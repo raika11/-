@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<apiConfig>
+	<api id="codelist" expire="1m">
+		<description>분류별 기사 목록을 반환한다.</description>
+		<parameter>
+			<title desc="기사제목">.{0,1000}</title>
+			<ids desc="분류" hints="codeIds" require="Y">^[0-9]{1,10}(,[0-9]{1,10})*$</ids>
+			<count desc="조회 건수" default="20" type="number">^(3|5|10|20|30|100|200|300|[12345][05])$</count>
+		</parameter>
+		<request>dps.article.codelist</request>
+		<request total="Y">dps.article.codelist_total</request>
+		<keys>
+			title
+			ids
+			#paging
+		</keys>
+	</api>
+    <api id="deptlist" expire="1m">
+        <description>부서별 기사 목록을 반환한다.</description>
+        <parameter>
+            <title desc="기사제목">.{0,1000}</title>
+            <ids desc="부서" hints="deptNos" require="Y">^[0-9]{1,10}(,[0-9]{1,10})*$</ids>
+            <count desc="조회 건수" default="20" type="number">^(3|5|10|20|30|100|200|300|[12345][05])$</count>
+        </parameter>
+        <request>dps.article.deptlist</request>
+        <request total="Y">dps.article.deptlist_total</request>
+        <keys>
+            title
+            ids
+            #paging
+        </keys>
+    </api>    
+    <api id="bylinelist" expire="1m">
+        <description>기자별 기사 목록을 반환한다.</description>
+        <parameter>
+            <title desc="기사제목">.{0,1000}</title>
+            <ids desc="기자" hints="bylineIds" require="Y">.{0,1000}</ids>
+            <count desc="조회 건수" default="20" type="number">^(3|5|10|20|30|100|200|300|[12345][05])$</count>
+        </parameter>
+        <request>dps.article.bylinelist</request>
+        <request total="Y">dps.article.bylinelist_total</request>
+        <keys>
+            title
+            ids
+            #paging
+        </keys>
+    </api>   
+    <api id="reditlist" expire="1m">
+        <description>편집기사 관련기사 목록을 반환한다.</description>
+        <parameter>
+            <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
+            <cids desc="콘텐츠ID" hints="contentsIds">.{0,1000}</cids>            
+        </parameter>
+        <request>dps.article.reditlist</request>        
+        <keys>            
+            ids
+            cids            
+        </keys>
+    </api>       
+    <api id="desking" expire="1m">
+        <description>편집기사 목록을 반환한다.</description>
+        <parameter>
+            <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
+        </parameter>
+        <request>dps.article.desking</request>        
+        <request resultName="deskingR">dps.article.deskingR</request>
+        <request resultName="deskingKwd">dps.article.deskingKwd</request>              
+        <request total="Y">dps.article.desking_total</request>
+        <keys>
+            ids
+            #paging
+        </keys>
+    </api>
+    <api id="deskingR" expire="1m">
+        <description>편집기사 관련기사 목록을 반환한다.</description>
+        <parameter>
+            <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
+            <cids desc="콘텐츠ID" hints="contentsIds">.{0,1000}</cids>            
+        </parameter>
+        <request>dps.article.deskingR</request>        
+        <keys>            
+            ids
+            cids            
+        </keys>
+    </api>       
+    <api id="deskingKwd" expire="1m">
+        <description>편집기사의 키워드 목록을 반환한다.</description>
+        <parameter>
+            <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>                     
+        </parameter>
+        <request>dps.article.deskingKwd</request>        
+        <keys> 
+            ids    
+        </keys>
+    </api>       
+    <!-- 편집기사 미리보기용 -->
+    <api id="desking.work" expire="0">
+        <description>미리보기용 편집기사 목록을 반환한다.</description>
+        <parameter>
+            <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
+            <creator require="Y">[0-9|A-z]{1,20}</creator>
+            <editionSeq desc="예약 아이디" require="Y" default="0" >^[0-9]{1,6}$</editionSeq>
+        </parameter>
+        <request>dps.article.desking_work</request>        
+        <request resultName="deskingR">dps.article.deskingR_work</request>        
+        <request resultName="deskingKwd">dps.article.deskingKwd_work</request>  
+        <request total="Y">dps.article.desking_total_work</request>
+        <keys>
+            ids
+            creator
+            editionSeq
+            #paging
+        </keys>
+    </api>
+    <api id="deskingR.work" expire="0">
+        <description>미리보기용 편집기사 관련기사 목록을 반환한다.</description>
+        <parameter>
+            <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
+            <creator require="Y">[0-9|A-z]{1,20}</creator>
+            <editionSeq desc="예약 아이디" require="Y" default="0" >^[0-9]{1,6}$</editionSeq>
+            <cids desc="콘텐츠ID" hints="contentsIds">.{0,1000}</cids>
+        </parameter>
+        <request>dps.article.deskingR_work</request>        
+        <keys>            
+            ids
+            creator
+            editionSeq
+            cids            
+        </keys>
+    </api>       
+    <api id="deskingKwd.work" expire="0">
+        <description>미리보기용 편집기사의 키워드 목록을 반환한다.</description>
+        <parameter>
+            <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>         
+            <creator require="Y">[0-9|A-z]{1,20}</creator>            
+            <editionSeq desc="예약 아이디" require="Y" default="0" >^[0-9]{1,6}$</editionSeq>
+        </parameter>
+        <request>dps.article.deskingKwd_work</request>        
+        <keys> 
+            ids    
+            creator
+            editionSeq
+        </keys>
+    </api>       
+</apiConfig>

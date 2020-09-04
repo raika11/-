@@ -1,0 +1,9 @@
+<mte:case if="$index == 1">
+	<div class="section-topnews01">
+	    <h1 class="tit"><a href="${site}">${index}</a></h1>
+		<p class="tit-sub"><strong></strong></p>
+	    <span class="poto">
+	        <a href="${site}" class="img-cover"><img src="${site}/${index}.jpg" alt="index=${index}"/></a>
+	    </span>
+	</div>
+</mte:case>

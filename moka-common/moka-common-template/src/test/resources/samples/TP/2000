@@ -1,0 +1,14 @@
+<mte:loop start="2" count="2">
+	<span>${_INDEX}단<span>
+	<table>
+    	<mte:loop start="1" count="9">
+		<tr>
+			<td>${_PARENT._INDEX}</td>
+			<td> X </td>
+			<td>${_INDEX}</td>
+			<td> = </td>
+			<td>${_PARENT._INDEX * _INDEX}</td>
+		</tr>
+		</mte:loop>
+	</table>
+</mte:loop>

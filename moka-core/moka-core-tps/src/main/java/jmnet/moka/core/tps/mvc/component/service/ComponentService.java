@@ -1,0 +1,161 @@
+package jmnet.moka.core.tps.mvc.component.service;
+
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import jmnet.moka.core.tps.common.dto.RelSearchDTO;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
+import jmnet.moka.core.tps.mvc.component.entity.Component;
+import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
+
+/**
+ * 컴포넌트 서비스
+ * 
+ * @author jeon
+ *
+ */
+public interface ComponentService {
+
+    /**
+     * 컴포넌트 목록 조회(MyBatis)
+     * 
+     * @param search 검색조건
+     * @return 컴포넌트 목록
+     */
+    public List<ComponentVO> findList(ComponentSearchDTO search);
+
+    /**
+     * 컴포넌트 카운트 조회(MyBatis)
+     * 
+     * @param search 검색조건
+     * @return 카운트
+     */
+    public Long findListCount(ComponentSearchDTO search);
+
+    /**
+     * 컴포넌트 목록 조회
+     * 
+     * @param search 검색조건
+     * @param pageable 페이지조건
+     * @return 목록
+     */
+    public Page<Component> findList(ComponentSearchDTO search, Pageable pageable);
+
+    /**
+     * 데이터셋ID로 컴포넌트 조회
+     * 
+     * @param datasetSeq 데이터셋ID
+     * @param pageable Pageable
+     * @return 컴포넌트 목록
+     */
+    public Page<Component> findByDataset_DatasetSeq(Long datasetSeq, Pageable pageable);
+
+    /**
+     * 데이터타입, 데이터셋ID로 컴포넌트 조회
+     * 
+     * @param dataType 데이터타입
+     * @param datasetSeq 데이터셋ID
+     * @return 컴포넌트
+     */
+    public Optional<Component> findByDataTypeAndDataset_DatasetSeq(String dataType,
+            Long datasetSeq);
+
+    /**
+     * 파라미터 datasetSeq를 쓰고 있는 컴포넌트가 있으면 true, 없으면 false
+     * 
+     * @param datasetSeq 데이터셋ID
+     * @return 컴포넌트 존재 유무
+     */
+    public boolean usedByDatasetSeq(Long datasetSeq);
+
+    /**
+     * <pre>
+     * 컴포넌트 조회
+     * </pre>
+     * 
+     * @param componentSeq 컴포넌트순번
+     * @return 컴포넌트
+     * @throws NoDataException 데이터없음 예외처리
+     */
+    public Optional<Component> findByComponentSeq(Long componentSeq);
+
+    /**
+     * 컴포넌트 등록
+     * 
+     * @param component 등록할 컴포넌트
+     * @return 등록된 컴포넌트
+     * @throws NoDataException 데이터 없음
+     * @throws Exception 예외
+     */
+    public Component insertComponent(Component component) throws NoDataException, Exception;
+
+    /**
+     * 여러개의 컴포넌트 등록
+     * 
+     * @param components 등록할 컴포넌트 리스트
+     * @return 등록된 컴포넌트 리스트
+     * @throws Exception 에러
+     */
+    public List<Component> insertComponents(List<Component> components) throws Exception;
+
+    /**
+     * 컴포넌트 업데이트
+     * 
+     * @param component 업데이트할 컴포넌트
+     * @return 업데이트된 컴포넌트
+     * @throws NoDataException 데이터없음
+     * @throws Exception 예외
+     */
+    public Component updateComponent(Component component) throws NoDataException, Exception;
+
+    /**
+     * 컴포넌트 업데이트
+     * 
+     * @param newComponent 새로운 컴포넌트
+     * @param orgComponent 원래 컴포넌트
+     * @return 업데이트된 컴포넌트
+     * @throws Exception 예외
+     */
+    public Component updateComponent(Component newComponent, Component orgComponent)
+            throws Exception;
+
+    /**
+     * <pre>
+     * 컴포넌트 삭제
+     * </pre>
+     * 
+     * @param seq 컴포넌트아이디
+     * @throws NoDataException 데이터없음
+     * @throws Exception 예외
+     */
+    public void deleteComponent(Long seq) throws NoDataException, Exception;
+
+    /**
+     * 컴포넌트 삭제
+     * 
+     * @param component 컴포넌트
+     * @throws Exception 예외
+     */
+    public void deleteComponent(Component component) throws Exception;
+
+    /**
+     * <pre>
+     * 관련 컴포넌트 조회
+     * </pre>
+     * 
+     * @param search 검색조건
+     * @param pageable Pageable
+     * @return 컴포넌트 목록
+     */
+    public Page<Component> findRelList(RelSearchDTO search, Pageable pageable);
+
+    /**
+     * 도메인아이디와 관련된 컴포넌트수
+     * 
+     * @param domainId 도메인아이디
+     * @return 컴포넌트수
+     */
+    public int countByDomainId(String domainId);
+}

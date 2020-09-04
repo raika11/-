@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
+jmnet.moka.common.proxy.autoConfig.HttpProxyConfiguration,\
+jmnet.moka.common.proxy.autoConfig.FileProxyConfiguration

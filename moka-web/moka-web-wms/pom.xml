@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>jmnet.moka</groupId>
+		<artifactId>moka-springboot-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>jmnet.moka.web</groupId>
+	<artifactId>moka-web-wms</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	
+	<name>moka-web-wms</name>
+	<description>Project for Moka-WMS</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tomcat.embed</groupId>
+					<artifactId>tomcat-embed-websocket</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		 <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-undertow</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+        
+        <dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.47</version><!--$NO-MVN-MAN-VER$ -->
+		</dependency>
+		
+		<dependency>
+			<groupId>jmnet.moka.core</groupId>
+			<artifactId>moka-core-tps</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+		</dependency>
+				
+		<dependency>
+	        <groupId>org.springframework.session</groupId>
+	        <artifactId>spring-session-hazelcast</artifactId>
+      	</dependency>
+      	
+      	<dependency>
+		    <groupId>org.infinispan</groupId>
+		    <artifactId>infinispan-core</artifactId>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.infinispan</groupId>
+		  <artifactId>infinispan-spring-boot-starter-embedded</artifactId>
+		  <version>2.3.3.Final</version>
+		</dependency>
+		
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version><!--$NO-MVN-MAN-VER$ -->
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Copy frontend build to target</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes/resources</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/main/front/build</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+							<nonFilteredFileExtensions>
+					            <!-- fonts -->
+					            <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+					            <nonFilteredFileExtension>svg</nonFilteredFileExtension>
+					            <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+					            <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+					            <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+					        </nonFilteredFileExtensions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<profiles>
+		<profile>
+			<id>product</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.7.6</version>
+						<configuration>
+							<nodeVersion>v12.13.0</nodeVersion>
+							<npmVersion>6.12.0</npmVersion>
+							<yarnVersion>v1.13.0</yarnVersion>
+							<workingDirectory>src/main/front</workingDirectory>
+							<installDriectory>target</installDriectory>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install node and yarn</id>
+								<goals>
+									<goal>install-node-and-yarn</goal>
+								</goals>
+							</execution>
+							<!-- <execution>
+								<id>cross-env install</id>
+								<goals>
+									<goal>yarn</goal>
+								</goals>
+								<configuration>
+									<arguments>i -g cross-env</arguments>
+								</configuration>
+							</execution> -->
+							<execution>
+								<id>run yarn install</id>
+								<goals>
+									<goal>yarn</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<arguments>install</arguments>
+								</configuration>
+							</execution>							
+							<execution>
+								<id>yarn run build</id>
+								<goals>
+									<goal>yarn</goal>
+								</goals>
+								<configuration>
+									<arguments>run build-prod</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
+	
+</project>

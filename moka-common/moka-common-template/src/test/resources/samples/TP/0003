@@ -1,0 +1,4 @@
+<link rel="shortcut icon" href="//img.yonhapnews.co.kr/basic/svc/favicon.ico">
+<link rel="stylesheet" href="${code.R_URL}/global/font/NanumBarunGothic/v01/font.css">
+<link rel="stylesheet" href="${code.R_URL}/www/home_n/v01/css/news2015.css?v=${date('yyyyMMddHHmm')}">
+<link rel="stylesheet" type="text/css" href="${code.R_URL}/global/home/v01/css/weather_ui.css">

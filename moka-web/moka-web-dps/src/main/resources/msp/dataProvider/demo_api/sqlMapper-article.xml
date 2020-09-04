@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dps.article">
+
+	<sql id="paging_tail">
+		LIMIT #{count, jdbcType=INTEGER} OFFSET #{start, jdbcType=INTEGER} 	
+	</sql>
+
+	<!-- codelist where -->	
+	<sql id="codelistWhere">
+        <if test="title != null and title !='' ">
+            WHERE A.TITLE like '%${title}%'
+        </if>		 
+	</sql>
+
+    <!-- deptlist where --> 
+    <sql id="deptlistWhere">
+        <if test="title != null and title !='' ">
+            AND A.TITLE like '%${title}%'
+        </if>        
+    </sql>
+
+    <!-- reditlist where --> 
+    <sql id="reditlistWhere">
+        <if test="cids != null and cids !='' ">
+            AND A.CONTENTS_ID = C.CID
+        </if>        
+    </sql>
+    	
+	<!-- codelist -->
+	<select id="codelist" parameterType="hashmap" resultType="map">
+		SELECT CONTENTS_ID,TITLE,SUBTITLE,DIST_YMDT,CONTENTS_TEXT FROM WMS_ARTICLE B WHERE EXISTS (
+			SELECT CONTENTS_ID FROM WMS_CONTENTS_CODE A, 
+				(SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+						(SELECT DISTINCT X.DID FROM
+							(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+								FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+								ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+								ORDER BY NUMBERS.N
+							) X
+					) Y
+				) C
+			WHERE A.CODE_ID=C.DID
+			AND A.CONTENTS_ID=B.CONTENTS_ID
+		)
+		<include refid="codelistWhere"/>
+		<include refid="paging_tail"/>
+	</select>
+    
+	<select id="codelist_total" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) FROM WMS_ARTICLE B WHERE EXISTS (
+			SELECT CONTENTS_ID FROM WMS_CONTENTS_CODE A, 
+				(SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+						(SELECT DISTINCT X.DID FROM
+							(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+								FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+								ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+								ORDER BY NUMBERS.N
+							) X
+					) Y
+				) C
+			WHERE A.CODE_ID=C.DID
+			AND A.CONTENTS_ID=B.CONTENTS_ID
+		)
+		<include refid="codelistWhere"/>
+	</select>
+
+    <!-- deptlist -->
+    <select id="deptlist" parameterType="hashmap" resultType="map">
+        SELECT CONTENTS_ID,TITLE,SUBTITLE,DIST_YMDT,CONTENTS_TEXT FROM WMS_ARTICLE A, 
+            (SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+                    (SELECT DISTINCT X.DID FROM
+                        (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+                            FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+                            ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+                            ORDER BY NUMBERS.N
+                        ) X
+                ) Y
+            ) C
+        WHERE A.BYLINE_DEPT_NO=C.DID
+        <include refid="deptlistWhere"/>
+        <include refid="paging_tail"/>
+    </select>
+    
+    <select id="deptlist_total" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) FROM WMS_ARTICLE A, 
+            (SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+                    (SELECT DISTINCT X.DID FROM
+                        (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+                            FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+                            ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+                            ORDER BY NUMBERS.N
+                        ) X
+                ) Y
+            ) C
+        WHERE A.BYLINE_DEPT_NO=C.DID
+        <include refid="deptlistWhere"/>
+    </select>
+    
+    <!-- bylinelist -->
+    <select id="bylinelist" parameterType="hashmap" resultType="map">
+        SELECT * FROM WMS_ARTICLE B WHERE EXISTS (
+        	SELECT CONTENTS_ID FROM WMS_CONTENTS_BYLINE A, 
+        		(SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+            			(SELECT DISTINCT X.DID FROM
+            				(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+            					FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+            					ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+            					ORDER BY NUMBERS.N
+            				) X
+        			) Y
+        		) C
+        	WHERE A.BYLINE_ID=C.DID
+        	AND A.CONTENTS_ID=B.CONTENTS_ID
+        )
+        <include refid="codelistWhere"/>
+        <include refid="paging_tail"/>
+    </select>
+    
+    <select id="bylinelist_total" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) FROM WMS_ARTICLE B WHERE EXISTS (
+        	SELECT CONTENTS_ID FROM WMS_CONTENTS_BYLINE A, 
+        		(SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+            			(SELECT DISTINCT X.DID FROM
+            				(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+            					FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+            					ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+            					ORDER BY NUMBERS.N
+            				) X
+        			) Y
+        		) C
+        	WHERE A.BYLINE_ID=C.DID
+        	AND A.CONTENTS_ID=B.CONTENTS_ID
+        )
+        <include refid="codelistWhere"/>
+    </select>    
+    
+    <!-- reditlist -->
+    <select id="reditlist" parameterType="hashmap" resultType="map">
+        SELECT
+        	A.CONTENTS_ID
+        	,DESK.DESKING_SEQ
+        	,DESK.DATASET_SEQ
+        	,DESK.EDITION_SEQ				
+        	,A.REL_CONTENTS_ID
+        	,A.CREATE_YMDT
+        	,A.REL_ORDER		
+        	,A.REL_TITLE		
+        FROM WMS_DESKING DESK, WMS_DESKING_REL A
+        	,(SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+        	FROM NUMBERS JOIN (SELECT ${ids} AS DID FROM DUAL) AS TEMP
+        	ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+        	)  B        
+	   <if test="cids != null and cids !='' "> 
+       , (SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.CID, ',', NUMBERS.N), ',', -1) CID
+        FROM NUMBERS JOIN (SELECT ${cids} AS CID FROM DUAL) AS TEMP
+        ON CHAR_LENGTH(TEMP.CID) - CHAR_LENGTH(REPLACE(TEMP.CID, ',', '')) >= NUMBERS.N - 1
+        ) C
+	   </if>               
+        , (SELECT @ROWNUM := 0) AS TEMP
+        	WHERE DESK.DESKING_SEQ = A.DESKING_SEQ
+        	AND DESK.DATASET_SEQ = B.DID
+       <include refid="reditlistWhere"/>          
+       ORDER BY DESK.DATASET_SEQ,DESK.CONTENTS_ORDER,A.REL_ORDER;        
+    </select>
+    
+    <!-- desking -->
+    <select id="desking" parameterType="hashmap" resultType="map">
+        SELECT
+            C.NUM
+            ,DESK.DESKING_SEQ 
+            ,DESK.EDITION_SEQ
+            ,DESK.CONTENTS_ID 
+            ,DESK.CONTENTS_ID AS CID
+            ,DESK.CONTENTS_ORDER AS CORDER
+            ,DESK.DATASET_SEQ
+            ,DESK.TITLE
+            ,DESK.MOBILE_TITLE
+            ,DESK.SUBTITLE
+            ,DESK.NAMEPLATE
+            ,DESK.TITLE_PREFIX
+            ,DESK.DIST_YMDT
+            ,DESK.BODY_HEAD
+            ,DESK.LINK_URL
+            ,DESK.LINK_TARGET
+            ,DESK.MORE_URL
+            ,DESK.MORE_TARGET
+            ,DESK.THUMBNAIL_FILE_NAME AS IMG
+            ,DESK.THUMBNAIL_SIZE AS IMG_SIZE
+            ,DESK.THUMBNAIL_WIDTH AS IMG_WIDTH
+            ,DESK.THUMBNAIL_HEIGHT AS IMG_HEIGHT
+            ,(SELECT CODE_ID FROM WMS_CONTENTS_CODE WHERE CONTENTS_ID=DESK.CONTENTS_ID ORDER BY CODE_ORDER LIMIT 1) AS CODE_ID
+            ,(SELECT CODE_NAME FROM WMS_CONTENTS_CODE CC, WMS_CODE CD WHERE CC.CONTENTS_ID=DESK.CONTENTS_ID AND CC.CODE_ID=CD.CODE_ID ORDER BY CC.CODE_ORDER LIMIT 1) AS CODE_NAME
+            ,(SELECT GROUP_CONCAT(KEYWORD) FROM WMS_CONTENTS_KEYWORD WHERE CONTENTS_ID=DESK.CONTENTS_ID) AS KEYWORD
+        FROM WMS_DESKING DESK,
+             (SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+                (SELECT DISTINCT X.DID FROM
+                    (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+                        FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+                        ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+                        ORDER BY NUMBERS.N
+                    ) X
+                ) Y, (SELECT @NUM := 0) AS NTEMP
+              ) C
+        WHERE DESK.DATASET_SEQ = C.DID
+        AND DESK.EDITION_SEQ = IFNULL((SELECT EDITION_SEQ FROM WMS_EDITION WHERE DATASET_SEQ=C.DID AND  DATE_FORMAT(NOW(),'%Y%m%d%H%i%s') >= EDITION_START_YMDT ORDER BY EDITION_START_YMDT DESC LIMIT 1),0)
+        ORDER BY C.NUM, DESK.CONTENTS_ORDER
+        <include refid="paging_tail"/>
+    </select>
+    
+    <select id="desking_total" parameterType="hashmap" resultType="int">
+        SELECT count(DESK.DATASET_SEQ) TOTAL
+        FROM WMS_DESKING DESK,
+             (SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+                (SELECT DISTINCT X.DID FROM
+                    (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+                        FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+                        ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+                        ORDER BY NUMBERS.N
+                    ) X
+                ) Y
+              ) C
+        WHERE DESK.DATASET_SEQ = C.DID
+        AND DESK.EDITION_SEQ = IFNULL((SELECT EDITION_SEQ FROM WMS_EDITION WHERE DATASET_SEQ=C.DID AND  DATE_FORMAT(NOW(),'%Y%m%d%H%i%s') >= EDITION_START_YMDT ORDER BY EDITION_START_YMDT DESC LIMIT 1),0)
+    </select>
+
+    <!-- deskingR where --> 
+    <sql id="deskingRWhere">
+        <if test="cids != null and cids !='' ">
+            AND DESK.CONTENTS_ID = C.CID
+        </if>        
+    </sql>
+    
+    <!-- deskingR -->
+    <select id="deskingR" parameterType="hashmap" resultType="map">
+        SELECT
+        	 DESK.CONTENTS_ID
+            ,DESK.CONTENTS_ID AS CID
+        	,DESK.DESKING_SEQ
+        	,DESK.DATASET_SEQ
+        	,DESK.EDITION_SEQ				
+        	,DESK_R.REL_CONTENTS_ID        
+            ,DESK_R.REL_CONTENTS_ID AS RCID
+        	,DESK_R.CREATE_YMDT
+        	,DESK_R.REL_ORDER		
+        	,DESK_R.REL_TITLE		
+        FROM WMS_DESKING DESK, WMS_DESKING_REL DESK_R
+        	,(SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+        	FROM NUMBERS JOIN (SELECT ${ids} AS DID FROM DUAL) AS TEMP
+        	ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+        	) C
+	   <if test="cids != null and cids !='' "> 
+       , (SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.CID, ',', NUMBERS.N), ',', -1) CID
+        FROM NUMBERS JOIN (SELECT ${cids} AS CID FROM DUAL) AS TEMP
+        ON CHAR_LENGTH(TEMP.CID) - CHAR_LENGTH(REPLACE(TEMP.CID, ',', '')) >= NUMBERS.N - 1
+        ) C
+	   </if>               
+        , (SELECT @ROWNUM := 0) AS TEMP
+        	WHERE DESK.DESKING_SEQ = DESK_R.DESKING_SEQ
+        	AND DESK.DATASET_SEQ = C.DID
+			AND DESK.EDITION_SEQ = IFNULL((SELECT EDITION_SEQ FROM WMS_EDITION WHERE DATASET_SEQ=C.DID AND  DATE_FORMAT(NOW(),'%Y%m%d%H%i%s') >= EDITION_START_YMDT ORDER BY EDITION_START_YMDT DESC LIMIT 1),0)        	
+       <include refid="deskingRWhere"/>          
+       ORDER BY DESK.DATASET_SEQ,DESK.CONTENTS_ORDER,DESK_R.REL_ORDER;        
+    </select>
+
+    <!-- deskingKwd -->
+    <select id="deskingKwd" parameterType="hashmap" resultType="map">
+		SELECT
+			CK.CONTENTS_ID, CK.KEYWORD 
+		FROM WMS_DESKING DESK
+            ,(SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+            FROM NUMBERS JOIN (SELECT ${ids} AS DID FROM DUAL) AS TEMP
+            ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+            ) C
+            ,WMS_CONTENTS_KEYWORD CK
+        WHERE DESK.DATASET_SEQ = C.DID
+        AND DESK.EDITION_SEQ = IFNULL((SELECT EDITION_SEQ FROM WMS_EDITION WHERE DATASET_SEQ=C.DID AND  DATE_FORMAT(NOW(),'%Y%m%d%H%i%s') >= EDITION_START_YMDT ORDER BY EDITION_START_YMDT DESC LIMIT 1),0)
+        AND DESK.CONTENTS_ID=CK.CONTENTS_ID   
+		ORDER BY CK.KEYWORD_ORDER;
+    </select>
+    
+    <!-- desking_work -->
+    <select id="desking_work" parameterType="hashmap" resultType="map">
+        SELECT
+            C.NUM
+            ,DESK.DESKING_SEQ 
+            ,DESK.EDITION_SEQ
+            ,DESK.CONTENTS_ID 
+            ,DESK.CONTENTS_ID AS CID
+            ,DESK.CONTENTS_ORDER AS CORDER
+            ,DESK.DATASET_SEQ
+            ,DESK.TITLE
+            ,DESK.MOBILE_TITLE
+            ,DESK.SUBTITLE
+            ,DESK.NAMEPLATE
+            ,DESK.TITLE_PREFIX
+            ,DESK.DIST_YMDT
+            ,DESK.BODY_HEAD
+            ,DESK.LINK_URL
+            ,DESK.LINK_TARGET
+            ,DESK.MORE_URL
+            ,DESK.MORE_TARGET
+            ,DESK.THUMBNAIL_FILE_NAME AS IMG
+            ,DESK.THUMBNAIL_SIZE AS IMG_SIZE
+            ,DESK.THUMBNAIL_WIDTH AS IMG_WIDTH
+            ,DESK.THUMBNAIL_HEIGHT AS IMG_HEIGHT
+            ,(SELECT CODE_ID FROM WMS_CONTENTS_CODE WHERE CONTENTS_ID=DESK.CONTENTS_ID ORDER BY CODE_ORDER LIMIT 1) AS CODE_ID
+            ,(SELECT CODE_NAME FROM WMS_CONTENTS_CODE CC, WMS_CODE CD WHERE CC.CONTENTS_ID=DESK.CONTENTS_ID AND CC.CODE_ID=CD.CODE_ID ORDER BY CC.CODE_ORDER LIMIT 1) AS CODE_NAME
+            ,(SELECT GROUP_CONCAT(KEYWORD) FROM WMS_CONTENTS_KEYWORD WHERE CONTENTS_ID=DESK.CONTENTS_ID) AS KEYWORD
+        FROM WMS_DESKING_WORK DESK,
+             (SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+                (SELECT DISTINCT X.DID FROM
+                    (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+                        FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+                        ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+                        ORDER BY NUMBERS.N
+                    ) X
+                ) Y, (SELECT @NUM := 0) AS NTEMP
+              ) C
+        WHERE DESK.DATASET_SEQ = C.DID
+        AND DESK.CREATOR = #{creator}
+        AND DESK.EDITION_SEQ = IFNULL(#{editionSeq},0)
+        ORDER BY C.NUM, DESK.CONTENTS_ORDER
+        <include refid="paging_tail"/>
+    </select>
+    
+    <select id="desking_total_work" parameterType="hashmap" resultType="int">
+        SELECT count(DESK.DATASET_SEQ) TOTAL
+        FROM WMS_DESKING_WORK DESK,
+             (SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+                (SELECT DISTINCT X.DID FROM
+                    (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+                        FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+                        ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+                        ORDER BY NUMBERS.N
+                    ) X
+                ) Y
+              ) C
+        WHERE DESK.DATASET_SEQ = C.DID
+        AND DESK.CREATOR = #{creator}
+        AND DESK.EDITION_SEQ = IFNULL(#{editionSeq},0)
+    </select>
+
+    
+    <!-- deskingR_work -->
+    <select id="deskingR_work" parameterType="hashmap" resultType="map">
+        SELECT
+        	 DESK.CONTENTS_ID
+            ,DESK.CONTENTS_ID AS CID
+        	,DESK.DESKING_SEQ
+        	,DESK.DATASET_SEQ
+        	,DESK.EDITION_SEQ				
+        	,DESK_R.REL_CONTENTS_ID        
+            ,DESK_R.REL_CONTENTS_ID AS RCID
+        	,DESK_R.CREATE_YMDT
+        	,DESK_R.REL_ORDER		
+        	,DESK_R.REL_TITLE		
+        FROM WMS_DESKING_WORK DESK, WMS_DESKING_REL_WORK DESK_R
+        	,(SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+        	FROM NUMBERS JOIN (SELECT ${ids} AS DID FROM DUAL) AS TEMP
+        	ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+        	) C
+	   <if test="cids != null and cids !='' "> 
+       , (SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.CID, ',', NUMBERS.N), ',', -1) CID
+        FROM NUMBERS JOIN (SELECT ${cids} AS CID FROM DUAL) AS TEMP
+        ON CHAR_LENGTH(TEMP.CID) - CHAR_LENGTH(REPLACE(TEMP.CID, ',', '')) >= NUMBERS.N - 1
+        ) C
+	   </if>               
+        , (SELECT @ROWNUM := 0) AS TEMP
+        	WHERE DESK.DESKING_SEQ = DESK_R.DESKING_SEQ
+        	AND DESK.CREATOR = DESK_R.CREATOR
+        	AND DESK.CREATOR = #{creator}
+        	AND DESK.DATASET_SEQ = C.DID
+        	AND DESK.EDITION_SEQ = IFNULL(#{editionSeq},0)        	
+       <include refid="deskingRWhere"/>          
+       ORDER BY DESK.DATASET_SEQ,DESK.CONTENTS_ORDER,DESK_R.REL_ORDER;        
+    </select>
+
+    <!-- deskingKwd_work -->
+    <select id="deskingKwd_work" parameterType="hashmap" resultType="map">
+		SELECT
+			CK.CONTENTS_ID, CK.KEYWORD 
+		FROM WMS_DESKING_WORK DESK
+            ,(SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+            FROM NUMBERS JOIN (SELECT ${ids} AS DID FROM DUAL) AS TEMP
+            ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+            ) C
+            ,WMS_CONTENTS_KEYWORD CK
+        WHERE DESK.DATASET_SEQ = C.DID
+        AND DESK.CREATOR = #{creator}
+        AND DESK.EDITION_SEQ = IFNULL(#{editionSeq},0)
+        AND DESK.CONTENTS_ID=CK.CONTENTS_ID   
+		ORDER BY CK.KEYWORD_ORDER;
+    </select>
+        
+</mapper>

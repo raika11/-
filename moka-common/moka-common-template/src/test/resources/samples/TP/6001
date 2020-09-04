@@ -1,0 +1,6 @@
+<h1> split test</h1>
+<ul class="list">
+	<mte:split value="서울시스템|SSC|CTS" separator="|">
+		<li><a href="search?${_TOKEN}"</a></li>
+	</mte:split>
+</ul>

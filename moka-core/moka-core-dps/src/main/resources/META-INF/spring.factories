@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
+jmnet.moka.core.dps.autoConfig.DpsApiAutoConfiguration ,\
+jmnet.moka.core.dps.autoConfig.DpsSqlSessionAutoConfiguration

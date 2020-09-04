@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="jmnet.moka.core.tps.mvc.domain.mapper.DomainMapper">
+	<select id="findAll" parameterType="map"
+		resultType="jmnet.moka.core.tps.mvc.domain.dto.DomainDTO">
+		SELECT * FROM WMS_DOMAIN
+		<if test="domainId != null and domainId != ''">
+			WHERE DOMAIN_ID = #{domainId}
+		</if>
+	</select>
+
+</mapper>

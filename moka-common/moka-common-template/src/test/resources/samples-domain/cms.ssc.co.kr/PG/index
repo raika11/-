@@ -1,0 +1,23 @@
+<html>
+<head>
+	<mte:tp id="0000" name="HTML 헤드"/>
+</head>
+<body class="${upper('renewal2015')}">
+<div id="wrap" class="sub-wrap gnb-news-01">
+	<!-- header// -->
+	<mte:tp id="0004" name="헤더"/>
+	<!-- //header -->
+	<!-- content// -->
+	<div id="content">
+		<mte:loop data="001" start="1" count="2">
+			<span>${site}</span>
+			<mte:tp id="0005" name="콘텐트"/>
+		</mte:loop>
+	</div>
+	<!-- //content -->
+	<!-- footer// -->
+	<mte:tp id="0006" name="푸터"/>
+	<!-- //footer -->
+</div>
+</body>
+</html>

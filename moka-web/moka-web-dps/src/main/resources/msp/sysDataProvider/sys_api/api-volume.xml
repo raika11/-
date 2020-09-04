@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<apiConfig>
+	<api id="volume.login" expire="0">
+		<description>사용자 정보를 반환한다.</description>
+		<parameter>
+			<userId>[A-z|0-9|_]{1,16}</userId>
+			<password>.{1,16}</password>
+		</parameter>
+		<request>dps.volume.login</request>
+		<keys>
+			userId
+		</keys>
+	</api>
+	<api id="volume.user" expire="0">
+		<description>사용자 볼륨 목록을 반환한다.</description>
+		<parameter>
+			<userId>[A-z|0-9|_]{1,16}</userId>
+		</parameter>
+		<request>dps.volume.user</request>
+		<keys>
+			userId
+		</keys>
+	</api>
+	<api id="volume.all" expire="0">
+		<description>모든 볼륨 목록을 반환한다.</description>
+		<request>dps.volume.all</request>
+	</api>
+</apiConfig>

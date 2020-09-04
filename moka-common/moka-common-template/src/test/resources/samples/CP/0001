@@ -1,0 +1,11 @@
+{
+	"id":"0001",
+	"name":"테스트",
+	"templateId" : "6000",
+	"api": "program.list",
+	"param": {
+		"name":"수어지교",
+		"_PAGE": "1",
+		"_SIZE": "3"
+	}
+}

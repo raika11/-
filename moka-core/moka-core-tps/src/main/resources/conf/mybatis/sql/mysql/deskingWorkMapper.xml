@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.desking.mapper.DeskingWorkMapper">
+
+	<!-- 기존의 작업용 편집기사 삭제 -->
+	<delete id="deleteByCreator" parameterType="string">
+		DELETE FROM WMS_DESKING_WORK WHERE CREATOR = #{creator}
+	</delete>
+
+	<!-- 기존의 작업용 관련편집기사 삭제 -->
+	<delete id="deleteRelByCreator" parameterType="string">
+		DELETE FROM WMS_DESKING_REL_WORK WHERE CREATOR = #{creator}
+	</delete>
+
+	<sql id="deskingColumns">
+		DESKING_SEQ,
+		DATASET_SEQ,			
+		EDITION_SEQ,
+		CONTENTS_ID, 
+		CONTENTS_ATTR,
+		LANG,
+		DIST_YMDT,
+		CONTENTS_ORDER,
+		TITLE,
+		MOBILE_TITLE,
+		SUBTITLE,
+		NAMEPLATE,
+		TITLE_PREFIX,
+		BODY_HEAD,
+		LINK_URL,
+		LINK_TARGET,
+		MORE_URL,
+		MORE_TARGET,
+		THUMBNAIL_FILE_NAME,
+		THUMBNAIL_SIZE,
+		THUMBNAIL_WIDTH,
+		THUMBNAIL_HEIGHT
+	</sql>
+
+	<sql id="aliasDeskingColumns">
+		A.DESKING_SEQ,
+		A.DATASET_SEQ,			
+		A.EDITION_SEQ,
+		A.CONTENTS_ID, 
+		A.CONTENTS_ATTR,
+		A.LANG,
+		A.DIST_YMDT,
+		A.CONTENTS_ORDER,
+		A.TITLE,
+		A.MOBILE_TITLE,
+		A.SUBTITLE,
+		A.NAMEPLATE,
+		A.TITLE_PREFIX,
+		A.BODY_HEAD,
+		A.LINK_URL,
+		A.LINK_TARGET,
+		A.MORE_URL,
+		A.MORE_TARGET,
+		A.THUMBNAIL_FILE_NAME,
+		A.THUMBNAIL_SIZE,
+		A.THUMBNAIL_WIDTH,
+		A.THUMBNAIL_HEIGHT
+	</sql>
+
+	<!-- 페이지의 편집기사를 작업자용 편집기사로 일괄 등록 -->
+	<insert id="importDeskingWorks" parameterType="jmnet.moka.core.tps.common.dto.WorkSearchDTO">
+		INSERT INTO WMS_DESKING_WORK (<include refid="deskingColumns"/>, CREATOR, CREATE_YMDT)
+		SELECT <include refid="aliasDeskingColumns"/>, #{creator}, #{createYmdt}
+		FROM WMS_DESKING A, WMS_COMPONENT_WORK CP
+		WHERE A.DATASET_SEQ = CP.DATASET_SEQ
+			AND CP.CREATOR = #{creator}
+	</insert>
+
+	<sql id="deskingRelColumns">
+		DESKING_SEQ,
+		CONTENTS_ID,
+		REL_CONTENTS_ID, 
+		REL_ORDER,
+		REL_TITLE
+	</sql>
+
+	<sql id="aliasDeskingRelColumns">
+		A.DESKING_SEQ,
+		A.CONTENTS_ID,
+		A.REL_CONTENTS_ID, 
+		A.REL_ORDER,
+		A.REL_TITLE
+	</sql>
+
+	<!-- 페이지의 관련 편집기사를 작업자용 관련 편집기사로 일괄 등록 -->
+	<insert id="importDeskingRelWorks" parameterType="jmnet.moka.core.tps.common.dto.WorkSearchDTO">
+		INSERT INTO WMS_DESKING_REL_WORK (<include refid="deskingRelColumns"/>, CREATOR, CREATE_YMDT)
+		SELECT <include refid="aliasDeskingRelColumns"/>, #{creator}, #{createYmdt}
+		FROM WMS_DESKING D, WMS_DESKING_REL A, WMS_COMPONENT_WORK CP
+		WHERE D.DATASET_SEQ = CP.DATASET_SEQ
+			AND D.DESKING_SEQ = A.DESKING_SEQ
+			AND CP.CREATOR = #{creator}
+	</insert>
+
+	<!-- Work편집기사 목록조회(복수) -->
+	<select id="findDeskingWorkAll" parameterType="jmnet.moka.core.tps.common.dto.WorkSearchDTO"
+		resultType="DeskingWorkVO">
+		SELECT *, 0 AS PV_COUNT,0 AS UV_COUNT FROM WMS_DESKING_WORK
+		WHERE CREATOR = #{creator}
+			AND EDITION_SEQ = #{editionSeq}		
+	</select>
+
+	<!-- Work관련편집기사 목록조회(복수) -->
+	<select id="findDeskingRelWorkAll" parameterType="jmnet.moka.core.tps.common.dto.WorkSearchDTO"
+		resultType="DeskingRelWorkVO">
+		SELECT DR.* FROM WMS_DESKING_WORK D, WMS_DESKING_REL_WORK DR 
+		WHERE DR.CREATOR = #{creator}
+			AND D.DESKING_SEQ = DR.DESKING_SEQ
+			AND D.CREATOR = DR.CREATOR
+			AND D.EDITION_SEQ = #{editionSeq}		
+	</select>
+
+	<!-- Work편집기사 목록조회(단수) -->
+	<select id="findDeskingWork" parameterType="jmnet.moka.core.tps.common.dto.WorkSearchDTO"
+		resultType="DeskingWorkVO">
+		SELECT *, 0 AS PV_COUNT,0 AS UV_COUNT
+		FROM WMS_DESKING_WORK
+		WHERE 
+			CREATOR = #{creator}
+			AND DATASET_SEQ = #{datasetSeq}
+			AND EDITION_SEQ = #{editionSeq}
+			ORDER BY CONTENTS_ORDER ASC
+	</select>
+
+	<!-- Work관련편집기사 목록조회(단수)  -->
+	<select id="findDeskingRelWork" parameterType="jmnet.moka.core.tps.common.dto.WorkSearchDTO"
+		resultType="DeskingRelWorkVO">
+		SELECT DR.*
+		FROM WMS_DESKING_REL_WORK DR, WMS_DESKING_WORK DW
+		WHERE
+			DR.CREATOR = #{creator}
+			AND DR.CREATOR = DW.CREATOR
+			AND DR.DESKING_SEQ = DW.DESKING_SEQ
+			AND DW.DATASET_SEQ = #{datasetSeq}
+			AND DW.EDITION_SEQ = #{editionSeq}
+		ORDER BY DR.REL_ORDER ASC
+	</select>
+
+	<sql id="findHistGroupWhere">
+		WHERE HIST.DATASET_SEQ = #{datasetSeq}
+	</sql>
+
+	<sql id="findHistOrder">
+		<if test="sortByColumn != null">
+			ORDER BY
+			<foreach open="" close="" collection="sortByColumn" item="sortItem" separator=",">
+				${sortItem}
+			</foreach>
+		</if>
+	</sql>
+
+	<!-- 데스킹히스토리 그룹 조회 -->
+	<select id="findHistGroup" parameterType="DeskingHistSearchDTO" resultType="DeskingHistGroupVO">
+		SELECT * FROM (
+			SELECT CREATE_YMDT, CREATOR, DATASET_SEQ, (@rownum := @rownum + 1) AS SEQ from (
+				SELECT CREATE_YMDT, CREATOR, ${datasetSeq} as DATASET_SEQ
+				FROM WMS_DESKING_HIST HIST
+				<include refid="findHistGroupWhere" />
+				GROUP BY HIST.CREATE_YMDT, HIST.CREATOR
+				<include refid="findHistOrder" />
+			) X, (SELECT @rownum := 0) AS TMP
+			ORDER BY SEQ DESC
+		) Y
+	</select>
+
+	<!-- 데스킹히스토리 그룹 카운트 -->
+	<select id="countByHistGroup" parameterType="DeskingHistSearchDTO" resultType="java.lang.Long">
+		SELECT
+			COUNT(TMP.CREATE_YMDT) as TOTAL_CNT
+		FROM (
+			SELECT CREATE_YMDT, CREATOR
+			FROM WMS_DESKING_HIST HIST
+			<include refid="findHistGroupWhere" />
+			GROUP BY CREATE_YMDT, CREATOR
+		) as TMP
+	</select>
+
+	<!-- 데스킹히스토리 상세 조회 -->
+	<select id="findHistDetail" parameterType="DeskingHistSearchDTO" resultType="DeskingHistVO">
+		SELECT *
+		FROM WMS_DESKING_HIST HIST
+		WHERE DATASET_SEQ = ${datasetSeq} AND CREATE_YMDT = #{createYmdt} AND CREATOR = #{creator}
+		<include refid="findHistOrder" />
+	</select>
+
+	<!-- 페이지내 모든 편집 데이터셋의 데스킹히스토리 조회 -->
+	<select id="findAllHistGroup" parameterType="DeskingHistSearchDTO" resultType="DeskingHistGroupVO">
+		SELECT * FROM (
+			SELECT CREATE_YMDT, CREATOR, DATASET_SEQ, (@rownum := @rownum + 1) AS SEQ, (
+				SELECT COMPONENT_NAME
+				FROM WMS_COMPONENT COMPONENT
+				WHERE COMPONENT.DATA_TYPE = "DESK" AND COMPONENT.DATASET_SEQ = X.DATASET_SEQ
+			) AS COMPONENT_NAME
+			FROM (
+				SELECT CREATE_YMDT, CREATOR, DATASET_SEQ
+				FROM WMS_DESKING_HIST HIST
+				WHERE
+					HIST.DATASET_SEQ IN (
+						SELECT DISTINCT DATASET_SEQ
+						FROM WMS_COMPONENT_WORK
+						WHERE CREATOR = #{creator}
+					)
+				GROUP BY HIST.CREATE_YMDT, HIST.CREATOR, HIST.DATASET_SEQ
+				<include refid="findHistOrder" />
+			) X, (SELECT @rownum := 0) AS TMP
+			ORDER BY SEQ DESC
+		) Y
+	</select>
+
+	<!-- 히스토리를 deskingWork로 등록 -->
+	<insert id="importDeskingWorkFromHist" parameterType="DeskingHistSearchDTO">
+		INSERT INTO WMS_DESKING_WORK (<include refid="deskingColumns"/>, CREATOR, CREATE_YMDT)
+		SELECT<include refid="aliasDeskingColumns"/>, #{creator}, DATE_FORMAT(NOW(),'%Y%m%d%H%i%s')
+		FROM WMS_DESKING_HIST A
+		WHERE A.DATASET_SEQ = #{datasetSeq}
+		AND A.CREATOR = #{creator}
+		AND A.CREATE_YMDT = #{createYmdt}
+	</insert>
+
+	<!-- 히스토리를 deskingRelWork로 등록 -->
+	<insert id="importDeskingRelWorkFromHist" parameterType="DeskingHistSearchDTO">
+		INSERT INTO WMS_DESKING_REL_WORK (<include refid="deskingRelColumns"/>, CREATOR, CREATE_YMDT)
+		SELECT<include refid="aliasDeskingRelColumns"/>, #{creator}, DATE_FORMAT(NOW(),'%Y%m%d%H%i%s')
+		FROM WMS_DESKING_HIST D, WMS_DESKING_REL_HIST A
+		WHERE D.DATASET_SEQ = #{datasetSeq}
+		AND D.HIST_SEQ = A.HIST_SEQ
+		AND D.CREATOR = A.CREATOR
+		AND D.CREATOR = #{creator}
+		AND D.CREATE_YMDT = #{createYmdt}
+	</insert>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dps.volume">
+  <select id="login" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_USER
+	WHERE USER_ID = #{userId}
+	<if test="password != null">
+	AND PASSWORD = #{password}
+	</if>
+  </select>
+  
+  <select id="user" parameterType="hashmap" resultType="map">
+	SELECT v.* 
+	FROM WMS_USER u, WMS_USER_DOMAIN_AUTHORITY a, WMS_DOMAIN d, WMS_VOLUME v
+	WHERE u.USER_ID = #{userId}
+	AND a.USER_SEQ = u.SEQ
+	AND a.DOMAIN_ID = d.DOMAIN_ID
+	AND d.VOLUME_ID = v.VOLUME_ID
+  </select>
+  
+  <select id="all" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_VOLUME
+  </select>
+  
+</mapper>

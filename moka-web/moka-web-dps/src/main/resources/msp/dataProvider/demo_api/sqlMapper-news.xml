@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dps.news">
+
+	<sql id="paging_tail">
+		LIMIT #{count, jdbcType=INTEGER} OFFSET #{start, jdbcType=INTEGER} 	
+	</sql>
+
+	<!-- list where -->	
+	<sql id="listWhere">
+		WHERE news_type = #{type}
+			<if test="title != null and title !='' "> 
+				AND newstitle LIKE '%${title}%'
+			</if>	 
+	</sql>
+	
+	<!-- list -->
+	<select id="list" parameterType="hashmap" resultType="map">
+		SELECT * FROM newsinfo
+		<include refid="listWhere"/>
+		<include refid="paging_tail"/>
+	</select>
+    
+	<select id="list_total" parameterType="hashmap" resultType="int">
+		SELECT	count(*) TOTAL
+		FROM newsinfo
+		<include refid="listWhere"/>
+	</select>
+	
+	<!-- edit 
+	<select id="desking" parameterType="hashmap" resultType="map">
+		SELECT
+			C.NUM,
+			DESK.CONTENTS_ID, 
+			DESK.CONTENTS_ID AS CID,
+			DESK.CONTENTS_ORDER AS CORDER,
+			DESK.DATASET_SEQ,
+			DESK.TITLE,
+			DESK.BODY_HEAD,
+			DESK.DIST_YMDT,
+			DESK.THUMBNAIL_FILE_NAME
+		FROM WMS_DESKING DESK,
+			 (SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+    			(SELECT DISTINCT X.DID FROM
+    				(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+    					FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+    					ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+    					ORDER BY NUMBERS.N
+    				) X
+    			) Y
+    		  ) C
+    	WHERE DESK.DATASET_SEQ = C.DID
+		ORDER BY C.NUM, DESK.CONTENTS_ORDER
+		<include refid="paging_tail"/>
+	</select>
+    
+	<select id="desking_total" parameterType="hashmap" resultType="int">
+		SELECT	count(DESK.DATASET_SEQ) TOTAL
+		FROM WMS_DESKING DESK,
+			 (SELECT @NUM := @NUM + 1 AS NUM, Y.DID FROM 
+    			(SELECT DISTINCT X.DID FROM
+    				(SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(TEMP.DID, ',', NUMBERS.N), ',', -1) DID
+    					FROM NUMBERS JOIN (SELECT #{ids} AS DID FROM DUAL) AS TEMP
+    					ON CHAR_LENGTH(TEMP.DID) - CHAR_LENGTH(REPLACE(TEMP.DID, ',', '')) >= NUMBERS.N - 1
+    					ORDER BY NUMBERS.N
+    				) X
+    			) Y
+    		  ) C
+    	WHERE DESK.DATASET_SEQ = C.DID
+	</select>
+	-->
+</mapper>

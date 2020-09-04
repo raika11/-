@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.page.mapper.PageRelMapper">
+	
+	<sql id="findAllWhere">
+		<if test="domainId != null and domainId != '' and domainId != 'all'">
+			AND PAGE.DOMAIN_ID = #{domainId}
+		</if>	
+	</sql>
+	
+	<sql id="findAllOrder">
+		<if test="sortByColumn != null">
+			ORDER BY
+			<foreach open="" close="" collection="sortByColumn" item="sortItem" separator=",">
+				${sortItem}
+			</foreach>
+		</if>
+	</sql>
+	
+	<resultMap type="PageVO" id="PageMap">
+		<id property="pageSeq" column="PAGE_SEQ" /> 
+		<result property="pageName" column="PAGE_NAME" /> 
+		<result property="pageUrl" column="PAGE_URL" /> 
+		<association property="domain" javaType="jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO"> 
+			<result property="domainId" column="DOMAIN_ID" /> 
+			<result property="mediaId" column="MEDIA_ID" /> 
+			<result property="domainName" column="DOMAIN_NAME" /> 
+			<result property="domainUrl" column="DOMAIN_URL" /> 
+			<result property="volumeId" column="VOLUME_ID" /> 
+			<result property="servicePlatform" column="SERVICE_PLATFORM" /> 
+		</association> 
+	</resultMap>
+
+	<select id="findAll" parameterType="RelSearchDTO" resultMap="PageMap">
+		SELECT 
+			PAGE.PAGE_SEQ, 
+			PAGE.PAGE_NAME, 
+			PAGE.PAGE_URL, 
+			DOMAIN.DOMAIN_ID,
+			DOMAIN.MEDIA_ID,
+			DOMAIN.DOMAIN_NAME,
+			DOMAIN.DOMAIN_URL,
+			DOMAIN.VOLUME_ID,
+			DOMAIN.SERVICE_PLATFORM
+		FROM (
+			SELECT DISTINCT PAGE_SEQ  FROM (
+				SELECT PAGE_SEQ FROM WMS_PAGE_REL WHERE REL_TYPE = #{relSeqType} AND REL_SEQ = #{relSeq}
+				<if test='relType != "CT"'>
+				UNION
+				SELECT PAGE_SEQ FROM WMS_PAGE_REL WHERE REL_TYPE = 'CT' AND REL_SEQ in ( 
+					SELECT DISTINCT CONTAINER_SEQ FROM WMS_CONTAINER_REL WHERE REL_TYPE = #{relSeqType} AND REL_SEQ = #{relSeq}
+				)
+				</if>
+			) AS REL
+		) X, WMS_PAGE AS PAGE, WMS_DOMAIN DOMAIN
+		WHERE X.PAGE_SEQ = PAGE.PAGE_SEQ
+		AND PAGE.DOMAIN_ID = DOMAIN.DOMAIN_ID
+		<include refid="findAllWhere"/>
+		<include refid="findAllOrder" />
+	</select>
+	
+	<select id="count" parameterType="RelSearchDTO" resultType="java.lang.Long">	
+		SELECT 
+			COUNT(DISTINCT PAGE.PAGE_SEQ) AS TOTAL_CNT
+		FROM (
+			SELECT DISTINCT PAGE_SEQ  FROM (
+				SELECT PAGE_SEQ FROM WMS_PAGE_REL WHERE REL_TYPE = #{relSeqType} AND REL_SEQ = #{relSeq}
+				<if test='relType != "CT"'>
+				UNION
+				SELECT PAGE_SEQ FROM WMS_PAGE_REL WHERE REL_TYPE = 'CT' AND REL_SEQ in ( 
+					SELECT DISTINCT CONTAINER_SEQ FROM WMS_CONTAINER_REL WHERE REL_TYPE = #{relSeqType} AND REL_SEQ = #{relSeq}
+				)
+				</if>
+			) AS REL
+		) X, WMS_PAGE AS PAGE
+		WHERE X.PAGE_SEQ = PAGE.PAGE_SEQ
+		<include refid="findAllWhere"/>
+	</select>
+
+</mapper>

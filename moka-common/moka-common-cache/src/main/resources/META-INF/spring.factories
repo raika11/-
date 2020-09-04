@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
+jmnet.moka.common.cache.autoConfig.CacheAutoConfiguration

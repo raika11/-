@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.ad.mapper.AdMapper">
+
+	<sql id="findAllWhere">
+		WHERE
+		<!-- 도메인 조건 -->
+			AD.DOMAIN_ID = #{domainId}
+		<!-- 검색 조건 -->
+		<if test="keyword != null and keyword != ''">
+			<choose>
+				<when test="searchType == 'adSeq'">
+					AND AD.AD_SEQ = #{keyword}
+				</when>
+				<when test="searchType == 'adName'">
+					AND AD.AD_NAME like '%${keyword}%'
+				</when>
+				<when test="searchType == 'adLocation'">
+					AND AD.AD_LOCATION like '%${keyword}%'
+				</when>
+				<when test="searchType == 'all'">
+					AND (AD.AD_SEQ = #{keyword} OR AD.AD_NAME like '%${keyword}%' OR AD.AD_LOCATION like '%${keyword}%')
+				</when>
+			</choose>
+		</if>
+		<!-- USE_YN 조건 -->
+			AND USE_YN = 'Y'
+	</sql>
+	
+	<sql id="findAllOrder">
+		<if test="sortByColumn != null">
+			ORDER BY
+			<foreach open="" close="" collection="sortByColumn" item="sortItem" separator=",">
+				${sortItem}
+			</foreach>
+		</if>
+	</sql>
+	
+	<select id="findAll" parameterType="AdSearchDTO" resultType="AdVO">
+		SELECT AD.AD_SEQ, AD.AD_NAME, AD.AD_LOCATION, 
+		(
+			SELECT
+			   CASE WHEN COUNT(CPAD.SEQ) > 0 THEN 'Y' ELSE 'N' END
+			FROM WMS_COMPONENT_AD CPAD
+			WHERE CPAD.AD_SEQ = AD.AD_SEQ	
+		) AS USE_YN
+		FROM WMS_AD AD
+		<include refid="findAllWhere"/>
+		<include refid="findAllOrder"/>
+	</select>
+	
+	<select id="count" parameterType="AdSearchDTO" resultType="java.lang.Long">
+		SELECT 
+			COUNT(AD.AD_SEQ) AS TOTAL_CNT
+		FROM WMS_AD AD
+		<include refid="findAllWhere"/>
+	</select>
+	
+	<!-- 관련광고 공통 컬럼  -->
+	<sql id="childRelsColumns">
+		AD.AD_SEQ, AD.AD_NAME, AD.AD_LOCATION
+	</sql>
+	
+	<!-- 페이지의 관련광고 목록 조회 -->
+	<select id="findPageChildRels" parameterType="AdSearchDTO" resultType="AdVO">
+		SELECT DISTINCT
+			IFNULL((SELECT REL_ORDER FROM WMS_PAGE_REL WHERE PAGE_SEQ = #{keyword} AND REL_TYPE = 'AD' AND REL_SEQ = AD.AD_SEQ ),999999) AS REL_ORDER, 			
+			<include refid="childRelsColumns" />
+		FROM (
+			SELECT DISTINCT REL_SEQ FROM (
+				SELECT PREL.REL_SEQ FROM WMS_PAGE_REL PREL WHERE PREL.PAGE_SEQ = #{keyword} AND PREL.REL_TYPE ='AD'
+				UNION
+				SELECT CTREL.REL_SEQ FROM WMS_PAGE_REL PREL,  WMS_CONTAINER_REL CTREL
+				WHERE PREL.PAGE_SEQ = #{keyword} 
+				AND PREL.REL_TYPE ='CT'
+				AND PREL.REL_SEQ = CTREL.CONTAINER_SEQ 
+				AND CTREL.REL_TYPE ='AD'
+			) AS REL
+		) AS X, WMS_AD AD
+		<include refid="findAllWhere" />
+			AND X.REL_SEQ = AD.AD_SEQ
+		<include refid="findAllOrder" />
+	</select>
+	
+	<select id="findPageChildRelsCount" parameterType="AdSearchDTO" resultType="java.lang.Long">
+		SELECT 
+			COUNT(AD.AD_SEQ) AS TOTAL_CNT
+		FROM (
+			SELECT DISTINCT REL_SEQ FROM (
+				SELECT PREL.REL_SEQ FROM WMS_PAGE_REL PREL WHERE PREL.PAGE_SEQ = #{keyword} AND PREL.REL_TYPE ='AD'
+				UNION
+				SELECT CTREL.REL_SEQ FROM WMS_PAGE_REL PREL,  WMS_CONTAINER_REL CTREL
+				WHERE PREL.PAGE_SEQ = #{keyword} 
+				AND PREL.REL_TYPE ='CT'
+				AND PREL.REL_SEQ = CTREL.CONTAINER_SEQ 
+				AND CTREL.REL_TYPE ='AD'
+			) AS REL
+		) AS X, WMS_AD AD
+		<include refid="findAllWhere" />
+			AND X.REL_SEQ = AD.AD_SEQ
+	</select>
+	
+	<!-- 콘텐츠스킨의 관련광고 목록 조회 -->
+	<select id="findSkinChildRels" parameterType="AdSearchDTO" resultType="AdVO">
+		SELECT DISTINCT
+			IFNULL((SELECT REL_ORDER FROM WMS_SKIN_REL WHERE SKIN_SEQ = #{keyword} AND REL_TYPE = 'AD' AND REL_SEQ = AD.AD_SEQ ),999999) AS REL_ORDER, 			
+			<include refid="childRelsColumns" />
+		FROM (
+			SELECT DISTINCT REL_SEQ FROM (
+				SELECT PREL.REL_SEQ FROM WMS_PAGE_REL PREL WHERE PREL.PAGE_SEQ = #{keyword} AND PREL.REL_TYPE ='AD'
+				UNION
+				SELECT CTREL.REL_SEQ FROM WMS_SKIN_REL PREL,  WMS_CONTAINER_REL CTREL
+				WHERE PREL.SKIN_SEQ = #{keyword} 
+				AND PREL.REL_TYPE ='CT'
+				AND PREL.REL_SEQ = CTREL.CONTAINER_SEQ 
+				AND CTREL.REL_TYPE ='AD'
+			) AS REL
+		) AS X, WMS_AD AD
+		<include refid="findAllWhere" />
+			AND X.REL_SEQ = AD.AD_SEQ
+		<include refid="findAllOrder" />
+	</select>
+	
+	<select id="findSkinChildRelsCount" parameterType="AdSearchDTO" resultType="java.lang.Long">
+		SELECT 
+			COUNT(AD.AD_SEQ) AS TOTAL_CNT
+		FROM (
+			SELECT DISTINCT REL_SEQ FROM (
+				SELECT PREL.REL_SEQ FROM WMS_SKIN_REL PREL WHERE PREL.SKIN_SEQ = #{keyword} AND PREL.REL_TYPE ='AD'
+				UNION
+				SELECT CTREL.REL_SEQ FROM WMS_SKIN_REL PREL,  WMS_CONTAINER_REL CTREL
+				WHERE PREL.SKIN_SEQ = #{keyword} 
+				AND PREL.REL_TYPE ='CT'
+				AND PREL.REL_SEQ = CTREL.CONTAINER_SEQ 
+				AND CTREL.REL_TYPE ='AD'
+			) AS REL
+		) AS X, WMS_AD AD
+		<include refid="findAllWhere" />
+			AND X.REL_SEQ = AD.AD_SEQ
+	</select>
+	
+	<!-- 컨테이너의 관련광고 목록 조회 -->
+	<select id="findContainerChildRels" parameterType="AdSearchDTO" resultType="AdVO">
+		SELECT DISTINCT
+			X.REL_ORDER,  		 			
+			<include refid="childRelsColumns" />
+		FROM WMS_CONTAINER_REL AS X, WMS_AD AD
+		<include refid="findAllWhere" />
+			AND X.CONTAINER_SEQ = #{keyword}
+			AND X.REL_TYPE ='AD'
+			AND X.REL_SEQ = AD.AD_SEQ
+		<include refid="findAllOrder" />
+	</select>
+	
+	<select id="findContainerChildRelsCount" parameterType="AdSearchDTO" resultType="java.lang.Long">
+		SELECT 
+			COUNT(AD.AD_SEQ) AS TOTAL_CNT
+		FROM WMS_CONTAINER_REL AS X, WMS_AD AD
+		<include refid="findAllWhere" />
+			AND X.CONTAINER_SEQ = #{keyword}
+			AND X.REL_TYPE ='AD'
+			AND X.REL_SEQ = AD.AD_SEQ
+	</select>
+	
+</mapper>

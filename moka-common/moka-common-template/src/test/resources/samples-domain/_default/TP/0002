@@ -1,0 +1,7 @@
+<mte:set var="html_name" value="html(name)"/>
+<title>${html_name}</title>
+<meta property="og:title" content="${html_name}">
+<meta name="title" content="${html_name}">
+<meta name="twitter:title" content="${html_name}">
+<meta itemprop="name" content="${html_name}">
+<mte:tp id="0003" name="리소스"/>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DefaultConfig>
+	<!-- 허용 ip 목록, 다중 그룹 가능 -->
+	<ipGroup name="system"><!--  * ( wildcard ) 허용  -->
+			127.0.0.1
+			175.192.253.130
+			101.55.50.*
+			192.168.42.*
+	</ipGroup>
+	<ipGroup name="test">
+			0:0:0:0:0:0:0:1
+	</ipGroup>
+	<!-- acl 목록에 없는 api는 모두 허용, acl 목록에 있는 경우는 해당 ipGroup만 허용 -->
+	<acl name="item" ipGroup="system,test"> <!--  api목록에 정규표현식을 사용하지 않는다. -->
+		ad.list
+		cp.list
+		ct.list
+		domain.list
+		pg.listSt
+		tp.list
+	</acl>
+	<acl name="volume" ipGroup="system">
+		volume.all
+		volume.login
+		volume.user
+	</acl>
+	<parameter>
+		<domainId desc="도메인 Id" require="Y">[0-9]{4}</domainId>
+		<page type="number" default="1">[1-9][0-9]*</page>
+		<size type="number" default="10">[1-9][0-9]*</size>
+		<sort>.{0,100}</sort>
+	</parameter>
+	<!--  parameterGroup의 name 속성에는 반드시 #을 붙여야 그룹으로 인식한다. -->
+	<parameterGroup name="#paging">
+		page
+		size
+		sort
+	</parameterGroup>
+</DefaultConfig>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dps.item">
+  <select id="domain_list" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_DOMAIN
+  </select>
+  
+  <select id="domain_total" parameterType="hashmap" resultType="map">
+    SELECT count(*) FROM WMS_DOMAIN
+  </select>
+  
+  <select id="reserved_list" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_RESERVED
+    WHERE DOMAIN_ID = #{domainId}
+  </select>
+  
+  <select id="page_list" parameterType="hashmap" resultType="map">
+  	<choose>
+	  	<when test='tBody.equalsIgnoreCase("Y") || tBody == null'>
+	  	 SELECT * 
+	  	</when>
+	  	<otherwise>
+	     SELECT PAGE_SEQ, DOMAIN_ID, PAGE_NAME, PAGE_DISPLAY_NAME,
+	     PARENT_PAGE_SEQ, PAGE_TYPE, PAGE_URL, PAGE_ORDER, 
+	     USE_YN, KEYWORD, DESCRIPTION, MOVE_YN, MOVE_URL
+	  	</otherwise>
+  	</choose>
+  	FROM WMS_PAGE
+	WHERE USE_YN='Y'
+	<if test="domainId != null">AND DOMAIN_ID = #{domainId}</if>
+	<if test="id != null">AND PAGE_SEQ = #{id}</if>
+  </select>
+
+  <select id="container" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_CONTAINER
+	WHERE CONTAINER_SEQ = #{id}
+  </select>
+
+  <select id="component" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_COMPONENT
+	WHERE COMPONENT_SEQ = #{id}
+  </select>
+  
+  <select id="component_work" parameterType="hashmap" resultType="map">
+	SELECT 
+	  c.COMPONENT_SEQ,
+	  c.DOMAIN_ID,
+	  (CASE WHEN w.SEQ IS NULL THEN c.TEMPLATE_SEQ ELSE w.TEMPLATE_SEQ END) AS TEMPLATE_SEQ,
+	  (CASE WHEN w.SEQ IS NULL THEN c.DATASET_SEQ ELSE w.DATASET_SEQ END) AS DATASET_SEQ,
+	  c.COMPONENT_NAME,
+	  c.DESCRIPTION,
+	  c.PERIOD_YN,
+	  c.PERIOD_START_YMDT,
+	  c.PERIOD_END_YMDT,
+	  (CASE WHEN w.SEQ IS NULL THEN c.DATA_TYPE ELSE w.DATA_TYPE END) AS DATA_TYPE,
+	  c.DEL_WORDS,
+	  c.PAGING_YN,
+	  c.PAGING_TYPE,
+	  c.PER_PAGE_COUNT,
+	  c.MAX_PAGE_COUNT,
+	  c.DISP_PAGE_COUNT,
+	  c.MORE_COUNT,
+	  c.SEARCH_SERVICE_TYPE,
+	  c.SEARCH_LANG,
+	  c.SEARCH_CODE_ID,
+	  (CASE WHEN w.SEQ IS NULL THEN c.SNAPSHOT_YN ELSE w.SNAPSHOT_YN END) AS SNAPSHOT_YN,
+	  (CASE WHEN w.SEQ IS NULL THEN c.SNAPSHOT_BODY ELSE w.SNAPSHOT_BODY END) AS SNAPSHOT_BODY,
+	  c.SKIN_SEQ,
+	  c.PREVIEW_RSRC,
+	  w.CREATE_YMDT,
+	  (CASE WHEN w.SEQ IS NULL THEN c.CREATOR ELSE w.CREATOR END) AS CREATOR,
+	  (CASE WHEN w.SEQ IS NULL THEN c.MODIFIED_YMDT ELSE w.CREATE_YMDT END) AS MODIFIED_YMDT,
+	  (CASE WHEN w.SEQ IS NULL THEN c.MODIFIER ELSE w.CREATOR END) AS MODIFIER
+	FROM WMS_COMPONENT c 
+	LEFT OUTER JOIN WMS_COMPONENT_WORK w 
+	  ON c.COMPONENT_SEQ = w.COMPONENT_SEQ AND w.CREATOR = #{creator}
+	WHERE  c.COMPONENT_SEQ = #{id}
+  </select>
+  
+  <select id="component_ad_list" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_COMPONENT_AD
+	WHERE COMPONENT_SEQ = #{id}
+	ORDER BY LIST_PARAGRAPH
+  </select>
+  
+  <select id="template" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_TEMPLATE
+	WHERE TEMPLATE_SEQ = #{id}
+  </select>
+  
+  <select id="dataset" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_DATASET
+	WHERE  DATASET_SEQ = #{id}
+  </select>
+  
+  <select id="ad" parameterType="hashmap" resultType="map">
+    SELECT * FROM WMS_AD
+	WHERE AD_SEQ = #{id}
+  </select>
+</mapper>

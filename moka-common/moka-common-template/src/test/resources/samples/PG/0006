@@ -1,0 +1,8 @@
+<html>
+<head>
+	<title>Component Test</title>
+</head>
+<body>
+<mte:cp id="0001" name="컴포넌트 테스트"/>
+</body>
+</html>

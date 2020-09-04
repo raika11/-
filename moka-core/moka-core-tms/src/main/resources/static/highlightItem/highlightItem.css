@@ -1,0 +1,17 @@
+.highlightItem { z-index:50000; outline : 1px dotted orange; outline-offset: 0px; background-color: red;opacity: 0.6 }
+.normalItem { z-index:50000; outline : 1px dotted blue; outline-offset: 0px; background-color: white;opacity: 0.4 }
+@-webkit-keyframes blinker { 
+	  from {opacity: 1.0;} 
+	  to {opacity: 0.0;} 
+	} 
+	.blink{ 
+		text-decoration: blink; 
+		-webkit-animation-name: blinker; 
+		-webkit-animation-duration: 0.9s; 
+		-webkit-animation-iteration-count:infinite; 
+		-webkit-animation-timing-function:ease-in-out; 
+		-webkit-animation-direction: alternate; 
+} 
+.label { float : left; color:white;background-color:black;padding:8px;font-weight:bold;}";
+.editBn { display:none; float : left; margin-left: 10px; color:white;background-color:black;padding:8px;font-weight:bold;}
+.closeBn { display:none; float : left; margin-left: 10px; color:white;background-color:black;padding:8px;font-weight:bold;}

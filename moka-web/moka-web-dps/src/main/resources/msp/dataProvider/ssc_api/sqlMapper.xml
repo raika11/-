@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dps.term">
+  
+	<sql id="pageing_header">
+		<bind name="limit" value="(size == null) ? 10 : size"/>
+		<bind name="offset" value="(page == null) ? 0 : (page-1)*limit"/>
+		select R1.* FROM (	
+	</sql>
+
+	<sql id="paging_tail">
+		) R1
+		LIMIT #{limit, jdbcType=INTEGER} OFFSET #{offset, jdbcType=INTEGER}	
+	</sql>
+	
+	<sql id="name_condition">
+		<if test="termName != null and termName !='' ">
+			WHERE TERM_NAME like '%${termName}%'
+		</if>	
+	</sql>
+	
+	<select id="term_list" parameterType="hashmap" resultType="map">
+		<include refid="pageing_header"/>
+		SELECT * FROM TEST_TERM
+		<include refid="name_condition"/>
+		<include refid="paging_tail"/>
+	</select>
+    
+	<select id="term_total" parameterType="hashmap" resultType="int">
+		SELECT	count(*) TOTAL
+		FROM TEST_TERM
+		<include refid="name_condition"/>
+	</select>
+	
+	<select id="loop_parent" parameterType="hashmap" resultType="map">
+		SELECT * 
+		FROM WMS_DESKING d 
+		WHERE d.DATASET_SEQ = #{id}
+	</select>
+	
+	<select id="loop_child" parameterType="hashmap" resultType="map">
+		SELECT r.*
+		FROM WMS_DESKING d, WMS_DESKING_REL r 
+		WHERE d.DATASET_SEQ = #{id}
+		AND d.DESKING_SEQ =r.DESKING_SEQ
+	</select>
+</mapper>

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "baseUrl": "./",
+        "paths": {
+            "~/stores": ["src/stores/*"],
+            "~/assets": ["src/assets/*"],
+            "~/components": ["src/components/*"],
+            "~/*": ["src/*"],
+            "moment/locale": ["node_modules/moment/locale"],
+            "moment": ["node_modules/moment/moment.js"]
+        },
+        "sourceMap": true
+    },
+    "include": ["./src/**/*"],
+    "exclude": ["./build/*", "./node_modules/*"]
+}

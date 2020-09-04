@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>jmnet.moka</groupId>
+		<artifactId>moka-springboot-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath/>
+	</parent>
+	
+	<groupId>jmnet.moka.common</groupId>
+	<artifactId>moka-common</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>moka-common</name>
+	<url>https://pri-nexus.joongang.co.kr</url>
+	
+	<modules>
+	    <module>moka-common-utils</module>
+	    <module>moka-common-template</module>
+	    <module>moka-common-data-support</module>
+	    <module>moka-common-data-mybatis</module>
+	    <module>moka-common-cache</module>
+	    <module>moka-common-proxy</module>
+	</modules>
+
+	<properties>
+		<spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+		<maven.test.skip>true</maven.test.skip>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+	</dependencies>
+
+</project>

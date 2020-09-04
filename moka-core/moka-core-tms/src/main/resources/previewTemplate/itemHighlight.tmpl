@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="${highlightCssPath}">
+<script src="${highlightJsPath}"></script>
+<script type="text/javascript" language="javascript">
+	var highlightFn = function() {
+		window.setTimeout(function() {
+			window.scrollTo(0,0);
+			previewHighlight('${itemType}','${itemId}', ${onlyHighlight});
+		}, 500);
+	};
+	
+	if ( document.addEventListener) {
+		document.addEventListener('DOMContentLoaded', highlightFn, false);
+	} else if (window.addEventListener) {
+		window.addEventListener('load', highlightFn, false );
+	} else if (window.attachEvent) {
+		window.attachEvent("onload", highlightFn );
+	}
+</script>

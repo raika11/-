@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.code.mapper.CodeMapper">
+
+	<select id="findSearchCodes" parameterType="codeSearchDTO" resultType="codeVO">
+		SELECT
+			CODE.CODE_ID, CODE.CODE_NAME, CODE.LARGE_CODE_ID, CODE.MIDDLE_CODE_ID,
+			(
+				CASE 
+					WHEN CODE.CODE_LEVEL = 1 THEN CODE.CODE_NAME
+					WHEN CODE.CODE_LEVEL = 2 THEN
+						CONCAT(
+							IFNULL(
+								(SELECT CONCAT(CD.CODE_NAME, #{delimiter})
+								FROM WMS_CODE CD
+								WHERE CD.CODE_NAME != '' AND CD.CODE_ID = CONCAT(CODE.LARGE_CODE_ID, '00000')), ''),
+							CODE.CODE_NAME
+						)
+					WHEN CODE.CODE_LEVEL = 3 THEN
+						CONCAT(
+							IFNULL((SELECT CODE_NAME FROM WMS_CODE WHERE CODE_NAME != '' AND CODE_ID = CONCAT(CODE.LARGE_CODE_ID, '00000')),''),
+							#{delimiter},
+							IFNULL((SELECT CODE_NAME FROM WMS_CODE WHERE CODE_NAME != '' AND CODE_ID = CONCAT(CODE.LARGE_CODE_ID, CODE.MIDDLE_CODE_ID, '000')),''),
+							#{delimiter},
+							CODE.CODE_NAME
+						)
+					ELSE ''
+					END
+			) AS CODE_PATH
+		FROM WMS_CODE CODE
+		WHERE 
+			CODE.USE_YN = 'Y' AND
+			<if test="codeLevel != null and codeLevel != ''">
+				CODE.CODE_LEVEL <![CDATA[<=]]> ${codeLevel} AND
+			</if>
+			CODE.CODE_NAME != ''
+		ORDER BY CODE.CODE_ID ASC
+	</select>
+	
+	<select id="findLargeCodes" parameterType="codeSearchDTO" resultType="codeVO">
+		SELECT
+			CODE.CODE_ID, CODE.CODE_NAME, CODE.LARGE_CODE_ID
+		FROM WMS_CODE CODE
+		WHERE
+			CODE.USE_YN = 'Y' AND
+			CODE.CODE_LEVEL = 1
+		ORDER BY CODE.CODE_ID ASC
+	</select>
+	
+	<select id="findMiddleCodes" parameterType="codeSearchDTO" resultType="codeVO">
+		SELECT
+			CODE.CODE_ID, CODE.CODE_NAME, CODE.LARGE_CODE_ID, CODE.MIDDLE_CODE_ID
+		FROM WMS_CODE CODE
+		WHERE 
+			CODE.USE_YN = 'Y' AND
+			CODE.CODE_LEVEL = 2
+			<if test="largeCodeId != null and largeCodeId != ''">
+				AND CODE.LARGE_CODE_ID = #{largeCodeId}
+			</if>
+		ORDER BY CODE.CODE_ID ASC
+	</select>
+	
+	<select id="findSmallCodes" parameterType="codeSearchDTO" resultType="codeVO">
+		SELECT
+			CODE.CODE_ID, CODE.CODE_NAME, CODE.LARGE_CODE_ID, CODE.MIDDLE_CODE_ID, CODE.SMALL_CODE_ID
+		FROM WMS_CODE CODE
+		WHERE 
+			CODE.USE_YN = 'Y' AND
+			CODE.CODE_LEVEL = 3
+			<if test="largeCodeId != null and largeCodeId != ''">
+				AND CODE.LARGE_CODE_ID = #{largeCodeId}
+			</if>
+			<if test="middleCodeId != null and middleCodeId != ''">
+				AND CODE.MIDDLE_CODE_ID = #{middleCodeId}
+			</if>
+		ORDER BY CODE.CODE_ID ASC
+	</select>
+	
+</mapper>

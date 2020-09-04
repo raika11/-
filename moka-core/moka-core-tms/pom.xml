@@ -1,0 +1,112 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>jmnet.moka</groupId>
+		<artifactId>moka-springboot-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	
+  <groupId>jmnet.moka.core</groupId>
+  <artifactId>moka-core-tms</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <description>Project for Template Merging Server</description>
+  
+  <name>moka-core-tms</name>
+  <url>https://pri-nexus.joongang.co.kr</url>
+
+  <properties>
+  	<spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+  </properties>
+  
+  <dependencies>
+  
+     <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-autoconfigure</artifactId>
+     </dependency>
+     
+     <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-autoconfigure-processor</artifactId>
+     </dependency>
+
+    <dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-webmvc</artifactId>
+	</dependency>
+
+	<dependency>
+		<groupId>jmnet.moka.common</groupId>
+		<artifactId>moka-common-utils</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+
+	<dependency>
+		<groupId>jmnet.moka.core</groupId>
+		<artifactId>moka-core-common</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+
+   	<dependency>
+		<groupId>jmnet.moka.common</groupId>
+		<artifactId>moka-common-proxy</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>jmnet.moka.common</groupId>
+		<artifactId>moka-common-cache</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	
+	<!-- 
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>servlet-api</artifactId>
+		<version>2.5</version>
+		<scope>provided</scope>
+	</dependency>
+	 -->
+	 
+	<dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <scope>provided</scope>
+	</dependency>
+    
+    <dependency>
+		<groupId>ch.qos.logback</groupId>
+		<artifactId>logback-classic</artifactId>
+		<scope>provided</scope>
+	</dependency>
+	
+	<dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>2.8.0</version>
+        <scope>compile</scope>
+    </dependency>
+    
+	<dependency>
+		<groupId>io.springfox</groupId>
+		<artifactId>springfox-swagger2</artifactId>
+		<version>2.8.0</version>
+		<scope>compile</scope>
+	</dependency>
+
+  </dependencies>
+  
+  <build>
+  	<resources>
+  		<resource>
+	  		<directory>src/main/resources</directory>
+	  		<excludes>
+	  			<exclude>static/**/*</exclude>
+	  		</excludes>
+  		</resource>
+  	</resources>
+  </build>
+  
+</project>

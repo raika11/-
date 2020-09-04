@@ -1,0 +1,28 @@
+<html>
+<head>
+	<title>Script Test</title>
+</head>
+<body>
+<mte:data url="https://ars.yna.co.kr/api/v2/articlelink?body=N&id=931&before=60&count=3"/>
+<mte:loop start="0" count="10">
+	<div> 
+		<span>기사 ${$index}</span>
+<mte:script>
+	// 항목들이 data맵에 있으므로 data.항목으로 접근해야 한다.
+	// 국문기사 판별 
+	var str = new ("java.lang.String");
+	str = data.CID;
+	if ( str.startsWith("A") || str.startsWith("X")) {
+		data.CID = "(국)"+data.CID;
+	} 
+
+</mte:script>
+		<span>${CID}</span>
+		<span>${TITLE}</span>
+		<span>${IMG}</span>
+		<span>${WRITER_DEPT_NAME}</span>
+		<span>${SECTION}</span>
+	</div>
+</mte:loop>
+</body>
+</html>

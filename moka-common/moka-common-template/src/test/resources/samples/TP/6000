@@ -1,0 +1,19 @@
+<h1> 돈화문 국악당 공연 정보 ${_TOTAL}건</h1>
+<ul class="list">
+	<mte:loop start="0" count="3">
+	<li>
+		<ul>
+			<h2>(${_INDEX})공연명:${performance}</h2>
+			<mte:script>
+				_ROW.intro = _ROW.intro.replaceAll('/pic','http://www.sdtt.or.kr/pic');
+			</mte:script>
+			<li>소개:${intro}</li>
+			<li>공연시간:${pertime}</li>
+			<li>연령제한:${age}</li>
+			<li>문의:${question}</li>
+			<li>가격:${price}</li>
+			<li>할인정보:${discount}</li>
+		</ul>
+	</li>
+	</mte:loop>
+</ul>

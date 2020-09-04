@@ -1,0 +1,7 @@
+<mte:case if="(meta=='Y')">
+	<link rel="canonical" id="canonical" href="${site}" />
+	<meta property="og:url" content="${site}" />
+	<meta name="twitter:url" content="${site}" />
+	<meta itemprop="url" content="${site}" />
+</mte:case>
+<mte:tp id="0002" name="메타 사이트"/>

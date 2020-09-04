@@ -1,0 +1,19 @@
+<html>
+<head>
+	<title>Data Load</title>
+</head>
+<body>
+<mte:data url="https://ars.yna.co.kr/api/v2/articlelink?body=N&id=931&before=60&count=3"/>
+<mte:loop start="0" count="10">
+	<div> 
+		<span>기사 ${$index}</span>
+		<span>${CID}</span>
+		<span>${TITLE}</span>
+		<span>${IMG}</span>
+		<span>${WRITER_DEPT_NAME}</span>
+		<span>${SECTION}</span>
+		<span>${xxx}</span>
+	</div>
+</mte:loop>
+</body>
+</html>

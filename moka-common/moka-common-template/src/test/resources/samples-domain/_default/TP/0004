@@ -1,0 +1,14 @@
+<div class="today today-weather">
+    <span class="blind">날짜와 날씨</span>
+    <span class="date" id="tickerWeatherDate">
+        <strong> </strong>
+        <em></em>
+    </span>
+    <div class="weather main-top-weather" id="tickerWeather">
+        <a href="//$domain{domain_name}/weather/index" data-stat-code="header_weather" data-stat-section>
+        <ul>
+            
+        </ul>
+        </a>
+    </div>
+</div>

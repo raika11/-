@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="false" />
+        <setting name="useColumnLabel" value="true" />
+        <setting name="useGeneratedKeys" value="false" />
+        <setting name="lazyLoadingEnabled" value="true" />
+        <setting name="multipleResultSetsEnabled" value="true" />
+        <setting name="defaultExecutorType" value="SIMPLE" />
+        <setting name="autoMappingBehavior" value="FULL" />
+        <setting name="callSettersOnNulls" value="true" />
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- <setting name="defaultStatementTimeout" value="60000" /> -->
+    </settings>
+    <typeAliases>
+        <package name="jmnet.moka.core.tps.mvc" />
+        <package name="jmnet.moka.core.tps.common.dto" />
+    </typeAliases>
+    <typeHandlers>
+        <typeHandler javaType="java.lang.Character" jdbcType="VARCHAR"
+            handler="jmnet.moka.common.data.mybatis.support.CharacterTypeHandler" />
+    </typeHandlers>
+    <plugins>
+        <plugin interceptor="jmnet.moka.common.data.mybatis.support.PaginationInterceptor">
+            <property name="dialectClass" value="jmnet.moka.common.data.mybatis.support.MysqlDialect" />
+        </plugin>
+    </plugins>
+</configuration>

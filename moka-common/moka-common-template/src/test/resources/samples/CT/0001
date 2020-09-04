@@ -1,0 +1,3 @@
+<mte:tp id="0000" name="HTML 헤드"/>
+<mte:tp id="0001" name="메타 공통"/>
+<title>안녕하세요? ${html(name)}님</title>

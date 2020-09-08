@@ -60,7 +60,12 @@ public class TemplateToken extends TemplateNode {
             return;
 		if ( this.isOnlyVariable) {
 			if ( context.has(this.text) ) {
-				sb.append(context.get(this.text));
+                Object value = context.get(this.text); 
+                if ( value != null) {
+                    sb.append(context.get(this.text));
+                } else {
+                    // null일 경우 넣지 않는다.
+                }
 			} else {
 				logger.debug("Not Found Variable:{}", this.text);
 			}

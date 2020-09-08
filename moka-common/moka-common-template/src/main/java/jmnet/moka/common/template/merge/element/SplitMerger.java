@@ -48,10 +48,15 @@ public class SplitMerger extends AbstractElementMerger{
         }
 
         String concated = "";
-        if (token != null && token.length() > 2) {
+        if (token != null && token.length() > 0) {
             concated = (String) context.get(token);
-        } else {
+            if ( concated == null || concated.length() == 0) {
+                return; 
+            }
+        } else if ( value != null && value.length() > 0) {
             concated = value;
+        } else {
+            return ;
         }
 
         String[] splitted = concated.split(separator);

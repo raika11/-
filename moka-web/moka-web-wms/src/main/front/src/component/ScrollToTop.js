@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 /**
- * history 변경 시 스크롤 탑으로 이동
+ * browser history 변경 시 스크롤 0으로 설정
  * @param {Element} param0.children children
  */
 const ScrollToTop = ({ children }) => {

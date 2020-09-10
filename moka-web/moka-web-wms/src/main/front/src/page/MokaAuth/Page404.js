@@ -13,7 +13,7 @@ const Page404 = ({ defaultLink }) => (
         <p className="h2 font-weight-normal mt-3 mb-4">
             The page you are looking for might have been removed.
         </p>
-        <Link to={defaultLink || '/dashboard/default'}>
+        <Link to={defaultLink || '/dashboard'}>
             <Button color="primary" size="lg">
                 Return to website
             </Button>

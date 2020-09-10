@@ -1,9 +1,8 @@
 import React from 'react';
 import './assets/scss/classic.scss';
 
-// router, history
-import { Router } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+// BrowserRouter
+import { BrowserRouter } from 'react-router-dom';
 
 // redux
 import { Provider } from 'react-redux';
@@ -12,13 +11,12 @@ import ReduxToastr from 'react-redux-toastr';
 import store from './store';
 import Routes from './routes/Routes';
 
-const browserHistory = createBrowserHistory();
 function App() {
     return (
         <Provider store={store}>
-            <Router history={browserHistory}>
+            <BrowserRouter>
                 <Routes />
-            </Router>
+            </BrowserRouter>
             <ReduxToastr
                 timeOut={5000}
                 newestOnTop={true}

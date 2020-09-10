@@ -3,9 +3,9 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-import { Main } from '@component';
+import Main from './component/Main';
 
-const Auth = ({ children }) => (
+const NoFrame = ({ children }) => (
     <Main className="d-flex w-100 justify-content-center">
         <Container className="d-flex flex-column">
             <Row className="h-100">
@@ -17,4 +17,4 @@ const Auth = ({ children }) => (
     </Main>
 );
 
-export default Auth;
+export default NoFrame;

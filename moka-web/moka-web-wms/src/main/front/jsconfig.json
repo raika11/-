@@ -10,7 +10,8 @@
             "@layout": ["src/layout/*"],
             "@page": ["src/page/*"],
             "@api": ["src/api/*"],
-            "@store": ["src/store/*"]
+            "@store": ["src/store/*"],
+            "@util": ["src/util/*"]
         }
     },
     "exclude": ["./build/*", "./node_modules/*"]

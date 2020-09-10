@@ -1,24 +1,20 @@
 import React from 'react';
-import { Container, Col, Row } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
-// import { Main } from '../components';
-// import Main from "../components/Main";
-// import Settings from "../components/Settings";
+import { Main } from '@component';
 
 const Auth = ({ children }) => (
-    //   <React.Fragment>
-    //     <Main className="d-flex w-100 justify-content-center">
-    //       <Container className="d-flex flex-column">
-    //         <Row className="h-100">
-    //           <Col sm="10" md="8" lg="6" className="mx-auto d-table h-100">
-    //             <div className="d-table-cell align-middle">{children}</div>
-    //           </Col>
-    //         </Row>
-    //       </Container>
-    //     </Main>
-    //     <Settings />
-    //   </React.Fragment>
-    <></>
+    <Main className="d-flex w-100 justify-content-center">
+        <Container className="d-flex flex-column">
+            <Row className="h-100">
+                <Col sm="10" md="8" lg="6" className="mx-auto d-table h-100">
+                    <div className="d-table-cell align-middle">{children}</div>
+                </Col>
+            </Row>
+        </Container>
+    </Main>
 );
 
 export default Auth;

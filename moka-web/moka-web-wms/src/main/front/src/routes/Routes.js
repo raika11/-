@@ -1,11 +1,26 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { ScrollToTop } from '../component';
+// layout
+import { AuthLayout } from '@layout';
+
+// page
+import Page404 from '@page/MokaAuth/Page404';
+
+// component
+import { ScrollToTop } from '@component';
 
 const Routes = () => (
     <ScrollToTop>
-        <Switch></Switch>
+        <Switch>
+            <Route
+                render={() => (
+                    <AuthLayout>
+                        <Page404 defaultLink="/dashboard" />
+                    </AuthLayout>
+                )}
+            />
+        </Switch>
     </ScrollToTop>
 );
 

@@ -3,7 +3,15 @@
         "target": "es2015",
         "module": "commonjs",
         "baseUrl": "./",
-        "paths": {}
+        "paths": {
+            "@/*": ["src/*"],
+            "@assets": ["src/assets/*"],
+            "@component": ["src/component/*"],
+            "@layout": ["src/layout/*"],
+            "@page": ["src/page/*"],
+            "@api": ["src/api/*"],
+            "@store": ["src/store/*"]
+        }
     },
     "exclude": ["./build/*", "./node_modules/*"]
 }

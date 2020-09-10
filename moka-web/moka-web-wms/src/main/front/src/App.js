@@ -1,22 +1,23 @@
 import React from 'react';
+import './assets/scss/classic.scss';
 
 // router, history
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
-// redux, store
+// redux
 import { Provider } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
+
 import store from './store';
+import Routes from './routes/Routes';
 
 const browserHistory = createBrowserHistory();
 function App() {
     return (
         <Provider store={store}>
             <Router history={browserHistory}>
-                <div>
-                    <h1>BackOffice</h1>
-                </div>
+                <Routes />
             </Router>
             <ReduxToastr
                 timeOut={5000}

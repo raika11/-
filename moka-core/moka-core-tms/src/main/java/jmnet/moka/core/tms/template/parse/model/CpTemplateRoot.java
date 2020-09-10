@@ -229,15 +229,8 @@ public class CpTemplateRoot extends MspTemplateRoot {
             childContext.set(ApiResult.MAIN_TOTAL, 0);
         }
 
-        String templateId = item.getString(ItemConstants.COMPONENT_TEMPLATE_ID);
         TemplateRoot tpTemplateRoot = this.getTpTemplateRoot();
-
-        if (context.getMergeOptions().isWrapItem()) {
-            sb.append(context.getCurrentIndent())
-                    .append(merger.getWrapItemStart(MspConstants.ITEM_TEMPLATE, templateId))
-                    .append(System.lineSeparator());
-        }
-
+        /* mte:tp를 거치지 않고 바로 TpTemplateRoot를 처리하므로 wrapping을 처리한다. */
         wrapItemStart(merger, context, sb);
 
         if (tpTemplateRoot != null) {

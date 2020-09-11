@@ -1,0 +1,12 @@
+// Variables
+@import '1-variables/non_responsive';
+
+// AppStack
+@import 'app';
+
+.non-responsive {
+    width: 1903px !important;
+    .d-flex {
+        display: block !important;
+    }
+}

@@ -12,18 +12,27 @@ const Routes = () => (
     <ScrollToTop>
         <Suspense fallback={<Loader />}>
             <Switch>
-                {routes.map(({ path, layout: Layout, component: Component, name, ...rest }) => (
-                    <Route
-                        key={name}
-                        path={path}
-                        {...rest}
-                        render={(props) => (
-                            <Layout>
-                                <Component {...props} />
-                            </Layout>
-                        )}
-                    />
-                ))}
+                {routes.map(
+                    ({
+                        path,
+                        layout: Layout,
+                        layoutClassName,
+                        component: Component,
+                        name,
+                        ...rest
+                    }) => (
+                        <Route
+                            key={name}
+                            path={path}
+                            {...rest}
+                            render={(props) => (
+                                <Layout className={layoutClassName}>
+                                    <Component {...props} />
+                                </Layout>
+                            )}
+                        />
+                    )
+                )}
                 <Redirect from="*" to="/404" />
             </Switch>
         </Suspense>

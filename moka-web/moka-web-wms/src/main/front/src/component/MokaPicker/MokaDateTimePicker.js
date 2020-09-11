@@ -7,13 +7,24 @@ const defaultDateFormat = 'YYYY-MM-DD';
 const defaultTimeFormat = 'HH:mm';
 
 /**
- * DateTime 입력창
+ * DateTimePicker
  * @param {string} props.placeholder placeholder
  * @param {string} props.dateFormat 날짜포맷(moment)
  * @param {string} props.timeFormat 시간포맷(moment)
  */
 const MokaDateTimePicker = (props) => {
     const { placeholder, dateFormat, timeFormat, ...rest } = props;
+
+    const renderDay = (props, currentDate, selectedDate) => {
+        if (currentDate._d.getDay() === 0) {
+            return (
+                <td {...props} className={`${props.className} sunday`}>
+                    {currentDate.date()}
+                </td>
+            );
+        }
+        return <td {...props}>{currentDate.date()}</td>;
+    };
 
     return (
         <DateTime
@@ -22,6 +33,7 @@ const MokaDateTimePicker = (props) => {
             timeFormat={timeFormat || defaultTimeFormat}
             defaultValue={moment().format(`${defaultDateFormat} ${defaultTimeFormat}`)}
             {...rest}
+            renderDay={renderDay}
             inputProps={{ placeholder: placeholder }}
         />
     );

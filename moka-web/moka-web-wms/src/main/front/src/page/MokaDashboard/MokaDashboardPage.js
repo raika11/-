@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
+import InputMask from 'react-input-mask';
+import Select from 'react-select';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+
+import { MokaDateTimePicker } from '@component';
+
+const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+];
 
 const MokaDashboardPage = () => {
     const [checked, setChecked] = useState(true);
@@ -37,11 +47,23 @@ const MokaDashboardPage = () => {
                                         <option>옵션1</option>
                                         <option>옵션2</option>
                                     </Form.Control>
-                                    <Form.Control as="select" custom>
+                                    <Form.Control as="select" custom className="mb-1">
                                         <option value="">커스텀 셀렉트</option>
                                         <option>옵션1</option>
                                         <option>옵션2</option>
                                     </Form.Control>
+                                    <Select
+                                        options={options}
+                                        className="react-select-container"
+                                        classNamePrefix="react-select"
+                                        placeholder="react-select lib"
+                                        styles={{
+                                            menu: (provided, state) => ({
+                                                ...provided,
+                                                zIndex: 2
+                                            })
+                                        }}
+                                    />
                                 </Form.Group>
 
                                 {/* checkbox */}
@@ -113,9 +135,29 @@ const MokaDashboardPage = () => {
                         <Card.Header className="mb-0">Form</Card.Header>
                         <Card.Body>
                             <Form>
+                                {/* 자동완성 */}
                                 <Form.Group>
-                                    <Form.Label>1) 자동완성</Form.Label>
-                                    {/* <Form */}
+                                    <Form.Label>1) 자동완성(react-select lib 사용)</Form.Label>
+                                    <Select
+                                        className="react-select-container"
+                                        classNamePrefix="react-select"
+                                        options={options}
+                                        isMulti
+                                    />
+                                </Form.Group>
+
+                                {/* Input Mask */}
+                                <Form.Group>
+                                    <Form.Label>2) InputMask</Form.Label>
+                                    <InputMask mask="(999) 9999-9999">
+                                        {(inputProps) => <Form.Control {...inputProps} />}
+                                    </InputMask>
+                                </Form.Group>
+
+                                {/* 달력 */}
+                                <Form.Group>
+                                    <Form.Label>3) Datetime picker</Form.Label>
+                                    <MokaDateTimePicker placeholder="날짜를 선택해주세요" />
                                 </Form.Group>
                             </Form>
                         </Card.Body>

@@ -36,6 +36,10 @@
         color: $black;
         cursor: pointer;
     }
+
+    .react-select__menu {
+        z-index: 2;
+    }
 }
 
 .input-group > .react-select-container {

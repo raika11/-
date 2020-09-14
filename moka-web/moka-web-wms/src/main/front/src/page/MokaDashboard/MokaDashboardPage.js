@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import InputMask from 'react-input-mask';
-import Select from 'react-select';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -10,16 +9,28 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-import { MokaDateTimePicker } from '@component';
+import { MokaDateTimePicker, MokaAutocomplete } from '@component';
 
 const options = [
-    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'chocolate', label: 'Chocolate', test: 'test' },
     { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'A', label: 'aaaaa' },
+    { value: 'b', label: 'aaaaa' },
+    { value: 'c', label: 'aaaaa' },
+    { value: 'd', label: 'aaaaa' },
+    { value: 'e', label: 'aaaaa' },
+    { value: 'f', label: 'aaaaa' },
+    { value: 'g', label: 'aaaaa' },
+    { value: 'h', label: 'aaaaa' },
+    { value: 'i', label: 'aaaaa' },
+    { value: 'j', label: 'aaaaa' },
+    { value: 'k', label: 'aaaaa' }
 ];
 
 const MokaDashboardPage = () => {
     const [checked, setChecked] = useState(true);
+    const [multiSelectValue, setMultiSelectValue] = useState([]);
 
     return (
         <Container>
@@ -55,18 +66,7 @@ const MokaDashboardPage = () => {
                                         <option>옵션1</option>
                                         <option>옵션2</option>
                                     </Form.Control>
-                                    <Select
-                                        options={options}
-                                        className="react-select-container"
-                                        classNamePrefix="react-select"
-                                        placeholder="react-select lib"
-                                        styles={{
-                                            menu: (provided, state) => ({
-                                                ...provided,
-                                                zIndex: 2
-                                            })
-                                        }}
-                                    />
+                                    <MokaAutocomplete options={options} />
                                 </Form.Group>
 
                                 {/* checkbox */}
@@ -141,11 +141,15 @@ const MokaDashboardPage = () => {
                                 {/* 자동완성 */}
                                 <Form.Group>
                                     <Form.Label>1) 자동완성(react-select lib 사용)</Form.Label>
-                                    <Select
-                                        className="react-select-container"
-                                        classNamePrefix="react-select"
+                                    <MokaAutocomplete
                                         options={options}
+                                        closeMenuOnSelect={false}
                                         isMulti
+                                        searchIcon={true}
+                                        value={multiSelectValue}
+                                        onChange={(value, event) => {
+                                            setMultiSelectValue(value);
+                                        }}
                                     />
                                 </Form.Group>
 

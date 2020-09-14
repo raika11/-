@@ -23,6 +23,8 @@ const MokaDraggableModal = (props) => {
             <Modal
                 aria-labelledby="draggable-modal-title"
                 show={show}
+                onHide={() => setShow(false)}
+                backdrop="static"
                 scrollable="true"
                 dialogAs={DraggableModalDialog}
                 {...rest}
@@ -49,7 +51,7 @@ const MokaDraggableModal = (props) => {
 
 MokaDraggableModal.propTypes = {
     title: PropTypes.string,
-    content: PropTypes.element
+    content: PropTypes.string
 };
 
 export default MokaDraggableModal;

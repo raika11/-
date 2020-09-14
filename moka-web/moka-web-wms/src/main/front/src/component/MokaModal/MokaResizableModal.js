@@ -25,6 +25,8 @@ const MokaResizableModal = (props) => {
             <Modal
                 aria-labelledby="draggable-modal-title"
                 show={show}
+                onHide={() => setShow(false)}
+                backdrop="static"
                 scrollable="true"
                 dialogAs={DraggableModalDialog}
                 {...rest}
@@ -32,7 +34,6 @@ const MokaResizableModal = (props) => {
                 <ResizableBox
                     height={300}
                     width={300}
-                    // className={resizable}
                     minConstraints={[width, height]}
                     maxConstraints={[window.innerWidth - 64, window.innerHeight - 64]}
                 >
@@ -42,11 +43,7 @@ const MokaResizableModal = (props) => {
                     </Modal.Header>
 
                     {/* 컨텐츠 */}
-                    {content && (
-                        <Modal.Body className={clsx('text-center m-3', 'resizableBoxContent')}>
-                            {content}
-                        </Modal.Body>
-                    )}
+                    {content && <Modal.Body className="text-center m-3">{content}</Modal.Body>}
 
                     {/* 액션 */}
                     <Modal.Footer>
@@ -63,7 +60,7 @@ const MokaResizableModal = (props) => {
 
 MokaResizableModal.propTypes = {
     title: PropTypes.string,
-    content: PropTypes.element
+    content: PropTypes.string
 };
 
 export default MokaResizableModal;

@@ -6,6 +6,7 @@ import Page404 from '@page/MokaAuth/Page404';
 
 // page
 const MokaDashBoard = React.lazy(() => import('@page/MokaDashboard'));
+const TestBoard = React.lazy(() => import('@page/TestBoard'));
 
 const routes = [
     {
@@ -21,6 +22,14 @@ const routes = [
         name: 'Page404',
         component: () => <Page404 defaultLink="/" />,
         layout: NoFrame
+    },
+    {
+        path: '/test',
+        name: 'Test',
+        component: TestBoard,
+        layout: NoFrame,
+        nonResponsive: false,
+        exact: true
     }
 ];
 

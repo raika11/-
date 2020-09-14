@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import InputMask from 'react-input-mask';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
-import AlertComponet from './AlertComponent';
-import { MokaDateTimePicker, MokaDraggableModal, MokaResizableModal, MokaAutocomplete } from '@component';
+import {
+    MokaDateTimePicker,
+    MokaDraggableModal,
+    MokaResizableModal,
+    MokaAutocomplete
+} from '@component';
 
 const options = [
     { value: 'chocolate', label: 'Chocolate', test: 'test' },
@@ -171,17 +175,6 @@ const MokaDashboardPage = () => {
                             </Form>
                         </Card.Body>
                     </Card>
-                    <AlertComponet />
-                    <MokaDraggableModal
-                        btnTitle="드래그 모달"
-                        title="Draggable-modal-test"
-                        content="테스트"
-                    />
-                    <MokaResizableModal
-                        btnTitle="리사이즈 모달"
-                        title="Resizeable-modal-test"
-                        content="테스트"
-                    />
                 </Col>
             </Row>
         </Container>

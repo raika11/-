@@ -13,15 +13,7 @@ const routes = [
         name: 'Default',
         component: MokaDashBoard,
         layout: NoFrame,
-        layoutClassName: 'non-responsive',
-        exact: true
-    },
-    {
-        path: '/dashboard',
-        name: 'Dashboard',
-        component: MokaDashBoard,
-        layout: NoFrame,
-        layoutClassName: 'non-responsive',
+        nonResponsive: false,
         exact: true
     },
     {

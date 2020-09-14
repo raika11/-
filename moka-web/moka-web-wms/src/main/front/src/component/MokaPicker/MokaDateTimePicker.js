@@ -16,6 +16,7 @@ const MokaDateTimePicker = (props) => {
     const { placeholder, dateFormat, timeFormat, ...rest } = props;
 
     const renderDay = (props, currentDate, selectedDate) => {
+        // 일요일 스타일 변경
         if (currentDate._d.getDay() === 0) {
             return (
                 <td {...props} className={`${props.className} sunday`}>

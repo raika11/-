@@ -1,23 +1,20 @@
 import React from 'react';
-import clsx from 'clsx';
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-
 import Main from './component/Main';
+import NonResponsive from './component/NonResponsive';
 
-const NoFrame = ({ children, className }) => {
-    return (
-        <Main className={clsx('d-flex w-100 justify-content-center', { [className]: className })}>
-            <Container className="d-flex flex-column">
-                <Row className="h-100">
-                    <Col sm="10" md="8" lg="6" className="mx-auto d-table h-100">
-                        <div className="d-table-cell align-middle">{children}</div>
-                    </Col>
-                </Row>
-            </Container>
-        </Main>
-    );
+/**
+ * NoFrame 레이아웃
+ * @param {Element} param0.children children
+ * @param {boolean} param0.nonResponsive 반응형 여부
+ */
+const NoFrame = ({ children, nonResponsive }) => {
+    const main = () => <Main className="d-flex w-100 justify-content-center">{children}</Main>;
+
+    if (nonResponsive) {
+        return <NonResponsive>{main()}</NonResponsive>;
+    }
+
+    return main();
 };
 
 export default NoFrame;

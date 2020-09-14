@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import InputMask from 'react-input-mask';
 import Select from 'react-select';
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 import { MokaDateTimePicker } from '@component';
 
@@ -19,7 +22,7 @@ const MokaDashboardPage = () => {
     const [checked, setChecked] = useState(true);
 
     return (
-        <Container fluid className="p-0">
+        <Container>
             <Row>
                 <Col lg="6">
                     <h1 className="h3 mb-3">Basic Inputs</h1>
@@ -158,6 +161,14 @@ const MokaDashboardPage = () => {
                                 <Form.Group>
                                     <Form.Label>3) Datetime picker</Form.Label>
                                     <MokaDateTimePicker placeholder="날짜를 선택해주세요" />
+                                </Form.Group>
+
+                                {/* Go To 404 */}
+                                <Form.Group>
+                                    <Form.Label>반응형 페이지 이동</Form.Label>
+                                    <Link to="/404">
+                                        <Button>404</Button>
+                                    </Link>
                                 </Form.Group>
                             </Form>
                         </Card.Body>

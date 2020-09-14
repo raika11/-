@@ -16,9 +16,9 @@ const Routes = () => (
                     ({
                         path,
                         layout: Layout,
-                        layoutClassName,
                         component: Component,
                         name,
+                        nonResponsive,
                         ...rest
                     }) => (
                         <Route
@@ -26,7 +26,7 @@ const Routes = () => (
                             path={path}
                             {...rest}
                             render={(props) => (
-                                <Layout className={layoutClassName}>
+                                <Layout nonResponsive={nonResponsive}>
                                     <Component {...props} />
                                 </Layout>
                             )}

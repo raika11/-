@@ -18,9 +18,17 @@ const routes = [
         exact: true
     },
     {
+        path: '/dashboard',
+        name: 'DashBoard',
+        component: MokaDashBoard,
+        layout: DefaultLayout,
+        nonResponsive: false,
+        exact: true
+    },
+    {
         path: '/404',
         name: 'Page404',
-        component: () => <Page404 defaultLink="/" />,
+        component: () => <Page404 defaultLink="/dashboard" />,
         layout: NoFrame
     },
     {

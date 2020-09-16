@@ -1,6 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // routes => api 변경
 // import routes from '@/routes';
@@ -18,7 +20,13 @@ const Sidebar = (props) => {
                 'sidebar-sticky': isSticky
             })}
         >
-            <div className="sidebar-content">TEST</div>
+            <div className="sidebar-content">
+                <PerfectScrollbar>
+                    <Link className="sidebar-brand" to="/">
+                        <span className="align-middle">The JoongAng</span>
+                    </Link>
+                </PerfectScrollbar>
+            </div>
         </nav>
     );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import InputMask from 'react-input-mask';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -6,24 +6,13 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { MokaDateTimePicker, MokaDraggableModal, MokaAutocomplete } from '@component';
+import { toastr } from 'react-redux-toastr';
 
-const options = [
-    { value: 'chocolate', label: 'Chocolate', test: 'test' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'A', label: 'aaaaa' },
-    { value: 'b', label: 'aaaaa' },
-    { value: 'c', label: 'aaaaa' },
-    { value: 'd', label: 'aaaaa' },
-    { value: 'e', label: 'aaaaa' },
-    { value: 'f', label: 'aaaaa' },
-    { value: 'g', label: 'aaaaa' },
-    { value: 'h', label: 'aaaaa' },
-    { value: 'i', label: 'aaaaa' },
-    { value: 'j', label: 'aaaaa' },
-    { value: 'k', label: 'aaaaa' }
-];
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+
+import { MokaDateTimePicker, MokaDraggableModal, MokaAutocomplete } from '@component';
+import { options, tableData, tableColumns } from './data';
 
 const MokaDashboardPage = () => {
     const [checked, setChecked] = useState(true);
@@ -32,13 +21,29 @@ const MokaDashboardPage = () => {
     // modal test
     const [showD, setShowD] = useState(false);
 
+    const columns = tableColumns.map((col) => ({
+        ...col,
+        headerAttrs: (cell, row, rowIndex, colIndex) => ({
+            scope: 'col',
+            width: col.width
+        }),
+        attrs: (cell, row, rowIndex, colIndex) => ({
+            width: col.width
+        })
+    }));
+    const tableRef = useRef(null);
+
     return (
         <Container fluid className="p-0">
             <Row>
                 <Col lg="6">
                     <h1 className="h3 mb-3">Basic Inputs</h1>
                     <Card>
-                        <Card.Header className="mb-0">Form</Card.Header>
+                        <Card.Header>
+                            <Card.Title tag="h5" className="mb-0">
+                                Form
+                            </Card.Title>
+                        </Card.Header>
                         <Card.Body>
                             <Form>
                                 {/* text input */}
@@ -135,7 +140,11 @@ const MokaDashboardPage = () => {
                 <Col lg="6">
                     <h1 className="h3 mb-3">Advanced Inputs</h1>
                     <Card>
-                        <Card.Header className="mb-0">Form</Card.Header>
+                        <Card.Header>
+                            <Card.Title tag="h5" className="mb-0">
+                                Form
+                            </Card.Title>
+                        </Card.Header>
                         <Card.Body>
                             <Form>
                                 {/* 자동완성 */}
@@ -181,6 +190,48 @@ const MokaDashboardPage = () => {
                                     <h1>드래그 가능한 모달</h1>
                                 </div>
                             </MokaDraggableModal>
+
+                            {/* toastr test */}
+                            <Button
+                                className="mr-2"
+                                onClick={() => {
+                                    toastr.confirm('확인창', {
+                                        onOk: () => console.log('OK: clicked'),
+                                        onCancle: () => console.log('CANCLE: clicked')
+                                    });
+                                }}
+                            >
+                                토스트 테스트
+                            </Button>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <h1 className="h3 mb-3">Table Test</h1>
+                    <Card>
+                        <Card.Header>
+                            <Card.Title tag="h5" className="mb-0">
+                                Basic Table
+                            </Card.Title>
+                        </Card.Header>
+                        <Card.Body>
+                            <BootstrapTable
+                                ref={tableRef}
+                                bootstrap4
+                                bordered={false}
+                                keyField="name"
+                                data={tableData}
+                                columns={columns}
+                                pagination={paginationFactory({
+                                    sizePerPage: 10,
+                                    sizePerPageList: [5, 10, 25, 50],
+                                    onPageChange: () => {
+                                        console.log(tableRef.current);
+                                    }
+                                })}
+                            />
                         </Card.Body>
                     </Card>
                 </Col>

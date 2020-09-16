@@ -1,3 +1,4 @@
 config
 node_modules
 src/serviceWorker.js
+src/assets/scss

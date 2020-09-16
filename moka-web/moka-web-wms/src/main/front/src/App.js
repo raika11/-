@@ -11,6 +11,15 @@ import ReduxToastr from 'react-redux-toastr';
 import store from './store';
 import Routes from './routes/Routes';
 
+// https://www.npmjs.com/package/react-redux-toastr
+const toastrOptions = {
+    okText: '예',
+    cancelText: '아니오',
+    component: (props) => {
+        console.log(props);
+    }
+};
+
 function App() {
     return (
         <Provider store={store}>
@@ -25,6 +34,7 @@ function App() {
                 transitionOut="fadeOut"
                 progressBar
                 closeOnToastrClick
+                options={toastrOptions}
             />
         </Provider>
     );

@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/Button';
 import AlertComponet from './AlertComponent';
 import { MokaDraggableModal } from '@component';
 import MokaTabComponent from './MokaTabComponent';
+import AccordionComponent from './AccordionComponent';
+import BreadcrumbComponent from './BreadcrumbsComponent';
 
 const TestBoardPgae = () => {
     // modal test
@@ -50,6 +52,31 @@ const TestBoardPgae = () => {
                                     { eventKey: 'third', title: 'TEST 3', content: 'TEST 3' }
                                 ]}
                             />
+                        </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header className="mb-0">Accordion</Card.Header>
+                        <Card.Body>
+                            <AccordionComponent
+                                card={[
+                                    {
+                                        eventKey: '0',
+                                        title: 'Test 1',
+                                        content: 'Test Accordion 1'
+                                    },
+                                    {
+                                        eventKey: '1',
+                                        title: 'Test 2',
+                                        content: 'Test Accordion 2'
+                                    }
+                                ]}
+                            />
+                        </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header className="mb-0">Breadcrumb</Card.Header>
+                        <Card.Body>
+                            <BreadcrumbComponent />
                         </Card.Body>
                     </Card>
                 </Col>

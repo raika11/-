@@ -4,11 +4,23 @@ import * as act from './action';
 
 const initialState = {
     isOpen: true,
-    isSticky: false
+    isSticky: true,
+    isBoxed: false
 };
 
 export default handleActions(
     {
+        /** 레이아웃 */
+        [act.ENABLE_BOXED_LAYOUT]: (state) => {
+            return produce(state, (draft) => {
+                draft.isBoxed = true;
+            });
+        },
+        [act.DISABLE_BOXED_LAYOUT]: (state) => {
+            return produce(state, (draft) => {
+                draft.isBoxed = false;
+            });
+        },
         /** 사이드바 */
         [act.SHOW_SIDEBAR]: (state) => {
             return produce(state, (draft) => {

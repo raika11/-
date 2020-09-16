@@ -53,6 +53,7 @@ const MokaModal = (props) => {
         >
             {/* 타이틀 */}
             <Modal.Header id="draggable-modal-title" closeButton>
+                <div id="draggable-handle" />
                 <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
 

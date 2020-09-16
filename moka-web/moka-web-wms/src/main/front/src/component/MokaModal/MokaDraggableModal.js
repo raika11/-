@@ -39,7 +39,7 @@ const defaultProps = {
 };
 
 const DraggableComponent = (props) => (
-    <Draggable handle="#draggable-modal-title" allowAnyClick={false}>
+    <Draggable handle="#draggable-handle" allowAnyClick={false}>
         <ModalDialog {...props} />
     </Draggable>
 );

@@ -1,5 +1,13 @@
 import { createAction } from 'redux-actions';
 
+/** 레이아웃 액션 */
+export const ENABLE_BOXED_LAYOUT = 'layout/ENABLE_BOXED_LAYOUT';
+export const DISABLE_BOXED_LAYOUT = 'layout/DISABLE_BOXED_LAYOUT';
+
+/** 레이아웃 액션 creator */
+export const enableBoxedLayout = createAction(ENABLE_BOXED_LAYOUT);
+export const disableBoxedLayout = createAction(DISABLE_BOXED_LAYOUT);
+
 /** 사이드바 액션 */
 export const SHOW_SIDEBAR = 'layout/SHOW_SIDEBAR';
 export const HIDE_SIDEBAR = 'layout/HIDE_SIDEBAR';

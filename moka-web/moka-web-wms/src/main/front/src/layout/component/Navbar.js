@@ -32,6 +32,9 @@ const MokaNavbar = () => {
                 <Nav.Link to="/test" as={NavLink}>
                     test
                 </Nav.Link>
+                <Nav.Link to="/aggrid" as={NavLink}>
+                    aggrid
+                </Nav.Link>
             </Nav>
             {/* Navbar menu 축소시 toggle, collapse 처리 */}
             {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import InputMask from 'react-input-mask';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
+import AlertComponet from './AlertComponent';
 import {
     MokaDateTimePicker,
     MokaDraggableModal,
@@ -29,6 +30,10 @@ const options = [
 const MokaDashboardPage = () => {
     const [checked, setChecked] = useState(true);
     const [multiSelectValue, setMultiSelectValue] = useState([]);
+
+    // modal test
+    const [showD, setShowD] = useState(false);
+    const [showR, setShowR] = useState(false);
 
     return (
         <Container>
@@ -173,6 +178,34 @@ const MokaDashboardPage = () => {
                                     </Link>
                                 </Form.Group>
                             </Form>
+
+                            {/* Alert */}
+                            <AlertComponet />
+
+                            {/* Modal */}
+                            <Button className="mr-2" onClick={() => setShowD(true)}>
+                                드래그 모달
+                            </Button>
+                            <Button onClick={() => setShowR(true)}>리사이즈 모달</Button>
+                            <MokaDraggableModal
+                                show={showD}
+                                onHide={() => setShowD(false)}
+                                title="드래그가능한 모달"
+                            >
+                                <div>
+                                    <h1>드래그 가능한 모달</h1>
+                                </div>
+                            </MokaDraggableModal>
+                            <MokaResizableModal
+                                show={showR}
+                                onHide={() => setShowR(false)}
+                                title="리사이즈가능한 모달"
+                                draggable
+                            >
+                                <div>
+                                    <h1>드래그 가능한 모달</h1>
+                                </div>
+                            </MokaResizableModal>
                         </Card.Body>
                     </Card>
                 </Col>

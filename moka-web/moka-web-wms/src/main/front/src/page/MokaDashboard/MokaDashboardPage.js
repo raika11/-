@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import InputMask from 'react-input-mask';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
-import AlertComponet from './AlertComponent';
 import {
     MokaDateTimePicker,
     MokaDraggableModal,
@@ -178,9 +177,6 @@ const MokaDashboardPage = () => {
                                     </Link>
                                 </Form.Group>
                             </Form>
-
-                            {/* Alert */}
-                            <AlertComponet />
 
                             {/* Modal */}
                             <Button className="mr-2" onClick={() => setShowD(true)}>

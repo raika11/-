@@ -1,14 +1,9 @@
 import React from 'react';
 import Draggable from 'react-draggable';
 import ModalDialog from 'react-bootstrap/ModalDialog';
-import { Button, Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-const DraggableComponent = (props) => (
-    <Draggable handle="#draggable-modal-title" allowAnyClick={false}>
-        <ModalDialog {...props} />
-    </Draggable>
-);
+import MokaModal from './MokaModal';
 
 const propTypes = {
     /**
@@ -40,45 +35,28 @@ const propTypes = {
 };
 
 const defaultProps = {
-    title: '',
-    children: undefined,
-    actionButtons: undefined
+    title: ''
 };
+
+const DraggableComponent = (props) => (
+    <Draggable handle="#draggable-modal-title" allowAnyClick={false}>
+        <ModalDialog {...props} />
+    </Draggable>
+);
 
 const MokaDraggableModal = (props) => {
     const { show, onHide, title, children, actionButtons, ...rest } = props;
 
     return (
-        <Modal
-            aria-labelledby={title}
+        <MokaModal
             show={show}
             onHide={onHide}
-            backdrop={false}
-            animation={false}
-            scrollable="true"
+            title={title}
+            children={children}
+            actionButtons={actionButtons}
             dialogAs={DraggableComponent}
-            enforceFocus={false}
             {...rest}
-        >
-            {/* 타이틀 */}
-            <Modal.Header id="draggable-modal-title" closeButton>
-                <Modal.Title>{title}</Modal.Title>
-            </Modal.Header>
-
-            {/* 컨텐츠 */}
-            <Modal.Body>{children}</Modal.Body>
-
-            {/* 액션 */}
-            {actionButtons && (
-                <Modal.Footer>
-                    {actionButtons.map(({ variant, buttonName, ...rest }) => (
-                        <Button variant={variant} {...rest}>
-                            {buttonName}
-                        </Button>
-                    ))}
-                </Modal.Footer>
-            )}
-        </Modal>
+        />
     );
 };
 

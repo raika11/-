@@ -8,7 +8,13 @@ import AlertComponet from './AlertComponent';
 import { MokaDraggableModal } from '@component';
 import MokaTabComponent from './MokaTabComponent';
 import AccordionComponent from './AccordionComponent';
-import BreadcrumbComponent from './BreadcrumbsComponent';
+import BreadcrumbComponent from './BreadcrumbComponent';
+import PopoverComponent from './PopoverComponent';
+import TooltipComponent from './TooltipComponent';
+import BadgeComponent from './BadgeComponent';
+
+const placements = ['right', 'left', 'top', 'bottom'];
+const variants = ['primary', 'secondary', 'success', 'danger', 'warning', 'light', 'info', 'dark'];
 
 const TestBoardPgae = () => {
     // modal test
@@ -78,6 +84,68 @@ const TestBoardPgae = () => {
                         <Card.Body>
                             <BreadcrumbComponent />
                         </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header className="mb-0">Popover</Card.Header>
+                        <Card.Body>
+                            {placements.map((placement, idx) => (
+                                <PopoverComponent
+                                    key={idx}
+                                    placement={placement}
+                                    title={`test-${placement}`}
+                                    content={`test-${placement}`}
+                                    buttonTitle={placement}
+                                    className="m-1"
+                                />
+                            ))}
+                        </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header className="mb-0">Tooltips</Card.Header>
+                        <Card.Body>
+                            {placements.map((placement, idx) => (
+                                <TooltipComponent
+                                    key={idx}
+                                    placement={placement}
+                                    title={`test-${placement}`}
+                                    content={`test-${placement}`}
+                                    buttonTitle={placement}
+                                    className="m-1"
+                                />
+                            ))}
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col lg="6">
+                    <Card>
+                        <Card.Header className="mb-0">Badges</Card.Header>
+                        <Card.Body>
+                            <div className="mb-1">
+                                {variants.map((variant, idx) => (
+                                    <BadgeComponent
+                                        key={idx}
+                                        title="test"
+                                        variant={variant}
+                                        className="mr-1"
+                                    />
+                                ))}
+                            </div>
+                            <div>
+                                {variants.map((variant, idx) => (
+                                    <BadgeComponent
+                                        key={idx}
+                                        pill
+                                        title="test"
+                                        variant={variant}
+                                        className="mr-1"
+                                    />
+                                ))}
+                            </div>
+                        </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header className="mb-0">Dropdowns</Card.Header>
+                        <Card.Body></Card.Body>
                     </Card>
                 </Col>
             </Row>

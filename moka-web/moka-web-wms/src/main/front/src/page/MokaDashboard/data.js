@@ -479,7 +479,7 @@ const tableColumns = [
         dataField: 'name',
         text: 'Name',
         sort: true,
-        width: 250
+        width: 256
     },
     {
         dataField: 'position',

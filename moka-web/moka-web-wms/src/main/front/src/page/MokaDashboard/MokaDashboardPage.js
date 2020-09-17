@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import InputMask from 'react-input-mask';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -8,11 +8,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { toastr } from 'react-redux-toastr';
 
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-
 import { MokaDateTimePicker, MokaDraggableModal, MokaAutocomplete } from '@component';
-import { options, tableData, tableColumns } from './data';
+import { options } from './data';
+import Table from './TableTest';
 
 const MokaDashboardPage = () => {
     const [checked, setChecked] = useState(true);
@@ -20,18 +18,8 @@ const MokaDashboardPage = () => {
 
     // modal test
     const [showD, setShowD] = useState(false);
-
-    const columns = tableColumns.map((col) => ({
-        ...col,
-        headerAttrs: (cell, row, rowIndex, colIndex) => ({
-            scope: 'col',
-            width: col.width
-        }),
-        attrs: (cell, row, rowIndex, colIndex) => ({
-            width: col.width
-        })
-    }));
-    const tableRef = useRef(null);
+    // table
+    const [fixedTable, setFixedTable] = useState(false);
 
     return (
         <Container fluid className="p-0">
@@ -173,7 +161,10 @@ const MokaDashboardPage = () => {
                                 {/* 달력 */}
                                 <Form.Group>
                                     <Form.Label>3) Datetime picker</Form.Label>
-                                    <MokaDateTimePicker placeholder="날짜를 선택해주세요" />
+                                    <MokaDateTimePicker
+                                        placeholder="날짜를 선택해주세요"
+                                        timeFormat={null}
+                                    />
                                 </Form.Group>
                             </Form>
 
@@ -188,6 +179,19 @@ const MokaDashboardPage = () => {
                             >
                                 <div>
                                     <h1>드래그 가능한 모달</h1>
+                                    <Button
+                                        onClick={() => {
+                                            toastr.confirm('적용하시겠습니까?', {
+                                                onOk: () => {
+                                                    setShowD(false);
+                                                },
+                                                onCancle: () => {},
+                                                attention: false
+                                            });
+                                        }}
+                                    >
+                                        적용
+                                    </Button>
                                 </div>
                             </MokaDraggableModal>
 
@@ -199,6 +203,7 @@ const MokaDashboardPage = () => {
                                         onOk: () => console.log('OK: clicked'),
                                         onCancle: () => console.log('CANCLE: clicked')
                                     });
+                                    // toastr.success('ddd', 'ddd');
                                 }}
                             >
                                 토스트 테스트
@@ -217,21 +222,10 @@ const MokaDashboardPage = () => {
                             </Card.Title>
                         </Card.Header>
                         <Card.Body>
-                            <BootstrapTable
-                                ref={tableRef}
-                                bootstrap4
-                                bordered={false}
-                                keyField="name"
-                                data={tableData}
-                                columns={columns}
-                                pagination={paginationFactory({
-                                    sizePerPage: 10,
-                                    sizePerPageList: [5, 10, 25, 50],
-                                    onPageChange: () => {
-                                        console.log(tableRef.current);
-                                    }
-                                })}
-                            />
+                            <Button className="mb-3" onClick={() => setFixedTable(!fixedTable)}>
+                                fixed 테이블 토글
+                            </Button>
+                            <Table fixed={fixedTable} />
                         </Card.Body>
                     </Card>
                 </Col>

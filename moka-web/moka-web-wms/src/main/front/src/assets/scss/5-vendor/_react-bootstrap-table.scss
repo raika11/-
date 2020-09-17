@@ -1,3 +1,37 @@
+.fixed-table .react-bootstrap-table {
+    .table {
+        position: relative;
+        overflow-x: auto;
+        display: block;
+        min-height: 400px;
+
+        thead {
+            display: block;
+            position: sticky;
+            box-sizing: border-box;
+            top: 0;
+            th {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+        tbody {
+            overflow-y: scroll;
+            position: absolute;
+            height: calc(100% - 48px);
+        }
+    }
+}
+
+.react-bootstrap-table {
+    margin-bottom: 1rem;
+    overflow-y: auto;
+
+    .table {
+        margin-bottom: unset;
+    }
+}
+
 .card > .react-bootstrap-table .table {
     margin-bottom: 0;
 }

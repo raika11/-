@@ -23,7 +23,7 @@ const routes = [
         name: 'DashBoard',
         component: MokaDashBoard,
         layout: DefaultLayout,
-        nonResponsive: false,
+        nonResponsive: true,
         exact: true
     },
     {

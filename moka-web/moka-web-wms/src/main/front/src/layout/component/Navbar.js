@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 
 import { toggleSidebar } from '@store/layout/action';
 
-const MokaNavbar = () => {
+const MokaNavbar = ({ nonResponsive }) => {
     const dispatch = useDispatch();
 
     const onToggleSidebar = () => {
@@ -17,9 +17,11 @@ const MokaNavbar = () => {
     return (
         <Navbar bg="white" expanded>
             {/* sidebar toggle button */}
-            <span className="sidebar-toggle d-flex mr-2" onClick={onToggleSidebar}>
-                <i className="hamburger align-self-center" />
-            </span>
+            {!nonResponsive && (
+                <span className="sidebar-toggle d-flex mr-2" onClick={onToggleSidebar}>
+                    <i className="hamburger align-self-center" />
+                </span>
+            )}
 
             {/* nav content */}
             <Nav className="mr-auto" navbar>

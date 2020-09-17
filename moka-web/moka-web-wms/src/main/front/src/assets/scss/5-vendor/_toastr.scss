@@ -1,3 +1,7 @@
 #toast-container > div {
-  opacity: 0.9;
+    opacity: 0.9;
+}
+
+body.toastr-confirm-active {
+    padding-right: 17px;
 }

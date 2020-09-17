@@ -9,7 +9,11 @@ const propTypes = {
     /**
      * 링크 URL
      */
-    to: PropTypes.string.isRequired,
+    to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+    /**
+     * 링크 타겟
+     */
+    target: PropTypes.oneOf(['_blank', '_self', '_parent', '_top']),
     /**
      * 링크 텍스트
      */
@@ -25,6 +29,7 @@ const propTypes = {
     inputProps: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)])
 };
 const defaultProps = {
+    target: '_blank',
     inputProps: {}
 };
 
@@ -34,7 +39,7 @@ const MokaPrependLinkInput = (props) => {
     return (
         <InputGroup className={className}>
             <InputGroup.Prepend>
-                <Link to={to}>
+                <Link to={to} target="_blank">
                     <InputGroup.Text>{linkText}</InputGroup.Text>
                 </Link>
             </InputGroup.Prepend>

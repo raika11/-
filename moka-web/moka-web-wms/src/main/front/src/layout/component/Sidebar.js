@@ -8,6 +8,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // import routes from '@/routes';
 
 const Sidebar = (props) => {
+    const { nonResponsive } = props;
     const { isOpen, isSticky } = useSelector((state) => ({
         isOpen: state.layout.isOpen,
         isSticky: state.layout.isSticky
@@ -16,8 +17,8 @@ const Sidebar = (props) => {
     return (
         <nav
             className={clsx('sidebar', {
-                toggled: !isOpen,
-                'sidebar-sticky': isSticky
+                toggled: !isOpen && !nonResponsive,
+                'sidebar-sticky': isSticky && !nonResponsive
             })}
         >
             <div className="sidebar-content">

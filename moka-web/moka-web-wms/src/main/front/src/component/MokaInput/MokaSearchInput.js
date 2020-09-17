@@ -40,6 +40,7 @@ const propTypes = {
     buttonClassName: PropTypes.string
 };
 const defaultProps = {
+    placeholder: '검색어를 입력하세요',
     variant: 'primary',
     searchText: '검색'
 };

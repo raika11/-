@@ -14,20 +14,20 @@ import NonResponsive from './component/NonResponsive';
  */
 const DefaultLayout = ({ children, nonResponsive }) => {
     const layout = () => (
-        <Wrapper>
-            <Sidebar />
+        <>
+            <Sidebar nonResponsive={nonResponsive} />
             <Main>
-                <Navbar />
+                <Navbar nonResponsive={nonResponsive} />
                 <Content>{children}</Content>
             </Main>
-        </Wrapper>
+        </>
     );
 
     if (nonResponsive) {
         return <NonResponsive>{layout()}</NonResponsive>;
     }
 
-    return layout();
+    return <Wrapper>{layout()}</Wrapper>;
 };
 
 export default DefaultLayout;

@@ -14,6 +14,9 @@
     z-index: 99;
     background: $white;
     width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: $box-shadow;
+    border-radius: $border-radius;
 }
 .rdtOpen .rdtPicker {
     display: block;

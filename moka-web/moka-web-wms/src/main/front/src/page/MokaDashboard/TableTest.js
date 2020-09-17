@@ -1,7 +1,15 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
+import clsx from 'clsx';
 // import BtTable from 'react-bootstrap/Table';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faChevronLeft,
+    faChevronRight,
+    faStepBackward,
+    faStepForward
+} from '@fortawesome/free-solid-svg-icons';
 
 import { tableData, tableColumns } from './data';
 
@@ -9,6 +17,41 @@ const FixedTable = ({ children }) => <div className="fixed-table">{children}</di
 
 const TableTest = ({ fixed }) => {
     const tableRef = useRef(null);
+
+    // 페이지네이션 커스텀
+    const pageListRenderer = useCallback(({ pages, onPageChange }) => {
+        // just exclude <, <<, >>, >
+        // const pageWithoutIndication = pages.filter((p) => typeof p.page !== 'string');
+        return (
+            <div className="react-bootstrap-table-pagination-list col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                <div className="pagination react-bootstrap-table-page-btns-ul">
+                    {pages.map((p) => (
+                        <button
+                            key={p.page}
+                            className={clsx('btn', 'mr-2', {
+                                'btn-primary': !p.active,
+                                'btn-warning': p.active
+                            })}
+                            onClick={() => onPageChange(p.page)}
+                        >
+                            {p.title === 'next page' ? (
+                                <FontAwesomeIcon icon={faChevronRight} />
+                            ) : p.title === 'previous page' ? (
+                                <FontAwesomeIcon icon={faChevronLeft} />
+                            ) : p.title === 'first page' ? (
+                                <FontAwesomeIcon icon={faStepBackward} />
+                            ) : p.title === 'last page' ? (
+                                <FontAwesomeIcon icon={faStepForward} />
+                            ) : (
+                                p.page
+                            )}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        );
+    }, []);
+
     const createTable = (col) => (
         <BootstrapTable
             ref={tableRef}
@@ -18,8 +61,13 @@ const TableTest = ({ fixed }) => {
             data={tableData}
             columns={col}
             pagination={paginationFactory({
+                paginationSize: 10,
                 sizePerPage: 10,
                 sizePerPageList: [5, 10, 25, 50],
+                prePageText: '<',
+                nextPageText: '>',
+                showTotal: true,
+                pageListRenderer,
                 onPageChange: (param1, param2) => {
                     console.log(param1);
                     console.log(param2);

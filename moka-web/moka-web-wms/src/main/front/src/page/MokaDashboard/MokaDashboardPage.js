@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import InputMask from 'react-input-mask';
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,7 +9,13 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { toastr } from 'react-redux-toastr';
 
-import { MokaDateTimePicker, MokaDraggableModal, MokaAutocomplete } from '@component';
+import {
+    MokaDateTimePicker,
+    MokaDraggableModal,
+    MokaAutocomplete,
+    MokaPrependLinkInput,
+    MokaSearchInput
+} from '@component';
 import { options } from './data';
 import Table from './TableTest';
 
@@ -134,80 +141,103 @@ const MokaDashboardPage = () => {
                             </Card.Title>
                         </Card.Header>
                         <Card.Body>
-                            <Form>
-                                {/* 자동완성 */}
-                                <Form.Group>
-                                    <Form.Label>1) 자동완성(react-select lib 사용)</Form.Label>
-                                    <MokaAutocomplete
-                                        options={options}
-                                        closeMenuOnSelect={false}
-                                        isMulti
-                                        searchIcon={true}
-                                        value={multiSelectValue}
-                                        onChange={(value, event) => {
-                                            setMultiSelectValue(value);
-                                        }}
-                                    />
-                                </Form.Group>
+                            {/* 자동완성 */}
+                            <Form.Group>
+                                <Form.Label>1) 자동완성(react-select lib 사용)</Form.Label>
+                                <MokaAutocomplete
+                                    options={options}
+                                    closeMenuOnSelect={false}
+                                    isMulti
+                                    searchIcon={true}
+                                    value={multiSelectValue}
+                                    onChange={(value, event) => {
+                                        setMultiSelectValue(value);
+                                    }}
+                                />
+                            </Form.Group>
 
-                                {/* Input Mask */}
-                                <Form.Group>
-                                    <Form.Label>2) InputMask</Form.Label>
-                                    <InputMask mask="(999) 9999-9999">
-                                        {(inputProps) => <Form.Control {...inputProps} />}
-                                    </InputMask>
-                                </Form.Group>
+                            {/* Input Mask */}
+                            <Form.Group>
+                                <Form.Label>2) InputMask</Form.Label>
+                                <InputMask mask="(999) 9999-9999">
+                                    {(inputProps) => <Form.Control {...inputProps} />}
+                                </InputMask>
+                            </Form.Group>
 
-                                {/* 달력 */}
-                                <Form.Group>
-                                    <Form.Label>3) Datetime picker</Form.Label>
-                                    <MokaDateTimePicker
-                                        placeholder="날짜를 선택해주세요"
-                                        timeFormat={null}
-                                    />
-                                </Form.Group>
-                            </Form>
+                            {/* 달력 */}
+                            <Form.Group>
+                                <Form.Label>3) Datetime picker</Form.Label>
+                                <MokaDateTimePicker
+                                    className="mb-3"
+                                    placeholder="날짜를 선택해주세요"
+                                />
+                                <MokaDateTimePicker className="mb-3" dateFormat={null} />
+                                <MokaDateTimePicker className="mb-3" timeFormat={null} />
+                            </Form.Group>
 
                             {/* Modal */}
-                            <Button className="mr-2" onClick={() => setShowD(true)}>
-                                드래그 모달
-                            </Button>
-                            <MokaDraggableModal
-                                show={showD}
-                                onHide={() => setShowD(false)}
-                                title="드래그가능한 모달"
-                            >
-                                <div>
-                                    <h1>드래그 가능한 모달</h1>
-                                    <Button
-                                        onClick={() => {
-                                            toastr.confirm('적용하시겠습니까?', {
-                                                onOk: () => {
-                                                    setShowD(false);
-                                                },
-                                                onCancle: () => {},
-                                                attention: false
-                                            });
-                                        }}
-                                    >
-                                        적용
-                                    </Button>
-                                </div>
-                            </MokaDraggableModal>
+                            <div className="mb-3">
+                                <Button className="mr-2" onClick={() => setShowD(true)}>
+                                    드래그 모달
+                                </Button>
+                                <MokaDraggableModal
+                                    show={showD}
+                                    onHide={() => setShowD(false)}
+                                    title="드래그가능한 모달"
+                                >
+                                    <div>
+                                        <h1>드래그 가능한 모달</h1>
+                                        <Button
+                                            onClick={() => {
+                                                toastr.confirm('적용하시겠습니까?', {
+                                                    onOk: () => {
+                                                        setShowD(false);
+                                                    },
+                                                    onCancle: () => {},
+                                                    attention: false
+                                                });
+                                            }}
+                                        >
+                                            적용
+                                        </Button>
+                                    </div>
+                                </MokaDraggableModal>
 
-                            {/* toastr test */}
-                            <Button
-                                className="mr-2"
-                                onClick={() => {
-                                    toastr.confirm('확인창', {
-                                        onOk: () => console.log('OK: clicked'),
-                                        onCancle: () => console.log('CANCLE: clicked')
-                                    });
-                                    // toastr.success('ddd', 'ddd');
-                                }}
-                            >
-                                토스트 테스트
-                            </Button>
+                                {/* toastr test */}
+                                <Button
+                                    className="mr-2"
+                                    onClick={() => {
+                                        toastr.confirm('확인창', {
+                                            onOk: () => console.log('OK: clicked'),
+                                            onCancle: () => console.log('CANCLE: clicked')
+                                        });
+                                        // toastr.success('ddd', 'ddd');
+                                    }}
+                                >
+                                    토스트 테스트
+                                </Button>
+                            </div>
+
+                            <Form.Group>
+                                <Form.Label>4) Input Group</Form.Label>
+                                <MokaPrependLinkInput
+                                    className="mb-3"
+                                    to="/404"
+                                    linkText="ID : 3"
+                                    inputProps={[
+                                        {
+                                            placeholder: '템플릿위치그룹',
+                                            disabled: true,
+                                            className: 'bg-white'
+                                        },
+                                        { placeholder: '템플릿명' }
+                                    ]}
+                                />
+                                <MokaSearchInput
+                                    variant="warning"
+                                    onSearch={() => toastr.success('테스트', '성공')}
+                                />
+                            </Form.Group>
                         </Card.Body>
                     </Card>
                 </Col>

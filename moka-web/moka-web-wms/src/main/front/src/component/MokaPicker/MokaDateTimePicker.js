@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import DateTime from 'react-datetime';
 import PropTypes from 'prop-types';
 
@@ -10,6 +10,10 @@ const propTypes = {
      * placeholder
      */
     placeholder: PropTypes.string,
+    /**
+     * 기본값 (string)
+     */
+    defaultValue: PropTypes.string,
     /**
      * 날짜포맷(moment)
      */
@@ -26,7 +30,7 @@ const defaultProps = {
 };
 
 const MokaDateTimePicker = (props) => {
-    const { placeholder, dateFormat, timeFormat, ...rest } = props;
+    const { placeholder, dateFormat, timeFormat, defaultValue, ...rest } = props;
 
     const renderDay = (props, currentDate, selectedDate) => {
         // 일요일 스타일 변경
@@ -40,12 +44,23 @@ const MokaDateTimePicker = (props) => {
         return <td {...props}>{currentDate.date()}</td>;
     };
 
+    // 기본값 생성
+    const defaultValueCreator = useCallback(() => {
+        if (dateFormat && timeFormat) {
+            return moment().format(`${dateFormat} ${timeFormat}`);
+        } else if (timeFormat) {
+            return moment().format(timeFormat);
+        } else {
+            return moment().format(dateFormat);
+        }
+    }, [dateFormat, timeFormat]);
+
     return (
         <DateTime
             locale="ko"
             dateFormat={dateFormat}
             timeFormat={timeFormat}
-            defaultValue={moment().format(`${dateFormat} ${timeFormat}`)}
+            defaultValue={defaultValue || defaultValueCreator()}
             {...rest}
             renderDay={renderDay}
             inputProps={{ placeholder: placeholder }}

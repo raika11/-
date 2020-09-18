@@ -12,6 +12,7 @@ import { toastr } from 'react-redux-toastr';
 import {
     MokaDateTimePicker,
     MokaDraggableModal,
+    MokaCodeListModal,
     MokaAutocomplete,
     MokaPrependLinkInput,
     MokaSearchInput
@@ -25,6 +26,7 @@ const MokaDashboardPage = () => {
 
     // modal test
     const [showD, setShowD] = useState(false);
+    const [showLMS, setShowLMS] = useState(false);
     // table
     const [fixedTable, setFixedTable] = useState(false);
 
@@ -216,6 +218,19 @@ const MokaDashboardPage = () => {
                                 >
                                     토스트 테스트
                                 </Button>
+
+                                {/* 대중소 모달 */}
+                                <Button className="mr-2" onClick={() => setShowLMS(true)}>
+                                    대중소 모달
+                                </Button>
+                                <MokaCodeListModal
+                                    show={showLMS}
+                                    onHide={() => setShowLMS(false)}
+                                    onOk={(codeData) => {
+                                        toastr.success('선택한 코드', codeData.codeId);
+                                    }}
+                                    title="분류 검색"
+                                />
                             </div>
 
                             <Form.Group>

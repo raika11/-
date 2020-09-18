@@ -63,8 +63,8 @@ const MokaModal = (props) => {
             {/* 액션 */}
             {actionButtons && (
                 <Modal.Footer>
-                    {actionButtons.map(({ variant, buttonName, ...rest }) => (
-                        <Button variant={variant} {...rest}>
+                    {actionButtons.map(({ variant, buttonName, ...rest }, idx) => (
+                        <Button key={`${buttonName}-${idx}`} variant={variant} {...rest}>
                             {buttonName}
                         </Button>
                     ))}

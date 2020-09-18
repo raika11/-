@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import DateTime from 'react-datetime';
+import InputElement from 'react-input-mask';
 import PropTypes from 'prop-types';
 
 import moment from 'moment';
@@ -32,6 +33,17 @@ const defaultProps = {
 const MokaDateTimePicker = (props) => {
     const { placeholder, dateFormat, timeFormat, defaultValue, ...rest } = props;
 
+    // 날짜시간 포맷
+    const dateTimeFormat = (() => {
+        if (dateFormat && timeFormat) {
+            return `${dateFormat} ${timeFormat}`;
+        } else if (timeFormat) {
+            return timeFormat;
+        } else {
+            return dateFormat;
+        }
+    })();
+
     const renderDay = (props, currentDate, selectedDate) => {
         // 일요일 스타일 변경
         if (currentDate._d.getDay() === 0) {
@@ -44,26 +56,26 @@ const MokaDateTimePicker = (props) => {
         return <td {...props}>{currentDate.date()}</td>;
     };
 
-    // 기본값 생성
-    const defaultValueCreator = useCallback(() => {
-        if (dateFormat && timeFormat) {
-            return moment().format(`${dateFormat} ${timeFormat}`);
-        } else if (timeFormat) {
-            return moment().format(timeFormat);
-        } else {
-            return moment().format(dateFormat);
-        }
-    }, [dateFormat, timeFormat]);
+    // input element 생성
+    const renderInput = (props, openCalendar, closeCalendar) => {
+        return (
+            <InputElement
+                {...props}
+                mask={dateTimeFormat.replace(/y|m|d|h/gi, '9')}
+                placeholder={placeholder}
+            />
+        );
+    };
 
     return (
         <DateTime
             locale="ko"
             dateFormat={dateFormat}
             timeFormat={timeFormat}
-            defaultValue={defaultValue || defaultValueCreator()}
+            defaultValue={defaultValue || moment().format(dateTimeFormat)}
             {...rest}
             renderDay={renderDay}
-            inputProps={{ placeholder: placeholder }}
+            renderInput={renderInput}
         />
     );
 };

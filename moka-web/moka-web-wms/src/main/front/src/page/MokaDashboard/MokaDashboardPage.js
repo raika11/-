@@ -207,11 +207,11 @@ const MokaDashboardPage = () => {
                                 <Button
                                     className="mr-2"
                                     onClick={() => {
-                                        toastr.confirm('확인창', {
-                                            onOk: () => console.log('OK: clicked'),
-                                            onCancle: () => console.log('CANCLE: clicked')
-                                        });
-                                        // toastr.success('ddd', 'ddd');
+                                        // toastr.confirm('확인창', {
+                                        //     onOk: () => console.log('OK: clicked'),
+                                        //     onCancle: () => console.log('CANCLE: clicked')
+                                        // });
+                                        toastr.success('ddd', 'ddd');
                                     }}
                                 >
                                     토스트 테스트

@@ -36,3 +36,39 @@
         right: 35px;
     }
 }
+
+.code-modal {
+    .card {
+        width: 266px;
+        height: 423px;
+        overflow: hidden;
+        box-shadow: unset;
+        border: 1px solid $list-group-border-color;
+        @include border-radius(0);
+
+        .card-header {
+            height: 38px;
+            text-align: center;
+            background-color: $list-group-border-color;
+
+            &:first-child {
+                @include border-radius(0);
+            }
+        }
+
+        .list-group {
+            height: calc(100% - 38px);
+            overflow-y: scroll;
+
+            > .list-group-item {
+                .custom-control label {
+                    width: 100%;
+                    cursor: pointer;
+                }
+                &:last-child {
+                    border-bottom-width: 1px;
+                }
+            }
+        }
+    }
+}

@@ -6,6 +6,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
+
+import jmnet.moka.common.proxy.http.IdleConnectionMonitor;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -104,14 +106,13 @@ public class HttpProxyConfiguration {
 			.setConnectTimeout(clientConnectTimeout)
 			.setRedirectsEnabled(clientRedirectEnable)
 			.setConnectionRequestTimeout(clientRequestTimeout).build();
-		
-		CloseableHttpClient httpClient = HttpClientBuilder.create()
+
+		return HttpClientBuilder.create()
 		.setDefaultRequestConfig(requestConfig)
 		.setSSLSocketFactory(sslConnectionFactory())
 		.setConnectionManager(poolingHttpClientConnectionManager())
 		.setUserAgent(clientHeaderUserAgent)
 		.setKeepAliveStrategy(new HttpShortKeepAliveStrategy()).build();
-		return httpClient;
 	}
 	
 	@Value("#{timeHumanizer.parse('${httpProxy.pool.socket.soTimeout}')}")
@@ -130,7 +131,11 @@ public class HttpProxyConfiguration {
 	private int poolMaxTotal;
 	@Value("${httpProxy.pool.defaultMaxPerRoute}")
 	private int poolDefaultMaxPerRoute;
-	
+	@Value("${httpProxy.pool.monitor.intervalSec}")
+	private int monitorIntervalSec;
+	@Value("${httpProxy.pool.monitor.idleTimeSec}")
+	private int monitoridleTimeSec;
+
 	@Bean(destroyMethod="shutdown")
 	public PoolingHttpClientConnectionManager poolingHttpClientConnectionManager() {
 		SocketConfig socketConfig = SocketConfig.custom()
@@ -146,7 +151,14 @@ public class HttpProxyConfiguration {
 		httpClientPool.setDefaultSocketConfig(socketConfig);
 		return httpClientPool;
 	}
-	
+
+	@Bean(destroyMethod="interrupt")
+	public IdleConnectionMonitor idleConnectionMonitor() {
+		IdleConnectionMonitor monitor = new IdleConnectionMonitor(poolingHttpClientConnectionManager(),monitorIntervalSec,monitoridleTimeSec);
+		monitor.start();
+		return monitor;
+	}
+
 	private SSLConnectionSocketFactory sslConnectionFactory() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		// use the TrustSelfSignedStrategy to allow Self Signed Certificates
         SSLContext sslContext = SSLContextBuilder

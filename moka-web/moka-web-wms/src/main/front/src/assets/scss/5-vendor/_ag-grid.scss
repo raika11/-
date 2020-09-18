@@ -6,7 +6,7 @@
     @include ag-theme-balham(
         (
             odd-row-background-color: #fff,
-            row-height: 53px,
+            // row-height: 53px,
             font-family: 'Noto Sans KR',
             header-column-separator: false,
             header-background-color: #f5f5f5,
@@ -64,4 +64,12 @@
 /* 데이터 없을 때 */
 .ag-center-cols-clipper {
     min-height: 32px;
+}
+
+.row-cell {
+    height: 53px
+}
+
+.rel-row-cell {
+    height: 30px
 }

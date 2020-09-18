@@ -48,7 +48,14 @@ public class HttpProxyConfiguration {
 	private int clientRequestTimeout;
 	@Value("${httpProxy.client.header.userAgent}")
 	private String clientHeaderUserAgent;
-	
+
+	private final GenericApplicationContext appContext;
+
+	@Autowired
+	public HttpProxyConfiguration(GenericApplicationContext appContext){
+		this.appContext = appContext;
+	}
+
 	/**
      * <pre>
      * Scope가 prototype인 api용 HttpProxy를 생성한다.
@@ -89,9 +96,6 @@ public class HttpProxyConfiguration {
 	public HttpProxy httpProxy() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		return new HttpProxy(httpClient());
 	}
-
-    @Autowired
-    private GenericApplicationContext appContext;
 
     @Bean(name = "apiHttpProxyFactory")
     @ConditionalOnProperty(name = "mcp.ext.proxy.factory.enable", havingValue = "true")

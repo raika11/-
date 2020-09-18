@@ -37,14 +37,14 @@ public class HttpProxy {
 	
 	private CloseableHttpClient httpClient;
 	
-	@Autowired
+//	@Autowired
 	public HttpProxy(CloseableHttpClient httpClient, String apiHost, String apiPath) {
 		this.httpClient = httpClient;
 		this.apiHost = apiHost;
 		this.apiPath = apiPath;
 	}
 	
-	@Autowired
+//	@Autowired
 	public HttpProxy(CloseableHttpClient httpClient) {
 		this.httpClient = httpClient;
 	}

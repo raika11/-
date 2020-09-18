@@ -18,7 +18,7 @@ public class MokaEncryptConfiguration {
     @Value("${moka.core.encrypt.salt}")
     private String encryptSalt;
 
-    @Bean(name = "encryptorBean")
+    @Bean(name = "mokaEncryptor")
     public StringEncryptor stringEncryptor() {
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword(encryptKey);

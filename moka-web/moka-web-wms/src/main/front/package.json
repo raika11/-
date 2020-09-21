@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "sass:compile": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/assets/scss/ -o public/css/",
+        "sass:compile": "node-sass-chokidar --include-path ./node_modules/ --output-style compressed ./src/assets/scss -o ./public/css",
         "sass:autoprefixer": "postcss public/css/*.css --use autoprefixer -d public/css",
         "build:css": "npm-run-all sass:*",
         "build:js": "node scripts/build.js",

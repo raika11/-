@@ -13,11 +13,11 @@ const initialState = {
 export default handleActions(
     {
         /** 테마 */
-        [act.CHANGE_THEME]: (state, payload) => {
+        [act.CHANGE_THEME]: (state, { payload }) => {
             return produce(state, (draft) => {
                 if (payload === 'classic' || payload === 'corporate' || payload === 'modern') {
                     draft.theme = payload;
-                    changeThemeStyle(payload);
+                    changeThemeStyle(payload, 'theme');
                 }
             });
         },

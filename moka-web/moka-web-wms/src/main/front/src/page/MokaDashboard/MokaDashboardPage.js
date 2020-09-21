@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import InputMask from 'react-input-mask';
 
 import Container from 'react-bootstrap/Container';
@@ -19,6 +20,7 @@ import {
 } from '@component';
 import { options } from './data';
 import Table from './TableTest';
+import { changeTheme } from '@store/layout/action';
 
 const MokaDashboardPage = () => {
     const [checked, setChecked] = useState(true);
@@ -29,6 +31,8 @@ const MokaDashboardPage = () => {
     const [showLMS, setShowLMS] = useState(false);
     // table
     const [fixedTable, setFixedTable] = useState(false);
+
+    const dispatch = useDispatch();
 
     return (
         <Container fluid className="p-0">
@@ -231,6 +235,26 @@ const MokaDashboardPage = () => {
                                     }}
                                     title="분류 검색"
                                 />
+
+                                {/* 테마변경 */}
+                                <Button
+                                    className="mr-2"
+                                    onClick={() => dispatch(changeTheme('classic'))}
+                                >
+                                    테마1
+                                </Button>
+                                <Button
+                                    className="mr-2"
+                                    onClick={() => dispatch(changeTheme('corporate'))}
+                                >
+                                    테마2
+                                </Button>
+                                <Button
+                                    className="mr-2"
+                                    onClick={() => dispatch(changeTheme('modern'))}
+                                >
+                                    테마3
+                                </Button>
                             </div>
 
                             <Form.Group>

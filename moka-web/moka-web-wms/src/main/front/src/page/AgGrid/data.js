@@ -1,4 +1,15 @@
 import React from 'react';
+import ListDeleteButton from './ListDeleteButton';
+import ListEditButton from './ListEditButton';
+
+const cellClassRules = {
+    // 'desking-rel-row-cell': (params) => params.data.rel === true,
+    'desking-edit-cell': (params) => params.colDef.editable
+};
+
+export const rowClassRules = {
+    'ag-rel-row': (params) => params.data.rel === true
+};
 
 var cellClassRules = {
     'row-cell': 'data.rel === false',
@@ -13,15 +24,10 @@ export const columnDefs = [
         cellClassRules: cellClassRules
     },
     {
-        field:'relContentsOrder',
-        cellClass: 'align-center',
-        width: 1,
+        field: 'relContentsOrder',
+        width: 0,
         colSpan: (params) => {
-            if (params.data.rel) {
-                return 2;
-            } else {
-                return 1;
-            }
+            return params.data.rel ? 2 : 1;
         },
         cellClassRules: cellClassRules
     },
@@ -34,54 +40,34 @@ export const columnDefs = [
         cellClassRules: cellClassRules
     },
     {
-        field: 'relContentTitle',
-        cellClass: 'align-center',
-        width: 1,
-        autoHeight: true,
-        cellRendererFramework: (params) => {
-            return (
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        height: '30px',
-                        lineHeight: 'normal'
-                    }}
-                    dangerouslySetInnerHTML={{ __html: params.data.relContentTitle }}
-                />
-            );
-        },
+        field: 'relTitle',
+        width: 0,
         colSpan: (params) => {
-            if (params.data.rel) {
-                return 4;
-            } else {
-                return 1;
-            }
+            return params.data.rel ? 4 : 1;
         },
+        editable: true,
         cellClassRules: cellClassRules
     },
     {
-        field: 'contentsOrderEx',
-        cellClass: 'align-center',
-        width: 22,
+        field: 'contentsOrder',
+        width: 23,
         cellClassRules: cellClassRules
     },
     {
         field: 'thumbnail',
         cellClass: 'align-center',
         width: 50,
-        cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-        },
+        // cellStyle: {
+        //     display: 'flex',
+        //     alignItems: 'center',
+        //     justifyContent: 'center'
+        // },
         cellRenderer: (params) => {
             let tag = '';
             if (params.data.thumbnailFileName) {
                 tag +=
-                    '<span style="width: 50px; height: 48px; display: flex; align-items: center;">';
-                tag += `<img width="50" src="http://img.com/${params.data.thumbnailFileName}" />`;
+                    '<span style="width: 50px; height: 48px; display: flex; align-items: center; background-color: #F4F7F9;">';
+                tag += `<img width="50" src="https://pds.joins.com/${params.data.thumbnailFileName}" />`;
                 tag += '</span>';
             }
             return tag;
@@ -89,9 +75,10 @@ export const columnDefs = [
         cellClassRules: cellClassRules
     },
     {
-        // field: 'titleEx',
-        width: 320,
+        field: 'title',
+        width: 300,
         autoHeight: true,
+        editable: true,
         cellRendererFramework: (params) => {
             return (
                 <div
@@ -100,79 +87,90 @@ export const columnDefs = [
                         flexDirection: 'column',
                         justifyContent: 'center',
                         height: '50px',
-                        lineHeight: 'normal'
+                        lineHeight: 'normal',
+                        backgroundColor: '#F4F7F9',
+                        width: '280px'
                     }}
-                    dangerouslySetInnerHTML={{ __html: params.data.titleEx }}
+                    dangerouslySetInnerHTML={{ __html: params.data.title }}
                 />
             );
         },
         cellClassRules: cellClassRules
+    },
+    {
+        field: 'editButton',
+        width: 35,
+        cellRendererFramework: ListEditButton,
+        cellRendererParams: (params) => {
+            return {
+                api: params.api,
+                rowIndex: params.rowIndex,
+                colKey: 'title',
+                char: params.data.title
+            };
+        },
+        cellClassRules: cellClassRules
+    },
+    {
+        field: 'deleteButton',
+        width: 35,
+        cellRendererFramework: ListDeleteButton,
+        cellRendererParams: (params) => {
+            return {
+                name: 'delete',
+                params
+            };
+        },
+        cellClassRules: cellClassRules
     }
-    // {
-    //     field: 'deskingDelete',
-    //     cellClass: 'align-right',
-    //     width: 35,
-    //     cellRendererFramework: ListDeleteButton,
-    //     cellRendererParams: (params) => {
-    //         return {
-    //             name: 'delete',
-    //             params
-    //         };
-    //     }
-    // }
 ];
 
 export const rowData = [
     {
         contentsId: '1',
         title: '더불어민주당 김현권 구미을 후보, 선거사무소 온라인 개소식',
-        titleEx: '더불어민주당 김현권 구미을 후보, 선거사무소 온라인 개소식',
-        thumbnailFileName: 'file/2020/08/05/2020080501000420600015561.jpg',
-        contentsOrderEx: '01'
+        thumbnailFileName:
+            '/news/component/htmlphoto_mmdata/202009/18/c57ae87f-08af-4111-89e5-325406b1477d.jpg',
+        contentsOrder: '01'
     },
     {
         contentsId: '11',
-        relContentTitle: 'rel"홍콩 글로벌 금융자본·인력… 인천 유치위해 규제 풀어야"',
-        // titleEx: 'rel"홍콩 글로벌 금융자본·인력… 인천 유치위해 규제 풀어야"',
-        thumbnailFileName: 'file/2020/08/05/2020080501000420600015561.jpg',
-        rel: true,
-        relContentsOrder: '01'
+        relTitle: 'rel"홍콩 글로벌 금융자본·인력… 인천 유치위해 규제 풀어야"',
+        relThumbnailFileName: '',
+        relContentsOrder: '01',
+        rel: true
     },
     {
         contentsId: '12',
-        relContentTitle: 'rel\'유치원 1년에 최소 5번 소독\' 보고 규정은 全無',
-        // titleEx: 'rel\'유치원 1년에 최소 5번 소독\' 보고 규정은 全無',
-        thumbnailFileName: '',
-        rel: true,
-        relContentsOrder: '02'
+        relTitle: 'rel\'유치원 1년에 최소 5번 소독\' 보고 규정은 全無',
+        relThumbnailFileName: '',
+        relContentsOrder: '02',
+        rel: true
     },
     {
         contentsId: '2',
         title: '이상길 예비후보 "행정절차 간소화로 지역경제위기 막아야"',
-        titleEx: '이상길 예비후보 "행정절차 간소화로 지역경제위기 막아야"',
         thumbnailFileName: '',
-        contentsOrderEx: '02'
+        contentsOrder: '02'
     },
     {
         contentsId: '3',
         title: '중앙지검 \'n번방 사건\' 특별수사 TF 구성',
-        titleEx: '중앙지검 \'n번방 사건\' 특별수사 TF 구성',
         thumbnailFileName: '',
-        contentsOrderEx: '03'
+        contentsOrder: '03'
     },
     {
         contentsId: '4',
         title: '이차영 괴산군수 정부예산 확보 발품행정 이어져',
-        titleEx: '이차영 괴산군수 정부예산 확보 발품행정 이어져',
-        thumbnailFileName: '',
-        contentsOrderEx: '04'
+        thumbnailFileName:
+            '/news/component/htmlphoto_mmdata/202009/18/c57ae87f-08af-4111-89e5-325406b1477d.jpg',
+        contentsOrder: '04'
     },
     {
         contentsId: '5',
         title: '[★별자리운세] 2020년8월6일 (목요일) 동서양 별자리 타로운세',
-        titleEx: '[★별자리운세] 2020년8월6일 (목요일) 동서양 별자리 타로운세',
         thumbnailFileName: '',
-        contentsOrderEx: '05'
+        contentsOrder: '05'
     }
 ];
 

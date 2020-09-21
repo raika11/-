@@ -1,5 +1,4 @@
 import React from 'react';
-import './assets/scss/classic.scss';
 
 // BrowserRouter
 import { BrowserRouter } from 'react-router-dom';

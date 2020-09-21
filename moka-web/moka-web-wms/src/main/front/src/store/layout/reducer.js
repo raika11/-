@@ -1,15 +1,26 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './action';
+import { changeThemeStyle } from '@util/stylesheetUtil';
 
 const initialState = {
     isOpen: true,
     isSticky: true,
-    isBoxed: false
+    isBoxed: false,
+    theme: 'classic'
 };
 
 export default handleActions(
     {
+        /** 테마 */
+        [act.CHANGE_THEME]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                if (payload === 'classic' || payload === 'corporate' || payload === 'modern') {
+                    draft.theme = payload;
+                    changeThemeStyle(payload, 'theme');
+                }
+            });
+        },
         /** 레이아웃 */
         [act.ENABLE_BOXED_LAYOUT]: (state) => {
             return produce(state, (draft) => {

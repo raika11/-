@@ -1,5 +1,11 @@
 import { createAction } from 'redux-actions';
 
+/** 테마 변경 */
+export const CHANGE_THEME = 'layout/CHANGE_THEME';
+
+/** 테마 변경 creator */
+export const changeTheme = createAction(CHANGE_THEME, (param) => param);
+
 /** 레이아웃 액션 */
 export const ENABLE_BOXED_LAYOUT = 'layout/ENABLE_BOXED_LAYOUT';
 export const DISABLE_BOXED_LAYOUT = 'layout/DISABLE_BOXED_LAYOUT';

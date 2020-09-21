@@ -34,7 +34,6 @@
 	<instance-name>dps-cache</instance-name>
     <group>
         <name>dps</name>
-        <password>dps-pass</password>
     </group>
     <management-center enabled="false">http://localhost:8080/hazelcast-mancenter</management-center>
     <network>

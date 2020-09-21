@@ -156,7 +156,7 @@ const MokaCodeListModal = (props) => {
             actionButtons={
                 actionButtons || [
                     { variant: 'primary', buttonName: '적용', onClick: onOkTrigger },
-                    { variant: 'default', buttonName: '취소', onClick: onHide }
+                    { variant: 'warning', buttonName: '취소', onClick: onHide }
                 ]
             }
         >

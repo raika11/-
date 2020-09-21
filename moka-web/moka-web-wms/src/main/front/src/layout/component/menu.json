@@ -1,0 +1,232 @@
+{
+    "resultInfo": {
+        "header": {
+            "success": "true",
+            "resultCode": "200"
+        },
+        "body": {
+            "seq": "0",
+            "menuName": "ROOT",
+            "nodes": {
+                "nodes": [
+                    {
+                        "seq": "1",
+                        "menuId": "01",
+                        "menuName": "desking",
+                        "menuDispName": "화면편집",
+                        "menuPath": "/desking",
+                        "menuOrder": "1",
+                        "depth": "1",
+                        "useYn": "Y",
+                        "iconName": "coffee"
+                    },
+                    {
+                        "seq": "2",
+                        "menuId": "02",
+                        "menuName": "page",
+                        "menuDispName": "페이지서비스",
+                        "menuOrder": "2",
+                        "depth": "1",
+                        "useYn": "Y",
+                        "iconName": "coffee",
+                        "nodes": {
+                            "nodes": [
+                                {
+                                    "seq": "3",
+                                    "menuId": "02001",
+                                    "menuName": "page",
+                                    "menuDispName": "페이지 관리",
+                                    "menuPath": "/page",
+                                    "menuOrder": "1",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "4",
+                                    "menuId": "02003",
+                                    "menuName": "container",
+                                    "menuDispName": "컨테이너 관리",
+                                    "menuPath": "/container",
+                                    "menuOrder": "3",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "5",
+                                    "menuId": "02004",
+                                    "menuName": "component",
+                                    "menuDispName": "컴포넌트 관리",
+                                    "menuPath": "/component",
+                                    "menuOrder": "4",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "6",
+                                    "menuId": "02005",
+                                    "menuName": "template",
+                                    "menuDispName": "템플릿 관리",
+                                    "menuPath": "/template",
+                                    "menuOrder": "5",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "7",
+                                    "menuId": "02006",
+                                    "menuName": "dataset",
+                                    "menuDispName": "데이타셋 관리",
+                                    "menuPath": "/dataset",
+                                    "menuOrder": "6",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "8",
+                                    "menuId": "02007",
+                                    "menuName": "reserved",
+                                    "menuDispName": "예약어 관리",
+                                    "menuPath": "/reserved",
+                                    "menuOrder": "7",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "9",
+                                    "menuId": "02008",
+                                    "menuName": "resource",
+                                    "menuDispName": "리소스 관리",
+                                    "menuPath": "/resource",
+                                    "menuOrder": "8",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "10",
+                                    "menuId": "02009",
+                                    "menuName": "rmslink",
+                                    "menuDispName": "리소스 탐색",
+                                    "menuPath": "/rmslink",
+                                    "menuOrder": "9",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "11",
+                                    "menuId": "02010",
+                                    "menuName": "skin",
+                                    "menuDispName": "콘텐츠스킨 관리",
+                                    "menuPath": "/skin",
+                                    "menuOrder": "10",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "12",
+                                    "menuId": "02011",
+                                    "menuName": "style",
+                                    "menuDispName": "소재스타일 관리",
+                                    "menuPath": "/style",
+                                    "menuOrder": "11",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02"
+                                },
+                                {
+                                    "seq": "13",
+                                    "menuId": "02012",
+                                    "menuName": "test",
+                                    "menuDispName": "테스트",
+                                    "menuOrder": "12",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02",
+                                    "nodes": {
+                                        "nodes": {
+                                            "seq": "19",
+                                            "menuId": "02012001",
+                                            "menuName": "test2",
+                                            "menuDispName": "테스트2",
+                                            "menuPath": "/test",
+                                            "menuOrder": "1",
+                                            "depth": "3",
+                                            "useYn": "Y",
+                                            "parentMenuId": "02012"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "seq": "14",
+                        "menuId": "03",
+                        "menuName": "advertise",
+                        "menuDispName": "광고 관리",
+                        "menuPath": "/ad",
+                        "menuOrder": "3",
+                        "depth": "1",
+                        "useYn": "Y",
+                        "iconName": "coffee"
+                    },
+                    {
+                        "seq": "15",
+                        "menuId": "04",
+                        "menuName": "system",
+                        "menuDispName": "시스템",
+                        "menuOrder": "4",
+                        "depth": "1",
+                        "useYn": "Y",
+                        "iconName": "coffee",
+                        "nodes": {
+                            "nodes": [
+                                {
+                                    "seq": "16",
+                                    "menuId": "04001",
+                                    "menuName": "domain",
+                                    "menuDispName": "도메인 관리",
+                                    "menuPath": "/domain",
+                                    "menuOrder": "1",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "04"
+                                },
+                                {
+                                    "seq": "17",
+                                    "menuId": "04002",
+                                    "menuName": "volume",
+                                    "menuDispName": "볼륨 관리",
+                                    "menuPath": "/volume",
+                                    "menuOrder": "2",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "04"
+                                },
+                                {
+                                    "seq": "18",
+                                    "menuId": "04003",
+                                    "menuName": "etccodeType",
+                                    "menuDispName": "기타코드 관리",
+                                    "menuPath": "/etccodeType",
+                                    "menuOrder": "3",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "04"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

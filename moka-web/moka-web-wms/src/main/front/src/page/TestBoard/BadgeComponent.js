@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Badge from 'react-bootstrap/Badge';
 import PropTypes from 'prop-types';
 
@@ -23,20 +23,10 @@ const defaultProps = {
 };
 
 const BadgeComponent = (props) => {
-    const { variant, title, className, ...rest } = props;
-    const [pill, setPill] = useState();
-
-    useEffect(() => {
-        /** pill */
-        setPill(
-            <Badge pill variant={variant} className={className} {...rest}>
-                {title}
-            </Badge>
-        );
-    }, [pill]);
+    const { pill, variant, title, className, ...rest } = props;
 
     return (
-        <Badge variant={variant} className={className} {...rest}>
+        <Badge pill={pill && true} variant={variant} className={className} {...rest}>
             {title}
         </Badge>
     );

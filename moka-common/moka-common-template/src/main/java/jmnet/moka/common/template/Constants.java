@@ -17,7 +17,7 @@ import jmnet.moka.common.ApiResult;
  */
 public class Constants {
 	/* Custom Tag */
-	public final static String PREFIX = "mte:";
+	public final static String PREFIX = "tems:";
 	public final static String ELEMENT_MERGER_PACKAGE = "jmnet.moka.common.template.merge.element";
 	public final static String ELEMENT_MERGER_POSTFIX = "Merger";
 	public final static String EL_CT = PREFIX + "ct";

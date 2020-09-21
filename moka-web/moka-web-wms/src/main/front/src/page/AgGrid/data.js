@@ -11,11 +11,6 @@ export const rowClassRules = {
     'ag-rel-row': (params) => params.data.rel === true
 };
 
-var cellClassRules = {
-    'row-cell': 'data.rel === false',
-    'rel-row-cell': 'data.rel === true'
-};
-
 export const columnDefs = [
     {
         rowDrag: true,
@@ -142,7 +137,7 @@ export const rowData = [
     },
     {
         contentsId: '12',
-        relTitle: 'rel\'유치원 1년에 최소 5번 소독\' 보고 규정은 全無',
+        relTitle: "rel'유치원 1년에 최소 5번 소독' 보고 규정은 全無",
         relThumbnailFileName: '',
         relContentsOrder: '02',
         rel: true
@@ -155,7 +150,7 @@ export const rowData = [
     },
     {
         contentsId: '3',
-        title: '중앙지검 \'n번방 사건\' 특별수사 TF 구성',
+        title: "중앙지검 'n번방 사건' 특별수사 TF 구성",
         thumbnailFileName: '',
         contentsOrder: '03'
     },

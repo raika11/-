@@ -162,7 +162,7 @@
 							<npmVersion>6.12.0</npmVersion>
 							<yarnVersion>v1.13.0</yarnVersion>
 							<workingDirectory>src/main/front</workingDirectory>
-							<installDriectory>target</installDriectory>
+							<installDirectory>target</installDirectory>
 						</configuration>
 						<executions>
 							<execution>

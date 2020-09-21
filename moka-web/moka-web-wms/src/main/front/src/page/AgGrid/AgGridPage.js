@@ -23,8 +23,8 @@ const AgGridPage = () => {
                             suppressMoveWhenRowDragging
                             immutableData
                             headerHeight={0}
-                            rowHeight={53}
                             rowClassRules={rowClassRules}
+                            stopEditingWhenGridLosesFocus
                         />
                     </div>
                 </Col>

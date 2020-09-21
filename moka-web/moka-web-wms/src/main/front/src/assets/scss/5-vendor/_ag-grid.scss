@@ -2,7 +2,10 @@
 @import 'ag-grid-community/src/styles/ag-grid';
 @import 'ag-grid-community/src/styles/ag-theme-balham/sass/_ag-theme-balham-mixin';
 
+// 기사 높이
 $row-height: 53px;
+// 기사 간 간격
+$padding-height: 10px;
 
 .ag-theme-moka-grid {
     @include ag-theme-balham(
@@ -40,23 +43,28 @@ $row-height: 53px;
 .ag-theme-moka-grid .ag-header-cell {
     padding-left: 3px;
     padding-right: 3px;
+    height: $row-height + $padding-height;
+    line-height: $row-height + $padding-height;
+    padding-bottom: $padding-height;
+    display: flex;
+    align-items: center;
+}
+
+/* 관련 편집기사 cell */
+.ag-theme-moka-grid .ag-rel-cell {
+    height: 36px !important;
+    line-height: 36px !important;
 }
 
 .ag-theme-moka-grid .ag-row {
-    border: 5px solid #fff;
+    border: $padding-height/2 solid #fff;
     border-radius: 10px 10px 10px 10px;
     background-color: #f4f7f9;
-    height: $row-height + 3px !important;
-    line-height: $row-height !important;
 }
 
-/* 관련 편집기사 */
+/* 관련 편집기사 row */
 .ag-theme-moka-grid .ag-rel-row {
-    border: 5px solid #fff;
-    border-radius: 10px 10px 10px 10px;
-    background-color: #f4f7f9;
-    height: 36px !important;
-    line-height: 36px !important;
+    background-color: #ededed !important;
 }
 
 .ag-header-cell-text {
@@ -86,7 +94,7 @@ $row-height: 53px;
 }
 
 /* 편집기사 editBox 필드 */
-.ag-theme-moka-grid .desking-edit-cell {
+.ag-theme-moka-grid .ag-edit-cell {
     padding-left: 0px;
     padding-right: 0px;
 }

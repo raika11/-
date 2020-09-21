@@ -3,11 +3,11 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "sass:compile": "node-sass-chokidar --include-path ./node_modules/ --output-style compressed ./src/assets/scss -o ./public/css",
+        "sass:compile": "node-sass-chokidar --include-path ./node_modules/ --output-style compact ./src/assets/scss -o ./public/css",
         "sass:autoprefixer": "postcss public/css/*.css --use autoprefixer -d public/css",
         "build:css": "npm-run-all sass:*",
         "build:js": "node scripts/build.js",
-        "watch:css": "chokidar \"src/assets/scss/**/*\" -c \"npm run build:css\"",
+        "watch:css": "chokidar \"src/assets/scss/**/*\" -c \"yarn build:css\"",
         "watch:js": "node scripts/start.js",
         "start": "npm-run-all -p build:css watch:*",
         "build": "npm-run-all -p build:*",

@@ -20,8 +20,8 @@ public class MokaEncryptTest {
     private StringEncryptor mokaEncryptor;
 
     private String[] sources = {
-            "wms",
-            "Wms#2019"
+            "USER_JA_WCMS",
+            "user_ja_wcms!@"
     };
     @Test
     public void encrypt() {

@@ -1,5 +1,6 @@
 package jmnet.moka.web.wms;
 
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import org.infinispan.spring.starter.embedded.InfinispanEmbeddedAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -15,6 +16,7 @@ import jmnet.moka.web.wms.config.WebMvcConfiguration;
         InfinispanEmbeddedAutoConfiguration.class, CacheAutoConfiguration.class})
 @AutoConfigureBefore(TpsAutoConfiguration.class)
 @Import({ValidationConfiguration.class, WebMvcConfiguration.class})
+@EnableEncryptableProperties
 public class WmsApplication {
 
     public static void main(String[] args) {

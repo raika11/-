@@ -34,12 +34,12 @@ const defaultProps = {
 };
 
 const MokaPrependLinkInput = (props) => {
-    const { to, linkText, className, inputProps } = props;
+    const { to, linkText, className, inputProps, target } = props;
 
     return (
         <InputGroup className={className}>
             <InputGroup.Prepend>
-                <Link to={to} target="_blank">
+                <Link to={to} target={target}>
                     <InputGroup.Text>{linkText}</InputGroup.Text>
                 </Link>
             </InputGroup.Prepend>

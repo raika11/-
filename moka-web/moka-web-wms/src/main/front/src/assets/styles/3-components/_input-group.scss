@@ -2,3 +2,13 @@
 .input-group > .input-group-append:last-child a > .input-group-text:not(:last-child) {
     @include border-right-radius(0);
 }
+
+.landscape {
+    width: 100%;
+    height: auto;
+}
+
+.portrait {
+    width: auto;
+    height: 100%;
+}

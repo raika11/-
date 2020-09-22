@@ -18,6 +18,7 @@ import {
     MokaPrependLinkInput,
     MokaSearchInput
 } from '@components';
+import { MokaImageInput } from '@components/MokaInput';
 import { options } from './data';
 import Table from './TableTest';
 import { changeTheme } from '@store/layout/layoutAction';
@@ -276,6 +277,11 @@ const MokaDashboardPage = () => {
                                     variant="warning"
                                     onSearch={() => toastr.success('테스트', '성공')}
                                 />
+                            </Form.Group>
+
+                            <Form.Group>
+                                <Form.Label>5) 드래그앤드롭 이미지</Form.Label>
+                                <MokaImageInput />
                             </Form.Group>
                         </Card.Body>
                     </Card>

@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import Collapse from 'react-bootstrap/Collapse';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-
-// 아이콘 등록
-library.add(faCoffee);
+import SidebarItemIcon from './SidebarItemIcon';
 
 const propTypes = {
     /**
@@ -37,9 +32,7 @@ const SidebarCategory = (props) => {
                 aria-expanded={open}
                 data-toggle="collapse"
             >
-                {nodeData.iconName && (
-                    <FontAwesomeIcon icon={nodeData.iconName} className="align-middle mr-3" />
-                )}
+                <SidebarItemIcon iconName={nodeData.iconName} />
                 <span className="align-middle">{nodeData.menuDispName}</span>
             </span>
             <Collapse in={open}>

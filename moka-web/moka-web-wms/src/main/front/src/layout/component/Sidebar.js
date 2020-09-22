@@ -5,12 +5,11 @@ import { Link } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { initSidebarOpenItem, changeSidebarOpenItem } from '@store/layout/action';
-import menu from './menu.json';
 import SidebarCategory from './SidebarCategory';
 import SidebarItem from './SidebarItem';
 
-// routes => api 변경
-// import routes from '@/routes';
+// .json => api 변경
+import menu from './menu.json';
 
 const Sidebar = (props) => {
     const { nonResponsive } = props;

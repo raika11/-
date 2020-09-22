@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-
-// 아이콘 등록
-library.add(faCoffee);
+import SidebarItemIcon from './SidebarItemIcon';
 
 const propTypes = {
     /**
@@ -34,9 +29,7 @@ const SidebarItem = (props) => {
             })}
         >
             <NavLink to={nodeData.menuPath || ''} className="sidebar-link" activeClassName="active">
-                {nodeData.iconName && (
-                    <FontAwesomeIcon icon={nodeData.iconName} className="align-middle mr-3" />
-                )}
+                <SidebarItemIcon iconName={nodeData.iconName} />
                 {nodeData.menuDispName}
             </NavLink>
         </li>

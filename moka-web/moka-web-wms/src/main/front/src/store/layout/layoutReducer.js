@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import * as act from './action';
+import * as act from './layoutAction';
 import { changeThemeStyle } from '@util/stylesheetUtil';
 
 const initialState = {

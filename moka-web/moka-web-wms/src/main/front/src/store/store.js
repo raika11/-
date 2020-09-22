@@ -8,7 +8,7 @@ import rootReducer from './rootReducer';
 import rootSaga from './rootSaga';
 
 // interceptor
-import interceptor from './common/interceptor';
+import interceptor from './commons/interceptor';
 
 // middleware
 const sagaMiddleware = createSagaMiddleware();

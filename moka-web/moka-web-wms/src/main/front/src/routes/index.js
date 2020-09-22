@@ -23,8 +23,7 @@ const routes = [
         name: 'DashBoard',
         component: MokaDashBoard,
         layout: DefaultLayout,
-        nonResponsive: true,
-        exact: true
+        nonResponsive: true
     },
     {
         path: '/404',

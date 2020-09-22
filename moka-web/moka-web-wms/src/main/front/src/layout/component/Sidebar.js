@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
-import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
-import Nav from 'react-bootstrap/Nav';
-import Accordion from 'react-bootstrap/Accordion';
+import Collapse from 'react-bootstrap/Collapse';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
+import { initSidebarOpenItem, changeSidebarOpenItem } from '@store/layout/action';
 import menu from './menu.json';
 
 // 아이콘 등록
@@ -22,98 +20,86 @@ library.add(faCoffee);
 
 const Sidebar = (props) => {
     const { nonResponsive } = props;
+    const dispatch = useDispatch();
     const location = useLocation();
     const nodes = menu.resultInfo.body.nodes.nodes;
-    const [toggle, setToggle] = useState({});
 
-    const { isOpen, isSticky } = useSelector((state) => ({
-        isOpen: state.layout.isOpen,
-        isSticky: state.layout.isSticky
+    // store state
+    const { sidebarIsOpen, sidebarIsSticky, sidebarOpenItem } = useSelector((state) => ({
+        sidebarIsOpen: state.layout.sidebarIsOpen,
+        sidebarIsSticky: state.layout.sidebarIsSticky,
+        sidebarOpenItem: state.layout.sidebarOpenItem
     }));
 
     useEffect(() => {
-        const expandNodes = nodes.filter((node) => node.nodes);
-        const newObj = expandNodes.reduce((result, item, idx, array) => {
-            result[item.menuId] = false;
-            return result;
-        }, {});
-        setToggle(newObj);
-    }, [nodes]);
+        // 사이드바 오픈 아이템 초기화
+        if (Object.keys(sidebarOpenItem).length < 1) {
+            const expandNodes = nodes.filter((node) => node.nodes);
+            const initValue = expandNodes.reduce((result, item, idx, array) => {
+                result[item.menuId] = false;
+                return result;
+            }, {});
+            dispatch(initSidebarOpenItem(initValue));
+        }
+    }, [dispatch, sidebarOpenItem, nodes]);
 
-    const toggleChange = ({ menuId }) => {
-        let neo = toggle;
-        toggle[menuId] = !toggle[menuId];
-        setToggle(neo);
+    const changeNodeToggle = ({ menuId }) => {
+        dispatch(
+            changeSidebarOpenItem({
+                menuId,
+                toggleValue: !sidebarOpenItem[menuId]
+            })
+        );
     };
 
-    const ToggleAction = ({ children, nodeData, isOpen, eventKey, onClick }) => {
-        const decoratedOnClick = useAccordionToggle(eventKey, onClick);
+    // 사이드바 카테고리(Collapse 영역) 생성
+    const SidebarCategory = ({ nodeData, children }) => {
+        const controls = `sidebar-collapse-${nodeData.menuId}`;
+        const open = sidebarOpenItem[nodeData.menuId];
+
         return (
-            <>
+            <li className={clsx('sidebar-item', { active: open })}>
                 <span
+                    className={clsx('sidebar-link', { collapsed: !open })}
+                    onClick={() => changeNodeToggle(nodeData)}
+                    aria-controls={controls}
+                    aria-expanded={open}
                     data-toggle="collapse"
-                    className={clsx('sidebar-link', { collapsed: !isOpen })}
-                    aria-expanded={isOpen ? 'true' : 'false'}
-                    onClick={decoratedOnClick}
                 >
                     {nodeData.iconName && (
                         <FontAwesomeIcon icon={nodeData.iconName} className="align-middle mr-3" />
                     )}
                     <span className="align-middle">{nodeData.menuDispName}</span>
                 </span>
-                <Accordion.Collapse eventKey={eventKey}>{children}</Accordion.Collapse>
-            </>
-        );
-    };
-
-    const SidebarCategory = ({ nodeData, isOpen, onClick, children }) => {
-        const getSidebarItemClass = (path) => {
-            if (location.pathname) {
-                return location.pathname.indexOf(path) !== -1 ||
-                    (location.pathname === '/' && path === '/dashboard')
-                    ? 'active'
-                    : '';
-            }
-            return '';
-        };
-
-        return (
-            <li
-                className={clsx('sidebar-item', { active: getSidebarItemClass(nodeData.menuPath) })}
-            >
-                <Accordion>
-                    <ToggleAction
-                        nodeData={nodeData}
-                        isOpen={isOpen}
-                        eventKey={nodeData.menuDispName}
-                        onClick={onClick}
-                    >
-                        <ul id="item" className={clsx('sidebar-dropdown list-unstyled')}>
+                <Collapse in={open}>
+                    <div id={controls}>
+                        <ul id="item" className="sidebar-dropdown list-unstyled">
                             {children}
                         </ul>
-                    </ToggleAction>
-                </Accordion>
+                    </div>
+                </Collapse>
             </li>
         );
     };
 
+    // 사이드바 아이템 생성
     const SidebarItem = ({ nodeData }) => {
-        const getSidebarItemClass = (path) => {
-            if (location.pathname) {
-                return location.pathname === path ? 'active' : '';
-            }
-            return '';
-        };
         return (
             <li
-                className={clsx('sidebar-item', { active: getSidebarItemClass(nodeData.menuPath) })}
+                className={clsx('sidebar-item', {
+                    active: location.pathname === nodeData.menuPath || null
+                })}
             >
-                <Nav.Link to={nodeData.menuPath} className="sidebar-link">
+                <NavLink
+                    to={nodeData.menuPath || ''}
+                    className="sidebar-link"
+                    activeClassName="active"
+                >
                     {nodeData.iconName && (
                         <FontAwesomeIcon icon={nodeData.iconName} className="align-middle mr-3" />
                     )}
                     {nodeData.menuDispName}
-                </Nav.Link>
+                </NavLink>
             </li>
         );
     };
@@ -121,8 +107,8 @@ const Sidebar = (props) => {
     return (
         <nav
             className={clsx('sidebar', {
-                toggled: !isOpen && !nonResponsive,
-                'sidebar-sticky': isSticky && !nonResponsive
+                toggled: !sidebarIsOpen && !nonResponsive,
+                'sidebar-sticky': sidebarIsSticky && !nonResponsive
             })}
         >
             <div className="sidebar-content">
@@ -132,20 +118,36 @@ const Sidebar = (props) => {
                     </Link>
 
                     <ul className="sidebar-nav">
-                        {nodes.map((node, idx) =>
-                            node.nodes ? (
-                                <SidebarCategory
-                                    key={node.menuId}
-                                    nodeData={node}
-                                    isOpen={toggle[node.menuId]}
-                                    onClick={() => toggleChange(node)}
-                                >
-                                    {node.nodes.nodes.map((no, idx2) => (
-                                        <SidebarItem key={idx2} nodeData={no} />
-                                    ))}
+                        {/* 3depth까지만 그려서 재귀로 처리하지 않음 */}
+                        {nodes.map((dep1Node) =>
+                            dep1Node.nodes ? (
+                                <SidebarCategory key={dep1Node.menuId} nodeData={dep1Node}>
+                                    {dep1Node.nodes.nodes.map((dep2Node) =>
+                                        dep2Node.nodes ? (
+                                            <SidebarCategory
+                                                key={dep2Node.menuId}
+                                                nodeData={dep2Node}
+                                            >
+                                                {dep2Node.nodes.nodes.map((dep3Node) => (
+                                                    // 3depth
+                                                    <SidebarItem
+                                                        key={dep3Node.menuId}
+                                                        nodeData={dep3Node}
+                                                    />
+                                                ))}
+                                            </SidebarCategory>
+                                        ) : (
+                                            // 2depth
+                                            <SidebarItem
+                                                key={dep2Node.menuId}
+                                                nodeData={dep2Node}
+                                            />
+                                        )
+                                    )}
                                 </SidebarCategory>
                             ) : (
-                                <SidebarItem key={node.menuId} nodeData={node} />
+                                // 1depth
+                                <SidebarItem key={dep1Node.menuId} nodeData={dep1Node} />
                             )
                         )}
                     </ul>

@@ -4,10 +4,11 @@ import * as act from './action';
 import { changeThemeStyle } from '@util/stylesheetUtil';
 
 const initialState = {
-    isOpen: true,
-    isSticky: true,
-    isBoxed: false,
-    theme: 'classic'
+    sidebarIsOpen: true,
+    sidebarIsSticky: true,
+    layoutIsBoxed: false,
+    theme: 'classic',
+    sidebarOpenItem: {}
 };
 
 export default handleActions(
@@ -24,43 +25,54 @@ export default handleActions(
         /** 레이아웃 */
         [act.ENABLE_BOXED_LAYOUT]: (state) => {
             return produce(state, (draft) => {
-                draft.isBoxed = true;
+                draft.layoutIsBoxed = true;
             });
         },
         [act.DISABLE_BOXED_LAYOUT]: (state) => {
             return produce(state, (draft) => {
-                draft.isBoxed = false;
+                draft.layoutIsBoxed = false;
             });
         },
         /** 사이드바 */
         [act.SHOW_SIDEBAR]: (state) => {
             return produce(state, (draft) => {
-                draft.isOpen = true;
+                draft.sidebarIsOpen = true;
             });
         },
         [act.HIDE_SIDEBAR]: (state) => {
             return produce(state, (draft) => {
-                draft.isOpen = false;
+                draft.sidebarIsOpen = false;
             });
         },
         [act.TOGGLE_SIDEBAR]: (state) => {
             return produce(state, (draft) => {
-                draft.isOpen = !draft.isOpen;
+                draft.sidebarIsOpen = !draft.sidebarIsOpen;
             });
         },
         [act.TOGGLE_STICKY_SIDEBAR]: (state) => {
             return produce(state, (draft) => {
-                draft.isSticky = !draft.isSticky;
+                draft.sidebarIsSticky = !draft.sidebarIsSticky;
             });
         },
         [act.ENABLE_STICKY_SIDEBAR]: (state) => {
             return produce(state, (draft) => {
-                draft.isSticky = true;
+                draft.sidebarIsSticky = true;
             });
         },
         [act.DISABLE_STICKY_SIDEBAR]: (state) => {
             return produce(state, (draft) => {
-                draft.isSticky = false;
+                draft.sidebarIsSticky = false;
+            });
+        },
+        /** 사이드바 오픈아이템 변경 */
+        [act.INIT_SIDEBAR_OPEN_ITEM]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.sidebarOpenItem = payload;
+            });
+        },
+        [act.CHANGE_SIDEBAR_OPEN_ITEM]: (state, { payload: { menuId, toggleValue } }) => {
+            return produce(state, (draft) => {
+                draft.sidebarOpenItem[menuId] = toggleValue;
             });
         }
     },

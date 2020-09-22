@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Wrapper from './component/Wrapper';
-import Main from './component/Main';
-import NonResponsive from './component/NonResponsive';
+import Wrapper from './components/Wrapper';
+import Main from './components/Main';
+import NonResponsive from './components/NonResponsive';
 
 /**
  * NoFrame 레이아웃

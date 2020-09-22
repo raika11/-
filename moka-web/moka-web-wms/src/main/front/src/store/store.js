@@ -7,6 +7,9 @@ import { createLogger } from 'redux-logger';
 import rootReducer from './rootReducer';
 import rootSaga from './rootSaga';
 
+// interceptor
+import interceptor from './common/interceptor';
+
 // middleware
 const sagaMiddleware = createSagaMiddleware();
 
@@ -20,5 +23,6 @@ if (process.env.NODE_ENV !== 'production') {
 // store create
 export const store = createStore(rootReducer, middleware);
 sagaMiddleware.run(rootSaga);
+interceptor.setupInterceptors(store);
 
 export default store;

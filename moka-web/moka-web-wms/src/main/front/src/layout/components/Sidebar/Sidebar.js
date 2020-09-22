@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-import { initSidebarOpenItem, changeSidebarOpenItem } from '@store/layout/action';
+import { initSidebarOpenItem, changeSidebarOpenItem } from '@store/layout/layoutAction';
 import SidebarCategory from './SidebarCategory';
 import SidebarItem from './SidebarItem';
 

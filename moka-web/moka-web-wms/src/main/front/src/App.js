@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 
 import store from './store';
-import Routes from './routes/Routes';
+import MokaRoutes from './routes/MokaRoutes';
 
 // https://www.npmjs.com/package/react-redux-toastr
 const toastrOptions = {
@@ -23,7 +23,7 @@ function App() {
     return (
         <Provider store={store}>
             <BrowserRouter>
-                <Routes />
+                <MokaRoutes />
             </BrowserRouter>
             <ReduxToastr
                 timeOut={5000}

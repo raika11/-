@@ -287,13 +287,12 @@ module.exports = function (webpackEnv) {
                 // Project Alias
                 '@': path.resolve(__dirname, '../src'),
                 '@assets': path.resolve(__dirname, '../src/assets'),
-                '@scss': path.resolve(__dirname, '../src/assets/scss'),
-                '@component': path.resolve(__dirname, '../src/component'),
+                '@styles': path.resolve(__dirname, '../src/assets/styles'),
+                '@components': path.resolve(__dirname, '../src/components'),
                 '@layout': path.resolve(__dirname, '../src/layout'),
-                '@page': path.resolve(__dirname, '../src/page'),
-                '@api': path.resolve(__dirname, '../src/api'),
+                '@pages': path.resolve(__dirname, '../src/pages'),
                 '@store': path.resolve(__dirname, '../src/store'),
-                '@util': path.resolve(__dirname, '../src/util'),
+                '@utils': path.resolve(__dirname, '../src/utils'),
                 // Allows for better profiling with ReactDevTools
                 ...(isEnvProductionProfile && {
                     'react-dom$': 'react-dom/profiling',

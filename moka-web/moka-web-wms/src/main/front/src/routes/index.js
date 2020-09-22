@@ -2,12 +2,12 @@ import React from 'react';
 
 // layout
 import { NoFrame, DefaultLayout } from '@layout';
-import Page404 from '@page/MokaAuth/Page404';
+import Page404 from '@pages/MokaAuth/Page404';
 
 // page
-const MokaDashBoard = React.lazy(() => import('@page/MokaDashboard'));
-const TestBoard = React.lazy(() => import('@page/TestBoard'));
-const AgGrid = React.lazy(() => import('@page/AgGrid'));
+const MokaDashBoard = React.lazy(() => import('@pages/MokaDashboard'));
+const TestBoard = React.lazy(() => import('@pages/TestBoard'));
+const AgGrid = React.lazy(() => import('@pages/AgGrid'));
 
 const routes = [
     {

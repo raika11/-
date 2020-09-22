@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 
-import { toggleSidebar } from '@store/layout/action';
+import { toggleSidebar } from '@store/layout/layoutAction';
 
 const MokaNavbar = ({ nonResponsive }) => {
     const dispatch = useDispatch();

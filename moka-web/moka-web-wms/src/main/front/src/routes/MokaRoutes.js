@@ -5,10 +5,10 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import routes from './index';
 
 // component
-import Loader from '@layout/component/Loader';
-import { ScrollToTop } from '@component';
+import Loader from '@layout/components/Loader';
+import { ScrollToTop } from '@components';
 
-const Routes = () => (
+const MokaRoutes = () => (
     <ScrollToTop>
         <Suspense fallback={<Loader />}>
             <Switch>
@@ -39,4 +39,4 @@ const Routes = () => (
     </ScrollToTop>
 );
 
-export default Routes;
+export default MokaRoutes;

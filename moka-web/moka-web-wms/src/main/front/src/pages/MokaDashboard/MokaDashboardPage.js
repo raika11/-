@@ -17,10 +17,10 @@ import {
     MokaAutocomplete,
     MokaPrependLinkInput,
     MokaSearchInput
-} from '@component';
+} from '@components';
 import { options } from './data';
 import Table from './TableTest';
-import { changeTheme } from '@store/layout/action';
+import { changeTheme } from '@store/layout/layoutAction';
 
 const MokaDashboardPage = () => {
     const [checked, setChecked] = useState(true);

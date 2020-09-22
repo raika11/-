@@ -6,12 +6,11 @@
         "paths": {
             "@/*": ["src/*"],
             "@assets": ["src/assets/*"],
-            "@component": ["src/component/*"],
+            "@components": ["src/components/*"],
             "@layout": ["src/layout/*"],
-            "@page": ["src/page/*"],
-            "@api": ["src/api/*"],
+            "@pages": ["src/pages/*"],
             "@store": ["src/store/*"],
-            "@util": ["src/util/*"]
+            "@utils": ["src/utils/*"]
         }
     },
     "exclude": ["./build/*", "./node_modules/*"]

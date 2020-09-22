@@ -4,7 +4,7 @@ import Popover from 'react-bootstrap/Popover';
 import Button from 'react-bootstrap/Button';
 
 const PopoverComponent = (props) => {
-    const { id, placement, title, content, buttonTitle, variant, className, ...rest } = props;
+    const { id, placement, title, children, buttonTitle, variant, className, ...rest } = props;
 
     return (
         <OverlayTrigger
@@ -14,7 +14,7 @@ const PopoverComponent = (props) => {
                 <Popover id={id}>
                     <Popover.Title as="h3">{title}</Popover.Title>
                     <Popover.Content>
-                        <div>{content}</div>
+                        <div>{children}</div>
                     </Popover.Content>
                 </Popover>
             }

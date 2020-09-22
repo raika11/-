@@ -1,7 +1,8 @@
 import React from 'react';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
-const BreadcrumbComponent = () => {
+const BreadcrumbComponent = (props) => {
+    const { ...rest } = props;
     return (
         <Breadcrumb>
             <Breadcrumb.Item href="/">Home</Breadcrumb.Item>

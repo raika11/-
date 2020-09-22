@@ -1,22 +1,33 @@
 import React from 'react';
-import { Alert } from 'react-bootstrap';
+import Alert from 'react-bootstrap/Alert';
+import PropTypes from 'prop-types';
 
-const colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
+const propTypes = {
+    /**
+     * variant
+     */
+    variant: PropTypes.string,
+    /**
+     * title
+     */
+    title: PropTypes.string,
+    /**
+     * children
+     */
+    children: PropTypes.string
+};
 
-const DefaultAlert = () => (
-    <div>
-        {colors.map((variant, idx) => (
-            <Alert key={idx} variant={variant}>
-                This is a {variant} alert—check it out!
-            </Alert>
-        ))}
-    </div>
-);
+const AlertComponet = (props) => {
+    const { variant, title, children, ...rest } = props;
 
-const AlertComponet = () => (
-    <>
-        <DefaultAlert />
-    </>
-);
+    return (
+        <Alert variant={variant} {...rest}>
+            {title && <Alert.Heading>{title}</Alert.Heading>}
+            {children}
+        </Alert>
+    );
+};
+
+AlertComponet.propTypes = propTypes;
 
 export default AlertComponet;

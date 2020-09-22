@@ -9,9 +9,15 @@ import { MokaDraggableModal } from '@component';
 import MokaTabComponent from './MokaTabComponent';
 import AccordionComponent from './AccordionComponent';
 import BreadcrumbComponent from './BreadcrumbComponent';
+import ImageComponent from './ImageComponent';
+import avatar from './img/avatars/logo192.png';
 import PopoverComponent from './PopoverComponent';
 import TooltipComponent from './TooltipComponent';
 import BadgeComponent from './BadgeComponent';
+import DropdownComponent from './DropdownComponent';
+import PaginationComponent from './PaginationComponent';
+import ProgressBarComponent from './ProgressBarComponent';
+import SpinnerComponent from './SpinnerComponent';
 
 const placements = ['right', 'left', 'top', 'bottom'];
 const variants = ['primary', 'secondary', 'success', 'danger', 'warning', 'light', 'info', 'dark'];
@@ -27,7 +33,25 @@ const TestBoardPgae = () => {
                     <Card>
                         <Card.Header className="mb-0">Alert</Card.Header>
                         <Card.Body>
-                            <AlertComponet />
+                            <div className="mb-2">
+                                {variants.map((variant, idx) => (
+                                    <AlertComponet
+                                        key={idx}
+                                        variant={variant}
+                                        children={`test-${variant}`}
+                                    />
+                                ))}
+                            </div>
+                            <div>
+                                {variants.map((variant, idx) => (
+                                    <AlertComponet
+                                        key={idx}
+                                        variant={variant}
+                                        title={`title-${variant}`}
+                                        children={`title-test-${variant}`}
+                                    />
+                                ))}
+                            </div>
                         </Card.Body>
                     </Card>
                     <Card>
@@ -86,6 +110,24 @@ const TestBoardPgae = () => {
                         </Card.Body>
                     </Card>
                     <Card>
+                        <Card.Header className="mb-0">Images</Card.Header>
+                        <Card.Body>
+                            {/* <Container>
+                                <Row>
+                                    <Col xs={6} md={4}>
+                                        <ImageComponent src={avatar} rounded />
+                                    </Col>
+                                    <Col xs={6} md={4}>
+                                        <ImageComponent src={avatar} roundedCircle />
+                                    </Col>
+                                    <Col xs={6} md={4}>
+                                        <ImageComponent src={avatar} thumbnail />
+                                    </Col>
+                                </Row>
+                            </Container> */}
+                        </Card.Body>
+                    </Card>
+                    <Card>
                         <Card.Header className="mb-0">Popover</Card.Header>
                         <Card.Body>
                             {placements.map((placement, idx) => (
@@ -93,7 +135,7 @@ const TestBoardPgae = () => {
                                     key={idx}
                                     placement={placement}
                                     title={`test-${placement}`}
-                                    content={`test-${placement}`}
+                                    children={`test-${placement}`}
                                     buttonTitle={placement}
                                     className="m-1"
                                 />
@@ -108,7 +150,7 @@ const TestBoardPgae = () => {
                                     key={idx}
                                     placement={placement}
                                     title={`test-${placement}`}
-                                    content={`test-${placement}`}
+                                    children={`test-${placement}`}
                                     buttonTitle={placement}
                                     className="m-1"
                                 />
@@ -145,7 +187,103 @@ const TestBoardPgae = () => {
                     </Card>
                     <Card>
                         <Card.Header className="mb-0">Dropdowns</Card.Header>
-                        <Card.Body></Card.Body>
+                        <Card.Body>
+                            <DropdownComponent
+                                variant="warning"
+                                title="드랍다운 버튼"
+                                items={[
+                                    { eventKey: '1', title: 'TEST 1' },
+                                    { eventKey: '2', title: 'TEST 2' },
+                                    { eventKey: '3', title: 'TEST 3' },
+                                    { eventKey: '4', title: 'TEST 4' },
+                                    { eventKey: '5', title: 'TEST 5' }
+                                ]}
+                                className="mb-2"
+                            />
+                            <DropdownComponent
+                                variant="warning"
+                                title="드랍다운 헤더"
+                                header
+                                headerTitle="헤더 테스트"
+                                items={[
+                                    { eventKey: '1', title: 'TEST 1' },
+                                    { eventKey: '2', title: 'TEST 2' },
+                                    { eventKey: '3', title: 'TEST 3' },
+                                    { eventKey: '4', title: 'TEST 4' },
+                                    { eventKey: '5', title: 'TEST 5' }
+                                ]}
+                            />
+                        </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header className="mb-0">Pagination</Card.Header>
+                        <Card.Body>
+                            <PaginationComponent size="sm" />
+                            <PaginationComponent />
+                            <PaginationComponent size="lg" />
+                        </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header className="mb-0">Progress Bars</Card.Header>
+                        <Card.Body>
+                            <ProgressBarComponent now={30} className="mb-2" />
+                            <ProgressBarComponent now={50} striped className="mb-2" />
+                            <ProgressBarComponent now={70} animated className="mb-2" />
+                            <ProgressBarComponent
+                                multi={[
+                                    { now: 60, striped: true, variant: 'primary' },
+                                    { now: 20, animated: true, variant: 'secondary' },
+                                    { now: 20, striped: true, variant: 'success' }
+                                ]}
+                            />
+                        </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header className="mb-0">Spinners</Card.Header>
+                        <Card.Body>
+                            <div>
+                                {variants.map((variant, idx) => (
+                                    <SpinnerComponent
+                                        key={idx}
+                                        animation="border"
+                                        variant={variant}
+                                        className="mb-2"
+                                    />
+                                ))}
+                            </div>
+                            <div>
+                                {variants.map((variant, idx) => (
+                                    <SpinnerComponent
+                                        key={idx}
+                                        animation="border"
+                                        variant={variant}
+                                        size="sm"
+                                        className="mb-2"
+                                    />
+                                ))}
+                            </div>
+                            <div>
+                                {variants.map((variant, idx) => (
+                                    <SpinnerComponent
+                                        key={idx}
+                                        animation="grow"
+                                        variant={variant}
+                                        className="mb-2"
+                                    />
+                                ))}
+                            </div>
+                            <div>
+                                {variants.map((variant, idx) => (
+                                    <SpinnerComponent
+                                        key={idx}
+                                        animation="grow"
+                                        variant={variant}
+                                        size="sm"
+                                        className="mb-2"
+                                    />
+                                ))}
+                            </div>
+                        </Card.Body>
                     </Card>
                 </Col>
             </Row>

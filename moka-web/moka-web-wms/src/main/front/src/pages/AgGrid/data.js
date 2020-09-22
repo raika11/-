@@ -169,3 +169,16 @@ export const rowData = [
         contentsOrder: '05'
     }
 ];
+
+// export const getOverIndex = (event, tgt) => {
+//     debugger;
+//     const elements = document.elementsFromPoint(event.clientX, event.clientY);
+//     const agGridRow = elements.find((r) => r.classList.contains('ag-row'));
+//     if (agGridRow) {
+//         const idOfRow = agGridRow.getAttribute('row-id');
+//         const rowNode = tgt.api.getRowNode(idOfRow);
+//         console.log('idOfRow:'+idOfRow+',rowIndex:'+rowNode.rowIndex);
+//         return rowNode.rowIndex;
+//     }
+//     return -1;
+// };

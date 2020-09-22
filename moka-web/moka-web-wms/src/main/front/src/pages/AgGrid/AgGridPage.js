@@ -6,47 +6,64 @@ import { AgGridReact } from 'ag-grid-react';
 import { columnDefs, rowData, rowClassRules } from './data';
 
 const AgGridPage = () => {
+    // let appendStore = [];
+
     const onRowDragEnter = (params) => {
-        debugger;
         const data = params.node.data;
         if (data.relContentIds && data.relContentIds.length > 0) {
-            const newRowData = rowData.filter(
+            // let fromIndex = rowData.indexOf(data);
+            // appendStore = rowData.slice(fromIndex + 1, fromIndex + 1 + data.relContentIds.length);
+            let newRowData = rowData.filter(
                 (node) => !data.relContentIds.includes(node.contentsId)
             );
             params.api.setRowData(newRowData);
         }
-        // console.log('onRowDragEnter', params);
     };
 
-    const onRowDragMove = (event) => {
-        var movingNode = event.node;
-        var overNode = event.overNode;
-        var rowNeedsToMove = movingNode !== overNode;
-        if (rowNeedsToMove) {
-            debugger;
-            var movingData = movingNode.data;
-            var overData = overNode.data;
-            let fromIndex = rowData.indexOf(movingData);
-            var toIndex = rowData.indexOf(overData);
-            var newStore = rowData.slice();
-
-            moveInArray(newStore, fromIndex, toIndex);
-            if (movingData.relContentIds && movingData.relContentIds.length > 0) {
-                movingData.relContentIds.forEach((relContentsId) => {
-                    fromIndex = newStore.findIndex((node) => node.contentsId === relContentsId);
-                    moveInArray(newStore, fromIndex, toIndex);
-                });
-            }
-
-            event.api.setRowData(newStore);
-            event.api.clearFocusedCell();
-        }
-        function moveInArray(arr, fromIndex, toIndex, relCnt) {
-            var element = arr[fromIndex];
-            arr.splice(fromIndex, 1 + relCnt);
-            arr.splice(toIndex, 0, element);
-        }
+    const onRowDragEnd = (params) => {
+        // var movingNode = params.node;
+        // var overNode = params.overNode;
+        // var rowNeedsToMove = movingNode !== overNode;
+        // if (rowNeedsToMove) {
+        //     let newStore = rowData.slice();
+        //     let toIndex = rowData.indexOf(overNode);
+        //     for (let i = 0; i < appendStore.length; i++) {
+        //         newStore.splice(toIndex + i, 0, appendStore[i]);
+        //     }
+        //     params.api.setRowData(newStore);
+        //     appendStore = [];
+        // }
     };
+
+    // const onRowDragMove = (event) => {
+    //     var movingNode = event.node;
+    //     var overNode = event.overNode;
+    //     var rowNeedsToMove = movingNode !== overNode;
+
+    //     const relCnt = movingNode.data.relContentIds ? movingNode.data.relContentIds.length : 0;
+
+    //     if (rowNeedsToMove) {
+    //         var movingData = movingNode.data;
+    //         var overData = overNode.data;
+    //         let fromIndex = rowData.indexOf(movingData);
+    //         // var toIndex = rowData.indexOf(overData);
+    //         var newStore = rowData.slice();
+
+    //         const appendStore = newStore.slice(fromIndex, fromIndex+ 1 + relCnt);
+
+    //         // delete
+    //         newStore.splice(fromIndex, 1 + relCnt);
+
+    //         // append
+    //         var toIndex = newStore.indexOf(overData);
+    //         for (let i = 0 ; i < appendStore.length; i++) {
+    //             newStore.splice(toIndex + i, 0, appendStore[i]);
+    //         }
+
+    //         event.api.setRowData(newStore);
+    //         event.api.clearFocusedCell();
+    //     }
+    // };
 
     return (
         <Container fluid className="p-0">
@@ -57,8 +74,9 @@ const AgGridPage = () => {
                             rowData={rowData}
                             getRowNodeId={(params) => params.contentsId}
                             columnDefs={columnDefs}
-                            // onRowDragEnter={onRowDragEnter}
-                            onRowDragMove={onRowDragMove}
+                            onRowDragEnter={onRowDragEnter}
+                            onRowDragEnd={onRowDragEnd}
+                            // onRowDragMove={onRowDragMove}
                             rowSelection="multiple"
                             rowDragManaged
                             animateRows

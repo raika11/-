@@ -2,7 +2,7 @@ import React from 'react';
 import ListDeleteButton from './ListDeleteButton';
 import ListEditButton from './ListEditButton';
 
-const cellClassRules = {    
+const cellClassRules = {
     'ag-rel-cell': (params) => params.data.rel === true,
     'ag-edit-cell': (params) => params.colDef.editable
 };
@@ -126,7 +126,8 @@ export const rowData = [
         title: '더불어민주당 김현권 구미을 후보, 선거사무소 온라인 개소식',
         thumbnailFileName:
             '/news/component/htmlphoto_mmdata/202009/18/c57ae87f-08af-4111-89e5-325406b1477d.jpg',
-        contentsOrder: '01'
+        contentsOrder: '01',
+        relContentIds: ['11', '12']
     },
     {
         contentsId: '11',

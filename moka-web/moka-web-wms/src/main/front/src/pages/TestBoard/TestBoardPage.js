@@ -112,19 +112,7 @@ const TestBoardPgae = () => {
                     <Card>
                         <Card.Header className="mb-0">Images</Card.Header>
                         <Card.Body>
-                            {/* <Container>
-                                <Row>
-                                    <Col xs={6} md={4}>
-                                        <ImageComponent src={avatar} rounded />
-                                    </Col>
-                                    <Col xs={6} md={4}>
-                                        <ImageComponent src={avatar} roundedCircle />
-                                    </Col>
-                                    <Col xs={6} md={4}>
-                                        <ImageComponent src={avatar} thumbnail />
-                                    </Col>
-                                </Row>
-                            </Container> */}
+                            <ImageComponent src={avatar} thumbnail />
                         </Card.Body>
                     </Card>
                     <Card>

@@ -1,6 +1,5 @@
 import React from 'react';
 import Pagination from 'react-bootstrap/Pagination';
-import PropTypes from 'prop-types';
 
 const PaginationComponent = (props) => {
     const { size, count, ...rest } = props;

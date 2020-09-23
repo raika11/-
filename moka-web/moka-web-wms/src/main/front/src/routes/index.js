@@ -7,6 +7,7 @@ import Page404 from '@pages/MokaAuth/Page404';
 // page
 const MokaDashBoard = React.lazy(() => import('@pages/MokaDashboard'));
 const TestBoard = React.lazy(() => import('@pages/TestBoard'));
+const Task = React.lazy(() => import('@pages/Task'));
 const AgGrid = React.lazy(() => import('@pages/AgGrid'));
 
 const routes = [
@@ -43,6 +44,14 @@ const routes = [
         path: '/aggrid',
         name: 'AgGrid',
         component: AgGrid,
+        layout: DefaultLayout,
+        nonResponsive: false,
+        exact: true
+    },
+    {
+        path: '/tasks',
+        name: 'Task',
+        component: Task,
         layout: DefaultLayout,
         nonResponsive: false,
         exact: true

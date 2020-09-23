@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 const DropdownComponent = (props) => {
-    const { variant, id, header, split, items, title, headerTitle, divider = true, ...rest } = props;
+    const {
+        variant,
+        id,
+        header,
+        split,
+        items,
+        title,
+        headerTitle,
+        // divider = true,
+        ...rest
+    } = props;
     const [itemList, setItemList] = useState([]);
 
     useEffect(() => {

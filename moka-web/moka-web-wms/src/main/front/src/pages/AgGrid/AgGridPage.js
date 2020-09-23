@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,64 +6,65 @@ import { AgGridReact } from 'ag-grid-react';
 import { columnDefs, rowData, rowClassRules } from './data';
 
 const AgGridPage = () => {
-    // let appendStore = [];
+    const [moveRows, setMoveRows] = useState([]);
 
     const onRowDragEnter = (params) => {
         const data = params.node.data;
-        if (data.relContentIds && data.relContentIds.length > 0) {
-            // let fromIndex = rowData.indexOf(data);
-            // appendStore = rowData.slice(fromIndex + 1, fromIndex + 1 + data.relContentIds.length);
-            let newRowData = rowData.filter(
-                (node) => !data.relContentIds.includes(node.contentsId)
-            );
+        if (data.relSeqs && data.relSeqs.length > 0) {
+            let fromIndex = rowData.indexOf(data);
+            setMoveRows(rowData.slice(fromIndex + 1, fromIndex + 1 + data.relSeqs.length));
+            let newRowData = rowData.filter((node) => !data.relSeqs.includes(node.seq));
             params.api.setRowData(newRowData);
         }
     };
 
+    /**
+     * 주기사의 가족내 이동은 가능
+     * 주기사->타 관련기사이동 불가. 순서조정 가능.
+     * 관련기사->주기사로 변경 불가, 타 관련기사로 이동 불가
+     */
     const onRowDragEnd = (params) => {
-        // var movingNode = params.node;
-        // var overNode = params.overNode;
-        // var rowNeedsToMove = movingNode !== overNode;
-        // if (rowNeedsToMove) {
-        //     let newStore = rowData.slice();
-        //     let toIndex = rowData.indexOf(overNode);
-        //     for (let i = 0; i < appendStore.length; i++) {
-        //         newStore.splice(toIndex + i, 0, appendStore[i]);
-        //     }
-        //     params.api.setRowData(newStore);
-        //     appendStore = [];
-        // }
+        var movingNode = params.node;
+        var overNode = params.overNode;
+        var rowNeedsToMove = movingNode !== overNode;
+
+        // 관련기사로 넣을지 여부
+        // let isRelInsert = params.event.ctrlKey;
+
+        if (rowNeedsToMove) {
+            // 주기사 여부
+            const srcIsOwner = !!!movingNode.data.rel;
+            const overIsOwner = !!!overNode.data.rel;
+
+            if (srcIsOwner) {
+                if (overIsOwner) {
+                    // 1. 주기사 -> 주기사 이동 : 소스 주기사의 관련기사를 추가한다.
+                    if (movingNode.data.relSeqs && movingNode.data.relSeqs.length > 0) {
+                        // display 기준으로 새로운 rows생성
+                        let newStore = [];
+                        for (let i = 0; i < params.api.getDisplayedRowCount(); i++) {
+                            newStore.push(params.api.getDisplayedRowAtIndex(i).data);
+                        }
+                        let toIndex = newStore.indexOf(movingNode.data) + 1; // 이동하는 노드의 아래에 넣는다.
+                        for (let i = 0; i < moveRows.length; i++) {
+                            newStore.splice(toIndex + i, 0, moveRows[i]);
+                        }
+                        params.api.setRowData(newStore);
+                        setMoveRows([]);
+                    }
+                } else {
+                    // 오버기사가 주기사의 자식인지 조사
+                    const isChildRel = movingNode.data.relSeqs.includes(overNode.data.seq);
+
+                    if (isChildRel) {
+                        // 2. 주기사 -> 자신의 관련영역 으로 이동 : 주인과 자식 교체
+                    } else {
+                        // 3. 주기사 -> 다른기사의 관련영역 으로 이동 : 불가
+                    }
+                }
+            }
+        }
     };
-
-    // const onRowDragMove = (event) => {
-    //     var movingNode = event.node;
-    //     var overNode = event.overNode;
-    //     var rowNeedsToMove = movingNode !== overNode;
-
-    //     const relCnt = movingNode.data.relContentIds ? movingNode.data.relContentIds.length : 0;
-
-    //     if (rowNeedsToMove) {
-    //         var movingData = movingNode.data;
-    //         var overData = overNode.data;
-    //         let fromIndex = rowData.indexOf(movingData);
-    //         // var toIndex = rowData.indexOf(overData);
-    //         var newStore = rowData.slice();
-
-    //         const appendStore = newStore.slice(fromIndex, fromIndex+ 1 + relCnt);
-
-    //         // delete
-    //         newStore.splice(fromIndex, 1 + relCnt);
-
-    //         // append
-    //         var toIndex = newStore.indexOf(overData);
-    //         for (let i = 0 ; i < appendStore.length; i++) {
-    //             newStore.splice(toIndex + i, 0, appendStore[i]);
-    //         }
-
-    //         event.api.setRowData(newStore);
-    //         event.api.clearFocusedCell();
-    //     }
-    // };
 
     return (
         <Container fluid className="p-0">

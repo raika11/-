@@ -123,14 +123,16 @@ export const columnDefs = [
 export const rowData = [
     {
         contentsId: '1',
+        seq: '1',
         title: '더불어민주당 김현권 구미을 후보, 선거사무소 온라인 개소식',
         thumbnailFileName:
             '/news/component/htmlphoto_mmdata/202009/18/c57ae87f-08af-4111-89e5-325406b1477d.jpg',
         contentsOrder: '01',
-        relContentIds: ['11', '12']
+        relSeqs: ['11', '12']
     },
     {
         contentsId: '11',
+        seq: '11',
         relTitle: 'rel"홍콩 글로벌 금융자본·인력… 인천 유치위해 규제 풀어야"',
         relThumbnailFileName: '',
         relContentsOrder: '01',
@@ -138,6 +140,7 @@ export const rowData = [
     },
     {
         contentsId: '12',
+        seq: '12',
         relTitle: "rel'유치원 1년에 최소 5번 소독' 보고 규정은 全無",
         relThumbnailFileName: '',
         relContentsOrder: '02',
@@ -145,25 +148,46 @@ export const rowData = [
     },
     {
         contentsId: '2',
+        seq: '2',
         title: '이상길 예비후보 "행정절차 간소화로 지역경제위기 막아야"',
         thumbnailFileName: '',
         contentsOrder: '02'
     },
     {
         contentsId: '3',
+        seq: '3',
         title: "중앙지검 'n번방 사건' 특별수사 TF 구성",
         thumbnailFileName: '',
         contentsOrder: '03'
     },
     {
         contentsId: '4',
+        seq: '4',
         title: '이차영 괴산군수 정부예산 확보 발품행정 이어져',
         thumbnailFileName:
             '/news/component/htmlphoto_mmdata/202009/18/c57ae87f-08af-4111-89e5-325406b1477d.jpg',
-        contentsOrder: '04'
+        contentsOrder: '04',
+        relSeqs: ['41', '42']
+    },
+    {
+        contentsId: '41',
+        seq: '41',
+        relTitle: 'rel"홍콩 글로벌 금융자본·인력… 인천 유치위해 규제 풀어야"',
+        relThumbnailFileName: '',
+        relContentsOrder: '01',
+        rel: true
+    },
+    {
+        contentsId: '42',
+        seq: '42',
+        relTitle: "rel'유치원 1년에 최소 5번 소독' 보고 규정은 全無",
+        relThumbnailFileName: '',
+        relContentsOrder: '02',
+        rel: true
     },
     {
         contentsId: '5',
+        seq: '5',
         title: '[★별자리운세] 2020년8월6일 (목요일) 동서양 별자리 타로운세',
         thumbnailFileName: '',
         contentsOrder: '05'

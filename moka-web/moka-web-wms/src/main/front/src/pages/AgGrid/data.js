@@ -136,6 +136,7 @@ export const rowData = [
         relTitle: 'rel"홍콩 글로벌 금융자본·인력… 인천 유치위해 규제 풀어야"',
         relThumbnailFileName: '',
         relContentsOrder: '01',
+        parentSeq: '1',
         rel: true
     },
     {
@@ -144,6 +145,7 @@ export const rowData = [
         relTitle: "rel'유치원 1년에 최소 5번 소독' 보고 규정은 全無",
         relThumbnailFileName: '',
         relContentsOrder: '02',
+        parentSeq: '1',
         rel: true
     },
     {

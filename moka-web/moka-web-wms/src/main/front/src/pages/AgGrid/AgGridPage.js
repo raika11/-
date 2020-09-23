@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs, rowData, rowClassRules } from './data';
+import { toastr } from 'react-redux-toastr';
 
 const AgGridPage = () => {
     const [moveRows, setMoveRows] = useState([]);
@@ -18,10 +19,40 @@ const AgGridPage = () => {
         }
     };
 
+    const getMoveMode = (movingData, overData) => {
+        if (!!!movingData.rel) {
+            if (movingData.relSeqs && movingData.relSeqs.includes(overData.seq)) {
+                return 'FamillyParentToChild'; // 주기사 -> 관련기사(부모가 자식으로 변경): trade
+            } else {
+                if (!!!overData.rel) {
+                    return 'ParentToParent'; // 주기사 -> 타 주기사: drag
+                } else {
+                    return 'ParentToChild'; // 주기사 -> 타 관련기사: rollback
+                }
+            }
+        } else if (!!!overData.rel) {
+            if (overData.relSeqs && overData.relSeqs.includes(movingData.seq)) {
+                return 'FamillyChildToParent'; // 관련기사 -> 주기사(자식이 부모로 변경): trade
+            } else {
+                if (!!!movingData.rel) {
+                    return 'ParentToParent'; // 주기사 -> 타 주기사: drag
+                } else {
+                    return 'ChildToParent'; // 관련기사 -> 타 주기사: rollback
+                }
+            }
+        } else {
+            if (movingData.parentSeq === overData.parentSeq) {
+                return 'FamillyChildToChild'; // 관련기사 -> 관련기사(형제) : drag
+            } else {
+                return 'ChildToChild'; // 관련기사 -> 타 관련기사 : rollback
+            }
+        }
+    };
+
     /**
      * 주기사의 가족내 이동은 가능
-     * 주기사->타 관련기사이동 불가. 순서조정 가능.
-     * 관련기사->주기사로 변경 불가, 타 관련기사로 이동 불가
+     * 주기사 : 타 관련기사이동 불가. 순서조정 가능.
+     * 관련기사 : 타 주기사로 변경 불가, 타 관련기사로 이동 불가
      */
     const onRowDragEnd = (params) => {
         var movingNode = params.node;
@@ -32,37 +63,46 @@ const AgGridPage = () => {
         // let isRelInsert = params.event.ctrlKey;
 
         if (rowNeedsToMove) {
-            // 주기사 여부
-            const srcIsOwner = !!!movingNode.data.rel;
-            const overIsOwner = !!!overNode.data.rel;
+            const moveMode = getMoveMode(movingNode.data, overNode.data);
+            if (moveMode.includes('Familly')) {
+                // 주기사 -> 관련기사(부모가 자식으로 변경): trade
+                if (moveMode === 'FamillyParentToChild') {
+                    // 서버에서 trade
+                }
 
-            if (srcIsOwner) {
-                if (overIsOwner) {
-                    // 1. 주기사 -> 주기사 이동 : 소스 주기사의 관련기사를 추가한다.
-                    if (movingNode.data.relSeqs && movingNode.data.relSeqs.length > 0) {
-                        // display 기준으로 새로운 rows생성
-                        let newStore = [];
-                        for (let i = 0; i < params.api.getDisplayedRowCount(); i++) {
-                            newStore.push(params.api.getDisplayedRowAtIndex(i).data);
-                        }
-                        let toIndex = newStore.indexOf(movingNode.data) + 1; // 이동하는 노드의 아래에 넣는다.
-                        for (let i = 0; i < moveRows.length; i++) {
-                            newStore.splice(toIndex + i, 0, moveRows[i]);
-                        }
-                        params.api.setRowData(newStore);
-                        setMoveRows([]);
-                    }
-                } else {
-                    // 오버기사가 주기사의 자식인지 조사
-                    const isChildRel = movingNode.data.relSeqs.includes(overNode.data.seq);
+                // 관련기사 -> 주기사(자식이 부모로 변경): trade
+                if (moveMode === 'FamillyChildToParent') {
+                    // 서버에서 trade
+                }
 
-                    if (isChildRel) {
-                        // 2. 주기사 -> 자신의 관련영역 으로 이동 : 주인과 자식 교체
-                    } else {
-                        // 3. 주기사 -> 다른기사의 관련영역 으로 이동 : 불가
-                    }
+                // 관련기사 -> 관련기사(형제) : drag
+                if (moveMode === 'FamillyChildToChild') {
+                    // 할일없음.
                 }
             }
+
+            // rollback
+            if (
+                moveMode === 'ParentToChild' ||
+                moveMode === 'ChildToParent' ||
+                moveMode === 'ChildToChild'
+            ) {
+                toastr.warning('드래그드랍 오류', '이동할 수 없습니다');
+            }
+        }
+
+        if (movingNode.data.relSeqs && movingNode.data.relSeqs.length > 0) {
+            // display 기준으로 새로운 rows생성
+            let newStore = [];
+            for (let i = 0; i < params.api.getDisplayedRowCount(); i++) {
+                newStore.push(params.api.getDisplayedRowAtIndex(i).data);
+            }
+            let toIndex = newStore.indexOf(movingNode.data) + 1; // 이동하는 노드의 아래에 넣는다.
+            for (let i = 0; i < moveRows.length; i++) {
+                newStore.splice(toIndex + i, 0, moveRows[i]);
+            }
+            params.api.setRowData(newStore);
+            setMoveRows([]);
         }
     };
 

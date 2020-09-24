@@ -3,7 +3,7 @@
 @import 'ag-grid-community/src/styles/ag-theme-balham/sass/_ag-theme-balham-mixin';
 
 // 기사 높이
-$row-height: 53px;
+// $row-height: 53px;
 // 기사 간 간격
 $padding-height: 10px;
 
@@ -43,9 +43,8 @@ $padding-height: 10px;
 .ag-theme-moka-grid .ag-header-cell {
     padding-left: 3px;
     padding-right: 3px;
-    height: $row-height;
-    line-height: $row-height;
-    // padding-bottom: $padding-height;
+    // height: $row-height;
+    // line-height: $row-height;
     display: flex;
     align-items: center;    
 }
@@ -60,15 +59,15 @@ $padding-height: 10px;
     border: $padding-height/2 solid #fff;
     border-radius: 8px 8px 8px 8px;    
     background-color: #f4f7f9;
-    height: $row-height + $padding-height;
-    line-height: $row-height + $padding-height;    
+    // height: $row-height + $padding-height;
+    // line-height: $row-height + $padding-height;    
 }
 
 /* 관련 편집기사 row */
 .ag-theme-moka-grid .ag-rel-row {
     background-color: #ededed !important;
-    height: 36px + $padding-height !important;
-    line-height: 36px + $padding-height !important;
+    // height: 36px + $padding-height !important;
+    // line-height: 36px + $padding-height !important;
 }
 
 .ag-header-cell-text {

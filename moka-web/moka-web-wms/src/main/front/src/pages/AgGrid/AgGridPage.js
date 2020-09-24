@@ -106,6 +106,10 @@ const AgGridPage = () => {
         }
     };
 
+    const getRowHeight = (params) => {
+        return params.data.rowHeight ? params.data.rowHeight : 53;
+    };
+
     return (
         <Container fluid className="p-0">
             <Row>
@@ -128,6 +132,7 @@ const AgGridPage = () => {
                             headerHeight={0}
                             rowClassRules={rowClassRules}
                             stopEditingWhenGridLosesFocus
+                            getRowHeight={getRowHeight}
                         />
                     </div>
                 </Col>

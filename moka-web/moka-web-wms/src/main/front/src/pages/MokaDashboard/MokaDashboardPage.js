@@ -280,8 +280,17 @@ const MokaDashboardPage = () => {
                             </Form.Group>
 
                             <Form.Group>
-                                <Form.Label>5) 드래그앤드롭 이미지</Form.Label>
-                                <MokaImageInput />
+                                <Form.Label>5) 파일 드롭존 테스트</Form.Label>
+                                <div>
+                                    <MokaImageInput />
+                                </div>
+                            </Form.Group>
+
+                            <Form.Group>
+                                <Form.Label>+ 다른 드롭존</Form.Label>
+                                <div>
+                                    <MokaImageInput />
+                                </div>
                             </Form.Group>
                         </Card.Body>
                     </Card>

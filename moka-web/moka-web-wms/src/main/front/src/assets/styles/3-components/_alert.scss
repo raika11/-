@@ -1,67 +1,70 @@
 .alert {
-  padding: 0;
-  display: flex;
-  color: $white;
-
-  .close:hover,
-  .close:focus {
     color: $white;
-    opacity: 1;
-  }
 }
+// .alert {
+//     padding: 0;
+//     display: flex;
+//     color: $white;
 
-.alert-outline,
-.alert-outline-coloured {
-  color: $body-color;
-  background: $white;
+//     .close:hover,
+//     .close:focus {
+//         color: $white;
+//         opacity: 1;
+//     }
+// }
 
-  hr {
-    border-top-color: $gray-400;
-  }
+// .alert-outline,
+// .alert-outline-coloured {
+//     color: $body-color;
+//     background: $white;
 
-  .close:hover,
-  .close:focus {
-    color: $gray-800;
-  }
+//     hr {
+//         border-top-color: $gray-400;
+//     }
 
-  .alert-message {
-    @include border-right-radius($alert-border-radius);
-    @include border-left-radius($alert-border-radius);
-    border: 1px solid $gray-400;
-  }
+//     .close:hover,
+//     .close:focus {
+//         color: $gray-800;
+//     }
 
-  .alert-message:not(:nth-child(2)) {
-    @include border-left-radius(0);
-    border-left: 0;
-  }
+//     .alert-message {
+//         @include border-right-radius($alert-border-radius);
+//         @include border-left-radius($alert-border-radius);
+//         border: 1px solid $gray-400;
+//     }
 
-  .alert-icon {
-    @include border-left-radius($alert-border-radius);
-    color: $white;
-  }
+//     .alert-message:not(:nth-child(2)) {
+//         @include border-left-radius(0);
+//         border-left: 0;
+//     }
 
-  @each $color, $value in $theme-colors {
-    &.alert-#{$color} .alert-icon {
-      background-color: $value;
-    }
-  }
-}
+//     .alert-icon {
+//         @include border-left-radius($alert-border-radius);
+//         color: $white;
+//     }
 
-.alert-outline-coloured {
-  @each $color, $value in $theme-colors {
-    &.alert-#{$color} .alert-message {
-      border-color: $value;
-    }
-  }
-}
+//     @each $color, $value in $theme-colors {
+//         &.alert-#{$color} .alert-icon {
+//             background-color: $value;
+//         }
+//     }
+// }
 
-.alert-icon {
-  padding: $alert-padding-y $alert-padding-x;
-  background: rgba(255,255,255,.1);
-}
+// .alert-outline-coloured {
+//     @each $color, $value in $theme-colors {
+//         &.alert-#{$color} .alert-message {
+//             border-color: $value;
+//         }
+//     }
+// }
 
-.alert-message {
-  padding: $alert-padding-y $alert-padding-x;
-  width: 100%;
-  box-sizing: border-box;
-}
+// .alert-icon {
+//     padding: $alert-padding-y $alert-padding-x;
+//     background: rgba(255, 255, 255, 0.1);
+// }
+
+// .alert-message {
+//     padding: $alert-padding-y $alert-padding-x;
+//     width: 100%;
+//     box-sizing: border-box;
+// }

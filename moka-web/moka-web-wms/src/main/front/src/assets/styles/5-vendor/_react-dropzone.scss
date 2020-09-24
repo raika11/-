@@ -1,0 +1,23 @@
+.is-file-dropzone {
+    img,
+    input,
+    div {
+        pointer-events: none;
+    }
+    .dropzone-dragover-mask {
+        border-color: #eee;
+    }
+}
+.dropzone-dragover {
+    .dropzone-dragover-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba($white, 0.3);
+        border: 3px dashed $orange;
+        border-radius: 5px;
+        transition: border-color 0.24s ease-in-out;
+    }
+}

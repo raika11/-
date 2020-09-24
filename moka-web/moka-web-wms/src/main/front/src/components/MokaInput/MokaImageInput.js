@@ -16,11 +16,26 @@ const propTypes = {
     /**
      * height
      */
-    height: PropTypes.number
+    height: PropTypes.number,
+    /**
+     * 사진이 아닌 타입이 들어왔을 때 나타나는 alert props
+     */
+    alertProps: PropTypes.shape({
+        outline: PropTypes.bool,
+        variant: PropTypes.string,
+        heading: PropTypes.string,
+        body: PropTypes.string
+    })
 };
 const defaultProps = {
     width: 171,
-    height: 180
+    height: 180,
+    alertProps: {
+        outline: false,
+        variant: 'danger',
+        heading: null,
+        body: '이미지파일만 등록할 수 있습니다'
+    }
 };
 
 /**
@@ -28,7 +43,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = (props) => {
-    const { width, height } = props;
+    const { width, height, alertProps } = props;
     const [imgSrc, setImgSrc] = useState(img);
     const [alert, setAlert] = useState(false);
     const imgRef = useRef(null);
@@ -99,9 +114,14 @@ const MokaImageInput = (props) => {
                         ref={imgRef}
                     />
                     <input {...getInputProps()} />
-                    <Alert className="absolute-top" variant="danger" show={alert}>
-                        <Alert.Heading>Fail</Alert.Heading>
-                        <p>이미지파일만 등록할 수 있습니다</p>
+                    <Alert
+                        className="absolute-top"
+                        bsPrefix={alertProps.outline ? 'alert-outline' : undefined}
+                        variant={alertProps.variant}
+                        show={alert}
+                    >
+                        {alertProps.heading && <Alert.Heading>{alertProps.heading}</Alert.Heading>}
+                        <p>{alertProps.body}</p>
                     </Alert>
                     <div className="dropzone-dragover-mask" />
                 </Figure>

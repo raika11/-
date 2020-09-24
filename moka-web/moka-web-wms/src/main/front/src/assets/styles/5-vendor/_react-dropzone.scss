@@ -1,7 +1,7 @@
 .is-file-dropzone {
     img,
     input,
-    div {
+    .dropzone-dragover-mask {
         pointer-events: none;
     }
     .dropzone-dragover-mask {

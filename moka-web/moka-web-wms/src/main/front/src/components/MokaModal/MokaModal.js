@@ -18,7 +18,7 @@ const propTypes = {
     /**
      * children (컨텐츠)
      */
-    children: PropTypes.element,
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
     /**
      * footer의 액션버튼
      */

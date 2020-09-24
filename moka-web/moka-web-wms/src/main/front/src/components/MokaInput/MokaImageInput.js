@@ -3,10 +3,13 @@ import clsx from 'clsx';
 import Dropzone from 'react-dropzone';
 import PropTypes from 'prop-types';
 
-import Alert from 'react-bootstrap/Alert';
 import Figure from 'react-bootstrap/Figure';
 import img from '@assets/images/react.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell } from '@fortawesome/free-solid-svg-icons';
+
 import { ACCEPTED_IMAGE_TYPES } from '@/constants';
+import MokaAlert from '@components/MokaAlert';
 
 const propTypes = {
     /**
@@ -114,15 +117,14 @@ const MokaImageInput = (props) => {
                         ref={imgRef}
                     />
                     <input {...getInputProps()} />
-                    <Alert
-                        className="absolute-top"
-                        bsPrefix={alertProps.outline ? 'alert-outline' : undefined}
-                        variant={alertProps.variant}
-                        show={alert}
-                    >
-                        {alertProps.heading && <Alert.Heading>{alertProps.heading}</Alert.Heading>}
-                        <p>{alertProps.body}</p>
-                    </Alert>
+                    <div className="absolute-top">
+                        <MokaAlert {...alertProps} show={alert}>
+                            {alertProps.heading && (
+                                <MokaAlert.Heading>{alertProps.heading}</MokaAlert.Heading>
+                            )}
+                            <p>{alertProps.body}</p>
+                        </MokaAlert>
+                    </div>
                     <div className="dropzone-dragover-mask" />
                 </Figure>
             )}

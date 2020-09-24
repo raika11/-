@@ -1,6 +1,6 @@
 import React from 'react';
-import Alert from 'react-bootstrap/Alert';
 import PropTypes from 'prop-types';
+import MokaAlert from '@components/MokaAlert';
 
 const propTypes = {
     /**
@@ -21,10 +21,10 @@ const AlertComponet = (props) => {
     const { variant, title, children, ...rest } = props;
 
     return (
-        <Alert variant={variant} {...rest}>
-            {title && <Alert.Heading>{title}</Alert.Heading>}
+        <MokaAlert variant={variant} {...rest}>
+            {title && <MokaAlert.Heading>{title}</MokaAlert.Heading>}
             {children}
-        </Alert>
+        </MokaAlert>
     );
 };
 

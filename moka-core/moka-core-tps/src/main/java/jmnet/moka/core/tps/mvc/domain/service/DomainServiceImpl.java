@@ -160,11 +160,6 @@ public class DomainServiceImpl implements DomainService {
         return mediaRepository.findByMediaTypeOrderByMediaIdAsc(TpsConstants.ONLINE_MEDIA_TYPE);
     }
 
-    @Override
-    public int countByVolumeId(String volumeId) {
-        return domainRepository.countByVolumeId(volumeId);
-    }
-
     public List<DomainDTO> findByMapper(String domainId) {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("domainId", domainId);

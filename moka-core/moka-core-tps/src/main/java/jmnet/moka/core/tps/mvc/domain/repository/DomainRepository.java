@@ -25,7 +25,4 @@ public interface DomainRepository extends JpaRepository<Domain, String> {
 
     // 매체별 도메인 전체 조회(공통도메인 제외). 페이징X
     public List<Domain> findByMediaId(String mediaId);
-    
-    // 볼륨으로 도메인 개수 검사
-    public int countByVolumeId(String volumeId);
 }

@@ -100,11 +100,4 @@ public interface DomainService {
      */
     public List<Media> findOnlineMediaList();
 
-    /**
-     * 볼륨 아이디로 도메인 개수 조회
-     *
-     * @param volumdId 볼륨아이디
-     * @return 건수
-     */
-    public int countByVolumeId(String volumdId);
 }

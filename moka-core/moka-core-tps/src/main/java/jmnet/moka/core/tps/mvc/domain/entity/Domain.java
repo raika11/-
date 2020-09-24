@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
  * 
  */
 @Entity
-@Table(name = "WMS_DOMAIN")
+@Table(name = "TB_WMS_DOMAIN")
 @NamedQuery(name = "Domain.findAll", query = "SELECT d FROM Domain d")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -55,22 +55,19 @@ public class Domain implements Serializable {
     @Column(name = "API_PATH")
     private String apiPath;
 
-    @Column(name = "VOLUME_ID", columnDefinition = "char")
-    private String volumeId;
-
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "CREATE_YMDT")
+    @Column(name = "REG_DT")
     private String createYmdt;
 
-    @Column(name = "CREATOR")
+    @Column(name = "REG_ID")
     private String creator;
 
-    @Column(name = "MODIFIED_YMDT")
+    @Column(name = "MOD_DT")
     private String modifiedYmdt;
 
-    @Column(name = "MODIFIER")
+    @Column(name = "MOD_ID")
     private String modifier;
 
 

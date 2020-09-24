@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -116,6 +117,9 @@ public class DeskingServiceImpl implements DeskingService {
     private UploadFileHelper uploadFileHelper;
 
     private final EntityManager entityManager;
+
+    @Value("${tps.desking.image.path}")
+    private String deskingImagePath;
 
     @Autowired
     public DeskingServiceImpl(EntityManager entityManager) {
@@ -564,9 +568,9 @@ public class DeskingServiceImpl implements DeskingService {
                         deskingWork.getDatasetSeq())
                 .orElseThrow(() -> new NoDataException(
                         messageByLocale.get("tps.component.error.noContent")));
-        String volumeId = component.getDomain().getVolumeId();
-        Volume volume = volumeService.findVolume(volumeId).orElseThrow(
-                () -> new NoDataException(messageByLocale.get("tps.volume.error.noContent")));
+//        String volumeId = component.getDomain().getVolumeId();
+//        Volume volume = volumeService.findVolume(volumeId).orElseThrow(
+//                () -> new NoDataException(messageByLocale.get("tps.volume.error.noContent")));
 
         // 파일명 생성
         String nowTime = McpDate.nowStr();
@@ -578,7 +582,7 @@ public class DeskingServiceImpl implements DeskingService {
         String[] paths = {"crop", nowTime.substring(0, 4), nowTime.substring(4, 6),
                 nowTime.substring(6, 8), fileName};
         String returnPath = String.join("/", paths);
-        String realPath = uploadFileHelper.getRealRmsPath(volume.getVolumePath(), returnPath);
+        String realPath = uploadFileHelper.getRealRmsPath(deskingImagePath, returnPath);
 
         // 파일 저장
         if (uploadFileHelper.saveFile(realPath, thumbnail)) {

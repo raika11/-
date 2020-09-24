@@ -212,9 +212,9 @@ public class VolumeRestController {
                     message = "{tps.volume.error.invalid.volumeId}") String volumeId) {
 
         // 관련 아이템이 있는지 조사
-        boolean isRelated = relationHelper.isRelatedVolume(volumeId);
+//        boolean isRelated = relationHelper.isRelatedVolume(volumeId);
 
-        ResultDTO<Boolean> resultDTO = new ResultDTO<>(isRelated);
+        ResultDTO<Boolean> resultDTO = new ResultDTO<>(false);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 

@@ -11,7 +11,6 @@ import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
-import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 import jmnet.moka.core.tps.mvc.page.vo.PageVO;
 import jmnet.moka.core.tps.mvc.reserved.service.ReservedService;
@@ -33,9 +32,6 @@ import java.util.List;
  *
  */
 public class RelationHelper {
-
-    @Autowired
-    DomainService domainService;
 
     @Autowired
     PageService pageService;
@@ -60,22 +56,6 @@ public class RelationHelper {
 
     @Autowired
     private ModelMapper modelMapper;
-
-    /**
-     * 관련 아이템이 있는 볼륨인지 체크
-     *
-     * @param volumeId 볼륨아이디
-     * @return 유무
-     */
-    public Boolean isRelatedVolume(String volumeId) {
-
-        // 도메인 체크
-        if (domainService.countByVolumeId(volumeId) > 0) {
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * 관련 아이템이 있는 도메인인지 체크

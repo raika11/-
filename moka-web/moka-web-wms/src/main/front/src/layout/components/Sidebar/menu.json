@@ -14,7 +14,7 @@
                         "menuId": "01",
                         "menuName": "desking",
                         "menuDispName": "화면편집",
-                        "menuPath": "/desking",
+                        "menuPath": "/",
                         "menuOrder": "1",
                         "depth": "1",
                         "useYn": "Y",

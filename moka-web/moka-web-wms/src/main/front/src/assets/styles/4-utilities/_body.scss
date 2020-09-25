@@ -1,7 +1,8 @@
 body {
     min-width: $min-width;
     max-width: $max-width;
-    min-height: $height;
+    max-height: $max-height;
+    height: 100vh;
     overflow: hidden;
     overflow-x: auto;
 }

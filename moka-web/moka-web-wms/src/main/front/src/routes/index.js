@@ -1,7 +1,7 @@
 import React from 'react';
 
 // layout
-import { NoFrame, DefaultLayout, SidebarAutoHideLayout } from '@layout';
+import { NoFrameLayout, SidebarOpenLayout, SidebarCloseLayout } from '@layout';
 import Page404 from '@pages/MokaAuth/Page404';
 
 // page
@@ -15,47 +15,47 @@ const routes = [
         path: '/',
         name: 'Default',
         component: MokaDashBoard,
-        layout: SidebarAutoHideLayout,
+        layout: SidebarCloseLayout,
         nonResponsive: false,
-        exact: true
+        exact: true,
     },
     {
         path: '/dashboard',
         name: 'DashBoard',
         component: MokaDashBoard,
-        layout: DefaultLayout,
-        nonResponsive: true
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
     },
     {
         path: '/404',
         name: 'Page404',
         component: () => <Page404 defaultLink="/dashboard" />,
-        layout: NoFrame
+        layout: NoFrameLayout,
     },
     {
         path: '/test',
         name: 'Test',
         component: TestBoard,
-        layout: DefaultLayout,
+        layout: SidebarOpenLayout,
         nonResponsive: false,
-        exact: true
+        exact: true,
     },
     {
         path: '/aggrid',
         name: 'AgGrid',
         component: AgGrid,
-        layout: DefaultLayout,
+        layout: SidebarOpenLayout,
         nonResponsive: false,
-        exact: true
+        exact: true,
     },
     {
         path: '/tasks',
         name: 'Task',
         component: Task,
-        layout: DefaultLayout,
+        layout: SidebarOpenLayout,
         nonResponsive: false,
-        exact: true
-    }
+        exact: true,
+    },
 ];
 
 export default routes;

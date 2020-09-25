@@ -7,17 +7,18 @@ import Main from './components/Main';
 import Navbar from './components/Navbar';
 import Content from './components/Content';
 import NonResponsive from './components/NonResponsive';
-import { showSidebar, hideSidebar } from '@store/layout/layoutAction';
+import { openSidebar, closeSidebar } from '@store/layout/layoutAction';
 
 let prevWidth = 0;
 
 /**
- * 1360px일때 사이드바 숨김
+ * window.innerWidth <= 1360px 일 때
+ * 사이드바 자동 닫힘
  *
  * @param {Element} param0.children children
  * @param {boolean} param0.nonResponsive 반응형 여부
  */
-const SidebarAutoHideLayout = ({ children, nonResponsive }) => {
+const SidebarAutoCloseLayout = ({ children, nonResponsive }) => {
     const dispatch = useDispatch();
 
     /**
@@ -25,16 +26,16 @@ const SidebarAutoHideLayout = ({ children, nonResponsive }) => {
      */
     const resizeFunction = useCallback(() => {
         if (prevWidth > 1360 && window.innerWidth <= 1360) {
-            dispatch(hideSidebar());
+            dispatch(closeSidebar());
         } else if (prevWidth <= 1360 && window.innerWidth > 1360) {
-            dispatch(showSidebar());
+            dispatch(openSidebar());
         }
         prevWidth = window.innerWidth;
     }, [dispatch]);
 
     useEffect(() => {
         if (window.innerWidth <= 1360) {
-            dispatch(hideSidebar());
+            dispatch(closeSidebar());
         }
     }, [dispatch]);
 
@@ -56,10 +57,10 @@ const SidebarAutoHideLayout = ({ children, nonResponsive }) => {
     );
 
     if (nonResponsive) {
-        return <NonResponsive className="default-layout">{layout()}</NonResponsive>;
+        return <NonResponsive className="sac-layout">{layout()}</NonResponsive>;
     }
 
-    return <Wrapper className="s-auto-hide-layout">{layout()}</Wrapper>;
+    return <Wrapper className="sac-layout">{layout()}</Wrapper>;
 };
 
-export default SidebarAutoHideLayout;
+export default SidebarAutoCloseLayout;

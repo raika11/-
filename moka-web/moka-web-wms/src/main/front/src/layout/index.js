@@ -1,3 +1,4 @@
-export { default as NoFrame } from './NoFrame';
-export { default as DefaultLayout } from './DefaultLayout';
-export { default as SidebarAutoHideLayout } from './SidebarAutoHideLayout';
+export { default as NoFrameLayout } from './NoFrameLayout';
+export { default as SidebarOpenLayout } from './SidebarOpenLayout';
+export { default as SidebarCloseLayout } from './SidebarCloseLayout';
+export { default as SidebarAutoCloseLayout } from './SidebarAutoCloseLayout';

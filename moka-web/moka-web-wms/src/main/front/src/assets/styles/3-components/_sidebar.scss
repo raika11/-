@@ -4,6 +4,8 @@
 .sidebar {
   min-width: $sidebar-width;
   max-width: $sidebar-width;
+  height: 100vh;
+  max-height: $max-height;
   transition: $sidebar-transition;
   background: $sidebar-bg;
   border-right: $sidebar-border;
@@ -34,6 +36,7 @@
 
   .sidebar-content {
     height: 100vh;
+    max-height: $max-height;
     position: absolute;
     top: 0;
     left: 0;

@@ -12,27 +12,18 @@ const MokaRoutes = () => (
     <ScrollToTop>
         <Suspense fallback={<Loader />}>
             <Switch>
-                {routes.map(
-                    ({
-                        path,
-                        layout: Layout,
-                        component: Component,
-                        name,
-                        nonResponsive,
-                        ...rest
-                    }) => (
-                        <Route
-                            key={name}
-                            path={path}
-                            {...rest}
-                            render={(props) => (
-                                <Layout nonResponsive={nonResponsive}>
-                                    <Component {...props} />
-                                </Layout>
-                            )}
-                        />
-                    )
-                )}
+                {routes.map(({ path, layout: Layout, component: Component, name, nonResponsive, ...rest }) => (
+                    <Route
+                        key={name}
+                        path={path}
+                        {...rest}
+                        render={(props) => (
+                            <Layout nonResponsive={nonResponsive}>
+                                <Component {...props} />
+                            </Layout>
+                        )}
+                    />
+                ))}
                 <Redirect from="*" to="/404" />
             </Switch>
         </Suspense>

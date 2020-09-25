@@ -8,7 +8,7 @@ const initialState = {
     sidebarIsSticky: true,
     layoutIsBoxed: false,
     theme: 'classic',
-    sidebarOpenItem: {}
+    sidebarOpenItem: {},
 };
 
 export default handleActions(
@@ -34,12 +34,12 @@ export default handleActions(
             });
         },
         /** 사이드바 */
-        [act.SHOW_SIDEBAR]: (state) => {
+        [act.OPEN_SIDEBAR]: (state) => {
             return produce(state, (draft) => {
                 draft.sidebarIsOpen = true;
             });
         },
-        [act.HIDE_SIDEBAR]: (state) => {
+        [act.CLOSE_SIDEBAR]: (state) => {
             return produce(state, (draft) => {
                 draft.sidebarIsOpen = false;
             });
@@ -74,7 +74,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.sidebarOpenItem[menuId] = toggleValue;
             });
-        }
+        },
     },
-    initialState
+    initialState,
 );

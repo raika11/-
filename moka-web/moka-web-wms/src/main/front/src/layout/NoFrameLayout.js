@@ -5,11 +5,11 @@ import Main from './components/Main';
 import NonResponsive from './components/NonResponsive';
 
 /**
- * NoFrame 레이아웃
+ * NoFrameLayout
  * @param {Element} param0.children children
  * @param {boolean} param0.nonResponsive 반응형 여부
  */
-const NoFrame = ({ children, nonResponsive }) => {
+const NoFrameLayout = ({ children, nonResponsive }) => {
     const layout = () => (
         <Wrapper>
             <Main className="d-flex w-100">{children}</Main>
@@ -23,4 +23,4 @@ const NoFrame = ({ children, nonResponsive }) => {
     return layout();
 };
 
-export default NoFrame;
+export default NoFrameLayout;

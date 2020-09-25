@@ -20,7 +20,7 @@ const Sidebar = (props) => {
     const { sidebarIsOpen, sidebarIsSticky, sidebarOpenItem } = useSelector((state) => ({
         sidebarIsOpen: state.layout.sidebarIsOpen,
         sidebarIsSticky: state.layout.sidebarIsSticky,
-        sidebarOpenItem: state.layout.sidebarOpenItem
+        sidebarOpenItem: state.layout.sidebarOpenItem,
     }));
 
     useEffect(() => {
@@ -40,18 +40,18 @@ const Sidebar = (props) => {
             dispatch(
                 changeSidebarOpenItem({
                     menuId,
-                    toggleValue: !sidebarOpenItem[menuId]
-                })
+                    toggleValue: !sidebarOpenItem[menuId],
+                }),
             );
         },
-        [sidebarOpenItem, dispatch]
+        [sidebarOpenItem, dispatch],
     );
 
     return (
         <nav
             className={clsx('sidebar', {
                 toggled: !sidebarIsOpen && !nonResponsive,
-                'sidebar-sticky': sidebarIsSticky && !nonResponsive
+                'sidebar-sticky': sidebarIsSticky && !nonResponsive,
             })}
         >
             <div className="sidebar-content">
@@ -64,12 +64,7 @@ const Sidebar = (props) => {
                         {/* 3depth까지만 그려서 재귀로 처리하지 않음 */}
                         {nodes.map((dep1Node) =>
                             dep1Node.nodes ? (
-                                <SidebarCategory
-                                    key={dep1Node.menuId}
-                                    nodeData={dep1Node}
-                                    open={sidebarOpenItem[dep1Node.menuId]}
-                                    onClick={() => changeNodeToggle(dep1Node)}
-                                >
+                                <SidebarCategory key={dep1Node.menuId} nodeData={dep1Node} open={sidebarOpenItem[dep1Node.menuId]} onClick={() => changeNodeToggle(dep1Node)}>
                                     <>
                                         {dep1Node.nodes.nodes.map((dep2Node) =>
                                             dep2Node.nodes ? (
@@ -82,27 +77,21 @@ const Sidebar = (props) => {
                                                     <>
                                                         {dep2Node.nodes.nodes.map((dep3Node) => (
                                                             // 3depth
-                                                            <SidebarItem
-                                                                key={dep3Node.menuId}
-                                                                nodeData={dep3Node}
-                                                            />
+                                                            <SidebarItem key={dep3Node.menuId} nodeData={dep3Node} />
                                                         ))}
                                                     </>
                                                 </SidebarCategory>
                                             ) : (
                                                 // 2depth
-                                                <SidebarItem
-                                                    key={dep2Node.menuId}
-                                                    nodeData={dep2Node}
-                                                />
-                                            )
+                                                <SidebarItem key={dep2Node.menuId} nodeData={dep2Node} />
+                                            ),
                                         )}
                                     </>
                                 </SidebarCategory>
                             ) : (
                                 // 1depth
                                 <SidebarItem key={dep1Node.menuId} nodeData={dep1Node} />
-                            )
+                            ),
                         )}
                     </ul>
                 </PerfectScrollbar>

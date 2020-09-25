@@ -17,10 +17,10 @@ import jmnet.moka.web.wms.config.WebMvcConfiguration;
 @AutoConfigureBefore(TpsAutoConfiguration.class)
 @Import({ValidationConfiguration.class, WebMvcConfiguration.class})
 @EnableEncryptableProperties
-public class WmsApplication {
+public class MokaWmsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(WmsApplication.class, args);
+        SpringApplication.run(MokaWmsApplication.class, args);
     }
 
 }

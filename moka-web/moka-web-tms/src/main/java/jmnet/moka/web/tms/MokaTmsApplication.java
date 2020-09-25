@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // @SpringBootApplication(exclude={DpsApiAutoConfiguration.class,
 // DpsSqlSessionAutoConfiguration.class})
 @SpringBootApplication
-public class MspTmsApplication {
+public class MokaTmsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MspTmsApplication.class, args);
+		SpringApplication.run(MokaTmsApplication.class, args);
 	}
 
 }

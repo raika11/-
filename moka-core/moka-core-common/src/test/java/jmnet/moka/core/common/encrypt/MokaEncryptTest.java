@@ -21,7 +21,9 @@ public class MokaEncryptTest {
 
     private String[] sources = {
             "USER_JA_WCMS",
-            "user_ja_wcms!@"
+            "user_ja_wcms!@",
+            "wms",
+            "Wms#2019"
     };
     @Test
     public void encrypt() {

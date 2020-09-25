@@ -3,7 +3,6 @@
 <mapper namespace="dps.item">
   <select id="domain_list" parameterType="hashmap" resultType="map">
     SELECT [DOMAIN_ID]
-      ,[VOLUME_ID]
       ,[MEDIA_ID]
       ,[DOMAIN_NAME]
       ,[DOMAIN_URL]

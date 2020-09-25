@@ -7,7 +7,6 @@ public class ItemConstants {
 
     /* Domain Info */
     public static final String DOMAIN_ID = "id";
-    public static final String DOMAIN_VOLUME_ID = "volumeId";
     public static final String DOMAIN_MEDIA_ID = "mediaId";
     public static final String DOMAIN_NAME = "name";
     public static final String DOMAIN_URL = "url";
@@ -124,19 +123,6 @@ public class ItemConstants {
     public static String DATASET_MODIFIED_YMDT = ITEM_MODIFIED;
     public static String DATASET_MODIFIER = "datasetModifier";
 
-    /* Skin Item */
-    public static String SKIN_ID = "id";
-    public static String SKIN_DOMAIN_ID = "domainId";
-    public static String SKIN_NAME = "name";
-    public static String SKIN_SERVICE_TYPE = "serviceType";
-    public static String SKIN_DEFAULT_YN = "defaultYn";
-    public static String SKIN_BODY = "body";
-    public static String SKIN_STYLE_SEQ = "styleId";
-    public static String SKIN_CREATE_YMDT = "create";
-    public static String SKIN_CREATOR = "creator";
-    public static String SKIN_MODIFIED_YMDT = ITEM_MODIFIED;
-    public static String SKIN_MODIFIER = "modifier";
-
     /* Ad Item */
     public static String AD_ID = "id";
     public static String AD_DOMAIN_ID = "domainId";
@@ -160,10 +146,23 @@ public class ItemConstants {
     public static String AD_MODIFIED_YMDT = ITEM_MODIFIED;
     public static String AD_MODIFIER = "modifier";
 
+    /* Skin Item */
+    public static String SKIN_ID = "id";
+    public static String SKIN_DOMAIN_ID = "domainId";
+    public static String SKIN_NAME = "name";
+    public static String SKIN_SERVICE_NAME = "serviceName";
+    public static String SKIN_SERVICE_TYPE = "serviceType";
+    public static String SKIN_DEFAULT_YN = "defaultYn";
+    public static String SKIN_BODY = "body";
+    public static String SKIN_CREATE_YMDT = "create";
+    public static String SKIN_CREATOR = "creator";
+    public static String SKIN_MODIFIED_YMDT = ITEM_MODIFIED;
+    public static String SKIN_MODIFIER = "modifier";
+
+
     public static class DpsItemConstants {
         /* Domain Info */
         public static String DOMAIN_ID = "DOMAIN_ID";
-        public static String DOMAIN_VOLUME_ID = "VOLUME_ID";
         public static String DOMAIN_MEDIA_ID = "MEDIA_ID";
         public static String DOMAIN_NAME = "DOMAIN_NAME";
         public static String DOMAIN_URL = "DOMAIN_URL";
@@ -173,17 +172,18 @@ public class ItemConstants {
         public static String DOMAIN_API_HOST = "API_HOST";
         public static String DOMAIN_API_PATH = "API_PATH";
         public static String DOMAIN_DESCRIPTION = "DESCRIPTION";
-        public static String DOMAIN_CREATE_YMDT = "CREATE_YMDT";
-        public static String DOMAIN_CREATOR = "CREATOR";
-        public static String DOMAIN_MODIFIED_YMDT = "MODIFIED_YMDT";
-        public static String DOMAIN_MODIFIER = "MODIFIER";
+        public static String DOMAIN_CREATE_YMDT = "REG_DT";
+        public static String DOMAIN_CREATOR = "REG_ID";
+        public static String DOMAIN_MODIFIED_YMDT = "MOD_DT";
+        public static String DOMAIN_MODIFIER = "MOD_ID";
 
         /* Domain Reserved(예약어) = TMS의 domain의 codeMap */
+        public static final String RESERVED_SEQ = "RESERVED_SEQ";
         public static final String RESERVED_ID = "RESERVED_ID";
         public static final String RESERVED_VALUE = "RESERVED_VALUE";
         public static final String RESERVED_DESCRIPTION = "DESCRIPTION";
-        public static final String RESERVED_YN = "USE_YN";
-        public static final String RESERVED_MODIFED_YMDT = "MODIFIED_YMDT";
+        public static final String RESERVED_USE_YN = "USE_YN";
+        public static final String RESERVED_MODIFED_YMDT = "MOD_DT";
 
         /* Page Item */
         public static String PAGE_ID = "PAGE_SEQ";
@@ -195,27 +195,27 @@ public class ItemConstants {
         public static String PAGE_TYPE = "PAGE_TYPE"; // 페이지유형 text/html, application/json,
                                                       // text/javascript, text/plain, text/xml
         public static String PAGE_URL = "PAGE_URL";
-        public static String PAGE_ORDER = "PAGE_ORDER";
+        public static String PAGE_ORDER = "PAGE_ORD";
         public static String PAGE_BODY = "PAGE_BODY";
         public static String PAGE_USE_YN = "USE_YN";
-        public static String PAGE_KEYWORD = "KEYWORD";
+        public static String PAGE_KEYWORD = "KWD";
         public static String PAGE_DESCRIPTION = "DESCRIPTION";
         public static String PAGE_MOVE_YN = "MOVE_YN";
         public static String PAGE_MOVE_URL = "MOVE_URL";
-        public static String PAGE_CREATE_YMDT = "CREATE_YMDT";
-        public static String PAGE_CREATOR = "CREATOR";
-        public static String PAGE_MODIFIED_YMDT = "MODIFIED_YMDT";
-        public static String PAGE_MODIFIER = "MODIFIER";
+        public static String PAGE_CREATE_YMDT = "REG_DT";
+        public static String PAGE_CREATOR = "REG_ID";
+        public static String PAGE_MODIFIED_YMDT = "MOD_DT";
+        public static String PAGE_MODIFIER = "MOD_ID";
 
         /* Container Item */
         public static String CONTAINER_ID = "CONTAINER_SEQ";
         public static String CONTAINER_DOMAIN_ID = "DOMAIN_ID";
         public static String CONTAINER_NAME = "CONTAINER_NAME";
         public static String CONTAINER_BODY = "CONTAINER_BODY";
-        public static String CONTAINER_CREATE_YMDT = "CREATE_YMDT";
-        public static String CONTAINER_CREATOR = "CREATOR";
-        public static String CONTAINER_MODIFIED_YMDT = "MODIFIED_YMDT";
-        public static String CONTAINER_MODIFIER = "MODIFIER";
+        public static String CONTAINER_CREATE_YMDT = "REG_DT";
+        public static String CONTAINER_CREATOR = "REG_ID";
+        public static String CONTAINER_MODIFIED_YMDT = "MOD_DT";
+        public static String CONTAINER_MODIFIER = "MOD_ID";
 
         /* Component Item */
         public static String COMPONENT_ID = "COMPONENT_SEQ";
@@ -224,8 +224,8 @@ public class ItemConstants {
         public static String COMPONENT_DATASET_ID = "DATASET_SEQ";
         public static String COMPONENT_NAME = "COMPONENT_NAME";
         public static String COMPONENT_PERIOD_YN = "PERIOD_YN";
-        public static String COMPONENT_PERIOD_START_YMDT = "PERIOD_START_YMDT";
-        public static String COMPONENT_PERIOD_END_YMDT = "PERIOD_END_YMDT";
+        public static String COMPONENT_PERIOD_START_YMDT = "PERIOD_START_DT";
+        public static String COMPONENT_PERIOD_END_YMDT = "PERIOD_END_DT";
         public static String COMPONENT_DATA_TYPE = "DATA_TYPE"; // 데이터유형:NONE, EDIT, AUTO
         public static String COMPONENT_DEL_WORDS = "DEL_WORDS"; // 제목삭제단어-단어구분은 개행
         public static String COMPONENT_PAGING_YN = "PAGING_YN";
@@ -234,21 +234,21 @@ public class ItemConstants {
         public static String COMPONENT_MAX_PAGE_COUNT = "MAX_PAGE_COUNT"; // 최대 페이지수
         public static String COMPONENT_DISP_PAGE_COUNT = "DISP_PAGE_COUNT"; // 표출 페이지수
         public static String COMPONENT_MORE_COUNT = "MORE_COUNT"; // 더보기 건수
-        public static String COMPONENT_SEARCH_SERVICE_TYPE = "SEARCH_SERVICE_TYPE"; // 검색서비스유형(기타코드)
-        public static String COMPONENT_SEARCH_LANG = "SEARCH_LANG"; // 검색언어(기타코드)
-        public static String COMPONENT_SEARCH_CODE_ID = "SEARCH_CODE_ID"; // 검색코드ID
+        public static String COMPONENT_SEARCH_SERVICE_TYPE = "SCH_SERVICE_TYPE"; // 검색서비스유형(기타코드)
+        public static String COMPONENT_SEARCH_LANG = "SCH_LANGUAGE"; // 검색언어(기타코드)
+        public static String COMPONENT_SEARCH_CODE_ID = "SCH_CODE_ID"; // 검색코드ID
         public static String COMPONENT_SNAPSHOT_YN = "SNAPSHOT_YN";
         public static String COMPONENT_SNAPSHOT_BODY = "SNAPSHOT_BODY";
         public static String COMPONENT_SKIN_ID = "SKIN_SEQ";
         public static String COMPONENT_PREVIEW_RESOURCE = "PREVIEW_RSRC";
-        public static String COMPONENT_CREATE_YMDT = "CREATE_YMDT";
-        public static String COMPONENT_CREATOR = "CREATOR";
-        public static String COMPONENT_MODIFIED_YMDT = "MODIFIED_YMDT";
-        public static String COMPONENT_MODIFIER = "MODIFIER";
+        public static String COMPONENT_CREATE_YMDT = "REG_DT";
+        public static String COMPONENT_CREATOR = "REG_ID";
+        public static String COMPONENT_MODIFIED_YMDT = "MOD_DT";
+        public static String COMPONENT_MODIFIER = "MOD_ID";
 
         public static String COMPONENTAD_COMPONENT_ID = "COMPONENT_SEQ";
         public static String COMPONENTAD_AD_ID = "AD_SEQ";
-        public static String COMPONENTAD_AD_NAME = "AD_NAME";
+//        public static String COMPONENTAD_AD_NAME = "AD_NAME";
         public static String COMPONENTAD_LIST_PARAGRAPH = "LIST_PARAGRAPH";
 
         /* Template Item */
@@ -261,10 +261,10 @@ public class ItemConstants {
         public static String TEMPLATE_GROUP = "TEMPLATE_GROUP";
         public static String TEMPLATE_WIDTH = "TEMPLATE_WIDTH";
         public static String TEMPLATE_DESCRIPTION = "DESCRIPTION";
-        public static String TEMPLATE_CREATE_YMDT = "CREATE_YMDT";
-        public static String TEMPLATE_CREATOR = "CREATOR";
-        public static String TEMPLATE_MODIFIED_YMDT = "MODIFIED_YMDT";
-        public static String TEMPLATE_MODIFIER = "MODIFIER";
+        public static String TEMPLATE_CREATE_YMDT = "REG_DT";
+        public static String TEMPLATE_CREATOR = "REG_ID";
+        public static String TEMPLATE_MODIFIED_YMDT = "MOD_DT";
+        public static String TEMPLATE_MODIFIER = "MOD_ID";
 
         /* DataSet Item */
         public static String DATASET_ID = "DATASET_SEQ";
@@ -274,10 +274,10 @@ public class ItemConstants {
         public static String DATASET_API = "DATA_API";
         public static String DATASET_API_PARAM = "DATA_API_PARAM";
         public static String DATASET_AUTO_CREATE_YN = "AUTO_CREATE_YN";
-        public static String DATASET_CREATE_YMDT = "CREATE_YMDT";
-        public static String DATASET_CREATOR = "CREATOR";
-        public static String DATASET_MODIFIED_YMDT = "MODIFIED_YMDT";
-        public static String DATASET_MODIFIER = "MODIFIER";
+        public static String DATASET_CREATE_YMDT = "REG_DT";
+        public static String DATASET_CREATOR = "REG_ID";
+        public static String DATASET_MODIFIED_YMDT = "MOD_DT";
+        public static String DATASET_MODIFIER = "MOD_ID";
 
         /* Ad Item */
         public static String AD_ID = "AD_SEQ";
@@ -287,8 +287,8 @@ public class ItemConstants {
         public static String AD_USE_TYPE = "AD_USE_TYPE";
         public static String AD_LOCATION = "AD_LOCATION";
         public static String AD_PERIOD_YN = "PERIOD_YN";
-        public static String AD_PERIOD_START_YMDT = "PERIOD_START_YMDT";
-        public static String AD_PERIOD_END_YMDT = "PERIOD_END_YMDT";
+        public static String AD_PERIOD_START_YMDT = "PERIOD_START_DT";
+        public static String AD_PERIOD_END_YMDT = "PERIOD_END_DT";
         public static String AD_USE_YN = "USE_YN";
         public static String AD_WIDTH = "AD_WIDTH";
         public static String AD_HEIGHT = "AD_HEIGHT";
@@ -297,23 +297,23 @@ public class ItemConstants {
         public static String AD_SLIDE_TYPE = "SLIDE_TYPE";
         public static String AD_BODY = "AD_BODY";
         public static String AD_FILENAME = "AD_FILE_NAME";
-        public static String AD_CREATE_YMDT = "CREATE_YMDT";
-        public static String AD_CREATOR = "CREATOR";
-        public static String AD_MODIFIED_YMDT = "MODIFIED_YMDT";
-        public static String AD_MODIFIER = "MODIFIER";
+        public static String AD_CREATE_YMDT = "REG_DT";
+        public static String AD_CREATOR = "REG_ID";
+        public static String AD_MODIFIED_YMDT = "MOD_DT";
+        public static String AD_MODIFIER = "MOD_ID";
 
         /* Skin Item */
         public static String SKIN_ID = "SKIN_SEQ";
         public static String SKIN_DOMAIN_ID = "DOMAIN_ID";
         public static String SKIN_NAME = "SKIN_NAME";
+        public static String SKIN_SERVICE_NAME = "SKIN_SERVICE_NAME";
         public static String SKIN_SERVICE_TYPE = "SERVICE_TYPE";
         public static String SKIN_DEFAULT_YN = "DEFAULT_YN";
         public static String SKIN_BODY = "SKIN_BODY";
-        public static String SKIN_STYLE_SEQ = "STYLE_SEQ";
-        public static String SKIN_CREATE_YMDT = "CREATE_YMDT";
-        public static String SKIN_CREATOR = "CREATOR";
-        public static String SKIN_MODIFIED_YMDT = "MODIFIED_YMDT";
-        public static String SKIN_MODIFIER = "MODIFIER";
+        public static String SKIN_CREATE_YMDT = "REG_DT";
+        public static String SKIN_CREATOR = "REG_ID";
+        public static String SKIN_MODIFIED_YMDT = "MOD_DT";
+        public static String SKIN_MODIFIER = "MOD_ID";
 
     }
 

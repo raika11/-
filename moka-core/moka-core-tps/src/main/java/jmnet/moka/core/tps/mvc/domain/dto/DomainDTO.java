@@ -2,9 +2,13 @@ package jmnet.moka.core.tps.mvc.domain.dto;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jmnet.moka.core.common.MspConstants;
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <pre>
@@ -72,16 +77,15 @@ public class DomainDTO implements Serializable {
     
     private String apiCodeId;		// apiHost + apiPath
 
-    @NotNull(message = "{tps.domain.error.invalid.volumeId}")
-    @Pattern(regexp = "[A-Z]{2}$", message = "{tps.domain.error.invalid.volumeId}")
-    private String volumeId;
-
     private String description;
+
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = MspConstants.JSON_DATE_FORMAT, timezone = MspConstants.JSON_DATE_TIME_ZONE)
+//    @DateTimeFormat(pattern = MspConstants.JSON_DATE_FORMAT)
+//    private Date regDt;
 
     public DomainItem toDomainItem() {
         DomainItem domainItem = new DomainItem();
         domainItem.put(ItemConstants.DOMAIN_ID, this.domainId);
-        domainItem.put(ItemConstants.DOMAIN_VOLUME_ID, this.volumeId);
         domainItem.put(ItemConstants.DOMAIN_MEDIA_ID, this.mediaId);
         domainItem.put(ItemConstants.DOMAIN_NAME, this.domainName);
         domainItem.put(ItemConstants.DOMAIN_URL, this.domainUrl);

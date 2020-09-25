@@ -1,15 +1,16 @@
 package jmnet.moka.core.tps.mvc.domain.entity;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import java.util.Date;
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jmnet.moka.core.common.MspConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
@@ -59,16 +60,14 @@ public class Domain implements Serializable {
     private String description;
 
     @Column(name = "REG_DT")
-    private String createYmdt;
+    private Date regDt;
 
     @Column(name = "REG_ID")
-    private String creator;
+    private String regId;
 
     @Column(name = "MOD_DT")
-    private String modifiedYmdt;
+    private Date modDt;
 
     @Column(name = "MOD_ID")
-    private String modifier;
-
-
+    private String modId;
 }

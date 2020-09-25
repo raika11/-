@@ -183,8 +183,8 @@ public class DomainRestController {
 
         // DomainDTO -> Domain 변환
         Domain domain = modelMapper.map(domainDTO, Domain.class);
-        domain.setCreateYmdt(McpDate.nowStr());
-        domain.setCreator(principal.getName());
+        domain.setRegDt(McpDate.now());
+        domain.setRegId(principal.getName());
 
         if (!McpString.isNullOrEmpty(domainDTO.getApiCodeId())) {
             // apiCodeId -> apiHost, apiPath
@@ -239,10 +239,10 @@ public class DomainRestController {
         Domain orgDomain = domainService.findByDomainId(newDomain.getDomainId())
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
-        newDomain.setModifiedYmdt(McpDate.nowStr());
-        newDomain.setModifier(principal.getName());
-        newDomain.setCreateYmdt(orgDomain.getCreateYmdt());
-        newDomain.setCreator(orgDomain.getCreator());
+        newDomain.setModDt(McpDate.now());
+        newDomain.setModId(principal.getName());
+        newDomain.setRegDt(orgDomain.getRegDt());
+        newDomain.setRegId(orgDomain.getRegId());
 
         if (!McpString.isNullOrEmpty(domainDTO.getApiCodeId())) {
             // apiCodeId -> apiHost, apiPath

@@ -109,8 +109,8 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/image/template/**")
         .permitAll()
                 // react 서버렌더링 허용
-        .antMatchers(this.reactRoutes).permitAll()
-        .anyRequest().authenticated();
+        .antMatchers(this.reactRoutes).permitAll().anyRequest().permitAll();
+//        .anyRequest().authenticated();
     }
 
     /**

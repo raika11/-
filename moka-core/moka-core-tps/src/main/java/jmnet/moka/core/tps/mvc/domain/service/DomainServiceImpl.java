@@ -96,8 +96,8 @@ public class DomainServiceImpl implements DomainService {
         // 페이지(메인홈) 등록
         jmnet.moka.core.tps.mvc.page.entity.Page root 
             = jmnet.moka.core.tps.mvc.page.entity.Page.builder()
-                .createYmdt(returnVal.getCreateYmdt())
-                .creator(returnVal.getCreator())
+                .createYmdt(returnVal.getRegDt().toString())
+                .creator(returnVal.getRegId())
                 .pageName("메인")
                 .pageDisplayName("HOME")
                 .domain(returnVal)

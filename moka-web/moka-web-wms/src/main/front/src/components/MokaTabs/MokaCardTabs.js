@@ -5,13 +5,13 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 
 const MokaTabs = (props) => {
-    const { className } = props;
+    const { className, fill } = props;
 
     return (
         <div className={clsx('tab', 'card-tab', className)}>
             <Tab.Container id={`tab-${Math.ceil(Math.random() * 10)}`} defaultActiveKey="first">
                 <div className="d-flex">
-                    <Nav fill variant="tabs">
+                    <Nav fill={fill} variant="tabs">
                         <Nav.Item>
                             <Nav.Link eventKey="first">Tab 1</Nav.Link>
                         </Nav.Item>

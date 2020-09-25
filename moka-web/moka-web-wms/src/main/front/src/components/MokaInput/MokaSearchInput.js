@@ -37,25 +37,19 @@ const propTypes = {
     /**
      * 검색버튼의 추가 스타일
      */
-    buttonClassName: PropTypes.string
+    buttonClassName: PropTypes.string,
 };
 const defaultProps = {
     placeholder: '검색어를 입력하세요',
     variant: 'primary',
-    searchText: '검색'
+    searchText: '검색',
 };
 
+/**
+ * 검색 버튼이 붙어있는 input
+ */
 const MokaSearchInput = (props) => {
-    const {
-        placeholder,
-        value,
-        onChange,
-        className,
-        searchText,
-        onSearch,
-        variant,
-        buttonClassName
-    } = props;
+    const { placeholder, value, onChange, className, searchText, onSearch, variant, buttonClassName } = props;
 
     return (
         <InputGroup className={className}>

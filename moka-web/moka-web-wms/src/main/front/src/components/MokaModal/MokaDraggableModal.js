@@ -44,6 +44,9 @@ const DraggableComponent = (props) => (
     </Draggable>
 );
 
+/**
+ * 드래그 가능한 모달
+ */
 const MokaDraggableModal = (props) => {
     const { show, onHide, title, children, actionButtons, ...rest } = props;
 

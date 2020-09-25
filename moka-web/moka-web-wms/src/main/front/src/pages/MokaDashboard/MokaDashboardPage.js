@@ -10,7 +10,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { toastr } from 'react-redux-toastr';
 
-import { MokaDateTimePicker, MokaDraggableModal, MokaCodeListModal, MokaAutocomplete, MokaPrependLinkInput, MokaSearchInput } from '@components';
+import { MokaDateTimePicker, MokaDraggableModal, MokaCodeListModal, MokaAutocomplete, MokaPrependLinkInput, MokaSearchInput, MokaCardTabs } from '@components';
 import { MokaImageInput } from '@components/MokaInput';
 import { options } from './data';
 import Table from './TableTest';
@@ -30,6 +30,11 @@ const MokaDashboardPage = () => {
 
     return (
         <Container fluid className="p-0">
+            <Row>
+                <Col>
+                    <MokaCardTabs />
+                </Col>
+            </Row>
             <Row>
                 <Col lg="6">
                     <h1 className="h3 mb-3">Basic Inputs</h1>

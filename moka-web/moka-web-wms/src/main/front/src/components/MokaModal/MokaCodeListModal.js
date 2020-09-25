@@ -28,8 +28,8 @@ const propTypes = {
         PropTypes.shape({
             variant: PropTypes.string,
             buttonName: PropTypes.string,
-            onClick: PropTypes.func
-        })
+            onClick: PropTypes.func,
+        }),
     ),
     /**
      * 적용 버튼 클릭이벤트
@@ -38,12 +38,15 @@ const propTypes = {
     /**
      * 취소 버튼 클릭이벤트
      */
-    onCancle: PropTypes.func
+    onCancle: PropTypes.func,
 };
 const defaultProps = {
-    title: ''
+    title: '',
 };
 
+/**
+ * 대/중/소 코드 선택 모달
+ */
 const MokaCodeListModal = (props) => {
     const { show, onHide, title, actionButtons, onOk, onCancle, ...rest } = props;
 
@@ -59,9 +62,7 @@ const MokaCodeListModal = (props) => {
 
     // 대분류 리스트 조회
     useEffect(() => {
-        setLCodeList(
-            codeList.resultInfo.body.list.list.filter((code) => code.middleCodeId === '00')
-        );
+        setLCodeList(codeList.resultInfo.body.list.list.filter((code) => code.middleCodeId === '00'));
     }, []);
 
     // 중분류 리스트 조회
@@ -71,11 +72,7 @@ const MokaCodeListModal = (props) => {
 
         if (selectedLCode) {
             const regex = new RegExp(`(${selectedLCode.largeCodeId})\\d{2}(000)`);
-            setMCodeList(
-                codeList.resultInfo.body.list.list.filter(
-                    (code) => regex.test(code.codeId) && code.middleCodeId !== '00'
-                )
-            );
+            setMCodeList(codeList.resultInfo.body.list.list.filter((code) => regex.test(code.codeId) && code.middleCodeId !== '00'));
         } else {
             setMCodeList([]);
             setSelectedMCode(null);
@@ -85,26 +82,24 @@ const MokaCodeListModal = (props) => {
     // 소분류 리스트 조회
     useEffect(() => {
         if (selectedMCode) {
-            const regex = new RegExp(
-                `(${selectedMCode.largeCodeId})${selectedMCode.middleCodeId}\\d{3}`
-            );
-            setSCodeList(
-                codeList.resultInfo.body.list.list.filter(
-                    (code) => regex.test(code.codeId) && code.codeId.slice(-3) !== '000'
-                )
-            );
+            const regex = new RegExp(`(${selectedMCode.largeCodeId})${selectedMCode.middleCodeId}\\d{3}`);
+            setSCodeList(codeList.resultInfo.body.list.list.filter((code) => regex.test(code.codeId) && code.codeId.slice(-3) !== '000'));
         } else {
             setSCodeList([]);
             setSelectedSCode(null);
         }
     }, [selectedMCode]);
 
-    // 대분류 변경 시
+    /**
+     * 대분류 변경 시
+     */
     const selectLCode = useCallback((codeData, e) => {
         setSelectedLCode(codeData);
     }, []);
 
-    // 중분류 변경 시
+    /**
+     * 중분류 변경 시
+     */
     const selectMCode = useCallback(
         (codeData, e) => {
             if (!selectedMCode || selectedMCode.codeId !== codeData.codeId) {
@@ -115,10 +110,12 @@ const MokaCodeListModal = (props) => {
                 e.target.checked = false;
             }
         },
-        [selectedMCode]
+        [selectedMCode],
     );
 
-    // 소분류 변경 시
+    /**
+     * 소분류 변경 시
+     */
     const selectSCode = useCallback(
         (codeData, e) => {
             if (!selectedSCode || selectedSCode.codeId !== codeData.codeId) {
@@ -128,10 +125,13 @@ const MokaCodeListModal = (props) => {
                 e.target.checked = false;
             }
         },
-        [selectedSCode]
+        [selectedSCode],
     );
 
-    const onOkTrigger = useCallback(() => {
+    /**
+     * 적용버튼 클릭
+     */
+    const handleOkTrigger = useCallback(() => {
         if (typeof onOk !== 'function') {
             return;
         }
@@ -155,8 +155,8 @@ const MokaCodeListModal = (props) => {
             className="code-modal"
             actionButtons={
                 actionButtons || [
-                    { variant: 'primary', buttonName: '적용', onClick: onOkTrigger },
-                    { variant: 'warning', buttonName: '취소', onClick: onHide }
+                    { variant: 'primary', buttonName: '적용', onClick: handleOkTrigger },
+                    { variant: 'warning', buttonName: '취소', onClick: onHide },
                 ]
             }
         >
@@ -167,14 +167,7 @@ const MokaCodeListModal = (props) => {
                     <ListGroup variant="flush">
                         {lCodeList.map((code) => (
                             <ListGroup.Item key={code.codeId}>
-                                <Form.Check
-                                    custom
-                                    type="radio"
-                                    name="lcode"
-                                    id={`radio-${code.codeId}`}
-                                    label={code.codeName}
-                                    onClick={(e) => selectLCode(code, e)}
-                                />
+                                <Form.Check custom type="radio" name="lcode" id={`radio-${code.codeId}`} label={code.codeName} onClick={(e) => selectLCode(code, e)} />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -186,14 +179,7 @@ const MokaCodeListModal = (props) => {
                     <ListGroup variant="flush">
                         {mCodeList.map((code) => (
                             <ListGroup.Item key={code.codeId}>
-                                <Form.Check
-                                    custom
-                                    type="radio"
-                                    name="mcode"
-                                    id={`radio-${code.codeId}`}
-                                    label={code.codeName}
-                                    onClick={(e) => selectMCode(code, e)}
-                                />
+                                <Form.Check custom type="radio" name="mcode" id={`radio-${code.codeId}`} label={code.codeName} onClick={(e) => selectMCode(code, e)} />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -205,14 +191,7 @@ const MokaCodeListModal = (props) => {
                     <ListGroup variant="flush">
                         {sCodeList.map((code) => (
                             <ListGroup.Item key={code.codeId}>
-                                <Form.Check
-                                    custom
-                                    type="radio"
-                                    name="scode"
-                                    id={`radio-${code.codeId}`}
-                                    label={code.codeName}
-                                    onClick={(e) => selectSCode(code, e)}
-                                />
+                                <Form.Check custom type="radio" name="scode" id={`radio-${code.codeId}`} label={code.codeName} onClick={(e) => selectSCode(code, e)} />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>

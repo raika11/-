@@ -61,3 +61,32 @@
 .tab-vertical .tab-content {
   overflow: auto;
 }
+
+/* -----------------------
+* Card Tab 스타일
+* ---------------------- */
+.card-tab {
+  box-shadow: $card-shadow;
+  background-color: $white;
+  border-radius: $card-border-width solid $card-border-color;
+  @include border-radius($card-border-radius);
+
+  .nav-tabs {
+    padding: 0 $card-spacer-x;
+  }
+
+  .nav-item .nav-link {
+    border-bottom: 2px solid $gray-300;
+
+    &.active {
+      border-color: $orange;
+    }
+  }
+
+  .tab-content {
+    background: inherit;
+    box-shadow: unset;
+    border-radius: unset;
+    width: 100%;
+  }
+}

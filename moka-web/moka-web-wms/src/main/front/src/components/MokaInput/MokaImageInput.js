@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 
 import Figure from 'react-bootstrap/Figure';
 import img from '@assets/images/react.svg';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell } from '@fortawesome/free-solid-svg-icons';
 
 import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 import MokaAlert from '@components/MokaAlert';

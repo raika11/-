@@ -26,13 +26,16 @@ const propTypes = {
      * inputProps (배열 | 오브젝트)
      * 배열일 경우 배열의 수만큼 input 생성
      */
-    inputProps: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)])
+    inputProps: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
 };
 const defaultProps = {
     target: '_blank',
-    inputProps: {}
+    inputProps: {},
 };
 
+/**
+ * Prepend 링크를 포함한 input
+ */
 const MokaPrependLinkInput = (props) => {
     const { to, linkText, className, inputProps, target } = props;
 
@@ -43,11 +46,7 @@ const MokaPrependLinkInput = (props) => {
                     <InputGroup.Text>{linkText}</InputGroup.Text>
                 </Link>
             </InputGroup.Prepend>
-            {Array.isArray(inputProps) ? (
-                inputProps.map((obj, idx) => <Form.Control key={idx} {...obj} />)
-            ) : (
-                <Form.Control {...inputProps} />
-            )}
+            {Array.isArray(inputProps) ? inputProps.map((obj, idx) => <Form.Control key={idx} {...obj} />) : <Form.Control {...inputProps} />}
         </InputGroup>
     );
 };

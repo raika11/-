@@ -13,8 +13,8 @@ const propTypes = {
     options: PropTypes.arrayOf(
         PropTypes.shape({
             label: PropTypes.string,
-            value: PropTypes.string
-        })
+            value: PropTypes.string,
+        }),
     ).isRequired,
     /**
      * 멀티선택
@@ -44,7 +44,7 @@ const propTypes = {
     /**
      * 검색 아이콘 클릭 콜백
      */
-    onClickSearchIcon: PropTypes.func
+    onClickSearchIcon: PropTypes.func,
 };
 
 const defaultProps = {
@@ -54,7 +54,7 @@ const defaultProps = {
     value: undefined,
     onChange: undefined,
     searchIcon: false,
-    onClickSearchIcon: undefined
+    onClickSearchIcon: undefined,
 };
 
 /**
@@ -62,17 +62,7 @@ const defaultProps = {
  * https://react-select.com/home
  */
 const MokaAutocomplete = (props) => {
-    const {
-        options,
-        isMulti,
-        closeMenuOnSelect,
-        searchIcon,
-        onClickSearchIcon,
-        placeholder,
-        value,
-        onChange,
-        ...rest
-    } = props;
+    const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, value, onChange, ...rest } = props;
 
     // 검색 아이콘
     const IndicatorsContainer = (props) => {

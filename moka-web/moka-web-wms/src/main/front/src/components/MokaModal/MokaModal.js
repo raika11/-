@@ -36,6 +36,9 @@ const defaultProps = {
     title: '',
 };
 
+/**
+ * 기본 모달
+ */
 const MokaModal = (props) => {
     const { show, onHide, title, children, actionButtons, dialogAs, ...rest } = props;
 

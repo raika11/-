@@ -22,14 +22,19 @@ const propTypes = {
     /**
      * 시간포맷(moment)
      */
-    timeFormat: PropTypes.string
+    timeFormat: PropTypes.string,
 };
 
 const defaultProps = {
     dateFormat: 'YYYY-MM-DD',
-    timeFormat: 'HH:mm'
+    timeFormat: 'HH:mm',
 };
 
+/**
+ * DateTimePicker,
+ * DatePicker,
+ * TimePicker
+ */
 const MokaDateTimePicker = (props) => {
     const { placeholder, dateFormat, timeFormat, defaultValue, ...rest } = props;
 
@@ -58,13 +63,7 @@ const MokaDateTimePicker = (props) => {
 
     // input element 생성
     const renderInput = (props, openCalendar, closeCalendar) => {
-        return (
-            <InputElement
-                {...props}
-                mask={dateTimeFormat.replace(/y|m|d|h/gi, '9')}
-                placeholder={placeholder}
-            />
-        );
+        return <InputElement {...props} mask={dateTimeFormat.replace(/y|m|d|h/gi, '9')} placeholder={placeholder} />;
     };
 
     return (

@@ -35,22 +35,22 @@ $spacers: (
     )
 ) !default;
 
+$min-width: 1360px !default;
+$max-width: 1920px !default;
+$height: 920px !default;
+
 // Grid breakpoints
 $grid-breakpoints: (
-    xs: 0,
-    sm: 576px,
-    md: 768px,
-    lg: 992px,
-    xl: 1200px,
-    xxl: 1440px
+    sm: 0px,
+    md: $min-width,
+    lg: $max-width
 ) !default;
 
 // Grid containers
 $container-max-widths: (
-    sm: 540px,
-    md: 720px,
-    lg: 960px,
-    xl: 1200px
+    sm: 0px,
+    md: $min-width,
+    lg: $max-width
 ) !default;
 
 // Options
@@ -156,10 +156,11 @@ $border-radius: 0.2rem !default;
 $border-radius-lg: 0.3rem !default;
 
 // Navbar
+$navbar-height: 56px !default;
 $navbar-padding-y: $spacer * 0.875 !default;
 $navbar-padding-x: $spacer * 1.25 !default;
 $navbar-nav-link-padding-x: 0.5rem !default;
-$navbar-border-bottom: 0 !default;
+$navbar-border-bottom: 1px solid $gray-300 !default;
 $navbar-box-shadow: 0 0 2rem 0 rgba($dark, 0.1) !default;
 
 // Navbar brand

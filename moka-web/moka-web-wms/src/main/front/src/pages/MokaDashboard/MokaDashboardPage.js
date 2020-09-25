@@ -194,12 +194,15 @@ const MokaDashboardPage = () => {
                                 <Button className="mr-2" onClick={() => dispatch(changeTheme('classic'))}>
                                     테마1
                                 </Button>
-                                <Button className="mr-2" onClick={() => dispatch(changeTheme('corporate'))}>
+                                {/* <Button
+                                    className="mr-2"
+                                    onClick={() => dispatch(changeTheme('corporate'))}
+                                >
                                     테마2
                                 </Button>
                                 <Button className="mr-2" onClick={() => dispatch(changeTheme('modern'))}>
                                     테마3
-                                </Button>
+                                </Button> */}
                             </div>
 
                             <Form.Group>

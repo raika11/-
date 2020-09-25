@@ -8,7 +8,9 @@ import Content from './components/Content';
 import NonResponsive from './components/NonResponsive';
 
 /**
- * 기본 레이아웃 (Sidebar, Main)
+ * 기본 레이아웃
+ * 1360px일때 사이드바 계속 있음
+ *
  * @param {Element} param0.children children
  * @param {boolean} param0.nonResponsive 반응형 여부
  */
@@ -24,10 +26,10 @@ const DefaultLayout = ({ children, nonResponsive }) => {
     );
 
     if (nonResponsive) {
-        return <NonResponsive>{layout()}</NonResponsive>;
+        return <NonResponsive className="d-layout">{layout()}</NonResponsive>;
     }
 
-    return <Wrapper>{layout()}</Wrapper>;
+    return <Wrapper className="d-layout">{layout()}</Wrapper>;
 };
 
 export default DefaultLayout;

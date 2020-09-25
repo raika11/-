@@ -1,9 +1,21 @@
+/** ------------------------------
+* 사이드바 기본 스타일(appStack)
+* -------------------------------- */
 .sidebar {
   min-width: $sidebar-width;
   max-width: $sidebar-width;
   transition: $sidebar-transition;
   background: $sidebar-bg;
   border-right: $sidebar-border;
+  z-index: 2;
+
+  &.toggled {
+    margin-left: -$sidebar-width;
+
+    .sidebar-content {
+      left: -$sidebar-width;
+    }
+  }
 }
 
 .sidebar-content {
@@ -22,7 +34,7 @@
 
   .sidebar-content {
     height: 100vh;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: $sidebar-width;
@@ -183,55 +195,6 @@ a.sidebar-link {
   cursor: pointer;
   width: 26px;
   height: 26px;
-}
-
-.sidebar {
-  &.toggled {
-    margin-left: -$sidebar-width;
-
-    .sidebar-content {
-      left: -$sidebar-width;
-    }
-  }
-
-  // Workaround for IE bug, more info:
-  // https://stackoverflow.com/a/25850649
-  @media (min-width: 1px) and (max-width: #{map-get($grid-breakpoints, 'lg') - .02px}) {
-
-    // Sidebar default state (on mobile)
-    margin-left: -$sidebar-width;
-
-    .sidebar-content {
-      left: -$sidebar-width;
-    }
-
-    // Sidebar toggled state (on mobile)
-    &.toggled {
-      margin-left: 0;
-
-      .sidebar-content {
-        left: 0;
-      }
-    }
-
-    // Sidebar collapsed state (on mobile)
-    // layouts-sidebar-collapsed.html
-    &-collapsed {
-      margin-left: 0;
-
-      .sidebar-content {
-        left: 0;
-      }
-
-      &.toggled {
-        margin-left: -$sidebar-width;
-
-        .sidebar-content {
-          left: -$sidebar-width;
-        }
-      }
-    }
-  }
 }
 
 // Sidebar header

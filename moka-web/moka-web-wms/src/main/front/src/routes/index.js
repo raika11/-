@@ -1,7 +1,7 @@
 import React from 'react';
 
 // layout
-import { NoFrame, DefaultLayout } from '@layout';
+import { NoFrame, DefaultLayout, SidebarAutoHideLayout } from '@layout';
 import Page404 from '@pages/MokaAuth/Page404';
 
 // page
@@ -15,7 +15,7 @@ const routes = [
         path: '/',
         name: 'Default',
         component: MokaDashBoard,
-        layout: DefaultLayout,
+        layout: SidebarAutoHideLayout,
         nonResponsive: false,
         exact: true
     },

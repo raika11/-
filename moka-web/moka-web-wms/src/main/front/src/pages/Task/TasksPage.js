@@ -36,7 +36,7 @@ const IconMenu = forwardRef(({ children, style, className }, ref) => {
 const IconDropButton = () => (
     <Dropdown>
         <Dropdown.Toggle as={IconToggle} />
-        <Dropdown.Menu as={IconMenu} align={{ lg: 'left' }}>
+        <Dropdown.Menu as={IconMenu}>
             <Dropdown.Item eventKey="1">Red</Dropdown.Item>
             <Dropdown.Item eventKey="2">Blue</Dropdown.Item>
             <Dropdown.Item eventKey="3" active>

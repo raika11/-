@@ -60,11 +60,12 @@ const Task = ({ text }) => (
 );
 
 const TasksPage = () => {
+
     return (
         <Container>
             <h1>Tasks</h1>
             <Row>
-                <Col lg={6} xl={3}>
+                <Col md={3}>
                     <Card>
                         <Card.Body>
                             <Card.Title className="d-flex justify-content-between">
@@ -79,7 +80,7 @@ const TasksPage = () => {
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col lg={6} xl={3}>
+                <Col md={3}>
                     <Card>
                         <Card.Body>
                             <Card.Title className="d-flex justify-content-between">
@@ -87,13 +88,13 @@ const TasksPage = () => {
                                 <IconDropButton />
                             </Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">Nam pretium turpis et arcu. Duis arcu.</Card.Subtitle>
+                            {/* <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
-                            <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
-                            <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
+                            <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." /> */}
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col lg={6} xl={3}>
+                <Col md={3}>
                     <Card>
                         <Card.Body>
                             <Card.Title className="d-flex justify-content-between">
@@ -101,15 +102,15 @@ const TasksPage = () => {
                                 <IconDropButton />
                             </Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">Nam pretium turpis et arcu. Duis arcu.</Card.Subtitle>
+                            {/* <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
-                            <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
-                            <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
+                            <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." /> */}
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col lg={6} xl={3}>
+                <Col md={3}>
                     <Card>
                         <Card.Body>
                             <Card.Title className="d-flex justify-content-between">

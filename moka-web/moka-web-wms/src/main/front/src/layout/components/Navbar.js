@@ -37,6 +37,12 @@ const MokaNavbar = ({ nonResponsive }) => {
                 <Nav.Link to="/aggrid" as={NavLink}>
                     aggrid
                 </Nav.Link>
+                <Nav.Link to="/tasks" as={NavLink}>
+                    task
+                </Nav.Link>
+                <Nav.Link to="/embed-video" as={NavLink}>
+                    video
+                </Nav.Link>
             </Nav>
             {/* Navbar menu 축소시 toggle, collapse 처리 */}
             {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}

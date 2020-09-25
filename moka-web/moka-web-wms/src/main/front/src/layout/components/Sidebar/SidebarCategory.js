@@ -12,9 +12,9 @@ const propTypes = {
     nodeData: PropTypes.shape({
         menuId: PropTypes.string.isRequired,
         iconName: PropTypes.string,
-        menuDispName: PropTypes.string
+        menuDispName: PropTypes.string,
     }),
-    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node])
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 };
 const defaultProps = {};
 
@@ -25,13 +25,7 @@ const SidebarCategory = (props) => {
 
     return (
         <li className={clsx('sidebar-item', { active: open })}>
-            <span
-                className={clsx('sidebar-link', { collapsed: !open })}
-                onClick={onClick}
-                aria-controls={controls}
-                aria-expanded={open}
-                data-toggle="collapse"
-            >
+            <span className={clsx('sidebar-link', { collapsed: !open })} onClick={onClick} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
                 <SidebarItemIcon iconName={nodeData.iconName} />
                 <span className="align-middle">{nodeData.menuDispName}</span>
             </span>

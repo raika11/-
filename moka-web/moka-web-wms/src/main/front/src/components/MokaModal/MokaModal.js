@@ -26,31 +26,21 @@ const propTypes = {
         PropTypes.shape({
             variant: PropTypes.string,
             buttonName: PropTypes.string,
-            onClick: PropTypes.func
-        })
+            onClick: PropTypes.func,
+        }),
     ),
-    dialogAs: PropTypes.elementType
+    dialogAs: PropTypes.elementType,
 };
 
 const defaultProps = {
-    title: ''
+    title: '',
 };
 
 const MokaModal = (props) => {
     const { show, onHide, title, children, actionButtons, dialogAs, ...rest } = props;
 
     return (
-        <Modal
-            aria-labelledby={title}
-            show={show}
-            onHide={onHide}
-            backdrop={false}
-            animation={false}
-            scrollable="true"
-            dialogAs={dialogAs}
-            enforceFocus={false}
-            {...rest}
-        >
+        <Modal aria-labelledby={title} show={show} onHide={onHide} backdrop={false} animation={false} scrollable="true" dialogAs={dialogAs} enforceFocus={false} {...rest}>
             {/* 타이틀 */}
             <Modal.Header id="draggable-modal-title" closeButton>
                 <div id="draggable-handle" />

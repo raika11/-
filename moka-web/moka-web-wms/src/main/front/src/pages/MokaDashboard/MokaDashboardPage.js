@@ -10,14 +10,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { toastr } from 'react-redux-toastr';
 
-import {
-    MokaDateTimePicker,
-    MokaDraggableModal,
-    MokaCodeListModal,
-    MokaAutocomplete,
-    MokaPrependLinkInput,
-    MokaSearchInput
-} from '@components';
+import { MokaDateTimePicker, MokaDraggableModal, MokaCodeListModal, MokaAutocomplete, MokaPrependLinkInput, MokaSearchInput } from '@components';
 import { MokaImageInput } from '@components/MokaInput';
 import { options } from './data';
 import Table from './TableTest';
@@ -79,25 +72,9 @@ const MokaDashboardPage = () => {
                                 {/* checkbox */}
                                 <Form.Group>
                                     <Form.Label>4) Checkbox</Form.Label>
-                                    <Form.Check
-                                        label="default checkbox"
-                                        type="checkbox"
-                                        name="checkbox-test"
-                                    />
-                                    <Form.Check
-                                        label="default checkbox2"
-                                        type="checkbox"
-                                        name="checkbox-test"
-                                        checked={checked}
-                                        onChange={() => setChecked(!checked)}
-                                    />
-                                    <Form.Check
-                                        custom
-                                        id="c-c-t"
-                                        checked={checked}
-                                        onChange={() => setChecked(!checked)}
-                                        label="커스텀(id 필수)"
-                                    />
+                                    <Form.Check label="default checkbox" type="checkbox" name="checkbox-test" />
+                                    <Form.Check label="default checkbox2" type="checkbox" name="checkbox-test" checked={checked} onChange={() => setChecked(!checked)} />
+                                    <Form.Check custom id="c-c-t" checked={checked} onChange={() => setChecked(!checked)} label="커스텀(id 필수)" />
                                 </Form.Group>
 
                                 {/* radiobutton */}
@@ -105,29 +82,14 @@ const MokaDashboardPage = () => {
                                     <Form.Label>5) Radiobutton</Form.Label>
                                     <Form.Check type="radio" label="default radio" name="radio" />
                                     <Form.Check type="radio" label="default radio2" name="radio" />
-                                    <Form.Check
-                                        custom
-                                        type="radio"
-                                        name="radio"
-                                        id="c-r"
-                                        label="커스텀(id 필수)"
-                                    />
+                                    <Form.Check custom type="radio" name="radio" id="c-r" label="커스텀(id 필수)" />
                                 </Form.Group>
 
                                 {/* Switch */}
                                 <Form.Group>
                                     <Form.Label>6) Switch (기본이 custom)</Form.Label>
-                                    <Form.Check
-                                        type="switch"
-                                        label="default check"
-                                        id="custom-switch"
-                                    />
-                                    <Form.Check
-                                        type="switch"
-                                        label="default check"
-                                        id="d-custom-switch"
-                                        disabled
-                                    />
+                                    <Form.Check type="switch" label="default check" id="custom-switch" />
+                                    <Form.Check type="switch" label="default check" id="d-custom-switch" disabled />
                                 </Form.Group>
 
                                 {/* File */}
@@ -166,18 +128,13 @@ const MokaDashboardPage = () => {
                             {/* Input Mask */}
                             <Form.Group>
                                 <Form.Label>2) InputMask</Form.Label>
-                                <InputMask mask="(999) 9999-9999">
-                                    {(inputProps) => <Form.Control {...inputProps} />}
-                                </InputMask>
+                                <InputMask mask="(999) 9999-9999">{(inputProps) => <Form.Control {...inputProps} />}</InputMask>
                             </Form.Group>
 
                             {/* 달력 */}
                             <Form.Group>
                                 <Form.Label>3) Datetime picker</Form.Label>
-                                <MokaDateTimePicker
-                                    className="mb-3"
-                                    placeholder="날짜를 선택해주세요"
-                                />
+                                <MokaDateTimePicker className="mb-3" placeholder="날짜를 선택해주세요" />
                                 <MokaDateTimePicker className="mb-3" dateFormat={null} />
                                 <MokaDateTimePicker className="mb-3" timeFormat={null} />
                             </Form.Group>
@@ -187,11 +144,7 @@ const MokaDashboardPage = () => {
                                 <Button className="mr-2" onClick={() => setShowD(true)}>
                                     드래그 모달
                                 </Button>
-                                <MokaDraggableModal
-                                    show={showD}
-                                    onHide={() => setShowD(false)}
-                                    title="드래그가능한 모달"
-                                >
+                                <MokaDraggableModal show={showD} onHide={() => setShowD(false)} title="드래그가능한 모달">
                                     <div>
                                         <h1>드래그 가능한 모달</h1>
                                         <Button
@@ -201,7 +154,7 @@ const MokaDashboardPage = () => {
                                                         setShowD(false);
                                                     },
                                                     onCancle: () => {},
-                                                    attention: false
+                                                    attention: false,
                                                 });
                                             }}
                                         >
@@ -238,22 +191,13 @@ const MokaDashboardPage = () => {
                                 />
 
                                 {/* 테마변경 */}
-                                <Button
-                                    className="mr-2"
-                                    onClick={() => dispatch(changeTheme('classic'))}
-                                >
+                                <Button className="mr-2" onClick={() => dispatch(changeTheme('classic'))}>
                                     테마1
                                 </Button>
-                                <Button
-                                    className="mr-2"
-                                    onClick={() => dispatch(changeTheme('corporate'))}
-                                >
+                                <Button className="mr-2" onClick={() => dispatch(changeTheme('corporate'))}>
                                     테마2
                                 </Button>
-                                <Button
-                                    className="mr-2"
-                                    onClick={() => dispatch(changeTheme('modern'))}
-                                >
+                                <Button className="mr-2" onClick={() => dispatch(changeTheme('modern'))}>
                                     테마3
                                 </Button>
                             </div>
@@ -268,15 +212,12 @@ const MokaDashboardPage = () => {
                                         {
                                             placeholder: '템플릿위치그룹',
                                             disabled: true,
-                                            className: 'bg-white'
+                                            className: 'bg-white',
                                         },
-                                        { placeholder: '템플릿명' }
+                                        { placeholder: '템플릿명' },
                                     ]}
                                 />
-                                <MokaSearchInput
-                                    variant="warning"
-                                    onSearch={() => toastr.success('테스트', '성공')}
-                                />
+                                <MokaSearchInput variant="warning" onSearch={() => toastr.success('테스트', '성공')} />
                             </Form.Group>
 
                             <Form.Group>

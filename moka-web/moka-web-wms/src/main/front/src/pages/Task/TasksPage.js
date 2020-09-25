@@ -51,12 +51,7 @@ const Task = ({ text }) => (
         <Card.Body className="p-3">
             <Form.Check type="checkbox" className="float-right" />
             <p>{text}</p>
-            <Image
-                src={avatar}
-                style={{ width: '32px', height: '32px' }}
-                roundedCircle
-                className="float-right"
-            />
+            <Image src={avatar} style={{ width: '32px', height: '32px' }} roundedCircle className="float-right" />
             <Button variant="primary" size="sm">
                 View
             </Button>
@@ -76,9 +71,7 @@ const TasksPage = () => {
                                 <div>Upcomings</div>
                                 <IconDropButton />
                             </Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">
-                                Nam pretium turpis et arcu. Duis arcu.
-                            </Card.Subtitle>
+                            <Card.Subtitle className="mb-2 text-muted">Nam pretium turpis et arcu. Duis arcu.</Card.Subtitle>
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
@@ -93,9 +86,7 @@ const TasksPage = () => {
                                 In Progress
                                 <IconDropButton />
                             </Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">
-                                Nam pretium turpis et arcu. Duis arcu.
-                            </Card.Subtitle>
+                            <Card.Subtitle className="mb-2 text-muted">Nam pretium turpis et arcu. Duis arcu.</Card.Subtitle>
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
@@ -109,9 +100,7 @@ const TasksPage = () => {
                                 On Hold
                                 <IconDropButton />
                             </Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">
-                                Nam pretium turpis et arcu. Duis arcu.
-                            </Card.Subtitle>
+                            <Card.Subtitle className="mb-2 text-muted">Nam pretium turpis et arcu. Duis arcu.</Card.Subtitle>
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
@@ -127,9 +116,7 @@ const TasksPage = () => {
                                 Completed
                                 <IconDropButton />
                             </Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">
-                                Nam pretium turpis et arcu. Duis arcu.
-                            </Card.Subtitle>
+                            <Card.Subtitle className="mb-2 text-muted">Nam pretium turpis et arcu. Duis arcu.</Card.Subtitle>
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />

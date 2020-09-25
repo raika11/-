@@ -27,8 +27,8 @@ const propTypes = {
         outline: PropTypes.bool,
         variant: PropTypes.string,
         heading: PropTypes.string,
-        body: PropTypes.string
-    })
+        body: PropTypes.string,
+    }),
 };
 const defaultProps = {
     width: 171,
@@ -37,8 +37,8 @@ const defaultProps = {
         outline: false,
         variant: 'danger',
         heading: null,
-        body: '이미지파일만 등록할 수 있습니다'
-    }
+        body: '이미지파일만 등록할 수 있습니다',
+    },
 };
 
 /**
@@ -89,39 +89,19 @@ const MokaImageInput = (props) => {
     };
 
     return (
-        <Dropzone
-            onDrop={onDrop}
-            onDragEnter={onDragEnter}
-            onDragLeave={onDragLeave}
-            preventDropOnDocument
-        >
+        <Dropzone onDrop={onDrop} onDragEnter={onDragEnter} onDragLeave={onDragLeave} preventDropOnDocument>
             {({ getRootProps, getInputProps }) => (
                 <Figure
                     {...getRootProps()}
-                    className={clsx(
-                        'overflow-hidden',
-                        'd-inline-flex',
-                        'align-items-center',
-                        'justify-content-center',
-                        'is-file-dropzone',
-                        'relative'
-                    )}
+                    className={clsx('overflow-hidden', 'd-inline-flex', 'align-items-center', 'justify-content-center', 'is-file-dropzone', 'relative')}
                     style={{ width, height }}
                     ref={wrapRef}
                 >
-                    <Figure.Image
-                        width={width}
-                        height={height}
-                        alt={`${width}x${height}`}
-                        src={imgSrc}
-                        ref={imgRef}
-                    />
+                    <Figure.Image width={width} height={height} alt={`${width}x${height}`} src={imgSrc} ref={imgRef} />
                     <input {...getInputProps()} />
                     <div className="absolute-top">
                         <MokaAlert {...alertProps} show={alert}>
-                            {alertProps.heading && (
-                                <MokaAlert.Heading>{alertProps.heading}</MokaAlert.Heading>
-                            )}
+                            {alertProps.heading && <MokaAlert.Heading>{alertProps.heading}</MokaAlert.Heading>}
                             <p>{alertProps.body}</p>
                         </MokaAlert>
                     </div>

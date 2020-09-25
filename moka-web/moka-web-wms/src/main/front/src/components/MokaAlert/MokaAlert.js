@@ -31,13 +31,13 @@ const propTypes = {
     /**
      * className
      */
-    className: PropTypes.string
+    className: PropTypes.string,
 };
 
 const defaultProps = {
     variant: 'primary',
     outline: false,
-    dismissible: false
+    dismissible: false,
 };
 
 /**
@@ -47,15 +47,7 @@ const MokaAlert = forwardRef((props, ref) => {
     const { outline, variant, icon, dismissible, children, className, onClose, ...rest } = props;
 
     return (
-        <Alert
-            ref={ref}
-            className={className}
-            variant={variant}
-            dismissible={dismissible}
-            onClose={onClose}
-            bsPrefix={outline ? 'alert-outline' : undefined}
-            {...rest}
-        >
+        <Alert ref={ref} className={className} variant={variant} dismissible={dismissible} onClose={onClose} bsPrefix={outline ? 'alert-outline' : undefined} {...rest}>
             {icon && <div className="alert-icon">{icon}</div>}
             <div className="alert-message">{children}</div>
         </Alert>

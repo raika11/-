@@ -21,7 +21,7 @@ const ScrollToTop = ({ children }) => {
                     e.dataTransfer.dropEffect = 'none';
                 }
             },
-            false
+            false,
         );
         window.addEventListener(
             'drop',
@@ -33,7 +33,7 @@ const ScrollToTop = ({ children }) => {
                     e.dataTransfer.dropEffect = 'none';
                 }
             },
-            false
+            false,
         );
     }, [location]);
 

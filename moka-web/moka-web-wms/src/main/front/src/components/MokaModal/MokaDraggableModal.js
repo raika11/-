@@ -29,13 +29,13 @@ const propTypes = {
         PropTypes.shape({
             variant: PropTypes.string,
             buttonName: PropTypes.string,
-            onClick: PropTypes.func
-        })
-    )
+            onClick: PropTypes.func,
+        }),
+    ),
 };
 
 const defaultProps = {
-    title: ''
+    title: '',
 };
 
 const DraggableComponent = (props) => (
@@ -47,17 +47,7 @@ const DraggableComponent = (props) => (
 const MokaDraggableModal = (props) => {
     const { show, onHide, title, children, actionButtons, ...rest } = props;
 
-    return (
-        <MokaModal
-            show={show}
-            onHide={onHide}
-            title={title}
-            children={children}
-            actionButtons={actionButtons}
-            dialogAs={DraggableComponent}
-            {...rest}
-        />
-    );
+    return <MokaModal show={show} onHide={onHide} title={title} children={children} actionButtons={actionButtons} dialogAs={DraggableComponent} {...rest} />;
 };
 
 MokaDraggableModal.defaultProps = defaultProps;

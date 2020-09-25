@@ -14,7 +14,7 @@ const propTypes = {
     /**
      * children
      */
-    children: PropTypes.string
+    children: PropTypes.string,
 };
 
 const AlertComponet = (props) => {

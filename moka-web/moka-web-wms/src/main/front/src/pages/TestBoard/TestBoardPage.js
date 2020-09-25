@@ -35,21 +35,12 @@ const TestBoardPgae = () => {
                         <Card.Body>
                             <div className="mb-2">
                                 {variants.map((variant, idx) => (
-                                    <AlertComponet
-                                        key={idx}
-                                        variant={variant}
-                                        children={`test-${variant}`}
-                                    />
+                                    <AlertComponet key={idx} variant={variant} children={`test-${variant}`} />
                                 ))}
                             </div>
                             <div>
                                 {variants.map((variant, idx) => (
-                                    <AlertComponet
-                                        key={idx}
-                                        variant={variant}
-                                        title={`title-${variant}`}
-                                        children={`title-test-${variant}`}
-                                    />
+                                    <AlertComponet key={idx} variant={variant} title={`title-${variant}`} children={`title-test-${variant}`} />
                                 ))}
                             </div>
                         </Card.Body>
@@ -61,11 +52,7 @@ const TestBoardPgae = () => {
                             <Button className="mr-2" onClick={() => setShowD(true)}>
                                 드래그 모달
                             </Button>
-                            <MokaDraggableModal
-                                show={showD}
-                                onHide={() => setShowD(false)}
-                                title="드래그가능한 모달"
-                            >
+                            <MokaDraggableModal show={showD} onHide={() => setShowD(false)} title="드래그가능한 모달">
                                 <div>
                                     <h1>드래그 가능한 모달</h1>
                                 </div>
@@ -79,7 +66,7 @@ const TestBoardPgae = () => {
                                 tab={[
                                     { eventKey: 'first', title: 'TEST 1', content: 'TEST 1' },
                                     { eventKey: 'second', title: 'TEST 2', content: 'TEST 2' },
-                                    { eventKey: 'third', title: 'TEST 3', content: 'TEST 3' }
+                                    { eventKey: 'third', title: 'TEST 3', content: 'TEST 3' },
                                 ]}
                             />
                         </Card.Body>
@@ -92,13 +79,13 @@ const TestBoardPgae = () => {
                                     {
                                         eventKey: '0',
                                         title: 'Test 1',
-                                        content: 'Test Accordion 1'
+                                        content: 'Test Accordion 1',
                                     },
                                     {
                                         eventKey: '1',
                                         title: 'Test 2',
-                                        content: 'Test Accordion 2'
-                                    }
+                                        content: 'Test Accordion 2',
+                                    },
                                 ]}
                             />
                         </Card.Body>
@@ -152,23 +139,12 @@ const TestBoardPgae = () => {
                         <Card.Body>
                             <div className="mb-1">
                                 {variants.map((variant, idx) => (
-                                    <BadgeComponent
-                                        key={idx}
-                                        title="test"
-                                        variant={variant}
-                                        className="mr-1"
-                                    />
+                                    <BadgeComponent key={idx} title="test" variant={variant} className="mr-1" />
                                 ))}
                             </div>
                             <div>
                                 {variants.map((variant, idx) => (
-                                    <BadgeComponent
-                                        key={idx}
-                                        pill
-                                        title="test"
-                                        variant={variant}
-                                        className="mr-1"
-                                    />
+                                    <BadgeComponent key={idx} pill title="test" variant={variant} className="mr-1" />
                                 ))}
                             </div>
                         </Card.Body>
@@ -184,7 +160,7 @@ const TestBoardPgae = () => {
                                     { eventKey: '2', title: 'TEST 2' },
                                     { eventKey: '3', title: 'TEST 3' },
                                     { eventKey: '4', title: 'TEST 4' },
-                                    { eventKey: '5', title: 'TEST 5' }
+                                    { eventKey: '5', title: 'TEST 5' },
                                 ]}
                                 className="mb-2"
                             />
@@ -198,7 +174,7 @@ const TestBoardPgae = () => {
                                     { eventKey: '2', title: 'TEST 2' },
                                     { eventKey: '3', title: 'TEST 3' },
                                     { eventKey: '4', title: 'TEST 4' },
-                                    { eventKey: '5', title: 'TEST 5' }
+                                    { eventKey: '5', title: 'TEST 5' },
                                 ]}
                             />
                         </Card.Body>
@@ -221,7 +197,7 @@ const TestBoardPgae = () => {
                                 multi={[
                                     { now: 60, striped: true, variant: 'primary' },
                                     { now: 20, animated: true, variant: 'secondary' },
-                                    { now: 20, striped: true, variant: 'success' }
+                                    { now: 20, striped: true, variant: 'success' },
                                 ]}
                             />
                         </Card.Body>
@@ -231,44 +207,22 @@ const TestBoardPgae = () => {
                         <Card.Body>
                             <div>
                                 {variants.map((variant, idx) => (
-                                    <SpinnerComponent
-                                        key={idx}
-                                        animation="border"
-                                        variant={variant}
-                                        className="mb-2"
-                                    />
+                                    <SpinnerComponent key={idx} animation="border" variant={variant} className="mb-2" />
                                 ))}
                             </div>
                             <div>
                                 {variants.map((variant, idx) => (
-                                    <SpinnerComponent
-                                        key={idx}
-                                        animation="border"
-                                        variant={variant}
-                                        size="sm"
-                                        className="mb-2"
-                                    />
+                                    <SpinnerComponent key={idx} animation="border" variant={variant} size="sm" className="mb-2" />
                                 ))}
                             </div>
                             <div>
                                 {variants.map((variant, idx) => (
-                                    <SpinnerComponent
-                                        key={idx}
-                                        animation="grow"
-                                        variant={variant}
-                                        className="mb-2"
-                                    />
+                                    <SpinnerComponent key={idx} animation="grow" variant={variant} className="mb-2" />
                                 ))}
                             </div>
                             <div>
                                 {variants.map((variant, idx) => (
-                                    <SpinnerComponent
-                                        key={idx}
-                                        animation="grow"
-                                        variant={variant}
-                                        size="sm"
-                                        className="mb-2"
-                                    />
+                                    <SpinnerComponent key={idx} animation="grow" variant={variant} size="sm" className="mb-2" />
                                 ))}
                             </div>
                         </Card.Body>

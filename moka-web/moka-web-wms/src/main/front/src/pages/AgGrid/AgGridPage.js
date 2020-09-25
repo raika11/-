@@ -112,11 +112,7 @@ const AgGridPage = () => {
             }
 
             // rollback
-            if (
-                moveMode === 'ParentToChild' ||
-                moveMode === 'ChildToParent' ||
-                moveMode === 'ChildToChild'
-            ) {
+            if (moveMode === 'ParentToChild' || moveMode === 'ChildToParent' || moveMode === 'ChildToChild') {
                 toastr.warning('드래그드랍 오류', '이동할 수 없습니다');
             }
         }

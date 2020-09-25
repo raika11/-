@@ -65,7 +65,6 @@ public class SkinDTO implements Serializable {
         skinItem.put(ItemConstants.SKIN_SERVICE_TYPE, this.serviceType);
         skinItem.put(ItemConstants.SKIN_DEFAULT_YN, this.defaultYn);
         skinItem.put(ItemConstants.SKIN_BODY, this.skinBody);
-        skinItem.put(ItemConstants.SKIN_STYLE_SEQ, this.getStyle().getStyleSeq());
         return skinItem;
 
     }

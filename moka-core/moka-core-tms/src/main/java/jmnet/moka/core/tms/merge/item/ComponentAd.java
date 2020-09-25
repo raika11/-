@@ -2,13 +2,13 @@ package jmnet.moka.core.tms.merge.item;
 
 public class ComponentAd {
     private String adId;
-    private String adName;
+//    private String adName;
     private int listParagraph;
 
-    public ComponentAd(String adId, String adName, int listParagraph) {
+    public ComponentAd(String adId, /*String adName,*/ int listParagraph) {
         super();
         this.adId = adId;
-        this.adName = adName;
+//        this.adName = adName;
         this.listParagraph = listParagraph;
     }
 
@@ -16,9 +16,9 @@ public class ComponentAd {
         return adId;
     }
 
-    public String getAdName() {
-        return adName;
-    }
+//    public String getAdName() {
+//        return adName;
+//    }
 
     public int getListParagraph() {
         return listParagraph;

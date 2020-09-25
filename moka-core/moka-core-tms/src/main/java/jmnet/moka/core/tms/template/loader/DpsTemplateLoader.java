@@ -183,11 +183,11 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             List<ComponentAd> list = new ArrayList<ComponentAd>(4);
             for (Map<String, Object> map : componentAdList) {
                 String adId = map.get(ItemConstants.DpsItemConstants.COMPONENTAD_AD_ID).toString();
-                String adName =
-                        (String) map.get(ItemConstants.DpsItemConstants.COMPONENTAD_AD_NAME);
+//                String adName =
+//                        (String) map.get(ItemConstants.DpsItemConstants.COMPONENTAD_AD_NAME);
                 int listParagraph = Integer.parseInt(map
                         .get(ItemConstants.DpsItemConstants.COMPONENTAD_LIST_PARAGRAPH).toString());
-                ComponentAd componentAd = new ComponentAd(adId, adName, listParagraph);
+                ComponentAd componentAd = new ComponentAd(adId, /*adName,*/ listParagraph);
                 list.add(componentAd);
             }
             item.put(ItemConstants.COMPONENTAD_LIST, list);

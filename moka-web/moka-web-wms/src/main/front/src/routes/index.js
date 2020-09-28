@@ -2,10 +2,10 @@ import React from 'react';
 
 // layout
 import { NoFrameLayout, SidebarOpenLayout, SidebarCloseLayout } from '@layout';
-import Page404 from '@pages/MokaAuth/Page404';
+import Page404 from '@pages/Auth/Page404';
 
 // page
-const MokaDashBoard = React.lazy(() => import('@pages/MokaDashboard'));
+const Dashboard = React.lazy(() => import('@pages/Dashboard'));
 const TestBoard = React.lazy(() => import('@pages/TestBoard'));
 const Task = React.lazy(() => import('@pages/Task'));
 const EmbedVideo = React.lazy(() => import('@pages/EmbedVideo'));
@@ -15,7 +15,7 @@ const routes = [
     {
         path: '/',
         name: 'Default',
-        component: MokaDashBoard,
+        component: Dashboard,
         layout: SidebarCloseLayout,
         nonResponsive: false,
         exact: true,
@@ -23,7 +23,7 @@ const routes = [
     {
         path: '/dashboard',
         name: 'DashBoard',
-        component: MokaDashBoard,
+        component: Dashboard,
         layout: SidebarOpenLayout,
         nonResponsive: true,
     },
@@ -63,8 +63,8 @@ const routes = [
         component: EmbedVideo,
         layout: SidebarOpenLayout,
         nonResponsive: false,
-        exact: true
-    }
+        exact: true,
+    },
 ];
 
 export default routes;

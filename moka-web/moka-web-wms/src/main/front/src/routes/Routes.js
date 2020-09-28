@@ -8,7 +8,7 @@ import routes from './index';
 import Loader from '@layout/components/Loader';
 import { ScrollToTop } from '@components';
 
-const MokaRoutes = () => (
+const Routes = () => (
     <ScrollToTop>
         <Suspense fallback={<Loader />}>
             <Switch>
@@ -30,4 +30,4 @@ const MokaRoutes = () => (
     </ScrollToTop>
 );
 
-export default MokaRoutes;
+export default Routes;

@@ -5,13 +5,16 @@
         "baseUrl": "./",
         "paths": {
             "@/*": ["src/*"],
-            "@assets": ["src/assets/*"],
-            "@components": ["src/components/*"],
-            "@layout": ["src/layout/*"],
-            "@pages": ["src/pages/*"],
-            "@store": ["src/store/*"],
-            "@utils": ["src/utils/*"]
+            "@assets/*": ["src/assets/*"],
+            "@components/*": ["src/components/*"],
+            "@components": ["src/components/index.js"],
+            "@layout/*": ["src/layout/*"],
+            "@layout": ["src/layout/index.js"],
+            "@pages/*": ["src/pages/*"],
+            "@store/*": ["src/store/*"],
+            "@utils/*": ["src/utils/*"]
         }
     },
+    "include": ["./src/**/*"],
     "exclude": ["./build/*", "./node_modules/*"]
 }

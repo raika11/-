@@ -2,10 +2,12 @@
 <DefaultConfig>
 	<!-- 허용 ip 목록, 다중 그룹 가능 -->
 	<ipGroup name="system"><!--  * ( wildcard ) 허용  -->
-			127.0.0.1
-			175.192.253.130
-			101.55.50.*
-			192.168.42.*
+		127.0.0.1
+		203.249.136.99
+		192.168.72.*
+		172.22.101.*
+		172.22.93.*
+		203.249.147.*
 	</ipGroup>
 	<ipGroup name="test">
 			0:0:0:0:0:0:0:1
@@ -18,11 +20,6 @@
 		domain.list
 		pg.listSt
 		tp.list
-	</acl>
-	<acl name="volume" ipGroup="system">
-		volume.all
-		volume.login
-		volume.user
 	</acl>
 	<parameter>
 		<domainId desc="도메인 Id" require="Y">[0-9]{4}</domainId>

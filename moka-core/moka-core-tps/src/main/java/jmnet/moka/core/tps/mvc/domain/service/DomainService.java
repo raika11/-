@@ -5,10 +5,11 @@ package jmnet.moka.core.tps.mvc.domain.service;
 
 import java.util.List;
 import java.util.Optional;
+
+import jmnet.moka.common.data.support.SearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
-import jmnet.moka.core.tps.mvc.domain.dto.DomainSearchDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.media.entity.Media;
 
@@ -23,10 +24,15 @@ public interface DomainService {
     /**
      * 도메인목록조회
      * @param search 검색조건
-     * @param pageable 페이징
      * @return 도메인목록
      */
-    public Page<Domain> findList(DomainSearchDTO search, Pageable pageable);
+    public Page<Domain> findList(SearchDTO search);
+
+    /**
+     * 도메인목록 전체조회(페이징X)
+     * @return 도메인목록
+     */
+    public List<Domain> findList();
     
     /**
      * 도메인 목록 조회(Mybatis)
@@ -34,14 +40,6 @@ public interface DomainService {
      * @return 도메인 목록
      */
     public List<DomainDTO> findByMapper(String domainId);
-
-    /**
-     * 권한별 도메인목록조회. 권한체크 나중에 할 것
-     * @param search 검색조건
-     * @return 도메인목록
-     */
-    public List<Domain> findList(DomainSearchDTO search);
-
 
     /**
      * 도메인 조회

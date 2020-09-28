@@ -10,12 +10,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
+
+import jmnet.moka.common.data.support.SearchDTO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -40,7 +41,6 @@ import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
-import jmnet.moka.core.tps.mvc.domain.dto.DomainSearchDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import jmnet.moka.core.tps.mvc.etccode.entity.Etccode;
@@ -96,12 +96,9 @@ public class DomainRestController {
      */
     @GetMapping
     public ResponseEntity<?> getDomainList(HttpServletRequest request,
-            @Valid @SearchParam DomainSearchDTO search) {
-        // 페이징조건 설정
-        Pageable pageable = search.getPageable();
-
+            @SearchParam SearchDTO search) {
         // 조회
-        Page<Domain> returnValue = domainService.findList(search, pageable);
+        Page<Domain> returnValue = domainService.findList(search);
 
         // 리턴값 설정
         ResultListDTO<DomainDTO> resultListMessage = new ResultListDTO<DomainDTO>();
@@ -183,8 +180,8 @@ public class DomainRestController {
 
         // DomainDTO -> Domain 변환
         Domain domain = modelMapper.map(domainDTO, Domain.class);
-        domain.setRegDt(McpDate.now());
-        domain.setRegId(principal.getName());
+//        domain.setRegDt(McpDate.now());
+//        domain.setRegId(principal.getName());
 
         if (!McpString.isNullOrEmpty(domainDTO.getApiCodeId())) {
             // apiCodeId -> apiHost, apiPath

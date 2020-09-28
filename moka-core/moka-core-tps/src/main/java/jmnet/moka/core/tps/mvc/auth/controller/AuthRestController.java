@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import jmnet.moka.common.data.support.SearchDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,6 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
-import jmnet.moka.core.tps.mvc.domain.dto.DomainSearchDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import jmnet.moka.core.tps.mvc.etccode.entity.Etccode;
@@ -148,14 +149,12 @@ public class AuthRestController {
      * 도메인목록조회(권한별 모든 도메인목록)
      * 
      * @param request 요청
-     * @param search 검색조건
      * @return 도메인목록
      */
     @GetMapping("/domains")
-    public ResponseEntity<?> getDomainList(HttpServletRequest request,
-            @Valid @SearchParam DomainSearchDTO search) {
+    public ResponseEntity<?> getDomainList(HttpServletRequest request) {
         // 조회
-        List<Domain> returnValue = domainService.findList(search);
+        List<Domain> returnValue = domainService.findList();
 
         // 리턴값 설정
         ResultListDTO<DomainDTO> resultListMessage = new ResultListDTO<DomainDTO>();

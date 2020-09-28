@@ -179,8 +179,8 @@ public class ContainerRestController {
 
         // 등록
         Container container = modelMapper.map(containerDTO, Container.class);
-        container.setCreateYmdt(McpDate.nowStr());
-        container.setCreator(principal.getName());
+        container.setRegDt(McpDate.now());
+        container.setRegId(principal.getName());
         Container returnValue = containerService.insertContainer(container);
 
         // 결과리턴
@@ -218,10 +218,10 @@ public class ContainerRestController {
         Container orgContainer = containerService.findByContainerSeq(containerSeq)
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
-        newContainer.setCreateYmdt(orgContainer.getCreateYmdt());
-        newContainer.setCreator(orgContainer.getCreator());
-        newContainer.setModifiedYmdt(McpDate.nowStr());
-        newContainer.setModifier(principal.getName());
+        newContainer.setRegDt(orgContainer.getRegDt());
+        newContainer.setRegId(orgContainer.getRegId());
+        newContainer.setModDt(McpDate.now());
+        newContainer.setModId(principal.getName());
         Container returnValue = containerService.updateContainer(newContainer);
 
         // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
@@ -327,8 +327,8 @@ public class ContainerRestController {
     private HistDTO convertToHistDto(ContainerHist hist) {
         HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
         histDTO.setBody(hist.getContainerBody());
-        histDTO.setCreateYmdt(hist.getCreateYmdt());
-        histDTO.setCreator(hist.getCreator());
+        histDTO.setRegDt(hist.getRegDt());
+        histDTO.setRegId(hist.getRegId());
         return histDTO;
     }
 

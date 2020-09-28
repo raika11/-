@@ -52,7 +52,7 @@ public class PageApiTests {
                 .pageName("홈")
                 // .parent
                 // .pageOrder("1")
-                .keyword("메인").description("").useYn("Y").pageBody("내용")
+                .kwd("메인").description("").useYn("Y").pageBody("내용")
                 // .createDt("20200227000000").modifyDt("20200318180704")
                 // .creator("superadmin").modifier("superadmin")
                 .build();

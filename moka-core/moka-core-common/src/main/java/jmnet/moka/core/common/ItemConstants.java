@@ -7,7 +7,6 @@ public class ItemConstants {
 
     /* Domain Info */
     public static final String DOMAIN_ID = "id";
-    public static final String DOMAIN_MEDIA_ID = "mediaId";
     public static final String DOMAIN_NAME = "name";
     public static final String DOMAIN_URL = "url";
     public static final String DOMAIN_SERVICE_PLATFORM = "servicePlatform";
@@ -32,7 +31,9 @@ public class ItemConstants {
     public static String PAGE_URL = "url";
     public static String PAGE_ORDER = "order";
     public static String PAGE_BODY = "body";
+    public static String PAGE_URL_PARAM = "urlParam";
     public static String PAGE_USE_YN = "useYn";
+    public static String PAGE_FILE_YN = "fileYn";
     public static String PAGE_KEYWORD = "keyword";
     public static String PAGE_DESCRIPTION = "desc";
     public static String PAGE_MOVE_YN = "moveYn";
@@ -163,7 +164,6 @@ public class ItemConstants {
     public static class DpsItemConstants {
         /* Domain Info */
         public static String DOMAIN_ID = "DOMAIN_ID";
-        public static String DOMAIN_MEDIA_ID = "MEDIA_ID";
         public static String DOMAIN_NAME = "DOMAIN_NAME";
         public static String DOMAIN_URL = "DOMAIN_URL";
         public static String DOMAIN_SERVICE_PLATFORM = "SERVICE_PLATFORM";
@@ -197,7 +197,9 @@ public class ItemConstants {
         public static String PAGE_URL = "PAGE_URL";
         public static String PAGE_ORDER = "PAGE_ORD";
         public static String PAGE_BODY = "PAGE_BODY";
+        public static String PAGE_URL_PARAM = "URL_PARAM";
         public static String PAGE_USE_YN = "USE_YN";
+        public static String PAGE_FILE_YN = "FILE_YN";
         public static String PAGE_KEYWORD = "KWD";
         public static String PAGE_DESCRIPTION = "DESCRIPTION";
         public static String PAGE_MOVE_YN = "MOVE_YN";

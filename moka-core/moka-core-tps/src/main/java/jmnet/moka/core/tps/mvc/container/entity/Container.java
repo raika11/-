@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.container.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -23,26 +24,23 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 /**
  * The persistent class for the WMS_CONTAINER database table.
  * 
  */
-@Entity
-@Table(name = "WMS_CONTAINER")
-@NamedQuery(name = "Container.findAll", query = "SELECT c FROM Container c")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @EqualsAndHashCode(exclude = "containerRels")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "containerSeq")
+@Entity
+@Table(name = "TB_WMS_CONTAINER")
+@NamedQuery(name = "Container.findAll", query = "SELECT c FROM Container c")
 public class Container implements Serializable {
 
     private static final long serialVersionUID = -6024609985470746225L;
@@ -63,17 +61,17 @@ public class Container implements Serializable {
     @Column(name = "CONTAINER_BODY")
     private String containerBody;
 
-    @Column(name = "CREATE_YMDT")
-    private String createYmdt;
+    @Column(name = "REG_DT")
+    private Date regDt;
 
-    @Column(name = "CREATOR")
-    private String creator;
+    @Column(name = "REG_ID")
+    private String regId;
 
-    @Column(name = "MODIFIED_YMDT")
-    private String modifiedYmdt;
+    @Column(name = "MOD_DT")
+    private Date modDt;
 
-    @Column(name = "MODIFIER")
-    private String modifier;
+    @Column(name = "MOD_ID")
+    private String modId;
 
     @Transient
     private Long pageRelCount;

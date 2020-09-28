@@ -105,7 +105,7 @@ public class ContainerServiceImpl implements ContainerService {
         Container saveContainer = containerRepository.save(container);
 
         // 3. 히스토리저장
-        insertHist(saveContainer, TpsConstants.WORKTYPE_INSERT, saveContainer.getCreator());
+        insertHist(saveContainer, TpsConstants.WORKTYPE_INSERT, saveContainer.getRegId());
 
         return saveContainer;
     }
@@ -198,14 +198,14 @@ public class ContainerServiceImpl implements ContainerService {
         hist.setWorkType(workType);
 
         if (workType.equals(TpsConstants.WORKTYPE_INSERT)) {
-            hist.setCreateYmdt(saveContainer.getCreateYmdt());
-            hist.setCreator(saveContainer.getCreator());
+            hist.setRegDt(saveContainer.getRegDt());
+            hist.setRegId(saveContainer.getRegId());
         } else if (workType.equals(TpsConstants.WORKTYPE_UPDATE)) {
-            hist.setCreateYmdt(saveContainer.getModifiedYmdt());
-            hist.setCreator(saveContainer.getModifier());
+            hist.setRegDt(saveContainer.getModDt());
+            hist.setRegId(saveContainer.getModId());
         } else if (workType.equals(TpsConstants.WORKTYPE_DELETE)) {
-            hist.setCreateYmdt(McpDate.nowStr());
-            hist.setCreator(userName);
+            hist.setRegDt(McpDate.now());
+            hist.setRegId(userName);
         }
 
         containerHistRepository.save(hist);
@@ -222,7 +222,7 @@ public class ContainerServiceImpl implements ContainerService {
         Container saveContainer = containerRepository.save(container);
 
         // 3. 히스토리저장
-        insertHist(saveContainer, TpsConstants.WORKTYPE_UPDATE, saveContainer.getModifier());
+        insertHist(saveContainer, TpsConstants.WORKTYPE_UPDATE, saveContainer.getModId());
 
         return saveContainer;
     }

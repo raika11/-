@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,8 @@ import jmnet.moka.core.tps.mvc.page.vo.PageVO;
  * @author ssc
  */
 @Service
+@Slf4j
 public class PageServiceImpl implements PageService {
-
-    private static final Logger logger = LoggerFactory.getLogger(PageServiceImpl.class);
 
     @Autowired
     PageRepository pageRepository;
@@ -154,7 +154,7 @@ public class PageServiceImpl implements PageService {
         Page savePage = pageRepository.save(page);
 
         // 3. 히스토리저장
-        insertHist(savePage, TpsConstants.WORKTYPE_INSERT, savePage.getCreator());
+        insertHist(savePage, TpsConstants.WORKTYPE_INSERT, savePage.getRegId());
 
         return savePage;
     }
@@ -179,7 +179,7 @@ public class PageServiceImpl implements PageService {
             relation.setRelType(item.getNodeName());
             relation.setRelSeq(Long.parseLong(item.getId()));
             relation.setRelParentType("NN");
-            relation.setRelOrder(item.getOrder());
+            relation.setRelOrd(item.getOrder());
 
             // 동일한 아이템은 추가하지 않는다.
             if (page.isEqualRel(relation)) {
@@ -224,7 +224,7 @@ public class PageServiceImpl implements PageService {
                     relationTP.setRelSeq(component.get().getTemplate().getTemplateSeq());
                     relationTP.setRelParentType(MokaConstants.ITEM_COMPONENT);
                     relationTP.setRelParentSeq(component.get().getComponentSeq());
-                    relationTP.setRelOrder(item.getOrder());
+                    relationTP.setRelOrd(item.getOrder());
 
                     // 동일한 아이템은 추가하지 않는다.
                     if (!page.isEqualRel(relationTP)) {
@@ -240,7 +240,7 @@ public class PageServiceImpl implements PageService {
                         relatioDS.setRelSeq(component.get().getDataset().getDatasetSeq());
                         relatioDS.setRelParentType(MokaConstants.ITEM_COMPONENT);
                         relatioDS.setRelParentSeq(component.get().getComponentSeq());
-                        relatioDS.setRelOrder(item.getOrder());
+                        relatioDS.setRelOrd(item.getOrder());
 
                         if (!page.isEqualRel(relatioDS)) {
                             relatioDS.setPage(page);
@@ -269,14 +269,14 @@ public class PageServiceImpl implements PageService {
         hist.setWorkType(workType);
 
         if (workType.equals(TpsConstants.WORKTYPE_INSERT)) {
-            hist.setCreateYmdt(savePage.getCreateYmdt());
-            hist.setCreator(savePage.getCreator());
+            hist.setRegDt(savePage.getRegDt());
+            hist.setRegId(savePage.getRegId());
         } else if (workType.equals(TpsConstants.WORKTYPE_UPDATE)) {
-            hist.setCreateYmdt(savePage.getModifiedYmdt());
-            hist.setCreator(savePage.getModifier());
+            hist.setRegDt(savePage.getModDt());
+            hist.setRegId(savePage.getModId());
         } else if (workType.equals(TpsConstants.WORKTYPE_DELETE)) {
-            hist.setCreateYmdt(McpDate.nowStr());
-            hist.setCreator(userName);
+            hist.setRegDt(McpDate.now());
+            hist.setRegId(userName);
         }
 
         pageHistRepository.save(hist);
@@ -295,7 +295,7 @@ public class PageServiceImpl implements PageService {
 
 
         // 3. 히스토리저장
-        insertHist(savePage, TpsConstants.WORKTYPE_UPDATE, savePage.getModifier());
+        insertHist(savePage, TpsConstants.WORKTYPE_UPDATE, savePage.getModId());
 
         return savePage;
     }
@@ -327,7 +327,7 @@ public class PageServiceImpl implements PageService {
             // 삭제
             pageRepository.deleteById(page.getPageSeq());
 
-            logger.info("[DELETE Page] domainId : {} pageSeq : {}", page.getDomain().getDomainId(),
+            log.info("[DELETE Page] domainId : {} pageSeq : {}", page.getDomain().getDomainId(),
                     page.getPageSeq());
         });
     }
@@ -399,7 +399,7 @@ public class PageServiceImpl implements PageService {
                             .relSeq(newComponent.getDataset().getDatasetSeq())
                             .relParentType(MokaConstants.ITEM_COMPONENT)
                             .relParentSeq(newComponent.getComponentSeq())
-                            .relOrder(rel.getRelOrder()).build();
+                            .relOrd(rel.getRelOrd()).build();
                     pageRelRepository.save(newRel);
                 }
             } else {

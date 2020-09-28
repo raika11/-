@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.container.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,28 +13,26 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import lombok.*;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 
 /**
  * The persistent class for the WMS_CONTAINER_HIST database table.
  * 
  */
-@Entity
-@Table(name = "WMS_CONTAINER_HIST")
-@NamedQuery(name = "ContainerHist.findAll", query = "SELECT c FROM ContainerHist c")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @EqualsAndHashCode(exclude = "container")
+@Entity
+@Table(name = "TB_WMS_CONTAINER_HIST")
+@NamedQuery(name = "ContainerHist.findAll", query = "SELECT c FROM ContainerHist c")
 public class ContainerHist implements Serializable {
 
     private static final long serialVersionUID = 6857747089425705175L;
@@ -59,10 +58,10 @@ public class ContainerHist implements Serializable {
     @Column(name = "WORK_TYPE", columnDefinition = "char")
     private String workType;
 
-    @Column(name = "CREATE_YMDT")
-    private String createYmdt;
+    @Column(name = "REG_DT")
+    private Date regDt;
 
-    @Column(name = "CREATOR")
-    private String creator;
+    @Column(name = "REG_ID")
+    private String regId;
 
 }

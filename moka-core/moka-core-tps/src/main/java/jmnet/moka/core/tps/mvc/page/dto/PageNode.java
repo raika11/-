@@ -41,7 +41,7 @@ public class PageNode implements Serializable {
 
     private String parentPageUrl;
 
-    private int pageOrder;
+    private Integer pageOrd;
 
     private boolean btnShow;                // 버튼아이콘 표시여부
 
@@ -63,7 +63,7 @@ public class PageNode implements Serializable {
         this.parentPageSeq = page.getParent() == null ? 0 : page.getParent().getPageSeq();
         this.parentPageName = page.getParent() == null ? null : page.getParent().getPageName();
         this.parentPageUrl = page.getParent() == null ? null : page.getParent().getPageUrl();
-        this.pageOrder = page.getPageOrder();
+        this.pageOrd = page.getPageOrd().intValue();
         this.btnShow = false;
         this.useYn = page.getUseYn().equals("Y") ? "Y" : "N";
     }
@@ -133,7 +133,7 @@ public class PageNode implements Serializable {
                     if (b.getNodes() != null && b.getNodes().size() > 0)
                         b.sort();
 
-                    return a.getPageOrder() - b.getPageOrder();
+                    return a.getPageOrd() - b.getPageOrd();
                 });
             }
         }

@@ -1,22 +1,14 @@
 package jmnet.moka.core.tps.mvc.page.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import jmnet.moka.common.utils.McpDate;
+import lombok.*;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -24,28 +16,23 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 
 /**
  * The persistent class for the WMS_PAGE database table.
  * 
  */
-@Entity
-@Table(name = "WMS_PAGE")
-@NamedQuery(name = "Page.findAll", query = "SELECT p FROM Page p")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @EqualsAndHashCode(exclude = "pageRels")
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "pageSeq")
+@Entity
+@Table(name = "TB_WMS_PAGE")
+@NamedQuery(name = "Page.findAll", query = "SELECT p FROM Page p")
 public class Page implements Serializable {
 
     private static final long serialVersionUID = 2047748626664504285L;
@@ -55,7 +42,7 @@ public class Page implements Serializable {
     @Column(name = "PAGE_SEQ")
     private Long pageSeq;
 
-    @Column(name = "PAGE_NAME")
+    @Column(name = "PAGE_NAME", nullable = false)
     private String pageName;
 
     @Column(name = "PAGE_SERVICE_NAME")
@@ -74,50 +61,65 @@ public class Page implements Serializable {
     @JoinColumn(name = "DOMAIN_ID", nullable = false, referencedColumnName = "DOMAIN_ID")
     private Domain domain;
 
-    @Column(name = "PAGE_TYPE")
+    @Column(name = "PAGE_TYPE", nullable = false)
     private String pageType;
 
-    @Column(name = "PAGE_URL")
+    @Column(name = "PAGE_URL", nullable = false)
     private String pageUrl;
 
-    @Column(name = "PAGE_ORDER")
-    private int pageOrder;
+    @Column(name = "PAGE_ORD", nullable = false)
+    private Integer pageOrd;
 
     @Lob
     @Column(name = "PAGE_BODY")
     private String pageBody;
 
-    @Column(name = "USE_YN", columnDefinition = "char")
+    @Column(name = "URL_PARAM")
+    private String urlParam;
+
+    @Column(name = "USE_YN", columnDefinition = "char", nullable = false)
     private String useYn;
 
-    @Column(name = "KEYWORD")
-    private String keyword;
+    @Column(name = "FILE_YN", columnDefinition = "char")
+    private String fileYn;
+
+    @Column(name = "KWD")
+    private String kwd;
 
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "MOVE_YN", columnDefinition = "char")
+    @Column(name = "MOVE_YN", columnDefinition = "char", nullable = false)
     private String moveYn;
 
     @Column(name = "MOVE_URL")
     private String moveUrl;
 
-    @Column(name = "CREATE_YMDT")
-    private String createYmdt;
+    @Column(name = "REG_DT")
+    private Date regDt;
 
-    @Column(name = "CREATOR")
-    private String creator;
+    @Column(name = "REG_ID")
+    private String regId;
 
-    @Column(name = "MODIFIED_YMDT")
-    private String modifiedYmdt;
+    @Column(name = "MOD_DT")
+    private Date modDt;
 
-    @Column(name = "MODIFIER")
-    private String modifier;
+    @Column(name = "MOD_ID")
+    private String modId;
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "page",
             cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private Set<PageRel> pageRels = new LinkedHashSet<PageRel>();
+
+    @PrePersist
+    public void prePersist() {
+        this.pageOrd = this.pageOrd == null ? 1 : this.pageOrd;
+        this.useYn = this.useYn == null ? "Y" : this.useYn;
+        this.fileYn = this.fileYn == null ? "N" : this.fileYn;
+        this.moveYn = this.moveYn == null ? "N" : this.moveYn;
+        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+    }
 
     /**
      * 관련아이템 추가
@@ -164,4 +166,3 @@ public class Page implements Serializable {
     }
 }
 
-    

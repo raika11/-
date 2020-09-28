@@ -231,8 +231,8 @@ public class PageRestController {
 
         // 등록
         Page page = modelMapper.map(pageDTO, Page.class);
-        page.setCreateYmdt(McpDate.nowStr());
-        page.setCreator(principal.getName());
+        page.setRegDt(McpDate.now());
+        page.setRegId(principal.getName());
         Page returnValue = pageService.insertPage(page);
 
         // 결과리턴
@@ -275,10 +275,10 @@ public class PageRestController {
         Page orgPage = pageService.findByPageSeq(pageSeq).orElseThrow(() -> new NoDataException(
                 messageByLocale.get("tps.page.error.noContent", request)));
 
-        newPage.setCreateYmdt(orgPage.getCreateYmdt());
-        newPage.setCreator(orgPage.getCreator());
-        newPage.setModifiedYmdt(McpDate.nowStr());
-        newPage.setModifier(principal.getName());
+        newPage.setRegDt(orgPage.getRegDt());
+        newPage.setRegId(orgPage.getRegId());
+        newPage.setModDt(McpDate.now());
+        newPage.setModId(principal.getName());
         Page returnValue = pageService.updatePage(newPage);
 
         // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
@@ -446,8 +446,8 @@ public class PageRestController {
     private HistDTO convertToHistDto(PageHist hist) {
         HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
         histDTO.setBody(hist.getPageBody());
-        histDTO.setCreateYmdt(hist.getCreateYmdt());
-        histDTO.setCreator(hist.getCreator());
+        histDTO.setRegDt(hist.getRegDt());
+        histDTO.setRegId(hist.getRegId());
         return histDTO;
     }
 

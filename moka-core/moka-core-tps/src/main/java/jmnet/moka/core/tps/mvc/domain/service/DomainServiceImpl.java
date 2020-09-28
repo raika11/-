@@ -11,6 +11,9 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+
+import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.common.utils.McpDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
-import jmnet.moka.core.tps.mvc.domain.dto.DomainSearchDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.mapper.DomainMapper;
 import jmnet.moka.core.tps.mvc.domain.repository.DomainRepository;
@@ -68,13 +70,13 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public Page<Domain> findList(DomainSearchDTO search, Pageable pageable) {
-        return domainRepository.findByMediaId(search.getMediaId(), pageable);
+    public Page<Domain> findList(SearchDTO search) {
+        return domainRepository.findAll(search.getPageable());
     }
 
     @Override
-    public List<Domain> findList(DomainSearchDTO search) {
-        return domainRepository.findByMediaId(search.getMediaId());
+    public List<Domain> findList() {
+        return domainRepository.findAll();
     }
 
     @Override
@@ -96,25 +98,22 @@ public class DomainServiceImpl implements DomainService {
         // 페이지(메인홈) 등록
         jmnet.moka.core.tps.mvc.page.entity.Page root 
             = jmnet.moka.core.tps.mvc.page.entity.Page.builder()
-                .createYmdt(returnVal.getRegDt().toString())
-                .creator(returnVal.getRegId())
+                .regDt(McpDate.now())
+                .regId(returnVal.getRegId())
                 .pageName("메인")
                 .pageDisplayName("HOME")
                 .domain(returnVal)
-                .pageOrder(1)
                 .pageUrl("/")
                 .pageBody("")
-                .useYn("Y")
-                .moveYn("N")
                 .build();
         
         // 페이지에 PAGE_TYPE 셋팅 (etccode 리스트의 첫번째 데이터)
-        String pageType = "";
-        try {    
-            pageType = etccodeService.findUseList(TpsConstants.ETCCODE_TYPE_PAGE_TYPE)
-                    .get(0).getCodeName();
-        } catch(Exception e) {}
-        root.setPageType(pageType);
+//        String pageType = "";
+//        try {
+//            pageType = etccodeService.findUseList(TpsConstants.ETCCODE_TYPE_PAGE_TYPE)
+//                    .get(0).getCodeName();
+//        } catch(Exception e) {}
+//        root.setPageType(pageType);
         
         pageService.insertPage(root);
         logger.debug("[INSERT DOMAIN] insert page, {}", root.getPageName());

@@ -20,9 +20,4 @@ import jmnet.moka.core.tps.mvc.domain.entity.Domain;
  */
 public interface DomainRepository extends JpaRepository<Domain, String> {
 
-    // 매체별 도메인 전체 조회. 페이징
-    public Page<Domain> findByMediaId(String mediaId, Pageable pageable);
-
-    // 매체별 도메인 전체 조회(공통도메인 제외). 페이징X
-    public List<Domain> findByMediaId(String mediaId);
 }

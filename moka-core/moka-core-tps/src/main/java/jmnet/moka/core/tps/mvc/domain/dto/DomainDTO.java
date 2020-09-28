@@ -6,15 +6,12 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.item.DomainItem;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * <pre>
@@ -25,9 +22,10 @@ import lombok.NoArgsConstructor;
  * @since 2020. 4. 14. 오후 1:32:16
  * @author jeon
  */
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DomainDTO implements Serializable {
@@ -58,10 +56,6 @@ public class DomainDTO implements Serializable {
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.domain.error.invalid.useYn}")
     private String useYn;
 
-    @NotNull(message = "{tps.domain.error.invalid.mediaId1}")
-    @Length(min = 1, max = 2, message = "{tps.domain.error.invalid.mediaId2}")
-    private String mediaId;
-
     @Length(min = 0, max = 3, message = "{tps.domain.error.invalid.lang}")
     private String lang;
 
@@ -80,7 +74,6 @@ public class DomainDTO implements Serializable {
     public DomainItem toDomainItem() {
         DomainItem domainItem = new DomainItem();
         domainItem.put(ItemConstants.DOMAIN_ID, this.domainId);
-        domainItem.put(ItemConstants.DOMAIN_MEDIA_ID, this.mediaId);
         domainItem.put(ItemConstants.DOMAIN_NAME, this.domainName);
         domainItem.put(ItemConstants.DOMAIN_URL, this.domainUrl);
         domainItem.put(ItemConstants.DOMAIN_SERVICE_PLATFORM, this.servicePlatform);

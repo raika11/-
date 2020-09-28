@@ -12,29 +12,29 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 /**
  * The persistent class for the WMS_PAGE_REL database table.
  * 
  */
-@Entity
-@Table(name = "WMS_PAGE_REL")
-@NamedQuery(name = "PageRel.findAll", query = "SELECT p FROM PageRel p")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @EqualsAndHashCode(exclude = "page")
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
+@Entity
+@Table(name = "TB_WMS_PAGE_REL")
+@NamedQuery(name = "PageRel.findAll", query = "SELECT p FROM PageRel p")
 public class PageRel implements Serializable {
 
     private static final long serialVersionUID = -371344931799250261L;
@@ -52,7 +52,7 @@ public class PageRel implements Serializable {
     @JoinColumn(name = "PAGE_SEQ", referencedColumnName = "PAGE_SEQ", nullable = false)
     private Page page;
 
-    @Column(name = "REL_TYPE")
+    @Column(name = "REL_TYPE", nullable = false)
     private String relType;
 
     @Column(name = "REL_SEQ")
@@ -64,14 +64,14 @@ public class PageRel implements Serializable {
     @Transient
     private Long templateSeq;
 
-    @Column(name = "REL_PARENT_TYPE")
+    @Column(name = "REL_PARENT_TYPE", nullable = false)
     private String relParentType;
 
     @Column(name = "REL_PARENT_SEQ")
     private Long relParentSeq;
 
-    @Column(name = "REL_ORDER")
-    private int relOrder;
+    @Column(name = "REL_ORD", nullable = false)
+    private Integer relOrd;
 
     public void setPage(Page page) {
         if (page == null) {

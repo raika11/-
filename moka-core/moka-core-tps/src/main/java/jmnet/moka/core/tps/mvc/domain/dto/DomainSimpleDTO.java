@@ -7,10 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.type.TypeReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * <pre>
@@ -21,9 +18,10 @@ import lombok.NoArgsConstructor;
  * @since 2020. 2. 6. 오후 5:46:30
  * @author jeon
  */
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DomainSimpleDTO implements Serializable {
@@ -33,8 +31,6 @@ public class DomainSimpleDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<DomainSimpleDTO>>() {}.getType();
 
     private String domainId;
-
-    private String mediaId;
 
     private String domainName;
 

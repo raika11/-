@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -18,15 +19,11 @@ import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "pageSeq")
@@ -64,18 +61,24 @@ public class PageDTO implements Serializable {
             message = "{tps.page.error.invalid.pageUrl2}")
     private String pageUrl;
 
-    @NotNull(message = "{tps.page.error.invalid.pageOrder}")
-    @Min(value = -1, message = "{tps.page.error.invalid.pageOrder}")
-    private int pageOrder;
+    @NotNull(message = "{tps.page.error.invalid.pageOrd}")
+    @Min(value = -1, message = "{tps.page.error.invalid.pageOrd}")
+    private int pageOrd;
 
     private String pageBody;
+
+    private String urlParam;
 
     @NotNull(message = "{tps.page.error.invalid.useYn}}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.invalid.useYn}")
     private String useYn;
 
-    @Length(max = 128, message = "{tps.page.error.invalid.keyword}")
-    private String keyword;
+    @NotNull(message = "{tps.page.error.invalid.fileYn}}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.invalid.fileYn}")
+    private String fileYn;
+
+    @Length(max = 128, message = "{tps.page.error.invalid.kwd}")
+    private String kwd;
 
     private String description;
 
@@ -115,9 +118,11 @@ public class PageDTO implements Serializable {
                 this.parent != null ? this.parent.getPageSeq() : null);
         pageItem.put(ItemConstants.PAGE_TYPE, this.pageType);
         pageItem.put(ItemConstants.PAGE_URL, this.pageUrl);
-        pageItem.put(ItemConstants.PAGE_ORDER, this.pageOrder);
+        pageItem.put(ItemConstants.PAGE_ORDER, this.pageOrd);
         pageItem.put(ItemConstants.PAGE_BODY, this.pageBody);
+        pageItem.put(ItemConstants.PAGE_URL_PARAM, this.urlParam);
         pageItem.put(ItemConstants.PAGE_USE_YN, this.useYn);
+        pageItem.put(ItemConstants.PAGE_FILE_YN, this.fileYn);
         pageItem.put(ItemConstants.PAGE_DESCRIPTION, this.description);
         pageItem.put(ItemConstants.PAGE_MOVE_YN, this.moveYn);
         pageItem.put(ItemConstants.PAGE_MOVE_URL, this.moveUrl);

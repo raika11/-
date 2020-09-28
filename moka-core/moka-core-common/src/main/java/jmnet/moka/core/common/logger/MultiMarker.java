@@ -9,6 +9,17 @@ import org.slf4j.Marker;
 
 import jmnet.moka.common.utils.McpString;
 
+/**
+ * <pre>
+ *
+ * Multi Marker 관리
+ *
+ * 2020. 9. 28. ince 최초생성
+ * </pre>
+ *
+ * @since 2020. 9. 28. 오후 1:14:45
+ * @author ince
+ */
 public class MultiMarker implements org.slf4j.Marker {
 
 	private static final long serialVersionUID = 2438877789519766569L;

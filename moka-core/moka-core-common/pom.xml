@@ -84,5 +84,10 @@
 			<version>2.5.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.codehaus.janino</groupId>
+			<artifactId>janino</artifactId>
+		</dependency>
+
 	</dependencies>
 </project>

@@ -157,7 +157,7 @@
                                                 "menuId": "02012001",
                                                 "menuName": "test2",
                                                 "menuDispName": "테스트2",
-                                                "menuPath": "/test",
+                                                "menuPath": "/embed-video",
                                                 "menuOrder": "1",
                                                 "depth": "3",
                                                 "useYn": "Y",

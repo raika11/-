@@ -14,25 +14,13 @@ $spacer: 1rem !default;
 
 $spacers: (
     0: 0,
-    1: (
-        $spacer * 0.25
-    ),
-    2: (
-        $spacer * 0.5
-    ),
+    1: ($spacer * 0.25),
+    2: ($spacer * 0.5),
     3: $spacer,
-    4: (
-        $spacer * 1.5
-    ),
-    5: (
-        $spacer * 3
-    ),
-    6: (
-        $spacer * 4.5
-    ),
-    7: (
-        $spacer * 6
-    )
+    4: ($spacer * 1.5),
+    5: ($spacer * 3),
+    6: ($spacer * 4.5),
+    7: ($spacer * 6)
 ) !default;
 
 $min-width: 1360px !default;
@@ -225,7 +213,7 @@ $card-title-color: $gray-700 !default;
 $table-accent-bg: $gray-100 !default;
 
 // Sidebar general
-$sidebar-width: 260px !default;
+$sidebar-width: 220px !default;
 $sidebar-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out !default;
 $sidebar-bg: #30211c !default;
 $sidebar-border: 0 !default;
@@ -253,7 +241,7 @@ $sidebar-link-hover-color: rgba($white, 0.9) !default;
 $sidebar-link-hover-bg: darken($sidebar-bg, 4) !default;
 $sidebar-link-hover-font-weight: $font-weight-normal !default;
 $sidebar-link-active-color: $sidebar-link-hover-color !default;
-$sidebar-link-active-bg: darken($sidebar-bg, 4) !default;
+$sidebar-link-active-bg: $orange !default;
 $sidebar-link-active-font-weight: $font-weight-normal !default;
 
 // Sidebar child link

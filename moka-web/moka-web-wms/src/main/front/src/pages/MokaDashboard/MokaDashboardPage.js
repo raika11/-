@@ -8,13 +8,20 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Nav from 'react-bootstrap/Nav';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+import Carousel from 'react-bootstrap/Carousel';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Jumbotron from 'react-bootstrap/Jumbotron';
 import { toastr } from 'react-redux-toastr';
 
-import { MokaDateTimePicker, MokaDraggableModal, MokaCodeListModal, MokaAutocomplete, MokaPrependLinkInput, MokaSearchInput, MokaCardTabs } from '@components';
+import { MokaDateTimePicker, MokaDraggableModal, MokaCodeListModal, MokaAutocomplete, MokaPrependLinkInput, MokaSearchInput, MokaCardTabs, MokaAlert } from '@components';
 import { MokaImageInput } from '@components/MokaInput';
 import { options } from './data';
 import Table from './TableTest';
 import { changeTheme } from '@store/layout/layoutAction';
+import bg from '@assets/images/bg.jpeg';
 
 const MokaDashboardPage = () => {
     const [checked, setChecked] = useState(true);
@@ -32,7 +39,94 @@ const MokaDashboardPage = () => {
         <Container fluid className="p-0">
             <Row>
                 <Col>
-                    <MokaCardTabs />
+                    <MokaCardTabs id="test" tabNavs={['Tab1', 'Tab2']} tabs={[<div>Test1</div>, <div>Test2</div>]} />
+                </Col>
+                <Col>
+                    <Card>
+                        <Card.Body>
+                            <Nav variant="pills" defaultActiveKey="nav-1">
+                                <Nav.Item>
+                                    <Nav.Link eventKey="nav-1">링크1</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link eventKey="nav-2">링크2</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link href="#">링크3</Nav.Link>
+                                </Nav.Item>
+                            </Nav>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <Card>
+                        <Card.Header>
+                            <Card.Title>카드 타이틀</Card.Title>
+                            <Card.Subtitle>카드 서브타이틀</Card.Subtitle>
+                        </Card.Header>
+                        <Card.Body>
+                            <Card.Text className="mb-4">
+                                본문 안에서 텍스트<Card.Link href="#">링크</Card.Link>
+                            </Card.Text>
+                            <ButtonToolbar className="mb-4">
+                                <ButtonGroup className="mr-2">
+                                    <Button>그룹버튼1</Button>
+                                    <Button>그룹버튼2</Button>
+                                    <Button>그룹버튼3</Button>
+                                </ButtonGroup>
+                                <ButtonGroup className="mr-2">
+                                    <Button variant="success">다른 그룹버튼1</Button>
+                                    <Button variant="success">다른 그룹버튼2</Button>
+                                    <Button variant="success">다른 그룹버튼3</Button>
+                                </ButtonGroup>
+                            </ButtonToolbar>
+                            <Row className="mb-3">
+                                <Col xs={2}>
+                                    <Carousel>
+                                        <Carousel.Item>
+                                            <img className="d-block w-100" src={bg} alt="t" />
+                                            <Carousel.Caption>
+                                                <h3>First slide label</h3>
+                                                <p>서브 텍스트</p>
+                                            </Carousel.Caption>
+                                        </Carousel.Item>
+                                        <Carousel.Item>
+                                            <img className="d-block w-100" src={bg} alt="t" />
+                                            <Carousel.Caption>
+                                                <h3>Second slide label</h3>
+                                                <p>서브 텍스트</p>
+                                            </Carousel.Caption>
+                                        </Carousel.Item>
+                                    </Carousel>
+                                </Col>
+                                <Col xs={3}>
+                                    <ListGroup as="ul">
+                                        <ListGroup.Item as="li" active>
+                                            액티브 아이템
+                                        </ListGroup.Item>
+                                        <ListGroup.Item as="li">아이템</ListGroup.Item>
+                                        <ListGroup.Item as="li" variant="info">
+                                            아이템
+                                        </ListGroup.Item>
+                                        <ListGroup.Item as="li" disabled>
+                                            사용불가 아이템
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                </Col>
+                                <Col xs={7}>
+                                    <Jumbotron>
+                                        <h1>TEST</h1>
+                                        <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                                        <p>
+                                            <Button variant="primary">Learn more</Button>
+                                        </p>
+                                    </Jumbotron>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
             <Row>
@@ -51,6 +145,16 @@ const MokaDashboardPage = () => {
                                     <Form.Label>1) 기본 텍스트 인풋</Form.Label>
                                     <Form.Control placeholder="입력창입니다" />
                                 </Form.Group>
+
+                                {/* inline text input */}
+                                <Form.Row>
+                                    <Form.Label column xs={2}>
+                                        1) 기본 텍스트 인풋
+                                    </Form.Label>
+                                    <Col xs={10}>
+                                        <Form.Control placeholder="입력창입니다" />
+                                    </Col>
+                                </Form.Row>
 
                                 {/* textarea */}
                                 <Form.Group>
@@ -240,6 +344,19 @@ const MokaDashboardPage = () => {
                                 <div>
                                     <MokaImageInput />
                                 </div>
+                            </Form.Group>
+
+                            <Form.Group>
+                                <MokaAlert variant="primary">
+                                    <MokaAlert.Heading>Alert Heading 영역</MokaAlert.Heading>
+                                    텍스트 영역
+                                    <MokaAlert.Link href="#">링크</MokaAlert.Link>입니다.
+                                </MokaAlert>
+                                <MokaAlert variant="primary" outline dismissible>
+                                    <MokaAlert.Heading>Alert Heading 영역</MokaAlert.Heading>
+                                    outline, dismissible 상태
+                                    <MokaAlert.Link href="#">링크</MokaAlert.Link>입니다.
+                                </MokaAlert>
                             </Form.Group>
                         </Card.Body>
                     </Card>

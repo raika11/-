@@ -5,29 +5,27 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 
 const MokaTabs = (props) => {
-    const { className, fill } = props;
+    const { className, fill, id, tabs, tabNavs } = props;
 
     return (
         <div className={clsx('tab', 'card-tab', className)}>
-            <Tab.Container id={`tab-${Math.ceil(Math.random() * 10)}`} defaultActiveKey="first">
+            <Tab.Container id={id} defaultActiveKey={0}>
                 <div className="d-flex">
                     <Nav fill={fill} variant="tabs">
-                        <Nav.Item>
-                            <Nav.Link eventKey="first">Tab 1</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="second">Tab 2</Nav.Link>
-                        </Nav.Item>
+                        {tabNavs.map((nav, idx) => (
+                            <Nav.Item key={idx}>
+                                <Nav.Link eventKey={idx}>{nav}</Nav.Link>
+                            </Nav.Item>
+                        ))}
                     </Nav>
                 </div>
                 <div className="d-flex">
                     <Tab.Content>
-                        <Tab.Pane eventKey="first">
-                            <p>Test1</p>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="second">
-                            <p>Test2</p>
-                        </Tab.Pane>
+                        {tabs.map((tab, idx) => (
+                            <Tab.Pane key={idx} eventKey={idx}>
+                                {tab}
+                            </Tab.Pane>
+                        ))}
                     </Tab.Content>
                 </div>
             </Tab.Container>

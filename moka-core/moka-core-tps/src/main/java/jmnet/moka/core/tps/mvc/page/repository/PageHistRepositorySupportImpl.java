@@ -45,16 +45,17 @@ public class PageHistRepositorySupportImpl extends QuerydslRepositorySupport
 
         // WHERE 조건
         builder.and(pageHist.page.pageSeq.eq(search.getSeq()));
-        if (!McpString.isEmpty(searchType) && !McpString.isEmpty(keyword)) {
-            if (searchType.equals("createYmdt")) {
-                builder.and(pageHist.createYmdt.startsWith(keyword));
-            } else if (searchType.equals("creator")) {
-                builder.and(pageHist.creator.contains(keyword));
-            } else if (searchType.equals("all")) {
-                builder.and(pageHist.creator.contains(keyword)
-                        .or(pageHist.createYmdt.startsWith(keyword)));
-            }
-        }
+        // TODO MIRA
+//        if (!McpString.isEmpty(searchType) && !McpString.isEmpty(keyword)) {
+//            if (searchType.equals("createYmdt")) {
+//                builder.and(pageHist.createYmdt.startsWith(keyword));
+//            } else if (searchType.equals("creator")) {
+//                builder.and(pageHist.creator.contains(keyword));
+//            } else if (searchType.equals("all")) {
+//                builder.and(pageHist.creator.contains(keyword)
+//                        .or(pageHist.createYmdt.startsWith(keyword)));
+//            }
+//        }
 
         JPQLQuery<PageHist> query = queryFactory.selectFrom(pageHist);
         query = getQuerydsl().applyPagination(pageable, query);

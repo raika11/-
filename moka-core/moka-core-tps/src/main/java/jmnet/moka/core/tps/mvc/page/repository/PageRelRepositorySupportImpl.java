@@ -92,15 +92,17 @@ public class PageRelRepositorySupportImpl extends QuerydslRepositorySupport
         builder.and(pageRel.relType.eq(relType));
         builder.and(pageRel.relSeq.eq(relSeq));
 
-        JPQLQuery<PageRel> query = queryFactory
-                .select(Projections.fields(PageRel.class, page.as("page"), domain.as("domain"),
-                        pageRel.relType.as("relType"), pageRel.relSeq.as("relSeq"),
-                        // containerRel.relParentType.as("relParentType"),
-                        // containerRel.relParentSeq.as("relParentSeq"),
-                        pageRel.relOrder.as("relOrder")))
-                .distinct().from(pageRel).where(builder).join(domain)
-                .on(pageRel.domain.domainId.eq(domain.domainId)).fetchJoin().join(page)
-                .on(pageRel.page.pageSeq.eq(page.pageSeq)).fetchJoin();
-        return query.fetch();
+        // TODO MIRA
+//        JPQLQuery<PageRel> query = queryFactory
+//                .select(Projections.fields(PageRel.class, page.as("page"), domain.as("domain"),
+//                        pageRel.relType.as("relType"), pageRel.relSeq.as("relSeq"),
+//                        // containerRel.relParentType.as("relParentType"),
+//                        // containerRel.relParentSeq.as("relParentSeq"),
+//                        pageRel.relOrder.as("relOrder")))
+//                .distinct().from(pageRel).where(builder).join(domain)
+//                .on(pageRel.domain.domainId.eq(domain.domainId)).fetchJoin().join(page)
+//                .on(pageRel.page.pageSeq.eq(page.pageSeq)).fetchJoin();
+//        return query.fetch();
+        return null;
     }
 }

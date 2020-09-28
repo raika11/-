@@ -1,12 +1,12 @@
 package jmnet.moka.core.tms.template.parse.model;
 
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.item.PageItem;
 
 /**
@@ -28,7 +28,7 @@ public class PgTemplateRoot extends MspTemplateRoot {
 
     @Override
     public void merge(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
-        context.set(MspConstants.MERGE_CONTEXT_PAGE, this.item);
+        context.set(MokaConstants.MERGE_CONTEXT_PAGE, this.item);
         // 2020-08-25 mte:data가 사용하는 부분보다 앞서 있다면 필요시 마다 로딩해도 문제가 없다.
         //        this.preloadData((MspTemplateMerger) merger, this.templateRoot, context);
         this.templateRoot.merge(merger, context, sb);

@@ -11,7 +11,7 @@ import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.AdItem;
@@ -47,7 +47,7 @@ public class AdMerger extends MspAbstractElementMerger {
             throws TemplateMergeException {
         TemplateRoot templateRoot = null;
         try {
-            templateRoot = templateMerger.getParsedTemplate(MspConstants.ITEM_AD,
+            templateRoot = templateMerger.getParsedTemplate(MokaConstants.ITEM_AD,
                     element.getAttribute(Constants.ATTR_ID));
         } catch (Exception e) {
             throw new TemplateMergeException("Child Template Load Fail", element, e);
@@ -56,7 +56,7 @@ public class AdMerger extends MspAbstractElementMerger {
         // 광고의 기간을 체크한다
         AdItem adItem = (AdItem) ((MspTemplateRoot) templateRoot).getItem();
         if (adItem.getBoolYN(ItemConstants.AD_USE_YN)) {
-            String now = LocalDateTime.now().format(MspConstants.dtf);
+            String now = LocalDateTime.now().format(MokaConstants.dtf);
             String start = adItem.getString(ItemConstants.AD_PERIOD_START_YMDT);
             if (start != null && now.compareTo(start) < 0) {
                 sb.append("<!-- Before Ad Date -->");

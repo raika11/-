@@ -3,12 +3,13 @@ package jmnet.moka.core.tms.mvc;
 import java.util.Enumeration;
 import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriComponentsBuilder;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.item.PageItem;
 
 public class HttpParamFactory {
@@ -46,22 +47,22 @@ public class HttpParamFactory {
             String paramName = paramNameEnumeration.nextElement();
             String value = request.getParameter(paramName);
             if (paramName.equalsIgnoreCase(page)) {
-                paramName = MspConstants.PARAM_PAGE;
+                paramName = MokaConstants.PARAM_PAGE;
             } else if (paramName.equalsIgnoreCase(count)) {
-                paramName = MspConstants.PARAM_COUNT;
+                paramName = MokaConstants.PARAM_COUNT;
             } else if (paramName.equalsIgnoreCase(sort)) {
-                paramName = MspConstants.PARAM_SORT;
+                paramName = MokaConstants.PARAM_SORT;
             }
             if (value != null) {
                 parameterMap.put(paramName, value);
             }
         }
         // page, count가 없을 경우 default값을 설정한다.
-        if (parameterMap.containsKey(MspConstants.PARAM_PAGE) == false) {
-            parameterMap.put(MspConstants.PARAM_PAGE, this.pageValue);
+        if (parameterMap.containsKey(MokaConstants.PARAM_PAGE) == false) {
+            parameterMap.put(MokaConstants.PARAM_PAGE, this.pageValue);
         }
-        if (parameterMap.containsKey(MspConstants.PARAM_COUNT) == false) {
-            parameterMap.put(MspConstants.PARAM_COUNT, this.countValue);
+        if (parameterMap.containsKey(MokaConstants.PARAM_COUNT) == false) {
+            parameterMap.put(MokaConstants.PARAM_COUNT, this.countValue);
         }
         return parameterMap;
     }
@@ -75,15 +76,15 @@ public class HttpParamFactory {
             builder.queryParam(entry.getKey(), entry.getValue());
         }
 
-        if (templateRoot.getItemType().equals(MspConstants.ITEM_PAGE) == false) {
-            PageItem pageItem = (PageItem) context.get(MspConstants.MERGE_CONTEXT_PAGE);
+        if (templateRoot.getItemType().equals(MokaConstants.ITEM_PAGE) == false) {
+            PageItem pageItem = (PageItem) context.get(MokaConstants.MERGE_CONTEXT_PAGE);
             if (pageItem != null) {
-                builder.queryParam(MspConstants.PARAM_PAGE_ITEM_ID, pageItem.getItemId());
+                builder.queryParam(MokaConstants.PARAM_PAGE_ITEM_ID, pageItem.getItemId());
             }
-            if (templateRoot.getItemType().equals(MspConstants.ITEM_TEMPLATE)) {
-                String relCp = element.getAttribute(MspConstants.ATTR_REL_CP);
+            if (templateRoot.getItemType().equals(MokaConstants.ITEM_TEMPLATE)) {
+                String relCp = element.getAttribute(MokaConstants.ATTR_REL_CP);
                 if (relCp != null) {
-                    builder.queryParam(MspConstants.PARAM_REL_CP, relCp);
+                    builder.queryParam(MokaConstants.PARAM_REL_CP, relCp);
                 }
             }
         }

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jmnet.moka.common.data.mybatis.support.McpMybatis;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetSearchDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
@@ -83,7 +83,7 @@ public class DatasetServiceImpl implements DatasetService {
             return true;
 
         // compnent, container, skin, page
-        if (relationHelper.hasRelations(datasetSeq, MspConstants.ITEM_DATASET))
+        if (relationHelper.hasRelations(datasetSeq, MokaConstants.ITEM_DATASET))
             return true;
 
         return false;

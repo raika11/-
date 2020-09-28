@@ -12,7 +12,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.core.tps.mvc.container.entity.QContainer;
 import jmnet.moka.core.tps.mvc.container.entity.QContainerRel;
 import jmnet.moka.core.tps.mvc.domain.entity.QDomain;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.container.entity.ContainerRel;
@@ -32,9 +32,9 @@ public class ContainerRelRepositorySupportImpl extends QuerydslRepositorySupport
         QContainerRel containerRel = QContainerRel.containerRel;
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(containerRel.relParentType.eq(MspConstants.ITEM_COMPONENT));
+        builder.and(containerRel.relParentType.eq(MokaConstants.ITEM_COMPONENT));
         builder.and(containerRel.relParentSeq.eq(component.getComponentSeq()));
-        builder.and(containerRel.relType.eq(MspConstants.ITEM_TEMPLATE));
+        builder.and(containerRel.relType.eq(MokaConstants.ITEM_TEMPLATE));
 
         queryFactory.update(containerRel).where(builder)
                 .set(containerRel.relSeq, component.getTemplate().getTemplateSeq()).execute();
@@ -49,9 +49,9 @@ public class ContainerRelRepositorySupportImpl extends QuerydslRepositorySupport
             // datasetSeq가 변경된 경우: update
             if (!orgComponent.getDataType().equals(TpsConstants.DATATYPE_NONE)) {
                 BooleanBuilder builder = new BooleanBuilder();
-                builder.and(containerRel.relParentType.eq(MspConstants.ITEM_COMPONENT));
+                builder.and(containerRel.relParentType.eq(MokaConstants.ITEM_COMPONENT));
                 builder.and(containerRel.relParentSeq.eq(newComponent.getComponentSeq()));
-                builder.and(containerRel.relType.eq(MspConstants.ITEM_DATASET));
+                builder.and(containerRel.relType.eq(MokaConstants.ITEM_DATASET));
 
                 queryFactory.update(containerRel).where(builder)
                         .set(containerRel.relSeq, newComponent.getDataset().getDatasetSeq())
@@ -65,9 +65,9 @@ public class ContainerRelRepositorySupportImpl extends QuerydslRepositorySupport
             // datasetSeq가 있다가 삭제된 경우: delete
             if (!orgComponent.getDataType().equals(TpsConstants.DATATYPE_NONE)) {
                 BooleanBuilder builder = new BooleanBuilder();
-                builder.and(containerRel.relParentType.eq(MspConstants.ITEM_COMPONENT));
+                builder.and(containerRel.relParentType.eq(MokaConstants.ITEM_COMPONENT));
                 builder.and(containerRel.relParentSeq.eq(newComponent.getComponentSeq()));
-                builder.and(containerRel.relType.eq(MspConstants.ITEM_DATASET));
+                builder.and(containerRel.relType.eq(MokaConstants.ITEM_DATASET));
 
                 queryFactory.delete(containerRel).where(builder).execute();
             }

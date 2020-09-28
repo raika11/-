@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ import org.springframework.web.servlet.view.AbstractView;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
 
 /**
@@ -49,11 +50,11 @@ public class CustomMergeView extends AbstractView {
             TemplateParseException, NoHandlerFoundException, TemplateMergeException {
 
         // 머지 옵션설정
-        MergeContext mergeContext = (MergeContext) request.getAttribute(MspConstants.MERGE_CONTEXT);
+        MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
 
-        String domainId = (String) mergeContext.get(MspConstants.MERGE_DOMAIN_ID);
-        String templateType = (String) mergeContext.get(MspConstants.MERGE_ITEM_TYPE);
-        String path = (String) mergeContext.get(MspConstants.MERGE_PATH);
+        String domainId = (String) mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
+        String templateType = (String) mergeContext.get(MokaConstants.MERGE_ITEM_TYPE);
+        String path = (String) mergeContext.get(MokaConstants.MERGE_PATH);
 
         long startTime = System.currentTimeMillis();
 
@@ -62,7 +63,7 @@ public class CustomMergeView extends AbstractView {
         mergeContext.getMergeOptions().setDebug(templateMergeDebug);
 
         // 페이지 content-type
-        Object pageInfo = mergeContext.get(MspConstants.MERGE_CONTEXT_PAGE);
+        Object pageInfo = mergeContext.get(MokaConstants.MERGE_CONTEXT_PAGE);
         if (pageInfo != null && pageInfo instanceof Map) {
             String pageType = ((String) ((Map<?, ?>) pageInfo).get("pageType"));
             response.setContentType(pageType + "; charset=UTF-8");

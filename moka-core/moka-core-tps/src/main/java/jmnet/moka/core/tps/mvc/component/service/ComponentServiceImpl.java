@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import javax.persistence.EntityManager;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.RelSearchDTO;
@@ -313,10 +314,10 @@ public class ComponentServiceImpl implements ComponentService {
 
     @Override
     public Page<Component> findRelList(RelSearchDTO search, Pageable pageable) {
-        if (search.getRelSeqType().equals(MspConstants.ITEM_TEMPLATE)) {
+        if (search.getRelSeqType().equals(MokaConstants.ITEM_TEMPLATE)) {
             // 템플릿
             return componentRepository.findListByTemplate(search, pageable);
-        } else if (search.getRelSeqType().equals(MspConstants.ITEM_DATASET)) {
+        } else if (search.getRelSeqType().equals(MokaConstants.ITEM_DATASET)) {
             // 데이터셋
             return componentRepository.findListByDataset(search, pageable);
         }

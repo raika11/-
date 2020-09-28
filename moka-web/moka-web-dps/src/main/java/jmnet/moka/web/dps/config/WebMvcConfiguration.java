@@ -3,6 +3,7 @@
  */
 package jmnet.moka.web.dps.config;
 
+import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.resource.PathResourceResolver;
-import jmnet.moka.core.common.mvc.interceptor.MspCommonHandlerInterceptor;
 
 /**
  * <pre>
@@ -37,7 +37,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Bean(name = "dpsHandlerInterceptor")
     public HandlerInterceptorAdapter dpsHandlerInterceptor() {
-        return new MspCommonHandlerInterceptor("DPS");
+        return new MokaCommonHandlerInterceptor("DPS");
     }
 
 

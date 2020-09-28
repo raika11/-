@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +14,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.common.data.mybatis.support.McpMybatis;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.template.ParsedItemDTO;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
@@ -140,7 +141,7 @@ public class SkinServiceImpl implements SkinService {
             // }
             //
             // } else
-            if (item.getNodeName().equals(MspConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
+            if (item.getNodeName().equals(MokaConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
                                                                              // 추가한다.
                 Optional<Component> component =
                         componentService.findByComponentSeq(Long.parseLong(item.getId()));
@@ -149,9 +150,9 @@ public class SkinServiceImpl implements SkinService {
 
                     // template 아이템 추가
                     SkinRel relationTP = new SkinRel();
-                    relationTP.setRelType(MspConstants.ITEM_TEMPLATE);
+                    relationTP.setRelType(MokaConstants.ITEM_TEMPLATE);
                     relationTP.setRelSeq(component.get().getTemplate().getTemplateSeq());
-                    relationTP.setRelParentType(MspConstants.ITEM_COMPONENT);
+                    relationTP.setRelParentType(MokaConstants.ITEM_COMPONENT);
                     relationTP.setRelParentSeq(component.get().getComponentSeq());
                     relationTP.setRelOrder(item.getOrder());
 
@@ -165,9 +166,9 @@ public class SkinServiceImpl implements SkinService {
                     // data 아이템 추가
                     if (component.get().getDataset() != null) {
                         SkinRel relatioDS = new SkinRel();
-                        relatioDS.setRelType(MspConstants.ITEM_DATASET);
+                        relatioDS.setRelType(MokaConstants.ITEM_DATASET);
                         relatioDS.setRelSeq(component.get().getDataset().getDatasetSeq());
-                        relatioDS.setRelParentType(MspConstants.ITEM_COMPONENT);
+                        relatioDS.setRelParentType(MokaConstants.ITEM_COMPONENT);
                         relatioDS.setRelParentSeq(component.get().getComponentSeq());
                         relatioDS.setRelOrder(item.getOrder());
 
@@ -250,14 +251,14 @@ public class SkinServiceImpl implements SkinService {
             if (!newComponent.getDataType().equals(TpsConstants.DATATYPE_NONE)
                     && orgComponent.getDataType().equals(TpsConstants.DATATYPE_NONE)) {
 
-                List<SkinRel> relList = skinRelRepository.findList(MspConstants.ITEM_COMPONENT,
+                List<SkinRel> relList = skinRelRepository.findList(MokaConstants.ITEM_COMPONENT,
                         newComponent.getComponentSeq());
 
                 for (SkinRel rel : relList) {
                     SkinRel newRel = SkinRel.builder().skin(rel.getSkin()).domain(rel.getDomain())
-                            .relType(MspConstants.ITEM_DATASET)
+                            .relType(MokaConstants.ITEM_DATASET)
                             .relSeq(newComponent.getDataset().getDatasetSeq())
-                            .relParentType(MspConstants.ITEM_COMPONENT)
+                            .relParentType(MokaConstants.ITEM_COMPONENT)
                             .relParentSeq(newComponent.getComponentSeq())
                             .relOrder(rel.getRelOrder()).build();
                     skinRelRepository.save(newRel);

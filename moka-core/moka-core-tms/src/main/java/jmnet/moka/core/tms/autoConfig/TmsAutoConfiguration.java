@@ -3,6 +3,8 @@ package jmnet.moka.core.tms.autoConfig;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,6 @@ import jmnet.moka.common.proxy.http.HttpProxy;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
-import jmnet.moka.core.common.mvc.interceptor.MspCommonHandlerInterceptor;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.content.ContentDelegator;
@@ -283,7 +284,7 @@ public class TmsAutoConfiguration {
     @Bean(name = "tmsHandlerInterceptor")
     @ConditionalOnMissingBean(name = "tmsHandlerInterceptor")
     public HandlerInterceptorAdapter tmsHandlerInterceptor() {
-        return new MspCommonHandlerInterceptor("TMS");
+        return new MokaCommonHandlerInterceptor("TMS");
     }
 
     private Contact contact = new Contact("서울시스템", "http://joongang.co.kr", "mater@joongang.co.kr");

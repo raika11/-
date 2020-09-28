@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.ui.Model;
 import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
@@ -46,7 +47,7 @@ public class CustomMergeHandler {
     public String merge(HttpServletRequest request, HttpServletResponse response, Model model)
             throws IOException {
         // 머지 옵션설정
-        MergeContext mergeContext = (MergeContext) request.getAttribute(MspConstants.MERGE_CONTEXT);
+        MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
 
         if (request.getParameterMap().containsKey("wrapItem"))
             mergeContext.getMergeOptions().setWrapItem(true);
@@ -56,20 +57,20 @@ public class CustomMergeHandler {
             mergeContext.getMergeOptions().setShowItemId(request.getParameter("showItemId"));
 
         // 도메인 정보를 설정한다.
-        String domainId = (String) mergeContext.get(MspConstants.MERGE_DOMAIN_ID);
+        String domainId = (String) mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
         Map<String, Object> domainInfo = domainResolver.getDomainInfoById(domainId);
-        mergeContext.set(MspConstants.MERGE_CONTEXT_DOMAIN, domainInfo);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_DOMAIN, domainInfo);
 
         // 코드정보를 설정한다.
         Map<String, String> domainCodeMapInfo = domainResolver.getReservedMap(domainId);
         if (domainCodeMapInfo != null) {
-            mergeContext.set(MspConstants.MERGE_CONTEXT_RESERVED, domainCodeMapInfo);
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_RESERVED, domainCodeMapInfo);
         }
 
         // 페이지 정보를 설정한다.
-        String path = (String) mergeContext.get(MspConstants.MERGE_PATH);
-        String itemType = (String) mergeContext.get(MspConstants.MERGE_ITEM_TYPE);
-        String itemId = (String) mergeContext.get(MspConstants.MERGE_ITEM_ID);
+        String path = (String) mergeContext.get(MokaConstants.MERGE_PATH);
+        String itemType = (String) mergeContext.get(MokaConstants.MERGE_ITEM_TYPE);
+        String itemId = (String) mergeContext.get(MokaConstants.MERGE_ITEM_ID);
 
         try {
             MergeItem pageItem =
@@ -83,7 +84,7 @@ public class CustomMergeHandler {
                         return null;
                     }
                 }
-                mergeContext.set(MspConstants.MERGE_CONTEXT_PAGE, pageItem);
+                mergeContext.set(MokaConstants.MERGE_CONTEXT_PAGE, pageItem);
             } else {
                 response.sendError(HttpStatus.NOT_FOUND.value());
                 logger.error("PageInfo not found : {} {} {}", path, itemType, itemId);
@@ -98,7 +99,7 @@ public class CustomMergeHandler {
         // Htttp 파라미터 설정    
         mergeContext.set(Constants.PARAM, this.httpParamFactory.creatHttpParamMap(request));
 
-        model.addAttribute(MspConstants.MERGE_CONTEXT, mergeContext);
+        model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
         return this.viewName;
     }
 

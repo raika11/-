@@ -7,6 +7,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +31,6 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
@@ -183,8 +184,8 @@ public class ComponentRestController {
      * </pre>
      * 
      * @param request HTTP요청
-     * @param DTOs 컴포넌트 목록
-     * @param pricipal Principal
+     * @param validList 컴포넌트 목록
+     * @param principal Principal
      * @return 등록된 컴포넌트
      * @throws InvalidDataException 데이터가 유효하지 않음
      * @throws Exception 에러
@@ -280,7 +281,7 @@ public class ComponentRestController {
 
             // purge 날림!!!!
             purgeHelper.purgeTms(request, returnVal.getDomain().getDomainId(),
-                    MspConstants.ITEM_COMPONENT, returnVal.getComponentSeq());
+                    MokaConstants.ITEM_COMPONENT, returnVal.getComponentSeq());
 
             // 리턴
             ResultDTO<ComponentDTO> resultDTO = new ResultDTO<ComponentDTO>(returnValDTO);
@@ -390,7 +391,7 @@ public class ComponentRestController {
                 .orElseThrow(() -> new NoDataException(message));
 
         // 관련아이템 확인
-        Boolean hasRels = relationHelper.hasRelations(componentSeq, MspConstants.ITEM_COMPONENT);
+        Boolean hasRels = relationHelper.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
         String delErrorMsg = messageByLocale.get("tps.component.error.delete.related", request);
         if (hasRels) {
             throw new Exception(delErrorMsg);
@@ -464,7 +465,7 @@ public class ComponentRestController {
         String message = messageByLocale.get("tps.component.error.noContent", request);
         componentService.findByComponentSeq(seq).orElseThrow(() -> new NoDataException(message));
 
-        Boolean chkRels = relationHelper.hasRelations(seq, MspConstants.ITEM_COMPONENT);
+        Boolean chkRels = relationHelper.hasRelations(seq, MokaConstants.ITEM_COMPONENT);
         ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
 
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -487,7 +488,7 @@ public class ComponentRestController {
             @Valid @SearchParam RelSearchDTO search) throws NoDataException {
 
         search.setRelSeq(seq);
-        search.setRelSeqType(MspConstants.ITEM_COMPONENT);
+        search.setRelSeqType(MokaConstants.ITEM_COMPONENT);
 
         // 컴포넌트 확인
         String message = messageByLocale.get("tps.component.error.noContent", request);

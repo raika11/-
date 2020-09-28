@@ -12,7 +12,7 @@ import jmnet.moka.common.proxy.http.HttpProxy;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ContentSkinItem;
@@ -62,7 +62,7 @@ public class ContentDelegator {
             String skinId = dataMap.get("SKIN_ID").toString();
             ContentSkinItem skinItem =
                     (ContentSkinItem) this.templateMerger.getItem(domainId,
-                            MspConstants.ITEM_CONTENT_SKIN,
+                            MokaConstants.ITEM_CONTENT_SKIN,
                             skinId);
             return skinItem;
         } catch (IOException | URISyntaxException | ParseException | TemplateLoadException

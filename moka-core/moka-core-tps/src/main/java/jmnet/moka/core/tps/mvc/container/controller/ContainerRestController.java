@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+import jmnet.moka.core.common.MokaConstants;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,6 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.dto.HistDTO;
@@ -165,7 +165,7 @@ public class ContainerRestController {
      * 컨테이너등록
      * 
      * @param request 요청
-     * @param ContainerDTO 등록할 컨테이너정보
+     * @param containerDTO 등록할 컨테이너정보
      * @param principal 로그인사용자 세션
      * @return 등록된 컨테이너정보
      * @throws Exception
@@ -195,7 +195,7 @@ public class ContainerRestController {
      * 
      * @param request 요청
      * @param containerSeq 컨테이너번호
-     * @param ContainerDTO 수정할 컨테이너정보
+     * @param containerDTO 수정할 컨테이너정보
      * @param principal 로그인 사용자 세션
      * @return 수정된 컨테이너정보
      * @throws InvalidDataException 데이타 유효성오류
@@ -226,7 +226,7 @@ public class ContainerRestController {
 
         // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
         purgeHelper.purgeTms(request, returnValue.getDomain().getDomainId(),
-                MspConstants.ITEM_CONTAINER, returnValue.getContainerSeq());
+                MokaConstants.ITEM_CONTAINER, returnValue.getContainerSeq());
 
         // 결과리턴
         ContainerDTO dto = modelMapper.map(returnValue, ContainerDTO.class);
@@ -264,7 +264,7 @@ public class ContainerRestController {
 
 
         // 연관 데이터 확인
-        if (relationHelper.hasRelations(containerSeq, MspConstants.ITEM_CONTAINER)) {
+        if (relationHelper.hasRelations(containerSeq, MokaConstants.ITEM_CONTAINER)) {
             List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
             String message =
@@ -321,7 +321,7 @@ public class ContainerRestController {
     /**
      * Container History Entity -> History DTO 변환
      * 
-     * @param history정보
+     * @param hist history정보
      * @return historyDTO
      */
     private HistDTO convertToHistDto(ContainerHist hist) {
@@ -349,7 +349,7 @@ public class ContainerRestController {
             @Valid @SearchParam RelSearchDTO search) throws NoDataException, InvalidDataException {
 
         search.setRelSeq(containerSeq);
-        search.setRelSeqType(MspConstants.ITEM_CONTAINER);
+        search.setRelSeqType(MokaConstants.ITEM_CONTAINER);
 
         return relationHelper.findRelations(search);
     }
@@ -360,7 +360,7 @@ public class ContainerRestController {
      * </pre>
      * 
      * @param request HTTP요청
-     * @param seq 컴포넌트아이디
+     * @param containerSeq 컨테이너 아이디
      * @return 관련 아이템 존재 여부
      * @throws NoDataException 데이터없음
      */
@@ -374,7 +374,7 @@ public class ContainerRestController {
     	containerService.findByContainerSeq(containerSeq).orElseThrow(() -> new NoDataException(
                 messageByLocale.get("tps.dataset.error.noContent", request)));
 
-        Boolean chkRels = relationHelper.hasRelations(containerSeq, MspConstants.ITEM_CONTAINER);
+        Boolean chkRels = relationHelper.hasRelations(containerSeq, MokaConstants.ITEM_CONTAINER);
         ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
 
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);

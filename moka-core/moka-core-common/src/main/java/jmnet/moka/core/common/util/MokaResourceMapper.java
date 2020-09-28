@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 
-public class MspResourceMapper {
+public class MokaResourceMapper {
 
 	public static List<Map<String,Object>> getDomainInfoMapList(String mspRoot) throws IOException {
-		File domainsJson = ResourceMapper.getFile(mspRoot+"/" + MspConstants.DOMAINS_JSON);
+		File domainsJson = ResourceMapper.getFile(mspRoot+"/" + MokaConstants.DOMAINS_JSON);
         return ResourceMapper.readJson(domainsJson, ResourceMapper.TYPEREF_LIST_MAP);
 	}
 
@@ -26,7 +26,7 @@ public class MspResourceMapper {
 	}
 
 	public static <T> T getCodeInfoMap(String mspRoot, String domainId, TypeReference<T> returnType) throws IOException {
-		File codesJson = new File(getTemplateDomainRootPath(mspRoot, domainId)+"/" +MspConstants.DOMAIN_CODE_JSON);
+		File codesJson = new File(getTemplateDomainRootPath(mspRoot, domainId)+"/" + MokaConstants.DOMAIN_CODE_JSON);
 		return ResourceMapper.readJson(codesJson, returnType);
 	}
 	
@@ -51,7 +51,7 @@ public class MspResourceMapper {
 	}
 
 	public static String getTemplateRootPath(String mspRoot) throws IOException {
-		return ResourceMapper.getAbsolutePath(String.join("/",mspRoot,MspConstants.ROOT_TEMPLATE));
+		return ResourceMapper.getAbsolutePath(String.join("/",mspRoot, MokaConstants.ROOT_TEMPLATE));
 	}
 
 	public static String getTemplateDomainRootPath(String mspRoot, String domainId) throws IOException {
@@ -59,18 +59,18 @@ public class MspResourceMapper {
 	}
 	
 	public static String getPagePath(String mspRoot, String domainId, String path) throws IOException {
-		return String.join("/", getTemplateDomainRootPath(mspRoot, domainId),MspConstants.ITEM_PAGE,path);
+		return String.join("/", getTemplateDomainRootPath(mspRoot, domainId), MokaConstants.ITEM_PAGE,path);
 	}
 	
 	public static String getComponentPath(String mspRoot, String domainId, String id) throws IOException {
-		return String.join("/", getTemplateDomainRootPath(mspRoot, domainId),MspConstants.ITEM_COMPONENT, id);
+		return String.join("/", getTemplateDomainRootPath(mspRoot, domainId), MokaConstants.ITEM_COMPONENT, id);
 	}
 	
 	public static String getTemplatePath(String mspRoot, String domainId, String id) throws IOException {
-		return String.join("/", getTemplateDomainRootPath(mspRoot, domainId),MspConstants.ITEM_TEMPLATE, id);
+		return String.join("/", getTemplateDomainRootPath(mspRoot, domainId), MokaConstants.ITEM_TEMPLATE, id);
 	}
 	
 	public static String getContainerPath(String mspRoot, String domainId, String id) throws IOException {
-		return String.join("/", getTemplateDomainRootPath(mspRoot, domainId),MspConstants.ITEM_CONTAINER, id);
+		return String.join("/", getTemplateDomainRootPath(mspRoot, domainId), MokaConstants.ITEM_CONTAINER, id);
 	}
 }

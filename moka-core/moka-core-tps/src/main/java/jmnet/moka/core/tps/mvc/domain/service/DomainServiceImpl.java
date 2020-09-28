@@ -18,7 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
@@ -59,7 +59,7 @@ public class DomainServiceImpl implements DomainService {
     @Autowired
     private UploadFileHelper uploadFileHelper;
     
-    @PersistenceContext(name = MspConstants.PERSISTANCE_UNIT_TPS)
+    @PersistenceContext(name = MokaConstants.PERSISTANCE_UNIT_TPS)
     private final EntityManager entityManager;
     
     @Autowired

@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -21,7 +23,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import jmnet.moka.core.common.MspConstants;
 
 /**
  * <pre>
@@ -61,9 +62,9 @@ public class ResourceMapper {
     }
 
     public static void setMspDefaultConfiguration(ObjectMapper objectMapper) {
-        SimpleDateFormat sdf = new SimpleDateFormat(MspConstants.JSON_DATE_FORMAT);
+        SimpleDateFormat sdf = new SimpleDateFormat(MokaConstants.JSON_DATE_FORMAT);
         objectMapper.setDateFormat(sdf);
-        objectMapper.setTimeZone(TimeZone.getTimeZone(MspConstants.JSON_DATE_TIME_ZONE));
+        objectMapper.setTimeZone(TimeZone.getTimeZone(MokaConstants.JSON_DATE_TIME_ZONE));
         if (ResourceMapper.PRETTY_JSON)
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }

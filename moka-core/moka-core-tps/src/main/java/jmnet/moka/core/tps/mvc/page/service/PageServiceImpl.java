@@ -18,7 +18,7 @@ import jmnet.moka.common.data.mybatis.support.McpMybatis;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.template.ParsedItemDTO;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
@@ -211,7 +211,7 @@ public class PageServiceImpl implements PageService {
             // }
             // }
             // } else
-            if (item.getNodeName().equals(MspConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
+            if (item.getNodeName().equals(MokaConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
                                                                              // 추가한다.
                 Optional<Component> component =
                         componentService.findByComponentSeq(Long.parseLong(item.getId()));
@@ -220,9 +220,9 @@ public class PageServiceImpl implements PageService {
 
                     // template 아이템 추가
                     PageRel relationTP = new PageRel();
-                    relationTP.setRelType(MspConstants.ITEM_TEMPLATE);
+                    relationTP.setRelType(MokaConstants.ITEM_TEMPLATE);
                     relationTP.setRelSeq(component.get().getTemplate().getTemplateSeq());
-                    relationTP.setRelParentType(MspConstants.ITEM_COMPONENT);
+                    relationTP.setRelParentType(MokaConstants.ITEM_COMPONENT);
                     relationTP.setRelParentSeq(component.get().getComponentSeq());
                     relationTP.setRelOrder(item.getOrder());
 
@@ -236,9 +236,9 @@ public class PageServiceImpl implements PageService {
                     // data 아이템 추가
                     if (component.get().getDataset() != null) {
                         PageRel relatioDS = new PageRel();
-                        relatioDS.setRelType(MspConstants.ITEM_DATASET);
+                        relatioDS.setRelType(MokaConstants.ITEM_DATASET);
                         relatioDS.setRelSeq(component.get().getDataset().getDatasetSeq());
-                        relatioDS.setRelParentType(MspConstants.ITEM_COMPONENT);
+                        relatioDS.setRelParentType(MokaConstants.ITEM_COMPONENT);
                         relatioDS.setRelParentSeq(component.get().getComponentSeq());
                         relatioDS.setRelOrder(item.getOrder());
 
@@ -257,7 +257,7 @@ public class PageServiceImpl implements PageService {
     /**
      * 히스토리저장
      * 
-     * @param saveSkin 스킨정보
+     * @param savePage 페이지
      * @param workType 작업유형
      * @param userName 작업자
      */
@@ -390,14 +390,14 @@ public class PageServiceImpl implements PageService {
             if (!newComponent.getDataType().equals(TpsConstants.DATATYPE_NONE)
                     && orgComponent.getDataType().equals(TpsConstants.DATATYPE_NONE)) {
 
-                List<PageRel> relList = pageRelRepository.findList(MspConstants.ITEM_COMPONENT,
+                List<PageRel> relList = pageRelRepository.findList(MokaConstants.ITEM_COMPONENT,
                         newComponent.getComponentSeq());
 
                 for (PageRel rel : relList) {
                     PageRel newRel = PageRel.builder().page(rel.getPage()).domain(rel.getDomain())
-                            .relType(MspConstants.ITEM_DATASET)
+                            .relType(MokaConstants.ITEM_DATASET)
                             .relSeq(newComponent.getDataset().getDatasetSeq())
-                            .relParentType(MspConstants.ITEM_COMPONENT)
+                            .relParentType(MokaConstants.ITEM_COMPONENT)
                             .relParentSeq(newComponent.getComponentSeq())
                             .relOrder(rel.getRelOrder()).build();
                     pageRelRepository.save(newRel);

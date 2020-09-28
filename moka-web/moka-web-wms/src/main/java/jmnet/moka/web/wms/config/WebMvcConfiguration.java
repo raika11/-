@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +31,8 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jmnet.moka.common.data.support.DTOModelMapper;
 import jmnet.moka.common.data.support.SearchParamResolver;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.common.mvc.interceptor.MspCommonHandlerInterceptor;
+import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 import jmnet.moka.core.common.util.ResourceMapper;
 
 /**
@@ -99,7 +100,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Bean
     public HandlerInterceptorAdapter wmsHandlerInterceptor() {
-        return new MspCommonHandlerInterceptor("WMS");
+        return new MokaCommonHandlerInterceptor("WMS");
     }
 
     /**
@@ -137,7 +138,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
 
-    @PersistenceContext(unitName = MspConstants.PERSISTANCE_UNIT_TPS)
+    @PersistenceContext(unitName = MokaConstants.PERSISTANCE_UNIT_TPS)
     private EntityManager tpsEntityManager;
 
     @Override

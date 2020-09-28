@@ -2,7 +2,7 @@ package jmnet.moka.core.tps.helper;
 
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.mvc.ad.service.AdService;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentDTO;
@@ -81,7 +81,7 @@ public class RelationHelper {
         
         // 페이지 체크
         RelSearchDTO search = RelSearchDTO.builder()
-                .relSeqType(MspConstants.ITEM_DOMAIN)
+                .relSeqType(MokaConstants.ITEM_DOMAIN)
                 .domainId(domainId).build();
         search.setDefaultSort("pageSeq,desc");
         Page<jmnet.moka.core.tps.mvc.page.entity.Page> pages = 
@@ -123,57 +123,57 @@ public class RelationHelper {
      */
     public Boolean hasRelations(Long seq, String itemType) {
     	
-        if (itemType.equals(MspConstants.ITEM_TEMPLATE)
-        		|| itemType.equals(MspConstants.ITEM_DATASET)) {
+        if (itemType.equals(MokaConstants.ITEM_TEMPLATE)
+        		|| itemType.equals(MokaConstants.ITEM_DATASET)) {
             
             // 관련 컴포넌트가 있는지 확인한다
             RelSearchDTO search = RelSearchDTO.builder()
                     .relSeq(seq).relSeqType(itemType)
-                    .relType(MspConstants.ITEM_COMPONENT).build();
+                    .relType(MokaConstants.ITEM_COMPONENT).build();
             if (this.isRelated(search)) {
                 return true;
             }
         }
 
-        if (itemType.equals(MspConstants.ITEM_TEMPLATE)
-                || itemType.equals(MspConstants.ITEM_DATASET)
-                || itemType.equals(MspConstants.ITEM_COMPONENT)
-                || itemType.equals(MspConstants.ITEM_AD)) {
+        if (itemType.equals(MokaConstants.ITEM_TEMPLATE)
+                || itemType.equals(MokaConstants.ITEM_DATASET)
+                || itemType.equals(MokaConstants.ITEM_COMPONENT)
+                || itemType.equals(MokaConstants.ITEM_AD)) {
             
             // 관련 컨테이너가 있는지 확인한다
             RelSearchDTO search = RelSearchDTO.builder()
                     .relSeq(seq).relSeqType(itemType)
-                    .relType(MspConstants.ITEM_CONTAINER).build();
+                    .relType(MokaConstants.ITEM_CONTAINER).build();
             if (this.isRelated(search)) {
                 return true;
             }
         }
 
-        if (itemType.equals(MspConstants.ITEM_TEMPLATE)
-                || itemType.equals(MspConstants.ITEM_DATASET)
-                || itemType.equals(MspConstants.ITEM_COMPONENT)
-                || itemType.equals(MspConstants.ITEM_AD)
-                || itemType.equals(MspConstants.ITEM_CONTAINER)) {
+        if (itemType.equals(MokaConstants.ITEM_TEMPLATE)
+                || itemType.equals(MokaConstants.ITEM_DATASET)
+                || itemType.equals(MokaConstants.ITEM_COMPONENT)
+                || itemType.equals(MokaConstants.ITEM_AD)
+                || itemType.equals(MokaConstants.ITEM_CONTAINER)) {
             
             // 관련 본문스킨이 있는지 확인한다
             RelSearchDTO search = RelSearchDTO.builder()
                     .relSeq(seq).relSeqType(itemType)
-                    .relType(MspConstants.ITEM_CONTENT_SKIN).build();
+                    .relType(MokaConstants.ITEM_CONTENT_SKIN).build();
             if (this.isRelated(search)) {
                 return true;
             }
         }
 
-        if (itemType.equals(MspConstants.ITEM_TEMPLATE)
-                || itemType.equals(MspConstants.ITEM_DATASET)
-                || itemType.equals(MspConstants.ITEM_COMPONENT)
-                || itemType.equals(MspConstants.ITEM_AD)
-                || itemType.equals(MspConstants.ITEM_CONTAINER)) {
+        if (itemType.equals(MokaConstants.ITEM_TEMPLATE)
+                || itemType.equals(MokaConstants.ITEM_DATASET)
+                || itemType.equals(MokaConstants.ITEM_COMPONENT)
+                || itemType.equals(MokaConstants.ITEM_AD)
+                || itemType.equals(MokaConstants.ITEM_CONTAINER)) {
             
             // 관련 페이지가 있는지 확인한다
             RelSearchDTO search = RelSearchDTO.builder()
                     .relSeq(seq).relSeqType(itemType)
-                    .relType(MspConstants.ITEM_PAGE).build();
+                    .relType(MokaConstants.ITEM_PAGE).build();
             if (this.isRelated(search)) {
                 return true;
             }
@@ -190,7 +190,7 @@ public class RelationHelper {
     public boolean isRelated(RelSearchDTO search) {
         String relType = search.getRelType();
 
-        if (relType.equals(MspConstants.ITEM_PAGE)) {
+        if (relType.equals(MokaConstants.ITEM_PAGE)) {
             
             // 페이지 목록 조회
         	search.setEntityClass(PageVO.class);
@@ -198,7 +198,7 @@ public class RelationHelper {
             Long totalCount = pageService.findRelCount(search);
             if (totalCount > 0) return true;
             
-        } else if (relType.equals(MspConstants.ITEM_CONTENT_SKIN)) {
+        } else if (relType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
             
             // 콘텐츠스킨 목록 조회
         	search.setEntityClass(SkinVO.class);
@@ -206,7 +206,7 @@ public class RelationHelper {
             Long totalCount = skinService.findRelCount(search);
             if (totalCount > 0) return true;
 
-        } else if (relType.equals(MspConstants.ITEM_CONTAINER)) {
+        } else if (relType.equals(MokaConstants.ITEM_CONTAINER)) {
             
             // 컨테이너 목록 조회
             search.setDefaultSort("containerSeq,desc");
@@ -214,7 +214,7 @@ public class RelationHelper {
             Page<Container> containers = containerService.findRelList(search, pageable);
             if (containers.getTotalElements() > 0) return true;
 
-        } else if (relType.equals(MspConstants.ITEM_COMPONENT)) {
+        } else if (relType.equals(MokaConstants.ITEM_COMPONENT)) {
             
             // 컴포넌트 목록 조회
             search.setDefaultSort("componentSeq,desc");
@@ -238,7 +238,7 @@ public class RelationHelper {
     public ResponseEntity<?> findRelations(RelSearchDTO search) {
         String relType = search.getRelType();
 
-        if (relType.equals(MspConstants.ITEM_PAGE)) {
+        if (relType.equals(MokaConstants.ITEM_PAGE)) {
             
         	// 페이지 목록 조회
         	search.setEntityClass(PageVO.class);
@@ -254,7 +254,7 @@ public class RelationHelper {
                     new ResultDTO<ResultListDTO<PageVO>>(resultListMessage);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
-        } else if (relType.equals(MspConstants.ITEM_CONTENT_SKIN)) {
+        } else if (relType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
             // 콘텐츠 스킨 목록 조회
         	search.setEntityClass(SkinVO.class);
             search.setDefaultSort("skinSeq,desc");
@@ -269,7 +269,7 @@ public class RelationHelper {
                     new ResultDTO<ResultListDTO<SkinVO>>(resultListMessage);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
-        } else if (relType.equals(MspConstants.ITEM_CONTAINER)) {
+        } else if (relType.equals(MokaConstants.ITEM_CONTAINER)) {
             
         	// 컨테이너 목록 조회
             search.setDefaultSort("containerSeq,desc");
@@ -287,7 +287,7 @@ public class RelationHelper {
                     new ResultDTO<ResultListDTO<ContainerDTO>>(resultListMessage);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
-        } else if (relType.equals(MspConstants.ITEM_COMPONENT)) {
+        } else if (relType.equals(MokaConstants.ITEM_COMPONENT)) {
             
         	// 컴포넌트 목록 조회
             search.setDefaultSort("componentSeq,desc");

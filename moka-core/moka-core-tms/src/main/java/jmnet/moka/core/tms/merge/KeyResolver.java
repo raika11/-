@@ -1,7 +1,7 @@
 package jmnet.moka.core.tms.merge;
 
 import java.util.StringJoiner;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 
 /**
@@ -82,36 +82,36 @@ public class KeyResolver {
 
     public static String makePgItemCacheKey(String domainId, String itemId,
             HttpParamMap httpParamMap) {
-        return makeDefaultCacheKey(domainId, MspConstants.ITEM_PAGE, itemId,
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_PAGE, itemId,
                 makeParamKey(httpParamMap));
     }
 
     public static String makeSkinItemCacheKey(String domainId, String itemId, String cid,
             HttpParamMap httpParamMap) {
-        return makeDefaultCacheKey(domainId, MspConstants.ITEM_CONTENT_SKIN, itemId, cid,
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_CONTENT_SKIN, itemId, cid,
                 makeParamKey(httpParamMap));
     }
 
     public static String makeCtItemCacheKey(String domainId, String itemId,
             String pageId, String cid, HttpParamMap httpParamMap, String... extra) {
-        return makeDefaultCacheKey(domainId, MspConstants.ITEM_CONTAINER, itemId, pageId, cid,
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_CONTAINER, itemId, pageId, cid,
                 makeParamKey(httpParamMap));
     }
 
     public static String makeCpItemCacheKey(String domainId, String itemId,
             String pageId, String cid, HttpParamMap httpParamMap, String... extra) {
-        return makeDefaultCacheKey(domainId, MspConstants.ITEM_COMPONENT, itemId, pageId, cid,
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_COMPONENT, itemId, pageId, cid,
                 makeParamKey(httpParamMap));
     }
 
     public static String makeTpItemCacheKey(String domainId, String itemId, String pageId,
             String cid, String relCp, HttpParamMap httpParamMap, String... extra) {
-        return makeDefaultCacheKey(domainId, MspConstants.ITEM_TEMPLATE, itemId, pageId, cid, relCp,
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_TEMPLATE, itemId, pageId, cid, relCp,
                 makeParamKey(httpParamMap));
     }
 
     public static String makeAdItemCacheKey(String domainId, String itemId) {
-        return makeDefaultCacheKey(domainId, MspConstants.ITEM_AD, itemId);
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_AD, itemId);
     }
 
     public static String makeDataId(String itemType, String itemId) {
@@ -123,16 +123,16 @@ public class KeyResolver {
             return ANY + DEFAULT_SEPARATOR + ANY;
         }
         String page =
-                httpParamMap.containsKey(MspConstants.PARAM_PAGE)
-                        ? httpParamMap.get(MspConstants.PARAM_PAGE).toString() : ANY;
+                httpParamMap.containsKey(MokaConstants.PARAM_PAGE)
+                        ? httpParamMap.get(MokaConstants.PARAM_PAGE).toString() : ANY;
         String count =
-                httpParamMap.containsKey(MspConstants.PARAM_COUNT)
-                        ? httpParamMap.get(MspConstants.PARAM_COUNT).toString() : ANY;
-        if (httpParamMap.get(MspConstants.PARAM_SORT) == null) {
+                httpParamMap.containsKey(MokaConstants.PARAM_COUNT)
+                        ? httpParamMap.get(MokaConstants.PARAM_COUNT).toString() : ANY;
+        if (httpParamMap.get(MokaConstants.PARAM_SORT) == null) {
             return String.join(DEFAULT_SEPARATOR, page, count);
         } else {
             return String.join(DEFAULT_SEPARATOR, page, count,
-                    httpParamMap.get(MspConstants.PARAM_SORT));
+                    httpParamMap.get(MokaConstants.PARAM_SORT));
         }
     }
 

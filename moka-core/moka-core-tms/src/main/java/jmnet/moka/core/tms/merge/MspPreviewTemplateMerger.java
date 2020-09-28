@@ -3,6 +3,8 @@ package jmnet.moka.core.tms.merge;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.apache.commons.jexl3.MapContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +15,6 @@ import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.loader.TemplateLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -61,8 +62,8 @@ public class MspPreviewTemplateMerger extends MspTemplateMerger {
     }
 
     private void setBaseTag(String pagePath, MergeContext context, StringBuilder sb) {
-        DomainItem domainItem = (DomainItem) context.get(MspConstants.MERGE_CONTEXT_DOMAIN);
-        PageItem pageItem = (PageItem) context.get(MspConstants.MERGE_CONTEXT_PAGE);
+        DomainItem domainItem = (DomainItem) context.get(MokaConstants.MERGE_CONTEXT_DOMAIN);
+        PageItem pageItem = (PageItem) context.get(MokaConstants.MERGE_CONTEXT_PAGE);
         // html인 경우만 baseTag 처리
         if (pageItem.get(ItemConstants.PAGE_TYPE).equals("text/html") == false) {
             return;
@@ -82,9 +83,9 @@ public class MspPreviewTemplateMerger extends MspTemplateMerger {
     private StringBuilder setHtmlWrap(String itemType, String itemId, StringBuilder sb) {
         StringWriter writer = new StringWriter();
         MapContext context = new MapContext();
-        context.set(MspConstants.HTML_WRAP_MERGE_ITEM_TYPE, itemType);
-        context.set(MspConstants.HTML_WRAP_MERGE_ITEM_ID, itemId);
-        context.set(MspConstants.HTML_WRAP_MERGE_CONTENT, sb);
+        context.set(MokaConstants.HTML_WRAP_MERGE_ITEM_TYPE, itemType);
+        context.set(MokaConstants.HTML_WRAP_MERGE_ITEM_ID, itemId);
+        context.set(MokaConstants.HTML_WRAP_MERGE_CONTENT, sb);
         this.htmlWrap.evaluate(context, writer);
         return new StringBuilder(writer.toString());
     }
@@ -102,21 +103,21 @@ public class MspPreviewTemplateMerger extends MspTemplateMerger {
         // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
         mergeContext.getMergeOptions().setPreview(true);
         if (this.workerId != null) {
-            mergeContext.set(MspConstants.MERGE_CONTEXT_WORKER_ID, this.workerId);
-            mergeContext.set(MspConstants.MERGE_CONTEXT_EDITION_SEQ, this.editionSeq);
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_WORKER_ID, this.workerId);
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_EDITION_SEQ, this.editionSeq);
         }
-        mergeContext.set(MspConstants.MERGE_CONTEXT_DOMAIN, this.domainItem);
-        mergeContext.set(MspConstants.MERGE_CONTEXT_PAGE, pageItem);
-        mergeContext.set(MspConstants.MERGE_PATH, pageItem.get(ItemConstants.PAGE_URL));
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_DOMAIN, this.domainItem);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_PAGE, pageItem);
+        mergeContext.set(MokaConstants.MERGE_PATH, pageItem.get(ItemConstants.PAGE_URL));
 
         // 예약어를 설정한다.
         ReservedMap reservedMap = domainResolver.getReservedMap(domainId);
         if (reservedMap != null) {
-            mergeContext.set(MspConstants.MERGE_CONTEXT_RESERVED, reservedMap);
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_RESERVED, reservedMap);
         }
 
         // Htttp 파라미터 설정
-        mergeContext.set(MspConstants.MERGE_CONTEXT_PARAM, new HttpParamMap());
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, new HttpParamMap());
         String itemType = pageItem.getItemType();
         String itemId = pageItem.getItemId();
 

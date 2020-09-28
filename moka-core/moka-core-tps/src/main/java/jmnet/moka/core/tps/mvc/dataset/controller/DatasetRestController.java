@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+import jmnet.moka.core.common.MokaConstants;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,6 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -287,7 +287,6 @@ public class DatasetRestController {
      * 데이타셋수정
      * 
      * @param datasetSeq 요청
-     * @param domainId 데이타셋순번
      * @param datasetDTO 수정할 데이타셋정보
      * @param principal 로그인사용자세션
      * @return 수정된 데이타셋정보
@@ -459,7 +458,7 @@ public class DatasetRestController {
             @Valid @SearchParam RelSearchDTO search) throws NoDataException, InvalidDataException {
 
         search.setRelSeq(datasetSeq);
-        search.setRelSeqType(MspConstants.ITEM_DATASET);
+        search.setRelSeqType(MokaConstants.ITEM_DATASET);
 
         return relationHelper.findRelations(search);
     }
@@ -470,7 +469,7 @@ public class DatasetRestController {
      * </pre>
      * 
      * @param request HTTP요청
-     * @param seq 컴포넌트아이디
+     * @param datasetSeq 데이터셋 아이디
      * @return 관련 아이템 존재 여부
      * @throws NoDataException 데이터없음
      */
@@ -484,7 +483,7 @@ public class DatasetRestController {
         datasetService.findByDatasetSeq(datasetSeq).orElseThrow(() -> new NoDataException(
                 messageByLocale.get("tps.dataset.error.noContent", request)));
 
-        Boolean chkRels = relationHelper.hasRelations(datasetSeq, MspConstants.ITEM_DATASET);
+        Boolean chkRels = relationHelper.hasRelations(datasetSeq, MokaConstants.ITEM_DATASET);
         ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
 
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -494,8 +493,8 @@ public class DatasetRestController {
      * 데이타셋을 복사한다
      * 
      * @param request HTTP요청
-     * @param seq 컴포넌트ID
-     * @param componentName 컴포넌트명
+     * @param datasetSeq 데이터셋ID
+     * @param datasetName 데이터셋명
      * @param principal Principal
      * @return 등록된 컴포넌트
      * @throws InvalidDataException 데이터없음 예외처리

@@ -2,6 +2,8 @@ package jmnet.moka.core.tms.merge.element;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.Constants;
@@ -10,7 +12,6 @@ import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -49,12 +50,12 @@ public class CpMerger extends MspAbstractElementMerger {
         MspTemplateRoot templateRoot = null;
         try {
             templateRoot =
-                    (MspTemplateRoot) templateMerger.getParsedTemplate(MspConstants.ITEM_COMPONENT,
+                    (MspTemplateRoot) templateMerger.getParsedTemplate(MokaConstants.ITEM_COMPONENT,
                     element.getAttribute(Constants.ATTR_ID));
             MergeItem item = templateRoot.getItem();
             if (item.getBoolYN(ItemConstants.COMPONENT_PERIOD_YN)) {
                 String now =
-                        LocalDateTime.now().format(MspConstants.dtf);
+                        LocalDateTime.now().format(MokaConstants.dtf);
                 if (now.compareTo(item.getString(ItemConstants.COMPONENT_PERIOD_START_YMDT)) < 0) {
                     sb.append("<!-- Before Component Date -->");
                     return;

@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -73,33 +74,33 @@ public class DefaultMergeView extends AbstractView {
             TemplateParseException, NoHandlerFoundException, TemplateMergeException {
 
         // 머지 옵션설정
-        MergeContext mergeContext = (MergeContext) request.getAttribute(MspConstants.MERGE_CONTEXT);
+        MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
 
         // debug 옵션
         mergeContext.getMergeOptions().setDebug(templateMergeDebug);
         long startTime = System.currentTimeMillis();
 
-        String domainId = (String) mergeContext.get(MspConstants.MERGE_DOMAIN_ID);
-        String path = (String) mergeContext.get(MspConstants.MERGE_PATH);
-        String itemType = (String) mergeContext.get(MspConstants.MERGE_ITEM_TYPE);
-        boolean isPageItem = itemType.equals(MspConstants.ITEM_PAGE);
-        String itemId = (String) mergeContext.get(MspConstants.MERGE_ITEM_ID);
-        String cid = (String) mergeContext.get(MspConstants.MERGE_CONTEXT_CID);
+        String domainId = (String) mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
+        String path = (String) mergeContext.get(MokaConstants.MERGE_PATH);
+        String itemType = (String) mergeContext.get(MokaConstants.MERGE_ITEM_TYPE);
+        boolean isPageItem = itemType.equals(MokaConstants.ITEM_PAGE);
+        String itemId = (String) mergeContext.get(MokaConstants.MERGE_ITEM_ID);
+        String cid = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_CID);
         HttpParamMap httpParamMap =
-                (HttpParamMap) mergeContext.get(MspConstants.MERGE_CONTEXT_PARAM);
+                (HttpParamMap) mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
         String cacheType = KeyResolver.getCacheType(itemType);
         String cacheKey = null;
-        if (itemType.equals(MspConstants.ITEM_PAGE)) {
+        if (itemType.equals(MokaConstants.ITEM_PAGE)) {
             cacheKey = KeyResolver.makePgItemCacheKey(domainId, itemId, httpParamMap);
-        } else if (itemType.equals(MspConstants.ITEM_CONTENT_SKIN)) {
+        } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
             cacheKey = "";
-        } else if (itemType.equals(MspConstants.ITEM_COMPONENT)) {
+        } else if (itemType.equals(MokaConstants.ITEM_COMPONENT)) {
             cacheKey = KeyResolver.makeCpItemCacheKey(domainId, itemId, null, cid, httpParamMap);
-        } else if (itemType.equals(MspConstants.ITEM_TEMPLATE)) {
-            Object relCp = mergeContext.get(MspConstants.ATTR_REL_CP);
+        } else if (itemType.equals(MokaConstants.ITEM_TEMPLATE)) {
+            Object relCp = mergeContext.get(MokaConstants.ATTR_REL_CP);
             if (relCp == null) {
                 if (httpParamMap != null) {
-                    relCp = httpParamMap.get(MspConstants.PARAM_REL_CP);
+                    relCp = httpParamMap.get(MokaConstants.PARAM_REL_CP);
                 }
             }
             cacheKey = KeyResolver.makeTpItemCacheKey(domainId, itemId, null, cid,
@@ -107,8 +108,8 @@ public class DefaultMergeView extends AbstractView {
         }
 
         // content-type 설정 : PAGE에 설정된 content-type을 따르며, PAGE가 아니거나 없으면 text/html; charset=UTF-8로 설정 
-        MergeItem item = (MergeItem) mergeContext.get(MspConstants.MERGE_CONTEXT_ITEM);
-        if (item != null && itemType.equals(MspConstants.ITEM_PAGE)) {
+        MergeItem item = (MergeItem) mergeContext.get(MokaConstants.MERGE_CONTEXT_ITEM);
+        if (item != null && itemType.equals(MokaConstants.ITEM_PAGE)) {
             String pageType = item.getString(ItemConstants.PAGE_TYPE);
             if (McpString.isNotEmpty(pageType)) {
                 response.setContentType(pageType + "; charset=UTF-8");

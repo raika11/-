@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.resource.PathResourceResolver;
-import jmnet.moka.core.common.mvc.interceptor.MspCommonHandlerInterceptor;
+import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 
 /**
  * Web MVC Configuration
@@ -38,7 +38,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Bean
     public HandlerInterceptorAdapter tmsHandlerInterceptor() {
-        return new MspCommonHandlerInterceptor("TMS");
+        return new MokaCommonHandlerInterceptor("TMS");
     }
 
     /**

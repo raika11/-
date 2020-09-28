@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -18,7 +20,6 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.common.template.loader.TemplateLoader;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
@@ -52,14 +53,14 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
 
     protected static Map<String, String> itemApiMap = new HashMap<String, String>();
     static {
-        itemApiMap.put(MspConstants.ITEM_DOMAIN, ITEM_API_DOMAIN);
-        itemApiMap.put(MspConstants.ITEM_PAGE, ITEM_API_PAGE);
-        itemApiMap.put(MspConstants.ITEM_CONTAINER, ITEM_API_CONTAINER);
-        itemApiMap.put(MspConstants.ITEM_COMPONENT, ITEM_API_COMPONENT);
-        itemApiMap.put(MspConstants.ITEM_TEMPLATE, ITEM_API_TEMPLATE);
-        itemApiMap.put(MspConstants.ITEM_DATASET, ITEM_API_DATASET);
-        itemApiMap.put(MspConstants.ITEM_AD, ITEM_API_AD);
-        itemApiMap.put(MspConstants.ITEM_CONTENT_SKIN, ITEM_API_SKIN);
+        itemApiMap.put(MokaConstants.ITEM_DOMAIN, ITEM_API_DOMAIN);
+        itemApiMap.put(MokaConstants.ITEM_PAGE, ITEM_API_PAGE);
+        itemApiMap.put(MokaConstants.ITEM_CONTAINER, ITEM_API_CONTAINER);
+        itemApiMap.put(MokaConstants.ITEM_COMPONENT, ITEM_API_COMPONENT);
+        itemApiMap.put(MokaConstants.ITEM_TEMPLATE, ITEM_API_TEMPLATE);
+        itemApiMap.put(MokaConstants.ITEM_DATASET, ITEM_API_DATASET);
+        itemApiMap.put(MokaConstants.ITEM_AD, ITEM_API_AD);
+        itemApiMap.put(MokaConstants.ITEM_CONTENT_SKIN, ITEM_API_SKIN);
     }
     protected HttpProxyDataLoader httpProxyDataLoader;
     private static final Logger logger = LoggerFactory.getLogger(DpsTemplateLoader.class);
@@ -146,12 +147,12 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             JSONObject jsonObject = (JSONObject) jsonArray.get(0);
             item = DPS_ITEM_FACTORY.getItem(itemType, jsonObject);
             // ComponentItem인 경우 COMPONENT_AD를 처리한다
-            if (itemType.equals(MspConstants.ITEM_COMPONENT)) {
+            if (itemType.equals(MokaConstants.ITEM_COMPONENT)) {
                 setComponentAd(item, jsonResult);
             }
             String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
-            if (itemType.equals(MspConstants.ITEM_PAGE)) {
+            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                 this.uri2ItemMap.put(item.getString(ItemConstants.PAGE_URL), itemKey);
             }
             if (cacheable) {
@@ -214,7 +215,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         }
 
         // pageItem이고 사용여부가 Y가 아니면 uri에서 제거
-        if (itemType.equals(MspConstants.ITEM_PAGE)) { // PG면 url에서 제거
+        if (itemType.equals(MokaConstants.ITEM_PAGE)) { // PG면 url에서 제거
             if (item.getString(ItemConstants.PAGE_USE_YN).equals("Y") == false) {
                 this.uri2ItemMap.remove(item.getString(ItemConstants.PAGE_URL));
             }

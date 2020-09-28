@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
@@ -46,9 +47,9 @@ public class DefaultPathResolver {
         this.domainResolver = domainResolver;
         this.domainTemplateMerger = domainTemplateMerger;
         this.contentDelegator = contentDelegator;
-        String[] partialMergeItems = {MspConstants.ITEM_PAGE, MspConstants.ITEM_COMPONENT,
-                MspConstants.ITEM_CONTAINER,
-                MspConstants.ITEM_TEMPLATE};
+        String[] partialMergeItems = {MokaConstants.ITEM_PAGE, MokaConstants.ITEM_COMPONENT,
+                MokaConstants.ITEM_CONTAINER,
+                MokaConstants.ITEM_TEMPLATE};
         this.mergeItemList = Arrays.asList(partialMergeItems);
     }
 	
@@ -116,7 +117,7 @@ public class DefaultPathResolver {
                 return true;
             } else {
                 // 404에러 페이지로 보낸다.
-                mergePath = MspConstants.TMS_ERROR_PAGE;
+                mergePath = MokaConstants.TMS_ERROR_PAGE;
             }
         } else if (requestPath.startsWith("/_")) {
             // _CP, _TP, _CT 머지
@@ -124,7 +125,7 @@ public class DefaultPathResolver {
                 return true;
             } else {
                 // 404에러 페이지로 보낸다.
-                mergePath = MspConstants.TMS_ERROR_PAGE;
+                mergePath = MokaConstants.TMS_ERROR_PAGE;
             }
         }
 
@@ -132,26 +133,26 @@ public class DefaultPathResolver {
         try {
             String itemKey = this.domainTemplateMerger.getItemKey(domainId, mergePath);
             MergeContext mergeContext = new MergeContext();
-            mergeContext.set(MspConstants.MERGE_DOMAIN_ID, domainId);
+            mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
             if (itemKey != null) {
                 // 머지 옵션설정
-                mergeContext.set(MspConstants.MERGE_PATH, mergePath);
-                mergeContext.set(MspConstants.MERGE_ITEM_TYPE,
+                mergeContext.set(MokaConstants.MERGE_PATH, mergePath);
+                mergeContext.set(MokaConstants.MERGE_ITEM_TYPE,
                         KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_TYPE));
-                mergeContext.set(MspConstants.MERGE_ITEM_ID,
+                mergeContext.set(MokaConstants.MERGE_ITEM_ID,
                         KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_ID));
-                request.setAttribute(MspConstants.MERGE_CONTEXT, mergeContext);
+                request.setAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
                 return true;
             } else {
                 // 에러페이지로 보낸다
                 itemKey =
-                        this.domainTemplateMerger.getItemKey(domainId, MspConstants.TMS_ERROR_PAGE);
-                mergeContext.set(MspConstants.MERGE_PATH, MspConstants.TMS_ERROR_PAGE);
-                mergeContext.set(MspConstants.MERGE_ITEM_TYPE,
+                        this.domainTemplateMerger.getItemKey(domainId, MokaConstants.TMS_ERROR_PAGE);
+                mergeContext.set(MokaConstants.MERGE_PATH, MokaConstants.TMS_ERROR_PAGE);
+                mergeContext.set(MokaConstants.MERGE_ITEM_TYPE,
                         KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_TYPE));
-                mergeContext.set(MspConstants.MERGE_ITEM_ID,
+                mergeContext.set(MokaConstants.MERGE_ITEM_ID,
                         KeyResolver.getItemKeyFactor(itemKey, KeyResolver.ITEM_ID));
-                request.setAttribute(MspConstants.MERGE_CONTEXT, mergeContext);
+                request.setAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
                 return true;
 
             }
@@ -173,11 +174,11 @@ public class DefaultPathResolver {
                 // 머지 옵션설정
                 MergeContext mergeContext = new MergeContext();
                 mergeContext.getMergeOptions().setPreviewResource(this.isPreviewResource(request));
-                mergeContext.set(MspConstants.MERGE_DOMAIN_ID, domainId);
-                mergeContext.set(MspConstants.MERGE_PATH, path);
-                mergeContext.set(MspConstants.MERGE_ITEM_TYPE, itemType);
-                mergeContext.set(MspConstants.MERGE_ITEM_ID, itemId);
-                request.setAttribute(MspConstants.MERGE_CONTEXT, mergeContext);
+                mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
+                mergeContext.set(MokaConstants.MERGE_PATH, path);
+                mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, itemType);
+                mergeContext.set(MokaConstants.MERGE_ITEM_ID, itemId);
+                request.setAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
                 return true;
             } else {
                 logger.warn("MergeItem Find Fail: {} {} {}", domainId, itemType, itemId);
@@ -197,14 +198,14 @@ public class DefaultPathResolver {
             ContentSkinItem skinItem = this.contentDelegator.getSkinItem(domainId, contentId);
             // 머지 옵션설정
             MergeContext mergeContext = new MergeContext();
-            mergeContext.set(MspConstants.MERGE_DOMAIN_ID, domainId);
-            mergeContext.set(MspConstants.MERGE_PATH, path);
-            mergeContext.set(MspConstants.MERGE_ITEM_TYPE, MspConstants.ITEM_CONTENT_SKIN);
+            mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
+            mergeContext.set(MokaConstants.MERGE_PATH, path);
+            mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, MokaConstants.ITEM_CONTENT_SKIN);
             //TODO 본문처리를 하기 위한 스킨을 찾는 로직 정의 필요 
-            mergeContext.set(MspConstants.MERGE_ITEM_TYPE, skinItem.getItemType());
-            mergeContext.set(MspConstants.MERGE_ITEM_ID, skinItem.getItemId());
-            mergeContext.set(MspConstants.MERGE_CONTEXT_CID, contentId);
-            request.setAttribute(MspConstants.MERGE_CONTEXT, mergeContext);
+            mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, skinItem.getItemType());
+            mergeContext.set(MokaConstants.MERGE_ITEM_ID, skinItem.getItemId());
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_CID, contentId);
+            request.setAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
             return true;
         } catch (TmsException e) {
             logger.error("Content Find Fail: {} {}", domainId, path, e);

@@ -3,6 +3,8 @@ package jmnet.moka.core.tms.template.parse.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -21,7 +23,6 @@ import jmnet.moka.common.template.parse.TemplateParser;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
@@ -99,7 +100,7 @@ public class CpTemplateRoot extends MspTemplateRoot {
         TpTemplateRoot tpTemplateRoot = null;
         try {
             tpTemplateRoot = (TpTemplateRoot) templateLoader
-                    .getParsedTemplate(MspConstants.ITEM_TEMPLATE, templateId);
+                    .getParsedTemplate(MokaConstants.ITEM_TEMPLATE, templateId);
         } catch (TemplateParseException | TemplateLoadException e) {
             logger.error("Component's Template Load Fail:{} {}",
                     this.item.get(ItemConstants.COMPONENT_ID),
@@ -118,7 +119,7 @@ public class CpTemplateRoot extends MspTemplateRoot {
         if (componentDataType != null
                 && componentDataType.equals(ItemConstants.CP_DATA_TYPE_NONE) == false) {
             // 컴포넌트에 설정된 파라미터를 가져온다.
-            DatasetItem datasetItem = (DatasetItem) merger.getItem(MspConstants.ITEM_DATASET,
+            DatasetItem datasetItem = (DatasetItem) merger.getItem(MokaConstants.ITEM_DATASET,
                     this.item.getString(ItemConstants.COMPONENT_DATASET_ID));
             boolean datasetAutoCreateYn =
                     datasetItem.getBoolYN(ItemConstants.DATASET_AUTO_CREATE_YN);
@@ -151,14 +152,14 @@ public class CpTemplateRoot extends MspTemplateRoot {
 
                 // Preview 모드 && WorkerId가 있을 경우 desking.work api를 호출한다.
                 boolean isDeskingWork = context.getMergeOptions().isPreview()
-                        && context.has(MspConstants.MERGE_CONTEXT_WORKER_ID);
+                        && context.has(MokaConstants.MERGE_CONTEXT_WORKER_ID);
                 String apiName = isDeskingWork ? ItemConstants.CP_DATA_TYPE_DESK_WORK_API
                         : ItemConstants.CP_DATA_TYPE_DESK_API;
                 if (isDeskingWork) {
-                    datasetParam.put(MspConstants.PARAM_WORKER_ID,
-                            context.get(MspConstants.MERGE_CONTEXT_WORKER_ID));
-                    datasetParam.put(MspConstants.PARAM_EDITION_SEQ,
-                            context.get(MspConstants.MERGE_CONTEXT_EDITION_SEQ));
+                    datasetParam.put(MokaConstants.PARAM_WORKER_ID,
+                            context.get(MokaConstants.MERGE_CONTEXT_WORKER_ID));
+                    datasetParam.put(MokaConstants.PARAM_EDITION_SEQ,
+                            context.get(MokaConstants.MERGE_CONTEXT_EDITION_SEQ));
                 }
                 DataLoader loader = merger.getDataLoader();
                 JSONResult jsonResult =
@@ -189,14 +190,14 @@ public class CpTemplateRoot extends MspTemplateRoot {
             this.setPreviewResource(merger, context, sb);
         }
         MergeContext childContext = context.createRowDataChild();
-        childContext.set(MspConstants.MERGE_CONTEXT_COMPONENT, this.item);
+        childContext.set(MokaConstants.MERGE_CONTEXT_COMPONENT, this.item);
 
         String componentDataType = this.item.getString(ItemConstants.COMPONENT_DATA_TYPE);
         // dataType이 NONE이 아닐 경우만 데이터 처리
         if (componentDataType != null
                 && componentDataType.equals(ItemConstants.CP_DATA_TYPE_NONE) == false) {
             HashMap<String, JSONResult> dataMap =
-                    (HashMap<String, JSONResult>) context.get(MspConstants.MERGE_DATA_MAP);
+                    (HashMap<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
 
             JSONResult jsonResult = null;
             if (dataMap != null) {
@@ -247,7 +248,7 @@ public class CpTemplateRoot extends MspTemplateRoot {
     private void wrapItemStart(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
         if (context.getMergeOptions().isWrapItem()) {
             sb.append(context.getCurrentIndent())
-                    .append(merger.getWrapItemStart(MspConstants.ITEM_TEMPLATE, this.templateId))
+                    .append(merger.getWrapItemStart(MokaConstants.ITEM_TEMPLATE, this.templateId))
                     .append(System.lineSeparator());
         }
     }
@@ -255,7 +256,7 @@ public class CpTemplateRoot extends MspTemplateRoot {
     private void wrapItemEnd(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
         if (context.getMergeOptions().isWrapItem()) {
             sb.append(context.getCurrentIndent())
-                    .append(merger.getWrapItemEnd(MspConstants.ITEM_TEMPLATE, this.templateId))
+                    .append(merger.getWrapItemEnd(MokaConstants.ITEM_TEMPLATE, this.templateId))
                     .append(System.lineSeparator());
         }
     }
@@ -280,14 +281,14 @@ public class CpTemplateRoot extends MspTemplateRoot {
     }
 
     private void setDataRange(Map<String, Object> datasetParam, HttpParamMap httpParamMap) {
-        String page = httpParamMap.get(MspConstants.PARAM_PAGE);
+        String page = httpParamMap.get(MokaConstants.PARAM_PAGE);
         String count = null;
         String start = null;
         // 컴포넌트에서 페이징 정보를 주입한다.
         if (this.isComponentPaging()) {
-            if (this.getPagingType().equals(MspConstants.COMPONENT_PAGING_TYPE_NUMBER)) {
+            if (this.getPagingType().equals(MokaConstants.COMPONENT_PAGING_TYPE_NUMBER)) {
                 count = Integer.toString(this.getPerPageCount());
-            } else if (this.getPagingType().equals(MspConstants.COMPONENT_PAGING_TYPE_MORE)) {
+            } else if (this.getPagingType().equals(MokaConstants.COMPONENT_PAGING_TYPE_MORE)) {
                 if (page.equals("1")) {
                     count = Integer.toString(this.getPerPageCount());
                 } else {
@@ -298,9 +299,9 @@ public class CpTemplateRoot extends MspTemplateRoot {
             }
         }
         if (count != null)
-            datasetParam.put(MspConstants.PARAM_COUNT, count);
+            datasetParam.put(MokaConstants.PARAM_COUNT, count);
         if (start != null)
-            datasetParam.put(MspConstants.PARAM_START, start);
+            datasetParam.put(MokaConstants.PARAM_START, start);
     }
 
     public boolean isComponentPaging() {

@@ -3,6 +3,8 @@ package jmnet.moka.core.tms.merge.element;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +20,6 @@ import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateNode;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -66,8 +67,8 @@ public class PagingMerger extends MspAbstractElementMerger {
 	
 	@Override
 	public void merge(TemplateElement element, MergeContext context, StringBuilder sb) throws TemplateMergeException {
-        HttpParamMap httpParamMap = (HttpParamMap) context.get(MspConstants.MERGE_CONTEXT_PARAM);
-        int currentPage = httpParamMap.getInt(MspConstants.PARAM_PAGE);
+        HttpParamMap httpParamMap = (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
+        int currentPage = httpParamMap.getInt(MokaConstants.PARAM_PAGE);
         currentPage =
                 (currentPage == Integer.MIN_VALUE ? Constants.PARAM_PAGE_DEFAULT : currentPage);
         int pageCount = httpParamMap.getInt(Constants.PARAM_COUNT);
@@ -179,9 +180,9 @@ public class PagingMerger extends MspAbstractElementMerger {
 	}
 
     private String getRelatedComponentId(MergeContext context, HttpParamMap httpParamMap) {
-        String relCp = (String) context.get(MspConstants.ATTR_REL_CP);
+        String relCp = (String) context.get(MokaConstants.ATTR_REL_CP);
         if (relCp == null) { // ESI인 경우 파라미터에서 얻어온다.
-            relCp = (String) httpParamMap.get(MspConstants.PARAM_REL_CP);
+            relCp = (String) httpParamMap.get(MokaConstants.PARAM_REL_CP);
         }
         return relCp;
     }
@@ -191,7 +192,7 @@ public class PagingMerger extends MspAbstractElementMerger {
         CpTemplateRoot cpTemplateRoot = null;
         if (relCp != null) {
             cpTemplateRoot = (CpTemplateRoot) ((MspTemplateMerger) this.templateMerger)
-                    .getParsedTemplate(MspConstants.ITEM_COMPONENT, relCp);
+                    .getParsedTemplate(MokaConstants.ITEM_COMPONENT, relCp);
         }
         return cpTemplateRoot;
     }
@@ -205,10 +206,10 @@ public class PagingMerger extends MspAbstractElementMerger {
         try {
             @SuppressWarnings("unchecked")
             Map<String, JSONResult> dataMap =
-                    (HashMap<String, JSONResult>) context.get(MspConstants.MERGE_DATA_MAP);
+                    (HashMap<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
             if (dataMap != null && relCp != null) {
                 jsonResult =
-                        dataMap.get(KeyResolver.makeDataId(MspConstants.ITEM_COMPONENT, relCp));
+                        dataMap.get(KeyResolver.makeDataId(MokaConstants.ITEM_COMPONENT, relCp));
             }
             if (jsonResult == null && relCp != null) {
                 jsonResult = cpTemplateRoot.loadData(this.templateMerger, context);
@@ -217,7 +218,7 @@ public class PagingMerger extends MspAbstractElementMerger {
                 | TemplateLoadException e) {
             logger.warn("DataLoad Fail: {} - component : {} {} {}",
                     ((MspTemplateMerger) this.templateMerger).getDomainId(),
-                    MspConstants.ITEM_COMPONENT, relCp, e.getMessage());
+                    MokaConstants.ITEM_COMPONENT, relCp, e.getMessage());
         }
         return jsonResult;
     }

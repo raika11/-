@@ -1,6 +1,8 @@
 package jmnet.moka.core.tms.merge.element;
 
 import java.io.IOException;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.Constants;
@@ -10,7 +12,6 @@ import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -38,7 +39,7 @@ public class TpMerger extends MspAbstractElementMerger {
     public String makeCacheKey(TemplateElement element, MspTemplateRoot templateRoot,
             MergeContext context) {
         String domainId = ((MspTemplateMerger) this.templateMerger).getDomainId();
-        String relCp = (String) context.get(MspConstants.ATTR_REL_CP);
+        String relCp = (String) context.get(MokaConstants.ATTR_REL_CP);
         return KeyResolver.makeTpItemCacheKey(domainId, element.getAttribute("id"),
                 templateRoot.getPageIdForCache(context), templateRoot.getCidForCache(context),
                 relCp, templateRoot.getParamForCache(context, false));
@@ -50,7 +51,7 @@ public class TpMerger extends MspAbstractElementMerger {
 
         TemplateRoot templateRoot = null;
         try {
-            templateRoot = templateMerger.getParsedTemplate(MspConstants.ITEM_TEMPLATE,
+            templateRoot = templateMerger.getParsedTemplate(MokaConstants.ITEM_TEMPLATE,
                     element.getAttribute(Constants.ATTR_ID));
         } catch (Exception e) {
             throw new TemplateMergeException("Child Template Merge Fail", element, e);
@@ -66,9 +67,9 @@ public class TpMerger extends MspAbstractElementMerger {
         String indent = context.getCurrentIndent();
 
         MergeContext childContext = context.createChild();
-        String relcp = element.getAttribute(MspConstants.ATTR_REL_CP);
+        String relcp = element.getAttribute(MokaConstants.ATTR_REL_CP);
         if (McpString.isNotEmpty(relcp)) {
-            childContext.set(MspConstants.ATTR_REL_CP, relcp);
+            childContext.set(MokaConstants.ATTR_REL_CP, relcp);
         }
 
         String cacheKey = makeCacheKey(element, (MspTemplateRoot) templateRoot, childContext);

@@ -27,7 +27,7 @@ import org.springframework.orm.jpa.persistenceunit.PersistenceUnitManager;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 
 /**
  * <pre>
@@ -91,7 +91,7 @@ public class TpsJpaConfiguration {
                 jpaProperties.getProperties(), new HibernateSettings());
         return builder.dataSource(this.dataSource).properties(properties)
                 .packages("jmnet.moka.core.tps.mvc.**.entity")
-                .persistenceUnit(MspConstants.PERSISTANCE_UNIT_TPS).build();
+                .persistenceUnit(MokaConstants.PERSISTANCE_UNIT_TPS).build();
     }
 
 

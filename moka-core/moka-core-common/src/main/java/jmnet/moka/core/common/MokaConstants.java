@@ -16,7 +16,7 @@ import jmnet.moka.common.template.Constants;
  * @since 2019. 9. 4. 오후 4:16:07
  * @author kspark
  */
-public class MspConstants {
+public class MokaConstants {
 
     public final static String ROOT_DATAPROVIDER = "dataProvider";	// 데이타 루트폴더명
     public final static String ROOT_TEMPLATE = "template";			// 템플릿 루트폴더명

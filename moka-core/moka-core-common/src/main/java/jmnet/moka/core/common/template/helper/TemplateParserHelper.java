@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +15,6 @@ import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.parse.TemplateParser;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.template.ParsedItemDTO;
 
 public class TemplateParserHelper {
@@ -22,18 +23,18 @@ public class TemplateParserHelper {
 
     private static HashMap<String, String> customTagToItemMap = new HashMap<String, String>(8);
     static {
-        customTagToItemMap.put(Constants.EL_CT, MspConstants.ITEM_CONTAINER);
-        customTagToItemMap.put(Constants.EL_CP, MspConstants.ITEM_COMPONENT);
-        customTagToItemMap.put(Constants.EL_TP, MspConstants.ITEM_TEMPLATE);
-        customTagToItemMap.put(Constants.EL_AD, MspConstants.ITEM_AD);
+        customTagToItemMap.put(Constants.EL_CT, MokaConstants.ITEM_CONTAINER);
+        customTagToItemMap.put(Constants.EL_CP, MokaConstants.ITEM_COMPONENT);
+        customTagToItemMap.put(Constants.EL_TP, MokaConstants.ITEM_TEMPLATE);
+        customTagToItemMap.put(Constants.EL_AD, MokaConstants.ITEM_AD);
     }
 
     private static HashMap<String, String> itemToCustomTagMap = new HashMap<String, String>(8);
     static {
-        itemToCustomTagMap.put(MspConstants.ITEM_CONTAINER, Constants.EL_CT);
-        itemToCustomTagMap.put(MspConstants.ITEM_COMPONENT, Constants.EL_CP);
-        itemToCustomTagMap.put(MspConstants.ITEM_TEMPLATE, Constants.EL_TP);
-        itemToCustomTagMap.put(MspConstants.ITEM_AD, Constants.EL_AD);
+        itemToCustomTagMap.put(MokaConstants.ITEM_CONTAINER, Constants.EL_CT);
+        itemToCustomTagMap.put(MokaConstants.ITEM_COMPONENT, Constants.EL_CP);
+        itemToCustomTagMap.put(MokaConstants.ITEM_TEMPLATE, Constants.EL_TP);
+        itemToCustomTagMap.put(MokaConstants.ITEM_AD, Constants.EL_AD);
     }
 
     public static String customTagToItem(String customTag) {

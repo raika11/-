@@ -3,7 +3,7 @@ package jmnet.moka.core.dps.api.handler.module;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.ApiResult;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
@@ -33,7 +33,7 @@ public class ComponentWorkModule implements ModuleInterface {
         componentMap.put("DATASET_SEQ", componentWorkMap.get("DATASET_SEQ"));
         componentMap.put("SNAPSHOT_YN", componentWorkMap.get("SNAPSHOT_YN"));
         componentMap.put("SNAPSHOT_BODY", componentWorkMap.get("SNAPSHOT_BODY"));
-        componentMap.put("MODIFIED_YMDT", MspConstants.now());
+        componentMap.put("MODIFIED_YMDT", MokaConstants.now());
         return componentList;
     }
 

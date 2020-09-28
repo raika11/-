@@ -6,7 +6,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.TemplateItem;
 
 /**
@@ -34,7 +34,7 @@ public class TpTemplateRoot extends MspTemplateRoot {
     @Override
     public void merge(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
         logger.trace("Merge entered : {} {}", this.item.getItemType(), this.item.getItemId());
-        context.set(MspConstants.MERGE_CONTEXT_TEMPLATE, this.item);
+        context.set(MokaConstants.MERGE_CONTEXT_TEMPLATE, this.item);
         //        if (this.hasBodyToken()) {
         //            sb.append("<b>Body Tag 있음</b>");
         //        } else {

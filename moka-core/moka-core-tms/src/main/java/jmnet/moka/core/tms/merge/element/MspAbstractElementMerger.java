@@ -1,6 +1,8 @@
 package jmnet.moka.core.tms.merge.element;
 
 import java.io.IOException;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.springframework.context.support.GenericApplicationContext;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.template.Constants;
@@ -11,7 +13,6 @@ import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.merge.element.AbstractElementMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
@@ -97,13 +98,13 @@ public abstract class MspAbstractElementMerger extends AbstractElementMerger {
             TemplateElement element, MergeContext context,
             StringBuilder sb) {
         boolean isEsiEnabled = ((MspTemplateMerger) merger).isEsiEnabled();
-        String mergePath = (String) context.get(MspConstants.MERGE_PATH);
+        String mergePath = (String) context.get(MokaConstants.MERGE_PATH);
         if (mergePath.startsWith("/_")) {
             return false;
         } else {
             if (isEsiEnabled) {
                 HttpParamMap paramMap =
-                        (HttpParamMap) context.get(MspConstants.MERGE_CONTEXT_PARAM);
+                        (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
                 sb.append("<esi:include src=\"/")
                         .append(paramMap.getMergeUrl(templateRoot, element, context))
                         .append("\"/>");

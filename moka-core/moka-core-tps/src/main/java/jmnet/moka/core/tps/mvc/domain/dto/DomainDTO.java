@@ -2,17 +2,12 @@ package jmnet.moka.core.tps.mvc.domain.dto;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jmnet.moka.core.common.MspConstants;
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.item.DomainItem;
@@ -20,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <pre>

@@ -5,6 +5,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.core.NestedExceptionUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.util.HttpHelper;
 
 /**
@@ -25,8 +26,8 @@ import jmnet.moka.core.common.util.HttpHelper;
  * @since 2019. 6. 17. 오후 3:18:05
  * @author ince
  */
-public class MspCommonHandlerInterceptor extends HandlerInterceptorAdapter {
-    public final static Logger logger = LoggerFactory.getLogger(MspCommonHandlerInterceptor.class);
+public class MokaCommonHandlerInterceptor extends HandlerInterceptorAdapter {
+    public final static Logger logger = LoggerFactory.getLogger(MokaCommonHandlerInterceptor.class);
 
     @Autowired
     private GenericApplicationContext appContext;
@@ -37,7 +38,7 @@ public class MspCommonHandlerInterceptor extends HandlerInterceptorAdapter {
 
     private List<String> ignoreList;
 
-	public MspCommonHandlerInterceptor(String systemName) {
+	public MokaCommonHandlerInterceptor(String systemName) {
 		this.systemName = systemName;
 	}
 
@@ -46,24 +47,24 @@ public class MspCommonHandlerInterceptor extends HandlerInterceptorAdapter {
         try {
             String debugValue =
                     appContext.getBeanFactory().resolveEmbeddedValue(
-                            String.format("${%s}", MspConstants.INTERCEPTOR_DEBUG));
+                            String.format("${%s}", MokaConstants.INTERCEPTOR_DEBUG));
             if (McpString.isNotEmpty(debugValue) && debugValue.equalsIgnoreCase("false")) {
                 this.debug = false;
             }
         } catch (IllegalArgumentException e) {
             // property가 설정되지 않아 무시함
-            logger.info("property {} not set, defalut is true", MspConstants.INTERCEPTOR_DEBUG);
+            logger.info("property {} not set, defalut is true", MokaConstants.INTERCEPTOR_DEBUG);
         }
         try {
             String ignoreList = appContext.getBeanFactory()
-                    .resolveEmbeddedValue(String.format("${%s}", MspConstants.INTERCEPTOR_IGNORE));
+                    .resolveEmbeddedValue(String.format("${%s}", MokaConstants.INTERCEPTOR_IGNORE));
             if (McpString.isNotEmpty(ignoreList)) {
                 this.ignoreList = Arrays.asList(ignoreList.split(","));
             }
         } catch (IllegalArgumentException e) {
             // property가 설정되지 않아 무시함
             logger.info("property {} not set, all uri has intercepted",
-                    MspConstants.INTERCEPTOR_IGNORE);
+                    MokaConstants.INTERCEPTOR_IGNORE);
         }
     }
 
@@ -94,7 +95,7 @@ public class MspCommonHandlerInterceptor extends HandlerInterceptorAdapter {
 
         String uri = request.getMethod() + " " + request.getHeader("Host") + " "
                 + request.getRequestURI();
-        if (request.getAttribute(MspConstants.INTERCEPTOR_REFUSED) != null) {
+        if (request.getAttribute(MokaConstants.INTERCEPTOR_REFUSED) != null) {
             logger.debug("[{}:preHandle] refused {}", systemName, uri);
             return false;
         }

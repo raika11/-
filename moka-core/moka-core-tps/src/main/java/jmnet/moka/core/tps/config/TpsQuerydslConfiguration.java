@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 
 /**<pre>
  * 
@@ -22,7 +22,7 @@ import jmnet.moka.core.common.MspConstants;
  */
 @Configuration
 public class TpsQuerydslConfiguration {
-    @PersistenceContext(unitName = MspConstants.PERSISTANCE_UNIT_TPS)
+    @PersistenceContext(unitName = MokaConstants.PERSISTANCE_UNIT_TPS)
     private EntityManager entityManager;
 	
     @Bean

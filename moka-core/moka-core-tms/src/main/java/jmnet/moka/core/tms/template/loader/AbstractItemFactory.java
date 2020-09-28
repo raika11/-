@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.item.AdItem;
@@ -110,19 +111,19 @@ public abstract class AbstractItemFactory {
             JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
             Map<String, Object> valueMap = ResourceMapper.getDefaultObjectMapper()
                     .convertValue(jsonObject, ResourceMapper.TYPEREF_MAP_OBJECT);
-            if (itemType.equals(MspConstants.ITEM_PAGE)) {
+            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                 return getPageItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_CONTENT_SKIN)) {
+            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
                 return getContentSkinItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_CONTAINER)) {
+            } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
                 return getContainerItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_COMPONENT)) {
+            } else if (itemType.equals(MokaConstants.ITEM_COMPONENT)) {
                 return getComponentItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_TEMPLATE)) {
+            } else if (itemType.equals(MokaConstants.ITEM_TEMPLATE)) {
                 return getTemplateItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_DATASET)) {
+            } else if (itemType.equals(MokaConstants.ITEM_DATASET)) {
                 return getDatasetItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_AD)) {
+            } else if (itemType.equals(MokaConstants.ITEM_AD)) {
                 return getAdItem(valueMap);
             }
             return null;
@@ -136,19 +137,19 @@ public abstract class AbstractItemFactory {
         try {
             Map<String, Object> valueMap = ResourceMapper.getDefaultObjectMapper()
                     .convertValue(jsonObject, ResourceMapper.TYPEREF_MAP_OBJECT);
-            if (itemType.equals(MspConstants.ITEM_PAGE)) {
+            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                 return getPageItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_CONTENT_SKIN)) {
+            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
                 return getContentSkinItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_CONTAINER)) {
+            } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
                 return getContainerItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_COMPONENT)) {
+            } else if (itemType.equals(MokaConstants.ITEM_COMPONENT)) {
                 return getComponentItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_TEMPLATE)) {
+            } else if (itemType.equals(MokaConstants.ITEM_TEMPLATE)) {
                 return getTemplateItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_DATASET)) {
+            } else if (itemType.equals(MokaConstants.ITEM_DATASET)) {
                 return getDatasetItem(valueMap);
-            } else if (itemType.equals(MspConstants.ITEM_AD)) {
+            } else if (itemType.equals(MokaConstants.ITEM_AD)) {
                 return getAdItem(valueMap);
             }
             return null;

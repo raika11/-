@@ -1,5 +1,6 @@
 package jmnet.moka.core.tms.template.parse.model;
 
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.Constants;
@@ -10,7 +11,6 @@ import jmnet.moka.common.template.parse.TemplateParser;
 import jmnet.moka.common.template.parse.model.TemplateNode;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.template.parse.model.TemplateToken;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
@@ -82,15 +82,15 @@ public abstract class MspTemplateRoot extends TemplateRoot {
     }
 
     public void setHasBodyToken() {
-        this.hasBodyToken = hasToken(MspConstants.MERGE_CONTEXT_BODY);
+        this.hasBodyToken = hasToken(MokaConstants.MERGE_CONTEXT_BODY);
     }
 
     public void setHasParamToken() {
-        this.hasParamToken = hasToken(MspConstants.MERGE_CONTEXT_PARAM);
+        this.hasParamToken = hasToken(MokaConstants.MERGE_CONTEXT_PARAM);
     }
 
     public void setHasPageToken() {
-        this.hasPageToken = hasToken(MspConstants.MERGE_CONTEXT_PAGE);
+        this.hasPageToken = hasToken(MokaConstants.MERGE_CONTEXT_PAGE);
     }
 
     public boolean hasBodyToken() {
@@ -107,7 +107,7 @@ public abstract class MspTemplateRoot extends TemplateRoot {
 
     public String getCidForCache(MergeContext context) {
         if (hasBodyToken()) {
-            return (String) context.get(MspConstants.MERGE_CONTEXT_CID);
+            return (String) context.get(MokaConstants.MERGE_CONTEXT_CID);
         } else {
             return null;
         }
@@ -115,10 +115,10 @@ public abstract class MspTemplateRoot extends TemplateRoot {
 
     public HttpParamMap getParamForCache(MergeContext context, boolean isComponent) {
         if (isComponent) {
-            return (HttpParamMap) context.get(MspConstants.MERGE_CONTEXT_PARAM);
+            return (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
         } else {
             if (hasParamToken() || hasPagingElement()) {
-                return (HttpParamMap) context.get(MspConstants.MERGE_CONTEXT_PARAM);
+                return (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
             } else {
                 return KeyResolver.EMPTY_MAP;
             }
@@ -127,7 +127,7 @@ public abstract class MspTemplateRoot extends TemplateRoot {
 
     public String getPageIdForCache(MergeContext context) {
         if (hasPageToken()) {
-            PageItem pageItem = (PageItem) context.get(MspConstants.MERGE_CONTEXT_PAGE);
+            PageItem pageItem = (PageItem) context.get(MokaConstants.MERGE_CONTEXT_PAGE);
             if (pageItem != null) {
                 return pageItem.getItemId();
             }

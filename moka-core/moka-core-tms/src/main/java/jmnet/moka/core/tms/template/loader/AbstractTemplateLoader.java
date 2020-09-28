@@ -3,6 +3,8 @@ package jmnet.moka.core.tms.template.loader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.exception.TemplateLoadException;
@@ -10,7 +12,6 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.TemplateLoader;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.item.AdItem;
@@ -165,8 +166,8 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
      * 아이템 정보를 다시 로딩하기 위해 삭제한다.
      * </pre>
      * 
-     * @param type
-     * @param id
+     * @param itemType
+     * @param itemId
      */
     public void purgeItem(String itemType, String itemId) {
         String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
@@ -175,7 +176,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
                 this.mergeItemMap.remove(itemKey);
                 logger.debug("Purged: {} {} {}", this.domainId, itemType, itemId);
             } else { // 존재하지 않고, 신규 PG면 uri등록이 필요함
-                if (itemType.equals(MspConstants.ITEM_PAGE)) {
+                if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                     try {
                         MspTemplateRoot templateRoot =
                                 (MspTemplateRoot) this.getParsedTemplate(itemType, itemId);
@@ -205,7 +206,6 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
      * 아이템 정보에서 템플릿 본문을 반환한다.
      * </pre>
      * 
-     * @param type
      * @param item
      * @return
      */

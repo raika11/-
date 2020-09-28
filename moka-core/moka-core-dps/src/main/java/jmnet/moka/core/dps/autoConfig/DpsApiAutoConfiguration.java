@@ -2,6 +2,8 @@ package jmnet.moka.core.dps.autoConfig;
 
 import java.util.Arrays;
 import java.util.List;
+
+import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.google.common.base.Predicate;
-import jmnet.moka.core.common.mvc.interceptor.MspCommonHandlerInterceptor;
 import jmnet.moka.core.dps.api.ApiParameterChecker;
 import jmnet.moka.core.dps.api.ApiRequestHandlerMapping;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
@@ -103,7 +104,7 @@ public class DpsApiAutoConfiguration {
 	@Bean(name="dpsHandlerInterceptor")
     @ConditionalOnMissingBean
 	public HandlerInterceptorAdapter dpsHandlerInterceptor() {
-		return new MspCommonHandlerInterceptor("DPS");
+		return new MokaCommonHandlerInterceptor("DPS");
 	}
 	
     private Contact contact = new Contact("서울시스템", "http://www.ssc.co.kr", "seoul01@ssc.co.kr");

@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.JSONResult;
@@ -20,7 +22,6 @@ import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateNode;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentAd;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
@@ -164,8 +165,8 @@ public class LoopMerger extends AbstractElementMerger {
         ComponentItem componentItem = getComponentItem(context);
         Map<Integer, ComponentAd> adMap = this.getAdMap(componentItem, state.count);
         state.count = state.count + adMap.size();
-        HttpParamMap httpParamMap = (HttpParamMap) context.get(MspConstants.MERGE_CONTEXT_PARAM);
-        int page = httpParamMap.getInt(MspConstants.PARAM_PAGE);
+        HttpParamMap httpParamMap = (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
+        int page = httpParamMap.getInt(MokaConstants.PARAM_PAGE);
         // 삭제 단어를 구한다.
         List<String> delWordList = getDelWordList(componentItem);
         int dataIndex = state.start;
@@ -184,7 +185,7 @@ public class LoopMerger extends AbstractElementMerger {
                 //                        totalIndex, componentAd.getAdId(), componentAd.getAdName()));
                 try {
                     AdTemplateRoot adRoot = (AdTemplateRoot) this.templateMerger
-                            .getParsedTemplate(MspConstants.ITEM_AD, componentAd.getAdId());
+                            .getParsedTemplate(MokaConstants.ITEM_AD, componentAd.getAdId());
                     adRoot.merge(this.templateMerger, childContext, sb);
                 } catch (TemplateParseException e) {
                     e.printStackTrace();
@@ -244,7 +245,7 @@ public class LoopMerger extends AbstractElementMerger {
     private int getTotalIndex(ComponentItem item, int page, int index) {
         if (item.getBoolYN(ItemConstants.COMPONENT_PAGING_YN)) {
             if (item.getString(ItemConstants.COMPONENT_PAGING_TYPE)
-                    .equals(MspConstants.COMPONENT_PAGING_TYPE_NUMBER)) {
+                    .equals(MokaConstants.COMPONENT_PAGING_TYPE_NUMBER)) {
                 return (page - 1) * item.getInt(ItemConstants.COMPONENT_PER_PAGE_COUNT) + index;
             } else {
                 if (page > 1) {
@@ -288,7 +289,7 @@ public class LoopMerger extends AbstractElementMerger {
     }
 
     private ComponentItem getComponentItem(MergeContext context) {
-        Object itemObject = context.get(MspConstants.MERGE_CONTEXT_COMPONENT);
+        Object itemObject = context.get(MokaConstants.MERGE_CONTEXT_COMPONENT);
         if (itemObject != null) {
             return (ComponentItem) itemObject;
         }

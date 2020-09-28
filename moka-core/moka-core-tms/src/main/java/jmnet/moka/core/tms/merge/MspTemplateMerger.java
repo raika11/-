@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JxltEngine.Template;
 import org.apache.commons.jexl3.MapContext;
@@ -38,7 +40,6 @@ import jmnet.moka.common.template.merge.TreeNode;
 import jmnet.moka.common.template.merge.element.ElementMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.element.MspAbstractElementMerger;
@@ -61,7 +62,7 @@ public class MspTemplateMerger implements TemplateMerger<MergeItem> {
             "jmnet.moka.core.tms.merge.element";
     protected static String[] TAGS =
             {Constants.EL_TP, Constants.EL_CP, Constants.EL_CT, Constants.EL_AD, Constants.EL_LOOP,
-                    Constants.EL_DATA, Constants.EL_PAGING, MspConstants.EL_JSON};
+                    Constants.EL_DATA, Constants.EL_PAGING, MokaConstants.EL_JSON};
     protected static List<String> CUSTOM_ELEMENT_MERGER_TAG = Arrays.asList(TAGS);
     private TemplateEngine templateEngine =
             new TemplateEngine(new Engine(new JexlBuilder()), false, 0, '$', '#');
@@ -108,8 +109,8 @@ public class MspTemplateMerger implements TemplateMerger<MergeItem> {
     }
 
     private void loadTemplateForPreview() {
-        this.wrapItemStart = templateEngine.createTemplate(MspConstants.WRAP_ITEM_START);
-        this.wrapItemEnd = templateEngine.createTemplate(MspConstants.WRAP_ITEM_END);
+        this.wrapItemStart = templateEngine.createTemplate(MokaConstants.WRAP_ITEM_START);
+        this.wrapItemEnd = templateEngine.createTemplate(MokaConstants.WRAP_ITEM_END);
 
         this.highlightJsPath =
                 appContext.getBeanFactory().resolveEmbeddedValue("${tms.merge.highlight.js.path}");
@@ -193,8 +194,8 @@ public class MspTemplateMerger implements TemplateMerger<MergeItem> {
      * 아이템 정보를 다시 로딩할 수 있도록 삭제한다.
      * </pre>
      * 
-     * @param type
-     * @param id
+     * @param itemType
+     * @param itemId
      */
     public void purgeItem(String itemType, String itemId) {
         this.templateLoader.purgeItem(itemType, itemId);
@@ -315,11 +316,11 @@ public class MspTemplateMerger implements TemplateMerger<MergeItem> {
 
     private String getHighlightScript(String itemType, String itemId, boolean onlyHighlight) {
         MapContext context = new MapContext();
-        context.set(MspConstants.HIGHLIGHT_JS_PATH, this.highlightJsPath);
-        context.set(MspConstants.HIGHLIGHT_CSS_PATH, this.highlightCssPath);
-        context.set(MspConstants.SHOW_ITEM_TYPE, itemType);
-        context.set(MspConstants.SHOW_ITEM_ID, itemId);
-        context.set(MspConstants.ONLY_HIGHLIGHT, onlyHighlight);
+        context.set(MokaConstants.HIGHLIGHT_JS_PATH, this.highlightJsPath);
+        context.set(MokaConstants.HIGHLIGHT_CSS_PATH, this.highlightCssPath);
+        context.set(MokaConstants.SHOW_ITEM_TYPE, itemType);
+        context.set(MokaConstants.SHOW_ITEM_ID, itemId);
+        context.set(MokaConstants.ONLY_HIGHLIGHT, onlyHighlight);
         StringWriter writer = new StringWriter();
         this.highlightTemplate.evaluate(context, writer);
         return writer.toString();
@@ -391,23 +392,23 @@ public class MspTemplateMerger implements TemplateMerger<MergeItem> {
     @SuppressWarnings("unchecked")
     public void setData(MergeContext context, String dataId, JSONResult result) {
         Map<String, JSONResult> dataMap = null;
-        if (context.has(MspConstants.MERGE_DATA_MAP) == false) {
+        if (context.has(MokaConstants.MERGE_DATA_MAP) == false) {
             dataMap = new HashMap<String, JSONResult>(16);
-            context.set(MspConstants.MERGE_DATA_MAP, dataMap);
+            context.set(MokaConstants.MERGE_DATA_MAP, dataMap);
         } else {
-            dataMap = (Map<String, JSONResult>) context.get(MspConstants.MERGE_DATA_MAP);
+            dataMap = (Map<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
         }
         dataMap.put(dataId, result);
         logger.debug("Loaded Data put : {}", dataId);
     }
 
     public JSONResult getData(MergeContext context, String dataId) {
-        if (context.has(MspConstants.MERGE_DATA_MAP) == false) {
+        if (context.has(MokaConstants.MERGE_DATA_MAP) == false) {
             return null;
         } else {
             @SuppressWarnings("unchecked")
             Map<String, JSONResult> dataMap =
-                    (Map<String, JSONResult>) context.get(MspConstants.MERGE_DATA_MAP);
+                    (Map<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
             return dataMap.get(dataId);
         }
     }

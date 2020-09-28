@@ -36,7 +36,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.dto.HistDTO;
@@ -282,7 +282,7 @@ public class PageRestController {
         Page returnValue = pageService.updatePage(newPage);
 
         // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
-        purgeHelper.purgeTms(request, returnValue.getDomain().getDomainId(), MspConstants.ITEM_PAGE,
+        purgeHelper.purgeTms(request, returnValue.getDomain().getDomainId(), MokaConstants.ITEM_PAGE,
                 returnValue.getPageSeq());
 
         // 결과리턴
@@ -341,7 +341,7 @@ public class PageRestController {
      */
     @GetMapping("/isPageUrl")
     public ResponseEntity<?> getIsPageUrl(HttpServletRequest request,
-            @RequestParam(name = "pageUrl") @Pattern(regexp = MspConstants.PAGE_SERVICE_URL_PATTERN,
+            @RequestParam(name = "pageUrl") @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN,
                     message = "{tps.page.error.invalid.pageUrl2}") String pageUrl,
             @RequestParam(name = "domainId") @Pattern(regexp = "[0-9]{4}$",
                     message = "{tps.domain.error.invalid.domainId}") String domainId,
@@ -369,7 +369,6 @@ public class PageRestController {
      * 
      * @param request 요청
      * @param pageSeq 페이지 순번 (필수)
-     * @param domain 도메인 (필수)
      * @return 퍼지성공여부
      * @throws URISyntaxException
      * @throws IOException
@@ -441,7 +440,7 @@ public class PageRestController {
     /**
      * Page History Entity -> History DTO 변환
      * 
-     * @param history정보
+     * @param hist history정보
      * @return historyDTO
      */
     private HistDTO convertToHistDto(PageHist hist) {

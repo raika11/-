@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSearchDTO;
@@ -50,7 +50,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Autowired
     private UploadFileHelper uploadFileHelper;
 
-    @PersistenceContext(name = MspConstants.PERSISTANCE_UNIT_TPS)
+    @PersistenceContext(name = MokaConstants.PERSISTANCE_UNIT_TPS)
     private final EntityManager entityManager;
 
     @Autowired

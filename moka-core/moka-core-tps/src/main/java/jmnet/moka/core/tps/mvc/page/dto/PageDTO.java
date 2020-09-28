@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import lombok.AllArgsConstructor;
@@ -43,7 +43,7 @@ public class PageDTO implements Serializable {
     @Pattern(regexp = ".+", message = "{tps.page.error.invalid.pageName}")
     private String pageName;
 
-    @Pattern(regexp = MspConstants.PAGE_SERVICE_NAME_PATTERN,
+    @Pattern(regexp = MokaConstants.PAGE_SERVICE_NAME_PATTERN,
             message = "{tps.page.error.invalid.pageServiceName}")
     private String pageServiceName;
 
@@ -60,7 +60,7 @@ public class PageDTO implements Serializable {
     private String pageType;
 
     @NotNull(message = "{tps.page.error.invalid.pageUrl}")
-    @Pattern(regexp = MspConstants.PAGE_SERVICE_URL_PATTERN,
+    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN,
             message = "{tps.page.error.invalid.pageUrl2}")
     private String pageUrl;
 

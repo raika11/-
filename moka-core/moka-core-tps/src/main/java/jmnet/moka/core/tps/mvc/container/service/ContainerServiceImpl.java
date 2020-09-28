@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.template.ParsedItemDTO;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
@@ -141,7 +141,7 @@ public class ContainerServiceImpl implements ContainerService {
                 // container.addContainerRel(relation);
             }
 
-            if (item.getNodeName().equals(MspConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
+            if (item.getNodeName().equals(MokaConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
                                                                              // 추가한다.
                 Optional<Component> component =
                         componentService.findByComponentSeq(Long.parseLong(item.getId()));
@@ -150,9 +150,9 @@ public class ContainerServiceImpl implements ContainerService {
 
                     // template 아이템 추가
                     ContainerRel relationTP = new ContainerRel();
-                    relationTP.setRelType(MspConstants.ITEM_TEMPLATE);
+                    relationTP.setRelType(MokaConstants.ITEM_TEMPLATE);
                     relationTP.setRelSeq(component.get().getTemplate().getTemplateSeq());
-                    relationTP.setRelParentType(MspConstants.ITEM_COMPONENT);
+                    relationTP.setRelParentType(MokaConstants.ITEM_COMPONENT);
                     relationTP.setRelParentSeq(component.get().getComponentSeq());
                     relationTP.setRelOrder(item.getOrder());
 
@@ -165,9 +165,9 @@ public class ContainerServiceImpl implements ContainerService {
                     // data 아이템 추가
                     if (component.get().getDataset() != null) {
                         ContainerRel relatioDS = new ContainerRel();
-                        relatioDS.setRelType(MspConstants.ITEM_DATASET);
+                        relatioDS.setRelType(MokaConstants.ITEM_DATASET);
                         relatioDS.setRelSeq(component.get().getDataset().getDatasetSeq());
-                        relatioDS.setRelParentType(MspConstants.ITEM_COMPONENT);
+                        relatioDS.setRelParentType(MokaConstants.ITEM_COMPONENT);
                         relatioDS.setRelParentSeq(component.get().getComponentSeq());
                         relatioDS.setRelOrder(item.getOrder());
 
@@ -186,8 +186,9 @@ public class ContainerServiceImpl implements ContainerService {
     /**
      * 히스토리저장
      * 
-     * @param container 컨테이너정보
-     * @param bInsert 새로 등록여부
+     * @param saveContainer 컨테이너정보
+     * @param workType 새로 등록여부
+     * @param userName 작업자
      */
     private void insertHist(Container saveContainer, String workType, String userName) {
         ContainerHist hist = new ContainerHist();
@@ -275,13 +276,13 @@ public class ContainerServiceImpl implements ContainerService {
                     && orgComponent.getDataType().equals(TpsConstants.DATATYPE_NONE)) {
 
                 List<ContainerRel> relList = containerRelRepository
-                        .findList(MspConstants.ITEM_COMPONENT, newComponent.getComponentSeq());
+                        .findList(MokaConstants.ITEM_COMPONENT, newComponent.getComponentSeq());
 
                 for (ContainerRel rel : relList) {
                     ContainerRel newRel = ContainerRel.builder().container(rel.getContainer())
-                            .domain(rel.getDomain()).relType(MspConstants.ITEM_DATASET)
+                            .domain(rel.getDomain()).relType(MokaConstants.ITEM_DATASET)
                             .relSeq(newComponent.getDataset().getDatasetSeq())
-                            .relParentType(MspConstants.ITEM_COMPONENT)
+                            .relParentType(MokaConstants.ITEM_COMPONENT)
                             .relParentSeq(newComponent.getComponentSeq())
                             .relOrder(rel.getRelOrder()).build();
                     containerRelRepository.save(newRel);

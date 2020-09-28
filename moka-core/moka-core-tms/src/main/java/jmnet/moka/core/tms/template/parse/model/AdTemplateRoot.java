@@ -1,12 +1,12 @@
 package jmnet.moka.core.tms.template.parse.model;
 
+import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.merge.item.AdItem;
 
 /**
@@ -32,7 +32,7 @@ public class AdTemplateRoot extends MspTemplateRoot {
     @Override
     public void merge(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
         logger.trace("Merge entered : {} {}", this.item.getItemType(), this.item.getItemId());
-        context.set(MspConstants.MERGE_CONTEXT_AD, this.item);
+        context.set(MokaConstants.MERGE_CONTEXT_AD, this.item);
         this.templateRoot.merge(merger, context, sb);
     }
 

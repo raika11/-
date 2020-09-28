@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +38,7 @@ public class PageSimpleDTO implements Serializable {
     @Pattern(regexp = ".+", message = "{tps.page.error.invalid.pageName}")
     private String pageName;
 
-    @Pattern(regexp = MspConstants.PAGE_SERVICE_NAME_PATTERN,
+    @Pattern(regexp = MokaConstants.PAGE_SERVICE_NAME_PATTERN,
             message = "{tps.page.error.invalid.pageServiceName}")
     private String pageServiceName;
 

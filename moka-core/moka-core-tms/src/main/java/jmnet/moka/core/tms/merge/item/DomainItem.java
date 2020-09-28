@@ -1,7 +1,7 @@
 package jmnet.moka.core.tms.merge.item;
 
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 
 public class DomainItem extends MergeItem {
 
@@ -18,7 +18,7 @@ public class DomainItem extends MergeItem {
     }
 
     public String getItemType() {
-        return MspConstants.ITEM_DOMAIN;
+        return MokaConstants.ITEM_DOMAIN;
     }
 
     public String getItemId() {

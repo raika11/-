@@ -7,6 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,6 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -297,11 +298,11 @@ public class TemplateRestController {
                 // 공통 도메인일 때
                 List<String> domainIds =
                         templateService.findDomainIdListByTemplateSeq(returnVal.getTemplateSeq());
-                purgeHelper.purgeTms(request, domainIds, MspConstants.ITEM_TEMPLATE,
+                purgeHelper.purgeTms(request, domainIds, MokaConstants.ITEM_TEMPLATE,
                         returnVal.getTemplateSeq());
             } else {
                 purgeHelper.purgeTms(request, returnVal.getDomain().getDomainId(),
-                        MspConstants.ITEM_TEMPLATE, returnVal.getTemplateSeq());
+                        MokaConstants.ITEM_TEMPLATE, returnVal.getTemplateSeq());
             }
 
             // 리턴값 셋팅
@@ -370,7 +371,7 @@ public class TemplateRestController {
                 .orElseThrow(() -> new NoDataException(message));
 
         // 관련 데이터 확인
-        Boolean hasRels = relationHelper.hasRelations(templateSeq, MspConstants.ITEM_TEMPLATE);
+        Boolean hasRels = relationHelper.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
         if (hasRels) {
             throw new Exception(messageByLocale.get("tps.template.error.delete.related", request));
         }
@@ -414,7 +415,7 @@ public class TemplateRestController {
         String message = messageByLocale.get("tps.template.error.noContent", request);
         templateService.findByTemplateSeq(seq).orElseThrow(() -> new NoDataException(message));
 
-        Boolean chkRels = relationHelper.hasRelations(seq, MspConstants.ITEM_TEMPLATE);
+        Boolean chkRels = relationHelper.hasRelations(seq, MokaConstants.ITEM_TEMPLATE);
         ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
 
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -438,7 +439,7 @@ public class TemplateRestController {
             @Valid @SearchParam RelSearchDTO search) throws NoDataException, Exception {
 
         search.setRelSeq(seq);
-        search.setRelSeqType(MspConstants.ITEM_TEMPLATE);
+        search.setRelSeqType(MokaConstants.ITEM_TEMPLATE);
 
         // 템플릿 확인
         String message = messageByLocale.get("tps.template.error.noContent", request);

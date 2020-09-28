@@ -10,6 +10,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +26,6 @@ import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tms.merge.MspPreviewTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
@@ -84,7 +85,7 @@ public class PreviewController {
             MspPreviewTemplateMerger dtm = (MspPreviewTemplateMerger) appContext
                     .getBean("previewTemplateMerger", domainItem);
 
-            PageItem pageItem = (PageItem) dtm.getItem(MspConstants.ITEM_PAGE, "4");
+            PageItem pageItem = (PageItem) dtm.getItem(MokaConstants.ITEM_PAGE, "4");
             StringBuilder sb = dtm.merge(pageItem, null, true);
 
             return new ResponseEntity<>(sb.toString(), HttpStatus.OK);

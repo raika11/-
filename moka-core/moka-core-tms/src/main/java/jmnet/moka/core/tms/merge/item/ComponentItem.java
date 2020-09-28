@@ -1,14 +1,14 @@
 package jmnet.moka.core.tms.merge.item;
 
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 
 public class ComponentItem extends MergeItem {
 
     private static final long serialVersionUID = 7844344606132646735L;
 
     public String getItemType() {
-        return MspConstants.ITEM_COMPONENT;
+        return MokaConstants.ITEM_COMPONENT;
     }
 
     public String getItemId() {

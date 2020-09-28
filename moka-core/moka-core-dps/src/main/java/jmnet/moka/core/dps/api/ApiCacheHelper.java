@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jmnet.moka.common.ApiResult;
 import jmnet.moka.common.cache.CacheManager;
-import jmnet.moka.core.common.MspConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.dps.api.model.Api;
 
 public class ApiCacheHelper {
@@ -20,8 +20,8 @@ public class ApiCacheHelper {
 
     private static ObjectMapper MAPPER = new ObjectMapper();
     static {
-        MAPPER.setDateFormat(MspConstants.jsonDateFormat());
-        MAPPER.setTimeZone(TimeZone.getTimeZone(MspConstants.JSON_DATE_TIME_ZONE));
+        MAPPER.setDateFormat(MokaConstants.jsonDateFormat());
+        MAPPER.setTimeZone(TimeZone.getTimeZone(MokaConstants.JSON_DATE_TIME_ZONE));
     }
 
     public static String makeCacheType(ApiContext apiContext) {

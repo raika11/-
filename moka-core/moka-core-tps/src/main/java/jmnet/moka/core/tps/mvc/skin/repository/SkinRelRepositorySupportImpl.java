@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.skin.repository;
 
 import java.util.List;
 
+import jmnet.moka.core.common.MokaConstants;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +13,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.core.tps.mvc.domain.entity.QDomain;
 import jmnet.moka.core.tps.mvc.skin.entity.QSkin;
 import jmnet.moka.core.tps.mvc.skin.entity.QSkinRel;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.skin.entity.SkinRel;
@@ -32,9 +32,9 @@ public class SkinRelRepositorySupportImpl extends QuerydslRepositorySupport
         QSkinRel skinRel = QSkinRel.skinRel;
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(skinRel.relParentType.eq(MspConstants.ITEM_COMPONENT));
+        builder.and(skinRel.relParentType.eq(MokaConstants.ITEM_COMPONENT));
         builder.and(skinRel.relParentSeq.eq(component.getComponentSeq()));
-        builder.and(skinRel.relType.eq(MspConstants.ITEM_TEMPLATE));
+        builder.and(skinRel.relType.eq(MokaConstants.ITEM_TEMPLATE));
 
         queryFactory.update(skinRel).where(builder)
                 .set(skinRel.relSeq, component.getTemplate().getTemplateSeq()).execute();
@@ -49,9 +49,9 @@ public class SkinRelRepositorySupportImpl extends QuerydslRepositorySupport
             // datasetSeq가 변경된 경우: update
             if (!orgComponent.getDataType().equals(TpsConstants.DATATYPE_NONE)) {
                 BooleanBuilder builder = new BooleanBuilder();
-                builder.and(skinRel.relParentType.eq(MspConstants.ITEM_COMPONENT));
+                builder.and(skinRel.relParentType.eq(MokaConstants.ITEM_COMPONENT));
                 builder.and(skinRel.relParentSeq.eq(newComponent.getComponentSeq()));
-                builder.and(skinRel.relType.eq(MspConstants.ITEM_DATASET));
+                builder.and(skinRel.relType.eq(MokaConstants.ITEM_DATASET));
 
                 queryFactory.update(skinRel).where(builder)
                         .set(skinRel.relSeq, newComponent.getDataset().getDatasetSeq()).execute();
@@ -64,9 +64,9 @@ public class SkinRelRepositorySupportImpl extends QuerydslRepositorySupport
             // datasetSeq가 있다가 삭제된 경우: delete
             if (!orgComponent.getDataType().equals(TpsConstants.DATATYPE_NONE)) {
                 BooleanBuilder builder = new BooleanBuilder();
-                builder.and(skinRel.relParentType.eq(MspConstants.ITEM_COMPONENT));
+                builder.and(skinRel.relParentType.eq(MokaConstants.ITEM_COMPONENT));
                 builder.and(skinRel.relParentSeq.eq(newComponent.getComponentSeq()));
-                builder.and(skinRel.relType.eq(MspConstants.ITEM_DATASET));
+                builder.and(skinRel.relType.eq(MokaConstants.ITEM_DATASET));
 
                 queryFactory.delete(skinRel).where(builder).execute();
             }

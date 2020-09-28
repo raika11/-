@@ -3,6 +3,8 @@ package jmnet.moka.core.tms.template.loader;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -14,7 +16,6 @@ import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.common.MspConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -61,7 +62,7 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
         // boolean isWorkComponent = this.workerId != null
         // && itemType.equals(MspConstants.ITEM_COMPONENT) && itemId.equals(this.componentId);
         boolean isWorkComponent = false;
-        if (this.workerId != null && itemType.equals(MspConstants.ITEM_COMPONENT)) {
+        if (this.workerId != null && itemType.equals(MokaConstants.ITEM_COMPONENT)) {
             if (this.componentIdList.size() == 0 || this.componentIdList.contains(itemId)) {
                 isWorkComponent = true;
             }
@@ -73,7 +74,7 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
         parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
         parameterMap.put(PARAM_ITEM_ID, itemId);
         if (isWorkComponent) {
-            parameterMap.put(MspConstants.PARAM_WORKER_ID, this.workerId);
+            parameterMap.put(MokaConstants.PARAM_WORKER_ID, this.workerId);
         }
 
         MergeItem item = null;
@@ -83,12 +84,12 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
             JSONObject jsonObject = (JSONObject) jsonArray.get(0);
             item = DPS_ITEM_FACTORY.getItem(itemType, jsonObject);
             // ComponentItem인 경우 COMPONENT_AD를 처리한다
-            if (itemType.equals(MspConstants.ITEM_COMPONENT)) {
+            if (itemType.equals(MokaConstants.ITEM_COMPONENT)) {
                 setComponentAd(item, jsonResult);
             }
             String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
-            if (itemType.equals(MspConstants.ITEM_PAGE)) {
+            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                 this.uri2ItemMap.put(item.getString(ItemConstants.PAGE_URL), itemKey);
             }
             if (cacheable) {

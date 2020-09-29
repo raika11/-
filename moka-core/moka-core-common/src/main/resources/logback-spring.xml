@@ -168,7 +168,9 @@
 		<appender-ref ref="console" />
 		<appender-ref ref="ACTION-FILE" />
 		<appender-ref ref="USER-SIFT" />
+		<!--  console을 통해 wildfly에서 생성하는 로그파일 설정을 따름
 		<appender-ref ref="FILE" />
+		-->
 	</root>
 
 </configuration>

@@ -139,4 +139,7 @@ public class MokaConstants {
     public static final String PAGE_SERVICE_NAME_PATTERN = "^[a-zA-Z0-9_\\-]*$";
     public static final String PAGE_SERVICE_URL_PATTERN = "^[a-zA-Z0-9_\\-\\/]*$";
 
+    public static final String SYSTEM_UNKNOWN = "UNKNOWN";
+    public static final String IP_UNKNOWN = "UNKNOWN";
+    public static final String USER_UNKNOWN = "UNKNOWN";
 }

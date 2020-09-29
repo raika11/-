@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
-jmnet.moka.core.common.encrypt.MokaEncryptConfiguration
+jmnet.moka.core.common.encrypt.MokaEncryptConfiguration,\
+jmnet.moka.core.common.logger.ActionLoggerConfiguration

@@ -10,32 +10,16 @@
 			<property resource="application.properties" />
 		</then>
 		<else>
-			<springProfile name="dev">
-			    <property resource='application-dev.properties' />
-			</springProfile>
-			<springProfile name="qa">
-			    <property resource='application-qa.properties' />
+			<springProfile name="stg">
+			    <property resource='application-stg.properties' />
 			</springProfile>
 			<springProfile name="prod">
 			    <property resource='application-prod.properties' />
 			</springProfile>
 		</else>
 	</if>
-	
-	<!-- setting -->
-	<springProfile name="qa">
-		<property resource="application-qa.properties" />
-	</springProfile>
-	<springProfile name="dev">
-		<property resource="application-dev.properties" />
-	</springProfile>
-	<springProfile name="prod">
-		<property resource="application-prod.properties" />
-	</springProfile>
 
-	<!-- log packagename -->
-	<property name="LOG_PACKAGE_NAME"
-		value="${logging.packagename}" />
+
 	<!-- log file path -->
 	<property name="LOG_PATH" value="${logging.path}" />
 	<!-- log file name -->
@@ -50,6 +34,10 @@
 		value="${logging.pattern.console}" />
 	<property name="LOG_MDC_PATTERN"
 		value="${logging.pattern.mdc}" />
+	<property name="LOG_ACTION_PATTERN"
+		value="${logging.pattern.action}" />
+	<property name="LOG_ROOT_LEVEL"
+		value="${logging.root.level}" />
 
 	<!-- console log -->
 	<appender name="console"
@@ -65,10 +53,10 @@
 	<!-- log file -->
 	<appender name="FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+		<file>${LOG_PATH}/${LOG_FILE_NAME}</file>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log
+			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}
 			</fileNamePattern>
 			<maxHistory>${LOG_DAYS}</maxHistory>
 		</rollingPolicy>
@@ -83,12 +71,12 @@
 	</appender>
 
 	<!-- system log file -->
-	<appender name="SYSTEM-FILE"
+	<!--<appender name="SYSTEM-FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/${LOG_FILE_NAME}-system.log</file>
+		<file>${LOG_PATH}/system.log</file>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}-system.%d{yyyy-MM-dd}.log
+			<fileNamePattern>${LOG_PATH}/system.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 			<maxHistory>${LOG_DAYS}</maxHistory>
 		</rollingPolicy>
@@ -108,15 +96,15 @@
 			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<pattern>${LOG_PATTERN}</pattern>
 		</encoder>
-	</appender>
+	</appender>-->
 
 	<!-- action log file -->
 	<appender name="ACTION-FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/${LOG_FILE_NAME}-action.log</file>
+		<file>${LOG_PATH}/action.log</file>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}-action.%d{yyyy-MM-dd}.log
+			<fileNamePattern>${LOG_PATH}/action.log.%d{yyyy-MM-dd}
 			</fileNamePattern>
 			<maxHistory>${LOG_DAYS}</maxHistory>
 		</rollingPolicy>
@@ -134,7 +122,7 @@
 		</filter>
 		<encoder
 			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>${LOG_PATTERN}</pattern>
+			<pattern>${LOG_ACTION_PATTERN}</pattern>
 		</encoder>
 	</appender>
 
@@ -157,10 +145,10 @@
 			<!-- log file -->
 			<appender name="USER-FILE"
 				class="ch.qos.logback.core.rolling.RollingFileAppender">
-				<file>${LOG_PATH}/${LOG_FILE_NAME}-user.log</file>
+				<file>${LOG_PATH}/user.log</file>
 				<rollingPolicy
 					class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-					<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}-user.%d{yyyy-MM-dd}.log
+					<fileNamePattern>${LOG_PATH}/user.log.%d{yyyy-MM-dd}
 					</fileNamePattern>
 					<maxHistory>${LOG_DAYS}</maxHistory>
 				</rollingPolicy>
@@ -176,39 +164,11 @@
 		</sift>
 	</appender>
 
-	<if condition='p("spring.profiles.active").equals("prod")'>
-		<then>
-			<logger name="${LOG_PACKAGE_NAME}" level="INFO" />
-
-			<logger name="org.springframework" additivity="false">
-				<level value="WARN" />
-				<appender-ref ref="console" />
-			</logger>
-
-			<root level="INFO">
-				<appender-ref ref="console" />
-				<appender-ref ref="ACTION-FILE" />
-				<appender-ref ref="SYSTEM-FILE" />
-				<appender-ref ref="USER-SIFT" />
-				<appender-ref ref="FILE" />
-			</root>
-		</then>
-		<else>
-			<logger name="${LOG_PACKAGE_NAME}" level="DEBUG" />
-
-			<logger name="org.springframework" additivity="false">
-				<level value="DEBUG" />
-				<appender-ref ref="console" />
-			</logger>
-
-			<root level="DEBUG">
-				<appender-ref ref="console" />
-				<appender-ref ref="ACTION-FILE" />
-				<appender-ref ref="SYSTEM-FILE" />
-				<appender-ref ref="USER-SIFT" />
-				<appender-ref ref="FILE" />
-			</root>
-		</else>
-	</if>
+	<root level="${LOG_ROOT_LEVEL}">
+		<appender-ref ref="console" />
+		<appender-ref ref="ACTION-FILE" />
+		<appender-ref ref="USER-SIFT" />
+		<appender-ref ref="FILE" />
+	</root>
 
 </configuration>

@@ -42,7 +42,9 @@ public class ActionLogger {
   }
 
   private ActionLogger(String systemId) {
-    this.systemId = systemId;
+    if(McpString.isNotEmpty(systemId)) {
+      this.systemId = systemId;
+    }
     init();
   }
 
@@ -85,16 +87,6 @@ public class ActionLogger {
    */
   public void fail(String actor, ActionType actionType, long executedTime, String msg) {
     log(actor, actionType, ActionResult.FAIL, executedTime, msg);
-  }
-
-  /**
-   * 스킵 로그 생성
-   * @param actor 사용자id 또는 client ip
-   * @param actionType 액션 유형
-   * @param executedTime 실행시간
-   */
-  public void skip(String actor, ActionType actionType, long executedTime) {
-    log(actor, actionType, ActionResult.SKIP, executedTime, null);
   }
 
   /**

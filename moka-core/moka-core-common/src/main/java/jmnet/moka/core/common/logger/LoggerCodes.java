@@ -18,6 +18,8 @@ public final class LoggerCodes {
    */
   public enum ActionType {
 
+    LOGIN( "LOGIN", "로그인"),
+    LOGOUT( "LOGOUT", "로그아웃"),
     INSERT( "INSERT", "입력"),
     UPDATE( "UPDATE", "변경"),
     DELETE( "DELETE", "삭제"),

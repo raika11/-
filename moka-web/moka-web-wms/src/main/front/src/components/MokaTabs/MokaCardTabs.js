@@ -1,10 +1,42 @@
 import React from 'react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 
-const MokaTabs = (props) => {
+const propTypes = {
+    /**
+     * className
+     */
+    className: PropTypes.string,
+    /**
+     * Nav Item을 화면에 꽉 채울 것인지
+     */
+    fill: PropTypes.bool,
+    /**
+     * tab id
+     */
+    id: PropTypes.string,
+    /**
+     * tab 컨텐츠(array)
+     */
+    tabs: PropTypes.arrayOf(PropTypes.node),
+    /**
+     * tab 컨텐츠의 Nav(array), tab과 갯수가 동일해야한다
+     */
+    tabNav: PropTypes.arrayOf(PropTypes.string),
+};
+const defaultProps = {
+    fill: false,
+    tabs: [],
+    tabNav: [],
+};
+
+/**
+ * 카드모양의 탭
+ */
+const MokaCardTabs = (props) => {
     const { className, fill, id, tabs, tabNavs } = props;
 
     return (
@@ -33,4 +65,7 @@ const MokaTabs = (props) => {
     );
 };
 
-export default MokaTabs;
+MokaCardTabs.propTypes = propTypes;
+MokaCardTabs.defaultProps = defaultProps;
+
+export default MokaCardTabs;

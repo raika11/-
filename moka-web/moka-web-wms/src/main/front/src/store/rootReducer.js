@@ -5,5 +5,5 @@ import layout from './layout/layoutReducer';
 
 export default combineReducers({
     toastr,
-    layout
+    layout,
 });

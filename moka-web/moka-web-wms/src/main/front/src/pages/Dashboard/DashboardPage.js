@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+import FormCheck from 'react-bootstrap/FormCheck';
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -197,6 +198,10 @@ const MokaDashboardPage = () => {
                                 {/* Switch */}
                                 <Form.Group>
                                     <Form.Label>6) Switch (기본이 custom)</Form.Label>
+                                    <FormCheck>
+                                        <FormCheck.Label>TEST</FormCheck.Label>
+                                        <FormCheck.Input custom type="radio" />
+                                    </FormCheck>
                                     <Form.Check type="switch" label="default check" id="custom-switch" />
                                     <Form.Check type="switch" label="default check" id="d-custom-switch" disabled />
                                 </Form.Group>

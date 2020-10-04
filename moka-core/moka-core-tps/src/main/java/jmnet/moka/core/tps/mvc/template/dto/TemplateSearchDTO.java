@@ -3,6 +3,8 @@
  */
 package jmnet.moka.core.tps.mvc.template.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -23,13 +25,14 @@ import lombok.EqualsAndHashCode;
  * @since 2020. 2. 14. 오후 4:54:01
  * @author ssc
  */
-@Alias("TemplateSearchDTO")
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
+@Alias("TemplateSearchDTO")
 public class TemplateSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 5900493133914418299L;

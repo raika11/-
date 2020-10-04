@@ -7,6 +7,8 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,9 +31,10 @@ import lombok.NoArgsConstructor;
  * @since 2020. 1. 14. 오후 1:33:28
  * @author jeon
  */
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TemplateDTO implements Serializable {
@@ -42,28 +45,28 @@ public class TemplateDTO implements Serializable {
 
     private Long templateSeq;
 
-    private Integer cropHeight;
-
-    private Integer cropWidth;
-
-    @Length(max = 4000, message = "{tps.template.error.invalid.description}")
-    private String description;
-
     private DomainSimpleDTO domain;
-
-    private String templateBody;
-
-    private String templateGroup;
 
     @NotNull(message = "{tps.template.error.invalid.templateName}")
     @Pattern(regexp = ".+", message = "{tps.template.error.invalid.templateName}")
     private String templateName;
 
-    private String templateThumbnail;
+    private String templateBody;
 
-    private MultipartFile templateThumbnailFile;
+    private Integer cropWidth;
+
+    private Integer cropHeight;
+
+    private String templateGroup;
 
     private Integer templateWidth;
+
+    private String templateThumb;
+
+    @Length(max = 4000, message = "{tps.template.error.invalid.description}")
+    private String description;
+
+    private MultipartFile templateThumbnailFile;
 
     public TemplateItem toTemplateItem() {
         TemplateItem templateItem = new TemplateItem();

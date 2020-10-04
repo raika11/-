@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -31,7 +33,8 @@ import lombok.NoArgsConstructor;
 @Alias("DatasetVO")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DatasetVO implements Serializable {

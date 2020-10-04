@@ -30,8 +30,8 @@
 		<class>jmnet.moka.core.tps.mvc.desking.entity.DeskingWork</class>
 		<class>jmnet.moka.core.tps.mvc.component.entity.ComponentAd</class>
 		<class>jmnet.moka.core.tps.mvc.reserved.entity.Reserved</class>
-		<class>jmnet.moka.core.tps.mvc.etccode.entity.Etccode</class>
-		<class>jmnet.moka.core.tps.mvc.etccode.entity.EtccodeType</class>
+		<class>jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt</class>
+		<class>jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgtGrp</class>
 		<class>jmnet.moka.core.tps.mvc.ad.entity.Ad</class>
 		<class>jmnet.moka.core.tps.mvc.code.entity.Code</class>
 		<class>jmnet.moka.core.tps.mvc.desking.entity.DeskingRelWork</class>

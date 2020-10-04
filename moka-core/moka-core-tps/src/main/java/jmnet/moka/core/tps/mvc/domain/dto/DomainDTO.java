@@ -1,17 +1,21 @@
 package jmnet.moka.core.tps.mvc.domain.dto;
 
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.List;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.DomainItem;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <pre>
@@ -66,10 +70,6 @@ public class DomainDTO implements Serializable {
     private String apiCodeId;		// apiHost + apiPath
 
     private String description;
-
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = MspConstants.JSON_DATE_FORMAT, timezone = MspConstants.JSON_DATE_TIME_ZONE)
-//    @DateTimeFormat(pattern = MspConstants.JSON_DATE_FORMAT)
-//    private Date regDt;
 
     public DomainItem toDomainItem() {
         DomainItem domainItem = new DomainItem();

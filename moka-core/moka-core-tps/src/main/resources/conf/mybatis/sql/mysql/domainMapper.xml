@@ -4,7 +4,7 @@
 	namespace="jmnet.moka.core.tps.mvc.domain.mapper.DomainMapper">
 	<select id="findAll" parameterType="map"
 		resultType="jmnet.moka.core.tps.mvc.domain.dto.DomainDTO">
-		SELECT * FROM WMS_DOMAIN
+		SELECT ROW_NUMBER() OVER(ORDER BY DOMAIN_ID) AS RNUM, * FROM WMS_DOMAIN
 		<if test="domainId != null and domainId != ''">
 			WHERE DOMAIN_ID = #{domainId}
 		</if>

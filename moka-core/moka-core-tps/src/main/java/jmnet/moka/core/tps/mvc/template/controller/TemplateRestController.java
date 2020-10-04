@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import jmnet.moka.core.common.MokaConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,10 +66,9 @@ import jmnet.moka.core.tps.mvc.user.dto.UserDTO;
  */
 @Controller
 @Validated
+@Slf4j
 @RequestMapping("/api/templates")
 public class TemplateRestController {
-    private static final Logger logger = LoggerFactory.getLogger(TemplateRestController.class);
-
     @Autowired
     private TemplateService templateService;
 
@@ -139,8 +139,8 @@ public class TemplateRestController {
 
         TemplateDTO templateDTO = modelMapper.map(template, TemplateDTO.class);
 
-        if (!McpString.isNullOrEmpty(templateDTO.getTemplateThumbnail())) {
-            templateDTO.setTemplateThumbnail("/image/" + templateDTO.getTemplateThumbnail());
+        if (!McpString.isNullOrEmpty(templateDTO.getTemplateThumb())) {
+            templateDTO.setTemplateThumb("/image/" + templateDTO.getTemplateThumb());
         }
 
         ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(templateDTO);
@@ -172,8 +172,9 @@ public class TemplateRestController {
         }
 
         Template template = modelMapper.map(templateDTO, Template.class);
-        template.setCreateYmdt(McpDate.nowStr());
-        template.setCreator(principal.getName());
+        template.setRegDt(McpDate.now());
+//        template.setRegId(principal.getName());
+        template.setRegId("test");
         if (template.getTemplateBody() == null) {
             template.setTemplateBody("");
         }
@@ -188,20 +189,20 @@ public class TemplateRestController {
                 // 이미지파일 저장(multipartFile)
                 String imgPath = templateService.saveTemplateImage(returnVal,
                         templateDTO.getTemplateThumbnailFile());
-                returnVal.setTemplateThumbnail(imgPath);
+                returnVal.setTemplateThumb(imgPath);
 
                 // 썸네일경로 업데이트(히스토리 생성X)
                 returnVal = templateService.updateTemplate(template, false);
 
-            } else if (!McpString.isNullOrEmpty(templateDTO.getTemplateThumbnail())) {
+            } else if (!McpString.isNullOrEmpty(templateDTO.getTemplateThumb())) {
                 /*
                  * 파일은 없는데 이미지 url이 있는 경우 ===> 파일을 복사한다! 복사할 파일의 /image/template/ 경로를 없애줌
                  */
-                String targetImg = templateDTO.getTemplateThumbnail();
+                String targetImg = templateDTO.getTemplateThumb();
                 targetImg = targetImg.replace(TpsConstants.TEMPLATE_IMAGE_PREFIEX, "");
                 targetImg = targetImg.replace("template/", "");
                 String imgPath = templateService.copyTemplateImage(returnVal, targetImg);
-                returnVal.setTemplateThumbnail(imgPath);
+                returnVal.setTemplateThumb(imgPath);
 
                 // 썸네일경로 업데이트(히스토리 생성X)
                 returnVal = templateService.updateTemplate(template, false);
@@ -209,16 +210,16 @@ public class TemplateRestController {
 
             TemplateDTO returnValDTO = modelMapper.map(returnVal, TemplateDTO.class);
 
-            if (!McpString.isNullOrEmpty(returnValDTO.getTemplateThumbnail())) {
-                returnValDTO.setTemplateThumbnail(
-                        TpsConstants.TEMPLATE_IMAGE_PREFIEX + returnValDTO.getTemplateThumbnail());
+            if (!McpString.isNullOrEmpty(returnValDTO.getTemplateThumb())) {
+                returnValDTO.setTemplateThumb(
+                        TpsConstants.TEMPLATE_IMAGE_PREFIEX + returnValDTO.getTemplateThumb());
             }
 
             ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(returnValDTO);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("[FAIL TO INSERT TEMPLATE]", e);
+            log.error("[FAIL TO INSERT TEMPLATE]", e);
             throw new Exception(messageByLocale.get("tps.template.error.save", request), e);
         }
     }
@@ -252,10 +253,11 @@ public class TemplateRestController {
         Template orgTemplate = templateService.findByTemplateSeq(templateDTO.getTemplateSeq())
                 .orElseThrow(() -> new NoDataException(message));
 
-        newTemplate.setCreateYmdt(orgTemplate.getCreateYmdt());
-        newTemplate.setCreator(orgTemplate.getCreator());
-        newTemplate.setModifiedYmdt(McpDate.nowStr());
-        newTemplate.setModifier(principal.getName());
+        newTemplate.setRegDt(orgTemplate.getRegDt());
+        newTemplate.setRegId(orgTemplate.getRegId());
+        newTemplate.setModDt(McpDate.now());
+//        newTemplate.setModId(principal.getName());
+        newTemplate.setRegId("test");
         if (newTemplate.getTemplateBody() == null) {
             newTemplate.setTemplateBody("");
         }
@@ -267,15 +269,15 @@ public class TemplateRestController {
             if (templateDTO.getTemplateThumbnailFile() != null
                     && !templateDTO.getTemplateThumbnailFile().isEmpty()) {
 
-                if (!McpString.isNullOrEmpty(orgTemplate.getTemplateThumbnail())) {
+                if (!McpString.isNullOrEmpty(orgTemplate.getTemplateThumb())) {
                     templateService.deleteTemplateImage(orgTemplate);
                 }
                 String imgPath = templateService.saveTemplateImage(newTemplate,
                         templateDTO.getTemplateThumbnailFile());
-                newTemplate.setTemplateThumbnail(imgPath);
+                newTemplate.setTemplateThumb(imgPath);
 
-            } else if (!McpString.isNullOrEmpty(orgTemplate.getTemplateThumbnail())
-                    && McpString.isNullOrEmpty(newTemplate.getTemplateThumbnail())) {
+            } else if (!McpString.isNullOrEmpty(orgTemplate.getTemplateThumb())
+                    && McpString.isNullOrEmpty(newTemplate.getTemplateThumb())) {
                 templateService.deleteTemplateImage(orgTemplate);
             }
 
@@ -289,8 +291,8 @@ public class TemplateRestController {
             }
             TemplateDTO returnValDTO = modelMapper.map(returnVal, TemplateDTO.class);
 
-            if (!McpString.isNullOrEmpty(returnValDTO.getTemplateThumbnail())) {
-                returnValDTO.setTemplateThumbnail("/image/" + returnValDTO.getTemplateThumbnail());
+            if (!McpString.isNullOrEmpty(returnValDTO.getTemplateThumb())) {
+                returnValDTO.setTemplateThumb("/image/" + returnValDTO.getTemplateThumb());
             }
 
             // purge 날림!!
@@ -310,7 +312,7 @@ public class TemplateRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("[FAIL TO UPDATE TEMPLATE] seq: {}) {}", templateDTO.getTemplateSeq(),
+            log.error("[FAIL TO UPDATE TEMPLATE] seq: {}) {}", templateDTO.getTemplateSeq(),
                     e.getMessage());
             throw new Exception(messageByLocale.get("tps.template.error.save", request), e);
         }
@@ -382,7 +384,7 @@ public class TemplateRestController {
             templateService.deleteTemplate(template);
 
             // 썸네일 파일 삭제
-            if (McpString.isNotEmpty(template.getTemplateThumbnail())) {
+            if (McpString.isNotEmpty(template.getTemplateThumb())) {
                 templateService.deleteTemplateImage(template);
             }
 
@@ -390,7 +392,7 @@ public class TemplateRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("[FAIL TO DELETE TEMPLATE] seq: {}) {}", templateSeq, e.getMessage());
+            log.error("[FAIL TO DELETE TEMPLATE] seq: {}) {}", templateSeq, e.getMessage());
             throw new Exception(messageByLocale.get("tps.template.error.delete", request), e);
         }
     }

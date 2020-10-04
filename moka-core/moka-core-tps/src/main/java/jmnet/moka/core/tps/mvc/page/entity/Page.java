@@ -9,17 +9,16 @@ import javax.persistence.*;
 
 import jmnet.moka.common.utils.McpDate;
 import lombok.*;
+import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 /**
- * The persistent class for the WMS_PAGE database table.
+ * The persistent class for the TB_WMS_PAGE database table.
  * 
  */
 @AllArgsConstructor
@@ -42,13 +41,16 @@ public class Page implements Serializable {
     @Column(name = "PAGE_SEQ")
     private Long pageSeq;
 
-    @Column(name = "PAGE_NAME", nullable = false)
+    @Nationalized
+    @Column(name = "PAGE_NAME", nullable = false, length = 256)
     private String pageName;
 
-    @Column(name = "PAGE_SERVICE_NAME")
+    @Nationalized
+    @Column(name = "PAGE_SERVICE_NAME", length = 256)
     private String pageServiceName;
 
-    @Column(name = "PAGE_DISPLAY_NAME")
+    @Nationalized
+    @Column(name = "PAGE_DISPLAY_NAME", length = 256)
     private String pageDisplayName;
 
     @ToString.Exclude   // self join시 문제가 있어 exclude
@@ -58,53 +60,57 @@ public class Page implements Serializable {
     private Page parent;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DOMAIN_ID", nullable = false, referencedColumnName = "DOMAIN_ID")
+    @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
-    @Column(name = "PAGE_TYPE", nullable = false)
+    @Column(name = "PAGE_TYPE", nullable = false, length = 24)
     private String pageType;
 
-    @Column(name = "PAGE_URL", nullable = false)
+    @Column(name = "PAGE_URL", nullable = false, length = 512)
     private String pageUrl;
 
     @Column(name = "PAGE_ORD", nullable = false)
     private Integer pageOrd;
 
-    @Lob
+    @Nationalized
     @Column(name = "PAGE_BODY")
     private String pageBody;
 
-    @Column(name = "URL_PARAM")
+    @Column(name = "URL_PARAM", length = 64)
     private String urlParam;
 
-    @Column(name = "USE_YN", columnDefinition = "char", nullable = false)
+    @Column(name = "USE_YN", columnDefinition = "char", nullable = false, length = 1)
     private String useYn;
 
-    @Column(name = "FILE_YN", columnDefinition = "char")
+    @Column(name = "FILE_YN", columnDefinition = "char", length = 1)
     private String fileYn;
 
-    @Column(name = "KWD")
+    @Nationalized
+    @Column(name = "KWD", length = 128)
     private String kwd;
 
-    @Column(name = "DESCRIPTION")
+    @Nationalized
+    @Column(name = "DESCRIPTION", length = 4000)
     private String description;
 
-    @Column(name = "MOVE_YN", columnDefinition = "char", nullable = false)
+    @Column(name = "MOVE_YN", columnDefinition = "char", nullable = false, length = 1)
     private String moveYn;
 
-    @Column(name = "MOVE_URL")
+    @Column(name = "MOVE_URL", length = 512)
     private String moveUrl;
 
     @Column(name = "REG_DT")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
-    @Column(name = "REG_ID")
+    @Column(name = "REG_ID", length = 50)
     private String regId;
 
     @Column(name = "MOD_DT")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
-    @Column(name = "MOD_ID")
+    @Column(name = "MOD_ID", length = 50)
     private String modId;
 
     @Builder.Default
@@ -119,6 +125,16 @@ public class Page implements Serializable {
         this.fileYn = this.fileYn == null ? "N" : this.fileYn;
         this.moveYn = this.moveYn == null ? "N" : this.moveYn;
         this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.pageOrd = this.pageOrd == null ? 1 : this.pageOrd;
+        this.useYn = this.useYn == null ? "Y" : this.useYn;
+        this.fileYn = this.fileYn == null ? "N" : this.fileYn;
+        this.moveYn = this.moveYn == null ? "N" : this.moveYn;
+        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
     }
 
     /**

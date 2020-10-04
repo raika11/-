@@ -90,7 +90,7 @@ public class ContainerRelRepositorySupportImpl extends QuerydslRepositorySupport
                         containerRel.relSeq.as("relSeq"),
                         // containerRel.relParentType.as("relParentType"),
                         // containerRel.relParentSeq.as("relParentSeq"),
-                        containerRel.relOrder.as("relOrder")))
+                        containerRel.relOrd.as("relOrd")))
                 .distinct().from(containerRel).where(builder).join(domain)
                 .on(containerRel.domain.domainId.eq(domain.domainId)).fetchJoin().join(container)
                 .on(containerRel.container.containerSeq.eq(container.containerSeq)).fetchJoin();

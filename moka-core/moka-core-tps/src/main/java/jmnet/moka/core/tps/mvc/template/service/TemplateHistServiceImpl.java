@@ -34,8 +34,8 @@ public class TemplateHistServiceImpl implements TemplateHistService {
     @Override
     public TemplateHist insertHistory(Template template) throws Exception {
         TemplateHist templateHist = TemplateHist.builder()
-                .createYmdt(template.getCreateYmdt())
-                .creator(template.getCreator())
+                .regDt(template.getRegDt())
+                .regId(template.getRegId())
                 .templateBody(template.getTemplateBody())
                 .template(template)
                 .build();

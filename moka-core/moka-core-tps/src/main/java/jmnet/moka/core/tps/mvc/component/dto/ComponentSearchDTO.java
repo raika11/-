@@ -2,6 +2,9 @@ package jmnet.moka.core.tps.mvc.component.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -20,10 +23,11 @@ import lombok.EqualsAndHashCode;
  *
  */
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 @Alias("componentSearchDTO")
 public class ComponentSearchDTO extends SearchDTO {

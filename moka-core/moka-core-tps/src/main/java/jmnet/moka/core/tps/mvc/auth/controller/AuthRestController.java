@@ -3,9 +3,7 @@ package jmnet.moka.core.tps.mvc.auth.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
-import jmnet.moka.common.data.support.SearchDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.mvc.MessageByLocale;
@@ -23,8 +20,8 @@ import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
-import jmnet.moka.core.tps.mvc.etccode.entity.Etccode;
-import jmnet.moka.core.tps.mvc.etccode.service.EtccodeService;
+import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
 
@@ -48,7 +45,7 @@ public class AuthRestController {
     private ModelMapper modelMapper;
 
     @Autowired
-    private EtccodeService etccodeService;
+    private CodeMgtService codeMgtService;
 
     @Autowired
     private ApiCodeHelper apiCodeHelper;
@@ -160,10 +157,10 @@ public class AuthRestController {
         ResultListDTO<DomainDTO> resultListMessage = new ResultListDTO<DomainDTO>();
         List<DomainDTO> domainDtoList = modelMapper.map(returnValue, DomainDTO.TYPE);
 
-        List<Etccode> etccodes = etccodeService.findUseList(TpsConstants.DATAAPI);
+        List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
         List<DomainDTO> domainDtoMapList = domainDtoList.stream().map((item) -> {
             String apiCodeId =
-                    apiCodeHelper.getDataApiCode(etccodes, item.getApiHost(), item.getApiPath());
+                    apiCodeHelper.getDataApiCode(CodeMgts, item.getApiHost(), item.getApiPath());
             if (apiCodeId != null) {
                 item.setApiCodeId(apiCodeId);
             }

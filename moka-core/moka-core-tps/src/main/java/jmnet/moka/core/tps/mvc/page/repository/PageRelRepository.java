@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import jmnet.moka.core.tps.mvc.page.entity.PageRel;
 
@@ -16,6 +17,7 @@ import jmnet.moka.core.tps.mvc.page.entity.PageRel;
  * @since 2020. 4. 14. 오후 4:00:15
  * @author jeon
  */
+@Repository
 public interface PageRelRepository extends JpaRepository<PageRel, Long>, PageRelRepositorySupport {
 
     /**

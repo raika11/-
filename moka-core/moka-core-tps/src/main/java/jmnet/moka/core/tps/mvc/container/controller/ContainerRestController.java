@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.container.controller;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import jmnet.moka.core.common.MokaConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +48,7 @@ import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
 
 @RestController
 @Validated
+@Slf4j
 @RequestMapping("/api/containers")
 public class ContainerRestController {
 
@@ -179,7 +182,6 @@ public class ContainerRestController {
 
         // 등록
         Container container = modelMapper.map(containerDTO, Container.class);
-        container.setRegDt(McpDate.now());
         container.setRegId(principal.getName());
         Container returnValue = containerService.insertContainer(container);
 

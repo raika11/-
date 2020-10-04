@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import jmnet.moka.core.tps.mvc.template.entity.TemplateHist;
+import org.springframework.stereotype.Repository;
 
 /**
  * <pre>
@@ -15,6 +16,7 @@ import jmnet.moka.core.tps.mvc.template.entity.TemplateHist;
  * @since 2020. 1. 15. 오후 5:30:35
  * @author jeon
  */
+@Repository
 public interface TemplateHistRepository extends JpaRepository<TemplateHist, Long>, TemplateHistRepositorySupport {
 
     /**

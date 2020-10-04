@@ -5,6 +5,7 @@ package jmnet.moka.core.tps.mvc.dataset.service;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,8 @@ import jmnet.moka.core.tps.mvc.desking.service.DeskingService;
  * @author ssc
  */
 @Service
+@Slf4j
 public class DatasetServiceImpl implements DatasetService {
-
-    private static final Logger logger = LoggerFactory.getLogger(DatasetServiceImpl.class);
 
     @Autowired
     private DatasetRepository datasetRepository;
@@ -93,7 +93,7 @@ public class DatasetServiceImpl implements DatasetService {
     public void deleteDataset(Long datasetSeq) {
         // 삭제
         datasetRepository.deleteById(datasetSeq);
-        logger.info("DELETE Dataset datasetSeq : {}", datasetSeq);
+        log.info("DELETE Dataset datasetSeq : {}", datasetSeq);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class DatasetServiceImpl implements DatasetService {
 
         // 삭제
         datasetRepository.deleteById(datasetSeq);
-        logger.info("DELETE Dataset datasetSeq : {}", datasetSeq);
+        log.info("DELETE Dataset datasetSeq : {}", datasetSeq);
 
         return true;
     }

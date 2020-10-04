@@ -17,7 +17,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -28,9 +30,10 @@ import lombok.NoArgsConstructor;
  * @since 2020. 4. 24. 오후 4:26:55
  * @author ssc
  */
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DatasetDTO implements Serializable {
@@ -58,10 +61,11 @@ public class DatasetDTO implements Serializable {
 
     private String dataApiParam;
 
+    @NotNull(message = "{tps.dataset.error.invalid.autoCreateYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.dataset.error.invalid.autoCreateYn}")
     private String autoCreateYn;
 
     private String description;
 
     private String dataApiParamShape;   // 디비상에는 없는 파라미터의 형식정보.(dps의 parameter정보)
-
 }

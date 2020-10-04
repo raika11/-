@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,7 @@ import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.dataset.service.DatasetService;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
-import jmnet.moka.core.tps.mvc.etccode.entity.Etccode;
-import jmnet.moka.core.tps.mvc.etccode.service.EtccodeService;
+import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 import jmnet.moka.core.tps.mvc.skin.service.SkinService;
 
@@ -43,8 +44,8 @@ import jmnet.moka.core.tps.mvc.skin.service.SkinService;
  *
  */
 @Service
+@Slf4j
 public class ComponentServiceImpl implements ComponentService {
-    private static final Logger logger = LoggerFactory.getLogger(ComponentService.class);
 
     @Autowired
     private ComponentRepository componentRepository;
@@ -65,7 +66,7 @@ public class ComponentServiceImpl implements ComponentService {
     private DomainService domainService;
 
     @Autowired
-    private EtccodeService etccodeSevice;
+    private CodeMgtService codeMgtSevice;
 
     @Autowired
     private ContainerService containerService;
@@ -136,10 +137,10 @@ public class ComponentServiceImpl implements ComponentService {
             comp.setComponentAdList(componentAds);
 
             // 템플릿 위치그룹명 셋팅
-            Optional<Etccode> etccode =
-                    etccodeSevice.findByCodeId(comp.getTemplate().getTemplateGroup());
-            etccode.ifPresent((c) -> {
-                comp.getTemplate().setTemplateGroupName(c.getCodeName());
+            Optional<CodeMgt> codeMgt =
+                codeMgtSevice.findByDtlCd(comp.getTemplate().getTemplateGroup());
+            codeMgt.ifPresent((c) -> {
+                comp.getTemplate().setTemplateGroupName(c.getCdNm());
             });
         }
         return component;
@@ -154,7 +155,7 @@ public class ComponentServiceImpl implements ComponentService {
         if (component.getDataType().equals(TpsConstants.DATATYPE_DESK)) {
             // insert
             returnComp = componentRepository.save(component);
-            logger.debug("[COMPONENT INSERT] seq: {}", returnComp.getComponentSeq());
+            log.debug("[COMPONENT INSERT] seq: {}", returnComp.getComponentSeq());
 
             // 데이터셋 생성하여 컴포넌트에 셋팅
             returnComp.setDataset(this.createNewDataset(returnComp));
@@ -162,7 +163,7 @@ public class ComponentServiceImpl implements ComponentService {
             entityManager.flush();
         } else {
             returnComp = componentRepository.save(component);
-            logger.debug("[COMPONENT INSERT] seq: {}", returnComp.getComponentSeq());
+            log.debug("[COMPONENT INSERT] seq: {}", returnComp.getComponentSeq());
         }
 
         // 컴포넌트광고가 있으면 insert
@@ -171,7 +172,7 @@ public class ComponentServiceImpl implements ComponentService {
                 ad.setComponentSeq(returnComp.getComponentSeq());
             }
             Set<ComponentAd> returnAds = componentAdService.insertComponentAdList(ads);
-            logger.debug("[COMPONENT INSERT] seq: {}) AdList Insert success",
+            log.debug("[COMPONENT INSERT] seq: {}) AdList Insert success",
                     returnComp.getComponentSeq());
 
             returnComp.setComponentAdList(returnAds);
@@ -179,17 +180,17 @@ public class ComponentServiceImpl implements ComponentService {
 
         // 히스토리 생성
         componentHistService.insertHistory(returnComp);
-        logger.debug("[COMPONENT INSERT] seq: {}) History Insert success",
+        log.debug("[COMPONENT INSERT] seq: {}) History Insert success",
                 returnComp.getComponentSeq());
 
         // DB반영
         entityManager.refresh(returnComp);
 
         // 템플릿 위치그룹명 셋팅
-        Optional<Etccode> etccode =
-                etccodeSevice.findByCodeId(returnComp.getTemplate().getTemplateGroup());
-        if (etccode.isPresent()) {
-            returnComp.getTemplate().setTemplateGroupName(etccode.get().getCodeName());
+        Optional<CodeMgt> codeMgt =
+                codeMgtSevice.findByDtlCd(returnComp.getTemplate().getTemplateGroup());
+        if (codeMgt.isPresent()) {
+            returnComp.getTemplate().setTemplateGroupName(codeMgt.get().getCdNm());
         }
 
         return returnComp;
@@ -218,25 +219,25 @@ public class ComponentServiceImpl implements ComponentService {
 
         // 컴포넌트 업데이트
         returnComp = componentRepository.save(newComponent);
-        logger.debug("[COMPONENT UPDATE] seq: {}", returnComp.getComponentSeq());
+        log.debug("[COMPONENT UPDATE] seq: {}", returnComp.getComponentSeq());
 
         // 컴포넌트 광고 업데이트
         Set<ComponentAd> ads = componentAdService.updateComponentAdList(
                 newComponent.getComponentAdList(), orgComponent.getComponentAdList());
         returnComp.setComponentAdList(ads);
-        logger.debug("[COMPONENT UPDATE] seq: {}) AdList Update success",
+        log.debug("[COMPONENT UPDATE] seq: {}) AdList Update success",
                 returnComp.getComponentSeq());
 
         // 히스토리 추가
         componentHistService.insertHistory(returnComp);
-        logger.debug("[COMPONENT UPDATE] seq: {}) History Insert success",
+        log.debug("[COMPONENT UPDATE] seq: {}) History Insert success",
                 returnComp.getComponentSeq());
 
         // 템플릿 위치그룹명 셋팅
-        Optional<Etccode> etccode =
-                etccodeSevice.findByCodeId(returnComp.getTemplate().getTemplateGroup());
-        if (etccode.isPresent()) {
-            returnComp.getTemplate().setTemplateGroupName(etccode.get().getCodeName());
+        Optional<CodeMgt> codeMgt =
+            codeMgtSevice.findByDtlCd(returnComp.getTemplate().getTemplateGroup());
+        if (codeMgt.isPresent()) {
+            returnComp.getTemplate().setTemplateGroupName(codeMgt.get().getCdNm());
         }
 
         // 컨테이너의 관련아이템 업데이트(페이지,스킨,컨테이너)
@@ -257,13 +258,13 @@ public class ComponentServiceImpl implements ComponentService {
                     .orElseThrow(() -> new NoDataException(message));
 
             // dataset 생성
-            Dataset dataset = Dataset.builder().createYmdt(component.getCreateYmdt())
-                    .creator(component.getCreator()).dataApiHost(domain.getApiHost())
+            Dataset dataset = Dataset.builder().regDt(component.getRegDt())
+                    .regId(component.getRegId()).dataApiHost(domain.getApiHost())
                     .dataApiPath(domain.getApiPath()).datasetName(component.getComponentName())
                     .autoCreateYn("N").build();
 
             Dataset returnDataset = datasetService.insertDataset(dataset);
-            logger.debug("[COMPONENT INSERT] seq: {}) Dataset Insert success",
+            log.debug("[COMPONENT INSERT] seq: {}) Dataset Insert success",
                     component.getComponentSeq());
 
             return returnDataset;
@@ -300,7 +301,7 @@ public class ComponentServiceImpl implements ComponentService {
 
         // 컴포넌트를 삭제한다
         componentRepository.deleteById(seq);
-        logger.debug("[COMPONENT DELETE] seq: {}", seq);
+        log.debug("[COMPONENT DELETE] seq: {}", seq);
     }
 
     @Override

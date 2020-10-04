@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.template.controller;
 import java.io.File;
 import java.nio.file.Files;
 import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,9 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 
 @Controller
+@Slf4j
 @RequestMapping("/image/template")
 public class TemplateImageRestController {
-    private static final Logger logger = LoggerFactory.getLogger(TemplateImageRestController.class);
-
     @Autowired
     private UploadFileHelper fileHelper;
 
@@ -51,7 +51,7 @@ public class TemplateImageRestController {
             ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
             return responseEntity;
         } catch(Exception e) {
-            logger.debug("[FAIL TO FILE LOAD] {}", imgRealPath);
+            log.debug("[FAIL TO FILE LOAD] {}", imgRealPath);
             e.printStackTrace();
         }
         
@@ -81,7 +81,7 @@ public class TemplateImageRestController {
             ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
             return responseEntity;
         } catch(Exception e) {
-            logger.debug("[FAIL TO FILE LOAD] {}", imgRealPath);
+            log.debug("[FAIL TO FILE LOAD] {}", imgRealPath);
             e.printStackTrace();
         }
         

@@ -35,8 +35,8 @@ public class TemplateVO implements Serializable {
     @Column(name = "TEMPLATE_WIDTH")
     private Integer templateWidth;
     
-    @Column(name = "TEMPLATE_THUMBNAIL")
-    private String templateThumbnail;
+    @Column(name = "TEMPLATE_THUMB")
+    private String templateThumb;
     
     @Column(name = "TP_ZONE")
     private String tpZone;

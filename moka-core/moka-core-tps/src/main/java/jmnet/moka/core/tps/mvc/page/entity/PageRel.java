@@ -1,17 +1,8 @@
 package jmnet.moka.core.tps.mvc.page.entity;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import java.time.LocalDateTime;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,7 +13,7 @@ import lombok.*;
 
 
 /**
- * The persistent class for the WMS_PAGE_REL database table.
+ * The persistent class for the TB_WMS_PAGE_REL database table.
  * 
  */
 @AllArgsConstructor
@@ -45,14 +36,14 @@ public class PageRel implements Serializable {
     private Long seq;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DOMAIN_ID", nullable = false, referencedColumnName = "DOMAIN_ID")
+    @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "PAGE_SEQ", referencedColumnName = "PAGE_SEQ", nullable = false)
     private Page page;
 
-    @Column(name = "REL_TYPE", nullable = false)
+    @Column(name = "REL_TYPE", nullable = false, length = 3)
     private String relType;
 
     @Column(name = "REL_SEQ")
@@ -64,7 +55,7 @@ public class PageRel implements Serializable {
     @Transient
     private Long templateSeq;
 
-    @Column(name = "REL_PARENT_TYPE", nullable = false)
+    @Column(name = "REL_PARENT_TYPE", nullable = false, length = 3)
     private String relParentType;
 
     @Column(name = "REL_PARENT_SEQ")
@@ -72,6 +63,13 @@ public class PageRel implements Serializable {
 
     @Column(name = "REL_ORD", nullable = false)
     private Integer relOrd;
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.relParentType = this.relParentType == null ? "NN" : this.relParentType;
+        this.relOrd = this.relOrd == null ? 1 : this.relOrd;
+    }
 
     public void setPage(Page page) {
         if (page == null) {

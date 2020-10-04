@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.template.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,26 +12,35 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 
 /**
  * The persistent class for the WMS_TEMPLATE database table.
  * 
  */
-@Entity
-@Table(name = "WMS_TEMPLATE")
-@NamedQuery(name = "Template.findAll", query = "SELECT t FROM Template t")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
+@Entity
+@Table(name = "TB_WMS_TEMPLATE")
+@NamedQuery(name = "Template.findAll", query = "SELECT t FROM Template t")
 public class Template implements Serializable {
 
     private static final long serialVersionUID = 8181884737274673595L;
@@ -40,48 +50,62 @@ public class Template implements Serializable {
     @Column(name = "TEMPLATE_SEQ")
     private Long templateSeq;
 
-    @Column(name = "CREATE_YMDT")
-    private String createYmdt;
-
-    @Column(name = "CREATOR")
-    private String creator;
-
-    @Column(name = "CROP_HEIGHT")
-    private int cropHeight;
-
-    @Column(name = "CROP_WIDTH")
-    private int cropWidth;
-
-    @Column(name = "DESCRIPTION", length = 4000)
-    private String description;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DOMAIN_ID", nullable = true)
     private Domain domain;
 
-    @Column(name = "MODIFIED_YMDT")
-    private String modifiedYmdt;
+    @Nationalized
+    @Column(name = "TEMPLATE_NAME", nullable = false, length = 128)
+    private String templateName;
 
-    @Column(name = "MODIFIER")
-    private String modifier;
-
-    @Lob
+    @Nationalized
     @Column(name = "TEMPLATE_BODY")
     private String templateBody;
 
-    @Column(name = "TEMPLATE_GROUP")
+    @Column(name = "CROP_WIDTH")
+    private Integer cropWidth;
+
+    @Column(name = "CROP_HEIGHT")
+    private Integer cropHeight;
+
+    @Column(name = "TEMPLATE_GROUP", length = 24)
     private String templateGroup;
-    
-    @Transient
-    private String templateGroupName;
-
-    @Column(name = "TEMPLATE_NAME")
-    private String templateName;
-
-    @Column(name = "TEMPLATE_THUMBNAIL")
-    private String templateThumbnail;
 
     @Column(name = "TEMPLATE_WIDTH")
     private Integer templateWidth;
 
+    @Column(name = "TEMPLATE_THUMB", length = 256)
+    private String templateThumb;
+
+    @Nationalized
+    @Column(name = "DESCRIPTION", length = 4000)
+    private String description;
+
+    @Column(name = "REG_DT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date regDt;
+
+    @Column(name = "REG_ID", length = 50)
+    private String regId;
+
+    @Column(name = "MOD_DT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modDt;
+
+    @Column(name = "MOD_ID", length = 50)
+    private String modId;
+    
+    @Transient
+    private String templateGroupName;
+
+    @PrePersist
+    public void prePersist() {
+        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
+    }
 }

@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.page.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +14,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
+import jmnet.moka.common.utils.McpDate;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.template.exception.TemplateParseException;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -64,10 +66,9 @@ import jmnet.moka.core.tps.mvc.template.service.TemplateService;
  */
 @RestController
 @Validated
+@Slf4j
 @RequestMapping("/api/pages")
 public class PageRestController {
-
-    // private static final Logger logger = LoggerFactory.getLogger(PageRestController.class);
 
     @Autowired
     private PageService pageService;
@@ -231,7 +232,6 @@ public class PageRestController {
 
         // 등록
         Page page = modelMapper.map(pageDTO, Page.class);
-        page.setRegDt(McpDate.now());
         page.setRegId(principal.getName());
         Page returnValue = pageService.insertPage(page);
 

@@ -1,34 +1,24 @@
 package jmnet.moka.core.tps.mvc.container.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.*;
+import org.hibernate.annotations.Nationalized;
 
 
 /**
- * The persistent class for the WMS_CONTAINER database table.
+ * The persistent class for the TB_WMS_CONTAINER database table.
  * 
  */
 @AllArgsConstructor
@@ -51,26 +41,29 @@ public class Container implements Serializable {
     private Long containerSeq;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DOMAIN_ID", nullable = false, referencedColumnName = "DOMAIN_ID")
+    @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
-    @Column(name = "CONTAINER_NAME")
+    @Nationalized
+    @Column(name = "CONTAINER_NAME", nullable = false, length = 128)
     private String containerName;
 
-    @Lob
+    @Nationalized
     @Column(name = "CONTAINER_BODY")
     private String containerBody;
 
     @Column(name = "REG_DT")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
-    @Column(name = "REG_ID")
+    @Column(name = "REG_ID", length = 50)
     private String regId;
 
     @Column(name = "MOD_DT")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
-    @Column(name = "MOD_ID")
+    @Column(name = "MOD_ID", length = 50)
     private String modId;
 
     @Transient
@@ -78,6 +71,17 @@ public class Container implements Serializable {
 
     @Transient
     private Long skinRelCount;
+
+    @PrePersist
+    public void prePersist() {
+        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
+    }
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "container",

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,8 @@ import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
  * @author jeon
  */
 @Service
+@Slf4j
 public class TemplateServiceImpl implements TemplateService {
-    private static final Logger logger = LoggerFactory.getLogger(TemplateServiceImpl.class);
-
     @Autowired
     private TemplateRepository templateRepository;
 
@@ -105,11 +105,11 @@ public class TemplateServiceImpl implements TemplateService {
     @Transactional
     public Template insertTemplate(Template template) throws Exception {
         Template returnVal = templateRepository.save(template);
-        logger.debug("Insert Template {}", returnVal.getTemplateSeq());
+        log.debug("Insert Template {}", returnVal.getTemplateSeq());
 
         // 히스토리 생성
         templateHistService.insertHistory(returnVal);
-        logger.debug("Insert Template History {}", returnVal.getTemplateSeq());
+        log.debug("Insert Template History {}", returnVal.getTemplateSeq());
 
         entityManager.refresh(returnVal);
         return returnVal;
@@ -119,17 +119,17 @@ public class TemplateServiceImpl implements TemplateService {
     @Transactional
     public Template updateTemplate(Template template) throws Exception {
         Template returnVal = templateRepository.save(template);
-        logger.debug("Update Template {}", template.getTemplateSeq());
+        log.debug("Update Template {}", template.getTemplateSeq());
 
         // 히스토리 생성
-        TemplateHist hist = TemplateHist.builder().createYmdt(template.getModifiedYmdt())
-                .creator(template.getModifier()).templateBody(template.getTemplateBody())
+        TemplateHist hist = TemplateHist.builder().regDt(template.getModDt())
+                .regId(template.getModId()).templateBody(template.getTemplateBody())
                 .template(template).build();
         if (template.getDomain() != null) {
             hist.setDomainId(template.getDomain().getDomainId());
         }
         templateHistService.insertHistory(hist);
-        logger.debug("Insert Template History {}", returnVal.getTemplateSeq());
+        log.debug("Insert Template History {}", returnVal.getTemplateSeq());
 
         return returnVal;
     }
@@ -138,7 +138,7 @@ public class TemplateServiceImpl implements TemplateService {
     public void deleteTemplate(Template template) throws Exception {
 
         templateRepository.deleteById(template.getTemplateSeq());
-        logger.debug("Delete Template {}", template.getTemplateSeq());
+        log.debug("Delete Template {}", template.getTemplateSeq());
     }
 
     @Override
@@ -147,7 +147,7 @@ public class TemplateServiceImpl implements TemplateService {
             return this.insertTemplate(template);
         } else {
             Template returnVal = templateRepository.save(template);
-            logger.debug("Insert Template {}", returnVal.getTemplateSeq());
+            log.debug("Insert Template {}", returnVal.getTemplateSeq());
 
             entityManager.refresh(returnVal);
             return returnVal;
@@ -160,7 +160,7 @@ public class TemplateServiceImpl implements TemplateService {
             return this.updateTemplate(template);
         } else {
             Template returnVal = templateRepository.save(template);
-            logger.debug("Insert Template {}", returnVal.getTemplateSeq());
+            log.debug("Insert Template {}", returnVal.getTemplateSeq());
             return returnVal;
         }
     }
@@ -223,7 +223,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public boolean deleteTemplateImage(Template template) throws Exception {
-        String thumbnailPath = template.getTemplateThumbnail();
+        String thumbnailPath = template.getTemplateThumb();
         thumbnailPath = thumbnailPath.replace("template/", "");
         // 이미지 실제 경로 생성
         String imageRealPath = uploadFileHelper.getRealPath("template", thumbnailPath);

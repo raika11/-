@@ -5,12 +5,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
+import org.springframework.stereotype.Repository;
 
 /**
  * 컨테이너 
  * @author ohtah
  *
  */
+@Repository
 public interface ContainerRepository
         extends JpaRepository<Container, Long>, ContainerRepositorySupport {
     

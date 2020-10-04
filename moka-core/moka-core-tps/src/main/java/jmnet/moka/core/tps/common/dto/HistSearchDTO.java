@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jmnet.moka.common.data.support.SearchDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
  * <pre>
@@ -20,10 +17,11 @@ import lombok.EqualsAndHashCode;
  * @author ssc
  */
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 public class HistSearchDTO extends SearchDTO {
 
@@ -38,6 +36,6 @@ public class HistSearchDTO extends SearchDTO {
 
     // 정렬 기본값을 설정
     public HistSearchDTO() {
-        super("createYmdt,desc");
+        super("regDt,desc");
     }
 }

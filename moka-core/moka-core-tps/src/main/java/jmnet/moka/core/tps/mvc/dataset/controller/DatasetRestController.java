@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import jmnet.moka.core.common.MokaConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +55,8 @@ import jmnet.moka.core.tps.mvc.dataset.dto.DatasetSearchDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.dataset.service.DatasetService;
 import jmnet.moka.core.tps.mvc.dataset.vo.DatasetVO;
-import jmnet.moka.core.tps.mvc.etccode.entity.Etccode;
-import jmnet.moka.core.tps.mvc.etccode.service.EtccodeService;
+import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 
 /**
  * <pre>
@@ -68,16 +69,15 @@ import jmnet.moka.core.tps.mvc.etccode.service.EtccodeService;
  */
 @RestController
 @Validated
+@Slf4j
 @RequestMapping("/api/datasets")
 public class DatasetRestController {
-
-    private static final Logger logger = LoggerFactory.getLogger(DatasetRestController.class);
 
     @Autowired
     private DatasetService datasetService;
 
     @Autowired
-    private EtccodeService etccodeService;
+    private CodeMgtService codeMgtService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -110,9 +110,9 @@ public class DatasetRestController {
 
         // apiCodeId -> apiHost, apiPath
         if (McpString.isNotEmpty(search.getApiCodeId())) {
-            List<Etccode> etccodes = etccodeService.findUseList(TpsConstants.DATAAPI);
+            List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
             Map<String, String> apiInfo =
-                    apiCodeHelper.getDataApi(request, etccodes, search.getApiCodeId());
+                    apiCodeHelper.getDataApi(request, CodeMgts, search.getApiCodeId());
             search.setApiHost(apiInfo.get(TpsConstants.API_HOST));
             search.setApiPath(apiInfo.get(TpsConstants.API_PATH));
         }
@@ -156,9 +156,9 @@ public class DatasetRestController {
         DatasetDTO dto = modelMapper.map(dataset, DatasetDTO.class);
 
         // apiHost, apiPath -> apiCodeId
-        List<Etccode> etccodes = etccodeService.findUseList(TpsConstants.DATAAPI);
+        List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
         String apiCodeId =
-                apiCodeHelper.getDataApiCode(etccodes, dto.getDataApiHost(), dto.getDataApiPath());
+                apiCodeHelper.getDataApiCode(CodeMgts, dto.getDataApiHost(), dto.getDataApiPath());
         if (apiCodeId != null) {
             dto.setApiCodeId(apiCodeId);
         }
@@ -190,7 +190,7 @@ public class DatasetRestController {
                     new TypeReference<ResultDTO<?>>() {});
 
             if (apiDto.getHeader().getResultCode() == TpsConstants.HEADER_UNAUTHORIZED) {
-                logger.error("Fail to load Dataset Parameter Info : %s", targetUrl);
+                log.error("Fail to load Dataset Parameter Info : %s", targetUrl);
                 throw new Exception(messageByLocale.get("tps.dataset.error.dps", request));
             }
 
@@ -198,7 +198,7 @@ public class DatasetRestController {
                     ResourceMapper.getDefaultObjectMapper().writeValueAsString(apiDto.getBody());
             return body;
         } catch (Exception e) {
-            logger.error("Fail to load Dataset Parameter Info : %s", targetUrl, e);
+            log.error("Fail to load Dataset Parameter Info : %s", targetUrl, e);
             throw new Exception(messageByLocale.get("tps.dataset.error.dps", request), e);
         }
     }
@@ -220,15 +220,15 @@ public class DatasetRestController {
         // 등록
         Dataset dataset = modelMapper.map(datasetDTO, Dataset.class);
 
-        dataset.setCreateYmdt(McpDate.nowStr());
-        dataset.setCreator(principal.getName());
+//        dataset.setRegId(principal.getName()); //?
+        dataset.setRegId("test");
 
         // apiCodeId -> apiHost, apiPath
         if (McpString.isEmpty(dataset.getDataApiHost())
                 && McpString.isEmpty(dataset.getDataApiPath())) {
-            List<Etccode> etccodes = etccodeService.findUseList(TpsConstants.DATAAPI);
+            List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
             Map<String, String> apiInfo =
-                    apiCodeHelper.getDataApi(request, etccodes, datasetDTO.getApiCodeId());
+                    apiCodeHelper.getDataApi(request, CodeMgts, datasetDTO.getApiCodeId());
             dataset.setDataApiHost(apiInfo.get(TpsConstants.API_HOST));
             dataset.setDataApiPath(apiInfo.get(TpsConstants.API_PATH));
         }
@@ -300,9 +300,9 @@ public class DatasetRestController {
             throws Exception {
 
         // apiCodeId -> apiHost, apiPath
-        List<Etccode> etccodes = etccodeService.findUseList(TpsConstants.DATAAPI);
+        List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
         Map<String, String> apiInfo =
-                apiCodeHelper.getDataApi(request, etccodes, datasetDTO.getApiCodeId());
+                apiCodeHelper.getDataApi(request, CodeMgts, datasetDTO.getApiCodeId());
 
         // 데이타유효성검사
         validData(request, datasetSeq, datasetDTO);
@@ -313,10 +313,11 @@ public class DatasetRestController {
                 .orElseThrow(() -> new NoDataException(
                         messageByLocale.get("tps.dataset.error.noContent", request)));
 
-        newDataset.setCreateYmdt(orgDataset.getCreateYmdt());
-        newDataset.setCreator(orgDataset.getCreator());
-        newDataset.setModifiedYmdt(McpDate.nowStr());
-        newDataset.setModifier(principal.getName());
+        newDataset.setRegDt(orgDataset.getRegDt());
+        newDataset.setRegId(orgDataset.getRegId());
+        newDataset.setModDt(McpDate.now());
+//        newDataset.setModId(principal.getName()); //?
+        newDataset.setModId("test");
         newDataset.setDataApiHost(apiInfo.get(TpsConstants.API_HOST));
         newDataset.setDataApiPath(apiInfo.get(TpsConstants.API_PATH));
         if (newDataset.getAutoCreateYn().equals("N")) {
@@ -355,9 +356,9 @@ public class DatasetRestController {
             throws InvalidDataException, IOException, URISyntaxException, Exception {
 
         // apiCodeId -> apiHost, apiPath
-        List<Etccode> etccodes = etccodeService.findUseList(TpsConstants.DATAAPI);
+        List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
         Map<String, String> apiInfo =
-                apiCodeHelper.getDataApi(request, etccodes, search.getApiCodeId());
+                apiCodeHelper.getDataApi(request, CodeMgts, search.getApiCodeId());
         search.setApiHost(apiInfo.get(TpsConstants.API_HOST));
         search.setApiPath(apiInfo.get(TpsConstants.API_PATH));
 
@@ -397,7 +398,7 @@ public class DatasetRestController {
             }
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Fail to load API list : %s", targetUrl, e);
+            log.error("Fail to load API list : %s", targetUrl, e);
             throw new Exception(messageByLocale.get("tps.dataset.error.dps", request), e);
         }
     }

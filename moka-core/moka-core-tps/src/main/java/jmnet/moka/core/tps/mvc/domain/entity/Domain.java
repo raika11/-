@@ -28,10 +28,10 @@ public class Domain implements Serializable {
     @Column(name = "DOMAIN_ID", columnDefinition = "char", length = 4)
     private String domainId;
 
-    @Column(name = "DOMAIN_NAME", nullable = false)
+    @Column(name = "DOMAIN_NAME", nullable = false, length = 64)
     private String domainName;
 
-    @Column(name = "DOMAIN_URL", nullable = false)
+    @Column(name = "DOMAIN_URL", nullable = false, length = 512)
     private String domainUrl;
 
     @Column(name = "SERVICE_PLATFORM", columnDefinition = "char", nullable = false)
@@ -40,28 +40,30 @@ public class Domain implements Serializable {
     @Column(name = "USE_YN", columnDefinition = "char", nullable = false)
     private String useYn;
 
-    @Column(name = "LANG", nullable = false)
+    @Column(name = "LANG", nullable = false, length = 24)
     private String lang;
 
-    @Column(name = "API_HOST")
+    @Column(name = "API_HOST", length = 256)
     private String apiHost;
 
-    @Column(name = "API_PATH")
+    @Column(name = "API_PATH", length = 256)
     private String apiPath;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION", length = 4000)
     private String description;
 
     @Column(name = "REG_DT")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
-    @Column(name = "REG_ID")
+    @Column(name = "REG_ID", length = 50)
     private String regId;
 
     @Column(name = "MOD_DT")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
-    @Column(name = "MOD_ID")
+    @Column(name = "MOD_ID", length = 50)
     private String modId;
 
     @PrePersist
@@ -70,5 +72,14 @@ public class Domain implements Serializable {
         this.useYn = this.useYn == null ? "Y" : this.useYn;
         this.lang = this.lang == null ? "KR" : this.lang;
         this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.servicePlatform = this.servicePlatform == null ? "P" : this.servicePlatform;
+        this.useYn = this.useYn == null ? "Y" : this.useYn;
+        this.lang = this.lang == null ? "KR" : this.lang;
+        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
     }
 }

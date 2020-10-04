@@ -3,12 +3,15 @@
  */
 package jmnet.moka.core.tps.mvc.page.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.persistence.Column;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -21,8 +24,10 @@ import lombok.NoArgsConstructor;
 @Alias("PageVO")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PageVO implements Serializable {
 
     private static final long serialVersionUID = 947646099080077257L;

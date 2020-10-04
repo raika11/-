@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.component.service;
 
 import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,8 @@ import jmnet.moka.core.tps.mvc.component.repository.ComponentWorkRepository;
  */
 
 @Service
+@Slf4j
 public class ComponentWorkServiceImpl implements ComponentWorkService {
-	private static final Logger logger = LoggerFactory.getLogger(ComponentWorkServiceImpl.class);
-
     @Autowired
     private ComponentWorkRepository componentWorkRepository;
     
@@ -45,7 +45,7 @@ public class ComponentWorkServiceImpl implements ComponentWorkService {
 		
 		// 컴포넌트 업데이트
 		ComponentWork saved = componentWorkRepository.save(orgComponent);
-        logger.debug("[COMPONENT UPDATE] seq: {}", saved.getSeq());
+        log.debug("[COMPONENT UPDATE] seq: {}", saved.getSeq());
         
 		return saved;
 	}

@@ -3,10 +3,12 @@ package jmnet.moka.core.tps.mvc.container.service;
 import static jmnet.moka.common.data.mybatis.support.McpMybatis.getRowBounds;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import jmnet.moka.core.common.MokaConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +40,8 @@ import jmnet.moka.core.tps.mvc.container.repository.ContainerRepository;
 import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
 
 @Service
+@Slf4j
 public class ContainerServiceImpl implements ContainerService {
-
-    private static final Logger logger = LoggerFactory.getLogger(ContainerServiceImpl.class);
 
     @Autowired
     ContainerRepository containerRepository;
@@ -130,7 +131,7 @@ public class ContainerServiceImpl implements ContainerService {
             relation.setRelType(item.getNodeName());
             relation.setRelSeq(Long.parseLong(item.getId()));
             relation.setRelParentType("NN");
-            relation.setRelOrder(item.getOrder());
+            relation.setRelOrd(item.getOrder());
 
             // 동일한 아이템은 추가하지 않는다.
             if (container.isEqualRel(relation)) {
@@ -154,7 +155,7 @@ public class ContainerServiceImpl implements ContainerService {
                     relationTP.setRelSeq(component.get().getTemplate().getTemplateSeq());
                     relationTP.setRelParentType(MokaConstants.ITEM_COMPONENT);
                     relationTP.setRelParentSeq(component.get().getComponentSeq());
-                    relationTP.setRelOrder(item.getOrder());
+                    relationTP.setRelOrd(item.getOrder());
 
                     if (!container.isEqualRel(relationTP)) {
                         relationTP.setContainer(container);
@@ -169,7 +170,7 @@ public class ContainerServiceImpl implements ContainerService {
                         relatioDS.setRelSeq(component.get().getDataset().getDatasetSeq());
                         relatioDS.setRelParentType(MokaConstants.ITEM_COMPONENT);
                         relatioDS.setRelParentSeq(component.get().getComponentSeq());
-                        relatioDS.setRelOrder(item.getOrder());
+                        relatioDS.setRelOrd(item.getOrder());
 
                         if (!container.isEqualRel(relatioDS)) {
                             relatioDS.setContainer(container);
@@ -230,7 +231,7 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public void deleteContainer(Container container, String name) {
 
-        logger.info("[DELETE Container] domainId : {} containerSeq : {}",
+        log.info("[DELETE Container] domainId : {} containerSeq : {}",
                 container.getDomain().getDomainId(), container.getContainerSeq());
 
         // 히스토리저장
@@ -284,7 +285,7 @@ public class ContainerServiceImpl implements ContainerService {
                             .relSeq(newComponent.getDataset().getDatasetSeq())
                             .relParentType(MokaConstants.ITEM_COMPONENT)
                             .relParentSeq(newComponent.getComponentSeq())
-                            .relOrder(rel.getRelOrder()).build();
+                            .relOrd(rel.getRelOrd()).build();
                     containerRelRepository.save(newRel);
                 }
             } else {

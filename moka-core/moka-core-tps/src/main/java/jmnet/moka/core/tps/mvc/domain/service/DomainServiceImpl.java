@@ -14,23 +14,19 @@ import javax.transaction.Transactional;
 
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jmnet.moka.core.tps.common.TpsConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.mapper.DomainMapper;
 import jmnet.moka.core.tps.mvc.domain.repository.DomainRepository;
-import jmnet.moka.core.tps.mvc.etccode.service.EtccodeService;
-import jmnet.moka.core.tps.mvc.media.entity.Media;
-import jmnet.moka.core.tps.mvc.media.repository.MediaRepository;
+import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 
 /**
@@ -40,8 +36,8 @@ import jmnet.moka.core.tps.mvc.page.service.PageService;
  * @author ssc
  */
 @Service
+@Slf4j
 public class DomainServiceImpl implements DomainService {
-    private static final Logger logger = LoggerFactory.getLogger(DomainServiceImpl.class);
 
     @Autowired
     private DomainRepository domainRepository;
@@ -50,10 +46,7 @@ public class DomainServiceImpl implements DomainService {
     private PageService pageService;
     
     @Autowired
-    private EtccodeService etccodeService;
-
-    @Autowired
-    private MediaRepository mediaRepository;
+    private CodeMgtService codeMgtService;
 
     @Autowired
     private DomainMapper domainMapper;
@@ -90,7 +83,7 @@ public class DomainServiceImpl implements DomainService {
         
         // 도메인 등록
         Domain returnVal = domainRepository.save(domain);
-        logger.debug("[INSERT DOMAIN] domainId : {}", returnVal.getDomainId());
+        log.debug("[INSERT DOMAIN] domainId : {}", returnVal.getDomainId());
         
         // 템플릿 이미지 폴더 생성
         uploadFileHelper.createBusinessDir("template", returnVal.getDomainId());
@@ -108,15 +101,15 @@ public class DomainServiceImpl implements DomainService {
                 .build();
         
         // 페이지에 PAGE_TYPE 셋팅 (etccode 리스트의 첫번째 데이터)
-//        String pageType = "";
-//        try {
-//            pageType = etccodeService.findUseList(TpsConstants.ETCCODE_TYPE_PAGE_TYPE)
-//                    .get(0).getCodeName();
-//        } catch(Exception e) {}
-//        root.setPageType(pageType);
+        String pageType = "";
+        try {
+            pageType = codeMgtService.findUseList(TpsConstants.CODE_MGT_GRP_PAGE_TYPE)
+                    .get(0).getCdNm();
+        } catch(Exception e) {}
+        root.setPageType(pageType);
         
         pageService.insertPage(root);
-        logger.debug("[INSERT DOMAIN] insert page, {}", root.getPageName());
+        log.debug("[INSERT DOMAIN] insert page, {}", root.getPageName());
         
         return returnVal;
     }
@@ -124,7 +117,7 @@ public class DomainServiceImpl implements DomainService {
     @Override
     public Domain updateDomain(Domain domain) {
         Domain returnVal = domainRepository.save(domain);
-        logger.debug("[UPDATE DOMAIN] domainId : {}", returnVal.getDomainId());
+        log.debug("[UPDATE DOMAIN] domainId : {}", returnVal.getDomainId());
         return returnVal;
     }
     
@@ -138,10 +131,10 @@ public class DomainServiceImpl implements DomainService {
                 pageService.findByDomainId(domainId, null).getContent().get(0);
         Principal principal = SecurityContextHolder.getContext().getAuthentication();
         pageService.deletePage(root, principal.getName());
-        logger.debug("[DELETE DOMAIN] Root Page Delete: {}", root.getPageSeq());
+        log.debug("[DELETE DOMAIN] Root Page Delete: {}", root.getPageSeq());
 
         domainRepository.deleteById(domainId);
-        logger.debug("[DELETE DOMAIN] domainId: {}", domainId);
+        log.debug("[DELETE DOMAIN] domainId: {}", domainId);
     }
     
     @Override
@@ -152,11 +145,6 @@ public class DomainServiceImpl implements DomainService {
     @Override
     public boolean hasRelations(String domainId) {
         return false;
-    }
-
-    @Override
-    public List<Media> findOnlineMediaList() {
-        return mediaRepository.findByMediaTypeOrderByMediaIdAsc(TpsConstants.ONLINE_MEDIA_TYPE);
     }
 
     public List<DomainDTO> findByMapper(String domainId) {

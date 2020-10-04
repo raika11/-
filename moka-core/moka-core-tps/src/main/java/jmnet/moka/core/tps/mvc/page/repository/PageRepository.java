@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
+import org.springframework.stereotype.Repository;
 
 /**
  * <pre>
@@ -16,6 +17,7 @@ import jmnet.moka.core.tps.mvc.page.entity.Page;
  * @since 2020. 4. 14. 오후 4:13:48
  * @author jeon
  */
+@Repository
 public interface PageRepository extends JpaRepository<Page, Long>, PageRepositorySupport {
 
 	/**

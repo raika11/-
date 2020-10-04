@@ -3,12 +3,14 @@ package jmnet.moka.core.tps.mvc.component.repository;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentAd;
+import org.springframework.stereotype.Repository;
 
 /**
  * ComponentAd Repository
  * @author 전현지
  *
  */
+@Repository
 public interface ComponentAdRepository extends JpaRepository<ComponentAd, Long> {
 
     /**

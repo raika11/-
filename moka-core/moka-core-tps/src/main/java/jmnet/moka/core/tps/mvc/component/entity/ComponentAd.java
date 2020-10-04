@@ -17,20 +17,23 @@ import jmnet.moka.core.tps.mvc.ad.entity.Ad;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 /**
- * The persistent class for the WMS_COMPONENT_AD database table.
+ * The persistent class for the TB_WMS_COMPONENT_AD database table.
  * 
  */
-@Entity
-@Table(name = "WMS_COMPONENT_AD")
-@NamedQuery(name = "ComponentAd.findAll", query = "SELECT w FROM ComponentAd w")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
+@Entity
+@Table(name = "TB_WMS_COMPONENT_AD")
+@NamedQuery(name = "ComponentAd.findAll", query = "SELECT w FROM ComponentAd w")
 public class ComponentAd implements Serializable {
 
     private static final long serialVersionUID = -7273958000859682529L;
@@ -43,15 +46,15 @@ public class ComponentAd implements Serializable {
     @Column(name = "SEQ")
     private Long seq;
 
-    @Column(name = "COMPONENT_SEQ")
+    @Column(name = "COMPONENT_SEQ", nullable = false)
     private Long componentSeq;
 
     @ManyToOne
-    @JoinColumn(name = "AD_SEQ", referencedColumnName = "AD_SEQ")
+    @JoinColumn(name = "AD_SEQ", referencedColumnName = "AD_SEQ", nullable = false)
     private Ad ad;
 
-    @Column(name = "LIST_PARAGRAPH")
-    private int listParagraph;
+    @Column(name = "LIST_PARAGRAPH", nullable = false)
+    private Integer listParagraph;
 
     //    @Override
     //    public boolean equals(Object o) {

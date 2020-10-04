@@ -1,7 +1,9 @@
 package jmnet.moka.core.tps.mvc.template.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -10,10 +12,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <pre>
@@ -24,9 +30,10 @@ import lombok.NoArgsConstructor;
  * @since 2020. 1. 14. 오후 1:33:39
  * @author jeon
  */
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TemplateHistDTO implements Serializable {
@@ -37,16 +44,17 @@ public class TemplateHistDTO implements Serializable {
 
     private Long seq;
 
-    private String createYmdt;
-
-    private String creator;
+    @JsonIgnore
+    @NotNull(message = "{tps.template.error.invalid.templateSeq}")
+    private TemplateDTO template;
 
     private String domainId;
 
     private String templateBody;
 
-    @JsonIgnore
-    @NotNull(message = "{tps.template.error.invalid.templateSeq}")
-    private TemplateDTO template;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = MokaConstants.JSON_DATE_FORMAT, timezone = MokaConstants.JSON_DATE_TIME_ZONE)
+    @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
+    private Date regDt;
 
+    private String regId;
 }

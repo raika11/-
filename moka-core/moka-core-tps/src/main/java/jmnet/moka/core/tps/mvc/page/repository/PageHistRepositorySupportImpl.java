@@ -1,5 +1,10 @@
 package jmnet.moka.core.tps.mvc.page.repository;
 
+import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
+import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.core.common.MokaConstants;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +19,11 @@ import jmnet.moka.core.tps.mvc.page.entity.QPageHist;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.dto.HistSearchDTO;
 import jmnet.moka.core.tps.mvc.page.entity.PageHist;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <pre>
@@ -45,17 +55,34 @@ public class PageHistRepositorySupportImpl extends QuerydslRepositorySupport
 
         // WHERE 조건
         builder.and(pageHist.page.pageSeq.eq(search.getSeq()));
-        // TODO MIRA
-//        if (!McpString.isEmpty(searchType) && !McpString.isEmpty(keyword)) {
-//            if (searchType.equals("createYmdt")) {
-//                builder.and(pageHist.createYmdt.startsWith(keyword));
-//            } else if (searchType.equals("creator")) {
-//                builder.and(pageHist.creator.contains(keyword));
-//            } else if (searchType.equals("all")) {
-//                builder.and(pageHist.creator.contains(keyword)
-//                        .or(pageHist.createYmdt.startsWith(keyword)));
-//            }
-//        }
+
+        if (!McpString.isEmpty(searchType) && !McpString.isEmpty(keyword)) {
+            if (searchType.equals("regDt")) {
+                try {
+                    List<Date> keywordDtList = McpDate.betweenDate(MokaConstants.JSON_DATE_FORMAT, keyword);
+                    builder.and(pageHist.regDt.between(
+                            Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(0)),
+                            Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(1))
+                    ));
+                } catch (ParseException e) {
+                }
+            } else if (searchType.equals("regId")) {
+                builder.and(pageHist.regId.contains(keyword));
+            } else if (searchType.equals("all")) {
+                List<Date> keywordDtList = null;
+                try {
+                    keywordDtList = McpDate.betweenDate(MokaConstants.JSON_DATE_FORMAT, keyword);
+                } catch (ParseException e) {
+                }
+                builder.and(
+                        pageHist.regId.contains(keyword)
+                        .or(pageHist.regDt.between(
+                                Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(0)),
+                                Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(1))
+                        ))
+                );
+            }
+        }
 
         JPQLQuery<PageHist> query = queryFactory.selectFrom(pageHist);
         query = getQuerydsl().applyPagination(pageable, query);

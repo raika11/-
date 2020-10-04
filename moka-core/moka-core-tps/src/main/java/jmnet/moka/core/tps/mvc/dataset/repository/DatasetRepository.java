@@ -5,6 +5,7 @@ package jmnet.moka.core.tps.mvc.dataset.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
+import org.springframework.stereotype.Repository;
 
 /**
  * <pre>
@@ -15,6 +16,7 @@ import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
  * @since 2020. 4. 24. 오후 4:21:20
  * @author ssc
  */
+@Repository
 public interface DatasetRepository
         extends JpaRepository<Dataset, Long>, DatasetRepositorySupport {
 

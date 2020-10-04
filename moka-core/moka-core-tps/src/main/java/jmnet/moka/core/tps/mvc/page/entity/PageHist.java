@@ -2,28 +2,18 @@ package jmnet.moka.core.tps.mvc.page.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import jmnet.moka.common.utils.McpDate;
 import lombok.*;
+import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 
 
 /**
- * The persistent class for the WMS_PAGE_HIST database table.
+ * The persistent class for the TB_WMS_PAGE_HIST database table.
  * 
  */
 @AllArgsConstructor
@@ -51,20 +41,27 @@ public class PageHist implements Serializable {
     private Page page;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DOMAIN_ID", nullable = false, referencedColumnName = "DOMAIN_ID")
+    @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
-    @Lob
+    @Nationalized
     @Column(name = "PAGE_BODY")
     private String pageBody;
 
-    @Column(name = "WORK_TYPE", columnDefinition = "char")
+    @Column(name = "WORK_TYPE", columnDefinition = "char", length = 1)
     private String workType;
 
     @Column(name = "REG_DT")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
-    @Column(name = "REG_ID")
+    @Column(name = "REG_ID", length = 50)
     private String regId;
 
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.workType = this.workType == null ? "U" : this.workType;
+        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+    }
 }

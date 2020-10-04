@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
+
+import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
 import org.springframework.beans.factory.annotation.Autowired;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.mvc.etccode.entity.Etccode;
 
 public class ApiCodeHelper {
 
@@ -23,23 +24,23 @@ public class ApiCodeHelper {
      * </pre>
      * 
      * @param request 요청
-     * @param etccodes API타입의 공통코드 목록
+     * @param codeMgts API타입의 공통코드 목록
      * @param apiCodeId 공통코드
      * @return apiHost, apiPath
      * @throws InvalidDataException apiCodeId 가 공통코드에 없음 에러
      */
-    public Map<String, String> getDataApi(HttpServletRequest request, List<Etccode> etccodes,
+    public Map<String, String> getDataApi(HttpServletRequest request, List<CodeMgt> codeMgts,
             String apiCodeId) throws InvalidDataException {
 
-        Optional<Etccode> etccode = etccodes.stream().filter(code -> {
-            String codeId = code.getCodeId();
-            return apiCodeId.equalsIgnoreCase(codeId) ? true : false;
+        Optional<CodeMgt> codeMgt = codeMgts.stream().filter(code -> {
+            String dtlCd = code.getDtlCd();
+            return apiCodeId.equalsIgnoreCase(dtlCd) ? true : false;
         }).findFirst();
 
         Map<String, String> returnMap = new HashMap<String, String>();
-        if (etccode.isPresent()) {
-            returnMap.put(TpsConstants.API_HOST, etccode.get().getCodeNameEtc1());
-            returnMap.put(TpsConstants.API_PATH, etccode.get().getCodeNameEtc2());
+        if (codeMgt.isPresent()) {
+            returnMap.put(TpsConstants.API_HOST, codeMgt.get().getCdNmEtc1());
+            returnMap.put(TpsConstants.API_PATH, codeMgt.get().getCdNmEtc2());
         } else {
             InvalidDataDTO validDto = new InvalidDataDTO("apiCodeId",
                     messageByLocale.get("tps.dataset.error.invalid.apiCodeId", request));
@@ -53,21 +54,21 @@ public class ApiCodeHelper {
     /**
      * apiHost, apiPath -> apiCodeId (공통코드)
      * 
-     * @param etccodes API타입의 공통코드 목록
+     * @param CodeMgts API타입의 공통코드 목록
      * @param dsApiHost apiHost
      * @param dsApiPath apiPath
      * @return 공통코드 PK
      */
-    public String getDataApiCode(List<Etccode> etccodes, String dsApiHost, String dsApiPath) {
+    public String getDataApiCode(List<CodeMgt> CodeMgts, String dsApiHost, String dsApiPath) {
         if (dsApiHost == null || dsApiPath == null)
             return null;
 
-        Optional<Etccode> etccode = etccodes.stream().filter(code -> {
-            return dsApiHost.equalsIgnoreCase(code.getCodeNameEtc1())
-                    && dsApiPath.equalsIgnoreCase(code.getCodeNameEtc2()) ? true : false;
+        Optional<CodeMgt> codeMgt = CodeMgts.stream().filter(code -> {
+            return dsApiHost.equalsIgnoreCase(code.getCdNmEtc1())
+                    && dsApiPath.equalsIgnoreCase(code.getCdNmEtc2()) ? true : false;
         }).findFirst();
-        if (etccode.isPresent()) {
-            return etccode.get().getCodeId();
+        if (codeMgt.isPresent()) {
+            return codeMgt.get().getDtlCd();
         }
         return null;
     }

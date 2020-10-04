@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ComponentHistRepository extends JpaRepository<ComponentHist, Long> {
 
     /**

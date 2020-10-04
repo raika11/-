@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.component.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import jmnet.moka.core.common.MokaConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,10 +65,9 @@ import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
  */
 @Controller
 @Validated
+@Slf4j
 @RequestMapping("/api/components")
 public class ComponentRestController {
-    private static final Logger logger = LoggerFactory.getLogger(ComponentRestController.class);
-
     @Autowired
     private ComponentService componentService;
 
@@ -162,8 +163,8 @@ public class ComponentRestController {
         try {
             // 등록
             Component component = modelMapper.map(componentDTO, Component.class);
-            component.setCreateYmdt(McpDate.nowStr());
-            component.setCreator(principal.getName());
+            component.setRegDt(McpDate.now());
+            component.setRegId(principal.getName());
 
             Component returnVal = componentService.insertComponent(component);
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
@@ -173,7 +174,7 @@ public class ComponentRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("[COMPONENT INSERT FAIL]", e);
+            log.error("[COMPONENT INSERT FAIL]", e);
             throw new Exception(messageByLocale.get("tps.component.error.save", request), e);
         }
     }
@@ -210,10 +211,10 @@ public class ComponentRestController {
         List<Component> components = modelMapper.map(componentDTOs, Component.TYPE);
 
         // 생성일자, 생성자 추가
-        String createYmdt = McpDate.nowStr();
+        Date regDt = McpDate.now();
         for (Component component : components) {
-            component.setCreator(principal.getName());
-            component.setCreateYmdt(createYmdt);
+            component.setRegId(principal.getName());
+            component.setRegDt(regDt);
         }
 
         try {
@@ -231,7 +232,7 @@ public class ComponentRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("[COMPONENT INSERT ALL FAIL]", e);
+            log.error("[COMPONENT INSERT ALL FAIL]", e);
             throw new Exception(messageByLocale.get("tps.component.error.save", request), e);
         }
     }
@@ -270,10 +271,10 @@ public class ComponentRestController {
         try {
             // 업데이트
             Component newComponent = modelMapper.map(componentDTO, Component.class);
-            newComponent.setCreateYmdt(orgComponent.getCreateYmdt());
-            newComponent.setCreator(orgComponent.getCreator());
-            newComponent.setModifiedYmdt(McpDate.nowStr());
-            newComponent.setModifier(principal.getName());
+            newComponent.setRegDt(orgComponent.getRegDt());
+            newComponent.setRegId(orgComponent.getRegId());
+            newComponent.setModDt(McpDate.now());
+            newComponent.setModId(principal.getName());
 
             Component returnVal = componentService.updateComponent(newComponent, orgComponent);
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
@@ -288,7 +289,7 @@ public class ComponentRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("[COMPONENT UPDATE FAIL]", e);
+            log.error("[COMPONENT UPDATE FAIL]", e);
             throw new Exception(messageByLocale.get("tps.component.error.save", request), e);
         }
     }
@@ -346,7 +347,7 @@ public class ComponentRestController {
                 }
             }
         } catch (Exception e) {
-            logger.error("[COMPONENT HISTORY LOAD FAIL] seq: {}) {}",
+            log.error("[COMPONENT HISTORY LOAD FAIL] seq: {}) {}",
                     componentDTO.getComponentSeq(), e.getMessage());
         }
 
@@ -361,7 +362,7 @@ public class ComponentRestController {
                 }
             }
         } catch (Exception e) {
-            logger.error("[COMPONENT HISTORY LOAD FAIL] seq: {}) {}",
+            log.error("[COMPONENT HISTORY LOAD FAIL] seq: {}) {}",
                     componentDTO.getComponentSeq(), e.getMessage());
         }
 
@@ -404,7 +405,7 @@ public class ComponentRestController {
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("[COMPONENT DELETE FAIL] seq: {}) {}", componentSeq, e.getMessage());
+            log.error("[COMPONENT DELETE FAIL] seq: {}) {}", componentSeq, e.getMessage());
             throw new Exception(messageByLocale.get("tps.component.error.delete", request), e);
         }
     }

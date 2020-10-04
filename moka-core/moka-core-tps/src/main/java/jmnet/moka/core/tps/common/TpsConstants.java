@@ -66,7 +66,7 @@ public class TpsConstants {
     public static final String DATAAPI = "API";
     
     /** 공통코드 */
-    public static final String ETCCODE_TYPE_PAGE_TYPE = "PAGE_TYPE";
+    public static final String CODE_MGT_GRP_PAGE_TYPE = "PAGE_TYPE";
 
     /** 컴포넌트 DATA_TYPE */
     public static final String DATATYPE_NONE = "NONE";      // NONE

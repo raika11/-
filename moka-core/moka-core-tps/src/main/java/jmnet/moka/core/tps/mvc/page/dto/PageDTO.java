@@ -63,17 +63,17 @@ public class PageDTO implements Serializable {
 
     @NotNull(message = "{tps.page.error.invalid.pageOrd}")
     @Min(value = -1, message = "{tps.page.error.invalid.pageOrd}")
-    private int pageOrd;
+    private Integer pageOrd;
 
     private String pageBody;
 
     private String urlParam;
 
-    @NotNull(message = "{tps.page.error.invalid.useYn}}")
+    @NotNull(message = "{tps.page.error.invalid.useYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.invalid.useYn}")
     private String useYn;
 
-    @NotNull(message = "{tps.page.error.invalid.fileYn}}")
+    @NotNull(message = "{tps.page.error.invalid.fileYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.invalid.fileYn}")
     private String fileYn;
 
@@ -82,7 +82,7 @@ public class PageDTO implements Serializable {
 
     private String description;
 
-    @NotNull(message = "{tps.page.error.invalid.moveYn}}")
+    @NotNull(message = "{tps.page.error.invalid.moveYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.invalid.moveYn}")
     private String moveYn;
 
@@ -112,7 +112,6 @@ public class PageDTO implements Serializable {
         pageItem.put(ItemConstants.PAGE_DOMAIN_ID, this.domain.getDomainId());
         pageItem.put(ItemConstants.PAGE_NAME, this.pageName);
         pageItem.put(ItemConstants.PAGE_SERVICE_NAME, this.pageServiceName);
-        pageItem.put(ItemConstants.PAGE_DISPLAY_NAME, this.pageDisplayName);
         pageItem.put(ItemConstants.PAGE_DISPLAY_NAME, this.pageDisplayName);
         pageItem.put(ItemConstants.PAGE_PARENT_ID,
                 this.parent != null ? this.parent.getPageSeq() : null);

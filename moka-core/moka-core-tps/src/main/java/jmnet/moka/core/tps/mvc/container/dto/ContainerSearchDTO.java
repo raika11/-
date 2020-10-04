@@ -8,10 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
  * <pre>
@@ -23,10 +20,11 @@ import lombok.EqualsAndHashCode;
  * @author ssc
  */
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 public class ContainerSearchDTO extends SearchDTO {
 

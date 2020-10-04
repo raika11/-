@@ -5,12 +5,14 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.type.TypeReference;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <pre>
@@ -43,6 +45,8 @@ public class HistDTO implements Serializable {
 
     private String workType;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = MokaConstants.JSON_DATE_FORMAT, timezone = MokaConstants.JSON_DATE_TIME_ZONE)
+    @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
     private Date regDt;
 
     private String regId;

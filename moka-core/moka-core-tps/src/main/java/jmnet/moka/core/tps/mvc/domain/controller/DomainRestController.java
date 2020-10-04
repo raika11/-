@@ -12,9 +12,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -43,10 +43,7 @@ import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
-import jmnet.moka.core.tps.mvc.etccode.entity.Etccode;
-import jmnet.moka.core.tps.mvc.etccode.service.EtccodeService;
-import jmnet.moka.core.tps.mvc.media.dto.MediaDTO;
-import jmnet.moka.core.tps.mvc.media.entity.Media;
+import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 
 /**
  * <pre>
@@ -59,9 +56,9 @@ import jmnet.moka.core.tps.mvc.media.entity.Media;
  */
 @RestController
 @Validated
+@Slf4j
 @RequestMapping("/api/domains")
 public class DomainRestController {
-    private static final Logger logger = LoggerFactory.getLogger(DomainRestController.class);
 
     @Autowired
     private DomainService domainService;
@@ -73,7 +70,7 @@ public class DomainRestController {
     private MessageByLocale messageByLocale;
 
     @Autowired
-    private EtccodeService etccodeService;
+    private CodeMgtService codeMgtService;
 
     @Autowired
     private RelationHelper relationHelper;
@@ -133,9 +130,9 @@ public class DomainRestController {
         DomainDTO dto = modelMapper.map(domain, DomainDTO.class);
 
         // apiHost, apiPath -> apiCodeId
-        List<Etccode> etccodes = etccodeService.findUseList(TpsConstants.DATAAPI);
+        List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
         String apiCodeId =
-                apiCodeHelper.getDataApiCode(etccodes, dto.getApiHost(), dto.getApiPath());
+                apiCodeHelper.getDataApiCode(CodeMgts, dto.getApiHost(), dto.getApiPath());
         if (apiCodeId != null) {
             dto.setApiCodeId(apiCodeId);
         }
@@ -185,9 +182,9 @@ public class DomainRestController {
 
         if (!McpString.isNullOrEmpty(domainDTO.getApiCodeId())) {
             // apiCodeId -> apiHost, apiPath
-            List<Etccode> etccodes = etccodeService.findUseList(TpsConstants.DATAAPI);
+            List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
             Map<String, String> apiInfo =
-                    apiCodeHelper.getDataApi(request, etccodes, domainDTO.getApiCodeId());
+                    apiCodeHelper.getDataApi(request, CodeMgts, domainDTO.getApiCodeId());
 
             domain.setApiHost(apiInfo.get(TpsConstants.API_HOST));
             domain.setApiPath(apiInfo.get(TpsConstants.API_PATH));
@@ -204,7 +201,7 @@ public class DomainRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("[FAIL TO INSERT DOMAIN]", e);
+            log.error("[FAIL TO INSERT DOMAIN]", e);
             throw new Exception(messageByLocale.get("tps.domain.error.save", request), e);
         }
     }
@@ -243,9 +240,9 @@ public class DomainRestController {
 
         if (!McpString.isNullOrEmpty(domainDTO.getApiCodeId())) {
             // apiCodeId -> apiHost, apiPath
-            List<Etccode> etccodes = etccodeService.findUseList(TpsConstants.DATAAPI);
+            List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
             Map<String, String> apiInfo =
-                    apiCodeHelper.getDataApi(request, etccodes, domainDTO.getApiCodeId());
+                    apiCodeHelper.getDataApi(request, CodeMgts, domainDTO.getApiCodeId());
             newDomain.setApiHost(apiInfo.get(TpsConstants.API_HOST));
             newDomain.setApiPath(apiInfo.get(TpsConstants.API_PATH));
         }
@@ -261,7 +258,7 @@ public class DomainRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("[FAIL TO UPDATE DOMAIN]", e);
+            log.error("[FAIL TO UPDATE DOMAIN]", e);
             throw new Exception(messageByLocale.get("tps.domain.error.save", request), e);
         }
     }
@@ -327,33 +324,9 @@ public class DomainRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("[FAIL TO DELETE DOMAIN] domainId: {}) {}", domainId, e.getMessage());
+            log.error("[FAIL TO DELETE DOMAIN] domainId: {}) {}", domainId, e.getMessage());
             throw new Exception(messageByLocale.get("tps.domain.error.delete", request), e);
         }
-    }
-
-
-    /**
-     * 온라인 매체목록조회
-     * 
-     * @param request
-     * @return 매체목록
-     */
-    @GetMapping("/medias")
-    public ResponseEntity<?> getMediaList(HttpServletRequest request) {
-        // 조회
-        List<Media> returnValue = domainService.findOnlineMediaList();
-
-        // 리턴값 설정
-        ResultListDTO<MediaDTO> resultListMessage = new ResultListDTO<MediaDTO>();
-        List<MediaDTO> mediaDtoList = modelMapper.map(returnValue, MediaDTO.TYPE);
-        resultListMessage.setTotalCnt(mediaDtoList.size());
-        resultListMessage.setList(mediaDtoList);
-
-        ResultDTO<ResultListDTO<MediaDTO>> resultDto =
-                new ResultDTO<ResultListDTO<MediaDTO>>(resultListMessage);
-
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**

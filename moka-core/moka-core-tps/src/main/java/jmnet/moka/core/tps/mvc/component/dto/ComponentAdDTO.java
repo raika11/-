@@ -8,7 +8,9 @@ import jmnet.moka.core.tps.mvc.ad.dto.AdSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -19,9 +21,10 @@ import lombok.NoArgsConstructor;
  * @since 2020. 5. 21. 오전 11:27:03
  * @author ssc
  */
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ComponentAdDTO implements Serializable {
@@ -34,6 +37,6 @@ public class ComponentAdDTO implements Serializable {
     
     private AdSimpleDTO ad;
 
-    private int listParagraph;
+    private Integer listParagraph;
 
 }

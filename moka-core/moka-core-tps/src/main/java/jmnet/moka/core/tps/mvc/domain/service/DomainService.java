@@ -8,10 +8,8 @@ import java.util.Optional;
 
 import jmnet.moka.common.data.support.SearchDTO;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
-import jmnet.moka.core.tps.mvc.media.entity.Media;
 
 /**
  * 도메인 서비스 2020. 1. 8. ssc 최초생성
@@ -90,12 +88,4 @@ public interface DomainService {
      * @return 관련아이템 여부
      */
     public boolean hasRelations(String domainId);
-
-    /**
-     * 매체목록조회 : 페이징조건 없는 조회
-     * 
-     * @return 매체목록
-     */
-    public List<Media> findOnlineMediaList();
-
 }

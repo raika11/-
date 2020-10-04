@@ -55,8 +55,6 @@ import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.EditionVO;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
-import jmnet.moka.core.tps.mvc.volume.entity.Volume;
-import jmnet.moka.core.tps.mvc.volume.service.VolumeService;
 
 /**
  * <pre>
@@ -103,9 +101,6 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Autowired
     private ComponentWorkService componentWorkService;
-
-    @Autowired
-    private VolumeService volumeService;
 
     @Autowired
     private TemplateService templateService;
@@ -399,8 +394,8 @@ public class DeskingServiceImpl implements DeskingService {
         component.setSnapshotYn(workVO.getSnapshotYn());
         component.setSnapshotBody(workVO.getSnapshotBody());
         component.setTemplate(template);
-        component.setModifiedYmdt(McpDate.nowStr());
-        component.setModifier(creator);
+        component.setModDt(McpDate.now());
+        component.setModId(creator);
 
         return componentService.updateComponent(component);
 

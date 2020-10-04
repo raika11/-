@@ -35,8 +35,6 @@ public class DomainSimpleDTO implements Serializable {
     private String domainName;
 
     private String domainUrl;
-
-    private String volumeId;
     
     private String servicePlatform;
 }

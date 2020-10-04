@@ -23,7 +23,7 @@
     </typeHandlers>
     <plugins>
         <plugin interceptor="jmnet.moka.common.data.mybatis.support.PaginationInterceptor">
-            <property name="dialectClass" value="jmnet.moka.common.data.mybatis.support.MysqlDialect" />
+            <property name="dialectClass" value="jmnet.moka.common.data.mybatis.support.Mssql2012UnderDialect" />
         </plugin>
     </plugins>
 </configuration>

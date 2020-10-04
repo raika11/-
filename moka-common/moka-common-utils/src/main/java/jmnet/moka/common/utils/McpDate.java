@@ -4,8 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class McpDate {
 
@@ -82,6 +84,7 @@ public class McpDate {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.parse(value);
     }
+
 
 
 
@@ -494,5 +497,27 @@ public class McpDate {
 
     public static LocalDate toLocalDate(String date) {
         return LocalDate.parse(date, DateTimeFormatter.BASIC_ISO_DATE);
+    }
+
+    /**
+     *
+     * <pre>
+     * 일자기준 between 시작일시, 종료일시를 리턴한다.
+     * </pre>
+     *
+     * @param format 날짜포맷
+     * @param day 값
+     * @return 시작일시,종료일시 배열
+     * @throws ParseException 파싱 예외
+     */
+    public static List<Date> betweenDate(String format, String day) throws ParseException {
+        if (day == null) {
+            return null;
+        }
+        List<Date> dateList = new ArrayList<Date>();
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        dateList.add(sdf.parse(day + " 00:00:00"));
+        dateList.add(sdf.parse(day + " 23:59:59"));
+        return dateList;
     }
 }

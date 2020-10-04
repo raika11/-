@@ -118,7 +118,7 @@ public class MokaConstants {
     public static final String HTML_WRAP_MERGE_CONTENT = "mergeContent";
 
     /* JSON dateformat */
-    public static final String JSON_DATE_FORMAT = "YYYY-MM-DD HH:MM:SS";
+    public static final String JSON_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String JSON_DATE_TIME_ZONE = "Asia/Seoul";
 
     // DateFormat은 thread-safe하지 않음, jackson에서는 문제없다고는 함

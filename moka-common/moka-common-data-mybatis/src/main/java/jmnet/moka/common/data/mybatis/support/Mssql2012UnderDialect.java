@@ -60,7 +60,7 @@ public class Mssql2012UnderDialect implements Dialect {
 		
 		StringBuffer buf = new StringBuffer();
 		buf.append(NL).append("select * from (");
-		buf.append(NL).append(getRowNumber(sql));
+		buf.append(NL).append(getRowNumber(sql, scale));
 		buf.append(NL).append(") OQ WHERE row_num BETWEEN ").append(start).append(" AND ").append(end);
 		return buf.toString();
 	}
@@ -86,12 +86,12 @@ public class Mssql2012UnderDialect implements Dialect {
     * @param sql SQL
     * @return convert SQL
     */
-	private String getRowNumber(String sql) {
+	private String getRowNumber(String sql, int scale) {
 		StringBuffer sqlBuffer = new StringBuffer(sql);
 		int startOfSelect = getSelectPrefixIdx(sql);
 		if(startOfSelect > -1) {
 			StringBuffer rownumber = new StringBuffer(50)
-					.append(" ROW_NUMBER() OVER(");
+					.append(" TOP ").append(scale).append(" ROW_NUMBER() OVER(");
 			int orderByIndex = sql.toLowerCase().lastIndexOf("order by");
 			if (orderByIndex > 0) {
 				rownumber.append(sql.substring(orderByIndex));
@@ -115,7 +115,8 @@ public class Mssql2012UnderDialect implements Dialect {
 	 * @return row_number 쿼리가 위치 할 index
 	 */
 	private int getSelectPrefixIdx(String sql) {
-		Pattern pattern = Pattern.compile("^\\s++"+SELECT+"(\\s++"+DISTINCT+")?+(\\s++"+TOP+"\\s++\\d*)?+", Pattern.CASE_INSENSITIVE);
+//		Pattern pattern = Pattern.compile("^\\s++"+SELECT+"(\\s++"+DISTINCT+")?+(\\s++"+TOP+"\\s++\\d*)?+", Pattern.CASE_INSENSITIVE);
+		Pattern pattern = Pattern.compile("^\\s*"+SELECT+"+(\\s*"+TOP+"\\s*\\d*)*(\\s*"+DISTINCT+")?", Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(sql);
 
 		return matcher.find() ? matcher.end() : -1;

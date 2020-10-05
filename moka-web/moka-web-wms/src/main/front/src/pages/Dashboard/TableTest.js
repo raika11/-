@@ -4,12 +4,7 @@ import clsx from 'clsx';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faChevronLeft,
-    faChevronRight,
-    faStepBackward,
-    faStepForward
-} from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faStepBackward, faStepForward } from '@moka/fontawesome-pro-solid-svg-icons';
 
 import { tableData, tableColumns } from './data';
 
@@ -30,7 +25,7 @@ const TableTest = ({ fixed }) => {
                             key={p.page}
                             className={clsx('btn', 'mr-2', {
                                 'btn-primary': !p.active,
-                                'btn-warning': p.active
+                                'btn-warning': p.active,
                             })}
                             onClick={() => onPageChange(p.page)}
                         >
@@ -72,7 +67,7 @@ const TableTest = ({ fixed }) => {
                     console.log(param1);
                     console.log(param2);
                     console.log(tableRef.current);
-                }
+                },
             })}
         />
     );
@@ -82,11 +77,11 @@ const TableTest = ({ fixed }) => {
             ...col,
             headerAttrs: (cell, row, rowIndex, colIndex) => ({
                 scope: 'col',
-                width: col.width
+                width: col.width,
             }),
             attrs: (cell, row, rowIndex, colIndex) => ({
-                width: col.width
-            })
+                width: col.width,
+            }),
         }));
         return <FixedTable>{createTable(columns)}</FixedTable>;
     }

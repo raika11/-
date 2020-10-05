@@ -11,7 +11,7 @@ const propTypes = {
     /**
      * 추가하는 className
      */
-    className: PropTypes.string
+    className: PropTypes.string,
 };
 const defaultProps = {};
 
@@ -20,7 +20,7 @@ const defaultProps = {};
  */
 const Wrapper = ({ children, className }) => {
     const { isBoxed } = useSelector((store) => ({
-        isBoxed: store.layout.isBoxed
+        isBoxed: store.layout.isBoxed,
     }));
 
     return (
@@ -28,9 +28,9 @@ const Wrapper = ({ children, className }) => {
             className={clsx(
                 'wrapper',
                 {
-                    'wrapper-boxed': isBoxed
+                    'wrapper-boxed': isBoxed,
                 },
-                className
+                className,
             )}
         >
             {children}

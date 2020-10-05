@@ -17,7 +17,17 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import { toastr } from 'react-redux-toastr';
 
-import { MokaDateTimePicker, MokaDraggableModal, MokaCodeListModal, MokaAutocomplete, MokaPrependLinkInput, MokaSearchInput, MokaCardTabs, MokaAlert } from '@components';
+import {
+    MokaDateTimePicker,
+    MokaDraggableModal,
+    MokaCodeListModal,
+    MokaAutocomplete,
+    MokaPrependLinkInput,
+    MokaSearchInput,
+    MokaCardTabs,
+    MokaAlert,
+    MokaEditor,
+} from '@components';
 import { MokaImageInput } from '@components/MokaInput';
 import { options } from './data';
 import Table from './TableTest';
@@ -38,6 +48,11 @@ const MokaDashboardPage = () => {
 
     return (
         <Container fluid className="p-0">
+            <Row>
+                <Col>
+                    <MokaEditor />
+                </Col>
+            </Row>
             <Row>
                 <Col>
                     <MokaCardTabs id="test" tabNavs={['Tab1', 'Tab2']} tabs={[<div>Test1</div>, <div>Test2</div>]} />
@@ -200,7 +215,7 @@ const MokaDashboardPage = () => {
                                     <Form.Label>6) Switch (기본이 custom)</Form.Label>
                                     <FormCheck>
                                         <FormCheck.Label>TEST</FormCheck.Label>
-                                        <FormCheck.Input custom type="radio" />
+                                        <FormCheck.Input type="radio" />
                                     </FormCheck>
                                     <Form.Check type="switch" label="default check" id="custom-switch" />
                                     <Form.Check type="switch" label="default check" id="d-custom-switch" disabled />

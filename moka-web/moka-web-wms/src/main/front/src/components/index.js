@@ -5,3 +5,4 @@ export { default as MokaModal, MokaDraggableModal, MokaCodeListModal } from './M
 export { MokaPrependLinkInput, MokaSearchInput } from './MokaInput';
 export { default as MokaAlert } from './MokaAlert';
 export { MokaCardTabs } from './MokaTabs';
+export { default as MokaEditor } from './MokaEditor';

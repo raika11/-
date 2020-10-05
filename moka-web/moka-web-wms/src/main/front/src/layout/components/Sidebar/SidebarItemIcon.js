@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee } from '@moka/fontawesome-pro-solid-svg-icons';
 
 // 아이콘 등록
 library.add(faCoffee);

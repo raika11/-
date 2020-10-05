@@ -3,7 +3,7 @@ import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@moka/fontawesome-pro-solid-svg-icons';
 
 const propTypes = {
     /**

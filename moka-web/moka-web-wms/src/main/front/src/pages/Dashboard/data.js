@@ -12,7 +12,7 @@ export const options = [
     { value: 'h', label: 'aaaaa' },
     { value: 'i', label: 'aaaaa' },
     { value: 'j', label: 'aaaaa' },
-    { value: 'k', label: 'aaaaa' }
+    { value: 'k', label: 'aaaaa' },
 ];
 
 const tableData = [
@@ -22,7 +22,7 @@ const tableData = [
         office: 'Edinburgh',
         age: 61,
         startDate: '2011/04/25',
-        salary: '$320,800'
+        salary: '$320,800',
     },
     {
         name: 'Garrett Winters',
@@ -30,7 +30,7 @@ const tableData = [
         office: 'Tokyo',
         age: 63,
         startDate: '2011/07/25',
-        salary: '$170,750'
+        salary: '$170,750',
     },
     {
         name: 'Ashton Cox',
@@ -38,7 +38,7 @@ const tableData = [
         office: 'San Francisco',
         age: 66,
         startDate: '2009/01/12',
-        salary: '$86,000'
+        salary: '$86,000',
     },
     {
         name: 'Cedric Kelly',
@@ -46,7 +46,7 @@ const tableData = [
         office: 'Edinburgh',
         age: 22,
         startDate: '2012/03/29',
-        salary: '$433,060'
+        salary: '$433,060',
     },
     {
         name: 'Airi Satou',
@@ -54,7 +54,7 @@ const tableData = [
         office: 'Tokyo',
         age: 33,
         startDate: '2008/11/28',
-        salary: '$162,700'
+        salary: '$162,700',
     },
     {
         name: 'Brielle Williamson',
@@ -62,7 +62,7 @@ const tableData = [
         office: 'New York',
         age: 61,
         startDate: '2012/12/02',
-        salary: '$372,000'
+        salary: '$372,000',
     },
     {
         name: 'Herrod Chandler',
@@ -70,7 +70,7 @@ const tableData = [
         office: 'San Francisco',
         age: 59,
         startDate: '2012/08/06',
-        salary: '$137,500'
+        salary: '$137,500',
     },
     {
         name: 'Rhona Davidson',
@@ -78,7 +78,7 @@ const tableData = [
         office: 'Tokyo',
         age: 55,
         startDate: '2010/10/14',
-        salary: '$327,900'
+        salary: '$327,900',
     },
     {
         name: 'Colleen Hurst',
@@ -86,7 +86,7 @@ const tableData = [
         office: 'San Francisco',
         age: 39,
         startDate: '2009/09/15',
-        salary: '$205,500'
+        salary: '$205,500',
     },
     {
         name: 'Sonya Frost',
@@ -94,7 +94,7 @@ const tableData = [
         office: 'Edinburgh',
         age: 23,
         startDate: '2008/12/13',
-        salary: '$103,600'
+        salary: '$103,600',
     },
     {
         name: 'Jena Gaines',
@@ -102,7 +102,7 @@ const tableData = [
         office: 'London',
         age: 30,
         startDate: '2008/12/19',
-        salary: '$90,560'
+        salary: '$90,560',
     },
     {
         name: 'Quinn Flynn',
@@ -110,7 +110,7 @@ const tableData = [
         office: 'Edinburgh',
         age: 22,
         startDate: '2013/03/03',
-        salary: '$342,000'
+        salary: '$342,000',
     },
     {
         name: 'Charde Marshall',
@@ -118,7 +118,7 @@ const tableData = [
         office: 'San Francisco',
         age: 36,
         startDate: '2008/10/16',
-        salary: '$470,600'
+        salary: '$470,600',
     },
     {
         name: 'Haley Kennedy',
@@ -126,7 +126,7 @@ const tableData = [
         office: 'London',
         age: 43,
         startDate: '2012/12/18',
-        salary: '$313,500'
+        salary: '$313,500',
     },
     {
         name: 'Tatyana Fitzpatrick',
@@ -134,7 +134,7 @@ const tableData = [
         office: 'London',
         age: 19,
         startDate: '2010/03/17',
-        salary: '$385,750'
+        salary: '$385,750',
     },
     {
         name: 'Michael Silva',
@@ -142,7 +142,7 @@ const tableData = [
         office: 'London',
         age: 66,
         startDate: '2012/11/27',
-        salary: '$198,500'
+        salary: '$198,500',
     },
     {
         name: 'Paul Byrd',
@@ -150,7 +150,7 @@ const tableData = [
         office: 'New York',
         age: 64,
         startDate: '2010/06/09',
-        salary: '$725,000'
+        salary: '$725,000',
     },
     {
         name: 'Gloria Little',
@@ -158,7 +158,7 @@ const tableData = [
         office: 'New York',
         age: 59,
         startDate: '2009/04/10',
-        salary: '$237,500'
+        salary: '$237,500',
     },
     {
         name: 'Bradley Greer',
@@ -166,7 +166,7 @@ const tableData = [
         office: 'London',
         age: 41,
         startDate: '2012/10/13',
-        salary: '$132,000'
+        salary: '$132,000',
     },
     {
         name: 'Dai Rios',
@@ -174,7 +174,7 @@ const tableData = [
         office: 'Edinburgh',
         age: 35,
         startDate: '2012/09/26',
-        salary: '$217,500'
+        salary: '$217,500',
     },
     {
         name: 'Jenette Caldwell',
@@ -182,7 +182,7 @@ const tableData = [
         office: 'New York',
         age: 30,
         startDate: '2011/09/03',
-        salary: '$345,000'
+        salary: '$345,000',
     },
     {
         name: 'Yuri Berry',
@@ -190,7 +190,7 @@ const tableData = [
         office: 'New York',
         age: 40,
         startDate: '2009/06/25',
-        salary: '$675,000'
+        salary: '$675,000',
     },
     {
         name: 'Caesar Vance',
@@ -198,7 +198,7 @@ const tableData = [
         office: 'New York',
         age: 21,
         startDate: '2011/12/12',
-        salary: '$106,450'
+        salary: '$106,450',
     },
     {
         name: 'Doris Wilder',
@@ -206,7 +206,7 @@ const tableData = [
         office: 'Sidney',
         age: 23,
         startDate: '2010/09/20',
-        salary: '$85,600'
+        salary: '$85,600',
     },
     {
         name: 'Angelica Ramos',
@@ -214,7 +214,7 @@ const tableData = [
         office: 'London',
         age: 47,
         startDate: '2009/10/09',
-        salary: '$1,200,000'
+        salary: '$1,200,000',
     },
     {
         name: 'Gavin Joyce',
@@ -222,7 +222,7 @@ const tableData = [
         office: 'Edinburgh',
         age: 42,
         startDate: '2010/12/22',
-        salary: '$92,575'
+        salary: '$92,575',
     },
     {
         name: 'Jennifer Chang',
@@ -230,7 +230,7 @@ const tableData = [
         office: 'Singapore',
         age: 28,
         startDate: '2010/11/14',
-        salary: '$357,650'
+        salary: '$357,650',
     },
     {
         name: 'Brenden Wagner',
@@ -238,7 +238,7 @@ const tableData = [
         office: 'San Francisco',
         age: 28,
         startDate: '2011/06/07',
-        salary: '$206,850'
+        salary: '$206,850',
     },
     {
         name: 'Fiona Green',
@@ -246,7 +246,7 @@ const tableData = [
         office: 'San Francisco',
         age: 48,
         startDate: '2010/03/11',
-        salary: '$850,000'
+        salary: '$850,000',
     },
     {
         name: 'Shou Itou',
@@ -254,7 +254,7 @@ const tableData = [
         office: 'Tokyo',
         age: 20,
         startDate: '2011/08/14',
-        salary: '$163,000'
+        salary: '$163,000',
     },
     {
         name: 'Michelle House',
@@ -262,7 +262,7 @@ const tableData = [
         office: 'Sidney',
         age: 37,
         startDate: '2011/06/02',
-        salary: '$95,400'
+        salary: '$95,400',
     },
     {
         name: 'Suki Burks',
@@ -270,7 +270,7 @@ const tableData = [
         office: 'London',
         age: 53,
         startDate: '2009/10/22',
-        salary: '$114,500'
+        salary: '$114,500',
     },
     {
         name: 'Prescott Bartlett',
@@ -278,7 +278,7 @@ const tableData = [
         office: 'London',
         age: 27,
         startDate: '2011/05/07',
-        salary: '$145,000'
+        salary: '$145,000',
     },
     {
         name: 'Gavin Cortez',
@@ -286,7 +286,7 @@ const tableData = [
         office: 'San Francisco',
         age: 22,
         startDate: '2008/10/26',
-        salary: '$235,500'
+        salary: '$235,500',
     },
     {
         name: 'Martena Mccray',
@@ -294,7 +294,7 @@ const tableData = [
         office: 'Edinburgh',
         age: 46,
         startDate: '2011/03/09',
-        salary: '$324,050'
+        salary: '$324,050',
     },
     {
         name: 'Unity Butler',
@@ -302,7 +302,7 @@ const tableData = [
         office: 'San Francisco',
         age: 47,
         startDate: '2009/12/09',
-        salary: '$85,675'
+        salary: '$85,675',
     },
     {
         name: 'Howard Hatfield',
@@ -310,7 +310,7 @@ const tableData = [
         office: 'San Francisco',
         age: 51,
         startDate: '2008/12/16',
-        salary: '$164,500'
+        salary: '$164,500',
     },
     {
         name: 'Hope Fuentes',
@@ -318,7 +318,7 @@ const tableData = [
         office: 'San Francisco',
         age: 41,
         startDate: '2010/02/12',
-        salary: '$109,850'
+        salary: '$109,850',
     },
     {
         name: 'Vivian Harrell',
@@ -326,7 +326,7 @@ const tableData = [
         office: 'San Francisco',
         age: 62,
         startDate: '2009/02/14',
-        salary: '$452,500'
+        salary: '$452,500',
     },
     {
         name: 'Timothy Mooney',
@@ -334,7 +334,7 @@ const tableData = [
         office: 'London',
         age: 37,
         startDate: '2008/12/11',
-        salary: '$136,200'
+        salary: '$136,200',
     },
     {
         name: 'Jackson Bradshaw',
@@ -342,7 +342,7 @@ const tableData = [
         office: 'New York',
         age: 65,
         startDate: '2008/09/26',
-        salary: '$645,750'
+        salary: '$645,750',
     },
     {
         name: 'Olivia Liang',
@@ -350,7 +350,7 @@ const tableData = [
         office: 'Singapore',
         age: 64,
         startDate: '2011/02/03',
-        salary: '$234,500'
+        salary: '$234,500',
     },
     {
         name: 'Bruno Nash',
@@ -358,7 +358,7 @@ const tableData = [
         office: 'London',
         age: 38,
         startDate: '2011/05/03',
-        salary: '$163,500'
+        salary: '$163,500',
     },
     {
         name: 'Sakura Yamamoto',
@@ -366,7 +366,7 @@ const tableData = [
         office: 'Tokyo',
         age: 37,
         startDate: '2009/08/19',
-        salary: '$139,575'
+        salary: '$139,575',
     },
     {
         name: 'Thor Walton',
@@ -374,7 +374,7 @@ const tableData = [
         office: 'New York',
         age: 61,
         startDate: '2013/08/11',
-        salary: '$98,540'
+        salary: '$98,540',
     },
     {
         name: 'Finn Camacho',
@@ -382,7 +382,7 @@ const tableData = [
         office: 'San Francisco',
         age: 47,
         startDate: '2009/07/07',
-        salary: '$87,500'
+        salary: '$87,500',
     },
     {
         name: 'Serge Baldwin',
@@ -390,7 +390,7 @@ const tableData = [
         office: 'Singapore',
         age: 64,
         startDate: '2012/04/09',
-        salary: '$138,575'
+        salary: '$138,575',
     },
     {
         name: 'Zenaida Frank',
@@ -398,7 +398,7 @@ const tableData = [
         office: 'New York',
         age: 63,
         startDate: '2010/01/04',
-        salary: '$125,250'
+        salary: '$125,250',
     },
     {
         name: 'Zorita Serrano',
@@ -406,7 +406,7 @@ const tableData = [
         office: 'San Francisco',
         age: 56,
         startDate: '2012/06/01',
-        salary: '$115,000'
+        salary: '$115,000',
     },
     {
         name: 'Jennifer Acosta',
@@ -414,7 +414,7 @@ const tableData = [
         office: 'Edinburgh',
         age: 43,
         startDate: '2013/02/01',
-        salary: '$75,650'
+        salary: '$75,650',
     },
     {
         name: 'Cara Stevens',
@@ -422,7 +422,7 @@ const tableData = [
         office: 'New York',
         age: 46,
         startDate: '2011/12/06',
-        salary: '$145,600'
+        salary: '$145,600',
     },
     {
         name: 'Hermione Butler',
@@ -430,7 +430,7 @@ const tableData = [
         office: 'London',
         age: 47,
         startDate: '2011/03/21',
-        salary: '$356,250'
+        salary: '$356,250',
     },
     {
         name: 'Lael Greer',
@@ -438,7 +438,7 @@ const tableData = [
         office: 'London',
         age: 21,
         startDate: '2009/02/27',
-        salary: '$103,500'
+        salary: '$103,500',
     },
     {
         name: 'Jonas Alexander',
@@ -446,7 +446,7 @@ const tableData = [
         office: 'San Francisco',
         age: 30,
         startDate: '2010/07/14',
-        salary: '$86,500'
+        salary: '$86,500',
     },
     {
         name: 'Shad Decker',
@@ -454,7 +454,7 @@ const tableData = [
         office: 'Edinburgh',
         age: 51,
         startDate: '2008/11/13',
-        salary: '$183,000'
+        salary: '$183,000',
     },
     {
         name: 'Michael Bruce',
@@ -462,7 +462,7 @@ const tableData = [
         office: 'Singapore',
         age: 29,
         startDate: '2011/06/27',
-        salary: '$183,000'
+        salary: '$183,000',
     },
     {
         name: 'Donna Snider',
@@ -470,8 +470,8 @@ const tableData = [
         office: 'New York',
         age: 27,
         startDate: '2011/01/25',
-        salary: '$112,000'
-    }
+        salary: '$112,000',
+    },
 ];
 
 const tableColumns = [
@@ -479,38 +479,38 @@ const tableColumns = [
         dataField: 'name',
         text: 'Name',
         sort: true,
-        width: 256
+        width: 256,
     },
     {
         dataField: 'position',
         text: 'Position',
         sort: true,
-        width: 250
+        width: 250,
     },
     {
         dataField: 'office',
         text: 'Office',
         sort: true,
-        width: 250
+        width: 250,
     },
     {
         dataField: 'age',
         text: 'Age',
         sort: true,
-        width: 250
+        width: 250,
     },
     {
         dataField: 'startDate',
         text: 'Start Date',
         sort: true,
-        width: 250
+        width: 250,
     },
     {
         dataField: 'salary',
         text: 'Salary',
         sort: true,
-        width: 250
-    }
+        width: 250,
+    },
 ];
 
 export { tableData, tableColumns };

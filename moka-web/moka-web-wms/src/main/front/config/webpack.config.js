@@ -25,6 +25,9 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
+// monaco editor webpack plugin
+const MonacoWebpackPlugin = require('@moka/monaco-editor-webpack-plugin');
+
 const postcssNormalize = require('postcss-normalize');
 
 const appPackageJson = require(paths.appPackageJson);
@@ -508,6 +511,52 @@ module.exports = function (webpackEnv) {
             ]
         },
         plugins: [
+            // A plugin to simplify loading the Monaco Editor with webpack.
+            new MonacoWebpackPlugin({
+                languages: ['html', 'css', 'javascript', 'json', 'xml'],
+                features: [
+                    'accessibilityHelp',
+                    'bracketMatching',
+                    'caretOperations',
+                    'clipboard',
+                    'codeAction',
+                    'codelens',
+                    'colorDetector',
+                    'comment',
+                    'contextmenu',
+                    'coreCommands',
+                    'cursorUndo',
+                    'dnd',
+                    'find',
+                    'folding',
+                    // 'fontZoom',
+                    'format',
+                    'gotoError',
+                    'gotoLine',
+                    'gotoSymbol',
+                    'hover',
+                    // 'iPadShowKeyboard',
+                    'inPlaceReplace',
+                    'inspectTokens',
+                    'linesOperations',
+                    'links',
+                    // 'multicursor',
+                    'parameterHints',
+                    // 'quickCommand',
+                    // 'quickOutline',
+                    // 'referenceSearch',
+                    'rename',
+                    // 'smartSelect',
+                    'snippets',
+                    'suggest',
+                    // 'toggleHighContrast',
+                    // 'toggleTabFocusMode',
+                    'transpose',
+                    'wordHighlighter',
+                    'wordOperations',
+                    'wordPartOperations'
+                ]
+            }),
             // Generates an `index.html` file with the <script> injected.
             new HtmlWebpackPlugin(
                 Object.assign(

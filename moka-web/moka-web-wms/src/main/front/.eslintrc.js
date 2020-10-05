@@ -6,6 +6,7 @@ module.exports = {
         'no-console': ['error', { allow: ['warn', 'error', 'log'] }],
         camelcase: 0,
         indent: 0,
-        dangerouslySetInnerHTML: 0
-    }
+        dangerouslySetInnerHTML: 0,
+        'jsx-a11y/anchor-is-valid': 0,
+    },
 };

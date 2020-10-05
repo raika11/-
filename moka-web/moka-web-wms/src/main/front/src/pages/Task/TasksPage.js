@@ -1,16 +1,15 @@
-import React, { useState, forwardRef, useRef } from 'react';
+import React, { forwardRef } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import Dropdown from 'react-bootstrap/Dropdown';
 import avatar from './image_test.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH } from '@moka/fontawesome-pro-solid-svg-icons';
 
 const IconToggle = forwardRef(({ children, onClick }, ref) => (
     <a
@@ -60,7 +59,6 @@ const Task = ({ text }) => (
 );
 
 const TasksPage = () => {
-
     return (
         <Container>
             <h1>Tasks</h1>

@@ -12,8 +12,8 @@ const propTypes = {
     nodeData: PropTypes.shape({
         menuPath: PropTypes.any,
         iconName: PropTypes.string,
-        menuDispName: PropTypes.string
-    })
+        menuDispName: PropTypes.string,
+    }),
 };
 const defaultProps = {};
 
@@ -25,7 +25,7 @@ const SidebarItem = (props) => {
     return (
         <li
             className={clsx('sidebar-item', {
-                active: location.pathname === nodeData.menuPath || null
+                active: location.pathname === nodeData.menuPath || null,
             })}
         >
             <NavLink to={nodeData.menuPath || ''} className="sidebar-link" activeClassName="active">

@@ -13,7 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	
-	<name>moka-web-tmss</name>
+	<name>moka-web-tms</name>
 	<description>Project for Moka-TMS</description>
 
 	<dependencies>

@@ -120,8 +120,8 @@ public class ComponentDTO implements Serializable {
         componentItem.put(ItemConstants.COMPONENT_NAME, this.componentName);
         componentItem.put(ItemConstants.COMPONENT_DESCRIPTION, this.description);
         componentItem.put(ItemConstants.COMPONENT_PERIOD_YN, this.periodYn);
-        componentItem.put(ItemConstants.COMPONENT_PERIOD_START_YMDT, this.periodStartDt.toString());
-        componentItem.put(ItemConstants.COMPONENT_PERIOD_END_YMDT, this.periodEndDt.toString());
+        componentItem.put(ItemConstants.COMPONENT_PERIOD_START_YMDT, this.periodStartDt);
+        componentItem.put(ItemConstants.COMPONENT_PERIOD_END_YMDT, this.periodEndDt);
         componentItem.put(ItemConstants.COMPONENT_DATA_TYPE, this.dataType);
         componentItem.put(ItemConstants.COMPONENT_DEL_WORDS, this.delWords);
         componentItem.put(ItemConstants.COMPONENT_PAGING_YN, this.pagingYn);

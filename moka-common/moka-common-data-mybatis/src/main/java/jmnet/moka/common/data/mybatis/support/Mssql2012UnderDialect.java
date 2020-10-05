@@ -10,7 +10,9 @@ package jmnet.moka.common.data.mybatis.support;
  * @author ohtah
  */
 public class Mssql2012UnderDialect implements Dialect {
-	
+
+	public final static String SELECT_PREFIX = "select";
+
 	/**
 	 * 
 	 * <pre>
@@ -51,8 +53,8 @@ public class Mssql2012UnderDialect implements Dialect {
 		
 		StringBuffer buf = new StringBuffer();
 		buf.append(NL).append("select * from (");
-		buf.append(NL).append(sql);
-		buf.append(NL).append(") OQ WHERE rnum BETWEEN ").append(start).append(" AND ").append(end);
+		buf.append(NL).append(getRowNumber(sql));
+		buf.append(NL).append(") OQ WHERE row_num BETWEEN ").append(start).append(" AND ").append(end);
 		return buf.toString();
 	}
 
@@ -71,4 +73,33 @@ public class Mssql2012UnderDialect implements Dialect {
 		sql = sql.trim();
 		return getSQL(sql, offset, scale);
 	}
+
+	/**
+	* sql의 select 문자 앞에 row_number 쿼리를 추가한다.
+    * @param sql SQL
+    * @return convert SQL
+    */
+	private String getRowNumber(String sql) {
+		StringBuffer sqlBuffer = new StringBuffer(sql);
+		int startOfSelect = sql.toLowerCase().indexOf(SELECT_PREFIX);
+
+		StringBuffer rownumber = new StringBuffer(50)
+				.append(" ROW_NUMBER() OVER(");
+		int orderByIndex = sql.toLowerCase().lastIndexOf("order by");
+		if ( orderByIndex>0) {
+			rownumber.append( sql.substring(orderByIndex) );
+			sqlBuffer = new StringBuffer(sqlBuffer.substring(0, orderByIndex));
+		} else {
+			rownumber.append( " ORDER BY (SELECT 1)" );
+		}
+		rownumber.append(") AS row_num,");
+
+		sqlBuffer.insert(startOfSelect+SELECT_PREFIX.length(), rownumber);
+		return sqlBuffer.toString();
+	}
+
+//	public static void main(String[] args) {
+//		Mssql2012UnderDialect d = new Mssql2012UnderDialect();
+//		System.out.println(d.getSQL("select distinct * from ddd where 111 order by dba desc", 10, 50));
+//	}
 }

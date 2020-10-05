@@ -77,7 +77,7 @@ public class ItemConstants {
     public static String COMPONENT_SNAPSHOT_YN = "snapshotYn";
     public static String COMPONENT_SNAPSHOT_BODY = "snapshotBody";
     public static String COMPONENT_SKIN_ID = "skinId";
-    public static String COMPONENT_PREVIEW_RESOURCE = "previewResource";
+//    public static String COMPONENT_PREVIEW_RESOURCE = "previewResource";
     public static String COMPONENT_CREATE_YMDT = "create";
     public static String COMPONENT_CREATOR = "ceator";
     public static String COMPONENT_MODIFIED_YMDT = ITEM_MODIFIED;
@@ -244,7 +244,7 @@ public class ItemConstants {
         public static String COMPONENT_SNAPSHOT_YN = "SNAPSHOT_YN";
         public static String COMPONENT_SNAPSHOT_BODY = "SNAPSHOT_BODY";
         public static String COMPONENT_SKIN_ID = "SKIN_SEQ";
-        public static String COMPONENT_PREVIEW_RESOURCE = "PREVIEW_RSRC";
+//        public static String COMPONENT_PREVIEW_RESOURCE = "PREVIEW_RSRC";
         public static String COMPONENT_CREATE_YMDT = "REG_DT";
         public static String COMPONENT_CREATOR = "REG_ID";
         public static String COMPONENT_MODIFIED_YMDT = "MOD_DT";

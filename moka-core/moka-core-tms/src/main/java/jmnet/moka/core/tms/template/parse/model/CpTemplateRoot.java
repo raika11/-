@@ -186,9 +186,9 @@ public class CpTemplateRoot extends MspTemplateRoot {
         }
 
         // 미리보기 일 경우 preview resource 추가
-        if (context.getMergeOptions().isPreviewResource()) {
-            this.setPreviewResource(merger, context, sb);
-        }
+//        if (context.getMergeOptions().isPreviewResource()) {
+//            this.setPreviewResource(merger, context, sb);
+//        }
         MergeContext childContext = context.createRowDataChild();
         childContext.set(MokaConstants.MERGE_CONTEXT_COMPONENT, this.item);
 
@@ -261,24 +261,24 @@ public class CpTemplateRoot extends MspTemplateRoot {
         }
     }
 
-    private void setPreviewResource(TemplateMerger<?> merger, MergeContext context,
-            StringBuilder sb) {
-        String resource = this.item.getString(ItemConstants.COMPONENT_PREVIEW_RESOURCE);
-        if (McpString.isEmpty(resource))
-            return;
-        TemplateRoot templateRoot = null;
-        try {
-            templateRoot = TemplateParser.parse(resource);
-        } catch (TemplateParseException e) {
-            logger.error("Preview Resource Parsing Fail: {} - component : {} {} {}",
-                    ((MspTemplateMerger) merger).getDomainId(), this.getItemType(), this.getId(),
-                    e.getMessage());
-            return;
-        }
-        sb.append(System.lineSeparator());
-        templateRoot.merge(merger, context, sb);
-        sb.append(System.lineSeparator());
-    }
+//    private void setPreviewResource(TemplateMerger<?> merger, MergeContext context,
+//            StringBuilder sb) {
+//        String resource = this.item.getString(ItemConstants.COMPONENT_PREVIEW_RESOURCE);
+//        if (McpString.isEmpty(resource))
+//            return;
+//        TemplateRoot templateRoot = null;
+//        try {
+//            templateRoot = TemplateParser.parse(resource);
+//        } catch (TemplateParseException e) {
+//            logger.error("Preview Resource Parsing Fail: {} - component : {} {} {}",
+//                    ((MspTemplateMerger) merger).getDomainId(), this.getItemType(), this.getId(),
+//                    e.getMessage());
+//            return;
+//        }
+//        sb.append(System.lineSeparator());
+//        templateRoot.merge(merger, context, sb);
+//        sb.append(System.lineSeparator());
+//    }
 
     private void setDataRange(Map<String, Object> datasetParam, HttpParamMap httpParamMap) {
         String page = httpParamMap.get(MokaConstants.PARAM_PAGE);

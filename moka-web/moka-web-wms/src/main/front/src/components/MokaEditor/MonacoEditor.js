@@ -1,6 +1,6 @@
 import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
-import * as monaco from '@moka/monaco-editor';
+import * as monaco from '@moka/monaco-editor/esm/vs/editor/editor.api';
 
 // Create Custom Theme
 monaco.editor.defineTheme('mokaTheme', {

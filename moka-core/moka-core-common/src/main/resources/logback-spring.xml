@@ -51,25 +51,33 @@
 	<!-- 로그 파일 생성 관련 -->
 	<!-- 로그 모드 -->
 	<!-- log file -->
-	<!-- console을 통해 wildfly에서 생성하는 로그파일 설정을 따름
+	<!-- console을 통해 wildfly에서 생성하는 로그파일 설정을 따름 -->
+	<!--로컬에서만 server.log 파일 생성 -->
+	<if condition='p("spring.profiles.active").equals("")'>
+		<then>
 	<appender name="FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_PATH}/${LOG_FILE_NAME}</file>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}
+			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i
 			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 50MB -->
+				<maxFileSize>${LOG_FILESIZE_LOG}</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
 			<maxHistory>${LOG_DAYS}</maxHistory>
 		</rollingPolicy>
-		<triggeringPolicy
+		<!--<triggeringPolicy
 			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
 			<MaxFileSize>${LOG_FILESIZE_LOG}</MaxFileSize>
-		</triggeringPolicy>
+		</triggeringPolicy>-->
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<pattern>${LOG_PATTERN}</pattern>
 		</encoder>
 	</appender>
-	-->
+		</then>
+	</if>
 
 	<!-- system log file -->
 	<!--<appender name="SYSTEM-FILE"
@@ -105,14 +113,18 @@
 		<file>${LOG_PATH}/action.log</file>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/action.log.%d{yyyy-MM-dd}
+			<fileNamePattern>${LOG_PATH}/action.log.%d{yyyy-MM-dd}.%i
 			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 50MB -->
+				<maxFileSize>${LOG_FILESIZE_LOG}</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
 			<maxHistory>${LOG_DAYS}</maxHistory>
 		</rollingPolicy>
-		<triggeringPolicy
+		<!--<triggeringPolicy
 			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
 			<MaxFileSize>${LOG_FILESIZE_LOG}</MaxFileSize>
-		</triggeringPolicy>
+		</triggeringPolicy>-->
 		<filter class="ch.qos.logback.core.filter.EvaluatorFilter">
 			<evaluator
 				class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
@@ -149,14 +161,18 @@
 				<file>${LOG_PATH}/user.log</file>
 				<rollingPolicy
 					class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-					<fileNamePattern>${LOG_PATH}/user.log.%d{yyyy-MM-dd}
+					<fileNamePattern>${LOG_PATH}/user.log.%d{yyyy-MM-dd}.%i
 					</fileNamePattern>
+					<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+						<!-- or whenever the file size reaches 50MB -->
+						<maxFileSize>${LOG_FILESIZE_LOG}</maxFileSize>
+					</timeBasedFileNamingAndTriggeringPolicy>
 					<maxHistory>${LOG_DAYS}</maxHistory>
 				</rollingPolicy>
-				<triggeringPolicy
+				<!--<triggeringPolicy
 					class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
 					<MaxFileSize>${LOG_FILESIZE_LOG}</MaxFileSize>
-				</triggeringPolicy>
+				</triggeringPolicy>-->
 				<encoder
 					class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 					<pattern>${LOG_MDC_PATTERN}</pattern>
@@ -169,9 +185,12 @@
 		<appender-ref ref="console" />
 		<appender-ref ref="ACTION-FILE" />
 		<appender-ref ref="USER-SIFT" />
-		<!--  console을 통해 wildfly에서 생성하는 로그파일 설정을 따름
-		<appender-ref ref="FILE" />
-		-->
+		<!--로컬에서만 server.log 파일 생성 -->
+		<if condition='p("spring.profiles.active").equals("")'>
+		<then>
+			<appender-ref ref="FILE" />
+		</then>
+		</if>
 	</root>
 
 </configuration>

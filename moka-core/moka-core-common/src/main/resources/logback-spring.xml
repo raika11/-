@@ -63,7 +63,6 @@
 			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i
 			</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<!-- or whenever the file size reaches 50MB -->
 				<maxFileSize>${LOG_FILESIZE_LOG}</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 			<maxHistory>${LOG_DAYS}</maxHistory>
@@ -113,12 +112,11 @@
 		<file>${LOG_PATH}/action.log</file>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/action.log.%d{yyyy-MM-dd}.%i
+			<fileNamePattern>${LOG_PATH}/action.log.%d{yyyy-MM-dd}
 			</fileNamePattern>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<!-- or whenever the file size reaches 50MB -->
+			<!--<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>${LOG_FILESIZE_LOG}</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
+			</timeBasedFileNamingAndTriggeringPolicy>-->
 			<maxHistory>${LOG_DAYS}</maxHistory>
 		</rollingPolicy>
 		<!--<triggeringPolicy
@@ -164,7 +162,6 @@
 					<fileNamePattern>${LOG_PATH}/user.log.%d{yyyy-MM-dd}.%i
 					</fileNamePattern>
 					<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-						<!-- or whenever the file size reaches 50MB -->
 						<maxFileSize>${LOG_FILESIZE_LOG}</maxFileSize>
 					</timeBasedFileNamingAndTriggeringPolicy>
 					<maxHistory>${LOG_DAYS}</maxHistory>

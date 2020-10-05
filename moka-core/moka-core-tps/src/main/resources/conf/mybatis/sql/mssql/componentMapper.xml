@@ -212,11 +212,11 @@
 			AND COMPONENT.TEMPLATE_SEQ = TEMPLATE.TEMPLATE_SEQ
 		<include refid="findAllOrder" />
 	</select>
-	
+
 	<select id="findContainerChildRelsCount"
 		parameterType="componentSearchDTO"
 		resultType="java.lang.Long">
-		SELECT 
+		SELECT
 			COUNT(DISTINCT COMPONENT.COMPONENT_SEQ) AS TOTAL_CNT
 		FROM TB_WMS_CONTAINER_REL AS X, TB_WMS_COMPONENT COMPONENT, TB_WMS_TEMPLATE TEMPLATE
 		<include refid="findAllWhere"/>

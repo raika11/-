@@ -53,7 +53,6 @@
 	
 	<select id="findAll" parameterType="TemplateSearchDTO" resultType="TemplateVO">
 		SELECT DISTINCT
-			ROW_NUMBER() OVER(<include refid="findAllOrder" />) AS RNUM,
 			TEMPLATE.TEMPLATE_SEQ,TEMPLATE.TEMPLATE_NAME,TEMPLATE.TEMPLATE_WIDTH,TEMPLATE.DOMAIN_ID,
 			CASE
 				WHEN TEMPLATE.TEMPLATE_THUMB IS NULL OR TEMPLATE.TEMPLATE_THUMB = '' THEN NULL
@@ -90,6 +89,7 @@
 			) AS USE_YN
 		FROM TB_WMS_TEMPLATE TEMPLATE
 		<include refid="findAllWhere" />
+		<include refid="findAllOrder" />
 	</select>
 	
 	<select id="count" parameterType="TemplateSearchDTO" resultType="java.lang.Long">
@@ -130,7 +130,7 @@
 	
 	<!-- 페이지의 관련템플릿 목록 조회 -->
 	<select id="findPageChildRels" parameterType="TemplateSearchDTO" resultType="TemplateVO">
-		SELECT ROW_NUMBER() OVER(<include refid="findAllOrder" />) AS RNUM, * FROM (
+		SELECT * FROM (
 			SELECT 			
 				<include refid="childRelsColumns" />,
 				OUT_ORDER,
@@ -154,6 +154,7 @@
 				AND X.REL_SEQ = TEMPLATE.TEMPLATE_SEQ
 			ORDER BY OUT_ORDER ASC, IN_ORDER ASC
 		) AS M
+		<include refid="findAllOrder" />
 	</select>
 	
 	<select id="findPageChildRelsCount" parameterType="TemplateSearchDTO" resultType="java.lang.Long">
@@ -174,7 +175,7 @@
 	
 	<!-- 콘텐츠스킨의 관련템플릿 목록 조회 -->
 	<select id="findSkinChildRels" parameterType="TemplateSearchDTO" resultType="TemplateVO">
-		SELECT ROW_NUMBER() OVER(<include refid="findAllOrder" />) AS RNUM, * FROM (
+		SELECT * FROM (
 			SELECT 			
 				<include refid="childRelsColumns" />,
 				OUT_ORDER,
@@ -198,6 +199,7 @@
 				AND X.REL_SEQ = TEMPLATE.TEMPLATE_SEQ
 			ORDER BY OUT_ORDER ASC, IN_ORDER ASC
 		) AS M
+		<include refid="findAllOrder" />
 	</select>
 	
 	<select id="findSkinChildRelsCount" parameterType="TemplateSearchDTO" resultType="java.lang.Long">
@@ -220,7 +222,6 @@
 	<select id="findContainerChildRels" parameterType="TemplateSearchDTO" resultType="TemplateVO">
 		SELECT 
 			DISTINCT
-			ROW_NUMBER() OVER(<include refid="findAllOrder" />) AS RNUM,
 			<include refid="childRelsColumns" />,
 			X.REL_ORDER
 		FROM TB_WMS_CONTAINER_REL X, TB_WMS_TEMPLATE TEMPLATE
@@ -228,6 +229,7 @@
 			AND X.CONTAINER_SEQ = #{keyword}
 			AND X.REL_TYPE ='TP'
 			AND X.REL_SEQ = TEMPLATE.TEMPLATE_SEQ
+		<include refid="findAllOrder" />
 	</select>
 	
 	<select id="findContainerChildRelsCount" parameterType="TemplateSearchDTO" resultType="java.lang.Long">

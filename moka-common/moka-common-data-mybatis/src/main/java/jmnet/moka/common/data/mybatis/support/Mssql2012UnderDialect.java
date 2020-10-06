@@ -116,7 +116,7 @@ public class Mssql2012UnderDialect implements Dialect {
 	 */
 	private int getSelectPrefixIdx(String sql) {
 //		Pattern pattern = Pattern.compile("^\\s++"+SELECT+"(\\s++"+DISTINCT+")?+(\\s++"+TOP+"\\s++\\d*)?+", Pattern.CASE_INSENSITIVE);
-		Pattern pattern = Pattern.compile("^\\s*"+SELECT+"+(\\s*"+TOP+"\\s*\\d*)*(\\s*"+DISTINCT+")?", Pattern.CASE_INSENSITIVE);
+		Pattern pattern = Pattern.compile("^\\s*"+SELECT+"(\\s*"+DISTINCT+")*(\\s*"+TOP+"\\s*\\d*)?", Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(sql);
 
 		return matcher.find() ? matcher.end() : -1;

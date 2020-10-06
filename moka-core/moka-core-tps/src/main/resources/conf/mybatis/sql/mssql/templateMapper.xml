@@ -50,7 +50,8 @@
 			</foreach>
 		</if>
 	</sql>
-	
+
+	<!--
 	<select id="findAll" parameterType="TemplateSearchDTO" resultType="TemplateVO">
 		SELECT DISTINCT
 			TEMPLATE.TEMPLATE_SEQ,TEMPLATE.TEMPLATE_NAME,TEMPLATE.TEMPLATE_WIDTH,TEMPLATE.DOMAIN_ID,
@@ -91,6 +92,7 @@
 		<include refid="findAllWhere" />
 		<include refid="findAllOrder" />
 	</select>
+	-->
 	
 	<select id="count" parameterType="TemplateSearchDTO" resultType="java.lang.Long">
 		SELECT 
@@ -253,5 +255,59 @@
 			SELECT DOMAIN_ID FROM TB_WMS_COMPONENT WHERE TEMPLATE_SEQ = ${value}
 		) AS X
 	</select>
-	
+
+	<resultMap id="templateResult" type="templateVO">
+		<id property="id" column="id" />
+		<result property="title" column="title"/>
+		<association property="TOTAL" javaType="integer" resultSet="total" column="TOTAL" foreignColumn="id">
+			<id property="id" column="id"/>
+			<result property="username" column="username"/>
+			<result property="password" column="password"/>
+			<result property="email" column="email"/>
+			<result property="bio" column="bio"/>
+		</association>
+	</resultMap>
+
+	<resultMap type="TemplateVO" id="templateMap"></resultMap>
+	<resultMap type="Integer" id="totalMap"></resultMap>
+
+	<select id="findAllTest" resultMap="templateMap,totalMap" parameterType="TemplateSearchDTO" statementType="CALLABLE">
+		{ call UPA_TB_WMS_TEMPLATE_LIST_SEL(
+			#{imageRoot, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
+			<choose>
+				<when test="searchType == 'templateSeq' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="searchType == 'templateName' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="searchType == 'templateBody' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+			#{tpZone, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{widthMin, mode=IN, jdbcType=INTEGER, javaType=integer},
+			#{widthMax, mode=IN, jdbcType=INTEGER, javaType=integer},
+			'Y',
+			#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+			#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+			#{p1, mode=OUT, jdbcType=CURSOR, javaType=integer, resultMap=test},
+		) }
+	</select>
 </mapper>

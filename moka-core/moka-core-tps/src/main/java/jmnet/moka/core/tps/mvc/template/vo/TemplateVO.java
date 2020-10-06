@@ -2,17 +2,18 @@ package jmnet.moka.core.tps.mvc.template.vo;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 import org.apache.ibatis.type.Alias;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Alias("templateVO")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TemplateVO implements Serializable {
     
     private static final long serialVersionUID = 8921206765125787780L;

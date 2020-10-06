@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +38,11 @@ import jmnet.moka.core.tms.template.parse.model.TpTemplateRoot;
  * @author kspark
  */
 public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem> {
+    public static final String URI_REST_PREFIX = "/*";
     protected String domainId;
     protected Map<String, MergeItem> mergeItemMap;
     protected Map<String, MspTemplateRoot> templateRootMap;
+    /*  REST 방식일 경우 URI에 "/*" 를 추가한다.     */
     protected Map<String, String> uri2ItemMap;
     protected TemplateLoader<MergeItem> assistantTemplateLoader;
     protected boolean cacheable;
@@ -69,8 +72,21 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         this.hasAssistantTemplateLoader = true;
     }
 
-
     public abstract void loadUri() throws TmsException;
+
+    public String createUri2ItemMapKey(MergeItem item) {
+        if (item.getItemType().equals(MokaConstants.ITEM_PAGE)) {
+            // REST 방식의 page에 대한 처리
+            String urlParam = item.getString(ItemConstants.PAGE_URL_PARAM);
+            if ( McpString.isEmpty(urlParam)) {
+                return item.getString(ItemConstants.PAGE_URL);
+            } else {
+                return item.getString(ItemConstants.PAGE_URL)
+                        + AbstractTemplateLoader.URI_REST_PREFIX;
+            }
+        }
+        return null;
+    }
 
     public Map<String, String> getUri2ItemMap() {
         return this.uri2ItemMap;

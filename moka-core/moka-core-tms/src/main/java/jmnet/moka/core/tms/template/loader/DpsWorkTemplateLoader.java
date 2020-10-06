@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -89,8 +90,8 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
             }
             String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
-            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
-                this.uri2ItemMap.put(item.getString(ItemConstants.PAGE_URL), itemKey);
+            if (itemType.equals(MokaConstants.ITEM_PAGE) && item.getBoolYN(ItemConstants.PAGE_USE_YN)) {
+                this.uri2ItemMap.put(this.createUri2ItemMapKey(item), itemKey);
             }
             if (cacheable) {
                 this.mergeItemMap.put(itemKey, item);
@@ -110,11 +111,6 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
             }
         }
         return item;
-    }
-
-
-    public String getItemKey(String uri) {
-        return this.uri2ItemMap.get(uri);
     }
 
     public MergeItem getItem(String itemType, String itemId)

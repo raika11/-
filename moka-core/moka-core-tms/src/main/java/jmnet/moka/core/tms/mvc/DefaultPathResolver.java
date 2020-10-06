@@ -92,7 +92,7 @@ public class DefaultPathResolver {
             throws TemplateLoadException, TemplateParseException, TemplateMergeException,
             TmsException {
         String domainId = domainResolver.getDomainId(request);
-		
+
         String paramDomain = request.getParameter("testDomain");
         if (paramDomain != null) {
             domainId = paramDomain;
@@ -110,8 +110,8 @@ public class DefaultPathResolver {
             int index = requestPath.length() > 1 ? requestPath.length() - 1 : 1;
             mergePath = mergePath.substring(0, index);
         }
-        if (requestPath.startsWith("/view")) {
-            // 본문처리 : /view/기사Id
+        if (requestPath.startsWith(MokaConstants.MERGE_ARTICE_PREFIX)) {
+            // 본문처리 : /article/기사Id
             // TODO 기사id를 캐시키 생성시 처리하도록 http파라미터에 넣는다.
             if (mergeContent(request, domainId, requestPath)) {
                 return true;

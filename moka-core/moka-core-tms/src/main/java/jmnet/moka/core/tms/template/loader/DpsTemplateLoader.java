@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -86,7 +87,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
     public void loadUri() throws TmsException {
 
         try {
-            HashMap<String, String> newUri2PageIdMap = new HashMap<String, String>(256);
+            HashMap<String, String> newUri2ItemMap = new HashMap<String, String>(256);
 
             Map<String, Object> parameterMap = new LinkedHashMap<String, Object>();
             parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
@@ -101,15 +102,12 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
                 // PG일 경우 URL과 매핑한다.
                 String itemKey = KeyResolver.makeItemKey(this.domainId, pageItem.getItemType(),
                         pageItem.getItemId());
-                newUri2PageIdMap.put(pageItem.getString(ItemConstants.PAGE_URL), itemKey);
+                if ( pageItem.getBoolYN(ItemConstants.PAGE_USE_YN)) { // 사용일 경우만 등록한다.
+                    newUri2ItemMap.put(this.createUri2ItemMapKey(pageItem),itemKey);
+                }
             }
-            this.uri2ItemMap = newUri2PageIdMap;
-
+            this.uri2ItemMap = newUri2ItemMap;
         } catch (Exception e) {
-            // 로딩된 정보가 있으면 유지하고, 없으면(초기로딩) 맵을 생성한다.
-            if (this.uri2ItemMap == null) {
-                this.uri2ItemMap = new HashMap<String, String>(256);
-            }
             throw new TmsException("Url load fail from DPS", e);
         }
     }
@@ -152,8 +150,13 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             }
             String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
-            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
-                this.uri2ItemMap.put(item.getString(ItemConstants.PAGE_URL), itemKey);
+            if (itemType.equals(MokaConstants.ITEM_PAGE) ) {
+                if ( item.getBoolYN(ItemConstants.PAGE_USE_YN)) {
+                    this.uri2ItemMap.put(this.createUri2ItemMapKey(item),itemKey);
+                } else {
+                    // 사용안함일 경우 제거한다.
+                    this.uri2ItemMap.remove(this.createUri2ItemMapKey(item));
+                }
             }
             if (cacheable) {
                 this.mergeItemMap.put(itemKey, item);
@@ -195,8 +198,20 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         }
     }
 
+    @Override
     public String getItemKey(String uri) {
-        return this.uri2ItemMap.get(uri);
+        if ( uri == null) return null;
+        String itemKey = this.uri2ItemMap.get(uri);
+        if ( itemKey != null ) { // REST방식 URL이 아닌 경우
+            return itemKey;
+        }
+        // REST 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
+        int lastSlashIndex = uri.lastIndexOf("/");
+        if ( lastSlashIndex > 0) {
+            return this.uri2ItemMap.get( uri.substring(0,lastSlashIndex)
+                    + AbstractTemplateLoader.URI_REST_PREFIX);
+        }
+        return null;
     }
 
     public MergeItem getItem(String itemType, String itemId)
@@ -212,13 +227,6 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             item = this.loadJson(itemType, itemId);
         } else {
             item = this.mergeItemMap.get(itemKey);
-        }
-
-        // pageItem이고 사용여부가 Y가 아니면 uri에서 제거
-        if (itemType.equals(MokaConstants.ITEM_PAGE)) { // PG면 url에서 제거
-            if (item.getString(ItemConstants.PAGE_USE_YN).equals("Y") == false) {
-                this.uri2ItemMap.remove(item.getString(ItemConstants.PAGE_URL));
-            }
         }
 
         if (item == null) {

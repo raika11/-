@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +82,6 @@ public class DefaultMergeHandler {
 		}
 
 		// 페이지 정보를 설정한다.
-        //        String path = (String) mergeContext.get(MspConstants.MERGE_PATH);
         String itemType = (String) mergeContext.get(MokaConstants.MERGE_ITEM_TYPE);
         String itemId = (String) mergeContext.get(MokaConstants.MERGE_ITEM_ID);
         MergeItem item = null;
@@ -105,6 +105,7 @@ public class DefaultMergeHandler {
                         }
                     }
                 } else {
+                    // MokaConstants.PARAM_PAGE_ITEM_ID 파라미터에 pageItem id가 있을 경우 pageItem 정보 추가
                     MergeItem pageItem = getPageItem(domainId, request);
                     if (pageItem != null) {
                         mergeContext.set(MokaConstants.MERGE_CONTEXT_PAGE, pageItem);
@@ -122,9 +123,24 @@ public class DefaultMergeHandler {
             }
         }
 
-		// Htttp 파라미터 설정	
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM,
-                this.httpParamFactory.creatHttpParamMap(request));
+		// Htttp 파라미터 설정
+        HttpParamMap httpParamMap = this.httpParamFactory.creatHttpParamMap(request);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM,httpParamMap);
+
+        // REST 방식 URI에 대한 처리: 마지막 경로를 파라미터로 넣어준다.
+        if (item instanceof PageItem) {
+            String paramName = item.getString(ItemConstants.PAGE_URL_PARAM);
+            if (McpString.isNotEmpty(paramName)) {
+                String mergePath = (String) mergeContext.get(MokaConstants.MERGE_PATH);
+                int lastSlashIndex = mergePath.lastIndexOf("/");
+                if ( lastSlashIndex > 0 && lastSlashIndex < mergePath.length()) {
+                    String paramValue = mergePath.substring(lastSlashIndex+1,mergePath.length());
+                    httpParamMap.put(paramName,paramValue);
+                } else {
+                    return null;
+                }
+            }
+        }
 
 		model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
 		return this.viewName;
@@ -134,6 +150,12 @@ public class DefaultMergeHandler {
         return getPageItem(domainId, MokaConstants.TMS_ERROR_PAGE);
     }
 
+    /**
+     * URI에 해당하는 PageItem을 반환한다.
+     * @param domainId 도메인 Id
+     * @param uri request uri
+     * @return pageItem
+     */
     private MergeItem getPageItem(String domainId, String uri) {
         MergeItem item = null;
         try {
@@ -154,6 +176,12 @@ public class DefaultMergeHandler {
         return item;
     }
 
+    /**
+     * MokaConstants.PARAM_PAGE_ITEM_ID에 선언된 파라메터명으로 pageItem을 반환한다.
+     * @param domainId 도메인 ID
+     * @param request http 요청
+     * @return pageItem
+     */
     private MergeItem getPageItem(String domainId, HttpServletRequest request) {
         MergeItem item = null;
         try {
@@ -163,7 +191,7 @@ public class DefaultMergeHandler {
                 String itemId = pageItemId;
                 item = this.domainTemplateMerger.getItem(domainId, itemType, itemId);
                 if (item == null) {
-                    logger.error("PageItem not found : {} {} {}", itemType, pageItemId);
+                    logger.error("PageItem not found : {} {}", itemType, pageItemId);
                     return null;
                 }
             }

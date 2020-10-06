@@ -61,7 +61,7 @@ const defaultProps = {
     tabNavs: [],
     tabNavWidth: 48,
     placement: 'left',
-    expansion: false,
+    expansion: true,
     onExpansion: null,
 };
 
@@ -98,7 +98,7 @@ const MokaCardToggleTabs = (props) => {
                 {/* 탭 컨텐츠 */}
                 <Tab.Content
                     className={clsx('p-0', {
-                        'd-none': !expansion,
+                        'd-none': !expansion || activeKey < 0,
                     })}
                     style={{ width: tabWidth }}
                 >

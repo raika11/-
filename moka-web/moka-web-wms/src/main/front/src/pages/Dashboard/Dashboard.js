@@ -46,7 +46,7 @@ const Dashboard = () => {
             <div className="d-flex">
                 {/* 리스트 */}
                 <Card bg="light" className="mr-10px" style={{ width: expansionState[0] ? 350 : CARD_FOLDING_WIDTH, height: CARD_DEFAULT_HEIGHT }}>
-                    <Card.Header className="p-2">
+                    <Card.Header>
                         <Card.Title>페이지 관리</Card.Title>
                     </Card.Header>
                     <Card.Body></Card.Body>

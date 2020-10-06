@@ -36,7 +36,7 @@
                                     "menuId": "02001",
                                     "menuName": "page",
                                     "menuDispName": "페이지 관리",
-                                    "menuPath": "/dashboard",
+                                    "menuPath": "/page",
                                     "menuOrder": "1",
                                     "depth": "2",
                                     "useYn": "Y",

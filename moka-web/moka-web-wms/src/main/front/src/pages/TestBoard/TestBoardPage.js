@@ -29,7 +29,7 @@ const TestBoardPgae = () => {
     return (
         <Container>
             <Row>
-                <Col lg="6">
+                <Col md="6">
                     <Card>
                         <Card.Header className="mb-0">Alert</Card.Header>
                         <Card.Body>
@@ -133,7 +133,7 @@ const TestBoardPgae = () => {
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col lg="6">
+                <Col md="6">
                     <Card>
                         <Card.Header className="mb-0">Badges</Card.Header>
                         <Card.Body>

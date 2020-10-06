@@ -53,7 +53,7 @@ const MokaEditor = forwardRef((props, ref) => {
     };
 
     return (
-        <Card className="h-100vh" style={{ width, height }}>
+        <Card className="vh-100" style={{ width, height }}>
             <Card.Header>Test</Card.Header>
             <Card.Body>
                 <MonacoEditor ref={editorRef} defaultValue={defaultValue} language={language} options={{ ...defaultOptions, ...options }} editorDidMount={editorDidMount} />

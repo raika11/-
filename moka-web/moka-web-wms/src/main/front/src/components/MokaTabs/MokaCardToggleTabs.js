@@ -9,13 +9,17 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 const propTypes = {
     /**
      * className
      */
     className: PropTypes.string,
+    /**
+     * 탭의 height
+     */
+    height: PropTypes.number,
     /**
      * 탭 컨텐츠 width
      */
@@ -34,18 +38,31 @@ const propTypes = {
     tabNavs: PropTypes.arrayOf(
         PropTypes.shape({
             title: PropTypes.string,
-            icon: PropTypes.object,
+            icon: PropTypes.node,
         }),
     ),
     /**
      * Tooltip 위치
      */
     placement: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+    /**
+     * 탭 확장(오픈)
+     */
+    expansion: PropTypes.bool,
+    /**
+     * 탭 확장 콜백
+     */
+    onExpansion: PropTypes.func,
 };
 const defaultProps = {
     tabs: [],
+    height: CARD_DEFAULT_HEIGHT,
+    tabWidth: 412,
     tabNavs: [],
+    tabNavWidth: 48,
     placement: 'left',
+    expansion: false,
+    onExpansion: null,
 };
 
 /**
@@ -53,27 +70,35 @@ const defaultProps = {
  * 버튼 토글로 탭 변경
  */
 const MokaCardToggleTabs = (props) => {
-    const { className, tabs, tabWidth, tabNavs, tabNavWidth, placement } = props;
-    const [currentKey, setCurrentKey] = useState(0);
+    const { className, height, tabs, tabWidth, tabNavs, tabNavWidth, placement, expansion, onExpansion } = props;
+    const [activeKey, setActiveKey] = useState(0);
 
     /**
      * 버튼 선택 이벤트
      * @param {any} eventKey 이벤트키
      */
     const handleSelect = (eventKey) => {
-        if (currentKey.toString() === eventKey) {
-            setCurrentKey(-1);
+        if (!expansion) {
+            if (typeof onExpansion === 'function') onExpansion(true);
+            setActiveKey(eventKey);
         } else {
-            setCurrentKey(eventKey);
+            if (activeKey.toString() === eventKey) {
+                setActiveKey(-1);
+                if (typeof onExpansion === 'function') onExpansion(false);
+            } else {
+                setActiveKey(eventKey);
+                if (typeof onExpansion === 'function') onExpansion(true);
+            }
         }
     };
 
     return (
-        <div className={clsx('tab', 'card-toggle-tab', 'd-flex', className)}>
-            <Tab.Container defaultActiveKey={currentKey}>
+        <div className={clsx('tab', 'card-toggle-tab', 'd-flex', className)} style={{ height }}>
+            <Tab.Container defaultActiveKey={activeKey}>
+                {/* 탭 컨텐츠 */}
                 <Tab.Content
                     className={clsx('p-0', {
-                        'd-none': currentKey < 0,
+                        'd-none': !expansion,
                     })}
                     style={{ width: tabWidth }}
                 >
@@ -83,7 +108,9 @@ const MokaCardToggleTabs = (props) => {
                         </Tab.Pane>
                     ))}
                 </Tab.Content>
-                <Card style={{ width: tabNavWidth }}>
+
+                {/* 탭 Nav */}
+                <Card className="mb-0" style={{ width: tabNavWidth }}>
                     <Card.Header>
                         <Card.Title>&nbsp;</Card.Title>
                     </Card.Header>
@@ -92,7 +119,7 @@ const MokaCardToggleTabs = (props) => {
                             <Nav.Item key={idx}>
                                 <OverlayTrigger key={idx} placement={placement} overlay={<Tooltip id={`tooltip-${idx}-${nav.title}`}>{nav.title}</Tooltip>}>
                                     <Nav.Link as={Button} eventKey={idx} onSelect={handleSelect}>
-                                        <FontAwesomeIcon icon={nav.icon} />
+                                        {nav.icon}
                                     </Nav.Link>
                                 </OverlayTrigger>
                             </Nav.Item>

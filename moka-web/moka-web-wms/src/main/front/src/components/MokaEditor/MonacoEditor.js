@@ -57,7 +57,7 @@ const MonacoEditor = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         container: containerElement.current,
         monaco,
-        editor: editorRef,
+        editorInstance: editorRef.current,
         getValue: () => editorRef.current.getValue(),
     }));
 
@@ -76,7 +76,22 @@ const MonacoEditor = forwardRef((props, ref) => {
         if (editorDidMount) {
             editorDidMount(monaco, instance);
         }
-    }, [editorDidMount, language, defaultValue, theme, options]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        // Component Did Update (에디터 업데이트)
+        if (editor) {
+            editor.updateOptions(options);
+        }
+    }, [options, editor]);
+
+    useEffect(() => {
+        // Component Did Update (에디터 업데이트)
+        if (editor) {
+            monaco.editor.setModelLanguage(editor.getModel(), language);
+        }
+    }, [language, editor]);
 
     useEffect(() => {
         // Component Unmount (에디터 인스턴스를 dispose)

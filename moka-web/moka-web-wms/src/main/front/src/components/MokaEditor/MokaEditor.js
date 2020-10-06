@@ -1,6 +1,12 @@
-import React, { forwardRef, useState, useRef, useImperativeHandle } from 'react';
+import React, { useCallback, forwardRef, useState, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
+
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExpandArrows, faExpand, faFile, faGripLines } from '@moka/fontawesome-pro-regular-svg-icons';
+
 import MonacoEditor from './MonacoEditor';
 
 const propTypes = {
@@ -20,24 +26,54 @@ const propTypes = {
      * 에디터 생성 시에 기본값으로 들어가는 value
      */
     defaultValue: PropTypes.string,
+    /**
+     * addtinal className
+     */
+    className: PropTypes.string,
+    /**
+     * Card.Header Title
+     */
+    title: PropTypes.string,
+    /**
+     * Blur 이벤트 콜백
+     * @param {string} value
+     */
+    onBlur: PropTypes.func,
+    /**
+     * 확장 여부
+     */
+    expansion: PropTypes.bool,
+    /**
+     * 확장 버튼 클릭 콜백
+     */
+    onExpansion: PropTypes.func,
 };
 const defaultProps = {
     language: 'html',
     defaultValue: '',
+    title: '에디터',
+    onBlur: null,
+    expansion: false,
+    onExpansion: null,
+};
+
+// 에디터 기본 옵션
+const defaultOptions = {
+    automaticLayout: true,
+    wordWrap: true,
+    minimap: { enabled: false },
+    hover: { enabled: true },
 };
 
 /**
  * Moka 에디터 컴포넌트
- * (카드 형태, wordwrap 아이콘 있음)
+ * (카드 형태, wordwrap, expansion 아이콘 있음)
  */
 const MokaEditor = forwardRef((props, ref) => {
-    const { width, height, defaultValue, language, options } = props;
-    const [defaultOptions, setDefaultOptions] = useState({
-        automaticLayout: true,
-        wordWrap: true,
-        minimap: { enabled: false },
-        hover: { enabled: true },
-    });
+    const { width, height, defaultValue, language, options, className, title, onBlur, expansion, onExpansion } = props;
+
+    // editor state
+    const [wordWrap, setWordWrap] = useState(defaultOptions.wordWrap);
 
     const editorRef = useRef(null);
     useImperativeHandle(ref, () => editorRef.current);
@@ -47,16 +83,62 @@ const MokaEditor = forwardRef((props, ref) => {
      * @param {object} monaco 모나코 obj
      * @param {object} editor 에디터 instance obj
      */
-    const editorDidMount = (monaco, editor) => {
-        /** onDidBlurEditorText */
-        editor.onDidBlurEditorText(() => {});
+    const editorDidMount = useCallback(
+        (monaco, editor) => {
+            /** onDidBlurEditorText */
+            if (typeof onBlur === 'function') {
+                editor.onDidBlurEditorText(() => {
+                    onBlur(editor.getValue());
+                });
+            }
+        },
+        [onBlur],
+    );
+
+    /**
+     * 에디터 확장
+     */
+    const handleExpansion = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (onExpansion) {
+            onExpansion(!expansion);
+        }
+    };
+
+    /**
+     * 에디터 word wrap 옵션 변경
+     */
+    const handleWordWrap = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setWordWrap(!wordWrap);
     };
 
     return (
-        <Card className="vh-100" style={{ width, height }}>
-            <Card.Header>Test</Card.Header>
+        <Card className={className} style={{ width, height }}>
+            {/* 카드 헤더 */}
+            <Card.Header className="d-flex justify-content-between align-item-center">
+                <Card.Title className="mb-0">{title}</Card.Title>
+                <div>
+                    <Button variant="light" className="p-1 mr-1" onClick={handleWordWrap}>
+                        <FontAwesomeIcon icon={wordWrap ? faFile : faGripLines} className="float-right" size="lg" />
+                    </Button>
+                    <Button variant="light" className="p-1" onClick={handleExpansion}>
+                        <FontAwesomeIcon icon={expansion ? faExpand : faExpandArrows} className="float-right" size="lg" />
+                    </Button>
+                </div>
+            </Card.Header>
+
+            {/* 카드 본문 */}
             <Card.Body>
-                <MonacoEditor ref={editorRef} defaultValue={defaultValue} language={language} options={{ ...defaultOptions, ...options }} editorDidMount={editorDidMount} />
+                <MonacoEditor
+                    ref={editorRef}
+                    defaultValue={defaultValue}
+                    language={language}
+                    options={{ ...defaultOptions, ...options, wordWrap }}
+                    editorDidMount={editorDidMount}
+                />
             </Card.Body>
         </Card>
     );

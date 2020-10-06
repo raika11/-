@@ -78,4 +78,6 @@ public interface TemplateMapper extends BaseMapper<TemplateVO, TemplateSearchDTO
      * @return 템플릿목록 건수
      */
     Long findContainerChildRelsCount(TemplateSearchDTO param);
+
+    List<List<Object>> findAllTest(TemplateSearchDTO param);
 }

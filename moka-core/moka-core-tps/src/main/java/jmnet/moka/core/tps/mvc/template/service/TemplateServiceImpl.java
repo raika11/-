@@ -77,7 +77,11 @@ public class TemplateServiceImpl implements TemplateService {
                 search.clearSort();
                 search.addSort("templateSeq,desc");
             }
-            return templateMapper.findAll(search, getRowBounds(search.getPage(), search.getSize()));
+//            return templateMapper.findAll(search, getRowBounds(search.getPage(), search.getSize()));
+            // 테스트중
+            List<List<Object>> returnValue = templateMapper.findAllTest(search);
+
+            return null;
         }
     }
 

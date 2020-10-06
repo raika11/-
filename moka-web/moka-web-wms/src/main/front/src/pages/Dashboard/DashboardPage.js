@@ -53,13 +53,13 @@ const MokaDashboardPage = () => {
         <>
             <Container className="p-0">
                 <div className="d-flex">
-                    <Card bg="light" style={{ width: '350px', marginRight: 10 }}>
+                    <Card className="mr-10px" bg="light" style={{ width: '350px' }}>
                         <Card.Header className="p-2">
                             <Card.Title>페이지 관리</Card.Title>
                         </Card.Header>
                         <Card.Body></Card.Body>
                     </Card>
-                    <Card bg="light" className="flex-fill" style={{ marginRight: 10 }}>
+                    <Card bg="light" className="flex-fill mr-10px" style={{ marginRight: 10 }}>
                         <Card.Header>
                             <Card.Title>에디터 영역</Card.Title>
                         </Card.Header>
@@ -67,26 +67,28 @@ const MokaDashboardPage = () => {
                     </Card>
 
                     <MokaCardToggleTabs
+                        tabWidth={412}
                         tabs={[
-                            <Card bg="light" style={{ width: '412px', marginRight: 10 }}>
+                            <Card bg="light">
                                 <Card.Header>
                                     <Card.Title>탭컨텐츠1</Card.Title>
                                 </Card.Header>
                                 <Card.Body></Card.Body>
                             </Card>,
-                            <Card bg="light" style={{ width: '412px', marginRight: 10 }}>
+                            <Card bg="light">
                                 <Card.Header>
                                     <Card.Title>탭 컨텐츠2</Card.Title>
                                 </Card.Header>
                                 <Card.Body></Card.Body>
                             </Card>,
-                            <Card bg="light" style={{ width: '412px', marginRight: 10 }}>
+                            <Card bg="light">
                                 <Card.Header>
                                     <Card.Title>탭 컨텐츠3</Card.Title>
                                 </Card.Header>
                                 <Card.Body></Card.Body>
                             </Card>,
                         ]}
+                        tabNavWidth={48}
                         tabNavs={[
                             { title: '버튼1', icon: faCoffee },
                             { title: '버튼2', icon: faCoffee },

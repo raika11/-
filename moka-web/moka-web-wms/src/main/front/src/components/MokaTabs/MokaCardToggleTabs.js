@@ -17,9 +17,17 @@ const propTypes = {
      */
     className: PropTypes.string,
     /**
+     * 탭 컨텐츠 width
+     */
+    tabWidth: PropTypes.number,
+    /**
      * tab 컨텐츠(array)
      */
     tabs: PropTypes.arrayOf(PropTypes.node),
+    /**
+     * 탭 Nav의 width
+     */
+    tabNavWidth: PropTypes.number,
     /**
      * tab 컨텐츠의 Nav(array), tab과 갯수가 동일해야한다
      */
@@ -45,7 +53,7 @@ const defaultProps = {
  * 버튼 토글로 탭 변경
  */
 const MokaCardToggleTabs = (props) => {
-    const { className, tabs, tabNavs, placement } = props;
+    const { className, tabs, tabWidth, tabNavs, tabNavWidth, placement } = props;
     const [currentKey, setCurrentKey] = useState(0);
 
     /**
@@ -67,6 +75,7 @@ const MokaCardToggleTabs = (props) => {
                     className={clsx('p-0', {
                         'd-none': currentKey < 0,
                     })}
+                    style={{ width: tabWidth }}
                 >
                     {tabs.map((tab, idx) => (
                         <Tab.Pane key={idx} eventKey={idx}>
@@ -74,7 +83,7 @@ const MokaCardToggleTabs = (props) => {
                         </Tab.Pane>
                     ))}
                 </Tab.Content>
-                <Card>
+                <Card style={{ width: tabNavWidth }}>
                     <Card.Header>
                         <Card.Title>&nbsp;</Card.Title>
                     </Card.Header>

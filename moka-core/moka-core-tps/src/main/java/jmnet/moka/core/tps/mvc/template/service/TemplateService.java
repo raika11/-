@@ -26,7 +26,7 @@ public interface TemplateService {
      * @param search 검색조건
      * @return 목록
      */
-    public List<List<Object>> findList(TemplateSearchDTO search);
+    public List<TemplateVO> findList(TemplateSearchDTO search);
     
     /**
      * 템플릿 목록 카운트 조회(Mybatis)

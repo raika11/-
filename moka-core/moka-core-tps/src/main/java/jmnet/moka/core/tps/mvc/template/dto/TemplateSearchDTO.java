@@ -51,7 +51,9 @@ public class TemplateSearchDTO extends SearchDTO {
     
     private String imageRoot;
 
-    private Integer outValue;
+    private Long total;      // 목록 총 갯수
+
+    private Integer returnValue;  // 프로시저 호출 결과
 
     // 검색 조건의 기본값을 설정
     public TemplateSearchDTO() {

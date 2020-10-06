@@ -59,28 +59,27 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public List<List<Object>> findList(TemplateSearchDTO search) {
-//        if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {	// 페이지에서 관련 템플릿 검색
-//            return templateMapper.findPageChildRels(search,
-//                    getRowBounds(search.getPage(), search.getSize()));
-//        } else if (search.getSearchType().equals("skinSeq")
-//                && McpString.isNotEmpty(search.getKeyword())) {	// 콘텐츠스킨에서 관련 템플릿 검색
-//            return templateMapper.findSkinChildRels(search,
-//                    getRowBounds(search.getPage(), search.getSize()));
-//        } else if (search.getSearchType().equals("containerSeq")
-//                && McpString.isNotEmpty(search.getKeyword())) {	// 컨테이너에서 관련 템플릿 검색
-//            return templateMapper.findContainerChildRels(search,
-//                    getRowBounds(search.getPage(), search.getSize()));
-//        } else {
-//            if (search.getSearchType().equals("pageSeq") || search.getSearchType().equals("skinSeq")
-//                    || search.getSearchType().equals("containerSeq")) {
-//                search.clearSort();
-//                search.addSort("templateSeq,desc");
-//            }
+    public List<TemplateVO> findList(TemplateSearchDTO search) {
+        if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {	// 페이지에서 관련 템플릿 검색
+            return templateMapper.findPageChildRels(search,
+                    getRowBounds(search.getPage(), search.getSize()));
+        } else if (search.getSearchType().equals("skinSeq")
+                && McpString.isNotEmpty(search.getKeyword())) {	// 콘텐츠스킨에서 관련 템플릿 검색
+            return templateMapper.findSkinChildRels(search,
+                    getRowBounds(search.getPage(), search.getSize()));
+        } else if (search.getSearchType().equals("containerSeq")
+                && McpString.isNotEmpty(search.getKeyword())) {	// 컨테이너에서 관련 템플릿 검색
+            return templateMapper.findContainerChildRels(search,
+                    getRowBounds(search.getPage(), search.getSize()));
+        } else {
+            if (search.getSearchType().equals("pageSeq") || search.getSearchType().equals("skinSeq")
+                    || search.getSearchType().equals("containerSeq")) {
+                search.clearSort();
+                search.addSort("templateSeq,desc");
+            }
 //            return templateMapper.findAll(search, getRowBounds(search.getPage(), search.getSize()));
-//        }
-        // 테스트중
-        return templateMapper.findAllTest(search);
+            return templateMapper.findAll(search);
+        }
     }
 
     @Override

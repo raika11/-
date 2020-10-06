@@ -92,7 +92,6 @@
 		<include refid="findAllWhere" />
 		<include refid="findAllOrder" />
 	</select>
-	-->
 	
 	<select id="count" parameterType="TemplateSearchDTO" resultType="java.lang.Long">
 		SELECT 
@@ -100,6 +99,7 @@
 		FROM TB_WMS_TEMPLATE TEMPLATE
 		<include refid="findAllWhere"/>
 	</select>
+	-->
 	
 	<!-- 관련템플릿 공통 컬럼  -->
 	<sql id="childRelsColumns">
@@ -256,11 +256,8 @@
 		) AS X
 	</select>
 
-	<resultMap type="TemplateVO" id="templateMap"></resultMap>
-	<resultMap type="Integer" id="totalMap"></resultMap>
-
-	<select id="findAllTest" resultMap="templateMap,totalMap" parameterType="TemplateSearchDTO" statementType="CALLABLE">
-		{call UPA_TB_WMS_TEMPLATE_LIST_SEL(
+	<select id="findAll" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_TB_WMS_TEMPLATE_LIST_SEL(
 			#{imageRoot, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			<choose>
@@ -300,10 +297,10 @@
 			</choose>
 			#{widthMin, mode=IN, jdbcType=INTEGER, javaType=integer},
 			#{widthMax, mode=IN, jdbcType=INTEGER, javaType=integer},
-			'Y',
 			#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
 			#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
-			#{outValue, mode=OUT, jdbcType=INTEGER, javaType=integer}
+			'Y',
+			#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }
 	</select>
 </mapper>

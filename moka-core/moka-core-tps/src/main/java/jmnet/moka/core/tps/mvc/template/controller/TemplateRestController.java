@@ -103,15 +103,16 @@ public class TemplateRestController {
             @AuthenticationPrincipal UserDTO userInfoDTO) {
 
         // 조회(mybatis)
-        Long totalCount = templateService.findListCount(search);
-        List<TemplateVO> returnValue = templateService.findList(search);
+//        Long totalCount = templateService.findListCount(search);
+        List<List<Object>> returnValue = templateService.findList(search);
 
-        ResultListDTO<TemplateVO> resultList = new ResultListDTO<TemplateVO>();
-        resultList.setList(returnValue);
+        ResultListDTO<Object> resultList = new ResultListDTO<Object>();
+        Integer totalCount = (int)returnValue.get(1).get(0);
+        resultList.setList(returnValue.get(0));
         resultList.setTotalCnt(totalCount);
 
-        ResultDTO<ResultListDTO<TemplateVO>> resultDTO =
-                new ResultDTO<ResultListDTO<TemplateVO>>(resultList);
+        ResultDTO<ResultListDTO<Object>> resultDTO =
+                new ResultDTO<ResultListDTO<Object>>(resultList);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 

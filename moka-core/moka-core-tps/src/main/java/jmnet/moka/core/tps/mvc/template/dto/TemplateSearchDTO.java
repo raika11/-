@@ -51,6 +51,8 @@ public class TemplateSearchDTO extends SearchDTO {
     
     private String imageRoot;
 
+    private Integer outValue;
+
     // 검색 조건의 기본값을 설정
     public TemplateSearchDTO() {
         super(TemplateVO.class, "templateSeq,desc");

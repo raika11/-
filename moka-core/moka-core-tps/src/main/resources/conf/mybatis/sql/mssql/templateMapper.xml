@@ -256,23 +256,11 @@
 		) AS X
 	</select>
 
-	<resultMap id="templateResult" type="templateVO">
-		<id property="id" column="id" />
-		<result property="title" column="title"/>
-		<association property="TOTAL" javaType="integer" resultSet="total" column="TOTAL" foreignColumn="id">
-			<id property="id" column="id"/>
-			<result property="username" column="username"/>
-			<result property="password" column="password"/>
-			<result property="email" column="email"/>
-			<result property="bio" column="bio"/>
-		</association>
-	</resultMap>
-
 	<resultMap type="TemplateVO" id="templateMap"></resultMap>
 	<resultMap type="Integer" id="totalMap"></resultMap>
 
 	<select id="findAllTest" resultMap="templateMap,totalMap" parameterType="TemplateSearchDTO" statementType="CALLABLE">
-		{ call UPA_TB_WMS_TEMPLATE_LIST_SEL(
+		{call UPA_TB_WMS_TEMPLATE_LIST_SEL(
 			#{imageRoot, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			<choose>
@@ -301,13 +289,21 @@
 					NULL,
 				</otherwise>
 			</choose>
-			#{tpZone, mode=IN, jdbcType=VARCHAR, javaType=string},
+
+			<choose>
+				<when test="tpZone != null and tpZone != ''">
+					#{tpZone},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
 			#{widthMin, mode=IN, jdbcType=INTEGER, javaType=integer},
 			#{widthMax, mode=IN, jdbcType=INTEGER, javaType=integer},
 			'Y',
 			#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
 			#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
-			#{p1, mode=OUT, jdbcType=CURSOR, javaType=integer, resultMap=test},
+			#{outValue, mode=OUT, jdbcType=INTEGER, javaType=integer}
 		) }
 	</select>
 </mapper>

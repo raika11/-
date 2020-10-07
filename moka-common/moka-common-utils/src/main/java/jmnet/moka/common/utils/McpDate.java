@@ -317,7 +317,6 @@ public class McpDate {
      * 어제 날짜를 문자열로 리턴
      * </pre>
      * 
-     * @param plus
      * @return Date
      */
     public static String yesterdayStr() {
@@ -519,5 +518,20 @@ public class McpDate {
         dateList.add(sdf.parse(day + " 00:00:00"));
         dateList.add(sdf.parse(day + " 23:59:59"));
         return dateList;
+    }
+
+    /**
+     * <pre>
+     * date 값이 null이면 현재Date를 리턴한다.
+     * </pre>
+     *
+     * @param date date
+     * @return
+     */
+    public static Date defaultValue(Date date) {
+        if(date == null) {
+            return now();
+        }
+        return date;
     }
 }

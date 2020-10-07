@@ -60,7 +60,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/assets/**", "/html/**", "/static/**", "/webjars/**",
-                "/favicon.ico", "/*.js", "/*.map", "/*.png", "/*.css",
+                "/favicon.ico", "/*.js", "/*.map", "/*.png", "/css/**",
                 "/*.json");
     }
 

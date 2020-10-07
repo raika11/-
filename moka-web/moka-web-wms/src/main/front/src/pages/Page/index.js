@@ -1,2 +1,2 @@
-import PagePage from './PagePage';
-export default PagePage;
+import Page from './Page';
+export default Page;

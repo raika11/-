@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
             if (acceptHeader.contains("html")) {
                 //                ModelAndView mav = new ModelAndView(TpsConstants.ERROR_PAGE_500);
                 request.setAttribute("javax.servlet.error.status_code",
-                        HttpStatus.INTERNAL_SERVER_ERROR);
+                        HttpStatus.INTERNAL_SERVER_ERROR.value());
                 ModelAndView mav = new ModelAndView("/error");
                 Throwable rootCause = NestedExceptionUtils.getRootCause(ex);
                 mav.addObject(TpsConstants.MODEL_ATTR_EXCEPTION, ex);

@@ -7,15 +7,13 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaSearchInput } from '@components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@moka/fontawesome-pro-solid-svg-icons';
 
-const ComponentSearch = () => {
+const PageChildAdList = () => {
     return (
-        <Card bg="light">
+        <Card>
             {/* 카드 헤더 */}
             <Card.Header>
-                <Card.Title>컴포넌트 검색</Card.Title>
+                <Card.Title className="h-100">광고 검색</Card.Title>
             </Card.Header>
 
             {/* 카드 바디 */}
@@ -35,7 +33,7 @@ const ComponentSearch = () => {
                         </Col>
                     </Form.Group>
                     <Form.Group className="d-flex justify-content-end">
-                        <Button>컴포넌트 추가</Button>
+                        <Button>광고 추가</Button>
                     </Form.Group>
                 </Form>
             </Card.Body>
@@ -43,4 +41,4 @@ const ComponentSearch = () => {
     );
 };
 
-export default ComponentSearch;
+export default PageChildAdList;

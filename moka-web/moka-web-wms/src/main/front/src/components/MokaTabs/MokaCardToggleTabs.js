@@ -85,17 +85,15 @@ const MokaCardToggleTabs = (props) => {
      * @param {any} eventKey 이벤트키
      */
     const handleSelect = (eventKey) => {
+        setActiveKey(eventKey);
         if (!isExpand) {
             if (onExpansion) onExpansion(true);
             else setIsExpand(true);
-            setActiveKey(eventKey);
         } else {
             if (activeKey.toString() === eventKey) {
-                setActiveKey(-1);
                 if (onExpansion) onExpansion(false);
                 else setIsExpand(false);
             } else {
-                setActiveKey(eventKey);
                 if (onExpansion) onExpansion(true);
                 else setIsExpand(true);
             }

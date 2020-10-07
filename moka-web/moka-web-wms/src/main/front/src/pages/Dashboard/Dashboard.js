@@ -76,19 +76,19 @@ const Dashboard = () => {
                     height={CARD_DEFAULT_HEIGHT}
                     tabWidth={412}
                     tabs={[
-                        <Card bg="light">
+                        <Card>
                             <Card.Header>
                                 <Card.Title className="h-100">탭컨텐츠1</Card.Title>
                             </Card.Header>
                             <Card.Body></Card.Body>
                         </Card>,
-                        <Card bg="light">
+                        <Card>
                             <Card.Header>
                                 <Card.Title className="h-100">탭 컨텐츠2</Card.Title>
                             </Card.Header>
                             <Card.Body></Card.Body>
                         </Card>,
-                        <Card bg="light">
+                        <Card>
                             <Card.Header>
                                 <Card.Title className="h-100">탭 컨텐츠3</Card.Title>
                             </Card.Header>

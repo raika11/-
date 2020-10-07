@@ -4,18 +4,15 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 
 import { MokaSearchInput } from '@components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@moka/fontawesome-pro-solid-svg-icons';
 
-const TemplateHistory = () => {
+const PageHistoryList = () => {
     return (
-        <Card bg="light">
+        <Card>
             {/* 카드 헤더 */}
             <Card.Header>
-                <Card.Title>템플릿 히스토리</Card.Title>
+                <Card.Title className="h-100">페이지 히스토리</Card.Title>
             </Card.Header>
 
             {/* 카드 바디 */}
@@ -40,4 +37,4 @@ const TemplateHistory = () => {
     );
 };
 
-export default TemplateHistory;
+export default PageHistoryList;

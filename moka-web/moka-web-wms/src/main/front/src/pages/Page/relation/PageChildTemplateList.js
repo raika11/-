@@ -6,19 +6,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
-
-import { MokaSearchInput } from '@components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faThList } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faThLarge } from '@moka/fontawesome-pro-solid-svg-icons';
 
-const TemplateSearch = () => {
+import { MokaSearchInput } from '@components';
+
+const PageChildTemplateList = () => {
     return (
-        <Card bg="light">
+        <Card>
             {/* 카드 헤더 */}
             <Card.Header>
-                <Card.Title>광고 검색</Card.Title>
+                <Card.Title className="h-100">템플릿 검색</Card.Title>
             </Card.Header>
 
             {/* 카드 바디 */}
@@ -72,4 +71,4 @@ const TemplateSearch = () => {
     );
 };
 
-export default TemplateSearch;
+export default PageChildTemplateList;

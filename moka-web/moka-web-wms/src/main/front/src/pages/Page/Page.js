@@ -17,7 +17,7 @@ import { faNewspaper } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faAd } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faHistory } from '@moka/fontawesome-pro-solid-svg-icons';
 
-const PageEdit = React.lazy(() => import('./PageEdit'));
+const PageInfo = React.lazy(() => import('./PageInfo'));
 const PageSearch = React.lazy(() => import('./PageSearch'));
 const ContentSkinSearch = React.lazy(() => import('./ContentSkinSearch'));
 const ContainerSearch = React.lazy(() => import('./ContainerSearch'));
@@ -93,7 +93,7 @@ const Page = () => {
                 tabWidth={412}
                 tabs={[
                     <Suspense>
-                        <PageEdit />
+                        <PageInfo />
                     </Suspense>,
                     <Suspense>
                         <PageSearch />

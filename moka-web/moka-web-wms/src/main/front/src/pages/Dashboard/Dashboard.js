@@ -97,7 +97,7 @@ const Dashboard = () => {
                     ]}
                     tabNavWidth={48}
                     tabNavs={[
-                        { title: '버튼1', icon: 'info' },
+                        { title: '버튼1', icon: 'Info' },
                         { title: '버튼2', icon: <FontAwesomeIcon icon={faCoffee} /> },
                         { title: '버튼3', icon: <FontAwesomeIcon icon={faCoffee} /> },
                     ]}

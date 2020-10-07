@@ -76,7 +76,7 @@ const MokaFoldableCard = (props) => {
             <Card.Header className="d-flex justify-content-between align-item-center">
                 <Card.Title className={clsx({ 'd-none': !isExpand })}>{title}</Card.Title>
                 <div className="d-flex align-items-center">
-                    <Button variant="light" className="p-0 float-right" onClick={handleExpansion}>
+                    <Button variant="white" className="p-0 float-right" onClick={handleExpansion}>
                         <FontAwesomeIcon icon={faAngleDoubleLeft} rotation={isExpand ? 0 : 180} />
                     </Button>
                 </div>

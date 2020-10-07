@@ -121,10 +121,10 @@ const MokaCardEditor = forwardRef((props, ref) => {
             <Card.Header className="d-flex justify-content-between align-item-center">
                 <Card.Title>{title}</Card.Title>
                 <div className="d-flex align-items-center">
-                    <Button variant="light" className="p-0 mr-10" onClick={handleWordWrap}>
+                    <Button variant="white" className="p-0 mr-10" onClick={handleWordWrap}>
                         <FontAwesomeIcon icon={wordWrap ? faArrowToRight : faRepeat} />
                     </Button>
-                    <Button variant="light" className="p-0" onClick={handleExpansion}>
+                    <Button variant="white" className="p-0" onClick={handleExpansion}>
                         <FontAwesomeIcon icon={expansion ? faCompressArrowsAlt : faExpandArrows} />
                     </Button>
                 </div>

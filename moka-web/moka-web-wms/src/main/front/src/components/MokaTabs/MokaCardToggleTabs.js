@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDoubleRight } from '@moka/fontawesome-pro-light-svg-icons';
+import { faAngleDoubleLeft } from '@moka/fontawesome-pro-light-svg-icons';
 
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
@@ -134,8 +134,8 @@ const MokaCardToggleTabs = (props) => {
                 <Card className="border-left-0" style={{ width: tabNavWidth }}>
                     <Card.Header className="pl-0 pr-0">
                         <div className="d-flex align-items-center justify-content-center">
-                            <Button variant="light" className="p-0" onClick={handleExpansion}>
-                                <FontAwesomeIcon icon={faAngleDoubleRight} rotation={isExpand ? 0 : 180} />
+                            <Button variant="white" className="p-0" onClick={handleExpansion}>
+                                <FontAwesomeIcon icon={faAngleDoubleLeft} rotation={isExpand ? 0 : 180} />
                             </Button>
                         </div>
                     </Card.Header>

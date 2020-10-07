@@ -102,9 +102,6 @@ a.sidebar-link {
 
 .sidebar-item.active > .sidebar-link,
 .sidebar-item.active .sidebar-link:hover {
-  color: $sidebar-link-active-color;
-  background: $sidebar-link-bg;
-
   i,
   svg {
     color: $sidebar-link-icon-active-color;
@@ -113,6 +110,7 @@ a.sidebar-link {
 }
 
 .sidebar-item.active > .sidebar-link.active {
+  color: $sidebar-link-active-color;
   background: $sidebar-link-active-bg;
 }
 

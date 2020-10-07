@@ -4,9 +4,19 @@
 }
 
 .card-header {
+  min-height: 40px;
   border-bottom-width: 0px;
   padding-top: 10px;
   padding-bottom: 0px;
+
+  button {
+    width: 24px;
+    height: 24px;
+
+    svg {
+      font-size: 20px;
+    }
+  }
 }
 
 .card-actions {
@@ -26,6 +36,9 @@
 }
 
 .card-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
   font-size: $font-size-lg;
   font-weight: $card-title-font-weight;
   color: $card-title-color;
@@ -56,5 +69,12 @@
 
   @media all and (-ms-high-contrast:none) {
     height: 100%;
+  }
+}
+
+.fold.card {
+  .card-header {
+    padding-left: 3px;
+    padding-right: 0px;
   }
 }

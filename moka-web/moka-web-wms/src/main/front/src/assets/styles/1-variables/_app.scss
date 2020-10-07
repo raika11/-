@@ -98,6 +98,7 @@ $theme-colors: (
     'light': $light,
     'dark': $dark,
     // 색상별 테마 추가
+    'white': $white,
     'orange': $orange,
     'gray150': $gray-150
 ) !default;
@@ -326,7 +327,7 @@ $pagination-color: $gray-600 !default;
 $pagination-hover-color: $gray-800 !default;
 
 // Content
-$content-padding: 2.5rem 2.5rem 1.5rem !default;
+$content-padding: 40px 24px !default;
 
 // Datetimepicker
 $bs-datetimepicker-active-bg: $primary !default;

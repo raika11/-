@@ -6,11 +6,28 @@ import { faCoffee } from '@moka/fontawesome-pro-solid-svg-icons';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 
-import { MokaEditor, MokaCardToggleTabs } from '@components';
-import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/constants';
+import { MokaCardEditor, MokaCardToggleTabs, MokaFoldableCard } from '@components';
+import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 const Dashboard = () => {
     const [expansionState, setExpansionState] = useState([true, false, true]);
+
+    /**
+     * 리스트 확장 시
+     * @param {boolean} expansion 확장여부
+     */
+    const handleListExpansion = (expansion) => {
+        setExpansionState(
+            produce(expansionState, (draft) => {
+                if (!draft[2] && !expansion) {
+                    draft[1] = true;
+                } else {
+                    draft[1] = false;
+                }
+                draft[0] = expansion;
+            }),
+        );
+    };
 
     /**
      * 에디터 확장 시
@@ -45,15 +62,12 @@ const Dashboard = () => {
         <Container className="p-0" fluid>
             <div className="d-flex">
                 {/* 리스트 */}
-                <Card bg="light" className="mr-10" style={{ width: expansionState[0] ? 350 : CARD_FOLDING_WIDTH, height: CARD_DEFAULT_HEIGHT }}>
-                    <Card.Header>
-                        <Card.Title>페이지 관리</Card.Title>
-                    </Card.Header>
-                    <Card.Body></Card.Body>
-                </Card>
+                <MokaFoldableCard className="mr-10" title="페이지관리" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[0]} onExpansion={handleListExpansion}>
+                    <div>TEST</div>
+                </MokaFoldableCard>
 
                 {/* 에디터 */}
-                <MokaEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+                <MokaCardEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
                 {/* 탭 */}
                 <MokaCardToggleTabs
@@ -64,19 +78,19 @@ const Dashboard = () => {
                     tabs={[
                         <Card bg="light">
                             <Card.Header>
-                                <Card.Title>탭컨텐츠1</Card.Title>
+                                <Card.Title className="h-100">탭컨텐츠1</Card.Title>
                             </Card.Header>
                             <Card.Body></Card.Body>
                         </Card>,
                         <Card bg="light">
                             <Card.Header>
-                                <Card.Title>탭 컨텐츠2</Card.Title>
+                                <Card.Title className="h-100">탭 컨텐츠2</Card.Title>
                             </Card.Header>
                             <Card.Body></Card.Body>
                         </Card>,
                         <Card bg="light">
                             <Card.Header>
-                                <Card.Title>탭 컨텐츠3</Card.Title>
+                                <Card.Title className="h-100">탭 컨텐츠3</Card.Title>
                             </Card.Header>
                             <Card.Body></Card.Body>
                         </Card>,

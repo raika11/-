@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExpandArrows, faExpand, faFile, faGripLines } from '@moka/fontawesome-pro-regular-svg-icons';
+import { faExpandArrows, faCompressArrowsAlt, faArrowToRight, faRepeat } from '@moka/fontawesome-pro-light-svg-icons';
 
 import MonacoEditor from './MonacoEditor';
 
@@ -66,10 +66,10 @@ const defaultOptions = {
 };
 
 /**
- * Moka 에디터 컴포넌트
- * (카드 형태, wordwrap, expansion 아이콘 있음)
+ * Card 형태의 Moka 에디터 컴포넌트
+ * (wordwrap, expansion 아이콘 있음)
  */
-const MokaEditor = forwardRef((props, ref) => {
+const MokaCardEditor = forwardRef((props, ref) => {
     const { width, height, defaultValue, language, options, className, title, onBlur, expansion, onExpansion } = props;
 
     // editor state
@@ -119,13 +119,13 @@ const MokaEditor = forwardRef((props, ref) => {
         <Card className={className} style={{ width, height }}>
             {/* 카드 헤더 */}
             <Card.Header className="d-flex justify-content-between align-item-center">
-                <Card.Title className="mb-0">{title}</Card.Title>
-                <div>
-                    <Button variant="light" className="p-1 mr-1" onClick={handleWordWrap}>
-                        <FontAwesomeIcon icon={wordWrap ? faFile : faGripLines} className="float-right" size="lg" />
+                <Card.Title>{title}</Card.Title>
+                <div className="d-flex align-items-center">
+                    <Button variant="light" className="p-0 mr-10" onClick={handleWordWrap}>
+                        <FontAwesomeIcon icon={wordWrap ? faArrowToRight : faRepeat} />
                     </Button>
-                    <Button variant="light" className="p-1" onClick={handleExpansion}>
-                        <FontAwesomeIcon icon={expansion ? faExpand : faExpandArrows} className="float-right" size="lg" />
+                    <Button variant="light" className="p-0" onClick={handleExpansion}>
+                        <FontAwesomeIcon icon={expansion ? faCompressArrowsAlt : faExpandArrows} />
                     </Button>
                 </div>
             </Card.Header>
@@ -144,7 +144,7 @@ const MokaEditor = forwardRef((props, ref) => {
     );
 });
 
-MokaEditor.propTypes = propTypes;
-MokaEditor.defaultProps = defaultProps;
+MokaCardEditor.propTypes = propTypes;
+MokaCardEditor.defaultProps = defaultProps;
 
-export default MokaEditor;
+export default MokaCardEditor;

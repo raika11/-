@@ -5,4 +5,5 @@ export { default as MokaModal, MokaDraggableModal, MokaCodeListModal } from './M
 export { MokaPrependLinkInput, MokaSearchInput } from './MokaInput';
 export { default as MokaAlert } from './MokaAlert';
 export { MokaCardTabs, MokaCardToggleTabs } from './MokaTabs';
-export { default as MokaEditor } from './MokaEditor';
+export { MokaCardEditor } from './MokaEditor';
+export { MokaFoldableCard } from './MokaCard';

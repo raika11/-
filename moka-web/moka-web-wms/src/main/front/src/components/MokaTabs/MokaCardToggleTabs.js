@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -8,6 +8,8 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDoubleRight } from '@moka/fontawesome-pro-light-svg-icons';
 
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
@@ -72,24 +74,43 @@ const defaultProps = {
 const MokaCardToggleTabs = (props) => {
     const { className, height, tabs, tabWidth, tabNavs, tabNavWidth, placement, expansion, onExpansion } = props;
     const [activeKey, setActiveKey] = useState(0);
+    const [isExpand, setIsExpand] = useState(true);
+
+    useEffect(() => {
+        setIsExpand(expansion);
+    }, [expansion]);
 
     /**
      * 버튼 선택 이벤트
      * @param {any} eventKey 이벤트키
      */
     const handleSelect = (eventKey) => {
-        if (!expansion) {
-            if (typeof onExpansion === 'function') onExpansion(true);
+        if (!isExpand) {
+            if (onExpansion) onExpansion(true);
+            else setIsExpand(true);
             setActiveKey(eventKey);
         } else {
             if (activeKey.toString() === eventKey) {
                 setActiveKey(-1);
-                if (typeof onExpansion === 'function') onExpansion(false);
+                if (onExpansion) onExpansion(false);
+                else setIsExpand(false);
             } else {
                 setActiveKey(eventKey);
-                if (typeof onExpansion === 'function') onExpansion(true);
+                if (onExpansion) onExpansion(true);
+                else setIsExpand(true);
             }
         }
+    };
+
+    /**
+     * 헤더의 확장 버튼
+     */
+    const handleExpansion = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (onExpansion) onExpansion(!isExpand);
+        else setIsExpand(!isExpand);
     };
 
     return (
@@ -98,7 +119,7 @@ const MokaCardToggleTabs = (props) => {
                 {/* 탭 컨텐츠 */}
                 <Tab.Content
                     className={clsx('p-0', {
-                        'd-none': !expansion || activeKey < 0,
+                        'd-none': !isExpand,
                     })}
                     style={{ width: tabWidth }}
                 >
@@ -111,8 +132,12 @@ const MokaCardToggleTabs = (props) => {
 
                 {/* 탭 Nav */}
                 <Card className="border-left-0" style={{ width: tabNavWidth }}>
-                    <Card.Header>
-                        <Card.Title>&nbsp;</Card.Title>
+                    <Card.Header className="pl-0 pr-0">
+                        <div className="d-flex align-items-center justify-content-center">
+                            <Button variant="light" className="p-0" onClick={handleExpansion}>
+                                <FontAwesomeIcon icon={faAngleDoubleRight} rotation={isExpand ? 0 : 180} />
+                            </Button>
+                        </div>
                     </Card.Header>
                     <Card.Body className="p-0 m-0">
                         {tabNavs.map((nav, idx) => (

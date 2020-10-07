@@ -81,5 +81,5 @@ public interface TemplateMapper extends BaseMapper<TemplateVO, TemplateSearchDTO
      */
     Long findContainerChildRelsCount(TemplateSearchDTO param);
 
-    List<List<Object>> findAllTest(TemplateSearchDTO param) throws RuntimeException;
+//    List<List<Object>> findAllTest(TemplateSearchDTO param) throws RuntimeException;
 }

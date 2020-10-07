@@ -9,6 +9,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import lombok.*;
 
 
@@ -69,20 +70,20 @@ public class CodeMgtGrp implements Serializable {
 
     @PrePersist
     public void prePersist() {
-        this.cdEngNm = this.cdEngNm == null ? "" : this.cdEngNm;
-        this.cdComment = this.cdComment == null ? "" : this.cdComment;
-        this.regId = this.regId == null ? "" : this.regId;
-        this.modId = this.modId == null ? "" : this.modId;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.cdEngNm = McpString.defaultValue(this.cdEngNm, "");
+        this.cdComment = McpString.defaultValue(this.cdComment, "");
+        this.regId = McpString.defaultValue(this.regId, "");
+        this.modId = McpString.defaultValue(this.modId, "");
+        this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.cdEngNm = this.cdEngNm == null ? "" : this.cdEngNm;
-        this.cdComment = this.cdComment == null ? "" : this.cdComment;
-        this.regId = this.regId == null ? "" : this.regId;
-        this.modId = this.modId == null ? "" : this.modId;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
-        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
+        this.cdEngNm = McpString.defaultValue(this.cdEngNm, "");
+        this.cdComment = McpString.defaultValue(this.cdComment, "");
+        this.regId = McpString.defaultValue(this.regId, "");
+        this.modId = McpString.defaultValue(this.modId, "");
+        this.regDt = McpDate.defaultValue(this.regDt);
+        this.modDt = McpDate.defaultValue(this.modDt);
     }
 }

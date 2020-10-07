@@ -90,7 +90,7 @@ public class Domain implements Serializable {
     /**
      * 등록 아이디
      */
-    @Column(name = "REG_ID", length = 50)
+    @Column(name = "REG_ID", length = 30)
     private String regId;
 
     /**
@@ -103,7 +103,7 @@ public class Domain implements Serializable {
     /**
      * 수정 아이디
      */
-    @Column(name = "MOD_ID", length = 50)
+    @Column(name = "MOD_ID", length = 30)
     private String modId;
 
     /**

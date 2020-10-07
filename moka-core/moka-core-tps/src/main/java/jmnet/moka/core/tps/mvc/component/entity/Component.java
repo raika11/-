@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
@@ -143,14 +144,14 @@ public class Component implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
-    @Column(name = "REG_ID", length = 50)
+    @Column(name = "REG_ID", length = 30)
     private String regId;
 
     @Column(name = "MOD_DT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
-    @Column(name = "MOD_ID", length = 50)
+    @Column(name = "MOD_ID", length = 30)
     private String modId;
 
     @Transient
@@ -158,20 +159,20 @@ public class Component implements Serializable {
 
     @PrePersist
     public void prePersist() {
-        this.periodYn = this.periodYn == null ? "N" : this.periodYn;
-        this.dataType = this.dataType == null ? "DESK" : this.dataType;
-        this.pagingYn = this.pagingYn == null ? "N" : this.pagingYn;
-        this.schLanguage = this.schLanguage == null ? "KR" : this.schLanguage;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.periodYn = McpString.defaultValue(this.periodYn, "N");
+        this.dataType = McpString.defaultValue(this.dataType, "DESK");
+        this.pagingYn = McpString.defaultValue(this.pagingYn, "N");
+        this.schLanguage = McpString.defaultValue(this.schLanguage, "KR");
+        this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.periodYn = this.periodYn == null ? "N" : this.periodYn;
-        this.dataType = this.dataType == null ? "DESK" : this.dataType;
-        this.pagingYn = this.pagingYn == null ? "N" : this.pagingYn;
-        this.schLanguage = this.schLanguage == null ? "KR" : this.schLanguage;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
-        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
+        this.periodYn = McpString.defaultValue(this.periodYn, "N");
+        this.dataType = McpString.defaultValue(this.dataType, "DESK");
+        this.pagingYn = McpString.defaultValue(this.pagingYn, "N");
+        this.schLanguage = McpString.defaultValue(this.schLanguage, "KR");
+        this.regDt = McpDate.defaultValue(this.regDt);
+        this.modDt = McpDate.defaultValue(this.modDt);
     }
 }

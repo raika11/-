@@ -85,14 +85,14 @@ public class Template implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
-    @Column(name = "REG_ID", length = 50)
+    @Column(name = "REG_ID", length = 30)
     private String regId;
 
     @Column(name = "MOD_DT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
-    @Column(name = "MOD_ID", length = 50)
+    @Column(name = "MOD_ID", length = 30)
     private String modId;
     
     @Transient
@@ -100,12 +100,12 @@ public class Template implements Serializable {
 
     @PrePersist
     public void prePersist() {
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
-        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
+        this.regDt = McpDate.defaultValue(this.regDt);
+        this.modDt = McpDate.defaultValue(this.modDt);
     }
 }

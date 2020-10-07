@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -72,32 +73,32 @@ public class Dataset implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
-    @Column(name = "REG_ID", length = 50)
+    @Column(name = "REG_ID", length = 30)
     private String regId;
 
     @Column(name = "MOD_DT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
-    @Column(name = "MOD_ID", length = 50)
+    @Column(name = "MOD_ID", length = 30)
     private String modId;
 
     @PrePersist
     public void prePersist() {
-        this.datasetName = this.datasetName == null ? "" : this.datasetName;
-        this.dataApiHost = this.dataApiHost == null ? "" : this.dataApiHost;
-        this.dataApiPath = this.dataApiPath == null ? "" : this.dataApiPath;
-        this.autoCreateYn = this.autoCreateYn == null ? "N" : this.autoCreateYn;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.datasetName = McpString.defaultValue(this.datasetName, "");
+        this.dataApiHost = McpString.defaultValue(this.dataApiHost, "");
+        this.dataApiPath = McpString.defaultValue(this.dataApiPath, "");
+        this.autoCreateYn = McpString.defaultValue(this.autoCreateYn, "N");
+        this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.datasetName = this.datasetName == null ? "" : this.datasetName;
-        this.dataApiHost = this.dataApiHost == null ? "" : this.dataApiHost;
-        this.dataApiPath = this.dataApiPath == null ? "" : this.dataApiPath;
-        this.autoCreateYn = this.autoCreateYn == null ? "N" : this.autoCreateYn;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
-        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
+        this.datasetName = McpString.defaultValue(this.datasetName, "");
+        this.dataApiHost = McpString.defaultValue(this.dataApiHost, "");
+        this.dataApiPath = McpString.defaultValue(this.dataApiPath, "");
+        this.autoCreateYn = McpString.defaultValue(this.autoCreateYn, "N");
+        this.regDt = McpDate.defaultValue(this.regDt);
+        this.modDt = McpDate.defaultValue(this.modDt);
     }
 }

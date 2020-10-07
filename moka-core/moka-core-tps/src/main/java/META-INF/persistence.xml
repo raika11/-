@@ -7,9 +7,7 @@
 		<class>jmnet.moka.core.tps.mvc.component.entity.Component</class>
 		<class>jmnet.moka.core.tps.mvc.component.entity.ComponentHist</class>
 		<class>jmnet.moka.core.tps.mvc.component.entity.ComponentWork</class>
-		<class>jmnet.moka.core.tps.mvc.media.entity.Media</class>
 		<class>jmnet.moka.core.tps.mvc.user.entity.User</class>
-		<class>jmnet.moka.core.tps.mvc.volume.entity.Volume</class>
 		<class>jmnet.moka.core.tps.mvc.menu.entity.Menu</class>
 		<class>jmnet.moka.core.tps.mvc.page.entity.Page</class>
 		<class>jmnet.moka.core.tps.mvc.page.entity.PageHist</class>

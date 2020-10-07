@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -65,13 +66,13 @@ public class TemplateHist implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
-    @Column(name = "REG_ID", length = 50)
+    @Column(name = "REG_ID", length = 30)
     private String regId;
 
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.workType = this.workType == null ? "U" : this.workType;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.workType = McpString.defaultValue(this.workType, "U");
+        this.regDt = McpDate.defaultValue(this.regDt);
     }
 }

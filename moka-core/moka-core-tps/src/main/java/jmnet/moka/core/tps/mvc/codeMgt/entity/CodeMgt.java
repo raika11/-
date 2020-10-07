@@ -7,6 +7,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import lombok.*;
 
 
@@ -82,29 +83,29 @@ public class CodeMgt implements Serializable {
     @PrePersist
     public void prePersist() {
         this.cdOrd = this.cdOrd == null ? 0 : this.cdOrd;
-        this.cdEngNm = this.cdEngNm == null ? "" : this.cdEngNm;
-        this.cdComment = this.cdComment == null ? "" : this.cdComment;
-        this.cdNmEtc1 = this.cdNmEtc1 == null ? "" : this.cdNmEtc1;
-        this.cdNmEtc2 = this.cdNmEtc2 == null ? "" : this.cdNmEtc2;
-        this.cdNmEtc3 = this.cdNmEtc3 == null ? "" : this.cdNmEtc3;
-        this.usedYn = this.usedYn == null ? "Y" : this.usedYn;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
-        this.regId = this.regId == null ? "" : this.regId;
-        this.modId = this.modId == null ? "" : this.modId;
+        this.cdEngNm = McpString.defaultValue(this.cdEngNm, "");
+        this.cdComment = McpString.defaultValue(this.cdComment, "");
+        this.cdNmEtc1 = McpString.defaultValue(this.cdNmEtc1, "");
+        this.cdNmEtc2 = McpString.defaultValue(this.cdNmEtc2, "");
+        this.cdNmEtc3 = McpString.defaultValue(this.cdNmEtc3, "");
+        this.usedYn = McpString.defaultValue(this.usedYn, "Y");
+        this.regDt = McpDate.defaultValue(this.regDt);
+        this.regId = McpString.defaultValue(this.regId, "");
+        this.modId = McpString.defaultValue(this.modId, "");
     }
 
     @PreUpdate
     public void preUpdate() {
         this.cdOrd = this.cdOrd == null ? 0 : this.cdOrd;
-        this.cdEngNm = this.cdEngNm == null ? "" : this.cdEngNm;
-        this.cdComment = this.cdComment == null ? "" : this.cdComment;
-        this.cdNmEtc1 = this.cdNmEtc1 == null ? "" : this.cdNmEtc1;
-        this.cdNmEtc2 = this.cdNmEtc2 == null ? "" : this.cdNmEtc2;
-        this.cdNmEtc3 = this.cdNmEtc3 == null ? "" : this.cdNmEtc3;
-        this.usedYn = this.usedYn == null ? "Y" : this.usedYn;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
-        this.regId = this.regId == null ? "" : this.regId;
-        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
-        this.modId = this.modId == null ? "" : this.modId;
+        this.cdEngNm = McpString.defaultValue(this.cdEngNm, "");
+        this.cdComment = McpString.defaultValue(this.cdComment, "");
+        this.cdNmEtc1 = McpString.defaultValue(this.cdNmEtc1, "");
+        this.cdNmEtc2 = McpString.defaultValue(this.cdNmEtc2, "");
+        this.cdNmEtc3 = McpString.defaultValue(this.cdNmEtc3, "");
+        this.usedYn = McpString.defaultValue(this.usedYn, "Y");
+        this.regDt = McpDate.defaultValue(this.regDt);
+        this.regId = McpString.defaultValue(this.regId, "");
+        this.modDt = McpDate.defaultValue(this.modDt);
+        this.modId = McpString.defaultValue(this.modId, "");
     }
 }

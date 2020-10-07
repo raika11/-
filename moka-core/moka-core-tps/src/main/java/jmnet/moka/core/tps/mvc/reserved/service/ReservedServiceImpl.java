@@ -5,6 +5,7 @@ package jmnet.moka.core.tps.mvc.reserved.service;
 
 import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,8 @@ import jmnet.moka.core.tps.mvc.reserved.repository.ReservedRepository;
  * @author ssc
  */
 @Service
+@Slf4j
 public class ReservedServiceImpl implements ReservedService {
-
-    private static final Logger logger = LoggerFactory.getLogger(ReservedServiceImpl.class);
 
     @Autowired
     private ReservedRepository reservedRepository;
@@ -54,7 +54,7 @@ public class ReservedServiceImpl implements ReservedService {
 
     @Override
     public void deleteReserved(Reserved reserved, String name) {
-        logger.info("[DELETE Reserved] domainId : {} reservedSeq : {}",
+        log.info("[DELETE Reserved] domainId : {} reservedSeq : {}",
                 reserved.getDomain().getDomainId(), reserved.getReservedSeq());
 
         reservedRepository.deleteById(reserved.getReservedSeq());

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import jmnet.moka.core.tps.mvc.reserved.entity.Reserved;
+import org.springframework.stereotype.Repository;
 
 /**
  * <pre>
@@ -17,6 +18,7 @@ import jmnet.moka.core.tps.mvc.reserved.entity.Reserved;
  * @since 2020. 6. 17. 오전 11:29:31
  * @author ssc
  */
+@Repository
 public interface ReservedRepository
         extends JpaRepository<Reserved, Long>, ReservedRepositorySupport {
 

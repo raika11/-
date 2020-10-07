@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.NotFound;
@@ -103,14 +104,14 @@ public class Page implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
-    @Column(name = "REG_ID", length = 50)
+    @Column(name = "REG_ID", length = 30)
     private String regId;
 
     @Column(name = "MOD_DT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
-    @Column(name = "MOD_ID", length = 50)
+    @Column(name = "MOD_ID", length = 30)
     private String modId;
 
     @Builder.Default
@@ -121,20 +122,20 @@ public class Page implements Serializable {
     @PrePersist
     public void prePersist() {
         this.pageOrd = this.pageOrd == null ? 1 : this.pageOrd;
-        this.useYn = this.useYn == null ? "Y" : this.useYn;
-        this.fileYn = this.fileYn == null ? "N" : this.fileYn;
-        this.moveYn = this.moveYn == null ? "N" : this.moveYn;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
+        this.useYn = McpString.defaultValue(this.useYn, "Y");
+        this.fileYn = McpString.defaultValue(this.fileYn, "N");
+        this.moveYn = McpString.defaultValue(this.moveYn, "N");
+        this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     @PreUpdate
     public void preUpdate() {
         this.pageOrd = this.pageOrd == null ? 1 : this.pageOrd;
-        this.useYn = this.useYn == null ? "Y" : this.useYn;
-        this.fileYn = this.fileYn == null ? "N" : this.fileYn;
-        this.moveYn = this.moveYn == null ? "N" : this.moveYn;
-        this.regDt = this.regDt == null ? McpDate.now() : this.regDt;
-        this.modDt = this.modDt == null ? McpDate.now() : this.modDt;
+        this.useYn = McpString.defaultValue(this.useYn, "Y");
+        this.fileYn = McpString.defaultValue(this.fileYn, "N");
+        this.moveYn = McpString.defaultValue(this.moveYn, "N");
+        this.regDt = McpDate.defaultValue(this.regDt);
+        this.modDt = McpDate.defaultValue(this.modDt);
     }
 
     /**

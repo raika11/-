@@ -203,7 +203,7 @@ public class DomainRestController {
         // DomainDTO -> Domain 변환
         Domain domain = modelMapper.map(domainDTO, Domain.class);
 //        domain.setRegDt(McpDate.now());
-//        domain.setRegId(principal.getName());
+        domain.setRegId(principal.getName());
 
         setHostAndPath(request, domain, domainDTO);
 

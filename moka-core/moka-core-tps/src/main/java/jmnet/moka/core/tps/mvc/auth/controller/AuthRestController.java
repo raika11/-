@@ -151,7 +151,7 @@ public class AuthRestController {
     @GetMapping("/domains")
     public ResponseEntity<?> getDomainList(HttpServletRequest request) {
         // 조회
-        List<Domain> returnValue = domainService.findList();
+        List<Domain> returnValue = domainService.findDomainList();
 
         // 리턴값 설정
         ResultListDTO<DomainDTO> resultListMessage = new ResultListDTO<DomainDTO>();

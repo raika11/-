@@ -38,37 +38,67 @@ public class DomainDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<DomainDTO>>() {}.getType();
 
+    /**
+     * 도메인 아이디
+     */
     @NotNull(message = "{tps.domain.error.invalid.domainId}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.invalid.domainId}")
     private String domainId;
 
+    /**
+     * 도메인 명
+     */
     @NotNull(message = "{tps.domain.error.invalid.domainName1}")
     @Pattern(regexp = ".+", message = "{tps.domain.error.invalid.domainName1}")
     @Length(min = 1, max = 64, message = "{tps.domain.error.invalid.domainName2}")
     private String domainName;
 
+    /**
+     * 도메인 url
+     */
     @NotNull(message = "{tps.domain.error.invalid.domainUrl1}")
     @Pattern(regexp = ".+", message = "{tps.domain.error.invalid.domainUrl1}")
     @Length(min = 1, max = 512, message = "{tps.domain.error.invalid.domainUrl2}")
     private String domainUrl;
 
+    /**
+     * 서비스 플랫폼 P : PC, M : 모바일
+     */
     @NotNull(message = "{tps.domain.error.invalid.servicePlatform}")
     @Pattern(regexp = "[P|M]{1}$", message = "{tps.domain.error.invalid.servicePlatform}")
     private String servicePlatform;
 
+    /**
+     * 사용여부 Y : 예, N : 아니오
+     */
     @NotNull(message = "{tps.domain.error.invalid.useYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.domain.error.invalid.useYn}")
     private String useYn;
 
+    /**
+     * 언어
+     */
     @Length(min = 0, max = 3, message = "{tps.domain.error.invalid.lang}")
     private String lang;
 
+    /**
+     * api host
+     */
     private String apiHost;
 
+    /**
+     * api path
+     */
     private String apiPath;
-    
+
+    /**
+     * api code id
+     */
     private String apiCodeId;		// apiHost + apiPath
 
+    /**
+     * 도메인 상세 설명
+     */
     private String description;
 
     public DomainItem toDomainItem() {

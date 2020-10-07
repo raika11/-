@@ -117,7 +117,7 @@ public class PreviewController {
             TemplateLoadException {
         // 도메인
         String message = messageByLocale.get("tps.domain.error.noContent", request);
-        Domain domainInfo = domainService.findByDomainId(pageDto.getDomain().getDomainId())
+        Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
                 .orElseThrow(() -> new NoDataException(message));
 
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
@@ -194,7 +194,7 @@ public class PreviewController {
 
             // 도메인
             String messageDM = messageByLocale.get("tps.domain.error.noContent", request);
-            Domain domainInfo = domainService.findByDomainId(pageDto.getDomain().getDomainId())
+            Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
                     .orElseThrow(() -> new NoDataException(messageDM));
             DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
             DomainItem domainItem = domainDto.toDomainItem();
@@ -249,7 +249,7 @@ public class PreviewController {
 
             // 도메인
             String messageDM = messageByLocale.get("tps.domain.error.noContent", request);
-            Domain domainInfo = domainService.findByDomainId(pageDto.getDomain().getDomainId())
+            Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
                     .orElseThrow(() -> new NoDataException(messageDM));
             DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
             DomainItem domainItem = domainDto.toDomainItem();

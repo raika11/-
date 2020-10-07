@@ -256,6 +256,9 @@
 		) AS X
 	</select>
 
+	<!--<resultMap id="TemplateMap" type="TemplateVO"/>
+	<resultMap id="HistMaps" type="TemplateVO"/>
+	<select id="findAllTest" parameterType="TemplateSearchDTO" resultMap="TemplateMap,HistMaps" statementType="CALLABLE">-->
 	<select id="findAll" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
 		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_TB_WMS_TEMPLATE_LIST_SEL(
 			#{imageRoot, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -299,7 +302,7 @@
 			#{widthMax, mode=IN, jdbcType=INTEGER, javaType=integer},
 			#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
 			#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
-			'Y',
+			#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }
 	</select>

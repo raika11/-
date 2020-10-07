@@ -2,9 +2,12 @@ package jmnet.moka.core.tps.mvc.template.service;
 
 import static jmnet.moka.common.data.mybatis.support.McpMybatis.getRowBounds;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import jmnet.moka.common.utils.dto.ResultListDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +81,8 @@ public class TemplateServiceImpl implements TemplateService {
                 search.addSort("templateSeq,desc");
             }
 //            return templateMapper.findAll(search, getRowBounds(search.getPage(), search.getSize()));
+//            List<List<Object>> listMap = templateMapper.findAllTest(search);
+//            return null;
             return templateMapper.findAll(search);
         }
     }

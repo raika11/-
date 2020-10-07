@@ -1,6 +1,8 @@
 package jmnet.moka.core.tps.mvc.template.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.RowBounds;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSearchDTO;
@@ -79,5 +81,5 @@ public interface TemplateMapper extends BaseMapper<TemplateVO, TemplateSearchDTO
      */
     Long findContainerChildRelsCount(TemplateSearchDTO param);
 
-    List<List<Object>> findAllTest(TemplateSearchDTO param);
+    List<List<Object>> findAllTest(TemplateSearchDTO param) throws RuntimeException;
 }

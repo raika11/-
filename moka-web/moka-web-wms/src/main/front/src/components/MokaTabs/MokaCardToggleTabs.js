@@ -38,7 +38,7 @@ const propTypes = {
     tabNavs: PropTypes.arrayOf(
         PropTypes.shape({
             title: PropTypes.string,
-            icon: PropTypes.node,
+            icon: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
         }),
     ),
     /**
@@ -114,11 +114,19 @@ const MokaCardToggleTabs = (props) => {
                     <Card.Header>
                         <Card.Title>&nbsp;</Card.Title>
                     </Card.Header>
-                    <Card.Body>
+                    <Card.Body className="p-0 m-0">
                         {tabNavs.map((nav, idx) => (
-                            <Nav.Item key={idx}>
+                            <Nav.Item key={idx} className="mb-1 p-1 d-flex">
                                 <OverlayTrigger key={idx} placement={placement} overlay={<Tooltip id={`tooltip-${idx}-${nav.title}`}>{nav.title}</Tooltip>}>
-                                    <Nav.Link as={Button} eventKey={idx} onSelect={handleSelect}>
+                                    <Nav.Link
+                                        as={Button}
+                                        eventKey={idx}
+                                        onSelect={handleSelect}
+                                        className={clsx('p-1', 'pt-2', 'pb-2', 'text-center', 'tab-btn', 'flex-fill', 'border-0', {
+                                            active: activeKey.toString() === idx.toString(),
+                                        })}
+                                        variant="gray150"
+                                    >
                                         {nav.icon}
                                     </Nav.Link>
                                 </OverlayTrigger>

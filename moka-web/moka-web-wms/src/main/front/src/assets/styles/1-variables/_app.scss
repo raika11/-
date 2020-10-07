@@ -11,6 +11,7 @@ $headings-font-weight: 600 !default;
 
 // Spacer
 $spacer: 1rem !default;
+$spacer-px: 1px !default;
 
 $spacers: (
     0: 0,
@@ -20,7 +21,11 @@ $spacers: (
     4: ($spacer * 1.5),
     5: ($spacer * 3),
     6: ($spacer * 4.5),
-    7: ($spacer * 6)
+    7: ($spacer * 6),
+    '03': ($spacer-px * 3),
+    '05': ($spacer-px * 5),
+    10: ($spacer-px * 10),
+    20: ($spacer-px * 20)
 ) !default;
 
 $min-width: 1360px !default;
@@ -58,11 +63,14 @@ $pink: #a180da !default;
 
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
+$gray-150: #e0e0e0 !default;
 $gray-200: #e9ecef !default;
 $gray-300: #dee2e6 !default;
 $gray-400: #ced4da !default;
 $gray-500: #adb5bd !default;
+$gray-550: #9e9ea5 !default;
 $gray-600: #6c757d !default;
+$gray-650: #5c5c6a !default;
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
@@ -87,7 +95,10 @@ $theme-colors: (
     'warning': $warning,
     'danger': $danger,
     'light': $light,
-    'dark': $dark
+    'dark': $dark,
+    // 색상별 테마 추가
+    'orange': $orange,
+    'gray150': $gray-150
 ) !default;
 
 // Social colors
@@ -233,12 +244,12 @@ $sidebar-header-text-transform: none !default;
 $sidebar-header-font-size: $font-size-sm !default;
 
 // Sidebar link
-$sidebar-link-padding: 0.7rem 1.5rem !default;
+$sidebar-link-padding: 0.7rem 1rem !default;
 $sidebar-link-font-weight: 400 !default;
 $sidebar-link-color: rgba($white, 0.7) !default;
 $sidebar-link-bg: $sidebar-bg !default;
-$sidebar-link-hover-color: rgba($white, 0.9) !default;
-$sidebar-link-hover-bg: darken($sidebar-bg, 4) !default;
+$sidebar-link-hover-color: rgba($white, 1) !default;
+$sidebar-link-hover-bg: $orange !default;
 $sidebar-link-hover-font-weight: $font-weight-normal !default;
 $sidebar-link-active-color: $sidebar-link-hover-color !default;
 $sidebar-link-active-bg: $orange !default;
@@ -248,15 +259,15 @@ $sidebar-link-active-font-weight: $font-weight-normal !default;
 $sidebar-link-child-padding: 0.55rem 1.5rem 0.55rem 3.55rem !default;
 $sidebar-link-child-font-weight: 400 !default;
 $sidebar-link-child-color: rgba($white, 0.55) !default;
-$sidebar-link-child-bg: darken($sidebar-bg, 2) !default;
-$sidebar-link-child-hover-color: rgba($white, 0.9) !default;
-$sidebar-link-child-hover-bg: darken($sidebar-bg, 4) !default;
+$sidebar-link-child-bg: darken($sidebar-bg, 0) !default;
+$sidebar-link-child-hover-color: rgba($white, 1) !default;
+$sidebar-link-child-hover-bg: $orange !default;
 $sidebar-link-child-active-color: $sidebar-link-child-hover-color !default;
-$sidebar-link-child-active-bg: darken($sidebar-bg, 4) !default;
+$sidebar-link-child-active-bg: darken($sidebar-bg, 0) !default;
 
 // Sidebar child link nested
-$sidebar-link-child-second-padding: 0.55rem 1.5rem 0.55rem 4.3rem !default;
-$sidebar-link-child-third-padding: 0.55rem 1.5rem 0.55rem 5.05rem !default;
+$sidebar-link-child-second-padding: 0.55rem 1.5rem 0.55rem 3rem !default;
+$sidebar-link-child-third-padding: 0.55rem 1.5rem 0.55rem 3rem !default;
 
 // Sidebar link icon
 $sidebar-link-icon-color: $white !default;

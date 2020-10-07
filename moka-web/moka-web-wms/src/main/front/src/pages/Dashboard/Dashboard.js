@@ -45,7 +45,7 @@ const Dashboard = () => {
         <Container className="p-0" fluid>
             <div className="d-flex">
                 {/* 리스트 */}
-                <Card bg="light" className="mr-10px" style={{ width: expansionState[0] ? 350 : CARD_FOLDING_WIDTH, height: CARD_DEFAULT_HEIGHT }}>
+                <Card bg="light" className="mr-10" style={{ width: expansionState[0] ? 350 : CARD_FOLDING_WIDTH, height: CARD_DEFAULT_HEIGHT }}>
                     <Card.Header>
                         <Card.Title>페이지 관리</Card.Title>
                     </Card.Header>
@@ -53,7 +53,7 @@ const Dashboard = () => {
                 </Card>
 
                 {/* 에디터 */}
-                <MokaEditor className="mr-10px flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+                <MokaEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
                 {/* 탭 */}
                 <MokaCardToggleTabs
@@ -83,7 +83,7 @@ const Dashboard = () => {
                     ]}
                     tabNavWidth={48}
                     tabNavs={[
-                        { title: '버튼1', icon: <FontAwesomeIcon icon={faCoffee} /> },
+                        { title: '버튼1', icon: 'info' },
                         { title: '버튼2', icon: <FontAwesomeIcon icon={faCoffee} /> },
                         { title: '버튼3', icon: <FontAwesomeIcon icon={faCoffee} /> },
                     ]}

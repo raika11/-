@@ -91,3 +91,30 @@
     width: 100%;
   }
 }
+
+/* -----------------------
+* Card Toggle Tab 스타일
+* ---------------------- */
+.card-toggle-tab {
+  .tab-content {
+    width: 412px;
+    .card {
+      width: 100%;
+    }
+  }
+
+  >.card {
+    width: 48px;
+    
+    .tab-btn {
+      background-color: $gray-150;
+      @include button-color($gray-550);
+      @include button-color-hover($gray-550);
+      &.active {
+        background-color: $gray-650;
+        @include button-color($white);
+        @include button-color-hover($white);
+      }
+    }
+  }
+}

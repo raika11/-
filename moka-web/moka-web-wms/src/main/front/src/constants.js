@@ -5,7 +5,7 @@ export const DB_DATEFORMAT = 'YYYYMMDDHHmmsss';
 export const ACCEPTED_IMAGE_TYPES = ['image/gif', 'image/jpeg', 'image/png'];
 
 // 카드 컴포넌트 기본 높이
-export const CARD_DEFAULT_HEIGHT = 836;
+export const CARD_DEFAULT_HEIGHT = 801;
 
 // 카드 접혔을 때 넓이
 export const CARD_FOLDING_WIDTH = 32;

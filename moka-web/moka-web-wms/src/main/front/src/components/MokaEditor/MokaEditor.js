@@ -27,7 +27,7 @@ const propTypes = {
      */
     defaultValue: PropTypes.string,
     /**
-     * addtinal className
+     * additional className
      */
     className: PropTypes.string,
     /**

@@ -8,3 +8,15 @@
     outline: 0;
   }
 }
+
+.form-row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.form-group {
+  &.row {
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+}

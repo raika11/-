@@ -103,20 +103,20 @@ const MokaCardToggleTabs = (props) => {
                     style={{ width: tabWidth }}
                 >
                     {tabs.map((tab, idx) => (
-                        <Tab.Pane key={idx} eventKey={idx}>
+                        <Tab.Pane className="h-100" key={idx} eventKey={idx}>
                             {tab}
                         </Tab.Pane>
                     ))}
                 </Tab.Content>
 
                 {/* 탭 Nav */}
-                <Card className="mb-0" style={{ width: tabNavWidth }}>
+                <Card className="border-left-0" style={{ width: tabNavWidth }}>
                     <Card.Header>
                         <Card.Title>&nbsp;</Card.Title>
                     </Card.Header>
                     <Card.Body className="p-0 m-0">
                         {tabNavs.map((nav, idx) => (
-                            <Nav.Item key={idx} className="mb-1 p-1 d-flex">
+                            <Nav.Item key={idx} className="mb-1 p-05 d-flex">
                                 <OverlayTrigger key={idx} placement={placement} overlay={<Tooltip id={`tooltip-${idx}-${nav.title}`}>{nav.title}</Tooltip>}>
                                     <Nav.Link
                                         as={Button}

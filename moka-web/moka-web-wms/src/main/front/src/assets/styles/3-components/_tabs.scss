@@ -96,14 +96,18 @@
 * Card Toggle Tab 스타일
 * ---------------------- */
 .card-toggle-tab {
+  margin-bottom: 0px;
+
   .tab-content {
     width: 412px;
     .card {
       width: 100%;
+      height: 100%;
     }
   }
 
   >.card {
+    margin-bottom: 0px;
     width: 48px;
     
     .btn-gray150.active {

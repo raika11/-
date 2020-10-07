@@ -53,7 +53,7 @@ public class DomainServiceImpl implements DomainService {
     
     @Autowired
     private UploadFileHelper uploadFileHelper;
-    
+
     @PersistenceContext(name = MokaConstants.PERSISTANCE_UNIT_TPS)
     private final EntityManager entityManager;
     
@@ -63,17 +63,17 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public Page<Domain> findList(SearchDTO search) {
+    public Page<Domain> findDomainList(SearchDTO search) {
         return domainRepository.findAll(search.getPageable());
     }
 
     @Override
-    public List<Domain> findList() {
+    public List<Domain> findDomainList() {
         return domainRepository.findAll();
     }
 
     @Override
-    public Optional<Domain> findByDomainId(String domainId) {
+    public Optional<Domain> findDomainById(String domainId) {
         return domainRepository.findById(domainId);
     }
 
@@ -122,7 +122,7 @@ public class DomainServiceImpl implements DomainService {
     }
     
     @Override
-    public void deleteDomain(String domainId) throws Exception {
+    public void deleteDomainById(String domainId) throws Exception {
         // 템플릿 이미지 폴더 삭제
         uploadFileHelper.deleteBusinessDir("template", domainId);
         
@@ -139,7 +139,7 @@ public class DomainServiceImpl implements DomainService {
     
     @Override
     public void deleteDomain(Domain domain) throws Exception {
-        this.deleteDomain(domain.getDomainId());
+        this.deleteDomainById(domain.getDomainId());
     }
 
     @Override
@@ -147,7 +147,7 @@ public class DomainServiceImpl implements DomainService {
         return false;
     }
 
-    public List<DomainDTO> findByMapper(String domainId) {
+    public List<DomainDTO> findDomainByMapper(String domainId) {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("domainId", domainId);
         return domainMapper.findAll(param);
@@ -155,7 +155,7 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     public boolean isDuplicatedId(String domainId) {
-        Optional<Domain> maybeDomain = this.findByDomainId(domainId);
+        Optional<Domain> maybeDomain = this.findDomainById(domainId);
         return maybeDomain.isPresent() ? true : false;
     }
 }

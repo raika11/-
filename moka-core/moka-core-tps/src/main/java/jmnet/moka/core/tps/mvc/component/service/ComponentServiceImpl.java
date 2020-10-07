@@ -254,7 +254,7 @@ public class ComponentServiceImpl implements ComponentService {
 
             // 도메인정보 조회
             String message = messageByLocale.get("tps.component.error.invalid.domainId");
-            Domain domain = domainService.findByDomainId(component.getDomain().getDomainId())
+            Domain domain = domainService.findDomainById(component.getDomain().getDomainId())
                     .orElseThrow(() -> new NoDataException(message));
 
             // dataset 생성

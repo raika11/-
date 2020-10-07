@@ -13,7 +13,14 @@ import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 
 /**
  * 도메인 서비스 2020. 1. 8. ssc 최초생성
- * 
+ * 메소드 생성 규칙
+ * 목록 조회 : find{Target}List
+ * 목록 건수 조회 : find{Target}ListCount
+ * ID로 상세 조회 : find{Target}ById
+ * 여러 속성으로 상세 조회 : find{Target}
+ * 등록 : insert{Target}
+ * 수정 : update{Target}
+ * 삭제 : delete{Target}
  * @since 2020. 1. 8. 오후 2:06:54
  * @author ssc
  */
@@ -24,27 +31,27 @@ public interface DomainService {
      * @param search 검색조건
      * @return 도메인목록
      */
-    public Page<Domain> findList(SearchDTO search);
+    public Page<Domain> findDomainList(SearchDTO search);
 
     /**
      * 도메인목록 전체조회(페이징X)
      * @return 도메인목록
      */
-    public List<Domain> findList();
+    public List<Domain> findDomainList();
     
     /**
      * 도메인 목록 조회(Mybatis)
      * @param domainId 도메인아이디
      * @return 도메인 목록
      */
-    public List<DomainDTO> findByMapper(String domainId);
+    public List<DomainDTO> findDomainByMapper(String domainId);
 
     /**
      * 도메인 조회
      * @param domainId 도메인아이디
      * @return 도메인정보
      */
-    public Optional<Domain> findByDomainId(String domainId);
+    public Optional<Domain> findDomainById(String domainId);
 
     /**
      * 도메인 추가
@@ -66,7 +73,7 @@ public interface DomainService {
      * @param domainId 도메인아이디
      * @throws Exception 예외처리
      */
-    public void deleteDomain(String domainId) throws Exception;
+    public void deleteDomainById(String domainId) throws Exception;
     
     /**
      * 도메인 삭제

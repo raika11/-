@@ -172,8 +172,7 @@ public class TemplateRestController {
 
         Template template = modelMapper.map(templateDTO, Template.class);
         template.setRegDt(McpDate.now());
-//        template.setRegId(principal.getName());
-        template.setRegId("test");
+        template.setRegId(principal.getName());
         if (template.getTemplateBody() == null) {
             template.setTemplateBody("");
         }

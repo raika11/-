@@ -51,6 +51,8 @@ public class TemplateSearchDTO extends SearchDTO {
     
     private String imageRoot;
 
+    private String useTotal;
+
     private Long total;      // 목록 총 갯수
 
     private Integer returnValue;  // 프로시저 호출 결과
@@ -59,5 +61,6 @@ public class TemplateSearchDTO extends SearchDTO {
     public TemplateSearchDTO() {
         super(TemplateVO.class, "templateSeq,desc");
         imageRoot = "/image/";
+        useTotal = "Y";
     }
 }

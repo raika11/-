@@ -122,7 +122,7 @@ const MokaCardToggleTabs = (props) => {
                                         as={Button}
                                         eventKey={idx}
                                         onSelect={handleSelect}
-                                        className={clsx('p-1', 'pt-2', 'pb-2', 'text-center', 'tab-btn', 'flex-fill', 'border-0', {
+                                        className={clsx('p-1', 'pt-2', 'pb-2', 'text-center', 'flex-fill', 'border-0', {
                                             active: activeKey.toString() === idx.toString(),
                                         })}
                                         variant="gray150"

@@ -1,10 +1,12 @@
 .card {
-  margin-bottom: 2rem;
+  margin-bottom: 0px;
   box-shadow: $card-shadow;
 }
 
 .card-header {
-  border-bottom-width: 1px;
+  border-bottom-width: 0px;
+  padding-top: 10px;
+  padding-bottom: 0px;
 }
 
 .card-actions {

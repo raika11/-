@@ -5,8 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 
-import { MokaCardEditor, MokaCardToggleTabs } from '@components';
-import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/constants';
+import { MokaCardEditor, MokaCardToggleTabs, MokaFoldableCard } from '@components';
+import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile } from '@moka/fontawesome-pro-solid-svg-icons';
@@ -17,6 +17,7 @@ import { faNewspaper } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faAd } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faHistory } from '@moka/fontawesome-pro-solid-svg-icons';
 
+const PageEdit = React.lazy(() => import('./PageEdit'));
 const PageInfo = React.lazy(() => import('./PageInfo'));
 const PageSearch = React.lazy(() => import('./PageSearch'));
 const ContentSkinSearch = React.lazy(() => import('./ContentSkinSearch'));
@@ -27,6 +28,23 @@ const AdSearch = React.lazy(() => import('./AdSearch'));
 const TemplateHistory = React.lazy(() => import('./TemplateHistory'));
 const Page = () => {
     const [expansionState, setExpansionState] = useState([true, false, true]);
+
+    /**
+     * 리스트 확장 시
+     * @param {boolean} expansion 확장여부
+     */
+    const handleListExpansion = (expansion) => {
+        setExpansionState(
+            produce(expansionState, (draft) => {
+                if (!draft[2] && !expansion) {
+                    draft[1] = true;
+                } else {
+                    draft[1] = false;
+                }
+                draft[0] = expansion;
+            }),
+        );
+    };
 
     /**
      * 에디터 확장 시
@@ -60,28 +78,11 @@ const Page = () => {
     return (
         <div className="d-flex">
             {/* 리스트 */}
-            <Card bg="light" className="mr-10" style={{ width: expansionState[0] ? 350 : CARD_FOLDING_WIDTH, height: CARD_DEFAULT_HEIGHT }}>
-                <Card.Header>
-                    <Card.Title>페이지 관리</Card.Title>
-                </Card.Header>
-                <Card.Body className="p-2">
-                    <Form.Group className="py-3">
-                        <Form.Control as="select" className="mb-2" custom>
-                            <option>중앙일보(https://joongang.joins.com/)</option>
-                        </Form.Control>
-                        <Form.Row>
-                            <Col md={4}>
-                                <Form.Control as="select">
-                                    <option>페이지 전체</option>
-                                </Form.Control>
-                            </Col>
-                            <Col>
-                                <Form.Control placeholder="검색어를 입력하세요" />
-                            </Col>
-                        </Form.Row>
-                    </Form.Group>
-                </Card.Body>
-            </Card>
+            <MokaFoldableCard className="mr-10" title="페이지관리" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[0]} onExpansion={handleListExpansion}>
+                <Suspense>
+                    <PageEdit />
+                </Suspense>
+            </MokaFoldableCard>
 
             {/* 에디터 */}
             <MokaCardEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />

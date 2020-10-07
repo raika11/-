@@ -10,12 +10,12 @@ import { MokaSearchInput } from '@components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@moka/fontawesome-pro-solid-svg-icons';
 
-const PageSearch = () => {
+const ContainerSearch = () => {
     return (
         <Card bg="light">
             {/* 카드 헤더 */}
             <Card.Header>
-                <Card.Title>페이지 검색</Card.Title>
+                <Card.Title>컨테이너 검색</Card.Title>
             </Card.Header>
 
             {/* 카드 바디 */}
@@ -26,16 +26,16 @@ const PageSearch = () => {
                             구분
                         </Form.Label>
                         <Col md={3} className="px-0 pl-3">
-                            <Form.Control as="select">
+                            <Form.Control as="select" custom>
                                 <option>전체</option>
                             </Form.Control>
                         </Col>
                         <Col md={8} className="px-0 pl-2">
-                            <MokaSearchInput searchText={<FontAwesomeIcon icon={faSearch} />} />
+                            <MokaSearchInput />
                         </Col>
                     </Form.Group>
                     <Form.Group className="d-flex justify-content-end">
-                        <Button>페이지 추가</Button>
+                        <Button>컨테이너 추가</Button>
                     </Form.Group>
                 </Form>
             </Card.Body>
@@ -43,4 +43,4 @@ const PageSearch = () => {
     );
 };
 
-export default PageSearch;
+export default ContainerSearch;

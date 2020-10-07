@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import produce from 'immer';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
+
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
@@ -17,9 +16,15 @@ import { faBallot } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faNewspaper } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faAd } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faHistory } from '@moka/fontawesome-pro-solid-svg-icons';
-import PageManagement from './components/PageManagement';
-import PageSearch from './components/PageSearch';
 
+const PageInfo = React.lazy(() => import('./PageInfo'));
+const PageSearch = React.lazy(() => import('./PageSearch'));
+const ContentSkinSearch = React.lazy(() => import('./ContentSkinSearch'));
+const ContainerSearch = React.lazy(() => import('./ContainerSearch'));
+const ComponentSearch = React.lazy(() => import('./ComponentSearch'));
+const TemplateSearch = React.lazy(() => import('./TemplateSearch'));
+const AdSearch = React.lazy(() => import('./AdSearch'));
+const TemplateHistory = React.lazy(() => import('./TemplateHistory'));
 const Page = () => {
     const [expansionState, setExpansionState] = useState([true, false, true]);
 
@@ -78,15 +83,6 @@ const Page = () => {
                 </Card.Body>
             </Card>
 
-            {/* <Card border="light" style={{ width: '350px', height: '836px' }} className="mr-2">
-                <Card.Body >
-                    
-                    <div style={{ height: '645px' }} className="mt-4">
-                        node
-                    </div>
-                </Card.Body>
-            </Card> */}
-
             {/* 에디터 */}
             <MokaCardEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
@@ -96,44 +92,30 @@ const Page = () => {
                 height={CARD_DEFAULT_HEIGHT}
                 tabWidth={412}
                 tabs={[
-                    <PageManagement />,
-                    <PageSearch />,
-                    <Card bg="light">
-                        <Card.Header>
-                            <Card.Title>탭 컨텐츠3</Card.Title>
-                        </Card.Header>
-                        <Card.Body></Card.Body>
-                    </Card>,
-                    <Card bg="light">
-                        <Card.Header>
-                            <Card.Title>탭 컨텐츠3</Card.Title>
-                        </Card.Header>
-                        <Card.Body></Card.Body>
-                    </Card>,
-                    <Card bg="light">
-                        <Card.Header>
-                            <Card.Title>탭 컨텐츠3</Card.Title>
-                        </Card.Header>
-                        <Card.Body></Card.Body>
-                    </Card>,
-                    <Card bg="light">
-                        <Card.Header>
-                            <Card.Title>탭 컨텐츠3</Card.Title>
-                        </Card.Header>
-                        <Card.Body></Card.Body>
-                    </Card>,
-                    <Card bg="light">
-                        <Card.Header>
-                            <Card.Title>탭 컨텐츠3</Card.Title>
-                        </Card.Header>
-                        <Card.Body></Card.Body>
-                    </Card>,
-                    <Card bg="light">
-                        <Card.Header>
-                            <Card.Title>탭 컨텐츠3</Card.Title>
-                        </Card.Header>
-                        <Card.Body></Card.Body>
-                    </Card>,
+                    <Suspense>
+                        <PageInfo />
+                    </Suspense>,
+                    <Suspense>
+                        <PageSearch />
+                    </Suspense>,
+                    <Suspense>
+                        <ContentSkinSearch />
+                    </Suspense>,
+                    <Suspense>
+                        <ContainerSearch />
+                    </Suspense>,
+                    <Suspense>
+                        <ComponentSearch />
+                    </Suspense>,
+                    <Suspense>
+                        <TemplateSearch />
+                    </Suspense>,
+                    <Suspense>
+                        <AdSearch />
+                    </Suspense>,
+                    <Suspense>
+                        <TemplateHistory />
+                    </Suspense>,
                 ]}
                 tabNavWidth={48}
                 tabNavs={[

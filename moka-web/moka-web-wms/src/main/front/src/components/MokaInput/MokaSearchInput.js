@@ -25,7 +25,7 @@ const propTypes = {
     /**
      * 검색버튼에 노출할 텍스트
      */
-    searchText: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+    searchText: PropTypes.string,
     /**
      * 검색버튼 onClick 이벤트
      */

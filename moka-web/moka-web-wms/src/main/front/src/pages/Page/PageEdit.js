@@ -11,7 +11,7 @@ import { MokaSearchInput } from '@components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@moka/fontawesome-pro-solid-svg-icons';
 
-const PageManagement = () => {
+const PageEdit = () => {
     return (
         <Card bg="light">
             {/* 카드 헤더 */}
@@ -65,7 +65,7 @@ const PageManagement = () => {
                             <Form.Control type="text" />
                         </Col>
                         <Col md={4} className="px-0 pl-3">
-                            <Form.Control as="select">
+                            <Form.Control as="select" custom>
                                 <option>text/html</option>
                             </Form.Control>
                         </Col>
@@ -92,7 +92,7 @@ const PageManagement = () => {
                             <Form.Check type="switch" id="custom-switch2" label="" />
                         </Col>
                         <Col md={8} className="px-0 pl-3">
-                            <MokaSearchInput searchText={<FontAwesomeIcon icon={faSearch} />} />
+                            <MokaSearchInput />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -125,4 +125,4 @@ const PageManagement = () => {
     );
 };
 
-export default PageManagement;
+export default PageEdit;

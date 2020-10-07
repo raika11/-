@@ -20,12 +20,22 @@ const PageEdit = () => {
             <Card.Body>
                 {/* 폼 */}
                 <Form>
-                    <Form.Group className="d-flex justify-content-between">
-                        <Button>W3C</Button>
-                        <Button>미리보기</Button>
-                        <Button>즉시반영</Button>
-                        <Button>전송</Button>
-                        <Button>삭제</Button>
+                    <Form.Group>
+                        <Button variant="dark" className="mr-05">
+                            W3C
+                        </Button>
+                        <Button variant="dark" className="mr-05">
+                            미리보기
+                        </Button>
+                        <Button variant="info" className="mr-05">
+                            즉시반영
+                        </Button>
+                        <Button variant="secondary" className="mr-05">
+                            전송
+                        </Button>
+                        <Button variant="secondary" className="mr-05">
+                            삭제
+                        </Button>
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Form.Label column md={3} className="px-0">

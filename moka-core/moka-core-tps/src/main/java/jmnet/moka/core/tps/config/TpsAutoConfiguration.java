@@ -28,7 +28,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
 @Import({HelperConfiguration.class, PreviewConfiguration.class, TpsJpaConfiguration.class,
-        TpsQuerydslConfiguration.class, TpsMybatisConfiguration.class})
+        TpsQuerydslConfiguration.class, TpsMybatisConfiguration.class, SwaggerConfiguration.class})
 @ComponentScan(basePackages = {"jmnet.moka.core.tps.mvc"})
 public class TpsAutoConfiguration {
 

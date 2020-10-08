@@ -30,11 +30,11 @@ public class PgTemplateRoot extends MokaTemplateRoot {
     public void merge(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
         context.set(MokaConstants.MERGE_CONTEXT_PAGE, this.item);
         // 2020-08-25 mte:data가 사용하는 부분보다 앞서 있다면 필요시 마다 로딩해도 문제가 없다.
-        //        this.preloadData((MspTemplateMerger) merger, this.templateRoot, context);
+        //        this.preloadData((MokaTemplateMerger) merger, this.templateRoot, context);
         this.templateRoot.merge(merger, context, sb);
     }
 
-    //    private void preloadData(MspTemplateMerger merger, TemplateRoot templateRoot,
+    //    private void preloadData(MokaTemplateMerger merger, TemplateRoot templateRoot,
     //            MergeContext context) {
     //        logger.trace("Merge entered : {} {}", this.item.getItemType(), this.item.getItemId());
     //        for (TemplateNode child : templateRoot.childNodes()) {
@@ -59,7 +59,7 @@ public class PgTemplateRoot extends MokaTemplateRoot {
     //                            componentId =
     //                                    ((TemplateElement) ctChild).getAttribute(Constants.ATTR_ID);
     //                            cpTemplateRoot = (CpTemplateRoot) merger
-    //                                    .getParsedTemplate(MspConstants.ITEM_COMPONENT, componentId);
+    //                                    .getParsedTemplate(MokaConstants.ITEM_COMPONENT, componentId);
     //                            loadComponentData(merger, cpTemplateRoot, context);
     //                        }
     //                    }
@@ -71,7 +71,7 @@ public class PgTemplateRoot extends MokaTemplateRoot {
     //        }
     //    }
     //
-    //    private void loadComponentData(MspTemplateMerger merger, CpTemplateRoot cpTemplateRoot,
+    //    private void loadComponentData(MokaTemplateMerger merger, CpTemplateRoot cpTemplateRoot,
     //            MergeContext context) {
     //        String componentId = cpTemplateRoot.getId();
     //        try {

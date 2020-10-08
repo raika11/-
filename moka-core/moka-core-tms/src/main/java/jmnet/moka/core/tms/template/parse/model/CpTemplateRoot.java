@@ -135,7 +135,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 datasetParam.putAll(httpParamMap);
                 this.setDataRange(datasetParam, httpParamMap);
                 String datasetApi = datasetItem.getString(ItemConstants.DATASET_API);
-                if (datasetApi != null && ((String) datasetApi).length() > 1) {
+                if (datasetApi != null && datasetApi.length() > 1) {
                     DataLoader loader = merger.getDataLoader();
                     JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, null),
                             datasetParam, false);
@@ -210,6 +210,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                     logger.warn("DataLoad Fail: {} - component : {} {} {}",
                             ((MokaTemplateMerger) merger).getDomainId(), templateRoot.getItemType(),
                             templateRoot.getId(), e.getMessage());
+                    return;
                 }
             }
 
@@ -218,9 +219,10 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에
             childContext.set(Constants.LOOP_INDEX, 0);
             Object resultObject = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
-            if (resultObject != null && resultObject instanceof List
-                    && ((List<?>) resultObject).size() > 0) {
-                childContext.set(Constants.LOOP_DATA_ROW, ((List<?>) resultObject).get(0));
+            if (resultObject != null) {
+                if (resultObject instanceof List && ((List<?>) resultObject).size() > 0) {
+                    childContext.set(Constants.LOOP_DATA_ROW, ((List<?>) resultObject).get(0));
+                }
             }
             // TOTAL 처리
             int total = jsonResult.getTotal();
@@ -270,7 +272,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
 //            templateRoot = TemplateParser.parse(resource);
 //        } catch (TemplateParseException e) {
 //            logger.error("Preview Resource Parsing Fail: {} - component : {} {} {}",
-//                    ((MspTemplateMerger) merger).getDomainId(), this.getItemType(), this.getId(),
+//                    ((MokaTemplateMerger) merger).getDomainId(), this.getItemType(), this.getId(),
 //                    e.getMessage());
 //            return;
 //        }

@@ -67,6 +67,7 @@ $gray-150: #e0e0e0 !default;
 $gray-160: #e5e5e5 !default;
 $gray-200: #e9ecef !default;
 $gray-300: #dee2e6 !default;
+$gray-310: #dddddd !default;
 $gray-400: #ced4da !default;
 $gray-500: #adb5bd !default;
 $gray-550: #9e9ea5 !default;
@@ -260,7 +261,7 @@ $sidebar-link-active-bg: $orange !default;
 $sidebar-link-active-font-weight: $font-weight-normal !default;
 
 // Sidebar child link
-$sidebar-link-child-padding: 0.55rem 1.5rem 0.55rem 3.55rem !default;
+$sidebar-link-child-padding: 0.55rem 1.5rem 0.55rem 2.80rem !default;
 $sidebar-link-child-font-weight: 400 !default;
 $sidebar-link-child-color: rgba($white, 0.55) !default;
 $sidebar-link-child-bg: darken($sidebar-bg, 0) !default;
@@ -268,10 +269,11 @@ $sidebar-link-child-hover-color: rgba($white, 1) !default;
 $sidebar-link-child-hover-bg: $orange !default;
 $sidebar-link-child-active-color: $sidebar-link-child-hover-color !default;
 $sidebar-link-child-active-bg: darken($sidebar-bg, 0) !default;
+$sidebar-link-child-collapse-bg: #21181c !default;
 
 // Sidebar child link nested
-$sidebar-link-child-second-padding: 0.55rem 1.5rem 0.55rem 3rem !default;
-$sidebar-link-child-third-padding: 0.55rem 1.5rem 0.55rem 3rem !default;
+$sidebar-link-child-second-padding: 0.55rem 1.5rem 0.55rem 2.80rem !default;
+$sidebar-link-child-third-padding: 0.55rem 1.5rem 0.55rem 2.80rem !default;
 
 // Sidebar link icon
 $sidebar-link-icon-color: $white !default;

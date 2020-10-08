@@ -118,7 +118,7 @@ a.sidebar-link {
 .sidebar-dropdown .sidebar-link {
   padding: $sidebar-link-child-padding;
   color: $sidebar-link-child-color;
-  background: $sidebar-link-child-bg;
+  background: inherit;
   font-weight: $sidebar-link-child-font-weight;
 }
 
@@ -128,10 +128,20 @@ a.sidebar-link {
   font-weight: $sidebar-link-hover-font-weight;
 }
 
-.sidebar-dropdown .sidebar-item.active .sidebar-link.active {
-  color: $sidebar-link-child-active-color;
-  background: $sidebar-link-active-bg;
-  font-weight: $sidebar-link-active-font-weight;
+.sidebar-dropdown .sidebar-item.active {
+  .sidebar-link.active {
+    color: $sidebar-link-child-active-color;
+    background: $sidebar-link-active-bg;
+    font-weight: $sidebar-link-active-font-weight;
+  }
+
+  // collapse children
+  [aria-expanded="true"] {
+    background-color: $sidebar-link-child-collapse-bg;
+    & ~ div.collapse {
+      background-color: $sidebar-link-child-collapse-bg;
+    }
+  }
 }
 
 // Chevron

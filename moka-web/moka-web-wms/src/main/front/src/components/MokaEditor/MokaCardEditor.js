@@ -117,20 +117,21 @@ const MokaCardEditor = forwardRef((props, ref) => {
 
     return (
         <Card className={className} style={{ width, height }}>
-            {/* 카드 헤더 */}
             <Card.Header className="d-flex justify-content-between align-item-center">
                 <Card.Title>{title}</Card.Title>
                 <div className="d-flex align-items-center">
+                    {/* 워드랩 버튼 */}
                     <Button variant="white" className="p-0 mr-10" onClick={handleWordWrap}>
                         <FontAwesomeIcon icon={wordWrap ? faArrowToRight : faRepeat} />
                     </Button>
+
+                    {/* 확장 버튼 */}
                     <Button variant="white" className="p-0" onClick={handleExpansion}>
                         <FontAwesomeIcon icon={expansion ? faCompressArrowsAlt : faExpandArrows} />
                     </Button>
                 </div>
             </Card.Header>
 
-            {/* 카드 본문 */}
             <Card.Body>
                 <MonacoEditor
                     ref={editorRef}

@@ -11,7 +11,11 @@ library.add(faCoffee);
 const SidebarItemIcon = (props) => {
     const { iconName } = props;
 
-    return iconName ? <FontAwesomeIcon icon={iconName} className="align-middle mr-3" /> : null;
+    return iconName ? (
+        <span className="align-middle">
+            <FontAwesomeIcon icon={iconName} />
+        </span>
+    ) : null;
 };
 
 export default SidebarItemIcon;

@@ -80,8 +80,7 @@ public class TemplateServiceImpl implements TemplateService {
                 search.clearSort();
                 search.addSort("templateSeq,desc");
             }
-
-            //
+//            return templateMapper.findAll(search, getRowBounds(search.getPage(), search.getSize()));
 //            List<List<Object>> listMap = templateMapper.findAllTest(search);
 //            return null;
             return templateMapper.findAll(search);

@@ -256,9 +256,12 @@
 		) AS X
 	</select>
 
+	<!-- resultSet이 여러개인 경우 -->
 	<!--<resultMap id="TemplateMap" type="TemplateVO"/>
 	<resultMap id="HistMaps" type="TemplateVO"/>
 	<select id="findAllTest" parameterType="TemplateSearchDTO" resultMap="TemplateMap,HistMaps" statementType="CALLABLE">-->
+
+	<!-- resultSet이 단일인 경우 -->
 	<select id="findAll" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
 		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_TB_WMS_TEMPLATE_LIST_SEL(
 			#{imageRoot, mode=IN, jdbcType=VARCHAR, javaType=string},

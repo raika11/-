@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
+import io.swagger.annotations.ApiOperation;
 import jmnet.moka.common.utils.McpDate;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -102,6 +103,7 @@ public class PageRestController {
      * @return 페이지 트리 목록(PageNode)
      * @throws NoDataException 등록된 페이지 없음
      */
+    @ApiOperation(value = "페이지목록조회(트리용)")
     @GetMapping("/tree")
     public ResponseEntity<?> getPageTree(HttpServletRequest request,
             @Valid @SearchParam PageSearchDTO search) throws NoDataException {
@@ -124,6 +126,7 @@ public class PageRestController {
      * @throws InvalidDataException 데이타유효성오류
      * @throws Exception 기타예외
      */
+    @ApiOperation(value = "페이지정보 조회")
     @GetMapping("/{pageSeq}")
     public ResponseEntity<?> getPage(HttpServletRequest request,
             @PathVariable("pageSeq") @Min(value = 0,
@@ -217,6 +220,7 @@ public class PageRestController {
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception 기타예외
      */
+    @ApiOperation(value = "페이지등록")
     @PostMapping(headers = {"content-type=application/json"},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postPage(HttpServletRequest request,
@@ -259,6 +263,7 @@ public class PageRestController {
      * @throws NoDataException 데이타 없음
      * @throws Exception 기타예외
      */
+    @ApiOperation(value = "페이지수정")
     @PutMapping(value = "/{seq}", headers = {"content-type=application/json"},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putPage(HttpServletRequest request,
@@ -308,6 +313,7 @@ public class PageRestController {
      * @throws NoDataException 페이지정보 없음 오류
      * @throws Exception 기타예외
      */
+    @ApiOperation(value = "페이지삭제")
     @DeleteMapping("/{seq}")
     public ResponseEntity<?> deletePage(HttpServletRequest request,
             @PathVariable("seq") @Min(value = 0,
@@ -339,6 +345,7 @@ public class PageRestController {
      * @param pageSeq 페이지가 0 보다 클 경우, 해당 페이지는 제외하고 서비되는 URL을 찾는다.
      * @return URL사용여부
      */
+    @ApiOperation(value = "페이지서비스URL사용여부 체크")
     @GetMapping("/isPageUrl")
     public ResponseEntity<?> getIsPageUrl(HttpServletRequest request,
             @RequestParam(name = "pageUrl") @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN,
@@ -374,6 +381,7 @@ public class PageRestController {
      * @throws IOException
      * @throws Exception 기타예외
      */
+    @ApiOperation(value = "페이지 PURGE")
     @GetMapping("/{pageSeq}/purge")
     public ResponseEntity<?> getPurge(HttpServletRequest request,
             @PathVariable("pageSeq") @Min(value = 0,
@@ -412,6 +420,7 @@ public class PageRestController {
      * @param search 검색조건
      * @return 히스토리 목록
      */
+    @ApiOperation(value = "히스토리 목록 조회")
     @GetMapping("/{pageSeq}/histories")
     public ResponseEntity<?> getHistoryList(HttpServletRequest request,
             @PathVariable("pageSeq") @Min(value = 0,
@@ -459,6 +468,7 @@ public class PageRestController {
      * @return 페이지 목록(PageDTO)
      * @throws NoDataException 등록된 페이지 없음
      */
+    @ApiOperation(value = "페이지목록조회(목용)")
     @GetMapping
     public ResponseEntity<?> getPagList(HttpServletRequest request,
             @Valid @SearchParam PageSearchDTO search) throws NoDataException {

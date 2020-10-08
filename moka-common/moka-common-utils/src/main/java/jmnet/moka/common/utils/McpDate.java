@@ -516,7 +516,7 @@ public class McpDate {
         List<Date> dateList = new ArrayList<Date>();
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         dateList.add(sdf.parse(day + " 00:00:00"));
-        dateList.add(sdf.parse(day + " 23:59:59"));
+        dateList.add(datePlus(sdf.parse(day + " 00:00:00"),1,false));
         return dateList;
     }
 

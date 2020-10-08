@@ -138,6 +138,11 @@ a.sidebar-link {
   // collapse children
   [aria-expanded="true"] {
     background-color: $sidebar-link-child-collapse-bg;
+
+    &:hover {
+      background: $sidebar-link-child-hover-bg;
+    }
+    
     & ~ div.collapse {
       background-color: $sidebar-link-child-collapse-bg;
     }

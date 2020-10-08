@@ -29,7 +29,7 @@ import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.core.tms.exception.TmsException;
-import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.content.ContentDelegator;
 import jmnet.moka.core.tms.mvc.DefaultMergeHandlerMapping;
 import jmnet.moka.core.tms.mvc.DefaultMergeViewResolver;
@@ -234,10 +234,10 @@ public class TmsAutoConfiguration {
      */
     @Bean(name = "domainTemplateMerger")
     @ConditionalOnMissingBean(name = "domainTemplateMerger")
-    public MspDomainTemplateMerger domainTemplateMerger()
+    public MokaDomainTemplateMerger domainTemplateMerger()
             throws TemplateParseException {
-        MspDomainTemplateMerger domainTemplateMerger =
-                new MspDomainTemplateMerger(appContext, defaultTemplateDomain);
+        MokaDomainTemplateMerger domainTemplateMerger =
+                new MokaDomainTemplateMerger(appContext, defaultTemplateDomain);
         return domainTemplateMerger;
     }
 

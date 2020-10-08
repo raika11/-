@@ -41,7 +41,7 @@ import jmnet.moka.core.common.purge.model.PagePurgeTask;
 import jmnet.moka.core.common.purge.model.PurgeItem;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.merge.KeyResolver;
-import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
@@ -75,7 +75,7 @@ public class CommandController {
 
     @Qualifier("domainTemplateMerger")
     @Autowired
-    private MspDomainTemplateMerger domainTemplateMerger;
+    private MokaDomainTemplateMerger domainTemplateMerger;
 
     private ResponseEntity<?> responseException(Exception e) {
         logger.error("Command Execute Fail:", e);

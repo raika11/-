@@ -28,11 +28,11 @@ import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
  * @since 2019. 9. 11. 오후 5:10:49
  * @author kspark
  */
-public class MspDomainTemplateMerger implements DomainTemplateMerger {
+public class MokaDomainTemplateMerger implements DomainTemplateMerger {
 
-    private static final Logger logger = LoggerFactory.getLogger(MspDomainTemplateMerger.class);
+    private static final Logger logger = LoggerFactory.getLogger(MokaDomainTemplateMerger.class);
     private String defaultTemplateDomain = "0000";
-    private HashMap<String, MspTemplateMerger> templateMergerMap;
+    private HashMap<String, MokaTemplateMerger> templateMergerMap;
     private TemplateLoader<MergeItem> assistantTemplateLoader;
     private DataLoader dataLoader;
     private HashMap<String, DataLoader> dataLoaderMap;
@@ -46,11 +46,11 @@ public class MspDomainTemplateMerger implements DomainTemplateMerger {
      * @param defaultTemplateDomain
      * @throws TemplateParseException
      */
-    public MspDomainTemplateMerger(GenericApplicationContext appContext,
-            String defaultTemplateDomain)
+    public MokaDomainTemplateMerger(GenericApplicationContext appContext,
+                                    String defaultTemplateDomain)
             throws TemplateParseException {
         this.appContext = appContext;
-        this.templateMergerMap = new HashMap<String, MspTemplateMerger>(16);
+        this.templateMergerMap = new HashMap<String, MokaTemplateMerger>(16);
         if (defaultTemplateDomain != null) {
             this.defaultTemplateDomain = defaultTemplateDomain;
         }
@@ -105,42 +105,42 @@ public class MspDomainTemplateMerger implements DomainTemplateMerger {
     @Override
     public void loadUri(String domainId)
             throws TemplateMergeException, TemplateParseException, TmsException {
-        MspTemplateMerger ftm = getTemplateMerger(domainId);
+        MokaTemplateMerger ftm = getTemplateMerger(domainId);
         ftm.loadUri();
     }
 
     @Override
     public Map<String, String> getUri2ItemMap(String domainId)
             throws TemplateMergeException, TemplateParseException, TmsException {
-        MspTemplateMerger ftm = getTemplateMerger(domainId);
+        MokaTemplateMerger ftm = getTemplateMerger(domainId);
         return ftm.getUri2ItemMap();
     }
 
     @Override
     public StringBuilder merge(String domainId, String itemType, String itemId,
             MergeContext context) throws TemplateMergeException, TemplateParseException {
-        MspTemplateMerger ftm = getTemplateMerger(domainId);
+        MokaTemplateMerger ftm = getTemplateMerger(domainId);
         return ftm.merge(itemType, itemId, context);
     }
 
 
     public String getItemKey(String domainId, String path)
             throws TemplateMergeException, TemplateParseException {
-        MspTemplateMerger ftm = getTemplateMerger(domainId);
+        MokaTemplateMerger ftm = getTemplateMerger(domainId);
         return ftm.getItemKey(path);
     }
 
     @Override
     public MergeItem getItem(String domainId, String itemType, String itemId)
             throws TemplateParseException, TemplateMergeException, TemplateLoadException {
-        MspTemplateMerger ftm = getTemplateMerger(domainId);
+        MokaTemplateMerger ftm = getTemplateMerger(domainId);
         return ftm.getItem(itemType, itemId);
     }
 
     @Override
     public void purgeItem(String domainId, String itemType, String itemId)
             throws TemplateMergeException, TemplateParseException {
-        MspTemplateMerger templateMerger = getTemplateMerger(domainId);
+        MokaTemplateMerger templateMerger = getTemplateMerger(domainId);
         templateMerger.purgeItem(itemType, itemId);
     }
 
@@ -155,13 +155,13 @@ public class MspDomainTemplateMerger implements DomainTemplateMerger {
      * @throws TemplateMergeException
      * @throws TemplateParseException
      */
-    private MspTemplateMerger getTemplateMerger(String domainId)
+    private MokaTemplateMerger getTemplateMerger(String domainId)
             throws TemplateMergeException, TemplateParseException {
         // 도메인 정보 로드 실패시 로더맵이 생성되지 않아 다시 생성해야 한다. 
         if (this.dataLoaderMap == null) {
             this.loadDataLoaderMap();
         }
-        MspTemplateMerger tm = this.templateMergerMap.get(domainId);
+        MokaTemplateMerger tm = this.templateMergerMap.get(domainId);
         if (tm == null) {
             try {
                 DataLoader domainDataLoader = this.dataLoader;
@@ -171,7 +171,7 @@ public class MspDomainTemplateMerger implements DomainTemplateMerger {
                 if (domainDataLoader != null) {
                     AbstractTemplateLoader templateLoader =
                             this.appContext.getBean(AbstractTemplateLoader.class, domainId);
-                    tm = new MspTemplateMerger(this.appContext, domainId, templateLoader,
+                    tm = new MokaTemplateMerger(this.appContext, domainId, templateLoader,
                             domainDataLoader, this.assistantTemplateLoader);
                     this.templateMergerMap.put(domainId, tm);
                     logger.debug("Domain Template Merger Created : {}", domainId);

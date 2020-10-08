@@ -19,7 +19,7 @@ import jmnet.moka.core.tms.merge.item.PageItem;
  * @since 2019. 9. 4. 오후 6:20:25
  * @author kspark
  */
-public class PgTemplateRoot extends MspTemplateRoot {
+public class PgTemplateRoot extends MokaTemplateRoot {
     private static final Logger logger = LoggerFactory.getLogger(PgTemplateRoot.class);
 
     public PgTemplateRoot(PageItem item) throws TemplateParseException {

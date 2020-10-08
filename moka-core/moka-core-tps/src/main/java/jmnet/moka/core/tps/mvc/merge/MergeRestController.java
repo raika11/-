@@ -27,7 +27,7 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
-import jmnet.moka.core.tms.merge.MspPreviewTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
@@ -97,7 +97,7 @@ public class MergeRestController {
             // merger
             // MspPreviewTemplateMerger dtm =
             // appContext.getBean(MspPreviewTemplateMerger.class, domainItem);
-            MspPreviewTemplateMerger dtm = (MspPreviewTemplateMerger) appContext
+            MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext
                     .getBean("previewTemplateMerger", domainItem);
 
             PageItem pageItem = pageDto.toPageItem();
@@ -152,8 +152,8 @@ public class MergeRestController {
 
             List<String> componentIdList = new ArrayList<String>(1);
             componentIdList.add(componentVO.getComponentSeq().toString());
-            MspPreviewTemplateMerger dtm =
-                    (MspPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger",
+            MokaPreviewTemplateMerger dtm =
+                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger",
                             domainItem, principal.getName(), componentVO.getEditionSeq(),
                             componentIdList);
 

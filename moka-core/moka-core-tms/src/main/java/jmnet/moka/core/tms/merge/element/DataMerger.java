@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.ApiResult;
@@ -21,9 +23,8 @@ import jmnet.moka.common.template.parse.TemplateParser;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateNode;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
-import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
+import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 
 /**
  * <pre>
@@ -34,7 +35,7 @@ import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
  * @since 2019. 9. 4. 오후 4:17:48
  * @author kspark
  */
-public class DataMerger extends MspAbstractElementMerger {
+public class DataMerger extends MokaAbstractElementMerger {
 
 	private static final Logger logger = LoggerFactory.getLogger(DataMerger.class);
 
@@ -43,7 +44,7 @@ public class DataMerger extends MspAbstractElementMerger {
 		logger.debug("{} is Created",this.getClass().getName());
 	}
 
-    public String makeCacheKey(TemplateElement element, MspTemplateRoot templateRoot,
+    public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
             MergeContext context) {
         return "Not_Implemented";
     }
@@ -88,7 +89,7 @@ public class DataMerger extends MspAbstractElementMerger {
                         element);
             }
             if (jsonResult != null) {
-                ((MspTemplateMerger) templateMerger).setData(context, dataId, jsonResult);
+                ((MokaTemplateMerger) templateMerger).setData(context, dataId, jsonResult);
             }
             return jsonResult;
         } catch (DataLoadException e) {
@@ -101,13 +102,13 @@ public class DataMerger extends MspAbstractElementMerger {
 	@Override
 	public void merge(TemplateElement element, MergeContext context, StringBuilder sb) throws TemplateMergeException   {
         String dataId = element.getAttribute(Constants.ATTR_DATA_ID);
-        JSONResult jsonResult = ((MspTemplateMerger) templateMerger).getData(context, dataId);
+        JSONResult jsonResult = ((MokaTemplateMerger) templateMerger).getData(context, dataId);
         if (jsonResult == null) {
             jsonResult = loadData(element, context);
         }
         if (jsonResult != null) {
             context = context.createRowDataChild(); // row data를 포함할 수 있는 child context를 생성한다.
-            ((MspTemplateMerger) templateMerger).setData(context, dataId, jsonResult);
+            ((MokaTemplateMerger) templateMerger).setData(context, dataId, jsonResult);
             context.set(Constants.CURRENT_DATA_ID, dataId);
             // TODO context가 LoopContext 아닐 경우에는 _ROW 를 인식하지 못해 찾을 수 없는 문제가 있음
             // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에

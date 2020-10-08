@@ -27,7 +27,7 @@ import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.tms.merge.MspPreviewTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
@@ -82,7 +82,7 @@ public class PreviewController {
         try {
             // MspPreviewTemplateMerger dtm =
             // appContext.getBean(MspPreviewTemplateMerger.class, domainItem);
-            MspPreviewTemplateMerger dtm = (MspPreviewTemplateMerger) appContext
+            MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext
                     .getBean("previewTemplateMerger", domainItem);
 
             PageItem pageItem = (PageItem) dtm.getItem(MokaConstants.ITEM_PAGE, "4");
@@ -128,7 +128,7 @@ public class PreviewController {
         try {
             // MspPreviewTemplateMerger dtm =
             // appContext.getBean(MspPreviewTemplateMerger.class, domainItem);
-            MspPreviewTemplateMerger dtm = (MspPreviewTemplateMerger) appContext
+            MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext
                     .getBean("previewTemplateMerger", domainItem);
 
             // 페이지
@@ -199,8 +199,8 @@ public class PreviewController {
             DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
             DomainItem domainItem = domainDto.toDomainItem();
 
-            MspPreviewTemplateMerger dtm =
-                    (MspPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger",
+            MokaPreviewTemplateMerger dtm =
+                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger",
                             domainItem, principal.getName(), editionSeq, new ArrayList<String>());
 
             // 랜더링
@@ -266,8 +266,8 @@ public class PreviewController {
 
             List<String> componentIdList = new ArrayList<String>(1);
             componentIdList.add(componentVO.getComponentSeq().toString());
-            MspPreviewTemplateMerger dtm =
-                    (MspPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger",
+            MokaPreviewTemplateMerger dtm =
+                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger",
                             domainItem, principal.getName(), componentVO.getEditionSeq(),
                             componentIdList);
 

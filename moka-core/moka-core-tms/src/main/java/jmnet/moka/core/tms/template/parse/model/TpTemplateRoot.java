@@ -19,7 +19,7 @@ import jmnet.moka.core.tms.merge.item.TemplateItem;
  * @since 2019. 9. 4. 오후 6:20:25
  * @author kspark
  */
-public class TpTemplateRoot extends MspTemplateRoot {
+public class TpTemplateRoot extends MokaTemplateRoot {
     private static final Logger logger = LoggerFactory.getLogger(TpTemplateRoot.class);
 
     public TpTemplateRoot(TemplateItem item)

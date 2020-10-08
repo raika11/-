@@ -33,26 +33,26 @@ import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
  * @since 2019. 9. 4. 오후 5:59:52
  * @author kspark
  */
-public class MspPreviewTemplateMerger extends MspTemplateMerger {
+public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
-    private static final Logger logger = LoggerFactory.getLogger(MspPreviewTemplateMerger.class);
+    private static final Logger logger = LoggerFactory.getLogger(MokaPreviewTemplateMerger.class);
     private DomainItem domainItem;
     private DomainResolver domainResolver;
     private String workerId;
     private Long editionSeq;
 
-    public MspPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem,
-            DomainResolver domainResolver, AbstractTemplateLoader templateLoader,
-            DataLoader dataLoader, TemplateLoader<MergeItem> assistantTemplateLoader)
+    public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem,
+                                     DomainResolver domainResolver, AbstractTemplateLoader templateLoader,
+                                     DataLoader dataLoader, TemplateLoader<MergeItem> assistantTemplateLoader)
             throws IOException {
         this(appContext, domainItem, domainResolver, templateLoader, dataLoader,
                 assistantTemplateLoader, null, null);
     }
 
-    public MspPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem,
-            DomainResolver domainResolver, AbstractTemplateLoader templateLoader,
-            DataLoader dataLoader, TemplateLoader<MergeItem> assistantTemplateLoader,
-            String workerId, Long editionSeq) throws IOException {
+    public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem,
+                                     DomainResolver domainResolver, AbstractTemplateLoader templateLoader,
+                                     DataLoader dataLoader, TemplateLoader<MergeItem> assistantTemplateLoader,
+                                     String workerId, Long editionSeq) throws IOException {
         super(appContext, domainItem.getItemId(), templateLoader, dataLoader,
                 assistantTemplateLoader);
         this.domainResolver = domainResolver;

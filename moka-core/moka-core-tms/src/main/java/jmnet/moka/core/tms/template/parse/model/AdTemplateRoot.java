@@ -19,7 +19,7 @@ import jmnet.moka.core.tms.merge.item.AdItem;
  * @since 2019. 9. 4. 오후 6:20:25
  * @author kspark
  */
-public class AdTemplateRoot extends MspTemplateRoot {
+public class AdTemplateRoot extends MokaTemplateRoot {
     private static final Logger logger = LoggerFactory.getLogger(AdTemplateRoot.class);
 
     public AdTemplateRoot(AdItem item)

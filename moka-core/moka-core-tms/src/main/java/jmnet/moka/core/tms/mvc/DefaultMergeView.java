@@ -20,7 +20,7 @@ import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
-import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 
 /**
@@ -42,7 +42,7 @@ public class DefaultMergeView extends AbstractView {
     private boolean isPageCache;
 
     @Autowired
-    private MspDomainTemplateMerger templateMerger;
+    private MokaDomainTemplateMerger templateMerger;
 
     @Autowired(required = false)
     private CacheManager cacheManager;

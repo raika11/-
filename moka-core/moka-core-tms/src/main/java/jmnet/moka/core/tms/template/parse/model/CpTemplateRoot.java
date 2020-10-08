@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -19,12 +20,10 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.merge.TemplateMerger;
-import jmnet.moka.common.template.parse.TemplateParser;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
-import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DatasetItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
@@ -40,7 +39,7 @@ import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
  * @since 2019. 9. 4. 오후 6:20:25
  * @author kspark
  */
-public class CpTemplateRoot extends MspTemplateRoot {
+public class CpTemplateRoot extends MokaTemplateRoot {
     private static final Logger logger = LoggerFactory.getLogger(CpTemplateRoot.class);
     private String templateId;
     private AbstractTemplateLoader templateLoader; // Template을 로딩하기 위해 필요함
@@ -140,7 +139,7 @@ public class CpTemplateRoot extends MspTemplateRoot {
                     DataLoader loader = merger.getDataLoader();
                     JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, null),
                             datasetParam, false);
-                    ((MspTemplateMerger) merger).setData(context,
+                    ((MokaTemplateMerger) merger).setData(context,
                             KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
                     return jsonResult;
                 }
@@ -164,7 +163,7 @@ public class CpTemplateRoot extends MspTemplateRoot {
                 DataLoader loader = merger.getDataLoader();
                 JSONResult jsonResult =
                         loader.getJSONResult(getDataUri(datasetItem, apiName), datasetParam, false);
-                ((MspTemplateMerger) merger).setData(context,
+                ((MokaTemplateMerger) merger).setData(context,
                         KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
                 return jsonResult;
             }
@@ -209,7 +208,7 @@ public class CpTemplateRoot extends MspTemplateRoot {
                 } catch (DataLoadException | ParseException | TemplateParseException
                         | TemplateLoadException e) {
                     logger.warn("DataLoad Fail: {} - component : {} {} {}",
-                            ((MspTemplateMerger) merger).getDomainId(), templateRoot.getItemType(),
+                            ((MokaTemplateMerger) merger).getDomainId(), templateRoot.getItemType(),
                             templateRoot.getId(), e.getMessage());
                 }
             }

@@ -2,6 +2,8 @@ package jmnet.moka.core.tms.merge.element;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.Constants;
@@ -13,10 +15,9 @@ import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
-import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.AdItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
-import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
+import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 
 /**
  * <pre>
@@ -27,7 +28,7 @@ import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
  * @since 2019. 9. 4. 오후 4:17:48
  * @author kspark
  */
-public class AdMerger extends MspAbstractElementMerger {
+public class AdMerger extends MokaAbstractElementMerger {
 
     private static final Logger logger = LoggerFactory.getLogger(AdMerger.class);
 
@@ -36,9 +37,9 @@ public class AdMerger extends MspAbstractElementMerger {
         logger.debug("{} is Created", this.getClass().getName());
     }
 
-    public String makeCacheKey(TemplateElement element, MspTemplateRoot templateRoot,
+    public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
             MergeContext context) {
-        String domainId = ((MspTemplateMerger) this.templateMerger).getDomainId();
+        String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
         return KeyResolver.makeAdItemCacheKey(domainId, element.getAttribute("id"));
     }
 
@@ -54,7 +55,7 @@ public class AdMerger extends MspAbstractElementMerger {
         }
 
         // 광고의 기간을 체크한다
-        AdItem adItem = (AdItem) ((MspTemplateRoot) templateRoot).getItem();
+        AdItem adItem = (AdItem) ((MokaTemplateRoot) templateRoot).getItem();
         if (adItem.getBoolYN(ItemConstants.AD_USE_YN)) {
             String now = LocalDateTime.now().format(MokaConstants.dtf);
             String start = adItem.getString(ItemConstants.AD_PERIOD_START_YMDT);
@@ -68,7 +69,7 @@ public class AdMerger extends MspAbstractElementMerger {
                 return;
             }
         }
-        String cacheKey = makeCacheKey(element, (MspTemplateRoot) templateRoot, context);
+        String cacheKey = makeCacheKey(element, (MokaTemplateRoot) templateRoot, context);
         boolean isDebug = context.getMergeOptions().isDebug();
         if (isDebug == false && this.appendCached(KeyResolver.CACHE_AD_MERGE, cacheKey, sb)) {
             return;

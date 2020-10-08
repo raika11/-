@@ -26,8 +26,8 @@ import jmnet.moka.core.tms.mvc.HttpParamMap;
  * @since 2019. 9. 4. 오후 6:20:25
  * @author kspark
  */
-public abstract class MspTemplateRoot extends TemplateRoot {
-    private static final Logger logger = LoggerFactory.getLogger(MspTemplateRoot.class);
+public abstract class MokaTemplateRoot extends TemplateRoot {
+    private static final Logger logger = LoggerFactory.getLogger(MokaTemplateRoot.class);
     protected MergeItem item;
     protected boolean hasBodyToken = true;
     protected boolean hasParamToken = true;
@@ -35,7 +35,7 @@ public abstract class MspTemplateRoot extends TemplateRoot {
     protected boolean hasPagingElement = true;
 
 
-    public MspTemplateRoot(MergeItem item, String templateColumn)
+    public MokaTemplateRoot(MergeItem item, String templateColumn)
             throws TemplateParseException {
         //  templateRoot가 null이며, lineNumber도 0이다.
         super(item.getItemType(), item.getItemId());

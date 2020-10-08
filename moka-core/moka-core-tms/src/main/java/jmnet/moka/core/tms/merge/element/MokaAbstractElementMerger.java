@@ -3,6 +3,7 @@ package jmnet.moka.core.tms.merge.element;
 import java.io.IOException;
 
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import org.springframework.context.support.GenericApplicationContext;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.template.Constants;
@@ -13,10 +14,9 @@ import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.merge.element.AbstractElementMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
-import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
-import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
+import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 
 /**
  * <pre>
@@ -26,14 +26,14 @@ import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
  * @since 2019. 9. 4. 오후 4:17:48
  * @author kspark
  */
-public abstract class MspAbstractElementMerger extends AbstractElementMerger {
+public abstract class MokaAbstractElementMerger extends AbstractElementMerger {
 
     //	private static final Logger logger = LoggerFactory.getLogger(MspAbstractElementMerger.class);
     protected CacheManager cacheManager;
     protected boolean cacheable = false;
     protected GenericApplicationContext appContext;
 
-	public MspAbstractElementMerger(TemplateMerger<MergeItem> templateMerger) throws IOException {
+	public MokaAbstractElementMerger(TemplateMerger<MergeItem> templateMerger) throws IOException {
 		super(templateMerger);
 	}
 	
@@ -50,7 +50,7 @@ public abstract class MspAbstractElementMerger extends AbstractElementMerger {
         }
     }
 
-    public abstract String makeCacheKey(TemplateElement element, MspTemplateRoot templateRoot,
+    public abstract String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
             MergeContext context);
 
     public boolean appendCached(String cacheType, String cacheKey, StringBuilder sb) {
@@ -97,7 +97,7 @@ public abstract class MspAbstractElementMerger extends AbstractElementMerger {
     public boolean addEsi(TemplateMerger<?> merger, TemplateRoot templateRoot,
             TemplateElement element, MergeContext context,
             StringBuilder sb) {
-        boolean isEsiEnabled = ((MspTemplateMerger) merger).isEsiEnabled();
+        boolean isEsiEnabled = ((MokaTemplateMerger) merger).isEsiEnabled();
         String mergePath = (String) context.get(MokaConstants.MERGE_PATH);
         if (mergePath.startsWith("/_")) {
             return false;

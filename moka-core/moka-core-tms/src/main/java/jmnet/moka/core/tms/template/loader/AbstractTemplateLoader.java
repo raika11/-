@@ -24,7 +24,7 @@ import jmnet.moka.core.tms.merge.item.TemplateItem;
 import jmnet.moka.core.tms.template.parse.model.AdTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.CpTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.CtTemplateRoot;
-import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
+import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.PgTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.TpTemplateRoot;
 
@@ -41,7 +41,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
     public static final String URI_REST_PREFIX = "/*";
     protected String domainId;
     protected Map<String, MergeItem> mergeItemMap;
-    protected Map<String, MspTemplateRoot> templateRootMap;
+    protected Map<String, MokaTemplateRoot> templateRootMap;
     /*  REST 방식일 경우 URI에 "/*" 를 추가한다.     */
     protected Map<String, String> uri2ItemMap;
     protected TemplateLoader<MergeItem> assistantTemplateLoader;
@@ -61,7 +61,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         this.itemExpireTime = itemExpireTime;
         if (cacheable) {
             this.mergeItemMap = new ConcurrentHashMap<String, MergeItem>(256);
-            this.templateRootMap = new ConcurrentHashMap<String, MspTemplateRoot>(256);
+            this.templateRootMap = new ConcurrentHashMap<String, MokaTemplateRoot>(256);
         }
         this.uri2ItemMap = new HashMap<String, String>(256);
     }
@@ -119,16 +119,16 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         if (cacheable) {
             this.mergeItemMap.put(itemKey, item);
         }
-        MspTemplateRoot templateRoot = getParsedTemplate(item);
+        MokaTemplateRoot templateRoot = getParsedTemplate(item);
         if (cacheable) {
             this.templateRootMap.put(itemKey, templateRoot);
         }
         return templateRoot;
     }
 
-    private MspTemplateRoot getParsedTemplate(MergeItem item)
+    private MokaTemplateRoot getParsedTemplate(MergeItem item)
             throws TemplateParseException {
-        MspTemplateRoot templateRoot = null;
+        MokaTemplateRoot templateRoot = null;
         if (item instanceof PageItem) {
             templateRoot = new PgTemplateRoot((PageItem) item);
         } else if (item instanceof ComponentItem) {
@@ -148,7 +148,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
     @Override
     public TemplateRoot getParsedTemplate(String itemType, String itemId)
             throws TemplateParseException, TemplateLoadException {
-        MspTemplateRoot templateRoot = null;
+        MokaTemplateRoot templateRoot = null;
         MergeItem remoteItem = null;
         String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
         if (cacheable && (templateRoot = this.templateRootMap.get(itemKey)) != null) {
@@ -194,8 +194,8 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
             } else { // 존재하지 않고, 신규 PG면 uri등록이 필요함
                 if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                     try {
-                        MspTemplateRoot templateRoot =
-                                (MspTemplateRoot) this.getParsedTemplate(itemType, itemId);
+                        MokaTemplateRoot templateRoot =
+                                (MokaTemplateRoot) this.getParsedTemplate(itemType, itemId);
                         PageItem pageItem = (PageItem) templateRoot.getItem();
                         if (pageItem.getString(ItemConstants.PAGE_USE_YN).equals("Y")) {
                             this.uri2ItemMap.put(pageItem.getString(ItemConstants.PAGE_URL),

@@ -16,7 +16,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
-import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 
 /**
  * <pre>
@@ -34,7 +34,7 @@ public class CustomMergeView extends AbstractView {
     private boolean templateMergeDebug;
 
     @Autowired
-    private MspDomainTemplateMerger templateMerger;
+    private MokaDomainTemplateMerger templateMerger;
 
     //    @Autowired
     //    private CacheManager cacheManager;

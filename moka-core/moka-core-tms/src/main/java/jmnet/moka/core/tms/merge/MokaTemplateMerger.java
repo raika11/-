@@ -42,7 +42,7 @@ import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.exception.TmsException;
-import jmnet.moka.core.tms.merge.element.MspAbstractElementMerger;
+import jmnet.moka.core.tms.merge.element.MokaAbstractElementMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
 
@@ -56,7 +56,7 @@ import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
  * @since 2019. 9. 4. 오후 5:59:52
  * @author kspark
  */
-public class MspTemplateMerger implements TemplateMerger<MergeItem> {
+public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
 
     protected static final String CUSTOM_ELEMENT_MERGER_PACKAGE =
             "jmnet.moka.core.tms.merge.element";
@@ -82,11 +82,11 @@ public class MspTemplateMerger implements TemplateMerger<MergeItem> {
     protected boolean onlyHighlight;
     protected boolean esiEnabled;
 
-    private static final Logger logger = LoggerFactory.getLogger(MspTemplateMerger.class);
+    private static final Logger logger = LoggerFactory.getLogger(MokaTemplateMerger.class);
 
-    public MspTemplateMerger(GenericApplicationContext appContext, String domainId,
-            AbstractTemplateLoader templateLoader, DataLoader dataLoader,
-            TemplateLoader<MergeItem> assistantTemplateLoader) {
+    public MokaTemplateMerger(GenericApplicationContext appContext, String domainId,
+                              AbstractTemplateLoader templateLoader, DataLoader dataLoader,
+                              TemplateLoader<MergeItem> assistantTemplateLoader) {
         this.appContext = appContext;
         try {
             this.cacheManager = this.appContext.getBean(CacheManager.class);
@@ -241,9 +241,9 @@ public class MspTemplateMerger implements TemplateMerger<MergeItem> {
                         Constructor<?> constructor = claz.getConstructor(TemplateMerger.class);
                         elementMerger = (ElementMerger) constructor.newInstance(this);
                         // MspAbstractElementMerger를 상속받은 경우만 appContext와 cacheManager를 설정한다.
-                        if (elementMerger instanceof MspAbstractElementMerger) {
-                            MspAbstractElementMerger mspElementMerger =
-                                    (MspAbstractElementMerger) elementMerger;
+                        if (elementMerger instanceof MokaAbstractElementMerger) {
+                            MokaAbstractElementMerger mspElementMerger =
+                                    (MokaAbstractElementMerger) elementMerger;
                             mspElementMerger.setApplicationContext(appContext);
                             mspElementMerger.setCacheManager(cacheManager);
                         }

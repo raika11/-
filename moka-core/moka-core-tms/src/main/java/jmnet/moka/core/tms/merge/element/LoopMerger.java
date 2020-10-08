@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.JSONResult;
@@ -22,7 +23,6 @@ import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateNode;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentAd;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
@@ -156,7 +156,7 @@ public class LoopMerger extends AbstractElementMerger {
             debug("START", element, indent, sb);
 
         JSONResult jsonResult =
-                ((MspTemplateMerger) this.templateMerger).getData(childContext, state.dataId);
+                ((MokaTemplateMerger) this.templateMerger).getData(childContext, state.dataId);
 
         Map<String, String> emptyRow = new HashMap<String, String>(16);
         List<?> dataList = state.getDataList(jsonResult, emptyRow);

@@ -3,6 +3,7 @@ package jmnet.moka.core.tms.merge.element;
 import java.io.IOException;
 
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.Constants;
@@ -13,9 +14,8 @@ import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tms.merge.KeyResolver;
-import jmnet.moka.core.tms.merge.MspTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
-import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
+import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 
 /**
  * <pre>
@@ -26,7 +26,7 @@ import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
  * @since 2019. 9. 4. 오후 4:17:48
  * @author kspark
  */
-public class TpMerger extends MspAbstractElementMerger {
+public class TpMerger extends MokaAbstractElementMerger {
 
 	private static final Logger logger = LoggerFactory.getLogger(TpMerger.class);
 
@@ -36,9 +36,9 @@ public class TpMerger extends MspAbstractElementMerger {
 		logger.debug("{} is Created",this.getClass().getName());
 	}
 	
-    public String makeCacheKey(TemplateElement element, MspTemplateRoot templateRoot,
+    public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
             MergeContext context) {
-        String domainId = ((MspTemplateMerger) this.templateMerger).getDomainId();
+        String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
         String relCp = (String) context.get(MokaConstants.ATTR_REL_CP);
         return KeyResolver.makeTpItemCacheKey(domainId, element.getAttribute("id"),
                 templateRoot.getPageIdForCache(context), templateRoot.getCidForCache(context),
@@ -72,7 +72,7 @@ public class TpMerger extends MspAbstractElementMerger {
             childContext.set(MokaConstants.ATTR_REL_CP, relcp);
         }
 
-        String cacheKey = makeCacheKey(element, (MspTemplateRoot) templateRoot, childContext);
+        String cacheKey = makeCacheKey(element, (MokaTemplateRoot) templateRoot, childContext);
         if (isDebug == false && this.appendCached(KeyResolver.CACHE_TP_MERGE, cacheKey, sb)) {
             return;
         }

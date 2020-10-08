@@ -21,13 +21,13 @@ import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateNode;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tms.merge.KeyResolver;
-import jmnet.moka.core.tms.merge.MspTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.template.parse.model.CpTemplateRoot;
-import jmnet.moka.core.tms.template.parse.model.MspTemplateRoot;
+import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 
-public class PagingMerger extends MspAbstractElementMerger {
+public class PagingMerger extends MokaAbstractElementMerger {
 
 	private static final Logger logger = LoggerFactory.getLogger(PagingMerger.class);
 	private static final String MERGE_PREV = "prev";
@@ -52,7 +52,7 @@ public class PagingMerger extends MspAbstractElementMerger {
     }
 
     @Override
-    public String makeCacheKey(TemplateElement element, MspTemplateRoot templateRoot,
+    public String makeCacheKey(TemplateElement element, MokaTemplateRoot templateRoot,
             MergeContext context) {
         return "Not_Implemented";
     }
@@ -191,7 +191,7 @@ public class PagingMerger extends MspAbstractElementMerger {
             throws TemplateParseException, TemplateLoadException {
         CpTemplateRoot cpTemplateRoot = null;
         if (relCp != null) {
-            cpTemplateRoot = (CpTemplateRoot) ((MspTemplateMerger) this.templateMerger)
+            cpTemplateRoot = (CpTemplateRoot) ((MokaTemplateMerger) this.templateMerger)
                     .getParsedTemplate(MokaConstants.ITEM_COMPONENT, relCp);
         }
         return cpTemplateRoot;
@@ -217,7 +217,7 @@ public class PagingMerger extends MspAbstractElementMerger {
         } catch (DataLoadException | ParseException | TemplateParseException
                 | TemplateLoadException e) {
             logger.warn("DataLoad Fail: {} - component : {} {} {}",
-                    ((MspTemplateMerger) this.templateMerger).getDomainId(),
+                    ((MokaTemplateMerger) this.templateMerger).getDomainId(),
                     MokaConstants.ITEM_COMPONENT, relCp, e.getMessage());
         }
         return jsonResult;

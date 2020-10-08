@@ -15,7 +15,7 @@ import org.springframework.ui.Model;
 import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.ItemConstants;
-import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
@@ -39,7 +39,7 @@ public class CustomMergeHandler {
     private DomainResolver domainResolver;
 	
     @Autowired
-    private MspDomainTemplateMerger domainTemplateMerger;
+    private MokaDomainTemplateMerger domainTemplateMerger;
 
     @Autowired
     private HttpParamFactory httpParamFactory;

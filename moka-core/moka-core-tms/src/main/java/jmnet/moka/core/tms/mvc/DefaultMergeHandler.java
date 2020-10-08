@@ -17,7 +17,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
-import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
@@ -47,7 +47,7 @@ public class DefaultMergeHandler {
     private DomainResolver domainResolver;
 	
     @Autowired
-    private MspDomainTemplateMerger domainTemplateMerger;
+    private MokaDomainTemplateMerger domainTemplateMerger;
 	
 	public String merge(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
         // 머지 옵션설정

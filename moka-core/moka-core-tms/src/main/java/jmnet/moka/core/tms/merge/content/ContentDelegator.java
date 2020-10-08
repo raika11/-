@@ -14,7 +14,7 @@ import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.exception.TmsException;
-import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ContentSkinItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
@@ -34,11 +34,11 @@ public class ContentDelegator {
 
     private ApiHttpProxyFactory apiHttpProxyFactory;
 
-    private MspDomainTemplateMerger templateMerger;
+    private MokaDomainTemplateMerger templateMerger;
 
 
     @Autowired
-    public ContentDelegator(DomainResolver domainResolver, MspDomainTemplateMerger templateMerger,
+    public ContentDelegator(DomainResolver domainResolver, MokaDomainTemplateMerger templateMerger,
             ApiHttpProxyFactory apiHttpProxyFactory) {
         this.domainResolver = domainResolver;
         this.templateMerger = templateMerger;

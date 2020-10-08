@@ -21,7 +21,7 @@ import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.exception.TmsException;
-import jmnet.moka.core.tms.merge.MspPreviewTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.DpsDomainResolver;
@@ -104,7 +104,7 @@ public class PreviewConfiguration {
 
     @Bean
     @Scope("prototype")
-    public MspPreviewTemplateMerger previewTemplateMerger(DomainItem domainItem)
+    public MokaPreviewTemplateMerger previewTemplateMerger(DomainItem domainItem)
             throws IOException {
         // AbstractTemplateLoader assistantTemplateLoader =
         // this.appContext.getBean(AbstractTemplateLoader.class, defaultTemplateDomain);
@@ -121,15 +121,15 @@ public class PreviewConfiguration {
         AbstractTemplateLoader templateLoader =
                 (AbstractTemplateLoader) this.appContext.getBean("templateLoader", domainId);
         DomainResolver domainResolver = this.appContext.getBean(DomainResolver.class);
-        MspPreviewTemplateMerger ptm = new MspPreviewTemplateMerger(this.appContext, domainItem,
+        MokaPreviewTemplateMerger ptm = new MokaPreviewTemplateMerger(this.appContext, domainItem,
                 domainResolver, templateLoader, httpProxyDataLoader, assistantTemplateLoader);
         return ptm;
     }
 
     @Bean
     @Scope("prototype")
-    public MspPreviewTemplateMerger previewWorkTemplateMerger(DomainItem domainItem,
-            String workerId, Long editionSeq, List<String> componentIdList) throws IOException {
+    public MokaPreviewTemplateMerger previewWorkTemplateMerger(DomainItem domainItem,
+                                                               String workerId, Long editionSeq, List<String> componentIdList) throws IOException {
         // AbstractTemplateLoader assistantTemplateLoader =
         // this.appContext.getBean(AbstractTemplateLoader.class, defaultTemplateDomain);
         AbstractTemplateLoader assistantTemplateLoader = (AbstractTemplateLoader) this.appContext
@@ -144,7 +144,7 @@ public class PreviewConfiguration {
         AbstractTemplateLoader templateLoader = (AbstractTemplateLoader) this.appContext
                 .getBean("workTemplateLoader", domainId, workerId, componentIdList);
         DomainResolver domainResolver = this.appContext.getBean(DomainResolver.class);
-        MspPreviewTemplateMerger ptm = new MspPreviewTemplateMerger(this.appContext, domainItem,
+        MokaPreviewTemplateMerger ptm = new MokaPreviewTemplateMerger(this.appContext, domainItem,
                 domainResolver, templateLoader, httpProxyDataLoader, assistantTemplateLoader,
                 workerId, editionSeq);
         return ptm;

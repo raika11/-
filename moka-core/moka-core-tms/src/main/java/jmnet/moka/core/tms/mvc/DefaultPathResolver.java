@@ -15,7 +15,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
-import jmnet.moka.core.tms.merge.MspDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.content.ContentDelegator;
 import jmnet.moka.core.tms.merge.item.ContentSkinItem;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
@@ -36,14 +36,14 @@ public class DefaultPathResolver {
 	public final transient Logger logger = LoggerFactory.getLogger(getClass());
 	
     private DomainResolver domainResolver;
-    private MspDomainTemplateMerger domainTemplateMerger;
+    private MokaDomainTemplateMerger domainTemplateMerger;
     private ContentDelegator contentDelegator;
 
     private List<String> mergeItemList;
 
     @Autowired
     public DefaultPathResolver(DomainResolver domainResolver,
-            MspDomainTemplateMerger domainTemplateMerger, ContentDelegator contentDelegator) {
+                               MokaDomainTemplateMerger domainTemplateMerger, ContentDelegator contentDelegator) {
         this.domainResolver = domainResolver;
         this.domainTemplateMerger = domainTemplateMerger;
         this.contentDelegator = contentDelegator;

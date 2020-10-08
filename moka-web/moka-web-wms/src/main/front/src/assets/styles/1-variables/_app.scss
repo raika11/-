@@ -1,12 +1,11 @@
 // Fonts
-$font-family-sans-serif: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', 'Segoe UI',
-    'Helvetica Neue', Arial, sans-serif !default;
+$font-family-sans-serif: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif !default;
 $font-weight-light: 300 !default;
 $font-weight-normal: 400 !default;
 $font-weight-bold: 600 !default;
-$font-size-base: 0.875rem !default;
+$font-size-base: .875rem !default;
 $font-size-lg: 1rem !default;
-$font-size-sm: 0.75rem !default;
+$font-size-sm: .75rem !default;
 $headings-font-weight: 600 !default;
 
 // Spacer
@@ -50,7 +49,7 @@ $container-max-widths: (
 $enable-validation-icons: false !default;
 
 // Transitions
-$transition-base: all 0.35s ease-in-out !default;
+$transition-base: all .35s ease-in-out !default;
 
 // Theme colors
 $blue: #5b7dff !default;
@@ -78,49 +77,49 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
 
-$primary: $orange !default;
-$secondary: $pink !default;
-$tertiary: $green !default;
-$success: $green !default;
-$info: $blue !default;
-$warning: $yellow !default;
-$danger: $red !default;
-$light: $gray-100 !default;
-$dark: #354052 !default;
+$primary:          $cyan !default;
+$secondary:        $pink !default;
+$tertiary:         $green !default;
+$success:          $green !default;
+$info:             $blue !default;
+$warning:          $yellow !default;
+$danger:           $red !default;
+$light:            $gray-100 !default;
+$dark:             #354052 !default;
 
 $theme-colors: (
-    'primary': $primary,
-    'secondary': $secondary,
-    'tertiary': $tertiary,
-    'success': $success,
-    'info': $info,
-    'warning': $warning,
-    'danger': $danger,
-    'light': $light,
-    'dark': $dark,
-    // 색상별 테마 추가
-    'white': $white,
+	"primary": $primary,
+	"secondary": $secondary,
+	"tertiary": $tertiary,
+	"success": $success,
+	"info": $info,
+	"warning": $warning,
+	"danger": $danger,
+	"light": $light,
+	"dark": $dark,
+	// 색상별 테마
+	'white': $white,
     'orange': $orange,
     'gray150': $gray-150
 ) !default;
 
 // Social colors
 $social-colors: (
-    'facebook': #3b5998,
-    'twitter': #1da1f2,
-    'google': #dc4e41,
-    'youtube': #f00,
-    'vimeo': #1ab7ea,
-    'dribbble': #ea4c89,
-    'github': #181717,
-    'instagram': #e4405f,
-    'pinterest': #bd081c,
-    'flickr': #0063dc,
-    'bitbucket': #0052cc
+	"facebook": #3b5998,
+	"twitter": #1da1f2,
+	"google": #dc4e41,
+	"youtube": #f00,
+	"vimeo": #1ab7ea,
+	"dribbble": #ea4c89,
+	"github": #181717,
+	"instagram": #e4405f,
+	"pinterest": #bd081c,
+	"flickr": #0063dc,
+	"bitbucket": #0052cc
 ) !default;
 
 // Body
-$body-bg: $gray-160 !default;
+$body-bg: #F5F9FC !default;
 $body-color: $gray-700 !default;
 
 // Common
@@ -145,29 +144,28 @@ $text-muted: lighten($gray-600, 3);
 
 // Progress
 $progress-height: 1rem !default;
-$progress-height-sm: 0.5rem !default;
+$progress-height-sm: .5rem !default;
 $progress-height-lg: 1.5rem !default;
 
 // Shadows
-$box-shadow-sm: 0 0.05rem 0.2rem rgba(0, 0, 0, 0.05) !default;
-$box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.05) !default;
-$box-shadow-lg: 0 0.2rem 0.2rem rgba(0, 0, 0, 0.05) !default;
+$box-shadow-sm:    0 0.05rem 0.2rem rgba(0, 0, 0, .05) !default;
+$box-shadow:       0 0.1rem 0.2rem rgba(0, 0, 0, .05) !default;
+$box-shadow-lg:    0 0.2rem 0.2rem rgba(0, 0, 0, .05) !default;
 
 // Border radius
-$border-radius-sm: 0.1rem !default;
-$border-radius: 0.2rem !default;
-$border-radius-lg: 0.3rem !default;
+$border-radius-sm: .1rem !default;
+$border-radius:    .2rem !default;
+$border-radius-lg: .3rem !default;
 
 // Navbar
-$navbar-height: 56px !default;
-$navbar-padding-y: $spacer * 0.875 !default;
-$navbar-padding-x: $spacer * 1.25 !default;
-$navbar-nav-link-padding-x: 0.5rem !default;
-$navbar-border-bottom: 1px solid $gray-300 !default;
-$navbar-box-shadow: 0 0 2rem 0 rgba($dark, 0.1) !default;
+$navbar-padding-y: $spacer*0.875 !default;
+$navbar-padding-x: $spacer*1.25 !default;
+$navbar-nav-link-padding-x: .5rem !default;
+$navbar-border-bottom: 0 !default;
+$navbar-box-shadow: 0 0 2rem 0 rgba($dark, .1) !default;
 
 // Navbar brand
-$navbar-brand-padding-y: $spacer * 0.875 !default;
+$navbar-brand-padding-y: $spacer*0.875 !default;
 $navbar-brand-padding-x: 0 !default;
 $navbar-brand-color: $gray-100 !default;
 $navbar-brand-font-weight: $font-weight-bold !default;
@@ -175,8 +173,8 @@ $navbar-brand-font-size: 1.15rem !default;
 $navbar-brand-icon-color: $primary !default;
 
 // Alerts
-$alert-padding-y: 0.95rem !default;
-$alert-padding-x: 0.95rem !default;
+$alert-padding-y: .95rem !default;
+$alert-padding-x: .95rem !default;
 $alert-border-width: 0 !default;
 $alert-bg-level: 0 !default;
 
@@ -186,13 +184,13 @@ $input-disabled-bg: $gray-200 !default;
 $input-color: $gray-700 !default;
 $input-btn-border-width: $border-width !default;
 $input-btn-line-height: $line-height-base !default;
-$input-btn-line-height-sm: $line-height-sm !default;
+$input-btn-line-height-sm:    $line-height-sm !default;
 $input-btn-line-height-lg: $line-height-lg !default;
-$input-btn-focus-width: 0.2rem !default;
-$input-btn-padding-y: 0.25rem !default;
-$input-btn-padding-y-sm: 0.15rem !default;
-$input-btn-padding-y-lg: 0.35rem !default;
-$input-btn-padding-x: 0.7rem !default;
+$input-btn-focus-width: .2rem !default;
+$input-btn-padding-y: .25rem !default;
+$input-btn-padding-y-sm: .15rem !default;
+$input-btn-padding-y-lg: .35rem !default;
+$input-btn-padding-x: .7rem !default;
 $input-btn-font-size-lg: $font-size-lg !default;
 $input-border-width: $input-btn-border-width !default;
 $input-height-border: $input-border-width * 2 !default;
@@ -210,18 +208,16 @@ $custom-control-indicator-disabled-bg: $gray-200 !default;
 // Dropdowns
 $dropdown-link-color: $gray-700 !default;
 $dropdown-link-hover-bg: $gray-100 !default;
-$dropdown-item-padding-y: 0.35rem !default;
+$dropdown-item-padding-y: .35rem !default;
 $dropdown-item-padding-x: 1.5rem !default;
 
 // Cards
-$card-spacer-x: 20px !default;
-$card-spacer-y: 20px !default;
-$card-border-radius: 0 !default;
+$card-border-radius: .25rem !default;
 $card-inner-border-radius: $card-border-radius !default;
-$card-border-width: 1px !default;
-$card-border-color: $gray-160 !default;
+$card-border-width: 0 !default;
+$card-border-color: transparent !default;
 $card-cap-bg: $white !default;
-$card-shadow: 0 0 0.875rem 0 rgba($dark, 0.05) !default;
+$card-shadow: 0 0 .875rem 0 rgba($dark, 0.05) !default;
 $card-title-font-weight: $font-weight-bold !default;
 $card-title-color: $gray-700 !default;
 
@@ -229,9 +225,9 @@ $card-title-color: $gray-700 !default;
 $table-accent-bg: $gray-100 !default;
 
 // Sidebar general
-$sidebar-width: 220px !default;
-$sidebar-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out !default;
-$sidebar-bg: #30211c !default;
+$sidebar-width: 260px !default;
+$sidebar-transition: margin-left .35s ease-in-out, left .35s ease-in-out !default;
+$sidebar-bg: $dark !default;
 $sidebar-border: 0 !default;
 
 // Sidebar brand
@@ -249,31 +245,30 @@ $sidebar-header-text-transform: none !default;
 $sidebar-header-font-size: $font-size-sm !default;
 
 // Sidebar link
-$sidebar-link-padding: 0.7rem 1rem !default;
+$sidebar-link-padding: .7rem 1.5rem !default;
 $sidebar-link-font-weight: 400 !default;
 $sidebar-link-color: rgba($white, 0.7) !default;
 $sidebar-link-bg: $sidebar-bg !default;
-$sidebar-link-hover-color: rgba($white, 1) !default;
-$sidebar-link-hover-bg: $orange !default;
+$sidebar-link-hover-color: rgba($white, 0.9) !default;
+$sidebar-link-hover-bg: darken($sidebar-bg, 4) !default;
 $sidebar-link-hover-font-weight: $font-weight-normal !default;
 $sidebar-link-active-color: $sidebar-link-hover-color !default;
-$sidebar-link-active-bg: $orange !default;
+$sidebar-link-active-bg: darken($sidebar-bg, 4) !default;
 $sidebar-link-active-font-weight: $font-weight-normal !default;
 
 // Sidebar child link
-$sidebar-link-child-padding: 0.55rem 1.5rem 0.55rem 2.80rem !default;
+$sidebar-link-child-padding: .55rem 1.5rem .55rem 3.55rem !default;
 $sidebar-link-child-font-weight: 400 !default;
 $sidebar-link-child-color: rgba($white, 0.55) !default;
-$sidebar-link-child-bg: darken($sidebar-bg, 0) !default;
-$sidebar-link-child-hover-color: rgba($white, 1) !default;
-$sidebar-link-child-hover-bg: $orange !default;
+$sidebar-link-child-bg: darken($sidebar-bg, 2) !default;
+$sidebar-link-child-hover-color: rgba($white, 0.9) !default;
+$sidebar-link-child-hover-bg: darken($sidebar-bg, 4) !default;
 $sidebar-link-child-active-color: $sidebar-link-child-hover-color !default;
-$sidebar-link-child-active-bg: darken($sidebar-bg, 0) !default;
-$sidebar-link-child-collapse-bg: #21181c !default;
+$sidebar-link-child-active-bg: darken($sidebar-bg, 4) !default;
 
 // Sidebar child link nested
-$sidebar-link-child-second-padding: 0.55rem 1.5rem 0.55rem 2.80rem !default;
-$sidebar-link-child-third-padding: 0.55rem 1.5rem 0.55rem 2.80rem !default;
+$sidebar-link-child-second-padding: .55rem 1.5rem .55rem 4.3rem !default;
+$sidebar-link-child-third-padding: .55rem 1.5rem .55rem 5.05rem !default;
 
 // Sidebar link icon
 $sidebar-link-icon-color: $white !default;
@@ -285,9 +280,9 @@ $sidebar-bottom-color: $gray-200 !default;
 $sidebar-bottom-bg: darken($sidebar-bg, 2) !default;
 
 // Transitions
-$transition-appearance: background 0.4s ease-in-out, color 0.4s ease-in-out !default;
-$transition-appearance-slow: background 0.6s ease-in-out, color 0.6s ease-in-out !default;
-$transition-appearance-fast: background 0.1s ease-in-out, color 0.1s ease-in-out !default;
+$transition-appearance: background .4s ease-in-out, color .4s ease-in-out !default;
+$transition-appearance-slow: background .6s ease-in-out, color .6s ease-in-out !default;
+$transition-appearance-fast: background .1s ease-in-out, color .1s ease-in-out !default;
 
 // Modals
 $modal-content-border-width: 0 !default;
@@ -297,11 +292,11 @@ $modal-xl: 1140px !default;
 $modal-lg: 900px !default;
 $modal-md: 600px !default;
 $modal-sm: 400px !default;
-$modal-transition: transform 0.25s ease-out !default;
+$modal-transition: transform .25s ease-out !default;
 
 // Tabs
 $tab-content-padding: $spacer * 1.25 !default;
-$tab-content-box-shadow: 0 0.2rem 0.1rem -0.1rem rgba(0, 0, 0, 0.15) !default;
+$tab-content-box-shadow: 0 0.2rem 0.1rem -0.1rem rgba(0,0,0,0.15) !default;
 $tab-content-border-radius: 0 0 $border-radius $border-radius !default;
 $tab-link-color: $gray-800 !default;
 $tab-link-padding: ($spacer * 0.75) $spacer !default;
@@ -311,25 +306,25 @@ $tab-link-active-bg: $white !default;
 
 // Badges
 $badge-font-size: 80% !default;
-$badge-padding-y: 0.3em !default;
-$badge-padding-x: 0.45em !default;
-$badge-pill-padding-x: 0.65em !default;
+$badge-padding-y: .3em !default;
+$badge-padding-x: .45em !default;
+$badge-pill-padding-x: .65em !default;
 
 // Breadcrumbs
 $breadcrumb-bg: $gray-200 !default;
 
 // Pagination
-$pagination-padding-y: 0.3rem !default;
-$pagination-padding-x: 0.75rem !default;
-$pagination-padding-y-sm: 0.15rem !default;
-$pagination-padding-x-sm: 0.5rem !default;
-$pagination-padding-y-lg: 0.35rem !default;
+$pagination-padding-y: .3rem !default;
+$pagination-padding-x: .75rem !default;
+$pagination-padding-y-sm: .15rem !default;
+$pagination-padding-x-sm: .5rem !default;
+$pagination-padding-y-lg: .35rem !default;
 $pagination-padding-x-lg: 1rem !default;
 $pagination-color: $gray-600 !default;
 $pagination-hover-color: $gray-800 !default;
 
 // Content
-$content-padding: 40px 24px !default;
+$content-padding: 2.5rem 2.5rem 1.5rem !default;
 
 // Datetimepicker
 $bs-datetimepicker-active-bg: $primary !default;

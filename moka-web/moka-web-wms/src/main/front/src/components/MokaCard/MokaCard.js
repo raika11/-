@@ -44,7 +44,6 @@ const defaultProps = {
  */
 const MokaCard = (props) => {
     const { className, width, height, title, children, foldable } = props;
-    console.log(width);
 
     return foldable ? (
         <MokaFoldableCard {...props}>{children}</MokaFoldableCard>

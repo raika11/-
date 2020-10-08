@@ -1,22 +1,9 @@
-/** ------------------------------
-* 사이드바 기본 스타일(appStack)
-* -------------------------------- */
 .sidebar {
   min-width: $sidebar-width;
   max-width: $sidebar-width;
-  height: 100vh;
   transition: $sidebar-transition;
   background: $sidebar-bg;
   border-right: $sidebar-border;
-  z-index: 2;
-
-  &.toggled {
-    margin-left: -$sidebar-width;
-
-    .sidebar-content {
-      left: -$sidebar-width;
-    }
-  }
 }
 
 .sidebar-content {
@@ -35,8 +22,7 @@
 
   .sidebar-content {
     height: 100vh;
-    max-height: $max-height;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: $sidebar-width;
@@ -102,6 +88,9 @@ a.sidebar-link {
 
 .sidebar-item.active > .sidebar-link,
 .sidebar-item.active .sidebar-link:hover {
+  color: $sidebar-link-active-color;
+  background: $sidebar-link-active-bg;
+
   i,
   svg {
     color: $sidebar-link-icon-active-color;
@@ -109,16 +98,11 @@ a.sidebar-link {
   }
 }
 
-.sidebar-item.active > .sidebar-link.active {
-  color: $sidebar-link-active-color;
-  background: $sidebar-link-active-bg;
-}
-
 // Children
 .sidebar-dropdown .sidebar-link {
   padding: $sidebar-link-child-padding;
   color: $sidebar-link-child-color;
-  background: inherit;
+  background: $sidebar-link-child-bg;
   font-weight: $sidebar-link-child-font-weight;
 }
 
@@ -128,25 +112,10 @@ a.sidebar-link {
   font-weight: $sidebar-link-hover-font-weight;
 }
 
-.sidebar-dropdown .sidebar-item.active {
-  .sidebar-link.active {
-    color: $sidebar-link-child-active-color;
-    background: $sidebar-link-active-bg;
-    font-weight: $sidebar-link-active-font-weight;
-  }
-
-  // collapse children
-  [aria-expanded="true"] {
-    background-color: $sidebar-link-child-collapse-bg;
-
-    &:hover {
-      background: $sidebar-link-child-hover-bg;
-    }
-    
-    & ~ div.collapse {
-      background-color: $sidebar-link-child-collapse-bg;
-    }
-  }
+.sidebar-dropdown .sidebar-item.active .sidebar-link {
+  color: $sidebar-link-child-active-color;
+  background: $sidebar-link-child-active-bg;
+  font-weight: $sidebar-link-active-font-weight;
 }
 
 // Chevron
@@ -163,7 +132,7 @@ a.sidebar-link {
   transform: rotate(45deg);
   position: absolute;
   top: 1.2rem;
-  right: 1rem;
+  right: 1.5rem;
   transition: all .2s ease-out;
 }
 
@@ -214,6 +183,55 @@ a.sidebar-link {
   cursor: pointer;
   width: 26px;
   height: 26px;
+}
+
+.sidebar {
+  &.toggled {
+    margin-left: -$sidebar-width;
+
+    .sidebar-content {
+      left: -$sidebar-width;
+    }
+  }
+
+  // Workaround for IE bug, more info:
+  // https://stackoverflow.com/a/25850649
+  @media (min-width: 1px) and (max-width: #{map-get($grid-breakpoints, 'lg') - .02px}) {
+
+    // Sidebar default state (on mobile)
+    margin-left: -$sidebar-width;
+
+    .sidebar-content {
+      left: -$sidebar-width;
+    }
+
+    // Sidebar toggled state (on mobile)
+    &.toggled {
+      margin-left: 0;
+
+      .sidebar-content {
+        left: 0;
+      }
+    }
+
+    // Sidebar collapsed state (on mobile)
+    // layouts-sidebar-collapsed.html
+    &-collapsed {
+      margin-left: 0;
+
+      .sidebar-content {
+        left: 0;
+      }
+
+      &.toggled {
+        margin-left: -$sidebar-width;
+
+        .sidebar-content {
+          left: -$sidebar-width;
+        }
+      }
+    }
+  }
 }
 
 // Sidebar header

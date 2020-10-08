@@ -1,5 +1,5 @@
 config/*
 node_modules/*
 src/serviceWorker.js
-src/assets/scss/*
+src/assets/styles/*
 public/index.html

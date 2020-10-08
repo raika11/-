@@ -1,0 +1,102 @@
+/* -----------------------
+* body
+* ---------------------- */
+body {
+    min-width: $min-width;
+    max-width: $max-width;
+    height: 100vh;
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.gap {
+    margin-right: 10px;
+}
+
+.custom-scroll {
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: $gray-310;
+        margin:0 0;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: $gray-650;
+        border-radius: 3px;
+    }
+    &::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+    }
+}
+
+/* -----------------------
+* sidebar
+* ---------------------- */
+.sidebar-sticky .sidebar-content {
+    position: absolute;
+}
+
+/* -----------------------
+* card
+* ---------------------- */
+.card {
+    &.fold {
+        .card-header {
+            padding-left: 0px;
+            padding-right: 0px;
+            justify-content: center !important;
+        }
+    }
+}
+
+/* -----------------------
+* card-tab
+* ---------------------- */
+.card-tab {
+    box-shadow: $card-shadow;
+    background-color: $white;
+    border-radius: $card-border-width solid $card-border-color;
+    @include border-radius($card-border-radius);
+
+    .nav-tabs {
+        padding: 0 $card-spacer-x;
+        width: 100%;
+    }
+
+    .nav-item .nav-link {
+        border-bottom: 2px solid $gray-300;
+
+        &.active {
+        border-color: $orange;
+        }
+    }
+
+    .tab-content {
+        background: inherit;
+        box-shadow: unset;
+        border-radius: unset;
+        width: 100%;
+    }
+}
+  
+/* -----------------------
+* card-toggle-tab
+* ---------------------- */
+.card-toggle-tab {
+    margin-bottom: 0px;
+
+    .tab-content {
+        .card {
+        width: 100%;
+        height: 100%;
+        }
+    }
+
+    >.card {
+        margin-bottom: 0px;
+        width: 48px;
+    }
+}

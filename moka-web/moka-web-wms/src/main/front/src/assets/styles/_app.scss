@@ -28,7 +28,6 @@
 @import '3-components/footer';
 @import '3-components/forms';
 @import '3-components/hamburger';
-@import '3-components/input-group';
 @import '3-components/landing';
 @import '3-components/modal';
 @import '3-components/navbar';
@@ -47,20 +46,18 @@
 @import '3-components/ie';
 
 // Theme utilities
-@import '4-utilities/body';
 @import '4-utilities/borders';
 @import '4-utilities/cursors';
 @import '4-utilities/font';
 @import '4-utilities/overflow';
 @import '4-utilities/position';
-@import '4-utilities/other';
 
 // 3rd party plugins
-// @import "react-quill/dist/quill.bubble";
-// @import "react-quill/dist/quill.snow";
 @import 'react-redux-toastr/src/styles/index';
 @import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min';
 @import 'react-resizable/css/styles';
+// @import "react-quill/dist/quill.bubble";
+// @import "react-quill/dist/quill.snow";
 // @import "jvectormap-next/jquery-jvectormap";
 // @import "react-dragula/dist/dragula";
 // @import "@fullcalendar/bootstrap/main";
@@ -68,16 +65,17 @@
 // @import "smartwizard/dist/css/smart_wizard_theme_arrows";
 
 // 3rd party plugin styles
-// @import '5-vendor/fullcalendar';
 @import '5-vendor/perfect-scrollbar';
-// @import '5-vendor/quill';
 @import '5-vendor/react-bootstrap-table';
 @import '5-vendor/react-datetime';
 @import '5-vendor/react-select';
 @import '5-vendor/toastr';
 @import '5-vendor/ag-grid';
 @import '5-vendor/react-dropzone';
+// @import '5-vendor/fullcalendar';
+// @import '5-vendor/quill';
 // @import '5-vendor/wizard';
 
-// non responsive
+// 서울시스템 추가
 @import 'non_responsive';
+@import 'custom';

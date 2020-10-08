@@ -1,74 +1,12 @@
 @each $color, $value in $theme-colors {
-    .modal-#{$color} {
-        @include modal-variant($value);
-    }
-}
-
-.modal-dialog {
-    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14),
-        0px 9px 46px 8px rgba(0, 0, 0, 0.12);
-    border-radius: 7px;
-    // margin: 32px;
-    &.react-draggable {
-        .modal-header {
-            cursor: move;
-        }
-    }
+  .modal-#{$color} {
+    @include modal-variant($value);
+  }
 }
 
 .modal-colored {
-    .modal-header,
-    .modal-footer {
-        border-color: rgba(255, 255, 255, 0.33);
-    }
-}
-
-.modal-header {
-    position: relative;
-    .close {
-        outline: none;
-    }
-    #draggable-handle {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 35px;
-    }
-}
-
-.code-modal {
-    .card {
-        width: 266px;
-        height: 423px;
-        overflow: hidden;
-        box-shadow: unset;
-        border: 1px solid $list-group-border-color;
-        @include border-radius(0);
-
-        .card-header {
-            height: 38px;
-            text-align: center;
-            background-color: $list-group-border-color;
-
-            &:first-child {
-                @include border-radius(0);
-            }
-        }
-
-        .list-group {
-            height: calc(100% - 38px);
-            overflow-y: scroll;
-
-            > .list-group-item {
-                .custom-control label {
-                    width: 100%;
-                    cursor: pointer;
-                }
-                &:last-child {
-                    border-bottom-width: 1px;
-                }
-            }
-        }
-    }
+  .modal-header,
+  .modal-footer {
+    border-color: rgba(255, 255, 255, 0.33)
+  }
 }

@@ -11,20 +11,20 @@ import { faNewspaper } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faAd } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faHistory } from '@moka/fontawesome-pro-solid-svg-icons';
 
-import { MokaCardEditor, MokaCardToggleTabs, MokaFoldableCard } from '@components';
+import { MokaCardEditor, MokaCardToggleTabs, MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 const PageList = React.lazy(() => import('./PageList'));
 const PageEdit = React.lazy(() => import('./PageEdit'));
 
-// relation
-const PageChildPageList = React.lazy(() => import('./relation/PageChildPageList'));
-const PageChildContainerList = React.lazy(() => import('./relation/PageChildContainerList'));
-const PageChildContentsSkinList = React.lazy(() => import('./relation/PageChildContentsSkinList'));
-const PageChildComponentList = React.lazy(() => import('./relation/PageChildComponentList'));
-const PageChildTemplateList = React.lazy(() => import('./relation/PageChildTemplateList'));
-const PageChildAdList = React.lazy(() => import('./relation/PageChildAdList'));
-const PageHistoryList = React.lazy(() => import('./relation/PageHistoryList'));
+// relations
+const PageChildPageList = React.lazy(() => import('./relations/PageChildPageList'));
+const PageChildContainerList = React.lazy(() => import('./relations/PageChildContainerList'));
+const PageChildContentsSkinList = React.lazy(() => import('./relations/PageChildContentsSkinList'));
+const PageChildComponentList = React.lazy(() => import('./relations/PageChildComponentList'));
+const PageChildTemplateList = React.lazy(() => import('./relations/PageChildTemplateList'));
+const PageChildAdList = React.lazy(() => import('./relations/PageChildAdList'));
+const PageHistoryList = React.lazy(() => import('./relations/PageHistoryList'));
 
 /**
  * 페이지 관리
@@ -87,11 +87,11 @@ const Page = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaFoldableCard className="mr-10" title="페이지관리" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[0]} onExpansion={handleListExpansion}>
+            <MokaCard className="mr-10" title="페이지관리" foldable height={CARD_DEFAULT_HEIGHT} expansion={expansionState[0]} onExpansion={handleListExpansion}>
                 <Suspense>
                     <PageList />
                 </Suspense>
-            </MokaFoldableCard>
+            </MokaCard>
 
             {/* 에디터 */}
             <MokaCardEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />

@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -49,23 +50,19 @@ const PageChildTemplateList = () => {
                             <MokaSearchInput />
                         </Col>
                     </Form.Group>
-                    <Form.Group className="d-flex mb-10">
-                        <Nav as="ul" className="mr-auto" variant="pills" defaultActiveKey="1">
-                            <Nav.Item as="li" className="p-0 mb-0 border rounded-0 border-0">
-                                <Nav.Link eventKey="1" as={Button} variant="gray150">
-                                    <FontAwesomeIcon icon={faThList} />
-                                </Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item as="li" className="p-0 mb-0 border rounded-0 border-0" variant="gray150">
-                                <Nav.Link eventKey="2" as={Button} variant="gray150">
-                                    <FontAwesomeIcon icon={faThLarge} />
-                                </Nav.Link>
-                            </Nav.Item>
+                    <div className="d-flex mb-10">
+                        <Nav as={ButtonGroup} size="sm" className="mr-auto" defaultActiveKey="1">
+                            <Nav.Link eventKey="1" as={Button} variant="gray150">
+                                <FontAwesomeIcon icon={faThList} />
+                            </Nav.Link>
+                            <Nav.Link eventKey="2" as={Button} variant="gray150">
+                                <FontAwesomeIcon icon={faThList} />
+                            </Nav.Link>
                         </Nav>
                         <div className="pt-0">
                             <Button variant="dark">템플릿 추가</Button>
                         </div>
-                    </Form.Group>
+                    </div>
                 </Form>
 
                 {/* <Tab></Tab> */}

@@ -108,11 +108,5 @@
   >.card {
     margin-bottom: 0px;
     width: 48px;
-    
-    .btn-gray150.active {
-      background-color: $gray-650;
-      @include button-color($white);
-      @include button-color-hover($white);
-    }
   }
 }

@@ -6,4 +6,4 @@ export { MokaPrependLinkInput, MokaSearchInput } from './MokaInput';
 export { default as MokaAlert } from './MokaAlert';
 export { MokaCardTabs, MokaCardToggleTabs } from './MokaTabs';
 export { MokaCardEditor } from './MokaEditor';
-export { MokaFoldableCard } from './MokaCard';
+export { default as MokaCard, MokaFoldableCard } from './MokaCard';

@@ -32,11 +32,14 @@ const propTypes = {
      */
     children: PropTypes.element.isRequired,
     /**
-     * 확장 여부
+     * 컴포넌트를 접고 펼 수 있을 때,
+     * 확장여부를 직접 제어하려는 경우 사용한다.
+     * 확장여부 state(true | false)
      */
     expansion: PropTypes.bool,
     /**
-     * 확장 버튼 클릭 콜백
+     * 컴포넌트를 접고 펼 수 있을 때,
+     * 확장 여부를 직접 제어하려는 경우 사용한다.
      */
     onExpansion: PropTypes.func,
 };
@@ -50,10 +53,10 @@ const defaultProps = {
 
 const MokaFoldableCard = (props) => {
     const { className, width, height, title, children, expansion, onExpansion } = props;
-    const [isExpand, setIsExpand] = useState(true);
+    const [localExpandState, setLocalExpandState] = useState(true);
 
     useEffect(() => {
-        setIsExpand(expansion);
+        setLocalExpandState(expansion);
     }, [expansion]);
 
     /**
@@ -64,27 +67,26 @@ const MokaFoldableCard = (props) => {
         e.stopPropagation();
 
         if (onExpansion) {
-            onExpansion(!isExpand);
+            onExpansion(!localExpandState);
         } else {
-            setIsExpand(!isExpand);
+            setLocalExpandState(!localExpandState);
         }
     };
 
     return (
-        <Card className={clsx('flex-shrink-0', className, { fold: !isExpand })} style={{ width: isExpand ? width : CARD_FOLDING_WIDTH, height }}>
-            {/* 카드 헤더 */}
+        <Card className={clsx('flex-shrink-0', className, { fold: !localExpandState })} style={{ width: localExpandState ? width : CARD_FOLDING_WIDTH, height }}>
             <Card.Header className="d-flex justify-content-between align-item-center">
-                <Card.Title className={clsx({ 'd-none': !isExpand })}>{title}</Card.Title>
+                {/* 타이틀 */}
+                <Card.Title className={clsx({ 'd-none': !localExpandState })}>{title}</Card.Title>
+                {/* 접는 버튼 */}
                 <div className="d-flex align-items-center">
-                    {/* 접는 버튼 */}
                     <Button variant="white" className="p-0 float-right" onClick={handleExpansion}>
-                        <FontAwesomeIcon icon={faAngleDoubleLeft} rotation={isExpand ? 0 : 180} />
+                        <FontAwesomeIcon icon={faAngleDoubleLeft} rotation={localExpandState ? 0 : 180} />
                     </Button>
                 </div>
             </Card.Header>
 
-            {/* 카드 본문 */}
-            <Card.Body className={clsx({ 'd-none': !isExpand })}>{children}</Card.Body>
+            <Card.Body className={clsx({ 'd-none': !localExpandState })}>{children}</Card.Body>
         </Card>
     );
 };

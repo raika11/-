@@ -6,7 +6,7 @@ import { faCoffee } from '@moka/fontawesome-pro-solid-svg-icons';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 
-import { MokaCardEditor, MokaCardToggleTabs, MokaFoldableCard } from '@components';
+import { MokaCardEditor, MokaCardToggleTabs, MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 const Dashboard = () => {
@@ -62,9 +62,9 @@ const Dashboard = () => {
         <Container className="p-0" fluid>
             <div className="d-flex">
                 {/* 리스트 */}
-                <MokaFoldableCard className="mr-10" title="페이지관리" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[0]} onExpansion={handleListExpansion}>
+                <MokaCard className="mr-10" title="페이지관리" expansion={expansionState[0]} onExpansion={handleListExpansion}>
                     <div>TEST</div>
-                </MokaFoldableCard>
+                </MokaCard>
 
                 {/* 에디터 */}
                 <MokaCardEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />

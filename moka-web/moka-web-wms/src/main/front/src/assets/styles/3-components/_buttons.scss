@@ -55,4 +55,16 @@
 .btn-gray150 {
    @include button-color($gray-550);
    @include button-color-hover($gray-550);
+
+   &.active {
+    // @include button-variant($gray-650, $gray-650);
+    background-color: $gray-650 !important;
+    border-color: $gray-650 !important;
+    color: $white !important;
+    @include button-color($white);
+    @include button-color-hover($white);
+    @include hover() {
+        background-color: darken($gray-650, 7.5%) !important;
+    }
+  }
 }

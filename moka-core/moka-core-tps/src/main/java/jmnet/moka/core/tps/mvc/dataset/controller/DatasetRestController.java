@@ -220,8 +220,7 @@ public class DatasetRestController {
         // 등록
         Dataset dataset = modelMapper.map(datasetDTO, Dataset.class);
 
-//        dataset.setRegId(principal.getName()); //?
-        dataset.setRegId("test");
+        dataset.setRegId(principal.getName());
 
         // apiCodeId -> apiHost, apiPath
         if (McpString.isEmpty(dataset.getDataApiHost())
@@ -316,8 +315,7 @@ public class DatasetRestController {
         newDataset.setRegDt(orgDataset.getRegDt());
         newDataset.setRegId(orgDataset.getRegId());
         newDataset.setModDt(McpDate.now());
-//        newDataset.setModId(principal.getName()); //?
-        newDataset.setModId("test");
+        newDataset.setModId(principal.getName());
         newDataset.setDataApiHost(apiInfo.get(TpsConstants.API_HOST));
         newDataset.setDataApiPath(apiInfo.get(TpsConstants.API_PATH));
         if (newDataset.getAutoCreateYn().equals("N")) {

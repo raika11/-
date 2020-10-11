@@ -77,4 +77,10 @@
 		<include refid="findAllWhere"/>
 	</select>
 
+	<select id="deleteByPageSeq" parameterType="Long" statementType="CALLABLE">
+		{call UPA_TB_WMS_PAGE_REL_DELETE(
+			#{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+	</select>
+
 </mapper>

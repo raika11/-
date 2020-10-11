@@ -2,10 +2,13 @@ package jmnet.moka.core.tps.mvc.page.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import jmnet.moka.core.tps.mvc.page.mapper.PageMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +72,9 @@ public class PageServiceImpl implements PageService {
 
     @Autowired
     private PageRelMapper pageRelMapper;
+
+    @Autowired
+    private PageMapper pageMapper;
 
     @Override
     public PageNode makeTree(PageSearchDTO search) {
@@ -285,7 +291,7 @@ public class PageServiceImpl implements PageService {
             throws TemplateParseException, UnsupportedEncodingException, IOException {
 
         // 1. 기존 관련아이템은 삭제 후, 저장
-        pageRelRepository.deleteByPageSeq(page.getPageSeq());
+        pageRelMapper.deleteByPageSeq(page.getPageSeq());
         insertRel(page);
 
         // 2. 저장
@@ -306,13 +312,21 @@ public class PageServiceImpl implements PageService {
         Long pageSeq = page.getPageSeq();
 
         // 1. 하위노드삭제
-        String subNodes = pageRepository.findSubNodes(domainId, pageSeq);
-        if (!McpString.isEmpty(subNodes)) {
-            String[] subNodesList = subNodes.split(",");
-            for (String deletePageSeq : subNodesList) {
-                deleteOnePage(Long.valueOf(deletePageSeq), userName);
-            }
+        Map paramMap = new HashMap();
+        paramMap.put("domainId", domainId);
+        paramMap.put("pageSeq", pageSeq);
+        List<Long> subNodes = pageMapper.findSubNodes(paramMap);
+        for(Long deletePageSeq : subNodes) {
+            deleteOnePage(deletePageSeq, userName);
         }
+// mysql
+//        String subNodes = pageRepository.findSubNodes(domainId, pageSeq);
+//        if (!McpString.isEmpty(subNodes)) {
+//            String[] subNodesList = subNodes.split(",");
+//            for (String deletePageSeq : subNodesList) {
+//                deleteOnePage(Long.valueOf(deletePageSeq), userName);
+//            }
+//        }
 
         // 2. 삭제
         deleteOnePage(pageSeq, userName);
@@ -326,7 +340,7 @@ public class PageServiceImpl implements PageService {
             pageRepository.deleteById(page.getPageSeq());
 
             log.info("[DELETE Page] domainId : {} pageSeq : {}", page.getDomain().getDomainId(),
-                    page.getPageSeq());
+                page.getPageSeq());
         });
     }
 

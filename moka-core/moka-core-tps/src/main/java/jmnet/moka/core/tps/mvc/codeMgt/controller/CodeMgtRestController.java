@@ -286,8 +286,7 @@ public class CodeMgtRestController {
 
         // 등록
         CodeMgtGrp codeMgtGrp = modelMapper.map(codeMgtGrpDTO, CodeMgtGrp.class);
-//        codeMgtGrp.setRegId(principal.getName()); //?
-        codeMgtGrp.setRegId("test");
+        codeMgtGrp.setRegId(principal.getName());
         CodeMgtGrp returnValue = codeMgtService.insertCodeMgtGrp(codeMgtGrp);
 
         // 결과리턴
@@ -331,8 +330,7 @@ public class CodeMgtRestController {
         newCodeMgtGrp.setRegDt(orgCodeMgtGrp.getRegDt());
         newCodeMgtGrp.setRegId(orgCodeMgtGrp.getRegId());
         newCodeMgtGrp.setModDt(McpDate.now());
-//        newCodeMgtGrp.setModId(principal.getName()); //?
-        newCodeMgtGrp.setModId("test");
+        newCodeMgtGrp.setModId(principal.getName());
         CodeMgtGrp returnValue = codeMgtService.updateCodeMgtGrp(newCodeMgtGrp);
 
         // 결과리턴
@@ -367,8 +365,7 @@ public class CodeMgtRestController {
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 2. 삭제
-//        codeMgtService.deleteCodeMgtGrp(codeMgtGrp, principal.getName()); //?
-        codeMgtService.deleteCodeMgtGrp(codeMgtGrp, "test");
+        codeMgtService.deleteCodeMgtGrp(codeMgtGrp, principal.getName());
 
         // 3. 결과리턴
         ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
@@ -490,8 +487,7 @@ public class CodeMgtRestController {
 
         // 등록
         CodeMgt codeMgt = modelMapper.map(codeMgtDTO, CodeMgt.class);
-//        codeMgt.setRegId(principal.getName()); //?
-        codeMgt.setRegId("test");
+        codeMgt.setRegId(principal.getName());
         CodeMgt returnValue = codeMgtService.insertCodeMgt(codeMgt);
 
         // 결과리턴
@@ -533,8 +529,7 @@ public class CodeMgtRestController {
         newCodeMgt.setRegDt(orgCodeMgt.getRegDt());
         newCodeMgt.setRegId(orgCodeMgt.getRegId());
         newCodeMgt.setModDt(McpDate.now());
-//        newCodeMgt.setModId(principal.getName()); //?
-        newCodeMgt.setModId("test");
+        newCodeMgt.setModId(principal.getName());
         CodeMgt returnValue = codeMgtService.updateCodeMgt(newCodeMgt);
 
         // 결과리턴
@@ -572,8 +567,7 @@ public class CodeMgtRestController {
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 2. 삭제
-//        codeMgtService.deleteCodeMgt(codeMgt, principal.getName()); //?
-        codeMgtService.deleteCodeMgt(codeMgt, "test");
+        codeMgtService.deleteCodeMgt(codeMgt, principal.getName());
 
         // 3. 결과리턴
         ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);

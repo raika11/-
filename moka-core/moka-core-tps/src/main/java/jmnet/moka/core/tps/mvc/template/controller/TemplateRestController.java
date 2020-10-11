@@ -254,8 +254,7 @@ public class TemplateRestController {
         newTemplate.setRegDt(orgTemplate.getRegDt());
         newTemplate.setRegId(orgTemplate.getRegId());
         newTemplate.setModDt(McpDate.now());
-//        newTemplate.setModId(principal.getName());
-        newTemplate.setRegId("test");
+        newTemplate.setModId(principal.getName());
         if (newTemplate.getTemplateBody() == null) {
             newTemplate.setTemplateBody("");
         }

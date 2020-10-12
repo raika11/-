@@ -62,7 +62,7 @@ const Dashboard = () => {
         <Container className="p-0" fluid>
             <div className="d-flex">
                 {/* 리스트 */}
-                <MokaCard className="mr-10" title="페이지관리" expansion={expansionState[0]} onExpansion={handleListExpansion}>
+                <MokaCard className="mr-10" title="페이지관리" expansion={expansionState[0]} onExpansion={handleListExpansion} foldable={true}>
                     <div>TEST</div>
                 </MokaCard>
 

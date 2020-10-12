@@ -1,5 +1,6 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
 import Alert from 'react-bootstrap/Alert';
 
@@ -37,7 +38,7 @@ const propTypes = {
 const defaultProps = {
     variant: 'primary',
     outline: false,
-    dismissible: false,
+    dismissible: true,
 };
 
 /**
@@ -46,12 +47,36 @@ const defaultProps = {
 const MokaAlert = forwardRef((props, ref) => {
     const { outline, variant, icon, dismissible, children, className, onClose, ...rest } = props;
 
-    return (
-        <Alert ref={ref} className={className} variant={variant} dismissible={dismissible} onClose={onClose} bsPrefix={outline ? 'alert-outline' : undefined} {...rest}>
-            {icon && <div className="alert-icon">{icon}</div>}
-            <div className="alert-message">{children}</div>
-        </Alert>
-    );
+    // alert state
+    const [show, setShow] = useState(true);
+
+    /**
+     * 닫기 버튼
+     */
+    const handleClose = () => {
+        if (onClose) onClose();
+        setShow(false);
+    };
+
+    if (show) {
+        return (
+            <Alert
+                ref={ref}
+                className={clsx(className, {
+                    'alert-outline': outline,
+                })}
+                variant={variant}
+                dismissible={dismissible}
+                onClose={handleClose}
+                {...rest}
+            >
+                {icon && <div className="alert-icon">{icon}</div>}
+                <div className="alert-message">{children}</div>
+            </Alert>
+        );
+    } else {
+        return null;
+    }
 });
 
 MokaAlert.propTypes = propTypes;

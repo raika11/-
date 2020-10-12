@@ -45,6 +45,6 @@ public class TemplateVO implements Serializable {
     @Column(name = "USE_YN")
     private String useYn;
     
-    @Column(name = "REL_ORDER")
-    private Integer relOrder;
+    @Column(name = "REL_ORD")
+    private Integer relOrd;
 }

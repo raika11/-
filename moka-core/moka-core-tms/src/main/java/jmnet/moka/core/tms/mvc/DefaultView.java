@@ -32,8 +32,8 @@ import jmnet.moka.core.tms.merge.item.MergeItem;
  * @since 2019. 9. 10. 오후 3:54:35
  * @author kspark
  */
-public class DefaultMergeView extends AbstractView {
-    private static final Logger logger = LoggerFactory.getLogger(DefaultMergeView.class);
+public class DefaultView extends AbstractView {
+    private static final Logger logger = LoggerFactory.getLogger(DefaultView.class);
 
     @Value("${tms.mte.debug}")
     private boolean templateMergeDebug;
@@ -85,7 +85,7 @@ public class DefaultMergeView extends AbstractView {
         String itemType = (String) mergeContext.get(MokaConstants.MERGE_ITEM_TYPE);
         boolean isPageItem = itemType.equals(MokaConstants.ITEM_PAGE);
         String itemId = (String) mergeContext.get(MokaConstants.MERGE_ITEM_ID);
-        String cid = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_CID);
+        String cid = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
         HttpParamMap httpParamMap =
                 (HttpParamMap) mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
         String cacheType = KeyResolver.getCacheType(itemType);

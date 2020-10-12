@@ -30,7 +30,6 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
-import jmnet.moka.core.tms.merge.content.ContentDelegator;
 import jmnet.moka.core.tms.mvc.DefaultMergeHandlerMapping;
 import jmnet.moka.core.tms.mvc.DefaultMergeViewResolver;
 import jmnet.moka.core.tms.mvc.DefaultPathResolver;
@@ -65,19 +64,35 @@ public class TmsAutoConfiguration {
     public static final long RESERVED_EXPIRE_TIME = 10 * 1000;
 
     @Value("${tms.merge.handler.class}")
-    private String mergeHandlerClass;
+    private String defaultHandlerClass;
 
     @Value("${tms.merge.handler.beanName}")
-    private String mergeHandlerBeanName;
+    private String defaultHandlerBeanName;
 
     @Value("${tms.merge.handler.method}")
-    private String mergeHandlerMethod;
+    private String defaultHandlerMethodName;
 
     @Value("${tms.merge.view.class}")
-    private String viewClass;
+    private String defaultViewClass;
 
     @Value("${tms.merge.view.name}")
-    private String viewName;
+    private String defaultViewName;
+
+    @Value("${tms.merge.article.handler.class}")
+    private String articleHandlerClass;
+
+    @Value("${tms.merge.article.handler.beanName}")
+    private String articleHandlerBeanName;
+
+    @Value("${tms.merge.article.handler.method}")
+    private String articleHandlerMethodName;
+
+    @Value("${tms.merge.article.view.class}")
+    private String articleViewClass;
+
+    @Value("${tms.merge.article.view.name}")
+    private String articleViewName;
+
 
     @Value("${tms.interceptor.enable}")
     private boolean tmsInterceptorEnable;
@@ -157,25 +172,6 @@ public class TmsAutoConfiguration {
     }
 
     /**
-     * 
-     * <pre>
-     * 컨텐트(기사)에 대한 처리를 담당하는 ContentDelegator를 생성한다.
-     * </pre>
-     * 
-     * @return
-     * @throws TmsException
-     * @throws TemplateParseException
-     * @throws TemplateLoadException
-     */
-    @Bean(name = "contentDelegator")
-    public ContentDelegator contentDelegator()
-            throws TmsException, TemplateParseException, TemplateLoadException {
-        ApiHttpProxyFactory apiHttpProxyFactory =
-                appContext.getBean(ApiHttpProxyFactory.class, this.appContext);
-        return new ContentDelegator(domainResolver(), domainTemplateMerger(), apiHttpProxyFactory);
-    }
-
-    /**
      * <pre>
      * 요청된 URL의 경로를 처리하는 Bean을 생성한다.
      * </pre>
@@ -190,8 +186,7 @@ public class TmsAutoConfiguration {
     @ConditionalOnMissingBean
     public DefaultPathResolver pathResolver()
             throws IOException, TmsException, TemplateParseException, TemplateLoadException {
-        return new DefaultPathResolver(domainResolver(), domainTemplateMerger(),
-                contentDelegator());
+        return new DefaultPathResolver(domainResolver(), domainTemplateMerger());
     }
 
     /**
@@ -247,7 +242,8 @@ public class TmsAutoConfiguration {
             @Autowired(required = false) HandlerInterceptorAdapter tmsHandlerInterceptor) {
         try {
             AbstractHandlerMapping handlerMapping = new DefaultMergeHandlerMapping(appContext,
-                    mergeHandlerClass, mergeHandlerBeanName, mergeHandlerMethod);
+                    defaultHandlerClass, defaultHandlerBeanName, defaultHandlerMethodName,
+                    articleHandlerClass, articleHandlerBeanName, articleHandlerMethodName);
             if (tmsHandlerInterceptor != null && this.tmsInterceptorEnable == true) {
                 handlerMapping.setInterceptors(tmsHandlerInterceptor);
             }
@@ -256,7 +252,7 @@ public class TmsAutoConfiguration {
             return handlerMapping;
         } catch (Exception e) {
             logger.error("Merge HandlerMapping Not Found: {}",
-                    mergeHandlerClass + "." + mergeHandlerMethod, e);
+                    defaultHandlerClass + "." + defaultHandlerMethodName, e);
         }
         return null;
     }
@@ -272,12 +268,21 @@ public class TmsAutoConfiguration {
     @Bean(name = "mergeViewResolver")
     @ConditionalOnMissingBean(name = "mergeViewResolver")
     public ViewResolver mergeViewResolver() throws ClassNotFoundException {
-        appContext.registerBean(this.viewName, Class.forName(this.viewClass),
+        // default view
+        appContext.registerBean(this.defaultViewName, Class.forName(this.defaultViewClass),
                 (beanDefinition) -> {
                     beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON);
                 });
-        View mergeView = (View) appContext.getBean(this.viewName);
-        final DefaultMergeViewResolver resolver = new DefaultMergeViewResolver(mergeView, 0);
+        View defaultView = (View) appContext.getBean(this.defaultViewName);
+        // default article view
+        appContext.registerBean(this.articleViewName, Class.forName(this.articleViewClass),
+                (beanDefinition) -> {
+                    beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON);
+                });
+        View articleView = (View) appContext.getBean(this.articleViewName);
+
+        final DefaultMergeViewResolver resolver = new DefaultMergeViewResolver(this.defaultViewName, defaultView, 0);
+        resolver.setArticleView(this.articleViewName, articleView);
         return resolver;
     }
 

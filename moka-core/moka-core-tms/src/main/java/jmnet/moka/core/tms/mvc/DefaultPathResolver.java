@@ -16,8 +16,6 @@ import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
-import jmnet.moka.core.tms.merge.content.ContentDelegator;
-import jmnet.moka.core.tms.merge.item.ContentSkinItem;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 
 /**
@@ -37,16 +35,14 @@ public class DefaultPathResolver {
 	
     private DomainResolver domainResolver;
     private MokaDomainTemplateMerger domainTemplateMerger;
-    private ContentDelegator contentDelegator;
 
     private List<String> mergeItemList;
 
     @Autowired
     public DefaultPathResolver(DomainResolver domainResolver,
-                               MokaDomainTemplateMerger domainTemplateMerger, ContentDelegator contentDelegator) {
+                               MokaDomainTemplateMerger domainTemplateMerger) {
         this.domainResolver = domainResolver;
         this.domainTemplateMerger = domainTemplateMerger;
-        this.contentDelegator = contentDelegator;
         String[] partialMergeItems = {MokaConstants.ITEM_PAGE, MokaConstants.ITEM_COMPONENT,
                 MokaConstants.ITEM_CONTAINER,
                 MokaConstants.ITEM_TEMPLATE};
@@ -113,7 +109,7 @@ public class DefaultPathResolver {
         if (requestPath.startsWith(MokaConstants.MERGE_ARTICE_PREFIX)) {
             // 본문처리 : /article/기사Id
             // TODO 기사id를 캐시키 생성시 처리하도록 http파라미터에 넣는다.
-            if (mergeContent(request, domainId, requestPath)) {
+            if (mergeArticle(request, domainId, requestPath)) {
                 return true;
             } else {
                 // 404에러 페이지로 보낸다.
@@ -190,25 +186,19 @@ public class DefaultPathResolver {
         }
     }
 
-    private boolean mergeContent(HttpServletRequest request, String domainId, String path) {
+    private boolean mergeArticle(HttpServletRequest request, String domainId, String path) {
         try {
             List<String> pathList = this.getPathList(path);
-            String contentId = pathList.get(1);
-            //TODO 기사아이디에 대한 검증 로직 필요
-            ContentSkinItem skinItem = this.contentDelegator.getSkinItem(domainId, contentId);
+            String articleId = pathList.get(1);
             // 머지 옵션설정
             MergeContext mergeContext = new MergeContext();
             mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
             mergeContext.set(MokaConstants.MERGE_PATH, path);
-            mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, MokaConstants.ITEM_CONTENT_SKIN);
-            //TODO 본문처리를 하기 위한 스킨을 찾는 로직 정의 필요 
-            mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, skinItem.getItemType());
-            mergeContext.set(MokaConstants.MERGE_ITEM_ID, skinItem.getItemId());
-            mergeContext.set(MokaConstants.MERGE_CONTEXT_CID, contentId);
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_ARTICLE_ID, articleId);
             request.setAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
             return true;
-        } catch (TmsException e) {
-            logger.error("Content Find Fail: {} {}", domainId, path, e);
+        } catch (Exception e) {
+            logger.error("Article Find Fail: {} {}", domainId, path, e);
             return false;
         }
     }

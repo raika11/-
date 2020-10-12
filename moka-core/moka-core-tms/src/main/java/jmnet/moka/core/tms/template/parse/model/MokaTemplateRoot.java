@@ -107,7 +107,7 @@ public abstract class MokaTemplateRoot extends TemplateRoot {
 
     public String getCidForCache(MergeContext context) {
         if (hasBodyToken()) {
-            return (String) context.get(MokaConstants.MERGE_CONTEXT_CID);
+            return (String) context.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
         } else {
             return null;
         }

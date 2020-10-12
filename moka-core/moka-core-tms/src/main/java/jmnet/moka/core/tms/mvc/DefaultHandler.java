@@ -34,11 +34,11 @@ import jmnet.moka.core.tms.mvc.domain.ReservedMap;
  * @since 2020. 3. 20. 오후 4:06:12
  * @author kspark
  */
-public class DefaultMergeHandler {
-	private static final Logger logger = LoggerFactory.getLogger(DefaultMergeHandler.class);
+public class DefaultHandler {
+	private static final Logger logger = LoggerFactory.getLogger(DefaultHandler.class);
 	
 	@Value("${tms.merge.view.name}")
-	private String viewName;
+	private String defaultViewName;
 		
 	@Autowired
     private HttpParamFactory httpParamFactory;
@@ -143,7 +143,7 @@ public class DefaultMergeHandler {
         }
 
 		model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
-		return this.viewName;
+		return this.defaultViewName;
 	}
 	
     private MergeItem getErrorPageItem(String domainId) {

@@ -16,29 +16,22 @@ public class CustomTmsConfiguration {
     public static final Logger logger = LoggerFactory.getLogger(CustomTmsConfiguration.class);
 
     @Value("${tms.merge.handler.class}")
-    private String templateMergeHandlerClass;
+    private String defaultHandlerClass;
 
     @Value("${tms.merge.handler.beanName}")
-    private String templateMergeHandlerBeanName;
+    private String defaultHandlerBeanName;
 
     @Value("${tms.merge.handler.method}")
-    private String templateMergeHandlerMethod;
+    private String defaultHandlerMethodName;
 
     @Value("${tms.merge.view.class}")
-    private String viewClass;
+    private String defaultViewClass;
 
     @Value("${tms.merge.view.name}")
-    private String viewName;
-
-    @Value("${tms.template.base}")
-    private String templateBase;
-
+    private String defaultViewName;
 
     @Value("${tms.default.template.domain}")
     private String defaultTemplateDomain;
-
-    @Value("${tms.domains.json}")
-    private String domainsJson;
 
     @Value("${command.allow.ips}")
     private String commandAllowIps;

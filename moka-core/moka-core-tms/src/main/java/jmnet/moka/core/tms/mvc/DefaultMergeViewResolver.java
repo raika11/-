@@ -11,12 +11,20 @@ import org.springframework.web.servlet.ViewResolver;
 public class DefaultMergeViewResolver extends WebApplicationObjectSupport implements ViewResolver, Ordered {
 	
 	private int order = Ordered.LOWEST_PRECEDENCE;  // default: same as non-Ordered
-	private String viewName;
-    private View view;
+	private String defaultViewName;
+    private View defaultView;
+	private String articleViewName;
+	private View articleView;
 	
-    public DefaultMergeViewResolver(View view, int order) {
-        this.view = view;
+    public DefaultMergeViewResolver(String defaultViewName, View defaultView, int order) {
+    	this.defaultViewName = defaultViewName;
+        this.defaultView = defaultView;
         this.order = order;
+	}
+
+	public void setArticleView(String articleViewName, View articleView) {
+    	this.articleViewName = articleViewName;
+		this.articleView = articleView;
 	}
 
 	@Override
@@ -35,8 +43,10 @@ public class DefaultMergeViewResolver extends WebApplicationObjectSupport implem
 //			// let's accept this as a non-match and allow for chaining as well...
 //			return null;
 //		}
-		if ( viewName.equals(this.viewName)) {
-            return this.view;
+		if ( viewName.equals(this.defaultViewName)) {
+            return this.defaultView;
+		} else if ( viewName.equals(this.articleViewName)) {
+			return this.articleView;
 		}
 		return null;
 	}

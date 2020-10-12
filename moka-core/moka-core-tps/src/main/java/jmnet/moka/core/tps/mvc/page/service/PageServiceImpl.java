@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.core.tps.mvc.page.mapper.PageMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -287,11 +288,14 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public Page updatePage(Page page)
-            throws TemplateParseException, UnsupportedEncodingException, IOException {
+    public Page updatePage(Page page) throws Exception {
 
         // 1. 기존 관련아이템은 삭제 후, 저장
-        pageRelMapper.deleteByPageSeq(page.getPageSeq());
+        Long returnValue = pageRelMapper.deleteByPageSeq(page.getPageSeq());
+        if (returnValue < 0) {
+            log.debug("DELETE FAIL WMS_PAGE_REL : {} ", returnValue);
+            throw new Exception("Failed to delete WMS_PAGE_REL. error code: " + returnValue);
+        }
         insertRel(page);
 
         // 2. 저장

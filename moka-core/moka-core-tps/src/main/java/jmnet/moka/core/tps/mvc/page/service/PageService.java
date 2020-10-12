@@ -63,10 +63,9 @@ public interface PageService {
      * 
      * @param page 수정할 페이지정보
      * @return 수정된 페이지정보
-     * @throws TemplateParseException, UnsupportedEncodingException, IOException
+     * @throws TemplateParseException, IOException
      */
-    public Page updatePage(Page page)
-            throws TemplateParseException, UnsupportedEncodingException, IOException;
+    public Page updatePage(Page page) throws Exception;
 
     /**
      * <pre>

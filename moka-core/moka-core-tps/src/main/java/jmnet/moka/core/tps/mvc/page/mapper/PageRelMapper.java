@@ -17,5 +17,5 @@ import jmnet.moka.core.tps.mvc.page.vo.PageVO;
  * @author ssc
  */
 public interface PageRelMapper extends BaseMapper<PageVO, RelSearchDTO> {
-    void deleteByPageSeq(Long pageSeq);
+    Long deleteByPageSeq(Long pageSeq);
 }

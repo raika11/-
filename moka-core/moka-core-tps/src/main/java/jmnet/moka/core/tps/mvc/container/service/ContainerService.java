@@ -58,7 +58,7 @@ public interface ContainerService {
      * @throws TemplateParseException, UnsupportedEncodingException, IOException
      */
     public Container updateContainer(Container container)
-            throws TemplateParseException, UnsupportedEncodingException, IOException;
+        throws Exception;
 
     /**
      * 컨테이너정보 삭제

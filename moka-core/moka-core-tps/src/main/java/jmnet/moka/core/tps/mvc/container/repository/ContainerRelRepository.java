@@ -22,9 +22,9 @@ public interface ContainerRelRepository
      * 
      * @param containerSeq 컨테이너순번
      */
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM ContainerRel r WHERE r.container.containerSeq = :containerSeq")
-    int deleteByContainerSeq(@Param("containerSeq") Long containerSeq);
+//    @Transactional
+//    @Modifying
+//    @Query("DELETE FROM ContainerRel r WHERE r.container.containerSeq = :containerSeq")
+//    int deleteByContainerSeq(@Param("containerSeq") Long containerSeq);
 
 }

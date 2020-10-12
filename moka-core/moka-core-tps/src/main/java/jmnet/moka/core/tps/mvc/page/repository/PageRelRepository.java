@@ -25,9 +25,9 @@ public interface PageRelRepository extends JpaRepository<PageRel, Long>, PageRel
      * 
      * @param pageSeq 페이지순번
      */
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM PageRel r WHERE r.page.pageSeq = :pageSeq")
-    int deleteByPageSeq(@Param("pageSeq") Long pageSeq);
+//    @Transactional
+//    @Modifying
+//    @Query("DELETE FROM PageRel r WHERE r.page.pageSeq = :pageSeq")
+//    int deleteByPageSeq(@Param("pageSeq") Long pageSeq);
 
 }

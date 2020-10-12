@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.mvc.container.mapper.ContainerRelMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,9 @@ public class ContainerServiceImpl implements ContainerService {
     
     @Autowired
     ContainerMapper containerMapper;
+
+    @Autowired
+    ContainerRelMapper containerRelMapper;
 
     @Override
     public List<ContainerVO> findList(ContainerSearchDTO search) {
@@ -214,9 +218,14 @@ public class ContainerServiceImpl implements ContainerService {
 
     @Override
     public Container updateContainer(Container container)
-            throws TemplateParseException, UnsupportedEncodingException, IOException {
+        throws Exception {
 
-        containerRelRepository.deleteByContainerSeq(container.getContainerSeq());
+        // 1. 기존 관련아이템은 삭제 후, 저장
+        Long returnValue = containerRelMapper.deleteByContainerSeq(container.getContainerSeq());
+        if (returnValue < 0) {
+            log.debug("DELETE FAIL WMS_CONTAINER_REL : {} ", returnValue);
+            throw new Exception("Failed to delete WMS_CONTAINER_REL. error code: " + returnValue);
+        }
         insertRel(container);
 
         // 2. 저장

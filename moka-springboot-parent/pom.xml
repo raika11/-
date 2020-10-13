@@ -16,6 +16,7 @@
 	<properties>
     	<failOnMissingWebXml>false</failOnMissingWebXml>
     	<tests.skip>true</tests.skip>
+    	<maven.test.skip>true</maven.test.skip>
  	</properties>
 
 	<repositories>

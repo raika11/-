@@ -24,7 +24,7 @@ const DropdownComponent = (props) => {
                 <Dropdown.Item key={idx} eventKey={i.eventKey}>
                     {i.title}
                 </Dropdown.Item>
-            ))
+            )),
         );
     }, [items]);
 

@@ -70,7 +70,8 @@ const defaultOptions = {
  * (wordwrap, expansion 아이콘 있음)
  */
 const MokaCardEditor = forwardRef((props, ref) => {
-    const { width, height, defaultValue, language, options, className, title, onBlur, expansion, onExpansion } = props;
+    const { width, height, defaultValue, language, options,
+         className, title, onBlur, expansion, onExpansion } = props;
 
     // editor state
     const [wordWrap, setWordWrap] = useState(defaultOptions.wordWrap);

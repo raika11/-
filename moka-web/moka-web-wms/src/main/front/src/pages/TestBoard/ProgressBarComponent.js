@@ -8,31 +8,13 @@ const ProgressBarComponent = (props) => {
     useEffect(() => {
         /** Bar items */
         if (multi) {
-            setBarList(
-                multi.map((i, idx) => (
-                    <ProgressBar
-                        key={idx}
-                        now={i.now}
-                        label={`${i.now}%`}
-                        variant={i.variant}
-                        striped={i.striped}
-                        animated={i.animated}
-                    />
-                ))
-            );
+            setBarList(multi.map((i, idx) => <ProgressBar key={idx} now={i.now} label={`${i.now}%`} variant={i.variant} striped={i.striped} animated={i.animated} />));
         }
     }, [multi]);
 
     return (
         <>
-            <ProgressBar
-                now={now}
-                label={`${now}%`}
-                variant={variant}
-                striped={striped && true}
-                animated={animated && true}
-                {...rest}
-            >
+            <ProgressBar now={now} label={`${now}%`} variant={variant} striped={striped && true} animated={animated && true} {...rest}>
                 {multi && barList}
             </ProgressBar>
         </>

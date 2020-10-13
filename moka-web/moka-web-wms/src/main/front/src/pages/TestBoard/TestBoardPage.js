@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import AlertComponet from './AlertComponent';
+
 import { MokaDraggableModal } from '@components';
+import AlertComponet from './AlertComponent';
 import MokaTabComponent from './MokaTabComponent';
 import AccordionComponent from './AccordionComponent';
 import BreadcrumbComponent from './BreadcrumbComponent';
@@ -19,12 +21,25 @@ import PaginationComponent from './PaginationComponent';
 import ProgressBarComponent from './ProgressBarComponent';
 import SpinnerComponent from './SpinnerComponent';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoffee } from '@moka/fontawesome-pro-solid-svg-icons';
+import { MokaIconTabs } from '@/components/MokaTabs';
+
 const placements = ['right', 'left', 'top', 'bottom'];
 const variants = ['primary', 'secondary', 'success', 'danger', 'warning', 'light', 'info', 'dark'];
 
 const TestBoardPgae = () => {
     // modal test
     const [showD, setShowD] = useState(false);
+    const [expansionState, setExpansionState] = useState(true);
+
+    /**
+     * 탭 확장 시
+     * @param {boolean} expansion 확장여부
+     */
+    const handleTabExpansion = () => {
+        setExpansionState();
+    };
 
     return (
         <Container>
@@ -225,6 +240,33 @@ const TestBoardPgae = () => {
                                     <SpinnerComponent key={idx} animation="grow" variant={variant} size="sm" className="mb-2" />
                                 ))}
                             </div>
+                        </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header className="mb-0">Icon toggle</Card.Header>
+                        <Card.Body>
+                            <MokaIconTabs
+                                tabNavPosition="left"
+                                tabNavWidth={300}
+                                expansion={expansionState}
+                                onExpansion={handleTabExpansion}
+                                tabs={[
+                                    <Card>
+                                        <Card.Body>탭컨텐츠1</Card.Body>
+                                    </Card>,
+                                    <Card>
+                                        <Card.Body>탭컨텐츠2</Card.Body>
+                                    </Card>,
+                                    <Card>
+                                        <Card.Body>탭컨텐츠3</Card.Body>
+                                    </Card>,
+                                ]}
+                                tabNavs={[
+                                    { title: '버튼1', icon: <FontAwesomeIcon icon={faCoffee} /> },
+                                    { title: '버튼2', icon: <FontAwesomeIcon icon={faCoffee} /> },
+                                    { title: '버튼3', icon: <FontAwesomeIcon icon={faCoffee} /> },
+                                ]}
+                            />
                         </Card.Body>
                     </Card>
                 </Col>

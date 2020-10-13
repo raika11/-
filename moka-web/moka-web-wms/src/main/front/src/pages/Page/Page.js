@@ -130,7 +130,10 @@ const Page = () => {
                 ]}
                 tabNavWidth={48}
                 tabNavs={[
-                    { title: '페이지 관리', icon: 'Info' },
+
+
+                    
+                    { title: '사이트 정보', icon: 'Info' },
                     { title: '페이지 검색', icon: <FontAwesomeIcon icon={faFile} /> },
                     { title: '콘텐츠 스킨 검색', icon: <FontAwesomeIcon icon={faFileAlt} /> },
                     { title: '컨테이너 검색', icon: <FontAwesomeIcon icon={faBox} /> },

@@ -58,21 +58,20 @@ public class MenuNode implements Serializable {
      */
     public MenuNode(Menu menu) {
         this.seq = menu.getSeq();
-        this.menuId = menu.getMenuId();
-        this.menuName = menu.getMenuName();
-        this.menuDispName = menu.getMenuDispName();
-        this.menuPath = menu.getMenuPath();
+        this.menuId = menu.getMenuCd();
+        this.menuName = menu.getMenuNm();
+        this.menuPath = menu.getMenuUrl();
         this.menuOrder = menu.getMenuOrder();
-        this.depth = menu.getDepth();
-        this.useYn = menu.getUseYn();
-        this.parentMenuId = menu.getParentMenuId();
-        this.iconName = menu.getIconName();
+        //this.depth = menu.getDepth();
+        this.useYn = menu.getUsedYn();
+        //this.parentMenuId = menu.getParentMenuId();
+        //this.iconName = menu.getIconName();
     }
 
     /**
      * 노드 찾기
      * 
-     * @param findSeq 찾을 메뉴 아이디
+     * @param findId 찾을 메뉴 아이디
      * @param rootNode 트리상의 찾기시작할 시작노드
      * @return
      */
@@ -110,7 +109,7 @@ public class MenuNode implements Serializable {
     /**
      * 자식노드 추가
      * 
-     * @param pageNode
+     * @param menuNode
      */
     public void addNode(MenuNode menuNode) {
         if (this.nodes == null)

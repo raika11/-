@@ -18,5 +18,5 @@ import jmnet.moka.core.tps.mvc.menu.entity.Menu;
  * @author ssc
  */
 public interface MenuRepository extends JpaRepository<Menu, Long> {
-    public List<Menu> findByUseYn(String useYn, Sort sort);
+    public List<Menu> findByUsedYn(String useYn, Sort sort);
 }

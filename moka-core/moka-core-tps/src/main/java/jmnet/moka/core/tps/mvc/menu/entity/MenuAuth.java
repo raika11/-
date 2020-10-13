@@ -4,21 +4,21 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 /**
- * CMS 메뉴
+ * CMS - 그룹/사용자별 메뉴 권한
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,8 +26,8 @@ import lombok.Setter;
 @Setter
 @Builder
 @Entity
-@Table(name = "TB_CMS_MENU")
-public class Menu implements Serializable {
+@Table(name = "TB_CMS_MENU_AUTH")
+public class MenuAuth implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,33 +37,13 @@ public class Menu implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ_NO", nullable = false)
-    private Long seq;
+    private Integer seqNo;
 
     /**
-     * 대메뉴코드
+     * 그룹/사용자구분 (G:그룹, U:사용자)
      */
-    @Column(name = "LMENU_CD", nullable = false)
-    private String largeMenuCd;
-
-    /**
-     * 중메뉴코드
-     */
-    @Column(name = "MMENU_CD")
-    @Builder.Default
-    private String middleMenuCd = "";
-
-    /**
-     * 소메뉴코드
-     */
-    @Column(name = "SMENU_CD")
-    @Builder.Default
-    private String smallMenuCd = "";
-
-    /**
-     * 메뉴코드 (GRP_CD+MID_CD+DTL_CD)
-     */
-    @Column(name = "MENU_CD", nullable = false)
-    private String menuCd;
+    @Column(name = "GRP_MEM_DIV", nullable = false)
+    private String groupMemberDiv;
 
     /**
      * 사용여부(Y:사용, N:미사용)
@@ -73,24 +53,20 @@ public class Menu implements Serializable {
     private String usedYn = "Y";
 
     /**
-     * 정렬순서
+     * 그룹코드 / 사용자ID
      */
-    @Column(name = "ORD_NO")
-    @Builder.Default
-    private Integer menuOrder = 0;
+    @Column(name = "GRP_MEM_ID", nullable = false)
+    private String groupMemberId;
 
     /**
-     * 메뉴명
+     * 메뉴코드 (TB_CMS_MENU.MENU_CD))
      */
-    @Column(name = "MENU_NM", nullable = false)
-    private String menuNm;
+    @Column(name = "MENU_CD", nullable = false)
+    private String menuCd;
 
-    /**
-     * 메뉴 페이지 URL
-     */
-    @Column(name = "MENU_URL")
-    @Builder.Default
-    private String menuUrl = "";
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MENU_CD", nullable = false, insertable = false, updatable = false)
+    private Menu menu;
 
     /**
      * 등록일시

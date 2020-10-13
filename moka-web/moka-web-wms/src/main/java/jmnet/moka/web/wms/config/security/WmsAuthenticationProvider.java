@@ -55,10 +55,13 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
         String userPassword = (String) authentication.getCredentials();
         
         UserDTO userDetails = (UserDTO)userService.loadUserByUsername(userId);
-        
+        /*
+        * 2020-10-13 차상인 주석 처리
+        * 임시 로그인 처리를 위해 비밀번호 체크 로직 주석 처리
         if(!matchPassword(userDetails.getPassword(), userPassword)) {
         	throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
         }
+         */
         
         if (userDetails.getAuthorities() == null) {
             throw new InsufficientAuthenticationException("User has no roles assigned");

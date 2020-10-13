@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.user.dto;
 
 import java.util.Collection;
 import java.util.List;
+import jmnet.moka.core.tps.mvc.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,7 +28,7 @@ public class UserDTO implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private Integer deptNo;
+    private String dept;
 
     private String position;
 
@@ -60,7 +61,7 @@ public class UserDTO implements UserDetails {
 
     public UserDTO() {}
 
-    public UserDTO(String userId, String allowMediaIds, String cellPhoneNo, Integer deptNo,
+    public UserDTO(String userId, String allowMediaIds, String cellPhoneNo, String dept,
             String emailaddress,
             // String createYmdt, String creator, String modifiedYmdt, String modifier,
             String password, String phoneNo, String photo, String position, String userLevel,
@@ -68,7 +69,7 @@ public class UserDTO implements UserDetails {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
-        this.deptNo = deptNo;
+        this.dept = dept;
         this.position = position;
         this.emailaddress = emailaddress;
         this.phoneNo = phoneNo;
@@ -86,11 +87,18 @@ public class UserDTO implements UserDetails {
 
     public static UserDTO create(User user, List<GrantedAuthority> authorities) {
         return new UserDTO(user.getUserId(), user.getAllowMediaIds(), user.getCellPhoneNo(),
-                user.getDeptNo(), user.getEmailaddress(),
+                String.valueOf(user.getDeptNo()), user.getEmailaddress(),
                 // user.getCreateYmdt(), user.getCreator(), user.getModifiedYmdt(),
                 // user.getModifier(),
                 user.getPassword(), user.getPhoneNo(), user.getPhoto(), user.getPosition(),
                 user.getUserLevel(), user.getUserName(), user.getWorkYn(), authorities);
+    }
+
+    public static UserDTO create(Member user, List<GrantedAuthority> authorities) {
+        return new UserDTO(user.getMemberId(), null, user.getMobilePhone(),
+            user.getDept(), user.getEmail(),
+            null, user.getCompanyPhone(), null, user.getGroup(),
+            null, user.getMemberNm(), user.getStatus(), authorities);
     }
 
     @Override
@@ -172,12 +180,12 @@ public class UserDTO implements UserDetails {
     // this.creator = creator;
     // }
 
-    public Integer getDeptNo() {
-        return deptNo;
+    public String getDept() {
+        return dept;
     }
 
-    public void setDeptNo(int deptNo) {
-        this.deptNo = deptNo;
+    public void setDept(String dept) {
+        this.dept = dept;
     }
 
     public String getEmailaddress() {

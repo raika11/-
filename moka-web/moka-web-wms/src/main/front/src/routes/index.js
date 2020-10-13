@@ -3,6 +3,7 @@ import React from 'react';
 // layout
 import { NoFrameLayout, SidebarOpenLayout, SidebarCloseLayout } from '@layout';
 import Page404 from '@pages/Auth/Page404';
+import Domain from '@/pages/Domain/Domain';
 
 // page
 const Dashboard = React.lazy(() => import('@pages/Dashboard'));
@@ -78,6 +79,15 @@ const routes = [
         name: 'Page',
         displayName: '페이지관리',
         component: Page,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: true,
+    },
+    {
+        path: '/domain',
+        name: 'Domain',
+        displayName: '도메인관리',
+        component: Domain,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: true,

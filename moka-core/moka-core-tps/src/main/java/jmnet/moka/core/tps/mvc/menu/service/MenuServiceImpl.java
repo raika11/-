@@ -25,12 +25,15 @@ import jmnet.moka.core.tps.mvc.menu.repository.MenuRepository;
 @Service
 public class MenuServiceImpl implements MenuService {
 
-    @Autowired
     MenuRepository menuRepository;
+
+    public MenuServiceImpl(MenuRepository menuRepository) {
+        this.menuRepository = menuRepository;
+    }
 
     @Override
     public MenuNode makeTree() {
-        List<Menu> menuList = menuRepository.findByUseYn("Y", orderByIdAsc());
+        List<Menu> menuList = menuRepository.findByUsedYn("Y", orderByIdAsc());
         return menuList.isEmpty() ? null : makeTree(menuList);
     }
 
@@ -43,6 +46,7 @@ public class MenuServiceImpl implements MenuService {
         Iterator<Menu> it = menuList.iterator();
         while (it.hasNext()) {
             Menu menu = it.next();
+            /*
             if (McpString.isEmpty(menu.getParentMenuId())) {
                 MenuNode menuNode = new MenuNode(menu);
                 rootNode.addNode(menuNode);
@@ -55,6 +59,8 @@ public class MenuServiceImpl implements MenuService {
                     parentNode.addNode(menuNode);
                 }
             }
+
+             */
         }
         rootNode.sort();
         return rootNode;

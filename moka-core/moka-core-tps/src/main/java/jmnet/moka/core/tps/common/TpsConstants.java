@@ -80,4 +80,6 @@ public class TpsConstants {
     /** 템플릿 image prefix */
     public static final String TEMPLATE_IMAGE_PREFIEX = "/image/";
 
+    public static final String SUPER_ADMIN_GROUP_CD = "999";
+
 }

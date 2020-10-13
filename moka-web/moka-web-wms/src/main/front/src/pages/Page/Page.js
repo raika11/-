@@ -13,6 +13,7 @@ import { faHistory } from '@moka/fontawesome-pro-solid-svg-icons';
 
 import { MokaCardEditor, MokaCardToggleTabs, MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { MokaIconTabs } from '@/components/MokaTabs';
 
 const PageList = React.lazy(() => import('./PageList'));
 const PageEdit = React.lazy(() => import('./PageEdit'));
@@ -106,7 +107,8 @@ const Page = () => {
             <MokaCardEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
             {/* 탭 */}
-            <MokaCardToggleTabs
+            <MokaIconTabs
+                tabNavPosition="right"
                 expansion={expansionState[2]}
                 onExpansion={handleTabExpansion}
                 height={CARD_DEFAULT_HEIGHT}
@@ -139,9 +141,6 @@ const Page = () => {
                 ]}
                 tabNavWidth={48}
                 tabNavs={[
-
-
-                    
                     { title: '사이트 정보', icon: 'Info' },
                     { title: '페이지 검색', icon: <FontAwesomeIcon icon={faFile} /> },
                     { title: '콘텐츠 스킨 검색', icon: <FontAwesomeIcon icon={faFileAlt} /> },

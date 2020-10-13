@@ -56,6 +56,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+    tabNavPosition: 'left',
     tabs: [],
     tabWidth: 600,
     tabNavs: [],

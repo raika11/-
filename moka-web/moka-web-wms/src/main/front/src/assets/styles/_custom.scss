@@ -100,3 +100,25 @@ body {
         width: 48px;
     }
 }
+
+/* -----------------------
+* divider
+* ---------------------- */
+.divider {
+    display: block;
+    width: 100%;
+    height: 1px;
+    overflow: hidden;
+    background-color: $gray-160;
+}
+
+.vertical-divider {
+    width: 1px;
+    height: 100%;
+    border: none;
+    border-left: 1px solid $gray-160;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: $spacer;
+    margin-right: $spacer;
+}

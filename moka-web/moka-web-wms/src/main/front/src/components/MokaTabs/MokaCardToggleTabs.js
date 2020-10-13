@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleLeft } from '@moka/fontawesome-pro-light-svg-icons';
 
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { MokaCard } from '@components';
 
 const propTypes = {
     /**
@@ -129,7 +130,38 @@ const MokaCardToggleTabs = (props) => {
                 </Tab.Content>
 
                 {/* 탭 Nav */}
-                <Card className="border-left-0" style={{ width: tabNavWidth }}>
+                <MokaCard
+                    className="border-left-0"
+                    width={tabNavWidth}
+                    headerClassName="pl-0 pr-0 d-flex align-items-center justify-content-center"
+                    bodyClassName="p-0 m-0"
+                    buttons={
+                        <Button variant="white" className="p-0" onClick={handleExpansion}>
+                            <FontAwesomeIcon icon={faAngleDoubleLeft} rotation={isExpand ? 0 : 180} />
+                        </Button>
+                    }
+                >
+                    <>
+                        {tabNavs.map((nav, idx) => (
+                            <Nav.Item key={idx} className="mb-1 p-05 d-flex">
+                                <OverlayTrigger key={idx} placement={placement} overlay={<Tooltip id={`tooltip-${idx}-${nav.title}`}>{nav.title}</Tooltip>}>
+                                    <Nav.Link
+                                        as={Button}
+                                        eventKey={idx}
+                                        onSelect={handleSelect}
+                                        className={clsx('p-1', 'pt-2', 'pb-2', 'text-center', 'flex-fill', 'border-0', {
+                                            active: activeKey.toString() === idx.toString(),
+                                        })}
+                                        variant="gray150"
+                                    >
+                                        {nav.icon}
+                                    </Nav.Link>
+                                </OverlayTrigger>
+                            </Nav.Item>
+                        ))}
+                    </>
+                </MokaCard>
+                {/* <Card className="border-left-0" style={{ width: tabNavWidth }}>
                     <Card.Header className="pl-0 pr-0">
                         <div className="d-flex align-items-center justify-content-center">
                             <Button variant="white" className="p-0" onClick={handleExpansion}>
@@ -156,7 +188,7 @@ const MokaCardToggleTabs = (props) => {
                             </Nav.Item>
                         ))}
                     </Card.Body>
-                </Card>
+                </Card> */}
             </Tab.Container>
         </div>
     );

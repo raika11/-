@@ -62,24 +62,26 @@ const Dashboard = () => {
         <Container className="p-0" fluid>
             <div className="d-flex">
                 {/* 리스트 */}
-                <MokaCard className="mr-10" title="페이지관리" expansion={expansionState[0]} onExpansion={handleListExpansion}>
-                    <MokaAlertWithButtons
-                        title="title"
-                        variant="light"
-                        buttons={[
-                            {
-                                variant: 'primary',
-                                text: '버튼1',
-                            },
-                            {
-                                variant: 'warning',
-                                text: '버튼2',
-                            },
-                        ]}
-                    >
-                        테스트
-                    </MokaAlertWithButtons>
-                    <MokaAlert outline>테스트</MokaAlert>
+                <MokaCard className="mr-10 flex-shrink-0" title="페이지관리" expansion={expansionState[0]} onExpansion={handleListExpansion}>
+                    <>
+                        <MokaAlertWithButtons
+                            title="title"
+                            variant="light"
+                            buttons={[
+                                {
+                                    variant: 'primary',
+                                    text: '버튼1',
+                                },
+                                {
+                                    variant: 'warning',
+                                    text: '버튼2',
+                                },
+                            ]}
+                        >
+                            테스트
+                        </MokaAlertWithButtons>
+                        <MokaAlert outline>테스트</MokaAlert>
+                    </>
                 </MokaCard>
 
                 {/* 에디터 */}

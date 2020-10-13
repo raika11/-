@@ -10,11 +10,11 @@ import routes from '@/routes';
 const MokaBreadcrumb = () => {
     const location = useLocation();
     const [currentPage, setCurrentPage] = useState({
-        path: '',
+        path: '/',
     });
 
     useEffect(() => {
-        const cp = routes.find((route) => !route.exact && location.pathname.indexOf(route.path) > -1);
+        const cp = location.pathname === '/' ? routes.find((route) => route.path === '/') : routes.find((route) => !route.exact && location.pathname.indexOf(route.path) > -1);
         setCurrentPage(cp);
     }, [location]);
 

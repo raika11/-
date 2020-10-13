@@ -105,6 +105,10 @@ body {
 * icon-toggle-tab
 * ---------------------- */
 .icon-toggle-tab {
+    .tab-pane > .card {
+        box-shadow: unset;
+    }
+    
     .nav-tabs {
         .nav-item {
             height: 44px;

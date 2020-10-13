@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import produce from 'immer';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee } from '@moka/fontawesome-pro-solid-svg-icons';
 import Container from 'react-bootstrap/Container';
-import Card from 'react-bootstrap/Card';
 
-import { MokaCardEditor, MokaCardToggleTabs, MokaCard, MokaAlertWithButtons, MokaAlert } from '@components';
+import { MokaCardEditor, MokaCardToggleTabs, MokaCard, MokaAlertWithButtons, MokaAlert, MokaIcon } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 const Dashboard = () => {
@@ -62,26 +59,36 @@ const Dashboard = () => {
         <Container className="p-0" fluid>
             <div className="d-flex">
                 {/* 리스트 */}
-                <MokaCard className="mr-10 flex-shrink-0" title="페이지관리" expansion={expansionState[0]} onExpansion={handleListExpansion}>
-                    <>
-                        <MokaAlertWithButtons
-                            title="title"
-                            variant="light"
-                            buttons={[
-                                {
-                                    variant: 'primary',
-                                    text: '버튼1',
-                                },
-                                {
-                                    variant: 'warning',
-                                    text: '버튼2',
-                                },
-                            ]}
-                        >
-                            테스트
-                        </MokaAlertWithButtons>
-                        <MokaAlert outline>테스트</MokaAlert>
-                    </>
+                <MokaCard
+                    className="mr-10 flex-shrink-0"
+                    title="페이지관리"
+                    expansion={expansionState[0]}
+                    onExpansion={handleListExpansion}
+                    foldable
+                    buttons={[
+                        {
+                            variant: 'white',
+                            icon: <MokaIcon iconName="fal-coffee" />,
+                        },
+                    ]}
+                >
+                    <MokaAlertWithButtons
+                        title="title"
+                        variant="light"
+                        buttons={[
+                            {
+                                variant: 'primary',
+                                text: '버튼1',
+                            },
+                            {
+                                variant: 'warning',
+                                text: '버튼2',
+                            },
+                        ]}
+                    >
+                        테스트
+                    </MokaAlertWithButtons>
+                    <MokaAlert outline>테스트</MokaAlert>
                 </MokaCard>
 
                 {/* 에디터 */}
@@ -94,30 +101,21 @@ const Dashboard = () => {
                     height={CARD_DEFAULT_HEIGHT}
                     tabWidth={412}
                     tabs={[
-                        <Card>
-                            <Card.Header>
-                                <Card.Title className="h-100">탭컨텐츠1</Card.Title>
-                            </Card.Header>
-                            <Card.Body></Card.Body>
-                        </Card>,
-                        <Card>
-                            <Card.Header>
-                                <Card.Title className="h-100">탭 컨텐츠2</Card.Title>
-                            </Card.Header>
-                            <Card.Body></Card.Body>
-                        </Card>,
-                        <Card>
-                            <Card.Header>
-                                <Card.Title className="h-100">탭 컨텐츠3</Card.Title>
-                            </Card.Header>
-                            <Card.Body></Card.Body>
-                        </Card>,
+                        <MokaCard titleClassName="h-100 mb-0" title="탭컨텐츠1">
+                            TEST
+                        </MokaCard>,
+                        <MokaCard titleClassName="h-100 mb-0" title="탭컨텐츠2">
+                            TEST
+                        </MokaCard>,
+                        <MokaCard titleClassName="h-100 mb-0" title="탭컨텐츠3">
+                            TEST
+                        </MokaCard>,
                     ]}
                     tabNavWidth={48}
                     tabNavs={[
                         { title: '버튼1', icon: 'Info' },
-                        { title: '버튼2', icon: <FontAwesomeIcon icon={faCoffee} /> },
-                        { title: '버튼3', icon: <FontAwesomeIcon icon={faCoffee} /> },
+                        { title: '버튼2', icon: <MokaIcon iconName="fal-coffee" /> },
+                        { title: '버튼3', icon: <MokaIcon iconName="fal-coffee" /> },
                     ]}
                 />
             </div>

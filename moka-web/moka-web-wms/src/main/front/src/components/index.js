@@ -7,3 +7,4 @@ export { default as MokaAlert, MokaAlertWithButtons } from './MokaAlert';
 export { MokaCardTabs, MokaCardToggleTabs } from './MokaTabs';
 export { MokaCardEditor } from './MokaEditor';
 export { default as MokaCard, MokaFoldableCard } from './MokaCard';
+export { default as MokaIcon } from './MokaIcon';

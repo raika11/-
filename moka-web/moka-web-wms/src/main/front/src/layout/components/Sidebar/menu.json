@@ -18,7 +18,7 @@
                         "menuOrder": "1",
                         "depth": "1",
                         "useYn": "Y",
-                        "iconName": "coffee"
+                        "iconName": "fal-coffee"
                     },
                     {
                         "seq": "2",
@@ -28,7 +28,7 @@
                         "menuOrder": "2",
                         "depth": "1",
                         "useYn": "Y",
-                        "iconName": "coffee",
+                        "iconName": "fal-coffee",
                         "nodes": {
                             "nodes": [
                                 {
@@ -178,7 +178,7 @@
                         "menuOrder": "3",
                         "depth": "1",
                         "useYn": "Y",
-                        "iconName": "coffee"
+                        "iconName": "fal-coffee"
                     },
                     {
                         "seq": "15",
@@ -188,7 +188,7 @@
                         "menuOrder": "4",
                         "depth": "1",
                         "useYn": "Y",
-                        "iconName": "coffee",
+                        "iconName": "fal-coffee",
                         "nodes": {
                             "nodes": [
                                 {

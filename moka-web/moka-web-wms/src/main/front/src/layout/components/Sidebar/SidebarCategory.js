@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import Collapse from 'react-bootstrap/Collapse';
-import SidebarItemIcon from './SidebarItemIcon';
+import { MokaIcon } from '@components';
 
 const propTypes = {
     /**
@@ -26,7 +26,11 @@ const SidebarCategory = (props) => {
     return (
         <li className={clsx('sidebar-item', { active: open })}>
             <span className={clsx('sidebar-link', { collapsed: !open })} onClick={onClick} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
-                <SidebarItemIcon iconName={nodeData.iconName} />
+                {nodeData.iconName && (
+                    <span className="align-middle">
+                        <MokaIcon iconName={nodeData.iconName} />
+                    </span>
+                )}
                 <span className="align-middle">{nodeData.menuDispName}</span>
             </span>
             <Collapse in={open}>

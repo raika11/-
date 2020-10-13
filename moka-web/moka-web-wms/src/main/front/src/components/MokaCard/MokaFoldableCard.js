@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDoubleLeft } from '@moka/fontawesome-pro-light-svg-icons';
-
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
 import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/constants';
+import { MokaIcon } from '@components';
 
 const propTypes = {
     /**
@@ -81,7 +79,7 @@ const MokaFoldableCard = (props) => {
                 {/* 접는 버튼 */}
                 <div className="d-flex align-items-center">
                     <Button variant="white" className="p-0 float-right" onClick={handleExpansion}>
-                        <FontAwesomeIcon icon={faAngleDoubleLeft} rotation={localExpandState ? 0 : 180} />
+                        <MokaIcon iconName="fal-angle-double-left" rotation={localExpandState ? 0 : 180} />
                     </Button>
                 </div>
             </Card.Header>

@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { NavLink, useLocation } from 'react-router-dom';
-
-import SidebarItemIcon from './SidebarItemIcon';
+import { MokaIcon } from '@components';
 
 const propTypes = {
     /**
@@ -29,7 +28,11 @@ const SidebarItem = (props) => {
             })}
         >
             <NavLink to={nodeData.menuPath || ''} className="sidebar-link" activeClassName="active">
-                <SidebarItemIcon iconName={nodeData.iconName} />
+                {nodeData.iconName && (
+                    <span className="align-middle">
+                        <MokaIcon iconName={nodeData.iconName} />
+                    </span>
+                )}
                 {nodeData.menuDispName}
             </NavLink>
         </li>

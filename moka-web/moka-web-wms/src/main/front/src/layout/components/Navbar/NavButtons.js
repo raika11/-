@@ -1,17 +1,16 @@
 import React from 'react';
 
 import Button from 'react-bootstrap/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee } from '@moka/fontawesome-pro-light-svg-icons';
+import { MokaIcon } from '@components';
 
 const NavButtons = () => {
     return (
         <div>
             <Button as="a" variant="light" className="p-0 mr-3">
-                <FontAwesomeIcon icon={faCoffee} size="lg" />
+                <MokaIcon iconName="fal-coffee" size="lg" />
             </Button>
             <Button as="a" variant="light" className="p-0">
-                <FontAwesomeIcon icon={faCoffee} size="lg" />
+                <MokaIcon iconName="fal-coffee" size="lg" />
             </Button>
         </div>
     );

@@ -1,9 +1,7 @@
 import React from 'react';
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@moka/fontawesome-pro-solid-svg-icons';
+import { MokaIcon } from '@components';
 
 const propTypes = {
     /**
@@ -81,7 +79,7 @@ const MokaAutocomplete = (props) => {
                     onMouseDown={onClick}
                     onTouchEnd={onClick}
                 >
-                    <FontAwesomeIcon icon={faSearch} />
+                    <MokaIcon iconName="fal-search" />
                 </div>
                 {children}
             </components.IndicatorsContainer>

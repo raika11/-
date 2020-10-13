@@ -16,6 +16,7 @@ const routes = [
     {
         path: '/',
         name: 'Default',
+        displayName: '홈',
         component: Dashboard,
         layout: SidebarCloseLayout,
         nonResponsive: false,
@@ -24,6 +25,7 @@ const routes = [
     {
         path: '/dashboard',
         name: 'DashBoard',
+        displayName: '대시보드',
         component: Dashboard,
         layout: SidebarOpenLayout,
         nonResponsive: true,
@@ -31,12 +33,14 @@ const routes = [
     {
         path: '/404',
         name: 'Page404',
+        displayName: '404',
         component: () => <Page404 defaultLink="/dashboard" />,
         layout: NoFrameLayout,
     },
     {
         path: '/test',
         name: 'Test',
+        displayName: '테스트페이지',
         component: TestBoard,
         layout: SidebarOpenLayout,
         nonResponsive: false,
@@ -45,6 +49,7 @@ const routes = [
     {
         path: '/aggrid',
         name: 'AgGrid',
+        displayName: 'AgGrid',
         component: AgGrid,
         layout: SidebarOpenLayout,
         nonResponsive: false,
@@ -53,6 +58,7 @@ const routes = [
     {
         path: '/tasks',
         name: 'Task',
+        displayName: 'Task',
         component: Task,
         layout: SidebarOpenLayout,
         nonResponsive: false,
@@ -61,6 +67,7 @@ const routes = [
     {
         path: '/embed-video',
         name: 'EmbedVideo',
+        displayName: 'EmbedVideo',
         component: EmbedVideo,
         layout: SidebarOpenLayout,
         nonResponsive: false,
@@ -69,6 +76,7 @@ const routes = [
     {
         path: '/page',
         name: 'Page',
+        displayName: '페이지관리',
         component: Page,
         layout: SidebarOpenLayout,
         nonResponsive: true,

@@ -23,7 +23,6 @@ const propTypes = {
      */
     buttons: PropTypes.arrayOf(
         PropTypes.shape({
-            color: PropTypes.string,
             variant: PropTypes.string,
             className: PropTypes.string,
             onClick: PropTypes.func,
@@ -89,9 +88,9 @@ const MokaAlertWithButtons = forwardRef((props, ref) => {
                     <hr />
                     <div className="btn-list">
                         {buttons.map((buttonProps, idx) => {
-                            const { color: buttonColor, variant: buttonVariant, className: buttonClassName, text: buttonText, onClick: buttonOnClick } = buttonProps;
+                            const { variant: buttonVariant, className: buttonClassName, text: buttonText, onClick: buttonOnClick } = buttonProps;
                             return (
-                                <Button key={`alert-button-${idx}`} color={buttonColor} variant={buttonVariant} className={clsx('mr-1', buttonClassName)} onClick={buttonOnClick}>
+                                <Button key={`alert-button-${idx}`} variant={buttonVariant} className={clsx('mr-1', buttonClassName)} onClick={buttonOnClick}>
                                     {buttonText}
                                 </Button>
                             );

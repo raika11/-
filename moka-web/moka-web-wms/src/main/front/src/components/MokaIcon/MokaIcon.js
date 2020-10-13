@@ -5,13 +5,39 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 import { faCoffee } from '@moka/fontawesome-pro-light-svg-icons';
-import { faAngleDoubleLeft } from '@moka/fontawesome-pro-light-svg-icons';
-import { faSearch } from '@moka/fontawesome-pro-light-svg-icons';
+import {
+    faAngleDoubleLeft,
+    faSearch,
+    faExpandArrows,
+    faCompressArrowsAlt,
+    faArrowToRight,
+    faRepeat,
+    faFile,
+    faFileAlt,
+    faBox,
+    faBallot,
+    faNewspaper,
+    faAd,
+    faHistory,
+} from '@moka/fontawesome-pro-light-svg-icons';
 
 // 아이콘 등록
 library.add(faCoffee);
 library.add(faAngleDoubleLeft);
 library.add(faSearch);
+library.add(faExpandArrows);
+library.add(faCompressArrowsAlt);
+library.add(faArrowToRight);
+library.add(faRepeat);
+library.add(faFile);
+library.add(faFileAlt);
+library.add(faBox);
+library.add(faBallot);
+library.add(faRepeat);
+library.add(faNewspaper);
+library.add(faNewspaper);
+library.add(faAd);
+library.add(faHistory);
 
 const propTypes = {
     /**

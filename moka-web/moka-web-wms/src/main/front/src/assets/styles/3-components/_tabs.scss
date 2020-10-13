@@ -53,6 +53,16 @@
   flex-direction: column;
 
   .nav-link {
+    @include border-left-radius(0);
+    @include border-right-radius($border-radius);
+  }
+}
+
+.tab-vertical.flex-row-reverse .nav-tabs {
+  float: left;
+  flex-direction: column;
+
+  .nav-link {
     @include border-left-radius($border-radius);
     @include border-right-radius(0);
   }

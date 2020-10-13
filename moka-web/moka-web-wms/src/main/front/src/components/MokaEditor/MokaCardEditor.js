@@ -1,12 +1,6 @@
 import React, { useCallback, forwardRef, useState, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
-
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExpandArrows, faCompressArrowsAlt, faArrowToRight, faRepeat } from '@moka/fontawesome-pro-light-svg-icons';
-
+import { MokaIcon, MokaCard } from '@components';
 import MonacoEditor from './MonacoEditor';
 
 const propTypes = {
@@ -70,8 +64,7 @@ const defaultOptions = {
  * (wordwrap, expansion 아이콘 있음)
  */
 const MokaCardEditor = forwardRef((props, ref) => {
-    const { width, height, defaultValue, language, options,
-         className, title, onBlur, expansion, onExpansion } = props;
+    const { width, height, defaultValue, language, options, className, title, onBlur, expansion, onExpansion } = props;
 
     // editor state
     const [wordWrap, setWordWrap] = useState(defaultOptions.wordWrap);
@@ -117,32 +110,30 @@ const MokaCardEditor = forwardRef((props, ref) => {
     };
 
     return (
-        <Card className={className} style={{ width, height }}>
-            <Card.Header className="d-flex justify-content-between align-item-center">
-                <Card.Title>{title}</Card.Title>
-                <div className="d-flex align-items-center">
-                    {/* 워드랩 버튼 */}
-                    <Button variant="white" className="p-0 mr-10" onClick={handleWordWrap}>
-                        <FontAwesomeIcon icon={wordWrap ? faArrowToRight : faRepeat} />
-                    </Button>
-
-                    {/* 확장 버튼 */}
-                    <Button variant="white" className="p-0" onClick={handleExpansion}>
-                        <FontAwesomeIcon icon={expansion ? faCompressArrowsAlt : faExpandArrows} />
-                    </Button>
-                </div>
-            </Card.Header>
-
-            <Card.Body>
-                <MonacoEditor
-                    ref={editorRef}
-                    defaultValue={defaultValue}
-                    language={language}
-                    options={{ ...defaultOptions, ...options, wordWrap }}
-                    editorDidMount={editorDidMount}
-                />
-            </Card.Body>
-        </Card>
+        <MokaCard
+            className={className}
+            headerClassName="d-flex justify-content-between align-items-center"
+            titleClassName="mb-0"
+            title={title}
+            buttons={[
+                // 워드랩 버튼
+                {
+                    className: 'p-0 mr-10',
+                    onClick: handleWordWrap,
+                    icon: <MokaIcon iconName={wordWrap ? 'fal-arrow-to-right' : 'fal-repeat'} />,
+                },
+                // 확장 버튼
+                {
+                    className: 'p-0',
+                    onClick: handleExpansion,
+                    icon: <MokaIcon iconName={expansion ? 'fal-compress-arrows-alt' : 'fal-expand-arrows'} />,
+                },
+            ]}
+            width={width}
+            height={height}
+        >
+            <MonacoEditor ref={editorRef} defaultValue={defaultValue} language={language} options={{ ...defaultOptions, ...options, wordWrap }} editorDidMount={editorDidMount} />
+        </MokaCard>
     );
 });
 

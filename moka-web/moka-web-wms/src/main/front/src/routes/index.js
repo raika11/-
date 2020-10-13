@@ -81,7 +81,8 @@ const routes = [
         component: Page,
         layout: SidebarOpenLayout,
         nonResponsive: true,
-        exact: true,
+        strict: true,
+        exact: false,
     },
     {
         path: '/domain',

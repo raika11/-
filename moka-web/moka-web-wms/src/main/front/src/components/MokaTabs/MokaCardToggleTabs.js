@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -66,10 +66,10 @@ const defaultProps = {
 };
 
 /**
- * 카드모양의 탭
+ * 카드모양의 탭 (사용하지 않음!!!!!!)
  * 버튼 토글로 탭 변경
  */
-const MokaCardToggleTabs = (props) => {
+const MokaCardToggleTabs = forwardRef((props, ref) => {
     const { className, height, tabs, tabWidth, tabNavs, tabNavWidth, placement, expansion, onExpansion } = props;
     const [activeKey, setActiveKey] = useState(0);
     const [isExpand, setIsExpand] = useState(true);
@@ -110,7 +110,7 @@ const MokaCardToggleTabs = (props) => {
     };
 
     return (
-        <div className={clsx('tab', 'card-toggle-tab', 'd-flex', className)} style={{ height }}>
+        <div ref={ref} className={clsx('tab', 'card-toggle-tab', 'd-flex', className)} style={{ height }}>
             <Tab.Container defaultActiveKey={activeKey}>
                 {/* 탭 컨텐츠 */}
                 <Tab.Content
@@ -159,7 +159,7 @@ const MokaCardToggleTabs = (props) => {
             </Tab.Container>
         </div>
     );
-};
+});
 
 MokaCardToggleTabs.propTypes = propTypes;
 MokaCardToggleTabs.defaultProps = defaultProps;

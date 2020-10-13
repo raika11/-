@@ -3,7 +3,7 @@ import produce from 'immer';
 
 import Container from 'react-bootstrap/Container';
 
-import { MokaCardEditor, MokaCardToggleTabs, MokaCard, MokaAlertWithButtons, MokaAlert, MokaIcon } from '@components';
+import { MokaCardEditor, MokaIconTabs, MokaCard, MokaAlertWithButtons, MokaAlert, MokaIcon } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 const Dashboard = () => {
@@ -95,7 +95,7 @@ const Dashboard = () => {
                 <MokaCardEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
                 {/* 탭 */}
-                <MokaCardToggleTabs
+                <MokaIconTabs
                     expansion={expansionState[2]}
                     onExpansion={handleTabExpansion}
                     height={CARD_DEFAULT_HEIGHT}

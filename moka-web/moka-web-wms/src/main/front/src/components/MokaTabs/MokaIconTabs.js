@@ -38,7 +38,8 @@ const propTypes = {
     tabNavs: PropTypes.arrayOf(
         PropTypes.shape({
             title: PropTypes.string,
-            icon: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+            icon: PropTypes.node,
+            text: PropTypes.string,
         }),
     ),
     /**
@@ -56,7 +57,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    tabNavPosition: 'left',
+    tabNavPosition: 'right',
     tabs: [],
     tabWidth: 600,
     tabNavs: [],
@@ -67,10 +68,10 @@ const defaultProps = {
 };
 
 /**
- * 탭
- * 토글로 탭 변경
+ * 아이콘 탭
+ * 아이콘 토글로 탭 변경
  */
-const MokaIconTabs = (props) => {
+const MokaIconTabs = forwardRef((props, ref) => {
     const { className, height, tabs, tabWidth, tabNavPosition, tabNavs, tabNavWidth, placement, expansion, onExpansion } = props;
     const [activeKey, setActiveKey] = useState(0);
     const [isExpand, setIsExpand] = useState(true);
@@ -100,35 +101,15 @@ const MokaIconTabs = (props) => {
     };
 
     const tabNavPlacement = clsx({
-        'd-flex': tabNavPosition === 'left' ? true : false,
-        'd-flex flex-row-reverse': tabNavPosition === 'right' ? true : false,
-        'd-flex flex-column': tabNavPosition === 'top' ? true : false,
-        'd-flex flex-column-reverse': tabNavPosition === 'bottom' ? true : false,
+        'tab-vertical flex-row-reverse': tabNavPosition === 'left' ? true : false,
+        'tab-vertical': tabNavPosition === 'right' ? true : false,
+        'flex-column': tabNavPosition === 'top' ? true : false,
+        'flex-column-reverse': tabNavPosition === 'bottom' ? true : false,
     });
 
     return (
-        <div tabNavPosition={tabNavPosition} className={clsx('tab', 'icon-toggle-tab', tabNavPlacement, className)} style={{ height }}>
+        <div ref={ref} className={clsx('tab', 'icon-toggle-tab', 'd-flex', tabNavPlacement, className)} style={{ height }}>
             <Tab.Container defaultActiveKey={activeKey}>
-                {/* 탭 Nav */}
-                <Nav variant="pills" className="d-flex" style={{ width: tabNavWidth }}>
-                    {tabNavs.map((nav, idx) => (
-                        <Nav.Item key={idx} className="mb-1">
-                            <OverlayTrigger key={idx} placement={placement} overlay={<Tooltip id={`tooltip-${idx}-${nav.title}`}>{nav.title}</Tooltip>}>
-                                <Nav.Link
-                                    eventKey={idx}
-                                    onSelect={handleSelect}
-                                    className={clsx('text-center', 'flex-fill', 'border-0', {
-                                        active: activeKey.toString() === idx.toString(),
-                                    })}
-                                    variant="gray150"
-                                >
-                                    {nav.icon}
-                                </Nav.Link>
-                            </OverlayTrigger>
-                        </Nav.Item>
-                    ))}
-                </Nav>
-
                 {/* 탭 컨텐츠 */}
                 <Tab.Content
                     className={clsx('p-0', {
@@ -142,10 +123,30 @@ const MokaIconTabs = (props) => {
                         </Tab.Pane>
                     ))}
                 </Tab.Content>
+
+                {/* 탭 Nav */}
+                <Nav variant="tabs" className="d-flex" style={{ width: tabNavWidth }}>
+                    {tabNavs.map((nav, idx) => (
+                        <Nav.Item key={idx}>
+                            <OverlayTrigger key={idx} placement={placement} overlay={<Tooltip id={`tooltip-${idx}-${nav.title}`}>{nav.title}</Tooltip>}>
+                                <Nav.Link
+                                    eventKey={idx}
+                                    onSelect={handleSelect}
+                                    className={clsx('text-center', 'flex-fill', 'border-0', 'pl-0', 'pr-0', 'd-flex', 'justify-content-center', {
+                                        active: activeKey.toString() === idx.toString(),
+                                    })}
+                                    variant="gray150"
+                                >
+                                    {nav.icon || <span className="h6 mb-0">{nav.text}</span>}
+                                </Nav.Link>
+                            </OverlayTrigger>
+                        </Nav.Item>
+                    ))}
+                </Nav>
             </Tab.Container>
         </div>
     );
-};
+});
 
 MokaIconTabs.propTypes = propTypes;
 MokaIconTabs.defaultProps = defaultProps;

@@ -14,7 +14,7 @@ const MokaBreadcrumb = () => {
     });
 
     useEffect(() => {
-        const cp = routes.find((route) => location.pathname === route.path);
+        const cp = routes.find((route) => !route.exact && location.pathname.indexOf(route.path) > -1);
         setCurrentPage(cp);
     }, [location]);
 

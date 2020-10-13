@@ -93,7 +93,6 @@ public class TmsAutoConfiguration {
     @Value("${tms.merge.article.view.name}")
     private String articleViewName;
 
-
     @Value("${tms.interceptor.enable}")
     private boolean tmsInterceptorEnable;
 
@@ -102,6 +101,12 @@ public class TmsAutoConfiguration {
 
     @Value("${tms.item.api.path}")
     private String itemApiPath;
+
+    @Value("${tms.default.api.host}")
+    private String defaultApiHost;
+
+    @Value("${tms.default.api.path}")
+    private String defaultApiPath;
 
     @Value("${tms.item.expire.time}")
     protected String itemExpireTimeStr;
@@ -232,7 +237,7 @@ public class TmsAutoConfiguration {
     public MokaDomainTemplateMerger domainTemplateMerger()
             throws TemplateParseException {
         MokaDomainTemplateMerger domainTemplateMerger =
-                new MokaDomainTemplateMerger(appContext, defaultTemplateDomain);
+                new MokaDomainTemplateMerger(appContext, defaultApiHost, defaultApiPath);
         return domainTemplateMerger;
     }
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cacheConfig>
 	<cacheGroup name="default" gcInterval="1m" >
-		<cache expire="20s" enable="false">
+		<cache expire="20s" enable="true">
 			<instance class="jmnet.moka.common.cache.HazelcastCache" name="hazelcast"/>
 		    <property name="config" value="classpath:dps-hazelcast-dev.xml"/>
 		</cache>
-		<cache expire="20s" enable="true">
+		<cache expire="20s" enable="false">
 			<instance class="jmnet.moka.common.cache.InfinispanCache" name="infinispan"/>
 		    <property name="config" value="classpath:dps-infinispan-dev.xml"/>
 		</cache>

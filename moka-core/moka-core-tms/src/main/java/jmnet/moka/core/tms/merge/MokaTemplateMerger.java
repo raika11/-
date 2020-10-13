@@ -85,8 +85,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     private static final Logger logger = LoggerFactory.getLogger(MokaTemplateMerger.class);
 
     public MokaTemplateMerger(GenericApplicationContext appContext, String domainId,
-                              AbstractTemplateLoader templateLoader, DataLoader dataLoader,
-                              TemplateLoader<MergeItem> assistantTemplateLoader) {
+                              AbstractTemplateLoader templateLoader, DataLoader dataLoader) {
         this.appContext = appContext;
         try {
             this.cacheManager = this.appContext.getBean(CacheManager.class);
@@ -98,10 +97,6 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         this.elementMergerMap = new HashMap<String, ElementMerger>(16);
         this.evaluator = new Evaluator();
         this.dataLoader = dataLoader;
-        if (assistantTemplateLoader != null) {
-            this.templateLoader.setAssistantTemplateLoader(assistantTemplateLoader);
-        }
-
         this.esiEnabled = Boolean
                 .valueOf(appContext.getBeanFactory().resolveEmbeddedValue("${tms.esi.enable}"));
 

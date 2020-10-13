@@ -41,13 +41,8 @@ public class PreviewConfiguration {
     @Value("${tms.item.api.path}")
     private String itemApiPath;
 
-
     @Value("${tms.template.loader.cache}")
     private boolean templateLoaderCache;
-
-    @Value("${tms.default.template.domain}")
-    private String defaultTemplateDomain;
-
 
     @Autowired
     private GenericApplicationContext appContext;
@@ -108,8 +103,6 @@ public class PreviewConfiguration {
             throws IOException {
         // AbstractTemplateLoader assistantTemplateLoader =
         // this.appContext.getBean(AbstractTemplateLoader.class, defaultTemplateDomain);
-        AbstractTemplateLoader assistantTemplateLoader = (AbstractTemplateLoader) this.appContext
-                .getBean("templateLoader", defaultTemplateDomain);
         String domainId = domainItem.getString(ItemConstants.DOMAIN_ID);
         // String domainUrl = domainItem.getString(ItemConstants.DOMAIN_URL);
         String apiHost = domainItem.getString(ItemConstants.DOMAIN_API_HOST);
@@ -122,7 +115,7 @@ public class PreviewConfiguration {
                 (AbstractTemplateLoader) this.appContext.getBean("templateLoader", domainId);
         DomainResolver domainResolver = this.appContext.getBean(DomainResolver.class);
         MokaPreviewTemplateMerger ptm = new MokaPreviewTemplateMerger(this.appContext, domainItem,
-                domainResolver, templateLoader, httpProxyDataLoader, assistantTemplateLoader);
+                domainResolver, templateLoader, httpProxyDataLoader);
         return ptm;
     }
 
@@ -132,8 +125,6 @@ public class PreviewConfiguration {
                                                                String workerId, Long editionSeq, List<String> componentIdList) throws IOException {
         // AbstractTemplateLoader assistantTemplateLoader =
         // this.appContext.getBean(AbstractTemplateLoader.class, defaultTemplateDomain);
-        AbstractTemplateLoader assistantTemplateLoader = (AbstractTemplateLoader) this.appContext
-                .getBean("templateLoader", defaultTemplateDomain);
         String domainId = domainItem.getString(ItemConstants.DOMAIN_ID);
         String apiHost = domainItem.getString(ItemConstants.DOMAIN_API_HOST);
         String apiPath = domainItem.getString(ItemConstants.DOMAIN_API_PATH);
@@ -145,8 +136,7 @@ public class PreviewConfiguration {
                 .getBean("workTemplateLoader", domainId, workerId, componentIdList);
         DomainResolver domainResolver = this.appContext.getBean(DomainResolver.class);
         MokaPreviewTemplateMerger ptm = new MokaPreviewTemplateMerger(this.appContext, domainItem,
-                domainResolver, templateLoader, httpProxyDataLoader, assistantTemplateLoader,
-                workerId, editionSeq);
+                domainResolver, templateLoader, httpProxyDataLoader, workerId, editionSeq);
         return ptm;
     }
 

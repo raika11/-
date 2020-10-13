@@ -34,13 +34,14 @@ const Domain = () => {
                     height={CARD_DEFAULT_HEIGHT}
                     expansion={expansionState[0]}
                     headerClassName="d-flex justify-content-between align-item-center"
-                    buttons={
-                        <div className="d-flex align-items-center">
-                            <Button variant="dark" className="mr-05" style={{ width: '100px', height: '32px' }}>
-                                도메인 추가
-                            </Button>
-                        </div>
-                    }
+                    buttons={[
+                        {
+                            variant: 'dark',
+                            className: 'mr-05',
+                            text: '도메인 추가',
+                            style: { width: '100px', height: '32px' },
+                        },
+                    ]}
                 >
                     <div>AgGrid</div>
                 </MokaCard>

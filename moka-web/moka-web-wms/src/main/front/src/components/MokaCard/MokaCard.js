@@ -48,6 +48,8 @@ const propTypes = {
         PropTypes.shape({
             variant: PropTypes.string,
             icon: PropTypes.node,
+            text: PropTypes.string,
+            style: PropTypes.object,
             onClick: PropTypes.func,
             ref: PropTypes.ref,
         }),
@@ -123,9 +125,10 @@ const MokaCard = forwardRef((props, ref) => {
                             ref={btn.ref}
                             variant={btn.variant || 'white'}
                             className={clsx('p-0', btn.className, { 'd-none': foldable && !localExpandState && !btn.foldIcon, 'mr-1': idx < headerButtons.length - 1 })}
+                            style={btn.style}
                             onClick={btn.onClick}
                         >
-                            {btn.icon}
+                            {btn.icon || btn.text}
                         </Button>
                     ))}
                 </div>

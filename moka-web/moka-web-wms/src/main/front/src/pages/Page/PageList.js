@@ -1,12 +1,12 @@
 import React from 'react';
 import Search from './PageSearch';
-import AgGrid from './PageAgGrid';
+import Tree from './PageTree';
 
 const PageList = () => {
     return (
         <>
             <Search />
-            <AgGrid />
+            <Tree />
         </>
     );
 };

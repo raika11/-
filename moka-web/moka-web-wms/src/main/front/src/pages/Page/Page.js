@@ -87,7 +87,16 @@ const Page = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard className="mr-10" title="페이지관리" foldable height={CARD_DEFAULT_HEIGHT} expansion={expansionState[0]} onExpansion={handleListExpansion}>
+            <MokaCard
+                className="mr-10"
+                headerClassName="pb-0"
+                titleClassName="mb-0"
+                title="페이지관리"
+                foldable
+                height={CARD_DEFAULT_HEIGHT}
+                expansion={expansionState[0]}
+                onExpansion={handleListExpansion}
+            >
                 <Suspense>
                     <PageList />
                 </Suspense>

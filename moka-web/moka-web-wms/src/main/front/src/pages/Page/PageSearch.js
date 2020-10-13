@@ -9,18 +9,18 @@ import { MokaSearchInput } from '@components';
 const PageSearch = () => {
     return (
         <Form>
-            <Form.Group>
+            <Form.Group className="mb-2">
                 <Form.Control as="select" custom>
-                    <option>중앙일보(https://joongang.joins.com/)</option>
+                    <option>중앙일보</option>
                 </Form.Control>
             </Form.Group>
             <Form.Group as={Row}>
-                <Col md={4} className="px-0">
+                <Col xs={4} className="p-0 pr-2">
                     <Form.Control as="select" custom>
                         <option>페이지 전체</option>
                     </Form.Control>
                 </Col>
-                <Col md={8} className="px-0 pl-2">
+                <Col xs={8} className="p-0">
                     <MokaSearchInput />
                 </Col>
             </Form.Group>

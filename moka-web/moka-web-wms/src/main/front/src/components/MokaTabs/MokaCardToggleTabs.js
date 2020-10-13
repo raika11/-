@@ -132,7 +132,7 @@ const MokaCardToggleTabs = (props) => {
                     width={tabNavWidth}
                     headerClassName="pl-0 pr-0 d-flex align-items-center justify-content-center"
                     bodyClassName="p-0 m-0"
-                    headerAs={
+                    titleAs={
                         <Button variant="white" className="p-0" onClick={handleExpansion}>
                             <MokaIcon iconName="fal-angle-double-left" rotation={isExpand ? 0 : 180} />
                         </Button>

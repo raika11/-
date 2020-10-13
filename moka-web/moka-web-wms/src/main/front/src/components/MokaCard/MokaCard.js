@@ -38,9 +38,9 @@ const propTypes = {
      */
     title: PropTypes.string,
     /**
-     * custom element type for this component (Card.Header)
+     * custom element type for this component (Card.Title)
      */
-    headerAs: PropTypes.node,
+    titleAs: PropTypes.node,
     /**
      * buttons
      */
@@ -80,7 +80,7 @@ const defaultProps = {
  * 카드 컴포넌트
  */
 const MokaCard = forwardRef((props, ref) => {
-    const { className, headerClassName, bodyClassName, titleClassName, width, height, title, headerAs, children, expansion, onExpansion, buttons, foldable } = props;
+    const { className, headerClassName, bodyClassName, titleClassName, width, height, title, titleAs, children, expansion, onExpansion, buttons, foldable } = props;
     const [localExpandState, setLocalExpandState] = useState(true);
 
     useEffect(() => {
@@ -143,10 +143,10 @@ const MokaCard = forwardRef((props, ref) => {
             className={clsx('flex-shrink-0', className, { fold: foldable && !localExpandState })}
             style={{ width: foldable && !localExpandState ? CARD_FOLDING_WIDTH : width, height }}
         >
-            <Card.Header className={clsx({ 'd-flex': foldable, 'justify-content-between': foldable, 'align-item-center': foldable }, headerClassName)}>
+            <Card.Header className={clsx({ 'd-flex': foldable, 'justify-content-between': foldable, 'align-items-center': foldable }, headerClassName)}>
                 {/* 카드 타이틀 */}
-                {headerAs ? (
-                    headerAs
+                {titleAs ? (
+                    titleAs
                 ) : (
                     <React.Fragment>
                         <Card.Title className={clsx({ 'd-none': foldable && !localExpandState }, titleClassName)}>{title}</Card.Title>

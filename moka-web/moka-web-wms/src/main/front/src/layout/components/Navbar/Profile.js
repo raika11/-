@@ -22,7 +22,7 @@ const Profile = ({ className }) => {
         <div className={clsx('d-flex', 'align-items-center', 'position-relative', className)}>
             <div className="d-flex flex-direction-column align-items-end mr-3">
                 <p className="h5 mb-0">사용자명</p>
-                <p className="h6 mb-0">로그인</p>
+                <p className="mb-0">로그인</p>
             </div>
             <Dropdown>
                 <Dropdown.Toggle as={profileCustomToggle} id="dropdown-profile">

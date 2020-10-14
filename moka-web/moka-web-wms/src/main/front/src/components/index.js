@@ -8,3 +8,5 @@ export { MokaCardTabs, MokaCardToggleTabs, MokaIconTabs } from './MokaTabs';
 export { MokaCardEditor } from './MokaEditor';
 export { default as MokaCard } from './MokaCard';
 export { default as MokaIcon } from './MokaIcon';
+export { default as MokaPagination } from './MokaPagination';
+export { default as MokaTable } from './MokaTable';

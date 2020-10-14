@@ -22,6 +22,7 @@ import {
     faFilePlus,
     faExternalLink,
 } from '@moka/fontawesome-pro-light-svg-icons';
+import { faAngleLeft, faAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 
 // 아이콘 등록
 library.add(faCoffee);
@@ -42,6 +43,8 @@ library.add(faAd);
 library.add(faHistory);
 library.add(faFilePlus);
 library.add(faExternalLink);
+library.add(faAngleLeft);
+library.add(faAngleRight);
 
 const propTypes = {
     /**

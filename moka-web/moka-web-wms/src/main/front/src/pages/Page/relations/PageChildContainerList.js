@@ -15,7 +15,7 @@ const PageChildContainerList = (props) => {
             <Card.Body>
                 {/* 검색 및 버튼 */}
                 <Search />
-                {/* 목록 */}
+                {/* 목록 및 페이징 */}
                 <AgGrid />
             </Card.Body>
         </Card>

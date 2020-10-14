@@ -4,17 +4,23 @@ import { useLocation, Link } from 'react-router-dom';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import routes from '@/routes';
 
+const home = {
+    path: '/',
+    displayName: '홈',
+};
+
 /**
  * Navbar에 들어가는 breadcrumb
  */
 const MokaBreadcrumb = () => {
     const location = useLocation();
-    const [currentPage, setCurrentPage] = useState({
-        path: '/',
-    });
+    const [currentPage, setCurrentPage] = useState(home);
 
     useEffect(() => {
-        const cp = location.pathname === '/' ? routes.find((route) => route.path === '/') : routes.find((route) => !route.exact && location.pathname.indexOf(route.path) > -1);
+        let cp = home;
+        if (location.pathname !== '/') {
+            cp = routes.find((route) => route.path !== '/' && location.pathname.indexOf(route.path) > -1);
+        }
         setCurrentPage(cp);
     }, [location]);
 

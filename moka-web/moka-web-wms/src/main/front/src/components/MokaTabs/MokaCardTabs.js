@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
+import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 const propTypes = {
     /**
@@ -25,33 +26,37 @@ const propTypes = {
     /**
      * tab 컨텐츠의 Nav(array), tab과 갯수가 동일해야한다
      */
-    tabNav: PropTypes.arrayOf(PropTypes.string),
+    tabNavs: PropTypes.arrayOf(PropTypes.string),
 };
 const defaultProps = {
+    width: 410,
+    height: CARD_DEFAULT_HEIGHT,
     fill: false,
     tabs: [],
-    tabNav: [],
+    tabNavs: [],
 };
 
 /**
  * 카드모양의 탭
  */
 const MokaCardTabs = (props) => {
-    const { className, fill, id, tabs, tabNavs } = props;
+    const { className, fill, id, tabs, tabNavs, width, height } = props;
 
     return (
-        <div className={clsx('tab', 'card-tab', className)}>
+        <div className={clsx('tab', 'card-tab', 'flex-fill', className)} style={{ width, height }}>
             <Tab.Container id={id} defaultActiveKey={0}>
                 <div className="d-flex">
                     <Nav fill={fill} variant="tabs">
                         {tabNavs.map((nav, idx) => (
                             <Nav.Item key={idx}>
-                                <Nav.Link eventKey={idx}>{nav}</Nav.Link>
+                                <Nav.Link eventKey={idx} className="h5">
+                                    {nav}
+                                </Nav.Link>
                             </Nav.Item>
                         ))}
                     </Nav>
                 </div>
-                <div className="d-flex">
+                <div className="d-flex custom-scroll">
                     <Tab.Content>
                         {tabs.map((tab, idx) => (
                             <Tab.Pane key={idx} eventKey={idx}>

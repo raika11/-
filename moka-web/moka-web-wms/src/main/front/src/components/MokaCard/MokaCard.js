@@ -49,7 +49,6 @@ const propTypes = {
             variant: PropTypes.string,
             icon: PropTypes.node,
             text: PropTypes.string,
-            style: PropTypes.object,
             onClick: PropTypes.func,
             ref: PropTypes.ref,
         }),
@@ -119,18 +118,21 @@ const MokaCard = forwardRef((props, ref) => {
         if (headerButtons.length > 0) {
             return (
                 <div className="d-flex align-items-center">
-                    {headerButtons.map((btn, idx) => (
-                        <Button
-                            key={idx}
-                            ref={btn.ref}
-                            variant={btn.variant || 'white'}
-                            className={clsx('p-0', btn.className, { 'd-none': foldable && !localExpandState && !btn.foldIcon, 'mr-1': idx < headerButtons.length - 1 })}
-                            style={btn.style}
-                            onClick={btn.onClick}
-                        >
-                            {btn.icon || btn.text}
-                        </Button>
-                    ))}
+                    {headerButtons.map((btnProps, idx) => {
+                        const { ref: btnRef, variant: btnVariant, onClick: btnOnClick, text: btnText, icon: btnIcon, className: btnClassName, foldIcon, ...rest } = btnProps;
+                        return (
+                            <Button
+                                key={idx}
+                                ref={btnRef}
+                                variant={btnVariant || 'white'}
+                                className={clsx('p-0', btnClassName, { 'd-none': foldable && !localExpandState && !foldIcon, 'mr-1': idx < headerButtons.length - 1 })}
+                                onClick={btnOnClick}
+                                {...rest}
+                            >
+                                {btnIcon || btnText}
+                            </Button>
+                        );
+                    })}
                 </div>
             );
         }
@@ -156,7 +158,7 @@ const MokaCard = forwardRef((props, ref) => {
             </Card.Header>
 
             {/* 카드 본문 */}
-            <Card.Body className={clsx({ 'd-none': foldable && !localExpandState }, bodyClassName)}>{children}</Card.Body>
+            <Card.Body className={clsx({ 'd-none': foldable && !localExpandState }, 'custom-scroll', bodyClassName)}>{children}</Card.Body>
         </Card>
     );
 });

@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-import { MokaDraggableModal } from '@components';
+import { MokaModal } from '@components';
 import AlertComponet from './AlertComponent';
 import MokaTabComponent from './MokaTabComponent';
 import AccordionComponent from './AccordionComponent';
@@ -67,11 +67,11 @@ const TestBoardPgae = () => {
                             <Button className="mr-2" onClick={() => setShowD(true)}>
                                 드래그 모달
                             </Button>
-                            <MokaDraggableModal show={showD} onHide={() => setShowD(false)} title="드래그가능한 모달">
+                            <MokaModal show={showD} onHide={() => setShowD(false)} title="드래그가능한 모달">
                                 <div>
                                     <h1>드래그 가능한 모달</h1>
                                 </div>
-                            </MokaDraggableModal>
+                            </MokaModal>
                         </Card.Body>
                     </Card>
                     <Card>

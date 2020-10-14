@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import clsx from 'clsx';
 import Dropzone from 'react-dropzone';
 import PropTypes from 'prop-types';
 
@@ -91,9 +90,10 @@ const MokaImageInput = (props) => {
             {({ getRootProps, getInputProps }) => (
                 <Figure
                     {...getRootProps()}
-                    className={clsx('overflow-hidden', 'd-inline-flex', 'align-items-center', 'justify-content-center', 'is-file-dropzone', 'relative')}
+                    className="d-inline-flex align-items-center justify-content-center is-file-dropzone position-relative"
                     style={{ width, height }}
                     ref={wrapRef}
+                    as="div"
                 >
                     <Figure.Image width={width} height={height} alt={`${width}x${height}`} src={imgSrc} ref={imgRef} />
                     <input {...getInputProps()} />

@@ -14,7 +14,7 @@ body {
 }
 
 .custom-scroll {
-    overflow-y: scroll;
+    overflow-y: auto;
     &::-webkit-scrollbar {
         width: 8px;
     }
@@ -30,6 +30,16 @@ body {
         width: 0;
         height: 0;
     }
+}
+
+.portrait {
+    height: 100%;
+    width: auto;
+}
+
+.landscape {
+    height: auto;
+    width: 100%;
 }
 
 /* -----------------------
@@ -70,10 +80,14 @@ body {
         border-bottom: 2px solid $gray-300;
 
         &.active {
-        border-color: $orange;
+            border-color: $orange;
         }
     }
 
+    > .d-flex:nth-child(2) {
+        height: calc(100% - 46px);
+    }
+    
     .tab-content {
         background: inherit;
         box-shadow: unset;
@@ -136,4 +150,40 @@ body {
     margin-bottom: 0px;
     margin-left: $spacer;
     margin-right: $spacer;
+}
+
+
+/* -----------------------
+* modal
+* ---------------------- */
+.react-draggable-container {
+    height: 100vh;
+    width: 100vw;
+    padding: 30px;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+
+    .modal-dialog {
+        box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+        border-radius: 7px;
+        margin: 0;
+        min-width: 600px;
+    
+        &.react-draggable {
+            .modal-header[data-drag-on="true"] {
+                cursor: move;
+                user-select: none;
+                position: relative;
+
+                #draggable-handle {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 35px;
+                }
+            }
+        }
+    }
 }

@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 
 import codeList from './code_data.json';
-import MokaDraggableModal from './MokaDraggableModal';
+import MokaModal from './MokaModal';
 
 const propTypes = {
     /**
@@ -22,9 +21,9 @@ const propTypes = {
      */
     title: PropTypes.string,
     /**
-     * footer의 액션버튼
+     * footer의 버튼
      */
-    actionButtons: PropTypes.arrayOf(
+    buttons: PropTypes.arrayOf(
         PropTypes.shape({
             variant: PropTypes.string,
             buttonName: PropTypes.string,
@@ -48,7 +47,7 @@ const defaultProps = {
  * 대/중/소 코드 선택 모달
  */
 const MokaCodeListModal = (props) => {
-    const { show, onHide, title, actionButtons, onOk, onCancle, ...rest } = props;
+    const { show, onHide, title, buttons, onOk, onCancle, ...rest } = props;
 
     // 대중소 분류 코드 리스트
     const [lCodeList, setLCodeList] = useState([]);
@@ -146,58 +145,60 @@ const MokaCodeListModal = (props) => {
     }, [selectedLCode, selectedMCode, selectedSCode, onOk, onHide]);
 
     return (
-        <MokaDraggableModal
+        <MokaModal
             {...rest}
             show={show}
             onHide={onHide}
             title={title}
             size="lg"
+            draggable
             className="code-modal"
-            actionButtons={
-                actionButtons || [
-                    { variant: 'primary', buttonName: '적용', onClick: handleOkTrigger },
-                    { variant: 'warning', buttonName: '취소', onClick: onHide },
+            buttons={
+                buttons || [
+                    { variant: 'primary', text: '적용', onClick: handleOkTrigger },
+                    { variant: 'warning', text: '취소', onClick: onHide },
                 ]
             }
+            centered
         >
             <div className="d-flex align-items-center justify-content-around">
                 {/* 대분류 */}
-                <Card>
-                    <Card.Header as="h5">대분류</Card.Header>
-                    <ListGroup variant="flush">
+                <div>
+                    <p className="h5">대분류</p>
+                    <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
                         {lCodeList.map((code) => (
                             <ListGroup.Item key={code.codeId}>
                                 <Form.Check custom type="radio" name="lcode" id={`radio-${code.codeId}`} label={code.codeName} onClick={(e) => selectLCode(code, e)} />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
-                </Card>
+                </div>
 
                 {/* 중분류 */}
-                <Card>
-                    <Card.Header as="h5">중분류</Card.Header>
-                    <ListGroup variant="flush">
+                <div>
+                    <p className="h5">중분류</p>
+                    <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
                         {mCodeList.map((code) => (
                             <ListGroup.Item key={code.codeId}>
                                 <Form.Check custom type="radio" name="mcode" id={`radio-${code.codeId}`} label={code.codeName} onClick={(e) => selectMCode(code, e)} />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
-                </Card>
+                </div>
 
                 {/* 소분류 */}
-                <Card>
-                    <Card.Header as="h5">소분류</Card.Header>
-                    <ListGroup variant="flush">
+                <div>
+                    <p className="h5">소분류</p>
+                    <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
                         {sCodeList.map((code) => (
                             <ListGroup.Item key={code.codeId}>
                                 <Form.Check custom type="radio" name="scode" id={`radio-${code.codeId}`} label={code.codeName} onClick={(e) => selectSCode(code, e)} />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
-                </Card>
+                </div>
             </div>
-        </MokaDraggableModal>
+        </MokaModal>
     );
 };
 

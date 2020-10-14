@@ -22,11 +22,11 @@ import {
     MokaAlert,
     MokaIcon,
     MokaImageInput,
-    MokaDraggableModal,
+    MokaModal,
     MokaCodeListModal,
 } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
-import { changeTheme } from '@store/layout/layoutAction';
+// import { changeTheme } from '@store/layout/layoutAction';
 import { options } from './data';
 
 const Dashboard = () => {
@@ -38,8 +38,7 @@ const Dashboard = () => {
     // modal test
     const [showD, setShowD] = useState(false);
     const [showLMS, setShowLMS] = useState(false);
-
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     /**
      * 리스트 확장 시
@@ -100,7 +99,6 @@ const Dashboard = () => {
                     className="mr-10 flex-shrink-0"
                     title="왼쪽 영역"
                     titleClassName="mb-0"
-                    bodyClassName="overflow-y-auto"
                     expansion={expansionState[0]}
                     onExpansion={handleListExpansion}
                     foldable
@@ -164,7 +162,6 @@ const Dashboard = () => {
 
                 <MokaCard
                     className="mr-10 flex-fill"
-                    bodyClassName="overflow-y-auto"
                     titleClassName="mb-0"
                     title="가운데 영역"
                     height={CARD_DEFAULT_HEIGHT}
@@ -296,24 +293,22 @@ const Dashboard = () => {
                                 <Button className="mr-2" onClick={() => setShowD(true)}>
                                     드래그 모달
                                 </Button>
-                                <MokaDraggableModal show={showD} onHide={() => setShowD(false)} title="드래그가능한 모달">
-                                    <div>
-                                        <h1>드래그 가능한 모달</h1>
-                                        <Button
-                                            onClick={() => {
-                                                toastr.confirm('적용하시겠습니까?', {
-                                                    onOk: () => {
-                                                        setShowD(false);
-                                                    },
-                                                    onCancle: () => {},
-                                                    attention: false,
-                                                });
-                                            }}
-                                        >
-                                            적용
-                                        </Button>
-                                    </div>
-                                </MokaDraggableModal>
+                                <MokaModal draggable show={showD} onHide={() => setShowD(false)} title="드래그가능한 모달">
+                                    <h1>드래그 가능한 모달</h1>
+                                    <Button
+                                        onClick={() => {
+                                            toastr.confirm('적용하시겠습니까?', {
+                                                onOk: () => {
+                                                    setShowD(false);
+                                                },
+                                                onCancle: () => {},
+                                                attention: false,
+                                            });
+                                        }}
+                                    >
+                                        적용
+                                    </Button>
+                                </MokaModal>
 
                                 {/* toastr test */}
                                 <Button
@@ -339,13 +334,13 @@ const Dashboard = () => {
                                     onOk={(codeData) => {
                                         toastr.success('선택한 코드', codeData.codeId);
                                     }}
-                                    title="분류 검색"
+                                    title="분류 검색(화면 틀어지는건 나중에 처리)"
                                 />
 
                                 {/* 테마변경 */}
-                                <Button className="mr-2" onClick={() => dispatch(changeTheme('classic'))}>
+                                {/* <Button className="mr-2" onClick={() => dispatch(changeTheme('classic'))}>
                                     테마1
-                                </Button>
+                                </Button> */}
                                 {/* <Button
                                     className="mr-2"
                                     onClick={() => dispatch(changeTheme('corporate'))}
@@ -378,8 +373,8 @@ const Dashboard = () => {
                     ]}
                     tabNavWidth={48}
                     tabNavs={[
-                        { title: 'Modal 예제', text: 'Info' },
-                        { title: '이미지drop', icon: <MokaIcon iconName="fal-coffee" /> },
+                        { title: 'Modal 예제', text: 'Modal' },
+                        { title: '이미지drop', text: 'Drop' },
                         { title: '버튼3', icon: <MokaIcon iconName="fal-coffee" /> },
                     ]}
                 />

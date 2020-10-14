@@ -20,6 +20,7 @@ import {
     faAd,
     faHistory,
     faFilePlus,
+    faExternalLink,
 } from '@moka/fontawesome-pro-light-svg-icons';
 
 // 아이콘 등록
@@ -40,6 +41,7 @@ library.add(faNewspaper);
 library.add(faAd);
 library.add(faHistory);
 library.add(faFilePlus);
+library.add(faExternalLink);
 
 const propTypes = {
     /**

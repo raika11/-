@@ -1,19 +1,35 @@
 import React from 'react';
 import AppendButton from '../components/ContainerAppendButton';
+import ContainerLinkButton from '../components/ContainerLinkButton';
+
+export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 
 export const columnDefs = [
     {
-        field: '아이디',
-        width: 100,
+        headerName: 'ID',
+        field: 'containerSeq',
+        width: 50,
     },
     {
-        field: '이름',
-        width: 150,
+        headerName: '이름',
+        field: 'containerName',
+        // cellClass: 'ag-cell-center',
+        // cellStyle: { textAlign: 'center' },
+        width: 240,
     },
     {
+        headerName: '',
         field: 'append',
-        width: 100,
+        width: 40,
+        cellStyle: { textAlign: 'center' },
         cellRendererFramework: (params) => <AppendButton {...params} />,
+    },
+    {
+        headerName: '',
+        field: 'append',
+        width: 40,
+        cellStyle: { textAlign: 'center' },
+        cellRendererFramework: (params) => <ContainerLinkButton {...params} />,
     },
 ];
 

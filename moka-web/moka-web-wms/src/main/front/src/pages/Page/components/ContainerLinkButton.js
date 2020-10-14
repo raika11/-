@@ -2,12 +2,12 @@ import React from 'react';
 import { MokaIcon } from '@components';
 import { Button } from 'react-bootstrap';
 
-const ContainerAppendButton = (props) => {
+const ContainerLinkButton = (props) => {
     return (
         <Button variant="white">
-            <MokaIcon iconName="fal-file-plus" />
+            <MokaIcon iconName="fal-external-link" />
         </Button>
     );
 };
 
-export default ContainerAppendButton;
+export default ContainerLinkButton;

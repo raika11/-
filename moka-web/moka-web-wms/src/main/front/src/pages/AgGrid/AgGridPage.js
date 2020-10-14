@@ -133,7 +133,7 @@ const AgGridPage = () => {
         <Container fluid className="p-0">
             <Row>
                 <Col lg="12">
-                    <div className="ag-theme-moka-grid">
+                    <div className="ag-theme-moka-desking-grid">
                         <AgGridReact
                             rowData={rowData}
                             getRowNodeId={(params) => params.contentsId}

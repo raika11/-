@@ -80,10 +80,14 @@ body {
         border-bottom: 2px solid $gray-300;
 
         &.active {
-        border-color: $orange;
+            border-color: $orange;
         }
     }
 
+    > .d-flex:nth-child(2) {
+        height: calc(100% - 46px);
+    }
+    
     .tab-content {
         background: inherit;
         box-shadow: unset;

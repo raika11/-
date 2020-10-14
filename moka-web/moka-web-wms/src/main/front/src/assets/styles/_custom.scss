@@ -137,7 +137,6 @@ body {
     margin-right: $spacer;
 }
 
-
 /* -----------------------
 * modal
 * ---------------------- */
@@ -168,6 +167,45 @@ body {
                     left: 0;
                     right: 35px;
                 }
+            }
+        }
+    }
+}
+
+/* -----------------------
+* tree
+* ---------------------- */
+.treeview {
+    .tree-list {
+        > .tree-category > div > ul li > .tree-label{
+            padding: 7px 0px;
+        }
+        > .tree-category > div > ul .tree-category{
+            padding-left: 28px;
+        }
+        > .tree-category > div > ul .tree-category .tree-item{
+            padding-left: 28px;
+        }
+
+        .tree-category, .tree-item {
+            position: relative;
+        }
+
+        .tree-buttons {
+            visibility: hidden;
+            position: absolute;
+            top: 0;
+            right: 10px;
+        }
+
+        .tree-label {
+            display: flex;
+        }
+
+        .tree-label:hover {
+            background: $orange;
+            & > .tree-buttons {
+                visibility: visible;
             }
         }
     }

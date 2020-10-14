@@ -106,7 +106,7 @@ const MonacoEditor = forwardRef((props, ref) => {
         };
     }, [editor]);
 
-    return <div ref={containerElement} className="react-monaco-editor-container h-100"></div>;
+    return <div ref={containerElement} className="react-monaco-editor-container" style={{ height: 'calc(100% - 7px)' }}></div>;
 });
 
 MonacoEditor.propTypes = propTypes;

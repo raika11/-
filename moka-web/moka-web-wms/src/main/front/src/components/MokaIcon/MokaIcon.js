@@ -22,6 +22,8 @@ import {
     faFilePlus,
     faExternalLink,
     faEllipsisV,
+	faPlus as falPlus,
+    faMinus as falMinus,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faAngleLeft, faAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 
@@ -47,6 +49,8 @@ library.add(faExternalLink);
 library.add(faEllipsisV);
 library.add(faAngleLeft);
 library.add(faAngleRight);
+library.add(falPlus);
+library.add(falMinus);
 
 const propTypes = {
     /**

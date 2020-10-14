@@ -33,7 +33,7 @@ const SidebarCategory = (props) => {
                 )}
                 <span className="align-middle">{nodeData.menuDispName}</span>
             </span>
-            <Collapse in={open}>
+            <Collapse in={open} timeout={3000}>
                 <div id={controls}>
                     <ul id="item" className="sidebar-dropdown list-unstyled">
                         {children}

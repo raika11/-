@@ -1,0 +1,287 @@
+{
+    "header": {
+        "success": true,
+        "resultCode": 200,
+        "resultType": "",
+        "message": "",
+        "redirect": null
+    },
+    "body": {
+        "pageSeq": 3,
+        "pageName": "메인",
+        "pageUrl": "/",
+        "parentPageSeq": 0,
+        "pageOrder": 1,
+        "btnShow": false,
+        "match": false,
+        "useYn": "Y",
+        "nodes": [
+            {
+                "pageSeq": 41,
+                "pageName": "추가테스트2",
+                "pageUrl": "/addtest2",
+                "parentPageSeq": 3,
+                "parentPageName": "메인",
+                "parentPageUrl": "/",
+                "pageOrder": 1,
+                "btnShow": false,
+                "match": false,
+                "useYn": "Y",
+                "nodes": [
+                    {
+                        "pageSeq": 82,
+                        "pageName": "a1",
+                        "pageUrl": "/addtest2/a1",
+                        "parentPageSeq": 41,
+                        "parentPageName": "추가테스트2",
+                        "parentPageUrl": "/addtest2",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y"
+                    },
+                    {
+                        "pageSeq": 83,
+                        "pageName": "aa3",
+                        "pageUrl": "/addtest2/aa3",
+                        "parentPageSeq": 41,
+                        "parentPageName": "추가테스트2",
+                        "parentPageUrl": "/addtest2",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y"
+                    },
+                    {
+                        "pageSeq": 84,
+                        "pageName": "aa6",
+                        "pageUrl": "/addtest2/aa6",
+                        "parentPageSeq": 41,
+                        "parentPageName": "추가테스트2",
+                        "parentPageUrl": "/addtest2",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y"
+                    }
+                ]
+            },
+            {
+                "pageSeq": 26,
+                "pageName": "중앙일보 메인",
+                "pageUrl": "/joongang",
+                "parentPageSeq": 3,
+                "parentPageName": "메인",
+                "parentPageUrl": "/",
+                "pageOrder": 1,
+                "btnShow": false,
+                "match": false,
+                "useYn": "Y",
+                "nodes": [
+                    {
+                        "pageSeq": 46,
+                        "pageName": "서브",
+                        "pageUrl": "/joongang/sub",
+                        "parentPageSeq": 26,
+                        "parentPageName": "중앙일보 메인",
+                        "parentPageUrl": "/joongang",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y",
+                        "nodes": [
+                            {
+                                "pageSeq": 59,
+                                "pageName": "test",
+                                "pageUrl": "/joongang/sub/test2",
+                                "parentPageSeq": 46,
+                                "parentPageName": "서브",
+                                "parentPageUrl": "/joongang/sub",
+                                "pageOrder": 1,
+                                "btnShow": false,
+                                "match": false,
+                                "useYn": "Y"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "pageSeq": 6,
+                "pageName": "페이징_테스트",
+                "pageUrl": "/paging",
+                "parentPageSeq": 3,
+                "parentPageName": "메인",
+                "parentPageUrl": "/",
+                "pageOrder": 1,
+                "btnShow": false,
+                "match": false,
+                "useYn": "Y"
+            },
+            {
+                "pageSeq": 47,
+                "pageName": "관련테스트",
+                "pageUrl": "/rel",
+                "parentPageSeq": 3,
+                "parentPageName": "메인",
+                "parentPageUrl": "/",
+                "pageOrder": 1,
+                "btnShow": false,
+                "match": false,
+                "useYn": "Y",
+                "nodes": [
+                    {
+                        "pageSeq": 89,
+                        "pageName": "111",
+                        "pageUrl": "/rel/111",
+                        "parentPageSeq": 47,
+                        "parentPageName": "관련테스트",
+                        "parentPageUrl": "/rel",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y"
+                    },
+                    {
+                        "pageSeq": 91,
+                        "pageName": "222",
+                        "pageUrl": "/rel/222",
+                        "parentPageSeq": 47,
+                        "parentPageName": "관련테스트",
+                        "parentPageUrl": "/rel",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y"
+                    },
+                    {
+                        "pageSeq": 67,
+                        "pageName": "함수테스트",
+                        "pageUrl": "/rel/rtest",
+                        "parentPageSeq": 47,
+                        "parentPageName": "관련테스트",
+                        "parentPageUrl": "/rel",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y"
+                    }
+                ]
+            },
+            {
+                "pageSeq": 92,
+                "pageName": "필진",
+                "pageUrl": "/reporter",
+                "parentPageSeq": 3,
+                "parentPageName": "메인",
+                "parentPageUrl": "/",
+                "pageOrder": 1,
+                "btnShow": false,
+                "match": false,
+                "useYn": "Y",
+                "nodes": [
+                    {
+                        "pageSeq": 95,
+                        "pageName": "2002",
+                        "pageUrl": "/reporter/2002",
+                        "parentPageSeq": 92,
+                        "parentPageName": "필진",
+                        "parentPageUrl": "/reporter",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y"
+                    },
+                    {
+                        "pageSeq": 94,
+                        "pageName": "test",
+                        "pageUrl": "/reporter/test",
+                        "parentPageSeq": 92,
+                        "parentPageName": "필진",
+                        "parentPageUrl": "/reporter",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y"
+                    }
+                ]
+            },
+            {
+                "pageSeq": 60,
+                "pageName": "TEST2",
+                "pageUrl": "/test2",
+                "parentPageSeq": 3,
+                "parentPageName": "메인",
+                "parentPageUrl": "/",
+                "pageOrder": 1,
+                "btnShow": false,
+                "match": false,
+                "useYn": "Y",
+                "nodes": [
+                    {
+                        "pageSeq": 62,
+                        "pageName": "test3",
+                        "pageUrl": "/test2/test31",
+                        "parentPageSeq": 60,
+                        "parentPageName": "TEST2",
+                        "parentPageUrl": "/test2",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y",
+                        "nodes": [
+                            {
+                                "pageSeq": 64,
+                                "pageName": "test4",
+                                "pageUrl": "/test2/test31/test4",
+                                "parentPageSeq": 62,
+                                "parentPageName": "test3",
+                                "parentPageUrl": "/test2/test31",
+                                "pageOrder": 1,
+                                "btnShow": false,
+                                "match": false,
+                                "useYn": "Y"
+                            }
+                        ]
+                    },
+                    {
+                        "pageSeq": 63,
+                        "pageName": "test32",
+                        "pageUrl": "/test2/test32",
+                        "parentPageSeq": 60,
+                        "parentPageName": "TEST2",
+                        "parentPageUrl": "/test2",
+                        "pageOrder": 1,
+                        "btnShow": false,
+                        "match": false,
+                        "useYn": "Y"
+                    }
+                ]
+            },
+            {
+                "pageSeq": 9,
+                "pageName": "에러페이지",
+                "pageUrl": "/error",
+                "parentPageSeq": 3,
+                "parentPageName": "메인",
+                "parentPageUrl": "/",
+                "pageOrder": 4,
+                "btnShow": false,
+                "match": false,
+                "useYn": "Y"
+            },
+            {
+                "pageSeq": 52,
+                "pageName": "이중루프 테스트",
+                "pageUrl": "/doubleloop",
+                "parentPageSeq": 3,
+                "parentPageName": "메인",
+                "parentPageUrl": "/",
+                "pageOrder": 10,
+                "btnShow": false,
+                "match": false,
+                "useYn": "Y"
+            }
+        ]
+    }
+}

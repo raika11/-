@@ -1,11 +1,16 @@
 package jmnet.moka.core.tms.mvc;
 
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.util.HttpHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +128,7 @@ public class DefaultHandler {
             }
         }
 
-		// Htttp 파라미터 설정
+		// Http 파라미터 설정
         HttpParamMap httpParamMap = this.httpParamFactory.creatHttpParamMap(request);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM,httpParamMap);
 
@@ -141,6 +146,11 @@ public class DefaultHandler {
                 }
             }
         }
+
+        // Http 헤더 설정
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_HEADER, HttpHelper.getHeaderMap(request));
+        // Http 쿠기 설정
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_COOKIE, HttpHelper.getCookieMap(request));
 
 		model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
 		return this.defaultViewName;

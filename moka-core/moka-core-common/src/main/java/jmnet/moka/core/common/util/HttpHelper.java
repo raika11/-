@@ -3,6 +3,7 @@ package jmnet.moka.core.common.util;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 public class HttpHelper {
@@ -49,5 +50,32 @@ public class HttpHelper {
             }
         }
         return parameterMap;
+    }
+
+    /**
+     * http header 정보를 Map으로 반환한다.
+     * @param request http요청
+     * @return http header 맵
+     */
+    public static Map<String, String> getHeaderMap(HttpServletRequest request) {
+        Map<String,String> headerMap = new HashMap<String,String>(8);
+        for ( Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements();) {
+            String headerName = e.nextElement();
+            headerMap.put(headerName,request.getHeader(headerName));
+        }
+        return headerMap;
+    }
+
+    /**
+     * http cookie를 Map으로 반환한다.
+     * @param request http요청
+     * @return http cookie 맵
+     */
+    public static Map<String, String> getCookieMap(HttpServletRequest request) {
+        Map<String,String> cookieMap = new HashMap<String,String>();
+        for ( Cookie cookie : request.getCookies() ) {
+            cookieMap.put(cookie.getName(), cookie.getValue());
+        }
+        return cookieMap;
     }
 }

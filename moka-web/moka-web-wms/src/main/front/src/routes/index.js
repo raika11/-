@@ -3,7 +3,6 @@ import React from 'react';
 // layout
 import { NoFrameLayout, SidebarOpenLayout, SidebarCloseLayout } from '@layout';
 import Page404 from '@pages/Auth/Page404';
-import Domain from '@/pages/Domain/Domain';
 
 // page
 const Dashboard = React.lazy(() => import('@pages/Dashboard'));
@@ -12,6 +11,7 @@ const Task = React.lazy(() => import('@pages/Task'));
 const EmbedVideo = React.lazy(() => import('@pages/EmbedVideo'));
 const AgGrid = React.lazy(() => import('@pages/AgGrid'));
 const Page = React.lazy(() => import('@pages/Page'));
+const Domain = React.lazy(() => import('@/pages/Domain'));
 
 const routes = [
     {
@@ -91,7 +91,7 @@ const routes = [
         component: Domain,
         layout: SidebarOpenLayout,
         nonResponsive: true,
-        exact: true,
+        exact: false,
     },
 ];
 

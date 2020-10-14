@@ -7,7 +7,8 @@
  * @since 2020-10-08 오후 2:00
  * @author thkim
  */
-import React, { useState, Suspense } from 'react';
+import React, { useState, useCallback, useEffect, Suspense } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,11 +20,33 @@ import { MokaCardEditor, MokaCardToggleTabs, MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import Button from 'react-bootstrap/Button';
 import { faAngleDoubleLeft } from '@moka/fontawesome-pro-light-svg-icons';
+import { changeSearchOption, getDomains } from '@store/domain';
 
 const DomainEdit = React.lazy(() => import('./DomainEdit'));
 
 const Domain = () => {
     const [expansionState, setExpansionState] = useState([true]);
+    const dispatch = useDispatch();
+
+    const { detail, list, total, search, error, loading, latestMediaId } = useSelector((store) => ({
+        detail: store.domain.detail,
+        list: store.domain.list,
+        total: store.domain.total,
+        search: store.domain.search,
+        error: store.domain.error,
+        latestMediaId: store.auth.latestMediaId,
+    }));
+
+    useEffect(() => {
+        dispatch(
+            getDomains(
+                changeSearchOption({
+                    key: 'mediaId',
+                    value: latestMediaId,
+                }),
+            ),
+        );
+    }, [latestMediaId, dispatch]);
 
     return (
         <Container className="p-0" fluid>

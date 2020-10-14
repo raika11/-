@@ -12,7 +12,10 @@ let message = {};
 /**
  * 목록
  */
-const getDomainsSaga = callApiAfterActions(domainAction.GET_DOMAINS, domainAPI.getDomains, (state) => state.domainAction);
+const getDomainsSaga = callApiAfterActions(domainAction.GET_DOMAINS, domainAPI.getDomains, (state) => {
+    console.log(state);
+    return state.domain;
+});
 
 /**
  * 조회

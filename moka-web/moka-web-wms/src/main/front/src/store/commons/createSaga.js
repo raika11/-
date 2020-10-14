@@ -13,7 +13,7 @@ export const callApiAfterActions = (actionType, api, targetStateSelector) => {
     const FAILURE = `${actionType}_FAILURE`;
 
     return function* ({ payload: actions }) {
-        yield put(startLoading(actionType));
+        //yield put(startLoading(actionType));
         try {
             // 검색 전에 배열로 들어온 액션들을 먼저 실행시킨다
             if (actions && actions.length > 0) {
@@ -70,8 +70,9 @@ export const callApiAfterActions = (actionType, api, targetStateSelector) => {
                     },
                 }),
             );
+            console.log(e.message);
         }
-        yield put(finishLoading(actionType));
+        //yield put(finishLoading(actionType));
     };
 };
 

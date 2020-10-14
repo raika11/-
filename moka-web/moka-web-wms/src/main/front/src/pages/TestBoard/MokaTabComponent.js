@@ -12,7 +12,7 @@ const propTypes = {
      * tab object
      * { eventKey, title, content }
      */
-    tab: PropTypes.arrayOf(PropTypes.any).isRequired
+    tab: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
 const MokaTabComponent = (props) => {
@@ -26,7 +26,7 @@ const MokaTabComponent = (props) => {
                 <Tab key={idx} eventKey={t.eventKey} title={t.title}>
                     <div className="pt-3">{t.content}</div>
                 </Tab>
-            ))
+            )),
         );
     }, [tab]);
 

@@ -21,6 +21,7 @@ import {
     faHistory,
     faFilePlus,
     faExternalLink,
+    faEllipsisV,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faAngleLeft, faAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 
@@ -43,6 +44,7 @@ library.add(faAd);
 library.add(faHistory);
 library.add(faFilePlus);
 library.add(faExternalLink);
+library.add(faEllipsisV);
 library.add(faAngleLeft);
 library.add(faAngleRight);
 

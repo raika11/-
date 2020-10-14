@@ -1,20 +1,17 @@
 package jmnet.moka.core.tps.mvc.member.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import jmnet.moka.common.utils.McpDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -138,7 +135,8 @@ public class Member implements Serializable {
      * 등록일시
      */
     @Column(name = "REG_DT", nullable = false)
-    private Date regDt;
+    @Builder.Default
+    private Date regDt = new Date();
 
     /**
      * 등록자
@@ -169,5 +167,17 @@ public class Member implements Serializable {
 
     @OneToMany(mappedBy = "member")
     private Set<GroupMember> groupMembers;
+
+
+    /**
+     * 수정 전 처리
+     */
+    @PreUpdate
+    public void preUpdate() {
+        this.regDt = McpDate.defaultValue(this.regDt);
+        this.modDt = McpDate.defaultValue(this.modDt);
+        ;
+    }
+
 
 }

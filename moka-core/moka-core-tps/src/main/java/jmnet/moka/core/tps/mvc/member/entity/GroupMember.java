@@ -1,7 +1,6 @@
 package jmnet.moka.core.tps.mvc.member.entity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,18 +13,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.common.utils.McpString;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.ibatis.annotations.Many;
 
 /**
  * CMS 그룹별 사용자
@@ -48,7 +42,7 @@ public class GroupMember implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ_NO", nullable = false)
-    private Integer seqNo;
+    private Long seqNo;
 
     /**
      * 그룹코드(TB_CMS_GROUP.GRP_CD)
@@ -123,6 +117,7 @@ public class GroupMember implements Serializable {
     @PreUpdate
     public void preUpdate() {
         this.regDt = McpDate.defaultValue(this.regDt);
-        this.modDt = McpDate.defaultValue(this.modDt);;
+        this.modDt = McpDate.defaultValue(this.modDt);
+        ;
     }
 }

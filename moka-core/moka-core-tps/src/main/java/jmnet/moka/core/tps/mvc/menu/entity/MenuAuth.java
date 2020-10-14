@@ -37,7 +37,7 @@ public class MenuAuth implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ_NO", nullable = false)
-    private Integer seqNo;
+    private Long seqNo;
 
     /**
      * 그룹/사용자구분 (G:그룹, U:사용자)
@@ -62,7 +62,7 @@ public class MenuAuth implements Serializable {
      * 메뉴코드 (TB_CMS_MENU.MENU_CD))
      */
     @Column(name = "MENU_CD", nullable = false)
-    private String menuCd;
+    private String menuId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MENU_CD", nullable = false, insertable = false, updatable = false)

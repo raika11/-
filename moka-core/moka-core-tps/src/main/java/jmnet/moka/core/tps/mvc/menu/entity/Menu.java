@@ -7,11 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,28 +40,17 @@ public class Menu implements Serializable {
     /**
      * 대메뉴코드
      */
-    @Column(name = "LMENU_CD", nullable = false)
-    private String largeMenuCd;
-
-    /**
-     * 중메뉴코드
-     */
-    @Column(name = "MMENU_CD")
-    @Builder.Default
-    private String middleMenuCd = "";
-
-    /**
-     * 소메뉴코드
-     */
-    @Column(name = "SMENU_CD")
-    @Builder.Default
-    private String smallMenuCd = "";
+    @Column(name = "PARENT_MENU_ID", nullable = false)
+    private String parentMenuId;
 
     /**
      * 메뉴코드 (GRP_CD+MID_CD+DTL_CD)
      */
-    @Column(name = "MENU_CD", nullable = false)
-    private String menuCd;
+    @Column(name = "MENU_ID", nullable = false)
+    private String menuId;
+
+    @Column(name = "DEPTH", nullable = false)
+    private Integer depth;
 
     /**
      * 사용여부(Y:사용, N:미사용)
@@ -86,11 +73,23 @@ public class Menu implements Serializable {
     private String menuNm;
 
     /**
+     * 메뉴 표시 명
+     */
+    @Column(name = "MENU_DISP_NM", nullable = false)
+    private String menuDisplayNm;
+
+    /**
      * 메뉴 페이지 URL
      */
     @Column(name = "MENU_URL")
     @Builder.Default
     private String menuUrl = "";
+
+    /**
+     * 아이콘 명
+     */
+    @Column(name = "ICON_NM", nullable = false)
+    private String iconNm;
 
     /**
      * 등록일시

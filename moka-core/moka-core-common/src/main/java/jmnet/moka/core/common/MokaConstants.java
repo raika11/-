@@ -7,25 +7,24 @@ import java.time.format.DateTimeFormatter;
 import jmnet.moka.common.template.Constants;
 
 /**
- * 
  * <pre>
  * MSP 프로젝트의 공통 상수와 함수를 포함한다.
  * 2019. 9. 4. kspark 최초생성
  * </pre>
- * 
- * @since 2019. 9. 4. 오후 4:16:07
+ *
  * @author kspark
+ * @since 2019. 9. 4. 오후 4:16:07
  */
 public class MokaConstants {
 
-    public final static String ROOT_DATAPROVIDER = "dataProvider";	// 데이타 루트폴더명
-    public final static String ROOT_TEMPLATE = "template";			// 템플릿 루트폴더명
-    public final static String ROOT_TEMPLATE_HISTORY = "template_history";	// 템플릿히스토리 루트폴더명
+    public final static String ROOT_DATAPROVIDER = "dataProvider";    // 데이타 루트폴더명
+    public final static String ROOT_TEMPLATE = "template";            // 템플릿 루트폴더명
+    public final static String ROOT_TEMPLATE_HISTORY = "template_history";    // 템플릿히스토리 루트폴더명
 
 
     public final static String DOMAINS_JSON = "domains.json";
     public final static String DOMAIN_CODE_JSON = "code.json";
-    public final static String DEFAULT_PATH = "0000";				// 공통, 기본 폴더명
+    public final static String DEFAULT_PATH = "0000";                // 공통, 기본 폴더명
 
     public static final String INTERCEPTOR_DEBUG = "msp.interceptor.debug";
     public static final String INTERCEPTOR_IGNORE = "msp.interceptor.ignore";
@@ -37,20 +36,21 @@ public class MokaConstants {
     /* mcp-core-template 확장 */
     public static String ATTR_REL_CP = "relcp";
     public static String EL_JSON = Constants.PREFIX + "json";
+
     static {
         Constants.name2NodeTypeMap.put(EL_JSON, Constants.TYPE_STATEMENT);
     }
 
     /* Item Kind */
     public final static String ITEM_DOMAIN = "DOMAIN";  // 도메인
-    public final static String ITEM_PAGE = "PG"; 		// 페이지
-    public final static String ITEM_COMPONENT = "CP";	// 컴포넌트
-    public final static String ITEM_TEMPLATE = "TP"; 	// 템플릿
-    public final static String ITEM_CONTAINER = "CT";	// 컨테이너
-    public final static String ITEM_AD = "AD";			// 광고
+    public final static String ITEM_PAGE = "PG";        // 페이지
+    public final static String ITEM_COMPONENT = "CP";    // 컴포넌트
+    public final static String ITEM_TEMPLATE = "TP";    // 템플릿
+    public final static String ITEM_CONTAINER = "CT";    // 컨테이너
+    public final static String ITEM_AD = "AD";            // 광고
     public final static String ITEM_CONTENT_SKIN = "CS";// 콘텐트(기사본문)스킨
     public final static String ITEM_UNKNOWN = "UNKNOWN";// 알수 없음
-    public final static String ITEM_DATASET = "DS";		// 데이타셋
+    public final static String ITEM_DATASET = "DS";        // 데이타셋
     public final static String ITEM_RESERVED = "RS";    // 예약어
 
     /* TMS Constants */
@@ -105,11 +105,9 @@ public class MokaConstants {
     public static final String PARAM_REL_CP = "relCp"; // for Item merge, related component
 
     public static final String WRAP_ITEM_START =
-            "<mte-start data-mte-type=\"${" + Constants.WRAP_ITEM_TYPE + "}\" data-mte-id=\"${"
-                    + Constants.WRAP_ITEM_ID + "}\"></mte-start>";
+            "<mte-start data-mte-type=\"${" + Constants.WRAP_ITEM_TYPE + "}\" data-mte-id=\"${" + Constants.WRAP_ITEM_ID + "}\"></mte-start>";
     public static final String WRAP_ITEM_END =
-            "<mte-end data-mte-type=\"${" + Constants.WRAP_ITEM_TYPE + "}\" data-mte-id=\"${"
-                    + Constants.WRAP_ITEM_ID + "}\"></mte-end>";
+            "<mte-end data-mte-type=\"${" + Constants.WRAP_ITEM_TYPE + "}\" data-mte-id=\"${" + Constants.WRAP_ITEM_ID + "}\"></mte-end>";
 
     public static final String HIGHLIGHT_JS_PATH = "highlightJsPath";
     public static final String HIGHLIGHT_CSS_PATH = "highlightCssPath";
@@ -130,8 +128,8 @@ public class MokaConstants {
     }
 
     // thread-safe한 date formatter
-    public static DateTimeFormatter dtf =
-            DateTimeFormatter.ofPattern(JSON_DATE_FORMAT).withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
+    public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern(JSON_DATE_FORMAT)
+                                                           .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
 
     public static String now() {
         LocalDateTime now = LocalDateTime.now();
@@ -145,4 +143,7 @@ public class MokaConstants {
     public static final String SYSTEM_UNKNOWN = "UNKNOWN";
     public static final String IP_UNKNOWN = "UNKNOWN";
     public static final String USER_UNKNOWN = "UNKNOWN";
+
+    public static final String YES = "Y";
+    public static final String NO = "N";
 }

@@ -4,9 +4,10 @@ import java.util.Optional;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
-public interface MemberRepository extends JpaRepository<Member, String>,
-    JpaSpecificationExecutor<Member> {
+@Repository
+public interface MemberRepository extends JpaRepository<Member, String>, JpaSpecificationExecutor<Member> {
 
     public Optional<Member> findByMemberId(String memberId);
 }

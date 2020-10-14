@@ -1,21 +1,22 @@
 package jmnet.moka.core.tps.mvc.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collection;
 import java.util.List;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jmnet.moka.core.tps.mvc.user.entity.User;
 
 /**
  * <pre>
  * User DTO
  * 2020. 4. 14. jeon 최초생성
  * </pre>
- * 
- * @since 2020. 4. 14. 오전 9:46:42
+ *
  * @author jeon
+ * @since 2020. 4. 14. 오전 9:46:42
  */
 public class UserDTO implements UserDetails {
 
@@ -48,6 +49,8 @@ public class UserDTO implements UserDetails {
 
     private String sessionId;
 
+    private String status;
+
     // private String createYmdt;
     //
     // private String creator;
@@ -59,13 +62,13 @@ public class UserDTO implements UserDetails {
     @JsonIgnore
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
-    public UserDTO(String userId, String allowMediaIds, String cellPhoneNo, String dept,
-            String emailaddress,
+    public UserDTO(String userId, String allowMediaIds, String cellPhoneNo, String dept, String emailaddress,
             // String createYmdt, String creator, String modifiedYmdt, String modifier,
-            String password, String phoneNo, String photo, String position, String userLevel,
-            String userName, String workYn, Collection<? extends GrantedAuthority> authorities) {
+            String password, String phoneNo, String photo, String position, String userLevel, String userName, String workYn,
+            Collection<? extends GrantedAuthority> authorities, String status) {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
@@ -83,22 +86,20 @@ public class UserDTO implements UserDetails {
         // this.modifiedYmdt = modifiedYmdt;
         // this.modifier = modifier;
         this.authorities = authorities;
+        this.status = status;
     }
 
     public static UserDTO create(User user, List<GrantedAuthority> authorities) {
-        return new UserDTO(user.getUserId(), user.getAllowMediaIds(), user.getCellPhoneNo(),
-                String.valueOf(user.getDeptNo()), user.getEmailaddress(),
+        return new UserDTO(user.getUserId(), user.getAllowMediaIds(), user.getCellPhoneNo(), String.valueOf(user.getDeptNo()), user.getEmailaddress(),
                 // user.getCreateYmdt(), user.getCreator(), user.getModifiedYmdt(),
                 // user.getModifier(),
-                user.getPassword(), user.getPhoneNo(), user.getPhoto(), user.getPosition(),
-                user.getUserLevel(), user.getUserName(), user.getWorkYn(), authorities);
+                user.getPassword(), user.getPhoneNo(), user.getPhoto(), user.getPosition(), user.getUserLevel(), user.getUserName(), user.getWorkYn(),
+                authorities, MokaConstants.YES);
     }
 
     public static UserDTO create(Member user, List<GrantedAuthority> authorities) {
-        return new UserDTO(user.getMemberId(), null, user.getMobilePhone(),
-            user.getDept(), user.getEmail(),
-            null, user.getCompanyPhone(), null, user.getGroup(),
-            null, user.getMemberNm(), user.getStatus(), authorities);
+        return new UserDTO(user.getMemberId(), null, user.getMobilePhone(), user.getDept(), user.getEmail(), null, user.getCompanyPhone(), null,
+                user.getGroup(), null, user.getMemberNm(), user.getStatus(), authorities, user.getStatus());
     }
 
     @Override
@@ -196,21 +197,6 @@ public class UserDTO implements UserDetails {
         this.emailaddress = emailaddress;
     }
 
-    // public String getModifiedYmdt() {
-    // return modifiedYmdt;
-    // }
-    //
-    // public void setModifiedYmdt(String modifiedYmdt) {
-    // this.modifiedYmdt = modifiedYmdt;
-    // }
-    //
-    // public String getModifier() {
-    // return modifier;
-    // }
-    //
-    // public void setModifier(String modifier) {
-    // this.modifier = modifier;
-    // }
 
     public String getPhoneNo() {
         return phoneNo;
@@ -270,6 +256,14 @@ public class UserDTO implements UserDetails {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

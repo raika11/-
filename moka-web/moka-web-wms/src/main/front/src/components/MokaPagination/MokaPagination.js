@@ -109,16 +109,16 @@ const MokaPagination = (props) => {
                 )}
             </Form.Control>
             <Pagination className="mb-0">
-                <Pagination.Prev>
-                    <MokaIcon iconName="fas-angle-left" onClick={handleBackButtonClick} />
+                <Pagination.Prev disabled={!prev} onClick={handleBackButtonClick}>
+                    <MokaIcon iconName="fas-angle-left" />
                 </Pagination.Prev>
                 {pageList.map((value) => (
                     <Pagination.Item key={value} onClick={(e) => handlePageClick(e, value - 1)} active={value === viewPage}>
                         {value}
                     </Pagination.Item>
                 ))}
-                <Pagination.Next>
-                    <MokaIcon iconName="fas-angle-right" onClick={handleNextButtonClick} />
+                <Pagination.Next disabled={!next} onClick={handleNextButtonClick}>
+                    <MokaIcon iconName="fas-angle-right" />
                 </Pagination.Next>
             </Pagination>
             <div>{`총: ${total} 건`}</div>

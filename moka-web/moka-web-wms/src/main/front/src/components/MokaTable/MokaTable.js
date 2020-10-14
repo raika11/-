@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaPagination } from '@components';
@@ -21,6 +21,14 @@ const propTypes = {
      * agGrid 높이
      */
     agGridHeight: PropTypes.number,
+    /**
+     * 로딩 텍스트 
+     */
+    localeText: PropTypes.Object, 
+    /**
+     * row clicked
+     */
+    onRowClicked: PropTypes.func,
     /**
      * 페이징여부
      */
@@ -51,6 +59,7 @@ const propTypes = {
     onChangeSearchOption: PropTypes.func,
 };
 const defaultProps = {
+    localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
     pagging: true,
     total: 0,
     page: 0,
@@ -61,14 +70,34 @@ const defaultProps = {
 };
 
 const MokaTable = (props) => {
-    const { columnDefs, rowData, onRowNodeId, agGridHeight } = props;
+    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading } = props;
     const { pagging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
+    const [gridApi, setGridApi] = useState(null); 
+
+    /**
+     * 로딩중 메세지
+     */
+    useEffect(() => {
+        if (gridApi) {
+            if (loading) {
+                gridApi.showLoadingOverlay();
+            } else {
+                gridApi.hideOverlay();
+            }
+        }
+    }, [loading, gridApi]);
+
+    const onGridReady = (params) => {
+        setGridApi(params.api);
+        // 조회결과 없음(No Rows..)메세지 표시 안함.
+        params.api.hideOverlay();
+    }
 
     return (
         <>
             {/* 목록 */}
             <div className="ag-theme-moka-grid mb-3" style={{ height: `${agGridHeight}px` }}>
-                <AgGridReact columnDefs={columnDefs} rowData={rowData} getRowNodeId={onRowNodeId} immutableData animateRows />
+                <AgGridReact columnDefs={columnDefs} rowData={rowData} getRowNodeId={onRowNodeId} immutableData animateRows localeText={localeText} onRowClicked={onRowClicked} onGridReady={onGridReady} />
             </div>
             {/* 페이징 */}
             {pagging ? (

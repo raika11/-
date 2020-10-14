@@ -12,7 +12,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThList } from '@moka/fontawesome-pro-solid-svg-icons';
 
 import { MokaSearchInput } from '@components';
-import { MokaTemplateThumbCard } from '@/components/MokaCard';
 
 import template from '../template.json';
 
@@ -70,20 +69,7 @@ const PageChildTemplateList = () => {
                 </Form>
                 <div className="tab-content p-0">
                     <div className="mb-0 tab-pane fade border custom-scroll active show" style={{ height: '560px' }}>
-                        <div className="d-flex flex-wrap align-content-start p-05">
-                            {list.map((thumb) => (
-                                <MokaTemplateThumbCard
-                                    key={thumb.templateSeq}
-                                    width={176}
-                                    height={130}
-                                    templateName={thumb.templateName}
-                                    img={thumb.templateThumbnail}
-                                    alt={'썸네일이미지'}
-                                    templateGroup={thumb.templateGroup}
-                                    templateWidth={thumb.templateWidth}
-                                />
-                            ))}
-                        </div>
+                        
                     </div>
                 </div>
 

@@ -1,26 +1,4 @@
 /* -----------------------
-* mixin
-* ---------------------- */
-@mixin custom-scroll {
-    overflow-y: auto;
-    &::-webkit-scrollbar {
-        width: 8px;
-    }
-    &::-webkit-scrollbar-track {
-        background-color: $gray-310;
-        margin:0 0;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: $gray-650;
-        border-radius: 3px;
-    }
-    &::-webkit-scrollbar-button {
-        width: 0;
-        height: 0;
-    }
-}
-
-/* -----------------------
 * body
 * ---------------------- */
 body {

@@ -1,19 +1,7 @@
 /* -----------------------
-* body
+* mixin
 * ---------------------- */
-body {
-    min-width: $min-width;
-    max-width: $max-width;
-    height: 100vh;
-    overflow: hidden;
-    overflow-x: auto;
-}
-
-.gap {
-    margin-right: 10px;
-}
-
-.custom-scroll {
+@mixin custom-scroll {
     overflow-y: auto;
     &::-webkit-scrollbar {
         width: 8px;
@@ -30,6 +18,25 @@ body {
         width: 0;
         height: 0;
     }
+}
+
+/* -----------------------
+* body
+* ---------------------- */
+body {
+    min-width: $min-width;
+    max-width: $max-width;
+    height: 100vh;
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.gap {
+    margin-right: 10px;
+}
+
+.custom-scroll {
+    @include custom-scroll;
 }
 
 .portrait {

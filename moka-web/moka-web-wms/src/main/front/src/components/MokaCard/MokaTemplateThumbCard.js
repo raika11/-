@@ -41,7 +41,7 @@ const propTypes = {
 const defaultProps = {};
 
 const MokaTemplateThumbCard = forwardRef((props, ref) => {
-    const { width, height, templateName, img, alt, templateGroup, templateWidth } = props;
+    const { menus, width, height, templateName, img, alt, templateGroup, templateWidth } = props;
     const imgRef = useRef(null);
 
     useEffect(() => {
@@ -87,8 +87,22 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
         <Dropdown>
             <Dropdown.Toggle as={IconToggle} />
             <Dropdown.Menu as={IconMenu}>
-                <Dropdown.Item eventKey="1">복사본 생성</Dropdown.Item>
-                <Dropdown.Item eventKey="2">삭제</Dropdown.Item>
+                {menus.map((menu, idx) => (
+                    <Dropdown.Item
+                        key={idx}
+                        eventKey={idx}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            if (typeof menu.onClick === 'function') {
+                                menu.onClick(menu, e);
+                            }
+                        }}
+                    >
+                        {menu.title}
+                    </Dropdown.Item>
+                ))}
             </Dropdown.Menu>
         </Dropdown>
     );

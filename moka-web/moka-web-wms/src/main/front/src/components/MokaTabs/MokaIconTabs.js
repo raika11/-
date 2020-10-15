@@ -31,10 +31,6 @@ const propTypes = {
     /**
      * tab 컨텐츠의 Nav(array), tab과 갯수가 동일해야한다
      */
-    /**
-     * tab의 위치
-     */
-    tabNavPosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
     tabNavs: PropTypes.arrayOf(
         PropTypes.shape({
             title: PropTypes.string,
@@ -42,6 +38,10 @@ const propTypes = {
             text: PropTypes.string,
         }),
     ),
+    /**
+     * tab의 위치
+     */
+    tabNavPosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
     /**
      * Tooltip 위치
      */

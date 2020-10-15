@@ -33,8 +33,9 @@ public class MokaConstants {
     /* Jpa PersistanceUnit Names */
     public final static String PERSISTANCE_UNIT_TPS = "TPS-PersistenceUnit";
 
-    /* mcp-core-template 확장 */
-    public static String ATTR_REL_CP = "relcp";
+    /* moka-core-template 확장 */
+    public static String ATTR_REL_CP = "relCp";
+    public static String ATTR_MATCH = "match";
     public static String EL_JSON = Constants.PREFIX + "json";
 
     static {
@@ -64,7 +65,7 @@ public class MokaConstants {
     public static String MERGE_DATA_MAP = "mergeDataMap";
     public static String MERGE_ARTICE_PREFIX = "/article";
 
-    /* TMS Custom Tooken */
+    /* TMS Custom Token */
     public static String MERGE_CONTEXT_DOMAIN = "domain";
     public static String MERGE_CONTEXT_RESERVED = "reserved";
     public static String MERGE_CONTEXT_PAGE = "page";

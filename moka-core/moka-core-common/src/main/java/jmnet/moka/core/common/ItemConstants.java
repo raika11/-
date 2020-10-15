@@ -65,6 +65,8 @@ public class ItemConstants {
     public static String COMPONENT_PERIOD_END_YMDT = "periodEnd";
     public static String COMPONENT_DATA_TYPE = "dataType"; // 데이터유형:NONE, EDIT, AUTO
     public static String COMPONENT_DEL_WORDS = "delWords"; // 제목삭제단어-단어구분은 개행
+    public static String COMPONENT_ZONE = "zone"; // 위치가능 Zone
+    public static String COMPONENT_MATCH_ZONE = "matchZone"; // 선택된 zone
     public static String COMPONENT_PAGING_YN = "pagingYn";
     public static String COMPONENT_PAGING_TYPE = "pagingType"; // 페이징유형:N:이전/다음, M:더보기
     public static String COMPONENT_PER_PAGE_COUNT = "perPageCount"; // 페이지당 건수
@@ -232,6 +234,8 @@ public class ItemConstants {
         public static String COMPONENT_PERIOD_END_YMDT = "PERIOD_END_DT";
         public static String COMPONENT_DATA_TYPE = "DATA_TYPE"; // 데이터유형:NONE, EDIT, AUTO
         public static String COMPONENT_DEL_WORDS = "DEL_WORDS"; // 제목삭제단어-단어구분은 개행
+        public static String COMPONENT_ZONE = "ZONE"; // 위치가능 Zone
+        public static String COMPONENT_MATCH_ZONE = "MATCH_ZONE"; // 선택된 zone
         public static String COMPONENT_PAGING_YN = "PAGING_YN";
         public static String COMPONENT_PAGING_TYPE = "PAGING_TYPE"; // 페이징유형:N:이전/다음, M:더보기
         public static String COMPONENT_PER_PAGE_COUNT = "PER_PAGE_COUNT"; // 페이지당 건수

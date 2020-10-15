@@ -1,5 +1,6 @@
 package jmnet.moka.common.template.parse;
 
+import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateNode;
@@ -28,7 +29,24 @@ public class TemplateElementBuilder {
 		this.index = 0;
 		this.lineNumber = lineNumber;
 	}
-	
+
+	/**
+	 * 임시적으로 사용하기 위한 동적으로 TemplateElement를 생성한다.
+	 * 단, node명과 id가 존재하는 커스텀 태그만 가능하다.
+	 * @param templateRoot 템플릿 루트
+	 * @param previous 이전 템플릿 노드
+	 * @param nodeName 노드명
+	 * @param idAttr 노드 id
+	 * @return templateElement
+	 */
+	public static TemplateElement createDynamicTemplateElement(TemplateRoot templateRoot,
+									   TemplateNode previous, String nodeName, String idAttr) {
+		TemplateElement dynamicTemplateElement = new TemplateElement(templateRoot, nodeName, previous, 0);
+		dynamicTemplateElement.addAttribute(Constants.ATTR_NAME, nodeName);
+		dynamicTemplateElement.addAttribute(Constants.ATTR_ID, idAttr);
+		return dynamicTemplateElement;
+	}
+
 	public TemplateElement parse(TemplateNode previous) throws TemplateParseException {
 		TemplateElement element = null;
 		try {

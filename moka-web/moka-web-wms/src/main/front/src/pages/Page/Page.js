@@ -102,7 +102,7 @@ const Page = () => {
             <Switch>
                 <Route
                     path={['/page', '/page/:pageSeq']}
-                    exac
+                    exact
                     render={() => (
                         <MokaIconTabs
                             expansion={expansionState[2]}

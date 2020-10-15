@@ -27,7 +27,7 @@ const propTypes = {
      * @param {object} nodeData
      * @param {bool} 확장 상태 (true: 확장, false: 축소)
      */
-    onExpanded: PropTypes.func,
+    onExpansion: PropTypes.func,
     /**
      * 선택된 노드아이디
      */

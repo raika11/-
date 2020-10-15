@@ -177,36 +177,87 @@ body {
 * ---------------------- */
 .treeview {
     .tree-list {
-        > .tree-category > div > ul li > .tree-label{
-            padding: 7px 0px;
-        }
-        > .tree-category > div > ul .tree-category{
-            padding-left: 28px;
-        }
-        > .tree-category > div > ul .tree-category .tree-item{
-            padding-left: 28px;
-        }
-
         .tree-category, .tree-item {
             position: relative;
+        }
+
+        .tree-item {
+            &[data-useyn='N'] {
+                color: rgba($black, 0.5)
+            }
+        }
+
+        .tree-label {
+            padding: 7px 7px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+
+            & button, & span {
+                z-index: 99;
+            }
+
+            &:hover::after {
+                content: "";
+                z-index: 50;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: $orange;
+            }
+
+            &:hover {
+                span { 
+                    color: $white;
+                }
+                > .tree-buttons {
+                    visibility: visible;
+
+                    button {
+                        width: 25px;
+                    }
+                }
+            }
         }
 
         .tree-buttons {
             visibility: hidden;
             position: absolute;
-            top: 0;
             right: 10px;
         }
 
-        .tree-label {
-            display: flex;
+        .selected {
+            background: rgba($black, 0.2);
+            color: $white;
         }
 
-        .tree-label:hover {
-            background: $orange;
-            & > .tree-buttons {
-                visibility: visible;
-            }
+        /*2뎁스 padding*/
+        > .tree-category > div ul li .tree-label {
+            padding-left: 28px;
+        }
+        > .tree-category > div ul li div ul li .tree-label {
+            padding-left: 56px;
+        }
+
+        /*3뎁스 padding*/
+        > .tree-category > div ul li div ul .tree-category div ul li .tree-label {
+            padding-left: 84px;
+        }
+        > .tree-category > div ul li div ul li .tree-category div ul li div ul li .tree-label {
+            padding-left: 112px;
+        }
+
+        /*4뎁스 padding*/
+        > .tree-category > div ul li div ul div ul .tree-category div ul li .tree-label {
+            padding-left: 112px;
+        }
+
+        /*5뎁스 padding*/
+        > .tree-category > div ul li div ul div ul li div ul .tree-category div ul li .tree-label {
+            padding-left: 140px;
         }
     }
 }

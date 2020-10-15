@@ -14,7 +14,8 @@
                     "templateName":"메인탑뉴스",
                     "templateWidth":540,
                     "templateThumbnail":"/image/template/1000/84.png",
-                    "templateGroup":"메인영역"
+                    "templateGroup":"메인영역",
+                    "templateBody":""
                 },
                 {
                     "servicePlatform":"P",
@@ -23,7 +24,8 @@
                     "templateName":"메인이슈기사",
                     "templateWidth":280,
                     "templateThumbnail":"/image/template/1000/102.PNG",
-                    "templateGroup":"메인영역"
+                    "templateGroup":"메인영역",
+                    "templateBody":"" 
                 }
             ]
             

@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 
 import { MokaSearchInput } from '@components';
 
-const TemplateSearch = () => {
+const PageChildTemplateSearch = () => {
     return (
         <Form>
             <Form.Group as={Row} className="mb-10">
@@ -39,4 +39,4 @@ const TemplateSearch = () => {
     );
 };
 
-export default TemplateSearch;
+export default PageChildTemplateSearch;

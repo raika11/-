@@ -7,10 +7,12 @@ import { MokaIcon } from '@components';
 import { MokaTemplateThumbCard } from '@/components/MokaCard';
 
 import template from '../template.json';
+import TemplateHtmlModal from '../modals/TemplateHtmlModal';
 
-const TemplateAggrid = () => {
+const PageChildTemplateAggrid = () => {
     const list = template.resultInfo.body.list;
     const [show, setShow] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <>
@@ -42,14 +44,16 @@ const TemplateAggrid = () => {
                                     templateGroup={thumb.templateGroup}
                                     templateWidth={thumb.templateWidth}
                                     menus={[{ title: '복사본 생성' }, { title: '삭제' }]}
+                                    onClick={() => setShowModal(true)}
                                 />
                             ))}
                         </div>
                     )}
+                    <TemplateHtmlModal show={showModal} onHide={() => setShowModal(false)} />
                 </div>
             </div>
         </>
     );
 };
 
-export default TemplateAggrid;
+export default PageChildTemplateAggrid;

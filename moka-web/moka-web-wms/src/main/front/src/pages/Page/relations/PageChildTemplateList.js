@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { MokaCard } from '@components';
-import TemplateSearch from './TemplateSearch';
-import TemplateAggrid from './TemplateAggrid';
+import TemplateSearch from './PageChildTemplateSearch';
+import TemplateAggrid from './PageChildTemplateAggrid';
 
 const PageChildTemplateList = () => {
     return (

@@ -9,7 +9,7 @@ import { MokaTable } from '@components';
 const PageChildContainerAgGrid = (props) => {
     const [total] = useState(rowData.length);
     const [loading] = useState(false);
-    const [search] = useState({ page: 1, size: 10 });
+    const [search] = useState({ page: 0, size: 10 });
 
     /**
      * 테이블에서 검색옵션 변경하는 경우
@@ -19,6 +19,7 @@ const PageChildContainerAgGrid = (props) => {
 
     /**
      * 목록에서 Row클릭
+     * @param {object} row 클릭된 Row
      */
     const handleRowClicked = useCallback((row) => {
         console.log(row);

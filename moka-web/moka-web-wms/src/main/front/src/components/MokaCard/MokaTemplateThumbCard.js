@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Dropdown from 'react-bootstrap/Dropdown';
 import BSImage from 'react-bootstrap/Image';
+import Button from 'react-bootstrap/Button';
 
 import { MokaIcon } from '@components';
 import bg from '@assets/images/bg.jpeg';
@@ -40,7 +41,7 @@ const propTypes = {
         /**
          * templateWidth 템플릿 가로 사이즈
          */
-        templateWidth: PropTypes.string,
+        templateWidth: PropTypes.number,
     }),
 };
 
@@ -77,34 +78,34 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
         }
     }, [height, width]);
 
-    // 커스텀 토글 버튼 아이콘
+    /**
+     * 커스텀 토글 버튼 아이콘 생성
+     */
     const IconToggle = forwardRef(({ children, onClick }, ref) => (
-        <a
+        <Button
             ref={ref}
             onClick={(e) => {
                 e.preventDefault();
-                onClick(e);
+                e.stopPropagation();
+                if (typeof onClick === 'function') {
+                    onClick(e);
+                }
             }}
+            variant="white"
+            className="btn-pill"
         >
             {children}
             <MokaIcon iconName="fal-ellipsis-v" />
-        </a>
+        </Button>
     ));
 
-    // 토글 아이콘 스타일
-    const IconMenu = forwardRef(({ children, style, className }, ref) => {
-        return (
-            <div ref={ref} style={style} className={className}>
-                <ul className="list-unstyled">{children}</ul>
-            </div>
-        );
-    });
-
-    // 아이콘 드롭 버튼
+    /**
+     * 아이콘 드롭 버튼 생성
+     */
     const IconDropButton = () => (
         <Dropdown>
             <Dropdown.Toggle as={IconToggle} />
-            <Dropdown.Menu as={IconMenu}>
+            <Dropdown.Menu>
                 {menus.map((menu, idx) => (
                     <Dropdown.Item
                         key={idx}
@@ -113,7 +114,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
                             e.preventDefault();
                             e.stopPropagation();
                             if (typeof menu.onClick === 'function') {
-                                menu.onClick(menu, e);
+                                menu.onClick(data, e);
                             }
                         }}
                     >
@@ -124,27 +125,29 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
         </Dropdown>
     );
 
+    /**
+     * 썸네일 카드 클릭 시
+     */
+    const handleThumbClick = (e) => {
+        if (onClick) {
+            onClick(data, e);
+        }
+    };
+
     return (
-        <div
-            ref={ref}
-            className="p-03"
-            style={{ width: width }}
-            onClick={(e) => {
-                onClick(data, e);
-            }}
-        >
+        <div ref={ref} className="p-03" style={{ width: width }}>
             <div className="border rounded">
-                <div className="d-flex justify-content-between p-03">
+                <div className="d-flex justify-content-between p-03 border-bottom">
                     <p className="pt-05 pl-05 mb-0">{data.templateName}</p>
                     <IconDropButton />
                 </div>
-                <div style={{ height: height }}>
+                <div className="d-flex align-item-centers justify-content-center cursor-pointer" style={{ height: height }} onClick={handleThumbClick}>
                     {img && <BSImage src={bg} alt={alt} ref={imgRef} className="hidden" />}
                     {!img && <div style={{ backgroundColor: '#e5e5e5' }} />}
                 </div>
-                <div className="d-flex justify-content-between p-03">
+                <div className="d-flex justify-content-between p-03 border-top">
                     <p className="pt-0 pl-05 mb-0">{data.templateGroup}</p>
-                    <p className="pt-0 pr-05 mb-0">{data.templateWidth}</p>
+                    <p className="pt-0 pr-05 mb-0">{data.templateWidth ? `w${data.templateWidth}` : ''}</p>
                 </div>
             </div>
         </div>

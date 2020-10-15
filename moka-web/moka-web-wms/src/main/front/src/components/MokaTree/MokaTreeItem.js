@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+
+import Button from 'react-bootstrap/Button';
 import MokaTreeLabel from './MokaTreeLabel';
+import { MokaIcon } from '@components';
 
 const propTypes = {
     /**
@@ -49,6 +52,9 @@ const MokaTreeItem = (props) => {
     return (
         <li className="tree-item" onClick={handleSelected} key={nodeId} data-depth={depth} data-useyn={useYn}>
             <div className={clsx('tree-label', { selected: selected === nodeId })}>
+                <Button variant="gray150" size="sm" className="mr-1" disabled>
+                    <MokaIcon iconName="fal-minus" />
+                </Button>
                 <MokaTreeLabel nodeId={nodeId} nodeData={nodeData} labelHoverButtons={labelHoverButtons} />
             </div>
         </li>

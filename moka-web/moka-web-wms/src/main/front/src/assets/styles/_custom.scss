@@ -194,6 +194,12 @@ body {
             position: relative;
             cursor: pointer;
 
+            & button {
+                width: 18px;
+                height: 18px;
+                padding: 0;
+            }
+            
             & button, & span {
                 z-index: 99;
             }

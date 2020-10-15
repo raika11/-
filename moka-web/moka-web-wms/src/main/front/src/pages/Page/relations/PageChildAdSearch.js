@@ -1,13 +1,11 @@
 import React from 'react';
-
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import { MokaSearchInput } from '@components';
 
-const PageChildContainerSearch = (props) => {
+const PageChildAdSearch = () => {
     return (
         <Form>
             <Form.Group as={Row}>
@@ -24,10 +22,10 @@ const PageChildContainerSearch = (props) => {
                 </Col>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
-                <Button>컨테이너 추가</Button>
+                <Button>광고 추가</Button>
             </Form.Group>
         </Form>
     );
 };
 
-export default PageChildContainerSearch;
+export default PageChildAdSearch;

@@ -13,7 +13,7 @@ const PageEdit = React.lazy(() => import('./PageEdit'));
 // relations
 const PageChildPageList = React.lazy(() => import('./relations/PageChildPageList'));
 const PageChildContainerList = React.lazy(() => import('./relations/PageChildContainerList'));
-const PageChildContentsSkinList = React.lazy(() => import('./relations/PageChildContentsSkinList'));
+const PageChildSkinList = React.lazy(() => import('./relations/PageChildSkinList'));
 const PageChildComponentList = React.lazy(() => import('./relations/PageChildComponentList'));
 const PageChildTemplateList = React.lazy(() => import('./relations/PageChildTemplateList'));
 const PageChildAdList = React.lazy(() => import('./relations/PageChildAdList'));
@@ -117,7 +117,7 @@ const Page = () => {
                                     <PageChildPageList />
                                 </Suspense>,
                                 <Suspense>
-                                    <PageChildContentsSkinList />
+                                    <PageChildSkinList />
                                 </Suspense>,
                                 <Suspense>
                                     <PageChildContainerList />

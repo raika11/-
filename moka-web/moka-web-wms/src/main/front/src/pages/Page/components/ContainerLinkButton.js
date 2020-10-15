@@ -5,8 +5,8 @@ import { Button } from 'react-bootstrap';
 const ContainerLinkButton = (props) => {
     const handleClick = useCallback(
         (e) => {
-            e.stopPropagation();
             e.preventDefault();
+            e.stopPropagation();
             const { data } = props;
             if (data) {
                 console.log(data);

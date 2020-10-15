@@ -57,6 +57,10 @@ const propTypes = {
      * 검색조건 변경 ( 페이지, 데이타건수 변경 )
      */
     onChangeSearchOption: PropTypes.func,
+    /**
+     * row click 이벤트 막는 cell의 필드 리스트
+     */
+    preventRowClickCell: PropTypes.arrayOf(PropTypes.string),
 };
 const defaultProps = {
     localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
@@ -67,10 +71,11 @@ const defaultProps = {
     pageSizes: PAGESIZE_OPTIONS,
     displayPageNum: DISPLAY_PAGE_NUM,
     onChangeSearchOption: null,
+    preventRowClickCell: [],
 };
 
 const MokaTable = (props) => {
-    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading } = props;
+    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell } = props;
     const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
     const [gridApi, setGridApi] = useState(null);
 
@@ -103,11 +108,11 @@ const MokaTable = (props) => {
      */
     const handleCellClicked = useCallback(
         (params) => {
-            if (params.colDef.preventRowClick === undefined || !params.colDef.preventRowClick) {
+            if (!preventRowClickCell.includes(params.colDef.field)) {
                 onRowClicked(params.node.data);
             }
         },
-        [onRowClicked],
+        [onRowClicked, preventRowClickCell],
     );
 
     return (

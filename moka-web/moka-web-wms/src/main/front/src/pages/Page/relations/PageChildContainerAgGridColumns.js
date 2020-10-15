@@ -7,7 +7,6 @@ export const columnDefs = [
         headerName: 'ID',
         field: 'containerSeq',
         width: 50,
-        preventRowClick: false,
     },
     {
         headerName: '이름',
@@ -22,7 +21,6 @@ export const columnDefs = [
         width: 40,
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (params) => <AppendButton {...params} />,
-        preventRowClick: true,
     },
     {
         headerName: '',
@@ -30,7 +28,7 @@ export const columnDefs = [
         width: 40,
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (params) => <ContainerLinkButton {...params} />,
-        preventRowClick: true,
+        // preventRowClick: true,
     },
 ];
 

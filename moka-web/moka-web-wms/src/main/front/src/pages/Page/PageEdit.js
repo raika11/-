@@ -13,7 +13,7 @@ const PageEdit = () => {
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title="사이트 정보">
             <Form>
-                <Form.Group>
+                <Form.Group className="mb-2">
                     <Button variant="dark" className="mr-05">
                         W3C
                     </Button>
@@ -30,7 +30,7 @@ const PageEdit = () => {
                         삭제
                     </Button>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group as={Row} className="mb-2">
                     <Form.Label column xs={3} className="px-0">
                         사용여부
                     </Form.Label>
@@ -38,7 +38,7 @@ const PageEdit = () => {
                         <Form.Check type="switch" id="custom-switch1" label="" />
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group as={Row} className="mb-2">
                     <Form.Label column xs={3} className="px-0">
                         사이트 ID
                     </Form.Label>
@@ -46,10 +46,10 @@ const PageEdit = () => {
                         <Form.Control type="text" placeholder="ID" />
                     </Col>
                     <Form.Label column xs={6} className="px-0 pl-4">
-                        URL /
+                        URL
                     </Form.Label>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group as={Row} className="mb-2">
                     <Form.Label column xs={3} className="px-0">
                         페이지명
                     </Form.Label>
@@ -57,7 +57,7 @@ const PageEdit = () => {
                         <Form.Control type="text" placeholder="페이지명을 입력하세요" />
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group as={Row} className="mb-2">
                     <Form.Label column xs={3} className="px-0">
                         서비스명
                     </Form.Label>
@@ -70,7 +70,7 @@ const PageEdit = () => {
                         </Form.Control>
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group as={Row} className="mb-2">
                     <Form.Label column xs={3} className="px-0">
                         표출명
                     </Form.Label>
@@ -84,7 +84,7 @@ const PageEdit = () => {
                         <Form.Control type="text" />
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group as={Row} className="mb-2">
                     <Form.Label column xs={3} className="px-0">
                         이동URL
                     </Form.Label>
@@ -95,7 +95,7 @@ const PageEdit = () => {
                         <MokaSearchInput onSearch={() => setMoveModalShow(true)} />
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group as={Row} className="mb-2">
                     <Form.Label column xs={3} className="px-0">
                         키워드
                     </Form.Label>
@@ -103,7 +103,7 @@ const PageEdit = () => {
                         <Form.Control type="text" placeholder="키워드를 입력하세요" />
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group as={Row} className="mb-2">
                     <Form.Label column xs={3} className="px-0">
                         설명
                     </Form.Label>

@@ -38,6 +38,7 @@ const PageChildContainerAgGrid = (props) => {
                 page={search.page}
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
+                preventRowClickCell={['append', 'link']}
             />
             {/* 설정 변경가능한 Table */}
             {/* <div className="ag-theme-moka-grid mb-3" style={{ height: '550px' }}>

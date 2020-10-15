@@ -35,6 +35,7 @@ const PageChildComponentAgGrid = (props) => {
             page={search.page}
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
+            preventRowClickCell={['append', 'link']}
         />
     );
 };

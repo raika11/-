@@ -322,6 +322,7 @@ $pagination-padding-y-lg: .35rem !default;
 $pagination-padding-x-lg: 1rem !default;
 $pagination-color: $gray-600 !default;
 $pagination-hover-color: $gray-800 !default;
+$pagination-disabled-color: rgba($black, 0.15);
 
 // Content
 $content-padding: 2.5rem 2.5rem 1.5rem !default;

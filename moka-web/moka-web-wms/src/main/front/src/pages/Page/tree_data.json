@@ -15,6 +15,7 @@
         "btnShow": false,
         "match": false,
         "useYn": "Y",
+        "depth": 1,
         "nodes": [
             {
                 "pageSeq": 41,
@@ -27,6 +28,7 @@
                 "btnShow": false,
                 "match": false,
                 "useYn": "Y",
+                "depth": 2,
                 "nodes": [
                     {
                         "pageSeq": 82,
@@ -38,7 +40,8 @@
                         "pageOrder": 1,
                         "btnShow": false,
                         "match": false,
-                        "useYn": "Y"
+                        "useYn": "Y",
+                        "depth": 3
                     },
                     {
                         "pageSeq": 83,
@@ -50,7 +53,8 @@
                         "pageOrder": 1,
                         "btnShow": false,
                         "match": false,
-                        "useYn": "Y"
+                        "useYn": "Y",
+                        "depth": 3
                     },
                     {
                         "pageSeq": 84,
@@ -62,7 +66,8 @@
                         "pageOrder": 1,
                         "btnShow": false,
                         "match": false,
-                        "useYn": "Y"
+                        "useYn": "Y",
+                        "depth": 3
                     }
                 ]
             },
@@ -77,6 +82,7 @@
                 "btnShow": false,
                 "match": false,
                 "useYn": "Y",
+                "depth": 2,
                 "nodes": [
                     {
                         "pageSeq": 46,
@@ -102,7 +108,8 @@
                                 "match": false,
                                 "useYn": "Y"
                             }
-                        ]
+                        ],
+                        "depth": 3
                     }
                 ]
             },
@@ -116,7 +123,8 @@
                 "pageOrder": 1,
                 "btnShow": false,
                 "match": false,
-                "useYn": "Y"
+                "useYn": "Y",
+                "depth": 2
             },
             {
                 "pageSeq": 47,
@@ -129,6 +137,7 @@
                 "btnShow": false,
                 "match": false,
                 "useYn": "Y",
+                "depth": 2,
                 "nodes": [
                     {
                         "pageSeq": 89,
@@ -140,7 +149,8 @@
                         "pageOrder": 1,
                         "btnShow": false,
                         "match": false,
-                        "useYn": "Y"
+                        "useYn": "Y",
+                        "depth": 3
                     },
                     {
                         "pageSeq": 91,
@@ -152,7 +162,8 @@
                         "pageOrder": 1,
                         "btnShow": false,
                         "match": false,
-                        "useYn": "Y"
+                        "useYn": "Y",
+                        "depth": 3
                     },
                     {
                         "pageSeq": 67,
@@ -164,7 +175,8 @@
                         "pageOrder": 1,
                         "btnShow": false,
                         "match": false,
-                        "useYn": "Y"
+                        "useYn": "Y",
+                        "depth": 3
                     }
                 ]
             },
@@ -179,6 +191,7 @@
                 "btnShow": false,
                 "match": false,
                 "useYn": "Y",
+                "depth": 2,
                 "nodes": [
                     {
                         "pageSeq": 95,
@@ -190,7 +203,8 @@
                         "pageOrder": 1,
                         "btnShow": false,
                         "match": false,
-                        "useYn": "Y"
+                        "useYn": "Y",
+                        "depth": 3
                     },
                     {
                         "pageSeq": 94,
@@ -202,7 +216,8 @@
                         "pageOrder": 1,
                         "btnShow": false,
                         "match": false,
-                        "useYn": "Y"
+                        "useYn": "Y",
+                        "depth": 3
                     }
                 ]
             },
@@ -217,6 +232,7 @@
                 "btnShow": false,
                 "match": false,
                 "useYn": "Y",
+                "depth": 2,
                 "nodes": [
                     {
                         "pageSeq": 62,
@@ -242,7 +258,8 @@
                                 "match": false,
                                 "useYn": "Y"
                             }
-                        ]
+                        ],
+                        "depth": 3
                     },
                     {
                         "pageSeq": 63,
@@ -254,7 +271,8 @@
                         "pageOrder": 1,
                         "btnShow": false,
                         "match": false,
-                        "useYn": "Y"
+                        "useYn": "Y",
+                        "depth": 3
                     }
                 ]
             },
@@ -268,7 +286,8 @@
                 "pageOrder": 4,
                 "btnShow": false,
                 "match": false,
-                "useYn": "Y"
+                "useYn": "Y",
+                "depth": 2
             },
             {
                 "pageSeq": 52,
@@ -280,7 +299,8 @@
                 "pageOrder": 10,
                 "btnShow": false,
                 "match": false,
-                "useYn": "Y"
+                "useYn": "Y",
+                "depth": 2
             }
         ]
     }

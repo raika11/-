@@ -15,6 +15,7 @@ const propTypes = {
     data: PropTypes.shape({
         pageSeq: PropTypes.number.isRequired,
         pageName: PropTypes.string.isRequired,
+        depth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         nodes: PropTypes.array,
     }),
     /**
@@ -57,7 +58,7 @@ const defaultProps = {
  */
 const MokaTreeView = (props) => {
     const { data, height } = props;
-    const { pageName, pageSeq } = data;
+    const { pageName, pageSeq, depth } = data;
 
     /**
      * 트리아이템 생성 함수
@@ -83,6 +84,7 @@ const MokaTreeView = (props) => {
                     nodeData={{
                         pageName,
                         pageSeq,
+                        depth,
                     }}
                     {...props}
                 >

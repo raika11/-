@@ -20,7 +20,7 @@ const propTypes = {
      * 현재 노드 데이터
      */
     nodeData: PropTypes.shape({
-        pageName: PropTypes.string,
+        depth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }).isRequired,
     /**
      * 트리라벨에 마우스 hover할 때 나오는 버튼 리스트
@@ -31,6 +31,7 @@ const defaultProps = {};
 
 const MokaTreeItem = (props) => {
     const { nodeId, selected, nodeData, onSelected, labelHoverButtons } = props;
+    const { depth } = nodeData;
 
     /**
      * 노드 선택 시 실행
@@ -45,7 +46,7 @@ const MokaTreeItem = (props) => {
     };
 
     return (
-        <li className="tree-item" onClick={handleSelected} key={nodeId}>
+        <li className="tree-item" onClick={handleSelected} key={nodeId} data-depth={depth}>
             <div className={clsx('tree-label', { selected: selected === nodeId })}>
                 <MokaTreeLabel nodeId={nodeId} nodeData={nodeData} labelHoverButtons={labelHoverButtons} />
             </div>

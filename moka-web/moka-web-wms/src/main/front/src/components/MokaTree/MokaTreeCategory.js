@@ -32,7 +32,7 @@ const propTypes = {
      * 현재 노드 데이터
      */
     nodeData: PropTypes.shape({
-        pageName: PropTypes.string,
+        depth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }).isRequired,
     /**
      * 트리라벨에 마우스 hover할 때 나오는 버튼 리스트
@@ -45,6 +45,7 @@ const defaultProps = {
 
 const MokaTreeCategory = (props) => {
     const { nodeId, selected, nodeData, children, expanded, onExpanded, onSelected, labelHoverButtons } = props;
+    const { depth } = nodeData;
     const [open, setOpen] = useState(false);
     const controls = `sidebar-collapse-${nodeId}`;
 
@@ -80,7 +81,7 @@ const MokaTreeCategory = (props) => {
     };
 
     return (
-        <li className="tree-category" key={nodeId} onClick={handleSelected}>
+        <li className="tree-category" key={nodeId} onClick={handleSelected} data-depth={depth}>
             <div className={clsx('tree-label', { selected: nodeId === selected })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
                 <Button size="sm" className="mr-1" onClick={handleExpanded}>
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaPagination } from '@components';
@@ -32,7 +32,7 @@ const propTypes = {
     /**
      * 페이징여부
      */
-    pagging: PropTypes.bool,
+    paging: PropTypes.bool,
     /**
      * 총갯수
      */
@@ -60,7 +60,7 @@ const propTypes = {
 };
 const defaultProps = {
     localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
-    pagging: true,
+    paging: true,
     total: 0,
     page: 0,
     size: PAGESIZE_OPTIONS[0],
@@ -71,7 +71,7 @@ const defaultProps = {
 
 const MokaTable = (props) => {
     const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading } = props;
-    const { pagging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
+    const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
     const [gridApi, setGridApi] = useState(null);
 
     /**
@@ -87,11 +87,28 @@ const MokaTable = (props) => {
         }
     }, [loading, gridApi]);
 
+    /**
+     * agGrid 로딩전 인스턴스설정
+     * @param {object} params grid object
+     */
     const onGridReady = (params) => {
         setGridApi(params.api);
-        // 조회결과 없음(No Rows..)메세지 표시 안함.
-        params.api.hideOverlay();
+        params.api.hideOverlay(); // 조회결과 없음(No Rows..)메세지 표시 안함.
     };
+
+    /**
+     * RowClick
+     * RowClick을 CellClick으로 받아서, cell별 설정에 따라서 RowClick를 호출한다.
+     * @param {object} params grid object
+     */
+    const handleCellClicked = useCallback(
+        (params) => {
+            if (params.colDef.preventRowClick === undefined || !params.colDef.preventRowClick) {
+                onRowClicked(params.node.data);
+            }
+        },
+        [onRowClicked],
+    );
 
     return (
         <>
@@ -104,12 +121,12 @@ const MokaTable = (props) => {
                     immutableData
                     animateRows
                     localeText={localeText}
-                    onRowClicked={onRowClicked}
+                    onCellClicked={handleCellClicked}
                     onGridReady={onGridReady}
                 />
             </div>
             {/* 페이징 */}
-            {pagging ? (
+            {paging ? (
                 <MokaPagination total={total} page={page} size={size} onChangeSearchOption={onChangeSearchOption} pageSizes={pageSizes} displayPageNum={displayPageNum} />
             ) : null}
         </>

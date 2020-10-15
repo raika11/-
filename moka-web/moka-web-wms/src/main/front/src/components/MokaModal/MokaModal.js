@@ -33,7 +33,6 @@ const propTypes = {
             onClick: PropTypes.func,
         }),
     ),
-    dialogAs: PropTypes.elementType,
     /**
      * 드래그 기능
      */
@@ -55,7 +54,7 @@ const defaultProps = {
  * DraggableModal이지만, draggable이 false인 경우 핸들을 제거
  */
 const MokaModal = (props) => {
-    const { show, onHide, title, children, buttons, dialogAs, draggable, centered, ...rest } = props;
+    const { show, onHide, title, children, buttons, draggable, centered, ...rest } = props;
 
     /**
      * draggable 껍데기 컴포넌트 생성

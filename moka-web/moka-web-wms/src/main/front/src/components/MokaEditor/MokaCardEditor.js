@@ -1,17 +1,26 @@
 import React, { useCallback, forwardRef, useState, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import { MokaIcon, MokaCard } from '@components';
+import defaultOptions from './options';
 import MonacoEditor from './MonacoEditor';
 
 const propTypes = {
     /**
-     * 에디터 width
+     * card의 width
      */
     width: PropTypes.number,
     /**
-     * 에디터 height
+     * card의 height
      */
     height: PropTypes.number,
+    /**
+     * card의 className
+     */
+    className: PropTypes.string,
+    /**
+     * Card.Header Title
+     */
+    title: PropTypes.string,
     /**
      * language
      */
@@ -20,14 +29,6 @@ const propTypes = {
      * 에디터 생성 시에 기본값으로 들어가는 value
      */
     defaultValue: PropTypes.string,
-    /**
-     * additional className
-     */
-    className: PropTypes.string,
-    /**
-     * Card.Header Title
-     */
-    title: PropTypes.string,
     /**
      * Blur 이벤트 콜백
      * @param {string} value
@@ -43,20 +44,14 @@ const propTypes = {
     onExpansion: PropTypes.func,
 };
 const defaultProps = {
+    // card props
+    title: '에디터',
+    // editor props
     language: 'html',
     defaultValue: '',
-    title: '에디터',
     onBlur: null,
     expansion: false,
     onExpansion: null,
-};
-
-// 에디터 기본 옵션
-const defaultOptions = {
-    automaticLayout: true,
-    wordWrap: true,
-    minimap: { enabled: false },
-    hover: { enabled: true },
 };
 
 /**
@@ -113,6 +108,7 @@ const MokaCardEditor = forwardRef((props, ref) => {
         <MokaCard
             className={className}
             headerClassName="d-flex justify-content-between align-items-center"
+            bodyClassName="overflow-hidden"
             titleClassName="mb-0"
             title={title}
             buttons={[

@@ -8,6 +8,30 @@ import ModalDialog from 'react-bootstrap/ModalDialog';
 
 const propTypes = {
     /**
+     * width
+     */
+    width: PropTypes.number,
+    /**
+     * height
+     */
+    height: PropTypes.number,
+    /**
+     * className
+     */
+    className: PropTypes.string,
+    /**
+     * headerClassName
+     */
+    headerClassName: PropTypes.string,
+    /**
+     * bodyClassName
+     */
+    bodyClassName: PropTypes.string,
+    /**
+     * footerClassName (buttons이 있을 경우에만 생김)
+     */
+    footerClassName: PropTypes.string,
+    /**
      * show
      */
     show: PropTypes.bool.isRequired,
@@ -54,7 +78,7 @@ const defaultProps = {
  * DraggableModal이지만, draggable이 false인 경우 핸들을 제거
  */
 const MokaModal = (props) => {
-    const { show, onHide, title, children, buttons, draggable, centered, ...rest } = props;
+    const { width, height, show, onHide, title, children, buttons, draggable, centered, className, headerClassName, bodyClassName, footerClassName, ...rest } = props;
 
     /**
      * draggable 껍데기 컴포넌트 생성
@@ -67,27 +91,27 @@ const MokaModal = (props) => {
                 })}
             >
                 <Draggable handle="#draggable-handle" allowAnyClick={true} bounds="parent">
-                    <ModalDialog {...props} />
+                    <ModalDialog style={{ width, height }} className={className} {...props} />
                 </Draggable>
             </div>
         ),
-        [centered],
+        [centered, className, height, width],
     );
 
     return (
         <Modal aria-labelledby={title} show={show} onHide={onHide} backdrop={false} animation={false} scrollable="true" dialogAs={DraggableModal} enforceFocus={false} {...rest}>
             {/* 타이틀 */}
-            <Modal.Header id="draggable-modal-title" data-drag-on={draggable} closeButton>
+            <Modal.Header className={headerClassName} id="draggable-modal-title" data-drag-on={draggable} closeButton>
                 {draggable && <div id="draggable-handle" />}
                 <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
 
             {/* 컨텐츠 */}
-            <Modal.Body>{children}</Modal.Body>
+            <Modal.Body className={bodyClassName}>{children}</Modal.Body>
 
             {/* 푸터 버튼 */}
             {buttons && (
-                <Modal.Footer>
+                <Modal.Footer className={footerClassName}>
                     {buttons.map(({ variant, text, ...rest }, idx) => (
                         <Button key={`${text}-${idx}`} variant={variant} {...rest}>
                             {text}

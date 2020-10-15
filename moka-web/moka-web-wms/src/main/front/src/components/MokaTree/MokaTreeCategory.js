@@ -1,35 +1,93 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 
 import { MokaIcon } from '@components';
 import MokaTreeLabel from './MokaTreeLabel';
 
-const MokaTreeCategory = (props) => {
-    const { pageName, id, children, onExpanded, onInsert, onDelete } = props;
-    const [open, setOpen] = useState(false);
-    const controls = `sidebar-collapse-${id}`;
+const propTypes = {
+    /**
+     * 트리아이템 식별키
+     */
+    nodeId: PropTypes.string.isRequired,
+    /**
+     * 선택된 노드아이디
+     */
+    selected: PropTypes.string,
+    /**
+     * 노드 클릭 콜백
+     */
+    onSelected: PropTypes.func,
+    /**
+     * 확장 노드 리스트
+     */
+    expanded: PropTypes.array,
+    /**
+     * 노드 확장/축소 콜백
+     */
+    onExpanded: PropTypes.func,
+    /**
+     * 현재 노드 데이터
+     */
+    nodeData: PropTypes.shape({
+        pageName: PropTypes.string,
+    }).isRequired,
+    /**
+     * 트리라벨에 마우스 hover할 때 나오는 버튼 리스트
+     */
+    labelHoverButtons: PropTypes.array,
+};
+const defaultProps = {
+    expanded: [],
+};
 
+const MokaTreeCategory = (props) => {
+    const { nodeId, selected, nodeData, children, expanded, onExpanded, onSelected, labelHoverButtons } = props;
+    const [open, setOpen] = useState(false);
+    const controls = `sidebar-collapse-${nodeId}`;
+
+    useEffect(() => {
+        if (expanded.filter((ex) => String(ex) === nodeId).length > 0) {
+            setOpen(true);
+        }
+    }, [expanded, nodeId]);
+
+    /**
+     * collapse 확장/축소
+     */
     const handleExpanded = (e) => {
         e.preventDefault();
         e.stopPropagation();
         setOpen(!open);
 
         if (onExpanded) {
-            onExpanded();
+            onExpanded(nodeData, e);
+        }
+    };
+
+    /**
+     * 노드 선택시 실행
+     */
+    const handleSelected = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (onSelected) {
+            onSelected(nodeData, e);
         }
     };
 
     return (
-        <li className="tree-category">
-            <div className="tree-label" aria-controls={controls} aria-expanded={open} data-toggle="collapse">
+        <li className="tree-category" key={nodeId} onClick={handleSelected}>
+            <div className={clsx('tree-label', { selected: nodeId === selected })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
                 <Button size="sm" className="mr-1" onClick={handleExpanded}>
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />
                 </Button>
-                <MokaTreeLabel pageaName={pageName} onInsert={onInsert} onDelete={onDelete} />
+                <MokaTreeLabel nodeId={nodeId} nodeData={nodeData} labelHoverButtons={labelHoverButtons} />
             </div>
-            <Collapse in={open} timeout={300}>
+            <Collapse in={open} timeout={3000}>
                 <div id={controls}>
                     <ul id="item" className="list-unstyled">
                         {children}
@@ -39,5 +97,8 @@ const MokaTreeCategory = (props) => {
         </li>
     );
 };
+
+MokaTreeCategory.propTypes = propTypes;
+MokaTreeCategory.defaultProps = defaultProps;
 
 export default MokaTreeCategory;

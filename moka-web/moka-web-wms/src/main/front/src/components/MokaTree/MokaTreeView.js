@@ -6,7 +6,11 @@ import MokaTreeItem from './MokaTreeItem';
 
 const propTypes = {
     /**
-     * 트리 데이터
+     * height
+     */
+    height: PropTypes.number,
+    /**
+     * 트리 전체 데이터
      */
     data: PropTypes.shape({
         pageSeq: PropTypes.number.isRequired,
@@ -14,25 +18,46 @@ const propTypes = {
         nodes: PropTypes.array,
     }),
     /**
-     * 확장 노드 리스트
+     * 확장 노드 리스트(노드아이디의 리스트)
      */
-    expanded: PropTypes.array,
+    expanded: PropTypes.arrayOf(PropTypes.string),
+    /**
+     * 노드 확장/축소 콜백
+     * @param {object} nodeData
+     * @param {bool} 확장 상태 (true: 확장, false: 축소)
+     */
+    onExpanded: PropTypes.func,
+    /**
+     * 선택된 노드아이디
+     */
+    selected: PropTypes.string,
     /**
      * 노드 클릭 콜백
+     * @param {object} nodeData
      */
-    onNodeSelect: PropTypes.func,
+    onSelected: PropTypes.func,
     /**
-     * 노드 토글 콜백
+     * 트리라벨에 마우스 hover할 때 나오는 버튼 리스트
      */
-    onNodeToggle: PropTypes.func,
+    labelHoverButtons: PropTypes.arrayOf(
+        PropTypes.shape({
+            text: PropTypes.string,
+            icon: PropTypes.node,
+            onClick: PropTypes.func,
+        }),
+    ),
 };
-const defaultProps = {};
+const defaultProps = {
+    expanded: [],
+    hoverButtons: [],
+};
 
 /**
  * 트리뷰 컴포넌트
  */
 const MokaTreeView = (props) => {
-    const { data, expanded, onExpanded, onNodeSelect, onNodeToggle, onInsert, onDelete, height } = props;
+    const { data, height } = props;
+    const { pageName, pageSeq } = data;
 
     /**
      * 트리아이템 생성 함수
@@ -42,18 +67,25 @@ const MokaTreeView = (props) => {
 
         if (nodes) {
             return (
-                <MokaTreeCategory key={pageSeq} {...nodeData} {...props}>
+                <MokaTreeCategory key={pageSeq} nodeId={String(pageSeq)} nodeData={nodeData} {...props}>
                     {nodes.map(createTreeItem)}
                 </MokaTreeCategory>
             );
         }
-        return <MokaTreeItem key={pageSeq} {...nodeData} {...props} />;
+        return <MokaTreeItem key={pageSeq} nodeId={String(pageSeq)} nodeData={nodeData} {...props} />;
     };
 
     return (
         <div className="border custom-scroll treeview" style={{ height }}>
             <ul className="list-unstyled tree-list">
-                <MokaTreeCategory key={data.pageSeq} id={data.pageSeq} pageName={data.pageName}>
+                <MokaTreeCategory
+                    nodeId={String(pageSeq)}
+                    nodeData={{
+                        pageName,
+                        pageSeq,
+                    }}
+                    {...props}
+                >
                     {data.nodes.map((nodes, idx) => {
                         return createTreeItem(nodes, idx);
                     })}

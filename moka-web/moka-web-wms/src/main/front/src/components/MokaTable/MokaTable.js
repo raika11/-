@@ -8,11 +8,11 @@ const propTypes = {
     /**
      * 목록 컬럼정의
      */
-    columnDefs: PropTypes.arrayOf(PropTypes.Object),
+    columnDefs: PropTypes.arrayOf(PropTypes.object),
     /**
      * 목록 데이타
      */
-    rowDatapageSizes: PropTypes.arrayOf(PropTypes.Object),
+    rowDatapageSizes: PropTypes.arrayOf(PropTypes.object),
     /**
      * agGrid getRowNodeId()
      */
@@ -22,9 +22,9 @@ const propTypes = {
      */
     agGridHeight: PropTypes.number,
     /**
-     * 로딩 텍스트 
+     * 로딩 텍스트
      */
-    localeText: PropTypes.Object, 
+    localeText: PropTypes.object,
     /**
      * row clicked
      */
@@ -32,7 +32,7 @@ const propTypes = {
     /**
      * 페이징여부
      */
-    pagging: PropTypes.boolean,
+    pagging: PropTypes.bool,
     /**
      * 총갯수
      */
@@ -72,7 +72,7 @@ const defaultProps = {
 const MokaTable = (props) => {
     const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading } = props;
     const { pagging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
-    const [gridApi, setGridApi] = useState(null); 
+    const [gridApi, setGridApi] = useState(null);
 
     /**
      * 로딩중 메세지
@@ -91,13 +91,22 @@ const MokaTable = (props) => {
         setGridApi(params.api);
         // 조회결과 없음(No Rows..)메세지 표시 안함.
         params.api.hideOverlay();
-    }
+    };
 
     return (
         <>
             {/* 목록 */}
             <div className="ag-theme-moka-grid mb-3" style={{ height: `${agGridHeight}px` }}>
-                <AgGridReact columnDefs={columnDefs} rowData={rowData} getRowNodeId={onRowNodeId} immutableData animateRows localeText={localeText} onRowClicked={onRowClicked} onGridReady={onGridReady} />
+                <AgGridReact
+                    columnDefs={columnDefs}
+                    rowData={rowData}
+                    getRowNodeId={onRowNodeId}
+                    immutableData
+                    animateRows
+                    localeText={localeText}
+                    onRowClicked={onRowClicked}
+                    onGridReady={onGridReady}
+                />
             </div>
             {/* 페이징 */}
             {pagging ? (

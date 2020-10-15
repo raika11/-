@@ -9,9 +9,9 @@ import bg from '@assets/images/bg.jpeg';
 
 const propTypes = {
     /**
-     * showModal 썸네일 카드 onClick 이벤트
+     * onClick 썸네일 카드 onClick 이벤트
      */
-    showModal: PropTypes.func,
+    onClick: PropTypes.func,
     /**
      * width 컴포넌트의 가로 사이즈
      */
@@ -21,10 +21,6 @@ const propTypes = {
      */
     height: PropTypes.number,
     /**
-     * templateName 템플릿 이름
-     */
-    templateName: PropTypes.string,
-    /**
      * img 이미지 경로
      */
     img: PropTypes.string,
@@ -32,20 +28,34 @@ const propTypes = {
      * alt 이미지 alt
      */
     alt: PropTypes.string,
-    /**
-     * templateGroup 템플릿 그룹
-     */
-    templateGroup: PropTypes.string,
-    /**
-     * templateWidth 템플릿 가로 사이즈
-     */
-    templateWidth: PropTypes.number,
+    data: PropTypes.shape({
+        /**
+         * templateName 템플릿 이름
+         */
+        templateName: PropTypes.string,
+        /**
+         * templateGroup 템플릿 그룹
+         */
+        templateGroup: PropTypes.string,
+        /**
+         * templateWidth 템플릿 가로 사이즈
+         */
+        templateWidth: PropTypes.string,
+    }),
 };
 
-const defaultProps = {};
+const defaultProps = {
+    img: bg,
+    alt: '썸네일이미지',
+    data: {
+        templateName: '',
+        templateGroup: '',
+        templateWidth: '',
+    },
+};
 
 const MokaTemplateThumbCard = forwardRef((props, ref) => {
-    const { showModal, menus, width, height, templateName, img, alt, templateGroup, templateWidth } = props;
+    const { onClick, menus, width, height, data, img, alt } = props;
     const imgRef = useRef(null);
 
     // 이미지 landscape, portrait 설정
@@ -115,19 +125,26 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
     );
 
     return (
-        <div ref={ref} className="p-03" style={{ width: width }} onClick={showModal}>
+        <div
+            ref={ref}
+            className="p-03"
+            style={{ width: width }}
+            onClick={(e) => {
+                onClick(data, e);
+            }}
+        >
             <div className="border rounded">
                 <div className="d-flex justify-content-between p-03">
-                    <p className="pt-05 pl-05 mb-0">{templateName}</p>
+                    <p className="pt-05 pl-05 mb-0">{data.templateName}</p>
                     <IconDropButton />
                 </div>
                 <div style={{ height: height }}>
-                    {img && <BSImage src={bg} alt={alt || '썸네일이미지'} ref={imgRef} className="hidden" />}
+                    {img && <BSImage src={bg} alt={alt} ref={imgRef} className="hidden" />}
                     {!img && <div style={{ backgroundColor: '#e5e5e5' }} />}
                 </div>
                 <div className="d-flex justify-content-between p-03">
-                    <p className="pt-0 pl-05 mb-0">{templateGroup}</p>
-                    <p className="pt-0 pr-05 mb-0">{templateWidth}</p>
+                    <p className="pt-0 pl-05 mb-0">{data.templateGroup}</p>
+                    <p className="pt-0 pr-05 mb-0">{data.templateWidth}</p>
                 </div>
             </div>
         </div>

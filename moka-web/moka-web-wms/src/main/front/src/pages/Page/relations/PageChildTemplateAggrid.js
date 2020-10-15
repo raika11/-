@@ -9,13 +9,19 @@ import { MokaTemplateThumbCard } from '@/components/MokaCard';
 import template from '../template.json';
 import TemplateHtmlModal from '../modals/TemplateHtmlModal';
 
+/**
+ * 템플릿 검색 ag-grid 컴포넌트
+ */
+
 const PageChildTemplateAggrid = () => {
     const list = template.resultInfo.body.list;
     const [show, setShow] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [selected, setSelected] = useState({});
 
     return (
         <>
+            {/* 버튼 그룹 */}
             <div className="d-flex mb-10">
                 <Nav as={ButtonGroup} size="sm" className="mr-auto" defaultActiveKey="1">
                     <Nav.Link eventKey="1" as={Button} variant="gray150" onClick={() => setShow(false)}>
@@ -29,6 +35,8 @@ const PageChildTemplateAggrid = () => {
                     <Button variant="dark">템플릿 추가</Button>
                 </div>
             </div>
+
+            {/* ag-grid table */}
             <div className="tab-content p-0">
                 <div className="mb-0 tab-pane fade border custom-scroll active show" style={{ height: '560px' }}>
                     {show && (
@@ -38,18 +46,19 @@ const PageChildTemplateAggrid = () => {
                                     key={thumb.templateSeq}
                                     width={176}
                                     height={130}
-                                    templateName={thumb.templateName}
+                                    data={thumb}
                                     img={thumb.templateThumbnail}
                                     alt={'썸네일이미지'}
-                                    templateGroup={thumb.templateGroup}
-                                    templateWidth={thumb.templateWidth}
                                     menus={[{ title: '복사본 생성' }, { title: '삭제' }]}
-                                    onClick={() => setShowModal(true)}
+                                    onClick={(template) => {
+                                        setShowModal(true);
+                                        setSelected(template);
+                                    }}
                                 />
                             ))}
                         </div>
                     )}
-                    <TemplateHtmlModal show={showModal} onHide={() => setShowModal(false)} />
+                    <TemplateHtmlModal title={selected.templateName} show={showModal} onHide={() => setShowModal(false)} />
                 </div>
             </div>
         </>

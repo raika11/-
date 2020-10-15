@@ -1,7 +1,6 @@
 package jmnet.moka.core.tps.mvc.member.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,10 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import jmnet.moka.common.utils.McpDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -77,11 +73,6 @@ public class GroupMember implements Serializable {
     @JoinColumn(name = "MEM_ID", nullable = false, insertable = false, updatable = false)
     private Member member;
 
-    /**
-     * 등록일시
-     */
-    @Column(name = "REG_DT")
-    private Date regDt;
 
     /**
      * 등록자
@@ -90,11 +81,6 @@ public class GroupMember implements Serializable {
     @Builder.Default
     private String regId = "";
 
-    /**
-     * 수정일시
-     */
-    @Column(name = "MOD_DT")
-    private Date modDt;
 
     /**
      * 수정자
@@ -103,21 +89,4 @@ public class GroupMember implements Serializable {
     @Builder.Default
     private String modId = "";
 
-    /**
-     * 신규 등록 전 처리
-     */
-    @PrePersist
-    public void prePersist() {
-        this.regDt = McpDate.defaultValue(this.regDt);
-    }
-
-    /**
-     * 수정 전 처리
-     */
-    @PreUpdate
-    public void preUpdate() {
-        this.regDt = McpDate.defaultValue(this.regDt);
-        this.modDt = McpDate.defaultValue(this.modDt);
-        ;
-    }
 }

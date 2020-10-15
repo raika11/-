@@ -1,11 +1,9 @@
 package jmnet.moka.core.tps.mvc.menu.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,9 +14,9 @@ import lombok.NoArgsConstructor;
  * 메뉴정보(트리구조)
  * 2020. 5. 21. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 5. 21. 오전 11:26:14
+ *
  * @author ssc
+ * @since 2020. 5. 21. 오전 11:26:14
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,11 +31,11 @@ public class MenuNode implements Serializable {
 
     private String menuId;
 
-    private String menuName;
+    private String menuNm;
 
-    private String menuDispName;
+    private String menuDisplayNm;
 
-    private String menuPath;
+    private String menuUrl;
 
     private Integer menuOrder;
 
@@ -53,14 +51,15 @@ public class MenuNode implements Serializable {
 
     /**
      * 노드생성
-     * 
+     *
      * @param menu Menu Entity
      */
-    public MenuNode(Menu menu) {
+    public MenuNode(MenuDTO menu) {
         this.seq = menu.getSeq();
         this.menuId = menu.getMenuId();
-        this.menuName = menu.getMenuNm();
-        this.menuPath = menu.getMenuUrl();
+        this.menuNm = menu.getMenuNm();
+        this.menuDisplayNm = menu.getMenuDisplayNm();
+        this.menuUrl = menu.getMenuUrl();
         this.menuOrder = menu.getMenuOrder();
         this.depth = menu.getDepth();
         this.useYn = menu.getUsedYn();
@@ -70,25 +69,24 @@ public class MenuNode implements Serializable {
 
     /**
      * 노드 찾기
-     * 
-     * @param findId 찾을 메뉴 아이디
+     *
+     * @param findId   찾을 메뉴 아이디
      * @param rootNode 트리상의 찾기시작할 시작노드
-     * @return
+     * @return MenuNode
      */
     public MenuNode findNode(String findId, MenuNode rootNode) {
         if (findId.equals(rootNode.getMenuId())) {
             return rootNode;
         } else {
             if (rootNode.hasChild()) {
-                Iterator<MenuNode> iterator = rootNode.getNodes().iterator();
-                while (iterator.hasNext()) {
-                    MenuNode menuNode = iterator.next();
+                for (MenuNode menuNode : rootNode.getNodes()) {
                     if (findId.equals(menuNode.getMenuId())) {
                         return menuNode;
                     } else if (menuNode.hasChild()) {
                         MenuNode findNode = findNode(findId, menuNode);
-                        if (findNode != null)
+                        if (findNode != null) {
                             return findNode;
+                        }
                     }
                 }
             }
@@ -99,21 +97,23 @@ public class MenuNode implements Serializable {
 
     /**
      * 자식존재여부 조사
-     * 
+     *
      * @return 존재여부
      */
     public boolean hasChild() {
-        return this.getNodes() != null && this.getNodes().size() > 0 ? true : false;
+        return this.getNodes() != null && this.getNodes()
+                                              .size() > 0;
     }
 
     /**
      * 자식노드 추가
-     * 
-     * @param menuNode
+     *
+     * @param menuNode MenuNode
      */
     public void addNode(MenuNode menuNode) {
-        if (this.nodes == null)
+        if (this.nodes == null) {
             this.nodes = new ArrayList<>();
+        }
         this.nodes.add(menuNode);
     }
 
@@ -123,18 +123,26 @@ public class MenuNode implements Serializable {
     public void sort() {
         if (this.getNodes() != null) {
             // 자식노드가 하나만 있을경우는, 자식의 자식노드를 정렬하도록 한다.
-            if (this.getNodes().size() == 1) {
-                this.getNodes().get(0).sort();
+            if (this.getNodes()
+                    .size() == 1) {
+                this.getNodes()
+                    .get(0)
+                    .sort();
             } else {
-                this.getNodes().sort((a, b) -> {
+                this.getNodes()
+                    .sort((a, b) -> {
 
-                    if (a.getNodes() != null && a.getNodes().size() > 0)
-                        a.sort();
-                    if (b.getNodes() != null && b.getNodes().size() > 0)
-                        b.sort();
+                        if (a.getNodes() != null && a.getNodes()
+                                                     .size() > 0) {
+                            a.sort();
+                        }
+                        if (b.getNodes() != null && b.getNodes()
+                                                     .size() > 0) {
+                            b.sort();
+                        }
 
-                    return a.getMenuOrder() - b.getMenuOrder();
-                });
+                        return a.getMenuOrder() - b.getMenuOrder();
+                    });
             }
         }
     }

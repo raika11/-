@@ -3,7 +3,18 @@ package jmnet.moka.core.tps.mvc.auth.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-
+import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.helper.ApiCodeHelper;
+import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
+import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
+import jmnet.moka.core.tps.mvc.domain.entity.Domain;
+import jmnet.moka.core.tps.mvc.domain.service.DomainService;
+import jmnet.moka.core.tps.mvc.menu.service.MenuService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,28 +22,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import jmnet.moka.common.utils.dto.ResultDTO;
-import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.helper.ApiCodeHelper;
-import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
-import jmnet.moka.core.tps.mvc.domain.entity.Domain;
-import jmnet.moka.core.tps.mvc.domain.service.DomainService;
-import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
-import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
-import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
-import jmnet.moka.core.tps.mvc.menu.service.MenuService;
 
 /**
  * <pre>
- * 사용자 권한  
+ * 사용자 권한
  * 2020. 1. 28. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 1. 28. 오후 2:09:06
+ *
  * @author ssc
+ * @since 2020. 1. 28. 오후 2:09:06
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -61,14 +59,15 @@ public class AuthRestController {
      * <pre>
      * 사용자 메뉴목록조회
      * </pre>
-     * 
+     *
      * @return 메뉴목록
      * @throws NoDataException
      */
+    /*
     @GetMapping("/menus")
     public ResponseEntity<?> getMenuList(HttpServletRequest request) throws NoDataException {
 
-        MenuNode menuNode = menuService.makeTree();
+        MenuNode menuNode = menuService.findServiceMenuTree();
         if (menuNode == null) {
             throw new NoDataException(messageByLocale.get("tps.menu.error.noContent", request));
         }
@@ -76,6 +75,7 @@ public class AuthRestController {
         ResultDTO<MenuNode> resultDto = new ResultDTO<MenuNode>(menuNode);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+     */
 
     // private List<MenuNode> makeMenuTree() {
     // List<MenuNode> rootNode = new ArrayList<MenuNode>();
@@ -144,7 +144,7 @@ public class AuthRestController {
 
     /**
      * 도메인목록조회(권한별 모든 도메인목록)
-     * 
+     *
      * @param request 요청
      * @return 도메인목록
      */
@@ -158,20 +158,22 @@ public class AuthRestController {
         List<DomainDTO> domainDtoList = modelMapper.map(returnValue, DomainDTO.TYPE);
 
         List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
-        List<DomainDTO> domainDtoMapList = domainDtoList.stream().map((item) -> {
-            String apiCodeId =
-                    apiCodeHelper.getDataApiCode(CodeMgts, item.getApiHost(), item.getApiPath());
-            if (apiCodeId != null) {
-                item.setApiCodeId(apiCodeId);
-            }
-            return item;
-        }).collect(Collectors.toList());
+        List<DomainDTO> domainDtoMapList = domainDtoList.stream()
+                                                        .map((item) -> {
+                                                            String apiCodeId =
+                                                                    apiCodeHelper.getDataApiCode(CodeMgts, item.getApiHost(),
+                                                                                                 item.getApiPath());
+                                                            if (apiCodeId != null) {
+                                                                item.setApiCodeId(apiCodeId);
+                                                            }
+                                                            return item;
+                                                        })
+                                                        .collect(Collectors.toList());
 
         resultListMessage.setTotalCnt(returnValue.size());
         resultListMessage.setList(domainDtoMapList);
 
-        ResultDTO<ResultListDTO<DomainDTO>> resultDto =
-                new ResultDTO<ResultListDTO<DomainDTO>>(resultListMessage);
+        ResultDTO<ResultListDTO<DomainDTO>> resultDto = new ResultDTO<ResultListDTO<DomainDTO>>(resultListMessage);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

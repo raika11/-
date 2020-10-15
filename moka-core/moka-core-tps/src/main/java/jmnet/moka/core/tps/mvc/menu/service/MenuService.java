@@ -1,12 +1,11 @@
-/**
- * msp-tps MenuService.java 2020. 6. 22. 오전 11:40:40 ssc
- */
 package jmnet.moka.core.tps.mvc.menu.service;
 
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
 import org.springframework.data.domain.Page;
@@ -30,7 +29,16 @@ public interface MenuService {
      *
      * @return 메뉴목록
      */
-    MenuNode makeTree();
+    MenuNode findServiceMenuTree(MenuSearchDTO search);
+
+    /**
+     * <pre>
+     * 메뉴목록 조회
+     * </pre>
+     *
+     * @return 메뉴목록
+     */
+    MenuNode findMenuTree();
 
     /**
      * 메뉴 목록 조회
@@ -101,6 +109,81 @@ public interface MenuService {
      * @return 메뉴 권한
      */
     MenuAuth insertMenuAuth(MenuAuth menuAuth);
+
+    /**
+     * 멤버의 메뉴 권한 부여
+     *
+     * @param memberId 멤버 ID
+     * @param menuIds  메뉴 ID
+     * @return 성공 건수
+     */
+    int appendMemberMenuAuth(String memberId, String[] menuIds);
+
+    /**
+     * 그룹의 메뉴 권한 부여
+     *
+     * @param groupCd 그룹 코드
+     * @param menuIds 메뉴 ID
+     * @return 성공 건수
+     */
+    int appendGroupMenuAuth(String groupCd, String[] menuIds);
+
+    /**
+     * 멤버의 메뉴 권한 부여
+     *
+     * @param memberIds 멤버 ID
+     * @param menuId    메뉴 ID
+     * @return 성공 건수
+     */
+    int appendMemberMenuAuth(String[] memberIds, String menuId);
+
+    /**
+     * 그룹의 메뉴 권한 부여
+     *
+     * @param groupCds 그룹 코드
+     * @param menuId   메뉴 ID
+     * @return 성공 건수
+     */
+    int appendGroupMenuAuth(String[] groupCds, String menuId);
+
+    /**
+     * 사용자별 메뉴 권한 추가
+     *
+     * @param groupMemberIds 사용자 ID 목록
+     * @param menuId         메뉴 ID
+     * @return 성공 건수
+     */
+    int appendMenuAuth(String[] groupMemberIds, String menuId, MenuAuthTypeCode menuAuthTypeCode);
+
+    /**
+     * 사용자별 메뉴 권한 추가
+     *
+     * @param groupMemberIds   사용자 ID 목록
+     * @param menu             메뉴 정보
+     * @param menuAuthTypeCode 메뉴 권한 유형 코드
+     * @return 성공 건수
+     */
+    int appendMenuAuth(String[] groupMemberIds, Menu menu, MenuAuthTypeCode menuAuthTypeCode);
+
+    /**
+     * 사용자별 메뉴 권한 추가
+     *
+     * @param groupMemberId    멤버 ID
+     * @param menuId           메뉴 ID
+     * @param menuAuthTypeCode 메뉴 권한 유형 코드
+     * @return 메뉴 권한 정보
+     */
+    MenuAuth appendMenuAuth(String groupMemberId, String menuId, MenuAuthTypeCode menuAuthTypeCode);
+
+    /**
+     * 사용자별 메뉴 권한 추가
+     *
+     * @param groupMemberId    멤버 ID
+     * @param menu             메뉴 정보
+     * @param menuAuthTypeCode 메뉴 권한 유형 코드
+     * @return 메뉴 권한 정보
+     */
+    MenuAuth appendMenuAuth(String groupMemberId, Menu menu, MenuAuthTypeCode menuAuthTypeCode);
 
     /**
      * 메뉴 권한 수정

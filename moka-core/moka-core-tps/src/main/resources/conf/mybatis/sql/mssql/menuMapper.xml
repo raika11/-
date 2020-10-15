@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.menu.mapper.MenuMapper">
+
+
+  <select id="findAll" parameterType="MenuSearchDTO" resultType="MenuVO" statementType="CALLABLE">
+    {call UPA_TB_CMS_MENU_LIST_SEL(
+    #{memberId, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </select>
+
+</mapper>

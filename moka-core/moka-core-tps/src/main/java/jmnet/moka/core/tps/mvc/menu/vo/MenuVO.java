@@ -1,40 +1,39 @@
-package jmnet.moka.core.tps.mvc.menu.entity;
+package jmnet.moka.core.tps.mvc.menu.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import jmnet.moka.core.tps.common.entity.BaseDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import org.apache.ibatis.type.Alias;
 
 /**
- * CMS 메뉴
+ * <pre>
+ *
+ * 2020. 10. 15. ince 최초생성
+ * </pre>
+ *
+ * @author ince
+ * @since 2020. 10. 15. 오후 4:26:55
  */
-@AllArgsConstructor
+@Alias("MenuVO")
 @NoArgsConstructor
-@Getter
+@AllArgsConstructor
 @Setter
+@Getter
 @Builder
-@Entity
-@Table(name = "TB_CMS_MENU")
-public class Menu extends BaseDateTime {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class MenuVO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
-    /**
-     * 일련번호
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "SEQ_NO", nullable = false)
-    private Long seq;
+    public static final Type TYPE = new TypeReference<List<MenuVO>>() {
+    }.getType();
 
     /**
      * 대메뉴코드
@@ -89,22 +88,4 @@ public class Menu extends BaseDateTime {
      */
     @Column(name = "ICON_NM", nullable = false)
     private String iconNm;
-
-
-
-    /**
-     * 등록자
-     */
-    @Column(name = "REG_ID")
-    @Builder.Default
-    private String regId = "";
-
-
-    /**
-     * 수정자
-     */
-    @Column(name = "MOD_ID")
-    @Builder.Default
-    private String modId = "";
-
 }

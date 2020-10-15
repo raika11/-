@@ -5,7 +5,7 @@ import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface MenuAuthRepository extends JpaRepository<MenuAuth, Long>, JpaSpecificationExecutor<MenuAuth> {
+public interface MenuAuthRepository extends JpaRepository<MenuAuth, Long>, JpaSpecificationExecutor<MenuAuth>, MenuAuthRepositorySupport {
 
     /**
      * 메뉴ID로 메뉴권한 목록 조회

@@ -1,15 +1,13 @@
 package jmnet.moka.core.tps.mvc.member.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.core.tps.common.entity.BaseDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +24,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "TB_CMS_MEM")
-public class Member implements Serializable {
+public class Member extends BaseDateTime {
 
     private static final long serialVersionUID = 1L;
 
@@ -131,12 +129,6 @@ public class Member implements Serializable {
     @Column(name = "EXPIRE_DT")
     private Date expireDt;
 
-    /**
-     * 등록일시
-     */
-    @Column(name = "REG_DT", nullable = false)
-    @Builder.Default
-    private Date regDt = new Date();
 
     /**
      * 등록자
@@ -145,11 +137,6 @@ public class Member implements Serializable {
     @Builder.Default
     private String regId = "";
 
-    /**
-     * 수정일시
-     */
-    @Column(name = "MOD_DT")
-    private Date modDt;
 
     /**
      * 수정자
@@ -167,17 +154,4 @@ public class Member implements Serializable {
 
     @OneToMany(mappedBy = "member")
     private Set<GroupMember> groupMembers;
-
-
-    /**
-     * 수정 전 처리
-     */
-    @PreUpdate
-    public void preUpdate() {
-        this.regDt = McpDate.defaultValue(this.regDt);
-        this.modDt = McpDate.defaultValue(this.modDt);
-        ;
-    }
-
-
 }

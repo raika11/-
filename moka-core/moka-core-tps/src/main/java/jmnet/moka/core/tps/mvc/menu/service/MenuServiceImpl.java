@@ -2,13 +2,21 @@ package jmnet.moka.core.tps.mvc.menu.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
+import jmnet.moka.core.tps.mvc.menu.mapper.MenuMapper;
 import jmnet.moka.core.tps.mvc.menu.repository.MenuAuthRepository;
 import jmnet.moka.core.tps.mvc.menu.repository.MenuRepository;
+import jmnet.moka.core.tps.mvc.menu.vo.MenuVO;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,24 +38,37 @@ public class MenuServiceImpl implements MenuService {
 
     final MenuAuthRepository menuAuthRepository;
 
-    public MenuServiceImpl(MenuRepository menuRepository, MenuAuthRepository menuAuthRepository) {
+    final MenuMapper menuMapper;
+
+    final ModelMapper modelMapper;
+
+    public MenuServiceImpl(MenuRepository menuRepository, MenuAuthRepository menuAuthRepository, MenuMapper menuMapper,
+            ModelMapper modelMapper) {
         this.menuRepository = menuRepository;
         this.menuAuthRepository = menuAuthRepository;
+        this.menuMapper = menuMapper;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public MenuNode makeTree() {
-        List<Menu> menuList = menuRepository.findByUsedYn("Y", orderByIdAsc());
-        return menuList.isEmpty() ? null : makeTree(menuList);
+    public MenuNode findServiceMenuTree(MenuSearchDTO searchDTO) {
+        List<MenuVO> menuList = menuMapper.findAll(searchDTO);
+        return menuList.isEmpty() ? null : makeTree(modelMapper.map(menuList, MenuDTO.TYPE));
     }
 
-    private MenuNode makeTree(List<Menu> menuList) {
+    @Override
+    public MenuNode findMenuTree() {
+        List<Menu> menuList = menuRepository.findAll(orderByIdAsc());
+        return menuList.isEmpty() ? null : makeTree(modelMapper.map(menuList, MenuDTO.TYPE));
+    }
+
+    private MenuNode makeTree(List<MenuDTO> menuList) {
         MenuNode rootNode = new MenuNode();
         rootNode.setSeq((long) 0);
-        rootNode.setMenuId("");
-        rootNode.setMenuName("ROOT");
+        rootNode.setMenuId("00000000");
+        rootNode.setMenuNm("ROOT");
 
-        for (Menu menu : menuList) {
+        for (MenuDTO menu : menuList) {
             if (McpString.isEmpty(menu.getParentMenuId())) {
                 MenuNode menuNode = new MenuNode(menu);
                 rootNode.addNode(menuNode);
@@ -117,6 +138,91 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public MenuAuth insertMenuAuth(MenuAuth menuAuth) {
+        return menuAuthRepository.save(menuAuth);
+    }
+
+    @Override
+    public int appendMemberMenuAuth(String memberId, String[] menuIds) {
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
+        for (String menuId : menuIds) {
+            if (appendMenuAuth(memberId, menuId, MenuAuthTypeCode.MEMBER) != null) {
+                atomicInteger.addAndGet(1);
+            }
+        }
+
+        return atomicInteger.get();
+
+    }
+
+    @Override
+    public int appendGroupMenuAuth(String groupCd, String[] menuIds) {
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
+        for (String menuId : menuIds) {
+            if (appendMenuAuth(groupCd, menuId, MenuAuthTypeCode.MEMBER) != null) {
+                atomicInteger.addAndGet(1);
+            }
+        }
+
+        return atomicInteger.get();
+    }
+
+    @Override
+    public int appendMemberMenuAuth(String[] memberIds, String menuId) {
+        return appendMenuAuth(memberIds, menuId, MenuAuthTypeCode.MEMBER);
+    }
+
+    @Override
+    public int appendGroupMenuAuth(String[] groupCds, String menuId) {
+        return appendMenuAuth(groupCds, menuId, MenuAuthTypeCode.GROUP);
+    }
+
+    @Override
+    public int appendMenuAuth(String[] groupMemberIds, String menuId, MenuAuthTypeCode menuAuthTypeCode) {
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
+        this.findMenuById(menuId)
+            .ifPresent(menu -> {
+                for (String groupMemberId : groupMemberIds) {
+                    if (appendMenuAuth(groupMemberId, menu.getMenuId(), menuAuthTypeCode) != null) {
+                        atomicInteger.addAndGet(1);
+                    }
+                }
+            });
+        return atomicInteger.get();
+    }
+
+    @Override
+    public int appendMenuAuth(String[] groupMemberIds, Menu menu, MenuAuthTypeCode menuAuthTypeCode) {
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
+        for (String groupMemberId : groupMemberIds) {
+            if (appendMenuAuth(groupMemberId, menu.getMenuId(), menuAuthTypeCode) != null) {
+                atomicInteger.addAndGet(1);
+            }
+        }
+        return atomicInteger.get();
+    }
+
+    @Override
+    public MenuAuth appendMenuAuth(String groupMemberId, String menuId, MenuAuthTypeCode menuAuthTypeCode) {
+        Optional<Menu> menu = this.findMenuById(menuId);
+        return menu.map(value -> appendMenuAuth(groupMemberId, value, menuAuthTypeCode))
+                   .orElse(null);
+    }
+
+    @Override
+    public MenuAuth appendMenuAuth(String groupMemberId, Menu menu, MenuAuthTypeCode menuAuthTypeCode) {
+        MenuAuth menuAuth = MenuAuth.builder()
+                                    .usedYn(MokaConstants.YES)
+                                    .groupMemberId(groupMemberId)
+                                    .menuId(menu.getMenuId())
+                                    .groupMemberDiv(menuAuthTypeCode.getCode())
+                                    .build();
+        Optional<MenuAuth> menuAuthOptional =
+                menuAuthRepository.findGroupMemberDivMenu(groupMemberId, menu.getMenuId(), menuAuthTypeCode.getCode());
+
+        if (menuAuthOptional.isPresent()) {
+            menuAuth = menuAuthOptional.get();
+            menuAuth.setUsedYn(MokaConstants.YES);
+        }
         return menuAuthRepository.save(menuAuth);
     }
 

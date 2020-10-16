@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import InputMask from 'react-input-mask';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
@@ -25,9 +26,13 @@ const propTypes = {
      */
     required: PropTypes.bool,
     /**
-     * input의 type (기본 text)
+     * input element의 타입(기본 input)
      */
-    type: PropTypes.oneOf(['text', 'select', 'radio', 'switch', 'checkbox']),
+    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea']),
+    /**
+     * input의 type
+     */
+    type: PropTypes.string,
     /**
      * input의 placeholder
      */
@@ -36,6 +41,10 @@ const propTypes = {
      * input의 value
      */
     value: PropTypes.any,
+    /**
+     * 값 valid 체크
+     */
+    isInvalid: PropTypes.bool,
     /**
      * input의 onChange
      */
@@ -49,21 +58,28 @@ const propTypes = {
      */
     inputProps: PropTypes.shape({
         custom: PropTypes.bool,
+        readOnly: PropTypes.bool,
+        plaintext: PropTypes.bool,
     }),
+    /**
+     * react-input-mask의 mask string
+     */
+    mask: PropTypes.string,
 };
 const defaultProps = {
     label: null,
     labelWidth: 90,
-    type: 'text',
+    as: 'input',
     required: false,
     inputProps: {},
+    isInvalid: false,
 };
 
 /**
  * 공통 input 컴포넌트 (라벨 처리)
  */
 const MokaInput = forwardRef((props, ref) => {
-    const { label, labelWidth, className, labelClassName, required, type, placeholder, onChange, value, name, children, inputProps } = props;
+    const { label, labelWidth, className, labelClassName, required, as, type, placeholder, onChange, value, name, children, inputProps, mask, isInvalid, disabled } = props;
 
     /**
      * input 스타일 생성
@@ -76,33 +92,159 @@ const MokaInput = forwardRef((props, ref) => {
      * input 생성
      */
     const createControl = () => {
-        if (type === 'select') {
+        // 셀렉트
+        if (as === 'select') {
             return (
-                <Form.Control ref={ref} as="select" placeholder={placeholder} onChange={onChange} value={value} name={name} custom {...inputProps} style={createControlStyle()}>
+                <Form.Control
+                    ref={ref}
+                    as="select"
+                    {...inputProps}
+                    placeholder={placeholder}
+                    required={required}
+                    onChange={onChange}
+                    value={value}
+                    name={name}
+                    custom
+                    isInvalid={isInvalid}
+                    disabled={disabled}
+                    style={createControlStyle()}
+                >
                     {children}
                 </Form.Control>
             );
-        } else if (type === 'radio') {
-            return <Form.Check type="radio" {...inputProps} value={value} onChange={onChange} style={createControlStyle()} />;
-        } else if (type === 'switch') {
-            return <Form.Check type="switch" {...inputProps} value={value} onChange={onChange} style={createControlStyle()} />;
-        } else if (type === 'checkbox') {
-            return <Form.Check type="checkbox" {...inputProps} value={value} onChange={onChange} style={createControlStyle()} />;
         }
-
-        return <Form.Control ref={ref} type={type} placeholder={placeholder} onChange={onChange} value={value} name={name} {...inputProps} style={createControlStyle()} />;
+        // textarea
+        else if (as === 'textarea') {
+            return (
+                <Form.Control
+                    ref={ref}
+                    as="textarea"
+                    {...inputProps}
+                    isInvalid={isInvalid}
+                    disabled={disabled}
+                    value={value}
+                    required={required}
+                    onChange={onChange}
+                    style={createControlStyle()}
+                />
+            );
+        }
+        // 라디오
+        else if (as === 'radio') {
+            return (
+                <Form.Check
+                    ref={ref}
+                    type="radio"
+                    {...inputProps}
+                    isInvalid={isInvalid}
+                    disabled={disabled}
+                    value={value}
+                    required={required}
+                    onChange={onChange}
+                    style={createControlStyle()}
+                />
+            );
+        }
+        // 스위치
+        else if (as === 'switch') {
+            return (
+                <Form.Check
+                    ref={ref}
+                    type="switch"
+                    {...inputProps}
+                    isInvalid={isInvalid}
+                    disabled={disabled}
+                    value={value}
+                    required={required}
+                    onChange={onChange}
+                    style={createControlStyle()}
+                />
+            );
+        }
+        // 체크박스
+        else if (as === 'checkbox') {
+            return (
+                <Form.Check
+                    ref={ref}
+                    type="checkbox"
+                    {...inputProps}
+                    isInvalid={isInvalid}
+                    disabled={disabled}
+                    value={value}
+                    required={required}
+                    onChange={onChange}
+                    style={createControlStyle()}
+                />
+            );
+        }
+        // plainText
+        else if (as === 'plainText') {
+            return (
+                <Form.Control
+                    ref={ref}
+                    as={as}
+                    {...inputProps}
+                    plainText
+                    disabled={disabled}
+                    isInvalid={isInvalid}
+                    placeholder={placeholder}
+                    type={type}
+                    onChange={onChange}
+                    required={required}
+                    value={value}
+                    name={name}
+                    style={createControlStyle()}
+                />
+            );
+        }
+        return (
+            <InputMask
+                mask={mask}
+                onChange={onChange}
+                value={value}
+                onPaste={inputProps.onPaste}
+                onMouseDown={inputProps.onMouseDown}
+                onFocus={inputProps.onFocus}
+                onBlur={inputProps.onFocus}
+                disabled={inputProps.disabled}
+                readOnly={inputProps.readOnly}
+            >
+                {(maskProps) => {
+                    console.log(maskProps);
+                    return (
+                        <Form.Control
+                            ref={ref}
+                            as={as}
+                            {...inputProps}
+                            {...maskProps}
+                            isInvalid={isInvalid}
+                            value={value}
+                            onChange={onChange}
+                            placeholder={placeholder}
+                            type={type}
+                            required={required}
+                            name={name}
+                            style={createControlStyle()}
+                        />
+                    );
+                }}
+            </InputMask>
+        );
     };
 
     return (
-        <Form.Group className={clsx('mb-2', 'd-flex', 'align-items-center', className)}>
-            {label && (
-                <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', labelClassName)} style={{ width: labelWidth }}>
-                    {label}
-                    {required && <span className="required-text">*</span>}
-                </Form.Label>
-            )}
-            {createControl()}
-        </Form.Group>
+        <>
+            <Form.Group className={clsx('mb-2', 'd-flex', 'align-items-center', className)}>
+                {label && (
+                    <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', labelClassName)} style={{ width: labelWidth }}>
+                        {label}
+                        {required && <span className="required-text">*</span>}
+                    </Form.Label>
+                )}
+                {createControl()}
+            </Form.Group>
+            <Form.Control.Feedback type="invalid">Please choose a username.</Form.Control.Feedback>
+        </>
     );
 });
 

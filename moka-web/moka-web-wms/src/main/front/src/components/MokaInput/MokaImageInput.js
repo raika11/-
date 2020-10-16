@@ -52,14 +52,21 @@ const defaultProps = {
  */
 const MokaImageInput = forwardRef((props, ref) => {
     const { width, height, alertProps, img, setFileValue } = props;
+
+    // state
     const [imgSrc, setImgSrc] = useState(null);
     const [alert, setAlert] = useState(false);
+
+    // ref
     const inputRef = useRef(null);
     const imgRef = useRef(null);
     const wrapRef = useRef(null);
     const defaultRef = useRef(null);
 
-    const removeFile = useCallback(() => {
+    /**
+     * input의 file 삭제하는 함수
+     */
+    const deleteFile = useCallback(() => {
         if (setFileValue) {
             setFileValue(null);
         }
@@ -75,9 +82,9 @@ const MokaImageInput = forwardRef((props, ref) => {
             input: inputRef.current,
             previewImg: imgRef.current,
             defaultText: defaultRef.current,
-            removeFile: removeFile,
+            deleteFile: deleteFile,
         }),
-        [removeFile],
+        [deleteFile],
     );
 
     /**

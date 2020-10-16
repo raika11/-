@@ -78,11 +78,22 @@ const propTypes = {
 };
 const defaultProps = {
     label: null,
-    labelWidth: 90,
+    labelWidth: 70,
     as: 'input',
     required: false,
     inputProps: {},
     isInvalid: false,
+};
+
+/**
+ * input 스타일 생성
+ */
+const createControlStyle = ({ label, labelWidth }) => {
+    const width = label ? `calc(100% - ${labelWidth}px)` : '100%';
+
+    return {
+        width: width,
+    };
 };
 
 /**
@@ -110,13 +121,6 @@ const MokaInput = forwardRef((props, ref) => {
     } = props;
 
     /**
-     * input 스타일 생성
-     */
-    const createControlStyle = () => ({
-        width: label ? `calc(100% - ${labelWidth}px)` : '100%',
-    });
-
-    /**
      * input 생성
      */
     const createControl = () => {
@@ -136,7 +140,7 @@ const MokaInput = forwardRef((props, ref) => {
                     custom
                     isInvalid={isInvalid}
                     disabled={disabled}
-                    style={createControlStyle()}
+                    style={createControlStyle({ label, labelWidth })}
                 >
                     {children}
                 </Form.Control>
@@ -155,7 +159,7 @@ const MokaInput = forwardRef((props, ref) => {
                     value={value}
                     required={required}
                     onChange={onChange}
-                    style={createControlStyle()}
+                    style={createControlStyle({ label, labelWidth })}
                 />
             );
         }
@@ -172,7 +176,7 @@ const MokaInput = forwardRef((props, ref) => {
                     value={value}
                     required={required}
                     onChange={onChange}
-                    style={createControlStyle()}
+                    style={createControlStyle({ label, labelWidth })}
                 />
             );
         }
@@ -189,7 +193,7 @@ const MokaInput = forwardRef((props, ref) => {
                     value={value}
                     required={required}
                     onChange={onChange}
-                    style={createControlStyle()}
+                    style={createControlStyle({ label, labelWidth })}
                 />
             );
         }
@@ -206,7 +210,7 @@ const MokaInput = forwardRef((props, ref) => {
                     value={value}
                     required={required}
                     onChange={onChange}
-                    style={createControlStyle()}
+                    style={createControlStyle({ label, labelWidth })}
                 />
             );
         }
@@ -242,7 +246,7 @@ const MokaInput = forwardRef((props, ref) => {
                         type={type}
                         required={required}
                         name={name}
-                        style={createControlStyle()}
+                        style={createControlStyle({ label, labelWidth })}
                     />
                 )}
             </InputMask>
@@ -251,14 +255,14 @@ const MokaInput = forwardRef((props, ref) => {
 
     return label ? (
         <Form.Group className={clsx('mb-2', 'd-flex', 'align-items-center', className)}>
-            <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', labelClassName)} style={{ width: labelWidth }}>
-                {label}
+            <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'mr-3', 'text-right', labelClassName)} style={{ width: labelWidth, 'min-width': labelWidth }}>
                 {required && <span className="required-text">*</span>}
+                {label}
             </Form.Label>
             {createControl()}
         </Form.Group>
     ) : (
-        <span className="position-relative">
+        <span className={clsx('position-relative', className)}>
             {required && <span className="required-text absolute-top-right">*</span>}
             {createControl()}
         </span>

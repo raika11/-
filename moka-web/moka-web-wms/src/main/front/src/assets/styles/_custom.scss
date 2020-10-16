@@ -31,6 +31,10 @@ body {
     pointer-events: none;
 }
 
+.resize-none {
+    resize: none;
+}
+
 /* -----------------------
 * sidebar
 * ---------------------- */
@@ -277,6 +281,7 @@ body {
 * ---------------------- */
 .required-text {
     position: absolute;
-    top: 0;
+    top: -4px;
     color: $red;
+    margin-left: -8px;
 }

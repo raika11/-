@@ -3,7 +3,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaInput } from '@components';
+import InputGroup from 'react-bootstrap/InputGroup';
+import { MokaCard, MokaInput, MokaIcon } from '@components';
 
 /**
  * 템플릿 정보/수정 컴포넌트
@@ -38,17 +39,48 @@ const TemplateEdit = () => {
                     <option>템플릿 위치설정</option>
                 </MokaInput>
 
-                <Form.Group as={Row} className="mb-0">
-                    <Col xs={6} className="d-flex p-0 m-0">
+                <Row className="m-0">
+                    <Col xs={6} className="p-0 m-0">
                         <MokaInput label="사이즈" as="select">
                             <option>사이즈</option>
                         </MokaInput>
                     </Col>
                     <Col xs={6} className="d-flex p-0">
-                        <MokaInput label="이미지" labelWidth={46} className="pr-1" /> X <MokaInput required />
+                        <MokaInput label="이미지" labelWidth={57} className="pr-1" /> X <MokaInput className="ml-2" required />
                     </Col>
-                </Form.Group>
-                <MokaInput label="입력태그" as="textarea" disabled />
+                </Row>
+
+                <MokaInput
+                    label="입력태그"
+                    as="textarea"
+                    value={`<mte:tp id="185" name="모바일 뉴스레터신청" />`}
+                    inputClassName="resize-none"
+                    inputProps={{ rows: 2 }}
+                    disabled
+                    // isGroup
+                    // inputGroupProps={{
+                    //     append: (
+                    //         <Button variant="dark">
+                    //             <MokaIcon iconName="fal-copy" />
+                    //         </Button>
+                    //     ),
+                    // }}
+                />
+
+                {/* <div className="position-relative">
+                    <MokaInput
+                        label="입력태그"
+                        as="textarea"
+                        value={`<mte:tp id="185" name="모바일 뉴스레터신청" />`}
+                        inputClassName="resize-none"
+                        inputProps={{ rows: 2 }}
+                        disabled
+                    />
+                    <Button className="btn-pill absolute-top-right" variant="gray150">
+                        <MokaIcon iconName="fal-copy" />
+                    </Button>
+                </div> */}
+
                 <MokaInput
                     ref={imgFileRef}
                     as="imageFile"
@@ -63,7 +95,7 @@ const TemplateEdit = () => {
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    imgFileRef.current.removeFile();
+                                    imgFileRef.current.deleteFile();
                                 }}
                             >
                                 삭제

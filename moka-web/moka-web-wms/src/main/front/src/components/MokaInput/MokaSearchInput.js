@@ -1,8 +1,10 @@
 import React from 'react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import InputGroup from 'react-bootstrap/InputGroup';
+// import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
 const propTypes = {
@@ -51,15 +53,28 @@ const defaultProps = {
 const MokaSearchInput = (props) => {
     const { placeholder, value, onChange, className, searchText, onSearch, variant, buttonClassName, ...rest } = props;
 
+    // ui 변경
+    // return (
+    //     <InputGroup className={className}>
+    //         <Form.Control placeholder={placeholder} value={value} onChange={onChange} {...rest} />
+    //         <InputGroup.Append>
+    //             <Button variant={variant} className={buttonClassName} onClick={onSearch}>
+    //                 {searchText}
+    //             </Button>
+    //         </InputGroup.Append>
+    //     </InputGroup>
+    // );
     return (
-        <InputGroup className={className}>
-            <Form.Control placeholder={placeholder} value={value} onChange={onChange} {...rest} />
-            <InputGroup.Append>
-                <Button variant={variant} className={buttonClassName} onClick={onSearch}>
+        <Form.Row className={className}>
+            <Col xs={9} className="p-0 pr-2">
+                <Form.Control placeholder={placeholder} value={value} onChange={onChange} {...rest} />
+            </Col>
+            <Col xs={3} className="p-0">
+                <Button variant={variant} className={clsx('w-100', buttonClassName)} onClick={onSearch}>
                     {searchText}
                 </Button>
-            </InputGroup.Append>
-        </InputGroup>
+            </Col>
+        </Form.Row>
     );
 };
 

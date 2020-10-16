@@ -267,3 +267,12 @@ body {
         }
     }
 }
+
+/* -----------------------
+* input
+* ---------------------- */
+.required-text {
+    position: absolute;
+    top: 0;
+    color: $red;
+}

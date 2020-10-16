@@ -12,6 +12,7 @@ const EmbedVideo = React.lazy(() => import('@pages/EmbedVideo'));
 const AgGrid = React.lazy(() => import('@pages/AgGrid'));
 const Page = React.lazy(() => import('@pages/Page'));
 const Domain = React.lazy(() => import('@pages/Domain/Domain'));
+const Template = React.lazy(() => import('@pages/Template'));
 
 const routes = [
     {
@@ -92,6 +93,16 @@ const routes = [
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,
+    },
+    {
+        path: '/template',
+        name: 'Template',
+        displayName: '템플릿관리',
+        component: Template,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
     },
 ];
 

@@ -53,7 +53,7 @@ const MovePageListModal = (props) => {
                         <Form.Label column xs={1} className="px-0">
                             구분
                         </Form.Label>
-                        <Col xs={3} className="px-0 my-auto pr-1">
+                        <Col xs={3} className="px-0 my-auto pr-2">
                             <Form.Control as="select" custom>
                                 <option>전체</option>
                             </Form.Control>

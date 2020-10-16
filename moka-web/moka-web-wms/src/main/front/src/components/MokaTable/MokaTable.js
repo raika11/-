@@ -72,10 +72,11 @@ const defaultProps = {
     displayPageNum: DISPLAY_PAGE_NUM,
     onChangeSearchOption: null,
     preventRowClickCell: [],
+    rowSelection: 'single',
 };
 
 const MokaTable = (props) => {
-    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell } = props;
+    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection } = props;
     const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
     const [gridApi, setGridApi] = useState(null);
 
@@ -128,6 +129,7 @@ const MokaTable = (props) => {
                     localeText={localeText}
                     onCellClicked={handleCellClicked}
                     onGridReady={onGridReady}
+                    rowSelection={rowSelection}
                 />
             </div>
             {/* 페이징 */}

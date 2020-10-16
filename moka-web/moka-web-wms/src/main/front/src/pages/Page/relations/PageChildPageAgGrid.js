@@ -1,14 +1,17 @@
 import React, { useState, useCallback } from 'react';
 import { columnDefs, rowData } from './PageChildPageAgGridColumns';
 import { MokaTable } from '@components';
+import PageHtmlModal from '../modals/PageHtmlModal';
 
 /**
  * 관련페이지 AgGrid 목록
  */
-const PageChildPageAgGrid = (props) => {
+const PageChildPageAgGrid = () => {
     const [total] = useState(rowData.length);
     const [loading] = useState(false);
     const [search] = useState({ page: 1, size: 10 });
+    const [showModal, setShowModal] = useState(false);
+    const [selected, setSelected] = useState({});
 
     /**
      * 테이블에서 검색옵션 변경하는 경우
@@ -20,23 +23,27 @@ const PageChildPageAgGrid = (props) => {
      * 목록에서 Row클릭
      */
     const handleRowClicked = useCallback((row) => {
-        console.log(row);
+        setShowModal(true);
+        setSelected(row);
     }, []);
 
     return (
-        <MokaTable
-            columnDefs={columnDefs}
-            rowData={rowData}
-            getRowNodeId={(params) => params.pageSeq}
-            agGridHeight={550}
-            onRowClicked={handleRowClicked}
-            loading={loading}
-            total={total}
-            page={search.page}
-            size={search.size}
-            onChangeSearchOption={handleChangeSearchOption}
-            preventRowClickCell={['load', 'preview', 'link']}
-        />
+        <>
+            <MokaTable
+                columnDefs={columnDefs}
+                rowData={rowData}
+                getRowNodeId={(params) => params.pageSeq}
+                agGridHeight={550}
+                onRowClicked={handleRowClicked}
+                loading={loading}
+                total={total}
+                page={search.page}
+                size={search.size}
+                onChangeSearchOption={handleChangeSearchOption}
+                preventRowClickCell={['load', 'preview', 'link']}
+            />
+            <PageHtmlModal title={selected.pageName} pageBody={selected.pageBody} show={showModal} onHide={() => setShowModal(false)} />
+        </>
     );
 };
 

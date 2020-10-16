@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { columnDefs, rowData } from './PageChildComponentAgGridColumns';
 import { MokaTable } from '@components';
+import ComponentHtmlModal from '../modals/ComponentHtmlModal';
 
 /**
  * 관련 컴포넌트 AgGrid 목록
@@ -9,6 +10,8 @@ const PageChildComponentAgGrid = (props) => {
     const [total] = useState(rowData.length);
     const [loading] = useState(false);
     const [search] = useState({ page: 1, size: 10 });
+    const [showModal, setShowModal] = useState(false);
+    const [selected, setSelected] = useState({});
 
     /**
      * 테이블에서 검색옵션 변경하는 경우
@@ -20,23 +23,27 @@ const PageChildComponentAgGrid = (props) => {
      * 목록에서 Row클릭
      */
     const handleRowClicked = useCallback((row) => {
-        console.log(row);
+        setShowModal(true);
+        setSelected(row);
     }, []);
 
     return (
-        <MokaTable
-            columnDefs={columnDefs}
-            rowData={rowData}
-            getRowNodeId={(params) => params.componentSeq}
-            agGridHeight={550}
-            onRowClicked={handleRowClicked}
-            loading={loading}
-            total={total}
-            page={search.page}
-            size={search.size}
-            onChangeSearchOption={handleChangeSearchOption}
-            preventRowClickCell={['append', 'link']}
-        />
+        <>
+            <MokaTable
+                columnDefs={columnDefs}
+                rowData={rowData}
+                getRowNodeId={(params) => params.componentSeq}
+                agGridHeight={550}
+                onRowClicked={handleRowClicked}
+                loading={loading}
+                total={total}
+                page={search.page}
+                size={search.size}
+                onChangeSearchOption={handleChangeSearchOption}
+                preventRowClickCell={['append', 'link']}
+            />
+            <ComponentHtmlModal title={selected.componentName} show={showModal} onHide={() => setShowModal(false)} />
+        </>
     );
 };
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import { MokaModalEditor } from '@components';
 
-const TemplateHtmlModal = (props) => {
+const ComponentHtmlModal = (props) => {
     const { show, onHide, title } = props;
 
     const handleSave = () => {
@@ -26,4 +26,4 @@ const TemplateHtmlModal = (props) => {
     );
 };
 
-export default TemplateHtmlModal;
+export default ComponentHtmlModal;

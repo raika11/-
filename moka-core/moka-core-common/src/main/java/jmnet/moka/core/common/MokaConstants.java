@@ -122,6 +122,7 @@ public class MokaConstants {
     /* JSON dateformat */
     public static final String JSON_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String JSON_DATE_TIME_ZONE = "Asia/Seoul";
+    public static final ZoneId JSON_ZONE_ID = ZoneId.of(MokaConstants.JSON_DATE_TIME_ZONE);
 
     // DateFormat은 thread-safe하지 않음, jackson에서는 문제없다고는 함
     public static SimpleDateFormat jsonDateFormat() {

@@ -1,12 +1,20 @@
 package jmnet.moka.core.dps.api;
 
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import jmnet.moka.core.common.MokaConstants;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlScript;
 import org.apache.commons.jexl3.MapContext;
+import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +76,13 @@ public class ApiParameterChecker {
 		} else {
 			if ( parameter.getType().equals(ApiParser.PARAM_TYPE_NUMBER)) {
 				return Integer.parseInt(paramValue);
+            } else if (parameter.getType().equals(ApiParser.PARAM_TYPE_DATE)) {
+                try {
+                    return MokaConstants.jsonDateFormat().parse(paramValue);
+                } catch (ParseException e) {
+                    // 날짜 형식에 맞지 않으면 null을 반환한다.
+                    return null;
+                }
             }
 		}
 		return paramValue;
@@ -89,6 +104,15 @@ public class ApiParameterChecker {
                     } catch (NumberFormatException e) {
                         throw new ParameterException(
                                 String.format("Cache Key Parameter is not number : %s %s %s %",
+                                        api.getApiConfig().getPath(), api.getId(), key, value),
+                                api);
+                    }
+                } else if (parameter.getType().equals(ApiParser.PARAM_TYPE_DATE)) {
+                    try {
+                        value = MokaConstants.jsonDateFormat().parse(parameterMap.get(key));
+                    } catch (ParseException e) {
+                        throw new ParameterException(
+                                String.format("Cache Key Parameter is not Date : %s %s %s %",
                                         api.getApiConfig().getPath(), api.getId(), key, value),
                                 api);
                     }

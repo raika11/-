@@ -17,7 +17,7 @@ public interface DomainTemplateMerger {
      * 도메인별 서비스 uri를 로딩한다.
      * </pre>
      * 
-     * @param doaminId
+     * @param domainId
      */
     void loadUri(String domainId)
             throws TemplateMergeException, TemplateParseException, TmsException;
@@ -29,7 +29,7 @@ public interface DomainTemplateMerger {
      * Uri별 아이템 정보를 반환한다.
      * </pre>
      * 
-     * @param doaminId
+     * @param domainId
      * @return
      * @throws TemplateMergeException
      * @throws TemplateParseException

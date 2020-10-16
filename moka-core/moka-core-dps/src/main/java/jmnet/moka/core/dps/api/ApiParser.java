@@ -77,8 +77,11 @@ public class ApiParser {
     public static final String ATTR_IP_GROUP = "ipGroup";
 	public static final String PARAM_TYPE_NUMBER = "number";
 	public static final String PARAM_TYPE_STRING = "string";
+	public static final String PARAM_TYPE_DATE = "date";
+	public static final String PARAM_DEFAULT_DATE_NOW = "now";
+	public static final String PARAM_DEFAULT_DATE_TODAY = "today";
     private static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-    public static final List<String> EMPTY_TOKEN_LIST = new ArrayList<String>(0);
+    public static final List<String> EMPTY_TOKEN_LIST = new ArrayList<>(0);
     private static XPathFactory xPathFactory = XPathFactory.newInstance();
     private Resource resource;
     private XPath xpath;
@@ -97,7 +100,7 @@ public class ApiParser {
         this.defaultApiConfig = defaultApiConfig;
     }
     
-    private void parseDocument() throws ParserConfigurationException, SAXException, IOException {
+    private void parseDocument() throws ParserConfigurationException, IOException {
     	DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         try {
             this.document = documentBuilder.parse(resource.getInputStream());
@@ -200,6 +203,8 @@ public class ApiParser {
                         type = PARAM_TYPE_STRING;
                     } else if (type.equals(PARAM_TYPE_NUMBER)) {
                         type = PARAM_TYPE_NUMBER;
+                    } else if (type.equals(PARAM_TYPE_DATE)) {
+                        type = PARAM_TYPE_DATE;
                     } else {
                         type = PARAM_TYPE_STRING;
                     }

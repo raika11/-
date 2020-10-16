@@ -12,6 +12,6 @@
 		-webkit-animation-timing-function:ease-in-out; 
 		-webkit-animation-direction: alternate; 
 } 
-.label { float : left; color:white;background-color:black;padding:8px;font-weight:bold;}";
+.label { float : left; color:white;background-color:black;padding:8px;font-weight:bold;}
 .editBn { display:none; float : left; margin-left: 10px; color:white;background-color:black;padding:8px;font-weight:bold;}
 .closeBn { display:none; float : left; margin-left: 10px; color:white;background-color:black;padding:8px;font-weight:bold;}

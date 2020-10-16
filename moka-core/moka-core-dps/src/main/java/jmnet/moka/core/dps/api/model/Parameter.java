@@ -1,7 +1,13 @@
 package jmnet.moka.core.dps.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.dps.api.ApiParser;
+
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class Parameter {
     private String name;
@@ -29,6 +35,15 @@ public class Parameter {
         if (defaultValue != null && defaultValue.length() > 0) {
             if (this.type.equals(ApiParser.PARAM_TYPE_NUMBER)) {
                 this.defaultValue = Integer.parseInt(defaultValue);
+            } else if (this.type.equals(ApiParser.PARAM_TYPE_DATE)) {
+                if ( this.defaultValue.equals(ApiParser.PARAM_DEFAULT_DATE_NOW)) {
+                    this.defaultValue = Date.from(LocalDateTime.now().atZone(MokaConstants.JSON_ZONE_ID).toInstant());
+                } else if (this.defaultValue.equals(ApiParser.PARAM_DEFAULT_DATE_TODAY) ) {
+                    LocalDateTime today = LocalDate.now().atTime(0,0,0);
+                    this.defaultValue = Date.from(today.atZone(MokaConstants.JSON_ZONE_ID).toInstant());
+                } else {
+                    this.defaultValue = null;
+                }
             } else {
                 this.defaultValue = defaultValue;
             }

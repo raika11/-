@@ -62,7 +62,7 @@ public abstract class AbstractDomainResolver implements DomainResolver {
             try {
                 this.loadDomain();
             } catch (TmsException e) {
-                logger.warn("Domain load failed : {}", e);
+                logger.warn("Domain load failed : {}", e.getMessage(), e);
                 return null;
             }
         }

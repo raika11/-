@@ -19,7 +19,7 @@ const PageChildContainerAgGrid = (props) => {
 
     /**
      * 목록에서 Row클릭
-     * @param {object} row 클릭된 Row
+     * @param {object} row 선택된 row데이타
      */
     const handleRowClicked = useCallback((row) => {
         console.log(row);

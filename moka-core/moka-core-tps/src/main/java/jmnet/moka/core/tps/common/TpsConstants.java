@@ -82,4 +82,8 @@ public class TpsConstants {
 
     public static final String SUPER_ADMIN_GROUP_CD = "999";
 
+    /** 프로시져 호출결과 성공여부 */
+    public static final Integer PROCEDURE_SUCCESS = 1;
+    public static final Integer PROCEDURE_FAIL = -1;
+
 }

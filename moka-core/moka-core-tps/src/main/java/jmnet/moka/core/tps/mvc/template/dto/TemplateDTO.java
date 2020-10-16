@@ -43,35 +43,73 @@ public class TemplateDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<TemplateDTO>>() {}.getType();
 
+    /**
+     * 템플릿SEQ
+     */
     private Long templateSeq;
 
+    /**
+     * 도메인
+     */
+    @NotNull(message = "{tps.page.error.invalid.domainId}")
     private DomainSimpleDTO domain;
 
+    /**
+     * 템플릿명
+     */
     @NotNull(message = "{tps.template.error.invalid.templateName}")
     @Pattern(regexp = ".+", message = "{tps.template.error.invalid.templateName}")
     private String templateName;
 
-    private String templateBody;
+    /**
+     * 템플릿본문
+     */
+    @Builder.Default
+    private String templateBody = "";
 
-    private Integer cropWidth;
+    /**
+     * 크롭 가로
+     */
+    @Builder.Default
+    private Integer cropWidth = 0;
 
-    private Integer cropHeight;
+    /**
+     * 크롭 세로
+     */
+    @Builder.Default
+    private Integer cropHeight = 0;
 
+    /**
+     * 템플릿그룹
+     */
     private String templateGroup;
 
-    private Integer templateWidth;
+    /**
+     * 템플릿가로
+     */
+    @Builder.Default
+    private Integer templateWidth = 0;
 
+    /**
+     * 템플릿썸네일경로
+     */
     private String templateThumb;
 
+    /**
+     * 상세정보
+     */
     @Length(max = 4000, message = "{tps.template.error.invalid.description}")
     private String description;
 
+    /**
+     * 템플릿썸네일파일
+     */
     private MultipartFile templateThumbnailFile;
 
     public TemplateItem toTemplateItem() {
         TemplateItem templateItem = new TemplateItem();
         templateItem.put(ItemConstants.TEMPLATE_ID, this.templateSeq);
-//        templateItem.put(ItemConstants.TEMPLATE_DOMAIN_ID, this.domain.getDomainId());
+        templateItem.put(ItemConstants.TEMPLATE_DOMAIN_ID, this.domain.getDomainId());
         templateItem.put(ItemConstants.TEMPLATE_NAME, this.templateName);
         templateItem.put(ItemConstants.TEMPLATE_BODY, this.templateBody);
         templateItem.put(ItemConstants.TEMPLATE_CROP_WIDTH, this.cropWidth);

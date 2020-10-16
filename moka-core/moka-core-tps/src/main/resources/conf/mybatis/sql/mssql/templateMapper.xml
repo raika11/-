@@ -169,7 +169,7 @@
 			#{imageRoot, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			<choose>
-				<when test="searchType == 'templateSeq' and keyword != null and keyword != ''">
+				<when test="(searchType == 'templateSeq' or searchType == 'all') and keyword != null and keyword != ''">
 					#{keyword},
 				</when>
 				<otherwise>
@@ -178,7 +178,7 @@
 			</choose>
 
 			<choose>
-				<when test="searchType == 'templateName' and keyword != null and keyword != ''">
+				<when test="(searchType == 'templateName' or searchType == 'all') and keyword != null and keyword != ''">
 					#{keyword},
 				</when>
 				<otherwise>
@@ -187,7 +187,7 @@
 			</choose>
 
 			<choose>
-				<when test="searchType == 'templateBody' and keyword != null and keyword != ''">
+				<when test="(searchType == 'templateBody' or searchType == 'all') and keyword != null and keyword != ''">
 					#{keyword},
 				</when>
 				<otherwise>

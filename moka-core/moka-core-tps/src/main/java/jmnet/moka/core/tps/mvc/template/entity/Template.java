@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,53 +46,99 @@ public class Template implements Serializable {
 
     private static final long serialVersionUID = 8181884737274673595L;
 
+    /**
+     * 템플릿SEQ
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TEMPLATE_SEQ")
     private Long templateSeq;
 
+    /**
+     * 도메인
+     */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DOMAIN_ID", nullable = true)
+    @JoinColumn(name = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
+    /**
+     * 템플릿명
+     */
     @Nationalized
     @Column(name = "TEMPLATE_NAME", nullable = false, length = 128)
     private String templateName;
 
+    /**
+     * 템플릿본문
+     */
     @Nationalized
     @Column(name = "TEMPLATE_BODY")
-    private String templateBody;
+    @Builder.Default
+    private String templateBody = "";
 
+    /**
+     * 크롭 가로
+     */
     @Column(name = "CROP_WIDTH")
-    private Integer cropWidth;
+    @Builder.Default
+    private Integer cropWidth = 0;
 
+    /**
+     * 크롭 세로
+     */
     @Column(name = "CROP_HEIGHT")
-    private Integer cropHeight;
+    @Builder.Default
+    private Integer cropHeight = 0;
 
+    /**
+     * 템플릿그룹
+     */
     @Column(name = "TEMPLATE_GROUP", length = 24)
     private String templateGroup;
 
+    /**
+     * 템플릿가로
+     */
     @Column(name = "TEMPLATE_WIDTH")
-    private Integer templateWidth;
+    @Builder.Default
+    private Integer templateWidth = 0;
 
+    /**
+     * 템플릿썸네일경로
+     */
     @Column(name = "TEMPLATE_THUMB", length = 256)
     private String templateThumb;
 
+    /**
+     * 상세정보
+     */
     @Nationalized
     @Column(name = "DESCRIPTION", length = 4000)
     private String description;
 
+    /**
+     * 등록일시
+     */
     @Column(name = "REG_DT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDt;
 
+    /**
+     * 등록자
+     */
     @Column(name = "REG_ID", length = 30)
     private String regId;
 
+    /**
+     * 수정일시
+     */
     @Column(name = "MOD_DT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
+    /**
+     * 수정자
+     */
     @Column(name = "MOD_ID", length = 30)
     private String modId;
     
@@ -100,11 +147,19 @@ public class Template implements Serializable {
 
     @PrePersist
     public void prePersist() {
+        this.templateBody = McpString.defaultValue(this.templateBody, "");
+        this.cropWidth = this.cropWidth == null ? 0 : this.cropWidth;
+        this.cropHeight = this.cropHeight == null ? 0 : this.cropHeight;
+        this.templateWidth = this.templateWidth == null ? 0 : this.templateWidth;
         this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     @PreUpdate
     public void preUpdate() {
+        this.templateBody = McpString.defaultValue(this.templateBody, "");
+        this.cropWidth = this.cropWidth == null ? 0 : this.cropWidth;
+        this.cropHeight = this.cropHeight == null ? 0 : this.cropHeight;
+        this.templateWidth = this.templateWidth == null ? 0 : this.templateWidth;
         this.regDt = McpDate.defaultValue(this.regDt);
         this.modDt = McpDate.defaultValue(this.modDt);
     }

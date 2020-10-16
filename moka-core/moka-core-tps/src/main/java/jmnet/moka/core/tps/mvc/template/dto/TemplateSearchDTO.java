@@ -3,6 +3,10 @@
  */
 package jmnet.moka.core.tps.mvc.template.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
@@ -37,30 +41,58 @@ public class TemplateSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 5900493133914418299L;
 
+    /**
+     * 도메인
+     */
+    @NotNull(message = "{tps.domain.error.invalid.domainId}")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.invalid.domainId}")
     private String domainId;
-    
+
+    /**
+     * 템플릿정보
+     */
     private String tpZone;
-    
+
+    /**
+     * 템플릿 최소 가로사이즈
+     */
     private Integer widthMin;
-    
+
+    /**
+     * 템플릿 최대 가로사이즈
+     */
     private Integer widthMax;
 
+    /**
+     * 검색타입
+     */
     private String searchType;
 
+    /**
+     * 검색어
+     */
     private String keyword;
-    
-    private String imageRoot;
 
+    /**
+     * 총갯수 사용여부
+     */
     private String useTotal;
 
-    private Long total;      // 목록 총 갯수
+    /**
+     * 총갯수
+     */
+    private Long total;
 
-    private Integer returnValue;  // 프로시저 호출 결과
+    /**
+     * 검색결과 성공여부
+     */
+    private Integer returnValue;
 
     // 검색 조건의 기본값을 설정
     public TemplateSearchDTO() {
         super(TemplateVO.class, "templateSeq,desc");
-        imageRoot = "/image/";
-        useTotal = "Y";
+        useTotal = MokaConstants.YES;
+        searchType = "all";
+        returnValue = TpsConstants.PROCEDURE_SUCCESS;
     }
 }

@@ -64,25 +64,20 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public List<TemplateVO> findList(TemplateSearchDTO search) {
         if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {	// 페이지에서 관련 템플릿 검색
-            return templateMapper.findPageChildRels(search,
-                    getRowBounds(search.getPage(), search.getSize()));
+            return templateMapper.findPageChildRels(search);
         } else if (search.getSearchType().equals("skinSeq")
                 && McpString.isNotEmpty(search.getKeyword())) {	// 콘텐츠스킨에서 관련 템플릿 검색
-            return templateMapper.findSkinChildRels(search,
-                    getRowBounds(search.getPage(), search.getSize()));
+            return templateMapper.findSkinChildRels(search);
         } else if (search.getSearchType().equals("containerSeq")
                 && McpString.isNotEmpty(search.getKeyword())) {	// 컨테이너에서 관련 템플릿 검색
-            return templateMapper.findContainerChildRels(search,
-                    getRowBounds(search.getPage(), search.getSize()));
+            return templateMapper.findContainerChildRels(search);
         } else {
-            if (search.getSearchType().equals("pageSeq") || search.getSearchType().equals("skinSeq")
+            if (search.getSearchType().equals("pageSeq")
+                    || search.getSearchType().equals("skinSeq")
                     || search.getSearchType().equals("containerSeq")) {
                 search.clearSort();
                 search.addSort("templateSeq,desc");
             }
-//            return templateMapper.findAll(search, getRowBounds(search.getPage(), search.getSize()));
-//            List<List<Object>> listMap = templateMapper.findAllTest(search);
-//            return null;
             return templateMapper.findAll(search);
         }
     }

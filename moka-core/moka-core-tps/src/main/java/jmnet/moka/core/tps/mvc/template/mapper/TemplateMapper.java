@@ -24,10 +24,9 @@ public interface TemplateMapper extends BaseMapper<TemplateVO, TemplateSearchDTO
      * </pre>
      * 
      * @param param 검색조건
-     * @param bounds 페이징조건
      * @return 템플릿목록
      */
-    List<TemplateVO> findPageChildRels(TemplateSearchDTO param, RowBounds bounds);
+    List<TemplateVO> findPageChildRels(TemplateSearchDTO param);
 
     /**
      * <pre>
@@ -45,10 +44,9 @@ public interface TemplateMapper extends BaseMapper<TemplateVO, TemplateSearchDTO
      * </pre>
      * 
      * @param param 검색조건
-     * @param bounds 페이징조건
      * @return 템플릿목록
      */
-    List<TemplateVO> findSkinChildRels(TemplateSearchDTO param, RowBounds bounds);
+    List<TemplateVO> findSkinChildRels(TemplateSearchDTO param);
 
     /**
      * <pre>
@@ -66,10 +64,9 @@ public interface TemplateMapper extends BaseMapper<TemplateVO, TemplateSearchDTO
      * </pre>
      * 
      * @param param 검색조건
-     * @param bounds 페이징조건
      * @return 템플릿목록
      */
-    List<TemplateVO> findContainerChildRels(TemplateSearchDTO param, RowBounds bounds);
+    List<TemplateVO> findContainerChildRels(TemplateSearchDTO param);
 
     /**
      * <pre>

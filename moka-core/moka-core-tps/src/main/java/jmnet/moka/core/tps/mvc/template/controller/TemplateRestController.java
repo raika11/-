@@ -1,5 +1,8 @@
 package jmnet.moka.core.tps.mvc.template.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -8,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+import javax.validation.constraints.NotNull;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -17,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -26,6 +32,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
@@ -88,20 +95,18 @@ public class TemplateRestController {
     private RelationHelper relationHelper;
 
     /**
-     * <pre>
-     * 템플릿 목록을 조회한다
-     * </pre>
-     * 
+     * 템플릿 목록조회
+     *
      * @param request HTTP 요청
      * @param search 검색조건
-     * @param userInfoDTO 유저(테스트)
      * @return 템플릿 목록
      */
+    @ApiOperation(value = "템플릿 목록조회")
     @GetMapping
-    public ResponseEntity<?> getTemplateList(HttpServletRequest request,
-            @Valid @SearchParam TemplateSearchDTO search,
-            @AuthenticationPrincipal UserDTO userInfoDTO) {
-
+    public ResponseEntity<?> getTemplateList(
+            HttpServletRequest request,
+            @Valid @SearchParam TemplateSearchDTO search
+    ) {
         // 조회(mybatis)
         List<TemplateVO> returnValue = templateService.findList(search);
 
@@ -109,26 +114,24 @@ public class TemplateRestController {
         resultList.setList(returnValue);
         resultList.setTotalCnt(search.getTotal());
 
-        ResultDTO<ResultListDTO<TemplateVO>> resultDTO =
-                new ResultDTO<ResultListDTO<TemplateVO>>(resultList);
+        ResultDTO<ResultListDTO<TemplateVO>> resultDTO = new ResultDTO<ResultListDTO<TemplateVO>>(resultList);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**
-     * <pre>
-     * 템플릿을 조회한다
-     * </pre>
+     * 템플릿을 상세 조회
      * 
      * @param request HTTP 요청
      * @param templateSeq 템플릿번호
      * @return 템플릿
      * @throws NoDataException 데이터없음
      */
+    @ApiOperation(value = "템플릿 상세조회")
     @GetMapping("/{seq}")
-    public ResponseEntity<?> getTemplate(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.template.error.invalid.templateSeq}") Long templateSeq)
-            throws NoDataException {
+    public ResponseEntity<?> getTemplate(
+            HttpServletRequest request,
+            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long templateSeq
+    ) throws NoDataException {
 
         String message = messageByLocale.get("tps.template.error.noContent", request);
 
@@ -147,9 +150,7 @@ public class TemplateRestController {
     }
 
     /**
-     * <pre>
-     * 템플릿을 등록한다
-     * </pre>
+     * 템플릿 등록
      * 
      * @param request HTTP 요청
      * @param templateDTO 템플릿DTO
@@ -158,10 +159,16 @@ public class TemplateRestController {
      * @throws InvalidDataException 데이터유효성검사
      * @throws Exception 썸네일 저장 실패, 그외 모든 에러
      */
+    @ApiOperation(value = "템플릿 등록")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "templateThumbnailFile", value = "template thumbnailFile", required = false, dataType = "file", paramType = "formData")
+    })
     @PostMapping
-    public ResponseEntity<?> postTemplate(HttpServletRequest request,
-            @Valid TemplateDTO templateDTO, Principal principal)
-            throws InvalidDataException, Exception {
+    public ResponseEntity<?> postTemplate(
+            HttpServletRequest request,
+            @Valid TemplateDTO templateDTO,
+            Principal principal
+    ) throws InvalidDataException, Exception {
 
         // 데이터 검사
         List<InvalidDataDTO> invalidList = validData(templateDTO);
@@ -173,9 +180,9 @@ public class TemplateRestController {
         Template template = modelMapper.map(templateDTO, Template.class);
         template.setRegDt(McpDate.now());
         template.setRegId(principal.getName());
-        if (template.getTemplateBody() == null) {
-            template.setTemplateBody("");
-        }
+//        if (template.getTemplateBody() == null) {
+//            template.setTemplateBody("");
+//        }
 
         try {
 
@@ -223,9 +230,7 @@ public class TemplateRestController {
     }
 
     /**
-     * <pre>
-     * 템플릿을 수정한다
-     * </pre>
+     * 템플릿 수정
      * 
      * @param request HTTP 요청
      * @param templateDTO 템플릿DTO
@@ -235,9 +240,13 @@ public class TemplateRestController {
      * @throws InvalidDataException 데이터 유효성검사
      * @throws Exception 썸네일 저장 실패, 그외 에러
      */
+    @ApiOperation(value = "템플릿 수정")
     @PutMapping("/{seq}")
-    public ResponseEntity<?> putTemplate(HttpServletRequest request, @Valid TemplateDTO templateDTO,
-            Principal principal) throws NoDataException, InvalidDataException, Exception {
+    public ResponseEntity<?> putTemplate(
+            HttpServletRequest request,
+            @Valid TemplateDTO templateDTO,
+            Principal principal
+    ) throws NoDataException, InvalidDataException, Exception {
 
         // 데이터 검사
         List<InvalidDataDTO> invalidList = validData(templateDTO);
@@ -316,7 +325,7 @@ public class TemplateRestController {
     }
 
     /**
-     * 템플릿을 복사한다
+     * 템플릿 복사
      * 
      * @param request HTTP요청
      * @param seq 템플릿ID
@@ -327,12 +336,14 @@ public class TemplateRestController {
      * @throws InvalidDataException 데이터유효성검사
      * @throws Exception 그외 에러
      */
+    @ApiOperation(value = "템플릿 복사")
     @PostMapping("/{seq}/copy")
-    public ResponseEntity<?> copyTemplate(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.template.error.invalid.templateSeq}") Long seq,
-            DomainSimpleDTO domain, String templateName, Principal principal)
-            throws InvalidDataException, Exception {
+    public ResponseEntity<?> copyTemplate(
+            HttpServletRequest request,
+            @PathVariable("seq") @Min(value = 0,message = "{tps.template.error.invalid.templateSeq}") Long seq,
+            DomainSimpleDTO domain, String templateName,
+            Principal principal
+    ) throws InvalidDataException, Exception {
 
         // 조회
         String message = messageByLocale.get("tps.template.error.noContent", request);
@@ -348,9 +359,7 @@ public class TemplateRestController {
     }
 
     /**
-     * <pre>
-     * 템플릿을 삭제한다
-     * </pre>
+     * 템플릿 삭제
      * 
      * @param request HTTP요청
      * @param templateSeq 템플릿아이디
@@ -358,11 +367,12 @@ public class TemplateRestController {
      * @throws NoDataException 데이터없음
      * @throws Exception 관련아이템 있으면 삭제 불가능, 그외 에러
      */
+    @ApiOperation(value = "템플릿 삭제")
     @DeleteMapping("/{seq}")
-    public ResponseEntity<?> deleteTemplate(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.template.error.invalid.templateSeq}") Long templateSeq)
-            throws NoDataException, Exception {
+    public ResponseEntity<?> deleteTemplate(
+            HttpServletRequest request,
+            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long templateSeq
+    ) throws NoDataException, Exception {
 
         // 템플릿 확인
         String message = messageByLocale.get("tps.template.error.noContent", request);
@@ -395,17 +405,16 @@ public class TemplateRestController {
     }
 
     /**
-     * <pre>
-     * 관련 아이템이 있는지 확인한다
-     * </pre>
+     * 관련 아이템 존재여부
      * 
      * @param request HTTP요청
      * @param seq 템플릿아이디
      * @return 관련 아이템 존재 여부
      * @throws NoDataException 데이터없음
      */
-    @GetMapping("/{seq}/hasRelations")
-    public ResponseEntity<?> hasRelations(HttpServletRequest request,
+    @ApiOperation(value = "관련 아이템 존재여부")
+    @GetMapping("/{seq}/relations/exists")
+    public ResponseEntity<?> existRelation(HttpServletRequest request,
             @PathVariable("seq") @Min(value = 0,
                     message = "{tps.template.error.invalid.templateSeq}") Long seq)
             throws NoDataException {
@@ -421,9 +430,7 @@ public class TemplateRestController {
     }
 
     /**
-     * <pre>
-     * 관련 아이템을 찾는다
-     * </pre>
+     * 관련 아이템 목록조회
      * 
      * @param request HTTP요청
      * @param search 검새 조건
@@ -431,11 +438,13 @@ public class TemplateRestController {
      * @throws NoDataException 데이터없음
      * @throws Exception 잘못된 분류
      */
+    @ApiOperation(value = "관련 아이템 목록조회")
     @GetMapping("/{seq}/relations")
-    public ResponseEntity<?> getRelations(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.template.error.invalid.templateSeq}") Long seq,
-            @Valid @SearchParam RelSearchDTO search) throws NoDataException, Exception {
+    public ResponseEntity<?> getRelationList(
+            HttpServletRequest request,
+            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long seq,
+            @Valid @SearchParam RelSearchDTO search
+    ) throws NoDataException, Exception {
 
         search.setRelSeq(seq);
         search.setRelSeqType(MokaConstants.ITEM_TEMPLATE);
@@ -448,21 +457,20 @@ public class TemplateRestController {
     }
 
     /**
-     * <pre>
-     * 템플릿 히스토리 목록을 조회한다
-     * </pre>
+     * 템플릿 히스토리 목록조회
      * 
      * @param request HTTP요청
      * @param templateSeq 템플릿아이디
      * @param search 검색조건
      * @return 템플릿 히스토리 목록
      */
+    @ApiOperation(value = "템플릿 히스토리 목록조회")
     @GetMapping("/{seq}/histories")
-    public ResponseEntity<?> getHistories(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.template.error.invalid.templateSeq}") Long templateSeq,
-            @Valid @SearchParam SearchDTO search) {
-
+    public ResponseEntity<?> getHistoryList(
+            HttpServletRequest request,
+            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long templateSeq,
+            @Valid @SearchParam SearchDTO search
+    ) {
         // 페이징조건 설정 (order by seq desc)
         List<String> sort = new ArrayList<String>();
         sort.add("seq,desc");
@@ -487,20 +495,19 @@ public class TemplateRestController {
     }
 
     /**
-     * <pre>
-     * 템플릿 히스토리를 조회한다
-     * </pre>
+     * 템플릿 히스토리 상세조회
      * 
      * @param request HTTP 요청
      * @param seq 순번
      * @return 템플릿 히스토리
      * @throws NoDataException 데이터없음
      */
+    @ApiOperation(value = "템플릿 히스토리 상세조회")
     @GetMapping("/{templateSeq}/histories/{seq}")
-    public ResponseEntity<?> getHistories(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.template.error.invalid.templateSeq}") Long seq)
-            throws NoDataException {
+    public ResponseEntity<?> getHistory(
+            HttpServletRequest request,
+            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long seq
+    ) throws NoDataException {
 
         // 템플릿 히스토리 조회
         String message = messageByLocale.get("tps.template.error.history.noContent", request);
@@ -513,9 +520,7 @@ public class TemplateRestController {
     }
 
     /**
-     * <pre>
      * 템플릿 데이터 유효성 검사
-     * </pre>
      * 
      * @param template 템플릿DTO
      * @return 타당하지 않은 데이터 목록
@@ -526,7 +531,7 @@ public class TemplateRestController {
         if (template != null) {
             // 문법검사
             try {
-                if (!McpString.isNullOrEmpty(template.getTemplateBody())) {
+                if (McpString.isNotEmpty(template.getTemplateBody())) {
                     TemplateParserHelper.checkSyntax(template.getTemplateBody());
                 }
             } catch (TemplateParseException e) {

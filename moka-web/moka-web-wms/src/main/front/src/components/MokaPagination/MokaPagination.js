@@ -97,11 +97,10 @@ const MokaPagination = (props) => {
         <div className="d-flex align-items-center justify-content-between">
             <Form.Control as="select" custom className="mb-1" style={{ width: '70px' }} onChange={handleChangeRowsPerPage} value={size}>
                 {pageSizes.map((value) => (
-                        <option key={value} value={value}>
-                            {value}
-                        </option>
-                    )
-                )}
+                    <option key={value} value={value}>
+                        {value}
+                    </option>
+                ))}
             </Form.Control>
             <Pagination className="mb-0">
                 <Pagination.Prev disabled={!prev} onClick={handleBackButtonClick}>

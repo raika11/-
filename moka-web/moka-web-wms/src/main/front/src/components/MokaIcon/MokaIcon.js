@@ -25,6 +25,8 @@ import {
     faPlus as falPlus,
     faMinus as falMinus,
     faThList,
+    faFileImport,
+    faFileSearch,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faAngleLeft, faAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 
@@ -42,7 +44,6 @@ library.add(faBox);
 library.add(faBallot);
 library.add(faRepeat);
 library.add(faNewspaper);
-library.add(faNewspaper);
 library.add(faAd);
 library.add(faHistory);
 library.add(faFilePlus);
@@ -53,6 +54,8 @@ library.add(faAngleRight);
 library.add(falPlus);
 library.add(falMinus);
 library.add(faThList);
+library.add(faFileImport);
+library.add(faFileSearch);
 
 const propTypes = {
     /**

@@ -6,7 +6,7 @@ import AgGrid from './PageChildContainerAgGrid';
 /**
  * 관련 컨테이너
  */
-const PageChildContainerList = (props) => {
+const PageChildContainerList = () => {
     return (
         <MokaCard title="컨테이너 검색" titleClassName="mb-0">
             {/* 검색 및 버튼 */}

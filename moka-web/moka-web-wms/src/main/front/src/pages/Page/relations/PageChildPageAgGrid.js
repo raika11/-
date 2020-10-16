@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { columnDefs, rowData } from './PageChildContainerAgGridColumns';
+import { columnDefs, rowData } from './PageChildPageAgGridColumns';
 import { MokaTable } from '@components';
 
 /**
@@ -27,7 +27,7 @@ const PageChildPageAgGrid = (props) => {
         <MokaTable
             columnDefs={columnDefs}
             rowData={rowData}
-            getRowNodeId={(params) => params.containerSeq}
+            getRowNodeId={(params) => params.pageSeq}
             agGridHeight={550}
             onRowClicked={handleRowClicked}
             loading={loading}
@@ -35,7 +35,7 @@ const PageChildPageAgGrid = (props) => {
             page={search.page}
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
-            preventRowClickCell={['append', 'link']}
+            preventRowClickCell={['load', 'preview', 'link']}
         />
     );
 };

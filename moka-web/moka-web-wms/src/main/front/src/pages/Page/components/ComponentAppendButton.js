@@ -2,15 +2,14 @@ import React, { useCallback } from 'react';
 import { MokaIcon } from '@components';
 import { Button } from 'react-bootstrap';
 
-const ContainerLinkButton = (props) => {
+const ComponentAppendButton = (props) => {
     const handleClick = useCallback(
         (e) => {
-            e.preventDefault();
             e.stopPropagation();
+            e.preventDefault();
             const { data } = props;
             if (data) {
                 console.log(data);
-                window.open(`/container/${data.containerSeq}`);
             }
         },
         [props],
@@ -18,9 +17,9 @@ const ContainerLinkButton = (props) => {
 
     return (
         <Button variant="white" onClick={handleClick}>
-            <MokaIcon iconName="fal-external-link" />
+            <MokaIcon iconName="fal-file-plus" />
         </Button>
     );
 };
 
-export default ContainerLinkButton;
+export default ComponentAppendButton;

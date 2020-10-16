@@ -11,7 +11,7 @@ const Task = React.lazy(() => import('@pages/Task'));
 const EmbedVideo = React.lazy(() => import('@pages/EmbedVideo'));
 const AgGrid = React.lazy(() => import('@pages/AgGrid'));
 const Page = React.lazy(() => import('@pages/Page'));
-const Domain = React.lazy(() => import('@pages/Domain/Domain'));
+const Domain = React.lazy(() => import('@pages/Domain'));
 const Template = React.lazy(() => import('@pages/Template'));
 
 const routes = [

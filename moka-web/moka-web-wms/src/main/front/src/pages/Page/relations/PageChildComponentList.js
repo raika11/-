@@ -9,7 +9,9 @@ import AgGrid from './PageChildComponentAgGrid';
 const PageChildComponentList = () => {
     return (
         <MokaCard title="컴포넌트 검색" titleClassName="mb-0">
+            {/* 검색 및 버튼 */}
             <Search />
+            {/* 목록 및 페이징 */}
             <AgGrid />
         </MokaCard>
     );

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { columnDefs, rowData } from './PageChildContainerAgGridColumns';
+import { columnDefs, rowData } from './PageChildComponentAgGridColumns';
 import { MokaTable } from '@components';
 
 /**
@@ -27,7 +27,7 @@ const PageChildComponentAgGrid = (props) => {
         <MokaTable
             columnDefs={columnDefs}
             rowData={rowData}
-            getRowNodeId={(params) => params.containerSeq}
+            getRowNodeId={(params) => params.componentSeq}
             agGridHeight={550}
             onRowClicked={handleRowClicked}
             loading={loading}

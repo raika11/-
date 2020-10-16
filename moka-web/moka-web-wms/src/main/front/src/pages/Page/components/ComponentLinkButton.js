@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { MokaIcon } from '@components';
 import { Button } from 'react-bootstrap';
 
-const ContainerLinkButton = (props) => {
+const ComponentLinkButton = (props) => {
     const handleClick = useCallback(
         (e) => {
             e.preventDefault();
@@ -10,7 +10,7 @@ const ContainerLinkButton = (props) => {
             const { data } = props;
             if (data) {
                 console.log(data);
-                window.open(`/container/${data.containerSeq}`);
+                window.open(`/component/${data.componentSeq}`);
             }
         },
         [props],
@@ -23,4 +23,4 @@ const ContainerLinkButton = (props) => {
     );
 };
 
-export default ContainerLinkButton;
+export default ComponentLinkButton;

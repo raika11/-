@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { MokaIcon } from '@components';
 import { Button } from 'react-bootstrap';
 
-const ContainerLinkButton = (props) => {
+const PagePreviewButton = (props) => {
     const handleClick = useCallback(
         (e) => {
             e.preventDefault();
@@ -10,17 +10,17 @@ const ContainerLinkButton = (props) => {
             const { data } = props;
             if (data) {
                 console.log(data);
-                window.open(`/container/${data.containerSeq}`);
             }
+            window.open(`${data.pageUrl}`);
         },
         [props],
     );
 
     return (
         <Button variant="white" onClick={handleClick}>
-            <MokaIcon iconName="fal-external-link" />
+            <MokaIcon iconName="fal-file-search" />
         </Button>
     );
 };
 
-export default ContainerLinkButton;
+export default PagePreviewButton;

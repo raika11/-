@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -10,21 +10,12 @@ import { MokaCard, MokaInput } from '@components';
  */
 const TemplateEdit = () => {
     const [validated, setValidated] = useState(true);
+    const imgFileRef = useRef(null);
+    const [fileValue, setFileValue] = useState(null);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title="템플릿 정보">
-            <Form
-            // noValidate
-            // validated={validated}
-            // onSubmit={(e) => {
-            //     const form = e.currentTarget;
-            //     if (form.checkValidity() === false) {
-            //         e.preventDefault();
-            //         e.stopPropagation();
-            //         setValidated(true);
-            //     }
-            // }}
-            >
+            <Form>
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div className="d-flex">
                         <Button variant="dark" className="mr-05">
@@ -46,6 +37,7 @@ const TemplateEdit = () => {
                 <MokaInput label="위치 그룹" as="select" isInvalid={!validated} required>
                     <option>템플릿 위치설정</option>
                 </MokaInput>
+
                 <Form.Group as={Row} className="mb-0">
                     <Col xs={6} className="d-flex p-0 m-0">
                         <MokaInput label="사이즈" as="select">
@@ -53,10 +45,35 @@ const TemplateEdit = () => {
                         </MokaInput>
                     </Col>
                     <Col xs={6} className="d-flex p-0">
-                        <MokaInput label="이미지" labelWidth={46} className="pr-1" /> X <MokaInput label=" " labelWidth={10} />
+                        <MokaInput label="이미지" labelWidth={46} className="pr-1" /> X <MokaInput required />
                     </Col>
                 </Form.Group>
-                <MokaInput label="입력태그" as="textarea" inputProps={{ disabled: true }} />
+                <MokaInput label="입력태그" as="textarea" disabled />
+                <MokaInput
+                    ref={imgFileRef}
+                    as="imageFile"
+                    label={
+                        <>
+                            대표이미지
+                            <br />
+                            <Button
+                                className="mt-1"
+                                size="sm"
+                                style={{ width: 68 }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    imgFileRef.current.removeFile();
+                                }}
+                            >
+                                삭제
+                            </Button>
+                        </>
+                    }
+                    labelClassName="justify-content-end"
+                    inputProps={{ width: 280, height: 280, setFileValue }}
+                />
+                <MokaInput label="설명" placeholder="내용설명" />
             </Form>
         </MokaCard>
     );

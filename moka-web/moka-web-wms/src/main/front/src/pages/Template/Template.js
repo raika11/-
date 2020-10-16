@@ -10,6 +10,7 @@ const TemplateList = React.lazy(() => import('./TemplateList'));
 const TemplateEdit = React.lazy(() => import('./TemplateEdit'));
 
 // relations
+const TemplatePageList = React.lazy(() => import('./relations/TemplatePageList'));
 
 /**
  * 템플릿 관리
@@ -103,6 +104,9 @@ const Template = () => {
                             tabs={[
                                 <Suspense>
                                     <TemplateEdit />
+                                </Suspense>,
+                                <Suspense>
+                                    <TemplatePageList />
                                 </Suspense>,
                             ]}
                             tabNavWidth={48}

@@ -2,7 +2,9 @@ import React, { forwardRef } from 'react';
 import InputMask from 'react-input-mask';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+
 import Form from 'react-bootstrap/Form';
+import { MokaImageInput } from '@components';
 
 const propTypes = {
     /**
@@ -22,13 +24,17 @@ const propTypes = {
      */
     labelClassName: PropTypes.string,
     /**
+     * input의 className
+     */
+    inputClassName: PropTypes.string,
+    /**
      * required 일 경우 라벨 옆에 * 표기
      */
     required: PropTypes.bool,
     /**
      * input element의 타입(기본 input)
      */
-    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea']),
+    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile']),
     /**
      * input의 type
      */
@@ -45,6 +51,10 @@ const propTypes = {
      * 값 valid 체크
      */
     isInvalid: PropTypes.bool,
+    /**
+     * input의 disabled
+     */
+    disabled: PropTypes.bool,
     /**
      * input의 onChange
      */
@@ -79,7 +89,25 @@ const defaultProps = {
  * 공통 input 컴포넌트 (라벨 처리)
  */
 const MokaInput = forwardRef((props, ref) => {
-    const { label, labelWidth, className, labelClassName, required, as, type, placeholder, onChange, value, name, children, inputProps, mask, isInvalid, disabled } = props;
+    const {
+        label,
+        labelWidth,
+        className,
+        labelClassName,
+        inputClassName,
+        required,
+        as,
+        type,
+        placeholder,
+        onChange,
+        value,
+        name,
+        children,
+        inputProps,
+        mask,
+        isInvalid,
+        disabled,
+    } = props;
 
     /**
      * input 스타일 생성
@@ -99,6 +127,7 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     as="select"
                     {...inputProps}
+                    className={inputClassName}
                     placeholder={placeholder}
                     required={required}
                     onChange={onChange}
@@ -120,6 +149,7 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     as="textarea"
                     {...inputProps}
+                    className={inputClassName}
                     isInvalid={isInvalid}
                     disabled={disabled}
                     value={value}
@@ -136,6 +166,7 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     type="radio"
                     {...inputProps}
+                    className={inputClassName}
                     isInvalid={isInvalid}
                     disabled={disabled}
                     value={value}
@@ -152,6 +183,7 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     type="switch"
                     {...inputProps}
+                    className={inputClassName}
                     isInvalid={isInvalid}
                     disabled={disabled}
                     value={value}
@@ -168,6 +200,7 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     type="checkbox"
                     {...inputProps}
+                    className={inputClassName}
                     isInvalid={isInvalid}
                     disabled={disabled}
                     value={value}
@@ -177,74 +210,58 @@ const MokaInput = forwardRef((props, ref) => {
                 />
             );
         }
-        // plainText
-        else if (as === 'plainText') {
-            return (
-                <Form.Control
-                    ref={ref}
-                    as={as}
-                    {...inputProps}
-                    plainText
-                    disabled={disabled}
-                    isInvalid={isInvalid}
-                    placeholder={placeholder}
-                    type={type}
-                    onChange={onChange}
-                    required={required}
-                    value={value}
-                    name={name}
-                    style={createControlStyle()}
-                />
-            );
+        // 드롭가능한 이미지 파일
+        else if (as === 'imageFile') {
+            return <MokaImageInput ref={ref} {...inputProps} />;
         }
+
         return (
             <InputMask
                 mask={mask}
                 onChange={onChange}
                 value={value}
+                disabled={disabled}
                 onPaste={inputProps.onPaste}
                 onMouseDown={inputProps.onMouseDown}
                 onFocus={inputProps.onFocus}
-                onBlur={inputProps.onFocus}
-                disabled={inputProps.disabled}
+                onBlur={inputProps.onBlur}
                 readOnly={inputProps.readOnly}
             >
-                {(maskProps) => {
-                    console.log(maskProps);
-                    return (
-                        <Form.Control
-                            ref={ref}
-                            as={as}
-                            {...inputProps}
-                            {...maskProps}
-                            isInvalid={isInvalid}
-                            value={value}
-                            onChange={onChange}
-                            placeholder={placeholder}
-                            type={type}
-                            required={required}
-                            name={name}
-                            style={createControlStyle()}
-                        />
-                    );
-                }}
+                {(maskProps) => (
+                    <Form.Control
+                        ref={ref}
+                        as={as}
+                        {...inputProps}
+                        {...maskProps}
+                        className={inputClassName}
+                        isInvalid={isInvalid}
+                        disabled={disabled}
+                        value={value}
+                        onChange={onChange}
+                        placeholder={placeholder}
+                        type={type}
+                        required={required}
+                        name={name}
+                        style={createControlStyle()}
+                    />
+                )}
             </InputMask>
         );
     };
 
-    return (
-        <>
-            <Form.Group className={clsx('mb-2', 'd-flex', 'align-items-center', className)}>
-                {label && (
-                    <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', labelClassName)} style={{ width: labelWidth }}>
-                        {label}
-                        {required && <span className="required-text">*</span>}
-                    </Form.Label>
-                )}
-                {createControl()}
-            </Form.Group>
-            <Form.Control.Feedback type="invalid">Please choose a username.</Form.Control.Feedback>
-        </>
+    return label ? (
+        <Form.Group className={clsx('mb-2', 'd-flex', 'align-items-center', className)}>
+            <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', labelClassName)} style={{ width: labelWidth }}>
+                {label}
+                {required && <span className="required-text">*</span>}
+            </Form.Label>
+            {createControl()}
+        </Form.Group>
+    ) : (
+        <span className="position-relative">
+            {required && <span className="required-text absolute-top-right">*</span>}
+            {createControl()}
+        </span>
     );
 });
 

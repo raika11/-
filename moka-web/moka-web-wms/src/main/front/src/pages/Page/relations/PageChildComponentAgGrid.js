@@ -23,8 +23,8 @@ const PageChildComponentAgGrid = (props) => {
      * 목록에서 Row클릭
      */
     const handleRowClicked = useCallback((row) => {
-        setShowModal(true);
         setSelected(row);
+        setShowModal(true);
     }, []);
 
     return (

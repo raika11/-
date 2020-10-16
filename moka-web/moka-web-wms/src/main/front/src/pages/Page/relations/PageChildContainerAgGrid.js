@@ -25,8 +25,8 @@ const PageChildContainerAgGrid = (props) => {
      * @param {object} row 선택된 row데이타
      */
     const handleRowClicked = useCallback((row) => {
-        setShowModal(true);
         setSelected(row);
+        setShowModal(true);
     }, []);
 
     return (

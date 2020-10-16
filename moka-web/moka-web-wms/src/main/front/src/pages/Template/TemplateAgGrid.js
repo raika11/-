@@ -34,7 +34,7 @@ const TemplateAgGrid = () => {
             </div>
 
             {/* ag-grid table */}
-            <div className="border custom-scroll" style={{ height: 558 }}>
+            <div className="border custom-scroll" style={{ height: 564 }}>
                 {listType === 'thumb' && (
                     <div className="d-flex flex-wrap align-content-start p-05 h-100 custom-scroll overflow-y-scroll">
                         {list.map((thumb) => (

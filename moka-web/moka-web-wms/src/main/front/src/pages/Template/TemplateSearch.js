@@ -27,7 +27,7 @@ const TemplateSearch = () => {
                     </Form.Control>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group as={Row} className="mb-2">
                 <Col xs={4} className="p-0 pr-2">
                     <Form.Control as="select" custom>
                         <option>템플릿 검색조건</option>

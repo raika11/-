@@ -10,13 +10,19 @@
 }
 
 .form-row {
+  min-height: 31px;
   margin-right: 0px;
   margin-left: 0px;
 }
 
 .form-group {
   &.row {
-      margin-right: 0px;
-      margin-left: 0px;
+    min-height: 31px;
+    margin-right: 0px;
+    margin-left: 0px;
   }
+}
+
+.form-control-plaintext {
+  outline: none;
 }

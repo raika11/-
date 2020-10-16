@@ -72,6 +72,7 @@ const defaultProps = {
     width: 410,
     height: CARD_DEFAULT_HEIGHT,
     foldable: false,
+    expansion: true,
     buttons: [],
 };
 

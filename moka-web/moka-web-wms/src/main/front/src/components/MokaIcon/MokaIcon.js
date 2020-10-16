@@ -28,6 +28,7 @@ import {
     faFileImport,
     faFileSearch,
     faCopy,
+    faCloudUpload,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faAngleLeft, faAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 
@@ -58,6 +59,7 @@ library.add(faThList);
 library.add(faFileImport);
 library.add(faFileSearch);
 library.add(faCopy);
+library.add(faCloudUpload);
 
 const propTypes = {
     /**

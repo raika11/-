@@ -118,7 +118,7 @@ const Template = () => {
                                 { title: '컨테이너 검색', icon: <MokaIcon iconName="fal-box" /> },
                                 { title: '컴포넌트 검색', icon: <MokaIcon iconName="fal-ballot" /> },
                                 { title: '광고 검색', icon: <MokaIcon iconName="fal-ad" /> },
-                                { title: '페이지 히스토리', icon: <MokaIcon iconName="fal-history" /> },
+                                { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
                             ]}
                         />
                     )}

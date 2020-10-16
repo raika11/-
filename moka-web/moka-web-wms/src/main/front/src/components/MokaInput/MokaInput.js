@@ -86,17 +86,6 @@ const defaultProps = {
 };
 
 /**
- * input 스타일 생성
- */
-const createControlStyle = ({ label, labelWidth }) => {
-    const width = label ? `calc(100% - ${labelWidth}px)` : '100%';
-
-    return {
-        width: width,
-    };
-};
-
-/**
  * 공통 input 컴포넌트 (라벨 처리)
  */
 const MokaInput = forwardRef((props, ref) => {
@@ -131,7 +120,7 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     as="select"
                     {...inputProps}
-                    className={inputClassName}
+                    className={clsx('flex-fill', inputClassName)}
                     placeholder={placeholder}
                     required={required}
                     onChange={onChange}
@@ -140,7 +129,6 @@ const MokaInput = forwardRef((props, ref) => {
                     custom
                     isInvalid={isInvalid}
                     disabled={disabled}
-                    style={createControlStyle({ label, labelWidth })}
                 >
                     {children}
                 </Form.Control>
@@ -153,13 +141,12 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     as="textarea"
                     {...inputProps}
-                    className={inputClassName}
+                    className={clsx('flex-fill', inputClassName)}
                     isInvalid={isInvalid}
                     disabled={disabled}
                     value={value}
                     required={required}
                     onChange={onChange}
-                    style={createControlStyle({ label, labelWidth })}
                 />
             );
         }
@@ -170,13 +157,12 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     type="radio"
                     {...inputProps}
-                    className={inputClassName}
+                    className={clsx('flex-fill', inputClassName)}
                     isInvalid={isInvalid}
                     disabled={disabled}
                     value={value}
                     required={required}
                     onChange={onChange}
-                    style={createControlStyle({ label, labelWidth })}
                 />
             );
         }
@@ -187,13 +173,12 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     type="switch"
                     {...inputProps}
-                    className={inputClassName}
+                    className={clsx('flex-fill', inputClassName)}
                     isInvalid={isInvalid}
                     disabled={disabled}
                     value={value}
                     required={required}
                     onChange={onChange}
-                    style={createControlStyle({ label, labelWidth })}
                 />
             );
         }
@@ -204,13 +189,12 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     type="checkbox"
                     {...inputProps}
-                    className={inputClassName}
+                    className={clsx('flex-fill', inputClassName)}
                     isInvalid={isInvalid}
                     disabled={disabled}
                     value={value}
                     required={required}
                     onChange={onChange}
-                    style={createControlStyle({ label, labelWidth })}
                 />
             );
         }
@@ -237,7 +221,7 @@ const MokaInput = forwardRef((props, ref) => {
                         as={as}
                         {...inputProps}
                         {...maskProps}
-                        className={inputClassName}
+                        className={clsx('flex-fill', inputClassName)}
                         isInvalid={isInvalid}
                         disabled={disabled}
                         value={value}
@@ -246,7 +230,6 @@ const MokaInput = forwardRef((props, ref) => {
                         type={type}
                         required={required}
                         name={name}
-                        style={createControlStyle({ label, labelWidth })}
                     />
                 )}
             </InputMask>
@@ -254,8 +237,8 @@ const MokaInput = forwardRef((props, ref) => {
     };
 
     return label ? (
-        <Form.Group className={clsx('mb-2', 'd-flex', 'align-items-center', className)}>
-            <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'mr-3', 'text-right', labelClassName)} style={{ width: labelWidth, 'min-width': labelWidth }}>
+        <Form.Group className={clsx('d-flex', 'align-items-center', className)}>
+            <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'mr-3', 'text-right', labelClassName)} style={{ width: labelWidth, minWidth: labelWidth }}>
                 {required && <span className="required-text">*</span>}
                 {label}
             </Form.Label>

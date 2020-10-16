@@ -13,6 +13,7 @@ const AgGrid = React.lazy(() => import('@pages/AgGrid'));
 const Page = React.lazy(() => import('@pages/Page'));
 const Domain = React.lazy(() => import('@pages/Domain'));
 const Template = React.lazy(() => import('@pages/Template'));
+const Dataset = React.lazy(() => import('@pages/Dataset'));
 
 const routes = [
     {
@@ -99,6 +100,16 @@ const routes = [
         name: 'Template',
         displayName: '템플릿관리',
         component: Template,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/dataset',
+        name: 'Dataset',
+        displayName: '데이터셋관리',
+        component: Dataset,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

@@ -2,7 +2,7 @@ export { default as ScrollToTop } from './ScrollToTop';
 export { MokaDateTimePicker } from './MokaPicker';
 export { default as MokaAutocomplete } from './MokaAutocomplete';
 export { default as MokaModal, MokaCodeListModal } from './MokaModal';
-export { default as MokaInput, MokaPrependLinkInput, MokaSearchInput, MokaImageInput } from './MokaInput';
+export { default as MokaInput, MokaPrependLinkInput, MokaSearchInput, MokaImageInput, MokaInputGroup } from './MokaInput';
 export { default as MokaAlert, MokaAlertWithButtons } from './MokaAlert';
 export { MokaCardTabs, MokaCardToggleTabs, MokaIconTabs } from './MokaTabs';
 export { MokaCardEditor, MokaModalEditor } from './MokaEditor';

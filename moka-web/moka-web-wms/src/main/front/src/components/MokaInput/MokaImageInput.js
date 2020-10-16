@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Figure from 'react-bootstrap/Figure';
 
 import { ACCEPTED_IMAGE_TYPES } from '@/constants';
-import MokaAlert from '@components/MokaAlert';
+import { MokaAlert, MokaIcon } from '@components';
 
 const propTypes = {
     /**
@@ -161,7 +161,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                 return (
                     <Figure
                         {...getRootProps()}
-                        className="d-inline-flex align-items-center justify-content-center is-file-dropzone position-relative bg-white"
+                        className="d-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white"
                         style={{ width, height }}
                         ref={wrapRef}
                         as="div"
@@ -182,6 +182,7 @@ const MokaImageInput = forwardRef((props, ref) => {
 
                         {/* default text */}
                         <span className="absolute-top w-100 h-100 d-flex align-items-center justify-content-center pointer-events-none" ref={defaultRef}>
+                            <MokaIcon iconName="fal-cloud-upload" className="mr-2" />
                             Drop files to attach, or browse
                         </span>
 

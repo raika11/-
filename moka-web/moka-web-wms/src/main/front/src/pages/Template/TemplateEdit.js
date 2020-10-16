@@ -1,22 +1,30 @@
 import React, { useState, useRef } from 'react';
+
+import { toastr } from 'react-redux-toastr';
+import copy from 'copy-to-clipboard';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import { MokaCard, MokaInput, MokaIcon } from '@components';
+
+import { MokaCard, MokaInput, MokaIcon, MokaInputGroup } from '@components';
 
 /**
  * 템플릿 정보/수정 컴포넌트
  */
 const TemplateEdit = () => {
+    // state
     const [validated, setValidated] = useState(true);
-    const imgFileRef = useRef(null);
     const [fileValue, setFileValue] = useState(null);
+    const [inputTag] = useState('<mte:tp id="185" name="모바일 뉴스레터신청" />');
+
+    // ref
+    const imgFileRef = useRef(null);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title="템플릿 정보">
             <Form>
+                {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div className="d-flex">
                         <Button variant="dark" className="mr-05">
@@ -31,56 +39,50 @@ const TemplateEdit = () => {
                         <Button variant="danger">삭제</Button>
                     </div>
                 </Form.Group>
-                <MokaInput label="템플릿ID" value="25555" inputProps={{ plaintext: true, readOnly: true }} />
-                <MokaInput label="템플릿명" value="템플릿명" onChange={() => {}} placeholder="템플릿명을 입력하세요" />
-
-                {/* invalid 테스트 */}
-                <MokaInput label="위치 그룹" as="select" isInvalid={!validated} required>
+                {/* 템플릿ID */}
+                <MokaInput className="mb-2" label="템플릿ID" value="25555" inputProps={{ plaintext: true, readOnly: true }} />
+                {/* 템플릿명 */}
+                <MokaInput className="mb-2" label="템플릿명" value="템플릿명" onChange={() => {}} placeholder="템플릿명을 입력하세요" />
+                {/* 위치그룹 */}
+                <MokaInput className="mb-2" label="위치 그룹" as="select" isInvalid={!validated}>
                     <option>템플릿 위치설정</option>
                 </MokaInput>
-
-                <Row className="m-0">
+                {/* 사이즈, 이미지 크기 */}
+                <Row className="m-0 mb-2">
                     <Col xs={6} className="p-0 m-0">
-                        <MokaInput label="사이즈" as="select">
+                        <MokaInput className="mb-0" label="사이즈" as="select">
                             <option>사이즈</option>
                         </MokaInput>
                     </Col>
-                    <Col xs={6} className="d-flex p-0">
-                        <MokaInput label="이미지" labelWidth={57} className="pr-1" /> X <MokaInput className="ml-2" required />
+                    <Col xs={4} className="p-0">
+                        <MokaInput label="이미지" labelWidth={55} className="mb-0 pr-1" />
+                    </Col>
+                    <Col xs={2} className="d-flex p-0">
+                        x <MokaInput className="ml-2 mb-0" />
                     </Col>
                 </Row>
-
-                <MokaInput
+                {/* 입력태그 */}
+                <MokaInputGroup
                     label="입력태그"
                     as="textarea"
-                    value={`<mte:tp id="185" name="모바일 뉴스레터신청" />`}
+                    value={inputTag}
                     inputClassName="resize-none"
                     inputProps={{ rows: 2 }}
+                    className="mb-2"
                     disabled
-                    // isGroup
-                    // inputGroupProps={{
-                    //     append: (
-                    //         <Button variant="dark">
-                    //             <MokaIcon iconName="fal-copy" />
-                    //         </Button>
-                    //     ),
-                    // }}
+                    append={
+                        <Button
+                            variant="dark"
+                            onClick={() => {
+                                copy(inputTag);
+                                toastr.success('알림창', '태그를 복사하였습니다.');
+                            }}
+                        >
+                            <MokaIcon iconName="fal-copy" />
+                        </Button>
+                    }
                 />
-
-                {/* <div className="position-relative">
-                    <MokaInput
-                        label="입력태그"
-                        as="textarea"
-                        value={`<mte:tp id="185" name="모바일 뉴스레터신청" />`}
-                        inputClassName="resize-none"
-                        inputProps={{ rows: 2 }}
-                        disabled
-                    />
-                    <Button className="btn-pill absolute-top-right" variant="gray150">
-                        <MokaIcon iconName="fal-copy" />
-                    </Button>
-                </div> */}
-
+                {/* 대표이미지 */}
                 <MokaInput
                     ref={imgFileRef}
                     as="imageFile"
@@ -103,8 +105,10 @@ const TemplateEdit = () => {
                         </>
                     }
                     labelClassName="justify-content-end"
-                    inputProps={{ width: 280, height: 280, setFileValue }}
+                    inputProps={{ width: 284, height: 280, setFileValue }}
+                    className="mb-2"
                 />
+                {/* 설명 */}
                 <MokaInput label="설명" placeholder="내용설명" />
             </Form>
         </MokaCard>

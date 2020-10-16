@@ -24,7 +24,7 @@ const PageChildContainerSearch = (props) => {
                 </Col>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
-                <Button>컨테이너 추가</Button>
+                <Button variant="dark">컨테이너 추가</Button>
             </Form.Group>
         </Form>
     );

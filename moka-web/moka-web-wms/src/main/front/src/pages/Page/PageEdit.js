@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaSearchInput, MokaCard } from '@components';
-import MovePageModal from './modals/MovePageModal';
+import MovePageListModal from './modals/MovePageListModal';
 
 const PageEdit = () => {
     const [moveModalShow, setMoveModalShow] = useState(false);
@@ -92,7 +92,7 @@ const PageEdit = () => {
                         <Form.Check type="switch" id="custom-switch2" label="" />
                     </Col>
                     <Col xs={8} className="px-0 pl-3">
-                        <MokaSearchInput onSearch={() => setMoveModalShow(true)} />
+                        <MokaSearchInput onSearch={() => setMoveModalShow(true)} disabled />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-2">
@@ -121,7 +121,7 @@ const PageEdit = () => {
                 </Form.Group>
             </Form>
 
-            <MovePageModal show={moveModalShow} onHide={() => setMoveModalShow(false)} />
+            <MovePageListModal show={moveModalShow} onHide={() => setMoveModalShow(false)} />
         </MokaCard>
     );
 };

@@ -22,7 +22,7 @@ const PageChildComponentList = () => {
                 </Col>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
-                <Button>컴포넌트 추가</Button>
+                <Button variant="dark">컴포넌트 추가</Button>
             </Form.Group>
         </Form>
     );

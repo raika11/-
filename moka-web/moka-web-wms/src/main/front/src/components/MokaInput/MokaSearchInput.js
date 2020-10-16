@@ -49,11 +49,11 @@ const defaultProps = {
  * 검색 버튼이 붙어있는 input
  */
 const MokaSearchInput = (props) => {
-    const { placeholder, value, onChange, className, searchText, onSearch, variant, buttonClassName } = props;
+    const { placeholder, value, onChange, className, searchText, onSearch, variant, buttonClassName, ...rest } = props;
 
     return (
         <InputGroup className={className}>
-            <Form.Control placeholder={placeholder} value={value} onChange={onChange} />
+            <Form.Control placeholder={placeholder} value={value} onChange={onChange} {...rest} />
             <InputGroup.Append>
                 <Button variant={variant} className={buttonClassName} onClick={onSearch}>
                     {searchText}

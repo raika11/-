@@ -22,7 +22,7 @@ const PageChildAdSearch = () => {
                 </Col>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
-                <Button>광고 추가</Button>
+                <Button variant="dark">광고 추가</Button>
             </Form.Group>
         </Form>
     );

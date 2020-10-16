@@ -22,7 +22,7 @@ const PageChildSkinSearch = () => {
                 </Col>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
-                <Button>스킨 추가</Button>
+                <Button variant="dark">스킨 추가</Button>
             </Form.Group>
         </Form>
     );

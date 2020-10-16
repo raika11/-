@@ -23,7 +23,7 @@ const PageChildPageSearch = (props) => {
                 </Col>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
-                <Button>페이지 추가</Button>
+                <Button variant="dark">페이지 추가</Button>
             </Form.Group>
         </Form>
     );

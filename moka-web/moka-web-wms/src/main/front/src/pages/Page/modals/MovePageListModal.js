@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-const MovePageModal = (props) => {
+const MovePageListModal = (props) => {
     const { show, onHide } = props;
     const [total] = useState(rowData.length);
     const [loading] = useState(false);
@@ -50,7 +50,7 @@ const MovePageModal = (props) => {
             <div>
                 <Form>
                     <Form.Group as={Row}>
-                        <Form.Label column xs={2} className="px-0">
+                        <Form.Label column xs={1} className="px-0">
                             구분
                         </Form.Label>
                         <Col xs={3} className="px-0 my-auto pr-1">
@@ -58,7 +58,7 @@ const MovePageModal = (props) => {
                                 <option>전체</option>
                             </Form.Control>
                         </Col>
-                        <Col xs={7} className="px-0 my-auto">
+                        <Col xs={8} className="px-0 my-auto">
                             <MokaSearchInput />
                         </Col>
                     </Form.Group>
@@ -80,4 +80,4 @@ const MovePageModal = (props) => {
     );
 };
 
-export default MovePageModal;
+export default MovePageListModal;

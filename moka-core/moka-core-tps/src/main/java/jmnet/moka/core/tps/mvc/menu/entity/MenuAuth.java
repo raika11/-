@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import jmnet.moka.core.tps.common.entity.BaseDateTime;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +26,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "TB_CMS_MENU_AUTH")
-public class MenuAuth extends BaseDateTime {
+public class MenuAuth extends BaseAudit {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,19 +66,4 @@ public class MenuAuth extends BaseDateTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MENU_ID", nullable = false, insertable = false, updatable = false)
     private Menu menu;
-
-    /**
-     * 등록자
-     */
-    @Column(name = "REG_ID")
-    @Builder.Default
-    private String regId = "";
-
-    /**
-     * 수정자
-     */
-    @Column(name = "MOD_ID")
-    @Builder.Default
-    private String modId = "";
-
 }

@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @AutoConfigureBefore(TpsAutoConfiguration.class)
 @Import({ValidationConfiguration.class, WebMvcConfiguration.class})
 @EnableEncryptableProperties
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "memberAuditorAwareImpl")
 public class MokaWmsApplication {
 
     public static void main(String[] args) {

@@ -37,8 +37,8 @@ public class MenuTest {
          * 대메뉴
          */
         Menu menu = Menu.builder()
-                        .menuId("03000000")
-                        .menuNm("test")
+                        .menuId("04000000")
+                        .menuNm("test2")
                         .menuDisplayNm("test")
                         .menuOrder(3)
                         .depth(1)

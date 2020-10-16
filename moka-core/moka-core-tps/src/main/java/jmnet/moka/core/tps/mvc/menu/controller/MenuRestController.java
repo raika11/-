@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
-import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.ActionLogger;
@@ -51,8 +51,7 @@ public class MenuRestController {
     private final ActionLogger actionLogger;
 
 
-    public MenuRestController(MenuService menuService, ModelMapper modelMapper, MessageByLocale messageByLocale,
-            ActionLogger actionLogger) {
+    public MenuRestController(MenuService menuService, ModelMapper modelMapper, MessageByLocale messageByLocale, ActionLogger actionLogger) {
         this.menuService = menuService;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
@@ -95,8 +94,7 @@ public class MenuRestController {
      */
     @ApiOperation(value = "메뉴 목록 트리 조회")
     @GetMapping("/tree")
-    public ResponseEntity<?> getMenuTree(HttpServletRequest request, @NotNull Principal principal,
-            @RequestAttribute Long processStartTime) {
+    public ResponseEntity<?> getMenuTree(HttpServletRequest request, @NotNull Principal principal, @RequestAttribute Long processStartTime) {
 
         // 조회
         MenuNode menuNode = menuService.findMenuTree();
@@ -109,7 +107,7 @@ public class MenuRestController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    
+
 
     /**
      * 메뉴정보 조회
@@ -177,19 +175,28 @@ public class MenuRestController {
 
         try {
             // insert
-            Menu returnValue = menuService.insertMenu(menu);
+            if (!menuService.isDuplicatedId(menuDTO.getMenuId())) {
+                Menu returnValue = menuService.insertMenu(menu);
 
-            // 결과리턴
-            MenuDTO dto = modelMapper.map(returnValue, MenuDTO.class);
-            ResultDTO<MenuDTO> resultDto = new ResultDTO<MenuDTO>(dto);
+                // 결과리턴
+                MenuDTO dto = modelMapper.map(returnValue, MenuDTO.class);
+                ResultDTO<MenuDTO> resultDto = new ResultDTO<MenuDTO>(dto);
 
-            // 액션 로그에 성공 로그 출력
-            actionLogger.success(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime);
+                // 액션 로그에 성공 로그 출력
+                actionLogger.success(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime);
 
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+                return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            } else {
+                // 중복 아이디 발생으로 인해 실패 로그 출력
+                actionLogger.fail(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime,
+                                  messageByLocale.get("tps.menu.error.duplicated.menuId", request));
 
+                return new ResponseEntity<>(MapBuilder.getInstance()
+                                                      .add("message", messageByLocale.get("tps.menu.error.duplicated.menuId", request))
+                                                      .getMultiValueMap(), HttpStatus.OK);
+            }
         } catch (Exception e) {
-            log.error("[FAIL TO INSERT DOMAIN]", e);
+            log.error("[FAIL TO INSERT MENU]", e);
             // 액션 로그에 오류 내용 출력
             actionLogger.error(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime, e);
             throw new Exception(messageByLocale.get("tps.menu.error.save", request), e);
@@ -209,8 +216,8 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 수정")
     @PutMapping("/{menuId}")
     public ResponseEntity<?> putMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.menu.error.invalid.menuId}") String menuId,
-            @Valid MenuDTO menuDTO, @NotNull Principal principal, @RequestAttribute Long processStartTime) throws Exception {
+            @PathVariable("menuId") @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.invalid.menuId}") String menuId, @Valid MenuDTO menuDTO,
+            @NotNull Principal principal, @RequestAttribute Long processStartTime) throws Exception {
 
 
         // MenuDTO -> Menu 변환
@@ -220,13 +227,6 @@ public class MenuRestController {
         // 오리진 데이터 조회
         Menu orgMenu = menuService.findMenuById(newMenu.getMenuId())
                                   .orElseThrow(() -> new NoDataException(infoMessage));
-
-        newMenu.setModDt(McpDate.now());
-        newMenu.setModId(principal.getName());
-        newMenu.setRegDt(orgMenu.getRegDt());
-        newMenu.setRegId(orgMenu.getRegId());
-
-
 
         try {
             // update
@@ -243,7 +243,7 @@ public class MenuRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE DOMAIN]", e);
+            log.error("[FAIL TO UPDATE MENU]", e);
             // 액션 로그에 에러 로그 출력
             actionLogger.error(principal.getName(), ActionType.UPDATE, System.currentTimeMillis() - processStartTime, e);
             throw new Exception(messageByLocale.get("tps.menu.error.save", request), e);
@@ -264,30 +264,33 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 삭제")
     @DeleteMapping("/{menuId}")
     public ResponseEntity<?> deleteMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.menu.error.invalid.menuId}") String menuId,
-            @NotNull Principal principal, @RequestAttribute Long processStartTime)
-            throws InvalidDataException, NoDataException, Exception {
+            @PathVariable("menuId") @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.invalid.menuId}") String menuId,
+            @NotNull Principal principal, @RequestAttribute Long processStartTime) throws InvalidDataException, NoDataException, Exception {
 
 
         // 메뉴 데이터 조회
         String noContentMessage = messageByLocale.get("tps.menu.error.noContent", request);
         Menu menu = menuService.findMenuById(menuId)
                                .orElseThrow(() -> new NoDataException(noContentMessage));
-
+        boolean success = false;
         try {
             // 삭제
-            menuService.deleteMenu(menu);
-
-
-            // 액션 로그에 성공 로그 출력
-            actionLogger.success(principal.getName(), ActionType.DELETE, System.currentTimeMillis() - processStartTime);
+            if (!menuService.isUsedGroupOrMember(menuId)) {
+                menuService.deleteMenu(menu);
+                success = true;
+                // 액션 로그에 성공 로그 출력
+                actionLogger.success(principal.getName(), ActionType.DELETE, System.currentTimeMillis() - processStartTime);
+            } else {
+                actionLogger.fail(principal.getName(), ActionType.DELETE, System.currentTimeMillis() - processStartTime,
+                                  messageByLocale.get("tps.menu.error.delete.related", request));
+            }
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(success);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE DOMAIN] menuId: {}) {}", menuId, e.getMessage());
+            log.error("[FAIL TO DELETE MENU] menuId: {}) {}", menuId, e.getMessage());
             // 액션 로그에 에러 로그 출력
             actionLogger.error(principal.getName(), ActionType.DELETE, System.currentTimeMillis() - processStartTime, e);
             throw new Exception(messageByLocale.get("tps.menu.error.delete", request), e);

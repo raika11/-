@@ -42,8 +42,7 @@ public class MenuServiceImpl implements MenuService {
 
     final ModelMapper modelMapper;
 
-    public MenuServiceImpl(MenuRepository menuRepository, MenuAuthRepository menuAuthRepository, MenuMapper menuMapper,
-            ModelMapper modelMapper) {
+    public MenuServiceImpl(MenuRepository menuRepository, MenuAuthRepository menuAuthRepository, MenuMapper menuMapper, ModelMapper modelMapper) {
         this.menuRepository = menuRepository;
         this.menuAuthRepository = menuAuthRepository;
         this.menuMapper = menuMapper;
@@ -137,6 +136,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public boolean isUsedGroupOrMember(String menuId) {
+        return menuAuthRepository.countByMenuId(menuId) > 0 ? true : false;
+    }
+
+    @Override
     public MenuAuth insertMenuAuth(MenuAuth menuAuth) {
         return menuAuthRepository.save(menuAuth);
     }
@@ -216,8 +220,7 @@ public class MenuServiceImpl implements MenuService {
                                     .menuId(menu.getMenuId())
                                     .groupMemberDiv(menuAuthTypeCode.getCode())
                                     .build();
-        Optional<MenuAuth> menuAuthOptional =
-                menuAuthRepository.findGroupMemberDivMenu(groupMemberId, menu.getMenuId(), menuAuthTypeCode.getCode());
+        Optional<MenuAuth> menuAuthOptional = menuAuthRepository.findGroupMemberDivMenu(groupMemberId, menu.getMenuId(), menuAuthTypeCode.getCode());
 
         if (menuAuthOptional.isPresent()) {
             menuAuth = menuAuthOptional.get();

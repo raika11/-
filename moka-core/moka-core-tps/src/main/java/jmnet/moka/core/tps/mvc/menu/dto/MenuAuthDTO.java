@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +33,8 @@ public class MenuAuthDTO implements Serializable {
     /**
      * 그룹/사용자구분 (G:그룹, U:사용자)
      */
+    @NotNull(message = "{tps.menu.error.invalid.domainId}")
+    @Pattern(regexp = "[0-9]{8}$", message = "{tps.domain.error.invalid.domainId}")
     private String groupMemberDiv;
 
     /**

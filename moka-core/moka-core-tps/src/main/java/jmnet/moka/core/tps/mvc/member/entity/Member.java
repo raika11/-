@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import jmnet.moka.core.tps.common.entity.BaseDateTime;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +24,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "TB_CMS_MEM")
-public class Member extends BaseDateTime {
+public class Member extends BaseAudit {
 
     private static final long serialVersionUID = 1L;
 
@@ -128,22 +128,6 @@ public class Member extends BaseDateTime {
      */
     @Column(name = "EXPIRE_DT")
     private Date expireDt;
-
-
-    /**
-     * 등록자
-     */
-    @Column(name = "REG_ID")
-    @Builder.Default
-    private String regId = "";
-
-
-    /**
-     * 수정자
-     */
-    @Column(name = "MOD_ID")
-    @Builder.Default
-    private String modId = "";
 
     /**
      * 비고

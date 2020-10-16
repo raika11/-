@@ -103,6 +103,14 @@ public interface MenuService {
     boolean isDuplicatedId(String menuId);
 
     /**
+     * 메뉴 그룹 및 멤버 사용 여부
+     *
+     * @param menuId 메뉴 ID
+     * @return 사용 여부
+     */
+    boolean isUsedGroupOrMember(String menuId);
+
+    /**
      * 메뉴 권한 등록
      *
      * @param menuAuth 메뉴 권한

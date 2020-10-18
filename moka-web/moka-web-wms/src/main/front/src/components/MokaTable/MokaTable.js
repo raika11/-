@@ -61,6 +61,10 @@ const propTypes = {
      * row click 이벤트 막는 cell의 필드 리스트
      */
     preventRowClickCell: PropTypes.arrayOf(PropTypes.string),
+    /**
+     * selected row 갯수
+     */
+    rowSelection: PropTypes.string,
 };
 const defaultProps = {
     localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },

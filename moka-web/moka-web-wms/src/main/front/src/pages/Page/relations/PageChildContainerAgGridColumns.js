@@ -28,7 +28,6 @@ export const columnDefs = [
         width: 40,
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (params) => <LinkButton {...params} />,
-        // preventRowClick: true,
     },
 ];
 

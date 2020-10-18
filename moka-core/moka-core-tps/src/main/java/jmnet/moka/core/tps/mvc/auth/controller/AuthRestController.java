@@ -1,8 +1,5 @@
 package jmnet.moka.core.tps.mvc.auth.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.mvc.MessageByLocale;
@@ -22,6 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <pre>
@@ -151,7 +152,7 @@ public class AuthRestController {
     @GetMapping("/domains")
     public ResponseEntity<?> getDomainList(HttpServletRequest request) {
         // 조회
-        List<Domain> returnValue = domainService.findDomainList();
+        List<Domain> returnValue = domainService.findAllDomain();
 
         // 리턴값 설정
         ResultListDTO<DomainDTO> resultListMessage = new ResultListDTO<DomainDTO>();
@@ -159,16 +160,16 @@ public class AuthRestController {
 
         List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
         List<DomainDTO> domainDtoMapList = domainDtoList.stream()
-                                                        .map((item) -> {
-                                                            String apiCodeId =
-                                                                    apiCodeHelper.getDataApiCode(CodeMgts, item.getApiHost(),
-                                                                                                 item.getApiPath());
-                                                            if (apiCodeId != null) {
-                                                                item.setApiCodeId(apiCodeId);
-                                                            }
-                                                            return item;
-                                                        })
-                                                        .collect(Collectors.toList());
+                .map((item) -> {
+                    String apiCodeId =
+                            apiCodeHelper.getDataApiCode(CodeMgts, item.getApiHost(),
+                                    item.getApiPath());
+                    if (apiCodeId != null) {
+                        item.setApiCodeId(apiCodeId);
+                    }
+                    return item;
+                })
+                .collect(Collectors.toList());
 
         resultListMessage.setTotalCnt(returnValue.size());
         resultListMessage.setList(domainDtoMapList);

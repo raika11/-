@@ -95,59 +95,67 @@ const Page = () => {
                 </Suspense>
             </MokaCard>
 
-            {/* 에디터 */}
-            <MokaCardEditor className="mr-10 flex-fill" title="에디터 영역" height={CARD_DEFAULT_HEIGHT} expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
-
-            {/* 탭 */}
             <Switch>
                 <Route
                     path={['/page', '/page/:pageSeq']}
                     exact
                     render={() => (
-                        <MokaIconTabs
-                            expansion={expansionState[2]}
-                            onExpansion={handleTabExpansion}
-                            height={CARD_DEFAULT_HEIGHT}
-                            tabWidth={412}
-                            tabs={[
-                                <Suspense>
-                                    <PageEdit />
-                                </Suspense>,
-                                <Suspense>
-                                    <PageChildPageList />
-                                </Suspense>,
-                                <Suspense>
-                                    <PageChildSkinList />
-                                </Suspense>,
-                                <Suspense>
-                                    <PageChildContainerList />
-                                </Suspense>,
-                                <Suspense>
-                                    <PageChildComponentList />
-                                </Suspense>,
-                                <Suspense>
-                                    <PageChildTemplateList />
-                                </Suspense>,
-                                <Suspense>
-                                    <PageChildAdList />
-                                </Suspense>,
-                                <Suspense>
-                                    <PageHistoryList />
-                                </Suspense>,
-                            ]}
-                            tabNavWidth={48}
-                            tabNavPosition="right"
-                            tabNavs={[
-                                { title: '사이트 정보', text: 'Info' },
-                                { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
-                                { title: '콘텐츠 스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
-                                { title: '컨테이너 검색', icon: <MokaIcon iconName="fal-box" /> },
-                                { title: '컴포넌트 검색', icon: <MokaIcon iconName="fal-ballot" /> },
-                                { title: '템플릿 검색', icon: <MokaIcon iconName="fal-newspaper" /> },
-                                { title: '광고 검색', icon: <MokaIcon iconName="fal-ad" /> },
-                                { title: '페이지 히스토리', icon: <MokaIcon iconName="fal-history" /> },
-                            ]}
-                        />
+                        <>
+                            {/* 에디터 */}
+                            <MokaCardEditor
+                                className="mr-10 flex-fill"
+                                title="에디터 영역"
+                                height={CARD_DEFAULT_HEIGHT}
+                                expansion={expansionState[1]}
+                                onExpansion={handleEditorExpansion}
+                            />
+
+                            {/* 탭 */}
+                            <MokaIconTabs
+                                expansion={expansionState[2]}
+                                onExpansion={handleTabExpansion}
+                                height={CARD_DEFAULT_HEIGHT}
+                                tabWidth={412}
+                                tabs={[
+                                    <Suspense>
+                                        <PageEdit />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <PageChildPageList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <PageChildSkinList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <PageChildContainerList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <PageChildComponentList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <PageChildTemplateList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <PageChildAdList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <PageHistoryList />
+                                    </Suspense>,
+                                ]}
+                                tabNavWidth={48}
+                                tabNavPosition="right"
+                                tabNavs={[
+                                    { title: '사이트 정보', text: 'Info' },
+                                    { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
+                                    { title: '콘텐츠 스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '컨테이너 검색', icon: <MokaIcon iconName="fal-box" /> },
+                                    { title: '컴포넌트 검색', icon: <MokaIcon iconName="fal-ballot" /> },
+                                    { title: '템플릿 검색', icon: <MokaIcon iconName="fal-newspaper" /> },
+                                    { title: '광고 검색', icon: <MokaIcon iconName="fal-ad" /> },
+                                    { title: '페이지 히스토리', icon: <MokaIcon iconName="fal-history" /> },
+                                ]}
+                            />
+                        </>
                     )}
                 />
             </Switch>

@@ -8,7 +8,7 @@ import bg from '@assets/images/bg.jpeg';
 
 const profileCustomToggle = forwardRef(({ children, onClick, id }, ref) => {
     return (
-        <div ref={ref} className="dropdown-toggle" onClick={onClick} id={id}>
+        <div ref={ref} className="dropdown-toggle cursor-pointer" onClick={onClick} id={id}>
             {children}
         </div>
     );

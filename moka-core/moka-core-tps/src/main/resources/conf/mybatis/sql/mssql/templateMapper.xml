@@ -152,11 +152,13 @@
 		) }
 	</select>
 
+	<!--
 	<select id="findDomainIdListByTemplateSeq" parameterType="java.lang.Long" resultType="String" statementType="CALLABLE">
 		{ call UPA_TB_WMS_DOMAIN_USE_TEMPLATE_LIST_SEL(
 			#{templateSeq, mode=IN, jdbcType=INTEGER, javaType=integer}
 		) }
 	</select>
+	-->
 
 	<!-- resultSet이 여러개인 경우 -->
 	<!--<resultMap id="TemplateMap" type="TemplateVO"/>

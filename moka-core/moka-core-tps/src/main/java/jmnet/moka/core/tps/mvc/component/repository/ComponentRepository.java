@@ -59,7 +59,7 @@ public interface ComponentRepository
     public Page<Component> findByDomain_DomainId(String domainId, Pageable pageable);
 
     /**
-     * 템플릿아이디와 관련된 컴포넌트 목록 조회
+     * 템플릿SEQ와 관련된 컴포넌트 목록 조회
      * 
      * @param templateSeq 템플릿ID
      * @param pageable Pageable

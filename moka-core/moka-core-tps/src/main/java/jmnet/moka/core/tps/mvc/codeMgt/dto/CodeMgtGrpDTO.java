@@ -13,6 +13,7 @@ import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * <pre>
@@ -35,21 +36,42 @@ public class CodeMgtGrpDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<CodeMgtGrpDTO>>() {}.getType();
 
+    /**
+     * 일련번호
+     */
     @Min(value = 0, message = "{tps.codeMgtGrp.error.invalid.seqNo}")
     private Long seqNo;
 
+    /**
+     * 그룹코드
+     */
     @NotNull(message = "{tps.codeMgtGrp.error.invalid.grpCd}")
-    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$",
-            message = "{tps.codeMgtGrp.error.invalid.grpCd2}")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.invalid.grpCd2}")
+    @Length(min = 1, max = 12, message = "{tps.codeMgtGrp.error.invalid.grpCd3}")
     private String grpCd;
 
+    /**
+     * 코드명
+     */
     @NotNull(message = "{tps.codeMgtGrp.error.invalid.cdNm}")
     @Pattern(regexp = ".+", message = "{tps.codeMgtGrp.error.invalid.cdNm}")
+    @Length(min = 1, max = 100, message = "{tps.codeMgtGrp.error.invalid.cdNm2}")
     private String cdNm;
 
+    /**
+     * 코드영문명
+     */
+    @Length(max = 100, message = "{tps.codeMgtGrp.error.invalid.cdEngNm}")
     private String cdEngNm;
 
+    /**
+     * 코드코멘트
+     */
+    @Length(max = 100, message = "{tps.codeMgtGrp.error.invalid.cdComment}")
     private String cdComment;
 
-    private Long countCodeMgt;  // 하위 코드 갯수. 디비에는 없는 데이타임.
+    /**
+     * 하위 기타코드 갯수. 디비에는 없는 데이타임.
+     */
+    private Long countCodeMgt;
 }

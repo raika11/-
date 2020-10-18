@@ -86,4 +86,7 @@ public class TpsConstants {
     public static final Integer PROCEDURE_SUCCESS = 1;
     public static final Integer PROCEDURE_FAIL = -1;
 
+    /** 검색타입 '전체' */
+    public static final String SEARCH_TYPE_ALL = "all";
+
 }

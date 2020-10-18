@@ -57,8 +57,9 @@ public class TemplateDTO implements Serializable {
     /**
      * 템플릿명
      */
-    @NotNull(message = "{tps.template.error.invalid.templateName}")
-    @Pattern(regexp = ".+", message = "{tps.template.error.invalid.templateName}")
+    @NotNull(message = "{tps.template.error.invalid.templateName1}")
+    @Pattern(regexp = ".+", message = "{tps.template.error.invalid.templateName1}")
+    @Length(min = 1, max = 128, message = "{tps.template.error.invalid.templateName2}")
     private String templateName;
 
     /**
@@ -82,6 +83,7 @@ public class TemplateDTO implements Serializable {
     /**
      * 템플릿그룹
      */
+    @Length(max = 24, message = "{tps.template.error.invalid.templateGroup}")
     private String templateGroup;
 
     /**
@@ -93,6 +95,7 @@ public class TemplateDTO implements Serializable {
     /**
      * 템플릿썸네일경로
      */
+    @Length(max = 256, message = "{tps.template.error.invalid.templateThumb}")
     private String templateThumb;
 
     /**

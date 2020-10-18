@@ -14,7 +14,7 @@ public interface TemplateHistService {
      * 히스토리 조회
      * </pre>
      * 
-     * @param templateSeq 템플릿아이디
+     * @param templateSeq 템플릿SEQ
      * @param search 검색조건
      * @param pageable pageable
      * @return 히스토리 리스트

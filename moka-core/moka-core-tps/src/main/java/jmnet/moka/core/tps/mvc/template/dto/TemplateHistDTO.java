@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,19 +44,41 @@ public class TemplateHistDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<TemplateHistDTO>>() {}.getType();
 
+    /**
+     * 일련번호
+     */
     private Long seq;
 
+    /**
+     * 템플릿
+     */
     @JsonIgnore
     @NotNull(message = "{tps.template.error.invalid.templateSeq}")
     private TemplateDTO template;
 
+    /**
+     * 도메인ID
+     */
+    @NotNull(message = "{tps.page.error.invalid.domainId}")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.invalid.domainId}")
     private String domainId;
 
-    private String templateBody;
+    /**
+     * 템플릿본문
+     */
+    @Builder.Default
+    private String templateBody = "";
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = MokaConstants.JSON_DATE_FORMAT, timezone = MokaConstants.JSON_DATE_TIME_ZONE)
-    @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
+    /**
+     * 등록일자
+     */
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = MokaConstants.JSON_DATE_FORMAT, timezone = MokaConstants.JSON_DATE_TIME_ZONE)
+//    @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
+    @DTODateTimeFormat
     private Date regDt;
 
+    /**
+     * 등록자
+     */
     private String regId;
 }

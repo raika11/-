@@ -18,6 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,41 +39,50 @@ import org.hibernate.annotations.Nationalized;
 @Builder
 @Entity
 @Table(name = "TB_WMS_TEMPLATE_HIST")
-@NamedQuery(name = "TemplateHist.findAll", query = "SELECT t FROM TemplateHist t")
-public class TemplateHist implements Serializable {
+public class TemplateHist extends BaseAudit {
 
     private static final long serialVersionUID = -5653969038976101774L;
 
+    /**
+     * 일련번호
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ")
     private Long seq;
 
+    /**
+     * 템플릿
+     */
     @ManyToOne
     @JoinColumn(name = "TEMPLATE_SEQ", nullable = false)
     private Template template;
 
-    @Column(name = "DOMAIN_ID", columnDefinition = "char", nullable = true)
+    /**
+     * 도메인ID
+     */
+    @Column(name = "DOMAIN_ID", columnDefinition = "char", nullable = false)
     private String domainId;
 
+    /**
+     * 템플릿본문
+     */
     @Nationalized
     @Column(name = "TEMPLATE_BODY")
-    private String templateBody;
+    @Builder.Default
+    private String templateBody = "";
 
+    /**
+     * 작업유형
+     */
     @Column(name = "WORK_TYPE", columnDefinition = "char")
-    private String workType;
-
-    @Column(name = "REG_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date regDt;
-
-    @Column(name = "REG_ID", length = 30)
-    private String regId;
+    @Builder.Default
+    private String workType = "U";
 
     @PrePersist
     @PreUpdate
     public void prePersist() {
+        this.templateBody = McpString.defaultValue(this.templateBody, "");
         this.workType = McpString.defaultValue(this.workType, "U");
-        this.regDt = McpDate.defaultValue(this.regDt);
     }
 }

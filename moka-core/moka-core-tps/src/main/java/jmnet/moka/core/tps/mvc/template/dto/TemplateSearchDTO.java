@@ -49,7 +49,7 @@ public class TemplateSearchDTO extends SearchDTO {
     private String domainId;
 
     /**
-     * 템플릿정보
+     * 템플릿그룹(템플릿위치그룹)
      */
     private String tpZone;
 
@@ -88,11 +88,13 @@ public class TemplateSearchDTO extends SearchDTO {
      */
     private Integer returnValue;
 
-    // 검색 조건의 기본값을 설정
+    /**
+     * 생성자: 검색 조건의 기본값을 설정
+     */
     public TemplateSearchDTO() {
         super(TemplateVO.class, "templateSeq,desc");
         useTotal = MokaConstants.YES;
-        searchType = "all";
+        searchType = TpsConstants.SEARCH_TYPE_ALL;
         returnValue = TpsConstants.PROCEDURE_SUCCESS;
     }
 }

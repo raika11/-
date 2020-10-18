@@ -50,7 +50,7 @@ public interface TemplateService {
      * 템플릿 조회
      * </pre>
      * 
-     * @param templateSeq 템플릿아이디
+     * @param templateSeq 템플릿SEQ
      * @return 템플릿
      * @throws NoDataException 데이터없음 예외처리
      */
@@ -115,10 +115,10 @@ public interface TemplateService {
     
     /**
      * 템플릿을 사용하는 모든 도메인 조회
-     * @param templateSeq 템플릿아이디
+     * @param templateSeq 템플릿SEQ
      * @return 도메인아이디 목록
      */
-    public List<String> findDomainIdListByTemplateSeq(Long templateSeq);
+//    public List<String> findDomainIdListByTemplateSeq(Long templateSeq);
     
     /**
      * 썸네일 이미지 저장

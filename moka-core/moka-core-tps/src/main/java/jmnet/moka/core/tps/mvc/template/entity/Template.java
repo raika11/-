@@ -20,6 +20,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,8 +32,7 @@ import org.hibernate.annotations.Nationalized;
 
 
 /**
- * The persistent class for the WMS_TEMPLATE database table.
- * 
+ * 템플릿
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,8 +41,7 @@ import org.hibernate.annotations.Nationalized;
 @Builder
 @Entity
 @Table(name = "TB_WMS_TEMPLATE")
-@NamedQuery(name = "Template.findAll", query = "SELECT t FROM Template t")
-public class Template implements Serializable {
+public class Template extends BaseAudit {
 
     private static final long serialVersionUID = 8181884737274673595L;
 
@@ -65,7 +64,7 @@ public class Template implements Serializable {
      * 템플릿명
      */
     @Nationalized
-    @Column(name = "TEMPLATE_NAME", nullable = false, length = 128)
+    @Column(name = "TEMPLATE_NAME", nullable = false)
     private String templateName;
 
     /**
@@ -93,7 +92,7 @@ public class Template implements Serializable {
     /**
      * 템플릿그룹
      */
-    @Column(name = "TEMPLATE_GROUP", length = 24)
+    @Column(name = "TEMPLATE_GROUP")
     private String templateGroup;
 
     /**
@@ -106,42 +105,16 @@ public class Template implements Serializable {
     /**
      * 템플릿썸네일경로
      */
-    @Column(name = "TEMPLATE_THUMB", length = 256)
+    @Column(name = "TEMPLATE_THUMB")
     private String templateThumb;
 
     /**
      * 상세정보
      */
     @Nationalized
-    @Column(name = "DESCRIPTION", length = 4000)
+    @Column(name = "DESCRIPTION")
     private String description;
 
-    /**
-     * 등록일시
-     */
-    @Column(name = "REG_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date regDt;
-
-    /**
-     * 등록자
-     */
-    @Column(name = "REG_ID", length = 30)
-    private String regId;
-
-    /**
-     * 수정일시
-     */
-    @Column(name = "MOD_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modDt;
-
-    /**
-     * 수정자
-     */
-    @Column(name = "MOD_ID", length = 30)
-    private String modId;
-    
     @Transient
     private String templateGroupName;
 
@@ -151,7 +124,6 @@ public class Template implements Serializable {
         this.cropWidth = this.cropWidth == null ? 0 : this.cropWidth;
         this.cropHeight = this.cropHeight == null ? 0 : this.cropHeight;
         this.templateWidth = this.templateWidth == null ? 0 : this.templateWidth;
-        this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     @PreUpdate
@@ -160,7 +132,5 @@ public class Template implements Serializable {
         this.cropWidth = this.cropWidth == null ? 0 : this.cropWidth;
         this.cropHeight = this.cropHeight == null ? 0 : this.cropHeight;
         this.templateWidth = this.templateWidth == null ? 0 : this.templateWidth;
-        this.regDt = McpDate.defaultValue(this.regDt);
-        this.modDt = McpDate.defaultValue(this.modDt);
     }
 }

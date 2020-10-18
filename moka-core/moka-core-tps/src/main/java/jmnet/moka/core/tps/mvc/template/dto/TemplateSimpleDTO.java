@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * <pre>
@@ -38,15 +39,28 @@ public class TemplateSimpleDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<TemplateSimpleDTO>>() {}.getType();
 
+    /**
+     * 템플릿SEQ
+     */
     private Long templateSeq;
 
+    /**
+     * 도메인
+     */
     @NotNull(message = "{template.error.invalid.domainId}")
     private DomainSimpleDTO domain;
 
-    @NotNull(message = "{template.error.invalid.templateName}")
-    @Pattern(regexp = ".+", message = "{template.error.invalid.templateName}")
+    /**
+     * 템플릿명
+     */
+    @NotNull(message = "{tps.template.error.invalid.templateName1}")
+    @Pattern(regexp = ".+", message = "{tps.template.error.invalid.templateName1}")
+    @Length(min = 1, max = 128, message = "{tps.template.error.invalid.templateName2}")
     private String templateName;
-    
+
+    /**
+     * 템플릿그룹명
+     */
     private String templateGroupName;
 
 }

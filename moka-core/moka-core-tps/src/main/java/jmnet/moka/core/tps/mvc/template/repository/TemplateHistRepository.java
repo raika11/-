@@ -21,10 +21,10 @@ public interface TemplateHistRepository extends JpaRepository<TemplateHist, Long
 
     /**
      * <pre>
-     * 템플릿아이디로 템플릿히스토리 목록을 찾는다
+     * 템플릿SEQ로 템플릿히스토리 목록을 찾는다
      * </pre>
      * 
-     * @param templateSeq 템플릿아이디
+     * @param templateSeq 템플릿SEQ
      * @param pageable Pageable
      * @return 템플릿 히스토리 목록
      */

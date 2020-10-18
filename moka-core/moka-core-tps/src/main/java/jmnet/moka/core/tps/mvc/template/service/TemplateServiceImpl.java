@@ -123,8 +123,8 @@ public class TemplateServiceImpl implements TemplateService {
         log.debug("Update Template {}", template.getTemplateSeq());
 
         // 히스토리 생성
-        TemplateHist hist = TemplateHist.builder().regDt(template.getModDt())
-                .regId(template.getModId()).templateBody(template.getTemplateBody())
+        TemplateHist hist = TemplateHist.builder()
+                .templateBody(template.getTemplateBody())
                 .template(template).build();
         if (template.getDomain() != null) {
             hist.setDomainId(template.getDomain().getDomainId());
@@ -176,10 +176,10 @@ public class TemplateServiceImpl implements TemplateService {
         return templateRepository.countByDomain_DomainId(domainId);
     }
 
-    @Override
-    public List<String> findDomainIdListByTemplateSeq(Long templateSeq) {
-        return templateMapper.findDomainIdListByTemplateSeq(templateSeq);
-    }
+//    @Override
+//    public List<String> findDomainIdListByTemplateSeq(Long templateSeq) {
+//        return templateMapper.findDomainIdListByTemplateSeq(templateSeq);
+//    }
 
     @Override
     public String saveTemplateImage(Template template, MultipartFile thumbnail) throws Exception {

@@ -8,12 +8,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.*;
 
 
 /**
- * The persistent class for the TB_15RE_CODE_MGT database table.
- * 
+ * 기타코드
  */
 
 @AllArgsConstructor
@@ -25,87 +26,90 @@ import lombok.*;
 //@JsonInclude(Include.NON_NULL)
 @Entity
 @Table(name = "TB_15RE_CODE_MGT")
-@NamedQuery(name = "CodeMgt.findAll", query = "SELECT e FROM CodeMgt e")
-public class CodeMgt implements Serializable {
+public class CodeMgt extends BaseAudit {
 
     private static final long serialVersionUID = -1877787466206944682L;
 
+    /**
+     * 일련번호
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ_NO")
     private Long seqNo;
 
+    /**
+     * 그룹코드
+     */
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "GRP_CD", referencedColumnName = "GRP_CD", nullable = false)
     private CodeMgtGrp codeMgtGrp;
 
-    @Column(name = "DTL_CD", nullable = false, length = 24)
+    /**
+     * 상세코드
+     */
+    @Column(name = "DTL_CD", nullable = false)
     private String dtlCd;
 
+    /**
+     * 코드순서
+     */
     @Column(name = "CD_ORD")
-    private Integer cdOrd;
+    @Builder.Default
+    private Integer cdOrd = 1;
 
-    @Column(name = "CD_NM", nullable = false, length = 100)
+    /**
+     * 코드명
+     */
+    @Column(name = "CD_NM", nullable = false)
     private String cdNm;
 
-    @Column(name = "CD_ENG_NM", length = 100)
+    /**
+     * 코드영문명
+     */
+    @Column(name = "CD_ENG_NM")
     private String cdEngNm;
 
-    @Column(name = "CD_COMMENT", length = 100)
+    /**
+     * 코드코멘트
+     */
+    @Column(name = "CD_COMMENT")
     private String cdComment;
 
-    @Column(name = "CD_NM_ETC1", length = 512)
+    /**
+     * 코드기타1
+     */
+    @Column(name = "CD_NM_ETC1")
     private String cdNmEtc1;
 
-    @Column(name = "CD_NM_ETC2", length = 1024)
+    /**
+     * 코드기타2
+     */
+    @Column(name = "CD_NM_ETC2")
     private String cdNmEtc2;
 
-    @Column(name = "CD_NM_ETC3", length = 1024)
+    /**
+     * 코드기타3
+     */
+    @Column(name = "CD_NM_ETC3")
     private String cdNmEtc3;
 
+    /**
+     * 사용여부(Y:사용, N:미사용)
+     */
     @Column(name = "USED_YN", columnDefinition = "char")
-    private String usedYn;
-
-    @Column(name = "REG_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date regDt;
-
-    @Column(name = "REG_ID", length = 30)
-    private String regId;
-
-    @Column(name = "MOD_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modDt;
-
-    @Column(name = "MOD_ID", length = 30)
-    private String modId;
+    @Builder.Default
+    private String usedYn = MokaConstants.YES;
 
     @PrePersist
     public void prePersist() {
-        this.cdOrd = this.cdOrd == null ? 0 : this.cdOrd;
-        this.cdEngNm = McpString.defaultValue(this.cdEngNm, "");
-        this.cdComment = McpString.defaultValue(this.cdComment, "");
-        this.cdNmEtc1 = McpString.defaultValue(this.cdNmEtc1, "");
-        this.cdNmEtc2 = McpString.defaultValue(this.cdNmEtc2, "");
-        this.cdNmEtc3 = McpString.defaultValue(this.cdNmEtc3, "");
-        this.usedYn = McpString.defaultValue(this.usedYn, "Y");
-        this.regDt = McpDate.defaultValue(this.regDt);
-        this.regId = McpString.defaultValue(this.regId, "");
-        this.modId = McpString.defaultValue(this.modId, "");
+        this.cdOrd = this.cdOrd == null ? 1 : this.cdOrd;
+        this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.cdOrd = this.cdOrd == null ? 0 : this.cdOrd;
-        this.cdEngNm = McpString.defaultValue(this.cdEngNm, "");
-        this.cdComment = McpString.defaultValue(this.cdComment, "");
-        this.cdNmEtc1 = McpString.defaultValue(this.cdNmEtc1, "");
-        this.cdNmEtc2 = McpString.defaultValue(this.cdNmEtc2, "");
-        this.cdNmEtc3 = McpString.defaultValue(this.cdNmEtc3, "");
-        this.usedYn = McpString.defaultValue(this.usedYn, "Y");
-        this.regDt = McpDate.defaultValue(this.regDt);
-        this.regId = McpString.defaultValue(this.regId, "");
-        this.modDt = McpDate.defaultValue(this.modDt);
-        this.modId = McpString.defaultValue(this.modId, "");
+        this.cdOrd = this.cdOrd == null ? 1 : this.cdOrd;
+        this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
     }
 }

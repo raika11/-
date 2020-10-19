@@ -69,6 +69,10 @@ const propTypes = {
      * 드래그여부
      */
     dragging: PropTypes.bool,
+    /**
+     * 드래그 함수
+     */
+    onRowDragMove: PropTypes.func,
 };
 const defaultProps = {
     localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
@@ -131,7 +135,6 @@ const MokaTable = (props) => {
         var overNode = event.overNode;
         var rowNeedsToMove = movingNode !== overNode;
         if (rowNeedsToMove) {
-            debugger;
             var movingData = movingNode.data;
             var overData = overNode.data;
             var fromIndex = rowData.indexOf(movingData);

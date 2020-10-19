@@ -1,30 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { columnDefs, rowData } from '../Page/relations/PageChildTemplateAgGridColumns';
 
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
-import { MokaIcon } from '@components';
-import { MokaTemplateThumbCard } from '@/components/MokaCard';
+import { MokaTable, MokaIcon } from '@components';
+import { MokaThumbnailTable } from '@/components/MokaTable';
+
 import template from '../Page/template.json';
 
 /**
  * 템플릿 AgGrid 컴포넌트
  */
 const TemplateAgGrid = () => {
-    const [listType, setListType] = useState('thumb');
-    // 템플릿 데이터 api로 변경
-    const list = template.resultInfo.body.list;
+    /**
+     * 썸네일 테이블 total
+     */
+    const thumbTotal = template.resultInfo.body.totalCnt;
+
+    const [total] = useState(rowData.length);
+    const [loading] = useState(false);
+    const [search] = useState({ page: 1, size: 10 });
+    const [showAgGrid, setShowAgGrid] = useState('list');
+
+    /**
+     * 테이블에서 검색옵션 변경하는 경우
+     * @param {object} payload 변경된 값
+     */
+    const handleChangeSearchOption = useCallback((search) => console.log(search), []);
+
+    /**
+     * 목록에서 Row클릭
+     */
+    const handleRowClicked = useCallback((row) => {
+        console.log(row);
+    }, []);
 
     return (
         <>
             {/* 버튼 그룹 */}
             <div className="d-flex mb-10">
-                <Nav as={ButtonGroup} size="sm" className="mr-auto" defaultActiveKey={listType}>
-                    <Nav.Link eventKey="list" as={Button} variant="gray150" onClick={() => setListType('list')}>
+                <Nav
+                    as={ButtonGroup}
+                    size="sm"
+                    className="mr-auto"
+                    defaultActiveKey="list"
+                    onSelect={(selectedKey) => {
+                        setShowAgGrid(selectedKey);
+                    }}
+                >
+                    <Nav.Link eventKey="list" as={Button} variant="gray150">
                         <MokaIcon iconName="fal-th-list" />
                     </Nav.Link>
-                    <Nav.Link eventKey="thumb" as={Button} variant="gray150" onClick={() => setListType('thumb')}>
+                    <Nav.Link eventKey="thumbnail" as={Button} variant="gray150">
                         <MokaIcon iconName="fal-th-list" />
                     </Nav.Link>
                 </Nav>
@@ -34,23 +63,33 @@ const TemplateAgGrid = () => {
             </div>
 
             {/* ag-grid table */}
-            <div className="border custom-scroll" style={{ height: 564 }}>
-                {listType === 'thumb' && (
-                    <div className="d-flex flex-wrap align-content-start p-05 h-100 custom-scroll overflow-y-scroll">
-                        {list.map((thumb) => (
-                            <MokaTemplateThumbCard
-                                key={thumb.templateSeq}
-                                width={176}
-                                height={130}
-                                data={thumb}
-                                img={thumb.templateThumbnail}
-                                alt={'썸네일이미지'}
-                                menus={[{ title: '복사본 생성' }, { title: '삭제' }]}
-                            />
-                        ))}
-                    </div>
-                )}
-            </div>
+            {showAgGrid === 'list' && (
+                <MokaTable
+                    columnDefs={columnDefs}
+                    rowData={rowData}
+                    getRowNodeId={(params) => params.templateSeq}
+                    agGridHeight={552}
+                    onRowClicked={handleRowClicked}
+                    loading={loading}
+                    total={total}
+                    page={search.page}
+                    size={search.size}
+                    onChangeSearchOption={handleChangeSearchOption}
+                    preventRowClickCell={['append', 'link']}
+                />
+            )}
+            {showAgGrid === 'thumbnail' && (
+                <MokaThumbnailTable
+                    tableHeight={552}
+                    total={thumbTotal}
+                    page={search.page}
+                    size={search.size}
+                    onChangeSearchOption={handleChangeSearchOption}
+                    onClick={(template) => {
+                        console.log(template);
+                    }}
+                />
+            )}
         </>
     );
 };

@@ -1,6 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 import { enqueueToast } from '@store/notification/toastStore';
-import { startLoading, finishLoading } from '../loadingReducer';
+import { startLoading, finishLoading } from '@store/loading/loadingAction';
 
 /**
  * payload로 넘어온 액션들을 처리하고 api를 호출한다

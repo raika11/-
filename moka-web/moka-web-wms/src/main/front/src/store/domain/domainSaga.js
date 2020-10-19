@@ -1,5 +1,5 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
-import { startLoading, finishLoading } from '../loadingReducer';
+import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import createRequestSaga from '../commons/createRequestSaga';
 import { callApiAfterActions } from '../commons/createSaga.js';
 import * as domainAPI from './domainApi';

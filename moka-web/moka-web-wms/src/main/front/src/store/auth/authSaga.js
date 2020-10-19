@@ -1,6 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import * as api from './authApi';
-import { startLoading, finishLoading } from '@store/loadingReducer';
+import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { enqueueToast } from '@store/notification/toastStore';
 import * as authAction from './authAction';
 import { setLocalItem } from '@utils/storageUtil';
@@ -116,8 +116,8 @@ export function* getDomainList({ payload: domainId }) {
     yield put(startLoading(ACTION));
 
     try {
-        const option = yield select((state) => state.authAction.domainSearch);
-        const response = yield call(api.getDomainList, { search: option });
+        const searchOption = yield select((store) => store.auth.domainSearch);
+        const response = yield call(api.getDomainList, { search: searchOption });
 
         if (response.data.header.success) {
             yield put({

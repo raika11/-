@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import { enqueueToast } from '@store/notification/toastStore';
-import loadingReducer, { startLoading, finishLoading } from '../loadingReducer';
+import { startLoading, finishLoading } from '@store/loading/loadingAction';
 
 export const createRequestActionTypes = (actionType) => {
     const SUCCESS = `${actionType}_SUCCESS`;

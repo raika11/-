@@ -31,12 +31,12 @@ export default handleActions(
                 draft.menu = initialState.menu;
             });
         },
-        [GET_DOMAIN_LIST_FAILURE]: (state, { payload: { body } }) => {
+        [GET_DOMAIN_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.domainList = body.list;
             });
         },
-        [GET_DOMAIN_LIST_SUCCESS]: (state) => {
+        [GET_DOMAIN_LIST_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.domainList = initialState.domainList;
             });

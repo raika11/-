@@ -8,20 +8,20 @@ import { PAGESIZE_OPTIONS } from '@/constants';
  */
 export const initialState = {
     total: 0,
-    error: undefined,
+    error: null,
     list: [],
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
         sort: 'templateSeq,desc',
-        widthMin: undefined,
-        widthMax: undefined,
-        domainId: 'all',
-        tpZone: 'all',
-        tpSize: 'all',
+        domainId: null,
+        templateGroup: null,
+        templateWidth: null,
         searchType: 'all',
         keyword: '',
     },
+    template: {},
+    templateError: null,
     templateBody: '',
 };
 
@@ -62,6 +62,28 @@ export default handleActions(
                 draft.list = initialState.list;
                 draft.total = initialState.total;
                 draft.error = payload;
+            });
+        },
+        [act.GET_TEMPLATE_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.template = body;
+                draft.templateBody = body.templateBody;
+                draft.templateError = initialState.templateError;
+            });
+        },
+        [act.GET_TEMPLATE_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.template = initialState.template;
+                draft.templateBody = initialState.templateBody;
+                draft.templateError = payload;
+            });
+        },
+        /**
+         * 데이터 변경
+         */
+        [act.CHANGE_TEMPLATE_BODY]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.templateBody = payload;
             });
         },
     },

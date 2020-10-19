@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MokaPagination } from '@components';
-import { MokaTemplateThumbCard } from '@/components/MokaCard';
+import { MokaPagination, MokaTemplateThumbCard } from '@components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
-import template from '@pages/Page/template.json';
-
 const propTypes = {
+    /**
+     * 리스트 데이터
+     */
+    rowData: PropTypes.array,
     /**
      * tableHeight 테이블 Height
      */
@@ -51,34 +52,34 @@ const propTypes = {
 };
 
 const defaultProps = {
-    paging: true,
+    rowData: [],
     total: 0,
     page: 0,
     size: PAGESIZE_OPTIONS[0],
+    menus: [],
     pageSizes: PAGESIZE_OPTIONS,
     displayPageNum: DISPLAY_PAGE_NUM,
     onChangeSearchOption: null,
-    menus: [],
+    paging: true,
 };
 
 /**
  * 썸네일 테이블
  */
 const MokaThumbnailTable = (props) => {
-    const { tableHeight, onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, menus } = props;
-    const list = template.resultInfo.body.list;
+    const { tableHeight, onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, menus, rowData } = props;
 
     return (
         <>
             <div className="mb-3 border" style={{ height: tableHeight }}>
                 <div className="d-flex flex-wrap align-content-start custom-scroll p-05 h-100 overflow-y-scroll">
-                    {list.map((thumb) => (
+                    {rowData.map((template) => (
                         <MokaTemplateThumbCard
-                            key={thumb.templateSeq}
+                            key={template.templateSeq}
+                            data={template}
                             width={174}
-                            height={130}
-                            data={thumb}
-                            img={thumb.templateThumbnail}
+                            height={192}
+                            img={template.templateThumbnail}
                             alt={'썸네일이미지'}
                             menus={menus}
                             onClick={onClick}

@@ -6,8 +6,8 @@ export { default as MokaInput, MokaPrependLinkInput, MokaSearchInput, MokaImageI
 export { default as MokaAlert, MokaAlertWithButtons } from './MokaAlert';
 export { MokaCardTabs, MokaCardToggleTabs, MokaIconTabs } from './MokaTabs';
 export { MokaCardEditor, MokaModalEditor } from './MokaEditor';
-export { default as MokaCard } from './MokaCard';
+export { default as MokaCard, MokaTemplateThumbCard } from './MokaCard';
 export { default as MokaIcon } from './MokaIcon';
 export { default as MokaPagination } from './MokaPagination';
-export { default as MokaTable } from './MokaTable';
+export { default as MokaTable, MokaThumbnailTable } from './MokaTable';
 export { default as MokaTreeView } from './MokaTree';

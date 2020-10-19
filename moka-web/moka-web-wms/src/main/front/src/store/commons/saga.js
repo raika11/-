@@ -111,15 +111,16 @@ export const callApiAfterActions = (actionType, api, targetStateSelector) => {
                     payload: response.data,
                     error: true,
                 });
-                yield put();
-                // enqueueToast({
-                //     key: `fail${new Date().getTime() + Math.random()}`,
-                //     message: response.data.header.message,
-                //     options: {
-                //         variant: 'error',
-                //         persist: true,
-                //     },
-                // }),
+                // yield put(
+                //     enqueueToast({
+                //         key: `fail${new Date().getTime() + Math.random()}`,
+                //         message: response.data.header.message,
+                //         options: {
+                //             variant: 'error',
+                //             persist: true,
+                //         },
+                //     })
+                // );
             }
         } catch (e) {
             yield put({
@@ -127,15 +128,16 @@ export const callApiAfterActions = (actionType, api, targetStateSelector) => {
                 payload: e,
                 error: true,
             });
-            yield put();
-            // enqueueToast({
-            //     key: `fail${new Date().getTime() + Math.random()}`,
-            //     message: e.message,
-            //     options: {
-            //         variant: 'error',
-            //         persist: true,
-            //     },
-            // }),
+            // yield put(
+            //     enqueueToast({
+            //         key: `fail${new Date().getTime() + Math.random()}`,
+            //         message: e.message,
+            //         options: {
+            //             variant: 'error',
+            //             persist: true,
+            //         },
+            //     })
+            // );
             console.log(e.message);
         }
         yield put(finishLoading(actionType));

@@ -68,6 +68,7 @@ const defaultProps = {
 const MokaTemplateThumbCard = forwardRef((props, ref) => {
     const { onClick, menus, width, height, data, img, alt } = props;
     const imgRef = useRef(null);
+    const wrapperRef = useRef(null);
 
     // 이미지 landscape, portrait 설정
     useEffect(() => {
@@ -77,7 +78,10 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
             image.onload = (imgProps) => {
                 let w = imgProps.path[0].width;
                 let h = imgProps.path[0].height;
-                let rate = width / height;
+                let rate = 1;
+                if (wrapperRef.current) {
+                    rate = wrapperRef.current.innerWidth / wrapperRef.current.innerHeight;
+                }
                 if (w / h > rate) {
                     imgRef.current.className = 'landscape';
                 } else {
@@ -86,7 +90,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
                 imgRef.current.style.visibility = 'visible';
             };
         }
-    }, [height, width]);
+    }, []);
 
     /**
      * 커스텀 토글 버튼 아이콘 생성
@@ -145,17 +149,17 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
     };
 
     return (
-        <div ref={ref} className="p-03" style={{ width: width }}>
-            <div className="border rounded">
-                <div className="d-flex justify-content-between p-03 border-bottom">
+        <div ref={ref} className="p-03" style={{ width, height }}>
+            <div className="border rounded d-flex flex-direction-column h-100 w-100">
+                <div className="d-flex justify-content-between p-03 border-bottom" style={{ minHeight: 38 }}>
                     <p className="pt-05 pl-05 mb-0">{data.templateName}</p>
                     {menus.length > 0 && <IconDropButton />}
                 </div>
-                <div className="d-flex align-item-centers justify-content-center cursor-pointer" style={{ height: height }} onClick={handleThumbClick}>
-                    {img && <BSImage src={bg} alt={alt} ref={imgRef} className="hidden" />}
+                <div ref={wrapperRef} className="d-flex flex-fill align-item-centers justify-content-center cursor-pointer overflow-hidden" onClick={handleThumbClick}>
+                    {img && <BSImage src={bg} alt={alt} ref={imgRef} style={{ visibility: 'hidden' }} />}
                     {!img && <div style={{ backgroundColor: '#e5e5e5' }} />}
                 </div>
-                <div className="d-flex justify-content-between p-03 border-top">
+                <div className="d-flex justify-content-between p-03 border-top" style={{ minHeight: 33 }}>
                     <p className="pt-0 pl-05 mb-0">{data.templateGroup}</p>
                     <p className="pt-0 pr-05 mb-0">{data.templateWidth ? `w${data.templateWidth}` : ''}</p>
                 </div>

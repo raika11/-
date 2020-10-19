@@ -7,6 +7,7 @@ import { MokaCardEditor, MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 
 const TemplateList = React.lazy(() => import('./TemplateList'));
+const TemplateEditor = React.lazy(() => import('./TemplateEditor'));
 const TemplateEdit = React.lazy(() => import('./TemplateEdit'));
 
 // relations
@@ -90,7 +91,9 @@ const Template = () => {
                     render={() => (
                         <>
                             {/* 에디터 */}
-                            <MokaCardEditor className="mr-10 flex-fill" title="템플릿 편집" expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+                            <Suspense>
+                                <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+                            </Suspense>
 
                             {/* 탭 */}
                             <MokaIconTabs

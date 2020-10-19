@@ -1,4 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { toastr } from 'react-redux-toastr';
 import copy from 'copy-to-clipboard';
@@ -8,11 +10,15 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInput, MokaIcon, MokaInputGroup } from '@components';
+import { getTemplate } from '@store/template/templateAction';
 
 /**
  * 템플릿 정보/수정 컴포넌트
  */
 const TemplateEdit = () => {
+    const { templateSeq } = useParams();
+    const dispatch = useDispatch();
+
     // state
     const [validated, setValidated] = useState(true);
     const [fileValue, setFileValue] = useState(null);
@@ -20,6 +26,12 @@ const TemplateEdit = () => {
 
     // ref
     const imgFileRef = useRef(null);
+
+    useEffect(() => {
+        if (templateSeq) {
+            dispatch(getTemplate({ templateSeq: templateSeq }));
+        }
+    }, [dispatch, templateSeq]);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title="템플릿 정보">

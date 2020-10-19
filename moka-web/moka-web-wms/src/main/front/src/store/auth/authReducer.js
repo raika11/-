@@ -31,6 +31,9 @@ export default handleActions(
                 draft.menu = initialState.menu;
             });
         },
+        /**
+         * 도메인 목록 조회
+         */
         [GET_DOMAIN_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.domainList = body.list;

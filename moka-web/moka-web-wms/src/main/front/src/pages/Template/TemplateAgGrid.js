@@ -1,41 +1,48 @@
 import React, { useState, useCallback } from 'react';
-import { columnDefs, rowData } from '../Page/relations/PageChildTemplateAgGridColumns';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import columnDefs from './TemplateAgGridColumns';
 
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-
-import { MokaTable, MokaIcon } from '@components';
-import { MokaThumbnailTable } from '@/components/MokaTable';
-
-import template from '../Page/template.json';
+import { MokaTable, MokaIcon, MokaThumbnailTable } from '@components';
+import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template/templateAction';
 
 /**
  * 템플릿 AgGrid 컴포넌트
  */
 const TemplateAgGrid = () => {
-    /**
-     * 썸네일 테이블 total
-     */
-    const thumbTotal = template.resultInfo.body.totalCnt;
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const [listType, setListType] = useState('list');
+    const { total, list, search, loading } = useSelector((store) => ({
+        total: store.template.total,
+        list: store.template.list,
+        search: store.template.search,
+        loading: store.loading[GET_TEMPLATE_LIST],
+    }));
 
-    const [total] = useState(rowData.length);
-    const [loading] = useState(false);
-    const [search] = useState({ page: 1, size: 10 });
-    const [showAgGrid, setShowAgGrid] = useState('list');
-
     /**
-     * 테이블에서 검색옵션 변경하는 경우
+     * 테이블 검색옵션 변경
      * @param {object} payload 변경된 값
      */
-    const handleChangeSearchOption = useCallback((search) => console.log(search), []);
+    const handleChangeSearchOption = useCallback(
+        (payload) => {
+            dispatch(getTemplateList(changeSearchOption(payload)));
+        },
+        [dispatch],
+    );
 
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((row) => {
-        console.log(row);
-    }, []);
+    const handleRowClicked = useCallback(
+        (template) => {
+            history.push(`/template/${template.templateSeq}`);
+        },
+        [history],
+    );
 
     return (
         <>
@@ -47,7 +54,7 @@ const TemplateAgGrid = () => {
                     className="mr-auto"
                     defaultActiveKey="list"
                     onSelect={(selectedKey) => {
-                        setShowAgGrid(selectedKey);
+                        setListType(selectedKey);
                     }}
                 >
                     <Nav.Link eventKey="list" as={Button} variant="gray150">
@@ -63,12 +70,12 @@ const TemplateAgGrid = () => {
             </div>
 
             {/* ag-grid table */}
-            {showAgGrid === 'list' && (
+            {listType === 'list' && (
                 <MokaTable
+                    agGridHeight={501}
                     columnDefs={columnDefs}
-                    rowData={rowData}
-                    getRowNodeId={(params) => params.templateSeq}
-                    agGridHeight={552}
+                    rowData={list}
+                    onRowNodeId={(template) => template.templateSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
                     total={total}
@@ -78,16 +85,24 @@ const TemplateAgGrid = () => {
                     preventRowClickCell={['append', 'link']}
                 />
             )}
-            {showAgGrid === 'thumbnail' && (
+            {listType === 'thumbnail' && (
                 <MokaThumbnailTable
-                    tableHeight={552}
-                    total={thumbTotal}
+                    tableHeight={501}
+                    rowData={list}
+                    loading={loading}
+                    total={total}
                     page={search.page}
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
-                    onClick={(template) => {
-                        console.log(template);
-                    }}
+                    onClick={handleRowClicked}
+                    menus={[
+                        {
+                            title: '복사본 생성',
+                        },
+                        {
+                            title: '삭제',
+                        },
+                    ]}
                 />
             )}
         </>

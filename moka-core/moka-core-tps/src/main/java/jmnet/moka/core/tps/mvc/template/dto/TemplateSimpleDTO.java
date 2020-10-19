@@ -53,9 +53,9 @@ public class TemplateSimpleDTO implements Serializable {
     /**
      * 템플릿명
      */
-    @NotNull(message = "{tps.template.error.invalid.templateName1}")
-    @Pattern(regexp = ".+", message = "{tps.template.error.invalid.templateName1}")
-    @Length(min = 1, max = 128, message = "{tps.template.error.invalid.templateName2}")
+    @NotNull(message = "{tps.template.error.notnull.templateName}")
+    @Pattern(regexp = ".+", message = "{tps.template.error.pattern.templateName}")
+    @Length(min = 1, max = 128, message = "{tps.template.error.length.templateName}")
     private String templateName;
 
     /**

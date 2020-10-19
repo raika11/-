@@ -19,7 +19,7 @@ public interface TemplateHistService {
      * @param pageable pageable
      * @return 히스토리 리스트
      */
-    public Page<TemplateHist> findHistories(Long templateSeq, SearchDTO search, Pageable pageable);
+    public Page<TemplateHist> findAllTemplateHist(Long templateSeq, SearchDTO search, Pageable pageable);
 
     /**
      * <pre>
@@ -29,7 +29,7 @@ public interface TemplateHistService {
      * @param seq 순번
      * @return 히스토리 정보
      */
-    public Optional<TemplateHist> findHistory(Long seq);
+    public Optional<TemplateHist> findTemplateHistBySeq(Long seq);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface TemplateHistService {
      * @return 히스토리
      * @throws Exception 에러
      */
-    public TemplateHist insertHistory(TemplateHist templateHist) throws Exception;
+    public TemplateHist insertTemplateHist(TemplateHist templateHist) throws Exception;
     
     /**
      * 히스토리 추가
@@ -48,5 +48,5 @@ public interface TemplateHistService {
      * @return 히스토리
      * @throws Exception 에러
      */
-    public TemplateHist insertHistory(Template template) throws Exception;
+    public TemplateHist insertTemplateHist(Template template) throws Exception;
 }

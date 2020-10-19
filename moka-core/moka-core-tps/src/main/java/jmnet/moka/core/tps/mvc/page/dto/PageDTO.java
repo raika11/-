@@ -49,7 +49,7 @@ public class PageDTO implements Serializable {
     @ToString.Exclude
     private ParentPageDTO parent;
 
-    @NotNull(message = "{tps.page.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
     @NotNull(message = "{tps.page.error.invalid.pageType}")

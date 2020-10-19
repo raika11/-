@@ -25,7 +25,7 @@ public interface TemplateRepository
      * @param pageable 페이지
      * @return 템플릿 목록
      */
-    public Page<Template> findByDomain_DomainId(String domainId, Pageable pageable);
+//    public Page<Template> findByDomain_DomainId(String domainId, Pageable pageable);
     
     /**
      * 도메인아이디와 관련된 템플릿수

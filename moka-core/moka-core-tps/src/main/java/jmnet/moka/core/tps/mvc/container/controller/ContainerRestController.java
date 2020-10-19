@@ -139,7 +139,7 @@ public class ContainerRestController {
         if (containerDTO != null) {
             // url id와 json의 id가 동일한지 검사
             if (containerSeq > 0 && !containerSeq.equals(containerDTO.getContainerSeq())) {
-                String message = messageByLocale.get("tps.common.error.invalid.matchId", request);
+                String message = messageByLocale.get("tps.common.error.no-data", request);
                 invalidList.add(new InvalidDataDTO("matchId", message));
             }
 

@@ -42,7 +42,7 @@ public class PageSimpleDTO implements Serializable {
 
     private String pageDisplayName;
 
-    @NotNull(message = "{tps.page.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
     @NotNull(message = "{tps.page.error.invalid.pageType}")

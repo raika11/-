@@ -383,12 +383,12 @@ public class DeskingServiceImpl implements DeskingService {
     @Override
     public Component updateComponent(DeskingComponentWorkVO workVO, String creator)
             throws NoDataException, Exception {
-        String messageC = messageByLocale.get("tps.component.error.noContent");
+        String messageC = messageByLocale.get("tps.common.error.no-data");
         Component component = componentService.findByComponentSeq(workVO.getComponentSeq())
                 .orElseThrow(() -> new NoDataException(messageC));
 
-        String messageT = messageByLocale.get("tps.template.error.noContent");
-        Template template = templateService.findByTemplateSeq(workVO.getTemplateSeq())
+        String messageT = messageByLocale.get("tps.common.error.no-data");
+        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
                 .orElseThrow(() -> new NoDataException(messageT));
 
         component.setSnapshotYn(workVO.getSnapshotYn());
@@ -437,8 +437,8 @@ public class DeskingServiceImpl implements DeskingService {
         ComponentWork componentWork = componentWorkService.findBySeq(componentWorkSeq)
                 .orElseThrow(() -> new NoDataException(messageC));
 
-        String messageT = messageByLocale.get("tps.template.error.noContent");
-        Template template = templateService.findByTemplateSeq(templateSeq)
+        String messageT = messageByLocale.get("tps.template.error.no-data");
+        Template template = templateService.findTemplateBySeq(templateSeq)
                 .orElseThrow(() -> new NoDataException(messageT));
 
         componentWork.setTemplate(template);

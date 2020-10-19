@@ -77,9 +77,6 @@ public class TpsConstants {
     public static final String API_HOST = "apiHost";
     public static final String API_PATH = "apiPath";
 
-    /** 템플릿 image prefix */
-    public static final String TEMPLATE_IMAGE_PREFIEX = "/image/";
-
     public static final String SUPER_ADMIN_GROUP_CD = "999";
 
     /** 프로시져 호출결과 성공여부 */

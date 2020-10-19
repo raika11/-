@@ -246,7 +246,7 @@ public class CodeMgtRestController {
         if (codeMgtGrpDTO != null) {
             // url id와 json의 id가 동일한지 검사
             if (seqNo > 0 && !seqNo.equals(codeMgtGrpDTO.getSeqNo())) {
-                String message = messageByLocale.get("tps.common.error.invalid.matchId", request);
+                String message = messageByLocale.get("tps.common.error.no-data", request);
                 actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
                 invalidList.add(new InvalidDataDTO("matchId", message));
             }
@@ -295,7 +295,7 @@ public class CodeMgtRestController {
         if (codeMgtSearchDTO != null) {
             // url id와 json의 id가 동일한지 검사
             if (!grpCd.equals(codeMgtSearchDTO.getGrpCd())) {
-                String message = messageByLocale.get("tps.common.error.invalid.matchId", request);
+                String message = messageByLocale.get("tps.common.error.no-data", request);
                 actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
                 invalidList.add(new InvalidDataDTO("matchId", message));
             }
@@ -505,7 +505,7 @@ public class CodeMgtRestController {
         if (codeMgtDTO != null) {
             // url id와 json의 id가 동일한지 검사
             if (seqNo > 0 && !seqNo.equals(codeMgtDTO.getSeqNo())) {
-                String message = messageByLocale.get("tps.common.error.invalid.matchId", request);
+                String message = messageByLocale.get("tps.common.error.no-data", request);
                 actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
                 invalidList.add(new InvalidDataDTO("matchId", message));
             }

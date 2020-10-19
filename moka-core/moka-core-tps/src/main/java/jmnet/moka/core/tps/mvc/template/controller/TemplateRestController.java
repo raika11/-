@@ -17,15 +17,12 @@ import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.template.exception.TemplateParseException;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -61,7 +57,6 @@ import jmnet.moka.core.tps.mvc.template.entity.TemplateHist;
 import jmnet.moka.core.tps.mvc.template.service.TemplateHistService;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
-import jmnet.moka.core.tps.mvc.user.dto.UserDTO;
 
 /**
  * <pre>
@@ -98,6 +93,9 @@ public class TemplateRestController {
     @Autowired
     private ActionLogger actionLogger;
 
+    @Value("${template.image.prefix}")
+    private String templateImagePrefix;
+
     /**
      * 템플릿 목록조회
      *
@@ -116,7 +114,7 @@ public class TemplateRestController {
         @RequestAttribute Long processStartTime
     ) {
         // 조회(mybatis)
-        List<TemplateVO> returnValue = templateService.findList(search);
+        List<TemplateVO> returnValue = templateService.findAllTemplate(search);
 
         ResultListDTO<TemplateVO> resultList = new ResultListDTO<TemplateVO>();
         resultList.setList(returnValue);
@@ -141,15 +139,15 @@ public class TemplateRestController {
     @GetMapping("/{seq}")
     public ResponseEntity<?> getTemplate(
         HttpServletRequest request,
-        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long templateSeq,
+        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
         @NotNull Principal principal,
         @RequestAttribute Long processStartTime
     ) throws NoDataException {
 
-        String message = messageByLocale.get("tps.template.error.noContent", request);
+        String message = messageByLocale.get("tps.common.error.no-data", request);
 
         // 조회
-        Template template = templateService.findByTemplateSeq(templateSeq)
+        Template template = templateService.findTemplateBySeq(templateSeq)
                 .orElseThrow(() -> new NoDataException(message));
 
         TemplateDTO templateDTO = modelMapper.map(template, TemplateDTO.class);
@@ -210,7 +208,7 @@ public class TemplateRestController {
                  * 파일은 없는데 이미지 url이 있는 경우 ===> 파일을 복사한다! 복사할 파일의 /image/template/ 경로를 없애줌
                  */
                 String targetImg = templateDTO.getTemplateThumb();
-                targetImg = targetImg.replace(TpsConstants.TEMPLATE_IMAGE_PREFIEX, "");
+                targetImg = targetImg.replace(templateImagePrefix, "");
                 targetImg = targetImg.replace("template/", "");
                 String imgPath = templateService.copyTemplateImage(returnVal, targetImg);
                 returnVal.setTemplateThumb(imgPath);
@@ -222,7 +220,7 @@ public class TemplateRestController {
             TemplateDTO returnValDTO = modelMapper.map(returnVal, TemplateDTO.class);
 
             if (!McpString.isNullOrEmpty(returnValDTO.getTemplateThumb())) {
-                returnValDTO.setTemplateThumb(TpsConstants.TEMPLATE_IMAGE_PREFIEX + returnValDTO.getTemplateThumb());
+                returnValDTO.setTemplateThumb(templateImagePrefix + returnValDTO.getTemplateThumb());
             }
 
             ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(returnValDTO);
@@ -260,9 +258,9 @@ public class TemplateRestController {
         // 데이터 검사
         validData(request, templateDTO, principal, processStartTime, ActionType.UPDATE);
 
-        String message = messageByLocale.get("tps.template.error.noContent", request);
+        String message = messageByLocale.get("tps.template.error.no-data", request);
         Template newTemplate = modelMapper.map(templateDTO, Template.class);
-        Template orgTemplate = templateService.findByTemplateSeq(templateDTO.getTemplateSeq())
+        Template orgTemplate = templateService.findTemplateBySeq(templateDTO.getTemplateSeq())
                 .orElseThrow(() -> new NoDataException(message));
 
 //        newTemplate.setRegDt(orgTemplate.getRegDt());
@@ -349,7 +347,7 @@ public class TemplateRestController {
     @PostMapping("/{seq}/copy")
     public ResponseEntity<?> copyTemplate(
         HttpServletRequest request,
-        @PathVariable("seq") @Min(value = 0,message = "{tps.template.error.invalid.templateSeq}") Long seq,
+        @PathVariable("seq") @Min(value = 0,message = "{tps.template.error.min.templateSeq}") Long seq,
         DomainSimpleDTO domain,
         String templateName,
         @NotNull Principal principal,
@@ -357,8 +355,8 @@ public class TemplateRestController {
     ) throws InvalidDataException, Exception {
 
         // 조회
-        String message = messageByLocale.get("tps.template.error.noContent", request);
-        Template template = templateService.findByTemplateSeq(seq)
+        String message = messageByLocale.get("tps.template.error.no-data", request);
+        Template template = templateService.findTemplateBySeq(seq)
                 .orElseThrow(() -> new NoDataException(message));
 
         TemplateDTO templateDTO = modelMapper.map(template, TemplateDTO.class);
@@ -384,14 +382,14 @@ public class TemplateRestController {
     @DeleteMapping("/{seq}")
     public ResponseEntity<?> deleteTemplate(
         HttpServletRequest request,
-        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long templateSeq,
+        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
         @NotNull Principal principal,
         @RequestAttribute Long processStartTime
     ) throws NoDataException, Exception {
 
         // 템플릿 확인
-        String message = messageByLocale.get("tps.template.error.noContent", request);
-        Template template = templateService.findByTemplateSeq(templateSeq)
+        String message = messageByLocale.get("tps.template.error.no-data", request);
+        Template template = templateService.findTemplateBySeq(templateSeq)
                 .orElseThrow(() -> new NoDataException(message));
 
         // 관련 데이터 확인
@@ -437,14 +435,14 @@ public class TemplateRestController {
     @GetMapping("/{seq}/has-relations")
     public ResponseEntity<?> hasRelations(
         HttpServletRequest request,
-        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long seq,
+        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long seq,
         @NotNull Principal principal,
         @RequestAttribute Long processStartTime
     ) throws NoDataException {
 
         // 템플릿 확인
-        String message = messageByLocale.get("tps.template.error.noContent", request);
-        templateService.findByTemplateSeq(seq).orElseThrow(() -> new NoDataException(message));
+        String message = messageByLocale.get("tps.template.error.no-data", request);
+        templateService.findTemplateBySeq(seq).orElseThrow(() -> new NoDataException(message));
 
         Boolean chkRels = relationHelper.hasRelations(seq, MokaConstants.ITEM_TEMPLATE);
 
@@ -468,7 +466,7 @@ public class TemplateRestController {
     @GetMapping("/{seq}/relations")
     public ResponseEntity<?> getRelationList(
         HttpServletRequest request,
-        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long seq,
+        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long seq,
         @Valid @SearchParam RelSearchDTO search,
         @NotNull Principal principal,
         @RequestAttribute Long processStartTime
@@ -478,8 +476,8 @@ public class TemplateRestController {
         search.setRelSeqType(MokaConstants.ITEM_TEMPLATE);
 
         // 템플릿 확인
-        String message = messageByLocale.get("tps.template.error.noContent", request);
-        templateService.findByTemplateSeq(seq).orElseThrow(() -> new NoDataException(message));
+        String message = messageByLocale.get("tps.template.error.no-data", request);
+        templateService.findTemplateBySeq(seq).orElseThrow(() -> new NoDataException(message));
 
         ResponseEntity<?> response = relationHelper.findRelations(search);
         actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
@@ -501,7 +499,7 @@ public class TemplateRestController {
     @GetMapping("/{seq}/histories")
     public ResponseEntity<?> getHistoryList(
         HttpServletRequest request,
-        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long templateSeq,
+        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
         @Valid @SearchParam SearchDTO search,
         @NotNull Principal principal,
         @RequestAttribute Long processStartTime
@@ -514,7 +512,7 @@ public class TemplateRestController {
 
         // 조회
         Page<TemplateHist> historyList =
-                templateHistService.findHistories(templateSeq, search, pageable);
+                templateHistService.findAllTemplateHist(templateSeq, search, pageable);
 
         // entity -> DTO
         List<TemplateHistDTO> historiesDTO =
@@ -544,14 +542,14 @@ public class TemplateRestController {
     @GetMapping("/{templateSeq}/histories/{seq}")
     public ResponseEntity<?> getHistory(
         HttpServletRequest request,
-        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.invalid.templateSeq}") Long seq,
+        @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long seq,
         @NotNull Principal principal,
         @RequestAttribute Long processStartTime
     ) throws NoDataException {
 
         // 템플릿 히스토리 조회
         String message = messageByLocale.get("tps.template.error.history.noContent", request);
-        TemplateHist history = templateHistService.findHistory(seq)
+        TemplateHist history = templateHistService.findTemplateHistBySeq(seq)
                 .orElseThrow(() -> new NoDataException(message));
         TemplateHistDTO historyDTO = modelMapper.map(history, TemplateHistDTO.class);
 
@@ -601,7 +599,7 @@ public class TemplateRestController {
                     && !template.getTemplateThumbnailFile().isEmpty()) {
                 boolean isImage = ImageUtil.isImage(template.getTemplateThumbnailFile());
                 if (!isImage) {
-                    String message = messageByLocale.get("tps.template.error.invalid.thumbnail");
+                    String message = messageByLocale.get("tps.template.error.onlyimage.thumbnail");
                     invalidList.add(new InvalidDataDTO("thumbnail", message));
                     actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
                 }
@@ -609,7 +607,7 @@ public class TemplateRestController {
         }
 
         if (invalidList.size() > 0) {
-            String validMessage = messageByLocale.get("tps.template.error.invalidContent", request);
+            String validMessage = messageByLocale.get("tps.common.error.invalidContent", request);
             throw new InvalidDataException(invalidList, validMessage);
         }
     }

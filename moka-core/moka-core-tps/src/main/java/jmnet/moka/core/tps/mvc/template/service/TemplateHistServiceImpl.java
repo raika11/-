@@ -17,22 +17,22 @@ public class TemplateHistServiceImpl implements TemplateHistService {
     private TemplateHistRepository templateHistRepository;
 
     @Override
-    public Page<TemplateHist> findHistories(Long templateSeq, SearchDTO search, Pageable pageable) {
+    public Page<TemplateHist> findAllTemplateHist(Long templateSeq, SearchDTO search, Pageable pageable) {
         return templateHistRepository.findList(templateSeq, search, pageable);
     }
 
     @Override
-    public Optional<TemplateHist> findHistory(Long seq) {
+    public Optional<TemplateHist> findTemplateHistBySeq(Long seq) {
         return templateHistRepository.findBySeq(seq);
     }
 
     @Override
-    public TemplateHist insertHistory(TemplateHist templateHist) throws Exception {
+    public TemplateHist insertTemplateHist(TemplateHist templateHist) throws Exception {
         return templateHistRepository.save(templateHist);
     }
 
     @Override
-    public TemplateHist insertHistory(Template template) throws Exception {
+    public TemplateHist insertTemplateHist(Template template) throws Exception {
         TemplateHist templateHist = TemplateHist.builder()
                 .templateBody(template.getTemplateBody())
                 .template(template)
@@ -40,6 +40,6 @@ public class TemplateHistServiceImpl implements TemplateHistService {
         if (template.getDomain() != null) {
             templateHist.setDomainId(template.getDomain().getDomainId());
         }
-        return this.insertHistory(templateHist);
+        return this.insertTemplateHist(templateHist);
     }
 }

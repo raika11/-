@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -46,20 +47,21 @@ public class TemplateDTO implements Serializable {
     /**
      * 템플릿SEQ
      */
+    @Min(value = 0, message = "{tps.template.error.min.templateSeq}")
     private Long templateSeq;
 
     /**
      * 도메인
      */
-    @NotNull(message = "{tps.page.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
     /**
      * 템플릿명
      */
-    @NotNull(message = "{tps.template.error.invalid.templateName1}")
-    @Pattern(regexp = ".+", message = "{tps.template.error.invalid.templateName1}")
-    @Length(min = 1, max = 128, message = "{tps.template.error.invalid.templateName2}")
+    @NotNull(message = "{tps.template.error.notnull.templateName}")
+    @Pattern(regexp = ".+", message = "{tps.template.error.pattern.templateName}")
+    @Length(min = 1, max = 128, message = "{tps.template.error.length.templateName}")
     private String templateName;
 
     /**
@@ -83,7 +85,7 @@ public class TemplateDTO implements Serializable {
     /**
      * 템플릿그룹
      */
-    @Length(max = 24, message = "{tps.template.error.invalid.templateGroup}")
+    @Length(max = 24, message = "{tps.template.error.length.templateGroup}")
     private String templateGroup;
 
     /**
@@ -95,13 +97,13 @@ public class TemplateDTO implements Serializable {
     /**
      * 템플릿썸네일경로
      */
-    @Length(max = 256, message = "{tps.template.error.invalid.templateThumb}")
+    @Length(max = 256, message = "{tps.template.error.length.templateThumb}")
     private String templateThumb;
 
     /**
      * 상세정보
      */
-    @Length(max = 4000, message = "{tps.template.error.invalid.description}")
+    @Length(max = 4000, message = "{tps.template.error.length.description}")
     private String description;
 
     /**

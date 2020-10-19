@@ -53,13 +53,13 @@ public class TemplateHistDTO implements Serializable {
      * 템플릿
      */
     @JsonIgnore
-    @NotNull(message = "{tps.template.error.invalid.templateSeq}")
+    @NotNull(message = "{tps.template.error.notnull.templateSeq}")
     private TemplateDTO template;
 
     /**
      * 도메인ID
      */
-    @NotNull(message = "{tps.page.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 

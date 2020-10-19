@@ -43,7 +43,7 @@ public class ContainerDTO implements Serializable {
     @Min(value = 0, message = "{tps.container.error.invalid.containerSeq}")
     private Long containerSeq;
 
-    @NotNull(message = "{tps.page.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
     @NotNull(message = "{tps.container.error.invalid.containerName}")

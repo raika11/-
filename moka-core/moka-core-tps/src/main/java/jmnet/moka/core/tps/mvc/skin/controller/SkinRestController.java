@@ -128,7 +128,7 @@ public class SkinRestController {
         if (skinDTO != null) {
             // url id와 json의 id가 동일한지 검사
             if (skinSeq > 0 && !skinSeq.equals(skinDTO.getSkinSeq())) {
-                String message = messageByLocale.get("tps.common.error.invalid.matchId", request);
+                String message = messageByLocale.get("tps.common.error.no-data", request);
                 invalidList.add(new InvalidDataDTO("matchId", message));
             }
 

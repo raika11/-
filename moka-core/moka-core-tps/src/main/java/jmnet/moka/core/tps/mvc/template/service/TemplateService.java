@@ -28,22 +28,15 @@ public interface TemplateService {
      * @param search 검색조건
      * @return 목록
      */
-    public List<TemplateVO> findList(TemplateSearchDTO search);
-    
-    /**
-     * 템플릿 목록 카운트 조회(Mybatis)
-     * @param search 검색조건
-     * @return 갯수
-     */
-    public Long findListCount(TemplateSearchDTO search);
-    
+    public List<TemplateVO> findAllTemplate(TemplateSearchDTO search);
+
     /**
      * 템플릿 목록 조회
      * @param search 검색조건
      * @param pageable 페이지조건
      * @return 목록
      */
-    public Page<Template> findList(TemplateSearchDTO search, Pageable pageable);
+    public Page<Template> findAllTemplate(TemplateSearchDTO search, Pageable pageable);
 
     /**
      * <pre>
@@ -54,7 +47,7 @@ public interface TemplateService {
      * @return 템플릿
      * @throws NoDataException 데이터없음 예외처리
      */
-    public Optional<Template> findByTemplateSeq(Long templateSeq) throws NoDataException;
+    public Optional<Template> findTemplateBySeq(Long templateSeq) throws NoDataException;
 
     /**
      * <pre>
@@ -111,7 +104,7 @@ public interface TemplateService {
      * @param domainId 도메인아이디
      * @return 템플릿수
      */
-    public int countByDomainId(String domainId);
+    public int countTemplateByDomainId(String domainId);
     
     /**
      * 템플릿을 사용하는 모든 도메인 조회

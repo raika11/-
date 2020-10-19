@@ -50,7 +50,7 @@ public class CodeMgtDTO implements Serializable {
      */
     @NotNull(message = "{tps.codeMgt.error.invalid.dtlCd}")
     @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgt.error.invalid.dtlCd2}")
-    @Length(min = 1, max = 24, message = "{tps.codeMgt.error.invalid.dtlCd3}")
+    @Length(min = 1, max = 24, message = "{tps.codeMgt.error.length.dtlCd}")
     private String dtlCd;
 
     /**

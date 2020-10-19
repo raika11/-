@@ -1,16 +1,11 @@
 package jmnet.moka.core.tps.mvc.template.service;
 
-import static jmnet.moka.common.data.mybatis.support.McpMybatis.getRowBounds;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import jmnet.moka.common.utils.dto.ResultListDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -62,15 +57,15 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public List<TemplateVO> findList(TemplateSearchDTO search) {
+    public List<TemplateVO> findAllTemplate(TemplateSearchDTO search) {
         if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {	// 페이지에서 관련 템플릿 검색
-            return templateMapper.findPageChildRels(search);
+            return templateMapper.findPageChildRelList(search);
         } else if (search.getSearchType().equals("skinSeq")
                 && McpString.isNotEmpty(search.getKeyword())) {	// 콘텐츠스킨에서 관련 템플릿 검색
-            return templateMapper.findSkinChildRels(search);
+            return templateMapper.findSkinChildRelList(search);
         } else if (search.getSearchType().equals("containerSeq")
                 && McpString.isNotEmpty(search.getKeyword())) {	// 컨테이너에서 관련 템플릿 검색
-            return templateMapper.findContainerChildRels(search);
+            return templateMapper.findContainerChildRelList(search);
         } else {
             if (search.getSearchType().equals("pageSeq")
                     || search.getSearchType().equals("skinSeq")
@@ -83,22 +78,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public Long findListCount(TemplateSearchDTO search) {
-        if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {
-            return templateMapper.findPageChildRelsCount(search);
-        } else if (search.getSearchType().equals("skinSeq")
-                && McpString.isNotEmpty(search.getKeyword())) {
-            return templateMapper.findSkinChildRelsCount(search);
-        } else if (search.getSearchType().equals("containerSeq")
-                && McpString.isNotEmpty(search.getKeyword())) {
-            return templateMapper.findContainerChildRelsCount(search);
-        } else {
-            return templateMapper.count(search);
-        }
-    }
-
-    @Override
-    public Optional<Template> findByTemplateSeq(Long templateSeq) throws NoDataException {
+    public Optional<Template> findTemplateBySeq(Long templateSeq) throws NoDataException {
         return templateRepository.findById(templateSeq);
     }
 
@@ -109,7 +89,7 @@ public class TemplateServiceImpl implements TemplateService {
         log.debug("Insert Template {}", returnVal.getTemplateSeq());
 
         // 히스토리 생성
-        templateHistService.insertHistory(returnVal);
+        templateHistService.insertTemplateHist(returnVal);
         log.debug("Insert Template History {}", returnVal.getTemplateSeq());
 
         entityManager.refresh(returnVal);
@@ -129,7 +109,7 @@ public class TemplateServiceImpl implements TemplateService {
         if (template.getDomain() != null) {
             hist.setDomainId(template.getDomain().getDomainId());
         }
-        templateHistService.insertHistory(hist);
+        templateHistService.insertTemplateHist(hist);
         log.debug("Insert Template History {}", returnVal.getTemplateSeq());
 
         return returnVal;
@@ -167,12 +147,12 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public Page<Template> findList(TemplateSearchDTO search, Pageable pageable) {
+    public Page<Template> findAllTemplate(TemplateSearchDTO search, Pageable pageable) {
         return templateRepository.findList(search, pageable);
     }
 
     @Override
-    public int countByDomainId(String domainId) {
+    public int countTemplateByDomainId(String domainId) {
         return templateRepository.countByDomain_DomainId(domainId);
     }
 

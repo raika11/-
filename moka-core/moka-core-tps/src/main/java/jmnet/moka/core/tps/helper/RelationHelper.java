@@ -65,7 +65,7 @@ public class RelationHelper {
     public Boolean isRelatedDomain(String domainId) {
         
         // 템플릿 체크
-        if (templateService.countByDomainId(domainId) > 0) {
+        if (templateService.countTemplateByDomainId(domainId) > 0) {
             return true;
         }
         

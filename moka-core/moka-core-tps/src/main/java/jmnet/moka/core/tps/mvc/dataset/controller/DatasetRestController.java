@@ -267,7 +267,7 @@ public class DatasetRestController {
 
         if (datasetDTO != null) {
             if (!datasetSeq.equals(datasetDTO.getDatasetSeq())) {
-                String message = messageByLocale.get("tps.common.error.invalid.matchId", request);
+                String message = messageByLocale.get("tps.common.error.no-data", request);
                 invalidList.add(new InvalidDataDTO("matchId", message));
             }
 

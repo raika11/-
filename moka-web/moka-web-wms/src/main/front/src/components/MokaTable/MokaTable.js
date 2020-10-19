@@ -76,13 +76,13 @@ const propTypes = {
 };
 const defaultProps = {
     localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
+    loading: false,
     paging: true,
     total: 0,
     page: 0,
     size: PAGESIZE_OPTIONS[0],
     pageSizes: PAGESIZE_OPTIONS,
     displayPageNum: DISPLAY_PAGE_NUM,
-    onChangeSearchOption: null,
     preventRowClickCell: [],
     rowSelection: 'single',
     dragging: false,

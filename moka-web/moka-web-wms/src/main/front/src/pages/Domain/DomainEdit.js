@@ -267,11 +267,11 @@ const DomainEdit = ({ history }) => {
                     <Button type="submit" variant="primary" className="float-left mr-10 pr-20 pl-20">
                         저장
                     </Button>
-                    <Button className="float-left mr-10 pr-20 pl-20" variant="dark">
+                    <Button className="float-left mr-10 pr-20 pl-20" variant="gray150">
                         취소
                     </Button>
                     {detail.domainId && (
-                        <Button className="float-left mr-0 pr-20 pl-20" variant="dark" onClick={handleDelete}>
+                        <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleDelete}>
                             삭제
                         </Button>
                     )}

@@ -28,7 +28,7 @@ public final class LoggerCodes {
         SELECT("SELECT", "조회"),
         DOWNLOAD("DOWNLOAD", "다운로드"),
         UPLOAD("UPLOAD", "업로드"),
-        FILE_DELETE("FILE_DELETE", "다운로드"),
+        FILE_DELETE("FILE_DELETE", "파일 삭제"),
         FILE_COPY("FILE_COPY", "파일 복사"),
         FILE_MOVE("FILE_MOVE", "파일 이동"),
         FILE_OVERWRITE("FILE_OVERWRITE", "파일 덮어쓰기");

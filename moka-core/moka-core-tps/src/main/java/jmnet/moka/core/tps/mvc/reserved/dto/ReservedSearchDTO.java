@@ -37,8 +37,8 @@ public class ReservedSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1972229889422176779L;
 
-    @NotNull(message = "{tps.domain.error.invalid.domainId}")
-    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.pattern.domainId}")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 
     private String serviceType;

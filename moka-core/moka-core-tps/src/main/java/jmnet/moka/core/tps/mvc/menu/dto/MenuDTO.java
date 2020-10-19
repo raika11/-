@@ -79,7 +79,7 @@ public class MenuDTO implements Serializable {
     /**
      * 메뉴 페이지 URL
      */
-    @NotNull(message = "{tps.domain.error.invalid.domainUrl1}")
+    @NotNull(message = "{tps.domain.error.notnull.domainUrl}")
     @Pattern(regexp = ".+", message = "{tps.domain.error.invalid.menuUrl1}")
     @Length(min = 1, max = 512, message = "{tps.domain.error.invalid.menuUrl2}")
     @Builder.Default

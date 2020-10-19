@@ -19,8 +19,8 @@ public class PageSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 3122658693342650030L;
 
-    @NotNull(message = "{tps.domain.error.invalid.domainId}")
-    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.pattern.domainId}")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 
     private String searchType;

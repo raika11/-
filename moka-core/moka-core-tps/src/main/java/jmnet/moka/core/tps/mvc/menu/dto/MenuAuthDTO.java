@@ -34,7 +34,7 @@ public class MenuAuthDTO implements Serializable {
      * 그룹/사용자구분 (G:그룹, U:사용자)
      */
     @NotNull(message = "{tps.menu.error.invalid.domainId}")
-    @Pattern(regexp = "[0-9]{8}$", message = "{tps.domain.error.invalid.domainId}")
+    @Pattern(regexp = "[0-9]{8}$", message = "{tps.domain.error.pattern.domainId}")
     private String groupMemberDiv;
 
     /**

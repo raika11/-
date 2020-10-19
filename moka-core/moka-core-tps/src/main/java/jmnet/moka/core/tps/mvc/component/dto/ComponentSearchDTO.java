@@ -34,8 +34,8 @@ public class ComponentSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = -7998111385290877921L;
 
-    @NotNull(message = "{tps.domain.error.invalid.domainId}")
-    @Pattern(regexp = ".+", message = "{tps.domain.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.pattern.domainId}")
+    @Pattern(regexp = ".+", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 
     private String searchType;

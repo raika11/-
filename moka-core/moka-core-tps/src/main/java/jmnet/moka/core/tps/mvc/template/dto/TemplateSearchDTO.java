@@ -44,8 +44,8 @@ public class TemplateSearchDTO extends SearchDTO {
     /**
      * 도메인
      */
-    @NotNull(message = "{tps.domain.error.invalid.domainId}")
-    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.pattern.domainId}")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 
     /**

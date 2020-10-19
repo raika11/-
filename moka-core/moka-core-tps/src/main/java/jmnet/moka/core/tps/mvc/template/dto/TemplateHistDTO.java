@@ -60,7 +60,7 @@ public class TemplateHistDTO implements Serializable {
      * 도메인ID
      */
     @NotNull(message = "{tps.page.error.invalid.domainId}")
-    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.invalid.domainId}")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 
     /**

@@ -78,6 +78,7 @@ public class ApiParser {
 	public static final String PARAM_TYPE_NUMBER = "number";
 	public static final String PARAM_TYPE_STRING = "string";
 	public static final String PARAM_TYPE_DATE = "date";
+    public static final String PARAM_TYPE_COOKIE = "cookie";
 	public static final String PARAM_DEFAULT_DATE_NOW = "now";
 	public static final String PARAM_DEFAULT_DATE_TODAY = "today";
     private static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -93,7 +94,7 @@ public class ApiParser {
 	}
 
     public ApiParser(Resource resource, DefaultApiConfig defaultApiConfig)
-            throws ParserConfigurationException, SAXException, IOException {
+            throws ParserConfigurationException, IOException {
         this.resource = resource;
         this.xpath = xPathFactory.newXPath();
         parseDocument();
@@ -212,8 +213,7 @@ public class ApiParser {
                     if (requireAttr != null && requireAttr.length() > 0) {
                         if (requireAttr.equalsIgnoreCase("Y")) {
                             require = true;
-                        } else
-                            require = false;
+                        }
                     }
                     parameterList
                             .add(new Parameter(name, type, desc, hints, filter, require, value,

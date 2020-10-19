@@ -1,6 +1,9 @@
 package jmnet.moka.core.dps.api;
 
 import java.util.Map;
+import javax.servlet.http.Cookie;
+import jmnet.moka.core.common.util.HttpHelper;
+import jmnet.moka.core.dps.api.model.Parameter;
 import org.apache.ibatis.session.SqlSession;
 import jmnet.moka.common.ApiResult;
 import jmnet.moka.core.dps.api.model.Api;
@@ -22,7 +25,20 @@ public class ApiContext {
 		this.apiResolver = apiResolver;
 		this.parameterMap = parameterMap;
 		this.api = apiRequestHelper.getApi(apiResolver.getPath(), apiResolver.getId());
+		if ( this.api.hasCookieParameter() && this.apiResolver.hasHttpRequest()) {
+			this.addCookieValues();
+		}
 		this.checkedParamMap = apiParameterChecker.checkParameter(this.api, this.parameterMap);
+	}
+
+	private void addCookieValues() {
+		Map<String,String> cookieMap = HttpHelper.getCookieMap(apiResolver.getRequest());
+		for ( Parameter parameter : this.api.getParameterMap().values() ) {
+			if ( parameter.getType().equals(ApiParser.PARAM_TYPE_COOKIE)) {
+				String parameterName = parameter.getName();
+				this.parameterMap.put(parameterName,cookieMap.get(parameterName));
+			}
+		}
 	}
 
 	public void setSqlSession(SqlSession sqlSession) {

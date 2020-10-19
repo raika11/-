@@ -1,15 +1,8 @@
 import React from 'react';
 import ListDeleteButton from '@pages/AgGrid/ListDeleteButton';
+import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-/**
- * <pre>
- *
- * 2020-10-14 thkim 최초생성
- * </pre>
- *
- * @since 2020-10-14 오후 2:37
- * @author thkim
- */
 export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 export const columnDefs = [
     {
@@ -31,9 +24,17 @@ export const columnDefs = [
     },
     {
         headerName: '',
-        field: 'append',
+        field: 'useYn',
         width: 40,
         cellStyle: { textAlign: 'center' },
-        cellRendererFramework: ListDeleteButton,
+        cellRendererFramework: (params) => {
+            const useYn = params.data.useYn;
+            let clazz = 'color-dark';
+            if (useYn === 'Y') {
+                clazz = 'color-primary';
+            }
+            return <FontAwesomeIcon className="align-middle mr-2" icon={faCircle} fixedWidth className={clazz} />;
+        },
+        //preventRowClick: true,
     },
 ];

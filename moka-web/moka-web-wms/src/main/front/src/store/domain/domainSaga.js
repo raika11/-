@@ -4,7 +4,7 @@ import createRequestSaga from '../commons/createRequestSaga';
 import { callApiAfterActions } from '../commons/createSaga.js';
 import * as domainAPI from './domainApi';
 import * as domainAction from './domainAction';
-import { getDomains } from '@store/domain';
+import { getDomains } from '@store/auth';
 import { enqueueToast } from '@store/notification/toastStore';
 
 let message = {};
@@ -12,10 +12,7 @@ let message = {};
 /**
  * 목록
  */
-const getDomainsSaga = callApiAfterActions(domainAction.GET_DOMAINS, domainAPI.getDomains, (state) => {
-    console.log(state);
-    return state.domain;
-});
+const getDomainsSaga = callApiAfterActions(domainAction.GET_DOMAINS, domainAPI.getDomains, (state) => state.domain);
 
 /**
  * 조회
@@ -30,7 +27,7 @@ const getDomainSaga = createRequestSaga(domainAction.GET_DOMAIN, domainAPI.getDo
  */
 function* duplicateCheckSaga({ payload: { domainId, unique, duplicate } }) {
     const ACTION = domainAction.DUPLICATE_CHECK;
-    yield put(startLoading(ACTION));
+    //yield put(startLoading(ACTION));
     try {
         const response = yield call(domainAPI.duplicateCheck, domainId);
         if (response.data.header.success) {
@@ -42,7 +39,7 @@ function* duplicateCheckSaga({ payload: { domainId, unique, duplicate } }) {
         }
         // eslint-disable-next-line no-empty
     } catch (e) {}
-    yield put(finishLoading(ACTION));
+    //yield put(finishLoading(ACTION));
 }
 
 /**
@@ -59,7 +56,7 @@ function* saveDomainSaga({ payload: { type, domain, success, fail, error } }) {
     message.message = '저장하지 못했습니다';
     message.options = { variant: 'error', persist: true };
 
-    yield put(startLoading(ACTION));
+    //yield put(startLoading(ACTION));
     try {
         const response = type === 'insert' ? yield call(domainAPI.postDomain, { domain }) : yield call(domainAPI.putDomain, { domain });
 
@@ -71,7 +68,7 @@ function* saveDomainSaga({ payload: { type, domain, success, fail, error } }) {
             // 목록 다시 검색
             yield put({ type: domainAction.GET_DOMAINS });
             // auth 도메인 목록 다시 조회
-            yield put(getDomains(domain.domainId));
+            //yield put(getDomains(domain.domainId));
             message.message = type === 'insert' ? '등록하였습니다' : '수정하였습니다';
             message.options = { variant: 'success', persist: false };
             if (typeof success === 'function') success(response.data.body);
@@ -90,7 +87,7 @@ function* saveDomainSaga({ payload: { type, domain, success, fail, error } }) {
         });
         if (typeof error === 'function') error(e);
     }
-    yield put(finishLoading(ACTION));
+    // yield put(finishLoading(ACTION));
     yield put(enqueueToast(message));
 }
 
@@ -131,7 +128,7 @@ function* deleteDomainSaga({ payload: { domainId, success, fail, error } }) {
     message.message = '삭제하지 못했습니다';
     message.options = { variant: 'error', persist: true };
 
-    yield put(startLoading(ACTION));
+    //yield put(startLoading(ACTION));
     try {
         const response = yield call(domainAPI.deleteDomain, { domainId });
 
@@ -159,7 +156,7 @@ function* deleteDomainSaga({ payload: { domainId, success, fail, error } }) {
         });
         if (typeof error === 'function') error(e);
     }
-    yield put(finishLoading(ACTION));
+    //yield put(finishLoading(ACTION));
     yield put(enqueueToast(message));
 }
 

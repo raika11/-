@@ -8,18 +8,12 @@ import { changeSearchOption, getDomains } from '@store/domain';
 import { useHistory } from 'react-router-dom';
 
 /**
- * <pre>
- *
- * 2020-10-14 thkim 최초생성
- * </pre>
- *
- * @since 2020-10-14 오후 2:32
- * @author thkim
+ * 도메인 AgGrid 목록
  */
 const DomainAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const [domainRows, setDomainRows] = useState([]);
     const { detail, list, total, search, error, loading, latestMediaId } = useSelector(
         (store) => ({
             detail: store.domain.detail,
@@ -32,10 +26,6 @@ const DomainAgGrid = () => {
         shallowEqual,
     );
 
-    const onRowClicked = (row) => {
-        history.push('/domain/' + row.domainId);
-    };
-
     useEffect(() => {
         dispatch(
             getDomains(
@@ -46,46 +36,53 @@ const DomainAgGrid = () => {
             ),
         );
     }, [latestMediaId, dispatch]);
+
+    useEffect(() => {
+        if (list.length > 0) {
+            setDomainRows(
+                list.map((d) => ({
+                    id: String(d.domainId),
+                    domainId: d.domainId,
+                    domainName: d.domainName,
+                    domainUrl: d.domainUrl,
+                    link: `/domain/${d.domainId}`,
+                    useYn: d.useYn,
+                })),
+            );
+        }
+        //console.log(domainRows);
+    }, [list]);
     /**
      * 테이블에서 검색옵션 변경하는 경우
      * @param {object} payload 변경된 값
      */
-    const handleChangeSearchOption = useCallback((search) => {
-        dispatch(changeSearchOption(search));
-    }, []);
+    const handleChangeSearchOption = useCallback(
+        (search) => {
+            dispatch(getDomains(changeSearchOption(search)));
+        },
+        [dispatch],
+    );
 
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((params) => console.log(params), []);
+    const handleRowClicked = useCallback((params) => history.push(params.link), []);
 
     return (
         <>
-            {/*<div className="ag-theme-moka-grid">
-                <AgGridReact
-                    columnDefs={columnDefs}
-                    rowData={rowData}
-                    getRowNodeId={(params) => params.containerSeq}
-                    immutableData
-                    animateRows
-                    onRowClicked={onRowClicked}
-                    onCellClicked={(cellData) => {
-                        console.log(cellData);
-                    }}
-                />
-            </div>*/}
             {/* 간단한 Table */}
             <MokaTable
                 columnDefs={columnDefs}
-                rowData={list}
-                onRowNodeId={(params) => (params.containerSeq ? params.containerSeq : 0)}
-                agGridHeight={600}
-                onRowClicked={onRowClicked}
+                rowData={domainRows}
+                onRowNodeId={(params) => params.domainId}
+                agGridHeight={620}
+                onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}
                 page={search.page}
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
+                preventRowClickCell={['delete']}
             />
             {/* 설정 변경가능한 Table */}
             {/* <div className="ag-theme-moka-grid mb-3" style={{ height: '550px' }}>

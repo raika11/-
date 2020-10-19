@@ -80,7 +80,7 @@ const MokaThumbnailTable = (props) => {
                             data={thumb}
                             img={thumb.templateThumbnail}
                             alt={'썸네일이미지'}
-                            menu={menus}
+                            menus={menus}
                             onClick={onClick}
                         />
                     ))}

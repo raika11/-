@@ -29,7 +29,7 @@ export const columnDefs = [
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (params) => {
             const useYn = params.data.useYn;
-            let clazz = 'color-dark';
+            let clazz = 'color-gray150';
             if (useYn === 'Y') {
                 clazz = 'color-primary';
             }

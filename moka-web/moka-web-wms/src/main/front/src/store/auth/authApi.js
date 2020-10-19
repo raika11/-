@@ -32,15 +32,8 @@ export const logout = () => {
     });
 };
 
-// 매체목록 조회
-export const getMedias = () => {
-    return instance.get('/api/domains/medias').catch((err) => {
-        throw err;
-    });
-};
-
 // 도메인목록 조회 : 권한 내에서 조회. 페이징 없음.
-export const getDomains = ({ search }) => {
+export const getDomainList = ({ search }) => {
     return instance.get(`/api/auth/domains?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });

@@ -1,41 +1,25 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import {
-    CHANGE_DOMAIN_SEARCH_OPTION,
-    CHANGE_LATEST_DOMAINID,
-    CHANGE_LATEST_MEDIAID_RESULT,
-    GET_DOMAINS_FAILURE,
-    GET_DOMAINS_SUCCESS,
-    GET_MEDIAS_FAILURE,
-    GET_MEDIAS_SUCCESS,
-    GET_MENU_FAILURE,
-    GET_MENU_SUCCESS,
-    SET_THEME,
-} from './authAction';
-import { getLocalItem } from '@utils/storageUtil';
+import { CHANGE_DOMAIN_SEARCH_OPTION, CHANGE_LATEST_DOMAINID, GET_DOMAIN_LIST_FAILURE, GET_DOMAIN_LIST_SUCCESS, GET_MENU_FAILURE, GET_MENU_SUCCESS } from './authAction';
 
 /**
  * initialState
  */
 const initialState = {
-    latestDomainId: undefined,
-    latestMediaId: undefined,
+    latestDomainId: null,
+    domainList: [],
     domainSearch: {
-        mediaId: '',
         page: 0,
         size: 100,
         sort: 'domainId,asc',
     },
     menu: [],
-    medias: [],
-    domains: [],
-    theme: getLocalItem('wmsTheme') || 'SSC',
 };
 
 /**
  * reducer
  */
-const authReducer = handleActions(
+export default handleActions(
     {
         [GET_MENU_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
@@ -47,14 +31,14 @@ const authReducer = handleActions(
                 draft.menu = initialState.menu;
             });
         },
-        [GET_DOMAINS_SUCCESS]: (state, { payload: { body } }) => {
+        [GET_DOMAIN_LIST_FAILURE]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.domains = body.list;
+                draft.domainList = body.list;
             });
         },
-        [GET_DOMAINS_FAILURE]: (state) => {
+        [GET_DOMAIN_LIST_SUCCESS]: (state) => {
             return produce(state, (draft) => {
-                draft.domains = initialState.domains;
+                draft.domainList = initialState.domainList;
             });
         },
         [CHANGE_DOMAIN_SEARCH_OPTION]: (state, { payload: { key, value } }) => {
@@ -67,17 +51,6 @@ const authReducer = handleActions(
                 draft.latestDomainId = payload;
             });
         },
-        [CHANGE_LATEST_MEDIAID_RESULT]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.latestMediaId = payload;
-            });
-        },
-        [SET_THEME]: (state, { payload }) => ({
-            ...state,
-            theme: payload,
-        }),
     },
     initialState,
 );
-
-export default authReducer;

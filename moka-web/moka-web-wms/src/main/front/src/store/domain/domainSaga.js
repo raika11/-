@@ -4,7 +4,7 @@ import createRequestSaga from '../commons/createRequestSaga';
 import { callApiAfterActions } from '../commons/createSaga.js';
 import * as domainAPI from './domainApi';
 import * as domainAction from './domainAction';
-import { getDomains } from '@store/auth';
+import { getDomainList } from '@store/auth';
 import { enqueueToast } from '@store/notification/toastStore';
 
 let message = {};
@@ -137,7 +137,7 @@ function* deleteDomainSaga({ payload: { domainId, success, fail, error } }) {
             // 목록 다시 검색
             yield put({ type: domainAction.GET_DOMAINS });
             // auth 도메인 목록 다시 조회
-            yield put(getDomains());
+            yield put(getDomainList());
             message.message = '삭제하였습니다';
             message.options = { variant: 'success', persist: false };
             if (typeof success === 'function') success(response.data.body);

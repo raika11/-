@@ -27,6 +27,9 @@ export const initialState = {
 
 export default handleActions(
     {
+        /**
+         * 검색조건 변경
+         */
         [act.CHANGE_SEARCH_OPTION]: (state, { payload: { key, value } }) => {
             return produce(state, (draft) => {
                 draft.search[key] = value;
@@ -40,7 +43,27 @@ export default handleActions(
                 }
             });
         },
+        /**
+         * 스토어 데이터 초기화
+         */
         [act.CLEAR_TEMPLATE]: () => initialState,
+        /**
+         * 데이터 조회
+         */
+        [act.GET_TEMPLATE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.list = body.list;
+                draft.total = body.totalCnt;
+                draft.error = initialState.error;
+            });
+        },
+        [act.GET_TEMPLATE_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.list = initialState.list;
+                draft.total = initialState.total;
+                draft.error = payload;
+            });
+        },
     },
     initialState,
 );

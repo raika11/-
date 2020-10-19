@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { createRequestActionTypes } from '@store/commons/createRequestSaga';
+import { createRequestActionTypes } from '@store/commons/saga';
 /**
  * action
  */

@@ -1,7 +1,6 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import createRequestSaga from '../commons/createRequestSaga';
-import { callApiAfterActions } from '../commons/createSaga.js';
+import { callApiAfterActions, createRequestSaga } from '../commons/saga';
 import * as domainAPI from './domainApi';
 import * as domainAction from './domainAction';
 import { getDomainList } from '@store/auth';

@@ -13,7 +13,7 @@ export const columnDefs = [
         field: 'componentName',
         // cellClass: 'ag-cell-center',
         // cellStyle: { textAlign: 'center' },
-        width: 190,
+        width: 170,
     },
     {
         headerName: '위치그룹',

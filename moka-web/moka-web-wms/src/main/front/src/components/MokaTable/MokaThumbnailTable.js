@@ -8,6 +8,10 @@ import template from '@pages/Page/template.json';
 
 const propTypes = {
     /**
+     * tableHeight 테이블 Height
+     */
+    tableHeight: PropTypes.number,
+    /**
      * 페이징여부
      */
     paging: PropTypes.bool,
@@ -48,13 +52,13 @@ const defaultProps = {
 };
 
 const MokaThumbnailTable = (props) => {
-    const { onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
+    const { tableHeight, onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
     const list = template.resultInfo.body.list;
 
     return (
         <>
-            <div className="tab-content p-0">
-                <div className="mb-0 tab-pane fade border custom-scroll active show" style={{ height: '560px' }}>
+            <div className="tab-content p-0 mb-3">
+                <div className="mb-0 tab-pane fade border custom-scroll active show" style={{ height: tableHeight }}>
                     <div className="d-flex flex-wrap align-content-start p-05">
                         {list.map((thumb) => (
                             <MokaTemplateThumbCard
@@ -73,12 +77,12 @@ const MokaThumbnailTable = (props) => {
                             />
                         ))}
                     </div>
-                    {/* 페이징 */}
-                    {paging ? (
-                        <MokaPagination total={total} page={page} size={size} onChangeSearchOption={onChangeSearchOption} pageSizes={pageSizes} displayPageNum={displayPageNum} />
-                    ) : null}
                 </div>
             </div>
+            {/* 페이징 */}
+            {paging ? (
+                <MokaPagination total={total} page={page} size={size} onChangeSearchOption={onChangeSearchOption} pageSizes={pageSizes} displayPageNum={displayPageNum} />
+            ) : null}
         </>
     );
 };

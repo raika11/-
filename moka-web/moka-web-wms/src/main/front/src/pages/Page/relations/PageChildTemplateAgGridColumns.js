@@ -6,14 +6,14 @@ export const columnDefs = [
     {
         headerName: 'ID',
         field: 'templateSeq',
-        width: 50,
+        width: 40,
     },
     {
         headerName: '템플릿명',
         field: 'templateName',
         // cellClass: 'ag-cell-center',
         // cellStyle: { textAlign: 'center' },
-        width: 190,
+        width: 170,
     },
     {
         headerName: '위치그룹',

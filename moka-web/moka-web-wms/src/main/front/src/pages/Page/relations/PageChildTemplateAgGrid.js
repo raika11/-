@@ -73,7 +73,7 @@ const PageChildTemplateAgGrid = () => {
                     columnDefs={columnDefs}
                     rowData={rowData}
                     getRowNodeId={(params) => params.templateSeq}
-                    agGridHeight={550}
+                    agGridHeight={500}
                     onRowClicked={handleRowClicked}
                     loading={loading}
                     total={total}
@@ -85,6 +85,7 @@ const PageChildTemplateAgGrid = () => {
             )}
             {showAgGrid === 'thumbnail' && (
                 <MokaThumbnailTable
+                    tableHeight={500}
                     total={thumbTotal}
                     page={search.page}
                     size={search.size}

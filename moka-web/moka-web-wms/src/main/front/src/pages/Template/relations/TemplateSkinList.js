@@ -3,25 +3,25 @@ import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaCard } from '@components';
 
-import AgGrid from './TemplatePageAgGrid';
+import AgGrid from './TemplateSkinAgGrid';
 
 /**
- * 관련 페이지
+ * 관련 본문스킨
  */
-const TemplatePageList = () => {
+const TemplateSkinList = () => {
     const history = useHistory();
 
     return (
-        <MokaCard titleClassName="mb-0" title="페이지 검색">
+        <MokaCard titleClassName="mb-0" title="본문스킨 검색">
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-3">
                 <Button
                     variant="dark"
                     onClick={() => {
-                        history.push('/page');
+                        history.push('/skin');
                     }}
                 >
-                    페이지 추가
+                    본문스킨 추가
                 </Button>
             </div>
             {/* 목록 및 페이징 */}
@@ -30,4 +30,4 @@ const TemplatePageList = () => {
     );
 };
 
-export default TemplatePageList;
+export default TemplateSkinList;

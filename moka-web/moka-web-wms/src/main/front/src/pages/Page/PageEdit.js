@@ -63,7 +63,7 @@ const PageEdit = () => {
                         <MokaInput label="표출명" className="mb-0" />
                     </Col>
                     <Col xs={4} className="px-0">
-                        <MokaInput label="순서" labelWidth={38} className="mb-0" />
+                        <MokaInput label="순서" labelWidth={43} className="mb-0" required />
                     </Col>
                 </Form.Row>
                 {/* 이동URL */}

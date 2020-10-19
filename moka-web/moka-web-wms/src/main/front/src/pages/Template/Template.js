@@ -11,6 +11,10 @@ const TemplateEdit = React.lazy(() => import('./TemplateEdit'));
 
 // relations
 const TemplatePageList = React.lazy(() => import('./relations/TemplatePageList'));
+const TemplateSkinList = React.lazy(() => import('./relations/TemplateSkinList'));
+const TemplateContainerList = React.lazy(() => import('./relations/TemplateContainerList'));
+const TemplateComponentList = React.lazy(() => import('./relations/TemplateComponentList'));
+const TemplateHistoryList = React.lazy(() => import('./relations/TemplateHistoryList'));
 
 /**
  * 템플릿 관리
@@ -73,16 +77,7 @@ const Template = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard
-                width={412}
-                className="mr-10"
-                headerClassName="pb-0"
-                titleClassName="mb-0"
-                title="템플릿 검색"
-                foldable
-                expansion={expansionState[0]}
-                onExpansion={handleListExpansion}
-            >
+            <MokaCard width={412} className="mr-10" titleClassName="mb-0" title="템플릿 검색" expansion={expansionState[0]} onExpansion={handleListExpansion} foldable>
                 <Suspense>
                     <TemplateList />
                 </Suspense>
@@ -109,6 +104,18 @@ const Template = () => {
                                     <Suspense>
                                         <TemplatePageList />
                                     </Suspense>,
+                                    <Suspense>
+                                        <TemplateSkinList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <TemplateContainerList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <TemplateComponentList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <TemplateHistoryList />
+                                    </Suspense>,
                                 ]}
                                 tabNavWidth={48}
                                 tabNavPosition="right"
@@ -118,7 +125,6 @@ const Template = () => {
                                     { title: '관련 본문스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
-                                    { title: '관련 광고', icon: <MokaIcon iconName="fal-ad" /> },
                                     { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
                                 ]}
                             />

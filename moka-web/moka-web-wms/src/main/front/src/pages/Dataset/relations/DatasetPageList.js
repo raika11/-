@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { MokaCard, MokaInput } from '@components';
+import AgGrid from './DatasetPageAgGrid';
 
 /**
  * 관련페이지 컴포넌트
@@ -11,7 +12,7 @@ const DatasetPageList = () => {
     const history = useHistory();
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" title="페이지 검색">
+        <MokaCard titleClassName="h-100 mb-0" title="페이지 검색">
             <Form>
                 <MokaInput as="select">
                     <option>도메인선택</option>
@@ -27,7 +28,7 @@ const DatasetPageList = () => {
                     페이지 추가
                 </Button>
             </div>
-            AgGrid 영역
+            <AgGrid />
         </MokaCard>
     );
 };

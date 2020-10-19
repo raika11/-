@@ -10,6 +10,9 @@ const DatasetList = React.lazy(() => import('./DatasetList'));
 
 // relations
 const DatasetPageList = React.lazy(() => import('./relations/DatasetPageList'));
+const DatasetSkinList = React.lazy(() => import('./relations/DatasetSkinList'));
+const DatasetContainerList = React.lazy(() => import('./relations/DatasetContainerList'));
+const DatasetComponentList = React.lazy(() => import('./relations/DatasetComponentList'));
 
 const Dataset = () => {
     const [tabExpansion, setTabExpansion] = useState(false);
@@ -45,6 +48,15 @@ const Dataset = () => {
                                 tabs={[
                                     <Suspense>
                                         <DatasetPageList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <DatasetSkinList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <DatasetContainerList />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <DatasetComponentList />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}

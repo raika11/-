@@ -67,6 +67,7 @@ const propTypes = {
      * 그 외 input props
      */
     inputProps: PropTypes.shape({
+        id: PropTypes.string,
         custom: PropTypes.bool,
         readOnly: PropTypes.bool,
         plaintext: PropTypes.bool,

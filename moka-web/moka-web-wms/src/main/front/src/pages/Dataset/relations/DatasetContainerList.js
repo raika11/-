@@ -3,16 +3,16 @@ import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { MokaCard, MokaInput } from '@components';
-import AgGrid from './DatasetSkinAgGrid';
+import AgGrid from './DatasetContainerAgGrid';
 
 /**
- * 관련 본문스킨
+ * 관련 컨테이너
  */
-const DatasetSkinList = () => {
+const DatasetContainerList = () => {
     const history = useHistory();
 
     return (
-        <MokaCard titleClassName="h-100 mb-0" title="본문스킨 검색">
+        <MokaCard titleClassName="h-100 mb-0" title="컨테이너 검색">
             <Form>
                 <MokaInput as="select">
                     <option>도메인선택</option>
@@ -22,10 +22,10 @@ const DatasetSkinList = () => {
                 <Button
                     variant="dark"
                     onClick={() => {
-                        history.push('/skin');
+                        history.push('/container');
                     }}
                 >
-                    본문스킨 추가
+                    컨테이너 추가
                 </Button>
             </div>
             <AgGrid />
@@ -33,4 +33,4 @@ const DatasetSkinList = () => {
     );
 };
 
-export default DatasetSkinList;
+export default DatasetContainerList;

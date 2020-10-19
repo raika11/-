@@ -3,6 +3,7 @@
  */
 package jmnet.moka.core.tps.config;
 
+import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -14,22 +15,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.StringUtils;
-import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * <pre>
- * 
+ *
  * 2019. 11. 29. ssc 최초생성
  * </pre>
- * 
- * @since 2019. 11. 29. 오후 2:05:07
+ *
  * @author ssc
+ * @since 2019. 11. 29. 오후 2:05:07
  */
 @Configuration
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
-@Import({HelperConfiguration.class, PreviewConfiguration.class, TpsJpaConfiguration.class,
-        TpsQuerydslConfiguration.class, TpsMybatisConfiguration.class, SwaggerConfiguration.class})
-@ComponentScan(basePackages = {"jmnet.moka.core.tps.mvc"})
+@Import({HelperConfiguration.class, PreviewConfiguration.class, TpsJpaConfiguration.class, TpsQuerydslConfiguration.class,
+         TpsMybatisConfiguration.class, SwaggerConfiguration.class})
+@ComponentScan(basePackages = {"jmnet.moka.core.tps.mvc", "jmnet.moka.core.tps.common.logger"})
 public class TpsAutoConfiguration {
 
     @Primary
@@ -44,7 +44,9 @@ public class TpsAutoConfiguration {
     public DataSource tpsDataSource() {
         DataSourceProperties dataSourceProperties = tpsDataSourceProperties();
         HikariDataSource dataSource = (HikariDataSource) dataSourceProperties
-                .initializeDataSourceBuilder().type(HikariDataSource.class).build();
+                .initializeDataSourceBuilder()
+                .type(HikariDataSource.class)
+                .build();
         if (StringUtils.hasText(dataSourceProperties.getName())) {
             dataSource.setPoolName(dataSourceProperties.getName());
         }

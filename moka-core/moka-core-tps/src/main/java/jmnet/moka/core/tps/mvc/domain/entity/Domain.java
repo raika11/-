@@ -1,17 +1,23 @@
 package jmnet.moka.core.tps.mvc.domain.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import javax.persistence.*;
-
-import jmnet.moka.common.utils.McpDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import jmnet.moka.common.utils.McpString;
-import lombok.*;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 /**
  * The persistent class for the TB_WMS_DOMAIN database table.
- * 
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +27,7 @@ import lombok.*;
 @Entity
 @Table(name = "TB_WMS_DOMAIN")
 @NamedQuery(name = "Domain.findAll", query = "SELECT d FROM Domain d")
-public class Domain implements Serializable {
+public class Domain extends BaseAudit {
 
     private static final long serialVersionUID = -6113879324816610973L;
 
@@ -80,31 +86,6 @@ public class Domain implements Serializable {
     @Column(name = "DESCRIPTION", length = 4000)
     private String description;
 
-    /**
-     * 등록 일시
-     */
-    @Column(name = "REG_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date regDt;
-
-    /**
-     * 등록 아이디
-     */
-    @Column(name = "REG_ID", length = 30)
-    private String regId;
-
-    /**
-     * 수정 일시
-     */
-    @Column(name = "MOD_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modDt;
-
-    /**
-     * 수정 아이디
-     */
-    @Column(name = "MOD_ID", length = 30)
-    private String modId;
 
     /**
      * 신규 등록 전 처리
@@ -114,7 +95,6 @@ public class Domain implements Serializable {
         this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
         this.useYn = McpString.defaultValue(this.useYn, "Y");
         this.lang = McpString.defaultValue(this.lang, "KR");
-        this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     /**
@@ -125,7 +105,5 @@ public class Domain implements Serializable {
         this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
         this.useYn = McpString.defaultValue(this.useYn, "Y");
         this.lang = McpString.defaultValue(this.lang, "KR");
-        this.regDt = McpDate.defaultValue(this.regDt);
-        this.modDt = McpDate.defaultValue(this.modDt);;
     }
 }

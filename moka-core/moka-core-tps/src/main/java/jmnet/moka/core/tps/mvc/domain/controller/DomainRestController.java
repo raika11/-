@@ -1,26 +1,20 @@
-/**
- * msp-tps DomainController.java 2020. 1. 8. 오후 2:09:06 ssc
- */
 package jmnet.moka.core.tps.mvc.domain.controller;
 
 import io.swagger.annotations.ApiOperation;
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
@@ -33,7 +27,6 @@ import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,57 +63,59 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/domains")
 public class DomainRestController {
 
-    @Autowired
-    private DomainService domainService;
+    private final DomainService domainService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private MessageByLocale messageByLocale;
+    private final MessageByLocale messageByLocale;
 
-    @Autowired
-    private CodeMgtService codeMgtService;
+    private final CodeMgtService codeMgtService;
 
-    @Autowired
-    private RelationHelper relationHelper;
+    private final RelationHelper relationHelper;
 
-    @Autowired
-    private ApiCodeHelper apiCodeHelper;
+    private final ApiCodeHelper apiCodeHelper;
 
     //    @Autowired
     //    private ApplicationContext applicationContext;
 
-    @Autowired
-    private PurgeHelper purgeHelper;
+    private final PurgeHelper purgeHelper;
 
-    @Autowired
-    private ActionLogger actionLogger;
+    private final TpsLogger tpsLogger;
+
+    public DomainRestController(DomainService domainService, ModelMapper modelMapper, MessageByLocale messageByLocale, CodeMgtService codeMgtService,
+            RelationHelper relationHelper, ApiCodeHelper apiCodeHelper, PurgeHelper purgeHelper, TpsLogger tpsLogger) {
+        this.domainService = domainService;
+        this.modelMapper = modelMapper;
+        this.messageByLocale = messageByLocale;
+        this.codeMgtService = codeMgtService;
+        this.relationHelper = relationHelper;
+        this.apiCodeHelper = apiCodeHelper;
+        this.purgeHelper = purgeHelper;
+        this.tpsLogger = tpsLogger;
+    }
 
     /**
      * 도메인목록조회
      *
-     * @param request 요청
-     * @param search  검색조건
+     * @param search 검색조건
      * @return 도메인목록
      */
     @ApiOperation(value = "도메인 목록 조회")
     @GetMapping
-    public ResponseEntity<?> getDomainList(HttpServletRequest request, @SearchParam SearchDTO search, @NotNull Principal principal,
-            @RequestAttribute Long processStartTime) {
+    public ResponseEntity<?> getDomainList(@SearchParam SearchDTO search, @RequestAttribute Long processStartTime) {
 
         // 조회
         Page<Domain> returnValue = domainService.findAllDomain(search);
 
         // 리턴값 설정
-        ResultListDTO<DomainDTO> resultListMessage = new ResultListDTO<DomainDTO>();
+        ResultListDTO<DomainDTO> resultListMessage = new ResultListDTO<>();
         List<DomainDTO> domainDtoList = modelMapper.map(returnValue.getContent(), DomainDTO.TYPE);
         resultListMessage.setTotalCnt(returnValue.getTotalElements());
         resultListMessage.setList(domainDtoList);
 
-        ResultDTO<ResultListDTO<DomainDTO>> resultDto = new ResultDTO<ResultListDTO<DomainDTO>>(resultListMessage);
+        ResultDTO<ResultListDTO<DomainDTO>> resultDto = new ResultDTO<>(resultListMessage);
 
-        actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
+        tpsLogger.success(ActionType.SELECT, System.currentTimeMillis() - processStartTime);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -131,19 +126,19 @@ public class DomainRestController {
      * @param request  요청
      * @param domainId 도메인아이디 (필수)
      * @return 도메인정보
-     * @throws NoDataException      도메인 정보가 없음
-     * @throws InvalidDataException 도메인 아이디 형식오류
+     * @throws NoDataException 도메인 정보가 없음
      */
     @ApiOperation(value = "도메인 조회")
     @GetMapping("/{domainId}")
     public ResponseEntity<?> getDomain(HttpServletRequest request,
             @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId,
-            @NotNull Principal principal, @RequestAttribute Long processStartTime)
-            throws NoDataException, InvalidDataException {
+            @RequestAttribute Long processStartTime)
+            throws NoDataException {
 
         String message = messageByLocale.get("tps.domain.error.no-data", request);
-        Domain domain = domainService.findDomainById(domainId)
-                                     .orElseThrow(() -> new NoDataException(message));
+        Domain domain = domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> new NoDataException(message));
 
         DomainDTO dto = modelMapper.map(domain, DomainDTO.class);
 
@@ -154,26 +149,25 @@ public class DomainRestController {
             dto.setApiCodeId(apiCodeId);
         }
 
-        actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
+        tpsLogger.success(ActionType.SELECT, System.currentTimeMillis() - processStartTime);
 
-        ResultDTO<DomainDTO> resultDto = new ResultDTO<DomainDTO>(dto);
+        ResultDTO<DomainDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
      * 도메인 중복 아이디 체크
      *
-     * @param request  HTTP 요청
      * @param domainId 도메인아이디
      * @return 중복 여부
      */
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{domainId}/exists")
-    public ResponseEntity<?> duplicateCheckId(HttpServletRequest request,
+    public ResponseEntity<?> duplicateCheckId(
             @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId) {
 
         boolean duplicated = domainService.isDuplicatedId(domainId);
-        ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(duplicated);
+        ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
@@ -182,21 +176,19 @@ public class DomainRestController {
      *
      * @param request   요청
      * @param domainDTO 등록할 도메인정보
-     * @param principal 로그인사용자 세션
      * @return 등록된 도메인정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "도메인 등록")
     @PostMapping
-    public ResponseEntity<?> postDomain(HttpServletRequest request, @Valid DomainDTO domainDTO, @NotNull Principal principal,
-            @RequestAttribute Long processStartTime)
+    public ResponseEntity<?> postDomain(HttpServletRequest request, @Valid DomainDTO domainDTO, @RequestAttribute Long processStartTime)
             throws InvalidDataException, Exception {
 
         // DomainDTO -> Domain 변환
         Domain domain = modelMapper.map(domainDTO, Domain.class);
         //        domain.setRegDt(McpDate.now());
-        domain.setRegId(principal.getName());
+        //domain.setRegId(principal.getName());
 
         setHostAndPath(request, domain, domainDTO);
 
@@ -207,17 +199,17 @@ public class DomainRestController {
 
             // 결과리턴
             DomainDTO dto = modelMapper.map(returnValue, DomainDTO.class);
-            ResultDTO<DomainDTO> resultDto = new ResultDTO<DomainDTO>(dto);
+            ResultDTO<DomainDTO> resultDto = new ResultDTO<>(dto);
 
             // 액션 로그에 성공 로그 출력
-            actionLogger.success(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime);
+            tpsLogger.success(ActionType.INSERT, System.currentTimeMillis() - processStartTime);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO INSERT DOMAIN]", e);
             // 액션 로그에 오류 내용 출력
-            actionLogger.error(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime, e);
+            tpsLogger.error(ActionType.INSERT, System.currentTimeMillis() - processStartTime, e);
             throw new Exception(messageByLocale.get("tps.domain.error.save", request), e);
         }
     }
@@ -228,7 +220,6 @@ public class DomainRestController {
      * @param request   요청
      * @param domainId  도메인아이디
      * @param domainDTO 수정할 도메인정보
-     * @param principal 로그인사용자세션
      * @return 수정된 도메인정보
      * @throws Exception 그외 모든 에러
      */
@@ -236,7 +227,7 @@ public class DomainRestController {
     @PutMapping("/{domainId}")
     public ResponseEntity<?> putDomain(HttpServletRequest request,
             @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId,
-            @Valid DomainDTO domainDTO, @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            @Valid DomainDTO domainDTO, @RequestAttribute Long processStartTime)
             throws Exception {
 
         // DomainDTO -> Domain 변환
@@ -244,13 +235,9 @@ public class DomainRestController {
         Domain newDomain = modelMapper.map(domainDTO, Domain.class);
 
         // 오리진 데이터 조회
-        Domain orgDomain = domainService.findDomainById(newDomain.getDomainId())
-                                        .orElseThrow(() -> new NoDataException(infoMessage));
-
-        newDomain.setModDt(McpDate.now());
-        newDomain.setModId(principal.getName());
-        newDomain.setRegDt(orgDomain.getRegDt());
-        newDomain.setRegId(orgDomain.getRegId());
+        domainService
+                .findDomainById(newDomain.getDomainId())
+                .orElseThrow(() -> new NoDataException(infoMessage));
 
         setHostAndPath(request, newDomain, domainDTO);
 
@@ -261,17 +248,17 @@ public class DomainRestController {
 
             // 결과리턴
             DomainDTO dto = modelMapper.map(returnValue, DomainDTO.class);
-            ResultDTO<DomainDTO> resultDto = new ResultDTO<DomainDTO>(dto);
+            ResultDTO<DomainDTO> resultDto = new ResultDTO<>(dto);
 
             // 액션 로그에 성공 로그 출력
-            actionLogger.success(principal.getName(), ActionType.UPDATE, System.currentTimeMillis() - processStartTime);
+            tpsLogger.success(ActionType.UPDATE, System.currentTimeMillis() - processStartTime);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE DOMAIN]", e);
             // 액션 로그에 에러 로그 출력
-            actionLogger.error(principal.getName(), ActionType.UPDATE, System.currentTimeMillis() - processStartTime, e);
+            tpsLogger.error(ActionType.UPDATE, System.currentTimeMillis() - processStartTime, e);
             throw new Exception(messageByLocale.get("tps.domain.error.save", request), e);
         }
     }
@@ -287,19 +274,19 @@ public class DomainRestController {
     @ApiOperation(value = "도메인과 관련아이템 존재 여부 확인")
     @GetMapping("/{domainId}/has-relations")
     public ResponseEntity<?> hasRelations(HttpServletRequest request,
-            @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId,
-            @RequestAttribute Long processStartTime)
+            @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.domain.error.no-data", request);
-        domainService.findDomainById(domainId)
-                     .orElseThrow(() -> new NoDataException(message));
+        domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> new NoDataException(message));
 
         // 관련 데이터 조회
         boolean isRelated = relationHelper.isRelatedDomain(domainId);
 
         // 결과리턴
-        ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(isRelated);
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(isRelated);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -317,26 +304,27 @@ public class DomainRestController {
     @DeleteMapping("/{domainId}")
     public ResponseEntity<?> deleteDomain(HttpServletRequest request,
             @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId,
-            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            @RequestAttribute Long processStartTime)
             throws InvalidDataException, NoDataException, Exception {
 
 
         // 도메인 데이터 조회
         String noContentMessage = messageByLocale.get("tps.domain.error.no-data", request);
-        Domain domain = domainService.findDomainById(domainId)
-                                     .orElseThrow(() -> new NoDataException(noContentMessage));
+        Domain domain = domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 관련 데이터 조회
         try {
             if (relationHelper.isRelatedDomain(domainId)) {
                 // 액션 로그에 실패 로그 출력
-                actionLogger.fail(principal.getName(), ActionType.DELETE, System.currentTimeMillis() - processStartTime,
-                                  messageByLocale.get("tps.domain.error.delete.exist-related", request));
+                tpsLogger.fail(ActionType.DELETE, System.currentTimeMillis() - processStartTime,
+                        messageByLocale.get("tps.domain.error.delete.exist-related", request));
                 throw new Exception(messageByLocale.get("tps.domain.error.delete.exist-related", request));
             }
         } catch (Exception ex) {
             // 액션 로그에 실패 로그 출력
-            actionLogger.fail(principal.getName(), ActionType.DELETE, System.currentTimeMillis() - processStartTime, ex.toString());
+            tpsLogger.fail(ActionType.DELETE, System.currentTimeMillis() - processStartTime, ex.toString());
             throw new Exception(messageByLocale.get("tps.domain.error.select.related", request));
         }
 
@@ -346,16 +334,16 @@ public class DomainRestController {
             purgeHelper.purgeTmsDomain(request);
 
             // 액션 로그에 성공 로그 출력
-            actionLogger.success(principal.getName(), ActionType.DELETE, System.currentTimeMillis() - processStartTime);
+            tpsLogger.success(ActionType.DELETE, System.currentTimeMillis() - processStartTime);
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO DELETE DOMAIN] domainId: {}) {}", domainId, e.getMessage());
             // 액션 로그에 실패 로그 출력
-            actionLogger.error(principal.getName(), ActionType.DELETE, System.currentTimeMillis() - processStartTime, e.toString());
+            tpsLogger.error(ActionType.DELETE, System.currentTimeMillis() - processStartTime, e.toString());
             throw new Exception(messageByLocale.get("tps.domain.error.delete", request), e);
         }
     }

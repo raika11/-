@@ -5,7 +5,7 @@
 	<!-- 페이지의 관련템플릿 목록 조회 -->
 	<select id="findPageChildRels" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
 		{ call UPA_TB_WMS_PAGE_REL_TEMPLATE_LIST_SEL(
-			${TEMPLATE_IMAGE_PREFIEX},
+			'${TEMPLATE_IMAGE_PREFIEX}',
 			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{keyword, mode=IN, jdbcType=INTEGER, javaType=string},
 			<choose>
@@ -55,7 +55,7 @@
 	<!-- 콘텐츠스킨의 관련템플릿 목록 조회 -->
 	<select id="findSkinChildRels" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
 		{ call UPA_TB_WMS_PAGE_REL_TEMPLATE_LIST_SEL(
-		${TEMPLATE_IMAGE_PREFIEX},
+		'${TEMPLATE_IMAGE_PREFIEX}',
 		#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 		#{keyword, mode=IN, jdbcType=INTEGER, javaType=string},
 		<choose>
@@ -105,7 +105,7 @@
 	<!-- 컨테이너의 관련템플릿 목록 조회 -->
 	<select id="findContainerChildRels" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
 		{ call UPA_TB_WMS_CONTAINER_REL_TEMPLATE_LIST_SEL(
-		${TEMPLATE_IMAGE_PREFIEX},
+		'${TEMPLATE_IMAGE_PREFIEX}',
 		#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 		#{keyword, mode=IN, jdbcType=INTEGER, javaType=string},
 		<choose>
@@ -168,7 +168,7 @@
 	<!-- resultSet이 단일인 경우 -->
 	<select id="findAll" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
 		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_TB_WMS_TEMPLATE_LIST_SEL(
-			${TEMPLATE_IMAGE_PREFIEX},
+			'${TEMPLATE_IMAGE_PREFIEX}',
 			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			<choose>
 				<when test="(searchType == 'templateSeq' or searchType == 'all') and keyword != null and keyword != ''">

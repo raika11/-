@@ -6,8 +6,8 @@ import { Helmet } from 'react-helmet';
 import { MokaCardEditor, MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 
+import TemplateEditor from './TemplateEditor';
 const TemplateList = React.lazy(() => import('./TemplateList'));
-const TemplateEditor = React.lazy(() => import('./TemplateEditor'));
 const TemplateEdit = React.lazy(() => import('./TemplateEdit'));
 
 // relations
@@ -91,9 +91,7 @@ const Template = () => {
                     render={() => (
                         <>
                             {/* 에디터 */}
-                            <Suspense>
-                                <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
-                            </Suspense>
+                            <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
                             {/* 탭 */}
                             <MokaIconTabs

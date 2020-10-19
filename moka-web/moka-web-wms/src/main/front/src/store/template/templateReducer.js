@@ -23,6 +23,7 @@ export const initialState = {
     template: {},
     templateError: null,
     templateBody: '',
+    inputTag: '',
 };
 
 export default handleActions(
@@ -46,7 +47,14 @@ export default handleActions(
         /**
          * 스토어 데이터 초기화
          */
-        [act.CLEAR_TEMPLATE]: () => initialState,
+        [act.CLEAR_TEMPLATE]: (state) => {
+            return produce(state, (draft) => {
+                draft.template = initialState.template;
+                draft.templateBody = initialState.templateBody;
+                draft.inputTag = initialState.inputTag;
+                draft.templateError = initialState.templateError;
+            });
+        },
         /**
          * 데이터 조회
          */
@@ -68,6 +76,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.template = body;
                 draft.templateBody = body.templateBody;
+                draft.inputTag = `<tems:tp id='${body.templateSeq}' name='${body.templateName}' />`;
                 draft.templateError = initialState.templateError;
             });
         },
@@ -75,6 +84,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.template = initialState.template;
                 draft.templateBody = initialState.templateBody;
+                draft.inputTag = initialState.inputTag;
                 draft.templateError = payload;
             });
         },

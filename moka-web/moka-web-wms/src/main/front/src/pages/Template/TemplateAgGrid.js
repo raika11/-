@@ -65,7 +65,9 @@ const TemplateAgGrid = () => {
                     </Nav.Link>
                 </Nav>
                 <div className="pt-0">
-                    <Button variant="dark">템플릿 추가</Button>
+                    <Button variant="dark" onClick={() => history.push('/template')}>
+                        템플릿 추가
+                    </Button>
                 </div>
             </div>
 

@@ -43,6 +43,10 @@
     cursor: pointer;
 }
 
+.ag-theme-moka-grid .ag-row.ag-row-last {
+    border-bottom-style: none;
+}
+
 
 /* 화면편집 */
 

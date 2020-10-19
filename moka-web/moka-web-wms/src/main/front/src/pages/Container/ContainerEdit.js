@@ -24,7 +24,7 @@ const ContainerEdit = () => {
                 {/* 컨테이너ID */}
                 <MokaInput className="mb-2" label="컨테이너ID" value="25555" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 컨테이너명 */}
-                <MokaInput className="mb-2" label="컨테이너명" value="컨테이너명" onChange={() => {}} placeholder="컨테이너명을 입력하세요" />
+                <MokaInput className="mb-2" label="컨테이너명" value="컨테이너명" onChange={() => {}} placeholder="컨테이너명을 입력하세요" required />
             </Form>
         </MokaCard>
     );

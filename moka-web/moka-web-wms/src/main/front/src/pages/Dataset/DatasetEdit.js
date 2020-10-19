@@ -52,7 +52,7 @@ const DatasetEdit = () => {
                             className="mb-0 h-100"
                             label="데이터"
                             value="desk"
-                            inputProps={{ label: '수동', name: 'dataType', checked: dataType === 'desk' }}
+                            inputProps={{ custom: true, id: 'dataset-type1', label: '수동', name: 'dataType', checked: dataType === 'desk' }}
                             onChange={() => setDataType('desk')}
                         />
                     </Col>
@@ -61,7 +61,7 @@ const DatasetEdit = () => {
                             as="radio"
                             className="mb-0 h-100 align-items-center d-flex"
                             value="auto"
-                            inputProps={{ label: '자동', name: 'dataType', checked: dataType === 'auto' }}
+                            inputProps={{ custom: true, id: 'dataset-type2', label: '자동', name: 'dataType', checked: dataType === 'auto' }}
                             onChange={() => setDataType('auto')}
                         />
                     </Col>

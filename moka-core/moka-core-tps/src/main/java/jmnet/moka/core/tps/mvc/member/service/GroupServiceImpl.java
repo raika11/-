@@ -26,17 +26,17 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Page<Group> findGroupList(SearchDTO search) {
+    public Page<Group> findAllGroup(SearchDTO search) {
         return groupRepository.findAll(search.getPageable());
     }
 
     @Override
-    public List<Group> findGroupList() {
+    public List<Group> findAllGroup() {
         return groupRepository.findAll();
     }
 
     @Override
-    public List<GroupMember> findGroupMemberList(String groupCd) {
+    public List<GroupMember> findAllGroupMember(String groupCd) {
         return groupMemberRepository.findAllByGroupCd(groupCd);
     }
 

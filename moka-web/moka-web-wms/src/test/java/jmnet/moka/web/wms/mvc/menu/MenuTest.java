@@ -66,8 +66,8 @@ public class MenuTest {
 
     @Test
     public void insertGroupMenuAuthTest() {
-        List<Group> groups = groupService.findGroupList();
-        List<Menu> menus = menuService.findMenuList();
+        List<Group> groups = groupService.findAllGroup();
+        List<Menu> menus = menuService.findAllMenu();
 
         menus.forEach(menu -> {
             groups.forEach(group -> {
@@ -86,8 +86,8 @@ public class MenuTest {
 
     @Test
     public void insertMemberMenuAuthTest() {
-        List<Menu> menus = menuService.findMenuList();
-        List<GroupMember> groupMembers = groupService.findGroupMemberList("999");
+        List<Menu> menus = menuService.findAllMenu();
+        List<GroupMember> groupMembers = groupService.findAllGroupMember("999");
         menus.forEach(menu -> {
             groupMembers.forEach(gm -> {
                 MenuAuth menuAuth = MenuAuth.builder()

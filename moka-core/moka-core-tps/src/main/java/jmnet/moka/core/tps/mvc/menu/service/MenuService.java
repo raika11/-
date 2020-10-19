@@ -46,14 +46,14 @@ public interface MenuService {
      * @param search 검색 조건
      * @return 검색 결과
      */
-    Page<Menu> findMenuList(SearchDTO search);
+    Page<Menu> findAllMenu(SearchDTO search);
 
     /**
      * 메뉴 전체 목록 조회
      *
      * @return 메뉴 목록
      */
-    List<Menu> findMenuList();
+    List<Menu> findAllMenu();
 
     /**
      * 메뉴 아이디로 상세 조회

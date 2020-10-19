@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @Validated
 @Slf4j
@@ -71,7 +72,7 @@ public class MenuRestController {
             @RequestAttribute Long processStartTime) {
 
         // 조회
-        Page<Menu> returnValue = menuService.findMenuList(search);
+        Page<Menu> returnValue = menuService.findAllMenu(search);
 
         // 리턴값 설정
         ResultListDTO<MenuDTO> resultListMessage = new ResultListDTO<MenuDTO>();
@@ -122,7 +123,8 @@ public class MenuRestController {
     @GetMapping("/{menuId}")
     public ResponseEntity<?> getMenu(HttpServletRequest request,
             @PathVariable("menuId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.menu.error.invalid.menuId}") String menuId,
-            @NotNull Principal principal, @RequestAttribute Long processStartTime) throws NoDataException, InvalidDataException {
+            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            throws NoDataException, InvalidDataException {
 
         String message = messageByLocale.get("tps.menu.error.noContent", request);
         Menu menu = menuService.findMenuById(menuId)
@@ -166,7 +168,8 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 등록")
     @PostMapping
     public ResponseEntity<?> postMenu(HttpServletRequest request, @Valid MenuDTO menuDTO, @NotNull Principal principal,
-            @RequestAttribute Long processStartTime) throws InvalidDataException, Exception {
+            @RequestAttribute Long processStartTime)
+            throws InvalidDataException, Exception {
 
         // MenuDTO -> Menu 변환
         Menu menu = modelMapper.map(menuDTO, Menu.class);
@@ -198,7 +201,7 @@ public class MenuRestController {
         } catch (Exception e) {
             log.error("[FAIL TO INSERT MENU]", e);
             // 액션 로그에 오류 내용 출력
-            actionLogger.error(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime, e);
+            actionLogger.error(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime, e.toString());
             throw new Exception(messageByLocale.get("tps.menu.error.save", request), e);
         }
     }
@@ -217,7 +220,8 @@ public class MenuRestController {
     @PutMapping("/{menuId}")
     public ResponseEntity<?> putMenu(HttpServletRequest request,
             @PathVariable("menuId") @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.invalid.menuId}") String menuId, @Valid MenuDTO menuDTO,
-            @NotNull Principal principal, @RequestAttribute Long processStartTime) throws Exception {
+            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            throws Exception {
 
 
         // MenuDTO -> Menu 변환
@@ -265,7 +269,8 @@ public class MenuRestController {
     @DeleteMapping("/{menuId}")
     public ResponseEntity<?> deleteMenu(HttpServletRequest request,
             @PathVariable("menuId") @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.invalid.menuId}") String menuId,
-            @NotNull Principal principal, @RequestAttribute Long processStartTime) throws InvalidDataException, NoDataException, Exception {
+            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            throws InvalidDataException, NoDataException, Exception {
 
 
         // 메뉴 데이터 조회

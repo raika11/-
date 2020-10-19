@@ -26,12 +26,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Page<Member> findMemberList(SearchDTO search) {
+    public Page<Member> findAllMember(SearchDTO search) {
         return memberRepository.findAll(search.getPageable());
     }
 
     @Override
-    public List<Member> findMemberList() {
+    public List<Member> findAllMember() {
         return memberRepository.findAll();
     }
 

@@ -86,7 +86,7 @@ public class MemberTest {
 
     @Test
     public void groupDeleteTest() {
-        List<Group> groups = groupService.findGroupList();
+        List<Group> groups = groupService.findAllGroup();
         groups.forEach(group -> {
             if (!groupService.hasMembers(group.getGroupCd())) {
                 groupService.deleteGroup(group);
@@ -97,7 +97,7 @@ public class MemberTest {
 
     @Test
     public void groupMemberInsertTest() {
-        List<Group> groups = groupService.findGroupList();
+        List<Group> groups = groupService.findAllGroup();
         groups.forEach(group -> {
             GroupMember groupMember = GroupMember.builder()
                                                  .groupCd(group.getGroupCd())

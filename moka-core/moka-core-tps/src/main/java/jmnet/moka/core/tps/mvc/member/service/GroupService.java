@@ -14,21 +14,21 @@ public interface GroupService {
      * @param search 검색 조건
      * @return 검색 결과 목록
      */
-    Page<Group> findGroupList(SearchDTO search);
+    Page<Group> findAllGroup(SearchDTO search);
 
     /**
      * 전체 그룹 조회
      *
      * @return 그룹 목록
      */
-    List<Group> findGroupList();
+    List<Group> findAllGroup();
 
     /**
      * 그룹 내 사용자 목록 조회
      *
      * @return 그룹 목록
      */
-    List<GroupMember> findGroupMemberList(String groupCd);
+    List<GroupMember> findAllGroupMember(String groupCd);
 
     /**
      * 그룹 ID로 그룹 상세 조회

@@ -15,14 +15,14 @@ public interface MemberService {
      * @param search 검색 조건
      * @return 검색 결과 목록
      */
-    Page<Member> findMemberList(SearchDTO search);
+    Page<Member> findAllMember(SearchDTO search);
 
     /**
      * 전체 멤버 조회
      *
      * @return 멤버 목록
      */
-    List<Member> findMemberList();
+    List<Member> findAllMember();
 
     /**
      * 멤버 ID로 멤버 상세 조회

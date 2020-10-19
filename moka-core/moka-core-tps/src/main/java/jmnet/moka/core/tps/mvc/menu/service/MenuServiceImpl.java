@@ -90,12 +90,12 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Page<Menu> findMenuList(SearchDTO search) {
+    public Page<Menu> findAllMenu(SearchDTO search) {
         return menuRepository.findAll(search.getPageable());
     }
 
     @Override
-    public List<Menu> findMenuList() {
+    public List<Menu> findAllMenu() {
         return menuRepository.findAll();
     }
 

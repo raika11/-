@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import * as api from './authApi';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { enqueueToast } from '@store/notification/toastStore';
+import { enqueueToast } from '@store/notification/toastAction';
 import * as authAction from './authAction';
 import { setLocalItem } from '@utils/storageUtil';
 

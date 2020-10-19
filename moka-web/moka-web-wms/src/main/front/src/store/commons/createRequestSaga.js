@@ -1,5 +1,5 @@
 import { call, put } from 'redux-saga/effects';
-import { enqueueToast } from '@store/notification/toastStore';
+import { enqueueToast } from '@store/notification/toastAction';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 
 export const createRequestActionTypes = (actionType) => {

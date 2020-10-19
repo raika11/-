@@ -1,22 +1,7 @@
-import { createAction, handleActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import produce from 'immer';
 
-/**
- * action
- */
-export const ENQUEUE_TOAST = 'toastStore/ENQUEUE_TOAST';
-export const REMOVE_TOAST = 'toastStore/REMOVE_TOAST';
-
-/**
- * action creator
- */
-export const enqueueToast = createAction(ENQUEUE_TOAST, ({ key, message, options, callback }) => ({
-    key,
-    message,
-    options,
-    callback,
-}));
-export const removeToast = createAction(REMOVE_TOAST, ({ key }) => ({ key }));
+import * as act from './toastAction';
 
 /**
  * initialState
@@ -28,9 +13,9 @@ const initialState = {
 /**
  * reducer
  */
-const toastStore = handleActions(
+const toastReducer = handleActions(
     {
-        [ENQUEUE_TOAST]: (state, { payload }) => {
+        [act.ENQUEUE_TOAST]: (state, { payload }) => {
             return produce(state, (draft) => {
                 const idx = draft.noti.indexOf(payload.key);
                 if (idx > -1) {
@@ -51,7 +36,7 @@ const toastStore = handleActions(
                 }
             });
         },
-        [REMOVE_TOAST]: (state, { payload }) => {
+        [act.REMOVE_TOAST]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.noti.splice(
                     draft.noti.findIndex((no) => no.key === payload.key),
@@ -63,4 +48,4 @@ const toastStore = handleActions(
     initialState,
 );
 
-export default toastStore;
+export default toastReducer;

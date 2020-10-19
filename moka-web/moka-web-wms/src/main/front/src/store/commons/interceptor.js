@@ -1,7 +1,7 @@
 import axios from './axios';
 import { setLocalItem, getLocalItem } from '@utils/storageUtil';
 import { store } from '@store/store';
-import { enqueueToast } from '@store/notification/toastStore';
+import { enqueueToast } from '@store/notification/toastAction';
 
 const goToLogin = (message) => {
     setLocalItem({ key: 'Authorization', value: undefined });

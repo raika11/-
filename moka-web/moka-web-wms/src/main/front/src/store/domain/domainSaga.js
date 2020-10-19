@@ -5,7 +5,7 @@ import { callApiAfterActions } from '../commons/createSaga.js';
 import * as domainAPI from './domainApi';
 import * as domainAction from './domainAction';
 import { getDomainList } from '@store/auth';
-import { enqueueToast } from '@store/notification/toastStore';
+import { enqueueToast } from '@store/notification/toastAction';
 
 let message = {};
 

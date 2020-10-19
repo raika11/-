@@ -65,6 +65,10 @@ const propTypes = {
      * selected row 갯수
      */
     rowSelection: PropTypes.string,
+    /**
+     * 드래그여부
+     */
+    dragging: PropTypes.bool,
 };
 const defaultProps = {
     localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
@@ -77,11 +81,13 @@ const defaultProps = {
     onChangeSearchOption: null,
     preventRowClickCell: [],
     rowSelection: 'single',
+    dragging: false,
 };
 
 const MokaTable = (props) => {
     const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection } = props;
     const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
+    const { dragging, onRowDragMove } = props;
     const [gridApi, setGridApi] = useState(null);
 
     /**
@@ -120,10 +126,34 @@ const MokaTable = (props) => {
         [onRowClicked, preventRowClickCell],
     );
 
+    const handleRowDragMove = (event) => {
+        var movingNode = event.node;
+        var overNode = event.overNode;
+        var rowNeedsToMove = movingNode !== overNode;
+        if (rowNeedsToMove) {
+            debugger;
+            var movingData = movingNode.data;
+            var overData = overNode.data;
+            var fromIndex = rowData.indexOf(movingData);
+            var toIndex = rowData.indexOf(overData);
+            var newStore = rowData.slice();
+            moveInArray(newStore, fromIndex, toIndex);
+            // rowData = newStore;
+            gridApi.setRowData(newStore);
+            gridApi.clearFocusedCell();
+            onRowDragMove(event, newStore);
+        }
+        function moveInArray(arr, fromIndex, toIndex) {
+            var element = arr[fromIndex];
+            arr.splice(fromIndex, 1);
+            arr.splice(toIndex, 0, element);
+        }
+    };
+
     return (
         <>
             {/* 목록 */}
-            <div className="ag-theme-moka-grid mb-3" style={{ height: `${agGridHeight}px` }}>
+            <div className="ag-theme-moka-grid" style={{ height: `${agGridHeight}px` }}>
                 <AgGridReact
                     columnDefs={columnDefs}
                     rowData={rowData}
@@ -134,11 +164,16 @@ const MokaTable = (props) => {
                     onCellClicked={handleCellClicked}
                     onGridReady={onGridReady}
                     rowSelection={rowSelection}
+                    rowDragManaged={dragging}
+                    suppressMoveWhenRowDragging={dragging}
+                    onRowDragMove={handleRowDragMove}
                 />
             </div>
             {/* 페이징 */}
             {paging ? (
-                <MokaPagination total={total} page={page} size={size} onChangeSearchOption={onChangeSearchOption} pageSizes={pageSizes} displayPageNum={displayPageNum} />
+                <div className="mt-3">
+                    <MokaPagination total={total} page={page} size={size} onChangeSearchOption={onChangeSearchOption} pageSizes={pageSizes} displayPageNum={displayPageNum} />
+                </div>
             ) : null}
         </>
     );

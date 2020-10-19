@@ -29,13 +29,22 @@ const PageChildContainerAgGrid = (props) => {
         setShowModal(true);
     }, []);
 
+    /**
+     * Row drag
+     * @param {object} event 드래그이벤트
+     * @param {object} list 드래그된 이후 목록
+     */
+    // const handleRowDragMove = useCallback((event, list) => {
+    //     console.log(list);
+    // }, []);
+
     return (
         <>
             {/* 간단한 Table */}
             <MokaTable
                 columnDefs={columnDefs}
                 rowData={rowData}
-                getRowNodeId={(params) => params.containerSeq}
+                onRowNodeId={(params) => params.containerSeq}
                 agGridHeight={550}
                 onRowClicked={handleRowClicked}
                 loading={loading}
@@ -44,6 +53,8 @@ const PageChildContainerAgGrid = (props) => {
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
                 preventRowClickCell={['append', 'link']}
+                // dragging
+                // onRowDragMove={handleRowDragMove}
             />
             {/* 설정 변경가능한 Table */}
             {/* <div className="ag-theme-moka-grid mb-3" style={{ height: '550px' }}>

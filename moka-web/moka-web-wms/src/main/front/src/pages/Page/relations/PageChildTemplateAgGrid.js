@@ -90,6 +90,7 @@ const PageChildTemplateAgGrid = () => {
                     page={search.page}
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
+                    menus={[{ title: '복사본 생성' }, { title: '삭제' }]}
                     onClick={(template) => {
                         setShowModal(true);
                         setSelected(template);

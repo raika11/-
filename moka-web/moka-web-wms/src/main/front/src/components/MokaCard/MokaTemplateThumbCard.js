@@ -43,6 +43,15 @@ const propTypes = {
          */
         templateWidth: PropTypes.number,
     }),
+    /**
+     * 오른쪽 드롭다운 메뉴에 리스트 객체
+     */
+    menus: PropTypes.arrayOf(
+        PropTypes.shape({
+            title: PropTypes.string,
+            onClick: PropTypes.func,
+        }),
+    ),
 };
 
 const defaultProps = {
@@ -53,6 +62,7 @@ const defaultProps = {
         templateGroup: '',
         templateWidth: '',
     },
+    menus: [],
 };
 
 const MokaTemplateThumbCard = forwardRef((props, ref) => {
@@ -139,7 +149,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
             <div className="border rounded">
                 <div className="d-flex justify-content-between p-03 border-bottom">
                     <p className="pt-05 pl-05 mb-0">{data.templateName}</p>
-                    <IconDropButton />
+                    {menus.length > 0 && <IconDropButton />}
                 </div>
                 <div className="d-flex align-item-centers justify-content-center cursor-pointer" style={{ height: height }} onClick={handleThumbClick}>
                     {img && <BSImage src={bg} alt={alt} ref={imgRef} className="hidden" />}

@@ -16,7 +16,7 @@ const propTypes = {
      */
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     /**
-     * 라벨의 넓이 (기본 값 90px)
+     * 라벨의 넓이 (기본 값 70px)
      */
     labelWidth: PropTypes.number,
     /**

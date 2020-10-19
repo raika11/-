@@ -14,24 +14,24 @@ const PageChildTemplateSearch = () => {
                 </Form.Control>
             </Form.Group>
             <Form.Group as={Row} className="mb-10">
-                <Col xs={7} className="pr-1 pr-0 pl-0">
+                <Col xs={7} className="pr-1 pl-0">
                     <Form.Control as="select" custom>
                         <option>위치그룹</option>
                     </Form.Control>
                 </Col>
-                <Col xs={5} className="pl-1 pr-0 pl-0">
+                <Col xs={5} className="pl-1 pr-0">
                     <Form.Control as="select" custom>
                         <option>사이즈 전체</option>
                     </Form.Control>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-10">
-                <Col xs={4} className="pr-1 pr-0 pl-0">
+                <Col xs={4} className="pr-1 pl-0">
                     <Form.Control as="select" custom>
                         <option>템플릿 전체</option>
                     </Form.Control>
                 </Col>
-                <Col xs={8} className="pl-1 pr-0 pl-0">
+                <Col xs={8} className="pl-1 pr-0">
                     <MokaSearchInput />
                 </Col>
             </Form.Group>

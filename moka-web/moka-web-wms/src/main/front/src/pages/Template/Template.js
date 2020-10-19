@@ -114,11 +114,11 @@ const Template = () => {
                                 tabNavPosition="right"
                                 tabNavs={[
                                     { title: '템플릿 정보', text: 'Info' },
-                                    { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '본문스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
-                                    { title: '컨테이너 검색', icon: <MokaIcon iconName="fal-box" /> },
-                                    { title: '컴포넌트 검색', icon: <MokaIcon iconName="fal-ballot" /> },
-                                    { title: '광고 검색', icon: <MokaIcon iconName="fal-ad" /> },
+                                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
+                                    { title: '관련 본문스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },
+                                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
+                                    { title: '관련 광고', icon: <MokaIcon iconName="fal-ad" /> },
                                     { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
                                 ]}
                             />

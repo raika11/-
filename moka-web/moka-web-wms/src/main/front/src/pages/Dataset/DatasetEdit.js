@@ -6,12 +6,14 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
 import { MokaCard, MokaInput, MokaSearchInput } from '@components';
+import AutoDatasetListModal from './modals/AutoDatasetListModal';
 
 /**
  * 데이터셋 정보/수정 컴포넌트
  */
 const DatasetEdit = () => {
     const [dataType, setDataType] = useState('desk');
+    const [autoListModalShow, setAutoListModalShow] = useState(false);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" width={688} className="mr-10 custom-scroll" title="데이터셋 정보">
@@ -64,7 +66,7 @@ const DatasetEdit = () => {
                         />
                     </Col>
                     <Col xs={5} className="p-0 d-flex">
-                        {dataType === 'auto' && <MokaSearchInput className="w-100" placeholder="데이터를 선택해주세요" />}
+                        {dataType === 'auto' && <MokaSearchInput className="w-100" placeholder="데이터를 선택해주세요" onSearch={() => setAutoListModalShow(true)} readOnly />}
                     </Col>
                 </Form.Row>
             </Form>
@@ -75,34 +77,41 @@ const DatasetEdit = () => {
             <div className="d-flex justify-content-center">
                 <Col xs={10} className="p-0">
                     <Form>
-                        <Form.Row className="mb-2">
-                            <MokaInput label="데이터셋 ID" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                            <Button>검색</Button>
-                        </Form.Row>
-                        <Form.Row className="mb-2">
-                            <MokaInput label="부서" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                            <Button>검색</Button>
-                        </Form.Row>
-                        <Form.Row className="mb-2">
-                            <MokaInput label="분류" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                            <Button>검색</Button>
-                        </Form.Row>
-                        <Form.Row className="mb-2">
-                            <MokaInput label="기자" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                            <Button>검색</Button>
-                        </Form.Row>
-                        <Form.Row className="mb-2">
-                            <MokaInput label="시리즈" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                            <Button>검색</Button>
-                        </Form.Row>
-                        <Form.Row className="mb-2">
-                            <MokaInput label="지역" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                            <Button>검색</Button>
-                        </Form.Row>
+                        {/* 데이터셋의 파라미터에 따라 변경됨 */}
+                        {dataType === 'auto' && (
+                            <>
+                                <Form.Row className="mb-2">
+                                    <MokaInput label="데이터셋 ID" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <Button>검색</Button>
+                                </Form.Row>
+                                <Form.Row className="mb-2">
+                                    <MokaInput label="부서" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <Button>검색</Button>
+                                </Form.Row>
+                                <Form.Row className="mb-2">
+                                    <MokaInput label="분류" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <Button>검색</Button>
+                                </Form.Row>
+                                <Form.Row className="mb-2">
+                                    <MokaInput label="기자" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <Button>검색</Button>
+                                </Form.Row>
+                                <Form.Row className="mb-2">
+                                    <MokaInput label="시리즈" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <Button>검색</Button>
+                                </Form.Row>
+                                <Form.Row className="mb-2">
+                                    <MokaInput label="지역" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <Button>검색</Button>
+                                </Form.Row>
+                            </>
+                        )}
                         <MokaInput label="설명" as="textarea" labelWidth={80} className="mb-0" inputClassName="resize-none" inputProps={{ rows: 7 }} />
                     </Form>
                 </Col>
             </div>
+
+            <AutoDatasetListModal show={autoListModalShow} onHide={() => setAutoListModalShow(false)} />
         </MokaCard>
     );
 };

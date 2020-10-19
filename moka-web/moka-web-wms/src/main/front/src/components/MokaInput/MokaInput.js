@@ -173,6 +173,7 @@ const MokaInput = forwardRef((props, ref) => {
                     ref={ref}
                     type="switch"
                     {...inputProps}
+                    label={inputProps.label || ''}
                     className={clsx('flex-fill', inputClassName)}
                     isInvalid={isInvalid}
                     disabled={disabled}

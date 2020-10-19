@@ -8,6 +8,9 @@ import { MokaIconTabs } from '@/components/MokaTabs';
 const DatasetEdit = React.lazy(() => import('./DatasetEdit'));
 const DatasetList = React.lazy(() => import('./DatasetList'));
 
+// relations
+const DatasetPageList = React.lazy(() => import('./relations/DatasetPageList'));
+
 const Dataset = () => {
     const [tabExpansion, setTabExpansion] = useState(false);
 
@@ -39,16 +42,19 @@ const Dataset = () => {
                                 expansion={tabExpansion}
                                 onExpansion={(ex) => setTabExpansion(ex)}
                                 tabWidth={412}
-                                tabs={[<div>sss</div>]}
+                                tabs={[
+                                    <Suspense>
+                                        <DatasetPageList />
+                                    </Suspense>,
+                                ]}
                                 tabNavWidth={48}
                                 tabNavPosition="left"
                                 placement="right"
                                 tabNavs={[
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },
+                                    { title: '관련 본문스킨', icon: <MokaIcon iconName="fal-box" /> },
+                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-ballot" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
-                                    { title: '관련 템플릿', icon: <MokaIcon iconName="fal-ballot" /> },
-                                    { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
                                 ]}
                             />
                         </>

@@ -6,6 +6,7 @@ import layout from '@store/layout/layoutReducer';
 import auth from '@store/auth/authReducer';
 import domain from '@store/domain/domainReducer';
 import template from '@store/template/templateReducer';
+import toast from '@store/notification/toastReducer';
 
 export default combineReducers({
     toastr,
@@ -14,4 +15,5 @@ export default combineReducers({
     auth,
     domain,
     template,
+    toast
 });

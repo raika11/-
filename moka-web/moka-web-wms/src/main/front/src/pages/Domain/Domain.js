@@ -31,9 +31,10 @@ const Domain = () => {
                     expansion={expansionState[0]}
                     headerClassName="d-flex justify-content-between align-item-center"
                     title="도메인 관리"
+                    titleClassName="h-100 mb-0 pb-0"
                     width={480}
                 >
-                    <div>
+                    <div className="mb-3 d-flex justify-content-end">
                         <Button variant="dark" className={clsx('p-0', 'mr-05')} onClick={domainAdd} style={{ width: '100px', height: '32px' }}>
                             도메인 추가
                         </Button>

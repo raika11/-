@@ -75,7 +75,7 @@ const DomainAgGrid = () => {
                 columnDefs={columnDefs}
                 rowData={domainRows}
                 onRowNodeId={(params) => params.domainId}
-                agGridHeight={620}
+                agGridHeight={600}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}

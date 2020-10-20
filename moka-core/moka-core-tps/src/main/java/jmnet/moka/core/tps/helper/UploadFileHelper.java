@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import jmnet.moka.core.tps.common.TpsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,8 +82,26 @@ public class UploadFileHelper {
      * @return uri
      */
     public String getUri(String path) {
-        return path.replace(this.realPathPrefix + "/", "");
+        // fileStore
+        return path.replace(this.realPathPrefix, "/" + TpsConstants.MOKA_STORE);
     }
+
+    /**
+     * 서비스 경로 가져옴
+     *
+     * @param business 업무
+     * @param paths 나머지 path
+     * @return 서비스 경로
+     */
+    public String getUri(String business, String... paths) {
+        StringBuffer sb = new StringBuffer(128);
+
+        sb.append("/").append(TpsConstants.MOKA_STORE).append("/").append(getBusinessProperty(business)).append("/")
+          .append(String.join("/", paths));
+
+        return sb.toString();
+    }
+
 
     /**
      * RMS에 보여질 파일을 업로드할 실제 경로 가져옴
@@ -152,6 +171,7 @@ public class UploadFileHelper {
 
             // 이미지 저장
             ImageIO.write(image, McpFile.getExtension(realPath), new File(realPath));
+
             return true;
         } catch (Exception e) {
             logger.error("Fail to save Image {}", realPath, e);

@@ -107,6 +107,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", TpsConstants.HEALTH_PAGE,
                         "/preview/**",
                         "/image/template/**",
+                        "/" + TpsConstants.MOKA_STORE + "/**",
                         "/swagger-ui.html",
                         "/swagger-resources/**",
                         "/v2/api-docs",

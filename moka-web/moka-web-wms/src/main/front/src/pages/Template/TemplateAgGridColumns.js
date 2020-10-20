@@ -16,7 +16,7 @@ export default [
     },
     {
         headerName: '위치그룹',
-        field: 'templateGroup',
+        field: 'tpZone',
         width: 65,
     },
     {

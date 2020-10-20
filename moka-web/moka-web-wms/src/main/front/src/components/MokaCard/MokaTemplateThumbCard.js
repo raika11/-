@@ -162,7 +162,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
                     {!img && <div style={{ backgroundColor: '#e5e5e5' }} />}
                 </div>
                 <div className="d-flex justify-content-between p-03 border-top" style={{ minHeight: 30 }}>
-                    <p className="pt-0 pl-05 mb-0">{data.templateGroup}</p>
+                    <p className="pt-0 pl-05 mb-0">{data.tpZone}</p>
                     <p className="pt-0 pr-05 mb-0">{data.templateWidth ? `w${data.templateWidth}` : ''}</p>
                 </div>
             </div>

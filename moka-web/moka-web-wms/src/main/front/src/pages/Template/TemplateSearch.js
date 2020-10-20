@@ -6,8 +6,10 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
+
 import { changeLatestDomainId } from '@store/auth/authAction';
-import { getTemplateList, changeSearchOption } from '@store/template/templateAction';
+import { getTemplateList, changeSearchOption, changeSearchOptions } from '@store/template/templateAction';
+import { getTpSize, getTpZone } from '@store/codeMgt/codeMgtAction';
 
 const defaultSearchType = [
     { id: 'all', name: '전체' },
@@ -22,10 +24,12 @@ const defaultSearchType = [
 const TemplateSearch = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, domainList, search } = useSelector((store) => ({
+    const { latestDomainId, domainList, search, tpSizeRows, tpZoneRows } = useSelector((store) => ({
         latestDomainId: store.auth.latestDomainId,
         domainList: store.auth.domainList,
         search: store.template.search,
+        tpSizeRows: store.codeMgt.tpSizeRows,
+        tpZoneRows: store.codeMgt.tpZoneRows,
     }));
 
     /**
@@ -34,6 +38,38 @@ const TemplateSearch = () => {
     const handleSearch = useCallback(() => {
         dispatch(getTemplateList(changeSearchOption({ key: 'page', value: 0 })));
     }, [dispatch]);
+
+    /**
+     * 템플릿 사이즈 변경 함수
+     * @param {object} e change이벤트
+     */
+    const handleChangeTpSize = (e) => {
+        if (e.target.value === 'all') {
+            dispatch(
+                changeSearchOptions([
+                    { key: 'widthMin', value: undefined },
+                    { key: 'widthMax', value: undefined },
+                ]),
+            );
+            return;
+        }
+        try {
+            const { widthmin, widthmax } = e.target.selectedOptions[0].dataset;
+            dispatch(
+                changeSearchOptions([
+                    { key: 'widthMin', value: Number(widthmin) },
+                    { key: 'widthMax', value: Number(widthmax) },
+                ]),
+            );
+        } catch (err) {
+            dispatch(
+                changeSearchOptions([
+                    { key: 'widthMin', value: undefined },
+                    { key: 'widthMax', value: undefined },
+                ]),
+            );
+        }
+    };
 
     useEffect(() => {
         // latestDomainId 변경 => 템플릿의 search.domainId 변경
@@ -51,6 +87,12 @@ const TemplateSearch = () => {
             handleSearch();
         }
     }, [search.domainId, handleSearch]);
+
+    useEffect(() => {
+        dispatch(getTpZone());
+        dispatch(getTpSize());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Form className="mb-10">
@@ -77,24 +119,28 @@ const TemplateSearch = () => {
                 <Col xs={7} className="p-0 pr-2">
                     <MokaInput
                         as="select"
-                        value={search.templateGroup || undefined}
+                        value={search.templateGroup}
                         onChange={(e) => {
                             dispatch(changeSearchOption({ key: 'templateGroup', value: e.target.value }));
                         }}
                     >
-                        <option>위치그룹(기타코드)</option>
+                        <option value="all">위치그룹 전체</option>
+                        {tpZoneRows.map((cd) => (
+                            <option key={cd.dtlCd} value={cd.dtlCd}>
+                                {cd.cdNm}
+                            </option>
+                        ))}
                     </MokaInput>
                 </Col>
                 {/* 템플릿 사이즈 */}
                 <Col xs={5} className="p-0">
-                    <MokaInput
-                        as="select"
-                        value={search.templateWidth || undefined}
-                        onChange={(e) => {
-                            dispatch(changeSearchOption({ key: 'templateWidth', value: e.target.value }));
-                        }}
-                    >
-                        <option>템플릿사이즈(기타코드)</option>
+                    <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize}>
+                        <option value="all">사이즈 전체</option>
+                        {tpSizeRows.map((cd) => (
+                            <option key={cd.dtlCd} value={cd.dtlCd} data-widthmin={cd.cdNmEtc1} data-widthmax={cd.cdNmEtc2}>
+                                {cd.cdNm}
+                            </option>
+                        ))}
                     </MokaInput>
                 </Col>
             </Form.Row>

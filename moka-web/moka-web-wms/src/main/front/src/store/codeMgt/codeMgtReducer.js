@@ -93,7 +93,7 @@ export default handleActions(
                 const rows = body.list.map((cd) => {
                     return {
                         ...cd,
-                        id: cd.seqNo,
+                        id: cd.dtlCd,
                         name: cd.cdNm,
                     };
                 });

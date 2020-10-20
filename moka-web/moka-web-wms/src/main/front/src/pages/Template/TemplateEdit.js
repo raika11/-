@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { toastr } from 'react-redux-toastr';
@@ -10,6 +10,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInput, MokaIcon, MokaInputGroup } from '@components';
+import { getTpSize, getTpZone } from '@store/codeMgt/codeMgtAction';
+import { changeTemplate, saveTemplate } from '@store/template/templateAction';
 
 /**
  * 템플릿 정보/수정 컴포넌트
@@ -17,9 +19,12 @@ import { MokaCard, MokaInput, MokaIcon, MokaInputGroup } from '@components';
 const TemplateEdit = () => {
     const { templateSeq } = useParams();
     const dispatch = useDispatch();
-    const { template, inputTag } = useSelector((store) => ({
+    const history = useHistory();
+    const { template, inputTag, tpZoneRows, latestDomainId } = useSelector((store) => ({
         template: store.template.template,
         inputTag: store.template.inputTag,
+        tpZoneRows: store.codeMgt.tpZoneRows,
+        latestDomainId: store.auth.latestDomainId,
     }));
 
     // state
@@ -37,6 +42,49 @@ const TemplateEdit = () => {
     // ref
     const imgFileRef = useRef(null);
 
+    /**
+     * validate 함수
+     */
+    const validate = (template) => {
+        return true;
+    };
+
+    /**
+     * 템플릿 저장
+     * @param {object} e 이벤트
+     */
+    const onSave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let newTemplate = {
+            ...template,
+            templateName,
+            templateWidth,
+            cropWidth,
+            cropHeight,
+            templateGroup,
+            templateThumb,
+            description,
+            templateThumbnailFile: fileValue,
+        };
+        if (validate(newTemplate)) {
+            if (!template.templateSeq || template.templateSeq === '') {
+                // 새 템플릿 저장 시에 도메인ID 셋팅
+                newTemplate.domain = { domainId: latestDomainId };
+            }
+            dispatch(
+                saveTemplate({
+                    actions: [changeTemplate(newTemplate)],
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            history.push(`/template/${body.templateSeq}`);
+                        }
+                    },
+                }),
+            );
+        }
+    };
+
     useEffect(() => {
         if (templateSeq) {
             setBtnDisabled(false);
@@ -49,13 +97,25 @@ const TemplateEdit = () => {
         // 스토어에서 가져온 템플릿 데이터 셋팅
         setFileValue(null);
         setTemplateName(template.templateName || '');
-        setTemplateWidth(template.templateWidth || '');
         setCropWidth(template.cropWidth || '');
         setCropHeight(template.cropHeight || '');
         setDescription(template.description || '');
+        setTemplateWidth(template.templateWidth || '');
         setTemplateGroup(template.templateGroup || '');
         setTemplateThumb(template.templateThumb);
     }, [template]);
+
+    useEffect(() => {
+        dispatch(getTpZone());
+        dispatch(getTpSize());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (templateGroup === '' && tpZoneRows.length > 0) {
+            setTemplateGroup(tpZoneRows[0].dtlCd);
+        }
+    }, [templateGroup, tpZoneRows]);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title="템플릿 정보">
@@ -71,7 +131,7 @@ const TemplateEdit = () => {
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="primary" className="mr-05" onClick={() => setValidated(!validated)}>
+                        <Button variant="primary" className="mr-05" onClick={onSave}>
                             저장
                         </Button>
                         <Button variant="danger" disabled={btnDisabled}>
@@ -84,21 +144,23 @@ const TemplateEdit = () => {
                 {/* 템플릿명 */}
                 <MokaInput className="mb-2" label="템플릿명" value={templateName} onChange={(e) => setTemplateName(e.target.value)} placeholder="템플릿명을 입력하세요" />
                 {/* 위치그룹 */}
-                <MokaInput className="mb-2" label="위치 그룹" as="select" isInvalid={!validated}>
-                    <option>템플릿 위치설정</option>
+                <MokaInput className="mb-2" label="위치 그룹" as="select" value={templateGroup} onChange={(e) => setTemplateGroup(e.target.value)} isInvalid={!validated}>
+                    {tpZoneRows.map((cd) => (
+                        <option key={cd.dtlCd} value={cd.dtlCd}>
+                            {cd.cdNm}
+                        </option>
+                    ))}
                 </MokaInput>
                 {/* 사이즈, 이미지 크기 */}
                 <Row className="m-0 mb-2">
-                    <Col xs={6} className="p-0 m-0">
-                        <MokaInput className="mb-0" label="사이즈" as="select">
-                            <option>사이즈</option>
-                        </MokaInput>
+                    <Col xs={5} className="p-0 m-0">
+                        <MokaInput className="mb-0" label="사이즈" value={templateWidth} onChange={(e) => setTemplateWidth(e.target.value)} type="number" />
                     </Col>
                     <Col xs={4} className="p-0">
-                        <MokaInput label="이미지" labelWidth={55} className="mb-0 pr-1" value={cropWidth} onChange={(e) => setCropWidth(e.target.value)} />
+                        <MokaInput label="이미지" labelWidth={46} className="mb-0" value={cropWidth} onChange={(e) => setCropWidth(e.target.value)} type="number" />
                     </Col>
-                    <Col xs={2} className="d-flex p-0">
-                        x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={(e) => setCropHeight(e.target.value)} />
+                    <Col xs={3} className="d-flex p-0 pl-2">
+                        x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={(e) => setCropHeight(e.target.value)} type="number" />
                     </Col>
                 </Row>
                 {/* 입력태그 */}

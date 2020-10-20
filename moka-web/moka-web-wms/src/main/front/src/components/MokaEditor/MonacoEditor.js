@@ -77,7 +77,7 @@ const MonacoEditor = forwardRef((props, ref) => {
             editorDidMount(monaco, instance);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [defaultValue]);
 
     useEffect(() => {
         // Component Did Update (에디터 업데이트)

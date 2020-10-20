@@ -29,7 +29,9 @@ export const getTemplate = createAction(GET_TEMPLATE, (payload) => payload);
  * 데이터 변경 액션
  */
 export const CHANGE_TEMPLATE_BODY = 'template/CHANGE_TEMPLATE_BODY';
+export const CHANGE_TEMPLATE = 'template/CHANGE_TEMPLATE';
 export const changeTemplateBody = createAction(CHANGE_TEMPLATE_BODY, (payload) => payload);
+export const changeTemplate = createAction(CHANGE_TEMPLATE, (payload) => payload);
 
 /**
  * 저장 액션

@@ -25,7 +25,7 @@ export const postTemplate = ({ template }) => {
             objectToFormData({
                 ...template,
                 domain: undefined,
-                'domain.domainId': template.domainId,
+                'domain.domainId': template.domain.domainId,
             }),
             {
                 headers: {
@@ -46,7 +46,7 @@ export const putTemplate = ({ template }) => {
             objectToFormData({
                 ...template,
                 domain: undefined,
-                'domain.domainId': template.domainId,
+                'domain.domainId': template.domain.domainId,
             }),
             {
                 headers: {

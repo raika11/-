@@ -74,7 +74,7 @@ export function* saveTemplate({ payload: { actions, callback } }) {
         // 실패 액션 실행
         yield put({
             type: act.GET_TEMPLATE_FAILURE,
-            payload: e,
+            payload: { header: { success: false }, body: e },
         });
     }
 

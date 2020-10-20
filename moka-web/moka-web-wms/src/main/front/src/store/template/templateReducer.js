@@ -15,8 +15,9 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         sort: 'templateSeq,desc',
         domainId: null,
-        templateGroup: null,
-        templateWidth: null,
+        templateGroup: 'all',
+        widthMin: undefined,
+        widthMax: undefined,
         searchType: 'all',
         keyword: '',
     },
@@ -76,6 +77,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.template = body;
                 draft.templateBody = body.templateBody;
+                console.log(body.templateBody);
                 draft.inputTag = `<tems:tp id='${body.templateSeq}' name='${body.templateName}' />`;
                 draft.templateError = initialState.templateError;
             });
@@ -94,6 +96,11 @@ export default handleActions(
         [act.CHANGE_TEMPLATE_BODY]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.templateBody = payload;
+            });
+        },
+        [act.CHANGE_TEMPLATE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.template = payload;
             });
         },
     },

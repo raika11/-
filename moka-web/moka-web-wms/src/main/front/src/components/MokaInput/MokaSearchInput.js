@@ -52,9 +52,23 @@ const defaultProps = {
 const MokaSearchInput = (props) => {
     const { placeholder, value, onChange, className, searchText, onSearch, variant, buttonClassName, ...rest } = props;
 
+    /**
+     * 키 입력
+     * @param {object} e 이벤트
+     */
+    const handleKeyPress = (e) => {
+        // 엔터 기본 동작 막음
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (onSearch) {
+                onSearch();
+            }
+        }
+    };
+
     return (
         <Form.Group as={Row} className={clsx('mb-0', className)}>
-            <Form.Control className="mr-2 flex-fill" placeholder={placeholder} value={value} onChange={onChange} {...rest} />
+            <Form.Control className="mr-2 flex-fill" placeholder={placeholder} value={value} onChange={onChange} onKeyPress={handleKeyPress} {...rest} />
             <Button variant={variant} className={buttonClassName} style={{ minWidth: 53 }} onClick={onSearch}>
                 {searchText}
             </Button>

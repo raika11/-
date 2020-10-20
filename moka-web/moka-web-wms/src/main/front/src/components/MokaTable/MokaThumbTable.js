@@ -11,7 +11,7 @@ const propTypes = {
         PropTypes.shape({
             id: PropTypes.any.isRequired,
             name: PropTypes.string.isRequired,
-            thumb: PropTypes.string.isRequired,
+            thumb: PropTypes.string,
         }),
     ),
     /**

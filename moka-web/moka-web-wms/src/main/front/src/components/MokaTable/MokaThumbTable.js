@@ -7,7 +7,13 @@ const propTypes = {
     /**
      * 리스트 데이터
      */
-    rowData: PropTypes.array,
+    rowData: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.any.isRequired,
+            name: PropTypes.string.isRequired,
+            thumb: PropTypes.string.isRequired,
+        }),
+    ),
     /**
      * tableHeight 테이블 Height
      */
@@ -49,6 +55,10 @@ const propTypes = {
             onClick: PropTypes.func,
         }),
     ),
+    /**
+     * 선택된 아이디
+     */
+    selected: PropTypes.any,
 };
 
 const defaultProps = {
@@ -67,14 +77,24 @@ const defaultProps = {
  * 썸네일 테이블
  */
 const MokaThumbTable = (props) => {
-    const { tableHeight, onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, menus, rowData } = props;
+    const { tableHeight, onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, menus, rowData, selected } = props;
 
     return (
         <>
             <div className="mb-3 border" style={{ height: tableHeight }}>
                 <div className="d-flex flex-wrap align-content-start custom-scroll p-05 h-100 overflow-y-scroll">
                     {rowData.map((data) => (
-                        <MokaTemplateThumbCard key={data.id} data={data} width={174} height={192} img={data.thumb} alt={data.name} menus={menus} onClick={onClick} />
+                        <MokaTemplateThumbCard
+                            key={data.id}
+                            data={data}
+                            width={174}
+                            height={192}
+                            img={data.thumb}
+                            alt={data.name}
+                            menus={menus}
+                            onClick={onClick}
+                            selected={String(selected) === String(data.id)}
+                        />
                     ))}
                 </div>
             </div>

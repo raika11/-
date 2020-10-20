@@ -29,18 +29,12 @@ const propTypes = {
      * alt 이미지 alt
      */
     alt: PropTypes.string,
+    /**
+     * 템플릿 데이터
+     */
     data: PropTypes.shape({
-        /**
-         * templateName 템플릿 이름
-         */
         templateName: PropTypes.string,
-        /**
-         * templateGroup 템플릿 그룹
-         */
         templateGroup: PropTypes.string,
-        /**
-         * templateWidth 템플릿 가로 사이즈
-         */
         templateWidth: PropTypes.number,
     }),
     /**
@@ -52,6 +46,10 @@ const propTypes = {
             onClick: PropTypes.func,
         }),
     ),
+    /**
+     * 선택 여부
+     */
+    selected: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -63,8 +61,12 @@ const defaultProps = {
         templateWidth: '',
     },
     menus: [],
+    selected: false,
 };
 
+/**
+ * TODO selected 처리해야함
+ */
 const MokaTemplateThumbCard = forwardRef((props, ref) => {
     const { onClick, menus, width, height, data, img, alt } = props;
     const imgRef = useRef(null);
@@ -159,7 +161,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
                     {img && <BSImage src={bg} alt={alt} ref={imgRef} style={{ visibility: 'hidden' }} />}
                     {!img && <div style={{ backgroundColor: '#e5e5e5' }} />}
                 </div>
-                <div className="d-flex justify-content-between p-03 border-top" style={{ minHeight: 33 }}>
+                <div className="d-flex justify-content-between p-03 border-top" style={{ minHeight: 30 }}>
                     <p className="pt-0 pl-05 mb-0">{data.templateGroup}</p>
                     <p className="pt-0 pr-05 mb-0">{data.templateWidth ? `w${data.templateWidth}` : ''}</p>
                 </div>

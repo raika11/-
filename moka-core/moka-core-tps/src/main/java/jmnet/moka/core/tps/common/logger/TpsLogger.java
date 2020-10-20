@@ -1,10 +1,12 @@
 package jmnet.moka.core.tps.common.logger;
 
 import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.editlog.entity.EditLog;
 import jmnet.moka.core.tps.mvc.editlog.service.EditLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,13 +48,7 @@ public class TpsLogger {
      * @param executedTime 실행시간
      */
     public void success(ActionType actionType, long executedTime) {
-        EditLog editLog = makeEditLog(actionType.code(), MokaConstants.YES, executedTime, null);
-        actionLogger.success(editLog.getMemberId(), actionType, executedTime, null);
-        try {
-            editLogService.insertEditLog(editLog);
-        } catch (Exception ex) {
-            log.error("[TPS LOGGER ERROR] : {}", ex.toString());
-        }
+        success(actionType, executedTime, null, false);
     }
 
     /**
@@ -63,10 +59,24 @@ public class TpsLogger {
      * @param msg          에러 메세지
      */
     public void success(ActionType actionType, long executedTime, String msg) {
+        success(actionType, executedTime, msg, false);
+    }
+
+    /**
+     * 성공 로그 생성
+     *
+     * @param actionType     액션 유형
+     * @param executedTime   실행시간
+     * @param msg            에러 메세지
+     * @param isEditLogWrite 편집 로그 출력 여부
+     */
+    public void success(ActionType actionType, long executedTime, String msg, boolean isEditLogWrite) {
         EditLog editLog = makeEditLog(actionType.code(), MokaConstants.YES, executedTime, msg);
         actionLogger.success(editLog.getMemberId(), actionType, executedTime, msg);
         try {
-            editLogService.insertEditLog(editLog);
+            if (isEditLogWrite) {
+                editLogService.insertEditLog(editLog);
+            }
         } catch (Exception ex) {
             log.error("[TPS LOGGER ERROR] : {}", ex.toString());
         }
@@ -80,10 +90,24 @@ public class TpsLogger {
      * @param msg          에러 메세지
      */
     public void fail(ActionType actionType, long executedTime, String msg) {
+        fail(actionType, executedTime, msg, false);
+    }
+
+    /**
+     * 실패 로그 생성
+     *
+     * @param actionType     액션 유형
+     * @param executedTime   실행시간
+     * @param msg            에러 메세지
+     * @param isEditLogWrite 편집 로그 출력 여부
+     */
+    public void fail(ActionType actionType, long executedTime, String msg, boolean isEditLogWrite) {
         EditLog editLog = makeEditLog(actionType.code(), MokaConstants.NO, executedTime, msg);
         actionLogger.fail(editLog.getMemberId(), actionType, executedTime, msg);
         try {
-            editLogService.insertEditLog(editLog);
+            if (isEditLogWrite) {
+                editLogService.insertEditLog(editLog);
+            }
         } catch (Exception ex) {
             log.error("[TPS LOGGER ERROR] : {}", ex.toString());
         }
@@ -109,13 +133,7 @@ public class TpsLogger {
      * @param msg          에러 메세지
      */
     public void error(ActionType actionType, long executedTime, String msg) {
-        EditLog editLog = makeEditLog(actionType.code(), MokaConstants.NO, executedTime, msg);
-        actionLogger.error(editLog.getMemberId(), actionType, executedTime, msg);
-        try {
-            editLogService.insertEditLog(editLog);
-        } catch (Exception ex) {
-            log.error("[TPS LOGGER ERROR] : {}", ex.toString());
-        }
+        error(actionType, executedTime, msg, null, false);
     }
 
     /**
@@ -126,29 +144,26 @@ public class TpsLogger {
      * @param t            Throwable
      */
     public void error(ActionType actionType, long executedTime, Throwable t) {
-        EditLog editLog = makeEditLog(actionType.code(), MokaConstants.NO, executedTime, t.getMessage());
-        actionLogger.error(editLog.getMemberId(), actionType, executedTime, t.getMessage());
-        try {
-            editLogService.insertEditLog(editLog);
-        } catch (Exception ex) {
-            log.error("[TPS LOGGER ERROR] : {}", ex.toString());
-        }
+        error(actionType, executedTime, null, t, false);
     }
 
     /**
      * 에러 로그 생성
      *
-     * @param actor        사용자id 또는 client ip
-     * @param actionType   액션 유형
-     * @param executedTime 실행시간
-     * @param msg          에러 메세지
-     * @param t            Throwable
+     * @param actionType     액션 유형
+     * @param executedTime   실행시간
+     * @param msg            에러 메세지
+     * @param t              Throwable
+     * @param isEditLogWrite 편집 로그 출력 여부
      */
-    public void error(String actor, ActionType actionType, long executedTime, String msg, Throwable t) {
-        EditLog editLog = makeEditLog(actionType.code(), MokaConstants.NO, executedTime, t.getMessage());
-        actionLogger.error(actor, actionType, executedTime, msg, t);
+    public void error(ActionType actionType, long executedTime, String msg, Throwable t, boolean isEditLogWrite) {
+        String errorMsg = McpString.defaultValue(msg) + (t != null ? t.getMessage() : "");
+        EditLog editLog = makeEditLog(actionType.code(), MokaConstants.NO, executedTime, errorMsg);
+        actionLogger.error(editLog.getMemberId(), actionType, executedTime, msg, t);
         try {
-            editLogService.insertEditLog(editLog);
+            if (isEditLogWrite) {
+                editLogService.insertEditLog(editLog);
+            }
         } catch (Exception ex) {
             log.error("[TPS LOGGER ERROR] : {}", ex.toString());
         }
@@ -174,22 +189,23 @@ public class TpsLogger {
                 ? ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
                 : null;
 
-        String url = req != null ? req.getRequestURI() : MokaConstants.IP_UNKNOWN;
-        String referer = req != null ? req.getHeader("referer") : MokaConstants.IP_UNKNOWN;
-        String param = req != null ? HttpHelper.getParamString(req) : MokaConstants.IP_UNKNOWN;
-        String remoteAddr = req != null ? HttpHelper.getRemoteAddr(req) : MokaConstants.IP_UNKNOWN;
+        String url = req != null ? McpString.defaultValue(req.getRequestURI(), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
+        String menuId =
+                req != null ? McpString.defaultValue(req.getHeader(TpsConstants.HEADER_MENU_ID), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
+        String param = req != null ? McpString.defaultValue(HttpHelper.getParamString(req), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
+        String remoteAddr = req != null ? McpString.defaultValue(HttpHelper.getRemoteAddr(req), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
 
 
         return EditLog
                 .builder()
                 .action(action)
                 .memberId(memberId)
-                .menuId(url)
+                .menuId(menuId)
                 .successYn(successYn)
                 .param(param)
                 .regIp(remoteAddr)
-                //.executedTime(executedTime)
-                //.errorMsg(errorMsg)
+                .executedTime(executedTime)
+                .apiPath(url)
                 .build();
     }
 

@@ -1,2 +1,1 @@
-import AgGridPage from './AgGridPage';
-export default AgGridPage;
+export { default } from './TestAgGrid';

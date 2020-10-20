@@ -1,10 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
+import { changeLatestDomainId } from '@store/auth/authAction';
 import { getTemplateList, changeSearchOption } from '@store/template/templateAction';
 
 const defaultSearchType = [
@@ -18,6 +20,7 @@ const defaultSearchType = [
  * 템플릿 검색 컴포넌트
  */
 const TemplateSearch = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const { latestDomainId, domainList, search } = useSelector((store) => ({
         latestDomainId: store.auth.latestDomainId,
@@ -58,7 +61,8 @@ const TemplateSearch = () => {
                     className="w-100"
                     value={search.domainId || undefined}
                     onChange={(e) => {
-                        dispatch(changeSearchOption({ key: 'domainId', value: e.target.value }));
+                        dispatch(changeLatestDomainId(e.target.value));
+                        history.push('/template');
                     }}
                 >
                     {domainList.map((domain) => (

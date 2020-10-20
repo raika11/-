@@ -9,5 +9,5 @@ export { MokaCardEditor, MokaModalEditor } from './MokaEditor';
 export { default as MokaCard, MokaTemplateThumbCard } from './MokaCard';
 export { default as MokaIcon } from './MokaIcon';
 export { default as MokaPagination } from './MokaPagination';
-export { default as MokaTable, MokaThumbnailTable } from './MokaTable';
+export { default as MokaTable, MokaThumbTable } from './MokaTable';
 export { default as MokaTreeView } from './MokaTree';

@@ -4,8 +4,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
 
-import { MokaTable, MokaIcon } from '@components';
-import { MokaThumbnailTable } from '@/components/MokaTable';
+import { MokaTable, MokaIcon, MokaThumbTable } from '@components';
 
 import template from '../template.json';
 import TemplateHtmlModal from '../modals/TemplateHtmlModal';
@@ -84,7 +83,7 @@ const PageChildTemplateAgGrid = () => {
                 />
             )}
             {showAgGrid === 'thumbnail' && (
-                <MokaThumbnailTable
+                <MokaThumbTable
                     tableHeight={500}
                     total={thumbTotal}
                     page={search.page}

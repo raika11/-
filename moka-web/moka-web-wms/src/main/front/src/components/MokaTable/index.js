@@ -1,2 +1,2 @@
 export { default } from './MokaTable';
-export { default as MokaThumbnailTable } from './MokaThumbnailTable';
+export { default as MokaThumbTable } from './MokaThumbTable';

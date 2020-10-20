@@ -66,24 +66,15 @@ const defaultProps = {
 /**
  * 썸네일 테이블
  */
-const MokaThumbnailTable = (props) => {
+const MokaThumbTable = (props) => {
     const { tableHeight, onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, menus, rowData } = props;
 
     return (
         <>
             <div className="mb-3 border" style={{ height: tableHeight }}>
                 <div className="d-flex flex-wrap align-content-start custom-scroll p-05 h-100 overflow-y-scroll">
-                    {rowData.map((template) => (
-                        <MokaTemplateThumbCard
-                            key={template.templateSeq}
-                            data={template}
-                            width={174}
-                            height={192}
-                            img={template.templateThumbnail}
-                            alt={'썸네일이미지'}
-                            menus={menus}
-                            onClick={onClick}
-                        />
+                    {rowData.map((data) => (
+                        <MokaTemplateThumbCard key={data.id} data={data} width={174} height={192} img={data.thumb} alt={data.name} menus={menus} onClick={onClick} />
                     ))}
                 </div>
             </div>
@@ -93,7 +84,7 @@ const MokaThumbnailTable = (props) => {
     );
 };
 
-MokaThumbnailTable.propTypes = propTypes;
-MokaThumbnailTable.defaultProps = defaultProps;
+MokaThumbTable.propTypes = propTypes;
+MokaThumbTable.defaultProps = defaultProps;
 
-export default MokaThumbnailTable;
+export default MokaThumbTable;

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './TemplateAgGridColumns';
@@ -6,7 +6,7 @@ import columnDefs from './TemplateAgGridColumns';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { MokaTable, MokaIcon, MokaThumbnailTable } from '@components';
+import { MokaTable, MokaIcon, MokaThumbTable } from '@components';
 import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template/templateAction';
 
 /**
@@ -16,6 +16,7 @@ const TemplateAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [listType, setListType] = useState('list');
+    const [rowData, setRowData] = useState([]);
     const { total, list, search, loading } = useSelector((store) => ({
         total: store.template.total,
         list: store.template.list,
@@ -43,6 +44,21 @@ const TemplateAgGrid = () => {
         },
         [history],
     );
+
+    useEffect(() => {
+        if (list.length > 0) {
+            setRowData(
+                list.map((data) => ({
+                    ...data,
+                    id: data.templateSeq,
+                    name: data.templateName,
+                    thumnb: data.templateThumnb,
+                })),
+            );
+        } else {
+            setRowData([]);
+        }
+    }, [list]);
 
     return (
         <>
@@ -76,7 +92,7 @@ const TemplateAgGrid = () => {
                 <MokaTable
                     agGridHeight={501}
                     columnDefs={columnDefs}
-                    rowData={list}
+                    rowData={rowData}
                     onRowNodeId={(template) => template.templateSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
@@ -88,9 +104,9 @@ const TemplateAgGrid = () => {
                 />
             )}
             {listType === 'thumbnail' && (
-                <MokaThumbnailTable
+                <MokaThumbTable
                     tableHeight={501}
-                    rowData={list}
+                    rowData={rowData}
                     loading={loading}
                     total={total}
                     page={search.page}

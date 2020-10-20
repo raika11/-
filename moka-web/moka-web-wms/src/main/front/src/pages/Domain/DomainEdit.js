@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,7 +8,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { clearDomain, getDomain, saveDomain, duplicateCheck, deleteDomain } from '@store/domain';
 import { notification } from '@utils/toastUtil';
 import { toastr } from 'react-redux-toastr';
-import { MokaInput } from '@components';
+import { getApi, getLang } from '@store/codeMgt/codeMgtAction';
 
 /**
  * 도메인 상세/수정/등록
@@ -17,6 +17,9 @@ import { MokaInput } from '@components';
 const DomainEdit = ({ history }) => {
     const { domainId: paramId } = useParams();
 
+    const elLang = useRef();
+    const elApiCodeId = useRef();
+    // entity
     const [domainId, setDomainId] = useState('');
     const [domainName, setDomainName] = useState('');
     const [domainUrl, setDomainUrl] = useState('');
@@ -26,34 +29,29 @@ const DomainEdit = ({ history }) => {
     const [apiCodeId, setApiCodeId] = useState('');
     const [description, setDescription] = useState('');
 
+    // error
     const [domainIdError, setDomainIdError] = useState(false);
     const [domainNameError, setDomainNameError] = useState(false);
     const [domainUrlError, setDomainUrlError] = useState(false);
 
-    const [isErrors, setIsErrors] = useState({
-        domain: false,
-        domainName: false,
-        domainUrl: false,
-    });
-
-    const { detail, langRows, apiRows, latestMediaId, loading } = useSelector(
+    // getter
+    const { detail, langRows, apiRows, latestDomainId, loading } = useSelector(
         (store) => ({
             detail: store.domain.detail,
-            /*langRows: store.etccodeTypeStore.langRows,
-        apiRows: store.etccodeTypeStore.apiRows,*/
-            latestMediaId: store.auth.latestMediaId,
-            loading: false,
+            langRows: store.codeMgt.langRows,
+            apiRows: store.codeMgt.apiRows,
+            latestDomainId: store.auth.latestDomainId,
         }),
         shallowEqual,
     );
     const dispatch = useDispatch();
 
     /**
-     *
-     * @param {*} target javascript event.target
+     * 각 항목별 값 변경
+     * @param target javascript event.target
      */
     const onChangeValue = ({ target }) => {
-        const { name, value, checked, selectedOptions } = target;
+        const { name, value, checked } = target;
         if (name === 'domainId') {
             const regex = /^[0-9\b]+$/;
             if ((value === '' || regex.test(value)) && value.length <= 4) {
@@ -80,6 +78,11 @@ const DomainEdit = ({ history }) => {
         }
     };
 
+    /**
+     * 유효성 검사를 한다.
+     * @param domain 도메인 정보를 가진 객체
+     * @returns {boolean} 유효성 검사 결과
+     */
     const validate = (domain) => {
         let isInvalid = false;
 
@@ -108,9 +111,9 @@ const DomainEdit = ({ history }) => {
     };
 
     useEffect(() => {
-        // TODO: 언어 정보 가져오기
-        // TODO: API 정보 가져오기
-    });
+        dispatch(getLang());
+        dispatch(getApi());
+    }, [dispatch]);
 
     useEffect(() => {
         /**
@@ -132,13 +135,17 @@ const DomainEdit = ({ history }) => {
         setDomainId(detail.domainId || '');
         setDomainName(detail.domainName || '');
         setServicePlatform(detail.servicePlatform || 'P');
-        setLang(detail.lang || 'KR');
+        setLang(detail.lang || (elLang.current[0] ? elLang.current[0].value : ''));
         setUseYn(detail.useYn || 'Y');
         setDomainUrl(detail.domainUrl || '');
-        setApiCodeId(detail.apiCodeId || '');
+        setApiCodeId(detail.apiCodeId || (elApiCodeId.current[0] ? elApiCodeId.current[0].value : ''));
         setDescription(detail.description || '');
     }, [detail]);
 
+    /**
+     * 저장 이벤트
+     * @param event 이벤트 객체
+     */
     const handleSubmit = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -173,8 +180,6 @@ const DomainEdit = ({ history }) => {
                         duplicate: () => {
                             console.log('hh');
                             notification('warning', '중복된 도메인아이디가 존재합니다.');
-                            /*/!*setMessage('중복된 도메인아이디가 존재합니다');
-                            setShowOpen(true);*!/*/
                         },
                     }),
                 );
@@ -292,9 +297,13 @@ const DomainEdit = ({ history }) => {
                         언어
                     </Form.Label>
                     <Col xs={4} className="pl-0 ml-0 pr-0 pl-0">
-                        <Form.Control as="select" custom onChange={onChangeValue} value={lang} name="lang" className="form-control">
-                            <option value="KR">국문</option>
-                            <option value="EN">영문</option>
+                        <Form.Control as="select" custom onChange={onChangeValue} value={lang} name="lang" className="form-control" ref={elLang}>
+                            {langRows &&
+                                langRows.map((row) => (
+                                    <option key={row.id} value={row.dtlCd}>
+                                        {row.name}
+                                    </option>
+                                ))}
                         </Form.Control>
                     </Col>
                 </Form.Group>
@@ -303,9 +312,13 @@ const DomainEdit = ({ history }) => {
                         API 경로
                     </Form.Label>
                     <Col xs={9} className="pl-0 ml-0 pr-0 pl-0">
-                        <Form.Control as="select" onChange={onChangeValue} custom value={apiCodeId} name="apiCodeId" className="form-control">
-                            <option value="MOKA_API">중앙일보API</option>
-                            <option value="MOKA_API2">중앙일보API2</option>
+                        <Form.Control as="select" onChange={onChangeValue} custom value={apiCodeId} name="apiCodeId" className="form-control" ref={elApiCodeId}>
+                            {apiRows &&
+                                apiRows.map((row) => (
+                                    <option key={row.id} value={row.dtlCd}>
+                                        {row.name}
+                                    </option>
+                                ))}
                         </Form.Control>
                     </Col>
                 </Form.Group>

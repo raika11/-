@@ -26,7 +26,7 @@ const getDomainSaga = createRequestSaga(domainAction.GET_DOMAIN, domainAPI.getDo
  * @param {func} param0.payload.duplicate 중복될 때 콜백
  */
 function* duplicateCheckSaga({ payload: { domainId, unique, duplicate } }) {
-    const ACTION = domainAction.DUPLICATE_CHECK;
+    //const ACTION = domainAction.DUPLICATE_CHECK;
     //yield put(startLoading(ACTION));
     try {
         const response = yield call(domainAPI.duplicateCheck, domainId);
@@ -53,7 +53,7 @@ function* duplicateCheckSaga({ payload: { domainId, unique, duplicate } }) {
  * @param {func} param0.payload.error 에러 콜백
  */
 function* saveDomainSaga({ payload: { type, domain, success, fail, error } }) {
-    const ACTION = domainAction.SAVE_DOMAIN;
+    //const ACTION = domainAction.SAVE_DOMAIN;
     message.key = `domainSave${new Date().getTime() + Math.random()}`;
     message.message = '저장하지 못했습니다';
     message.options = { variant: 'error', persist: true };
@@ -91,7 +91,6 @@ function* saveDomainSaga({ payload: { type, domain, success, fail, error } }) {
     }
     // yield put(finishLoading(ACTION));
     //yield put(enqueueToast(message));
-    console.log('test');
     yield notification(message.options.variant, message.message);
 }
 
@@ -128,7 +127,7 @@ function* hasRelationsSaga({ payload: { domainId, exist, notExist } }) {
  * @param {func} param0.payload.error 에러 콜백
  */
 function* deleteDomainSaga({ payload: { domainId, success, fail, error } }) {
-    const ACTION = domainAction.DELETE_DOMAIN;
+    //const ACTION = domainAction.DELETE_DOMAIN;
     message.key = `domainDel${new Date().getTime() + Math.random()}`;
     message.message = '삭제하지 못했습니다';
     message.options = { variant: 'error', persist: true };

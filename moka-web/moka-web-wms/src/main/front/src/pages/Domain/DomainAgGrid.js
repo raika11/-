@@ -14,14 +14,14 @@ const DomainAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [domainRows, setDomainRows] = useState([]);
-    const { detail, list, total, search, error, loading, latestMediaId } = useSelector(
+    const { detail, list, total, search, error, loading, latestDomainId } = useSelector(
         (store) => ({
             detail: store.domain.detail,
             list: store.domain.list,
             total: store.domain.total,
             search: store.domain.search,
             error: store.domain.error,
-            latestMediaId: store.auth.latestMediaId,
+            latestDomainId: store.auth.latestDomainId,
         }),
         shallowEqual,
     );
@@ -31,11 +31,11 @@ const DomainAgGrid = () => {
             getDomainList(
                 changeSearchOption({
                     key: 'mediaId',
-                    value: latestMediaId,
+                    value: latestDomainId,
                 }),
             ),
         );
-    }, [latestMediaId, dispatch]);
+    }, [dispatch, latestDomainId]);
 
     useEffect(() => {
         if (list.length > 0) {
@@ -83,6 +83,7 @@ const DomainAgGrid = () => {
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
                 preventRowClickCell={['delete']}
+                pageSizes={[1, 2, 5]}
             />
             {/* 설정 변경가능한 Table */}
             {/* <div className="ag-theme-moka-grid mb-3" style={{ height: '550px' }}>

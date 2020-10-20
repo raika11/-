@@ -218,6 +218,14 @@ public interface MenuService {
     /**
      * 메뉴 아이디로 메뉴 권한 목록 조회
      *
+     * @param menuAuth 메뉴 권한
+     * @return 메뉴 권한
+     */
+    MenuAuth findMenuAuth(MenuAuth menuAuth);
+
+    /**
+     * 메뉴 아이디로 메뉴 권한 목록 조회
+     *
      * @param menuId 메뉴 ID
      * @return 메뉴 권한 목록
      */

@@ -94,6 +94,7 @@ const defaultProps = {
 
 const MokaTable = (props) => {
     const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection, selected } = props;
+    const { onAppendClick, onDeleteClick } = props;
     const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
     const { dragging, onRowDragMove } = props;
     const [gridApi, setGridApi] = useState(null);
@@ -129,6 +130,13 @@ const MokaTable = (props) => {
         (params) => {
             if (!preventRowClickCell.includes(params.colDef.field)) {
                 onRowClicked(params.node.data);
+            }
+            if (params.colDef.field === 'append') {
+                if (onAppendClick ) onAppendClick(params.node.data);
+            }
+
+            if (params.colDef.field === 'delete') {
+                if (onDeleteClick ) onDeleteClick(params.node.data);
             }
         },
         [onRowClicked, preventRowClickCell],

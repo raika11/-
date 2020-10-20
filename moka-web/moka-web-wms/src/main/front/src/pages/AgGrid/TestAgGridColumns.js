@@ -1,23 +1,25 @@
 import React from 'react';
 import { MokaTableAppendButton, MokaTableDeleteButton, MokaTableLinkButton, MokaTableLoadButton, MokaTablePreviewButton } from '@components';
 
-const handleAppendClick = (params) => {
+const appendClick = (params) => {
+    console.log('cloumns append');
     console.log(params.node.data);
 };
 
-const handleDeleteClick = (params) => {
+const deleteClick = (params) => {
+    console.log('cloumns delete');
     console.log(params.node.data);
 };
 
-const handleLinkClick = (params) => {
+const linkClick = (params) => {
     console.log(params.node.data);
 };
 
-const handleLoadClick = (params) => {
+const loadClick = (params) => {
     console.log(params.node.data);
 };
 
-const handlePreviewClick = (params) => {
+const previewClick = (params) => {
     console.log(params.node.data);
 };
 
@@ -50,35 +52,35 @@ export const columnDefs = [
         field: 'append',
         width: 40,
         cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => <MokaTableAppendButton data={params} onClick={handleAppendClick} />,
+        cellRendererFramework: (params) => <MokaTableAppendButton data={params} onClick={appendClick} />,
     },
     {
         headerName: '',
         field: 'delete',
         width: 40,
         cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => <MokaTableDeleteButton data={params} onClick={handleDeleteClick} />,
+        cellRendererFramework: (params) => <MokaTableDeleteButton data={params} onClick={deleteClick} />,
     },
     {
         headerName: '',
         field: 'link',
         width: 40,
         cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => <MokaTableLinkButton data={params} onClick={handleLinkClick} />,
+        cellRendererFramework: (params) => <MokaTableLinkButton data={params} onClick={linkClick} />,
     },
     {
         headerName: '',
         field: 'load',
         width: 40,
         cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => <MokaTableLoadButton data={params} onClick={handleLoadClick} />,
+        cellRendererFramework: (params) => <MokaTableLoadButton data={params} onClick={loadClick} />,
     },
     {
         headerName: '',
         field: 'preview',
         width: 40,
         cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => <MokaTablePreviewButton data={params} onClick={handlePreviewClick} />,
+        cellRendererFramework: (params) => <MokaTablePreviewButton data={params} onClick={previewClick} />,
     },
 ];
 

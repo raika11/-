@@ -35,6 +35,16 @@ const TestAgGrid = (props) => {
         console.log(list);
     }, []);
 
+    const handleAppendClick = useCallback((row) => {
+        console.log('append');
+        console.log(row);
+    }, []);
+
+    const handleDeleteClick = useCallback((row) => {
+        console.log('delete');
+        console.log(row);
+    }, []);
+
     return (
         <>
             {/* 간단한 Table */}
@@ -50,6 +60,8 @@ const TestAgGrid = (props) => {
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
                 preventRowClickCell={['append', 'link']}
+                onAppendClick={handleAppendClick}
+                onDeleteClick={handleDeleteClick}
                 selected={selected}
                 // dragging
                 // onRowDragMove={handleRowDragMove}

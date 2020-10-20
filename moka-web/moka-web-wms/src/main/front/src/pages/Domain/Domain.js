@@ -1,10 +1,9 @@
-import React, { useState, Suspense, useEffect } from 'react';
+import React, { useState, Suspense } from 'react';
 import Container from 'react-bootstrap/Container';
 
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
-import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 

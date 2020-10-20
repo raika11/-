@@ -6,6 +6,8 @@ import Button from 'react-bootstrap/Button';
 import { useParams, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { clearDomain, getDomain, saveDomain, duplicateCheck, deleteDomain } from '@store/domain';
+import { notification } from '@utils/toastUtil';
+import { toastr } from 'react-redux-toastr';
 import { MokaInput } from '@components';
 
 /**
@@ -15,16 +17,25 @@ import { MokaInput } from '@components';
 const DomainEdit = ({ history }) => {
     const { domainId: paramId } = useParams();
 
-    const [validated, setValidated] = useState(false);
     const [domainId, setDomainId] = useState('');
     const [domainName, setDomainName] = useState('');
     const [domainUrl, setDomainUrl] = useState('');
     const [useYn, setUseYn] = useState('Y');
     const [servicePlatform, setServicePlatform] = useState('P');
     const [lang, setLang] = useState('KR');
-    const [apiPath, setApiPath] = useState('');
-    const [apiHost, setApiHost] = useState('');
+    const [apiCodeId, setApiCodeId] = useState('');
     const [description, setDescription] = useState('');
+
+    const [domainIdError, setDomainIdError] = useState(false);
+    const [domainNameError, setDomainNameError] = useState(false);
+    const [domainUrlError, setDomainUrlError] = useState(false);
+
+    const [isErrors, setIsErrors] = useState({
+        domain: false,
+        domainName: false,
+        domainUrl: false,
+    });
+
     const { detail, langRows, apiRows, latestMediaId, loading } = useSelector(
         (store) => ({
             detail: store.domain.detail,
@@ -47,26 +58,59 @@ const DomainEdit = ({ history }) => {
             const regex = /^[0-9\b]+$/;
             if ((value === '' || regex.test(value)) && value.length <= 4) {
                 setDomainId(value);
+                setDomainIdError(false);
             }
+        } else if (name === 'domainName') {
+            setDomainName(value);
+            setDomainNameError(false);
+        } else if (name === 'domainUrl') {
+            setDomainUrl(value);
+            setDomainUrlError(false);
         } else if (name === 'servicePlatform') {
             setServicePlatform(value);
         } else if (name === 'lang') {
             setLang(value);
-        } else if (name === 'domainName') {
-            setDomainName(value);
-        } else if (name === 'domainUrl') {
-            setDomainUrl(value);
         } else if (name === 'description') {
             setDescription(value);
-        } else if (name === 'apiHost') {
-            setApiHost(value);
-        } else if (name === 'apiPath') {
-            setApiPath(value);
+        } else if (name === 'apiCodeId') {
+            setApiCodeId(value);
         } else if (name === 'useYN') {
             const usedValue = checked ? 'Y' : 'N';
             setUseYn(usedValue);
         }
     };
+
+    const validate = (domain) => {
+        let isInvalid = false;
+
+        // 도메인아이디체크
+        if (!domain.domainId || domain.domainId === '') {
+            setDomainIdError(true);
+            isInvalid = isInvalid | true;
+        } else if (!/^\d{4}$/.test(domain.domainId)) {
+            setDomainIdError(false);
+            isInvalid = isInvalid | true;
+        }
+
+        // 도메인명 체크
+        if (!/[^\s\t\n]+/.test(domain.domainName)) {
+            setDomainNameError(true);
+            isInvalid = isInvalid | true;
+        }
+
+        // 도메인url 체크
+        if (!/[^\s\t\n]+/.test(domain.domainUrl)) {
+            setDomainUrlError(true);
+            isInvalid = isInvalid | true;
+        }
+
+        return !isInvalid;
+    };
+
+    useEffect(() => {
+        // TODO: 언어 정보 가져오기
+        // TODO: API 정보 가져오기
+    });
 
     useEffect(() => {
         /**
@@ -78,18 +122,20 @@ const DomainEdit = ({ history }) => {
         } else if (!paramId && detail.domainId && !loading) {
             dispatch(clearDomain({ detail: true }));
         }
-    }, [paramId]);
+    }, [detail.domainId, dispatch, loading, paramId]);
 
     useEffect(() => {
         // 도메인 데이터 셋팅
+        setDomainIdError(false);
+        setDomainNameError(false);
+        setDomainUrlError(false);
         setDomainId(detail.domainId || '');
         setDomainName(detail.domainName || '');
         setServicePlatform(detail.servicePlatform || 'P');
         setLang(detail.lang || 'KR');
         setUseYn(detail.useYn || 'Y');
         setDomainUrl(detail.domainUrl || '');
-        setApiHost(detail.apiHost || '');
-        setApiPath(detail.apiPath || '');
+        setApiCodeId(detail.apiCodeId || '');
         setDescription(detail.description || '');
     }, [detail]);
 
@@ -103,42 +149,50 @@ const DomainEdit = ({ history }) => {
             lang,
             domainUrl,
             useYn,
-            apiHost,
-            apiPath,
+            apiCodeId,
             description,
         };
 
-        if (detail.domainId) {
-            // 업데이트
-            dispatch(saveDomain({ type: 'update', domain: tmp }));
-        } else {
-            // 추가
-            /* dispatch(
-                duplicateCheck({
-                    domainId,
-                    unique: () =>*/
-            dispatch(
-                saveDomain({
-                    type: 'insert',
-                    domain: tmp,
-                    success: () => history.push(`/domain/${domainId}`),
-                }),
-                /*),
-                    duplicate: () => {
-                        /!*setMessage('중복된 도메인아이디가 존재합니다');
-                        setShowOpen(true);*!/
-                    },
-                }),*/
-            );
+        if (validate(tmp)) {
+            if (detail.domainId) {
+                // 업데이트
+                dispatch(saveDomain({ type: 'update', domain: tmp }));
+            } else {
+                // 추가
+                dispatch(
+                    duplicateCheck({
+                        domainId,
+                        unique: () =>
+                            dispatch(
+                                saveDomain({
+                                    type: 'insert',
+                                    domain: tmp,
+                                    success: () => history.push(`/domain/${domainId}`),
+                                }),
+                            ),
+                        duplicate: () => {
+                            console.log('hh');
+                            notification('warning', '중복된 도메인아이디가 존재합니다.');
+                            /*/!*setMessage('중복된 도메인아이디가 존재합니다');
+                            setShowOpen(true);*!/*/
+                        },
+                    }),
+                );
+            }
         }
     };
 
     const handleDelete = (e) => {
-        if (detail.domainId) {
-            dispatch(deleteDomain({ domainId: detail.domainId }));
-        } else {
-            console.log('삭제 실패');
-        }
+        toastr.confirm('정말 삭제하시겠습니까?', {
+            onOk: () => {
+                if (detail.domainId) {
+                    dispatch(deleteDomain({ domainId: detail.domainId }));
+                } else {
+                    console.log('삭제 실패');
+                }
+            },
+            onCancel: () => {},
+        });
     };
 
     return (
@@ -155,9 +209,8 @@ const DomainEdit = ({ history }) => {
                             onChange={onChangeValue}
                             value={domainId}
                             name="domainId"
-                            isInvalid={validated}
                             disabled={detail.domainId && true}
-                            required
+                            isInvalid={domainIdError}
                             className="form-control"
                         />
                     </Col>
@@ -170,7 +223,15 @@ const DomainEdit = ({ history }) => {
                         <span className="required-text">*</span>도메인 명
                     </Form.Label>
                     <Col xs={9} className="pl-0 pr-0">
-                        <Form.Control type="text" placeholder="도메인 명을 입력하세요" onChange={onChangeValue} value={domainName} name="domainName" className="form-control" />
+                        <Form.Control
+                            type="text"
+                            placeholder="도메인 명을 입력하세요"
+                            onChange={onChangeValue}
+                            value={domainName}
+                            name="domainName"
+                            className="form-control"
+                            isInvalid={domainNameError}
+                        />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row}>
@@ -185,6 +246,7 @@ const DomainEdit = ({ history }) => {
                             value={domainUrl}
                             name="domainUrl"
                             className="form-control"
+                            isInvalid={domainUrlError}
                         />
                     </Col>
                 </Form.Group>
@@ -238,20 +300,12 @@ const DomainEdit = ({ history }) => {
                 </Form.Group>
                 <Form.Group as={Row}>
                     <Form.Label column xs={3} className="pt-1 pr-0 pl-0 mb-0">
-                        API Host
-                    </Form.Label>
-                    <Col xs={9} className="pl-0 pr-0 pr-0 pl-0">
-                        <Form.Control type="text" onChange={onChangeValue} value={apiHost} name="apiHost" className="form-control" />
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row}>
-                    <Form.Label column xs={3} className="pt-1 pr-0 pl-0 mb-0">
                         API 경로
                     </Form.Label>
                     <Col xs={9} className="pl-0 ml-0 pr-0 pl-0">
-                        <Form.Control as="select" onChange={onChangeValue} custom value={apiPath} name="apiPath" className="form-control">
-                            <option value="demo_api">demo.api</option>
-                            <option value="demo_api2">demo.api2</option>
+                        <Form.Control as="select" onChange={onChangeValue} custom value={apiCodeId} name="apiCodeId" className="form-control">
+                            <option value="MOKA_API">중앙일보API</option>
+                            <option value="MOKA_API2">중앙일보API2</option>
                         </Form.Control>
                     </Col>
                 </Form.Group>

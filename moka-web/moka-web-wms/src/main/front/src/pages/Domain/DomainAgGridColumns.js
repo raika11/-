@@ -1,5 +1,4 @@
 import React from 'react';
-import ListDeleteButton from '@pages/AgGrid/ListDeleteButton';
 import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

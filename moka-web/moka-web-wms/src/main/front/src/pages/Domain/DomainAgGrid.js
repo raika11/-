@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { MokaTable } from '@components';
 import { rowData } from '@pages/Page/relations/PageChildContainerAgGridColumns';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { changeSearchOption, getDomains } from '@store/domain';
+import { changeSearchOption, getDomainList } from '@store/domain';
 import { useHistory } from 'react-router-dom';
 
 /**
@@ -28,7 +28,7 @@ const DomainAgGrid = () => {
 
     useEffect(() => {
         dispatch(
-            getDomains(
+            getDomainList(
                 changeSearchOption({
                     key: 'mediaId',
                     value: latestMediaId,
@@ -58,7 +58,7 @@ const DomainAgGrid = () => {
      */
     const handleChangeSearchOption = useCallback(
         (search) => {
-            dispatch(getDomains(changeSearchOption(search)));
+            dispatch(getDomainList(changeSearchOption(search)));
         },
         [dispatch],
     );
@@ -66,7 +66,7 @@ const DomainAgGrid = () => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((params) => history.push(params.link), []);
+    const handleRowClicked = useCallback((params) => history.push(params.link), [history]);
 
     return (
         <>

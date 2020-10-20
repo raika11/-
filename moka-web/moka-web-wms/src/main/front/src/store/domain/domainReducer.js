@@ -10,8 +10,8 @@ import {
     DELETE_DOMAIN_SUCCESS,
     GET_DOMAIN_FAILURE,
     GET_DOMAIN_SUCCESS,
-    GET_DOMAINS_FAILURE,
-    GET_DOMAINS_SUCCESS,
+    GET_DOMAIN_LIST_FAILURE,
+    GET_DOMAIN_LIST_SUCCESS,
 } from '@store/domain/domainAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
@@ -69,14 +69,14 @@ const domainReducer = handleActions(
         /**
          * 목록
          */
-        [GET_DOMAINS_SUCCESS]: (state, { payload: { body } }) => {
+        [GET_DOMAIN_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.error = initialState.error;
                 draft.list = body.list;
                 draft.total = body.totalCnt;
             });
         },
-        [GET_DOMAINS_FAILURE]: (state, { payload }) => {
+        [GET_DOMAIN_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.error = payload;
                 draft.list = initialState.list;

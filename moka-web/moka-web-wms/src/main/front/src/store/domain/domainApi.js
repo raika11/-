@@ -2,7 +2,7 @@ import qs from 'qs';
 import instance from '../commons/axios';
 
 // 도메인목록 조회
-export const getDomains = ({ search }) => {
+export const getDomainList = ({ search }) => {
     return instance.get(`/api/domains?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
@@ -17,7 +17,7 @@ export const getDomain = (domainId) => {
 
 // 도메인아이디 중복 체크
 export const duplicateCheck = (domainId) => {
-    return instance.get(`/api/domains/${domainId}/duplicateCheck`).catch((err) => {
+    return instance.get(`/api/domains/${domainId}/exists`).catch((err) => {
         throw err;
     });
 };

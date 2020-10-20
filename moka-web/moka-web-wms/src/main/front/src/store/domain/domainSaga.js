@@ -5,13 +5,14 @@ import * as domainAPI from './domainApi';
 import * as domainAction from './domainAction';
 import { getDomainList } from '@store/auth';
 import { enqueueToast } from '@store/notification/toastAction';
+import { notification } from '@utils/toastUtil';
 
 let message = {};
 
 /**
  * 목록
  */
-const getDomainsSaga = callApiAfterActions(domainAction.GET_DOMAINS, domainAPI.getDomains, (state) => state.domain);
+const getDomainsSaga = callApiAfterActions(domainAction.GET_DOMAIN_LIST, domainAPI.getDomainList, (state) => state.domain);
 
 /**
  * 조회
@@ -35,6 +36,8 @@ function* duplicateCheckSaga({ payload: { domainId, unique, duplicate } }) {
             } else {
                 if (typeof unique === 'function') unique(false);
             }
+        } else {
+            yield notification('error', response.data.header.message);
         }
         // eslint-disable-next-line no-empty
     } catch (e) {}
@@ -65,7 +68,7 @@ function* saveDomainSaga({ payload: { type, domain, success, fail, error } }) {
                 payload: response.data,
             });
             // 목록 다시 검색
-            yield put({ type: domainAction.GET_DOMAINS });
+            yield put({ type: domainAction.GET_DOMAIN_LIST });
             // auth 도메인 목록 다시 조회
             //yield put(getDomains(domain.domainId));
             message.message = type === 'insert' ? '등록하였습니다' : '수정하였습니다';
@@ -87,7 +90,9 @@ function* saveDomainSaga({ payload: { type, domain, success, fail, error } }) {
         if (typeof error === 'function') error(e);
     }
     // yield put(finishLoading(ACTION));
-    yield put(enqueueToast(message));
+    //yield put(enqueueToast(message));
+    console.log('test');
+    yield notification(message.options.variant, message.message);
 }
 
 /**
@@ -111,7 +116,8 @@ function* hasRelationsSaga({ payload: { domainId, exist, notExist } }) {
         }
         // eslint-disable-next-line no-empty
     } catch (e) {}
-    yield put(finishLoading(ACTION));
+    //yield put(finishLoading(ACTION));
+    yield notification(message.options.variant, message.message);
 }
 
 /**
@@ -134,9 +140,9 @@ function* deleteDomainSaga({ payload: { domainId, success, fail, error } }) {
         if (response.data.header.success) {
             yield put({ type: domainAction.DELETE_DOMAIN_SUCCESS });
             // 목록 다시 검색
-            yield put({ type: domainAction.GET_DOMAINS });
+            yield put({ type: domainAction.GET_DOMAIN_LIST });
             // auth 도메인 목록 다시 조회
-            yield put(getDomainList());
+            //yield put(getDomainList());
             message.message = '삭제하였습니다';
             message.options = { variant: 'success', persist: false };
             if (typeof success === 'function') success(response.data.body);
@@ -146,6 +152,7 @@ function* deleteDomainSaga({ payload: { domainId, success, fail, error } }) {
                 payload: response.data,
             });
             message.message = response.data.header.message;
+            message.options = { variant: 'error' };
             if (typeof fail === 'function') fail(response.data);
         }
     } catch (e) {
@@ -156,7 +163,8 @@ function* deleteDomainSaga({ payload: { domainId, success, fail, error } }) {
         if (typeof error === 'function') error(e);
     }
     //yield put(finishLoading(ACTION));
-    yield put(enqueueToast(message));
+    //yield put(enqueueToast(message));
+    yield notification(message.options.variant, message.message);
 }
 
 function* clearDomainSaga({ payload }) {
@@ -180,7 +188,7 @@ function* clearDomainSaga({ payload }) {
 }
 
 export default function* domainSaga() {
-    yield takeLatest(domainAction.GET_DOMAINS, getDomainsSaga);
+    yield takeLatest(domainAction.GET_DOMAIN_LIST, getDomainsSaga);
     yield takeLatest(domainAction.GET_DOMAIN, getDomainSaga);
     yield takeLatest(domainAction.DUPLICATE_CHECK, duplicateCheckSaga);
     yield takeLatest(domainAction.SAVE_DOMAIN, saveDomainSaga);

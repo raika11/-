@@ -125,8 +125,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void deleteMenuById(String menuId) {
-        this.findMenuById(menuId)
-            .ifPresent(this::deleteMenu);
+        this
+                .findMenuById(menuId)
+                .ifPresent(this::deleteMenu);
     }
 
     @Override
@@ -183,14 +184,15 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public int appendMenuAuth(String[] groupMemberIds, String menuId, MenuAuthTypeCode menuAuthTypeCode) {
         final AtomicInteger atomicInteger = new AtomicInteger(0);
-        this.findMenuById(menuId)
-            .ifPresent(menu -> {
-                for (String groupMemberId : groupMemberIds) {
-                    if (appendMenuAuth(groupMemberId, menu.getMenuId(), menuAuthTypeCode) != null) {
-                        atomicInteger.addAndGet(1);
+        this
+                .findMenuById(menuId)
+                .ifPresent(menu -> {
+                    for (String groupMemberId : groupMemberIds) {
+                        if (appendMenuAuth(groupMemberId, menu.getMenuId(), menuAuthTypeCode) != null) {
+                            atomicInteger.addAndGet(1);
+                        }
                     }
-                }
-            });
+                });
         return atomicInteger.get();
     }
 
@@ -208,18 +210,20 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public MenuAuth appendMenuAuth(String groupMemberId, String menuId, MenuAuthTypeCode menuAuthTypeCode) {
         Optional<Menu> menu = this.findMenuById(menuId);
-        return menu.map(value -> appendMenuAuth(groupMemberId, value, menuAuthTypeCode))
-                   .orElse(null);
+        return menu
+                .map(value -> appendMenuAuth(groupMemberId, value, menuAuthTypeCode))
+                .orElse(null);
     }
 
     @Override
     public MenuAuth appendMenuAuth(String groupMemberId, Menu menu, MenuAuthTypeCode menuAuthTypeCode) {
-        MenuAuth menuAuth = MenuAuth.builder()
-                                    .usedYn(MokaConstants.YES)
-                                    .groupMemberId(groupMemberId)
-                                    .menuId(menu.getMenuId())
-                                    .groupMemberDiv(menuAuthTypeCode.getCode())
-                                    .build();
+        MenuAuth menuAuth = MenuAuth
+                .builder()
+                .usedYn(MokaConstants.YES)
+                .groupMemberId(groupMemberId)
+                .menuId(menu.getMenuId())
+                .groupMemberDiv(menuAuthTypeCode.getCode())
+                .build();
         Optional<MenuAuth> menuAuthOptional = menuAuthRepository.findGroupMemberDivMenu(groupMemberId, menu.getMenuId(), menuAuthTypeCode.getCode());
 
         if (menuAuthOptional.isPresent()) {
@@ -242,6 +246,13 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void deleteMenuAuth(Long seqNo) {
         menuAuthRepository.deleteById(seqNo);
+    }
+
+    @Override
+    public MenuAuth findMenuAuth(MenuAuth menuAuth) {
+        return menuAuthRepository
+                .findGroupMemberDivMenu(menuAuth)
+                .orElse(null);
     }
 
     @Override

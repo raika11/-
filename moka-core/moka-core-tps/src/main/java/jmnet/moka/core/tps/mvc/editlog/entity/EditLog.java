@@ -88,12 +88,12 @@ public class EditLog implements Serializable {
     /**
      * 수행시간
      */
-    //@Column(name = "EXECUTED_TIME")
-    //private Long executedTime;
+    @Column(name = "EXEC_TIME")
+    private Long executedTime;
 
     /**
-     * 오류메세지
+     * API 경로
      */
-    //@Column(name = "ERROR_MSG")
-    //private String errorMsg;
+    @Column(name = "API_PATH")
+    private String apiPath;
 }

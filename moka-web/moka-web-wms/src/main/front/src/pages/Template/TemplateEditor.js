@@ -43,7 +43,8 @@ const TemplateEditor = (props) => {
                 dispatch(changeLatestDomainId(domainId));
             }
         }
-    }, [dispatch, template, latestDomainId]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, template]);
 
     useEffect(() => {
         // 템플릿seq가 있을 때 데이터 조회

@@ -84,9 +84,83 @@ export function* saveTemplate({ payload: { actions, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 복사
+ */
+export function* copyTemplate({ payload: { templateSeq, templateName, domainId, callback } }) {
+    const ACTION = act.COPY_TEMPLATE;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.copyTemplate, { templateSeq, templateName, domainId });
+
+        if (response.header.success) {
+            callbackData = response.data;
+
+            // 검색조건 변경
+            yield put({
+                type: act.CHANGE_SEARCH_OPTION,
+                payload: { key: 'domainId', value: domainId },
+            });
+
+            // 목록 다시 검색
+            yield put({ type: act.GET_TEMPLATE_LIST });
+        } else {
+            callbackData = response.data;
+        }
+    } catch (e) {
+        callbackData = { header: { success: false }, body: e };
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 관련 아이템 체크
+ * @param {string|number} param0.payload.templateseq 템플릿ID (필수)
+ * @param {func} param0.payload.callback 콜백
+ */
+export function* hasRelationList({ payload: { templateSeq, callback, exist, notExist } }) {
+    const ACTION = act.HAS_RELATION_LIST;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.hasRelationList, { templateSeq });
+
+        if (response.data.header.success) {
+            callbackData = response.data;
+        }
+    } catch (e) {
+        callbackData = { header: { success: false }, body: e };
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 관련아이템 목록 조회
+ * @param {string} param0.payload.relType PG|SK|CT|CP
+ * @param {array} param0.payload.actions api 호출 전 액션
+ */
+export function* getRelationList({ payload: { actions, relType } }) {
+    const sagaFunc = callApiAfterActions(act.GET_RELATION_LIST, api.getRelationList, (state) => state.templateRelations[relType]);
+    yield call(sagaFunc, { payload: actions });
+}
+
 /** saga */
 export default function* saga() {
-    yield takeLatest(act.getTemplateList, getTemplateList);
-    yield takeLatest(act.getTemplate, getTemplate);
-    yield takeLatest(act.saveTemplate, saveTemplate);
+    yield takeLatest(act.GET_TEMPLATE_LIST, getTemplateList);
+    yield takeLatest(act.GET_TEMPLATE, getTemplate);
+    yield takeLatest(act.SAVE_TEMPLATE, saveTemplate);
+    yield takeLatest(act.COPY_TEMPLATE, copyTemplate);
+    yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
+    yield takeLatest(act.GET_RELATION_LIST, getRelationList);
 }

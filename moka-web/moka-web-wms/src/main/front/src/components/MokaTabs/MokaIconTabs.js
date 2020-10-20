@@ -54,6 +54,10 @@ const propTypes = {
      * 탭 확장 콜백
      */
     onExpansion: PropTypes.func,
+    /**
+     * nav 클릭 콜백
+     */
+    onSelectNav: PropTypes.func,
 };
 
 const defaultProps = {
@@ -65,6 +69,7 @@ const defaultProps = {
     placement: 'left',
     expansion: true,
     onExpansion: null,
+    onSelectNav: null,
 };
 
 /**
@@ -72,7 +77,7 @@ const defaultProps = {
  * 아이콘 토글로 탭 변경
  */
 const MokaIconTabs = forwardRef((props, ref) => {
-    const { className, height, tabs, tabWidth, tabNavPosition, tabNavs, tabNavWidth, placement, expansion, onExpansion } = props;
+    const { className, height, tabs, tabWidth, tabNavPosition, tabNavs, tabNavWidth, placement, expansion, onExpansion, onSelectNav } = props;
     const [activeKey, setActiveKey] = useState(0);
     const [isExpand, setIsExpand] = useState(true);
 
@@ -97,6 +102,10 @@ const MokaIconTabs = forwardRef((props, ref) => {
                 if (onExpansion) onExpansion(true);
                 else setIsExpand(true);
             }
+        }
+
+        if (onSelectNav) {
+            onSelectNav(eventKey);
         }
     };
 

@@ -3,7 +3,7 @@ import produce from 'immer';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
-import { MokaCardEditor, MokaCard, MokaIcon } from '@components';
+import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 
 import TemplateEditor from './TemplateEditor';
@@ -22,6 +22,7 @@ const TemplateHistoryList = React.lazy(() => import('./relations/TemplateHistory
  */
 const Template = () => {
     const [expansionState, setExpansionState] = useState([true, false, true]);
+    const [openTabIdx, setOpenTabIdx] = useState(0);
 
     /**
      * 리스트 확장 시
@@ -97,25 +98,26 @@ const Template = () => {
                             <MokaIconTabs
                                 expansion={expansionState[2]}
                                 onExpansion={handleTabExpansion}
+                                onSelectNav={(idx) => setOpenTabIdx(idx)}
                                 tabWidth={412}
                                 tabs={[
                                     <Suspense>
-                                        <TemplateEdit />
+                                        <TemplateEdit show={openTabIdx === '0'} />
                                     </Suspense>,
                                     <Suspense>
-                                        <TemplatePageList />
+                                        <TemplatePageList show={openTabIdx === '1'} />
                                     </Suspense>,
                                     <Suspense>
-                                        <TemplateSkinList />
+                                        <TemplateSkinList show={openTabIdx === '2'} />
                                     </Suspense>,
                                     <Suspense>
-                                        <TemplateContainerList />
+                                        <TemplateContainerList show={openTabIdx === '3'} />
                                     </Suspense>,
                                     <Suspense>
-                                        <TemplateComponentList />
+                                        <TemplateComponentList show={openTabIdx === '4'} />
                                     </Suspense>,
                                     <Suspense>
-                                        <TemplateHistoryList />
+                                        <TemplateHistoryList show={openTabIdx === 5} />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}

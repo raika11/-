@@ -12,6 +12,8 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInput, MokaIcon, MokaInputGroup } from '@components';
 import { getTpSize, getTpZone } from '@store/codeMgt/codeMgtAction';
 import { changeTemplate, saveTemplate } from '@store/template/templateAction';
+import CopyModal from './modals/CopyModal';
+import AddComponentModal from './modals/AddComponentModal';
 
 /**
  * 템플릿 정보/수정 컴포넌트
@@ -38,6 +40,10 @@ const TemplateEdit = () => {
     const [description, setDescription] = useState('');
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [validated, setValidated] = useState(true);
+
+    // modal state
+    const [copyModalShow, setCopyModalShow] = useState(false);
+    const [addComponentModalShow, setAddComponentModalShow] = useState(false);
 
     // ref
     const imgFileRef = useRef(null);
@@ -123,10 +129,10 @@ const TemplateEdit = () => {
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button variant="dark" className="mr-05" disabled={btnDisabled}>
+                        <Button variant="dark" className="mr-05" disabled={btnDisabled} onClick={() => setAddComponentModalShow(true)}>
                             컴포넌트 생성
                         </Button>
-                        <Button variant="dark" disabled={btnDisabled}>
+                        <Button variant="dark" disabled={btnDisabled} onClick={() => setCopyModalShow(true)}>
                             복사
                         </Button>
                     </div>
@@ -157,7 +163,15 @@ const TemplateEdit = () => {
                         <MokaInput className="mb-0" label="사이즈" value={templateWidth} onChange={(e) => setTemplateWidth(e.target.value)} type="number" />
                     </Col>
                     <Col xs={4} className="p-0">
-                        <MokaInput label="이미지" labelWidth={46} className="mb-0" value={cropWidth} onChange={(e) => setCropWidth(e.target.value)} type="number" />
+                        <MokaInput
+                            label="이미지"
+                            labelWidth={51}
+                            labelClassName="mr-2"
+                            className="mb-0"
+                            value={cropWidth}
+                            onChange={(e) => setCropWidth(e.target.value)}
+                            type="number"
+                        />
                     </Col>
                     <Col xs={3} className="d-flex p-0 pl-2">
                         x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={(e) => setCropHeight(e.target.value)} type="number" />
@@ -206,13 +220,18 @@ const TemplateEdit = () => {
                             </Button>
                         </>
                     }
-                    labelClassName="justify-content-end"
+                    labelClassName="justify-content-end mr-3"
                     inputProps={{ width: 284, height: 280, setFileValue }}
                     className="mb-2"
                 />
                 {/* 설명 */}
                 <MokaInput label="설명" placeholder="내용설명" value={description} onChange={(e) => setDescription(e.target.value)} />
             </Form>
+
+            {/* 템플릿복사 Modal */}
+            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} />
+            {/* 컴포넌트생성 Modal */}
+            <AddComponentModal show={addComponentModalShow} onHide={() => setAddComponentModalShow(false)} />
         </MokaCard>
     );
 };

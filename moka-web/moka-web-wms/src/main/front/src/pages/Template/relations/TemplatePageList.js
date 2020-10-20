@@ -8,7 +8,8 @@ import AgGrid from './TemplatePageAgGrid';
 /**
  * 관련 페이지
  */
-const TemplatePageList = () => {
+const TemplatePageList = (props) => {
+    const { show } = props;
     const history = useHistory();
 
     return (
@@ -24,8 +25,9 @@ const TemplatePageList = () => {
                     페이지 추가
                 </Button>
             </div>
+
             {/* 목록 및 페이징 */}
-            <AgGrid />
+            <AgGrid show={show} />
         </MokaCard>
     );
 };

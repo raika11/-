@@ -166,6 +166,7 @@ const MokaTable = (props) => {
             if (selected && gridApi) {
                 const selectedNode = gridApi.getRowNode(selected);
                 if (selectedNode) {
+                    gridApi.deselectAll();
                     selectedNode.selectThisNode(true);
                 }
             }

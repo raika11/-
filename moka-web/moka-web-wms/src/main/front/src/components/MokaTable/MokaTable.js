@@ -191,6 +191,7 @@ const MokaTable = (props) => {
                     suppressMoveWhenRowDragging={dragging}
                     onRowDragMove={handleRowDragMove}
                     onRowDataUpdated={handleRowDataUpdated}
+                    tooltipShowDelay={0}
                     selected={selected}
                 />
             </div>

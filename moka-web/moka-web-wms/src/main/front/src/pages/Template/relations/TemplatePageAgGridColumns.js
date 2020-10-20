@@ -1,5 +1,5 @@
 import React from 'react';
-import DeleteButton from '../components/TemplateDeleteButton';
+import { MokaTablePreviewButton, MokaTableLinkButton } from '@components';
 
 export default [
     {
@@ -18,12 +18,12 @@ export default [
         headerName: '',
         field: 'preview',
         width: 36,
-        cellRendererFramework: (row) => <DeleteButton {...row} />,
+        cellRendererFramework: (row) => <MokaTablePreviewButton {...row} />,
     },
     {
         headerName: '',
         field: 'link',
         width: 36,
-        cellRendererFramework: (row) => <DeleteButton {...row} />,
+        cellRendererFramework: (row) => <MokaTableLinkButton {...row} />,
     },
 ];

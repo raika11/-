@@ -147,7 +147,7 @@ const AddComponentModal = (props) => {
                     <Form.Row className="mb-2" key={idx}>
                         <Col xs={11} className="p-0">
                             <MokaInput
-                                label="컴포넌트"
+                                label="컴포넌트명"
                                 labelWidth={90}
                                 className="mb-0"
                                 value={component.componentName}
@@ -162,7 +162,7 @@ const AddComponentModal = (props) => {
                                 </Button>
                             ) : (
                                 <Button variant="gray150" onClick={(e) => removeComponent(e, idx)}>
-                                    <MokaIcon iconName="fal-minus-square" />
+                                    <MokaIcon iconName="fal-minus" />
                                 </Button>
                             )}
                         </Col>

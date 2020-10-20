@@ -11,3 +11,4 @@ export { default as MokaIcon } from './MokaIcon';
 export { default as MokaPagination } from './MokaPagination';
 export { default as MokaTable, MokaThumbTable } from './MokaTable';
 export { default as MokaTreeView } from './MokaTree';
+export { MokaTableAppendButton, MokaTableDeleteButton, MokaTableLinkButton, MokaTableLoadButton, MokaTablePreviewButton } from './MokaButton';

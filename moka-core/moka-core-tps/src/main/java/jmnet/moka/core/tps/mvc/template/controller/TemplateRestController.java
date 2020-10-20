@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.template.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -57,12 +58,12 @@ import jmnet.moka.core.tps.mvc.template.entity.TemplateHist;
 import jmnet.moka.core.tps.mvc.template.service.TemplateHistService;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
- * <pre>
  * 템플릿 API
  * 2020. 1. 14. jeon 최초생성
- * </pre>
  * 
  * @since 2020. 1. 14. 오후 1:33:50
  * @author jeon
@@ -95,6 +96,9 @@ public class TemplateRestController {
 
     @Value("${template.image.prefix}")
     private String templateImagePrefix;
+
+    @Value("${tps.upload.path.template}")
+    private String uploadPathTemplate;
 
     /**
      * 템플릿 목록조회
@@ -144,16 +148,18 @@ public class TemplateRestController {
         @RequestAttribute Long processStartTime
     ) throws NoDataException {
 
-        String message = messageByLocale.get("tps.common.error.no-data", request);
-
         // 조회
         Template template = templateService.findTemplateBySeq(templateSeq)
-                .orElseThrow(() -> new NoDataException(message));
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data", request);
+                    actionLogger.fail(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime, message);
+                    return new NoDataException(message);
+                });
 
         TemplateDTO templateDTO = modelMapper.map(template, TemplateDTO.class);
 
-        if (!McpString.isNullOrEmpty(templateDTO.getTemplateThumb())) {
-            templateDTO.setTemplateThumb("/image/" + templateDTO.getTemplateThumb());
+        if (McpString.isNotEmpty(templateDTO.getTemplateThumb())) {
+            templateDTO.setTemplateThumb(templateImagePrefix + templateDTO.getTemplateThumb());
         }
 
         ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(templateDTO);
@@ -166,6 +172,7 @@ public class TemplateRestController {
      * 
      * @param request HTTP 요청
      * @param templateDTO 템플릿DTO
+     * @param templateThumbnailFile 템플릿썸네일파일
      * @param principal 로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 템플릿
@@ -173,19 +180,17 @@ public class TemplateRestController {
      * @throws Exception 썸네일 저장 실패, 템플릿오류 그외 모든 에러
      */
     @ApiOperation(value = "템플릿 등록")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "templateThumbnailFile", value = "template thumbnailFile", required = false, dataType = "file", paramType = "formData")
-    })
-    @PostMapping
+    @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<?> postTemplate(
-        HttpServletRequest request,
-        @Valid TemplateDTO templateDTO,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
+            HttpServletRequest request,
+            @Valid TemplateDTO templateDTO,
+            @ApiParam(value = "templateThumbnailFile") @RequestPart(value = "templateThumbnailFile", required = false)
+                    MultipartFile templateThumbnailFile,
+            @NotNull Principal principal,
+            @RequestAttribute Long processStartTime
     ) throws InvalidDataException, Exception {
-
         // 데이터 검사
-        validData(request, templateDTO, principal, processStartTime, ActionType.INSERT);
+        validData(request, templateDTO, templateThumbnailFile, principal, processStartTime, ActionType.INSERT);
 
         Template template = modelMapper.map(templateDTO, Template.class);
 
@@ -193,11 +198,9 @@ public class TemplateRestController {
             // 등록(이미지 등록에 seq가 필요해서 템플릿을 먼저 저장함)
             Template returnVal = templateService.insertTemplate(template);
 
-            if (templateDTO.getTemplateThumbnailFile() != null
-                    && !templateDTO.getTemplateThumbnailFile().isEmpty()) {
+            if (templateThumbnailFile != null && !templateThumbnailFile.isEmpty()) {
                 // 이미지파일 저장(multipartFile)
-                String imgPath = templateService.saveTemplateImage(returnVal,
-                        templateDTO.getTemplateThumbnailFile());
+                String imgPath = templateService.saveTemplateImage(returnVal,templateThumbnailFile);
                 returnVal.setTemplateThumb(imgPath);
 
                 // 썸네일경로 업데이트(히스토리 생성X)
@@ -239,6 +242,7 @@ public class TemplateRestController {
      * 
      * @param request HTTP 요청
      * @param templateDTO 템플릿DTO
+     * @param templateThumbnailFile 템플릿썸네일파일
      * @param principal 로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 템플릿
@@ -247,21 +251,26 @@ public class TemplateRestController {
      * @throws Exception 썸네일 저장 실패, 템플릿오류 그외 모든 에러
      */
     @ApiOperation(value = "템플릿 수정")
-    @PutMapping("/{seq}")
+    @PutMapping(value="/{seq}", consumes = "multipart/form-data")
     public ResponseEntity<?> putTemplate(
         HttpServletRequest request,
         @Valid TemplateDTO templateDTO,
+        @ApiParam(value = "templateThumbnailFile") @RequestPart(value = "templateThumbnailFile", required = false)
+                    MultipartFile templateThumbnailFile,
         @NotNull Principal principal,
         @RequestAttribute Long processStartTime
     ) throws NoDataException, InvalidDataException, Exception {
 
         // 데이터 검사
-        validData(request, templateDTO, principal, processStartTime, ActionType.UPDATE);
+        validData(request, templateDTO, templateThumbnailFile, principal, processStartTime, ActionType.UPDATE);
 
-        String message = messageByLocale.get("tps.template.error.no-data", request);
         Template newTemplate = modelMapper.map(templateDTO, Template.class);
         Template orgTemplate = templateService.findTemplateBySeq(templateDTO.getTemplateSeq())
-                .orElseThrow(() -> new NoDataException(message));
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.template.error.no-data", request);
+                    actionLogger.fail(principal.getName(), ActionType.UPDATE, System.currentTimeMillis() - processStartTime, message);
+                    return new NoDataException(message);
+                });
 
 //        newTemplate.setRegDt(orgTemplate.getRegDt());
 //        newTemplate.setRegId(orgTemplate.getRegId());
@@ -275,14 +284,12 @@ public class TemplateRestController {
             /*
              * 이미지 파일 저장 새로운 파일이 있으면 기존 파일이 있으면 삭제하고 새 파일을 저장한다. 새로운 파일이 없는데 기존 파일이 있으면 기존 파일을 삭제한다
              */
-            if (templateDTO.getTemplateThumbnailFile() != null
-                    && !templateDTO.getTemplateThumbnailFile().isEmpty()) {
+            if (templateThumbnailFile != null && !templateThumbnailFile.isEmpty()) {
 
                 if (McpString.isNotEmpty(orgTemplate.getTemplateThumb())) {
                     templateService.deleteTemplateImage(orgTemplate);
                 }
-                String imgPath = templateService.saveTemplateImage(newTemplate,
-                        templateDTO.getTemplateThumbnailFile());
+                String imgPath = templateService.saveTemplateImage(newTemplate, templateThumbnailFile);
                 newTemplate.setTemplateThumb(imgPath);
 
             } else if (McpString.isNotEmpty(orgTemplate.getTemplateThumb())
@@ -301,7 +308,7 @@ public class TemplateRestController {
             TemplateDTO returnValDTO = modelMapper.map(returnVal, TemplateDTO.class);
 
             if (McpString.isNotEmpty(returnValDTO.getTemplateThumb())) {
-                returnValDTO.setTemplateThumb("/image/" + returnValDTO.getTemplateThumb());
+                returnValDTO.setTemplateThumb(templateImagePrefix + returnValDTO.getTemplateThumb());
             }
 
             ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(returnValDTO);
@@ -355,16 +362,19 @@ public class TemplateRestController {
     ) throws InvalidDataException, Exception {
 
         // 조회
-        String message = messageByLocale.get("tps.template.error.no-data", request);
         Template template = templateService.findTemplateBySeq(seq)
-                .orElseThrow(() -> new NoDataException(message));
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.template.error.no-data", request);
+                    actionLogger.fail(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime, message);
+                    return new NoDataException(message);
+                });
 
         TemplateDTO templateDTO = modelMapper.map(template, TemplateDTO.class);
         templateDTO.setTemplateSeq(null);
         templateDTO.setTemplateName(templateName);
         templateDTO.setDomain(domain);
 
-        return this.postTemplate(request, templateDTO, principal, processStartTime);
+        return this.postTemplate(request, templateDTO, null, principal, processStartTime);
     }
 
     /**
@@ -388,9 +398,12 @@ public class TemplateRestController {
     ) throws NoDataException, Exception {
 
         // 템플릿 확인
-        String message = messageByLocale.get("tps.template.error.no-data", request);
         Template template = templateService.findTemplateBySeq(templateSeq)
-                .orElseThrow(() -> new NoDataException(message));
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.template.error.no-data", request);
+                    actionLogger.fail(principal.getName(), ActionType.DELETE, System.currentTimeMillis() - processStartTime, message);
+                    return new NoDataException(message);
+                });
 
         // 관련 데이터 확인
         Boolean hasRels = relationHelper.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
@@ -407,7 +420,6 @@ public class TemplateRestController {
             // 썸네일 파일 삭제
             if (McpString.isNotEmpty(template.getTemplateThumb())) {
                 templateService.deleteTemplateImage(template);
-//                actionLogger.success(principal.getName(), ActionType.FILE_DELETE, System.currentTimeMillis() - processStartTime);
             }
 
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true);
@@ -441,8 +453,11 @@ public class TemplateRestController {
     ) throws NoDataException {
 
         // 템플릿 확인
-        String message = messageByLocale.get("tps.template.error.no-data", request);
-        templateService.findTemplateBySeq(seq).orElseThrow(() -> new NoDataException(message));
+        templateService.findTemplateBySeq(seq).orElseThrow(() -> {
+            String message = messageByLocale.get("tps.template.error.no-data", request);
+            actionLogger.fail(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime, message);
+            return new NoDataException(message);
+        });
 
         Boolean chkRels = relationHelper.hasRelations(seq, MokaConstants.ITEM_TEMPLATE);
 
@@ -476,8 +491,11 @@ public class TemplateRestController {
         search.setRelSeqType(MokaConstants.ITEM_TEMPLATE);
 
         // 템플릿 확인
-        String message = messageByLocale.get("tps.template.error.no-data", request);
-        templateService.findTemplateBySeq(seq).orElseThrow(() -> new NoDataException(message));
+        templateService.findTemplateBySeq(seq).orElseThrow(() -> {
+            String message = messageByLocale.get("tps.template.error.no-data", request);
+            actionLogger.fail(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime, message);
+            return new NoDataException(message);
+        });
 
         ResponseEntity<?> response = relationHelper.findRelations(search);
         actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
@@ -511,12 +529,10 @@ public class TemplateRestController {
         Pageable pageable = search.getPageable();
 
         // 조회
-        Page<TemplateHist> historyList =
-                templateHistService.findAllTemplateHist(templateSeq, search, pageable);
+        Page<TemplateHist> historyList = templateHistService.findAllTemplateHist(templateSeq, search, pageable);
 
         // entity -> DTO
-        List<TemplateHistDTO> historiesDTO =
-                modelMapper.map(historyList.getContent(), TemplateHistDTO.TYPE);
+        List<TemplateHistDTO> historiesDTO = modelMapper.map(historyList.getContent(), TemplateHistDTO.TYPE);
 
         ResultListDTO<TemplateHistDTO> resultList = new ResultListDTO<TemplateHistDTO>();
         resultList.setTotalCnt(historyList.getTotalElements());
@@ -548,9 +564,12 @@ public class TemplateRestController {
     ) throws NoDataException {
 
         // 템플릿 히스토리 조회
-        String message = messageByLocale.get("tps.template.error.history.noContent", request);
         TemplateHist history = templateHistService.findTemplateHistBySeq(seq)
-                .orElseThrow(() -> new NoDataException(message));
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.template.error.history.no-data", request);
+                    actionLogger.fail(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime, message);
+                    return new NoDataException(message);
+                });
         TemplateHistDTO historyDTO = modelMapper.map(history, TemplateHistDTO.class);
 
         ResultDTO<TemplateHistDTO> resultDTO = new ResultDTO<TemplateHistDTO>(historyDTO);
@@ -563,6 +582,7 @@ public class TemplateRestController {
      *
      * @param request 요청
      * @param template 템플릿정보
+     * @param templateThumbnailFile 템플릿썸네일파일
      * @param principal 작업자
      * @param processStartTime 작업시간
      * @param actionType 작업구분(INSERT OR UPDATE)
@@ -572,6 +592,7 @@ public class TemplateRestController {
     private void validData(
         HttpServletRequest request,
         TemplateDTO template,
+        MultipartFile templateThumbnailFile,
         Principal principal,
         Long processStartTime,
         ActionType actionType
@@ -595,9 +616,8 @@ public class TemplateRestController {
                 actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
             }
             // 등록한 파일이 이미지 파일인지 체크
-            if (template.getTemplateThumbnailFile() != null
-                    && !template.getTemplateThumbnailFile().isEmpty()) {
-                boolean isImage = ImageUtil.isImage(template.getTemplateThumbnailFile());
+            if (templateThumbnailFile != null && !templateThumbnailFile.isEmpty()) {
+                boolean isImage = ImageUtil.isImage(templateThumbnailFile);
                 if (!isImage) {
                     String message = messageByLocale.get("tps.template.error.onlyimage.thumbnail");
                     invalidList.add(new InvalidDataDTO("thumbnail", message));

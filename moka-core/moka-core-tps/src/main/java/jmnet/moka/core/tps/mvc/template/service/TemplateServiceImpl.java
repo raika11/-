@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -166,14 +167,10 @@ public class TemplateServiceImpl implements TemplateService {
         String extension = McpFile.getExtension(thumbnail.getOriginalFilename()).toLowerCase();
         String newFilename = String.valueOf(template.getTemplateSeq()) + "." + extension;
         // 이미지를 저장할 실제 경로 생성
-        String imageRealPath =
-                template.getDomain() != null
-                        ? uploadFileHelper.getRealPath("template",
-                                template.getDomain().getDomainId(), newFilename)
-                        : uploadFileHelper.getRealPath("template", newFilename);
+        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS,template.getDomain().getDomainId(), newFilename);
 
         if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
-            String uri = uploadFileHelper.getUri(imageRealPath);
+            String uri = uploadFileHelper.getUri(TpsConstants.TEMPLATE_BUSINESS,template.getDomain().getDomainId(), newFilename);
             return uri;
         } else {
             return "";
@@ -185,17 +182,13 @@ public class TemplateServiceImpl implements TemplateService {
         String extension = McpFile.getExtension(copyTargetImgPath).toLowerCase();
         String newFilename = String.valueOf(template.getTemplateSeq()) + "." + extension;
         // 이미지를 저장할 실제 경로 생성
-        String imageRealPath =
-                template.getDomain() != null
-                        ? uploadFileHelper.getRealPath("template",
-                                template.getDomain().getDomainId(), newFilename)
-                        : uploadFileHelper.getRealPath("template", newFilename);
+        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template.getDomain().getDomainId(), newFilename);
 
         // copy할 파일 실제 경로 구함
-        String targetRealPath = uploadFileHelper.getRealPath("template", copyTargetImgPath);
+        String targetRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, copyTargetImgPath);
 
         if (uploadFileHelper.copyFile(imageRealPath, targetRealPath)) {
-            String uri = uploadFileHelper.getUri(imageRealPath);
+            String uri = uploadFileHelper.getUri(TpsConstants.TEMPLATE_BUSINESS, template.getDomain().getDomainId(), newFilename);
             return uri;
         } else {
             return "";
@@ -207,7 +200,7 @@ public class TemplateServiceImpl implements TemplateService {
         String thumbnailPath = template.getTemplateThumb();
         thumbnailPath = thumbnailPath.replace("template/", "");
         // 이미지 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPath("template", thumbnailPath);
+        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, thumbnailPath);
         return uploadFileHelper.deleteFile(imageRealPath);
     }
 }

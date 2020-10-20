@@ -106,11 +106,6 @@ public class TemplateDTO implements Serializable {
     @Length(max = 4000, message = "{tps.template.error.length.description}")
     private String description;
 
-    /**
-     * 템플릿썸네일파일
-     */
-    private MultipartFile templateThumbnailFile;
-
     public TemplateItem toTemplateItem() {
         TemplateItem templateItem = new TemplateItem();
         templateItem.put(ItemConstants.TEMPLATE_ID, this.templateSeq);

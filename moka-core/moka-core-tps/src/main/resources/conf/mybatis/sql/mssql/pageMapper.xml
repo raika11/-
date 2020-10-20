@@ -3,7 +3,7 @@
 <mapper namespace="jmnet.moka.core.tps.mvc.page.mapper.PageMapper">
 	
 	<select id="findSubNodes" parameterType="hashMap" resultType="Long" statementType="CALLABLE">
-		{call UPA_TB_WMS_PAGE_TOPDOWN_LIST(
+		{call UPA_WMS_PAGE_TOPDOWN_LIST(
 			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }

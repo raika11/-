@@ -4,7 +4,7 @@
 
 	<!-- 페이지의 관련템플릿 목록 조회 -->
 	<select id="findPageChildRelList" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
-		{ call UPA_TB_WMS_PAGE_REL_TEMPLATE_LIST_SEL(
+		{ call UPA_WMS_PAGE_REL_TEMPLATE_LIST_SEL(
 			'${template.image.prefix}',
 			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{keyword, mode=IN, jdbcType=INTEGER, javaType=string},
@@ -54,7 +54,7 @@
 	
 	<!-- 콘텐츠스킨의 관련템플릿 목록 조회 -->
 	<select id="findSkinChildRelList" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
-		{ call UPA_TB_WMS_PAGE_REL_TEMPLATE_LIST_SEL(
+		{ call UPA_WMS_PAGE_REL_TEMPLATE_LIST_SEL(
 		'${template.image.prefix}',
 		#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 		#{keyword, mode=IN, jdbcType=INTEGER, javaType=string},
@@ -104,7 +104,7 @@
 	
 	<!-- 컨테이너의 관련템플릿 목록 조회 -->
 	<select id="findContainerChildRelList" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
-		{ call UPA_TB_WMS_CONTAINER_REL_TEMPLATE_LIST_SEL(
+		{ call UPA_WMS_CONTAINER_REL_TEMPLATE_LIST_SEL(
 		'${template.image.prefix}',
 		#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 		#{keyword, mode=IN, jdbcType=INTEGER, javaType=string},
@@ -154,7 +154,7 @@
 
 	<!--
 	<select id="findDomainIdListByTemplateSeq" parameterType="java.lang.Long" resultType="String" statementType="CALLABLE">
-		{ call UPA_TB_WMS_DOMAIN_USE_TEMPLATE_LIST_SEL(
+		{ call UPA_WMS_DOMAIN_USE_TEMPLATE_LIST_SEL(
 			#{templateSeq, mode=IN, jdbcType=INTEGER, javaType=integer}
 		) }
 	</select>
@@ -167,11 +167,18 @@
 
 	<!-- resultSet이 단일인 경우 -->
 	<select id="findAll" parameterType="TemplateSearchDTO" resultType="TemplateVO" statementType="CALLABLE">
-		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_TB_WMS_TEMPLATE_LIST_SEL(
-			'${template.image.prefix}',
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_TEMPLATE_LIST_SEL(
 			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			<choose>
-				<when test="(searchType == 'templateSeq' or searchType == 'all') and keyword != null and keyword != ''">
+				<when test="searchType == 'all' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="searchType == 'templateSeq' and keyword != null and keyword != ''">
 					#{keyword},
 				</when>
 				<otherwise>
@@ -180,7 +187,7 @@
 			</choose>
 
 			<choose>
-				<when test="(searchType == 'templateName' or searchType == 'all') and keyword != null and keyword != ''">
+				<when test="searchType == 'templateName' and keyword != null and keyword != ''">
 					#{keyword},
 				</when>
 				<otherwise>
@@ -189,7 +196,7 @@
 			</choose>
 
 			<choose>
-				<when test="(searchType == 'templateBody' or searchType == 'all') and keyword != null and keyword != ''">
+				<when test="searchType == 'templateBody' and keyword != null and keyword != ''">
 					#{keyword},
 				</when>
 				<otherwise>

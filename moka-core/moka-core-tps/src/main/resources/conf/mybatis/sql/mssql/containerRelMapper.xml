@@ -3,7 +3,7 @@
 <mapper namespace="jmnet.moka.core.tps.mvc.page.mapper.ContainerRelMapper">
 
 	<select id="deleteByContainerSeq" parameterType="java.lang.Long" resultType="java.lang.Long" statementType="CALLABLE">
-		{call UPA_TB_WMS_CONTAINER_REL_DELETE(
+		{call UPA_WMS_CONTAINER_REL_DELETE(
 			#{containerSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }
 	</select>

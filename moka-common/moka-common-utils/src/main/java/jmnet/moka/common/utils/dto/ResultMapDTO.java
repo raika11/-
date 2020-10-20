@@ -48,7 +48,7 @@ public class ResultMapDTO extends ResultDTO<Map<String, Object>> {
                 .message("")
                 .build();
         this.body = new HashMap<>();
-        this.body.putAll(body);
+        this.body.putAll(successBody);
     }
 
     /**

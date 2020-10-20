@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSearchDTO;
@@ -58,7 +59,7 @@ public class MainRestContgroller {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("TEMPLATE_IMAGE_PREFIX", templateImagePrefix);
 
-        ResultDTO<Map<String, Object>> resultDTO = new ResultDTO<Map<String, Object>>(result);
+        ResultMapDTO resultDTO = new ResultMapDTO(result);
         actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }

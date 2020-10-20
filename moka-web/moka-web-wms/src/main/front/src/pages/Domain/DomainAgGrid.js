@@ -58,7 +58,7 @@ const DomainAgGrid = () => {
      */
     const handleChangeSearchOption = useCallback(
         (search) => {
-            dispatch(getDomainList(changeSearchOption(search)));
+            dispatch(getDomainList(changeSearchOption(search), search.key === 'size' && changeSearchOption({ key: 'page', value: 0 })));
         },
         [dispatch],
     );

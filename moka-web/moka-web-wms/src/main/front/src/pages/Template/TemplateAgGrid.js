@@ -17,11 +17,12 @@ const TemplateAgGrid = () => {
     const dispatch = useDispatch();
     const [listType, setListType] = useState('list');
     const [rowData, setRowData] = useState([]);
-    const { total, list, search, loading } = useSelector((store) => ({
+    const { total, list, search, loading, template } = useSelector((store) => ({
         total: store.template.total,
         list: store.template.list,
         search: store.template.search,
         loading: store.loading[GET_TEMPLATE_LIST],
+        template: store.template.template,
     }));
 
     /**
@@ -101,6 +102,7 @@ const TemplateAgGrid = () => {
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
                     preventRowClickCell={['append', 'link']}
+                    selected={template.templateSeq}
                 />
             )}
             {listType === 'thumbnail' && (

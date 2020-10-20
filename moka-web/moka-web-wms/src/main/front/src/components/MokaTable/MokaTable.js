@@ -64,7 +64,11 @@ const propTypes = {
     /**
      * selected row 갯수
      */
-    rowSelection: PropTypes.string,
+    rowSelection: PropTypes.oneOf(['single', 'multiple']),
+    /**
+     * 선택된 아이디
+     */
+    selected: PropTypes.any,
     /**
      * 드래그여부
      */
@@ -89,7 +93,7 @@ const defaultProps = {
 };
 
 const MokaTable = (props) => {
-    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection } = props;
+    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection, selected } = props;
     const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
     const { dragging, onRowDragMove } = props;
     const [gridApi, setGridApi] = useState(null);
@@ -153,6 +157,21 @@ const MokaTable = (props) => {
         }
     };
 
+    /**
+     * ag-grid가 화면에 그릴 row data가 변경되었을 때 실행된다.
+     * (selected 값이 있을 때 select함)
+     */
+    const handleRowDataUpdated = useCallback(() => {
+        setTimeout(function () {
+            if (selected && gridApi) {
+                const selectedNode = gridApi.getRowNode(selected);
+                if (selectedNode) {
+                    selectedNode.selectThisNode(true);
+                }
+            }
+        });
+    }, [selected, gridApi]);
+
     return (
         <>
             {/* 목록 */}
@@ -170,6 +189,8 @@ const MokaTable = (props) => {
                     rowDragManaged={dragging}
                     suppressMoveWhenRowDragging={dragging}
                     onRowDragMove={handleRowDragMove}
+                    onRowDataUpdated={handleRowDataUpdated}
+                    selected={selected}
                 />
             </div>
             {/* 페이징 */}

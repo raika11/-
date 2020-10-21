@@ -229,7 +229,7 @@ const TemplateEdit = () => {
             </Form>
 
             {/* 템플릿복사 Modal */}
-            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} />
+            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} template={template} />
             {/* 컴포넌트생성 Modal */}
             <AddComponentModal show={addComponentModalShow} onHide={() => setAddComponentModalShow(false)} />
         </MokaCard>

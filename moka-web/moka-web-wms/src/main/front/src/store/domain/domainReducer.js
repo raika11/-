@@ -1,82 +1,84 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import {
-    CHANGE_SEARCH_OPTION,
-    CLEAR_DOMAIN,
-    CLEAR_DOMAIN_DETAIL,
-    CLEAR_DOMAIN_LIST,
-    CLEAR_SEARCH_OPTION,
-    DELETE_DOMAIN_FAILURE,
-    DELETE_DOMAIN_SUCCESS,
-    GET_DOMAIN_FAILURE,
-    GET_DOMAIN_SUCCESS,
-    GET_DOMAIN_LIST_FAILURE,
-    GET_DOMAIN_LIST_SUCCESS,
-} from '@store/domain/domainAction';
+import * as act from '@store/domain/domainAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
 /**
  * initialState
  */
 const initialState = {
-    error: undefined,
-    list: [],
     total: 0,
+    list: [],
+    error: null,
     search: {
-        mediaId: undefined,
         page: 0,
         size: PAGESIZE_OPTIONS[0],
         sort: 'domainId,asc',
     },
-    detail: {},
-    detailError: {},
+    domain: {},
+    domainError: {},
+    invalidList: [],
 };
 
 /**
  * reducer
  */
-const domainReducer = handleActions(
+export default handleActions(
     {
-        [CHANGE_SEARCH_OPTION]: (state, { payload: { key, value } }) => {
+        /**
+         * 검색조건 변경
+         */
+        [act.CHANGE_SEARCH_OPTION]: (state, { payload: newSearch }) => {
             return produce(state, (draft) => {
-                draft.search[key] = value;
+                draft.search = newSearch;
             });
         },
-        [CLEAR_SEARCH_OPTION]: (state) => {
+        /**
+         * 데이터 변경
+         */
+        [act.CHANGE_DOMAIN]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.search = initialState.search;
+                draft.domain = payload;
             });
         },
-        [CLEAR_DOMAIN_LIST]: (state) => {
+        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.list = initialState.list;
-                draft.total = initialState.total;
-                draft.error = initialState.error;
+                draft.invalidList = payload;
             });
         },
-        [CLEAR_DOMAIN_DETAIL]: (state) => {
+        /**
+         * 스토어 데이터 삭제
+         */
+        [act.CLEAR_DOMAIN]: (state, { payload }) => {
+            const { domain, search, list } = payload;
+
             return produce(state, (draft) => {
-                draft.detail = initialState.detail;
-                draft.detailError = initialState.detailError;
-            });
-        },
-        [CLEAR_DOMAIN]: (state) => {
-            return produce(state, (draft) => {
-                draft.detail = initialState.detail;
-                draft.detailError = initialState.detailError;
+                if (!payload || search) {
+                    draft.search = initialState.search;
+                }
+                if (!payload || domain) {
+                    draft.domain = initialState.domain;
+                    draft.domainError = initialState.domainError;
+                    draft.invalidList = initialState.invalidList;
+                }
+                if (!payload || list) {
+                    draft.list = initialState.list;
+                    draft.total = initialState.total;
+                    draft.error = initialState.error;
+                }
             });
         },
         /**
          * 목록
          */
-        [GET_DOMAIN_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_DOMAIN_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.error = initialState.error;
                 draft.list = body.list;
                 draft.total = body.totalCnt;
             });
         },
-        [GET_DOMAIN_LIST_FAILURE]: (state, { payload }) => {
+        [act.GET_DOMAIN_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.error = payload;
                 draft.list = initialState.list;
@@ -86,34 +88,36 @@ const domainReducer = handleActions(
         /**
          * 조회, 등록, 수정
          */
-        [GET_DOMAIN_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_DOMAIN_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.detailError = initialState.detailError;
-                draft.detail = body;
+                draft.domain = body;
+                draft.domainError = initialState.domainError;
+                draft.invalidList = initialState.invalidList;
             });
         },
-        [GET_DOMAIN_FAILURE]: (state, { payload }) => {
+        [act.GET_DOMAIN_FAILURE]: (state, { payload }) => {
+            const { body } = payload;
+
             return produce(state, (draft) => {
-                draft.detailError = payload;
-                draft.detail = initialState.detail;
+                draft.domain = initialState.domain;
+                draft.domainError = payload;
+                draft.invalidList = body;
             });
         },
         /**
          * 삭제
          */
-        [DELETE_DOMAIN_SUCCESS]: (state) => {
+        [act.DELETE_DOMAIN_SUCCESS]: (state) => {
             return produce(state, (draft) => {
-                draft.detailError = initialState.detailError;
-                draft.detail = initialState.detail;
+                draft.domain = initialState.domain;
+                draft.domainError = initialState.domainError;
             });
         },
-        [DELETE_DOMAIN_FAILURE]: (state, { payload }) => {
+        [act.DELETE_DOMAIN_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.detailError = payload;
+                draft.domainError = payload;
             });
         },
     },
     initialState,
 );
-
-export default domainReducer;

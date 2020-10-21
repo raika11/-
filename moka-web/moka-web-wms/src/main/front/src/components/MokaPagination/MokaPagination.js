@@ -51,7 +51,6 @@ const MokaPagination = (props) => {
     const handleChangeRowsPerPage = useCallback(
         (event) => {
             onChangeSearchOption({ key: 'size', value: Number(event.target.value) });
-            onChangeSearchOption({ key: 'page', value: 0 });
         },
         [onChangeSearchOption],
     );

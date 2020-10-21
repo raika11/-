@@ -3,6 +3,7 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { enqueueToast } from '@store/notification/toastAction';
 import { setLocalItem } from '@utils/storageUtil';
 import * as api from './authApi';
+import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
 
 /**
@@ -117,7 +118,7 @@ export function* getDomainList({ payload: domainId }) {
 
     try {
         const searchOption = yield select((store) => store.auth.domainSearch);
-        const response = yield call(api.getDomainList, { search: searchOption });
+        const response = yield call(domainApi.getDomainList, { search: searchOption });
 
         if (response.data.header.success) {
             yield put({

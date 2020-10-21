@@ -7,7 +7,8 @@ import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { MokaTable, MokaIcon, MokaThumbTable } from '@components';
-import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template/templateAction';
+import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOptions } from '@store/template/templateAction';
+import CopyModal from './modals/CopyModal';
 
 /**
  * 템플릿 AgGrid 컴포넌트
@@ -15,8 +16,13 @@ import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/t
 const TemplateAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
+
+    //state
     const [listType, setListType] = useState('list');
     const [rowData, setRowData] = useState([]);
+    const [copyModalShow, setCopyModalShow] = useState(false);
+    const [copyModalData, setCopyModalData] = useState({});
+
     const { total, list, search, loading, template } = useSelector((store) => ({
         total: store.template.total,
         list: store.template.list,
@@ -31,7 +37,7 @@ const TemplateAgGrid = () => {
      */
     const handleChangeSearchOption = useCallback(
         (payload) => {
-            dispatch(getTemplateList(changeSearchOption(payload)));
+            dispatch(getTemplateList(changeSearchOptions([payload, { key: 'page', value: 0 }])));
         },
         [dispatch],
     );
@@ -53,7 +59,7 @@ const TemplateAgGrid = () => {
                     ...data,
                     id: data.templateSeq,
                     name: data.templateName,
-                    thumnb: data.templateThumnb,
+                    thumb: data.templateThumb,
                 })),
             );
         } else {
@@ -101,7 +107,7 @@ const TemplateAgGrid = () => {
                     page={search.page}
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
-                    preventRowClickCell={['append', 'link']}
+                    preventRowClickCell={['delete']}
                     selected={template.templateSeq}
                 />
             )}
@@ -118,6 +124,10 @@ const TemplateAgGrid = () => {
                     menus={[
                         {
                             title: '복사본 생성',
+                            onClick: (data) => {
+                                setCopyModalData(data);
+                                setCopyModalShow(true);
+                            },
                         },
                         {
                             title: '삭제',
@@ -125,6 +135,9 @@ const TemplateAgGrid = () => {
                     ]}
                 />
             )}
+
+            {/* 복사본 생성 Modal */}
+            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} template={copyModalData} />
         </>
     );
 };

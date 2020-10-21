@@ -1,11 +1,10 @@
 import React, { Suspense } from 'react';
-
 import { Route, Switch, useHistory } from 'react-router-dom';
-import { MokaCard } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet';
+import { MokaCard } from '@components';
+import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 const DomainEdit = React.lazy(() => import('./DomainEdit'));
 const DomainList = React.lazy(() => import('./DomainList'));
@@ -15,6 +14,7 @@ const DomainList = React.lazy(() => import('./DomainList'));
  */
 const Domain = () => {
     const history = useHistory();
+
     /**
      * 도메인 추가
      */

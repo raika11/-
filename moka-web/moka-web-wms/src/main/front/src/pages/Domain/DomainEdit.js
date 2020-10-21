@@ -137,7 +137,7 @@ const DomainEdit = ({ history }) => {
         if (paramId) {
             dispatch(getDomain(paramId));
         } else {
-            dispatch(clearDomain({ domain: true }));
+            dispatch(clearDomain());
         }
     }, [dispatch, paramId]);
 

@@ -49,23 +49,24 @@ export default handleActions(
         /**
          * 스토어 데이터 삭제
          */
-        [act.CLEAR_DOMAIN]: (state, { payload }) => {
-            const { domain, search, list } = payload;
-
+        [act.CLEAR_STORE]: () => initialState,
+        [act.CLEAR_DOMAIN]: (state) => {
             return produce(state, (draft) => {
-                if (!payload || search) {
-                    draft.search = initialState.search;
-                }
-                if (!payload || domain) {
-                    draft.domain = initialState.domain;
-                    draft.domainError = initialState.domainError;
-                    draft.invalidList = initialState.invalidList;
-                }
-                if (!payload || list) {
-                    draft.list = initialState.list;
-                    draft.total = initialState.total;
-                    draft.error = initialState.error;
-                }
+                draft.domain = initialState.domain;
+                draft.domainError = initialState.domainError;
+                draft.invalidList = initialState.invalidList;
+            });
+        },
+        [act.CLEAR_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.total = initialState.total;
+                draft.list = initialState.list;
+                draft.error = initialState.error;
+            });
+        },
+        [act.CLEAR_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.search = initialState.search;
             });
         },
         /**

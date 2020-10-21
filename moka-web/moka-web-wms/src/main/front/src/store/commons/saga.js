@@ -42,8 +42,7 @@ export function createRequestSaga(actionType, api) {
         } catch (e) {
             yield put({
                 type: FAILURE,
-                payload: e,
-                error: true,
+                payload: { header: { success: false }, body: e },
             });
         }
 
@@ -85,7 +84,6 @@ export const callApiAfterActions = (actionType, api, targetStateSelector) => {
                 yield put({
                     type: SUCCESS,
                     payload: response.data,
-                    meta: response,
                 });
             } else {
                 yield put({
@@ -96,7 +94,7 @@ export const callApiAfterActions = (actionType, api, targetStateSelector) => {
         } catch (e) {
             yield put({
                 type: FAILURE,
-                payload: e,
+                payload: { header: { success: false }, body: e },
             });
         }
         yield put(finishLoading(actionType));
@@ -123,20 +121,17 @@ export const callApiWithParam = (actionType, api, param) => {
                 yield put({
                     type: SUCCESS,
                     payload: response.data,
-                    meta: response,
                 });
             } else {
                 yield put({
                     type: FAILURE,
                     payload: response.data,
-                    error: true,
                 });
             }
         } catch (e) {
             yield put({
                 type: FAILURE,
-                payload: e,
-                error: true,
+                payload: { header: { success: false }, body: e },
             });
         }
 

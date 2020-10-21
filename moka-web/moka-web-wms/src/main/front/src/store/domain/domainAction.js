@@ -10,8 +10,14 @@ export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) =>
 /**
  * 스토어 데이터 삭제
  */
+export const CLEAR_STORE = 'domain/CLEAR_DOMAIN_ALL';
 export const CLEAR_DOMAIN = 'domain/CLEAR_DOMAIN';
-export const clearDomain = createAction(CLEAR_DOMAIN, ({ search, list, domain }) => ({ search, list, domain }));
+export const CLEAR_LIST = 'domain/CLEAR_LIST';
+export const CLEAR_SEARCH = 'domain/CLEAR_SEARCH';
+export const clearStore = createAction(CLEAR_STORE);
+export const clearDomain = createAction(CLEAR_DOMAIN);
+export const clearList = createAction(CLEAR_LIST);
+export const clearSearch = createAction(CLEAR_SEARCH);
 
 /**
  * 데이터 조회

@@ -90,7 +90,7 @@ function* saveDomain({ payload: { type, actions, callback } }) {
 
         yield put({
             type: domainAction.GET_DOMAIN_FAILURE,
-            payload: e,
+            payload: callbackData,
         });
     }
 
@@ -160,7 +160,7 @@ function* deleteDomain({ payload: { domainId, callback } }) {
 
         yield put({
             type: domainAction.DELETE_DOMAIN_FAILURE,
-            payload: e,
+            payload: callbackData,
         });
     }
 

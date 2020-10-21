@@ -6,6 +6,6 @@ import clsx from 'clsx';
  * @param {string} param0.className 오버라이드 스타일
  * @param {Element} param0.children children
  */
-const Main = ({ className, children }) => <div className={clsx('main', className)}>{children}</div>;
+const Main = ({ className, children }) => <div className={clsx('main', 'custom-scroll', className)}>{children}</div>;
 
 export default Main;

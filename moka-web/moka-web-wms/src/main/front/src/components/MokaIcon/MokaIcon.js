@@ -31,6 +31,7 @@ import {
     faCloudUpload,
     faMinusSquare,
     faMinus,
+    faSignOutAlt,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faAngleLeft, faAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 
@@ -64,6 +65,7 @@ library.add(faCopy);
 library.add(faCloudUpload);
 library.add(faMinusSquare);
 library.add(faMinus);
+library.add(faSignOutAlt);
 
 const propTypes = {
     /**

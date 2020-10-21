@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { MokaModal, MokaInput } from '@components';
 import { copyTemplate } from '@store/template/templateAction';
@@ -9,15 +9,11 @@ import { copyTemplate } from '@store/template/templateAction';
  * 템플릿 복사 Modal
  */
 const CopyModal = (props) => {
-    const { show, onHide } = props;
+    const { show, onHide, template } = props;
     const dispatch = useDispatch();
     const history = useHistory();
     const [templateName, setTemplateName] = useState('');
     const [templateNameInvalid, setTemplateNameInvalid] = useState(false);
-
-    const { template } = useSelector((store) => ({
-        template: store.template.template,
-    }));
 
     /**
      * 닫기

@@ -24,7 +24,7 @@ export const columnDefs = [
     {
         headerName: '',
         field: 'useYn',
-        width: 40,
+        width: 50,
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (params) => {
             const useYn = params.data.useYn;

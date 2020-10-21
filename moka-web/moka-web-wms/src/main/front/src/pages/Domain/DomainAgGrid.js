@@ -72,7 +72,6 @@ const DomainAgGrid = () => {
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
                 preventRowClickCell={['delete']}
-                pageSizes={[1, 2, 3]}
             />
             {/* 설정 변경가능한 Table */}
             {/* <div className="ag-theme-moka-grid mb-3" style={{ height: '550px' }}>

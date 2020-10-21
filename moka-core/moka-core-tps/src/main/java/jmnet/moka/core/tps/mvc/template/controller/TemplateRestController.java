@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.tps.helper.UploadFileHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,7 @@ import jmnet.moka.core.tps.mvc.template.entity.TemplateHist;
 import jmnet.moka.core.tps.mvc.template.service.TemplateHistService;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -92,13 +94,10 @@ public class TemplateRestController {
     private RelationHelper relationHelper;
 
     @Autowired
+    private UploadFileHelper uploadFileHelper;
+
+    @Autowired
     private ActionLogger actionLogger;
-
-    @Value("${template.image.prefix}")
-    private String templateImagePrefix;
-
-    @Value("${tps.upload.path.template}")
-    private String uploadPathTemplate;
 
     /**
      * 템플릿 목록조회
@@ -158,10 +157,6 @@ public class TemplateRestController {
 
         TemplateDTO templateDTO = modelMapper.map(template, TemplateDTO.class);
 
-        if (McpString.isNotEmpty(templateDTO.getTemplateThumb())) {
-            templateDTO.setTemplateThumb(templateImagePrefix + templateDTO.getTemplateThumb());
-        }
-
         ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(templateDTO);
         actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -180,7 +175,7 @@ public class TemplateRestController {
      * @throws Exception 썸네일 저장 실패, 템플릿오류 그외 모든 에러
      */
     @ApiOperation(value = "템플릿 등록")
-    @PostMapping(consumes = "multipart/form-data")
+    @PostMapping(consumes = {"multipart/form-data","application/x-www-form-urlencoded"})
     public ResponseEntity<?> postTemplate(
             HttpServletRequest request,
             @Valid TemplateDTO templateDTO,
@@ -201,6 +196,7 @@ public class TemplateRestController {
             if (templateThumbnailFile != null && !templateThumbnailFile.isEmpty()) {
                 // 이미지파일 저장(multipartFile)
                 String imgPath = templateService.saveTemplateImage(returnVal,templateThumbnailFile);
+                actionLogger.success(principal.getName(), ActionType.UPLOAD, System.currentTimeMillis() - processStartTime);
                 returnVal.setTemplateThumb(imgPath);
 
                 // 썸네일경로 업데이트(히스토리 생성X)
@@ -208,12 +204,11 @@ public class TemplateRestController {
 
             } else if (McpString.isNotEmpty(templateDTO.getTemplateThumb())) {
                 /*
-                 * 파일은 없는데 이미지 url이 있는 경우 ===> 파일을 복사한다! 복사할 파일의 /image/template/ 경로를 없애줌
+                 * 파일은 없는데 이미지 url이 있는 경우 ===> 파일을 복사한다!
                  */
-                String targetImg = templateDTO.getTemplateThumb();
-                targetImg = targetImg.replace(templateImagePrefix, "");
-                targetImg = targetImg.replace("template/", "");
+                String targetImg =  uploadFileHelper.getRealPathByDB(templateDTO.getTemplateThumb());
                 String imgPath = templateService.copyTemplateImage(returnVal, targetImg);
+                actionLogger.success(principal.getName(), ActionType.FILE_COPY, System.currentTimeMillis() - processStartTime);
                 returnVal.setTemplateThumb(imgPath);
 
                 // 썸네일경로 업데이트(히스토리 생성X)
@@ -221,10 +216,6 @@ public class TemplateRestController {
             }
 
             TemplateDTO returnValDTO = modelMapper.map(returnVal, TemplateDTO.class);
-
-            if (!McpString.isNullOrEmpty(returnValDTO.getTemplateThumb())) {
-                returnValDTO.setTemplateThumb(templateImagePrefix + returnValDTO.getTemplateThumb());
-            }
 
             ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(returnValDTO);
             actionLogger.success(principal.getName(), ActionType.INSERT, System.currentTimeMillis() - processStartTime);
@@ -282,19 +273,27 @@ public class TemplateRestController {
 
         try {
             /*
-             * 이미지 파일 저장 새로운 파일이 있으면 기존 파일이 있으면 삭제하고 새 파일을 저장한다. 새로운 파일이 없는데 기존 파일이 있으면 기존 파일을 삭제한다
+             * 이미지 파일 저장 새로운 파일이 있으면 기존 파일이 있으면 삭제하고 새 파일을 저장한다.
+             * 새로운 파일이 없는데 기존 파일이 있으면 기존 파일을 삭제한다
              */
             if (templateThumbnailFile != null && !templateThumbnailFile.isEmpty()) {
 
+                // 기존이미지 삭제
                 if (McpString.isNotEmpty(orgTemplate.getTemplateThumb())) {
                     templateService.deleteTemplateImage(orgTemplate);
+                    actionLogger.success(principal.getName(), ActionType.FILE_DELETE, System.currentTimeMillis() - processStartTime);
                 }
+                // 새로운 이미지 저장
                 String imgPath = templateService.saveTemplateImage(newTemplate, templateThumbnailFile);
+                actionLogger.success(principal.getName(), ActionType.UPLOAD, System.currentTimeMillis() - processStartTime);
+
+                // 이미지 파일명 수정
                 newTemplate.setTemplateThumb(imgPath);
 
             } else if (McpString.isNotEmpty(orgTemplate.getTemplateThumb())
-                    && McpString.isNullOrEmpty(newTemplate.getTemplateThumb())) {
+                    && McpString.isEmpty(newTemplate.getTemplateThumb())) {
                 templateService.deleteTemplateImage(orgTemplate);
+                actionLogger.success(principal.getName(), ActionType.FILE_DELETE, System.currentTimeMillis() - processStartTime);
             }
 
             // 수정 (템플릿바디가 변경되었을 때만 히스토리를 생성한다)
@@ -307,9 +306,9 @@ public class TemplateRestController {
             }
             TemplateDTO returnValDTO = modelMapper.map(returnVal, TemplateDTO.class);
 
-            if (McpString.isNotEmpty(returnValDTO.getTemplateThumb())) {
-                returnValDTO.setTemplateThumb(templateImagePrefix + returnValDTO.getTemplateThumb());
-            }
+//            if (McpString.isNotEmpty(returnValDTO.getTemplateThumb())) {
+//                returnValDTO.setTemplateThumb(templateImagePrefix + returnValDTO.getTemplateThumb());
+//            }
 
             ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(returnValDTO);
 
@@ -420,6 +419,7 @@ public class TemplateRestController {
             // 썸네일 파일 삭제
             if (McpString.isNotEmpty(template.getTemplateThumb())) {
                 templateService.deleteTemplateImage(template);
+                actionLogger.success(principal.getName(), ActionType.FILE_DELETE, System.currentTimeMillis() - processStartTime);
             }
 
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true);

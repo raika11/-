@@ -42,8 +42,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/main")
 public class MainRestContgroller {
 
-    @Value("${template.image.prefix}")
-    private String templateImagePrefix;
+    @Value("${tps.upload.path.url}")
+    private String uploadPathUrl;
 
     @Autowired
     private ActionLogger actionLogger;
@@ -55,9 +55,9 @@ public class MainRestContgroller {
             @NotNull Principal principal,
             @RequestAttribute Long processStartTime
     ) {
-        // 템플릿 image prefix
+        // 파일 서비스 prefix
         Map<String, Object> result = new HashMap<String, Object>();
-        result.put("TEMPLATE_IMAGE_PREFIX", templateImagePrefix);
+        result.put("UPLOAD_PATH_URL", uploadPathUrl);
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
         actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);

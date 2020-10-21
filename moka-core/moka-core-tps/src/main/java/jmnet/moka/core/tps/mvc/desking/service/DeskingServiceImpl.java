@@ -577,7 +577,7 @@ public class DeskingServiceImpl implements DeskingService {
         String[] paths = {"crop", nowTime.substring(0, 4), nowTime.substring(4, 6),
                 nowTime.substring(6, 8), fileName};
         String returnPath = String.join("/", paths);
-        String realPath = uploadFileHelper.getRealRmsPath(deskingImagePath, returnPath);
+        String realPath = uploadFileHelper.getRealPath(deskingImagePath, returnPath);
 
         // 파일 저장
         if (uploadFileHelper.saveFile(realPath, thumbnail)) {

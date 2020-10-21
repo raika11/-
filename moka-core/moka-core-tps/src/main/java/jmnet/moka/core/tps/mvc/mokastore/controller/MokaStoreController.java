@@ -2,16 +2,19 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.filestore.controller;
+package jmnet.moka.core.tps.mvc.mokastore.controller;
 
 import java.io.File;
 import java.nio.file.Files;
 import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,56 +34,69 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Slf4j
 @RequestMapping("/mokastore")
-public class FileStoreController {
+public class MokaStoreController {
 
     @Autowired
-    private UploadFileHelper fileHelper;
+    private UploadFileHelper uploadFileHelper;
+
+    @Value("${tps.upload.path.url}")
+    private String urlPathPrefix;
+
+    @Autowired
+    private ActionLogger actionLogger;
 
     /**
-     * 도메인이 있는 템플릿의 이미지 서비스
+     * 파일 서비스
      * @param request HTTP 요청
-     * @param domainId 도메인ID
-     * @param templateThumbnail 템플릿 썸네일
      * @return 이미지 byte[]
      * @throws NoDataException 데이터없음
      */
-    @GetMapping(value = "/template/{domainId:\\d+}/{templateThumbnail:\\d+\\.(?:jpe*g|JPE*G|png|PNG|gif|GIF)}",
+    @GetMapping(value = "/{business}/{domainId:\\d+}/{filename:\\d+\\.(?:jpe*g|JPE*G|png|PNG|gif|GIF)}",
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE})
-    public ResponseEntity<byte[]> getImageAsResponseEntity(HttpServletRequest request,
+    public ResponseEntity<byte[]> getImageAsResponseEntity(
+            HttpServletRequest request,
+            @PathVariable("business") String business,
             @PathVariable("domainId") String domainId,
-            @PathVariable("templateThumbnail") String templateThumbnail) throws NoDataException {
-
-        String imgRealPath = fileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, domainId, templateThumbnail);
-        HttpHeaders headers = new HttpHeaders();
-
-        try {
-            File file = new File(imgRealPath);
-            byte[] media = Files.readAllBytes(file.toPath());
-            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-
-            ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
-            return responseEntity;
-        } catch(Exception e) {
-            log.debug("[FAIL TO FILE LOAD] {}", imgRealPath);
-            e.printStackTrace();
+            @PathVariable("filename") String filename
+    ) throws NoDataException {
+        String imgRealPath = null;
+        if(business.equals(TpsConstants.TEMPLATE_BUSINESS)) {
+            imgRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, domainId, filename);
         }
 
+        if(McpString.isEmpty(imgRealPath)) {
+            log.debug("[NO FILE PATH] {}", request.getRequestURI());
+        } else {
+            try {
+                File file = new File(imgRealPath);
+                byte[] media = Files.readAllBytes(file.toPath());
+                HttpHeaders headers = new HttpHeaders();
+                headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+
+                ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
+                return responseEntity;
+            } catch(Exception e) {
+                log.debug("[FAIL TO FILE LOAD] {}", imgRealPath);
+            }
+        }
         return null;
     }
 
 //    /**
-//     * 공통 도메인 템플릿 이미지 서비스
+//     * 도메인이 있는 템플릿의 이미지 서비스
 //     * @param request HTTP 요청
+//     * @param domainId 도메인ID
 //     * @param templateThumbnail 템플릿 썸네일
 //     * @return 이미지 byte[]
 //     * @throws NoDataException 데이터없음
 //     */
-//    @GetMapping(value = "{templateThumbnail:\\d+\\.(?:jpe*g|JPE*G|png|PNG|gif|GIF)}",
+//    @GetMapping(value = "/template/{domainId:\\d+}/{templateThumbnail:\\d+\\.(?:jpe*g|JPE*G|png|PNG|gif|GIF)}",
 //            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE})
-//    public ResponseEntity<byte[]> getCommonDomainImageAsResponseEntity(HttpServletRequest request,
+//    public ResponseEntity<byte[]> getImageAsResponseEntity(HttpServletRequest request,
+//            @PathVariable("domainId") String domainId,
 //            @PathVariable("templateThumbnail") String templateThumbnail) throws NoDataException {
 //
-//        String imgRealPath = fileHelper.getRealPath("template", templateThumbnail);
+//        String imgRealPath = fileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, domainId, templateThumbnail);
 //        HttpHeaders headers = new HttpHeaders();
 //
 //        try {
@@ -97,4 +113,5 @@ public class FileStoreController {
 //
 //        return null;
 //    }
+
 }

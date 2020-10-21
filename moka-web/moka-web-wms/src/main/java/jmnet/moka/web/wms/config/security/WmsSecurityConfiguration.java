@@ -54,6 +54,9 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${wms.session.registry.type}")
     private String sessionRegistryType;
 
+    @Value("${tps.upload.path.url}")
+    private String urlPathPrefix;
+
 
     /**
      * Spring Security 필터 걸리지 않는 패턴 설정 아래에 있는 antMatchers 필터 처리보다 우선적으로 적용된다.
@@ -120,7 +123,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             // home, react 소스, 미리보기, 템플릿 이미지 허용
             .antMatchers("/", TpsConstants.HEALTH_PAGE, "/preview/**", "/image/template/**",
-                    "/" + TpsConstants.MOKA_STORE + "/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs",
+                    "/" + urlPathPrefix + "/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs",
                     "/api/user/test-login")
             .permitAll()
             // react 서버렌더링 허용

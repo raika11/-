@@ -37,8 +37,11 @@ public class UploadFileHelper {
     @Value("${tps.upload.path.real}")
     private String realPathPrefix;
 
-    @Value("${tps.upload.rms.path.prefix}")
-    private String rmsPathPrefix;
+    @Value("${tps.upload.path.url}")
+    private String urlPathPrefix;
+
+//    @Value("${tps.upload.rms.path.prefix}")
+//    private String rmsPathPrefix;
 
     @SuppressWarnings("serial")
     public UploadFileHelper() {
@@ -76,14 +79,16 @@ public class UploadFileHelper {
     }
 
     /**
-     * realPathPrefix를 제외한 uri 리턴
-     * 
-     * @param path 파일 경로
-     * @return uri
+     * 디비에 저장된 경로로 실제 경로 가져옴
+     * @param dbPath 디비에 저장된 경로
+     * @return 실제경로
      */
-    public String getUri(String path) {
-        // fileStore
-        return path.replace(this.realPathPrefix, "/" + TpsConstants.MOKA_STORE);
+    public String getRealPathByDB(String dbPath) {
+        StringBuffer sb = new StringBuffer(128);
+
+        sb.append(this.realPathPrefix).append("/").append(dbPath);
+
+        return sb.toString();
     }
 
     /**
@@ -96,27 +101,42 @@ public class UploadFileHelper {
     public String getUri(String business, String... paths) {
         StringBuffer sb = new StringBuffer(128);
 
-        sb.append("/").append(TpsConstants.MOKA_STORE).append("/").append(getBusinessProperty(business)).append("/")
+        sb.append("/").append(this.urlPathPrefix).append("/").append(getBusinessProperty(business)).append("/")
           .append(String.join("/", paths));
 
         return sb.toString();
     }
 
-
     /**
-     * RMS에 보여질 파일을 업로드할 실제 경로 가져옴
-     * 
-     * @param volumePath 볼륨패스
-     * @return 실제 경로
+     * 디비에 저정될 경로 가져옴. urlPathPrefix을 제외한 경로 리턴
+     *
+     * @param business 업무
+     * @param paths 나머지 path
+     * @return 서비스 경로
      */
-    public String getRealRmsPath(String volumePath, String... paths) {
+    public String getDbUri(String business, String... paths) {
         StringBuffer sb = new StringBuffer(128);
 
-        sb.append(this.rmsPathPrefix).append("/").append(volumePath).append("/")
-                .append(String.join("/", paths));
+        sb.append("/").append(getBusinessProperty(business)).append("/")
+          .append(String.join("/", paths));
 
         return sb.toString();
     }
+
+//    /**
+//     * RMS에 보여질 파일을 업로드할 실제 경로 가져옴
+//     *
+//     * @param volumePath 볼륨패스
+//     * @return 실제 경로
+//     */
+//    public String getRealRmsPath(String volumePath, String... paths) {
+//        StringBuffer sb = new StringBuffer(128);
+//
+//        sb.append(this.rmsPathPrefix).append("/").append(volumePath).append("/")
+//                .append(String.join("/", paths));
+//
+//        return sb.toString();
+//    }
 
     /**
      * 파일 업로드

@@ -24,7 +24,6 @@ public class TpsConstants {
     public static final String LOGIN_PROCESSING_URL = "/loginProcess";    // 로그인 처리 url
     public static final String LOGOUT_PAGE = "/logout";                // 로그아웃 처리 url
     public static final String VIEW_PREFIX = "/html";
-    public static final String MOKA_STORE = "mokastore";                // 파일 루트경로
 
     /**
      * 24시간

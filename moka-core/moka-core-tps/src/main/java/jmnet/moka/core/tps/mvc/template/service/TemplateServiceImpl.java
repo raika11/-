@@ -118,7 +118,6 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public void deleteTemplate(Template template) throws Exception {
-
         templateRepository.deleteById(template.getTemplateSeq());
         log.debug("Delete Template {}", template.getTemplateSeq());
     }
@@ -170,7 +169,7 @@ public class TemplateServiceImpl implements TemplateService {
         String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS,template.getDomain().getDomainId(), newFilename);
 
         if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
-            String uri = uploadFileHelper.getUri(TpsConstants.TEMPLATE_BUSINESS,template.getDomain().getDomainId(), newFilename);
+            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS,template.getDomain().getDomainId(), newFilename);
             return uri;
         } else {
             return "";
@@ -185,10 +184,10 @@ public class TemplateServiceImpl implements TemplateService {
         String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template.getDomain().getDomainId(), newFilename);
 
         // copy할 파일 실제 경로 구함
-        String targetRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, copyTargetImgPath);
+//        String targetRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, copyTargetImgPath);
 
-        if (uploadFileHelper.copyFile(imageRealPath, targetRealPath)) {
-            String uri = uploadFileHelper.getUri(TpsConstants.TEMPLATE_BUSINESS, template.getDomain().getDomainId(), newFilename);
+        if (uploadFileHelper.copyFile(imageRealPath, copyTargetImgPath)) {
+            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template.getDomain().getDomainId(), newFilename);
             return uri;
         } else {
             return "";
@@ -197,10 +196,8 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public boolean deleteTemplateImage(Template template) throws Exception {
-        String thumbnailPath = template.getTemplateThumb();
-        thumbnailPath = thumbnailPath.replace("template/", "");
         // 이미지 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, thumbnailPath);
+        String imageRealPath = uploadFileHelper.getRealPathByDB(template.getTemplateThumb());
         return uploadFileHelper.deleteFile(imageRealPath);
     }
 }

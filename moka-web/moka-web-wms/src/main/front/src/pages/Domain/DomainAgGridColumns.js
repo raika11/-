@@ -7,19 +7,19 @@ export const columnDefs = [
     {
         headerName: 'ID',
         field: 'domainId',
-        width: 50,
+        width: 80,
     },
     {
         headerName: 'URL',
         field: 'domainUrl',
         // cellClass: 'ag-cell-center',
         // cellStyle: { textAlign: 'center' },
-        width: 250,
+        width: 200,
     },
     {
         headerName: '도메인명',
         field: 'domainName',
-        width: 80,
+        width: 100,
     },
     {
         headerName: '',

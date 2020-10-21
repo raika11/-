@@ -58,6 +58,10 @@ const propTypes = {
      * nav 클릭 콜백
      */
     onSelectNav: PropTypes.func,
+    /**
+     * 탭 확장 가능 여부
+     */
+    foldable: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -70,6 +74,7 @@ const defaultProps = {
     expansion: true,
     onExpansion: null,
     onSelectNav: null,
+    foldable: true,
 };
 
 /**
@@ -77,7 +82,7 @@ const defaultProps = {
  * 아이콘 토글로 탭 변경
  */
 const MokaIconTabs = forwardRef((props, ref) => {
-    const { className, height, tabs, tabWidth, tabNavPosition, tabNavs, tabNavWidth, placement, expansion, onExpansion, onSelectNav } = props;
+    const { foldable, className, height, tabs, tabWidth, tabNavPosition, tabNavs, tabNavWidth, placement, expansion, onExpansion, onSelectNav } = props;
     const [activeKey, setActiveKey] = useState(0);
     const [isExpand, setIsExpand] = useState(true);
 
@@ -91,19 +96,20 @@ const MokaIconTabs = forwardRef((props, ref) => {
      */
     const handleSelect = (eventKey) => {
         setActiveKey(eventKey);
-        if (!isExpand) {
-            if (onExpansion) onExpansion(true);
-            else setIsExpand(true);
-        } else {
-            if (activeKey.toString() === eventKey) {
-                if (onExpansion) onExpansion(false);
-                else setIsExpand(false);
-            } else {
+        if (foldable) {
+            if (!isExpand) {
                 if (onExpansion) onExpansion(true);
                 else setIsExpand(true);
+            } else {
+                if (activeKey.toString() === eventKey) {
+                    if (onExpansion) onExpansion(false);
+                    else setIsExpand(false);
+                } else {
+                    if (onExpansion) onExpansion(true);
+                    else setIsExpand(true);
+                }
             }
         }
-
         if (onSelectNav) {
             onSelectNav(eventKey);
         }

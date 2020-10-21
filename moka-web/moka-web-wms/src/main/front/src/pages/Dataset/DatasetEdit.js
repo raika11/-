@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-import { MokaCard, MokaInputLabel, MokaSearchInput } from '@components';
+import { MokaCard, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import AutoDatasetListModal from './modals/AutoDatasetListModal';
 
 /**
@@ -57,7 +57,7 @@ const DatasetEdit = () => {
                         />
                     </Col>
                     <Col xs={1} className="p-0 mr-10">
-                        <MokaInputLabel
+                        <MokaInput
                             as="radio"
                             className="mb-0 h-100 align-items-center d-flex"
                             value="auto"

@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
+import { MokaSearchInput, MokaCard, MokaInput, MokaInputLabel } from '@components';
 import MovePageListModal from './modals/MovePageListModal';
 
 const PageEdit = () => {
@@ -51,9 +51,9 @@ const PageEdit = () => {
                         <MokaInputLabel label="서비스명" className="mb-0" />
                     </Col>
                     <Col xs={4} className="px-0 pl-2">
-                        <MokaInputLabel as="select" className="mb-0">
+                        <MokaInput as="select" className="mb-0">
                             <option>text/html</option>
-                        </MokaInputLabel>
+                        </MokaInput>
                     </Col>
                 </Form.Row>
                 {/* 표출명, 순서 */}

@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { MokaCard, MokaInputLabel, MokaIcon, MokaInputGroup } from '@components';
+import { MokaCard, MokaInputLabel, MokaIcon, MokaInput, MokaInputGroup } from '@components';
 import { getTpSize, getTpZone } from '@store/codeMgt/codeMgtAction';
 import { changeTemplate, saveTemplate } from '@store/template/templateAction';
 import CopyModal from './modals/CopyModal';
@@ -174,7 +174,7 @@ const TemplateEdit = () => {
                         />
                     </Col>
                     <Col xs={3} className="d-flex p-0 pl-2">
-                        x <MokaInputLabel className="ml-2 mb-0" value={cropHeight} onChange={(e) => setCropHeight(e.target.value)} type="number" />
+                        x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={(e) => setCropHeight(e.target.value)} type="number" />
                     </Col>
                 </Row>
                 {/* 입력태그 */}

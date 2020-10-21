@@ -1,10 +1,8 @@
 import React, { forwardRef } from 'react';
-import InputMask from 'react-input-mask';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-
 import Form from 'react-bootstrap/Form';
-import { MokaImageInput } from '@components';
+import MokaInput from './MokaInput';
 
 const propTypes = {
     /**
@@ -14,7 +12,7 @@ const propTypes = {
     /**
      * 라벨 (개행이 들어갈 경우 node 형태로 보낸다)
      */
-    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
     /**
      * 라벨의 넓이 (기본 값 70px)
      */
@@ -32,6 +30,7 @@ const propTypes = {
      */
     required: PropTypes.bool,
     /**
+     * ---------------------------------------------------------------------------------------------
      * input element의 타입(기본 input)
      */
     as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile']),
@@ -88,170 +87,37 @@ const defaultProps = {
 };
 
 /**
- * 공통 input 컴포넌트 (라벨 처리)
+ * 라벨 + input
  */
 const MokaInputLabel = forwardRef((props, ref) => {
-    const {
-        label,
-        labelWidth,
-        className,
-        labelClassName,
-        inputClassName,
-        required,
-        as,
-        type,
-        placeholder,
-        onChange,
-        value,
-        name,
-        children,
-        inputProps,
-        mask,
-        isInvalid,
-        disabled,
-    } = props;
+    // label props
+    const { label, labelWidth, className, labelClassName, required } = props;
+    // input props
+    const { inputClassName, as, type, placeholder, onChange, value, name, children, inputProps, mask, isInvalid, disabled } = props;
 
-    /**
-     * input 생성
-     */
-    const createControl = () => {
-        // 셀렉트
-        if (as === 'select') {
-            return (
-                <Form.Control
-                    ref={ref}
-                    as="select"
-                    {...inputProps}
-                    className={clsx('flex-fill', inputClassName)}
-                    placeholder={placeholder}
-                    required={required}
-                    onChange={onChange}
-                    value={value}
-                    name={name}
-                    custom
-                    isInvalid={isInvalid}
-                    disabled={disabled}
-                >
-                    {children}
-                </Form.Control>
-            );
-        }
-        // textarea
-        else if (as === 'textarea') {
-            return (
-                <Form.Control
-                    ref={ref}
-                    as="textarea"
-                    {...inputProps}
-                    className={clsx('flex-fill', inputClassName)}
-                    isInvalid={isInvalid}
-                    disabled={disabled}
-                    value={value}
-                    required={required}
-                    onChange={onChange}
-                />
-            );
-        }
-        // 라디오
-        else if (as === 'radio') {
-            return (
-                <Form.Check
-                    ref={ref}
-                    type="radio"
-                    {...inputProps}
-                    className={clsx('flex-fill', inputClassName)}
-                    isInvalid={isInvalid}
-                    disabled={disabled}
-                    value={value}
-                    required={required}
-                    onChange={onChange}
-                />
-            );
-        }
-        // 스위치
-        else if (as === 'switch') {
-            return (
-                <Form.Check
-                    ref={ref}
-                    type="switch"
-                    {...inputProps}
-                    label={inputProps.label || ''}
-                    className={clsx('flex-fill', inputClassName)}
-                    isInvalid={isInvalid}
-                    disabled={disabled}
-                    value={value}
-                    required={required}
-                    onChange={onChange}
-                />
-            );
-        }
-        // 체크박스
-        else if (as === 'checkbox') {
-            return (
-                <Form.Check
-                    ref={ref}
-                    type="checkbox"
-                    {...inputProps}
-                    className={clsx('flex-fill', inputClassName)}
-                    isInvalid={isInvalid}
-                    disabled={disabled}
-                    value={value}
-                    required={required}
-                    onChange={onChange}
-                />
-            );
-        }
-        // 드롭가능한 이미지 파일
-        else if (as === 'imageFile') {
-            return <MokaImageInput ref={ref} {...inputProps} />;
-        }
-
-        return (
-            <InputMask
-                mask={mask}
-                onChange={onChange}
-                value={value}
-                disabled={disabled}
-                onPaste={inputProps.onPaste}
-                onMouseDown={inputProps.onMouseDown}
-                onFocus={inputProps.onFocus}
-                onBlur={inputProps.onBlur}
-                readOnly={inputProps.readOnly}
-            >
-                {(maskProps) => (
-                    <Form.Control
-                        ref={ref}
-                        as={as}
-                        {...inputProps}
-                        {...maskProps}
-                        className={clsx('flex-fill', inputClassName)}
-                        isInvalid={isInvalid}
-                        disabled={disabled}
-                        value={value}
-                        onChange={onChange}
-                        placeholder={placeholder}
-                        type={type}
-                        required={required}
-                        name={name}
-                    />
-                )}
-            </InputMask>
-        );
-    };
-
-    return label ? (
+    return (
         <Form.Group className={clsx('d-flex', 'align-items-center', className)}>
             <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'text-right', labelClassName)} style={{ width: labelWidth, minWidth: labelWidth }} htmlFor="none">
                 {required && <span className="required-text">*</span>}
                 {label}
             </Form.Label>
-            {createControl()}
+            <MokaInput
+                ref={ref}
+                className={inputClassName}
+                as={as}
+                type={type}
+                placeholder={placeholder}
+                onChange={onChange}
+                value={value}
+                name={name}
+                inputProps={inputProps}
+                mask={mask}
+                isInvalid={isInvalid}
+                disabled={disabled}
+            >
+                {children}
+            </MokaInput>
         </Form.Group>
-    ) : (
-        <span className={clsx('position-relative', className)}>
-            {required && <span className="required-text absolute-top-right">*</span>}
-            {createControl()}
-        </span>
     );
 });
 

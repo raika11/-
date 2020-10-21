@@ -90,7 +90,7 @@ const defaultProps = {
 /**
  * 공통 input 컴포넌트 (라벨 처리)
  */
-const MokaInput = forwardRef((props, ref) => {
+const MokaInputLabel = forwardRef((props, ref) => {
     const {
         label,
         labelWidth,
@@ -255,7 +255,7 @@ const MokaInput = forwardRef((props, ref) => {
     );
 });
 
-MokaInput.propTypes = propTypes;
-MokaInput.defaultProps = defaultProps;
+MokaInputLabel.propTypes = propTypes;
+MokaInputLabel.defaultProps = defaultProps;
 
-export default MokaInput;
+export default MokaInputLabel;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { MokaModal, MokaInput } from '@components';
+import { MokaModal, MokaInputLabel } from '@components';
 import { copyTemplate } from '@store/template/templateAction';
 
 /**
@@ -62,7 +62,7 @@ const CopyModal = (props) => {
             draggable
         >
             <Form>
-                <MokaInput
+                <MokaInputLabel
                     label="템플릿명"
                     labelWidth={90}
                     className="mb-0"

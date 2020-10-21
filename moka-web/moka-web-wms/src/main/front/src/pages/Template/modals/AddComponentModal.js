@@ -4,7 +4,7 @@ import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaModal, MokaInput, MokaIcon } from '@components';
+import { MokaModal, MokaInputLabel, MokaIcon } from '@components';
 import { saveComponentList } from '@store/component/componentAction';
 
 /**
@@ -146,7 +146,7 @@ const AddComponentModal = (props) => {
                 {componentList.map((component, idx) => (
                     <Form.Row className="mb-2" key={idx}>
                         <Col xs={11} className="p-0">
-                            <MokaInput
+                            <MokaInputLabel
                                 label="컴포넌트명"
                                 labelWidth={90}
                                 className="mb-0"

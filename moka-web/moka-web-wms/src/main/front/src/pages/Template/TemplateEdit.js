@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { MokaCard, MokaInput, MokaIcon, MokaInputGroup } from '@components';
+import { MokaCard, MokaInputLabel, MokaIcon, MokaInputGroup } from '@components';
 import { getTpSize, getTpZone } from '@store/codeMgt/codeMgtAction';
 import { changeTemplate, saveTemplate } from '@store/template/templateAction';
 import CopyModal from './modals/CopyModal';
@@ -146,24 +146,24 @@ const TemplateEdit = () => {
                     </div>
                 </Form.Group>
                 {/* 템플릿ID */}
-                <MokaInput className="mb-2" label="템플릿ID" value={templateSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="템플릿ID" value={templateSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 템플릿명 */}
-                <MokaInput className="mb-2" label="템플릿명" value={templateName} onChange={(e) => setTemplateName(e.target.value)} placeholder="템플릿명을 입력하세요" />
+                <MokaInputLabel className="mb-2" label="템플릿명" value={templateName} onChange={(e) => setTemplateName(e.target.value)} placeholder="템플릿명을 입력하세요" />
                 {/* 위치그룹 */}
-                <MokaInput className="mb-2" label="위치 그룹" as="select" value={templateGroup} onChange={(e) => setTemplateGroup(e.target.value)} isInvalid={!validated}>
+                <MokaInputLabel className="mb-2" label="위치 그룹" as="select" value={templateGroup} onChange={(e) => setTemplateGroup(e.target.value)} isInvalid={!validated}>
                     {tpZoneRows.map((cd) => (
                         <option key={cd.dtlCd} value={cd.dtlCd}>
                             {cd.cdNm}
                         </option>
                     ))}
-                </MokaInput>
+                </MokaInputLabel>
                 {/* 사이즈, 이미지 크기 */}
                 <Row className="m-0 mb-2">
                     <Col xs={5} className="p-0 m-0">
-                        <MokaInput className="mb-0" label="사이즈" value={templateWidth} onChange={(e) => setTemplateWidth(e.target.value)} type="number" />
+                        <MokaInputLabel className="mb-0" label="사이즈" value={templateWidth} onChange={(e) => setTemplateWidth(e.target.value)} type="number" />
                     </Col>
                     <Col xs={4} className="p-0">
-                        <MokaInput
+                        <MokaInputLabel
                             label="이미지"
                             labelWidth={51}
                             labelClassName="mr-2"
@@ -174,7 +174,7 @@ const TemplateEdit = () => {
                         />
                     </Col>
                     <Col xs={3} className="d-flex p-0 pl-2">
-                        x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={(e) => setCropHeight(e.target.value)} type="number" />
+                        x <MokaInputLabel className="ml-2 mb-0" value={cropHeight} onChange={(e) => setCropHeight(e.target.value)} type="number" />
                     </Col>
                 </Row>
                 {/* 입력태그 */}
@@ -199,7 +199,7 @@ const TemplateEdit = () => {
                     }
                 />
                 {/* 대표이미지 */}
-                <MokaInput
+                <MokaInputLabel
                     ref={imgFileRef}
                     as="imageFile"
                     label={
@@ -225,7 +225,7 @@ const TemplateEdit = () => {
                     className="mb-2"
                 />
                 {/* 설명 */}
-                <MokaInput label="설명" placeholder="내용설명" value={description} onChange={(e) => setDescription(e.target.value)} />
+                <MokaInputLabel label="설명" placeholder="내용설명" value={description} onChange={(e) => setDescription(e.target.value)} />
             </Form>
 
             {/* 템플릿복사 Modal */}

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaSearchInput, MokaInput } from '@components';
+import { MokaSearchInput, MokaInputLabel } from '@components';
 
 import { changeLatestDomainId } from '@store/auth/authAction';
 import { getTemplateList, changeSearchOption, changeSearchOptions } from '@store/template/templateAction';
@@ -98,7 +98,7 @@ const TemplateSearch = () => {
         <Form className="mb-10">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
-                <MokaInput
+                <MokaInputLabel
                     as="select"
                     className="w-100"
                     value={search.domainId || undefined}
@@ -112,12 +112,12 @@ const TemplateSearch = () => {
                             {domain.domainName}
                         </option>
                     ))}
-                </MokaInput>
+                </MokaInputLabel>
             </Form.Row>
             <Form.Row className="mb-2">
                 {/* 템플릿 위치그룹 */}
                 <Col xs={7} className="p-0 pr-2">
-                    <MokaInput
+                    <MokaInputLabel
                         as="select"
                         value={search.templateGroup}
                         onChange={(e) => {
@@ -130,24 +130,24 @@ const TemplateSearch = () => {
                                 {cd.cdNm}
                             </option>
                         ))}
-                    </MokaInput>
+                    </MokaInputLabel>
                 </Col>
                 {/* 템플릿 사이즈 */}
                 <Col xs={5} className="p-0">
-                    <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize}>
+                    <MokaInputLabel as="select" value={search.templateWidth} onChange={handleChangeTpSize}>
                         <option value="all">사이즈 전체</option>
                         {tpSizeRows.map((cd) => (
                             <option key={cd.dtlCd} value={cd.dtlCd} data-widthmin={cd.cdNmEtc1} data-widthmax={cd.cdNmEtc2}>
                                 {cd.cdNm}
                             </option>
                         ))}
-                    </MokaInput>
+                    </MokaInputLabel>
                 </Col>
             </Form.Row>
             <Form.Group as={Row} className="mb-2">
                 {/* 검색조건 */}
                 <Col xs={4} className="p-0 pr-2">
-                    <MokaInput
+                    <MokaInputLabel
                         as="select"
                         value={search.searchType || undefined}
                         onChange={(e) => {
@@ -159,7 +159,7 @@ const TemplateSearch = () => {
                                 {type.name}
                             </option>
                         ))}
-                    </MokaInput>
+                    </MokaInputLabel>
                 </Col>
                 {/* 키워드 */}
                 <Col xs={8} className="p-0">

@@ -3,7 +3,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-import { MokaCard, MokaInput } from '@components';
+import { MokaCard, MokaInputLabel } from '@components';
 
 /**
  * 컨테이너 정보/수정 컴포넌트
@@ -22,9 +22,9 @@ const ContainerEdit = () => {
                     </div>
                 </Form.Group>
                 {/* 컨테이너ID */}
-                <MokaInput className="mb-2" label="컨테이너ID" value="25555" inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="컨테이너ID" value="25555" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 컨테이너명 */}
-                <MokaInput className="mb-2" label="컨테이너명" value="컨테이너명" onChange={() => {}} placeholder="컨테이너명을 입력하세요" required />
+                <MokaInputLabel className="mb-2" label="컨테이너명" value="컨테이너명" onChange={() => {}} placeholder="컨테이너명을 입력하세요" required />
             </Form>
         </MokaCard>
     );

@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { MokaSearchInput, MokaCard, MokaInput } from '@components';
+import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
 import MovePageListModal from './modals/MovePageListModal';
 
 const PageEdit = () => {
@@ -31,55 +31,55 @@ const PageEdit = () => {
                     </Button>
                 </Form.Group>
                 {/* 사용여부 */}
-                <MokaInput as="switch" className="mb-2" label="사용여부" inputProps={{ id: 'useYn', label: '' }} />
+                <MokaInputLabel as="switch" className="mb-2" label="사용여부" inputProps={{ id: 'useYn', label: '' }} />
                 {/* 사이트 ID, URL */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="px-0">
-                        <MokaInput label="사이트 ID" className="mb-0" placeholder="ID" />
+                        <MokaInputLabel label="사이트 ID" className="mb-0" placeholder="ID" />
                     </Col>
                     <Col xs={6} className="px-0">
-                        <MokaInput label="URL" labelWidth={47} className="mb-0" inputProps={{ plaintext: true }} />
+                        <MokaInputLabel label="URL" labelWidth={47} className="mb-0" inputProps={{ plaintext: true }} />
                     </Col>
                 </Form.Row>
                 {/* 페이지명 */}
                 <Form.Row className="mb-2">
-                    <MokaInput label="페이지명" className="mb-0 w-100" placeholder="페이지명을 입력하세요" required />
+                    <MokaInputLabel label="페이지명" className="mb-0 w-100" placeholder="페이지명을 입력하세요" required />
                 </Form.Row>
                 {/* 서비스명, 서비스타입 */}
                 <Form.Row className="mb-2">
                     <Col xs={8} className="px-0">
-                        <MokaInput label="서비스명" className="mb-0" />
+                        <MokaInputLabel label="서비스명" className="mb-0" />
                     </Col>
                     <Col xs={4} className="px-0 pl-2">
-                        <MokaInput as="select" className="mb-0">
+                        <MokaInputLabel as="select" className="mb-0">
                             <option>text/html</option>
-                        </MokaInput>
+                        </MokaInputLabel>
                     </Col>
                 </Form.Row>
                 {/* 표출명, 순서 */}
                 <Form.Row className="mb-2">
                     <Col xs={8} className="px-0">
-                        <MokaInput label="표출명" className="mb-0" />
+                        <MokaInputLabel label="표출명" className="mb-0" />
                     </Col>
                     <Col xs={4} className="px-0">
-                        <MokaInput label="순서" labelWidth={43} className="mb-0" required />
+                        <MokaInputLabel label="순서" labelWidth={43} className="mb-0" required />
                     </Col>
                 </Form.Row>
                 {/* 이동URL */}
                 <Form.Row className="mb-2">
                     <Col xs={4} className="px-0">
-                        <MokaInput as="switch" className="mb-0 h-100" inputProps={{ id: 'moveUrl' }} label="이동URL" />
+                        <MokaInputLabel as="switch" className="mb-0 h-100" inputProps={{ id: 'moveUrl' }} label="이동URL" />
                     </Col>
                     <Col xs={8} className="px-0">
                         <MokaSearchInput className="pl-2" onSearch={() => setMoveModalShow(true)} disabled />
                     </Col>
                 </Form.Row>
                 {/* 키워드 */}
-                <MokaInput className="mb-2" label="키워드" placeholder="키워드를 입력하세요" />
+                <MokaInputLabel className="mb-2" label="키워드" placeholder="키워드를 입력하세요" />
                 {/* 설명 */}
-                <MokaInput className="mb-2" inputClassName="resize-none" as="textarea" label="설명" inputProps={{ rows: 10 }} />
+                <MokaInputLabel className="mb-2" inputClassName="resize-none" as="textarea" label="설명" inputProps={{ rows: 10 }} />
                 {/* 경로 파라미터명 */}
-                <MokaInput
+                <MokaInputLabel
                     className="mb-2"
                     label={
                         <>

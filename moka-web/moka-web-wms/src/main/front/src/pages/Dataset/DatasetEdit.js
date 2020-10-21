@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-import { MokaCard, MokaInput, MokaSearchInput } from '@components';
+import { MokaCard, MokaInputLabel, MokaSearchInput } from '@components';
 import AutoDatasetListModal from './modals/AutoDatasetListModal';
 
 /**
@@ -21,7 +21,7 @@ const DatasetEdit = () => {
                 {/* 데이터셋아이디, 버튼그룹 */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <MokaInput className="mb-0" label="데이터셋ID" value="10111" inputProps={{ plaintext: true, readOnly: true }} />
+                        <MokaInputLabel className="mb-0" label="데이터셋ID" value="10111" inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
                     <Col xs={6} className="p-0 d-flex justify-content-between">
                         <div className="d-flex">
@@ -41,13 +41,13 @@ const DatasetEdit = () => {
                 {/* 데이터셋명 */}
                 <Form.Row className="mb-2">
                     <Col xs={7} className="p-0">
-                        <MokaInput className="mb-0" label="데이터셋명" placeholder="데이터셋명을 입력하세요" />
+                        <MokaInputLabel className="mb-0" label="데이터셋명" placeholder="데이터셋명을 입력하세요" />
                     </Col>
                 </Form.Row>
                 {/* 데이터타입 */}
                 <Form.Row className="mb-2">
                     <Col xs={3} className="p-0">
-                        <MokaInput
+                        <MokaInputLabel
                             as="radio"
                             className="mb-0 h-100"
                             label="데이터"
@@ -57,7 +57,7 @@ const DatasetEdit = () => {
                         />
                     </Col>
                     <Col xs={1} className="p-0 mr-10">
-                        <MokaInput
+                        <MokaInputLabel
                             as="radio"
                             className="mb-0 h-100 align-items-center d-flex"
                             value="auto"
@@ -81,32 +81,32 @@ const DatasetEdit = () => {
                         {dataType === 'auto' && (
                             <>
                                 <Form.Row className="mb-2">
-                                    <MokaInput label="데이터셋 ID" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <MokaInputLabel label="데이터셋 ID" labelWidth={80} className="flex-fill mb-0 mr-2" />
                                     <Button>검색</Button>
                                 </Form.Row>
                                 <Form.Row className="mb-2">
-                                    <MokaInput label="부서" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <MokaInputLabel label="부서" labelWidth={80} className="flex-fill mb-0 mr-2" />
                                     <Button>검색</Button>
                                 </Form.Row>
                                 <Form.Row className="mb-2">
-                                    <MokaInput label="분류" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <MokaInputLabel label="분류" labelWidth={80} className="flex-fill mb-0 mr-2" />
                                     <Button>검색</Button>
                                 </Form.Row>
                                 <Form.Row className="mb-2">
-                                    <MokaInput label="기자" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <MokaInputLabel label="기자" labelWidth={80} className="flex-fill mb-0 mr-2" />
                                     <Button>검색</Button>
                                 </Form.Row>
                                 <Form.Row className="mb-2">
-                                    <MokaInput label="시리즈" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <MokaInputLabel label="시리즈" labelWidth={80} className="flex-fill mb-0 mr-2" />
                                     <Button>검색</Button>
                                 </Form.Row>
                                 <Form.Row className="mb-2">
-                                    <MokaInput label="지역" labelWidth={80} className="flex-fill mb-0 mr-2" />
+                                    <MokaInputLabel label="지역" labelWidth={80} className="flex-fill mb-0 mr-2" />
                                     <Button>검색</Button>
                                 </Form.Row>
                             </>
                         )}
-                        <MokaInput label="설명" as="textarea" labelWidth={80} className="mb-0" inputClassName="resize-none" inputProps={{ rows: 7 }} />
+                        <MokaInputLabel label="설명" as="textarea" labelWidth={80} className="mb-0" inputClassName="resize-none" inputProps={{ rows: 7 }} />
                     </Form>
                 </Col>
             </div>

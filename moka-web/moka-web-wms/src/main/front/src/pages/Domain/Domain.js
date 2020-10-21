@@ -1,5 +1,4 @@
-import React, { useState, Suspense } from 'react';
-import Container from 'react-bootstrap/Container';
+import React, { Suspense } from 'react';
 
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { MokaCard } from '@components';

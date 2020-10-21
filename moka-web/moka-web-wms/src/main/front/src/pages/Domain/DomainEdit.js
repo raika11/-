@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { useParams, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { clearDomain, getDomain, saveDomain, duplicateCheck, deleteDomain } from '@store/domain';
+import { clearDomain, getDomain, saveDomain, duplicateCheck, deleteDomain, GET_DOMAIN } from '@store/domain';
 import { notification } from '@utils/toastUtil';
 import { toastr } from 'react-redux-toastr';
 import { getApi, getLang } from '@store/codeMgt/codeMgtAction';
@@ -35,12 +35,12 @@ const DomainEdit = ({ history }) => {
     const [domainUrlError, setDomainUrlError] = useState(false);
 
     // getter
-    const { detail, langRows, apiRows, latestDomainId, loading } = useSelector(
+    const { detail, langRows, apiRows, loading } = useSelector(
         (store) => ({
             detail: store.domain.detail,
             langRows: store.codeMgt.langRows,
             apiRows: store.codeMgt.apiRows,
-            latestDomainId: store.auth.latestDomainId,
+            loading: store.loading[GET_DOMAIN],
         }),
         shallowEqual,
     );
@@ -113,7 +113,8 @@ const DomainEdit = ({ history }) => {
     useEffect(() => {
         dispatch(getLang());
         dispatch(getApi());
-    }, [dispatch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         /**

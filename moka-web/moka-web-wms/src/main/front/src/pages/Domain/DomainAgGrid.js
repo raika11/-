@@ -1,8 +1,6 @@
-import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from './DomainAgGridColumns';
 import React, { useCallback, useEffect, useState } from 'react';
 import { MokaTable } from '@components';
-import { rowData } from '@pages/Page/relations/PageChildContainerAgGridColumns';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { changeSearchOption, getDomainList } from '@store/domain';
 import { useHistory } from 'react-router-dom';
@@ -14,28 +12,19 @@ const DomainAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [domainRows, setDomainRows] = useState([]);
-    const { detail, list, total, search, error, loading, latestDomainId } = useSelector(
+    const { list, total, search, loading } = useSelector(
         (store) => ({
-            detail: store.domain.detail,
             list: store.domain.list,
             total: store.domain.total,
             search: store.domain.search,
-            error: store.domain.error,
-            latestDomainId: store.auth.latestDomainId,
         }),
         shallowEqual,
     );
 
     useEffect(() => {
-        dispatch(
-            getDomainList(
-                changeSearchOption({
-                    key: 'mediaId',
-                    value: latestDomainId,
-                }),
-            ),
-        );
-    }, [dispatch, latestDomainId]);
+        dispatch(getDomainList());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (list.length > 0) {
@@ -83,6 +72,7 @@ const DomainAgGrid = () => {
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
                 preventRowClickCell={['delete']}
+                pageSizes={[1, 2, 3]}
             />
             {/* 설정 변경가능한 Table */}
             {/* <div className="ag-theme-moka-grid mb-3" style={{ height: '550px' }}>

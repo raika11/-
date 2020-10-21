@@ -32,7 +32,7 @@ export const columnDefs = [
             if (useYn === 'Y') {
                 clazz = 'color-primary';
             }
-            return <FontAwesomeIcon className="align-middle mr-2" icon={faCircle} fixedWidth className={clazz} />;
+            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
         },
         //preventRowClick: true,
     },

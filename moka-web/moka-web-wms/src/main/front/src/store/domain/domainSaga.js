@@ -3,8 +3,6 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga } from '../commons/saga';
 import * as domainAPI from './domainApi';
 import * as domainAction from './domainAction';
-import { getDomainList } from '@store/auth';
-import { enqueueToast } from '@store/notification/toastAction';
 import { notification } from '@utils/toastUtil';
 
 let message = {};
@@ -26,8 +24,8 @@ const getDomainSaga = createRequestSaga(domainAction.GET_DOMAIN, domainAPI.getDo
  * @param {func} param0.payload.duplicate 중복될 때 콜백
  */
 function* duplicateCheckSaga({ payload: { domainId, unique, duplicate } }) {
-    //const ACTION = domainAction.DUPLICATE_CHECK;
-    //yield put(startLoading(ACTION));
+    const ACTION = domainAction.DUPLICATE_CHECK;
+    yield put(startLoading(ACTION));
     try {
         const response = yield call(domainAPI.duplicateCheck, domainId);
         if (response.data.header.success) {
@@ -41,7 +39,7 @@ function* duplicateCheckSaga({ payload: { domainId, unique, duplicate } }) {
         }
         // eslint-disable-next-line no-empty
     } catch (e) {}
-    //yield put(finishLoading(ACTION));
+    yield put(finishLoading(ACTION));
 }
 
 /**
@@ -53,12 +51,12 @@ function* duplicateCheckSaga({ payload: { domainId, unique, duplicate } }) {
  * @param {func} param0.payload.error 에러 콜백
  */
 function* saveDomainSaga({ payload: { type, domain, success, fail, error } }) {
-    //const ACTION = domainAction.SAVE_DOMAIN;
+    const ACTION = domainAction.SAVE_DOMAIN;
     message.key = `domainSave${new Date().getTime() + Math.random()}`;
     message.message = '저장하지 못했습니다';
     message.options = { variant: 'error', persist: true };
 
-    //yield put(startLoading(ACTION));
+    yield put(startLoading(ACTION));
     try {
         const response = type === 'insert' ? yield call(domainAPI.postDomain, { domain }) : yield call(domainAPI.putDomain, { domain });
 
@@ -89,7 +87,7 @@ function* saveDomainSaga({ payload: { type, domain, success, fail, error } }) {
         });
         if (typeof error === 'function') error(e);
     }
-    // yield put(finishLoading(ACTION));
+    yield put(finishLoading(ACTION));
     //yield put(enqueueToast(message));
     yield notification(message.options.variant, message.message);
 }
@@ -127,12 +125,12 @@ function* hasRelationsSaga({ payload: { domainId, exist, notExist } }) {
  * @param {func} param0.payload.error 에러 콜백
  */
 function* deleteDomainSaga({ payload: { domainId, success, fail, error } }) {
-    //const ACTION = domainAction.DELETE_DOMAIN;
+    const ACTION = domainAction.DELETE_DOMAIN;
     message.key = `domainDel${new Date().getTime() + Math.random()}`;
     message.message = '삭제하지 못했습니다';
     message.options = { variant: 'error', persist: true };
 
-    //yield put(startLoading(ACTION));
+    yield put(startLoading(ACTION));
     try {
         const response = yield call(domainAPI.deleteDomain, { domainId });
 
@@ -161,7 +159,7 @@ function* deleteDomainSaga({ payload: { domainId, success, fail, error } }) {
         });
         if (typeof error === 'function') error(e);
     }
-    //yield put(finishLoading(ACTION));
+    yield put(finishLoading(ACTION));
     //yield put(enqueueToast(message));
     yield notification(message.options.variant, message.message);
 }

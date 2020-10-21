@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaPagination } from '@components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
+import Tooltip from './MokaTableTooltip';
 
 const propTypes = {
     /**
@@ -132,14 +133,14 @@ const MokaTable = (props) => {
                 onRowClicked(params.node.data);
             }
             if (params.colDef.field === 'append') {
-                if (onAppendClick ) onAppendClick(params.node.data);
+                if (onAppendClick) onAppendClick(params.node.data);
             }
 
             if (params.colDef.field === 'delete') {
-                if (onDeleteClick ) onDeleteClick(params.node.data);
+                if (onDeleteClick) onDeleteClick(params.node.data);
             }
         },
-        [onRowClicked, preventRowClickCell],
+        [onAppendClick, onDeleteClick, onRowClicked, preventRowClickCell],
     );
 
     const handleRowDragMove = (event) => {
@@ -201,6 +202,12 @@ const MokaTable = (props) => {
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     selected={selected}
+                    defaultColDef={
+                        {
+                            // tooltipComponent: 'mokaTooltip',
+                        }
+                    }
+                    frameworkComponents={{ mokaTooltip: Tooltip }}
                 />
             </div>
             {/* 페이징 */}

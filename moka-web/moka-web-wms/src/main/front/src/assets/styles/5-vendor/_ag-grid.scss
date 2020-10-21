@@ -47,6 +47,11 @@
     border-bottom-style: none;
 }
 
+.ag-react-container {
+    height: 100%;
+    width: 100%;
+}
+
 
 /* 화면편집 */
 
@@ -124,10 +129,6 @@ $padding-height: 10px;
     overflow: hidden;
     height: unset !important;
     min-height: unset !important;
-}
-
-.ag-theme-moka-desking-grid .ag-react-container {
-    width: 100%;
 }
 .ag-theme-moka-desking-grid .ag-react-container > button {
     padding: 0;

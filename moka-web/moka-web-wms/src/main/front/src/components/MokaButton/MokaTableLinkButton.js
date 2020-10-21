@@ -37,9 +37,11 @@ const MokaTableLinkButton = (props) => {
     );
 
     return (
-        <Button variant="gray150" className="py-0 px-05" onClick={handleClick}>
-            <MokaIcon iconName="fal-external-link" />
-        </Button>
+        <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+            <Button variant="white" className="border p-0 moka-table-button" onClick={handleClick}>
+                <MokaIcon iconName="fal-external-link" />
+            </Button>
+        </div>
     );
 };
 

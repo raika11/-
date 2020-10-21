@@ -9,6 +9,7 @@ import template from '@store/template/templateReducer';
 import templateRelations from '@store/template/templateRelationsReducer';
 import toast from '@store/notification/toastReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
+import reserved from '@store/reserved/reservedReducer';
 
 export default combineReducers({
     toastr,
@@ -20,4 +21,5 @@ export default combineReducers({
     templateRelations,
     toast,
     codeMgt,
+    reserved,
 });

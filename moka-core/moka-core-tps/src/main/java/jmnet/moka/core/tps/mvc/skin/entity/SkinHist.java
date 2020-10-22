@@ -11,7 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
+import lombok.Builder.Default;
+import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,44 +34,58 @@ import lombok.NoArgsConstructor;
  * The persistent class for the WMS_SKIN_HIST database table.
  * 
  */
-@Entity
-@Table(name = "WMS_SKIN_HIST")
-@NamedQuery(name = "SkinHist.findAll", query = "SELECT s FROM SkinHist s")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @EqualsAndHashCode(exclude = "skin")
-@JsonInclude(Include.NON_NULL)
-public class SkinHist implements Serializable {
+//@JsonInclude(Include.NON_NULL)
+@Entity
+@Table(name = "TB_WMS_SKIN_HIST")
+public class SkinHist extends BaseAudit {
 
     private static final long serialVersionUID = 46823883650528948L;
 
+    /**
+     * 일련번호
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ")
     private Long seq;
 
+    /**
+     * 스킨
+     */
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SKIN_SEQ", referencedColumnName = "SKIN_SEQ", nullable = false)
     private Skin skin;
 
+    /**
+     * 도메인
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID")
     private Domain domain;
 
-    @Lob
+    /**
+     * 스킨본문
+     */
+    @Nationalized
     @Column(name = "SKIN_BODY")
-    private String skinBody;
+    @Builder.Default
+    private String skinBody = "";
 
     @Column(name = "WORK_TYPE", columnDefinition = "char")
-    private String workType;
+    @Builder.Default
+    private String workType = "U";
 
-    @Column(name = "CREATE_YMDT")
-    private String createYmdt;
-
-    @Column(name = "CREATOR")
-    private String creator;
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.skinBody = McpString.defaultValue(this.skinBody, "");
+        this.workType = McpString.defaultValue(this.workType, "U");
+    }
 
 }

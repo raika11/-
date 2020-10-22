@@ -17,11 +17,15 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.style.entity.Style;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -29,72 +33,91 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 
 /**
  * The persistent class for the WMS_SKIN database table.
  * 
  */
-@Entity
-@Table(name = "WMS_SKIN")
-@NamedQuery(name = "Skin.findAll", query = "SELECT s FROM Skin s")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
 @EqualsAndHashCode(exclude = "skinRels")
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "skinSeq")
-public class Skin implements Serializable {
+@Entity
+@Table(name = "TB_WMS_SKIN")
+public class Skin extends BaseAudit {
 
     private static final long serialVersionUID = -5594061966806120720L;
 
+    /**
+     * 스킨SEQ
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SKIN_SEQ")
     private Long skinSeq;
 
+    /**
+     * 도메인
+     */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID")
+    @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
-    @Column(name = "SKIN_NAME")
+    /**
+     * 스킨명
+     */
+    @Nationalized
+    @Column(name = "SKIN_NAME", nullable = false)
     private String skinName;
 
+    /**
+     * 스킨서비스명
+     */
+    @Nationalized
     @Column(name = "SKIN_SERVICE_NAME")
     private String skinServiceName;
 
+    /**
+     * 서비스유형(기타코드)
+     */
     @Column(name = "SERVICE_TYPE")
     private String serviceType;
 
-    @Column(name = "DEFAULT_YN", columnDefinition = "char")
-    private String defaultYn;
+    /**
+     * 기본여부
+     */
+    @Column(name = "DEFAULT_YN", columnDefinition = "char", nullable = false)
+    @Builder.Default
+    private String defaultYn = "N";
 
-    @Lob
+    /**
+     * 스킨본문
+     */
+    @Nationalized
     @Column(name = "SKIN_BODY")
-    private String skinBody;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "STYLE_SEQ", referencedColumnName = "STYLE_SEQ")
-    private Style style;
-
-    @Column(name = "CREATE_YMDT")
-    private String createYmdt;
-
-    @Column(name = "CREATOR")
-    private String creator;
-
-    @Column(name = "MODIFIED_YMDT")
-    private String modifiedYmdt;
-
-    @Column(name = "MODIFIER")
-    private String modifier;
+    @Builder.Default
+    private String skinBody = "";
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "skin",
             cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private Set<SkinRel> skinRels = new LinkedHashSet<SkinRel>();
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.skinBody = McpString.defaultValue(this.skinBody, "");
+        this.defaultYn = McpString.defaultValue(this.defaultYn, "N");
+    }
 
     /**
      * 관련아이템 추가

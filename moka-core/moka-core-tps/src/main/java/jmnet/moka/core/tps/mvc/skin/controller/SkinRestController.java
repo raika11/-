@@ -85,7 +85,7 @@ public class SkinRestController {
      * 본문스킨정보 조회
      * 
      * @param request 요청
-     * @param containerSeq 스킨아이디 (필수)
+     * @param skinSeq 스킨아이디 (필수)
      * @return 페이지정보
      * @throws NoDataException 스킨 정보가 없음
      * @throws InvalidDataException 스킨 아이디 형식오류
@@ -114,8 +114,8 @@ public class SkinRestController {
      * 본문스킨정보 유효성 검사
      * 
      * @param request 요청
-     * @param containerSeq 스킨 순번. 0이면 등록일때 유효성 검사
-     * @param containerDTO 스킨정보
+     * @param skinSeq 스킨 순번. 0이면 등록일때 유효성 검사
+     * @param skinDTO 스킨정보
      * @return 유효하지 않은 필드목록
      * @throws InvalidDataException 데이타유효성 예외
      * @throws Exception 기타예외
@@ -184,8 +184,6 @@ public class SkinRestController {
 
         // 등록
         Skin skin = modelMapper.map(skinDTO, Skin.class);
-        skin.setCreateYmdt(McpDate.nowStr());
-        skin.setCreator(principal.getName());
         Skin returnValue = skinService.insertSkin(skin);
 
         // 결과리턴

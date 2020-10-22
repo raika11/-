@@ -82,7 +82,7 @@ public class SkinServiceImpl implements SkinService {
         Skin saveSkin = skinRepository.save(skin);
 
         // 3. 히스토리저장
-        insertHist(saveSkin, TpsConstants.WORKTYPE_INSERT, saveSkin.getCreator());
+        insertHist(saveSkin, TpsConstants.WORKTYPE_INSERT, saveSkin.getRegId());
 
         return saveSkin;
     }
@@ -107,7 +107,7 @@ public class SkinServiceImpl implements SkinService {
             relation.setRelType(item.getNodeName());
             relation.setRelSeq(Long.parseLong(item.getId()));
             relation.setRelParentType("NN");
-            relation.setRelOrder(item.getOrder());
+            relation.setRelOrd(item.getOrder());
 
             // 동일한 아이템은 추가하지 않는다.
             if (skin.isEqualRel(relation)) {
@@ -154,7 +154,7 @@ public class SkinServiceImpl implements SkinService {
                     relationTP.setRelSeq(component.get().getTemplate().getTemplateSeq());
                     relationTP.setRelParentType(MokaConstants.ITEM_COMPONENT);
                     relationTP.setRelParentSeq(component.get().getComponentSeq());
-                    relationTP.setRelOrder(item.getOrder());
+                    relationTP.setRelOrd(item.getOrder());
 
                     // 동일한 아이템은 추가하지 않는다.
                     if (!skin.isEqualRel(relationTP)) {
@@ -170,7 +170,7 @@ public class SkinServiceImpl implements SkinService {
                         relatioDS.setRelSeq(component.get().getDataset().getDatasetSeq());
                         relatioDS.setRelParentType(MokaConstants.ITEM_COMPONENT);
                         relatioDS.setRelParentSeq(component.get().getComponentSeq());
-                        relatioDS.setRelOrder(item.getOrder());
+                        relatioDS.setRelOrd(item.getOrder());
 
                         if (!skin.isEqualRel(relatioDS)) {
                             relatioDS.setSkin(skin);
@@ -199,14 +199,14 @@ public class SkinServiceImpl implements SkinService {
         hist.setWorkType(workType);
 
         if (workType.equals(TpsConstants.WORKTYPE_INSERT)) {
-            hist.setCreateYmdt(saveSkin.getCreateYmdt());
-            hist.setCreator(saveSkin.getCreator());
+            hist.setRegDt(saveSkin.getRegDt());
+            hist.setRegId(saveSkin.getRegId());
         } else if (workType.equals(TpsConstants.WORKTYPE_UPDATE)) {
-            hist.setCreateYmdt(saveSkin.getModifiedYmdt());
-            hist.setCreator(saveSkin.getModifier());
+            hist.setRegDt(saveSkin.getModDt());
+            hist.setRegId(saveSkin.getModId());
         } else if (workType.equals(TpsConstants.WORKTYPE_DELETE)) {
-            hist.setCreateYmdt(McpDate.nowStr());
-            hist.setCreator(userName);
+            hist.setRegDt(McpDate.now());
+            hist.setRegId(userName);
         }
 
         skinHistRepository.save(hist);
@@ -260,7 +260,7 @@ public class SkinServiceImpl implements SkinService {
                             .relSeq(newComponent.getDataset().getDatasetSeq())
                             .relParentType(MokaConstants.ITEM_COMPONENT)
                             .relParentSeq(newComponent.getComponentSeq())
-                            .relOrder(rel.getRelOrder()).build();
+                            .relOrd(rel.getRelOrd()).build();
                     skinRelRepository.save(newRel);
                 }
             } else {

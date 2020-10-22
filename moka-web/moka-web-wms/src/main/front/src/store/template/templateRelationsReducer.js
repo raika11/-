@@ -67,21 +67,41 @@ export default handleActions(
         /**
          * 검색조건 변경
          */
-        [act.CHANGE_SEARCH_REL_OPTION]: (state, { payload: { relType, key, value } }) => {
+        [act.CHANGE_SEARCH_PG_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                if (draft[relType]) {
-                    draft[relType].search[key] = value;
-                }
+                draft.PG.search = payload;
             });
         },
-        [act.CHANGE_SEARCH_REL_OPTIONS]: (state, { payload: { relType, changes } }) => {
+        [act.CHANGE_SEARCH_SK_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                for (let idx = 0; idx < changes.length; idx++) {
-                    let obj = changes[idx];
-                    if (draft[relType]) {
-                        draft[relType].search[obj.key] = obj.value;
-                    }
-                }
+                draft.SK.search = payload;
+            });
+        },
+        [act.CHANGE_SEARCH_CT_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.CT.search = payload;
+            });
+        },
+        [act.CHANGE_SEARCH_CP_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.CP.search = payload;
+            });
+        },
+        /**
+         * 관련아이템 목록
+         */
+        [act.GET_RELATION_LIST_SUCCESS]: (state, { payload: { relType, body } }) => {
+            return produce(state, (draft) => {
+                draft[relType].list = body.list;
+                draft[relType].total = body.totalCnt;
+                draft[relType].error = initialState[relType].error;
+            });
+        },
+        [act.GET_RELATION_LIST_FAILURE]: (state, { payload: { relType, payload } }) => {
+            return produce(state, (draft) => {
+                draft[relType].list = initialState[relType].list;
+                draft[relType].total = initialState[relType].total;
+                draft[relType].error = payload;
             });
         },
     },

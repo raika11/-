@@ -5,22 +5,20 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import * as api from './templateApi';
 import * as act from './templateAction';
 
-let message = {};
-
 /**
  * 템플릿 목록 조회
  */
-export const getTemplateList = callApiAfterActions(act.getTemplateList, api.getTemplateList, (store) => store.template);
+const getTemplateList = callApiAfterActions(act.getTemplateList, api.getTemplateList, (store) => store.template);
 
 /**
  * 템플릿 조회
  */
-export const getTemplate = createRequestSaga(act.getTemplate, api.getTemplate);
+const getTemplate = createRequestSaga(act.getTemplate, api.getTemplate);
 
 /**
  * 저장
  */
-export function* saveTemplate({ payload: { actions, callback } }) {
+function* saveTemplate({ payload: { actions, callback } }) {
     const ACTION = act.SAVE_TEMPLATE;
     let response, callbackData;
 
@@ -69,12 +67,12 @@ export function* saveTemplate({ payload: { actions, callback } }) {
             });
         }
     } catch (e) {
-        callbackData = e;
+        callbackData = { header: { success: false }, body: e };
 
         // 실패 액션 실행
         yield put({
             type: act.GET_TEMPLATE_FAILURE,
-            payload: { header: { success: false }, body: e },
+            payload: callbackData,
         });
     }
 
@@ -87,7 +85,7 @@ export function* saveTemplate({ payload: { actions, callback } }) {
 /**
  * 복사
  */
-export function* copyTemplate({ payload: { templateSeq, templateName, domainId, callback } }) {
+function* copyTemplate({ payload: { templateSeq, templateName, domainId, callback } }) {
     const ACTION = act.COPY_TEMPLATE;
     let callbackData = {};
 
@@ -124,7 +122,7 @@ export function* copyTemplate({ payload: { templateSeq, templateName, domainId, 
  * @param {string|number} param0.payload.templateseq 템플릿ID (필수)
  * @param {func} param0.payload.callback 콜백
  */
-export function* hasRelationList({ payload: { templateSeq, callback, exist, notExist } }) {
+function* hasRelationList({ payload: { templateSeq, callback, exist, notExist } }) {
     const ACTION = act.HAS_RELATION_LIST;
     let callbackData = {};
 
@@ -150,9 +148,47 @@ export function* hasRelationList({ payload: { templateSeq, callback, exist, notE
  * @param {string} param0.payload.relType PG|SK|CT|CP
  * @param {array} param0.payload.actions api 호출 전 액션
  */
-export function* getRelationList({ payload: { actions, relType } }) {
-    const sagaFunc = callApiAfterActions(act.GET_RELATION_LIST, api.getRelationList, (state) => state.templateRelations[relType]);
-    yield call(sagaFunc, { payload: actions });
+function* getRelationList({ payload: { actions, relType } }) {
+    const ACTION = act.GET_RELATION_LIST;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        // 검색 전에 배열로 들어온 액션들을 먼저 실행시킨다
+        if (actions && actions.length > 0) {
+            for (let i = 0; i < actions.length; i++) {
+                const act = actions[i];
+                if (act) {
+                    yield put({
+                        type: act.type,
+                        payload: act.payload,
+                    });
+                }
+            }
+        }
+        // 검색 조건
+        const searchOption = yield select((store) => store.templateRelations[relType]);
+        const response = yield call(api.getRelationList, searchOption);
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.GET_RELATION_LIST_SUCCESS,
+                payload: { ...response.data, relType },
+            });
+        } else {
+            yield put({
+                type: act.GET_RELATION_LIST_FAILURE,
+                payload: { relType, payload: response.data },
+            });
+        }
+    } catch (e) {
+        yield put({
+            type: act.GET_RELATION_LIST_FAILURE,
+            payload: { relType, payload: { header: { success: false }, body: e } },
+        });
+    }
+
+    yield put(finishLoading(ACTION));
 }
 
 /** saga */

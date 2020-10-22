@@ -1,10 +1,12 @@
 import React, { Suspense } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { clearStore } from '@store/domain';
 
 const DomainEdit = React.lazy(() => import('./DomainEdit'));
 const DomainList = React.lazy(() => import('./DomainList'));
@@ -14,6 +16,7 @@ const DomainList = React.lazy(() => import('./DomainList'));
  */
 const Domain = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
 
     /**
      * 도메인 추가
@@ -21,6 +24,12 @@ const Domain = () => {
     const domainAdd = () => {
         history.push('/domain');
     };
+
+    React.useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     return (
         <div className="d-flex">

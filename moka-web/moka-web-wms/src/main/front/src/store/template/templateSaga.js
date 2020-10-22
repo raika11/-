@@ -122,7 +122,7 @@ function* copyTemplate({ payload: { templateSeq, templateName, domainId, callbac
  * @param {string|number} param0.payload.templateseq 템플릿ID (필수)
  * @param {func} param0.payload.callback 콜백
  */
-function* hasRelationList({ payload: { templateSeq, callback, exist, notExist } }) {
+function* hasRelationList({ payload: { templateSeq, callback } }) {
     const ACTION = act.HAS_RELATION_LIST;
     let callbackData = {};
 
@@ -167,7 +167,7 @@ function* getRelationList({ payload: { actions, relType } }) {
             }
         }
         // 검색 조건
-        const searchOption = yield select((store) => store.templateRelations[relType]);
+        const searchOption = yield select((store) => store.templateRelationList[relType]);
         const response = yield call(api.getRelationList, searchOption);
 
         if (response.data.header.success) {

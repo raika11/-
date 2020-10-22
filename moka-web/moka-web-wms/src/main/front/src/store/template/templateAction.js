@@ -21,7 +21,7 @@ export const clearTemplate = createAction(CLEAR_TEMPLATE);
 export const clearList = createAction(CLEAR_STORE);
 export const clearSearch = createAction(CLEAR_STORE);
 export const clearRelationList = createAction(CLEAR_RELATION_LIST);
-export const clearHistroy = createAction(CLEAR_HISTORY);
+export const clearHistory = createAction(CLEAR_HISTORY);
 
 /**
  * 데이터 조회

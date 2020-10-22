@@ -9,8 +9,8 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInputLabel, MokaIcon, MokaInput, MokaInputGroup } from '@components';
 import { getTpZone } from '@store/codeMgt';
-import { changeTemplate, saveTemplate, changeInvalidList } from '@store/template';
-import { notification } from '@utils/toastUtil';
+import { changeTemplate, saveTemplate, hasRelationList, changeInvalidList, deleteTemplate } from '@store/template';
+import { notification, toastr } from '@utils/toastUtil';
 import CopyModal from './modals/CopyModal';
 import AddComponentModal from './modals/AddComponentModal';
 
@@ -97,13 +97,34 @@ const TemplateEdit = () => {
     };
 
     /**
-     * 템플릿 저장
+     * 템플릿 등록
+     * @param {object} tmp 템플릿
+     */
+    const submitTemplate = (tmp) => {
+        dispatch(
+            saveTemplate({
+                actions: [changeTemplate(tmp)],
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        notification('success', header.message);
+                        history.push(`/template/${body.templateSeq}`);
+                    } else {
+                        notification('warning', header.message || '실패하였습니다');
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
+     * 저장 이벤트
      * @param {object} e 이벤트
      */
-    const onSave = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        let newTemplate = {
+
+        let temp = {
             ...template,
             templateName,
             templateWidth,
@@ -114,25 +135,55 @@ const TemplateEdit = () => {
             description,
             templateThumbnailFile: fileValue,
         };
-        if (validate(newTemplate)) {
+
+        if (validate(temp)) {
             if (!template.templateSeq || template.templateSeq === '') {
                 // 새 템플릿 저장 시에 도메인ID 셋팅
-                newTemplate.domain = { domainId: latestDomainId };
+                temp.domain = { domainId: latestDomainId };
             }
+            submitTemplate(temp);
+        }
+    };
+
+    /**
+     * 템플릿 삭제
+     * @param {object} response response
+     */
+    const deleteCallback = (response) => {
+        if (response.header.success) {
             dispatch(
-                saveTemplate({
-                    actions: [changeTemplate(newTemplate)],
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            notification('success', header.message);
-                            history.push(`/template/${body.templateSeq}`);
+                deleteTemplate({
+                    templateSeq: template.templateSeq,
+                    callback: (response) => {
+                        if (response.header.success) {
+                            notification('success', response.header.message);
+                            history.push('/template');
                         } else {
-                            notification('warning', header.message || '실패하였습니다');
+                            notification('warning', response.header.message);
                         }
                     },
                 }),
             );
+        } else {
+            notification('warning', response.header.message);
         }
+    };
+
+    /**
+     * 삭제 이벤트
+     */
+    const handleDelete = () => {
+        toastr.confirm('정말 삭제하시겠습니까?', {
+            onOk: () => {
+                dispatch(
+                    hasRelationList({
+                        templateSeq: template.templateSeq,
+                        callback: deleteCallback,
+                    }),
+                );
+            },
+            onCancle: () => {},
+        });
     };
 
     useEffect(() => {
@@ -193,10 +244,10 @@ const TemplateEdit = () => {
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="primary" className="mr-05" onClick={onSave}>
+                        <Button variant="primary" className="mr-05" onClick={handleSubmit}>
                             저장
                         </Button>
-                        <Button variant="danger" disabled={btnDisabled}>
+                        <Button variant="danger" disabled={btnDisabled} onClick={handleDelete}>
                             삭제
                         </Button>
                     </div>

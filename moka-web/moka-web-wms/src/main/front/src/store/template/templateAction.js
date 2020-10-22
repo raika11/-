@@ -54,6 +54,12 @@ export const COPY_TEMPLATE = 'template/COPY_TEMPLATE';
 export const copyTemplate = createAction(COPY_TEMPLATE, ({ templateSeq, templateName, domainId, callback }) => ({ templateSeq, templateName, domainId, callback }));
 
 /**
+ * 삭제
+ */
+export const [DELETE_TEMPLATE, DELETE_TEMPLATE_SUCCESS] = createRequestActionTypes('template/DELETE_TEMPLATE');
+export const deleteTemplate = createAction(DELETE_TEMPLATE, ({ templateSeq }) => ({ templateSeq }));
+
+/**
  * 관련아이템 검색조건 변경
  */
 export const CHANGE_SEARCH_PG_OPTION = 'template/CHANGE_SEARCH_PG_OPTION';
@@ -68,7 +74,7 @@ export const changeSearchCPOption = createAction(CHANGE_SEARCH_CP_OPTION, (searc
 /**
  * 관련아이템 데이터 조회
  */
-export const HAS_RELATION_LIST = createRequestActionTypes('template/HAS_RELATION_LIST');
+export const HAS_RELATION_LIST = 'template/HAS_RELATION_LIST';
 export const [GET_RELATION_LIST, GET_RELATION_LIST_SUCCESS, GET_RELATION_LIST_FAILURE] = createRequestActionTypes('template/GET_RELATION_LIST');
 export const hasRelationList = createAction(HAS_RELATION_LIST, (payload) => payload);
 export const getRelationPGList = createAction(GET_RELATION_LIST, (...actions) => ({

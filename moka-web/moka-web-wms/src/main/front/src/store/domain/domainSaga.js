@@ -1,6 +1,8 @@
 import { takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga } from '../commons/saga';
+import { NETWORK_ERROR_MESSAGE } from '@/constants';
+
 import * as domainAPI from './domainApi';
 import * as domainAction from './domainAction';
 
@@ -29,7 +31,7 @@ function* duplicateCheck({ payload: { domainId, callback } }) {
         const response = yield call(domainAPI.duplicateCheck, domainId);
         callbackData = response.data;
     } catch (e) {
-        callbackData = { header: { success: false }, body: true };
+        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: true };
     }
 
     if (typeof callback === 'function') {
@@ -86,7 +88,7 @@ function* saveDomain({ payload: { type, actions, callback } }) {
             });
         }
     } catch (e) {
-        callbackData = { header: { success: false }, body: e };
+        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
 
         yield put({
             type: domainAction.GET_DOMAIN_FAILURE,
@@ -106,17 +108,17 @@ function* saveDomain({ payload: { type, actions, callback } }) {
  * @param {string} param0.payload.domainId 도메인아이디
  * @param {func} param0.payload.callback 콜백
  */
-function* hasRelations({ payload: { domainId, callback } }) {
-    const ACTION = domainAction.HAS_RELATIONS;
+function* hasRelationList({ payload: { domainId, callback } }) {
+    const ACTION = domainAction.HAS_RELATION_LIST;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(domainAPI.hasRelations, { domainId });
+        const response = yield call(domainAPI.hasRelationList, { domainId });
         callbackData = response.data;
     } catch (e) {
-        callbackData = { header: { success: false }, body: e };
+        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
     }
 
     if (typeof callback === 'function') {
@@ -156,7 +158,7 @@ function* deleteDomain({ payload: { domainId, callback } }) {
             });
         }
     } catch (e) {
-        callbackData = { header: { success: false }, body: e };
+        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
 
         yield put({
             type: domainAction.DELETE_DOMAIN_FAILURE,
@@ -177,5 +179,5 @@ export default function* domainSaga() {
     yield takeLatest(domainAction.DUPLICATE_CHECK, duplicateCheck);
     yield takeLatest(domainAction.SAVE_DOMAIN, saveDomain);
     yield takeLatest(domainAction.DELETE_DOMAIN, deleteDomain);
-    yield takeLatest(domainAction.HAS_RELATIONS, hasRelations);
+    yield takeLatest(domainAction.HAS_RELATION_LIST, hasRelationList);
 }

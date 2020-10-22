@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '~/stores/loadingStore';
+import { NETWORK_ERROR_MESSAGE } from '@/constants';
 
 import * as act from './componentAction';
 import * as api from './componentApi';
@@ -23,7 +24,7 @@ export function* saveComponentList({ payload: { componentList, callback } }) {
             callbackData = { header: { success: false, message: '등록할 컴포넌트가 없습니다' }, body: null };
         }
     } catch (e) {
-        callbackData = { header: { success: false, message: '저장하지 못했습니다' }, body: e };
+        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
     }
 
     if (typeof callback === 'function') {

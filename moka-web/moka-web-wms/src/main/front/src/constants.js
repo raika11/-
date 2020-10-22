@@ -31,3 +31,6 @@ export const CODETYPE_TP_ZONE = 'TP_ZONE';
 export const CODETYPE_LANG = 'LANG';
 // 공통코드 : 서비스타입
 export const CODETYPE_SERVICE_TYPE = 'SERVICE_TYPE';
+
+// 통신 실패 message
+export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

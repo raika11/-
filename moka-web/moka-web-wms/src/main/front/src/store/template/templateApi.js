@@ -93,3 +93,10 @@ export const getHistoryList = ({ search }) => {
         throw err;
     });
 };
+
+// 템플릿 삭제
+export const deleteTemplate = ({ templateSeq }) => {
+    return instance.delete(`/api/templates/${templateSeq}`).catch((err) => {
+        throw err;
+    });
+};

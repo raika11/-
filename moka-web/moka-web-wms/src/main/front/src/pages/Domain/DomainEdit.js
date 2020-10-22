@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { toastr } from 'react-redux-toastr';
 
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { notification } from '@utils/toastUtil';
-import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, deleteDomain, changeInvalidList, hasRelations, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
+import { notification, toastr } from '@utils/toastUtil';
+import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, deleteDomain, changeInvalidList, hasRelationList, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
 import { getApi, getLang } from '@store/codeMgt';
 
 /**
@@ -255,9 +254,7 @@ const DomainEdit = ({ history }) => {
      * @param {object} response response
      */
     const deleteCallback = (response) => {
-        if (response.body) {
-            notification('warning', '관련 아이템이 존재하여 삭제할 수 없습니다.');
-        } else {
+        if (response.header.success) {
             dispatch(
                 deleteDomain({
                     domainId: domain.domainId,
@@ -271,6 +268,8 @@ const DomainEdit = ({ history }) => {
                     },
                 }),
             );
+        } else {
+            notification('warning', response.header.message);
         }
     };
 
@@ -281,7 +280,7 @@ const DomainEdit = ({ history }) => {
         toastr.confirm('정말 삭제하시겠습니까?', {
             onOk: () => {
                 dispatch(
-                    hasRelations({
+                    hasRelationList({
                         domainId: domain.domainId,
                         callback: deleteCallback,
                     }),

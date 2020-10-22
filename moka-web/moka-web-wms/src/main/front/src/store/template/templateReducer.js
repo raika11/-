@@ -101,6 +101,17 @@ export default handleActions(
                 draft.invalidList = payload;
             });
         },
+        /**
+         * 데이터 삭제
+         */
+        [act.DELETE_TEMPLATE_SUCCESS]: (state) => {
+            return produce(state, (draft) => {
+                draft.template = initialState.template;
+                draft.templateBody = initialState.templateBody;
+                draft.inputTag = initialState.inputTag;
+                draft.templateError = initialState.templateError;
+            });
+        },
     },
     initialState,
 );

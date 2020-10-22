@@ -26,8 +26,8 @@ export const [GET_DOMAIN_LIST, GET_DOMAIN_LIST_SUCCESS, GET_DOMAIN_LIST_FAILURE]
 export const [GET_DOMAIN, GET_DOMAIN_SUCCESS, GET_DOMAIN_FAILURE] = createRequestActionTypes('domain/GET_DOMAIN');
 export const getDomainList = createAction(GET_DOMAIN_LIST, (...actions) => actions);
 export const getDomain = createAction(GET_DOMAIN, (domainId) => domainId);
-export const HAS_RELATIONS = 'domain/HAS_RELATIONS';
-export const hasRelations = createAction(HAS_RELATIONS, ({ domainId, callback }) => ({ domainId, callback }));
+export const HAS_RELATION_LIST = 'domain/HAS_RELATION_LIST';
+export const hasRelationList = createAction(HAS_RELATION_LIST, ({ domainId, callback }) => ({ domainId, callback }));
 
 /**
  * 데이터 변경

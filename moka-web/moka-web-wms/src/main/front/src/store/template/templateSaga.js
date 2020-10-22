@@ -1,6 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { callApiAfterActions, createRequestSaga } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
+import { NETWORK_ERROR_MESSAGE } from '@/constants';
 
 import * as api from './templateApi';
 import * as act from './templateAction';
@@ -67,7 +68,7 @@ function* saveTemplate({ payload: { actions, callback } }) {
             });
         }
     } catch (e) {
-        callbackData = { header: { success: false }, body: e };
+        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
 
         // 실패 액션 실행
         yield put({
@@ -83,6 +84,42 @@ function* saveTemplate({ payload: { actions, callback } }) {
 }
 
 /**
+ * 삭제
+ * @param {string|number} param0.payload.templateSeq 템플릿ID (필수)
+ * @param {func} param0.payload.callback 콜백
+ */
+export function* deleteTemplate({ payload: { templateSeq, callback } }) {
+    const ACTION = act.DELETE_TEMPLATE;
+    const SUCCESS = act.DELETE_TEMPLATE_SUCCESS;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(api.deleteTemplate, { templateSeq });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: SUCCESS,
+                payload: response.data,
+            });
+
+            // 목록 다시 검색
+            yield put({ type: act.GET_TEMPLATE_LIST });
+        }
+    } catch (e) {
+        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
  * 복사
  */
 function* copyTemplate({ payload: { templateSeq, templateName, domainId, callback } }) {
@@ -92,10 +129,9 @@ function* copyTemplate({ payload: { templateSeq, templateName, domainId, callbac
     yield put(startLoading(ACTION));
     try {
         const response = yield call(api.copyTemplate, { templateSeq, templateName, domainId });
+        callbackData = response.data;
 
         if (response.header.success) {
-            callbackData = response.data;
-
             // 검색조건 변경
             yield put({
                 type: act.CHANGE_SEARCH_OPTION,
@@ -104,11 +140,9 @@ function* copyTemplate({ payload: { templateSeq, templateName, domainId, callbac
 
             // 목록 다시 검색
             yield put({ type: act.GET_TEMPLATE_LIST });
-        } else {
-            callbackData = response.data;
         }
     } catch (e) {
-        callbackData = { header: { success: false }, body: e };
+        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
     }
 
     if (typeof callback === 'function') {
@@ -129,12 +163,9 @@ function* hasRelationList({ payload: { templateSeq, callback } }) {
     yield put(startLoading(ACTION));
     try {
         const response = yield call(api.hasRelationList, { templateSeq });
-
-        if (response.data.header.success) {
-            callbackData = response.data;
-        }
+        callbackData = response.data;
     } catch (e) {
-        callbackData = { header: { success: false }, body: e };
+        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
     }
 
     if (typeof callback === 'function') {
@@ -184,7 +215,7 @@ function* getRelationList({ payload: { actions, relType } }) {
     } catch (e) {
         yield put({
             type: act.GET_RELATION_LIST_FAILURE,
-            payload: { relType, payload: { header: { success: false }, body: e } },
+            payload: { relType, payload: { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e } },
         });
     }
 

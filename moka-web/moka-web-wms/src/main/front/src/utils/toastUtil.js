@@ -1,10 +1,12 @@
 import { toastr } from 'react-redux-toastr';
-export const toast = toastr;
+export { toastr } from 'react-redux-toastr';
+
 const TYPES = {
     SUCCESS: 'success',
     ERROR: 'error',
     WARN: 'warning',
     INFO: 'info',
+    CONFIRM: 'confirm',
 };
 
 const defaultOptions = {

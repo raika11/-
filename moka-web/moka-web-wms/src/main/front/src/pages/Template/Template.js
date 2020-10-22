@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
-import { clearStore, clearHistroy, clearRelationList } from '@store/template';
+import { clearStore, clearHistory, clearRelationList } from '@store/template';
 
 import TemplateEditor from './TemplateEditor';
 const TemplateList = React.lazy(() => import('./TemplateList'));
@@ -77,7 +77,7 @@ const Template = () => {
         return () => {
             dispatch(clearStore());
             dispatch(clearRelationList());
-            dispatch(clearHistroy());
+            dispatch(clearHistory());
         };
     }, [dispatch]);
 

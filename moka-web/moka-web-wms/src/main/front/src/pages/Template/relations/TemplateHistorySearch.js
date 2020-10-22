@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInputLabel } from '@components';
-import { changeSearchHistOption, getHistoryList } from '@store/template';
+import { changeSearchHistOption, getHistoryList, historyState } from '@store/template';
 
 const defaultSearchType = [
     { id: 'all', name: '전체' },
@@ -13,13 +13,18 @@ const defaultSearchType = [
 
 const TemplateHistorySearch = ({ show }) => {
     const dispatch = useDispatch();
-    const { template, search } = useSelector(
+    const { template, search: storeSearch } = useSelector(
         (store) => ({
             template: store.template.template,
             search: store.templateHistory.search,
         }),
         shallowEqual,
     );
+    const [search, setSearch] = useState(historyState.search);
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     /**
      * 검색 버튼
@@ -61,12 +66,10 @@ const TemplateHistorySearch = ({ show }) => {
                         className="mb-0"
                         value={search.searchType || undefined}
                         onChange={(e) => {
-                            dispatch(
-                                changeSearchHistOption({
-                                    ...search,
-                                    searchType: e.target.value,
-                                }),
-                            );
+                            setSearch({
+                                ...search,
+                                searchType: e.target.value,
+                            });
                         }}
                     >
                         {defaultSearchType.map((searchType) => (
@@ -80,12 +83,10 @@ const TemplateHistorySearch = ({ show }) => {
                     <MokaSearchInput
                         value={search.keyword}
                         onChange={(e) => {
-                            dispatch(
-                                changeSearchHistOption({
-                                    ...search,
-                                    keyword: e.target.value,
-                                }),
-                            );
+                            setSearch({
+                                ...search,
+                                keyword: e.target.value,
+                            });
                         }}
                         onSearch={handleSearch}
                     />

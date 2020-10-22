@@ -28,6 +28,10 @@ export default handleActions(
             });
         },
         /**
+         * 스토어 데이터 제거
+         */
+        [act.CLEAR_HISTORY]: () => initialState,
+        /**
          * 목록
          */
         [act.GET_HISTORY_LIST_SUCCESS]: (state, { payload: { body } }) => {

@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import columnDefs from './TemplateComponentAgGridColumns';
 import { MokaTable } from '@components';
-import { GET_RELATION_LIST, changeSearchCPOption, getRelationCPList } from '@store/template';
+import { GET_RELATION_LIST, changeSearchCPOption, getRelationCPList, relationState } from '@store/template';
 
 const TemplateComponentAgGrid = ({ show }) => {
     const dispatch = useDispatch();
-    const { template, search, total, list, loading } = useSelector(
+    const { template, search: storeSearch, total, list, loading } = useSelector(
         (store) => ({
             template: store.template.template,
             search: store.templateRelationList.CT.search,
@@ -16,6 +16,11 @@ const TemplateComponentAgGrid = ({ show }) => {
         }),
         shallowEqual,
     );
+    const [search, setSearch] = useState(relationState.CP.search);
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     /**
      * 테이블 검색옵션 변경
@@ -42,17 +47,19 @@ const TemplateComponentAgGrid = ({ show }) => {
     const handleRowClicked = useCallback(() => {}, []);
 
     useEffect(() => {
-        if (show && template.templateSeq) {
-            dispatch(
-                getRelationCPList(
-                    changeSearchCPOption({
-                        ...search,
-                        templateSeq: template.templateSeq,
-                        domainId: template.domain.domainId,
-                        page: 0,
-                    }),
-                ),
-            );
+        if (show) {
+            if (template.templateSeq) {
+                dispatch(
+                    getRelationCPList(
+                        changeSearchCPOption({
+                            ...search,
+                            templateSeq: template.templateSeq,
+                            domainId: template.domain.domainId,
+                            page: 0,
+                        }),
+                    ),
+                );
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show, template]);

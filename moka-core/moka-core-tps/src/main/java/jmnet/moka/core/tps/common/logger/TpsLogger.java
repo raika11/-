@@ -101,6 +101,16 @@ public class TpsLogger {
      * 성공 로그 생성
      *
      * @param actionType     액션 유형
+     * @param isEditLogWrite 편집 로그 출력 여부
+     */
+    public void success(ActionType actionType, boolean isEditLogWrite) {
+        success(actionType, null, false);
+    }
+
+    /**
+     * 성공 로그 생성
+     *
+     * @param actionType     액션 유형
      * @param msg            에러 메세지
      * @param isEditLogWrite 편집 로그 출력 여부
      */

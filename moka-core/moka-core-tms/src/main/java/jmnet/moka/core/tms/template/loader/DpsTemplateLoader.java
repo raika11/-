@@ -1,18 +1,11 @@
 package jmnet.moka.core.tms.template.loader;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.exception.DataLoadException;
@@ -21,21 +14,26 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.common.template.loader.TemplateLoader;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.item.ComponentAd;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <pre>
  * JSON형태의 템플릿 정보를 로딩하고 캐싱을 관리한다.
  * 2019. 9. 4. kspark 최초생성
  * </pre>
- * 
- * @since 2019. 9. 4. 오후 4:16:52
+ *
  * @author kspark
+ * @since 2019. 9. 4. 오후 4:16:52
  */
 public class DpsTemplateLoader extends AbstractTemplateLoader {
     public static final String ITEM_API_DOMAIN = "domain.list";
@@ -53,6 +51,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
     public static final String DATA_SELECT_COMPONENT_AD = "COMPONENT_AD";
 
     protected static Map<String, String> itemApiMap = new HashMap<String, String>();
+
     static {
         itemApiMap.put(MokaConstants.ITEM_DOMAIN, ITEM_API_DOMAIN);
         itemApiMap.put(MokaConstants.ITEM_PAGE, ITEM_API_PAGE);
@@ -63,17 +62,16 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         itemApiMap.put(MokaConstants.ITEM_AD, ITEM_API_AD);
         itemApiMap.put(MokaConstants.ITEM_CONTENT_SKIN, ITEM_API_SKIN);
     }
+
     protected HttpProxyDataLoader httpProxyDataLoader;
     private static final Logger logger = LoggerFactory.getLogger(DpsTemplateLoader.class);
     private static final DpsItemFactory DPS_ITEM_FACTORY = new DpsItemFactory();
 
-    public DpsTemplateLoader(String domainId, HttpProxyDataLoader httpProxyDataLoader)
-            throws TemplateParseException, TmsException {
+    public DpsTemplateLoader(String domainId, HttpProxyDataLoader httpProxyDataLoader)  {
         this(domainId, httpProxyDataLoader, false, 0L);
     }
 
-    public DpsTemplateLoader(String domainId, HttpProxyDataLoader httpProxyDataLoader,
-            boolean cacheable, long itemExpireSeconds) {
+    public DpsTemplateLoader(String domainId, HttpProxyDataLoader httpProxyDataLoader, boolean cacheable, long itemExpireSeconds) {
         super(domainId, cacheable, itemExpireSeconds);
         try {
             this.httpProxyDataLoader = httpProxyDataLoader;
@@ -92,18 +90,18 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             Map<String, Object> parameterMap = new LinkedHashMap<String, Object>();
             parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
             parameterMap.put(PARAM_TBODY, "N");
-            JSONResult jsonResult =
-                    this.httpProxyDataLoader.getJSONResult(ITEM_API_PAGE, parameterMap, true);
-            Object jsonArray = (JSONArray) jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
+            JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(ITEM_API_PAGE, parameterMap, true);
+            Object jsonArray = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
             for (JSONObject jsonObject : (List<JSONObject>) jsonArray) {
                 Map<String, Object> valueMap = ResourceMapper.getDefaultObjectMapper()
-                        .convertValue(jsonObject, new TypeReference<Map<String, Object>>() {});
+                                                             .convertValue(jsonObject, new TypeReference<Map<String, Object>>() {
+                                                             });
                 PageItem pageItem = DPS_ITEM_FACTORY.getPageItem(valueMap);
                 // PG일 경우 URL과 매핑한다.
-                String itemKey = KeyResolver.makeItemKey(this.domainId, pageItem.getItemType(),
-                        pageItem.getItemId());
-                if ( pageItem.getBoolYN(ItemConstants.PAGE_USE_YN)) { // 사용일 경우만 등록한다.
-                    newUri2ItemMap.put(this.createUri2ItemMapKey(pageItem),itemKey);
+                if (pageItem.getBoolYN(ItemConstants.PAGE_USE_YN)) { // 사용일 경우만 등록한다.
+                    // case-insensitive를 지원하기 위해 소문자로 변환
+                    String itemKey = KeyResolver.makeItemKey(this.domainId, pageItem.getItemType(), pageItem.getItemId());
+                    newUri2ItemMap.put(this.getPageUriLowerCase(pageItem), itemKey);
                 }
             }
             this.uri2ItemMap = newUri2ItemMap;
@@ -122,15 +120,14 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
      * <pre>
      * 템플릿 내용을 로딩한다.
      * </pre>
-     * 
+     *
      * @param itemType 템플릿 타입
-     * @param itemId 아이디
+     * @param itemId   아이디
      * @return 템플릿 내용
-     * @throws TemplateParseException 템플릿 파싱 오류
-     * @throws TemplateLoadException
+     * @throws TemplateParseException 템플릿 파싱 예외
+     * @throws TemplateLoadException 템플릿 로드 예외
      */
-    private MergeItem loadJson(String itemType, String itemId)
-            throws TemplateParseException, TemplateLoadException {
+    private MergeItem loadJson(String itemType, String itemId) throws TemplateParseException, TemplateLoadException {
 
         String api = itemApiMap.get(itemType);
         Map<String, Object> parameterMap = new LinkedHashMap<String, Object>();
@@ -138,7 +135,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         // parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
         parameterMap.put(PARAM_ITEM_ID, itemId);
 
-        MergeItem item = null;
+        MergeItem item ;
         try {
             JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(api, parameterMap, true);
             JSONArray jsonArray = (JSONArray) jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
@@ -150,12 +147,12 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             }
             String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
-            if (itemType.equals(MokaConstants.ITEM_PAGE) ) {
-                if ( item.getBoolYN(ItemConstants.PAGE_USE_YN)) {
-                    this.uri2ItemMap.put(this.createUri2ItemMapKey(item),itemKey);
+            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
+                if (item.getBoolYN(ItemConstants.PAGE_USE_YN)) {
+                    this.addUri((PageItem) item);
                 } else {
                     // 사용안함일 경우 제거한다.
-                    this.uri2ItemMap.remove(this.createUri2ItemMapKey(item));
+                    this.removeUri((PageItem) item);
                 }
             }
             if (cacheable) {
@@ -163,16 +160,13 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             }
             logger.debug("Item Loaded: {} {}", itemType, itemId);
         } catch (DataLoadException e) {
-            throw new TemplateLoadException(String.format("TemplateItem load fail: %s %s %s",
-                    this.domainId, itemType, itemId), e);
+            throw new TemplateLoadException(String.format("TemplateItem load fail: %s %s %s", this.domainId, itemType, itemId), e);
         } catch (Exception e) {
             if (this.hasAssistantTemplateLoader) {
-                logger.debug("Template Loaded Fail And Will Retry : {} {} {}", itemType, itemId,
-                        e.getMessage());
+                logger.debug("Template Loaded Fail And Will Retry : {} {} {}", itemType, itemId, e.getMessage());
                 item = this.assistantTemplateLoader.getItem(itemType, itemId);
             } else {
-                throw new TemplateLoadException(
-                        String.format("Template Loaded Fail: %s %s", itemType, itemId), e);
+                throw new TemplateLoadException(String.format("Template Loaded Fail: %s %s", itemType, itemId), e);
             }
         }
         return item;
@@ -182,15 +176,16 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         JSONResult componentAdResult = (JSONResult) jsonResult.get(DATA_SELECT_COMPONENT_AD);
         JSONArray jsonArray = (JSONArray) componentAdResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
         List<Map<String, Object>> componentAdList = ResourceMapper.getDefaultObjectMapper()
-                .convertValue(jsonArray, ResourceMapper.TYPEREF_LIST_MAP);
+                                                                  .convertValue(jsonArray, ResourceMapper.TYPEREF_LIST_MAP);
         if (componentAdList != null && componentAdList.size() > 0) {
             List<ComponentAd> list = new ArrayList<ComponentAd>(4);
             for (Map<String, Object> map : componentAdList) {
-                String adId = map.get(ItemConstants.DpsItemConstants.COMPONENTAD_AD_ID).toString();
-//                String adName =
-//                        (String) map.get(ItemConstants.DpsItemConstants.COMPONENTAD_AD_NAME);
-                int listParagraph = Integer.parseInt(map
-                        .get(ItemConstants.DpsItemConstants.COMPONENTAD_LIST_PARAGRAPH).toString());
+                String adId = map.get(ItemConstants.DpsItemConstants.COMPONENTAD_AD_ID)
+                                 .toString();
+                //                String adName =
+                //                        (String) map.get(ItemConstants.DpsItemConstants.COMPONENTAD_AD_NAME);
+                int listParagraph = Integer.parseInt(map.get(ItemConstants.DpsItemConstants.COMPONENTAD_LIST_PARAGRAPH)
+                                                        .toString());
                 ComponentAd componentAd = new ComponentAd(adId, /*adName,*/ listParagraph);
                 list.add(componentAd);
             }
@@ -198,32 +193,14 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         }
     }
 
-    @Override
-    public String getItemKey(String uri) {
-        if ( uri == null) return null;
-        String itemKey = this.uri2ItemMap.get(uri);
-        if ( itemKey != null ) { // REST방식 URL이 아닌 경우
-            return itemKey;
-        }
-        // REST 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
-        int lastSlashIndex = uri.lastIndexOf("/");
-        if ( lastSlashIndex > 0) {
-            return this.uri2ItemMap.get( uri.substring(0,lastSlashIndex)
-                    + AbstractTemplateLoader.URI_REST_PREFIX);
-        }
-        return null;
-    }
-
-    public MergeItem getItem(String itemType, String itemId)
-            throws TemplateParseException, TemplateLoadException {
+    public MergeItem getItem(String itemType, String itemId) throws TemplateParseException, TemplateLoadException {
         return getItem(itemType, itemId, false);
     }
 
-    public MergeItem getItem(String itemType, String itemId, boolean force)
-            throws TemplateParseException, TemplateLoadException {
+    public MergeItem getItem(String itemType, String itemId, boolean force) throws TemplateParseException, TemplateLoadException {
         String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
-        MergeItem item = null;
-        if (force || cacheable == false || this.mergeItemMap.containsKey(itemKey) == false) {
+        MergeItem item;
+        if (force || !cacheable || !this.mergeItemMap.containsKey(itemKey)) {
             item = this.loadJson(itemType, itemId);
         } else {
             item = this.mergeItemMap.get(itemKey);

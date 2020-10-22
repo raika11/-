@@ -1,6 +1,5 @@
 package jmnet.moka.core.tms.mvc.handler;
 
-import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +25,7 @@ import org.springframework.web.method.HandlerMethod;
 public class DigitalSpecialHandler extends AbstractHandler {
     private static final Logger logger = LoggerFactory.getLogger(DigitalSpecialHandler.class);
 
-    private MokaDomainTemplateMerger domainTemplateMerger;
+    private final MokaDomainTemplateMerger domainTemplateMerger;
 
     public DigitalSpecialHandler(@Autowired MokaDomainTemplateMerger domainTemplateMerger) {
         this.domainTemplateMerger = domainTemplateMerger;
@@ -34,7 +33,8 @@ public class DigitalSpecialHandler extends AbstractHandler {
     }
 
     @Override
-    public HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId)  {
+    public HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId) {
+        // case-insensitive URI 처리
         if (pathList.size() == 2 && requestPath.toLowerCase()
                                                .startsWith(MokaConstants.MERGE_DIGITAL_SPECIAL_PREFIX)) {
             // 디지털스페셜 처리 : /digitalspecial(case insensitive)/id
@@ -50,7 +50,7 @@ public class DigitalSpecialHandler extends AbstractHandler {
         return null;
     }
 
-    public String merge(HttpServletRequest request, HttpServletResponse response, Model model)  {
+    public String merge(HttpServletRequest request, HttpServletResponse response, Model model) {
         // 머지 옵션설정
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
         model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);

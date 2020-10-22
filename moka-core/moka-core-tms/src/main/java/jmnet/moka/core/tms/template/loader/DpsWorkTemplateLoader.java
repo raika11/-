@@ -3,13 +3,6 @@ package jmnet.moka.core.tms.template.loader;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.exception.DataLoadException;
@@ -17,29 +10,34 @@ import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.item.MergeItem;
+import jmnet.moka.core.tms.merge.item.PageItem;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <pre>
  * JSON형태의 템플릿 정보를 로딩하고 캐싱을 관리한다.
  * 2019. 9. 4. kspark 최초생성
  * </pre>
- * 
- * @since 2019. 9. 4. 오후 4:16:52
+ *
  * @author kspark
+ * @since 2019. 9. 4. 오후 4:16:52
  */
 public class DpsWorkTemplateLoader extends DpsTemplateLoader {
     public static final String ITEM_API_COMPONENT_WORK = "component.work";
-    private String workerId;
-    private List<String> componentIdList;
+    private final String workerId;
+    private final List<String> componentIdList;
     private static final Logger logger = LoggerFactory.getLogger(DpsWorkTemplateLoader.class);
     private static final DpsItemFactory DPS_ITEM_FACTORY = new DpsItemFactory();
 
-    public DpsWorkTemplateLoader(String domainId, HttpProxyDataLoader httpProxyDataLoader,
-            String workerId, List<String> componentIdList)
-            throws TemplateParseException, TmsException {
+    public DpsWorkTemplateLoader(String domainId, HttpProxyDataLoader httpProxyDataLoader, String workerId, List<String> componentIdList)
+            throws TmsException {
         super(domainId, httpProxyDataLoader, false, 0L);
         this.workerId = workerId;
         this.componentIdList = componentIdList;
@@ -50,15 +48,14 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
      * <pre>
      * 템플릿 내용을 로딩한다.
      * </pre>
-     * 
+     *
      * @param itemType 템플릿 타입
-     * @param itemId 아이디
+     * @param itemId   아이디
      * @return 템플릿 내용
      * @throws TemplateParseException 템플릿 파싱 오류
      * @throws TemplateLoadException
      */
-    private MergeItem loadJson(String itemType, String itemId)
-            throws TemplateParseException, TemplateLoadException {
+    private MergeItem loadJson(String itemType, String itemId) throws TemplateParseException, TemplateLoadException {
         String api = DpsTemplateLoader.itemApiMap.get(itemType);
         // boolean isWorkComponent = this.workerId != null
         // && itemType.equals(MspConstants.ITEM_COMPONENT) && itemId.equals(this.componentId);
@@ -91,35 +88,30 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
             String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
             if (itemType.equals(MokaConstants.ITEM_PAGE) && item.getBoolYN(ItemConstants.PAGE_USE_YN)) {
-                this.uri2ItemMap.put(this.createUri2ItemMapKey(item), itemKey);
+                this.addUri((PageItem) item);
             }
             if (cacheable) {
                 this.mergeItemMap.put(itemKey, item);
             }
             logger.debug("Item Loaded: {} {}", itemType, itemId);
         } catch (DataLoadException e) {
-            throw new TemplateLoadException(String.format("TemplateItem load fail: %s %s %s",
-                    this.domainId, itemType, itemId), e);
+            throw new TemplateLoadException(String.format("TemplateItem load fail: %s %s %s", this.domainId, itemType, itemId), e);
         } catch (Exception e) {
             if (this.hasAssistantTemplateLoader) {
-                logger.debug("Template Loaded Fail And Will Retry : {} {} {}", itemType, itemId,
-                        e.getMessage());
+                logger.debug("Template Loaded Fail And Will Retry : {} {} {}", itemType, itemId, e.getMessage());
                 item = this.assistantTemplateLoader.getItem(itemType, itemId);
             } else {
-                throw new TemplateLoadException(
-                        String.format("Template Loaded Fail: %s %s", itemType, itemId), e);
+                throw new TemplateLoadException(String.format("Template Loaded Fail: %s %s", itemType, itemId), e);
             }
         }
         return item;
     }
 
-    public MergeItem getItem(String itemType, String itemId)
-            throws TemplateParseException, TemplateLoadException {
+    public MergeItem getItem(String itemType, String itemId) throws TemplateParseException, TemplateLoadException {
         return getItem(itemType, itemId, true);
     }
 
-    public MergeItem getItem(String itemType, String itemId, boolean force)
-            throws TemplateParseException, TemplateLoadException {
+    public MergeItem getItem(String itemType, String itemId, boolean force) throws TemplateParseException, TemplateLoadException {
 
         MergeItem item = this.loadJson(itemType, itemId);
         if (item == null) {

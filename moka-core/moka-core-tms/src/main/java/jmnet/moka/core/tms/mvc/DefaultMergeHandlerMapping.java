@@ -24,11 +24,11 @@ import org.springframework.web.servlet.handler.AbstractHandlerMapping;
  */
 public class DefaultMergeHandlerMapping extends AbstractHandlerMapping {
 
-    private GenericApplicationContext appContext;
+    private final GenericApplicationContext appContext;
 
-    private DomainResolver domainResolver;
+    private final DomainResolver domainResolver;
 
-    private List<AbstractHandler> handlerList;
+    private final List<AbstractHandler> handlerList;
 
     @Autowired
     public DefaultMergeHandlerMapping(@Autowired GenericApplicationContext appContext, @Autowired DomainResolver domainResolver,
@@ -51,7 +51,7 @@ public class DefaultMergeHandlerMapping extends AbstractHandlerMapping {
 
         // 서비스 도메인이 아닐 경우 다음 handlerMapping으로 넘긴다.
         if (domainId == null) {
-            return false;
+            return null;
         }
 
         String requestPath = resolvePath(request);

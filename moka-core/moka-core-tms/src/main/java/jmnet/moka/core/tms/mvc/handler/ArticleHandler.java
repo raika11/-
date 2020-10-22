@@ -48,6 +48,7 @@ public class ArticleHandler extends AbstractHandler {
     }
 
     public HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId) {
+        // case-insensitive URI 처리
         if (pathList.size() == 2 && requestPath.toLowerCase()
                                                .startsWith(MokaConstants.MERGE_ARTICE_PREFIX)) {
             try {

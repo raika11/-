@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -50,8 +53,9 @@ public class EditLog implements Serializable {
     /**
      * 입력수정삭제/로그인/로그아웃
      */
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "ACTION", nullable = false)
-    private String action;
+    private ActionType action;
 
     /**
      * 사용자ID

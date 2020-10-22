@@ -43,36 +43,70 @@ public class TpsLogger {
 
     /**
      * 성공 로그 생성
-     *
-     * @param actionType   액션 유형
-     * @param executedTime 실행시간
      */
-    public void success(ActionType actionType, long executedTime) {
-        success(actionType, executedTime, null, false);
+    public void success() {
+        success(null, null, false);
     }
 
     /**
      * 성공 로그 생성
      *
-     * @param actionType   액션 유형
-     * @param executedTime 실행시간
-     * @param msg          에러 메세지
+     * @param msg 에러 메세지
      */
-    public void success(ActionType actionType, long executedTime, String msg) {
-        success(actionType, executedTime, msg, false);
+    public void success(String msg) {
+        success(null, msg, false);
+    }
+
+    /**
+     * 성공 로그 생성
+     *
+     * @param msg            에러 메세지
+     * @param isEditLogWrite 편집 로그 출력 여부
+     */
+    public void success(String msg, boolean isEditLogWrite) {
+        success(null, msg, isEditLogWrite);
+    }
+
+    /**
+     * 성공 로그 생성
+     *
+     * @param actionType 액션 유형
+     */
+    public void success(ActionType actionType) {
+        success(actionType, null, false);
+    }
+
+
+    /**
+     * 성공 로그 생성
+     *
+     * @param isEditLogWrite 편집 로그 출력 여부
+     */
+    public void success(boolean isEditLogWrite) {
+        success(null, null, isEditLogWrite);
+    }
+
+
+    /**
+     * 성공 로그 생성
+     *
+     * @param actionType 액션 유형
+     * @param msg        에러 메세지
+     */
+    public void success(ActionType actionType, String msg) {
+        success(actionType, msg, false);
     }
 
     /**
      * 성공 로그 생성
      *
      * @param actionType     액션 유형
-     * @param executedTime   실행시간
      * @param msg            에러 메세지
      * @param isEditLogWrite 편집 로그 출력 여부
      */
-    public void success(ActionType actionType, long executedTime, String msg, boolean isEditLogWrite) {
-        EditLog editLog = makeEditLog(actionType.code(), MokaConstants.YES, executedTime, msg);
-        actionLogger.success(editLog.getMemberId(), actionType, executedTime, msg);
+    public void success(ActionType actionType, String msg, boolean isEditLogWrite) {
+        EditLog editLog = makeEditLog(actionType, MokaConstants.YES, msg);
+        actionLogger.success(editLog.getMemberId(), editLog.getAction(), editLog.getExecutedTime(), msg);
         try {
             if (isEditLogWrite) {
                 editLogService.insertEditLog(editLog);
@@ -85,25 +119,42 @@ public class TpsLogger {
     /**
      * 실패 로그 생성
      *
-     * @param actionType   액션 유형
-     * @param executedTime 실행시간
-     * @param msg          에러 메세지
+     * @param msg 에러 메세지
      */
-    public void fail(ActionType actionType, long executedTime, String msg) {
-        fail(actionType, executedTime, msg, false);
+    public void fail(String msg) {
+        fail(null, msg, false);
+    }
+
+    /**
+     * 실패 로그 생성
+     *
+     * @param msg            에러 메세지
+     * @param isEditLogWrite isEditLogWrite 편집 로그 출력 여부
+     */
+    public void fail(String msg, boolean isEditLogWrite) {
+        fail(null, msg, isEditLogWrite);
+    }
+
+    /**
+     * 실패 로그 생성
+     *
+     * @param actionType 액션 유형
+     * @param msg        에러 메세지
+     */
+    public void fail(ActionType actionType, String msg) {
+        fail(actionType, msg, false);
     }
 
     /**
      * 실패 로그 생성
      *
      * @param actionType     액션 유형
-     * @param executedTime   실행시간
      * @param msg            에러 메세지
      * @param isEditLogWrite 편집 로그 출력 여부
      */
-    public void fail(ActionType actionType, long executedTime, String msg, boolean isEditLogWrite) {
-        EditLog editLog = makeEditLog(actionType.code(), MokaConstants.NO, executedTime, msg);
-        actionLogger.fail(editLog.getMemberId(), actionType, executedTime, msg);
+    public void fail(ActionType actionType, String msg, boolean isEditLogWrite) {
+        EditLog editLog = makeEditLog(actionType, MokaConstants.NO, msg);
+        actionLogger.fail(editLog.getMemberId(), editLog.getAction(), editLog.getExecutedTime(), msg);
         try {
             if (isEditLogWrite) {
                 editLogService.insertEditLog(editLog);
@@ -116,50 +167,122 @@ public class TpsLogger {
     /**
      * 스킵 로그 생성
      *
-     * @param actionType   액션 유형
-     * @param executedTime 실행시간
-     * @param msg          에러 메세지
+     * @param msg 액션 유형
      */
-    public void skip(ActionType actionType, long executedTime, String msg) {
-        EditLog editLog = makeEditLog(actionType.code(), MokaConstants.NO, executedTime, msg);
-        actionLogger.skip(editLog.getMemberId(), actionType, executedTime, msg);
+    public void skip(String msg) {
+        skip(null, msg);
+    }
+
+    /**
+     * 스킵 로그 생성
+     *
+     * @param actionType 액션 유형
+     * @param msg        에러 메세지
+     */
+    public void skip(ActionType actionType, String msg) {
+        EditLog editLog = makeEditLog(actionType, MokaConstants.NO, msg);
+        actionLogger.skip(editLog.getMemberId(), editLog.getAction(), editLog.getExecutedTime(), msg);
     }
 
     /**
      * 에러 로그 생성
      *
-     * @param actionType   액션 유형
-     * @param executedTime 실행시간
-     * @param msg          에러 메세지
+     * @param msg 에러 메세지
      */
-    public void error(ActionType actionType, long executedTime, String msg) {
-        error(actionType, executedTime, msg, null, false);
+    public void error(String msg) {
+        error(null, msg, null, false);
     }
 
     /**
      * 에러 로그 생성
      *
-     * @param actionType   액션 유형
-     * @param executedTime 실행시간
-     * @param t            Throwable
+     * @param msg            에러 메세지
+     * @param isEditLogWrite 편집 로그 출력 여부
      */
-    public void error(ActionType actionType, long executedTime, Throwable t) {
-        error(actionType, executedTime, null, t, false);
+    public void error(String msg, boolean isEditLogWrite) {
+        error(null, msg, null, isEditLogWrite);
+    }
+
+    /**
+     * 에러 로그 생성
+     *
+     * @param actionType 액션 유형
+     * @param msg        에러 메세지
+     */
+    public void error(ActionType actionType, String msg) {
+        error(actionType, msg, null, false);
     }
 
     /**
      * 에러 로그 생성
      *
      * @param actionType     액션 유형
-     * @param executedTime   실행시간
+     * @param msg            에러 메세지
+     * @param isEditLogWrite 편집 로그 출력 여부
+     */
+    public void error(ActionType actionType, String msg, boolean isEditLogWrite) {
+        error(actionType, msg, null, isEditLogWrite);
+    }
+
+    /**
+     * 에러 로그 생성
+     *
+     * @param t Throwable
+     */
+    public void error(Throwable t) {
+        error(null, null, t, false);
+    }
+
+    /**
+     * 에러 로그 생성
+     *
+     * @param t              Throwable
+     * @param isEditLogWrite 편집 로그 출력 여부
+     */
+    public void error(Throwable t, boolean isEditLogWrite) {
+        error(null, null, t, isEditLogWrite);
+    }
+
+    /**
+     * 에러 로그 생성
+     *
+     * @param msg 에러 메세지
+     * @param t   Throwable
+     */
+    public void error(String msg, Throwable t) {
+        error(null, msg, t, false);
+    }
+
+    /**
+     * @param msg            에러 메세지 * @param t   Throwable
+     * @param isEditLogWrite 편집 로그 출력 여부
+     */
+    public void error(String msg, Throwable t, boolean isEditLogWrite) {
+        error(null, msg, t, isEditLogWrite);
+    }
+
+    /**
+     * 에러 로그 생성
+     *
+     * @param actionType 액션 유형
+     * @param t          Throwable
+     */
+    public void error(ActionType actionType, Throwable t) {
+        error(actionType, null, t, false);
+    }
+
+    /**
+     * 에러 로그 생성
+     *
+     * @param actionType     액션 유형
      * @param msg            에러 메세지
      * @param t              Throwable
      * @param isEditLogWrite 편집 로그 출력 여부
      */
-    public void error(ActionType actionType, long executedTime, String msg, Throwable t, boolean isEditLogWrite) {
+    public void error(ActionType actionType, String msg, Throwable t, boolean isEditLogWrite) {
         String errorMsg = McpString.defaultValue(msg) + (t != null ? t.getMessage() : "");
-        EditLog editLog = makeEditLog(actionType.code(), MokaConstants.NO, executedTime, errorMsg);
-        actionLogger.error(editLog.getMemberId(), actionType, executedTime, msg, t);
+        EditLog editLog = makeEditLog(actionType, MokaConstants.NO, errorMsg);
+        actionLogger.error(editLog.getMemberId(), editLog.getAction(), editLog.getExecutedTime(), msg, t);
         try {
             if (isEditLogWrite) {
                 editLogService.insertEditLog(editLog);
@@ -172,13 +295,12 @@ public class TpsLogger {
     /**
      * HttpServletRequest와 Authentication로 편집 로그 정보를 생성한다.
      *
-     * @param action       행위
-     * @param successYn    성공 여부
-     * @param executedTime 수행시간
-     * @param errorMsg     에러 메세지
+     * @param actionType 행위
+     * @param successYn  성공 여부
+     * @param errorMsg   에러 메세지
      * @return EditLog
      */
-    private EditLog makeEditLog(String action, String successYn, long executedTime, String errorMsg) {
+    private EditLog makeEditLog(ActionType actionType, String successYn, String errorMsg) {
 
         Authentication auth = SecurityContextHolder
                 .getContext()
@@ -188,26 +310,51 @@ public class TpsLogger {
         HttpServletRequest req = RequestContextHolder.getRequestAttributes() != null
                 ? ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
                 : null;
-
-        String url = req != null ? McpString.defaultValue(req.getRequestURI(), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
+        if (actionType == null && req != null) {
+            actionType = getAction(req.getMethod());
+        }
+        Long processStartTime =
+                req != null ? System.currentTimeMillis() - Long.parseLong(McpString.defaultValue(req.getAttribute("processStartTime"), "0")) : 0;
+        String url = req != null ? McpString.defaultValue(req.getRequestURI(), MokaConstants.UNKNOWN) : MokaConstants.IP_UNKNOWN;
         String menuId =
                 req != null ? McpString.defaultValue(req.getHeader(TpsConstants.HEADER_MENU_ID), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
-        String param = req != null ? McpString.defaultValue(HttpHelper.getParamString(req), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
+        String param = req != null ? McpString.defaultValue(HttpHelper.getParamString(req, "&"), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
         String remoteAddr = req != null ? McpString.defaultValue(HttpHelper.getRemoteAddr(req), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
 
 
         return EditLog
                 .builder()
-                .action(action)
+                .action(actionType)
                 .memberId(memberId)
                 .menuId(menuId)
                 .successYn(successYn)
                 .param(param)
                 .regIp(remoteAddr)
-                .executedTime(executedTime)
+                .executedTime(processStartTime)
                 .apiPath(url)
                 .build();
     }
 
+    public ActionType getAction(String method) {
+        ActionType actionType;
+        switch (method.toUpperCase()) {
+            case "GET":
+                actionType = ActionType.SELECT;
+                break;
+            case "POST":
+                actionType = ActionType.INSERT;
+                break;
+            case "PUT":
+                actionType = ActionType.UPDATE;
+                break;
+            case "DELETE":
+                actionType = ActionType.DELETE;
+                break;
+            default:
+                actionType = ActionType.UNKNOWN;
+        }
+
+        return actionType;
+    }
 
 }

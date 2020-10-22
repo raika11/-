@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tps.mvc.editlog.entity.EditLog;
 import jmnet.moka.core.tps.mvc.editlog.repository.EditLogRepository;
@@ -76,7 +77,7 @@ public class EditLogServiceImpl implements EditLogService {
         this.deleteEditLogBySeqNo(editLog.getSeqNo());
     }
 
-    private EditLog makeEditLog(String memberId, String action, String menuId, String successYn, String param) {
+    private EditLog makeEditLog(String memberId, ActionType action, String menuId, String successYn, String param) {
         return EditLog
                 .builder()
                 .action(action)

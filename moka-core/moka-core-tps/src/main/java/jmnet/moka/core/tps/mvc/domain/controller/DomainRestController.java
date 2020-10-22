@@ -115,7 +115,7 @@ public class DomainRestController {
 
         ResultDTO<ResultListDTO<DomainDTO>> resultDto = new ResultDTO<>(resultListMessage);
 
-        tpsLogger.success(ActionType.SELECT, System.currentTimeMillis() - processStartTime);
+        tpsLogger.success(ActionType.SELECT);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -149,7 +149,7 @@ public class DomainRestController {
             dto.setApiCodeId(apiCodeId);
         }
 
-        tpsLogger.success(ActionType.SELECT, System.currentTimeMillis() - processStartTime);
+        tpsLogger.success(ActionType.SELECT);
 
         ResultDTO<DomainDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -202,14 +202,14 @@ public class DomainRestController {
             ResultDTO<DomainDTO> resultDto = new ResultDTO<>(dto);
 
             // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.INSERT, System.currentTimeMillis() - processStartTime);
+            tpsLogger.success(ActionType.INSERT);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO INSERT DOMAIN]", e);
             // 액션 로그에 오류 내용 출력
-            tpsLogger.error(ActionType.INSERT, System.currentTimeMillis() - processStartTime, e);
+            tpsLogger.error(ActionType.INSERT, e);
             throw new Exception(messageByLocale.get("tps.domain.error.save", request), e);
         }
     }
@@ -251,14 +251,14 @@ public class DomainRestController {
             ResultDTO<DomainDTO> resultDto = new ResultDTO<>(dto);
 
             // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.UPDATE, System.currentTimeMillis() - processStartTime);
+            tpsLogger.success(ActionType.UPDATE);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE DOMAIN]", e);
             // 액션 로그에 에러 로그 출력
-            tpsLogger.error(ActionType.UPDATE, System.currentTimeMillis() - processStartTime, e);
+            tpsLogger.error(ActionType.UPDATE, e);
             throw new Exception(messageByLocale.get("tps.domain.error.save", request), e);
         }
     }
@@ -318,13 +318,12 @@ public class DomainRestController {
         try {
             if (relationHelper.isRelatedDomain(domainId)) {
                 // 액션 로그에 실패 로그 출력
-                tpsLogger.fail(ActionType.DELETE, System.currentTimeMillis() - processStartTime,
-                        messageByLocale.get("tps.domain.error.delete.exist-related", request));
+                tpsLogger.fail(ActionType.DELETE, messageByLocale.get("tps.domain.error.delete.exist-related", request));
                 throw new Exception(messageByLocale.get("tps.domain.error.delete.exist-related", request));
             }
         } catch (Exception ex) {
             // 액션 로그에 실패 로그 출력
-            tpsLogger.fail(ActionType.DELETE, System.currentTimeMillis() - processStartTime, ex.toString());
+            tpsLogger.fail(ActionType.DELETE, ex.toString());
             throw new Exception(messageByLocale.get("tps.domain.error.select.related", request));
         }
 
@@ -334,7 +333,7 @@ public class DomainRestController {
             purgeHelper.purgeTmsDomain(request);
 
             // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.DELETE, System.currentTimeMillis() - processStartTime);
+            tpsLogger.success(ActionType.DELETE);
 
             // 결과리턴
             ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
@@ -343,7 +342,7 @@ public class DomainRestController {
         } catch (Exception e) {
             log.error("[FAIL TO DELETE DOMAIN] domainId: {}) {}", domainId, e.getMessage());
             // 액션 로그에 실패 로그 출력
-            tpsLogger.error(ActionType.DELETE, System.currentTimeMillis() - processStartTime, e.toString());
+            tpsLogger.error(ActionType.DELETE, e.toString());
             throw new Exception(messageByLocale.get("tps.domain.error.delete", request), e);
         }
     }

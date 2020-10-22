@@ -8,12 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.MapBuilder;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
@@ -23,6 +22,7 @@ import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthBatchDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthSimpleDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
@@ -73,20 +73,25 @@ public class MenuRestController {
      */
     @ApiOperation(value = "메뉴 목록 조회")
     @GetMapping
-    public ResponseEntity<?> getMenuList(HttpServletRequest request, @SearchParam SearchDTO search, @RequestAttribute Long processStartTime) {
+    public ResponseEntity<?> getMenuList(HttpServletRequest request, @SearchParam MenuSearchDTO search) {
+
+        ResultListDTO<MenuDTO> resultListMessage = new ResultListDTO<MenuDTO>();
 
         // 조회
-        Page<Menu> returnValue = menuService.findAllMenu(search);
-
-        // 리턴값 설정
-        ResultListDTO<MenuDTO> resultListMessage = new ResultListDTO<MenuDTO>();
-        List<MenuDTO> menuDtoList = modelMapper.map(returnValue.getContent(), MenuDTO.TYPE);
-        resultListMessage.setTotalCnt(returnValue.getTotalElements());
-        resultListMessage.setList(menuDtoList);
+        if (McpString.isYes(search.getUseTotal())) {
+            Page<Menu> returnValue = menuService.findAllMenu(search);
+            List<MenuDTO> menuDtoList = modelMapper.map(returnValue.getContent(), MenuDTO.TYPE);
+            resultListMessage.setTotalCnt(returnValue.getTotalElements());
+            resultListMessage.setList(menuDtoList);
+        } else {
+            List<Menu> returnValue = menuService.findAllMenuByParentId(search.getParentMenuId());
+            List<MenuDTO> menuDtoList = modelMapper.map(returnValue, MenuDTO.TYPE);
+            resultListMessage.setList(menuDtoList);
+        }
 
         ResultDTO<ResultListDTO<MenuDTO>> resultDto = new ResultDTO<ResultListDTO<MenuDTO>>(resultListMessage);
 
-        tpsLogger.success(ActionType.SELECT, System.currentTimeMillis() - processStartTime);
+        tpsLogger.success(true);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -99,7 +104,7 @@ public class MenuRestController {
      */
     @ApiOperation(value = "메뉴 목록 트리 조회")
     @GetMapping("/tree")
-    public ResponseEntity<?> getMenuTree(HttpServletRequest request, @RequestAttribute Long processStartTime) {
+    public ResponseEntity<?> getMenuTree(HttpServletRequest request) {
 
         // 조회
         MenuNode menuNode = menuService.findMenuTree();
@@ -107,7 +112,7 @@ public class MenuRestController {
         // 리턴값 설정
         ResultDTO<MenuNode> resultDto = new ResultDTO<MenuNode>(menuNode);
 
-        tpsLogger.success(ActionType.SELECT, System.currentTimeMillis() - processStartTime);
+        tpsLogger.success();
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -127,7 +132,7 @@ public class MenuRestController {
     @GetMapping("/{menuId}")
     public ResponseEntity<?> getMenu(HttpServletRequest request,
             @PathVariable("menuId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.menu.error.length.menuId}") String menuId,
-            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            @NotNull Principal principal)
             throws NoDataException, InvalidDataException {
 
         String message = messageByLocale.get("tps.menu.error.no-data", request);
@@ -137,7 +142,7 @@ public class MenuRestController {
 
         MenuDTO dto = modelMapper.map(menu, MenuDTO.class);
 
-        tpsLogger.success(ActionType.SELECT, System.currentTimeMillis() - processStartTime);
+        tpsLogger.success();
 
         ResultDTO<MenuDTO> resultDto = new ResultDTO<MenuDTO>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -191,13 +196,12 @@ public class MenuRestController {
                 ResultDTO<MenuDTO> resultDto = new ResultDTO<MenuDTO>(dto);
 
                 // 액션 로그에 성공 로그 출력
-                tpsLogger.success(ActionType.INSERT, System.currentTimeMillis() - processStartTime);
+                tpsLogger.success();
 
                 return new ResponseEntity<>(resultDto, HttpStatus.OK);
             } else {
                 // 중복 아이디 발생으로 인해 실패 로그 출력
-                tpsLogger.fail(ActionType.INSERT, System.currentTimeMillis() - processStartTime,
-                        messageByLocale.get("tps.menu.error.duplicated.menuId", request));
+                tpsLogger.fail(messageByLocale.get("tps.menu.error.duplicated.menuId", request));
 
                 return new ResponseEntity<>(MapBuilder
                         .getInstance()
@@ -207,7 +211,7 @@ public class MenuRestController {
         } catch (Exception e) {
             log.error("[FAIL TO INSERT MENU]", e);
             // 액션 로그에 오류 내용 출력
-            tpsLogger.error(ActionType.INSERT, System.currentTimeMillis() - processStartTime, e.toString());
+            tpsLogger.error(e.toString());
             throw new Exception(messageByLocale.get("tps.menu.error.save", request), e);
         }
     }
@@ -226,7 +230,7 @@ public class MenuRestController {
     @PutMapping("/{menuId}")
     public ResponseEntity<?> putMenu(HttpServletRequest request,
             @PathVariable("menuId") @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.length.menuId}") String menuId, @Valid MenuDTO menuDTO,
-            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            @NotNull Principal principal)
             throws Exception {
 
 
@@ -249,14 +253,14 @@ public class MenuRestController {
             ResultDTO<MenuDTO> resultDto = new ResultDTO<MenuDTO>(dto);
 
             // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.UPDATE, System.currentTimeMillis() - processStartTime);
+            tpsLogger.success();
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE MENU]", e);
             // 액션 로그에 에러 로그 출력
-            tpsLogger.error(ActionType.UPDATE, System.currentTimeMillis() - processStartTime, e);
+            tpsLogger.error(e);
             throw new Exception(messageByLocale.get("tps.menu.error.save", request), e);
         }
     }
@@ -283,21 +287,21 @@ public class MenuRestController {
                         try {
                             saveMenuAuth(menuId, MenuAuthTypeCode.GROUP, menuAuthBatchDTO.getMenuAuthSimpleDTOs());
                         } catch (Exception ex) {
-                            tpsLogger.skip(ActionType.UPDATE, System.currentTimeMillis() - processStartTime, ex.toString());
+                            tpsLogger.skip(ex.toString());
                         }
                     });
             success = true;
             ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(success);
 
             // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.UPDATE, System.currentTimeMillis() - processStartTime);
+            tpsLogger.success();
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE MENU AUTH]", e);
             // 액션 로그에 에러 로그 출력
-            tpsLogger.error(ActionType.UPDATE, System.currentTimeMillis() - processStartTime, e);
+            tpsLogger.error(e);
             throw new Exception(messageByLocale.get("tps.menu.auth.error.save", request), e);
         }
     }
@@ -323,21 +327,58 @@ public class MenuRestController {
                         try {
                             saveMenuAuth(menuId, MenuAuthTypeCode.MEMBER, menuAuthBatchDTO.getMenuAuthSimpleDTOs());
                         } catch (Exception ex) {
-                            tpsLogger.skip(ActionType.UPDATE, System.currentTimeMillis() - processStartTime, ex.toString());
+                            tpsLogger.skip(ex.toString());
                         }
                     });
             success = true;
             ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(success);
 
             // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.UPDATE, System.currentTimeMillis() - processStartTime);
+            tpsLogger.success();
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE MENU AUTH]", e);
             // 액션 로그에 에러 로그 출력
-            tpsLogger.error(ActionType.UPDATE, System.currentTimeMillis() - processStartTime, e);
+            tpsLogger.error(e);
+            throw new Exception(messageByLocale.get("tps.menu.auth.error.save", request), e);
+        }
+    }
+
+    /**
+     * 여러 메뉴의 사용자 권한 수정
+     *
+     * @param request      요청
+     * @param menuAuthSeqs 메뉴 권한 시퀀스 목록
+     * @return 수정된 메뉴정보
+     * @throws Exception 그외 모든 에러
+     */
+    @ApiOperation(value = "메뉴 권한 수정")
+    @DeleteMapping("/{menuId}/auths")
+    public ResponseEntity<?> deleteMemberMenuAuth(HttpServletRequest request, List<Long> menuAuthSeqs)
+            throws Exception {
+        Boolean success = Boolean.FALSE;
+        try {
+            menuAuthSeqs.forEach(seq -> {
+                try {
+                    menuService.deleteMenuAuth(seq);
+                } catch (Exception ex) {
+                    tpsLogger.skip(ex.toString());
+                }
+            });
+            success = Boolean.TRUE;
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(success);
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success();
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE MENU AUTH]", e);
+            // 액션 로그에 에러 로그 출력
+            tpsLogger.error(e);
             throw new Exception(messageByLocale.get("tps.menu.auth.error.save", request), e);
         }
     }
@@ -386,7 +427,7 @@ public class MenuRestController {
     @DeleteMapping("/{menuId}")
     public ResponseEntity<?> deleteMenu(HttpServletRequest request,
             @PathVariable("menuId") @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.length.menuId}") String menuId,
-            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            @NotNull Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 
 
@@ -402,10 +443,9 @@ public class MenuRestController {
                 menuService.deleteMenu(menu);
                 success = true;
                 // 액션 로그에 성공 로그 출력
-                tpsLogger.success(ActionType.DELETE, System.currentTimeMillis() - processStartTime);
+                tpsLogger.success();
             } else {
-                tpsLogger.fail(ActionType.DELETE, System.currentTimeMillis() - processStartTime,
-                        messageByLocale.get("tps.menu.error.delete.related", request));
+                tpsLogger.fail(messageByLocale.get("tps.menu.error.delete.related", request));
             }
 
             // 결과리턴
@@ -415,7 +455,7 @@ public class MenuRestController {
         } catch (Exception e) {
             log.error("[FAIL TO DELETE MENU] menuId: {}) {}", menuId, e.getMessage());
             // 액션 로그에 에러 로그 출력
-            tpsLogger.error(ActionType.DELETE, System.currentTimeMillis() - processStartTime, e);
+            tpsLogger.error(e);
             throw new Exception(messageByLocale.get("tps.menu.error.delete", request), e);
         }
     }

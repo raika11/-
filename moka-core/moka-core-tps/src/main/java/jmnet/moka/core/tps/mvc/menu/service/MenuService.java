@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface MenuService {
 
+    String ROOT_MENU_ID = "00";
+
     /**
      * <pre>
      * 메뉴목록 조회
@@ -47,6 +49,14 @@ public interface MenuService {
      * @return 검색 결과
      */
     Page<Menu> findAllMenu(SearchDTO search);
+
+    /**
+     * 하위 메뉴 목록 조회
+     *
+     * @param parentMenuId 검색 조건
+     * @return 검색 결과
+     */
+    List<Menu> findAllMenuByParentId(String parentMenuId);
 
     /**
      * 메뉴 전체 목록 조회

@@ -42,6 +42,8 @@ public class MenuServiceImpl implements MenuService {
 
     final ModelMapper modelMapper;
 
+
+
     public MenuServiceImpl(MenuRepository menuRepository, MenuAuthRepository menuAuthRepository, MenuMapper menuMapper, ModelMapper modelMapper) {
         this.menuRepository = menuRepository;
         this.menuAuthRepository = menuAuthRepository;
@@ -64,7 +66,7 @@ public class MenuServiceImpl implements MenuService {
     private MenuNode makeTree(List<MenuDTO> menuList) {
         MenuNode rootNode = new MenuNode();
         rootNode.setSeq((long) 0);
-        rootNode.setMenuId("00000000");
+        rootNode.setMenuId(ROOT_MENU_ID);
         rootNode.setMenuNm("ROOT");
 
         for (MenuDTO menu : menuList) {
@@ -92,6 +94,11 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Page<Menu> findAllMenu(SearchDTO search) {
         return menuRepository.findAll(search.getPageable());
+    }
+
+    @Override
+    public List<Menu> findAllMenuByParentId(String parentMenuId) {
+        return menuRepository.findAllByParentMenuId(parentMenuId);
     }
 
     @Override

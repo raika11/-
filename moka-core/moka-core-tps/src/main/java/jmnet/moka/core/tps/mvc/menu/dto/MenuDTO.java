@@ -33,14 +33,14 @@ public class MenuDTO implements Serializable {
      * 대메뉴코드
      */
     @NotNull(message = "{tps.menu.error.invalid.menuId}")
-    @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.invalid.menuId}")
+    @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.invalid.menuId}")
     private String parentMenuId;
 
     /**
      * 메뉴코드 (GRP_CD+MID_CD+DTL_CD)
      */
     @NotNull(message = "{tps.menu.error.invalid.menuId}")
-    @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.invalid.menuId}")
+    @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.invalid.menuId}")
     private String menuId;
 
     /**

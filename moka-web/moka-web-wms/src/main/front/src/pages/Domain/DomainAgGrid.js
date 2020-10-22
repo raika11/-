@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
-import { changeSearchOption, getDomainList } from '@store/domain';
+import { changeSearchOption, getDomainList, initialState } from '@store/domain';
 import { columnDefs } from './DomainAgGridColumns';
 
 /**
@@ -11,7 +11,8 @@ import { columnDefs } from './DomainAgGridColumns';
 const DomainAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { domain, list, total, search, loading } = useSelector(
+    const [search, setSearch] = useState(initialState);
+    const { domain, list, total, search: storeSearch, loading } = useSelector(
         (store) => ({
             domain: store.domain.domain,
             list: store.domain.list,
@@ -20,6 +21,10 @@ const DomainAgGrid = () => {
         }),
         shallowEqual,
     );
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     useEffect(() => {
         dispatch(getDomainList());

@@ -32,17 +32,9 @@ export default handleActions(
         /**
          * 검색조건 변경
          */
-        [act.CHANGE_SEARCH_OPTION]: (state, { payload: { key, value } }) => {
+        [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.search[key] = value;
-            });
-        },
-        [act.CHANGE_SEARCH_OPTIONS]: (state, { payload: arr }) => {
-            return produce(state, (draft) => {
-                for (let idx = 0; idx < arr.length; idx++) {
-                    let obj = arr[idx];
-                    draft.search[obj.key] = obj.value;
-                }
+                draft.search = payload;
             });
         },
         /**

@@ -125,7 +125,7 @@ const Template = () => {
                                 tabNavs={[
                                     { title: '템플릿 정보', text: 'Info' },
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '관련 본문스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
                                     { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },

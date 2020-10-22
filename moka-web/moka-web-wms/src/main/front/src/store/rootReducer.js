@@ -6,7 +6,7 @@ import layout from '@store/layout/layoutReducer';
 import auth from '@store/auth/authReducer';
 import domain from '@store/domain/domainReducer';
 import template from '@store/template/templateReducer';
-import templateRelations from '@store/template/templateRelationsReducer';
+import templateRelationList from '@store/template/templateRelationListReducer';
 import toast from '@store/notification/toastReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
 import reserved from '@store/reserved/reservedReducer';
@@ -18,7 +18,7 @@ export default combineReducers({
     auth,
     domain,
     template,
-    templateRelations,
+    templateRelationList,
     toast,
     codeMgt,
     reserved,

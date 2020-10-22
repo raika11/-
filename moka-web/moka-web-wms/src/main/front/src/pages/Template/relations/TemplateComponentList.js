@@ -8,7 +8,8 @@ import AgGrid from './TemplateComponentAgGrid';
 /**
  * 관련 컴포넌트
  */
-const TemplateComponentList = () => {
+const TemplateComponentList = (props) => {
+    const { show } = props;
     const history = useHistory();
 
     return (
@@ -24,8 +25,9 @@ const TemplateComponentList = () => {
                     컴포넌트 추가
                 </Button>
             </div>
+
             {/* 목록 및 페이징 */}
-            <AgGrid />
+            <AgGrid show={show} />
         </MokaCard>
     );
 };

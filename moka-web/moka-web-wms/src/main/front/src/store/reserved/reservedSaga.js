@@ -1,22 +1,26 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { callApiAfterActions, createRequestSaga } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import * as api from './reservedApi';
-import * as act from './reservedAction';
+import * as reservedAPI from './reservedApi';
+import * as reservedAction from './reservedAction';
 
 /**
  * 예약어 목록 조회
  */
-export const getReservedList = callApiAfterActions(act.GET_RESERVED_LIST, api.getReservedList, (store) => store.reserved);
+export const getReservedList = callApiAfterActions(reservedAction.GET_RESERVED_LIST, reservedAPI.getReservedList, (store) => store.reserved);
 
 /**
- * 예약어 등록
+ * 예약어 등록/수정
+ * @param {string} param0.payload.type insert|update
+ * @param {array} param0.payload.actions 선처리 액션들
+ * @param {func} param0.payload.callback 콜백
  */
-export function* putReserved({ payload: { actions, callback } }) {
-    const ACTION = act.PUT_RESERVED;
-    let response, callbackData;
+export function* saveReserved({ payload: { type, actions, callback } }) {
+    const ACTION = reservedAction.SAVE_RESERVED;
+    let callbackData = {};
 
     yield put(startLoading(ACTION));
+
     try {
         // actions 먼저 처리
         if (actions && actions.length > 0) {
@@ -30,42 +34,33 @@ export function* putReserved({ payload: { actions, callback } }) {
         }
 
         // 예약어 데이터
-        const reservedData = yield select((store) => store.reserved.reserved);
-
-        // 등록/수정
-        if (reservedData.reservedSeq) {
-            response = yield call(api.putReserved, { reserved: reservedData });
-        } else {
-            response = yield call(api.postReserved, { reserved: reservedData });
-        }
+        const reserved = yield select((store) => store.reserved.reserved);
+        const response = type === 'insert' ? yield call(reservedAPI.postReserved, { reserved }) : yield call(reservedAPI.putReserved, { reserved });
+        callbackData = response.data;
 
         if (response.data.header.success) {
-            callbackData = response.data;
-
             // 성공 액션
             yield put({
-                type: act.GET_RESERVED_SUCCESS,
+                type: reservedAction.GET_RESERVED_SUCCESS,
                 payload: response.data,
             });
 
-            // 목록
-            yield put({ type: act.GET_RESERVED_LIST });
+            // 목록 검색
+            yield put({ type: reservedAction.GET_RESERVED_LIST });
         } else {
-            callbackData = response.data;
-
             // 실패 액션 실행
             yield put({
-                type: act.GET_RESERVED_FAILURE,
+                type: reservedAction.GET_RESERVED_FAILURE,
                 payload: response.data,
             });
         }
     } catch (e) {
-        callbackData = e;
+        callbackData = { header: { success: false }, body: e };
 
         // 실패 액션 실행
         yield put({
-            type: act.GET_RESERVED_FAILURE,
-            payload: { header: { success: false }, body: e },
+            type: reservedAction.GET_RESERVED_FAILURE,
+            payload: callbackData,
         });
     }
 
@@ -77,42 +72,46 @@ export function* putReserved({ payload: { actions, callback } }) {
 
 /**
  * 예약어 삭제
+ * @param {} param0.payload.reservedSet
+ * @param {func} param0.payload.callback 콜백
  */
 export function* deleteReserved({ payload: { reservedSet, callback } }) {
-    const ACTION = act.DELETE_RESERVED;
-    let callbackData;
+    const ACTION = reservedAction.DELETE_RESERVED;
+    let callbackData = {};
 
     yield put(startLoading(ACTION));
     try {
-        const response = yield call(api.deleteReserved, reservedSet.seq);
+        const response = yield call(reservedAPI.deleteReserved, reservedSet.seq);
+        callbackData = response.data;
 
         if (response.data.header.success) {
             yield put({
-                type: act.DELETE_RESERVED_SUCCESS,
+                type: reservedAction.DELETE_RESERVED_SUCCESS,
                 payload: response.data,
             });
 
-            // 목록
+            // 목록 검색
             yield put({
-                type: act.GET_RESERVED_LIST,
+                type: reservedAction.GET_RESERVED_LIST,
                 payload: { domainId: reservedSet.domainId },
             });
         } else {
             yield put({
-                type: act.DELETE_RESERVED_FAILURE,
+                type: reservedAction.DELETE_RESERVED_FAILURE,
                 payload: response.data,
             });
 
             // 목록 다시 검색
             yield put({
-                type: act.GET_RESERVED_LIST,
+                type: reservedAction.GET_RESERVED_LIST,
                 payload: { domainId: reservedSet.domainId },
             });
         }
     } catch (e) {
+        callbackData = { header: { success: false }, body: e };
         yield put({
-            type: act.DELETE_RESERVED_FAILURE,
-            payload: e,
+            type: reservedAction.DELETE_RESERVED_FAILURE,
+            payload: callbackData,
         });
     }
     if (typeof callback === 'function') {
@@ -124,12 +123,12 @@ export function* deleteReserved({ payload: { reservedSet, callback } }) {
 /**
  * 예약어 정보 조회
  */
-export const getReserved = createRequestSaga(act.getReserved, api.getReserved);
+export const getReserved = createRequestSaga(reservedAction.GET_RESERVED, reservedAPI.getReserved);
 
 /** saga */
 export default function* saga() {
-    yield takeLatest(act.GET_RESERVED_LIST, getReservedList);
-    yield takeLatest(act.GET_RESERVED, getReserved);
-    yield takeLatest(act.PUT_RESERVED, putReserved);
-    yield takeLatest(act.DELETE_RESERVED, deleteReserved);
+    yield takeLatest(reservedAction.GET_RESERVED_LIST, getReservedList);
+    yield takeLatest(reservedAction.GET_RESERVED, getReserved);
+    yield takeLatest(reservedAction.SAVE_RESERVED, saveReserved);
+    yield takeLatest(reservedAction.DELETE_RESERVED, deleteReserved);
 }

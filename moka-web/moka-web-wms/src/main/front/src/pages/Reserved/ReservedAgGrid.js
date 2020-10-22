@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { columnDefs } from './ReservedAgGridColumns';
 import { MokaTable } from '@components';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { changeSearchOption, getReservedList, clearReserved } from '@store/reserved';
+import { changeSearchOption, getReserved, clearReserved } from '@store/reserved';
 
 /**
  * 예약어 AgGrid 컴포넌트
@@ -12,39 +12,30 @@ import { changeSearchOption, getReservedList, clearReserved } from '@store/reser
 const ReservedAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { total, list, search, reserved, latestReservedSeq, loading } = useSelector((store) => ({
+    const { total, list, search, latestReservedSeq, loading } = useSelector((store) => ({
         total: store.reserved.total,
         list: store.reserved.list,
         search: store.reserved.search,
-        reserved: store.reserved.reserved,
         latestReservedSeq: store.reserved.latestReservedSeq,
+        loading: store.loading['reserved/GET_RESERVED_LIST'],
     }));
-    const [reservedRows, setReservedRows] = useState([]);
 
     /**
      * Store의 예약어 정보를 테이블 데이터로 변경
      */
-    useEffect(() => {
-        setReservedRows(
-            list.map((r) => ({
-                id: String(r.reservedSeq),
-                reservedId: r.reservedId,
-                domain: r.domain,
-                reservedSeq: r.reservedSeq,
-                reservedValue: r.reservedValue,
-                useYn: r.useYn,
-                link: `/reserved/${r.reservedSeq}`,
-            })),
-        );
-    }, [list]);
-
-    /**
-     * 예약어 추가 e
-     */
-    const onAddClick = useCallback(() => {
-        history.push('/reserved');
-        dispatch(clearReserved());
-    }, [dispatch, history]);
+    // useEffect(() => {
+    //     setReservedRows(
+    //         list.map((r) => ({
+    //             id: String(r.reservedSeq),
+    //             reservedId: r.reservedId,
+    //             domain: r.domain,
+    //             reservedSeq: r.reservedSeq,
+    //             reservedValue: r.reservedValue,
+    //             useYn: r.useYn,
+    //             link: `/reserved/${r.reservedSeq}`,
+    //         })),
+    //     );
+    // }, [list]);
 
     /**
      * 테이블에서 검색옵션 변경하는 경우
@@ -52,7 +43,7 @@ const ReservedAgGrid = () => {
      */
     const handleChangeSearchOption = useCallback(
         (search) => {
-            dispatch(getReservedList(changeSearchOption(search), search.key === 'size' && changeSearchOption({ key: 'page', value: 0 })));
+            dispatch(getReserved(changeSearchOption(search), search.key === 'size' && changeSearchOption({ key: 'page', value: 0 })));
         },
         [dispatch],
     );
@@ -61,11 +52,20 @@ const ReservedAgGrid = () => {
      * 목록에서 Row클릭
      */
     const handleRowClicked = useCallback(
-        (e, row) => {
+        (row) => {
             history.push(row.link);
+            dispatch(getReserved(row.reservedSeq));
         },
-        [history],
+        [dispatch, history],
     );
+
+    /**
+     * 예약어 추가 버튼 클릭
+     */
+    const onAddClick = useCallback(() => {
+        history.push('/reserved');
+        dispatch(clearReserved());
+    }, [dispatch, history]);
 
     return (
         <>
@@ -77,15 +77,15 @@ const ReservedAgGrid = () => {
             {/* 간단한 Table */}
             <MokaTable
                 columnDefs={columnDefs}
-                // 수정중
-                rowData={total}
-                getRowNodeId={(params) => params.reservedId}
+                rowData={list}
+                getRowNodeId={(params) => params.reservedSeq}
                 agGridHeight={550}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}
                 page={search.page}
                 size={search.size}
+                selected={String(latestReservedSeq)}
                 onChangeSearchOption={handleChangeSearchOption}
             />
         </>

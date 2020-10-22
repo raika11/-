@@ -2,7 +2,7 @@ import qs from 'qs';
 import instance from '../commons/axios';
 
 // 예약어목록 조회
-export const getReservedList = (search) => {
+export const getReservedList = ({ search }) => {
     return instance.get(`/api/reserveds?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });

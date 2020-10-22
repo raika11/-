@@ -44,12 +44,26 @@ const propTypes = {
      */
     name: PropTypes.string,
     /**
-     * 그 외 input props
+     * value, placeholder, type, onChange, disabled, name, isInvalid가 아닌
+     * input의 추가 props를 정의한다.
+     * (input 형태에 따라 필요한 props가 각기 다르기 때문에 모두 명시하지 않음, 아래는 예제 props)
      */
     inputProps: PropTypes.shape({
+        /**
+         * input id값
+         */
         id: PropTypes.string,
+        /**
+         * custom 여부(라디오, 체크박스)
+         */
         custom: PropTypes.bool,
+        /**
+         * readOnly (텍스트, textarea)
+         */
         readOnly: PropTypes.bool,
+        /**
+         * type="input" 에서 사용하며 input을 plaintext처럼 보이게 한다
+         */
         plaintext: PropTypes.bool,
     }),
     /**

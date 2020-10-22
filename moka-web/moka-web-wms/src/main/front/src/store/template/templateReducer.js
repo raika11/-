@@ -25,6 +25,7 @@ export const initialState = {
     templateError: null,
     templateBody: '',
     inputTag: '',
+    invalidList: [],
 };
 
 export default handleActions(
@@ -46,6 +47,7 @@ export default handleActions(
                 draft.templateBody = initialState.templateBody;
                 draft.inputTag = initialState.inputTag;
                 draft.templateError = initialState.templateError;
+                draft.invalidList = initialState.invalidList;
             });
         },
         /**
@@ -92,6 +94,11 @@ export default handleActions(
         [act.CHANGE_TEMPLATE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.template = payload;
+            });
+        },
+        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
             });
         },
     },

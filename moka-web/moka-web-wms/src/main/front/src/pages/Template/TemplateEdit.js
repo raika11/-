@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { toastr } from 'react-redux-toastr';
 import copy from 'copy-to-clipboard';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -10,8 +8,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInputLabel, MokaIcon, MokaInput, MokaInputGroup } from '@components';
-import { getTpSize, getTpZone } from '@store/codeMgt/codeMgtAction';
-import { changeTemplate, saveTemplate } from '@store/template/templateAction';
+import { getTpZone } from '@store/codeMgt';
+import { changeTemplate, saveTemplate, changeInvalidList } from '@store/template';
+import { notification } from '@utils/toastUtil';
 import CopyModal from './modals/CopyModal';
 import AddComponentModal from './modals/AddComponentModal';
 
@@ -22,11 +21,12 @@ const TemplateEdit = () => {
     const { templateSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { template, inputTag, tpZoneRows, latestDomainId } = useSelector((store) => ({
+    const { template, inputTag, tpZoneRows, latestDomainId, invalidList } = useSelector((store) => ({
         template: store.template.template,
         inputTag: store.template.inputTag,
         tpZoneRows: store.codeMgt.tpZoneRows,
         latestDomainId: store.auth.latestDomainId,
+        invalidList: store.template.invalidList,
     }));
 
     // state
@@ -39,7 +39,9 @@ const TemplateEdit = () => {
     const [fileValue, setFileValue] = useState(null);
     const [description, setDescription] = useState('');
     const [btnDisabled, setBtnDisabled] = useState(true);
-    const [validated, setValidated] = useState(true);
+
+    // error
+    const [teamplateNameError, setTemplateNameError] = useState(false);
 
     // modal state
     const [copyModalShow, setCopyModalShow] = useState(false);
@@ -49,10 +51,49 @@ const TemplateEdit = () => {
     const imgFileRef = useRef(null);
 
     /**
-     * validate 함수
+     * 각 항목별 값 변경
+     */
+    const handleChangeValue = ({ target }) => {
+        const { name, value } = target;
+
+        if (name === 'templateName') {
+            setTemplateName(value);
+            const regex = /[^\s\t\n]+/;
+            if (regex.test(value)) {
+                setTemplateNameError(false);
+            }
+        } else if (name === 'templateWidth') {
+            setTemplateWidth(value);
+        } else if (name === 'cropWidth') {
+            setCropWidth(value);
+        } else if (name === 'cropHeight') {
+            setCropHeight(value);
+        } else if (name === 'templateGroup') {
+            setTemplateGroup(value);
+        } else if (name === 'description') {
+            setDescription(value);
+        }
+    };
+
+    /**
+     * 유효성 검사
+     * @param {object} template 템플릿데이터
      */
     const validate = (template) => {
-        return true;
+        let isInvalid = false;
+        let errList = [];
+
+        // 템플릿명 체크
+        if (!/[^\s\t\n]+/.test(template.templateName)) {
+            errList.push({
+                field: 'templateName',
+                reason: '',
+            });
+            isInvalid = isInvalid | true;
+        }
+
+        dispatch(changeInvalidList(errList));
+        return !isInvalid;
     };
 
     /**
@@ -83,7 +124,10 @@ const TemplateEdit = () => {
                     actions: [changeTemplate(newTemplate)],
                     callback: ({ header, body }) => {
                         if (header.success) {
+                            notification('success', header.message);
                             history.push(`/template/${body.templateSeq}`);
+                        } else {
+                            notification('warning', header.message || '실패하였습니다');
                         }
                     },
                 }),
@@ -103,25 +147,37 @@ const TemplateEdit = () => {
         // 스토어에서 가져온 템플릿 데이터 셋팅
         setFileValue(null);
         setTemplateName(template.templateName || '');
-        setCropWidth(template.cropWidth || '');
-        setCropHeight(template.cropHeight || '');
+        setCropWidth(template.cropWidth || 0);
+        setCropHeight(template.cropHeight || 0);
         setDescription(template.description || '');
-        setTemplateWidth(template.templateWidth || '');
+        setTemplateWidth(template.templateWidth || 0);
         setTemplateGroup(template.templateGroup || '');
         setTemplateThumb(template.templateThumb);
     }, [template]);
 
     useEffect(() => {
-        dispatch(getTpZone());
-        dispatch(getTpSize());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
+        // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
         if (templateGroup === '' && tpZoneRows.length > 0) {
             setTemplateGroup(tpZoneRows[0].dtlCd);
         }
     }, [templateGroup, tpZoneRows]);
+
+    useEffect(() => {
+        // 코드 조회
+        dispatch(getTpZone());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        // invalidList 처리
+        if (invalidList.length > 0) {
+            invalidList.forEach((i) => {
+                if (i.field === 'templateName') {
+                    setTemplateNameError(true);
+                }
+            });
+        }
+    }, [invalidList]);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title="템플릿 정보">
@@ -148,9 +204,18 @@ const TemplateEdit = () => {
                 {/* 템플릿ID */}
                 <MokaInputLabel className="mb-2" label="템플릿ID" value={templateSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 템플릿명 */}
-                <MokaInputLabel className="mb-2" label="템플릿명" value={templateName} onChange={(e) => setTemplateName(e.target.value)} placeholder="템플릿명을 입력하세요" />
+                <MokaInputLabel
+                    className="mb-2"
+                    label="템플릿명"
+                    value={templateName}
+                    name="templateName"
+                    onChange={handleChangeValue}
+                    placeholder="템플릿명을 입력하세요"
+                    isInvalid={teamplateNameError}
+                    required
+                />
                 {/* 위치그룹 */}
-                <MokaInputLabel className="mb-2" label="위치 그룹" as="select" value={templateGroup} onChange={(e) => setTemplateGroup(e.target.value)} isInvalid={!validated}>
+                <MokaInputLabel className="mb-2" label="위치 그룹" as="select" value={templateGroup} onChange={handleChangeValue} name="templateGroup">
                     {tpZoneRows.map((cd) => (
                         <option key={cd.dtlCd} value={cd.dtlCd}>
                             {cd.cdNm}
@@ -160,7 +225,7 @@ const TemplateEdit = () => {
                 {/* 사이즈, 이미지 크기 */}
                 <Row className="m-0 mb-2">
                     <Col xs={5} className="p-0 m-0">
-                        <MokaInputLabel className="mb-0" label="사이즈" value={templateWidth} onChange={(e) => setTemplateWidth(e.target.value)} type="number" />
+                        <MokaInputLabel className="mb-0" label="사이즈" value={templateWidth} onChange={handleChangeValue} type="number" name="templateWidth" />
                     </Col>
                     <Col xs={4} className="p-0">
                         <MokaInputLabel
@@ -169,12 +234,13 @@ const TemplateEdit = () => {
                             labelClassName="mr-2"
                             className="mb-0"
                             value={cropWidth}
-                            onChange={(e) => setCropWidth(e.target.value)}
+                            name="cropWidth"
+                            onChange={handleChangeValue}
                             type="number"
                         />
                     </Col>
                     <Col xs={3} className="d-flex p-0 pl-2">
-                        x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={(e) => setCropHeight(e.target.value)} type="number" />
+                        x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={handleChangeValue} type="number" name="cropHeight" />
                     </Col>
                 </Row>
                 {/* 입력태그 */}
@@ -191,7 +257,7 @@ const TemplateEdit = () => {
                             variant="dark"
                             onClick={() => {
                                 copy(inputTag);
-                                toastr.success('알림창', '태그를 복사하였습니다.');
+                                notification('success', '태그를 복사하였습니다');
                             }}
                         >
                             <MokaIcon iconName="fal-copy" />
@@ -225,7 +291,7 @@ const TemplateEdit = () => {
                     className="mb-2"
                 />
                 {/* 설명 */}
-                <MokaInputLabel label="설명" placeholder="내용설명" value={description} onChange={(e) => setDescription(e.target.value)} />
+                <MokaInputLabel label="설명" placeholder="내용설명" value={description} onChange={handleChangeValue} name="description" />
             </Form>
 
             {/* 템플릿복사 Modal */}

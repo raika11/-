@@ -9,9 +9,9 @@ const TemplatePageAgGrid = ({ show }) => {
     const { template, search, total, list, loading } = useSelector(
         (store) => ({
             template: store.template.template,
-            search: store.templateRelations.PG.search,
-            total: store.templateRelations.PG.total,
-            list: store.templateRelations.PG.list,
+            search: store.templateRelationList.PG.search,
+            total: store.templateRelationList.PG.total,
+            list: store.templateRelationList.PG.list,
             loading: store.loading[GET_RELATION_LIST],
         }),
         shallowEqual,

@@ -6,13 +6,14 @@ import { MokaCard } from '@components';
 import AgGrid from './TemplateSkinAgGrid';
 
 /**
- * 관련 본문스킨
+ * 관련 뷰스킨
  */
-const TemplateSkinList = () => {
+const TemplateSkinList = (props) => {
+    const { show } = props;
     const history = useHistory();
 
     return (
-        <MokaCard titleClassName="mb-0" title="본문스킨 검색">
+        <MokaCard titleClassName="mb-0" title="뷰스킨 검색">
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-3">
                 <Button
@@ -21,11 +22,12 @@ const TemplateSkinList = () => {
                         history.push('/skin');
                     }}
                 >
-                    본문스킨 추가
+                    뷰스킨 추가
                 </Button>
             </div>
+
             {/* 목록 및 페이징 */}
-            <AgGrid />
+            <AgGrid show={show} />
         </MokaCard>
     );
 };

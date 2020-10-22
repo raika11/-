@@ -104,6 +104,10 @@ export default handleActions(
                 draft[relType].error = payload;
             });
         },
+        /**
+         * 스토어 데이터 제거
+         */
+        [act.CLEAR_RELATION_LIST]: () => initialState,
     },
     initialState,
 );

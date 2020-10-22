@@ -1,26 +1,77 @@
-import React, { useState, useCallback } from 'react';
-// import { columnDefs, rowData } from './PageChildContainerAgGridColumns';
-// import { MokaTable } from '@components';
+import React, { useCallback, useEffect } from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import columnDefs from './TemplateSkinAgGridColumns';
+import { MokaTable } from '@components';
+import { GET_RELATION_LIST, changeSearchSKOption, getRelationSKList } from '@store/template';
 
-const TemplateSkinAgGrid = (props) => {
-    // const [total] = useState(rowData.length);
-    // const [loading] = useState(false);
-    // const [search] = useState({ page: 1, size: 10 });
+const TemplateSkinAgGrid = ({ show }) => {
+    const dispatch = useDispatch();
+    const { template, search, total, list, loading } = useSelector(
+        (store) => ({
+            template: store.template.template,
+            search: store.templateRelationList.SK.search,
+            total: store.templateRelationList.SK.total,
+            list: store.templateRelationList.SK.list,
+            loading: store.loading[GET_RELATION_LIST],
+        }),
+        shallowEqual,
+    );
 
     /**
-     * 테이블에서 검색옵션 변경하는 경우
-     * @param {object} payload 변경된 값
+     * 테이블 검색옵션 변경
+     * @param {*} payload 변경된 값
      */
-    // const handleChangeSearchOption = useCallback((search) => console.log(search), []);
+    const handleChangeSearchOption = useCallback(
+        ({ key, value }) => {
+            dispatch(
+                getRelationSKList(
+                    changeSearchSKOption({
+                        ...search,
+                        [key]: value,
+                        page: 0,
+                    }),
+                ),
+            );
+        },
+        [dispatch, search],
+    );
 
     /**
      * 목록에서 Row클릭
      */
-    // const handleRowClicked = useCallback((row) => {
-    //     console.log(row);
-    // }, []);
+    const handleRowClicked = useCallback(() => {}, []);
 
-    return <div>agGrid</div>;
+    useEffect(() => {
+        if (show && template.templateSeq) {
+            dispatch(
+                getRelationSKList(
+                    changeSearchSKOption({
+                        ...search,
+                        templateSeq: template.templateSeq,
+                        domainId: template.domain.domainId,
+                        page: 0,
+                    }),
+                ),
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show, template]);
+
+    return (
+        <MokaTable
+            agGridHeight={625}
+            columnDefs={columnDefs}
+            rowData={list}
+            onRowNodeId={(page) => page.pageSeq}
+            onRowClicked={handleRowClicked}
+            loading={loading}
+            total={total}
+            page={search.page}
+            size={search.size}
+            onChangeSearchOption={handleChangeSearchOption}
+            preventRowClickCell={['preview', 'link']}
+        />
+    );
 };
 
 export default TemplateSkinAgGrid;

@@ -16,10 +16,12 @@ export const CLEAR_STORE = 'template/CLEAR_STORE';
 export const CLEAR_TEMPLATE = 'template/CLEAR_TEMPLATE';
 export const CLEAR_LIST = 'template/CLEAR_LIST';
 export const CLEAR_SEARCH = 'template/CLEAR_SEARCH';
+export const CLEAR_RELATION_LIST = 'template/CLEAR_RELATION_LIST';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearTemplate = createAction(CLEAR_TEMPLATE);
 export const clearList = createAction(CLEAR_STORE);
 export const clearSearch = createAction(CLEAR_STORE);
+export const clearRelationList = createAction(CLEAR_RELATION_LIST);
 
 /**
  * 데이터 조회

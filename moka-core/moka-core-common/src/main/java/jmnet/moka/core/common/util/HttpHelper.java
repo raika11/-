@@ -17,6 +17,8 @@ public class HttpHelper {
     public static final String[] REMOTE_IP_HEADER =
             {"X-Forwarded-For", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"};
 
+    private static final Map<String, String> EMPTY_MAP = new HashMap<>(0);
+
     /**
      * 요청한 Client IP를 가져온다.
      *
@@ -24,7 +26,7 @@ public class HttpHelper {
      * @return IP
      */
     public static String getRemoteAddr(HttpServletRequest request) {
-        String ip = null;
+        String ip;
         for (String h : REMOTE_IP_HEADER) {
             ip = request.getHeader(h);
             if (ip != null) {
@@ -43,13 +45,16 @@ public class HttpHelper {
      * @return 파라미터 맵
      */
     public static Map<String, String> getParamMap(HttpServletRequest request) {
-        Map<String, String> parameterMap = new HashMap<String, String>(8);
+        Map<String, String> parameterMap = EMPTY_MAP;
         Enumeration<String> paramNameEnumeration = request.getParameterNames();
-        while (paramNameEnumeration.hasMoreElements()) {
-            String paramName = paramNameEnumeration.nextElement();
-            String value = request.getParameter(paramName);
-            if (value != null) {
-                parameterMap.put(paramName, value);
+        if (paramNameEnumeration.hasMoreElements()) {
+            parameterMap = new HashMap<>(8);
+            while (paramNameEnumeration.hasMoreElements()) {
+                String paramName = paramNameEnumeration.nextElement();
+                String value = request.getParameter(paramName);
+                if (value != null) {
+                    parameterMap.put(paramName, value);
+                }
             }
         }
         return parameterMap;
@@ -64,17 +69,17 @@ public class HttpHelper {
      * @return 파라미터 맵
      */
     public static String getParamString(HttpServletRequest request) {
-        String param = "";
+        StringBuilder param = new StringBuilder(64);
         Enumeration<String> params = request.getParameterNames();
         int idx = 0;
         while (params.hasMoreElements()) {
-            String name = (String) params.nextElement();
+            String name = params.nextElement();
             if (idx++ > 0) {
-                param += ",";
+                param.append(",");
             }
-            param += (name + "=" + request.getParameter(name));
+            param.append(name).append("=").append(request.getParameter(name));
         }
-        return param;
+        return param.toString();
     }
 
     /**
@@ -84,7 +89,7 @@ public class HttpHelper {
      * @return http header 맵
      */
     public static Map<String, String> getHeaderMap(HttpServletRequest request) {
-        Map<String, String> headerMap = new HashMap<String, String>(8);
+        Map<String, String> headerMap = new HashMap<>(8);
         for (Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements(); ) {
             String headerName = e.nextElement();
             headerMap.put(headerName, request.getHeader(headerName));
@@ -99,9 +104,13 @@ public class HttpHelper {
      * @return http cookie 맵
      */
     public static Map<String, String> getCookieMap(HttpServletRequest request) {
-        Map<String, String> cookieMap = new HashMap<String, String>();
-        for (Cookie cookie : request.getCookies()) {
-            cookieMap.put(cookie.getName(), cookie.getValue());
+        Map<String, String> cookieMap = EMPTY_MAP;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            cookieMap = new HashMap<>();
+            for (Cookie cookie : request.getCookies()) {
+                cookieMap.put(cookie.getName(), cookie.getValue());
+            }
         }
         return cookieMap;
     }

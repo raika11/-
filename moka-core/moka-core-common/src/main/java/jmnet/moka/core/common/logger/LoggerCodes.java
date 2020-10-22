@@ -31,7 +31,8 @@ public final class LoggerCodes {
         FILE_DELETE("FILE_DELETE", "파일 삭제"),
         FILE_COPY("FILE_COPY", "파일 복사"),
         FILE_MOVE("FILE_MOVE", "파일 이동"),
-        FILE_OVERWRITE("FILE_OVERWRITE", "파일 덮어쓰기");
+        FILE_OVERWRITE("FILE_OVERWRITE", "파일 덮어쓰기"),
+        UNKNOWN("UNKNOWN", "알수없음");
 
         private String code;
         private String description;

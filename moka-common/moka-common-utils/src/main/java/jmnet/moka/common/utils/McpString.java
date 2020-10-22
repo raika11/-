@@ -23,21 +23,22 @@ import org.springframework.web.util.HtmlUtils;
 
 /**
  * MCP String Util 클래스 org.springframework.util.StringUtils 상속
- * 
- * @author ince
  *
+ * @author ince
  */
 public class McpString extends StringUtils {
 
     private final static String URI_REGEX = "\\{[A-z0-9]*\\}";
 
+    public final static String YES = "Y";
+    public final static String NO = "N";
+
 
     /**
-     * 
      * <pre>
      * value 가 null 또는 empty 인지 체크 한다.
      * </pre>
-     * 
+     *
      * @param value
      * @return empty true/false
      */
@@ -62,7 +63,7 @@ public class McpString extends StringUtils {
 
     /**
      * 값이 Null 또는 Empty인지 체크
-     * 
+     *
      * @param str 문자열
      * @return 빈문자열 여부
      */
@@ -72,7 +73,7 @@ public class McpString extends StringUtils {
 
     /**
      * 값이 있는지 여부
-     * 
+     *
      * @param str
      * @return
      */
@@ -81,11 +82,10 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * values 배열 요소에 null 또는 empty 값이 있는지 여부를 체크 한다.
      * </pre>
-     * 
+     *
      * @param values
      * @return 포함 여부
      */
@@ -103,7 +103,7 @@ public class McpString extends StringUtils {
 
     /**
      * url 파라미터를 Map 형태로 전달한다.
-     * 
+     *
      * @param value
      * @return
      */
@@ -130,11 +130,10 @@ public class McpString extends StringUtils {
 
 
     /**
-     * 
      * <pre>
      * RESTFul 리소스 URI 를 리턴 한다.
      * </pre>
-     * 
+     *
      * @param sourceUri
      * @param pathVariables
      * @return URI
@@ -142,7 +141,9 @@ public class McpString extends StringUtils {
     public static String genUriWithPathVariables(String sourceUri, String... pathVariables) {
         String resultUri = null;
         if (pathVariables != null) {
-            Matcher matcher = Pattern.compile(URI_REGEX).matcher(sourceUri);
+            Matcher matcher = Pattern
+                    .compile(URI_REGEX)
+                    .matcher(sourceUri);
             int matchedCount = 0;
             while (matcher.find()) {
                 matchedCount++;
@@ -153,8 +154,8 @@ public class McpString extends StringUtils {
                     resultUri = resultUri.replaceFirst(URI_REGEX, pathVariable);
                 }
             } else {
-                throw new RuntimeException("path valiables count mismatched.\nsourceUri is "
-                        + sourceUri + "\npathVariables is " + Arrays.toString(pathVariables));
+                throw new RuntimeException(
+                        "path valiables count mismatched.\nsourceUri is " + sourceUri + "\npathVariables is " + Arrays.toString(pathVariables));
             }
         } else {
             throw new RuntimeException("path valiable is null, abd sourceUri is " + sourceUri);
@@ -163,11 +164,10 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * RESTFul 리소스 URI 를 리턴 한다.
      * </pre>
-     * 
+     *
      * @param uri
      * @param pathVariables
      * @return URI
@@ -175,30 +175,30 @@ public class McpString extends StringUtils {
     public static String genAwareUriWithPathVariables(String uri, String... pathVariables) {
         String resultUri = uri;
         if (pathVariables != null) {
-            Matcher matcher = Pattern.compile(URI_REGEX).matcher(uri);
+            Matcher matcher = Pattern
+                    .compile(URI_REGEX)
+                    .matcher(uri);
             int matchedCount = 0;
             while (matcher.find()) {
                 matchedCount++;
             }
             if (matchedCount > pathVariables.length) {
-                throw new RuntimeException(String.format(
-                        "path valiables count mismatched. uri is '%s' pathVariables is '%s'", uri,
-                        Arrays.toString(pathVariables)));
+                throw new RuntimeException(
+                        String.format("path valiables count mismatched. uri is '%s' pathVariables is '%s'", uri, Arrays.toString(pathVariables)));
             } else {
                 for (int i = 0; i < matchedCount; i++) {
                     resultUri = resultUri.replaceFirst(URI_REGEX, pathVariables[i]);
                 }
             }
         } else {
-            throw new RuntimeException(
-                    String.format("path valiable is null, abd uri is '%s'", uri));
+            throw new RuntimeException(String.format("path valiable is null, abd uri is '%s'", uri));
         }
         return resultUri;
     }
 
     /**
      * value가 빈값일때 빈문자열로 리턴
-     * 
+     *
      * @param value 값
      * @return 값
      */
@@ -208,7 +208,7 @@ public class McpString extends StringUtils {
 
     /**
      * value가 빈값일때 빈문자열로 리턴
-     * 
+     *
      * @param value 값
      * @return 값
      */
@@ -218,8 +218,8 @@ public class McpString extends StringUtils {
 
     /**
      * value가 빈값일때 defaultValue를 리턴
-     * 
-     * @param value 값
+     *
+     * @param value        값
      * @param defaultValue 기본값
      * @return 값
      */
@@ -232,8 +232,8 @@ public class McpString extends StringUtils {
 
     /**
      * value가 빈값일때 defaultValue를 리턴
-     * 
-     * @param value 값
+     *
+     * @param value        값
      * @param defaultValue 기본값
      * @return 값
      */
@@ -245,12 +245,11 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * value 값이 없다면 defaultValue 값을 리턴 한다.
      * </pre>
-     * 
-     * @param value String
+     *
+     * @param value        String
      * @param defaultValue
      * @return String
      */
@@ -263,12 +262,11 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * value 값이 없다면 defaultValue 값을 리턴 한다.
      * </pre>
-     * 
-     * @param value Object
+     *
+     * @param value        Object
      * @param defaultValue
      * @return String
      */
@@ -281,11 +279,10 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * value 값이 없다면 defaultValue 값을 리턴 한다.
      * </pre>
-     * 
+     *
      * @param value
      * @param defaultValue
      * @return Integer
@@ -300,11 +297,10 @@ public class McpString extends StringUtils {
 
 
     /**
-     * 
      * <pre>
      * value 파라미터 값을 integer 객체의 값으로 변환한 값을 리턴
      * </pre>
-     * 
+     *
      * @param value
      * @return Integer
      */
@@ -328,11 +324,10 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * value 파라미터 값을 Long 객체의 값으로 변환한 값을 리턴
      * </pre>
-     * 
+     *
      * @param value
      * @return Long
      */
@@ -353,30 +348,32 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * 날짜 포멧에 해당하는 문자열 값을 리턴
      * </pre>
-     * 
+     *
      * @param format
      * @return Format String
      */
     public static String getFormattedString(String format) {
-        return FastDateFormat.getInstance(format).format(Calendar.getInstance());
+        return FastDateFormat
+                .getInstance(format)
+                .format(Calendar.getInstance());
     }
 
     /**
-     * 
      * <pre>
      * 날짜 포멧에 해당하는 문자열 값을 리턴
      * </pre>
-     * 
+     *
      * @param format
      * @param date
      * @return Format String
      */
     public static String getFormattedString(final String format, final Date date) {
-        return FastDateFormat.getInstance(format).format(date);
+        return FastDateFormat
+                .getInstance(format)
+                .format(date);
     }
 
 
@@ -408,17 +405,18 @@ public class McpString extends StringUtils {
 
             date = cal.getTime();
         }
-        return FastDateFormat.getInstance(format).format(date);
+        return FastDateFormat
+                .getInstance(format)
+                .format(date);
     }
 
 
 
     /**
-     * 
      * <pre>
      * 성공 여부 리턴
      * </pre>
-     * 
+     *
      * @param delimiterValues
      * @return success true / false
      */
@@ -437,11 +435,10 @@ public class McpString extends StringUtils {
 
 
     /**
-     * 
      * <pre>
      * List 값을 "key1, key2, key3, ..." 으로 변환
      * </pre>
-     * 
+     *
      * @param values
      * @return String
      */
@@ -455,7 +452,9 @@ public class McpString extends StringUtils {
             if (index == 0) {
                 builder.append(val);
             } else {
-                builder.append(", ").append(val);
+                builder
+                        .append(", ")
+                        .append(val);
             }
             ++index;
         }
@@ -463,11 +462,10 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * Object 값을 Boolean형로 변환
      * </pre>
-     * 
+     *
      * @param val
      * @return boolean
      */
@@ -508,16 +506,16 @@ public class McpString extends StringUtils {
 
 
     /**
-     * 
      * <pre>
      * RSA Key 암호화
      * </pre>
-     * 
+     *
      * @param token
      * @return RSA Key String
      * @throws Exception
      */
-    public static String generateRsaKey(String token) throws Exception {
+    public static String generateRsaKey(String token)
+            throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(2048);
 
@@ -525,9 +523,9 @@ public class McpString extends StringUtils {
         Key publicKey = keyPair.getPublic(); // 공개키
         /**
          * Key privateKey = keyPair.getPrivate(); // 개인키
-         * 
+         *
          * KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-         * 
+         *
          * RSAPublicKeySpec publicKeySpec = keyFactory.getKeySpec(publicKey,
          * RSAPublicKeySpec.class); RSAPrivateKeySpec privateKeySpec =
          * keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
@@ -542,17 +540,17 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * RSA Key 복호화
      * </pre>
-     * 
+     *
      * @param privateKey
      * @param token
      * @return 복호화 된 String
      * @throws Exception
      */
-    public static String decryptionRsaKey(Key privateKey, String token) throws Exception {
+    public static String decryptionRsaKey(Key privateKey, String token)
+            throws Exception {
 
         Cipher cipher = Cipher.getInstance("RSA");
 
@@ -566,11 +564,10 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * html로 전달되는 문자열에 white space를 제거한 문자열을 리턴
      * </pre>
-     * 
+     *
      * @param text 변환 문자열
      * @return white space를 제거한 문자열
      */
@@ -584,11 +581,10 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * 문자열을 헥사 바이트 배열로 변환
      * </pre>
-     * 
+     *
      * @param hexCode
      * @return byte 배열
      */
@@ -600,12 +596,11 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * 인코딩 변환
      * </pre>
-     * 
-     * @param code 문자열
+     *
+     * @param code     문자열
      * @param encoding encoding 타입
      * @return 변환된 문자열
      * @throws UnsupportedEncodingException
@@ -616,11 +611,10 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * html 문자열을 엔티티로 변환
      * </pre>
-     * 
+     *
      * @param html html 문자열
      * @return escape된 html
      */
@@ -653,11 +647,10 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * html 문자열을 엔티티로 변환
      * </pre>
-     * 
+     *
      * @param html html 문자열
      * @return escape된 html
      */
@@ -666,12 +659,11 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * 문자열이 maxCount보다 긴 경우 substring하고 말줄임표 추가
      * </pre>
-     * 
-     * @param str 값
+     *
+     * @param str      값
      * @param maxCount 최대 길이
      * @return 최대길이까지 자른 문자열+'...'
      */
@@ -685,13 +677,12 @@ public class McpString extends StringUtils {
     }
 
     /**
-     * 
      * <pre>
      * 문장의 길이가 최대 길이 보다 긴 경우
      * 개행문자를 추가한다.
      * </pre>
-     * 
-     * @param str 값
+     *
+     * @param str      값
      * @param maxCount 최대 길이
      * @return 최대길이까지 자른 후 개행시킨 문자열
      */
@@ -728,7 +719,7 @@ public class McpString extends StringUtils {
 
     /**
      * 문자열 배열을 복사한다.
-     * 
+     *
      * @param sourceArray 복사 할 문자열 배열
      * @return 복사한 배열
      */
@@ -743,7 +734,7 @@ public class McpString extends StringUtils {
 
     /**
      * 카멜 표기법으로 되어 있는 문자열을 스네이크 표기법으로 변경 한다.
-     * 
+     *
      * @param key
      * @return String
      */
@@ -753,12 +744,56 @@ public class McpString extends StringUtils {
         for (int i = 0; i < key.length(); i++) {
             char c = key.charAt(i);
             if (Character.isUpperCase(c)) {
-                sb.append("_").append(Character.toLowerCase(c));
+                sb
+                        .append("_")
+                        .append(Character.toLowerCase(c));
             } else {
                 sb.append(c);
             }
         }
         returnValue = sb.toString();
         return returnValue;
+    }
+
+    /**
+     * 입력값이 Y인 경우 true, 아니면 false
+     *
+     * @param yesOrNo Yes or No
+     * @return boolean
+     */
+    public static boolean isYes(String yesOrNo) {
+        return defaultValue(yesOrNo, YES).equals(YES);
+    }
+
+    /**
+     * 입력값이 Y인 경우 true, 아니면 false
+     *
+     * @param yesOrNo      Yes or No
+     * @param defaultValue 기본값
+     * @return boolean
+     */
+    public static boolean isYes(String yesOrNo, String defaultValue) {
+        return defaultValue(yesOrNo, defaultValue).equals(YES);
+    }
+
+    /**
+     * 입력값이 N인 경우 true, 아니면 false
+     *
+     * @param yesOrNo Yes or No
+     * @return boolean
+     */
+    public static boolean isNo(String yesOrNo) {
+        return defaultValue(yesOrNo, NO).equals(NO);
+    }
+
+    /**
+     * 입력값이 N인 경우 true, 아니면 false
+     *
+     * @param yesOrNo      Yes or No
+     * @param defaultValue 기본값
+     * @return boolean
+     */
+    public static boolean isNo(String yesOrNo, String defaultValue) {
+        return defaultValue(yesOrNo, defaultValue).equals(NO);
     }
 }

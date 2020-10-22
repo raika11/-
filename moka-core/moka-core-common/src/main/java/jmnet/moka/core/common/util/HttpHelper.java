@@ -69,15 +69,31 @@ public class HttpHelper {
      * @return 파라미터 맵
      */
     public static String getParamString(HttpServletRequest request) {
+        return getParamString(request, ",");
+    }
+
+    /**
+     * <pre>
+     * http 파라미터를 문자열로 반환한다.
+     * </pre>
+     *
+     * @param request  HttpServletRequest
+     * @param operator 연결자
+     * @return 파라미터 맵
+     */
+    public static String getParamString(HttpServletRequest request, String operator) {
         StringBuilder param = new StringBuilder(64);
         Enumeration<String> params = request.getParameterNames();
         int idx = 0;
         while (params.hasMoreElements()) {
             String name = params.nextElement();
             if (idx++ > 0) {
-                param.append(",");
+                param.append(operator);
             }
-            param.append(name).append("=").append(request.getParameter(name));
+            param
+                    .append(name)
+                    .append("=")
+                    .append(request.getParameter(name));
         }
         return param.toString();
     }

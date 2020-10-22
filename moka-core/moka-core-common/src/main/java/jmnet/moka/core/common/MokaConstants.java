@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import jmnet.moka.common.template.Constants;
+import jmnet.moka.common.utils.McpString;
 
 /**
  * <pre>
@@ -132,8 +133,9 @@ public class MokaConstants {
     }
 
     // thread-safe한 date formatter
-    public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern(JSON_DATE_FORMAT)
-                                                           .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
+    public static DateTimeFormatter dtf = DateTimeFormatter
+            .ofPattern(JSON_DATE_FORMAT)
+            .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
 
     public static String now() {
         LocalDateTime now = LocalDateTime.now();
@@ -144,10 +146,11 @@ public class MokaConstants {
     public static final String PAGE_SERVICE_NAME_PATTERN = "^[a-zA-Z0-9_\\-]*$";
     public static final String PAGE_SERVICE_URL_PATTERN = "^[a-zA-Z0-9_\\-\\/]*$";
 
-    public static final String SYSTEM_UNKNOWN = "UNKNOWN";
-    public static final String IP_UNKNOWN = "UNKNOWN";
-    public static final String USER_UNKNOWN = "UNKNOWN";
+    public static final String UNKNOWN = "UNKNOWN";
+    public static final String SYSTEM_UNKNOWN = UNKNOWN;
+    public static final String IP_UNKNOWN = UNKNOWN;
+    public static final String USER_UNKNOWN = UNKNOWN;
 
-    public static final String YES = "Y";
-    public static final String NO = "N";
+    public static final String YES = McpString.YES;
+    public static final String NO = McpString.NO;
 }

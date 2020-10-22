@@ -73,7 +73,7 @@ export const copyTemplate = ({ templateSeq, templateName, domainId }) => {
 
 // 관련 아이템 확인
 export const hasRelationList = ({ templateSeq }) => {
-    return instance.get(`/api/templates/${templateSeq}/hasRelations`).catch((err) => {
+    return instance.get(`/api/templates/${templateSeq}/has-relations`).catch((err) => {
         throw err;
     });
 };

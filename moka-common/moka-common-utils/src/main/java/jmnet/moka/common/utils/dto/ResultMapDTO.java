@@ -27,28 +27,29 @@ public class ResultMapDTO extends ResultDTO<Map<String, Object>> {
     }
 
     public ResultMapDTO(HttpStatus status, Map<String, Object> body) {
-        header = ResultHeaderDTO
-                .builder()
-                .success(status.equals(HttpStatus.OK) || status.equals(HttpStatus.ACCEPTED))
-                .resultCode(status.value())
-                .resultType(status.name())
-                .message(status.getReasonPhrase())
-                .build();
+        this(status, body, null);
+    }
+
+    public ResultMapDTO(HttpStatus status, Map<String, Object> body, String message) {
+        header = ResultHeaderDTO.create(status, message);
         this.body = new HashMap<>();
         this.body.putAll(body);
     }
 
     // 성공: body 세팅
     public ResultMapDTO(Map<String, Object> successBody) {
-        header = ResultHeaderDTO
-                .builder()
-                .success(true)
-                .resultCode(HttpStatus.OK.value())
-                .resultType("")
-                .message("")
-                .build();
+        this(successBody, null);
+    }
+
+    public ResultMapDTO(Map<String, Object> successBody, String message) {
+        header = ResultHeaderDTO.success(message);
         this.body = new HashMap<>();
         this.body.putAll(successBody);
+    }
+
+    // 실패: 헤더만 세팅
+    public ResultMapDTO(int resultCode, String failMessage) {
+        header = ResultHeaderDTO.fail(resultCode, failMessage);
     }
 
     /**

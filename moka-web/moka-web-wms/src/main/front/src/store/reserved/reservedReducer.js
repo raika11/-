@@ -23,6 +23,14 @@ export const initialState = {
     latestReservedSeq: null,
     invalidList: [],
 };
+export const defaultSearch = {
+    domainId: null,
+    searchType: 'all',
+    page: 0,
+    size: PAGESIZE_OPTIONS[0],
+    sort: 'reservedId,desc',
+    keyword: '',
+};
 
 /**
  * reducer

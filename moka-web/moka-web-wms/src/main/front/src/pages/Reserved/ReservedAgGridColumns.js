@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export const columnDefs = [
     {
         headerName: '예약어',
-        field: 'domainId',
+        field: 'reservedId',
         width: 120,
     },
     {
         headerName: '값',
-        field: 'domainName',
+        field: 'reservedValue',
         width: 200,
     },
     {
@@ -20,11 +20,11 @@ export const columnDefs = [
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (params) => {
             const useYn = params.data.useYn;
-            let classColorName = 'color-gray150';
+            let clazz = 'color-gray150';
             if (useYn === 'Y') {
-                classColorName = 'color-primary';
+                clazz = 'color-primary';
             }
-            return <FontAwesomeIcon className="align-middle mr-2" icon={faCircle} fixedWidth className={classColorName} />;
+            return <FontAwesomeIcon className="align-middle mr-2" icon={faCircle} fixedWidth className={clazz} />;
         },
         //preventRowClick: true,
     },

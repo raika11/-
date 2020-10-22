@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { columnDefs } from './ReservedAgGridColumns';
 import { MokaTable } from '@components';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { changeSearchOption, getReserved, clearReserved } from '@store/reserved';
+import { changeSearchOption, clearReserved, getReservedList, initialState } from '@store/reserved';
 
 /**
  * 예약어 AgGrid 컴포넌트
@@ -12,7 +12,8 @@ import { changeSearchOption, getReserved, clearReserved } from '@store/reserved'
 const ReservedAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { total, list, search, latestReservedSeq, loading } = useSelector((store) => ({
+    const [search, setSearch] = useState(initialState);
+    const { total, list, search: storeSearch, latestReservedSeq, loading } = useSelector((store) => ({
         total: store.reserved.total,
         list: store.reserved.list,
         search: store.reserved.search,
@@ -20,44 +21,37 @@ const ReservedAgGrid = () => {
         loading: store.loading['reserved/GET_RESERVED_LIST'],
     }));
 
-    /**
-     * Store의 예약어 정보를 테이블 데이터로 변경
-     */
-    // useEffect(() => {
-    //     setReservedRows(
-    //         list.map((r) => ({
-    //             id: String(r.reservedSeq),
-    //             reservedId: r.reservedId,
-    //             domain: r.domain,
-    //             reservedSeq: r.reservedSeq,
-    //             reservedValue: r.reservedValue,
-    //             useYn: r.useYn,
-    //             link: `/reserved/${r.reservedSeq}`,
-    //         })),
-    //     );
-    // }, [list]);
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    useEffect(() => {
+        dispatch(getReservedList());
+    }, [dispatch]);
 
     /**
      * 테이블에서 검색옵션 변경하는 경우
      * @param {object} payload 변경된 값
      */
     const handleChangeSearchOption = useCallback(
-        (search) => {
-            dispatch(getReserved(changeSearchOption(search), search.key === 'size' && changeSearchOption({ key: 'page', value: 0 })));
+        ({ key, value }) => {
+            dispatch(
+                getReservedList(
+                    changeSearchOption({
+                        ...search,
+                        [key]: value,
+                        page: 0,
+                    }),
+                ),
+            );
         },
-        [dispatch],
+        [dispatch, search],
     );
 
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback(
-        (row) => {
-            history.push(row.link);
-            dispatch(getReserved(row.reservedSeq));
-        },
-        [dispatch, history],
-    );
+    const handleRowClicked = useCallback((params) => history.push(`/reserved/${params.reservedSeq}`), [history]);
 
     /**
      * 예약어 추가 버튼 클릭

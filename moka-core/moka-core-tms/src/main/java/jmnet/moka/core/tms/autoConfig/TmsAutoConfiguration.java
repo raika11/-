@@ -1,20 +1,18 @@
 package jmnet.moka.core.tms.autoConfig;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import jmnet.moka.common.TimeHumanizer;
 import jmnet.moka.common.proxy.http.ApiHttpProxyFactory;
 import jmnet.moka.common.proxy.http.HttpProxy;
-import jmnet.moka.common.template.exception.TemplateLoadException;
-import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
-import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.mvc.DefaultMergeHandlerMapping;
 import jmnet.moka.core.tms.mvc.DefaultMergeViewResolver;
-import jmnet.moka.core.tms.mvc.DefaultPathResolver;
+import jmnet.moka.core.tms.mvc.HandlerAndView;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.DpsDomainResolver;
@@ -62,35 +60,8 @@ public class TmsAutoConfiguration {
     public static final long ITEM_EXPIRE_TIME = 10 * 1000;
     public static final long RESERVED_EXPIRE_TIME = 10 * 1000;
 
-    @Value("${tms.merge.handler.class}")
-    private String defaultHandlerClass;
-
-    @Value("${tms.merge.handler.beanName}")
-    private String defaultHandlerBeanName;
-
-    @Value("${tms.merge.handler.method}")
-    private String defaultHandlerMethodName;
-
-    @Value("${tms.merge.view.class}")
-    private String defaultViewClass;
-
-    @Value("${tms.merge.view.name}")
-    private String defaultViewName;
-
-    @Value("${tms.merge.article.handler.class}")
-    private String articleHandlerClass;
-
-    @Value("${tms.merge.article.handler.beanName}")
-    private String articleHandlerBeanName;
-
-    @Value("${tms.merge.article.handler.method}")
-    private String articleHandlerMethodName;
-
-    @Value("${tms.merge.article.view.class}")
-    private String articleViewClass;
-
-    @Value("${tms.merge.article.view.name}")
-    private String articleViewName;
+    @Value("${tms.merge.handlerAndView.list}")
+    private String[] handlerAndViewArray;
 
     @Value("${tms.interceptor.enable}")
     private boolean tmsInterceptorEnable;
@@ -119,11 +90,15 @@ public class TmsAutoConfiguration {
     @Value("${tms.default.template.domain}")
     private String defaultTemplateDomain;
 
-    @Autowired
     private GenericApplicationContext appContext;
 
-    @Autowired
     private ApiHttpProxyFactory apiHttpProxyFactory;
+
+    @Autowired
+    public TmsAutoConfiguration(GenericApplicationContext appContext, ApiHttpProxyFactory apiHttpProxyFactory) {
+        this.appContext = appContext;
+        this.apiHttpProxyFactory = apiHttpProxyFactory;
+    }
 
     /**
      * <pre>
@@ -160,33 +135,15 @@ public class TmsAutoConfiguration {
      * </pre>
      *
      * @return DomainResolver Bean
-     * @throws TmsException
      */
     @Bean(name = "domainResolver")
     @ConditionalOnMissingBean
-    public DomainResolver domainResolver() throws TmsException {
-        DomainResolver domainResolver = null;
+    public DomainResolver domainResolver() {
+        DomainResolver domainResolver;
         long reservedExpireTime = TimeHumanizer.parseLong(this.reservedExpireTimeStr, ITEM_EXPIRE_TIME);
         HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
         domainResolver = new DpsDomainResolver(httpProxyDataLoader, reservedExpireTime);
         return domainResolver;
-    }
-
-    /**
-     * <pre>
-     * 요청된 URL의 경로를 처리하는 Bean을 생성한다.
-     * </pre>
-     *
-     * @return PathResolver Bean
-     * @throws IOException            IO 예외
-     * @throws TemplateLoadException
-     * @throws TemplateParseException
-     * @throws TmsException
-     */
-    @Bean(name = "pathResolver")
-    @ConditionalOnMissingBean
-    public DefaultPathResolver pathResolver() throws IOException, TmsException, TemplateParseException, TemplateLoadException {
-        return new DefaultPathResolver(domainResolver(), domainTemplateMerger());
     }
 
     /**
@@ -196,8 +153,7 @@ public class TmsAutoConfiguration {
      * </pre>
      *
      * @param domainId 도메인 id
-     * @return
-     * @throws TmsException
+     * @return 템플릿 로더
      */
     @Bean(name = "templateLoader")
     @Scope("prototype")
@@ -219,35 +175,39 @@ public class TmsAutoConfiguration {
      * 도메인 전체에 대한 머지를 담당하는 DomainTemplateMerger를 생성한다.
      * </pre>
      *
-     * @return
-     * @throws TemplateParseException
-     * @throws TmsException
-     * @throws TemplateLoadException
+     * @return 도메인 템플릿 머저
      */
     @Bean(name = "domainTemplateMerger")
     @ConditionalOnMissingBean(name = "domainTemplateMerger")
-    public MokaDomainTemplateMerger domainTemplateMerger() throws TemplateParseException {
-        MokaDomainTemplateMerger domainTemplateMerger = new MokaDomainTemplateMerger(appContext, defaultApiHost, defaultApiPath);
-        return domainTemplateMerger;
+    public MokaDomainTemplateMerger domainTemplateMerger() {
+        return new MokaDomainTemplateMerger(appContext, defaultApiHost, defaultApiPath);
     }
 
     @Bean(name = "mergeHandlerMapping")
     @ConditionalOnMissingBean(name = "mergeHandlerMapping")
-    public AbstractHandlerMapping mergeHandlerMapping(@Autowired(required = false) HandlerInterceptorAdapter tmsHandlerInterceptor) {
+    public AbstractHandlerMapping mergeHandlerMapping(@Autowired List<HandlerAndView> handlerAndViewList, @Autowired DomainResolver domainResolver,
+            @Autowired(required = false) HandlerInterceptorAdapter tmsHandlerInterceptor) throws ClassNotFoundException {
         try {
-            AbstractHandlerMapping handlerMapping =
-                    new DefaultMergeHandlerMapping(appContext, defaultHandlerClass, defaultHandlerBeanName, defaultHandlerMethodName,
-                                                   articleHandlerClass, articleHandlerBeanName, articleHandlerMethodName);
-            if (tmsHandlerInterceptor != null && this.tmsInterceptorEnable == true) {
+            AbstractHandlerMapping handlerMapping = new DefaultMergeHandlerMapping(appContext, domainResolver, handlerAndViewList);
+            if (tmsHandlerInterceptor != null && this.tmsInterceptorEnable) {
                 handlerMapping.setInterceptors(tmsHandlerInterceptor);
             }
             handlerMapping.setOrder(-1);
 
             return handlerMapping;
         } catch (Exception e) {
-            logger.error("Merge HandlerMapping Not Found: {}", defaultHandlerClass + "." + defaultHandlerMethodName, e);
+            logger.error("Merge HandlerMapping Creation Faild!", e);
+            throw e;
         }
-        return null;
+    }
+
+    @Bean(name = "handlerAndViewList")
+    public List<HandlerAndView> handlerAndViewList() {
+        List<HandlerAndView> handlerAndViewList = new ArrayList<>();
+        for (String handlerAndView : this.handlerAndViewArray) {
+            handlerAndViewList.add(new HandlerAndView(appContext, handlerAndView));
+        }
+        return handlerAndViewList;
     }
 
     /**
@@ -255,25 +215,19 @@ public class TmsAutoConfiguration {
      * 머지 요청에 대한 ViewResolver를 생성한다.
      * </pre>
      *
-     * @return
-     * @throws ClassNotFoundException
+     * @return 뷰 리졸버
+     * @throws ClassNotFoundException 클래스 예외
      */
     @Bean(name = "mergeViewResolver")
     @ConditionalOnMissingBean(name = "mergeViewResolver")
-    public ViewResolver mergeViewResolver() throws ClassNotFoundException {
-        // default view
-        appContext.registerBean(this.defaultViewName, Class.forName(this.defaultViewClass), (beanDefinition) -> {
-            beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON);
-        });
-        View defaultView = (View) appContext.getBean(this.defaultViewName);
-        // default article view
-        appContext.registerBean(this.articleViewName, Class.forName(this.articleViewClass), (beanDefinition) -> {
-            beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON);
-        });
-        View articleView = (View) appContext.getBean(this.articleViewName);
-
-        final DefaultMergeViewResolver resolver = new DefaultMergeViewResolver(this.defaultViewName, defaultView, 0);
-        resolver.setArticleView(this.articleViewName, articleView);
+    public ViewResolver mergeViewResolver(@Autowired List<HandlerAndView> handlerAndViewList) throws ClassNotFoundException {
+        final DefaultMergeViewResolver resolver = new DefaultMergeViewResolver(0);
+        for (HandlerAndView handlerAndView : handlerAndViewList) {
+            appContext.registerBean(handlerAndView.getViewName(), Class.forName(handlerAndView.getViewClass()),
+                                    (beanDefinition) -> beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON));
+            View view = (View) appContext.getBean(handlerAndView.getViewName());
+            resolver.addView(handlerAndView.getViewName(), view);
+        }
         return resolver;
     }
 
@@ -283,7 +237,7 @@ public class TmsAutoConfiguration {
         return new MokaCommonHandlerInterceptor("TMS");
     }
 
-    private Contact contact = new Contact("서울시스템", "http://joongang.co.kr", "mater@joongang.co.kr");
+    private Contact contact = new Contact("중앙일보 Moka TMS", "http://joongang.co.kr", "mater@joongang.co.kr");
 
     @Bean
     public Docket tmsApi() {
@@ -295,7 +249,7 @@ public class TmsAutoConfiguration {
                                                      .license("Commerce License")
                                                      .licenseUrl("http://www.ssc.co.kr")
                                                      .build();
-        Docket commandApiDocket = new Docket(DocumentationType.SWAGGER_2).securitySchemes(securitySchemes())
+        return new Docket(DocumentationType.SWAGGER_2).securitySchemes(securitySchemes())
                                                                          .securityContexts(securityContexts())
                                                                          .groupName("commandApi")
                                                                          .select()
@@ -303,19 +257,18 @@ public class TmsAutoConfiguration {
                                                                          .paths(PathSelectors.ant("/command/*"))
                                                                          .build()
                                                                          .apiInfo(commandApiInfo);
-        return commandApiDocket;
     }
 
     private List<SecurityContext> securityContexts() {
-        List<SecurityReference> securityReferences = Arrays.asList(new SecurityReference("basicAuth", new AuthorizationScope[0]));
-        return Arrays.asList(SecurityContext.builder()
-                                            .securityReferences(securityReferences)
-                                            .forPaths(PathSelectors.any())
-                                            .build());
+        List<SecurityReference> securityReferences = Collections.singletonList(new SecurityReference("basicAuth", new AuthorizationScope[0]));
+        return Collections.singletonList(SecurityContext.builder()
+                                                        .securityReferences(securityReferences)
+                                                        .forPaths(PathSelectors.any())
+                                                        .build());
     }
 
     private List<SecurityScheme> securitySchemes() {
-        return Arrays.asList(new BasicAuth("basicAuth"));
+        return Collections.singletonList(new BasicAuth("basicAuth"));
     }
 
 }

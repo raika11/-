@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { MokaTable, MokaIcon, MokaThumbTable } from '@components';
-import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOptions } from '@store/template/templateAction';
+import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template/templateAction';
 import CopyModal from './modals/CopyModal';
 
 /**
@@ -33,13 +33,20 @@ const TemplateAgGrid = () => {
 
     /**
      * 테이블 검색옵션 변경
-     * @param {object} payload 변경된 값
      */
     const handleChangeSearchOption = useCallback(
-        (payload) => {
-            dispatch(getTemplateList(changeSearchOptions([payload, { key: 'page', value: 0 }])));
+        ({ key, value }) => {
+            dispatch(
+                getTemplateList(
+                    changeSearchOption({
+                        ...search,
+                        [key]: value,
+                        page: 0,
+                    }),
+                ),
+            );
         },
-        [dispatch],
+        [dispatch, search],
     );
 
     /**

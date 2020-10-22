@@ -1,10 +1,12 @@
 import React, { useState, Suspense } from 'react';
 import produce from 'immer';
+import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
+import { clearStore, clearHistroy, clearRelationList } from '@store/template';
 
 import TemplateEditor from './TemplateEditor';
 const TemplateList = React.lazy(() => import('./TemplateList'));
@@ -21,6 +23,7 @@ const TemplateHistoryList = React.lazy(() => import('./relations/TemplateHistory
  * 템플릿 관리
  */
 const Template = () => {
+    const dispatch = useDispatch();
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [openTabIdx, setOpenTabIdx] = useState(0);
 
@@ -70,6 +73,14 @@ const Template = () => {
         );
     };
 
+    React.useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+            dispatch(clearRelationList());
+            dispatch(clearHistroy());
+        };
+    }, [dispatch]);
+
     return (
         <div className="d-flex">
             <Helmet>
@@ -117,7 +128,7 @@ const Template = () => {
                                         <TemplateComponentList show={openTabIdx === '4'} />
                                     </Suspense>,
                                     <Suspense>
-                                        <TemplateHistoryList show={openTabIdx === 5} />
+                                        <TemplateHistoryList show={openTabIdx === '5'} />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}

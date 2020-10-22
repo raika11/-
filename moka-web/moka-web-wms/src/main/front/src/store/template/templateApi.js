@@ -85,3 +85,11 @@ export const getRelationList = ({ search }) => {
         throw err;
     });
 };
+
+// 템플릿 히스토리 조회
+export const getHistoryList = ({ search }) => {
+    const queryString = qs.stringify(search);
+    return instance.get(`/api/templates/${search.templateSeq}/histories?${queryString}`).catch((err) => {
+        throw err;
+    });
+};

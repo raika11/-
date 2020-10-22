@@ -6,11 +6,13 @@ import AgGrid from './TemplateHistoryAgGrid';
 /**
  * 템플릿 히스토리
  */
-const TemplateHistoryList = () => {
+const TemplateHistoryList = (props) => {
+    const { show } = props;
+
     return (
         <MokaCard title="템플릿 히스토리" titleClassName="mb-0">
-            <Search />
-            <AgGrid />
+            <Search show={show} />
+            <AgGrid show={show} />
         </MokaCard>
     );
 };

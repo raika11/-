@@ -7,6 +7,7 @@ import auth from '@store/auth/authReducer';
 import domain from '@store/domain/domainReducer';
 import template from '@store/template/templateReducer';
 import templateRelationList from '@store/template/templateRelationListReducer';
+import templateHistory from '@store/template/templateHistoryReducer';
 import toast from '@store/notification/toastReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
 import reserved from '@store/reserved/reservedReducer';
@@ -19,6 +20,7 @@ export default combineReducers({
     domain,
     template,
     templateRelationList,
+    templateHistory,
     toast,
     codeMgt,
     reserved,

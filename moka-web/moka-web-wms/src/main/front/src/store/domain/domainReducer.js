@@ -6,7 +6,7 @@ import { PAGESIZE_OPTIONS } from '@/constants';
 /**
  * initialState
  */
-const initialState = {
+export const initialState = {
     total: 0,
     list: [],
     error: null,

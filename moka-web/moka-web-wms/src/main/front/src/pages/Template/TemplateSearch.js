@@ -1,15 +1,15 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaSearchInput, MokaInput, MokaInputLabel } from '@components';
+import { MokaSearchInput, MokaInput } from '@components';
 
-import { changeLatestDomainId } from '@store/auth/authAction';
-import { getTemplateList, changeSearchOption, changeSearchOptions } from '@store/template/templateAction';
-import { getTpSize, getTpZone } from '@store/codeMgt/codeMgtAction';
+import { changeLatestDomainId } from '@store/auth';
+import { getTemplateList, changeSearchOption, initialState } from '@store/template';
+import { getTpSize, getTpZone } from '@store/codeMgt';
 
 const defaultSearchType = [
     { id: 'all', name: '전체' },
@@ -24,20 +24,36 @@ const defaultSearchType = [
 const TemplateSearch = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, domainList, search, tpSizeRows, tpZoneRows } = useSelector((store) => ({
-        latestDomainId: store.auth.latestDomainId,
-        domainList: store.auth.domainList,
-        search: store.template.search,
-        tpSizeRows: store.codeMgt.tpSizeRows,
-        tpZoneRows: store.codeMgt.tpZoneRows,
-    }));
+    const { latestDomainId, domainList, search: storeSearch, tpSizeRows, tpZoneRows } = useSelector(
+        (store) => ({
+            latestDomainId: store.auth.latestDomainId,
+            domainList: store.auth.domainList,
+            search: store.template.search,
+            tpSizeRows: store.codeMgt.tpSizeRows,
+            tpZoneRows: store.codeMgt.tpZoneRows,
+        }),
+        shallowEqual,
+    );
+    const [search, setSearch] = React.useState(initialState.search);
+
+    useEffect(() => {
+        // 스토어의 search 객체 변경 시 로컬 state에 셋팅
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     /**
      * 검색
      */
     const handleSearch = useCallback(() => {
-        dispatch(getTemplateList(changeSearchOption({ key: 'page', value: 0 })));
-    }, [dispatch]);
+        dispatch(
+            getTemplateList(
+                changeSearchOption({
+                    ...search,
+                    page: 0,
+                }),
+            ),
+        );
+    }, [dispatch, search]);
 
     /**
      * 템플릿 사이즈 변경 함수
@@ -45,48 +61,43 @@ const TemplateSearch = () => {
      */
     const handleChangeTpSize = (e) => {
         if (e.target.value === 'all') {
-            dispatch(
-                changeSearchOptions([
-                    { key: 'widthMin', value: undefined },
-                    { key: 'widthMax', value: undefined },
-                ]),
-            );
+            setSearch({
+                ...search,
+                widthMin: null,
+                widthMax: null,
+            });
             return;
         }
         try {
             const { widthmin, widthmax } = e.target.selectedOptions[0].dataset;
-            dispatch(
-                changeSearchOptions([
-                    { key: 'widthMin', value: Number(widthmin) },
-                    { key: 'widthMax', value: Number(widthmax) },
-                ]),
-            );
+            setSearch({
+                ...search,
+                widthMin: Number(widthmin),
+                widthMax: Number(widthmax),
+            });
         } catch (err) {
-            dispatch(
-                changeSearchOptions([
-                    { key: 'widthMin', value: undefined },
-                    { key: 'widthMax', value: undefined },
-                ]),
-            );
+            setSearch({
+                ...search,
+                widthMin: null,
+                widthMax: null,
+            });
         }
     };
 
     useEffect(() => {
         // latestDomainId 변경 => 템플릿의 search.domainId 변경
-        dispatch(
-            changeSearchOption({
-                key: 'domainId',
-                value: latestDomainId,
-            }),
-        );
-    }, [dispatch, latestDomainId]);
-
-    useEffect(() => {
-        // 템플릿 리스트 조회
-        if (search.domainId) {
-            handleSearch();
+        if (latestDomainId && latestDomainId !== search.domainId) {
+            dispatch(
+                getTemplateList(
+                    changeSearchOption({
+                        ...search,
+                        domainId: latestDomainId,
+                        page: 0,
+                    }),
+                ),
+            );
         }
-    }, [search.domainId, handleSearch]);
+    }, [dispatch, latestDomainId, search]);
 
     useEffect(() => {
         dispatch(getTpZone());
@@ -121,7 +132,10 @@ const TemplateSearch = () => {
                         as="select"
                         value={search.templateGroup}
                         onChange={(e) => {
-                            dispatch(changeSearchOption({ key: 'templateGroup', value: e.target.value }));
+                            setSearch({
+                                ...search,
+                                templateGroup: e.target.value,
+                            });
                         }}
                     >
                         <option value="all">위치그룹 전체</option>
@@ -151,7 +165,10 @@ const TemplateSearch = () => {
                         as="select"
                         value={search.searchType || undefined}
                         onChange={(e) => {
-                            dispatch(changeSearchOption({ key: 'searchType', value: e.target.value }));
+                            setSearch({
+                                ...search,
+                                searchType: e.target.value,
+                            });
                         }}
                     >
                         {defaultSearchType.map((type) => (
@@ -166,7 +183,10 @@ const TemplateSearch = () => {
                     <MokaSearchInput
                         value={search.keyword}
                         onChange={(e) => {
-                            dispatch(changeSearchOption({ key: 'keyword', value: e.target.value }));
+                            setSearch({
+                                ...search,
+                                keyword: e.target.value,
+                            });
                         }}
                         onSearch={handleSearch}
                     />

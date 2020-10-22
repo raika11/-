@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
+import MokaInput from './MokaInput';
 
 const propTypes = {
     /**
@@ -68,7 +69,17 @@ const MokaSearchInput = (props) => {
 
     return (
         <Form.Group as={Row} className={clsx('mb-0', className)}>
-            <Form.Control className="mr-2 flex-fill" placeholder={placeholder} value={value} onChange={onChange} onKeyPress={handleKeyPress} {...rest} />
+            <MokaInput
+                className="mr-2 flex-fill"
+                placeholder={placeholder}
+                value={value}
+                onChange={onChange}
+                type="text"
+                inputProps={{
+                    ...rest,
+                    onKeyPress: handleKeyPress,
+                }}
+            />
             <Button variant={variant} className={buttonClassName} style={{ minWidth: 53 }} onClick={onSearch}>
                 {searchText}
             </Button>

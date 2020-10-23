@@ -93,7 +93,6 @@ export function* deleteTemplate({ payload: { templateSeq, callback } }) {
     let callbackData = {};
 
     yield put(startLoading(ACTION));
-
     try {
         const response = yield call(api.deleteTemplate, { templateSeq });
         callbackData = response.data;
@@ -130,7 +129,7 @@ function* copyTemplate({ payload: { templateSeq, templateName, domainId, callbac
         const response = yield call(api.copyTemplate, { templateSeq, templateName, domainId });
         callbackData = response.data;
 
-        if (response.header.success) {
+        if (response.data.header.success) {
             // 검색조건 변경
             yield put({
                 type: act.CHANGE_SEARCH_OPTION,
@@ -231,6 +230,7 @@ export default function* saga() {
     yield takeLatest(act.GET_TEMPLATE_LIST, getTemplateList);
     yield takeLatest(act.GET_TEMPLATE, getTemplate);
     yield takeLatest(act.SAVE_TEMPLATE, saveTemplate);
+    yield takeLatest(act.DELETE_TEMPLATE, deleteTemplate);
     yield takeLatest(act.COPY_TEMPLATE, copyTemplate);
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
     yield takeLatest(act.GET_RELATION_LIST, getRelationList);

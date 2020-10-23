@@ -57,7 +57,7 @@ export const copyTemplate = createAction(COPY_TEMPLATE, ({ templateSeq, template
  * 삭제
  */
 export const [DELETE_TEMPLATE, DELETE_TEMPLATE_SUCCESS] = createRequestActionTypes('template/DELETE_TEMPLATE');
-export const deleteTemplate = createAction(DELETE_TEMPLATE, ({ templateSeq }) => ({ templateSeq }));
+export const deleteTemplate = createAction(DELETE_TEMPLATE, ({ templateSeq, callback }) => ({ templateSeq, callback }));
 
 /**
  * 관련아이템 검색조건 변경

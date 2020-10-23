@@ -3,6 +3,8 @@
  */
 package jmnet.moka.core.tps.common;
 
+import org.springframework.http.HttpStatus;
+
 /**
  * <pre>
  *
@@ -48,14 +50,17 @@ public class TpsConstants {
     /**
      * ResultDTO의 헤더코드
      */
-    public static final int HEADER_SUCCESS = 200;           // 성공
-    public static final int HEADER_SERVER_ERROR = 500;      // 서버오류
-    public static final int HEADER_BAD_REQUEST = 400;        // 요청오류
-    public static final int HEADER_FILE_ERROR = 502;        // 파일관련 에러
-    public static final int HEADER_UNAUTHORIZED = 403;        // 인증오류
-    public static final int HEADER_NO_DATA = 201;           // 데이타없음
-    public static final int HEADER_INVALID_DATA = 202;        // 데이타 유효성검사 실패
-    public static final int HEADER_RELEATED_DATA = 203;        // 관련데이타로 인해 삭제실패
+    public static final int HEADER_SUCCESS = HttpStatus.OK.value();           // 성공
+    public static final int HEADER_SERVER_ERROR = HttpStatus.INTERNAL_SERVER_ERROR.value();      // 서버오류
+    public static final int HEADER_BAD_REQUEST = HttpStatus.BAD_REQUEST.value();        // 요청오류
+    public static final int HEADER_BAD_GATEWAY = HttpStatus.BAD_GATEWAY.value();        // 요청오류
+    public static final int HEADER_UNAUTHORIZED = HttpStatus.UNAUTHORIZED.value();        // 인증오류
+    public static final int HEADER_FORBIDDEN = HttpStatus.FORBIDDEN.value();        // 인증오류
+    public static final int HEADER_NO_DATA = HttpStatus.NO_CONTENT.value();           // 데이타없음
+    public static final int HEADER_INVALID_DATA = HttpStatus.BAD_REQUEST.value();        // 데이타 유효성검사 실패
+
+    public static final int HEADER_FILE_ERROR = 470;        // 파일관련 에러
+    public static final int HEADER_RELEATED_DATA = 471;        // 관련데이타로 인해 삭제실패
 
     /**
      * 히스토리 작업구분

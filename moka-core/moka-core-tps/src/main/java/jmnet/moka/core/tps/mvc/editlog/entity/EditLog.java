@@ -100,4 +100,10 @@ public class EditLog implements Serializable {
      */
     @Column(name = "API_PATH")
     private String apiPath;
+
+    /**
+     * 에러 메세지
+     */
+    @Column(name = "ERR_MSG")
+    private String errMsg;
 }

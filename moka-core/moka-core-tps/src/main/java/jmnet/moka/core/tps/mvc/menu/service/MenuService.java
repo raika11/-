@@ -2,7 +2,6 @@ package jmnet.moka.core.tps.mvc.menu.service;
 
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
@@ -48,7 +47,7 @@ public interface MenuService {
      * @param search 검색 조건
      * @return 검색 결과
      */
-    Page<Menu> findAllMenu(SearchDTO search);
+    Page<Menu> findAllMenu(MenuSearchDTO search);
 
     /**
      * 하위 메뉴 목록 조회

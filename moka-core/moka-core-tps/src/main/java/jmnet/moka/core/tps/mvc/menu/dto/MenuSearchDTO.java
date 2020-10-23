@@ -27,6 +27,10 @@ public class MenuSearchDTO extends SearchDTO {
 
     private String memberId;
 
+    private String menuId;
+
+    private String menuNm;
+
     @Builder.Default
     private String parentMenuId = MenuService.ROOT_MENU_ID;
 

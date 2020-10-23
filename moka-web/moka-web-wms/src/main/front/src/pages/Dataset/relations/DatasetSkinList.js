@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { MokaCard, MokaInputLabel } from '@components';
+import { MokaCard, MokaInput } from '@components';
 import AgGrid from './DatasetSkinAgGrid';
 
 /**
@@ -14,9 +14,9 @@ const DatasetSkinList = () => {
     return (
         <MokaCard titleClassName="h-100 mb-0" title="본문스킨 검색">
             <Form>
-                <MokaInputLabel as="select">
+                <MokaInput as="select">
                     <option>도메인선택</option>
-                </MokaInputLabel>
+                </MokaInput>
             </Form>
             <div className="d-flex justify-content-end mt-2">
                 <Button

@@ -117,7 +117,7 @@ public class UploadFileHelper {
     public String getDbUri(String business, String... paths) {
         StringBuffer sb = new StringBuffer(128);
 
-        sb.append("/").append(getBusinessProperty(business)).append("/")
+        sb.append(getBusinessProperty(business)).append("/")
           .append(String.join("/", paths));
 
         return sb.toString();

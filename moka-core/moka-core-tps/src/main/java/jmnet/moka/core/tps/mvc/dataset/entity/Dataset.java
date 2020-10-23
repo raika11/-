@@ -15,6 +15,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,7 +38,7 @@ import org.hibernate.annotations.Nationalized;
 @Entity
 @Table(name = "TB_WMS_DATASET")
 @NamedQuery(name = "Dataset.findAll", query = "SELECT d FROM Dataset d")
-public class Dataset implements Serializable {
+public class Dataset extends BaseAudit {
 
     private static final long serialVersionUID = 2114564214212670123L;
 
@@ -85,20 +87,17 @@ public class Dataset implements Serializable {
 
     @PrePersist
     public void prePersist() {
-        this.datasetName = McpString.defaultValue(this.datasetName, "");
-        this.dataApiHost = McpString.defaultValue(this.dataApiHost, "");
-        this.dataApiPath = McpString.defaultValue(this.dataApiPath, "");
-        this.autoCreateYn = McpString.defaultValue(this.autoCreateYn, "N");
-        this.regDt = McpDate.defaultValue(this.regDt);
+        this.datasetName = McpString.defaultValue(this.datasetName);
+        this.dataApiHost = McpString.defaultValue(this.dataApiHost);
+        this.dataApiPath = McpString.defaultValue(this.dataApiPath);
+        this.autoCreateYn = McpString.defaultValue(this.autoCreateYn, MokaConstants.NO);
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.datasetName = McpString.defaultValue(this.datasetName, "");
-        this.dataApiHost = McpString.defaultValue(this.dataApiHost, "");
-        this.dataApiPath = McpString.defaultValue(this.dataApiPath, "");
-        this.autoCreateYn = McpString.defaultValue(this.autoCreateYn, "N");
-        this.regDt = McpDate.defaultValue(this.regDt);
-        this.modDt = McpDate.defaultValue(this.modDt);
+        this.datasetName = McpString.defaultValue(this.datasetName);
+        this.dataApiHost = McpString.defaultValue(this.dataApiHost);
+        this.dataApiPath = McpString.defaultValue(this.dataApiPath);
+        this.autoCreateYn = McpString.defaultValue(this.autoCreateYn, MokaConstants.NO);
     }
 }

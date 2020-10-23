@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.NotFound;
@@ -122,18 +123,18 @@ public class Page implements Serializable {
     @PrePersist
     public void prePersist() {
         this.pageOrd = this.pageOrd == null ? 1 : this.pageOrd;
-        this.useYn = McpString.defaultValue(this.useYn, "Y");
-        this.fileYn = McpString.defaultValue(this.fileYn, "N");
-        this.moveYn = McpString.defaultValue(this.moveYn, "N");
+        this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
+        this.fileYn = McpString.defaultValue(this.fileYn, MokaConstants.NO);
+        this.moveYn = McpString.defaultValue(this.moveYn, MokaConstants.NO);
         this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     @PreUpdate
     public void preUpdate() {
         this.pageOrd = this.pageOrd == null ? 1 : this.pageOrd;
-        this.useYn = McpString.defaultValue(this.useYn, "Y");
-        this.fileYn = McpString.defaultValue(this.fileYn, "N");
-        this.moveYn = McpString.defaultValue(this.moveYn, "N");
+        this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
+        this.fileYn = McpString.defaultValue(this.fileYn, MokaConstants.NO);
+        this.moveYn = McpString.defaultValue(this.moveYn, MokaConstants.NO);
         this.regDt = McpDate.defaultValue(this.regDt);
         this.modDt = McpDate.defaultValue(this.modDt);
     }

@@ -1,20 +1,20 @@
 package jmnet.moka.core.tps.mvc.dataset.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jmnet.moka.core.tps.mvc.dataset.entity.QDataset;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetSearchDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
+import jmnet.moka.core.tps.mvc.dataset.entity.QDataset;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-public class DatasetRepositorySupportImpl extends QuerydslRepositorySupport
-        implements DatasetRepositorySupport {
+public class DatasetRepositorySupportImpl extends QuerydslRepositorySupport implements DatasetRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     public DatasetRepositorySupportImpl(JPAQueryFactory queryFactory) {
@@ -39,13 +39,14 @@ public class DatasetRepositorySupportImpl extends QuerydslRepositorySupport
                 builder.and(dataset.datasetSeq.eq(Long.parseLong(keyword)));
             } else if (searchType.equals("datasetName")) {
                 builder.and(dataset.datasetName.contains(keyword));
-            } else if (searchType.equals("all")) {
-                builder.and(
-                        dataset.datasetSeq.like(keyword).or(dataset.datasetName.contains(keyword)));
+            } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
+                builder.and(dataset.datasetSeq.like(keyword)
+                                              .or(dataset.datasetName.contains(keyword)));
             }
         }
 
-        JPQLQuery<Dataset> query = queryFactory.selectFrom(dataset).where(builder);
+        JPQLQuery<Dataset> query = queryFactory.selectFrom(dataset)
+                                               .where(builder);
         query = getQuerydsl().applyPagination(pageable, query);
         QueryResults<Dataset> list = query.fetchResults();
 

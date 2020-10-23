@@ -8,6 +8,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -93,7 +94,7 @@ public class Domain extends BaseAudit {
     @PrePersist
     public void prePersist() {
         this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
-        this.useYn = McpString.defaultValue(this.useYn, "Y");
+        this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
         this.lang = McpString.defaultValue(this.lang, "KR");
     }
 
@@ -103,7 +104,7 @@ public class Domain extends BaseAudit {
     @PreUpdate
     public void preUpdate() {
         this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
-        this.useYn = McpString.defaultValue(this.useYn, "Y");
+        this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
         this.lang = McpString.defaultValue(this.lang, "KR");
     }
 }

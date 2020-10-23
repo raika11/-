@@ -7,11 +7,15 @@ import javax.persistence.*;
 
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.entity.RegAudit;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 
 
 /**
@@ -27,7 +31,7 @@ import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 @Entity
 @Table(name = "TB_WMS_CONTAINER_HIST")
 @NamedQuery(name = "ContainerHist.findAll", query = "SELECT c FROM ContainerHist c")
-public class ContainerHist implements Serializable {
+public class ContainerHist extends RegAudit {
 
     private static final long serialVersionUID = 6857747089425705175L;
 
@@ -50,19 +54,12 @@ public class ContainerHist implements Serializable {
     private String containerBody;
 
     @Column(name = "WORK_TYPE", columnDefinition = "char", length = 1)
-    private String workType;
-
-    @Column(name = "REG_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date regDt;
-
-    @Column(name = "REG_ID", length = 30)
-    private String regId;
+    @Builder.Default
+    private String workType = TpsConstants.WORKTYPE_UPDATE;
 
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.workType = McpString.defaultValue(this.workType, "U");
-        this.regDt = McpDate.defaultValue(this.regDt);
+        this.workType = McpString.defaultValue(this.workType, TpsConstants.WORKTYPE_UPDATE);
     }
 }

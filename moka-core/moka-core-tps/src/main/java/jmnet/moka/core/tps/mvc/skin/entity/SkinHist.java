@@ -15,7 +15,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
+import jmnet.moka.core.tps.common.entity.RegAudit;
 import lombok.Builder.Default;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.NotFound;
@@ -42,7 +44,7 @@ import lombok.NoArgsConstructor;
 //@JsonInclude(Include.NON_NULL)
 @Entity
 @Table(name = "TB_WMS_SKIN_HIST")
-public class SkinHist extends BaseAudit {
+public class SkinHist extends RegAudit {
 
     private static final long serialVersionUID = 46823883650528948L;
 
@@ -79,13 +81,13 @@ public class SkinHist extends BaseAudit {
 
     @Column(name = "WORK_TYPE", columnDefinition = "char")
     @Builder.Default
-    private String workType = "U";
+    private String workType = TpsConstants.WORKTYPE_UPDATE;
 
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.skinBody = McpString.defaultValue(this.skinBody, "");
-        this.workType = McpString.defaultValue(this.workType, "U");
+        this.skinBody = McpString.defaultValue(this.skinBody);
+        this.workType = McpString.defaultValue(this.workType, TpsConstants.WORKTYPE_UPDATE);
     }
 
 }

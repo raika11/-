@@ -21,6 +21,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.entity.RegAudit;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import lombok.AllArgsConstructor;
@@ -44,7 +46,7 @@ import org.hibernate.annotations.Nationalized;
 @Entity
 @Table(name = "TB_WMS_COMPONENT_HIST")
 @NamedQuery(name = "ComponentHist.findAll", query = "SELECT c FROM ComponentHist c")
-public class ComponentHist implements Serializable {
+public class ComponentHist extends RegAudit {
 
     private static final long serialVersionUID = -5085329432096691213L;
 
@@ -78,19 +80,11 @@ public class ComponentHist implements Serializable {
     
     @Builder.Default
     @Column(name = "WORK_TYPE", columnDefinition = "char")
-    private String workType = "U";
-
-    @Column(name = "REG_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date regDt;
-
-    @Column(name = "REG_ID", length = 30)
-    private String regId;
+    private String workType = TpsConstants.WORKTYPE_UPDATE;
 
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.workType = McpString.defaultValue(this.workType, "U");
-        this.regDt = McpDate.defaultValue(this.regDt);
+        this.workType = McpString.defaultValue(this.workType, TpsConstants.WORKTYPE_UPDATE);
     }
 }

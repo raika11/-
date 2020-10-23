@@ -3,22 +3,19 @@
  */
 package jmnet.moka.core.tps.mvc.template.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.ibatis.type.Alias;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 
 /**
  * <pre>

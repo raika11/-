@@ -1,33 +1,26 @@
 package jmnet.moka.core.tps.mvc.template.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.item.TemplateItem;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
- * <pre>
  * 템플릿 DTO
  * 2020. 1. 14. jeon 최초생성
- * </pre>
  * 
  * @since 2020. 1. 14. 오후 1:33:28
  * @author jeon

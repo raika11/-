@@ -42,8 +42,6 @@ public class ComponentHistServiceImpl implements ComponentHistService {
                 Component component = (Component) object;
                 histories.add(
                         ComponentHist.builder()
-                        .regDt(component.getRegDt())
-                        .regId(component.getRegId())
                         .dataset(component.getDataset())
                         .dataType(component.getDataType())
                         .snapshotBody(component.getSnapshotBody())
@@ -63,11 +61,11 @@ public class ComponentHistServiceImpl implements ComponentHistService {
     public ComponentHist insertHistory(Component component) throws Exception {
         ComponentHist history = ComponentHist.builder()
                 // 수정일자 or 등록일자
-                .regDt(McpString.isNullOrEmpty(component.getModDt()) ?
-                        component.getRegDt() : component.getModDt())
+//                .regDt(McpString.isNullOrEmpty(component.getModDt()) ?
+//                        component.getRegDt() : component.getModDt())
                 // 수정자 or 등록자
-                .regId(McpString.isNullOrEmpty(component.getModId()) ?
-                        component.getRegId() : component.getModId())
+//                .regId(McpString.isNullOrEmpty(component.getModId()) ?
+//                        component.getRegId() : component.getModId())
                 .dataset(component.getDataset())
                 .dataType(component.getDataType())
                 .snapshotBody(component.getSnapshotBody())

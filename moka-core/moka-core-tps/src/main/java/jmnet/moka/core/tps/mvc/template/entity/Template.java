@@ -1,7 +1,5 @@
 package jmnet.moka.core.tps.mvc.template.entity;
 
-import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,22 +7,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -120,7 +112,7 @@ public class Template extends BaseAudit {
 
     @PrePersist
     public void prePersist() {
-        this.templateBody = McpString.defaultValue(this.templateBody, "");
+        this.templateBody = McpString.defaultValue(this.templateBody);
         this.cropWidth = this.cropWidth == null ? 0 : this.cropWidth;
         this.cropHeight = this.cropHeight == null ? 0 : this.cropHeight;
         this.templateWidth = this.templateWidth == null ? 0 : this.templateWidth;
@@ -128,7 +120,7 @@ public class Template extends BaseAudit {
 
     @PreUpdate
     public void preUpdate() {
-        this.templateBody = McpString.defaultValue(this.templateBody, "");
+        this.templateBody = McpString.defaultValue(this.templateBody);
         this.cropWidth = this.cropWidth == null ? 0 : this.cropWidth;
         this.cropHeight = this.cropHeight == null ? 0 : this.cropHeight;
         this.templateWidth = this.templateWidth == null ? 0 : this.templateWidth;

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.style.entity.Style;
@@ -97,7 +98,7 @@ public class Skin extends BaseAudit {
      */
     @Column(name = "DEFAULT_YN", columnDefinition = "char", nullable = false)
     @Builder.Default
-    private String defaultYn = "N";
+    private String defaultYn = MokaConstants.NO;
 
     /**
      * 스킨본문
@@ -115,8 +116,8 @@ public class Skin extends BaseAudit {
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.skinBody = McpString.defaultValue(this.skinBody, "");
-        this.defaultYn = McpString.defaultValue(this.defaultYn, "N");
+        this.skinBody = McpString.defaultValue(this.skinBody);
+        this.defaultYn = McpString.defaultValue(this.defaultYn, MokaConstants.NO);
     }
 
     /**

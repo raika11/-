@@ -24,6 +24,7 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
@@ -159,18 +160,18 @@ public class Component implements Serializable {
 
     @PrePersist
     public void prePersist() {
-        this.periodYn = McpString.defaultValue(this.periodYn, "N");
-        this.dataType = McpString.defaultValue(this.dataType, "DESK");
-        this.pagingYn = McpString.defaultValue(this.pagingYn, "N");
+        this.periodYn = McpString.defaultValue(this.periodYn, MokaConstants.NO);
+        this.dataType = McpString.defaultValue(this.dataType, TpsConstants.DATATYPE_DESK);
+        this.pagingYn = McpString.defaultValue(this.pagingYn, MokaConstants.NO);
         this.schLanguage = McpString.defaultValue(this.schLanguage, "KR");
         this.regDt = McpDate.defaultValue(this.regDt);
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.periodYn = McpString.defaultValue(this.periodYn, "N");
-        this.dataType = McpString.defaultValue(this.dataType, "DESK");
-        this.pagingYn = McpString.defaultValue(this.pagingYn, "N");
+        this.periodYn = McpString.defaultValue(this.periodYn, MokaConstants.NO);
+        this.dataType = McpString.defaultValue(this.dataType, TpsConstants.DATATYPE_DESK);
+        this.pagingYn = McpString.defaultValue(this.pagingYn, MokaConstants.NO);
         this.schLanguage = McpString.defaultValue(this.schLanguage, "KR");
         this.regDt = McpDate.defaultValue(this.regDt);
         this.modDt = McpDate.defaultValue(this.modDt);

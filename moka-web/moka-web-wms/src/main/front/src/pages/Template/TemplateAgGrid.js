@@ -41,7 +41,6 @@ const TemplateAgGrid = () => {
                     changeSearchOption({
                         ...search,
                         [key]: value,
-                        page: 0,
                     }),
                 ),
             );

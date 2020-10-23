@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -15,8 +15,6 @@ const DatasetContainerList = React.lazy(() => import('./relations/DatasetContain
 const DatasetComponentList = React.lazy(() => import('./relations/DatasetComponentList'));
 
 const Dataset = () => {
-    const [tabExpansion, setTabExpansion] = useState(false);
-
     return (
         <div className="d-flex">
             <Helmet>
@@ -42,8 +40,7 @@ const Dataset = () => {
                                 <DatasetEdit />
                             </Suspense>
                             <MokaIconTabs
-                                expansion={tabExpansion}
-                                onExpansion={(ex) => setTabExpansion(ex)}
+                                foldable={false}
                                 tabWidth={412}
                                 tabs={[
                                     <Suspense>
@@ -60,11 +57,10 @@ const Dataset = () => {
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}
-                                tabNavPosition="left"
-                                placement="right"
+                                placement="left"
                                 tabNavs={[
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '관련 본문스킨', icon: <MokaIcon iconName="fal-box" /> },
+                                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-box" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-ballot" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
                                 ]}

@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.menu.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
@@ -92,8 +91,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Page<Menu> findAllMenu(SearchDTO search) {
-        return menuRepository.findAll(search.getPageable());
+    public Page<Menu> findAllMenu(MenuSearchDTO search) {
+        return menuRepository.findAll(search);
     }
 
     @Override

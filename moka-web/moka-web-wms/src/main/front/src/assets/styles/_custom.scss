@@ -66,6 +66,21 @@ body {
     }
 }
 
+.template-group-label {
+    right: 2px;
+    width: 51px;
+    bottom: 0;
+    height: 22px;
+    margin-bottom: 2px;
+    display: flex;
+    position: absolute;
+    background: rgba($black, 0.8);
+    color: $white;
+    align-items: center;
+    border-radius: 5px;
+    justify-content: center;
+}
+
 /* -----------------------
 * card-tab
 * ---------------------- */

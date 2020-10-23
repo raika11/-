@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author ssc
  * @since 2020. 6. 22. 오전 11:22:20
  */
-public interface MenuRepository extends JpaRepository<Menu, Long> {
+public interface MenuRepository extends JpaRepository<Menu, Long>, MenuRepositorySupport {
     public List<Menu> findByUsedYn(String useYn, Sort sort);
 
     public Optional<Menu> findByMenuId(String menuId);

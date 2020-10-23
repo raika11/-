@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
@@ -125,11 +126,11 @@ public class GroupRestController {
             throws NoDataException {
 
         String message = messageByLocale.get("tps.group.error.no-data", request);
-        Group member = groupService
+        Group group = groupService
                 .findGroupById(groupCd)
                 .orElseThrow(() -> new NoDataException(message));
 
-        GroupDTO dto = modelMapper.map(member, GroupDTO.class);
+        GroupDTO dto = modelMapper.map(group, GroupDTO.class);
 
 
         tpsLogger.success(ActionType.SELECT);
@@ -169,15 +170,16 @@ public class GroupRestController {
             throws InvalidDataException, Exception {
 
         // GroupDTO -> Group 변환
-        Group member = modelMapper.map(groupDTO, Group.class);
-
-        if (groupService.isDuplicatedId(member.getGroupCd())) {
-            throw new InvalidDataException(messageByLocale.get("tps.group.error.duplicated.groupCd", request));
+        Group group = modelMapper.map(groupDTO, Group.class);
+        if (McpString.isNotEmpty(group.getGroupCd())) { // 자동 발번이 아닌 경우 중복 체크
+            if (groupService.isDuplicatedId(group.getGroupCd())) {
+                throw new InvalidDataException(messageByLocale.get("tps.group.error.duplicated.groupCd", request));
+            }
         }
 
         try {
             // insert
-            Group returnValue = groupService.insertGroup(member);
+            Group returnValue = groupService.insertGroup(group);
 
 
             // 결과리턴

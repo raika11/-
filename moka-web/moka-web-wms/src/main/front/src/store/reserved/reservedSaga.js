@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { callApiAfterActions, createRequestSaga } from '@store/commons/saga';
+import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import * as reservedAPI from './reservedApi';
 import * as reservedAction from './reservedAction';
@@ -55,7 +55,7 @@ export function* saveReserved({ payload: { type, actions, callback } }) {
             });
         }
     } catch (e) {
-        callbackData = { header: { success: false }, body: e };
+        callbackData = errorResponse(e);
 
         // 실패 액션 실행
         yield put({
@@ -108,7 +108,8 @@ export function* deleteReserved({ payload: { reservedSet, callback } }) {
             });
         }
     } catch (e) {
-        callbackData = { header: { success: false }, body: e };
+        callbackData = errorResponse(e);
+
         yield put({
             type: reservedAction.DELETE_RESERVED_FAILURE,
             payload: callbackData,

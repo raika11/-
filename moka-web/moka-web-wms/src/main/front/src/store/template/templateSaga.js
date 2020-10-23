@@ -1,7 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { callApiAfterActions, createRequestSaga } from '@store/commons/saga';
+import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { NETWORK_ERROR_MESSAGE } from '@/constants';
 
 import * as api from './templateApi';
 import * as act from './templateAction';
@@ -68,7 +67,7 @@ function* saveTemplate({ payload: { actions, callback } }) {
             });
         }
     } catch (e) {
-        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
+        callbackData = errorResponse(e);
 
         // 실패 액션 실행
         yield put({
@@ -109,7 +108,7 @@ export function* deleteTemplate({ payload: { templateSeq, callback } }) {
             yield put({ type: act.GET_TEMPLATE_LIST });
         }
     } catch (e) {
-        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
+        callbackData = errorResponse(e);
     }
 
     if (typeof callback === 'function') {
@@ -142,7 +141,7 @@ function* copyTemplate({ payload: { templateSeq, templateName, domainId, callbac
             yield put({ type: act.GET_TEMPLATE_LIST });
         }
     } catch (e) {
-        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
+        callbackData = errorResponse(e);
     }
 
     if (typeof callback === 'function') {
@@ -165,7 +164,7 @@ function* hasRelationList({ payload: { templateSeq, callback } }) {
         const response = yield call(api.hasRelationList, { templateSeq });
         callbackData = response.data;
     } catch (e) {
-        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
+        callbackData = errorResponse(e);
     }
 
     if (typeof callback === 'function') {
@@ -215,7 +214,7 @@ function* getRelationList({ payload: { actions, relType } }) {
     } catch (e) {
         yield put({
             type: act.GET_RELATION_LIST_FAILURE,
-            payload: { relType, payload: { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e } },
+            payload: { relType, payload: errorResponse(e) },
         });
     }
 

@@ -41,6 +41,7 @@ export default handleActions(
         /**
          * 스토어 데이터 초기화
          */
+        [act.CLEAR_STORE]: () => initialState,
         [act.CLEAR_TEMPLATE]: (state) => {
             return produce(state, (draft) => {
                 draft.template = initialState.template;
@@ -48,6 +49,18 @@ export default handleActions(
                 draft.inputTag = initialState.inputTag;
                 draft.templateError = initialState.templateError;
                 draft.invalidList = initialState.invalidList;
+            });
+        },
+        [act.CLEAR_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.list = initialState.list;
+                draft.total = initialState.total;
+                draft.error = initialState.error;
+            });
+        },
+        [act.CLEAR_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.search = initialState.search;
             });
         },
         /**

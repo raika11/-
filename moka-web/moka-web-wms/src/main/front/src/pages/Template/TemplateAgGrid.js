@@ -36,15 +36,11 @@ const TemplateAgGrid = () => {
      */
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
-            dispatch(
-                getTemplateList(
-                    changeSearchOption({
-                        ...search,
-                        [key]: value,
-                        page: 0,
-                    }),
-                ),
-            );
+            let temp = { ...search, [key]: value };
+            if (key !== 'page') {
+                temp['page'] = 0;
+            }
+            dispatch(getTemplateList(changeSearchOption(temp)));
         },
         [dispatch, search],
     );

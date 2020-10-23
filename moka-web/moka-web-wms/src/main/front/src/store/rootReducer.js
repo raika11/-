@@ -11,6 +11,7 @@ import templateHistory from '@store/template/templateHistoryReducer';
 import toast from '@store/notification/toastReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
 import reserved from '@store/reserved/reservedReducer';
+import dataset from '@store/dataset/datasetReducer';
 
 export default combineReducers({
     toastr,
@@ -24,4 +25,5 @@ export default combineReducers({
     toast,
     codeMgt,
     reserved,
+    dataset,
 });

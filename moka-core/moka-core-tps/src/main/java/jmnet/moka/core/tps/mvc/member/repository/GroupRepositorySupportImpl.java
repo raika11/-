@@ -60,7 +60,7 @@ public class GroupRepositorySupportImpl extends QuerydslRepositorySupport implem
         }
 
         QueryResults<Group> list = query
-                .leftJoin(qGroup.regUser, qMember)
+                .leftJoin(qGroup.regMember, qMember)
                 .fetchJoin()
                 .fetchResults();
 

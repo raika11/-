@@ -34,6 +34,7 @@ import {
     faSignOutAlt,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faAngleLeft, faAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
+import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
 
 // 아이콘 등록
 library.add(faCoffee);
@@ -66,6 +67,7 @@ library.add(faCloudUpload);
 library.add(faMinusSquare);
 library.add(faMinus);
 library.add(faSignOutAlt);
+library.add(fadImage);
 
 const propTypes = {
     /**
@@ -95,6 +97,8 @@ const MokaIcon = (props) => {
             iconArray = ['far', rIconName];
         } else if (prefix === 'fab-') {
             iconArray = ['fab', rIconName];
+        } else if (prefix === 'fad-') {
+            iconArray = ['fad', rIconName];
         }
 
         return <FontAwesomeIcon icon={iconArray} {...rest} />;

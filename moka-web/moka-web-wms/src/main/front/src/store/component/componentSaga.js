@@ -16,15 +16,11 @@ export function* saveComponentList({ payload: { componentList, callback } }) {
 
     yield put(startLoading(ACTION));
     try {
-        if (componentList.length > 0) {
-            // 컴포넌트 여러개 저장하는 api 호출
-            const response = yield call(api.postAllComponents, { componentList });
-            callbackData = response.data;
-        } else {
-            callbackData = { header: { success: false, message: '등록할 컴포넌트가 없습니다' }, body: null };
-        }
+        // 컴포넌트 여러개 저장하는 api 호출
+        const response = yield call(api.postAllComponents, { componentList });
+        callbackData = response.data;
     } catch (e) {
-        callbackData = { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e };
+        callbackData = errorResponse(e);
     }
 
     if (typeof callback === 'function') {

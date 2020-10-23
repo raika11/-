@@ -10,6 +10,7 @@ import jmnet.moka.core.tps.mvc.member.repository.GroupMemberRepository;
 import jmnet.moka.core.tps.mvc.member.repository.GroupRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -46,6 +47,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public Group insertGroup(Group group) {
         if (McpString.isEmpty(group.getGroupCd())) {
             group.setGroupCd(getNewGroupCd());
@@ -54,6 +56,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public Group updateGroup(Group group) {
         return groupRepository.save(group);
     }

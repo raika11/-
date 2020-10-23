@@ -66,8 +66,8 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
             throws Exception {
         web
                 .ignoring()
-                .antMatchers("/assets/**", "/html/**", "/static/**", "/webjars/**", "/favicon.ico", "/*.js", "/*.map", "/*.png",
-                        "/css/**", "/*.json");
+                .antMatchers("/assets/**", "/html/**", "/static/**", "/webjars/**", "/favicon.ico", "/*.js", "/*.map", "/*.png", "/css/**",
+                        "/*.json");
     }
 
     @Bean
@@ -75,7 +75,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
             throws Exception {
         WmsJwtAuthenticationFilter filter = new WmsJwtAuthenticationFilter(this.authenticationManager());
         SessionRegistry sessionRegistry = sessionRegistry(); //memory/hazelcast/infinispan 기반
-        filter.setSessionAuthenticationStrategy(new WmsSessionAuthenticationStrategy(sessionRegistry, 2)); // maxium 동시 사용자 설정
+        filter.setSessionAuthenticationStrategy(new WmsSessionAuthenticationStrategy(sessionRegistry, 200)); // maxium 동시 사용자 설정
         return filter;
     }
 
@@ -122,9 +122,8 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
             // home, react 소스, 미리보기, 템플릿 이미지 허용
-            .antMatchers("/", TpsConstants.HEALTH_PAGE, "/preview/**", "/image/template/**",
-                    "/" + urlPathPrefix + "/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs",
-                    "/api/user/test-login")
+            .antMatchers("/", TpsConstants.HEALTH_PAGE, "/preview/**", "/image/template/**", "/" + urlPathPrefix + "/**", "/swagger-ui.html",
+                    "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login")
             .permitAll()
             // react 서버렌더링 허용
             .antMatchers(this.reactRoutes)

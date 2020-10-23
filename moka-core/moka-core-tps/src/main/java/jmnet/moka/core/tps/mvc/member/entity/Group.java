@@ -57,5 +57,5 @@ public class Group extends RegAudit {
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
-    private Member regUser;
+    private Member regMember;
 }

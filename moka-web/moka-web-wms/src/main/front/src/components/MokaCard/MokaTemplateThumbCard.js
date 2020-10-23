@@ -153,17 +153,27 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
     return (
         <div ref={ref} className="p-03" style={{ width, height }}>
             <div className="border rounded d-flex flex-direction-column h-100 w-100">
-                <div className="d-flex justify-content-between p-03 border-bottom" style={{ minHeight: 38 }}>
-                    <p className="pt-05 pl-05 mb-0">{data.templateName}</p>
-                    {menus.length > 0 && <IconDropButton />}
+                <div className="position-relative overflow-hidden flex-fill cursor-pointer">
+                    <div className="w-100 h-100 absolute-top">
+                        <div ref={wrapperRef} className="w-100 h-100 d-flex align-item-centers rounded-top justify-content-center overflow-hidden" onClick={handleThumbClick}>
+                            {img && <BSImage src={bg} alt={alt} ref={imgRef} style={{ visibility: 'hidden' }} />}
+                            {!img && (
+                                <div className="w-100 d-flex align-items-center justify-content-center bg-light">
+                                    <MokaIcon iconName="fad-image" size="2x" className="color-gray150" />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    {data.templateWidth !== 0 && <p className="template-group-label">w{data.templateWidth}</p>}
                 </div>
-                <div ref={wrapperRef} className="d-flex flex-fill align-item-centers justify-content-center cursor-pointer overflow-hidden" onClick={handleThumbClick}>
-                    {img && <BSImage src={bg} alt={alt} ref={imgRef} style={{ visibility: 'hidden' }} />}
-                    {!img && <div style={{ backgroundColor: '#e5e5e5' }} />}
-                </div>
-                <div className="d-flex justify-content-between p-03 border-top" style={{ minHeight: 30 }}>
-                    <p className="pt-0 pl-05 mb-0">{data.tpZone}</p>
-                    <p className="pt-0 pr-05 mb-0">{data.templateWidth ? `w${data.templateWidth}` : ''}</p>
+                <div className="p-03 border-top" style={{ minHeight: 55 }}>
+                    <div className="d-flex justify-content-between" style={{ height: 27 }}>
+                        <p className="pt-05 pl-05 mb-0 flex-fill h5 text-truncate" title={data.templateName}>
+                            {data.templateName}
+                        </p>
+                        {menus.length > 0 && <IconDropButton />}
+                    </div>
+                    <p className="pt-0 pl-05 mb-0 text-truncate">{data.tpZone}</p>
                 </div>
             </div>
         </div>

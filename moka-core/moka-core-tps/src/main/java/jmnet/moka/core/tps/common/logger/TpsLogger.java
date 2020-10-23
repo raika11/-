@@ -342,6 +342,7 @@ public class TpsLogger {
                 .regIp(remoteAddr)
                 .executedTime(processStartTime)
                 .apiPath(url)
+                .errMsg(errorMsg)
                 .build();
     }
 

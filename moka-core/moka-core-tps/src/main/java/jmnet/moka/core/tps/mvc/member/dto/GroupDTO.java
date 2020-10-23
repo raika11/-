@@ -63,5 +63,5 @@ public class GroupDTO {
     /**
      * 등록자명
      */
-    private MemberDTO regUser;
+    private MemberDTO regMember;
 }

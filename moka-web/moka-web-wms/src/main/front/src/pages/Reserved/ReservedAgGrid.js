@@ -35,15 +35,11 @@ const ReservedAgGrid = () => {
      */
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
-            dispatch(
-                getReservedList(
-                    changeSearchOption({
-                        ...search,
-                        [key]: value,
-                        page: 0,
-                    }),
-                ),
-            );
+            let temp = { ...search, [key]: value };
+            if (key !== 'page') {
+                temp['page'] = 0;
+            }
+            dispatch(getReservedList(changeSearchOption(temp)));
         },
         [dispatch, search],
     );

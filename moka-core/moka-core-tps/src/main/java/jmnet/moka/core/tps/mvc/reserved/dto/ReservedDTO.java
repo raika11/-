@@ -3,28 +3,28 @@
  */
 package jmnet.moka.core.tps.mvc.reserved.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
 /**
- * <pre>
- * 
+ * 예약어 DTO
  * 2020. 6. 17. ssc 최초생성
- * </pre>
  * 
  * @since 2020. 6. 17. 오전 11:41:42
  * @author ssc
@@ -42,25 +42,50 @@ public class ReservedDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<ReservedDTO>>() {}.getType();
 
+    /**
+     * 예약어SEQ
+     */
+    @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}")
     private Long reservedSeq;
 
+    /**
+     * 도메인
+     */
     @ToString.Exclude
-    @NotNull(message = "{tps.reserved.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    @NotNull(message = "{tps.reserved.error.invalid.reservedId}")
+    /**
+     * 예약어ID
+     */
+    @NotNull(message = "{tps.reserved.error.notnull.reservedId}")
     @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+",
-            message = "{tps.reserved.error.invalid.reservedId}")
+            message = "{tps.reserved.error.pattern.reservedId}")
+    @Length(max = 24, message = "{tps.reserved.error.length.reservedId}")
     private String reservedId;
 
-    @NotNull(message = "{tps.reserved.error.invalid.reservedValue}")
-    @Pattern(regexp = ".+", message = "{tps.reserved.error.invalid.reservedValue}")
+    /**
+     * 예약어값
+     */
+    @NotNull(message = "{tps.reserved.error.notnull.reservedValue}")
+    @Pattern(regexp = ".+", message = "{tps.reserved.error.pattern.reservedValue}")
+    @Length(max = 128, message = "{tps.reserved.error.length.reservedValue}")
     private String reservedValue;
 
-    @NotNull(message = "{tps.reserved.error.invalid.useYn}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.reserved.error.invalid.useYn}")
-    private String useYn;
-
+    /**
+     * 상세정보
+     */
+    @Length(max = 4000, message = "{tps.reserved.error.length.description}")
     private String description;
+
+    /**
+     * 사용여부(Y:사용, N:미사용)
+     */
+    @NotNull(message = "{tps.reserved.error.notnull.useYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.reserved.error.pattern.useYn}")
+    @Builder.Default
+    private String useYn = MokaConstants.YES;
+
+
 
 }

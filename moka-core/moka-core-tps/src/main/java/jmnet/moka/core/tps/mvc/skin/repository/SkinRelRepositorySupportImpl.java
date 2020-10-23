@@ -88,7 +88,7 @@ public class SkinRelRepositorySupportImpl extends QuerydslRepositorySupport
                         skinRel.relType.as("relType"), skinRel.relSeq.as("relSeq"),
                         // containerRel.relParentType.as("relParentType"),
                         // containerRel.relParentSeq.as("relParentSeq"),
-                        skinRel.relOrder.as("relOrder")))
+                        skinRel.relOrd.as("relOrd")))
                 .distinct().from(skinRel).where(builder).join(domain)
                 .on(skinRel.domain.domainId.eq(domain.domainId)).fetchJoin().join(skin)
                 .on(skinRel.skin.skinSeq.eq(skin.skinSeq)).fetchJoin();

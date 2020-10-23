@@ -29,7 +29,6 @@ public class SkinRepositorySupportImpl extends QuerydslRepositorySupport
     public Page<Skin> findList(SkinSearchDTO search, Pageable pageable) {
         QSkin skin = QSkin.skin;
         QDomain domain = QDomain.domain;
-        QStyle style = QStyle.style;
 
         BooleanBuilder builder = new BooleanBuilder();
         String searchType = search.getSearchType();
@@ -55,7 +54,7 @@ public class SkinRepositorySupportImpl extends QuerydslRepositorySupport
         JPQLQuery<Skin> query = queryFactory.selectFrom(skin);
         query = getQuerydsl().applyPagination(pageable, query);
         QueryResults<Skin> list = query.innerJoin(skin.domain, domain).fetchJoin()
-                .leftJoin(skin.style, style).fetchJoin().where(builder).fetchResults();
+                .where(builder).fetchResults();
 
         return new PageImpl<Skin>(list.getResults(), pageable, list.getTotal());
     }

@@ -1,5 +1,11 @@
 package jmnet.moka.core.tps.mvc.skin.repository;
 
+import com.querydsl.core.types.dsl.Expressions;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.core.common.MokaConstants;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -37,15 +43,44 @@ public class SkinHistRepositorySupportImpl extends QuerydslRepositorySupport
         // WHERE 조건
         builder.and(skinHist.skin.skinSeq.eq(search.getSeq()));
         if (!McpString.isEmpty(searchType) && !McpString.isEmpty(keyword)) {
-            if (searchType.equals("createYmdt")) {
-                builder.and(skinHist.createYmdt.startsWith(keyword));
-            } else if (searchType.equals("creator")) {
-                builder.and(skinHist.creator.contains(keyword));
+            if (searchType.equals("regDt")) {
+                try {
+                    List<Date> keywordDtList = McpDate
+                            .betweenDate(MokaConstants.JSON_DATE_FORMAT, keyword);
+                    builder.and(skinHist.regDt.between(
+                            Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(0)),
+                            Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(1))
+                    ));
+                } catch (ParseException e) {
+                }
+            } else if (searchType.equals("regId")) {
+                builder.and(skinHist.regId.contains(keyword));
             } else if (searchType.equals("all")) {
-                builder.and(skinHist.creator.contains(keyword)
-                        .or(skinHist.createYmdt.startsWith(keyword)));
+                List<Date> keywordDtList = null;
+                try {
+                    keywordDtList = McpDate.betweenDate(MokaConstants.JSON_DATE_FORMAT, keyword);
+                } catch (ParseException e) {
+                }
+                builder.and(
+                        skinHist.regId.contains(keyword)
+                                  .or(skinHist.regDt.between(
+                                          Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(0)),
+                                          Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(1))
+                                  ))
+                );
             }
         }
+//        builder.and(skinHist.skin.skinSeq.eq(search.getSeq()));
+//        if (!McpString.isEmpty(searchType) && !McpString.isEmpty(keyword)) {
+//            if (searchType.equals("createYmdt")) {
+//                builder.and(skinHist.createYmdt.startsWith(keyword));
+//            } else if (searchType.equals("creator")) {
+//                builder.and(skinHist.creator.contains(keyword));
+//            } else if (searchType.equals("all")) {
+//                builder.and(skinHist.creator.contains(keyword)
+//                        .or(skinHist.createYmdt.startsWith(keyword)));
+//            }
+//        }
 
         JPQLQuery<SkinHist> query = queryFactory.selectFrom(skinHist);
         query = getQuerydsl().applyPagination(pageable, query);

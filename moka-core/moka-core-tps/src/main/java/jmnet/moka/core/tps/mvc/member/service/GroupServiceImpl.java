@@ -2,8 +2,8 @@ package jmnet.moka.core.tps.mvc.member.service;
 
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.mvc.member.dto.GroupSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.Group;
 import jmnet.moka.core.tps.mvc.member.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.repository.GroupMemberRepository;
@@ -26,8 +26,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Page<Group> findAllGroup(SearchDTO search) {
-        return groupRepository.findAll(search.getPageable());
+    public Page<Group> findAllGroup(GroupSearchDTO search) {
+        return groupRepository.findAllGroup(search);
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GroupRepository extends JpaRepository<Group, String>, JpaSpecificationExecutor<Group> {
+public interface GroupRepository extends JpaRepository<Group, String>, JpaSpecificationExecutor<Group>, GroupRepositorySupport {
+
 
 }

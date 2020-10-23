@@ -2,7 +2,7 @@ package jmnet.moka.core.tps.mvc.member.service;
 
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.tps.mvc.member.dto.GroupSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.Group;
 import jmnet.moka.core.tps.mvc.member.entity.GroupMember;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,7 @@ public interface GroupService {
      * @param search 검색 조건
      * @return 검색 결과 목록
      */
-    Page<Group> findAllGroup(SearchDTO search);
+    Page<Group> findAllGroup(GroupSearchDTO search);
 
     /**
      * 전체 그룹 조회

@@ -1,20 +1,21 @@
 package jmnet.moka.core.tps.mvc.member.entity;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import jmnet.moka.core.tps.common.entity.RegAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * CMS 권한그룸
@@ -26,7 +27,8 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "TB_CMS_GROUP")
-public class Group implements Serializable {
+@EqualsAndHashCode(exclude = {"regUser"})
+public class Group extends RegAudit {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,17 +52,10 @@ public class Group implements Serializable {
     private String groupKorNm = "";
 
     /**
-     * 등록일시
-     */
-    @Column(name = "REG_DT")
-    @Builder.Default
-    private Date regDt = new Date();
-
-    /**
      * 등록자
      */
-    @Column(name = "REG_ID")
-    @Builder.Default
-    private String regId = "";
-
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
+    private Member regUser;
 }

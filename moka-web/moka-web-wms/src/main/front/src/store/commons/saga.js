@@ -3,6 +3,18 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { NETWORK_ERROR_MESSAGE } from '@/constants';
 
 /**
+ * 통신에러 response 처리
+ * @param {any} body 본문
+ */
+export const errorResponse = (body) => ({
+    header: {
+        success: false,
+        message: NETWORK_ERROR_MESSAGE,
+    },
+    body,
+});
+
+/**
  * 성공/삭제 액션명 생성
  * @param {string} actionType 액션명
  */
@@ -41,7 +53,7 @@ export function createRequestSaga(actionType, api) {
         } catch (e) {
             yield put({
                 type: FAILURE,
-                payload: { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e },
+                payload: errorResponse(e),
             });
         }
 
@@ -93,7 +105,7 @@ export const callApiAfterActions = (actionType, api, targetStateSelector) => {
         } catch (e) {
             yield put({
                 type: FAILURE,
-                payload: { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e },
+                payload: errorResponse(e),
             });
         }
         yield put(finishLoading(actionType));
@@ -130,7 +142,7 @@ export const callApiWithParam = (actionType, api, param) => {
         } catch (e) {
             yield put({
                 type: FAILURE,
-                payload: { header: { success: false, message: NETWORK_ERROR_MESSAGE }, body: e },
+                payload: errorResponse(e),
             });
         }
 

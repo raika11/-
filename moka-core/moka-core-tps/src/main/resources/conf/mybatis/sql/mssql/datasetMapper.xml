@@ -1,79 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.dataset.mapper.DatasetMapper">
-	
-	<sql id="findAllWhere">
-		<if test="apiHost != null and apiHost != ''">
-		WHERE DATASET.DATA_API_HOST = #{apiHost}	
-			<if test="apiPath != null and apiPath != ''">
-				AND DATASET.DATA_API_PATH = #{apiPath}
-			</if>
-			<if test='autoCreateYn == "Y" or autoCreateYn == "N"'>
-				AND DATASET.AUTO_CREATE_YN = #{autoCreateYn}
-			</if>
-			<if test="keyword != null and keyword != ''">
-				<choose>
-					<when test="searchType == 'datasetSeq'">
-						AND DATASET.DATASET_SEQ = ${keyword}
-					</when>
-					<when test="searchType == 'datasetName'">
-						AND DATASET.DATASET_NAME like '%${keyword}%'
-					</when>
-					<when test="searchType == 'datasetSeqLike'">
-						AND DATASET.DATASET_SEQ like '${keyword}%'
-					</when>
-					<otherwise>
-						AND DATASET.DATASET_SEQ like '%${keyword}%' OR DATASET.DATASET_NAME like '%${keyword}%'
-					</otherwise>
-				</choose> 
-			</if>
-		</if>	
-		<if test="apiHost == null or apiHost == ''">
-		WHERE DATASET.DATA_API_HOST IS NULL	
-		</if>
+
+	<select id="findAll" parameterType="DatasetSearchDTO" resultType="DatasetVO" statementType="CALLABLE">
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_DATASET_LIST_SEL(
+		<choose>
+			<when test="searchType == 'all' and keyword != null and keyword != ''">
+				#{keyword},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="searchType == 'datasetsSeq' and keyword != null and keyword != ''">
+				#{keyword},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="searchType == 'datasetName' and keyword != null and keyword != ''">
+				#{keyword},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="apiHost != null and apiHost != ''">
+				#{apiHost},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="apiPath != null and apiPath != ''">
+				#{apiPath},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test='autoCreateYn == "Y" or autoCreateYn == "N"'>
+				#{autoCreateYn},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+
 		<!-- 제외 데이터셋 조건 -->
-		<if test="exclude != null and !exclude.isEmpty()">
-			AND DATASET.DATASET_SEQ NOT IN <foreach item="seq" collection="exclude" open="(" separator="," close=")">#{seq}</foreach>
-		</if>
-	</sql>
-	
-	<sql id="findAllOrder">
-		<if test="sortByColumn != null">
-			ORDER BY
-			<foreach open="" close="" collection="sortByColumn" item="sortItem" separator=",">
-				${sortItem}
-			</foreach>
-		</if>
-	</sql>
-	
-	<select id="findAll" parameterType="DatasetSearchDTO" resultType="DatasetVO">
-		SELECT 
-			DATASET.DATASET_SEQ,DATASET.DATASET_NAME,DATASET.AUTO_CREATE_YN,
-			(
-				SELECT 
-				   CASE WHEN 
-				      (COUNT(PR.REL_SEQ) + COUNT(SR.REL_SEQ) + COUNT(CR.REL_SEQ) + COUNT(CP.DATASET_SEQ) + COUNT(DK.DATASET_SEQ)) > 0 
-				    THEN 'Y' ELSE 'N' END
-				FROM TB_WMS_DATASET DS
-					LEFT OUTER JOIN TB_WMS_PAGE_REL PR ON DS.DATASET_SEQ = PR.REL_SEQ AND PR.REL_TYPE='DS'
-					LEFT OUTER JOIN TB_WMS_SKIN_REL SR ON DS.DATASET_SEQ = SR.REL_SEQ AND SR.REL_TYPE='DS'
-					LEFT OUTER JOIN TB_WMS_CONTAINER_REL CR ON DS.DATASET_SEQ = CR.REL_SEQ AND CR.REL_TYPE='DS'
-					LEFT OUTER JOIN TB_WMS_COMPONENT CP ON DS.DATASET_SEQ = CP.DATASET_SEQ
-					LEFT OUTER JOIN TB_WMS_DESKING DK ON DS.DATASET_SEQ = DK.DATASET_SEQ
-					LEFT OUTER JOIN TB_WMS_DESKING_HIST DH ON DS.DATASET_SEQ = DH.DATASET_SEQ
-					LEFT OUTER JOIN TB_WMS_DESKING_WORK DW ON DS.DATASET_SEQ = DW.DATASET_SEQ
-				WHERE DS.DATASET_SEQ = DATASET.DATASET_SEQ	
-			) AS USE_YN
-		FROM TB_WMS_DATASET DATASET
-		<include refid="findAllWhere" />
-		<include refid="findAllOrder" />
-	</select>
-	
-	<select id="count" parameterType="DatasetSearchDTO" resultType="java.lang.Long">
-		SELECT 
-			COUNT(DATASET.DATASET_SEQ) AS TOTAL_CNT
-		FROM TB_WMS_DATASET DATASET
-		<include refid="findAllWhere"/>
+		<choose>
+			<when test="exclude != null and exclude != ''">
+				#{exclude},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+
+		#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+		#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
 	</select>
 
 </mapper>

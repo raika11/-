@@ -258,8 +258,7 @@ public class ComponentServiceImpl implements ComponentService {
                     .orElseThrow(() -> new NoDataException(message));
 
             // dataset 생성
-            Dataset dataset = Dataset.builder().regDt(component.getRegDt())
-                    .regId(component.getRegId()).dataApiHost(domain.getApiHost())
+            Dataset dataset = Dataset.builder().dataApiHost(domain.getApiHost())
                     .dataApiPath(domain.getApiPath()).datasetName(component.getComponentName())
                     .autoCreateYn("N").build();
 

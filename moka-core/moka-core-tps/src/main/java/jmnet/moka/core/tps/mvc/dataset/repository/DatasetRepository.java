@@ -8,10 +8,8 @@ import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import org.springframework.stereotype.Repository;
 
 /**
- * <pre>
- * 
+ * 데이타셋
  * 2020. 4. 24. ssc 최초생성
- * </pre>
  * 
  * @since 2020. 4. 24. 오후 4:21:20
  * @author ssc

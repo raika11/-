@@ -22,10 +22,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * <pre>
- * 
+ * 데이타셋 VO
  * 2020. 4. 24. ssc 최초생성
- * </pre>
  * 
  * @since 2020. 4. 24. 오후 4:26:55
  * @author ssc
@@ -43,15 +41,27 @@ public class DatasetVO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<DatasetVO>>() {}.getType();
 
+    /**
+     * 데이터셋SEQ
+     */
     @Column(name = "DATASET_SEQ")
     private Long datasetSeq;
 
+    /**
+     * 데이터셋명
+     */
     @Column(name = "DATASET_NAME")
     private String datasetName;
 
+    /**
+     * 자동생성여부
+     */
     @Column(name = "AUTO_CREATE_YN")
     private String autoCreateYn;
 
+    /**
+     * 사용여부
+     */
     @Column(name = "USE_YN")
     private String useYn;
 }

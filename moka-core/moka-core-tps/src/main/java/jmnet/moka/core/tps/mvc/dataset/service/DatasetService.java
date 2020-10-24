@@ -36,14 +36,7 @@ public interface DatasetService {
      * @param search 검색조건
      * @return 데이타셋정보 목록
      */
-    public List<DatasetVO> findList(DatasetSearchDTO search);
-    
-    /**
-     * 데이타셋정보 목록 총갯수
-     * @param search 검색조건 
-     * @return 목록 총갯수 
-     */
-    public Long findListCount(DatasetSearchDTO search);
+    public List<DatasetVO> findAllDataset(DatasetSearchDTO search);
 
     /**
      * 데이타셋정보 조회
@@ -51,7 +44,7 @@ public interface DatasetService {
      * @param datasetSeq 데이타셋순번
      * @return 데이타셋정보
      */
-    public Optional<Dataset> findByDatasetSeq(Long datasetSeq);
+    public Optional<Dataset> findDatasetBySeq(Long datasetSeq);
 
     /**
      * <pre>

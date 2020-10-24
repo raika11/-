@@ -56,7 +56,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 템플릿 API 2020. 1. 14. jeon 최초생성
+ * 템플릿 API
+ * 2020. 1. 14. jeon 최초생성
  *
  * @author jeon
  * @since 2020. 1. 14. 오후 1:33:50
@@ -66,6 +67,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequestMapping("/api/templates")
 public class TemplateRestController {
+
     @Autowired
     private TemplateService templateService;
 
@@ -214,7 +216,7 @@ public class TemplateRestController {
      * @throws Exception            썸네일 저장 실패, 템플릿오류 그외 모든 에러
      */
     @ApiOperation(value = "템플릿 수정")
-    @PutMapping(value = "/{seq}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+    @PutMapping(value = "/{templateSeq}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> putTemplate(HttpServletRequest request, @Valid TemplateDTO templateDTO,
             @ApiParam(value = "templateThumbnailFile") @RequestPart(value = "templateThumbnailFile", required = false)
@@ -308,7 +310,7 @@ public class TemplateRestController {
      * 템플릿 복사
      *
      * @param request      HTTP요청
-     * @param seq          템플릿SEQ
+     * @param templateSeq  템플릿SEQ
      * @param domain       도메인DTO
      * @param templateName 템플릿명
      * @return 복사한 데이터
@@ -316,14 +318,14 @@ public class TemplateRestController {
      * @throws Exception            그외 예외
      */
     @ApiOperation(value = "템플릿 복사")
-    @PostMapping("/{seq}/copy")
+    @PostMapping("/{templateSeq}/copy")
     public ResponseEntity<?> copyTemplate(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long seq, DomainSimpleDTO domain,
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq, DomainSimpleDTO domain,
             String templateName)
             throws InvalidDataException, Exception {
 
         // 조회
-        Template template = templateService.findTemplateBySeq(seq)
+        Template template = templateService.findTemplateBySeq(templateSeq)
                                            .orElseThrow(() -> {
                                                String message = messageByLocale.get("tps.template.error.no-data", request);
                                                tpsLogger.fail(ActionType.INSERT, message, true);
@@ -348,9 +350,9 @@ public class TemplateRestController {
      * @throws Exception       관련아이템 있으면 삭제 불가능, 그외 에러
      */
     @ApiOperation(value = "템플릿 삭제")
-    @DeleteMapping("/{seq}")
+    @DeleteMapping("/{templateSeq}")
     public ResponseEntity<?> deleteTemplate(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
             throws NoDataException, Exception {
 
         // 데이타 확인
@@ -395,19 +397,19 @@ public class TemplateRestController {
      * 관련 아이템 존재여부
      *
      * @param request HTTP요청
-     * @param seq     템플릿SEQ
+     * @param templateSeq     템플릿SEQ
      * @return 관련 아이템 존재 여부
      * @throws NoDataException 데이터없음
      * @throws Exception       관련아이템 조회 에러
      */
     @ApiOperation(value = "관련 아이템 존재여부")
-    @GetMapping("/{seq}/has-relations")
-    public ResponseEntity<?> hasRelations(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long seq)
+    @GetMapping("/{templateSeq}/has-relations")
+    public ResponseEntity<?> hasRelationList(HttpServletRequest request,
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
             throws Exception {
 
         // 템플릿 확인
-        templateService.findTemplateBySeq(seq)
+        templateService.findTemplateBySeq(templateSeq)
                        .orElseThrow(() -> {
                            String message = messageByLocale.get("tps.template.error.no-data", request);
                            tpsLogger.fail(ActionType.SELECT, message, true);
@@ -415,15 +417,15 @@ public class TemplateRestController {
                        });
 
         try {
-            Boolean chkRels = relationHelper.hasRelations(seq, MokaConstants.ITEM_TEMPLATE);
+            Boolean chkRels = relationHelper.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
 
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[RELATION EXISTENCE CHECK FAILED] seq: {}) {}", seq, e.getMessage());
-            tpsLogger.error(ActionType.DELETE, "[RELATION EXISTENCE CHECK FAILEDE]", e, true);
+            log.error("[TEMPLATE RELATION EXISTENCE CHECK FAILED] seq: {}) {}", templateSeq, e.getMessage());
+            tpsLogger.error(ActionType.DELETE, "[TEMPLATE RELATION EXISTENCE CHECK FAILEDE]", e, true);
             throw new Exception(messageByLocale.get("tps.template.error.hasRelations", request), e);
         }
     }
@@ -438,16 +440,16 @@ public class TemplateRestController {
      * @throws Exception       잘못된 분류
      */
     @ApiOperation(value = "관련 아이템 목록조회")
-    @GetMapping("/{seq}/relations")
+    @GetMapping("/{templateSeq}/relations")
     public ResponseEntity<?> getRelationList(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long seq, @Valid @SearchParam RelSearchDTO search)
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq, @Valid @SearchParam RelSearchDTO search)
             throws NoDataException, Exception {
 
-        search.setRelSeq(seq);
+        search.setRelSeq(templateSeq);
         search.setRelSeqType(MokaConstants.ITEM_TEMPLATE);
 
         // 템플릿 확인
-        templateService.findTemplateBySeq(seq)
+        templateService.findTemplateBySeq(templateSeq)
                        .orElseThrow(() -> {
                            String message = messageByLocale.get("tps.template.error.no-data", request);
                            tpsLogger.fail(ActionType.SELECT, message, true);
@@ -456,7 +458,6 @@ public class TemplateRestController {
 
         ResponseEntity<?> response = relationHelper.findRelations(search);
         tpsLogger.success(ActionType.SELECT, true);
-
         return response;
     }
 

@@ -50,24 +50,13 @@ public class DatasetServiceImpl implements DatasetService {
         return datasetRepository.save(dataset);
     }
 
-    // @Override
-    // public Page<Dataset> findList(DatasetSearchDTO search, Pageable pageable) {
-    // return datasetRepository.findList(search, pageable);
-    // }
-
     @Override
-    public List<DatasetVO> findList(DatasetSearchDTO search) {
-        return datasetMapper.findAll(search,
-                McpMybatis.getRowBounds(search.getPage(), search.getSize()));
+    public List<DatasetVO> findAllDataset(DatasetSearchDTO search) {
+        return datasetMapper.findAll(search);
     }
 
     @Override
-    public Long findListCount(DatasetSearchDTO search) {
-        return datasetMapper.count(search);
-    }
-
-    @Override
-    public Optional<Dataset> findByDatasetSeq(Long datasetSeq) {
+    public Optional<Dataset> findDatasetBySeq(Long datasetSeq) {
         return datasetRepository.findById(datasetSeq);
     }
 

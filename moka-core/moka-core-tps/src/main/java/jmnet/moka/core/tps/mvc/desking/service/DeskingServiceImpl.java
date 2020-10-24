@@ -123,12 +123,13 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     public boolean usedByDatasetSeq(Long datasetSeq) {
-        Long deskingCnt = deskingRepository.countByDataset_DatasetSeq(datasetSeq);
-        Long deskingHistCnt = deskingHistRepository.countByDataset_DatasetSeq(datasetSeq);
-        Long deskingWorkCnt = deskingWorkRepository.countByDatasetSeq(datasetSeq);
-
-        Long cnt = deskingCnt + deskingHistCnt + deskingWorkCnt;
-        return cnt > 0 ? true : false;
+//        Long deskingCnt = deskingRepository.countByDataset_DatasetSeq(datasetSeq);
+//        Long deskingHistCnt = deskingHistRepository.countByDataset_DatasetSeq(datasetSeq);
+//        Long deskingWorkCnt = deskingWorkRepository.countByDatasetSeq(datasetSeq);
+//
+//        Long cnt = deskingCnt + deskingHistCnt + deskingWorkCnt;
+//        return cnt > 0 ? true : false;
+        return false;
     }
 
     @Override

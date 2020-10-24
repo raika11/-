@@ -19,6 +19,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +28,7 @@ import org.hibernate.annotations.Nationalized;
 
 
 /**
- * The persistent class for the WMS_DATASET database table.
- * 
+ * 데이타셋
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,67 +37,67 @@ import org.hibernate.annotations.Nationalized;
 @Builder
 @Entity
 @Table(name = "TB_WMS_DATASET")
-@NamedQuery(name = "Dataset.findAll", query = "SELECT d FROM Dataset d")
 public class Dataset extends BaseAudit {
 
     private static final long serialVersionUID = 2114564214212670123L;
 
+    /**
+     * 데이터셋SEQ
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DATASET_SEQ")
     private Long datasetSeq;
 
+    /**
+     * 데이터셋명
+     */
     @Nationalized
-    @Column(name = "DATASET_NAME", nullable = false, length = 128)
+    @Column(name = "DATASET_NAME", nullable = false)
     private String datasetName;
 
-    @Column(name = "DATA_API_HOST", nullable = false, length = 256)
-    private String dataApiHost;
-
-    @Column(name = "DATA_API_PATH", nullable = false, length = 256)
+    /**
+     * 데이터API경로(기타코드)
+     */
+    @Column(name = "DATA_API_PATH", nullable = false)
     private String dataApiPath;
 
-    @Column(name = "DATA_API", length = 256)
+    /**
+     * 데이터API호스트(기타코드)
+     */
+    @Column(name = "DATA_API_HOST", nullable = false)
+    private String dataApiHost;
+
+    /**
+     * 데이터API
+     */
+    @Column(name = "DATA_API")
     private String dataApi;
 
+    /**
+     * 데이터API파라미터
+     */
     @Nationalized
-    @Column(name = "DATA_API_PARAM", length = 2048)
+    @Column(name = "DATA_API_PARAM")
     private String dataApiParam;
 
+    /**
+     * 상세정보
+     */
     @Nationalized
-    @Column(name = "DESCRIPTION", length = 4000)
+    @Column(name = "DESCRIPTION")
     private String description;
 
+    /**
+     * 자동생성여부
+     */
     @Column(name = "AUTO_CREATE_YN", columnDefinition = "char")
-    private String autoCreateYn;
-
-    @Column(name = "REG_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date regDt;
-
-    @Column(name = "REG_ID", length = 30)
-    private String regId;
-
-    @Column(name = "MOD_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modDt;
-
-    @Column(name = "MOD_ID", length = 30)
-    private String modId;
+    @Builder.Default
+    private String autoCreateYn = MokaConstants.NO;
 
     @PrePersist
-    public void prePersist() {
-        this.datasetName = McpString.defaultValue(this.datasetName);
-        this.dataApiHost = McpString.defaultValue(this.dataApiHost);
-        this.dataApiPath = McpString.defaultValue(this.dataApiPath);
-        this.autoCreateYn = McpString.defaultValue(this.autoCreateYn, MokaConstants.NO);
-    }
-
     @PreUpdate
-    public void preUpdate() {
-        this.datasetName = McpString.defaultValue(this.datasetName);
-        this.dataApiHost = McpString.defaultValue(this.dataApiHost);
-        this.dataApiPath = McpString.defaultValue(this.dataApiPath);
+    public void prePersist() {
         this.autoCreateYn = McpString.defaultValue(this.autoCreateYn, MokaConstants.NO);
     }
 }

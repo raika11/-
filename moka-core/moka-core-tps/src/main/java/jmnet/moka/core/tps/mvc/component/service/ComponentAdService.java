@@ -18,7 +18,7 @@ public interface ComponentAdService {
      * @param componentSeq 컴포넌트ID
      * @throws Exception 에러
      */
-    public void deleteByComponentSeq(Long componentSeq) throws Exception;
+    public void deleteComponentAdByComponentSeq(Long componentSeq) throws Exception;
 
     /**
      * 컴포넌트ID로 컴포넌트광고 목록을 조회한다
@@ -26,7 +26,7 @@ public interface ComponentAdService {
      * @param componnentSeq 컴포넌트ID
      * @return 컴포넌트광고 목록
      */
-    public LinkedHashSet<ComponentAd> findByComponentSeq(Long componnentSeq);
+    public LinkedHashSet<ComponentAd> findComponentAdByComponentSeq(Long componnentSeq);
 
     /**
      * 컴포넌트광고 추가
@@ -39,7 +39,7 @@ public interface ComponentAdService {
 
     /**
      * 컴포넌트광고 수정
-     * 
+     *
      * @param newAds 새로운 리스트
      * @param orgAds 원래 리스트
      * @return 컴포넌트광고리스트

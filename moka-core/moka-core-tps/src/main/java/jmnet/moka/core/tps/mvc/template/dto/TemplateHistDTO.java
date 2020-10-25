@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,6 +22,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -47,6 +49,7 @@ public class TemplateHistDTO implements Serializable {
     /**
      * 일련번호
      */
+    @Min(value = 0, message = "{tps.templatehist.error.min.seq}")
     private Long seq;
 
     /**
@@ -80,5 +83,6 @@ public class TemplateHistDTO implements Serializable {
     /**
      * 등록자
      */
+    @Length(max = 30, message = "{tps.templatehist.error.length.regId}")
     private String regId;
 }

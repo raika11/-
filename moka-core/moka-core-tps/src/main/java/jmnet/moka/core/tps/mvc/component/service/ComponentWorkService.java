@@ -20,7 +20,7 @@ public interface ComponentWorkService {
      * @param seq 순번
      * @return work컴포넌트
      */
-    Optional<ComponentWork> findBySeq(Long seq);
+    Optional<ComponentWork> findComponentWorkBySeq(Long seq);
 
     /**
      * work컴포넌트 업데이트
@@ -30,6 +30,6 @@ public interface ComponentWorkService {
      * @throws NoDataException 데이터없음
      * @throws Exception 예외
      */
-    public ComponentWork updateComponent(ComponentWork component) throws NoDataException, Exception;
+    public ComponentWork updateComponentWork(ComponentWork component) throws NoDataException, Exception;
 
 }

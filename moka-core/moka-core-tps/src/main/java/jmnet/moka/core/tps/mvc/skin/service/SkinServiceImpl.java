@@ -144,7 +144,7 @@ public class SkinServiceImpl implements SkinService {
             if (item.getNodeName().equals(MokaConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
                                                                              // 추가한다.
                 Optional<Component> component =
-                        componentService.findByComponentSeq(Long.parseLong(item.getId()));
+                        componentService.findComponentBySeq(Long.parseLong(item.getId()));
 
                 if (component.isPresent()) {
 

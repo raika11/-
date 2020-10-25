@@ -15,7 +15,7 @@ public interface ComponentHistService {
      * @param pageable Pageable
      * @return 히스토리
      */
-    public Page<ComponentHist> findHistoryList(Long componentSeq, Pageable pageable);
+    public Page<ComponentHist> findAllComponentHist(Long componentSeq, Pageable pageable);
     
     /**
      * 컴포넌트 히스토리 등록
@@ -23,7 +23,7 @@ public interface ComponentHistService {
      * @return 히스토리
      * @throws Exception 에러
      */
-    public ComponentHist insertHistory(ComponentHist history) throws Exception;
+    public ComponentHist insertComponentHist(ComponentHist history) throws Exception;
     
     /**
      * 컴포넌트 히스토리 등록
@@ -31,7 +31,7 @@ public interface ComponentHistService {
      * @return 히스토리
      * @throws Exception 에러
      */
-    public ComponentHist insertHistory(Component component) throws Exception;
+    public ComponentHist insertComponentHist(Component component) throws Exception;
     
     /**
      * 여러개의 히스토리를 한번에 등록
@@ -39,8 +39,8 @@ public interface ComponentHistService {
      * @return 히스토리 리스트
      * @throws Exception 에러
      */
-    public List<ComponentHist> insertHistories(List<?> maybeHistories) throws Exception;
+    public List<ComponentHist> insertComponentHistList(List<?> maybeHistories) throws Exception;
     
-    public Optional<ComponentHist> findOneByComponentSeqAndDataType(Long componentSeq, String dataType) throws Exception;
+    public Optional<ComponentHist> findComponentHistByComponentSeqAndDataType(Long componentSeq, String dataType) throws Exception;
 
 }

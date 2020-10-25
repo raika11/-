@@ -257,7 +257,7 @@ public class PreviewController {
             DomainItem domainItem = domainDto.toDomainItem();
 
             // 컴포넌트 : work 컴포넌트정보를 모두 보내지는 않는다.
-            String messageCP = messageByLocale.get("tps.component.error.noContent", request);
+            String messageCP = messageByLocale.get("tps.common.error.no-data", request);
             DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentsWorkBySeq(componentWorkSeq);
             if (componentVO == null) {
                 throw new NoDataException(messageCP);

@@ -33,7 +33,7 @@ public class SkinSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 4193591098798538945L;
 
-    @NotNull(message = "{tps.domain.error.pattern.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 

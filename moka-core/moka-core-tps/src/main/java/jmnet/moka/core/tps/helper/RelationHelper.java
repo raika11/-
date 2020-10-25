@@ -70,7 +70,7 @@ public class RelationHelper {
         }
 
         // 컴포넌트 체크
-        if (componentService.countByDomainId(domainId) > 0) {
+        if (componentService.countComponentByDomainId(domainId) > 0) {
             return true;
         }
 
@@ -229,7 +229,7 @@ public class RelationHelper {
             // 컴포넌트 목록 조회
             search.setDefaultSort("componentSeq,desc");
             Pageable pageable = search.getPageable();
-            Page<Component> components = componentService.findRelList(search, pageable);
+            Page<Component> components = componentService.findAllRel(search, pageable);
             if (components.getTotalElements() > 0) {
                 return true;
             }
@@ -301,7 +301,7 @@ public class RelationHelper {
             search.setDefaultSort("componentSeq,desc");
             Pageable pageable = search.getPageable();
 
-            Page<Component> components = componentService.findRelList(search, pageable);
+            Page<Component> components = componentService.findAllRel(search, pageable);
             ResultListDTO<ComponentDTO> resultListMessage = new ResultListDTO<ComponentDTO>();
 
             List<ComponentDTO> dtoList = modelMapper.map(components.getContent(), ComponentDTO.TYPE);

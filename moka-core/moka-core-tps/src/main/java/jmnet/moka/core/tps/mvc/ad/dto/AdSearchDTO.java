@@ -24,7 +24,7 @@ public class AdSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = -4988052502214963085L;
 
-    @NotNull(message = "{tps.domain.error.pattern.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     @Pattern(regexp = ".+", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 

@@ -385,7 +385,7 @@ public class DeskingServiceImpl implements DeskingService {
     public Component updateComponent(DeskingComponentWorkVO workVO, String creator)
             throws NoDataException, Exception {
         String messageC = messageByLocale.get("tps.common.error.no-data");
-        Component component = componentService.findByComponentSeq(workVO.getComponentSeq())
+        Component component = componentService.findComponentBySeq(workVO.getComponentSeq())
                 .orElseThrow(() -> new NoDataException(messageC));
 
         String messageT = messageByLocale.get("tps.common.error.no-data");
@@ -420,22 +420,22 @@ public class DeskingServiceImpl implements DeskingService {
     public ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn,
             String snapshotBody, String creator) throws NoDataException, Exception {
 
-        String messageC = messageByLocale.get("tps.component.error.noContent");
-        ComponentWork componentWork = componentWorkService.findBySeq(componentWorkSeq)
+        String messageC = messageByLocale.get("tps.common.error.no-data");
+        ComponentWork componentWork = componentWorkService.findComponentWorkBySeq(componentWorkSeq)
                 .orElseThrow(() -> new NoDataException(messageC));
 
         componentWork.setSnapshotYn(snapshotYn);
         componentWork.setSnapshotBody(snapshotBody);
 
-        return componentWorkService.updateComponent(componentWork);
+        return componentWorkService.updateComponentWork(componentWork);
     }
 
     @Override
     public ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq,
             String creator) throws NoDataException, Exception {
 
-        String messageC = messageByLocale.get("tps.component.error.noContent");
-        ComponentWork componentWork = componentWorkService.findBySeq(componentWorkSeq)
+        String messageC = messageByLocale.get("tps.common.error.no-data");
+        ComponentWork componentWork = componentWorkService.findComponentWorkBySeq(componentWorkSeq)
                 .orElseThrow(() -> new NoDataException(messageC));
 
         String messageT = messageByLocale.get("tps.template.error.no-data");
@@ -444,7 +444,7 @@ public class DeskingServiceImpl implements DeskingService {
 
         componentWork.setTemplate(template);
 
-        return componentWorkService.updateComponent(componentWork);
+        return componentWorkService.updateComponentWork(componentWork);
 
     }
 
@@ -560,10 +560,10 @@ public class DeskingServiceImpl implements DeskingService {
         // 볼륨 패스를 가져오기 위해 도메인을 찾는다
         // 데이터셋을 쓰는 컴포넌트 찾기 -> 도메인 가져오기
         Component component = componentService
-                .findByDataTypeAndDataset_DatasetSeq(TpsConstants.DATATYPE_DESK,
+                .findComponentByDataTypeAndDataset_DatasetSeq(TpsConstants.DATATYPE_DESK,
                         deskingWork.getDatasetSeq())
                 .orElseThrow(() -> new NoDataException(
-                        messageByLocale.get("tps.component.error.noContent")));
+                        messageByLocale.get("tps.common.error.no-data")));
 //        String volumeId = component.getDomain().getVolumeId();
 //        Volume volume = volumeService.findVolume(volumeId).orElseThrow(
 //                () -> new NoDataException(messageByLocale.get("tps.volume.error.noContent")));

@@ -34,15 +34,6 @@ public class ReservedSearchDTO extends SearchDTO {
     private static final long serialVersionUID = 1972229889422176779L;
 
     /**
-     * 도메인
-     */
-    @NotNull(message = "{tps.domain.error.notnull.domainId}")
-    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
-    private String domainId;
-
-//    private String serviceType;
-
-    /**
      * 검색타입
      */
     private String searchType;
@@ -55,6 +46,7 @@ public class ReservedSearchDTO extends SearchDTO {
     /**
      * 총갯수 사용여부
      */
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.useTotal}")
     private String useTotal;
 
     /**
@@ -66,6 +58,15 @@ public class ReservedSearchDTO extends SearchDTO {
      * 검색결과 성공여부
      */
     private Integer returnValue;
+
+    /**
+     * 도메인
+     */
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
+    private String domainId;
+
+//    private String serviceType;
 
     // 검색 조건의 기본값을 설정
     public ReservedSearchDTO() {

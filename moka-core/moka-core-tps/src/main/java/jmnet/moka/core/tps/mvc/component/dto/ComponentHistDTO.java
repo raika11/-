@@ -7,7 +7,12 @@ import java.util.Date;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSimpleDTO;
 import lombok.AllArgsConstructor;
@@ -16,16 +21,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * <pre>
  * 컴포넌트 히스토리 DTO
- * 2020. 4. 13. jeon 최초생성
- * </pre>
- * 
- * @since 2020. 4. 13. 오후 5:34:36
- * @author jeon
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,25 +40,56 @@ public class ComponentHistDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<ComponentHistDTO>>() {
     }.getType();
 
+    /**
+     * 일련번호
+     */
+    @Min(value = 0, message = "{tps.componenthist.error.min.seq}")
     private Long seq;
 
+    /**
+     * 컴포넌트SEQ
+     */
+    @NotNull(message = "{tps.component.error.notnull.componentSeq}")
     private Long componentSeq;
 
+    /**
+     * 도메인ID
+     */
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private String domainId;
 
+    /**
+     * 데이타셋
+     */
     private DatasetDTO dataset;
 
+    /**
+     * 템플릿
+     */
+    @NotNull(message = "{tps.template.error.notnull.templateSeq}")
     private TemplateSimpleDTO template;
 
-    private String dataType;
+    /**
+     * 데이터유형:NONE, DESK, AUTO
+     */
+    @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)]{4}$", message = "{tps.component.error.pattern.dataType}")
+    @Builder.Default
+    private String dataType = TpsConstants.DATATYPE_DESK;
 
+    /**
+     * 스냅샷본문
+     */
     private String snapshotBody;
 
-    private String workType;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = MokaConstants.JSON_DATE_FORMAT, timezone = MokaConstants.JSON_DATE_TIME_ZONE)
-    @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
+    /**
+     * 등록일자
+     */
+    @DTODateTimeFormat
     private Date regDt;
 
+    /**
+     * 등록자
+     */
+    @Length(max = 30, message = "{tps.templatehist.error.length.regId}")
     private String regId;
 }

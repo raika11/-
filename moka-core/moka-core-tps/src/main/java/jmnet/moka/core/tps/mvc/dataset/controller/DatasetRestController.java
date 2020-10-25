@@ -3,23 +3,42 @@
  */
 package jmnet.moka.core.tps.mvc.dataset.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-
+import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.proxy.autoConfig.HttpProxyConfiguration;
+import jmnet.moka.common.proxy.http.HttpProxy;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
+import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
-import jmnet.moka.core.tps.mvc.template.entity.Template;
+import jmnet.moka.core.tps.exception.InvalidDataException;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.helper.ApiCodeHelper;
+import jmnet.moka.core.tps.helper.RelationHelper;
+import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
+import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
+import jmnet.moka.core.tps.mvc.dataset.dto.DatasetSearchDTO;
+import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
+import jmnet.moka.core.tps.mvc.dataset.service.DatasetService;
+import jmnet.moka.core.tps.mvc.dataset.vo.DatasetVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,31 +53,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import jmnet.moka.common.data.support.SearchParam;
-import jmnet.moka.common.proxy.autoConfig.HttpProxyConfiguration;
-import jmnet.moka.common.proxy.http.HttpProxy;
-import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.common.utils.McpString;
-import jmnet.moka.common.utils.dto.ResultDTO;
-import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
-import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.helper.ApiCodeHelper;
-import jmnet.moka.core.tps.helper.RelationHelper;
-import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
-import jmnet.moka.core.tps.mvc.dataset.dto.DatasetSearchDTO;
-import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
-import jmnet.moka.core.tps.mvc.dataset.service.DatasetService;
-import jmnet.moka.core.tps.mvc.dataset.vo.DatasetVO;
-import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
-import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 
 /**
  * 데이타셋 API
@@ -253,7 +247,8 @@ public class DatasetRestController {
                 dto.setDataApiParamShape(getParameters(request, dto));
             }
 
-            ResultDTO<DatasetDTO> resultDto = new ResultDTO<DatasetDTO>(dto);
+            String message = messageByLocale.get("tps.common.success.insert", request);
+            ResultDTO<DatasetDTO> resultDto = new ResultDTO<DatasetDTO>(dto, message);
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
@@ -346,7 +341,8 @@ public class DatasetRestController {
                 dto.setDataApiParamShape(getParameters(request, dto));
             }
 
-            ResultDTO<DatasetDTO> resultDto = new ResultDTO<DatasetDTO>(dto);
+            String message = messageByLocale.get("tps.common.success.update", request);
+            ResultDTO<DatasetDTO> resultDto = new ResultDTO<DatasetDTO>(dto, message);
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         }  catch (Exception e) {
@@ -464,7 +460,8 @@ public class DatasetRestController {
             datasetService.deleteDataset(datasetSeq);
 
             // 3. 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
+            String message = messageByLocale.get("tps.common.success.delete", request);
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {

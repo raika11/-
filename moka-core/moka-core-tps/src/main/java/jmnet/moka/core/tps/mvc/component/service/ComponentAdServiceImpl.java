@@ -15,12 +15,12 @@ public class ComponentAdServiceImpl implements ComponentAdService {
     private ComponentAdRepository componentAdRepository;
 
     @Override
-    public void deleteByComponentSeq(Long componentSeq) throws Exception {
+    public void deleteComponentAdByComponentSeq(Long componentSeq) throws Exception {
         componentAdRepository.deleteByComponentSeq(componentSeq);
     }
 
     @Override
-    public LinkedHashSet<ComponentAd> findByComponentSeq(Long componentSeq) {
+    public LinkedHashSet<ComponentAd> findComponentAdByComponentSeq(Long componentSeq) {
         LinkedHashSet<ComponentAd> result = new LinkedHashSet<ComponentAd>(
                 componentAdRepository.findByComponentSeqOrderByListParagraph(componentSeq));
         return result;
@@ -32,7 +32,7 @@ public class ComponentAdServiceImpl implements ComponentAdService {
             throws Exception {
         Set<ComponentAd> result = orgAds;
 
-        if (!newAds.equals(orgAds)) {
+        if (newAds != null && !newAds.equals(orgAds)) {
             if (orgAds != null && orgAds.size() > 0) {
                 componentAdRepository.deleteAll(orgAds);
             }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
+import jmnet.moka.core.tps.common.TpsConstants;
 import org.apache.ibatis.type.Alias;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
@@ -73,7 +74,7 @@ public class DeskingComponentWorkVO implements Serializable {
 
     @Column(name = "SEARCH_LANG")
     @Builder.Default
-    private String searchLang = "KR";
+    private String searchLang = TpsConstants.DEFAULT_LANG;
 
     @Column(name = "SEARCH_SERVICE_TYPE")
     private String searchServiceType;

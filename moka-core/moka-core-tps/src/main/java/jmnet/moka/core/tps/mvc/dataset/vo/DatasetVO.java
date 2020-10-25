@@ -3,23 +3,18 @@
  */
 package jmnet.moka.core.tps.mvc.dataset.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
-
 import javax.persistence.Column;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.ibatis.type.Alias;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 
 /**
  * 데이타셋 VO

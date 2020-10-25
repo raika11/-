@@ -3,21 +3,17 @@
  */
 package jmnet.moka.core.tps.mvc.dataset.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,10 +21,6 @@ import org.hibernate.validator.constraints.Length;
 
 /**
  * 데이타셋 DTO
- * 2020. 4. 24. ssc 최초생성
- * 
- * @since 2020. 4. 24. 오후 4:26:55
- * @author ssc
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -96,8 +88,7 @@ public class DatasetDTO implements Serializable {
     /**
      * 자동생성여부
      */
-    @NotNull(message = "{tps.dataset.error.invalid.autoCreateYn}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.dataset.error.invalid.autoCreateYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.dataset.error.pattern.autoCreateYn}")
     @Builder.Default
     private String autoCreateYn = MokaConstants.NO;
 

@@ -1,20 +1,16 @@
 package jmnet.moka.core.tps.mvc.dataset.dto;
 
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.dataset.vo.DatasetVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -44,6 +40,7 @@ public class DatasetSearchDTO extends SearchDTO {
     /**
      * 총갯수 사용여부
      */
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.useTotal}")
     private String useTotal;
 
     /**

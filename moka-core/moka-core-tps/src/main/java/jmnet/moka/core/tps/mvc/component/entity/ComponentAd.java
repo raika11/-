@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.component.entity;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -10,21 +11,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import com.fasterxml.jackson.core.type.TypeReference;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.ad.entity.Ad;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 /**
- * The persistent class for the TB_WMS_COMPONENT_AD database table.
- * 
+ * 컴포넌트 광고
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,7 +35,6 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "TB_WMS_COMPONENT_AD")
-@NamedQuery(name = "ComponentAd.findAll", query = "SELECT w FROM ComponentAd w")
 public class ComponentAd implements Serializable {
 
     private static final long serialVersionUID = -7273958000859682529L;
@@ -41,51 +42,38 @@ public class ComponentAd implements Serializable {
     public static final Type TYPE = new TypeReference<List<ComponentAd>>() {
     }.getType();
 
+    /**
+     * 일련번호
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ")
     private Long seq;
 
+    /**
+     * 컴포넌트SEQ
+     */
     @Column(name = "COMPONENT_SEQ", nullable = false)
     private Long componentSeq;
 
+    /**
+     * 광고
+     */
     @ManyToOne
     @JoinColumn(name = "AD_SEQ", referencedColumnName = "AD_SEQ", nullable = false)
     private Ad ad;
 
+    /**
+     * 리스트단락
+     */
     @Column(name = "LIST_PARAGRAPH", nullable = false)
-    private Integer listParagraph;
+    @Builder.Default
+    private Integer listParagraph = TpsConstants.LIST_PARAGRAPH;
 
-    //    @Override
-    //    public boolean equals(Object o) {
-    //        if (o == null) {
-    //            return false;
-    //        }
-    //        
-    //        if (o instanceof ComponentAd == false) {
-    //            return false;
-    //        }
-    //        
-    //        ComponentAd other = (ComponentAd) o;
-    //        if (other.getAd() == null) {
-    //            return false;
-    //        }
-    //        if (other.getSeq() != this.seq
-    //                || other.getComponentSeq() != this.componentSeq
-    //                || other.getListParagraph() != this.listParagraph
-    //                || other.getAd().getAdSeq() != this.ad.getAdSeq()) {
-    //            return false;
-    //        }
-    //        return true;
-    //    }
-    //    
-    //    @Override
-    //    public int hashCode() {
-    //        StringBuffer str = new StringBuffer(128);
-    //        str.append(seq);
-    //        str.append(componentSeq);
-    //        str.append(ad.getAdSeq());
-    //        str.append(listParagraph);
-    //        return str.hashCode();
-    //    }
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.listParagraph = this.listParagraph == null ? TpsConstants.LIST_PARAGRAPH : this.listParagraph;
+    }
+
 }

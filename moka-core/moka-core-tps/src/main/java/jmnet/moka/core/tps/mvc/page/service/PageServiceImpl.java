@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.core.tps.mvc.page.mapper.PageMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -219,7 +218,7 @@ public class PageServiceImpl implements PageService {
             if (item.getNodeName().equals(MokaConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
                                                                              // 추가한다.
                 Optional<Component> component =
-                        componentService.findByComponentSeq(Long.parseLong(item.getId()));
+                        componentService.findComponentBySeq(Long.parseLong(item.getId()));
 
                 if (component.isPresent()) {
 

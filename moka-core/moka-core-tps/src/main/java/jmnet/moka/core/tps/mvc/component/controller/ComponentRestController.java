@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.component.controller;
 
+import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,10 +11,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.mvc.template.dto.TemplateDTO;
+import jmnet.moka.core.tps.mvc.template.entity.Template;
+import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,14 +58,7 @@ import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 
 /**
- * 
- * <pre>
- * 컴포넌트 RestController
- * 2020. 4. 21. jeon 최초생성
- * </pre>
- * 
- * @since 2020. 4. 21. 오후 5:09:51
- * @author jeon
+ * 컴포넌트 API
  */
 @Controller
 @Validated
@@ -86,136 +83,125 @@ public class ComponentRestController {
     @Autowired
     private RelationHelper relationHelper;
 
+    @Autowired
+    private TpsLogger tpsLogger;
+
     /**
-     * 컴포넌트 목록을 조회한다
+     * 컴포넌트 목록조회
      * 
      * @param request HTTP 요청
      * @param search 검색 조건
      * @return 컴포넌트 목록
      */
+    @ApiOperation(value = "컴포넌트 목록조회")
     @GetMapping
-    public ResponseEntity<?> getComponents(HttpServletRequest request,
-            @Valid @SearchParam ComponentSearchDTO search) {
+    public ResponseEntity<?> getComponentList(HttpServletRequest request, @Valid @SearchParam ComponentSearchDTO search) {
 
         // 조회(mybatis)
-        Long totalCount = componentService.findListCount(search);
-        List<ComponentVO> returnValue = componentService.findList(search);
+        List<ComponentVO> returnValue = componentService.findAllComponent(search);
 
         ResultListDTO<ComponentVO> resultList = new ResultListDTO<ComponentVO>();
         resultList.setList(returnValue);
-        resultList.setTotalCnt(totalCount);
+        resultList.setTotalCnt(search.getTotal());
 
-        ResultDTO<ResultListDTO<ComponentVO>> resultDTO =
-                new ResultDTO<ResultListDTO<ComponentVO>>(resultList);
+        ResultDTO<ResultListDTO<ComponentVO>> resultDTO = new ResultDTO<ResultListDTO<ComponentVO>>(resultList);
+        tpsLogger.success(true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**
-     * 컴포넌트를 조회한다
+     * 컴포넌트 상세조회
      * 
      * @param request HTTP 요청
      * @param componentSeq 컴포넌트아이디
      * @return 컴포넌트
      * @throws NoDataException 데이터없음
      */
-    @GetMapping("/{seq}")
+    @ApiOperation(value = "컴포넌트 상세조회")
+    @GetMapping("/{componentSeq}")
     public ResponseEntity<?> getComponent(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.component.error.invalid.componentSeq}") Long componentSeq)
-            throws NoDataException, Exception {
+            @PathVariable("componentSeq") @Min(value = 0,
+                    message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+            throws NoDataException {
 
-        String message = messageByLocale.get("tps.component.error.noContent", request);
-
-        // 조회
-        Component component = componentService.findByComponentSeq(componentSeq)
-                .orElseThrow(() -> new NoDataException(message));
+        Component component = componentService.findComponentBySeq(componentSeq)
+            .orElseThrow(() -> {
+                String message = messageByLocale.get("tps.common.error.no-data", request);
+                tpsLogger.fail(message, true);
+                return new NoDataException(message);
+            });
 
         ComponentDTO componentDTO = modelMapper.map(component, ComponentDTO.class);
-        componentDTO = this.setPrevDataset(componentDTO);
 
         ResultDTO<ComponentDTO> resultDTO = new ResultDTO<ComponentDTO>(componentDTO);
+        tpsLogger.success(true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**
-     * 컴포넌트를 등록한다
+     * 컴포넌트 등록
      * 
      * @param request HTTP 요청
      * @param componentDTO 컴포넌트DTO
-     * @param principal Principal
      * @return 등록된 컴포넌트
      * @throws InvalidDataException 데이터가 유효하지 않음
      * @throws NoDataException 데이터 없음
      * @throws Exception 그외 모든 예외
      */
+    @ApiOperation(value = "컴포넌트 등록")
     @PostMapping
     public ResponseEntity<?> postComponent(HttpServletRequest request,
-            @RequestBody @Valid ComponentDTO componentDTO, Principal principal)
+            @RequestBody @Valid ComponentDTO componentDTO)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이터 유효성 검사
-        List<InvalidDataDTO> invalidList = validData(componentDTO);
-        if (invalidList.size() > 0) {
-            String message = messageByLocale.get("tps.component.error.invalidContent", request);
-            throw new InvalidDataException(invalidList, message);
-        }
+        validData(request, componentDTO, ActionType.INSERT);
+
+        Component component = modelMapper.map(componentDTO, Component.class);
 
         try {
             // 등록
-            Component component = modelMapper.map(componentDTO, Component.class);
-            component.setRegDt(McpDate.now());
-            component.setRegId(principal.getName());
-
             Component returnVal = componentService.insertComponent(component);
+
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
             returnValDTO = this.setPrevDataset(returnValDTO);
 
-            ResultDTO<ComponentDTO> resultDTO = new ResultDTO<ComponentDTO>(returnValDTO);
+            String message = messageByLocale.get("tps.common.success.insert", request);
+            ResultDTO<ComponentDTO> resultDTO = new ResultDTO<ComponentDTO>(returnValDTO, message);
+            tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[COMPONENT INSERT FAIL]", e);
+            log.error("[FAIL TO INSERT COMPONENT]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT COMPONENT]", e, true);
             throw new Exception(messageByLocale.get("tps.component.error.save", request), e);
         }
     }
 
     /**
-     * <pre>
      * 여러개의 컴포넌트를 한번에 등록한다
-     * </pre>
      * 
      * @param request HTTP요청
      * @param validList 컴포넌트 목록
-     * @param principal Principal
      * @return 등록된 컴포넌트
      * @throws InvalidDataException 데이터가 유효하지 않음
      * @throws Exception 에러
      */
+    @ApiOperation(value = "컴포넌트 멀티등록")
     @PostMapping("/all")
     public ResponseEntity<?> postAllComponent(HttpServletRequest request,
-            @Valid @RequestBody ValidList<ComponentDTO> validList, Principal principal)
+            @Valid @RequestBody ValidList<ComponentDTO> validList)
             throws InvalidDataException, Exception {
 
         // 컴포넌트 목록 가져옴
         List<ComponentDTO> componentDTOs = validList.getList();
 
+        // 데이터 유효성 검사
         for (ComponentDTO componentDTO : componentDTOs) {
-            // 데이터 유효성 검사
-            List<InvalidDataDTO> invalidList = validData(componentDTO);
-            if (invalidList.size() > 0) {
-                String message = messageByLocale.get("tps.component.error.invalidContent", request);
-                throw new InvalidDataException(invalidList, message);
-            }
+            validData(request, componentDTO, ActionType.INSERT);
         }
 
         List<Component> components = modelMapper.map(componentDTOs, Component.TYPE);
-
-        // 생성일자, 생성자 추가
-        Date regDt = McpDate.now();
-        for (Component component : components) {
-            component.setRegId(principal.getName());
-            component.setRegDt(regDt);
-        }
 
         try {
             // 한번에 등록한다
@@ -227,54 +213,51 @@ public class ComponentRestController {
             resultList.setList(returnValDTO);
             resultList.setTotalCnt(returnValDTO.size());
 
-            ResultDTO<ResultListDTO<ComponentDTO>> resultDTO =
-                    new ResultDTO<ResultListDTO<ComponentDTO>>(resultList);
+            String message = messageByLocale.get("tps.common.success.insert", request);
+            ResultDTO<ResultListDTO<ComponentDTO>> resultDTO = new ResultDTO<ResultListDTO<ComponentDTO>>(resultList, message);
+            tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[COMPONENT INSERT ALL FAIL]", e);
+            log.error("[FAIL TO INSERT COMPONENT]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT COMPONENT]", e, true);
             throw new Exception(messageByLocale.get("tps.component.error.save", request), e);
         }
     }
 
     /**
-     * 컴포넌트를 수정한다
+     * 컴포넌트 수정
      * 
      * @param request HTTP 요청
      * @param componentSeq 컴포넌트아이디
      * @param componentDTO 수정할 컴포넌트DTO
-     * @param principal Principal
      * @return 수정된 컴포넌트DTO
      * @throws NoDataException 데이터없음
      * @throws InvalidDataException 데이터가 유효하지 않음
      * @throws Exception 나머지 에러
      */
-    @PutMapping("/{seq}")
+    @ApiOperation(value = "컴포넌트 수정")
+    @PutMapping("/{componentSeq}")
     public ResponseEntity<?> putComponent(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.component.error.invalid.componentSeq}") Long componentSeq,
-            @Valid @RequestBody ComponentDTO componentDTO, Principal principal)
+            @PathVariable("componentSeq") @Min(value = 0,
+                    message = "{tps.component.error.min.componentSeq}") Long componentSeq,
+            @Valid @RequestBody ComponentDTO componentDTO)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이터 유효성 검사
-        List<InvalidDataDTO> invalidList = validData(componentDTO);
-        if (invalidList.size() > 0) {
-            String message = messageByLocale.get("tps.component.error.invalidContent", request);
-            throw new InvalidDataException(invalidList, message);
-        }
+        validData(request, componentDTO, ActionType.UPDATE);
 
         // 원래 데이터 조회
-        String message = messageByLocale.get("tps.component.error.noContent", request);
-        Component orgComponent = componentService.findByComponentSeq(componentSeq)
-                .orElseThrow(() -> new NoDataException(message));
+        Component orgComponent = componentService.findComponentBySeq(componentSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.component.error.no-data", request);
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             // 업데이트
             Component newComponent = modelMapper.map(componentDTO, Component.class);
-            newComponent.setRegDt(orgComponent.getRegDt());
-            newComponent.setRegId(orgComponent.getRegId());
-            newComponent.setModDt(McpDate.now());
-            newComponent.setModId(principal.getName());
 
             Component returnVal = componentService.updateComponent(newComponent, orgComponent);
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
@@ -285,35 +268,42 @@ public class ComponentRestController {
                     MokaConstants.ITEM_COMPONENT, returnVal.getComponentSeq());
 
             // 리턴
-            ResultDTO<ComponentDTO> resultDTO = new ResultDTO<ComponentDTO>(returnValDTO);
+            String message = messageByLocale.get("tps.common.success.update", request);
+            ResultDTO<ComponentDTO> resultDTO = new ResultDTO<ComponentDTO>(returnValDTO, message);
+            tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[COMPONENT UPDATE FAIL]", e);
+            log.error("[FAIL TO UPDATE COMPONENT] seq: {}) {}", componentDTO.getComponentSeq(), e.getMessage());
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE COMPONENT]", e, true);
             throw new Exception(messageByLocale.get("tps.component.error.save", request), e);
         }
     }
 
     /**
-     * 컴포넌트를 복사한다
+     * 컴포넌트 복사
      * 
      * @param request HTTP요청
-     * @param seq 컴포넌트ID
+     * @param componentSeq 컴포넌트SEQ
      * @param componentName 컴포넌트명
-     * @param principal Principal
      * @return 등록된 컴포넌트
      * @throws InvalidDataException 데이터없음 예외처리
      * @throws Exception 그외 예외
      */
-    @PostMapping("/{seq}/copy")
+    @ApiOperation(value = "컴포넌트 복사")
+    @PostMapping("/{componentSeq}/copy")
     public ResponseEntity<?> copyComponent(HttpServletRequest request,
-            @PathVariable("seq") Long seq, String componentName, Principal principal)
+            @PathVariable("componentSeq") @Min(value = 0,
+                message = "{tps.component.error.min.componentSeq}") Long componentSeq, String componentName)
             throws InvalidDataException, Exception {
 
         // 조회
-        String message = messageByLocale.get("tps.component.error.noContent", request);
-        Component component = componentService.findByComponentSeq(seq)
-                .orElseThrow(() -> new NoDataException(message));
+        Component component = componentService.findComponentBySeq(componentSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.component.error.no-data", request);
+                    tpsLogger.fail(ActionType.INSERT, message, true);
+                    return new NoDataException(message);
+                });
 
         ComponentDTO componentDTO = modelMapper.map(component, ComponentDTO.class);
         // 수동형 데이터셋이면 새 데이터셋을 생성하게끔 null로 바꿔줌
@@ -323,7 +313,7 @@ public class ComponentRestController {
         componentDTO.setComponentSeq(null);
         componentDTO.setComponentName(componentName);
 
-        return this.postComponent(request, componentDTO, principal);
+        return this.postComponent(request, componentDTO);
     }
 
     /**
@@ -339,7 +329,7 @@ public class ComponentRestController {
         // 히스토리에서 데스크 데이터셋 찾아서 셋팅
         try {
             Optional<ComponentHist> deskHistory = componentHistService
-                    .findOneByComponentSeqAndDataType(componentSeq, TpsConstants.DATATYPE_DESK);
+                    .findComponentHistByComponentSeqAndDataType(componentSeq, TpsConstants.DATATYPE_DESK);
             if (deskHistory.isPresent()) {
                 Dataset deskDataset = deskHistory.get().getDataset();
                 if (deskDataset != null) {
@@ -354,7 +344,7 @@ public class ComponentRestController {
         // 히스토리에서 자동 데이터셋 찾아서 셋팅
         try {
             Optional<ComponentHist> autoHistory = componentHistService
-                    .findOneByComponentSeqAndDataType(componentSeq, TpsConstants.DATATYPE_AUTO);
+                    .findComponentHistByComponentSeqAndDataType(componentSeq, TpsConstants.DATATYPE_AUTO);
             if (autoHistory.isPresent()) {
                 Dataset autoDataset = autoHistory.get().getDataset();
                 if (autoDataset != null) {
@@ -370,9 +360,7 @@ public class ComponentRestController {
     }
 
     /**
-     * <pre>
-     * 컴포넌트를 삭제한다
-     * </pre>
+     * 컴포넌트 삭제
      * 
      * @param request HTTP요청
      * @param componentSeq 컴포넌트아이디
@@ -380,50 +368,58 @@ public class ComponentRestController {
      * @throws NoDataException 데이터없음
      * @throws Exception 관련아이템 있으면 삭제 불가능
      */
-    @DeleteMapping("/{seq}")
+    @ApiOperation(value = "컴포넌트 삭제")
+    @DeleteMapping("/{componentSeq}")
     public ResponseEntity<?> deleteComponent(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.component.error.invalid.componentSeq}") Long componentSeq)
+            @PathVariable("componentSeq") @Min(value = 0,
+                    message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws NoDataException, Exception {
 
-        // 컴포넌트 확인
-        String message = messageByLocale.get("tps.component.error.noContent", request);
-        Component component = componentService.findByComponentSeq(componentSeq)
-                .orElseThrow(() -> new NoDataException(message));
+        // 데이타 확인
+        Component component = componentService.findComponentBySeq(componentSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.component.error.no-data", request);
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
         // 관련아이템 확인
         Boolean hasRels = relationHelper.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
-        String delErrorMsg = messageByLocale.get("tps.component.error.delete.related", request);
         if (hasRels) {
-            throw new Exception(delErrorMsg);
+            String relMessage = messageByLocale.get("tps.component.error.delete.related", request);
+            tpsLogger.fail(ActionType.DELETE, relMessage, true);
+            throw new Exception(relMessage);
         }
 
         try {
             // 컴포넌트 삭제
             componentService.deleteComponent(component);
 
-            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true);
+            String message = messageByLocale.get("tps.common.success.delete", request);
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
+            tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
         } catch (Exception e) {
-            log.error("[COMPONENT DELETE FAIL] seq: {}) {}", componentSeq, e.getMessage());
+            log.error("[FAIL TO DELETE COMPONENT] seq: {}) {}", componentSeq, e.getMessage());
+            tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE COMPONENT]", e, true);
             throw new Exception(messageByLocale.get("tps.component.error.delete", request), e);
         }
     }
 
     /**
-     * <pre>
-     * 컴포넌트 히스토리를 조회한다
-     * </pre>
+     * 컴포넌트 히스토리 목록조회
      * 
      * @param request HTTP요청
      * @param search 검색조건
-     * @param seq 컴포넌트ID
+     * @param componentSeq 컴포넌트SEQ
      * @return 히스토리 목록
      */
-    @GetMapping("/{seq}/histories")
-    public ResponseEntity<?> getHistories(HttpServletRequest request,
-            @Valid @SearchParam SearchDTO search, @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.component.error.invalid.componentSeq}") Long seq) {
+    @ApiOperation(value = "컴포넌트 히스토리 목록조회")
+    @GetMapping("/{componentSeq}/histories")
+    public ResponseEntity<?> getHistoryList(HttpServletRequest request,
+            @Valid @SearchParam SearchDTO search, @PathVariable("componentSeq") @Min(value = 0,
+                    message = "{tps.component.error.min.componentSeq}") Long componentSeq) {
 
         // 페이징조건 설정 (order by seq desc)
         List<String> sort = new ArrayList<String>();
@@ -432,92 +428,115 @@ public class ComponentRestController {
         Pageable pageable = search.getPageable();
 
         // 히스토리 목록 조회
-        Page<ComponentHist> returnVal = componentHistService.findHistoryList(seq, pageable);
-        List<ComponentHistDTO> returnValDTO =
-                modelMapper.map(returnVal.getContent(), ComponentHistDTO.TYPE);
+        Page<ComponentHist> returnVal = componentHistService.findAllComponentHist(componentSeq, pageable);
+
+        // entity -> DTO
+        List<ComponentHistDTO> returnValDTO = modelMapper.map(returnVal.getContent(), ComponentHistDTO.TYPE);
 
         // 리턴 DTO 생성
         ResultListDTO<ComponentHistDTO> resultList = new ResultListDTO<ComponentHistDTO>();
         resultList.setList(returnValDTO);
         resultList.setTotalCnt(returnValDTO.size());
 
-        ResultDTO<ResultListDTO<ComponentHistDTO>> resultDTO =
-                new ResultDTO<ResultListDTO<ComponentHistDTO>>(resultList);
+        ResultDTO<ResultListDTO<ComponentHistDTO>> resultDTO = new ResultDTO<ResultListDTO<ComponentHistDTO>>(resultList);
+        tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**
-     * <pre>
-     * 관련 아이템이 있는지 확인한다
-     * </pre>
+     * 관련 아이템 존재여부
      * 
      * @param request HTTP요청
-     * @param seq 컴포넌트아이디
+     * @param componentSeq 컴포넌트SEQ
      * @return 관련 아이템 존재 여부
      * @throws NoDataException 데이터없음
      */
-    @GetMapping("/{seq}/hasRelations")
-    public ResponseEntity<?> hasRelations(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.component.error.invalid.componentSeq}") Long seq)
-            throws NoDataException {
+    @ApiOperation(value = "관련 아이템 존재여부")
+    @GetMapping("/{componentSeq}/has-relations")
+    public ResponseEntity<?> hasRelationList(HttpServletRequest request,
+            @PathVariable("componentSeq") @Min(value = 0,
+                    message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+        throws Exception {
 
         // 컴포넌트 확인
-        String message = messageByLocale.get("tps.component.error.noContent", request);
-        componentService.findByComponentSeq(seq).orElseThrow(() -> new NoDataException(message));
+        componentService.findComponentBySeq(componentSeq).orElseThrow(() -> {
+            String message = messageByLocale.get("tps.component.error.no-data", request);
+            tpsLogger.fail(ActionType.SELECT, message, true);
+            return new NoDataException(message);
+        });
 
-        Boolean chkRels = relationHelper.hasRelations(seq, MokaConstants.ITEM_COMPONENT);
-        ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
+        try {
+            Boolean chkRels = relationHelper.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
 
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[COMPONENT RELATION EXISTENCE CHECK FAILED] seq: {}) {}", componentSeq, e.getMessage());
+            tpsLogger.error(ActionType.DELETE, "[COMPONENT RELATION EXISTENCE CHECK FAILEDE]", e, true);
+            throw new Exception(messageByLocale.get("tps.component.error.hasRelations", request), e);
+        }
     }
 
     /**
-     * <pre>
-     * 관련 아이템(페이지, 컨테이너, 컴포넌트)을 찾는다
-     * </pre>
-     * 
+     * 관련 아이템 목록조회
+     *
      * @param request HTTP요청
-     * @param search 검색 조건
+     * @param componentSeq 컴포넌트SEQ
+     * @param search 검색조건
      * @return 관련아이템 목록
      * @throws NoDataException 데이터없음
      */
-    @GetMapping("/{seq}/relations")
-    public ResponseEntity<?> getRelations(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0,
-                    message = "{tps.component.error.invalid.componentSeq}") Long seq,
+    @ApiOperation(value = "관련 아이템 목록조회")
+    @GetMapping("/{componentSeq}/relations")
+    public ResponseEntity<?> getRelationList(HttpServletRequest request,
+            @PathVariable("componentSeq") @Min(value = 0,
+                    message = "{tps.component.error.min.componentSeq}") Long componentSeq,
             @Valid @SearchParam RelSearchDTO search) throws NoDataException {
 
-        search.setRelSeq(seq);
+        search.setRelSeq(componentSeq);
         search.setRelSeqType(MokaConstants.ITEM_COMPONENT);
 
         // 컴포넌트 확인
-        String message = messageByLocale.get("tps.component.error.noContent", request);
-        componentService.findByComponentSeq(search.getRelSeq())
-                .orElseThrow(() -> new NoDataException(message));
+        componentService.findComponentBySeq(search.getRelSeq())
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.component.error.no-data", request);
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
 
-        return relationHelper.findRelations(search);
+        ResponseEntity<?> response = relationHelper.findRelations(search);
+        tpsLogger.success(ActionType.SELECT, true);
+        return response;
     }
 
     /**
      * 컴포넌트 데이터 유효성 검사
-     * 
-     * @param component
+     *
+     * @param request 요청
+     * @param component 컴포넌트정보
+     * @param actionType 작업구분(INSERT OR UPDATE)
      * @return
      */
-    private List<InvalidDataDTO> validData(ComponentDTO component) {
+    private void validData(HttpServletRequest request, ComponentDTO component, ActionType actionType)
+        throws InvalidDataException {
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
         if (component != null) {
             // dataType이 AUTO 일 때는 반드시 dataseq가 존재
             if (component.getDataType().equals("AUTO")) {
                 if (component.getDataset() == null) {
-                    String message = messageByLocale.get("tps.dataset.error.invalid.datasetSeq");
+                    String message = messageByLocale.get("tps.dataset.error.notnull.datasetSeq");
                     invalidList.add(new InvalidDataDTO("dataset", message));
+                    tpsLogger.fail(actionType, message, true);
                 }
             }
         }
 
-        return invalidList;
+        if (invalidList.size() > 0) {
+            String validMessage = messageByLocale.get("tps.common.error.invalidContent", request);
+            throw new InvalidDataException(invalidList, validMessage);
+        }
     }
 }

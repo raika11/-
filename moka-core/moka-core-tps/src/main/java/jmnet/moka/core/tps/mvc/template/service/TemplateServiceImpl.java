@@ -147,11 +147,6 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public Page<Template> findAllTemplate(TemplateSearchDTO search, Pageable pageable) {
-        return templateRepository.findList(search, pageable);
-    }
-
-    @Override
     public int countTemplateByDomainId(String domainId) {
         return templateRepository.countByDomain_DomainId(domainId);
     }

@@ -3,8 +3,6 @@ package jmnet.moka.core.tps.mvc.component.service;
 import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jmnet.moka.core.common.mvc.MessageByLocale;
@@ -29,14 +27,14 @@ public class ComponentWorkServiceImpl implements ComponentWorkService {
     private MessageByLocale messageByLocale;
 
     @Override
-    public Optional<ComponentWork> findBySeq(Long seq) {
+    public Optional<ComponentWork> findComponentWorkBySeq(Long seq) {
         return componentWorkRepository.findById(seq);
     }
 
 	@Override
-	public ComponentWork updateComponent(ComponentWork component) throws NoDataException, Exception {
+	public ComponentWork updateComponentWork(ComponentWork component) throws NoDataException, Exception {
 		String message = messageByLocale.get("tps.desking.component.error.work.noContent");
-		ComponentWork orgComponent = this.findBySeq(component.getSeq())
+		ComponentWork orgComponent = this.findComponentWorkBySeq(component.getSeq())
                 .orElseThrow(() -> new NoDataException(message));
 		
 		orgComponent.setSnapshotYn(component.getSnapshotYn());

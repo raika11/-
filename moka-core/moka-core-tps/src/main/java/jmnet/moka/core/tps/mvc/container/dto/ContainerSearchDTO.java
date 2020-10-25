@@ -30,7 +30,7 @@ public class ContainerSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = -3544871391843287828L;
 
-    @NotNull(message = "{tps.domain.error.pattern.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 

@@ -174,7 +174,9 @@ public class ReservedRestController {
             Reserved returnValue = reservedService.insertReserved(reserved);
 
             ReservedDTO dto = modelMapper.map(returnValue, ReservedDTO.class);
-            ResultDTO<ReservedDTO> resultDto = new ResultDTO<ReservedDTO>(dto);
+
+            String message = messageByLocale.get("tps.common.success.insert", request);
+            ResultDTO<ReservedDTO> resultDto = new ResultDTO<ReservedDTO>(dto, message);
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
@@ -218,7 +220,8 @@ public class ReservedRestController {
 
             ReservedDTO dto = modelMapper.map(returnValue, ReservedDTO.class);
 
-            ResultDTO<ReservedDTO> resultDto = new ResultDTO<ReservedDTO>(dto);
+            String message = messageByLocale.get("tps.common.success.update", request);
+            ResultDTO<ReservedDTO> resultDto = new ResultDTO<ReservedDTO>(dto, message);
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -259,7 +262,8 @@ public class ReservedRestController {
             reservedService.deleteReserved(reserved);
 
             // 3. 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
+            String message = messageByLocale.get("tps.common.success.delete", request);
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 

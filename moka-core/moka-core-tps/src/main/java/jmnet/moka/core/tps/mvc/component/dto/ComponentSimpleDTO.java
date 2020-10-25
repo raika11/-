@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import javax.validation.constraints.Pattern;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSimpleDTO;
 import lombok.AllArgsConstructor;
@@ -17,16 +19,10 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
- * 
- * <pre>
- * 컴포넌트아이디, 컴포넌트명, 데이터Api, 데이터Param, 데이터타입, 도메인, 템플릿
- * 2020. 4. 21. jeon 최초생성
- * </pre>
- * 
- * @since 2020. 4. 21. 오전 10:25:48
- * @author jeon
+ * 간단한 컴포넌트 : 아이디, 컴포넌트명, 데이터Api, 데이터Param, 데이터타입, 도메인, 템플릿
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,16 +36,35 @@ public class ComponentSimpleDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<ComponentSimpleDTO>>() {}.getType();
 
+    /**
+     * 컴포넌트SEQ
+     */
     private Long componentSeq;
 
-    @NotBlank(message = "{tps.component.error.invalid.componentName}")
+    /**
+     * 컴포넌트명
+     */
+    @NotNull(message = "{tps.component.error.notnull.componentName}")
+    @Pattern(regexp = ".+", message = "{tps.component.error.pattern.componentName}")
+    @Length(min = 1, max = 128, message = "{tps.component.error.length.componentName}")
     private String componentName;
 
-    private String dataType;
+    /**
+     * 데이터유형:NONE, DESK, AUTO
+     */
+    @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)]{4}$", message = "{tps.component.error.pattern.dataType}")
+    @Builder.Default
+    private String dataType = TpsConstants.DATATYPE_DESK;
 
-    @NotNull(message = "{tps.component.error.invalid.domainId}")
+    /**
+     * 도메인
+     */
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    @NotNull(message = "{tps.component.error.invalid.templateId}")
+    /**
+     * 템플릿
+     */
+    @NotNull(message = "{tps.template.error.notnull.templateSeq}")
     private TemplateSimpleDTO template;
 }

@@ -102,6 +102,7 @@ public class TemplateRestController {
     @ApiOperation(value = "템플릿 목록조회")
     @GetMapping
     public ResponseEntity<?> getTemplateList(HttpServletRequest request, @Valid @SearchParam TemplateSearchDTO search) {
+
         // 조회(mybatis)
         List<TemplateVO> returnValue = templateService.findAllTemplate(search);
 
@@ -123,9 +124,9 @@ public class TemplateRestController {
      * @throws NoDataException 데이터없음
      */
     @ApiOperation(value = "템플릿 상세조회")
-    @GetMapping("/{seq}")
+    @GetMapping("/{templateSeq}")
     public ResponseEntity<?> getTemplate(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
             throws NoDataException {
 
         Template template = templateService.findTemplateBySeq(templateSeq)
@@ -158,7 +159,8 @@ public class TemplateRestController {
     public ResponseEntity<?> postTemplate(HttpServletRequest request, @Valid TemplateDTO templateDTO,
             @RequestPart(value = "templateThumbnailFile", required = false) MultipartFile templateThumbnailFile)
             throws InvalidDataException, Exception {
-        // 데이터 검사
+
+        // 데이터 유효성 검사
         validData(request, templateDTO, templateThumbnailFile, ActionType.INSERT);
 
         Template template = modelMapper.map(templateDTO, Template.class);
@@ -434,10 +436,10 @@ public class TemplateRestController {
      * 관련 아이템 목록조회
      *
      * @param request HTTP요청
-     * @param search  검새 조건
+     * @param templateSeq 템플릿SEQ
+     * @param search 검색조건
      * @return 관련아이템 목록
      * @throws NoDataException 데이터없음
-     * @throws Exception       잘못된 분류
      */
     @ApiOperation(value = "관련 아이템 목록조회")
     @GetMapping("/{templateSeq}/relations")
@@ -470,10 +472,11 @@ public class TemplateRestController {
      * @return 템플릿 히스토리 목록
      */
     @ApiOperation(value = "템플릿 히스토리 목록조회")
-    @GetMapping("/{seq}/histories")
+    @GetMapping("/{templateSeq}/histories")
     public ResponseEntity<?> getHistoryList(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
             @Valid @SearchParam SearchDTO search) {
+
         // 페이징조건 설정 (order by seq desc)
         List<String> sort = new ArrayList<String>();
         sort.add("seq,desc");
@@ -486,6 +489,7 @@ public class TemplateRestController {
         // entity -> DTO
         List<TemplateHistDTO> historiesDTO = modelMapper.map(historyList.getContent(), TemplateHistDTO.TYPE);
 
+        // 리턴 DTO 생성
         ResultListDTO<TemplateHistDTO> resultList = new ResultListDTO<TemplateHistDTO>();
         resultList.setTotalCnt(historyList.getTotalElements());
         resultList.setList(historiesDTO);
@@ -506,13 +510,13 @@ public class TemplateRestController {
     @ApiOperation(value = "템플릿 히스토리 상세조회")
     @GetMapping("/{templateSeq}/histories/{seq}")
     public ResponseEntity<?> getHistory(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long seq)
+            @PathVariable("seq") @Min(value = 0, message = "{tps.templatehist.error.min.seq}") Long seq)
             throws NoDataException {
 
         // 템플릿 히스토리 조회
         TemplateHist history = templateHistService.findTemplateHistBySeq(seq)
                                                   .orElseThrow(() -> {
-                                                      String message = messageByLocale.get("tps.template.error.history.no-data", request);
+                                                      String message = messageByLocale.get("tps.templatehist.error.no-data", request);
                                                       tpsLogger.fail(ActionType.SELECT, message, true);
                                                       return new NoDataException(message);
                                                   });

@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.component.repository.ComponentHistRepository;
@@ -21,18 +20,18 @@ public class ComponentHistServiceImpl implements ComponentHistService {
     private ComponentHistRepository componentHistRepository;
 
     @Override
-    public ComponentHist insertHistory(ComponentHist history) throws Exception {
+    public ComponentHist insertComponentHist(ComponentHist history) throws Exception {
         return componentHistRepository.save(history);
     }
 
     @Override
-    public Page<ComponentHist> findHistoryList(Long componentSeq, Pageable pageable) {
+    public Page<ComponentHist> findAllComponentHist(Long componentSeq, Pageable pageable) {
         return componentHistRepository.findByComponentSeq(componentSeq, pageable);
     }
     
     @Override
     @Transactional
-    public List<ComponentHist> insertHistories(List<?> maybeHistories) throws Exception {
+    public List<ComponentHist> insertComponentHistList(List<?> maybeHistories) throws Exception {
         Iterator<?> iterator = maybeHistories.iterator();
         List<ComponentHist> histories = new ArrayList<ComponentHist>();
         
@@ -58,7 +57,7 @@ public class ComponentHistServiceImpl implements ComponentHistService {
     }
 
     @Override
-    public ComponentHist insertHistory(Component component) throws Exception {
+    public ComponentHist insertComponentHist(Component component) throws Exception {
         ComponentHist history = ComponentHist.builder()
                 // 수정일자 or 등록일자
 //                .regDt(McpString.isNullOrEmpty(component.getModDt()) ?
@@ -73,11 +72,11 @@ public class ComponentHistServiceImpl implements ComponentHistService {
                 .template(component.getTemplate())
                 .componentSeq(component.getComponentSeq()).build();
         
-        return this.insertHistory(history);
+        return this.insertComponentHist(history);
     }
 
     @Override
-    public Optional<ComponentHist> findOneByComponentSeqAndDataType(Long componentSeq, String dataType) throws Exception {
+    public Optional<ComponentHist> findComponentHistByComponentSeqAndDataType(Long componentSeq, String dataType) throws Exception {
         return componentHistRepository.findFirstByComponentSeqAndDataTypeOrderBySeqDesc(componentSeq, dataType);
     }
 }

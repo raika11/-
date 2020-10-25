@@ -1,27 +1,20 @@
 package jmnet.moka.core.tps.mvc.component.service;
 
 import static jmnet.moka.common.data.mybatis.support.McpMybatis.getRowBounds;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import javax.persistence.EntityManager;
-
-import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentAd;
@@ -33,15 +26,17 @@ import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.dataset.service.DatasetService;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
-import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 import jmnet.moka.core.tps.mvc.skin.service.SkinService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 컴포넌트 서비스 Impl
- * 
- * @author jeon
- *
  */
 @Service
 @Slf4j
@@ -88,51 +83,32 @@ public class ComponentServiceImpl implements ComponentService {
     }
 
     @Override
-    public List<ComponentVO> findList(ComponentSearchDTO search) {
+    public List<ComponentVO> findAllComponent(ComponentSearchDTO search) {
         if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) { // 페이지에서 관련 컴포넌트 검색
-            return componentMapper.findPageChildRels(search,
-                    getRowBounds(search.getPage(), search.getSize()));
+            return componentMapper.findPageChildRelList(search);
         } else if (search.getSearchType().equals("skinSeq")
                 && McpString.isNotEmpty(search.getKeyword())) {	// 콘텐츠스킨에서 관련 컴포넌트 검색
-            return componentMapper.findSkinChildRels(search,
-                    getRowBounds(search.getPage(), search.getSize()));
+            return componentMapper.findSkinChildRelList(search);
         } else if (search.getSearchType().equals("containerSeq")
                 && McpString.isNotEmpty(search.getKeyword())) { // 컨테이너에서 관련 컴포넌트 검색
-            return componentMapper.findContainerChildRels(search,
-                    getRowBounds(search.getPage(), search.getSize()));
+            return componentMapper.findContainerChildRelList(search);
         } else {
             if (search.getSearchType().equals("pageSeq") || search.getSearchType().equals("skinSeq")
                     || search.getSearchType().equals("containerSeq")) {
                 search.clearSort();
                 search.addSort("componentSeq,desc");
             }
-            return componentMapper.findAll(search,
-                    getRowBounds(search.getPage(), search.getSize()));
+            return componentMapper.findAll(search);
         }
     }
 
     @Override
-    public Long findListCount(ComponentSearchDTO search) {
-        if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {
-            return componentMapper.findPageChildRelsCount(search);
-        } else if (search.getSearchType().equals("skinSeq")
-                && McpString.isNotEmpty(search.getKeyword())) {
-            return componentMapper.findSkinChildRelsCount(search);
-        } else if (search.getSearchType().equals("containerSeq")
-                && McpString.isNotEmpty(search.getKeyword())) {
-            return componentMapper.findContainerChildRelsCount(search);
-        } else {
-            return componentMapper.count(search);
-        }
-    }
-
-    @Override
-    public Optional<Component> findByComponentSeq(Long componentSeq) {
+    public Optional<Component> findComponentBySeq(Long componentSeq) {
         Optional<Component> component = componentRepository.findById(componentSeq);
         if (component.isPresent()) {
             // 광고 셋팅
             LinkedHashSet<ComponentAd> componentAds =
-                    componentAdService.findByComponentSeq(componentSeq);
+                    componentAdService.findComponentAdByComponentSeq(componentSeq);
             Component comp = component.get();
             comp.setComponentAdList(componentAds);
 
@@ -179,7 +155,7 @@ public class ComponentServiceImpl implements ComponentService {
         }
 
         // 히스토리 생성
-        componentHistService.insertHistory(returnComp);
+        componentHistService.insertComponentHist(returnComp);
         log.debug("[COMPONENT INSERT] seq: {}) History Insert success",
                 returnComp.getComponentSeq());
 
@@ -198,8 +174,8 @@ public class ComponentServiceImpl implements ComponentService {
 
     @Override
     public Component updateComponent(Component component) throws NoDataException, Exception {
-        String message = messageByLocale.get("tps.component.error.noContent");
-        Component orgComponent = this.findByComponentSeq(component.getComponentSeq())
+        String message = messageByLocale.get("tps.component.error.no-data");
+        Component orgComponent = this.findComponentBySeq(component.getComponentSeq())
                 .orElseThrow(() -> new NoDataException(message));
         return this.updateComponent(component, orgComponent);
     }
@@ -208,7 +184,6 @@ public class ComponentServiceImpl implements ComponentService {
     @Transactional
     public Component updateComponent(Component newComponent, Component orgComponent)
             throws Exception {
-        Component returnComp = null;
 
         // DATASET_SEQ == null이고 DATA_TYPE == 'EDIT' 인 경우 데이터셋 생성하여 컴포넌트에 셋팅
         if (newComponent.getDataset() == null
@@ -218,26 +193,26 @@ public class ComponentServiceImpl implements ComponentService {
         entityManager.detach(orgComponent);
 
         // 컴포넌트 업데이트
-        returnComp = componentRepository.save(newComponent);
-        log.debug("[COMPONENT UPDATE] seq: {}", returnComp.getComponentSeq());
+        Component component = componentRepository.save(newComponent);
+        log.debug("[COMPONENT UPDATE] seq: {}", component.getComponentSeq());
 
         // 컴포넌트 광고 업데이트
         Set<ComponentAd> ads = componentAdService.updateComponentAdList(
                 newComponent.getComponentAdList(), orgComponent.getComponentAdList());
-        returnComp.setComponentAdList(ads);
-        log.debug("[COMPONENT UPDATE] seq: {}) AdList Update success",
-                returnComp.getComponentSeq());
+        component.setComponentAdList(ads);
+        log.debug("[COMPONENT UPDATE] seq: {} AdList Update success",
+            component.getComponentSeq());
 
         // 히스토리 추가
-        componentHistService.insertHistory(returnComp);
-        log.debug("[COMPONENT UPDATE] seq: {}) History Insert success",
-                returnComp.getComponentSeq());
+        componentHistService.insertComponentHist(component);
+        log.debug("[COMPONENT UPDATE] seq: {} History Insert success",
+            component.getComponentSeq());
 
         // 템플릿 위치그룹명 셋팅
         Optional<CodeMgt> codeMgt =
-            codeMgtSevice.findByDtlCd(returnComp.getTemplate().getTemplateGroup());
+            codeMgtSevice.findByDtlCd(component.getTemplate().getTemplateGroup());
         if (codeMgt.isPresent()) {
-            returnComp.getTemplate().setTemplateGroupName(codeMgt.get().getCdNm());
+            component.getTemplate().setTemplateGroupName(codeMgt.get().getCdNm());
         }
 
         // 컨테이너의 관련아이템 업데이트(페이지,스킨,컨테이너)
@@ -245,7 +220,7 @@ public class ComponentServiceImpl implements ComponentService {
         pageService.updateRelItems(newComponent, orgComponent);
         skinService.updateRelItems(newComponent, orgComponent);
 
-        return returnComp;
+        return component;
     }
 
     private Dataset createNewDataset(Component component) throws NoDataException {
@@ -253,7 +228,7 @@ public class ComponentServiceImpl implements ComponentService {
         if (component.getDataset() == null) {
 
             // 도메인정보 조회
-            String message = messageByLocale.get("tps.component.error.invalid.domainId");
+            String message = messageByLocale.get("tps.domain.error.notnull.domainId");
             Domain domain = domainService.findDomainById(component.getDomain().getDomainId())
                     .orElseThrow(() -> new NoDataException(message));
 
@@ -273,9 +248,9 @@ public class ComponentServiceImpl implements ComponentService {
 
     @Override
     public void deleteComponent(Long seq) throws NoDataException, Exception {
-        String message = messageByLocale.get("tps.component.error.noContent");
+        String message = messageByLocale.get("tps.component.error.no-data");
         Component component =
-                this.findByComponentSeq(seq).orElseThrow(() -> new NoDataException(message));
+                this.findComponentBySeq(seq).orElseThrow(() -> new NoDataException(message));
         this.deleteComponent(component);
     }
 
@@ -295,7 +270,7 @@ public class ComponentServiceImpl implements ComponentService {
 
         // 컴포넌트 광고를 지운다
         if (component.getComponentAdList().size() > 0) {
-            componentAdService.deleteByComponentSeq(seq);
+            componentAdService.deleteComponentAdByComponentSeq(seq);
         }
 
         // 컴포넌트를 삭제한다
@@ -308,12 +283,12 @@ public class ComponentServiceImpl implements ComponentService {
     public List<Component> insertComponents(List<Component> components) throws Exception {
         List<Component> result = componentRepository.saveAll(components);
         // 히스토리 생성
-        componentHistService.insertHistories(result);
+        componentHistService.insertComponentHistList(result);
         return result;
     }
 
     @Override
-    public Page<Component> findRelList(RelSearchDTO search, Pageable pageable) {
+    public Page<Component> findAllRel(RelSearchDTO search, Pageable pageable) {
         if (search.getRelSeqType().equals(MokaConstants.ITEM_TEMPLATE)) {
             // 템플릿
             return componentRepository.findListByTemplate(search, pageable);
@@ -325,7 +300,7 @@ public class ComponentServiceImpl implements ComponentService {
     }
 
     @Override
-    public Page<Component> findByDataset_DatasetSeq(Long datasetSeq, Pageable pageable) {
+    public Page<Component> findComponentByDataset_DatasetSeq(Long datasetSeq, Pageable pageable) {
         return componentRepository.findByDataset_DatasetSeq(datasetSeq, pageable);
     }
 
@@ -339,17 +314,12 @@ public class ComponentServiceImpl implements ComponentService {
     }
 
     @Override
-    public Page<Component> findList(ComponentSearchDTO search, Pageable pageable) {
-        return componentRepository.findList(search, pageable);
-    }
-
-    @Override
-    public int countByDomainId(String domainId) {
+    public int countComponentByDomainId(String domainId) {
         return componentRepository.countByDomain_DomainId(domainId);
     }
 
     @Override
-    public Optional<Component> findByDataTypeAndDataset_DatasetSeq(String dataType,
+    public Optional<Component> findComponentByDataTypeAndDataset_DatasetSeq(String dataType,
             Long datasetSeq) {
         return componentRepository.findByDataTypeAndDataset_DatasetSeq(dataType, datasetSeq);
     }

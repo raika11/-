@@ -31,9 +31,17 @@ export const putDataset = ({ dataset }) => {
     });
 };
 
-// 데이타셋 삭제
-export const deleteDataset = (datasetSeq) => {
-    return instance.delete(`/api/datasets/${datasetSeq}`).catch((err) => {
+// 데이타셋 복사
+export const copyDataset = ({ datasetSeq, datasetName }) => {
+    const queryString = qs.stringify({ datasetName });
+    return instance.post(`/api/datasets/${datasetSeq}/copy?${queryString}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 관련 아이템 확인
+export const hasRelationList = (datasetSeq) => {
+    return instance.get(`/api/datasets/${datasetSeq}/has-relations`).catch((err) => {
         throw err;
     });
 };
@@ -46,6 +54,13 @@ export const getRelationList = ({ search }) => {
     });
 };
 
+// 데이타셋 삭제
+export const deleteDataset = (datasetSeq) => {
+    return instance.delete(`/api/datasets/${datasetSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
 // API목록 조회
 export const getApiList = ({ search }) => {
     const queryString = qs.stringify(search);
@@ -54,17 +69,3 @@ export const getApiList = ({ search }) => {
     });
 };
 
-// 관련 아이템 확인
-export const hasRelationList = (datasetSeq) => {
-    return instance.get(`/api/datasets/${datasetSeq}/has-relations`).catch((err) => {
-        throw err;
-    });
-};
-
-// 데이타셋 복사
-export const copyDataset = ({ datasetSeq, datasetName }) => {
-    const queryString = qs.stringify({ datasetName });
-    return instance.post(`/api/datasets/${datasetSeq}/copy?${queryString}`).catch((err) => {
-        throw err;
-    });
-};

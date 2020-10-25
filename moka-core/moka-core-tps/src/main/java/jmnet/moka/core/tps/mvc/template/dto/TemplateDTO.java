@@ -20,10 +20,6 @@ import org.hibernate.validator.constraints.Length;
 
 /**
  * 템플릿 DTO
- * 2020. 1. 14. jeon 최초생성
- * 
- * @since 2020. 1. 14. 오후 1:33:28
- * @author jeon
  */
 @AllArgsConstructor
 @NoArgsConstructor

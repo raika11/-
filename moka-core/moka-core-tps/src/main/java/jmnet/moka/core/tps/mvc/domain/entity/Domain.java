@@ -9,6 +9,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,36 +56,39 @@ public class Domain extends BaseAudit {
      * 서비스 플랫폼 P : PC, M : 모바일
      */
     @Column(name = "SERVICE_PLATFORM", columnDefinition = "char", nullable = false)
-    private String servicePlatform;
+    @Builder.Default
+    private String servicePlatform = "P";
 
     /**
      * 사용여부 Y : 예, N : 아니오
      */
     @Column(name = "USE_YN", columnDefinition = "char", nullable = false)
-    private String useYn;
+    @Builder.Default
+    private String useYn = MokaConstants.YES;
 
     /**
      * 언어
      */
-    @Column(name = "LANG", nullable = false, length = 24)
-    private String lang;
+    @Column(name = "LANG", nullable = false)
+    @Builder.Default
+    private String lang = TpsConstants.DEFAULT_LANG;
 
     /**
      * api host
      */
-    @Column(name = "API_HOST", length = 256)
+    @Column(name = "API_HOST")
     private String apiHost;
 
     /**
      * api path
      */
-    @Column(name = "API_PATH", length = 256)
+    @Column(name = "API_PATH")
     private String apiPath;
 
     /**
      * 도메인 상세 설명
      */
-    @Column(name = "DESCRIPTION", length = 4000)
+    @Column(name = "DESCRIPTION")
     private String description;
 
 
@@ -95,7 +99,7 @@ public class Domain extends BaseAudit {
     public void prePersist() {
         this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
         this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
-        this.lang = McpString.defaultValue(this.lang, "KR");
+        this.lang = McpString.defaultValue(this.lang, TpsConstants.DEFAULT_LANG);
     }
 
     /**
@@ -105,6 +109,6 @@ public class Domain extends BaseAudit {
     public void preUpdate() {
         this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
         this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
-        this.lang = McpString.defaultValue(this.lang, "KR");
+        this.lang = McpString.defaultValue(this.lang, TpsConstants.DEFAULT_LANG);
     }
 }

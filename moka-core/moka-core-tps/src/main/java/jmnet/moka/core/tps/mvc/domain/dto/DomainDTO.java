@@ -41,7 +41,7 @@ public class DomainDTO implements Serializable {
     /**
      * 도메인 아이디
      */
-    @NotNull(message = "{tps.domain.error.pattern.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 

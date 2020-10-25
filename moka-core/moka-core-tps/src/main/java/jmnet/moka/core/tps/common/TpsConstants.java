@@ -99,6 +99,27 @@ public class TpsConstants {
     public static final String DATATYPE_AUTO = "AUTO";     // AUTO
 
     /**
+     * 컴포넌트 페이징 유형
+     */
+    public static final String PAGING_TYPE_NEXT = "N";     // 이전/다음
+    public static final String PAGING_TYPE_MORE = "M";     // 더보기
+
+    /**
+     * 컴포넌트 페이징 기본값
+     */
+    public static final Integer PER_PAGE_COUNT = 20;        // 페이지당 건수
+    public static final Integer MAX_PAGE_COUNT = 100;       // 최대 페이지수
+    public static final Integer DISP_PAGE_COUNT = 10;       // 표출 페이지수
+    public static final Integer MORE_COUNT = 10;            // 더보기 건수
+
+    /**
+     * 언어 기본값
+     */
+    public static final String DEFAULT_LANG = "KR";
+
+    public static final Integer LIST_PARAGRAPH = 10;    // 컴포넌트 광고 리스트단락수
+
+    /**
      * API CODE JSON 정보
      */
     public static final String API_HOST = "apiHost";

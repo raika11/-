@@ -31,14 +31,6 @@ public interface TemplateService {
     public List<TemplateVO> findAllTemplate(TemplateSearchDTO search);
 
     /**
-     * 템플릿 목록 조회
-     * @param search 검색조건
-     * @param pageable 페이지조건
-     * @return 목록
-     */
-    public Page<Template> findAllTemplate(TemplateSearchDTO search, Pageable pageable);
-
-    /**
      * <pre>
      * 템플릿 조회
      * </pre>

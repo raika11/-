@@ -1,38 +1,34 @@
 package jmnet.moka.core.tps.mvc.component.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
-
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
+import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import jmnet.moka.core.tps.mvc.skin.entity.Skin;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 컴포넌트DTO
- * 
- * @author jeon
- *
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -46,68 +42,165 @@ public class ComponentDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<ComponentDTO>>() {}.getType();
 
+    /**
+     * 컴포넌트SEQ
+     */
+    @Min(value = 0, message = "{tps.component.error.min.componentSeq}")
     private Long componentSeq;
 
-    @NotNull(message = "{tps.component.error.invalid.domainId}")
+    /**
+     * 도메인
+     */
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    @NotNull(message = "{tps.component.error.invalid.templateSeq}")
+    /**
+     * 템플릿
+     */
+    @NotNull(message = "{tps.template.error.notnull.templateSeq}")
     private TemplateSimpleDTO template;
 
+    /**
+     * 데이타셋
+     */
     private DatasetDTO dataset;
 
-    @NotNull(message = "{tps.component.error.invalid.componentName}")
-    @Pattern(regexp = ".+", message = "{tps.component.error.invalid.componentName}")
+    /**
+     * 컴포넌트명
+     */
+    @NotNull(message = "{tps.component.error.notnull.componentName}")
+    @Pattern(regexp = ".+", message = "{tps.component.error.pattern.componentName}")
+    @Length(min = 1, max = 128, message = "{tps.component.error.length.componentName}")
     private String componentName;
-    
+
+    /**
+     * 상세정보
+     */
+    @Length(max = 4000, message = "{tps.component.error.length.description}")
     private String description;
 
+    /**
+     * 기간여부
+     */
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.component.error.pattern.periodYn}")
     @Builder.Default
-    private String periodYn = "N";
+    private String periodYn = MokaConstants.NO;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = MokaConstants.JSON_DATE_FORMAT, timezone = MokaConstants.JSON_DATE_TIME_ZONE)
-    @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
+    /**
+     * 기간시작일
+     */
+    @DTODateTimeFormat
     private Date periodStartDt;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = MokaConstants.JSON_DATE_FORMAT, timezone = MokaConstants.JSON_DATE_TIME_ZONE)
-    @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
+    /**
+     * 기간종료일
+     */
+    @DTODateTimeFormat
     private Date periodEndDt;
 
+    /**
+     * 데이터유형:NONE, DESK, AUTO
+     */
+    @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)]{4}$", message = "{tps.component.error.pattern.dataType}")
     @Builder.Default
-    private String dataType = "NONE";
+    private String dataType = TpsConstants.DATATYPE_DESK;
 
+    /**
+     * 삭제단어-단어구분은 개행
+     */
+    @Length(max = 256, message = "{tps.component.error.length.delWords}")
     private String delWords;
 
+    /**
+     * 페이징여부
+     */
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.component.error.pattern.pagingYn}")
     @Builder.Default
-    private String pagingYn = "N";
+    private String pagingYn = MokaConstants.NO;
 
+    /**
+     * 페이징유형:N:이전/다음, M:더보기
+     */
+    @Pattern(regexp = "[N|M]{1}$", message = "{tps.component.error.pattern.pagingType}")
     private String pagingType;
 
-    private Integer perPageCount;
+    /**
+     * 페이지당 건수
+     */
+    @NotNull(message = "{tps.component.error.notnull.perPageCount}")
+    @Builder.Default
+    private Integer perPageCount = TpsConstants.PER_PAGE_COUNT;
 
-    private Integer maxPageCount;
+    /**
+     * 최대 페이지수
+     */
+    @NotNull(message = "{tps.component.error.notnull.maxPageCount}")
+    @Builder.Default
+    private Integer maxPageCount = TpsConstants.MAX_PAGE_COUNT;
 
-    private Integer dispPageCount;
+    /**
+     * 표출 페이지수
+     */
+    @NotNull(message = "{tps.component.error.notnull.dispPageCount}")
+    @Builder.Default
+    private Integer dispPageCount = TpsConstants.DISP_PAGE_COUNT;
 
-    private Integer moreCount;
+    /**
+     * 더보기 건수
+     */
+    @NotNull(message = "{tps.component.error.notnull.moreCount}")
+    @Builder.Default
+    private Integer moreCount = TpsConstants.MORE_COUNT;
 
+    /**
+     * 검색서비스유형(기타코드)
+     */
+    @Length(max = 24, message = "{tps.component.error.length.schServiceType}")
     private String schServiceType;
 
-    private String schLanguage;
+    /**
+     * 검색언어(기타코드)
+     */
+    @Length(max = 24, message = "{tps.component.error.length.schLang}")
+    @Builder.Default
+    private String schLang = TpsConstants.DEFAULT_LANG;
 
+    /**
+     * 검색코드ID
+     */
+    @Length(max = 24, message = "{tps.component.error.length.schCodeId}")
     private String schCodeId;
 
+    /**
+     * 스냅샷여부
+     */
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.component.error.pattern.snapshotYn}")
     @Builder.Default
-    private String snapshotYn = "N";
+    private String snapshotYn = MokaConstants.NO;
 
+    /**
+     * 스냅샷본문
+     */
     private String snapshotBody;
 
+    /**
+     * 연결 본문
+     */
     private Skin skin;
 
+    /**
+     * 이전 자동데이타셋 : 디비에 없는 필드
+     */
     private DatasetDTO prevAutoDataset;
-    
+
+    /**
+     * 이전 수동데이타셋 : 디비에 없는 필드
+     */
     private DatasetDTO prevDeskDataset;
 
+    /**
+     * 광고
+     */
     @JsonInclude
     private LinkedHashSet<ComponentAdDTO> componentAdList;
 
@@ -131,7 +224,7 @@ public class ComponentDTO implements Serializable {
         componentItem.put(ItemConstants.COMPONENT_DISP_PAGE_COUNT, this.dispPageCount);
         componentItem.put(ItemConstants.COMPONENT_MORE_COUNT, this.moreCount);
         componentItem.put(ItemConstants.COMPONENT_SEARCH_SERVICE_TYPE, this.schServiceType);
-        componentItem.put(ItemConstants.COMPONENT_SEARCH_LANG, this.schLanguage);
+        componentItem.put(ItemConstants.COMPONENT_SEARCH_LANG, this.schLang);
         componentItem.put(ItemConstants.COMPONENT_SEARCH_CODE_ID, this.schCodeId);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_YN, this.snapshotYn);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_BODY, this.snapshotBody);

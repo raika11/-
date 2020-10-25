@@ -22,19 +22,19 @@
 					AND TEMPLATE_NAME like '%${keyword}%'
 				</when>
 				<when test="searchType == 'all'">
-					AND (COMPONENT.COMPONENT_SEQ = #{keyword} 
-						OR COMPONENT.COMPONENT_NAME like '%${keyword}%' 
-						OR COMPONENT.TEMPLATE_SEQ = #{keyword} 
+					AND (COMPONENT.COMPONENT_SEQ = #{keyword}
+						OR COMPONENT.COMPONENT_NAME like '%${keyword}%'
+						OR COMPONENT.TEMPLATE_SEQ = #{keyword}
 						OR TEMPLATE_NAME like '%${keyword}%')
 				</when>
-			</choose> 
+			</choose>
 		</if>
 		<!-- 템플릿 그룹 조건 -->
 		<if test="tpZone != null and tpZone != '' and tpZone != 'all'">
 			AND TEMPLATE.TEMPLATE_GROUP = #{tpZone}
 		</if>
 	</sql>
-	
+
 	<sql id="findAllOrder">
 		<if test="sortByColumn != null">
 			ORDER BY
@@ -43,46 +43,69 @@
 			</foreach>
 		</if>
 	</sql>
-	
-	<select id="findAll"
-		parameterType="componentSearchDTO"
-		resultType="componentVO">
-		SELECT
-			COMPONENT.COMPONENT_SEQ,COMPONENT.COMPONENT_NAME,
-			(
-				SELECT CODE.CD_NM
-				FROM TB_15RE_CODE_MGT AS CODE, TB_15RE_CODE_MGT_GRP CODEGRP
-				WHERE CODE.GRP_CD = CODEGRP.GRP_CD
-					AND TEMPLATE.TEMPLATE_GROUP = CODE.DTL_CD
-					AND CODEGRP.GRP_CD='TP_ZONE'
-			) AS TP_ZONE,
-			(
-				SELECT 
-				   CASE WHEN 
-				      (COUNT(PR.REL_SEQ) + COUNT(SR.REL_SEQ) + COUNT(CR.REL_SEQ)) > 0
-				    THEN 'Y' ELSE 'N' END
-				FROM TB_WMS_COMPONENT CP
-					LEFT OUTER JOIN TB_WMS_PAGE_REL PR ON CP.COMPONENT_SEQ = PR.REL_SEQ AND PR.REL_TYPE='CP'
-					LEFT OUTER JOIN TB_WMS_SKIN_REL SR ON CP.COMPONENT_SEQ = SR.REL_SEQ AND SR.REL_TYPE='CP'
-					LEFT OUTER JOIN TB_WMS_CONTAINER_REL CR ON CP.COMPONENT_SEQ = CR.REL_SEQ AND CR.REL_TYPE='CP'
-				WHERE CP.COMPONENT_SEQ = COMPONENT.COMPONENT_SEQ	
-			) AS USE_YN, 
-			TEMPLATE.TEMPLATE_NAME, 
-			TEMPLATE.TEMPLATE_SEQ
-		FROM TB_WMS_COMPONENT COMPONENT
-		JOIN TB_WMS_TEMPLATE TEMPLATE ON COMPONENT.TEMPLATE_SEQ = TEMPLATE.TEMPLATE_SEQ
-		<include refid="findAllWhere"/>
-		<include refid="findAllOrder" />
-	</select>
-	
-	<select id="count"
-		parameterType="componentSearchDTO"
-		resultType="java.lang.Long">
-		SELECT 
-			COUNT(COMPONENT.COMPONENT_SEQ) AS TOTAL_CNT
-		FROM TB_WMS_COMPONENT COMPONENT
-		JOIN TB_WMS_TEMPLATE TEMPLATE ON COMPONENT.TEMPLATE_SEQ = TEMPLATE.TEMPLATE_SEQ
-		<include refid="findAllWhere"/>
+
+	<select id="findAll" parameterType="ComponentSearchDTO" resultType="ComponentVO" statementType="CALLABLE">
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_COMPONENT_LIST_SEL(
+			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
+			<choose>
+				<when test="searchType == 'all' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="searchType == 'componentSeq' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="searchType == 'componentName' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="searchType == 'templateSeq' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="searchType == 'templateName' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="tpZone != null and tpZone != ''">
+					#{tpZone},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+			#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+			#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
 	</select>
 	
 	<!-- 관련컴포넌트 공통 컬럼  -->
@@ -95,9 +118,10 @@
 	</sql>
 		
 	<!-- 페이지의 관련컴포넌트 목록 조회  -->
-	<select id="findPageChildRels"
-		parameterType="componentSearchDTO"
-		resultType="componentVO">
+	<select id="findPageChildRelList" parameterType="ComponentSearchDTO" resultType="ComponentVO" statementType="CALLABLE">
+
+
+
 		SELECT * FROM (
 			SELECT
 				<include refid="childRelsColumns" />,

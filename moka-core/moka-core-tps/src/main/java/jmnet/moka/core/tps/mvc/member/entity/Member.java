@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
+import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

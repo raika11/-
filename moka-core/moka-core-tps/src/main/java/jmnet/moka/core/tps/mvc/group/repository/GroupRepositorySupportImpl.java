@@ -1,11 +1,11 @@
-package jmnet.moka.core.tps.mvc.member.repository;
+package jmnet.moka.core.tps.mvc.group.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tps.mvc.member.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.member.entity.Group;
+import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
+import jmnet.moka.core.tps.mvc.group.entity.Group;
 import jmnet.moka.core.tps.mvc.member.entity.QGroup;
 import jmnet.moka.core.tps.mvc.member.entity.QMember;
 import org.springframework.data.domain.Page;

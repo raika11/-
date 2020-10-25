@@ -1,6 +1,6 @@
-package jmnet.moka.core.tps.mvc.member.repository;
+package jmnet.moka.core.tps.mvc.group.repository;
 
-import jmnet.moka.core.tps.mvc.member.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

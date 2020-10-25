@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.member.dto;
+package jmnet.moka.core.tps.mvc.group.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jmnet.moka.common.data.support.SearchDTO;

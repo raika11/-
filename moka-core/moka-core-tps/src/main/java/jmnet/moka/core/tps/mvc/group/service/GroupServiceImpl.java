@@ -1,13 +1,13 @@
-package jmnet.moka.core.tps.mvc.member.service;
+package jmnet.moka.core.tps.mvc.group.service;
 
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tps.mvc.member.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.member.entity.Group;
-import jmnet.moka.core.tps.mvc.member.entity.GroupMember;
-import jmnet.moka.core.tps.mvc.member.repository.GroupMemberRepository;
-import jmnet.moka.core.tps.mvc.member.repository.GroupRepository;
+import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
+import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.group.repository.GroupMemberRepository;
+import jmnet.moka.core.tps.mvc.group.repository.GroupRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

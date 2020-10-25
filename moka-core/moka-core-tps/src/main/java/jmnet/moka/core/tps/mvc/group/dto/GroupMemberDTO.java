@@ -1,9 +1,9 @@
-package jmnet.moka.core.tps.mvc.member.dto;
+package jmnet.moka.core.tps.mvc.group.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,5 +56,5 @@ public class GroupMemberDTO {
     /**
      * 사용자 정보
      */
-    private Member member;
+    private MemberDTO member;
 }

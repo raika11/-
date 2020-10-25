@@ -1,7 +1,7 @@
-package jmnet.moka.core.tps.mvc.member.repository;
+package jmnet.moka.core.tps.mvc.group.repository;
 
-import jmnet.moka.core.tps.mvc.member.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.member.entity.Group;
+import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
+import jmnet.moka.core.tps.mvc.group.entity.Group;
 import org.springframework.data.domain.Page;
 
 /**

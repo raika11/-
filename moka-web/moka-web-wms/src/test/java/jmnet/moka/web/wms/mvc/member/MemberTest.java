@@ -3,10 +3,10 @@ package jmnet.moka.web.wms.mvc.member;
 import java.util.List;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.mvc.member.entity.Group;
-import jmnet.moka.core.tps.mvc.member.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.group.service.GroupService;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
-import jmnet.moka.core.tps.mvc.member.service.GroupService;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,16 +32,17 @@ public class MemberTest {
     @Test
     public void memberInsertTest() {
 
-        Member member = Member.builder()
-                              .memberId("ssc_test01")
-                              .memberNm("관리자")
-                              .group("J")
-                              .dept("사회부")
-                              .email("ssc@ssc.co.kr")
-                              .companyPhone("02-555-5555")
-                              .mobilePhone("010-5555-5555")
-                              .status("Y")
-                              .build();
+        Member member = Member
+                .builder()
+                .memberId("ssc_test01")
+                .memberNm("관리자")
+                .group("J")
+                .dept("사회부")
+                .email("ssc@ssc.co.kr")
+                .companyPhone("02-555-5555")
+                .mobilePhone("010-5555-5555")
+                .status("Y")
+                .build();
         memberService.insertMember(member);
     }
 
@@ -52,35 +53,39 @@ public class MemberTest {
 
     @Test
     public void groupInsertTest() {
-        Group group = Group.builder()
-                           .groupCd("G01")
-                           .groupKorNm("그룹1")
-                           .groupNm("G1")
-                           .build();
+        Group group = Group
+                .builder()
+                .groupCd("G01")
+                .groupKorNm("그룹1")
+                .groupNm("G1")
+                .build();
 
         groupService.insertGroup(group);
 
-        group = Group.builder()
-                     .groupCd("G02")
-                     .groupKorNm("그룹2")
-                     .groupNm("G2")
-                     .build();
+        group = Group
+                .builder()
+                .groupCd("G02")
+                .groupKorNm("그룹2")
+                .groupNm("G2")
+                .build();
 
         groupService.insertGroup(group);
 
         if (groupService.isDuplicatedId("G02")) {
-            group = Group.builder()
-                         .groupCd("G02")
-                         .groupKorNm("그룹2")
-                         .groupNm("G2")
-                         .build();
+            group = Group
+                    .builder()
+                    .groupCd("G02")
+                    .groupKorNm("그룹2")
+                    .groupNm("G2")
+                    .build();
             groupService.updateGroup(group);
         }
 
-        group = Group.builder()
-                     .groupKorNm("그룹5")
-                     .groupNm("G5")
-                     .build();
+        group = Group
+                .builder()
+                .groupKorNm("그룹5")
+                .groupNm("G5")
+                .build();
         groupService.insertGroup(group);
     }
 
@@ -99,11 +104,12 @@ public class MemberTest {
     public void groupMemberInsertTest() {
         List<Group> groups = groupService.findAllGroup();
         groups.forEach(group -> {
-            GroupMember groupMember = GroupMember.builder()
-                                                 .groupCd(group.getGroupCd())
-                                                 .memberId("ssc_test01")
-                                                 .usedYn(MokaConstants.YES)
-                                                 .build();
+            GroupMember groupMember = GroupMember
+                    .builder()
+                    .groupCd(group.getGroupCd())
+                    .memberId("ssc_test01")
+                    .usedYn(MokaConstants.YES)
+                    .build();
             memberService.insertGroupMember(groupMember);
         });
     }

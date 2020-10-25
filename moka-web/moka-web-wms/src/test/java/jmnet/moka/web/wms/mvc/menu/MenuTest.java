@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
-import jmnet.moka.core.tps.mvc.member.entity.Group;
-import jmnet.moka.core.tps.mvc.member.entity.GroupMember;
-import jmnet.moka.core.tps.mvc.member.service.GroupService;
+import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.group.service.GroupService;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
@@ -36,30 +36,32 @@ public class MenuTest {
         /**
          * 대메뉴
          */
-        Menu menu = Menu.builder()
-                        .menuId("04000000")
-                        .menuNm("test2")
-                        .menuDisplayNm("test")
-                        .menuOrder(3)
-                        .depth(1)
-                        .parentMenuId(ROOT_MENU_ID)
-                        .usedYn(MokaConstants.YES)
-                        .build();
+        Menu menu = Menu
+                .builder()
+                .menuId("04000000")
+                .menuNm("test2")
+                .menuDisplayNm("test")
+                .menuOrder(3)
+                .depth(1)
+                .parentMenuId(ROOT_MENU_ID)
+                .usedYn(MokaConstants.YES)
+                .build();
         Menu systemMenu = menuService.insertMenu(menu);
 
         /**
          * 중메뉴
          */
-        menu = Menu.builder()
-                   .menuId("02001000")
-                   .menuNm("PAGE")
-                   .menuDisplayNm("페이지 관리")
-                   .menuOrder(1)
-                   .menuUrl("/page")
-                   .depth(2)
-                   .parentMenuId(systemMenu.getMenuId())
-                   .usedYn(MokaConstants.YES)
-                   .build();
+        menu = Menu
+                .builder()
+                .menuId("02001000")
+                .menuNm("PAGE")
+                .menuDisplayNm("페이지 관리")
+                .menuOrder(1)
+                .menuUrl("/page")
+                .depth(2)
+                .parentMenuId(systemMenu.getMenuId())
+                .usedYn(MokaConstants.YES)
+                .build();
 
         //Menu domainMenu = menuService.insertMenu(menu);
     }
@@ -71,12 +73,13 @@ public class MenuTest {
 
         menus.forEach(menu -> {
             groups.forEach(group -> {
-                MenuAuth menuAuth = MenuAuth.builder()
-                                            .groupMemberDiv(MenuAuthTypeCode.GROUP.getCode())
-                                            .menuId(menu.getMenuId())
-                                            .groupMemberId(group.getGroupCd())
-                                            .usedYn(MokaConstants.YES)
-                                            .build();
+                MenuAuth menuAuth = MenuAuth
+                        .builder()
+                        .groupMemberDiv(MenuAuthTypeCode.GROUP.getCode())
+                        .menuId(menu.getMenuId())
+                        .groupMemberId(group.getGroupCd())
+                        .usedYn(MokaConstants.YES)
+                        .build();
 
                 menuService.insertMenuAuth(menuAuth);
             });
@@ -90,12 +93,13 @@ public class MenuTest {
         List<GroupMember> groupMembers = groupService.findAllGroupMember("999");
         menus.forEach(menu -> {
             groupMembers.forEach(gm -> {
-                MenuAuth menuAuth = MenuAuth.builder()
-                                            .groupMemberDiv(MenuAuthTypeCode.MEMBER.getCode())
-                                            .menuId(menu.getMenuId())
-                                            .groupMemberId(gm.getMemberId())
-                                            .usedYn(MokaConstants.YES)
-                                            .build();
+                MenuAuth menuAuth = MenuAuth
+                        .builder()
+                        .groupMemberDiv(MenuAuthTypeCode.MEMBER.getCode())
+                        .menuId(menu.getMenuId())
+                        .groupMemberId(gm.getMemberId())
+                        .usedYn(MokaConstants.YES)
+                        .build();
                 menuService.insertMenuAuth(menuAuth);
             });
         });

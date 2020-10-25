@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.member.entity;
+package jmnet.moka.core.tps.mvc.group.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
+import jmnet.moka.core.tps.mvc.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.member.dto;
+package jmnet.moka.core.tps.mvc.group.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

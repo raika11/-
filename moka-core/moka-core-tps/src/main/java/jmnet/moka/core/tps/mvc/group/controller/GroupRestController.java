@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.member.controller;
+package jmnet.moka.core.tps.mvc.group.controller;
 
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
@@ -18,10 +18,10 @@ import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
-import jmnet.moka.core.tps.mvc.member.dto.GroupDTO;
-import jmnet.moka.core.tps.mvc.member.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.member.entity.Group;
-import jmnet.moka.core.tps.mvc.member.service.GroupService;
+import jmnet.moka.core.tps.mvc.group.dto.GroupDTO;
+import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
+import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.service.GroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;

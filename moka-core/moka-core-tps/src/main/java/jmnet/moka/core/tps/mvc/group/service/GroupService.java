@@ -1,10 +1,10 @@
-package jmnet.moka.core.tps.mvc.member.service;
+package jmnet.moka.core.tps.mvc.group.service;
 
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.core.tps.mvc.member.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.member.entity.Group;
-import jmnet.moka.core.tps.mvc.member.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
+import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import org.springframework.data.domain.Page;
 
 public interface GroupService {

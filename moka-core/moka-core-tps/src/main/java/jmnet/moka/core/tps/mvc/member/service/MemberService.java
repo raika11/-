@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.core.tps.mvc.member.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
 import org.springframework.data.domain.Page;
 

@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.core.tps.mvc.member.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.group.repository.GroupMemberRepository;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
-import jmnet.moka.core.tps.mvc.member.repository.GroupMemberRepository;
 import jmnet.moka.core.tps.mvc.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -70,8 +70,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt) {
         Optional<Member> optionalMember = this.findMemberById(memberId);
-        return optionalMember.map(value -> updateMemberLoginInfo(value, loginDate, loginIp, null))
-                             .orElse(null);
+        return optionalMember
+                .map(value -> updateMemberLoginInfo(value, loginDate, loginIp, null))
+                .orElse(null);
     }
 
     @Override
@@ -104,8 +105,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member addMemberLoginErrorCount(String memberId) {
         Optional<Member> optionalMember = this.findMemberById(memberId);
-        return optionalMember.map(this::addMemberLoginErrorCount)
-                             .orElse(null);
+        return optionalMember
+                .map(this::addMemberLoginErrorCount)
+                .orElse(null);
     }
 
     @Override
@@ -124,19 +126,21 @@ public class MemberServiceImpl implements MemberService {
             member.setGroupMembers((groupMembers != null ? new HashSet<>(groupMembers) : new HashSet<>()));
         }
 
-        member.getGroupMembers()
-              .forEach(groupMember -> {
-                  this.deleteGroupMember(groupMember);
-              });
+        member
+                .getGroupMembers()
+                .forEach(groupMember -> {
+                    this.deleteGroupMember(groupMember);
+                });
         memberRepository.delete(member);
     }
 
     @Override
     public void deleteMemberById(String memberId) {
-        this.findMemberById(memberId)
-            .ifPresent(member -> {
-                deleteMember(member);
-            });
+        this
+                .findMemberById(memberId)
+                .ifPresent(member -> {
+                    deleteMember(member);
+                });
     }
 
     @Override

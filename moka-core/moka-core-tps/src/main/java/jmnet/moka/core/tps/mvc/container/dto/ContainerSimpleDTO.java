@@ -1,32 +1,24 @@
 package jmnet.moka.core.tps.mvc.container.dto;
 
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.List;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 /**
- * 
- * <pre>
- * 컨테이너아이디, 도메인, 컨테이너명
- * 2020. 4. 21. jeon 최초생성
- * </pre>
- * 
- * @since 2020. 4. 21. 오후 4:51:16
- * @author jeon
+ * 간단 컨테이너 : 아이디, 도메인, 컨테이너명
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,14 +32,24 @@ public class ContainerSimpleDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<ContainerSimpleDTO>>() {}.getType();
 
-    @Min(value = 0, message = "{tps.container.error.invalid.containerSeq}")
+    /**
+     * 컨테이너SEQ
+     */
+    @Min(value = 0, message = "{tps.container.error.min.containerSeq}")
     private Long containerSeq;
 
-    @NotNull(message = "{tps.common.error.invalid.domainId}")
+    /**
+     * 도메인
+     */
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    @NotNull(message = "{tps.container.error.invalid.containerName}")
-    @Pattern(regexp = ".+", message = "{tps.container.error.invalid.containerName}")
+    /**
+     * 컨테이너명
+     */
+    @NotNull(message = "{tps.container.error.notnull.containerName}")
+    @Pattern(regexp = ".+", message = "{tps.container.error.pattern.containerName}")
+    @Length(min = 1, max = 128, message = "{tps.container.error.length.containerName}")
     private String containerName;
 
 }

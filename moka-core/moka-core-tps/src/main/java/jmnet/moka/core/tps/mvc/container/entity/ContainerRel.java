@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.*;
 
 
 /**
- * The persistent class for the TB_WMS_CONTAINER_REL database table.
- * 
+ * 컨테이너 관련아이템
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,49 +21,80 @@ import lombok.*;
 @EqualsAndHashCode(exclude = "container")
 @Entity
 @Table(name = "TB_WMS_CONTAINER_REL")
-@NamedQuery(name = "ContainerRel.findAll", query = "SELECT c FROM ContainerRel c")
 public class ContainerRel implements Serializable {
 
     private static final long serialVersionUID = -7450080057831221133L;
 
+    /**
+     * 일련번호
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ")
     private Long seq;
 
+    /**
+     * 컨테이너
+     */
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTAINER_SEQ", referencedColumnName = "CONTAINER_SEQ", nullable = false)
     private Container container;
 
+    /**
+     * 도메인
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
-    @Column(name = "REL_TYPE", nullable = false, length = 3)
+    /**
+     * 관련유형 TP:템플릿, CP: 컴포넌트, AD:광고, CT:컨테이너, DS: 데이타셋
+     */
+    @Column(name = "REL_TYPE", nullable = false)
     private String relType;
 
+    /**
+     * 관련SEQ
+     */
     @Column(name = "REL_SEQ")
     private Long relSeq;
 
+    /**
+     * 관련 아이템명
+     */
     @Transient
     private String relName;
 
+    /**
+     * 템플릿SEQ
+     */
     @Transient
     private Long templateSeq;
 
-    @Column(name = "REL_PARENT_TYPE", length = 3)
-    private String relParentType;
+    /**
+     * 관련부모유형 NN :없음. CP: 컴포넌트, CT:컨테이너
+     */
+    @Column(name = "REL_PARENT_TYPE")
+    @Builder.Default
+    private String relParentType = TpsConstants.REL_TYPE_UNKNOWN;
 
+    /**
+     * 관련부모SEQ
+     */
     @Column(name = "REL_PARENT_SEQ")
     private Long relParentSeq;
 
+    /**
+     * 관련순서
+     */
     @Column(name = "REL_ORD", nullable = false)
-    private Integer relOrd;
+    @Builder.Default
+    private Integer relOrd = 1;
 
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.relParentType = this.relParentType == null ? "NN" : this.relParentType;
+        this.relParentType = this.relParentType == null ? TpsConstants.REL_TYPE_UNKNOWN : this.relParentType;
         this.relOrd = this.relOrd == null ? 1 : this.relOrd;
     }
 

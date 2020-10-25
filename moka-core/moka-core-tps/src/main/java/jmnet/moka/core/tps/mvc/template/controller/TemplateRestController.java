@@ -57,10 +57,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 템플릿 API
- * 2020. 1. 14. jeon 최초생성
- *
- * @author jeon
- * @since 2020. 1. 14. 오후 1:33:50
  */
 @Controller
 @Validated
@@ -95,13 +91,12 @@ public class TemplateRestController {
     /**
      * 템플릿 목록조회
      *
-     * @param request HTTP 요청
      * @param search  검색조건
      * @return 템플릿 목록
      */
     @ApiOperation(value = "템플릿 목록조회")
     @GetMapping
-    public ResponseEntity<?> getTemplateList(HttpServletRequest request, @Valid @SearchParam TemplateSearchDTO search) {
+    public ResponseEntity<?> getTemplateList(@Valid @SearchParam TemplateSearchDTO search) {
 
         // 조회(mybatis)
         List<TemplateVO> returnValue = templateService.findAllTemplate(search);
@@ -428,7 +423,7 @@ public class TemplateRestController {
         } catch (Exception e) {
             log.error("[TEMPLATE RELATION EXISTENCE CHECK FAILED] seq: {}) {}", templateSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[TEMPLATE RELATION EXISTENCE CHECK FAILEDE]", e, true);
-            throw new Exception(messageByLocale.get("tps.template.error.hasRelations", request), e);
+            throw new Exception(messageByLocale.get("tps.template.error.hasRelation", request), e);
         }
     }
 
@@ -439,13 +434,13 @@ public class TemplateRestController {
      * @param templateSeq 템플릿SEQ
      * @param search 검색조건
      * @return 관련아이템 목록
-     * @throws NoDataException 데이터없음
+     * @throws Exception 에외
      */
     @ApiOperation(value = "관련 아이템 목록조회")
     @GetMapping("/{templateSeq}/relations")
     public ResponseEntity<?> getRelationList(HttpServletRequest request,
             @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq, @Valid @SearchParam RelSearchDTO search)
-            throws NoDataException, Exception {
+            throws Exception {
 
         search.setRelSeq(templateSeq);
         search.setRelSeqType(MokaConstants.ITEM_TEMPLATE);

@@ -88,14 +88,13 @@ public class ComponentRestController {
 
     /**
      * 컴포넌트 목록조회
-     * 
-     * @param request HTTP 요청
+     *
      * @param search 검색 조건
      * @return 컴포넌트 목록
      */
     @ApiOperation(value = "컴포넌트 목록조회")
     @GetMapping
-    public ResponseEntity<?> getComponentList(HttpServletRequest request, @Valid @SearchParam ComponentSearchDTO search) {
+    public ResponseEntity<?> getComponentList(@Valid @SearchParam ComponentSearchDTO search) {
 
         // 조회(mybatis)
         List<ComponentVO> returnValue = componentService.findAllComponent(search);

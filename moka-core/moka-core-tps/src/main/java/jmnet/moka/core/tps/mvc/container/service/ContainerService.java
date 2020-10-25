@@ -23,22 +23,15 @@ public interface ContainerService {
      * @param search 검색조건
      * @return 컨테이너 목록
      */
-    public List<ContainerVO> findList(ContainerSearchDTO search);
+    public List<ContainerVO> findAllContainer(ContainerSearchDTO search);
 
-    /**
-     * 컨테이너 카운트 조회(MyBatis)
-     * @param search 검색조건
-     * @return 카운트
-     */
-    public Long findListCount(ContainerSearchDTO search);
-    
     /**
      * 컨테이너정보 조회
      * 
      * @param containerSeq 컨테이너순번
      * @return 컨테이너정보
      */
-    public Optional<Container> findByContainerSeq(Long containerSeq);
+    public Optional<Container> findContainerBySeq(Long containerSeq);
 
     /**
      * 컨테이너정보 등록
@@ -75,7 +68,7 @@ public interface ContainerService {
      * @param pageable 페이징
      * @return 히스토리 목록
      */
-    public Page<ContainerHist> findHistoryList(HistSearchDTO search, Pageable pageable);
+    public Page<ContainerHist> findAllContainerHist(HistSearchDTO search, Pageable pageable);
 
     /**
      * <pre>
@@ -92,7 +85,7 @@ public interface ContainerService {
      * @param domainId 도메인아이디
      * @return 컨테이너수
      */
-    public int countByDomainId(String domainId);
+    public int countContainerByDomainId(String domainId);
     
     /**
      * <pre>
@@ -103,5 +96,5 @@ public interface ContainerService {
      * @param search 검색조건
      * @return 컨테이너 목록
      */
-    public Page<Container> findRelList(RelSearchDTO search, Pageable pageable);
+    public Page<Container> findAllContainerRel(RelSearchDTO search, Pageable pageable);
 }

@@ -106,7 +106,7 @@ public class SkinServiceImpl implements SkinService {
             SkinRel relation = new SkinRel();
             relation.setRelType(item.getNodeName());
             relation.setRelSeq(Long.parseLong(item.getId()));
-            relation.setRelParentType("NN");
+            relation.setRelParentType(TpsConstants.REL_TYPE_UNKNOWN);
             relation.setRelOrd(item.getOrder());
 
             // 동일한 아이템은 추가하지 않는다.

@@ -65,13 +65,12 @@ public class ReservedRestController {
     /**
      * 예약어목록조회
      *
-     * @param request 요청
      * @param search  검색조건
      * @return 예약어목록
      */
-    @ApiOperation(value = "예약어목록조회")
+    @ApiOperation(value = "예약어 목록조회")
     @GetMapping
-    public ResponseEntity<?> getReservedList(HttpServletRequest request, @Valid @SearchParam ReservedSearchDTO search) {
+    public ResponseEntity<?> getReservedList(@Valid @SearchParam ReservedSearchDTO search) {
         // 페이징조건 설정
         Pageable pageable = search.getPageable();
 

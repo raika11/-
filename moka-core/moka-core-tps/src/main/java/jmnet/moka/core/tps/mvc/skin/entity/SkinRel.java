@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.AllArgsConstructor;
@@ -96,7 +97,7 @@ public class SkinRel extends BaseAudit {
      */
     @Column(name = "REL_PARENT_TYPE", nullable = false)
     @Builder.Default
-    private String relParentType = "NN";
+    private String relParentType = TpsConstants.REL_TYPE_UNKNOWN;
 
     /**
      * 관련부모SEQ
@@ -114,7 +115,7 @@ public class SkinRel extends BaseAudit {
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.relParentType = this.relParentType == null ? "NN" : this.relParentType;
+        this.relParentType = this.relParentType == null ? TpsConstants.REL_TYPE_UNKNOWN : this.relParentType;
         this.relOrd = this.relOrd == null ? 1 : this.relOrd;
     }
 

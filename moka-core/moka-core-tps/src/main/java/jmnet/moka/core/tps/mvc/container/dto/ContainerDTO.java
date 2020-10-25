@@ -1,31 +1,29 @@
 package jmnet.moka.core.tps.mvc.container.dto;
 
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.List;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.ContainerItem;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
- * <pre>
- * 컨테이너 정보
- * 2020. 5. 21. ssc 최초생성
- * </pre>
- * 
- * @since 2020. 5. 21. 오전 11:51:57
- * @author ssc
+ * 컨테이너 DTO
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,42 +38,65 @@ public class ContainerDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<ContainerDTO>>() {}.getType();
 
-    @Min(value = 0, message = "{tps.container.error.invalid.containerSeq}")
+    /**
+     * 컨테이너SEQ
+     */
+    @Min(value = 0, message = "{tps.container.error.min.containerSeq}")
     private Long containerSeq;
 
+    /**
+     * 도메인
+     */
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    @NotNull(message = "{tps.container.error.invalid.containerName}")
-    @Pattern(regexp = ".+", message = "{tps.page.error.invalid.containerName}")
+    /**
+     * 컨테이너명
+     */
+    @NotNull(message = "{tps.container.error.notnull.containerName}")
+    @Pattern(regexp = ".+", message = "{tps.container.error.pattern.containerName}")
+    @Length(min = 1, max = 128, message = "{tps.container.error.length.containerName}")
     private String containerName;
 
-    private String containerBody;
+    /**
+     * 컨테이너본문
+     */
+    @Builder.Default
+    private String containerBody = "";
 
+    /**
+     * 페이지 관련갯수
+     */
     @JsonIgnore
-    private Long pageRelCount;
+    private Long pageRelCount = (long)0;
 
+    /**
+     * 본문 관련갯수
+     */
     @JsonIgnore
-    private Long skinRelCount;
+    private Long skinRelCount = (long)0;
 
-    private String useYn;
+    /**
+     * 사용여부
+     */
+    private String useYn = MokaConstants.NO;
 
     public void setPageRelCount(Long pageRelCount) {
         this.pageRelCount = pageRelCount;
         if (pageRelCount != null && pageRelCount > 0) {
-            this.useYn = "Y";
+            this.useYn = MokaConstants.YES;
         }
     }
 
     public void setSkinRelCount(Long skinRelCount) {
         this.skinRelCount = skinRelCount;
         if (skinRelCount != null && skinRelCount > 0) {
-            this.useYn = "Y";
+            this.useYn = MokaConstants.YES;
         }
     }
 
     public String getUseYn() {
-        return (this.useYn != null) ? this.useYn : "N";
+        return (this.useYn != null) ? this.useYn : MokaConstants.NO;
     }
 
     public ContainerItem toContainerItem() {

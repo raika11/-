@@ -22,8 +22,7 @@ import org.hibernate.annotations.Nationalized;
 
 
 /**
- * The persistent class for the WMS_TEMPLATE_HIST database table.
- * 
+ * 템플릿 히스토리
  */
 @AllArgsConstructor
 @NoArgsConstructor

@@ -19,8 +19,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 
 /**
- * The persistent class for the TB_WMS_CONTAINER_HIST database table.
- * 
+ * 컨테이너 히스토리
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,30 +29,44 @@ import org.springframework.data.annotation.CreatedDate;
 @EqualsAndHashCode(exclude = "container")
 @Entity
 @Table(name = "TB_WMS_CONTAINER_HIST")
-@NamedQuery(name = "ContainerHist.findAll", query = "SELECT c FROM ContainerHist c")
 public class ContainerHist extends RegAudit {
 
     private static final long serialVersionUID = 6857747089425705175L;
 
+    /**
+     * 일련번호
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ")
     private Long seq;
 
+    /**
+     * 컨테이너
+     */
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTAINER_SEQ", referencedColumnName = "CONTAINER_SEQ", nullable = false)
     private Container container;
 
+    /**
+     * 도메인
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
+    /**
+     * 컨테이너본문
+     */
     @Nationalized
     @Column(name = "CONTAINER_BODY")
     private String containerBody;
 
-    @Column(name = "WORK_TYPE", columnDefinition = "char", length = 1)
+    /**
+     * 작업유형
+     */
+    @Column(name = "WORK_TYPE", columnDefinition = "char")
     @Builder.Default
     private String workType = TpsConstants.WORKTYPE_UPDATE;
 

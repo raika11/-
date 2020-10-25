@@ -12,14 +12,14 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
 
 /**
- * The persistent class for the TB_WMS_CONTAINER database table.
- * 
+ * 컨테이너
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,62 +30,59 @@ import org.hibernate.annotations.Nationalized;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "containerSeq")
 @Entity
 @Table(name = "TB_WMS_CONTAINER")
-@NamedQuery(name = "Container.findAll", query = "SELECT c FROM Container c")
-public class Container implements Serializable {
+public class Container extends BaseAudit {
 
     private static final long serialVersionUID = -6024609985470746225L;
 
+    /**
+     * 컨테이너SEQ
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CONTAINER_SEQ")
     private Long containerSeq;
 
+    /**
+     * 도메인
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
+    /**
+     * 컨테이너명
+     */
     @Nationalized
-    @Column(name = "CONTAINER_NAME", nullable = false, length = 128)
+    @Column(name = "CONTAINER_NAME", nullable = false)
     private String containerName;
 
+    /**
+     * 컨테이너본문
+     */
     @Nationalized
     @Column(name = "CONTAINER_BODY")
-    private String containerBody;
-
-    @Column(name = "REG_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date regDt;
-
-    @Column(name = "REG_ID", length = 30)
-    private String regId;
-
-    @Column(name = "MOD_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modDt;
-
-    @Column(name = "MOD_ID", length = 30)
-    private String modId;
-
-    @Transient
-    private Long pageRelCount;
-
-    @Transient
-    private Long skinRelCount;
-
-    @PrePersist
-    public void prePersist() {
-        this.regDt = McpDate.defaultValue(this.regDt);
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.regDt = McpDate.defaultValue(this.regDt);
-        this.modDt = McpDate.defaultValue(this.modDt);
-    }
-
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "container",
-            cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private String containerBody = "";
+
+    /**
+     * 페이지 관련갯수
+     */
+    @Transient
+    @Builder.Default
+    private Long pageRelCount = (long)0;
+
+    /**
+     * 본문 관련갯수
+     */
+    @Transient
+    @Builder.Default
+    private Long skinRelCount = (long)0;
+
+    /**
+     * 관련아이템
+     */
+    @Builder.Default
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "container", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private Set<ContainerRel> containerRels = new LinkedHashSet<ContainerRel>();
 
     public void addContainerRel(ContainerRel containerRel) {

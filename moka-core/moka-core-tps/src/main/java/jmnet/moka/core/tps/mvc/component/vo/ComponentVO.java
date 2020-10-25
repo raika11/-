@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.component.vo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,7 +44,8 @@ public class ComponentVO implements Serializable {
      * 사용여부
      */
     @Column(name = "USE_YN")
-    private String useYn;
+    @Builder.Default
+    private String useYn = MokaConstants.NO;
 
     /**
      * 템플릿SEQ
@@ -55,6 +57,7 @@ public class ComponentVO implements Serializable {
      * 관련 컴포넌트 순서
      */
     @Column(name = "REL_ORDER")
-    private Integer relOrder;
+    @Builder.Default
+    private Integer relOrder = 1;
 
 }

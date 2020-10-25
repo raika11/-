@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 import javax.persistence.Column;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,11 +53,13 @@ public class DatasetVO implements Serializable {
      * 자동생성여부
      */
     @Column(name = "AUTO_CREATE_YN")
-    private String autoCreateYn;
+    @Builder.Default
+    private String autoCreateYn = MokaConstants.NO;
 
     /**
      * 사용여부
      */
     @Column(name = "USE_YN")
-    private String useYn;
+    @Builder.Default
+    private String useYn = MokaConstants.NO;
 }

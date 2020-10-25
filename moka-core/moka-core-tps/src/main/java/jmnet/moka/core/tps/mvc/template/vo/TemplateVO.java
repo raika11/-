@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 
@@ -22,7 +23,8 @@ public class TemplateVO implements Serializable {
      * 도메인 플랫폼
      */
     @Column(name = "SERVICE_PLATFORM")
-    private String servicePlatform;
+    @Builder.Default
+    private String servicePlatform = "P";
 
     /**
      * 도메인아이디
@@ -52,7 +54,8 @@ public class TemplateVO implements Serializable {
      * 템플릿가로
      */
     @Column(name = "TEMPLATE_WIDTH")
-    private Integer templateWidth;
+    @Builder.Default
+    private Integer templateWidth = 0;
 
     /**
      * 템플릿썸네일경로
@@ -70,11 +73,13 @@ public class TemplateVO implements Serializable {
      * 템플릿 사용여부
      */
     @Column(name = "USE_YN")
-    private String useYn;
+    @Builder.Default
+    private String useYn = MokaConstants.NO;
 
     /**
      * 삽입된 템플릿 순서 (템플릿을 관련아이템으로 조회시 사용)
      */
     @Column(name = "REL_ORD")
-    private Integer relOrd;
+    @Builder.Default
+    private Integer relOrd = 1;
 }

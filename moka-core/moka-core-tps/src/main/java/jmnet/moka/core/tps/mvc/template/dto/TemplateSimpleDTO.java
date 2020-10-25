@@ -19,13 +19,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * <pre>
- * 템플릿ID, 도메인정보, 템플릿명
- * 2020. 2. 6. jeon 최초생성
- * </pre>
- * 
- * @since 2020. 2. 6. 오후 5:45:58
- * @author jeon
+ * 간단 템플릿 : 템플릿ID, 도메인정보, 템플릿명
  */
 @AllArgsConstructor
 @NoArgsConstructor

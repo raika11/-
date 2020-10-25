@@ -35,33 +35,51 @@
 			</foreach>
 		</if>
 	</sql>
-	
-	<select id="findAll" parameterType="ContainerSearchDTO" resultType="ContainerVO">
-		SELECT DISTINCT
-			CONTAINER.DOMAIN_ID,
-			CONTAINER.CONTAINER_SEQ,
-			CONTAINER.CONTAINER_NAME,
-			CONTAINER.CONTAINER_BODY,
-			(
-				SELECT
-				   CASE WHEN 
-				      (COUNT(PR.REL_SEQ) + COUNT(SR.REL_SEQ)) > 0
-				    THEN 'Y' ELSE 'N' END
-				FROM WMS_CONTAINER CT
-					LEFT OUTER JOIN WMS_PAGE_REL PR ON CT.CONTAINER_SEQ = PR.REL_SEQ AND PR.REL_TYPE='CT'
-					LEFT OUTER JOIN WMS_SKIN_REL SR ON CT.CONTAINER_SEQ = SR.REL_SEQ AND SR.REL_TYPE='CT'
-				WHERE CT.CONTAINER_SEQ = CONTAINER.CONTAINER_SEQ	
-			) AS USE_YN
-		FROM WMS_CONTAINER CONTAINER
-		<include refid="findAllWhere" />
-		<include refid="findAllOrder" />
-	</select>
-	
-	<select id="count" parameterType="ContainerSearchDTO" resultType="java.lang.Long">
-		SELECT 
-			COUNT(CONTAINER.CONTAINER_SEQ) AS TOTAL_CNT
-		FROM WMS_CONTAINER CONTAINER
-		<include refid="findAllWhere"/>
+
+	<select id="findAll" parameterType="ContainerSearchDTO" resultType="ContainerVO" statementType="CALLABLE">
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_CONTAINER_LIST_SEL(
+			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
+			<choose>
+				<when test="searchType == 'all' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="searchType == 'containerSeq' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="searchType == 'containerName' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="searchType == 'containerBody' and keyword != null and keyword != ''">
+					#{keyword},
+				</when>
+				<otherwise>
+					NULL,
+				</otherwise>
+			</choose>
+
+			#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+			#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+			#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
 	</select>
 	
 	<!-- 관련컨테이너 공통 컬럼  -->

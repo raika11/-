@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.*;
 
@@ -67,7 +68,7 @@ public class PageRel implements Serializable {
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.relParentType = this.relParentType == null ? "NN" : this.relParentType;
+        this.relParentType = this.relParentType == null ? TpsConstants.REL_TYPE_UNKNOWN : this.relParentType;
         this.relOrd = this.relOrd == null ? 1 : this.relOrd;
     }
 

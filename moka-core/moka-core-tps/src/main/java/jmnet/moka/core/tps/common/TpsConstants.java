@@ -3,6 +3,7 @@
  */
 package jmnet.moka.core.tps.common;
 
+import jmnet.moka.core.common.MokaConstants;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -117,7 +118,9 @@ public class TpsConstants {
      */
     public static final String DEFAULT_LANG = "KR";
 
-    public static final Integer LIST_PARAGRAPH = 10;    // 컴포넌트 광고 리스트단락수
+    public static final Integer LIST_PARAGRAPH = 10;        // 컴포넌트 광고 리스트단락수
+
+    public static final String REL_TYPE_UNKNOWN = "NN";     // 관련아이템 없음
 
     /**
      * API CODE JSON 정보

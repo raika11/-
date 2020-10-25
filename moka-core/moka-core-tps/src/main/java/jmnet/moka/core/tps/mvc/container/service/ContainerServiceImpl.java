@@ -3,7 +3,9 @@ package jmnet.moka.core.tps.mvc.container.service;
 import static jmnet.moka.common.data.mybatis.support.McpMybatis.getRowBounds;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import jmnet.moka.core.common.MokaConstants;
@@ -60,39 +62,24 @@ public class ContainerServiceImpl implements ContainerService {
     ContainerRelMapper containerRelMapper;
 
     @Override
-    public List<ContainerVO> findList(ContainerSearchDTO search) {
+    public List<ContainerVO> findAllContainer(ContainerSearchDTO search) {
     	
     	if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) { // 페이지에서 관련 컨테이너 검색 
-            return containerMapper.findPageChildRels(search,
-                    getRowBounds(search.getPage(), search.getSize()));
+            return containerMapper.findPageChildRelList(search);
         } else if (search.getSearchType().equals("skinSeq")
                 && McpString.isNotEmpty(search.getKeyword())) { // 콘텐츠스킨에서 관련 컨테이너 검색
-            return containerMapper.findSkinChildRels(search,
-                    getRowBounds(search.getPage(), search.getSize()));
+            return containerMapper.findSkinChildRelList(search);
         } else { // 컨테이너목록 조회
             if (search.getSearchType().equals("pageSeq") || search.getSearchType().equals("skinSeq")) {
                 search.clearSort();
                 search.addSort("containerSeq,desc");
             }
-            return containerMapper.findAll(search,
-                    getRowBounds(search.getPage(), search.getSize()));
-        }
-    }
-    
-    @Override
-    public Long findListCount(ContainerSearchDTO search) {
-        if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {
-            return containerMapper.findPageChildRelsCount(search);
-        } else if (search.getSearchType().equals("skinSeq")
-                && McpString.isNotEmpty(search.getKeyword())) {
-            return containerMapper.findSkinChildRelsCount(search);        
-        } else {
-            return containerMapper.count(search);
+            return containerMapper.findAll(search);
         }
     }
 
     @Override
-    public Optional<Container> findByContainerSeq(Long containerSeq) {
+    public Optional<Container> findContainerBySeq(Long containerSeq) {
         return containerRepository.findById(containerSeq);
     }
 
@@ -131,7 +118,7 @@ public class ContainerServiceImpl implements ContainerService {
             ContainerRel relation = new ContainerRel();
             relation.setRelType(item.getNodeName());
             relation.setRelSeq(Long.parseLong(item.getId()));
-            relation.setRelParentType("NN");
+            relation.setRelParentType(TpsConstants.REL_TYPE_UNKNOWN);
             relation.setRelOrd(item.getOrder());
 
             // 동일한 아이템은 추가하지 않는다.
@@ -218,10 +205,13 @@ public class ContainerServiceImpl implements ContainerService {
         throws Exception {
 
         // 1. 기존 관련아이템은 삭제 후, 저장
-        Long returnValue = containerRelMapper.deleteByContainerSeq(container.getContainerSeq());
+        Map paramMap = new HashMap();
+        paramMap.put("containerSeq", container.getContainerSeq());
+        paramMap.put("returnValue", 0);
+        Long returnValue = containerRelMapper.deleteByContainerSeq(paramMap);
         if (returnValue < 0) {
-            log.debug("DELETE FAIL WMS_CONTAINER_REL : {} ", returnValue);
-            throw new Exception("Failed to delete WMS_CONTAINER_REL. error code: " + returnValue);
+            log.debug("DELETE FAIL CONTAINER_REL : {} ", returnValue);
+            throw new Exception("Failed to delete CONTAINER_REL. error code: " + returnValue);
         }
         insertRel(container);
 
@@ -249,7 +239,7 @@ public class ContainerServiceImpl implements ContainerService {
     }
     
     @Override
-    public Page<ContainerHist> findHistoryList(HistSearchDTO search, Pageable pageable) {
+    public Page<ContainerHist> findAllContainerHist(HistSearchDTO search, Pageable pageable) {
         return containerHistRepository.findList(search, pageable);
     }
 
@@ -301,14 +291,14 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public int countByDomainId(String domainId) {
+    public int countContainerByDomainId(String domainId) {
         return containerRepository.countByDomain_DomainId(domainId);
     }
 
     //검색조건에 해당하는 아이템을 사용중인 컨테이너 목록 조회(부모찾기)
     // : 컴포넌트,템플릿,데이타셋,광고에서 사용하는 함수
     @Override
-    public Page<Container> findRelList(RelSearchDTO search, Pageable pageable) {
+    public Page<Container> findAllContainerRel(RelSearchDTO search, Pageable pageable) {
     	return containerRepository.findRelList(search, pageable);
     }
 }

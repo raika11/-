@@ -75,7 +75,7 @@ public class RelationHelper {
         }
 
         // 컨테이너 체크
-        if (containerService.countByDomainId(domainId) > 0) {
+        if (containerService.countContainerByDomainId(domainId) > 0) {
             return true;
         }
 
@@ -219,7 +219,7 @@ public class RelationHelper {
             // 컨테이너 목록 조회
             search.setDefaultSort("containerSeq,desc");
             Pageable pageable = search.getPageable();
-            Page<Container> containers = containerService.findRelList(search, pageable);
+            Page<Container> containers = containerService.findAllContainerRel(search, pageable);
             if (containers.getTotalElements() > 0) {
                 return true;
             }
@@ -285,7 +285,7 @@ public class RelationHelper {
             search.setDefaultSort("containerSeq,desc");
             Pageable pageable = search.getPageable();
 
-            Page<Container> containers = containerService.findRelList(search, pageable);
+            Page<Container> containers = containerService.findAllContainerRel(search, pageable);
             ResultListDTO<ContainerDTO> resultListMessage = new ResultListDTO<ContainerDTO>();
 
             List<ContainerDTO> dtoList = modelMapper.map(containers.getContent(), ContainerDTO.TYPE);

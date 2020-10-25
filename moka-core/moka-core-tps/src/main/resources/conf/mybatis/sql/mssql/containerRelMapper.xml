@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.page.mapper.ContainerRelMapper">
 
-	<select id="deleteByContainerSeq" parameterType="java.lang.Long" resultType="java.lang.Long" statementType="CALLABLE">
-		{call UPA_WMS_CONTAINER_REL_DELETE(
+	<select id="deleteByContainerSeq" parameterType="hashMap" resultType="Long" statementType="CALLABLE">
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_CONTAINER_REL_DELETE(
 			#{containerSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }
 	</select>

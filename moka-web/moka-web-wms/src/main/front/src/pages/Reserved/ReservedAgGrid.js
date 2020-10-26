@@ -54,7 +54,7 @@ const ReservedAgGrid = () => {
                     예약어추가
                 </Button>
             </div>
-            {/* 간단한 Table */}
+            {/* table */}
             <MokaTable
                 columnDefs={columnDefs}
                 rowData={list}

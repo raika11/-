@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
 import { getReservedList, changeSearchOption, initialState } from '@store/reserved';
+import { changeLatestDomainId } from '@store/auth';
 
 /**
  * 예약어 검색
@@ -58,27 +59,18 @@ const ReservedSearch = () => {
 
     const handleChangeSearchOption = (e) => {
         if (e.target.name === 'domainId') {
-            dispatch(
-                changeSearchOption({
-                    ...search,
-                    domainId: e.target.value,
-                }),
-            );
+            dispatch(changeLatestDomainId(e.target.value));
             history.push('/reserved');
         } else if (e.target.name === 'searchType') {
-            dispatch(
-                changeSearchOption({
-                    ...search,
-                    searchType: e.target.value,
-                }),
-            );
+            setSearch({
+                ...search,
+                searchType: e.target.value,
+            });
         } else if (e.target.name === 'keyword') {
-            dispatch(
-                changeSearchOption({
-                    ...search,
-                    keyword: e.target.value,
-                }),
-            );
+            setSearch({
+                ...search,
+                keyword: e.target.value,
+            });
         }
     };
 

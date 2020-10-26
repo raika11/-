@@ -111,6 +111,7 @@ const MokaInput = forwardRef((props, ref) => {
                 disabled={disabled}
                 value={value}
                 onChange={onChange}
+                name={name}
             />
         );
     }
@@ -126,6 +127,7 @@ const MokaInput = forwardRef((props, ref) => {
                 disabled={disabled}
                 value={value}
                 onChange={onChange}
+                name={name}
             />
         );
     }
@@ -142,6 +144,7 @@ const MokaInput = forwardRef((props, ref) => {
                 disabled={disabled}
                 value={value}
                 onChange={onChange}
+                name={name}
             />
         );
     }
@@ -157,6 +160,7 @@ const MokaInput = forwardRef((props, ref) => {
                 disabled={disabled}
                 value={value}
                 onChange={onChange}
+                name={name}
             />
         );
     }

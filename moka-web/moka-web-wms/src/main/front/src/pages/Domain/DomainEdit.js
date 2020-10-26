@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import { notification, toastr } from '@utils/toastUtil';
 import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, deleteDomain, changeInvalidList, hasRelationList, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
 import { getApi, getLang } from '@store/codeMgt';
+import { MokaInput, MokaInputLabel } from '@components';
 
 /**
  * 도메인 상세/수정/등록
@@ -315,141 +316,131 @@ const DomainEdit = ({ history, onDelete }) => {
         <div className="d-flex justify-content-center mb-20">
             {loading && <div className="opacity-box"></div>}
             <Form style={{ width: 605 }}>
+                {/* 사용여부 */}
+                <Form.Row>
+                    <Col xs={3} className="pl-0 pr-0">
+                        <MokaInputLabel
+                            label="사용여부"
+                            as="switch"
+                            inputProps={{ id: 'domain-useYN', label: '', checked: useYn === 'Y' && true }}
+                            name="useYN"
+                            onChange={handleChangeValue}
+                            required
+                        />
+                    </Col>
+                </Form.Row>
+
                 {/* 도메인ID */}
-                <Form.Group as={Row}>
-                    <Form.Label column xs={3} className="pt-1 pr-0 pl-0 mb-0">
-                        <span className="required-text">*</span>도메인 ID
-                    </Form.Label>
-                    <Col xs={2} className="pl-0 pr-0">
-                        <Form.Control
-                            type="text"
+                <Form.Row>
+                    <Col xs={4} className="pl-0 pr-0">
+                        <MokaInputLabel
+                            label="도메인ID"
                             placeholder="ID"
                             onChange={handleChangeValue}
                             value={domainId}
                             name="domainId"
                             disabled={domain.domainId && true}
                             isInvalid={domainIdError}
-                            className="form-control"
+                            required
                         />
                     </Col>
-                    <Form.Label column xs={6} className="pt-1 pr-0 pl-10 mb-0">
-                        숫자 4자리로 입력하세요
-                    </Form.Label>
-                </Form.Group>
+                </Form.Row>
+
                 {/* 도메인명 */}
-                <Form.Group as={Row}>
-                    <Form.Label column xs={3} className="pt-2 pr-0 pl-0 mb-0">
-                        <span className="required-text">*</span>도메인 명
-                    </Form.Label>
+                <Form.Row>
                     <Col xs={9} className="pl-0 pr-0">
-                        <Form.Control
-                            type="text"
+                        <MokaInputLabel
+                            label="도메인명"
                             placeholder="도메인 명을 입력하세요"
                             onChange={handleChangeValue}
                             value={domainName}
                             name="domainName"
-                            className="form-control"
                             isInvalid={domainNameError}
+                            required
                         />
                     </Col>
-                </Form.Group>
+                </Form.Row>
+
                 {/* 도메인주소 */}
-                <Form.Group as={Row}>
-                    <Form.Label column xs={3} className="pt-2 pr-0 pl-0 mb-0">
-                        <span className="required-text">*</span>도메인 주소
-                    </Form.Label>
+                <Form.Row>
                     <Col xs={9} className="pl-0 pr-0">
-                        <Form.Control
-                            type="text"
+                        <MokaInputLabel
+                            label="도메인주소"
                             placeholder="도메인 주소에서 http(s)://를 빼고 입력하세요"
                             onChange={handleChangeValue}
                             value={domainUrl}
                             name="domainUrl"
-                            className="form-control"
                             isInvalid={domainUrlError}
+                            required
                         />
                     </Col>
-                </Form.Group>
-                {/* 사용여부 */}
-                <Form.Group as={Row}>
-                    <Form.Label column xs={3} className="pt-2 pr-0 pl-0 mr-1 mb-0">
-                        <span className="required-text">*</span>사용여부
-                    </Form.Label>
-                    <Col xs={9} className="px-0 my-auto">
-                        <Form.Check type="switch" id="domain-useYN" label="" name="useYN" onChange={handleChangeValue} checked={useYn === 'Y' && true} className="pt-2 pl-4 ml-2" />
-                    </Col>
-                </Form.Group>
+                </Form.Row>
+
                 {/* 플랫폼 */}
-                <Form.Group as={Row}>
-                    <Form.Label column xs={3} className="pt-1 pr-0 pl-0 mb-0">
-                        <span className="required-text">*</span>플랫폼
-                    </Form.Label>
-                    <div className="form-check form-check-inline pr-20">
-                        <Form.Check
-                            custom
-                            type="radio"
-                            label="PC"
+                <Form.Row>
+                    <Col xs={3} className="p-0">
+                        <MokaInputLabel
+                            label="플랫폼"
+                            as="radio"
+                            inputProps={{
+                                custom: true,
+                                id: 'domain-pc',
+                                label: 'PC',
+                                checked: servicePlatform === 'P' && true,
+                            }}
+                            name="servicePlatform"
+                            onChange={handleChangeValue}
                             value="P"
-                            id="domain-pc"
-                            name="servicePlatform"
-                            onChange={handleChangeValue}
-                            checked={servicePlatform === 'P' && true}
+                            className="mb-0 h-100"
+                            required
                         />
-                    </div>
-                    <div className="form-check form-check-inline">
-                        <Form.Check
-                            custom
-                            type="radio"
-                            label="Mobile"
+                    </Col>
+                    <Col xs={1} className="p-0 mr-10">
+                        <MokaInput
+                            inputProps={{ custom: true, label: 'Mobile', id: 'domain-mobile', checked: servicePlatform === 'M' && true }}
+                            as="radio"
                             value="M"
-                            id="domain-mobile"
                             name="servicePlatform"
+                            className="mb-0 h-100 align-items-center d-flex"
                             onChange={handleChangeValue}
-                            checked={servicePlatform === 'M' && true}
                         />
-                    </div>
-                </Form.Group>
+                    </Col>
+                </Form.Row>
+
                 {/* 언어 */}
-                <Form.Group as={Row}>
-                    <Form.Label column xs={3} className="pt-1 mr-0 pr-0 pl-0">
-                        언어
-                    </Form.Label>
+                <Form.Row>
                     <Col xs={4} className="pl-0 ml-0 pr-0 pl-0">
-                        <Form.Control as="select" custom onChange={handleChangeValue} value={lang} name="lang" className="form-control" ref={elLang}>
+                        <MokaInputLabel as="select" label="언어" className="pt-1 mr-0 pr-0 pl-0" onChange={handleChangeValue} value={lang} name="lang" inputProps={{ ref: elLang }}>
                             {langRows &&
                                 langRows.map((row) => (
                                     <option key={row.id} value={row.dtlCd}>
                                         {row.name}
                                     </option>
                                 ))}
-                        </Form.Control>
+                        </MokaInputLabel>
                     </Col>
-                </Form.Group>
+                </Form.Row>
+
                 {/* API 경로 */}
-                <Form.Group as={Row}>
-                    <Form.Label column xs={3} className="pt-1 pr-0 pl-0 mb-0">
-                        API 경로
-                    </Form.Label>
+                <Form.Row>
                     <Col xs={9} className="pl-0 ml-0 pr-0 pl-0">
-                        <Form.Control as="select" onChange={handleChangeValue} custom value={apiCodeId} name="apiCodeId" className="form-control" ref={elApiCodeId}>
+                        <MokaInputLabel label="API 경로" as="select" onChange={handleChangeValue} custom value={apiCodeId} name="apiCodeId" inputProps={{ ref: elApiCodeId }}>
                             {apiRows &&
                                 apiRows.map((row) => (
                                     <option key={row.id} value={row.dtlCd}>
                                         {row.name}
                                     </option>
                                 ))}
-                        </Form.Control>
+                        </MokaInputLabel>
                     </Col>
-                </Form.Group>
+                </Form.Row>
+
                 {/* 메모 */}
-                <Form.Group as={Row}>
-                    <Form.Label column xs={3} className="pt-2 pr-0 pl-0 mb-0">
-                        메모
-                    </Form.Label>
+                <Form.Row>
                     <Col xs={9} className="pl-0 pr-0">
-                        <Form.Control as="textarea" rows="3" onChange={handleChangeValue} value={description} name="description" />
+                        <MokaInputLabel as="textarea" label="매모" inputProps={{ rows: 3 }} onChange={handleChangeValue} value={description} name="description" />
                     </Col>
-                </Form.Group>
+                </Form.Row>
                 {/* 버튼 */}
                 <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
                     <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>

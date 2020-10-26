@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { columnDefs } from './ReservedAgGridColumns';
 import { MokaTable } from '@components';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { changeSearchOption, clearReserved, getReservedList } from '@store/reserved';
+import { changeSearchOption, clearReserved, getReservedList, GET_RESERVED_LIST } from '@store/reserved';
 
 /**
  * 예약어 AgGrid 컴포넌트
@@ -17,7 +17,7 @@ const ReservedAgGrid = () => {
         list: store.reserved.list,
         search: store.reserved.search,
         reserved: store.reserved.reserved,
-        loading: store.loading['reserved/GET_RESERVED_LIST'],
+        loading: store.loading[GET_RESERVED_LIST],
     }));
 
     /**
@@ -58,7 +58,7 @@ const ReservedAgGrid = () => {
             <MokaTable
                 columnDefs={columnDefs}
                 rowData={list}
-                getRowNodeId={(reserved) => reserved.reservedSeq}
+                onRowNodeId={(reserved) => reserved.reservedSeq}
                 agGridHeight={550}
                 onRowClicked={handleRowClicked}
                 loading={loading}

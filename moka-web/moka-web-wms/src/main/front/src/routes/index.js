@@ -17,6 +17,7 @@ const Dataset = React.lazy(() => import('@pages/Dataset'));
 const Container = React.lazy(() => import('@pages/Container'));
 const Reserved = React.lazy(() => import('@pages/Reserved'));
 const Component = React.lazy(() => import('@pages/Component'));
+const CodeMgt = React.lazy(() => import('@pages/CodeMgt'));
 
 const routes = [
     {
@@ -143,6 +144,16 @@ const routes = [
         name: 'Component',
         displayName: '컴포넌트관리',
         component: Component,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/codeMgt',
+        name: 'CodeMgt',
+        displayName: '기타코드관리',
+        component: CodeMgt,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

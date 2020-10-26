@@ -18,7 +18,7 @@ const ReservedEdit = () => {
     const [reservedId, setReservedId] = useState('');
     const [reservedSeq, setReservedSeq] = useState('');
     const [reservedValue, setReservedValue] = useState('');
-    const [useYn, setUseYn] = useState('Y');
+    const [useYn, setUseYn] = useState('N');
     const [description, setdescription] = useState('');
     const [paramState, setParamState] = useState(false);
 
@@ -42,14 +42,13 @@ const ReservedEdit = () => {
         setReservedSeq(reserved.reservedSeq || '');
         setReservedValue(reserved.reservedValue || '');
         setdescription(reserved.description || '');
-        setUseYn(reserved.useYn || 'Y');
+        setUseYn(reserved.useYn || 'N');
     }, [reserved]);
 
     /**
      * input 값 변경
-     * @param target javascript event.target
      */
-    const handleChange = ({ target }) => {
+    const handleChangeValue = ({ target }) => {
         const { name, value, checked } = target;
         if (name === 'useYn') {
             const usedVal = checked ? 'Y' : 'N';
@@ -169,8 +168,9 @@ const ReservedEdit = () => {
      * 저장 이벤트
      * @param event 이벤트 객체
      */
-    const handleClickSave = (e) => {
+    const handleClickSave = () => {
         let newReserved = '';
+        debugger;
         if (reservedSeq) {
             newReserved = {
                 ...reserved,
@@ -206,7 +206,7 @@ const ReservedEdit = () => {
     /**
      * 삭제 이벤트
      */
-    const handleDeleteClick = (e) => {
+    const handleClickDelete = () => {
         const reservedSet = {
             domainId: latestDomainId,
             seq: reservedSeq,
@@ -243,13 +243,22 @@ const ReservedEdit = () => {
             <Form>
                 {/* 사용여부 */}
                 <Form.Group className="d-flex mb-2 justify-content-between align-content-center">
-                    <MokaInputLabel label="사용여부" labelWidth={80} as="switch" className="mb-0" inputProps={{ id: 'useYn', label: '' }} name="useYn" onChange={handleChange} />
+                    <MokaInputLabel
+                        label="사용여부"
+                        labelWidth={80}
+                        as="switch"
+                        className="mb-0"
+                        inputProps={{ id: 'useYn', label: '' }}
+                        name="useYn"
+                        onChange={handleChangeValue}
+                        checked={useYn === 'Y' && true}
+                    />
                     {/* 버튼 그룹 */}
                     <Form.Group className="mb-0 d-flex align-items-center">
                         <Button variant="dark" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="secondary" onClick={handleDeleteClick}>
+                        <Button variant="secondary" onClick={handleClickDelete}>
                             삭제
                         </Button>
                     </Form.Group>
@@ -263,9 +272,10 @@ const ReservedEdit = () => {
                             className="mb-2"
                             placeholder="예약어를 입력하세요"
                             name="reservedId"
-                            onChange={handleChange}
+                            onChange={handleChangeValue}
                             isInvalid={reservedIdError}
                             required
+                            value={reserved.reservedId}
                         />
                     </Col>
                 </Form.Row>
@@ -278,14 +288,23 @@ const ReservedEdit = () => {
                             className="mb-2"
                             placeholder="값을 입력하세요"
                             name="reservedValue"
-                            onChange={handleChange}
+                            onChange={handleChangeValue}
                             isInvalid={reservedValueError}
                             required
+                            value={reserved.reservedValue}
                         />
                     </Col>
                 </Form.Row>
                 {/* 예약어 설명 */}
-                <MokaInputLabel label="예약어 설명" labelWidth={80} className="mb-0" placeholder="설명을 입력하세요" name="description" onChange={handleChange} />
+                <MokaInputLabel
+                    label="예약어 설명"
+                    labelWidth={80}
+                    className="mb-0"
+                    placeholder="설명을 입력하세요"
+                    name="description"
+                    onChange={handleChangeValue}
+                    value={reserved.description}
+                />
             </Form>
         </>
     );

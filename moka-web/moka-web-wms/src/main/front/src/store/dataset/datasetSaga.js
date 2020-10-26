@@ -5,4 +5,8 @@ import { callApiAfterActions, createRequestSaga, errorResponse } from '../common
 import * as act from './datasetAction';
 import * as api from './datasetApi';
 
-export default function* datasetSaga() {}
+const getDatasetList = callApiAfterActions(act.getDatasetList, api.getDatasetList, (store) => store.dataset);
+
+export default function* saga() {
+    yield takeLatest(act.GET_DATASET_LIST, getDatasetList);
+}

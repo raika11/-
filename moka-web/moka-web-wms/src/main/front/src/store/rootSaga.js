@@ -5,7 +5,8 @@ import domainSaga from '@store/domain/domainSaga';
 import templateSaga from '@store/template/templateSaga';
 import codeMgtSaga from '@store/codeMgt/codeMgtSaga';
 import reservedSaga from '@store/reserved/reservedSaga';
+import datasetdSaga from '@store/dataset/datasetSaga';
 
 export default function* rootSaga() {
-    yield all([authSaga(), domainSaga(), templateSaga(), codeMgtSaga(), reservedSaga()]);
+    yield all([authSaga(), domainSaga(), templateSaga(), codeMgtSaga(), reservedSaga(), datasetdSaga()]);
 }

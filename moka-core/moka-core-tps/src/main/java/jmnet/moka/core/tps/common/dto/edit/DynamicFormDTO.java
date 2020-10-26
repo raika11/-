@@ -37,7 +37,7 @@ import lombok.ToString;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class ChannelFormatDTO {
+public class DynamicFormDTO {
 
     /**
      * 채널명 화면명 또는 업무명이라고 보면 됨
@@ -62,5 +62,8 @@ public class ChannelFormatDTO {
     private List<PartDTO> parts;
 
 
-    private Long lastModified;
+    /**
+     * 파일 마지막 수정 일시
+     */
+    private Long lastModified = 0L;
 }

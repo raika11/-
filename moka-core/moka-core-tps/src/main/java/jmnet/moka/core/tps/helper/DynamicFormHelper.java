@@ -1,25 +1,29 @@
 package jmnet.moka.core.tps.helper;
 
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.common.code.EditFieldTypeCode;
-import jmnet.moka.core.tps.common.dto.edit.ChannelFormatDTO;
+import jmnet.moka.core.tps.common.dto.edit.DynamicFormDTO;
 import jmnet.moka.core.tps.common.dto.edit.FieldDTO;
 import jmnet.moka.core.tps.common.dto.edit.FieldGroupDTO;
 import jmnet.moka.core.tps.common.dto.edit.OptionDTO;
 import jmnet.moka.core.tps.common.dto.edit.PartDTO;
-import jmnet.moka.core.tps.exception.NoDataException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * <pre>
@@ -34,47 +38,63 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2020-10-25 09:16
  */
 @Slf4j
-public class EditFormHelper {
+public class DynamicFormHelper {
 
-    private static Map<String, ChannelFormatDTO> chnnelFormatMap = new HashMap<>();
+    private final Map<String, DynamicFormDTO> dynamicFormMap;
+
+    private final XmlMapper xmlMapper;
+
+    @Value("${tps.dynamic.edit.form.xml.file.path}")
+    private String xmlFilePath;
+
+    public DynamicFormHelper(XmlMapper xmlMapper) {
+        this.xmlMapper = xmlMapper;
+        dynamicFormMap = new HashMap<>();
+    }
 
     /**
      * 파일을 읽어, ChannelFormatDTO로 변환한다.
      *
-     * @param filePath 파일 경우
+     * @param site        사이트
+     * @param channelName 채널명
      * @return ChannelFormatDTO
-     * @throws Exception
+     * @throws MokaException 오류 처리
      */
-    public static ChannelFormatDTO mapping(String filePath)
-            throws Exception {
-        XmlMapper xmlMapper = new XmlMapper();
-        TypeFactory tf = xmlMapper.getTypeFactory();
-
-        File file = McpFile.getFile(filePath);
-        String fileName = file.getName();
-        ChannelFormatDTO channelFormatDTO = chnnelFormatMap.get(fileName);
-        if (channelFormatDTO == null || !channelFormatDTO
+    public DynamicFormDTO mapping(String site, String channelName)
+            throws MokaException {
+        String formatKey = site + "_" + channelName;
+        File file = McpFile.getFile(String.format(xmlFilePath, site, channelName));
+        if (!file.exists()) {
+            throw new MokaException(new FileNotFoundException(file.getAbsolutePath()));
+        }
+        DynamicFormDTO dynamicFormDTO = dynamicFormMap.get(formatKey);
+        if (dynamicFormDTO == null || !dynamicFormDTO
                 .getLastModified()
                 .equals(file.lastModified())) {
-            channelFormatDTO = xmlMapper.readValue(file, ChannelFormatDTO.class);
-            refineFieldGroup(channelFormatDTO);
-
-            chnnelFormatMap.put(fileName, channelFormatDTO);
+            synchronized (DynamicFormHelper.class) {
+                try {
+                    dynamicFormDTO = xmlMapper.readValue(file, DynamicFormDTO.class);
+                    refineFieldGroup(dynamicFormDTO);
+                } catch (IOException e) {
+                    throw new MokaException(e.getMessage());
+                }
+                dynamicFormMap.put(formatKey, dynamicFormDTO);
+            }
         }
 
-        return chnnelFormatMap.get(fileName);
+        return dynamicFormMap.get(formatKey);
     }
 
     /**
      * field 목록의 그룹별로 묶는다.
      *
-     * @param channelFormatDTO ChannelFormatDTO
-     * @throws Exception
+     * @param dynamicFormDTO ChannelFormatDTO
+     * @throws MokaException
      */
-    public static void refineFieldGroup(ChannelFormatDTO channelFormatDTO)
-            throws Exception {
+    public void refineFieldGroup(DynamicFormDTO dynamicFormDTO)
+            throws MokaException {
 
-        channelFormatDTO
+        dynamicFormDTO
                 .getParts()
                 .forEach(partDTO -> {
                     Map<String, List<FieldDTO>> groupMap = new HashMap<>();
@@ -90,10 +110,11 @@ public class EditFormHelper {
                         groupInnerFields.add(fieldDTO);
                         groupMap.put(currentGroupNumber, groupInnerFields);
                     }
-                    groupMap.forEach((group, fieldDTOS) -> {
-                        fieldDTOS.sort((o1, o2) -> {
-                            return o1.getSequence() - o2.getSequence();
-                        });
+                    partDTO.setFields(null);
+                    for (Entry<String, List<FieldDTO>> entry : groupMap.entrySet()) {
+                        String group = entry.getKey();
+                        List<FieldDTO> fieldDTOS = entry.getValue();
+                        fieldDTOS.sort(Comparator.comparingInt(FieldDTO::getSequence));
                         FieldGroupDTO fieldGroupDTO = FieldGroupDTO
                                 .builder()
                                 .fields(fieldDTOS)
@@ -102,7 +123,7 @@ public class EditFormHelper {
                         partDTO
                                 .getFieldGroups()
                                 .add(fieldGroupDTO);
-                    });
+                    }
 
                 });
 
@@ -113,7 +134,7 @@ public class EditFormHelper {
      *
      * @param fieldDTO FieldDTO
      */
-    public static void refineOptions(FieldDTO fieldDTO) {
+    public void refineOptions(FieldDTO fieldDTO) {
 
         EditFieldTypeCode fieldType = EditFieldTypeCode.getType(fieldDTO.getType());
         if (fieldType == EditFieldTypeCode.SELECT) {
@@ -122,7 +143,7 @@ public class EditFormHelper {
                     .split("\\^");
             Set<OptionDTO> options = Arrays
                     .stream(values)
-                    .map(s -> new OptionDTO(s))
+                    .map(OptionDTO::new)
                     .collect(Collectors.toSet());
             fieldDTO.setOptions(options);
         }
@@ -135,21 +156,30 @@ public class EditFormHelper {
      * @param channelName 채널명
      * @param partId      파트 ID
      * @return PartDTO
-     * @throws Exception
+     * @throws MokaException
      */
-    public static PartDTO getPart(String channelName, String partId)
-            throws Exception {
-        ChannelFormatDTO channelFormatDTO = chnnelFormatMap.get(channelName);
-        return channelFormatDTO
+    public PartDTO getPart(String site, String channelName, String partId)
+            throws MokaException {
+        DynamicFormDTO dynamicFormDTO = getChannelFormat(site, channelName);
+        return dynamicFormDTO
                 .getParts()
                 .stream()
                 .filter(part -> part
                         .getId()
                         .equals(partId))
                 .findFirst()
-                .orElseThrow(() -> new NoDataException(EditFormHelper.class.getName()));
+                .orElseThrow(() -> new MokaException(DynamicFormHelper.class.getName()));
 
     }
 
-
+    /**
+     * channel정보를 불러온다.
+     *
+     * @param channelName 채널명
+     * @return ChannelFormatDTO
+     */
+    public DynamicFormDTO getChannelFormat(String site, String channelName)
+            throws MokaException {
+        return mapping(site, channelName);
+    }
 }

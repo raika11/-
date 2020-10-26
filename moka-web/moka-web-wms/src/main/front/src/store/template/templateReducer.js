@@ -84,7 +84,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.template = body;
                 draft.templateBody = body.templateBody;
-                draft.inputTag = `<tems:tp id='${body.templateSeq}' name='${body.templateName}' />`;
+                draft.inputTag = `<tems:tp id="${body.templateSeq}" name="${body.templateName}" />`;
                 draft.templateError = initialState.templateError;
             });
         },

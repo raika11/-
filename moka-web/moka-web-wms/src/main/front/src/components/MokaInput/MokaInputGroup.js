@@ -82,6 +82,10 @@ const propTypes = {
      * InputGroup.prepend에 들어갈 노드
      */
     prepend: PropTypes.node,
+    /**
+     * style 객체
+     */
+    style: PropTypes.object,
 };
 const defaultProps = {
     label: null,
@@ -115,6 +119,7 @@ const MokaInputGroup = forwardRef((props, ref) => {
         inputGroupClassName,
         append,
         prepend,
+        style,
     } = props;
 
     /**
@@ -163,7 +168,7 @@ const MokaInputGroup = forwardRef((props, ref) => {
     const createInputGroup = () => {
         if (as !== 'prependLink') {
             return (
-                <InputGroup className={clsx('flex-fill', inputGroupClassName)}>
+                <InputGroup className={clsx('flex-fill', inputGroupClassName)} style={style}>
                     {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
                     {createControl()}
                     {append && <InputGroup.Append>{append}</InputGroup.Append>}

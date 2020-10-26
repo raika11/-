@@ -38,8 +38,8 @@ const MokaTableDeleteButton = (props) => {
 
     return (
         <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-            <Button variant="white" className="border p-0 moka-table-button" onClick={handleClick}>
-                <MokaIcon iconName="fal-minus" />
+            <Button variant="white" className="border-0 p-0 moka-table-button bg-transparent" onClick={handleClick}>
+                <MokaIcon iconName="fal-minus-circle" />
             </Button>
         </div>
     );

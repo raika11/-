@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
-import { MokaInput, MokaInputLabel, MokaInputGroup, MokaIcon, MokaPrependLinkInput } from '@components';
+import { MokaInput, MokaInputLabel, MokaInputGroup, MokaIcon, MokaDateTimePicker } from '@components';
 
 const DetailPeriodForm = (props) => {
     const { periodYn, periodStartDt, periodEndDt, setPeriodYn, setPeriodStartDt, setPeriodEndDt } = props;
@@ -39,7 +39,7 @@ const DetailPeriodForm = (props) => {
             <Collapse in={open} timeout={3000}>
                 <div id={controls}>
                     <div className="d-flex justify-content-center">
-                        <Col xs={10} className="p-0">
+                        <Col xs={11} className="p-0">
                             <Form.Row>
                                 <Col xs={3} className="d-flex p-0 pr-3">
                                     <MokaInputLabel
@@ -60,24 +60,19 @@ const DetailPeriodForm = (props) => {
                                     />
                                 </Col>
                                 <Col xs={9} className="d-flex p-0">
-                                    <MokaInputGroup
-                                        className="mb-0 mr-1"
-                                        append={
-                                            <Button disabled={disabled}>
-                                                <MokaIcon iconName="fal-calendar-alt" />
-                                            </Button>
-                                        }
+                                    <MokaDateTimePicker
+                                        className="flex-grow-0 mr-1"
+                                        timeFormat={null}
                                         disabled={disabled}
+                                        value={periodStartDt}
+                                        onChange={(e) => {
+                                            console.log(e);
+                                        }}
                                     />
-                                    <MokaInputGroup
-                                        className="mb-0 mr-1"
-                                        append={
-                                            <Button disabled={disabled}>
-                                                <MokaIcon iconName="fal-clock" />
-                                            </Button>
-                                        }
-                                        disabled={disabled}
-                                    />
+                                    <MokaDateTimePicker className="flex-grow-0 mr-1" dateFormat={null} disabled={disabled} value={periodStartDt} />
+                                    ~
+                                    <MokaDateTimePicker className="flex-grow-0 mr-1" disabled={disabled} timeFormat={null} value={periodEndDt} />
+                                    <MokaDateTimePicker className="flex-grow-0 mr-1" disabled={disabled} dateFormat={null} value={periodEndDt} />
                                 </Col>
                             </Form.Row>
                         </Col>

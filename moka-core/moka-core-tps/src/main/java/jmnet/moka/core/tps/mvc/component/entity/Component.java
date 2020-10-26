@@ -26,7 +26,6 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
-import jmnet.moka.core.tps.mvc.page.entity.PageRel;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,7 +49,8 @@ public class Component extends BaseAudit {
 
     private static final long serialVersionUID = 1003720414088222277L;
 
-    public static final Type TYPE = new TypeReference<List<Component>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<Component>>() {
+    }.getType();
 
     /**
      * 컴포넌트SEQ
@@ -131,6 +131,18 @@ public class Component extends BaseAudit {
     private String delWords;
 
     /**
+     * 영역
+     */
+    @Column(name = "ZONE")
+    private String zone;
+
+    /**
+     * 매칭영역
+     */
+    @Column(name = "MATCH_ZONE")
+    private String matchZone;
+
+    /**
      * 페이징여부
      */
     @Column(name = "PAGING_YN", columnDefinition = "char")
@@ -204,12 +216,12 @@ public class Component extends BaseAudit {
     @Column(name = "SNAPSHOT_BODY")
     private String snapshotBody;
 
-//    /**
-//     * 스킨SEQ
-//     */
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "SKIN_SEQ", referencedColumnName = "SKIN_SEQ")
-//    private Skin skin;
+    //    /**
+    //     * 스킨SEQ
+    //     */
+    //    @ManyToOne(fetch = FetchType.EAGER)
+    //    @JoinColumn(name = "SKIN_SEQ", referencedColumnName = "SKIN_SEQ")
+    //    private Skin skin;
 
     /**
      * 광고

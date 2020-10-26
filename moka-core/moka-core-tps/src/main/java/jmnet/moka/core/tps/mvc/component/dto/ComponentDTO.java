@@ -40,7 +40,8 @@ public class ComponentDTO implements Serializable {
 
     private static final long serialVersionUID = 7271351833690295727L;
 
-    public static final Type TYPE = new TypeReference<List<ComponentDTO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<ComponentDTO>>() {
+    }.getType();
 
     /**
      * 컴포넌트SEQ
@@ -110,6 +111,18 @@ public class ComponentDTO implements Serializable {
      */
     @Length(max = 256, message = "{tps.component.error.length.delWords}")
     private String delWords;
+
+    /**
+     * 영역
+     */
+    @Length(max = 100, message = "{tps.component.error.length.zone}")
+    private String zone;
+
+    /**
+     * 매칭영역
+     */
+    @Length(max = 50, message = "{tps.component.error.length.matchZone}")
+    private String matchZone;
 
     /**
      * 페이징여부

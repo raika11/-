@@ -6,12 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
@@ -97,9 +98,9 @@ public class DynamicFormHelper {
         dynamicFormDTO
                 .getParts()
                 .forEach(partDTO -> {
-                    Map<String, List<FieldDTO>> groupMap = new HashMap<>();
+                    SortedMap<Integer, List<FieldDTO>> groupMap = new TreeMap<>();
                     partDTO.setFieldGroups(new ArrayList<>());
-                    String currentGroupNumber = "1";
+                    Integer currentGroupNumber = 1;
                     for (FieldDTO fieldDTO : partDTO.getFields()) {
                         refineOptions(fieldDTO);
                         if (McpString.isEmpty(fieldDTO.getGroup())) {
@@ -111,10 +112,19 @@ public class DynamicFormHelper {
                         groupMap.put(currentGroupNumber, groupInnerFields);
                     }
                     partDTO.setFields(null);
-                    for (Entry<String, List<FieldDTO>> entry : groupMap.entrySet()) {
-                        String group = entry.getKey();
+                    for (Entry<Integer, List<FieldDTO>> entry : groupMap.entrySet()) {
+                        Integer group = entry.getKey();
                         List<FieldDTO> fieldDTOS = entry.getValue();
-                        fieldDTOS.sort(Comparator.comparingInt(FieldDTO::getSequence));
+                        fieldDTOS.sort((o1, o2) -> {
+                            if (!o1
+                                    .getType()
+                                    .equals(o2.getType())) {
+                                return 1;
+                            } else {
+                                return o1.getSequence() - o2.getSequence();
+                            }
+
+                        });
                         FieldGroupDTO fieldGroupDTO = FieldGroupDTO
                                 .builder()
                                 .fields(fieldDTOS)

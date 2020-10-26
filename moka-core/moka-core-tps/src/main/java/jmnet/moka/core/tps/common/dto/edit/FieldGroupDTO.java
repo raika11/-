@@ -39,7 +39,7 @@ public class FieldGroupDTO {
     /**
      * 그룹번호
      */
-    private String group;
+    private Integer group;
     /**
      * 필드 목록
      */

@@ -131,7 +131,7 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 조회")
     @GetMapping("/{menuId}")
     public ResponseEntity<?> getMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.menu.error.length.menuId}") String menuId,
+            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId,
             @NotNull Principal principal)
             throws NoDataException, InvalidDataException {
 
@@ -158,7 +158,7 @@ public class MenuRestController {
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{menuId}/exists")
     public ResponseEntity<?> duplicateCheckId(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.menu.error.length.menuId}") String menuId) {
+            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId) {
 
         boolean duplicated = menuService.isDuplicatedId(menuId);
         ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(duplicated);
@@ -229,8 +229,8 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 수정")
     @PutMapping("/{menuId}")
     public ResponseEntity<?> putMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.length.menuId}") String menuId, @Valid MenuDTO menuDTO,
-            @NotNull Principal principal)
+            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId,
+            @Valid MenuDTO menuDTO, @NotNull Principal principal)
             throws Exception {
 
 
@@ -426,7 +426,7 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 삭제")
     @DeleteMapping("/{menuId}")
     public ResponseEntity<?> deleteMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{8}$", message = "{tps.menu.error.length.menuId}") String menuId,
+            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId,
             @NotNull Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 

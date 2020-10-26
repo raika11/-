@@ -53,7 +53,7 @@ public class FieldDTO {
      * 그룹번호
      */
     @JacksonXmlProperty(isAttribute = true)
-    private String group;
+    private Integer group;
 
     /**
      * 그룹 내 표시 순번 값 없을 경우 default는 Integer 최대값

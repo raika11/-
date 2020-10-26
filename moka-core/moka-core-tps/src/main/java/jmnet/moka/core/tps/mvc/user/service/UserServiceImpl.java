@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<GrantedAuthority> getAuthorities(String position) {
         if (position.equals(TpsConstants.SUPER_ADMIN_GROUP_CD)) {
             return Arrays.asList(new SimpleGrantedAuthority(TpsConstants.ROLE_SUPERADMIN));
-        } else if (position.equals("1")) {
+        } else if (position.equals("J")) {
             return Arrays.asList(new SimpleGrantedAuthority(TpsConstants.ROLE_USER));
         }
         return null;

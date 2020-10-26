@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DefaultConfig>
-	<!-- 허용 ip 목록, 다중 그룹 가능 -->
-	<ipGroup name="system"><!--  * ( wildcard ) 허용  -->
-			127.0.0.1
-			175.192.253.130
-			192.168.42.*
-	</ipGroup>
-	<ipGroup name="test">
-			0:0:0:0:0:0:0:1
-	</ipGroup>
-	<!-- acl 목록에 없는 api는 모두 허용, acl 목록에 있는 경우는 해당 ipGroup만 허용 -->
-	<acl name="item" ipGroup="system,test"> <!--  api목록에 정규표현식을 사용하지 않는다. -->
-		term.list
-	</acl>
-	<parameter>
-		<termName desc="검색할 용어">.{0,100}</termName>
-		<page type="number" default="1">[1-9][0-9]{0,2}</page>
-		<count type="number" default="30">[0-9]{1,3}</count>
-		<start type="number" default="0" eval="((page le 0 ? 1 :page) - 1)*count">[0-9]{1,5}</start>	
-		<sort>.{0,100}</sort>
-	</parameter>
-	<!--  parameterGroup의 name 속성에는 반드시 #을 붙여야 그룹으로 인식한다. -->
-	<parameterGroup name="#paging">
-		page
-		count
-		start
-		sort		
-	</parameterGroup>
+  <!-- 허용 ip 목록, 다중 그룹 가능 -->
+  <ipGroup name="system"><!--  * ( wildcard ) 허용  -->
+    127.0.0.1
+    192.168.72.*
+    172.29.12.*
+    172.29.58.*
+    203.249.146.200
+  </ipGroup>
+  <ipGroup name="test">
+    0:0:0:0:0:0:0:1
+  </ipGroup>
+  <!-- acl 목록에 없는 api는 모두 허용, acl 목록에 있는 경우는 해당 ipGroup만 허용 -->
+  <acl name="item" ipGroup="system,test"> <!--  api목록에 정규표현식을 사용하지 않는다. -->
+    term.list
+  </acl>
+  <parameter>
+    <termName desc="검색할 용어">.{0,100}</termName>
+    <page type="number" default="1">[1-9][0-9]{0,2}</page>
+    <count type="number" default="30">[0-9]{1,3}</count>
+    <start type="number" default="0" eval="((page le 0 ? 1 :page) - 1)*count">[0-9]{1,5}</start>
+    <sort>.{0,100}</sort>
+  </parameter>
+  <!--  parameterGroup의 name 속성에는 반드시 #을 붙여야 그룹으로 인식한다. -->
+  <parameterGroup name="#paging">
+    page
+    count
+    start
+    sort
+  </parameterGroup>
 </DefaultConfig>

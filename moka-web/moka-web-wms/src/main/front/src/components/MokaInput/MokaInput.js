@@ -4,7 +4,7 @@ import InputMask from 'react-input-mask';
 import PropTypes from 'prop-types';
 
 import Form from 'react-bootstrap/Form';
-import { MokaImageInput } from '@components';
+import { MokaImageInput, MokaAutocomplete } from '@components';
 
 const propTypes = {
     /**
@@ -14,7 +14,7 @@ const propTypes = {
     /**
      * input element의 타입(기본 input)
      */
-    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile']),
+    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'autocomplete']),
     /**
      * input의 type
      */
@@ -172,6 +172,10 @@ const MokaInput = forwardRef((props, ref) => {
     // 드롭가능한 이미지 파일
     else if (as === 'imageFile') {
         return <MokaImageInput ref={ref} {...inputProps} />;
+    }
+    // auto complete
+    else if (as === 'autocomplete') {
+        return <MokaAutocomplete value={value} onChange={onChange} {...inputProps} />;
     }
 
     return (

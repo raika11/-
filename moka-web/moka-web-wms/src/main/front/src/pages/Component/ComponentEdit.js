@@ -1,12 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+import { MokaCard } from '@components';
+import { DB_DATEFORMAT } from '@/constants';
 
-import Row from 'react-bootstrap/Row';
-import { MokaCard, MokaInputLabel, MokaIcon, MokaInput, MokaInputGroup } from '@components';
 import BasicForm from './components/BasicForm';
 import DetailRelationForm from './components/DetailRelationForm';
 import DetailPeriodForm from './components/DetailPeriodForm';
+import DetailSchForm from './components/DetailSchForm';
+import DetailPagingForm from './components/DetailPagingForm';
 
 /**
  * 컴포넌트 정보/수정 컴포넌트
@@ -36,12 +39,12 @@ const ComponentEdit = () => {
     const [periodStartDt, setPeriodStartDt] = useState('');
     const [periodEndDt, setPeriodEndDt] = useState('');
     // 검색 설정
-    const [schServiceType, setSchServiceType] = useState('');
-    const [schLang, setSchLang] = useState('');
+    const [schServiceType, setSchServiceType] = useState('all');
+    const [schLang, setSchLang] = useState('all');
     const [schCodeId, setSchCodeId] = useState('');
     // 목록 설정
     const [pagingYn, setPagingYn] = useState('N');
-    const [pagingType, setPagingType] = useState('');
+    const [pagingType, setPagingType] = useState('N');
     const [perPageCount, setPerPageCount] = useState(0);
     const [maxPageCount, setMaxPageCount] = useState(0);
     const [dispPageCount, setDispPageCount] = useState(0);
@@ -83,6 +86,30 @@ const ComponentEdit = () => {
                     setPeriodYn={setPeriodYn}
                     setPeriodStartDt={setPeriodStartDt}
                     setPeriodEndDt={setPeriodEndDt}
+                />
+                <hr className="divider" />
+                <DetailSchForm
+                    schServiceType={schServiceType}
+                    schLang={schLang}
+                    schCodeId={schCodeId}
+                    setSchServiceType={setSchServiceType}
+                    setSchLang={setSchLang}
+                    setSchCodeId={setSchCodeId}
+                />
+                <hr className="divider" />
+                <DetailPagingForm
+                    pagingYn={pagingYn}
+                    pagingType={pagingType}
+                    perPageCount={perPageCount}
+                    maxPageCount={maxPageCount}
+                    dispPageCount={dispPageCount}
+                    moreCount={moreCount}
+                    setPagingYn={setPagingYn}
+                    setPagingType={setPagingType}
+                    setPerPageCount={setPerPageCount}
+                    setMaxPageCount={setMaxPageCount}
+                    setDispPageCount={setDispPageCount}
+                    setMoreCount={setMoreCount}
                 />
             </div>
         </MokaCard>

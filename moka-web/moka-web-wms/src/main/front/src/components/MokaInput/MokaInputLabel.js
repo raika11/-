@@ -32,8 +32,11 @@ const propTypes = {
     /**
      * ---------------------------------------------------------------------------------------------
      * input element의 타입(기본 input)
+     * imageFile -> MokaImageInput
+     * none -> label만 그림 (input 없음)
+     * autocomplete -> MokaAutocomplete
      */
-    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile']),
+    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'none', 'autocomplete']),
     /**
      * input의 type
      */
@@ -101,22 +104,24 @@ const MokaInputLabel = forwardRef((props, ref) => {
                 {required && <span className="required-text">*</span>}
                 {label}
             </Form.Label>
-            <MokaInput
-                ref={ref}
-                className={inputClassName}
-                as={as}
-                type={type}
-                placeholder={placeholder}
-                onChange={onChange}
-                value={value}
-                name={name}
-                inputProps={inputProps}
-                mask={mask}
-                isInvalid={isInvalid}
-                disabled={disabled}
-            >
-                {children}
-            </MokaInput>
+            {as !== 'none' && (
+                <MokaInput
+                    ref={ref}
+                    className={inputClassName}
+                    as={as}
+                    type={type}
+                    placeholder={placeholder}
+                    onChange={onChange}
+                    value={value}
+                    name={name}
+                    inputProps={inputProps}
+                    mask={mask}
+                    isInvalid={isInvalid}
+                    disabled={disabled}
+                >
+                    {children}
+                </MokaInput>
+            )}
         </Form.Group>
     );
 });

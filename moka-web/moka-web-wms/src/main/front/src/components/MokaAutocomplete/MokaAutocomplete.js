@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
 import { MokaIcon } from '@components';
@@ -43,6 +44,10 @@ const propTypes = {
      * 검색 아이콘 클릭 콜백
      */
     onClickSearchIcon: PropTypes.func,
+    /**
+     * className
+     */
+    className: PropTypes.string,
 };
 
 const defaultProps = {
@@ -60,7 +65,7 @@ const defaultProps = {
  * https://react-select.com/home
  */
 const MokaAutocomplete = (props) => {
-    const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, value, onChange, ...rest } = props;
+    const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, value, onChange, className, ...rest } = props;
 
     // 검색 아이콘
     const IndicatorsContainer = (props) => {
@@ -88,7 +93,7 @@ const MokaAutocomplete = (props) => {
 
     return (
         <Select
-            className="react-select-container"
+            className={clsx('react-select-container', 'flex-fill', className)}
             classNamePrefix="react-select"
             closeMenuOnSelect={closeMenuOnSelect}
             isSearchable

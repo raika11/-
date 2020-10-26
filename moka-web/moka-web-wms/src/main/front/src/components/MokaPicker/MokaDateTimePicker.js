@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef } from 'react';
 import DateTime from 'react-datetime';
 import InputElement from 'react-input-mask';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -51,9 +51,8 @@ const defaultProps = {
  * DatePicker,
  * TimePicker
  */
-const MokaDateTimePicker = (props) => {
+const MokaDateTimePicker = forwardRef((props, ref) => {
     const { placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, ...rest } = props;
-    const [calendarOpen, setCalendarOpen] = useState(false);
 
     // 날짜시간 포맷
     const dateTimeFormat = (() => {
@@ -65,11 +64,6 @@ const MokaDateTimePicker = (props) => {
             return dateFormat;
         }
     })();
-
-    const handleOpen = (op) => {
-        console.log(op);
-        setCalendarOpen(true);
-    };
 
     const renderDay = (props, currentDate, selectedDate) => {
         // 일요일 스타일 변경
@@ -108,19 +102,19 @@ const MokaDateTimePicker = (props) => {
 
     return (
         <DateTime
+            ref={ref}
             locale="ko"
             dateFormat={dateFormat}
             timeFormat={timeFormat}
             defaultValue={defaultValue || moment().format(dateTimeFormat)}
             value={value}
             onChange={onChange}
-            onOpen={handleOpen}
             {...rest}
             renderDay={renderDay}
             renderInput={renderInput}
         />
     );
-};
+});
 
 MokaDateTimePicker.propTypes = propTypes;
 MokaDateTimePicker.defaultProps = defaultProps;

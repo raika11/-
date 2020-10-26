@@ -32,7 +32,7 @@ const initialState = {
     tpSizeRows: [],
     tpZoneRows: [],
     langRows: [],
-    seviceTypeRows: [],
+    serviceTypeRows: [],
     pageTypeRows: [],
     apiRows: [],
 };

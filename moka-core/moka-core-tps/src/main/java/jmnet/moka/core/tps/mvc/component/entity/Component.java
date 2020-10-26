@@ -3,9 +3,7 @@ package jmnet.moka.core.tps.mvc.component.entity;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.lang.reflect.Type;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +17,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -222,12 +219,6 @@ public class Component extends BaseAudit {
     //    @ManyToOne(fetch = FetchType.EAGER)
     //    @JoinColumn(name = "SKIN_SEQ", referencedColumnName = "SKIN_SEQ")
     //    private Skin skin;
-
-    /**
-     * 광고
-     */
-    @Transient
-    private Set<ComponentAd> componentAdList = new LinkedHashSet<ComponentAd>();
 
     @PrePersist
     @PreUpdate

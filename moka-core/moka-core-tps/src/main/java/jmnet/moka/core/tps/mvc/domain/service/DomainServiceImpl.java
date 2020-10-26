@@ -3,8 +3,15 @@
  */
 package jmnet.moka.core.tps.mvc.domain.service;
 
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
@@ -19,15 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * 도메인 서비스 2020. 1. 8. ssc 최초생성
@@ -79,7 +77,8 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     @Transactional
-    public Domain insertDomain(Domain domain) throws Exception {
+    public Domain insertDomain(Domain domain)
+            throws Exception {
 
         // 도메인 등록
         Domain returnVal = domainRepository.save(domain);
@@ -89,25 +88,18 @@ public class DomainServiceImpl implements DomainService {
         uploadFileHelper.createBusinessDir("template", returnVal.getDomainId());
 
         // 페이지(메인홈) 등록
-        jmnet.moka.core.tps.mvc.page.entity.Page root
-                = jmnet.moka.core.tps.mvc.page.entity.Page.builder()
-                .regDt(McpDate.now())
-                .regId(returnVal.getRegId())
-                .pageName("메인")
-                .pageDisplayName("HOME")
-                .domain(returnVal)
-                .pageUrl("/")
-                .pageBody("")
-                .build();
+        jmnet.moka.core.tps.mvc.page.entity.Page root = jmnet.moka.core.tps.mvc.page.entity.Page.builder()
+                                                                                                //                                                                                                .regDt(McpDate.now())
+                                                                                                //                                                                                                .regId(returnVal.getRegId())
+                                                                                                .pageName("메인")
+                                                                                                .pageDisplayName("HOME")
+                                                                                                .domain(returnVal)
+                                                                                                .pageUrl("/")
+                                                                                                .pageBody("")
+                                                                                                .build();
 
         // 페이지에 PAGE_TYPE 셋팅 (etccode 리스트의 첫번째 데이터)
-        String pageType = "";
-        try {
-            pageType = codeMgtService.findUseList(TpsConstants.CODE_MGT_GRP_PAGE_TYPE)
-                    .get(0).getCdNm();
-        } catch (Exception e) {
-        }
-        root.setPageType(pageType);
+        root.setPageType(TpsConstants.PAGE_TYPE_HTML);
 
         pageService.insertPage(root);
         log.debug("[INSERT DOMAIN] insert page, {}", root.getPageName());
@@ -123,14 +115,17 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void deleteDomainById(String domainId) throws Exception {
+    public void deleteDomainById(String domainId)
+            throws Exception {
         // 템플릿 이미지 폴더 삭제
         uploadFileHelper.deleteBusinessDir("template", domainId);
 
         // 루트 페이지 삭제
-        jmnet.moka.core.tps.mvc.page.entity.Page root =
-                pageService.findByDomainId(domainId, null).getContent().get(0);
-        Principal principal = SecurityContextHolder.getContext().getAuthentication();
+        jmnet.moka.core.tps.mvc.page.entity.Page root = pageService.findPageByDomainId(domainId, null)
+                                                                   .getContent()
+                                                                   .get(0);
+        Principal principal = SecurityContextHolder.getContext()
+                                                   .getAuthentication();
         pageService.deletePage(root, principal.getName());
         log.debug("[DELETE DOMAIN] Root Page Delete: {}", root.getPageSeq());
 
@@ -139,7 +134,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void deleteDomain(Domain domain) throws Exception {
+    public void deleteDomain(Domain domain)
+            throws Exception {
         this.deleteDomainById(domain.getDomainId());
     }
 

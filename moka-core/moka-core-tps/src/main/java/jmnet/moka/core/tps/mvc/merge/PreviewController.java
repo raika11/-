@@ -184,7 +184,7 @@ public class PreviewController {
         try {
             // 페이지
             String messagePG = messageByLocale.get("tps.page.error.noContent", request);
-            Page pageInfo = pageService.findByPageSeq(pageSeq)
+            Page pageInfo = pageService.findPageBySeq(pageSeq)
                                        .orElseThrow(() -> new NoDataException(messagePG));
             PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
             PageItem pageItem = pageDto.toPageItem();
@@ -241,7 +241,7 @@ public class PreviewController {
         try {
             // 페이지
             String messagePG = messageByLocale.get("tps.page.error.noContent", request);
-            Page pageInfo = pageService.findByPageSeq(pageSeq)
+            Page pageInfo = pageService.findPageBySeq(pageSeq)
                                        .orElseThrow(() -> new NoDataException(messagePG));
             PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
             PageItem pageItem = pageDto.toPageItem();

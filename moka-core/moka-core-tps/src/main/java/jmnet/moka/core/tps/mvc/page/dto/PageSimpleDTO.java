@@ -1,20 +1,24 @@
 package jmnet.moka.core.tps.mvc.page.dto;
 
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.List;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,36 +31,71 @@ public class PageSimpleDTO implements Serializable {
 
     private static final long serialVersionUID = -3629594236709756375L;
 
-    public static final Type TYPE = new TypeReference<List<PageSimpleDTO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<PageSimpleDTO>>() {
+    }.getType();
 
-    @Min(value = 0, message = "{tps.page.error.invalid.pageSeq}")
+    /**
+     * 페이지SEQ
+     */
+    @Min(value = 0, message = "{tps.page.error.min.pageSeq}")
     private Long pageSeq;
 
-    @NotNull(message = "{tps.page.error.invalid.pageName}")
-    @Pattern(regexp = ".+", message = "{tps.page.error.invalid.pageName}")
-    private String pageName;
-
-    @Pattern(regexp = MokaConstants.PAGE_SERVICE_NAME_PATTERN,
-            message = "{tps.page.error.invalid.pageServiceName}")
-    private String pageServiceName;
-
-    private String pageDisplayName;
-
+    /**
+     * 도메인
+     */
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    @NotNull(message = "{tps.page.error.invalid.pageType}")
-    @Pattern(regexp = ".+", message = "{tps.page.error.invalid.pageType}")
-    private String pageType;
+    /**
+     * 페이지명
+     */
+    @NotNull(message = "{tps.page.error.notnull.pageName}")
+    @Pattern(regexp = ".+", message = "{tps.page.error.pattern.pageName}")
+    @Length(min = 1, max = 256, message = "{tps.page.error.length.pageName}")
+    private String pageName;
 
-    @NotNull(message = "{tps.page.error.invalid.pageUrl}")
-    @Pattern(regexp = ".+", message = "{tps.page.error.invalid.pageUrl}")
+    /**
+     * 페이지서비스명
+     */
+    @Pattern(regexp = MokaConstants.PAGE_SERVICE_NAME_PATTERN, message = "{tps.page.error.pattern.pageServiceName}")
+    @Length(max = 256, message = "{tps.page.error.length.pageServiceName}")
+    private String pageServiceName;
+
+    /**
+     * 페이지표출명
+     */
+    @Length(max = 256, message = "{tps.page.error.length.pageServiceName}")
+    private String pageDisplayName;
+
+    /**
+     * 페이지유형 text/html, application/json, text/javascript, text/plain, text/xml
+     */
+    @NotNull(message = "{tps.page.error.notnull.pageType}")
+    @Pattern(regexp = ".+", message = "{tps.page.error.pattern.pageType}")
+    @Length(min = 1, max = 24, message = "{tps.page.error.length.pageType}")
+    @Builder.Default
+    private String pageType = TpsConstants.PAGE_TYPE_HTML;
+
+    /**
+     * 페이지URL
+     */
+    @NotNull(message = "{tps.page.error.notnull.pageUrl}")
+    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.pageUrl}")
+    @Length(min = 1, max = 512, message = "{tps.page.error.length.pageUrl}")
     private String pageUrl;
 
-    @NotNull(message = "{tps.page.error.invalid.useYn}}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.invalid.useYn}")
-    private String useYn;
+    /**
+     * 사용여부
+     */
+    @NotNull(message = "{tps.page.error.notnull.useYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.pattern.useYn}")
+    @Builder.Default
+    private String useYn = MokaConstants.YES;
 
+    /**
+     * 상세정보
+     */
+    @Length(max = 4000, message = "{tps.page.error.len.description}")
     private String description;
 }
 

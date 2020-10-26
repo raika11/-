@@ -8,24 +8,6 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
@@ -54,6 +36,23 @@ import jmnet.moka.core.tps.mvc.desking.vo.EditionVO;
 import jmnet.moka.core.tps.mvc.page.dto.PageSimpleDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @Validated
@@ -85,28 +84,25 @@ public class DeskingRestController {
      * @throws Exception 예외
      */
     @GetMapping("/components")
-    public ResponseEntity<?> getComponentWorkList(
-            HttpServletRequest request,
-            @Min(value = 0, message = "{tps.desking.error.invalid.pageSeq}") Long pageSeq,
-            Principal principal) throws Exception {
+    public ResponseEntity<?> getComponentWorkList(HttpServletRequest request,
+            @Min(value = 0, message = "{tps.desking.error.invalid.pageSeq}") Long pageSeq, Principal principal)
+            throws Exception {
 
         try {
             // work초기화
             deskingService.InitComponentWorks(pageSeq, principal.getName());
 
             // work조회 : 편집기사만 조회할경우 editionSeq = 0 으로 조회
-            List<DeskingComponentWorkVO> returnValue =
-                    deskingService.getComponentWorkAll(pageSeq, (long) 0, principal.getName());
+            List<DeskingComponentWorkVO> returnValue = deskingService.getComponentWorkAll(pageSeq, (long) 0, principal.getName());
 
             // page
-            Page page = pageService.findByPageSeq(pageSeq).orElseThrow(() -> new NoDataException(
-                    messageByLocale.get("tps.page.error.noContent", request)));
+            Page page = pageService.findPageBySeq(pageSeq)
+                                   .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.page.error.noContent", request)));
 
             PageSimpleDTO pageDto = modelMapper.map(page, PageSimpleDTO.class);
 
             // 리턴값 설정
-            DeskingResultListDTO<DeskingComponentWorkVO> resultListMessage =
-                    new DeskingResultListDTO<DeskingComponentWorkVO>();
+            DeskingResultListDTO<DeskingComponentWorkVO> resultListMessage = new DeskingResultListDTO<DeskingComponentWorkVO>();
             resultListMessage.setList(returnValue);
             resultListMessage.setPage(pageDto);
             resultListMessage.setTotalCnt(returnValue.size());
@@ -131,17 +127,15 @@ public class DeskingRestController {
      * @throws Exception            기타예외
      */
     @GetMapping("/components/{componentWorkSeq}")
-    public ResponseEntity<?> getComponentWork(
-            HttpServletRequest request, @PathVariable("componentWorkSeq")
-    @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
-            Principal principal) throws NoDataException, InvalidDataException, Exception {
+    public ResponseEntity<?> getComponentWork(HttpServletRequest request,
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq, Principal principal)
+            throws NoDataException, InvalidDataException, Exception {
 
         // work조회
         DeskingComponentWorkVO returnValue = deskingService.getComponentWork(componentWorkSeq);
 
         // 리턴값 설정
-        ResultDTO<DeskingComponentWorkVO> resultDto =
-                new ResultDTO<DeskingComponentWorkVO>(returnValue);
+        ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(returnValue);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -156,10 +150,9 @@ public class DeskingRestController {
      * @throws Exception
      */
     @PostMapping("/components/{componentWorkSeq}")
-    public ResponseEntity<?> postComponentWork(
-            HttpServletRequest request, @PathVariable("componentWorkSeq")
-    @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
-            Principal principal) throws Exception {
+    public ResponseEntity<?> postComponentWork(HttpServletRequest request,
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq, Principal principal)
+            throws Exception {
 
         try {
             // 데이타유효성검사.
@@ -172,8 +165,7 @@ public class DeskingRestController {
             deskingService.sendComponent(workVO, principal.getName());
 
             // 결과리턴
-            ResultDTO<DeskingComponentWorkVO> resultDto =
-                    new ResultDTO<DeskingComponentWorkVO>(workVO);
+            ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -194,35 +186,29 @@ public class DeskingRestController {
      * @throws Exception 예외
      */
     @PutMapping("/components/{componentWorkSeq}")
-    public ResponseEntity<?> putComponentWork(
-            HttpServletRequest request, @PathVariable("componentWorkSeq")
-    @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
-            String snapshotYn, String snapshotBody, Long templateSeq, Principal principal)
+    public ResponseEntity<?> putComponentWork(HttpServletRequest request,
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq, String snapshotYn,
+            String snapshotBody, Long templateSeq, Principal principal)
             throws Exception {
 
         try {
 
             // 컴포넌트 워크 저장
             if (McpString.isNotEmpty(snapshotYn)) {
-                deskingService
-                        .updateComponentWorkSnapshot(componentWorkSeq, snapshotYn, snapshotBody,
-                                principal.getName());
+                deskingService.updateComponentWorkSnapshot(componentWorkSeq, snapshotYn, snapshotBody, principal.getName());
             }
             if (templateSeq != null) {
-                deskingService.updateComponentWorkTemplate(componentWorkSeq, templateSeq,
-                        principal.getName());
+                deskingService.updateComponentWorkTemplate(componentWorkSeq, templateSeq, principal.getName());
             }
 
             // 컴포넌트 워크 조회(편집기사,관련편집기사포함)
             DeskingComponentWorkVO workVO = deskingService.getComponentWork(componentWorkSeq);
 
-            ResultDTO<DeskingComponentWorkVO> resultDto =
-                    new ResultDTO<DeskingComponentWorkVO>(workVO);
+            ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(
-                    messageByLocale.get("tps.desking.component.error.work.update", request), e);
+            throw new Exception(messageByLocale.get("tps.desking.component.error.work.update", request), e);
         }
     }
 
@@ -239,8 +225,7 @@ public class DeskingRestController {
      * @throws Exception            그외 에러
      */
     @PutMapping("/components/{componentWorkSeq}/contents")
-    public ResponseEntity<?> putDeskingWork(
-            HttpServletRequest request, @Valid DeskingWorkDTO deskingWorkDTO, Principal principal,
+    public ResponseEntity<?> putDeskingWork(HttpServletRequest request, @Valid DeskingWorkDTO deskingWorkDTO, Principal principal,
             @PathVariable("componentWorkSeq") Long componentWorkSeq)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -252,9 +237,8 @@ public class DeskingRestController {
         }
 
         // 오리진 데스킹워크 조회
-        DeskingWork orgDW = deskingService.getDeskingWork(deskingWorkDTO.getSeq()).orElseThrow(
-                () -> new NoDataException(
-                        messageByLocale.get("tps.desking.error.work.noContent", request)));
+        DeskingWork orgDW = deskingService.getDeskingWork(deskingWorkDTO.getSeq())
+                                          .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.desking.error.work.noContent", request)));
 
         // 오리진을 복사한 new데스킹워크 생성, dto 값 셋팅
         DeskingWork newDW = (DeskingWork) orgDW.clone();
@@ -285,16 +269,14 @@ public class DeskingRestController {
 
         try {
             // 스냅샷 수정
-            deskingService
-                    .updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
 
             deskingService.updateDeskingWork(newDW);
 
             // 컴포넌트 워크 조회(편집기사,관련편집기사포함)
             DeskingComponentWorkVO workVO = deskingService.getComponentWork(componentWorkSeq);
 
-            ResultDTO<DeskingComponentWorkVO> resultDto =
-                    new ResultDTO<DeskingComponentWorkVO>(workVO);
+            ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             throw new Exception(messageByLocale.get("tps.desking.error.work.save", request), e);
@@ -327,37 +309,36 @@ public class DeskingRestController {
     @PutMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/priority", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putDeskingWorkPriority(HttpServletRequest request,
-                                                    @PathVariable("componentWorkSeq")
-                                                    @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
-                                                    @PathVariable("datasetSeq")
-                                                    @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
-                                                    @RequestBody @Valid DeskingComponentWorkVO workVO, Principal principal)
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @RequestBody @Valid DeskingComponentWorkVO workVO, Principal principal)
             throws Exception {
 
         try {
             // 데이타유효성검사.
             // validData(request, datasetSeq, workVO);
 
-            WorkSearchDTO search = WorkSearchDTO.builder().componentSeq(workVO.getComponentSeq())
-                    .creator(principal.getName()).datasetSeq(workVO.getDatasetSeq())
-                    .editionSeq(workVO.getEditionSeq()).build();
+            WorkSearchDTO search = WorkSearchDTO.builder()
+                                                .componentSeq(workVO.getComponentSeq())
+                                                .creator(principal.getName())
+                                                .datasetSeq(workVO.getDatasetSeq())
+                                                .editionSeq(workVO.getEditionSeq())
+                                                .build();
 
             // 스냅샷 수정
-            deskingService
-                    .updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
 
             // 정렬변경
-            List<DeskingWorkVO> deskingList = deskingService
-                    .updateDeskingWorkPriority(datasetSeq, workVO.getDeskingWorks(),
-                            principal.getName(), search);
+            List<DeskingWorkVO> deskingList =
+                    deskingService.updateDeskingWorkPriority(datasetSeq, workVO.getDeskingWorks(), principal.getName(), search);
 
-            workVO.getDeskingWorks().clear();
+            workVO.getDeskingWorks()
+                  .clear();
             workVO.setDeskingWorks(deskingList);
 
 
             // 리턴값 설정
-            ResultDTO<DeskingComponentWorkVO> resultDto =
-                    new ResultDTO<DeskingComponentWorkVO>(workVO);
+            ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -380,29 +361,24 @@ public class DeskingRestController {
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/delete", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteDeskingWorkList(HttpServletRequest request,
-                                                   @PathVariable("componentWorkSeq")
-                                                   @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
-                                                   @PathVariable("datasetSeq")
-                                                   @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
-                                                   @RequestBody @Valid ValidList<DeskingWorkVO> validList, Principal principal)
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @RequestBody @Valid ValidList<DeskingWorkVO> validList, Principal principal)
             throws Exception {
         try {
             List<DeskingWorkVO> deskingWorkVOList = validList.getList();
 
             // 스냅샷 수정
-            deskingService
-                    .updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
 
             // work 편집기사 삭제 및 정렬
-            deskingService
-                    .deleteDeskingWorkList(deskingWorkVOList, datasetSeq, 0L, principal.getName());
+            deskingService.deleteDeskingWorkList(deskingWorkVOList, datasetSeq, 0L, principal.getName());
 
             // work 컴포넌트 조회(편집기사,관련편집기사포함)
             DeskingComponentWorkVO workVO = deskingService.getComponentWork(componentWorkSeq);
 
             // 리턴값 설정
-            ResultDTO<DeskingComponentWorkVO> resultDto =
-                    new ResultDTO<DeskingComponentWorkVO>(workVO);
+            ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -424,19 +400,18 @@ public class DeskingRestController {
      */
     @GetMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/hasOtherSaved")
     public ResponseEntity<?> hasOtherSaved(HttpServletRequest request,
-                                           @PathVariable("componentWorkSeq")
-                                           @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
-                                           @PathVariable("datasetSeq")
-                                           @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
-                                           Integer interval, Principal principal) throws Exception {
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq, Integer interval,
+            Principal principal)
+            throws Exception {
 
         try {
             // wms_desking만 조회
-            List<Desking> deskingList = deskingService
-                    .hasOtherSaved(datasetSeq, interval.intValue(), principal.getName());
+            List<Desking> deskingList = deskingService.hasOtherSaved(datasetSeq, interval.intValue(), principal.getName());
 
             if (deskingList.size() > 0) {
-                String userName = deskingList.get(0).getCreator();
+                String userName = deskingList.get(0)
+                                             .getCreator();
                 return new ResponseEntity<>(new ResultDTO<String>(userName), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(new ResultDTO<Boolean>(false), HttpStatus.OK);
@@ -460,11 +435,9 @@ public class DeskingRestController {
      */
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}")
     public ResponseEntity<?> postDeskingWork(HttpServletRequest request,
-                                             @PathVariable("componentWorkSeq")
-                                             @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
-                                             @PathVariable("datasetSeq")
-                                             @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
-                                             @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO, Principal principal)
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO, Principal principal)
             throws Exception {
 
         try {
@@ -472,7 +445,7 @@ public class DeskingRestController {
 
             // 더미기사인지 체크
             if (deskingWorkDTO.getContentsAttr() != null && deskingWorkDTO.getContentsAttr()
-                    .equals("D")) {
+                                                                          .equals("D")) {
                 // 컨텐츠아이디 생성
                 deskingWorkDTO.setContentsId("D" + McpDate.nowStr());
                 deskingWorkDTO.setDistYmdt(null);
@@ -494,8 +467,7 @@ public class DeskingRestController {
             }
 
             // 스냅샷 수정
-            deskingService
-                    .updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
 
             // work편집기사 추가 및 정렬
             deskingService.insertDeskingWork(deskingWork, datasetSeq, 0L, principal.getName());
@@ -504,8 +476,7 @@ public class DeskingRestController {
             DeskingComponentWorkVO workVO = deskingService.getComponentWork(componentWorkSeq);
 
             // 리턴값 설정
-            ResultDTO<DeskingComponentWorkVO> resultDto =
-                    new ResultDTO<DeskingComponentWorkVO>(workVO);
+            ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -527,11 +498,9 @@ public class DeskingRestController {
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/list", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postDeskingWorkList(HttpServletRequest request,
-                                                 @PathVariable("componentWorkSeq")
-                                                 @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
-                                                 @PathVariable("datasetSeq")
-                                                 @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
-                                                 @RequestBody @Valid ValidList<DeskingWorkDTO> validList, Principal principal)
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @RequestBody @Valid ValidList<DeskingWorkDTO> validList, Principal principal)
             throws Exception {
 
         try {
@@ -541,23 +510,19 @@ public class DeskingRestController {
 
             if (deskingWorkDTOList.size() > 0) {
                 // 스냅샷 수정
-                deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null,
-                        principal.getName());
+                deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
 
                 // work편집기사 목록 추가 및 정렬
                 for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
-                    DeskingWork appendDeskingWork =
-                            modelMapper.map(appendDeskingWorkDTO, DeskingWork.class);
-                    deskingService.insertDeskingWork(appendDeskingWork, datasetSeq, 0L,
-                            principal.getName());
+                    DeskingWork appendDeskingWork = modelMapper.map(appendDeskingWorkDTO, DeskingWork.class);
+                    deskingService.insertDeskingWork(appendDeskingWork, datasetSeq, 0L, principal.getName());
                 }
 
                 // work 컴포넌트 조회(편집기사,관련편집기사포함)
                 DeskingComponentWorkVO workVO = deskingService.getComponentWork(componentWorkSeq);
 
                 // 리턴값 설정
-                ResultDTO<DeskingComponentWorkVO> resultDto =
-                        new ResultDTO<DeskingComponentWorkVO>(workVO);
+                ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
                 return new ResponseEntity<>(resultDto, HttpStatus.OK);
             } else {
                 throw new Exception(messageByLocale.get("tps.desking.error.work.insert", request));
@@ -571,26 +536,24 @@ public class DeskingRestController {
     /**
      * work편집기사목록 이동(source->target)
      *
-     * @param request          요청
-     * @param componentWorkSeq target work컴포넌트순번
-     * @param datasetSeq       target 데이타셋순번
+     * @param request             요청
+     * @param componentWorkSeq    target work컴포넌트순번
+     * @param datasetSeq          target 데이타셋순번
      * @param srcComponentWorkSeq source work컴포넌트순번
      * @param srcDatasetSeq       source 데이타셋순번
-     * @param validList        이동할 편집기사 목록
-     * @param principal        작업자
+     * @param validList           이동할 편집기사 목록
+     * @param principal           작업자
      * @return target work컴포넌트
      * @throws Exception 예외
      */
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/move", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> moveDeskingWorkList(HttpServletRequest request,
-                                                 @PathVariable("componentWorkSeq")
-                                                 @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
-                                                 @PathVariable("datasetSeq")
-                                                 @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
-                                                 @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long srcComponentWorkSeq,
-                                                 @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long srcDatasetSeq,
-                                                 @RequestBody @Valid ValidList<DeskingWorkDTO> validList, Principal principal)
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long componentWorkSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @Min(value = 0, message = "{tps.common.error.invalid.seq}") Long srcComponentWorkSeq,
+            @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long srcDatasetSeq,
+            @RequestBody @Valid ValidList<DeskingWorkDTO> validList, Principal principal)
             throws Exception {
 
         try {
@@ -600,30 +563,26 @@ public class DeskingRestController {
 
             if (deskingWorkDTOList.size() > 0) {
                 // 스냅샷 수정
-                deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null,
-                        principal.getName());
-                deskingService.updateComponentWorkSnapshot(srcComponentWorkSeq, "N", null,
-                        principal.getName());
+                deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+                deskingService.updateComponentWorkSnapshot(srcComponentWorkSeq, "N", null, principal.getName());
 
                 // target work편집기사 목록 추가 및 정렬
                 for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
-                    DeskingWork appendDeskingWork =
-                            modelMapper.map(appendDeskingWorkDTO, DeskingWork.class);
-                    deskingService.moveDeskingWork(appendDeskingWork, datasetSeq, srcDatasetSeq,0L,
-                            principal.getName());
+                    DeskingWork appendDeskingWork = modelMapper.map(appendDeskingWorkDTO, DeskingWork.class);
+                    deskingService.moveDeskingWork(appendDeskingWork, datasetSeq, srcDatasetSeq, 0L, principal.getName());
                 }
 
                 // source 정렬
-                List<Long> deleteList =
-                        deskingWorkDTOList.stream().map(DeskingWorkDTO::getSeq).collect(Collectors.toList());
+                List<Long> deleteList = deskingWorkDTOList.stream()
+                                                          .map(DeskingWorkDTO::getSeq)
+                                                          .collect(Collectors.toList());
                 deskingService.sortBeforeDeleteDeskingWork(deleteList, srcDatasetSeq, 0L, principal.getName());
 
                 // work 컴포넌트 조회(편집기사,관련편집기사포함)
                 DeskingComponentWorkVO workVO = deskingService.getComponentWork(componentWorkSeq);
 
                 // 리턴값 설정
-                ResultDTO<DeskingComponentWorkVO> resultDto =
-                        new ResultDTO<DeskingComponentWorkVO>(workVO);
+                ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
                 return new ResponseEntity<>(resultDto, HttpStatus.OK);
             } else {
                 throw new Exception(messageByLocale.get("tps.desking.error.work.move", request));
@@ -647,10 +606,8 @@ public class DeskingRestController {
      * @throws Exception       에러 처리
      */
     @PutMapping("/components/{componentWorkSeq}/contents/{datasetSeq}/{contentsId}/relations")
-    public ResponseEntity<?> updateDeskingRelWorks(HttpServletRequest request,
-                                                   @RequestBody @Valid ValidList<DeskingRelWorkDTO> validList,
-                                                   @PathVariable("componentWorkSeq") Long componentWorkSeq,
-                                                   @PathVariable("contentsId") String contentsId, Principal principal)
+    public ResponseEntity<?> updateDeskingRelWorks(HttpServletRequest request, @RequestBody @Valid ValidList<DeskingRelWorkDTO> validList,
+            @PathVariable("componentWorkSeq") Long componentWorkSeq, @PathVariable("contentsId") String contentsId, Principal principal)
             throws NoDataException, Exception {
 
         String noDataMessage = messageByLocale.get("tps.desking.error.noComponentInfo");
@@ -661,10 +618,13 @@ public class DeskingRestController {
         if (resultWorkVO == null) {
             throw new NoDataException(noDataMessage);
         }
-        Optional<DeskingWorkVO> maybeWorkVO =
-                resultWorkVO.getDeskingWorks().stream().filter(deskingWork -> {
-                    return deskingWork.getContentsId().equals(contentsId);
-                }).findFirst();
+        Optional<DeskingWorkVO> maybeWorkVO = resultWorkVO.getDeskingWorks()
+                                                          .stream()
+                                                          .filter(deskingWork -> {
+                                                              return deskingWork.getContentsId()
+                                                                                .equals(contentsId);
+                                                          })
+                                                          .findFirst();
 
         DeskingWorkVO workVO = maybeWorkVO.orElseThrow(() -> new NoDataException(noDataMessage));
 
@@ -682,22 +642,18 @@ public class DeskingRestController {
             }
 
             // 스냅샷 수정
-            deskingService
-                    .updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
 
             // 새로운 릴레이션 저장
-            List<DeskingRelWork> result = deskingService
-                    .updateDeskingRelWorks(workVO.getDeskingSeq(), principal.getName(), relWorks);
+            List<DeskingRelWork> result = deskingService.updateDeskingRelWorks(workVO.getDeskingSeq(), principal.getName(), relWorks);
             resultList.setList(result);
             resultList.setTotalCnt(result.size());
 
-            ResultDTO<ResultListDTO<DeskingRelWork>> resultDto =
-                    new ResultDTO<ResultListDTO<DeskingRelWork>>(resultList);
+            ResultDTO<ResultListDTO<DeskingRelWork>> resultDto = new ResultDTO<ResultListDTO<DeskingRelWork>>(resultList);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            throw new Exception(
-                    messageByLocale.get("tps.desking.error.work.relation.save", request), e);
+            throw new Exception(messageByLocale.get("tps.desking.error.work.relation.save", request), e);
         }
     }
 
@@ -711,25 +667,23 @@ public class DeskingRestController {
      * @throws Exception 에러 처리
      */
     @DeleteMapping("/components/{componentWorkSeq}/contents/{datasetSeq}/{contentsId}/relations")
-    public ResponseEntity<?> deleteDeskingRelWork(HttpServletRequest request,
-                                                  @PathVariable("componentWorkSeq") Long componentWorkSeq,
-                                                  @Valid DeskingRelWorkDTO drwDTO, Principal principal) throws Exception {
+    public ResponseEntity<?> deleteDeskingRelWork(HttpServletRequest request, @PathVariable("componentWorkSeq") Long componentWorkSeq,
+            @Valid DeskingRelWorkDTO drwDTO, Principal principal)
+            throws Exception {
 
         try {
             DeskingRelWork deskingRelWork = modelMapper.map(drwDTO, DeskingRelWork.class);
             deskingRelWork.setCreator(principal.getName());
 
             // 스냅샷 수정
-            deskingService
-                    .updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
 
             deskingService.deleteDeskingRelWork(deskingRelWork);
             ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            throw new Exception(
-                    messageByLocale.get("tps.desking.error.work.relation.delete", request), e);
+            throw new Exception(messageByLocale.get("tps.desking.error.work.relation.delete", request), e);
         }
     }
 
@@ -744,24 +698,22 @@ public class DeskingRestController {
      * @throws Exception 에러
      */
     @GetMapping("/histories")
-    public ResponseEntity<?> getAllDeskingHistories(
-            HttpServletRequest request, @Valid @SearchParam DeskingHistSearchDTO search,
-            @RequestParam("pageSeq") Long pageSeq, Principal principal) throws Exception {
+    public ResponseEntity<?> getAllDeskingHistories(HttpServletRequest request, @Valid @SearchParam DeskingHistSearchDTO search,
+            @RequestParam("pageSeq") Long pageSeq, Principal principal)
+            throws Exception {
 
         try {
             search.setCreator(principal.getName());
 
             // 히스토리 그룹 목록 조회(mybatis)
-            List<DeskingHistGroupVO> returnValue =
-                    deskingService.findAllDeskingHistGroup(search, pageSeq);
+            List<DeskingHistGroupVO> returnValue = deskingService.findAllDeskingHistGroup(search, pageSeq);
 
             // 리턴 DTO 생성
             ResultListDTO<DeskingHistGroupVO> resultList = new ResultListDTO<DeskingHistGroupVO>();
             resultList.setList(returnValue);
             resultList.setTotalCnt(returnValue.size());
 
-            ResultDTO<ResultListDTO<DeskingHistGroupVO>> resultDTO =
-                    new ResultDTO<ResultListDTO<DeskingHistGroupVO>>(resultList);
+            ResultDTO<ResultListDTO<DeskingHistGroupVO>> resultDTO = new ResultDTO<ResultListDTO<DeskingHistGroupVO>>(resultList);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
         } catch (Exception e) {
             throw new Exception(messageByLocale.get("tps.desking.error.hist", request), e);
@@ -779,9 +731,9 @@ public class DeskingRestController {
      * @throws Exception 에러처리
      */
     @GetMapping("/histories/{datasetSeq}")
-    public ResponseEntity<?> getAllDeskingHistoriesDetail(
-            HttpServletRequest request, @Valid @SearchParam DeskingHistSearchDTO search,
-            @PathVariable("datasetSeq") Long datasetSeq, Principal principal) throws Exception {
+    public ResponseEntity<?> getAllDeskingHistoriesDetail(HttpServletRequest request, @Valid @SearchParam DeskingHistSearchDTO search,
+            @PathVariable("datasetSeq") Long datasetSeq, Principal principal)
+            throws Exception {
 
         search.setDatasetSeq(datasetSeq);
 
@@ -794,8 +746,7 @@ public class DeskingRestController {
             resultList.setList(returnValue);
             resultList.setTotalCnt(returnValue.size());
 
-            ResultDTO<ResultListDTO<DeskingHistVO>> resultDTO =
-                    new ResultDTO<ResultListDTO<DeskingHistVO>>(resultList);
+            ResultDTO<ResultListDTO<DeskingHistVO>> resultDTO = new ResultDTO<ResultListDTO<DeskingHistVO>>(resultList);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
         } catch (Exception e) {
             throw new Exception(messageByLocale.get("tps.desking.error.hist", request), e);
@@ -815,10 +766,8 @@ public class DeskingRestController {
      * @throws Exception       그외 에러
      */
     @GetMapping("/components/{componentWorkSeq}/contents/{datasetSeq}/histories")
-    public ResponseEntity<?> getDeskingHistories(HttpServletRequest request,
-                                                 @PathVariable("datasetSeq") Long datasetSeq,
-                                                 @RequestParam(value = "detail", defaultValue = "N") String detail,
-                                                 @Valid @SearchParam DeskingHistSearchDTO search, Principal principal)
+    public ResponseEntity<?> getDeskingHistories(HttpServletRequest request, @PathVariable("datasetSeq") Long datasetSeq,
+            @RequestParam(value = "detail", defaultValue = "N") String detail, @Valid @SearchParam DeskingHistSearchDTO search, Principal principal)
             throws NoDataException, Exception {
 
         search.setDatasetSeq(datasetSeq);
@@ -833,8 +782,7 @@ public class DeskingRestController {
                 resultList.setList(returnValue);
                 resultList.setTotalCnt(returnValue.size());
 
-                ResultDTO<ResultListDTO<DeskingHistVO>> resultDTO =
-                        new ResultDTO<ResultListDTO<DeskingHistVO>>(resultList);
+                ResultDTO<ResultListDTO<DeskingHistVO>> resultDTO = new ResultDTO<ResultListDTO<DeskingHistVO>>(resultList);
                 return new ResponseEntity<>(resultDTO, HttpStatus.OK);
             } else {
                 // 그룹 데이터 조회(mybatis)
@@ -842,13 +790,11 @@ public class DeskingRestController {
                 List<DeskingHistGroupVO> returnValue = deskingService.findDeskingHistGroup(search);
 
                 // 리턴 DTO 생성
-                ResultListDTO<DeskingHistGroupVO> resultList =
-                        new ResultListDTO<DeskingHistGroupVO>();
+                ResultListDTO<DeskingHistGroupVO> resultList = new ResultListDTO<DeskingHistGroupVO>();
                 resultList.setList(returnValue);
                 resultList.setTotalCnt(totalCount);
 
-                ResultDTO<ResultListDTO<DeskingHistGroupVO>> resultDTO =
-                        new ResultDTO<ResultListDTO<DeskingHistGroupVO>>(resultList);
+                ResultDTO<ResultListDTO<DeskingHistGroupVO>> resultDTO = new ResultDTO<ResultListDTO<DeskingHistGroupVO>>(resultList);
                 return new ResponseEntity<>(resultDTO, HttpStatus.OK);
             }
         } catch (Exception e) {
@@ -865,8 +811,7 @@ public class DeskingRestController {
      * @throws Exception
      */
     @GetMapping("/editions")
-    public ResponseEntity<?> getEditionList(HttpServletRequest request,
-                                            @Min(value = 0, message = "{tps.desking.error.invalid.pageSeq}") Long pageSeq)
+    public ResponseEntity<?> getEditionList(HttpServletRequest request, @Min(value = 0, message = "{tps.desking.error.invalid.pageSeq}") Long pageSeq)
             throws Exception {
 
         try {
@@ -877,13 +822,11 @@ public class DeskingRestController {
             resultListMessage.setList(returnValue);
             resultListMessage.setTotalCnt(returnValue.size());
 
-            ResultDTO<ResultListDTO<EditionVO>> resultDto =
-                    new ResultDTO<ResultListDTO<EditionVO>>(resultListMessage);
+            ResultDTO<ResultListDTO<EditionVO>> resultDto = new ResultDTO<ResultListDTO<EditionVO>>(resultListMessage);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.edition.error.select", request),
-                    e);
+            throw new Exception(messageByLocale.get("tps.desking.edition.error.select", request), e);
         }
     }
 
@@ -898,18 +841,15 @@ public class DeskingRestController {
      * @throws Exception
      */
     @PostMapping("/components/{componentWorkSeq}/contents/{datasetSeq}/histories")
-    public ResponseEntity<?> postDeskingHistories(HttpServletRequest request,
-                                                  @PathVariable("componentWorkSeq") Long componentWorkSeq,
-                                                  @PathVariable("datasetSeq") @Min(value = 0,
-                                                          message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
-                                                  @Valid @SearchParam DeskingHistSearchDTO search, Principal principal)
+    public ResponseEntity<?> postDeskingHistories(HttpServletRequest request, @PathVariable("componentWorkSeq") Long componentWorkSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @Valid @SearchParam DeskingHistSearchDTO search, Principal principal)
             throws Exception {
 
         try {
 
             // 스냅샷 수정
-            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null,
-                    principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
 
             deskingService.importDeskingWorkHistory(search);
 
@@ -917,12 +857,10 @@ public class DeskingRestController {
             DeskingComponentWorkVO workVO = deskingService.getComponentWork(componentWorkSeq);
 
             // 리턴값 설정
-            ResultDTO<DeskingComponentWorkVO> resultDto =
-                    new ResultDTO<DeskingComponentWorkVO>(workVO);
+            ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            throw new Exception(
-                    messageByLocale.get("tps.desking.error.work.histories.move", request), e);
+            throw new Exception(messageByLocale.get("tps.desking.error.work.histories.move", request), e);
         }
     }
 }

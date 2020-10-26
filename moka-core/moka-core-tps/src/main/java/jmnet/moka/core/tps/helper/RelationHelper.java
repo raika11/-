@@ -85,7 +85,7 @@ public class RelationHelper {
                                           .domainId(domainId)
                                           .build();
         search.setDefaultSort("pageSeq,desc");
-        Page<jmnet.moka.core.tps.mvc.page.entity.Page> pages = pageService.findByDomainId(domainId, search.getPageable());
+        Page<jmnet.moka.core.tps.mvc.page.entity.Page> pages = pageService.findPageByDomainId(domainId, search.getPageable());
 
         if (pages.getContent()
                  .size() > 1) {
@@ -199,7 +199,7 @@ public class RelationHelper {
             // 페이지 목록 조회
             search.setEntityClass(PageVO.class);
             search.setDefaultSort("pageSeq,desc");
-            Long totalCount = pageService.findRelCount(search);
+            Long totalCount = pageService.countPageRel(search);
             if (totalCount > 0) {
                 return true;
             }
@@ -255,8 +255,8 @@ public class RelationHelper {
             // 페이지 목록 조회
             search.setEntityClass(PageVO.class);
             search.setDefaultSort("pageSeq,desc");
-            List<PageVO> pages = pageService.findRelList(search);
-            Long totalCount = pageService.findRelCount(search);
+            List<PageVO> pages = pageService.findAllPageRel(search);
+            Long totalCount = pageService.countPageRel(search);
 
             ResultListDTO<PageVO> resultListMessage = new ResultListDTO<PageVO>();
             resultListMessage.setTotalCnt(totalCount);

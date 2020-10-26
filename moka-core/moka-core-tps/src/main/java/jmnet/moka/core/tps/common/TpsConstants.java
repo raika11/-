@@ -3,7 +3,6 @@
  */
 package jmnet.moka.core.tps.common;
 
-import jmnet.moka.core.common.MokaConstants;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -93,11 +92,16 @@ public class TpsConstants {
     public static final String CODE_MGT_GRP_PAGE_TYPE = "PAGE_TYPE";
 
     /**
+     * 페이지 기본타입
+     */
+    public static final String PAGE_TYPE_HTML = "text/html";
+
+    /**
      * 컴포넌트 DATA_TYPE
      */
     public static final String DATATYPE_NONE = "NONE";      // NONE
-    public static final String DATATYPE_DESK = "DESK";     // DESK
-    public static final String DATATYPE_AUTO = "AUTO";     // AUTO
+    public static final String DATATYPE_DESK = "DESK";      // DESK
+    public static final String DATATYPE_AUTO = "AUTO";      // AUTO
 
     /**
      * 컴포넌트 페이징 유형
@@ -118,9 +122,15 @@ public class TpsConstants {
      */
     public static final String DEFAULT_LANG = "KR";
 
-    public static final Integer LIST_PARAGRAPH = 10;        // 컴포넌트 광고 리스트단락수
+    /**
+     * 컴포넌트 광고 리스트단락수
+     */
+    public static final Integer LIST_PARAGRAPH = 10;
 
-    public static final String REL_TYPE_UNKNOWN = "NN";     // 관련아이템 없음
+    /**
+     * 관련아이템 없음
+     */
+    public static final String REL_TYPE_UNKNOWN = "NN";
 
     /**
      * API CODE JSON 정보

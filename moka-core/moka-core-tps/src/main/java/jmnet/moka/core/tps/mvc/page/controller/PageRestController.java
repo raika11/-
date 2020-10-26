@@ -14,16 +14,17 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.template.exception.TemplateParseException;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.dto.HistDTO;
 import jmnet.moka.core.tps.common.dto.HistSearchDTO;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.PurgeHelper;
@@ -57,10 +58,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 페이지 2020. 3. 8. ssc 최초생성
- *
- * @author ssc
- * @since 2020. 3. 8. 오후 2:09:06
+ * 페이지 API
  */
 @RestController
 @Validated
@@ -92,29 +90,31 @@ public class PageRestController {
     @Autowired
     private PurgeHelper purgeHelper;
 
+    @Autowired
+    private TpsLogger tpsLogger;
+
     /**
-     * 페이지목록조회(트리용)
+     * 페이지 목록조회(트리용)
      *
      * @param request 요청
      * @param search  검색조건(검색조건있으나, 해당되는 페이지만 조회되는것은 아니다.)
      * @return 페이지 트리 목록(PageNode)
-     * @throws NoDataException 등록된 페이지 없음
      */
     @ApiOperation(value = "페이지목록조회(트리용)")
     @GetMapping("/tree")
-    public ResponseEntity<?> getPageTree(HttpServletRequest request, @Valid @SearchParam PageSearchDTO search)
-            throws NoDataException {
+    public ResponseEntity<?> getPageTree(HttpServletRequest request, @Valid @SearchParam PageSearchDTO search) {
 
         PageNode pageNode = pageService.makeTree(search);
-        if (pageNode == null) {
-            throw new NoDataException(messageByLocale.get("tps.page.error.noContent", request));
-        }
+
         ResultDTO<PageNode> resultDto = new ResultDTO<PageNode>(pageNode);
+
+        tpsLogger.success(true);
+
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
-     * 페이지정보 조회
+     * 페이지 상세조회
      *
      * @param request 요청
      * @param pageSeq 페이지아이디 (필수)
@@ -123,17 +123,21 @@ public class PageRestController {
      * @throws InvalidDataException 데이타유효성오류
      * @throws Exception            기타예외
      */
-    @ApiOperation(value = "페이지정보 조회")
+    @ApiOperation(value = "페이지 상세조회")
     @GetMapping("/{pageSeq}")
     public ResponseEntity<?> getPage(HttpServletRequest request,
-            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.invalid.pageSeq}") Long pageSeq)
+            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
-        validData(request, pageSeq, null);
+        validData(request, pageSeq, null, ActionType.SELECT);
 
-        Page page = pageService.findByPageSeq(pageSeq)
-                               .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.page.error.noContent", request)));
+        Page page = pageService.findPageBySeq(pageSeq)
+                               .orElseThrow(() -> {
+                                   String message = messageByLocale.get("tps.common.error.no-data", request);
+                                   tpsLogger.fail(message, true);
+                                   return new NoDataException(message);
+                               });
 
         PageDTO dto = modelMapper.map(page, PageDTO.class);
         if (page.getParent() != null) {
@@ -141,7 +145,7 @@ public class PageRestController {
             dto.setParent(parentDto);
         }
         ResultDTO<PageDTO> resultDto = new ResultDTO<PageDTO>(dto);
-
+        tpsLogger.success(true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -154,7 +158,7 @@ public class PageRestController {
      * @throws InvalidDataException 유효성예외
      * @throws Exception            기타예외
      */
-    private void validData(HttpServletRequest request, Long pageSeq, PageDTO pageDTO)
+    private void validData(HttpServletRequest request, Long pageSeq, PageDTO pageDTO, ActionType actionType)
             throws InvalidDataException, Exception {
 
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
@@ -164,24 +168,27 @@ public class PageRestController {
             if (pageSeq > 0 && !pageSeq.equals(pageDTO.getPageSeq())) {
                 String message = messageByLocale.get("tps.common.error.no-data", request);
                 invalidList.add(new InvalidDataDTO("matchId", message));
+                tpsLogger.fail(actionType, message, true);
             }
 
             // command명칭 사용불가
             if (Arrays.asList(serviceNameExcludes)
                       .contains(pageDTO.getPageServiceName())) {
-                String message = messageByLocale.get("tps.page.error.invalid.pageServiceName3", request);
+                String message = messageByLocale.get("tps.page.error.invalid.pageServiceName", request);
                 invalidList.add(new InvalidDataDTO("pageServiceName", message));
+                tpsLogger.fail(actionType, message, true);
             }
 
             // PageUrl 중복검사
-            List<Page> pageList = pageService.findByPageUrl(pageDTO.getPageUrl(), pageDTO.getDomain()
-                                                                                         .getDomainId());
+            List<Page> pageList = pageService.findPageByPageUrl(pageDTO.getPageUrl(), pageDTO.getDomain()
+                                                                                             .getDomainId());
             if (pageList.size() > 0) {
                 for (Page page : pageList) {
                     if (!page.getPageSeq()
                              .equals(pageDTO.getPageSeq())) {
-                        String message = messageByLocale.get("tps.page.error.invalid.pageServiceName2", request);
+                        String message = messageByLocale.get("tps.page.error.duplicate.pageServiceName", request);
                         invalidList.add(new InvalidDataDTO("pageServiceName", message));
+                        tpsLogger.fail(actionType, message, true);
                     }
                 }
             }
@@ -193,12 +200,15 @@ public class PageRestController {
                 String message = e.getMessage();
                 String extra = Integer.toString(e.getLineNumber());
                 invalidList.add(new InvalidDataDTO("pageBody", message, extra));
+                tpsLogger.fail(actionType, message, true);
             } catch (Exception e) {
-                throw e;
+                String message = e.getMessage();
+                invalidList.add(new InvalidDataDTO("pageBody", message));
+                tpsLogger.fail(actionType, message, true);
             }
 
             if (invalidList.size() > 0) {
-                String validMessage = messageByLocale.get("tps.page.error.invalidContent", request);
+                String validMessage = messageByLocale.get("tps.common.error.invalidContent", request);
                 throw new InvalidDataException(invalidList, validMessage);
             }
         }
@@ -207,7 +217,7 @@ public class PageRestController {
     }
 
     /**
-     * 페이지등록
+     * 페이지 등록
      *
      * @param request   요청
      * @param pageDTO   등록할 페이지정보
@@ -216,7 +226,7 @@ public class PageRestController {
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            기타예외
      */
-    @ApiOperation(value = "페이지등록")
+    @ApiOperation(value = "페이지 등록")
     @PostMapping(headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postPage(HttpServletRequest request, @RequestBody @Valid PageDTO pageDTO, Principal principal)
             throws InvalidDataException, Exception {
@@ -224,30 +234,38 @@ public class PageRestController {
         if (McpString.isEmpty(pageDTO.getPageBody())) {
             pageDTO.setPageBody("");
         }
-        ;
 
         // 데이타유효성검사.
-        validData(request, (long) 0, pageDTO);
+        validData(request, (long) 0, pageDTO, ActionType.INSERT);
 
-        // 등록
+
         Page page = modelMapper.map(pageDTO, Page.class);
-        page.setRegId(principal.getName());
-        Page returnValue = pageService.insertPage(page);
 
-        // 결과리턴
-        PageDTO dto = modelMapper.map(returnValue, PageDTO.class);
-        if (returnValue.getParent() != null) {
-            ParentPageDTO parentDto = modelMapper.map(returnValue.getParent(), ParentPageDTO.class);
-            dto.setParent(parentDto);
+        try {
+            // 등록
+            Page returnValue = pageService.insertPage(page);
+
+            // 결과리턴
+            PageDTO dto = modelMapper.map(returnValue, PageDTO.class);
+            if (returnValue.getParent() != null) {
+                ParentPageDTO parentDto = modelMapper.map(returnValue.getParent(), ParentPageDTO.class);
+                dto.setParent(parentDto);
+            }
+
+            String message = messageByLocale.get("tps.common.success.insert", request);
+            ResultDTO<PageDTO> resultDto = new ResultDTO<PageDTO>(dto, message);
+            tpsLogger.success(ActionType.INSERT, true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT PAGE]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT PAGE]", e, true);
+            throw new Exception(messageByLocale.get("tps.page.error.save", request), e);
         }
-        ResultDTO<PageDTO> resultDto = new ResultDTO<PageDTO>(dto);
-
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
     }
 
     /**
-     * 페이지수정
+     * 페이지 수정
      *
      * @param request   요청
      * @param pageSeq   페이지번호
@@ -258,45 +276,52 @@ public class PageRestController {
      * @throws NoDataException      데이타 없음
      * @throws Exception            기타예외
      */
-    @ApiOperation(value = "페이지수정")
-    @PutMapping(value = "/{seq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "페이지 수정")
+    @PutMapping(value = "/{pageSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putPage(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.page.error.invalid.pageSeq}") Long pageSeq, @RequestBody @Valid PageDTO pageDTO,
+            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.invalid.pageSeq}") Long pageSeq, @RequestBody @Valid PageDTO pageDTO,
             Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이타유효성검사.
-        validData(request, pageSeq, pageDTO);
+        validData(request, pageSeq, pageDTO, ActionType.UPDATE);
 
         // 수정
         Page newPage = modelMapper.map(pageDTO, Page.class);
-        Page orgPage = pageService.findByPageSeq(pageSeq)
-                                  .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.page.error.noContent", request)));
+        Page orgPage = pageService.findPageBySeq(pageSeq)
+                                  .orElseThrow(() -> {
+                                      String message = messageByLocale.get("tps.page.error.no-data", request);
+                                      tpsLogger.fail(ActionType.UPDATE, message, true);
+                                      return new NoDataException(message);
+                                  });
 
-        newPage.setRegDt(orgPage.getRegDt());
-        newPage.setRegId(orgPage.getRegId());
-        newPage.setModDt(McpDate.now());
-        newPage.setModId(principal.getName());
-        Page returnValue = pageService.updatePage(newPage);
+        try {
+            Page returnValue = pageService.updatePage(newPage);
 
-        // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
-        purgeHelper.purgeTms(request, returnValue.getDomain()
-                                                 .getDomainId(), MokaConstants.ITEM_PAGE, returnValue.getPageSeq());
+            // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
+            purgeHelper.purgeTms(request, returnValue.getDomain()
+                                                     .getDomainId(), MokaConstants.ITEM_PAGE, returnValue.getPageSeq());
 
-        // 결과리턴
-        PageDTO dto = modelMapper.map(returnValue, PageDTO.class);
-        if (returnValue.getParent() != null) {
-            ParentPageDTO parentDto = modelMapper.map(returnValue.getParent(), ParentPageDTO.class);
-            dto.setParent(parentDto);
+            // 결과리턴
+            PageDTO dto = modelMapper.map(returnValue, PageDTO.class);
+            if (returnValue.getParent() != null) {
+                ParentPageDTO parentDto = modelMapper.map(returnValue.getParent(), ParentPageDTO.class);
+                dto.setParent(parentDto);
+            }
+
+            String message = messageByLocale.get("tps.common.success.update", request);
+            ResultDTO<PageDTO> resultDto = new ResultDTO<PageDTO>(dto, message);
+            tpsLogger.success(ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE PAGE] seq: {}) {}", pageDTO.getPageSeq(), e.getMessage());
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE PAGE]", e, true);
+            throw new Exception(messageByLocale.get("tps.page.error.save", request), e);
         }
-        ResultDTO<PageDTO> resultDto = new ResultDTO<PageDTO>(dto);
-
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-
     }
 
     /**
-     * 페이지삭제
+     * 페이지 삭제
      *
      * @param request   요청
      * @param pageSeq   삭제 할 페이지순번 (필수)
@@ -306,30 +331,42 @@ public class PageRestController {
      * @throws NoDataException      페이지정보 없음 오류
      * @throws Exception            기타예외
      */
-    @ApiOperation(value = "페이지삭제")
-    @DeleteMapping("/{seq}")
+    @ApiOperation(value = "페이지 삭제")
+    @DeleteMapping("/{pageSeq}")
     public ResponseEntity<?> deletePage(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.page.error.invalid.pageSeq}") Long pageSeq, Principal principal)
+            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq, Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 
         // 1.1 아이디체크
-        validData(request, pageSeq, null);
+        validData(request, pageSeq, null, ActionType.DELETE);
 
         // 1.2. 데이타 존재여부 검사
-        Page page = pageService.findByPageSeq(pageSeq)
-                               .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.page.error.noContent", request)));
+        Page page = pageService.findPageBySeq(pageSeq)
+                               .orElseThrow(() -> {
+                                   String message = messageByLocale.get("tps.page.error.no-data", request);
+                                   tpsLogger.fail(ActionType.INSERT, message, true);
+                                   return new NoDataException(message);
+                               });
 
-        // 2. 삭제
-        pageService.deletePage(page, principal.getName());
+        try {
+            // 2. 삭제
+            pageService.deletePage(page, principal.getName());
 
-        // 3. 결과리턴
-        ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            // 3. 결과리턴
+            String message = messageByLocale.get("tps.common.success.delete", request);
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
+            tpsLogger.success(ActionType.DELETE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE PAGE] seq: {}) {}", pageSeq, e.getMessage());
+            tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE PAGE]", e, true);
+            throw new Exception(messageByLocale.get("tps.page.error.delete", request), e);
+        }
     }
 
     /**
-     * 페이지서비스URL사용여부 체크
+     * 페이지서 비스URL 사용여부 체크
      *
      * @param request  요청
      * @param pageUrl  페이지 서비스 URL
@@ -337,14 +374,14 @@ public class PageRestController {
      * @param pageSeq  페이지가 0 보다 클 경우, 해당 페이지는 제외하고 서비되는 URL을 찾는다.
      * @return URL사용여부
      */
-    @ApiOperation(value = "페이지서비스URL사용여부 체크")
+    @ApiOperation(value = "페이지 서비스URL 사용여부 체크")
     @GetMapping("/isPageUrl")
     public ResponseEntity<?> getIsPageUrl(HttpServletRequest request, @RequestParam(name = "pageUrl")
-    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.invalid.pageUrl2}") String pageUrl,
+    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.pageUrl}") String pageUrl,
             @RequestParam(name = "domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId,
-            @RequestParam(name = "pageSeq", defaultValue = "0") @Min(value = 0, message = "{tps.page.error.invalid.pageSeq}") Long pageSeq) {
+            @RequestParam(name = "pageSeq", defaultValue = "0") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq) {
 
-        List<Page> pageList = pageService.findByPageUrl(pageUrl, domainId);
+        List<Page> pageList = pageService.findPageByPageUrl(pageUrl, domainId);
 
         Boolean ret = false;
         if (pageList.size() > 0) {
@@ -357,7 +394,7 @@ public class PageRestController {
         }
 
         ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(ret);
-
+        tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -371,21 +408,25 @@ public class PageRestController {
      * @throws IOException
      * @throws Exception          기타예외
      */
-    @ApiOperation(value = "페이지 PURGE")
+    @ApiOperation(value = "페이지 PURGE - 삭제될 수 있음")
     @GetMapping("/{pageSeq}/purge")
     public ResponseEntity<?> getPurge(HttpServletRequest request,
-            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.invalid.pageSeq}") Long pageSeq)
+            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq)
             throws Exception {
 
         // 데이타유효성검사.
-        validData(request, pageSeq, null);
+        validData(request, pageSeq, null, ActionType.SELECT);
 
         // 1.1 아이디체크
-        validData(request, pageSeq, null);
+        validData(request, pageSeq, null, ActionType.SELECT);
 
         // 1.2. 데이타 존재여부 검사
-        Page page = pageService.findByPageSeq(pageSeq)
-                               .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.page.error.noContent", request)));
+        Page page = pageService.findPageBySeq(pageSeq)
+                               .orElseThrow(() -> {
+                                   String message = messageByLocale.get("tps.page.error.no-data", request);
+                                   tpsLogger.fail(ActionType.SELECT, message, true);
+                                   return new NoDataException(message);
+                               });
 
         // 페이지 바니시 퍼지. 성공실패여부는 리턴하지 않는다.
         String message = purgeHelper.purgeVarnish(request, page);
@@ -401,27 +442,29 @@ public class PageRestController {
         resultDTO.getHeader()
                  .setMessage(message);
 
+        log.debug("[PAGE PURGE] pageSeq: {}, pageUrl: {}", pageSeq, page.getPageUrl());
+
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**
-     * 히스토리 목록 조회
+     * 페이지 히스토리 목록조회
      *
      * @param request 요청
      * @param pageSeq 페이지순번
      * @param search  검색조건
      * @return 히스토리 목록
      */
-    @ApiOperation(value = "히스토리 목록 조회")
+    @ApiOperation(value = "페이지 히스토리 목록조회")
     @GetMapping("/{pageSeq}/histories")
     public ResponseEntity<?> getHistoryList(HttpServletRequest request,
-            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.invalid.pageSeq}") Long pageSeq,
+            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
             @Valid @SearchParam HistSearchDTO search) {
 
         search.setSeq(pageSeq);
 
         // 조회
-        org.springframework.data.domain.Page<PageHist> histList = pageService.findHistoryList(search, search.getPageable());
+        org.springframework.data.domain.Page<PageHist> histList = pageService.findAllPageHist(search, search.getPageable());
 
         // entity -> DTO
         List<HistDTO> histDTOList = histList.stream()
@@ -433,6 +476,7 @@ public class PageRestController {
         resultList.setList(histDTOList);
 
         ResultDTO<ResultListDTO<HistDTO>> resultDTO = new ResultDTO<ResultListDTO<HistDTO>>(resultList);
+        tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
@@ -451,14 +495,14 @@ public class PageRestController {
     }
 
     /**
-     * 페이지목록조회(목용)
+     * 페이지 목록조회(목록용)
      *
      * @param request 요청
      * @param search  검색조건
      * @return 페이지 목록(PageDTO)
      * @throws NoDataException 등록된 페이지 없음
      */
-    @ApiOperation(value = "페이지목록조회(목용)")
+    @ApiOperation(value = "페이지 목록조회(목록용)")
     @GetMapping
     public ResponseEntity<?> getPagList(HttpServletRequest request, @Valid @SearchParam PageSearchDTO search)
             throws NoDataException {
@@ -466,7 +510,7 @@ public class PageRestController {
         Pageable pageable = search.getPageable();
 
         // 조회
-        org.springframework.data.domain.Page<Page> returnValue = pageService.findList(search, pageable);
+        org.springframework.data.domain.Page<Page> returnValue = pageService.findAllPage(search, pageable);
 
         // 리턴값 설정
         ResultListDTO<PageDTO> resultListMessage = new ResultListDTO<PageDTO>();
@@ -475,7 +519,7 @@ public class PageRestController {
         resultListMessage.setList(pageDtoList);
 
         ResultDTO<ResultListDTO<PageDTO>> resultDto = new ResultDTO<ResultListDTO<PageDTO>>(resultListMessage);
-
+        tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 

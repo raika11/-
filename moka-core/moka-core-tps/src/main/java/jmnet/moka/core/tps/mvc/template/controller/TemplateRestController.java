@@ -2,7 +2,6 @@ package jmnet.moka.core.tps.mvc.template.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -91,7 +90,7 @@ public class TemplateRestController {
     /**
      * 템플릿 목록조회
      *
-     * @param search  검색조건
+     * @param search 검색조건
      * @return 템플릿 목록
      */
     @ApiOperation(value = "템플릿 목록조회")
@@ -393,8 +392,8 @@ public class TemplateRestController {
     /**
      * 관련 아이템 존재여부
      *
-     * @param request HTTP요청
-     * @param templateSeq     템플릿SEQ
+     * @param request     HTTP요청
+     * @param templateSeq 템플릿SEQ
      * @return 관련 아이템 존재 여부
      * @throws NoDataException 데이터없음
      * @throws Exception       관련아이템 조회 에러
@@ -430,16 +429,17 @@ public class TemplateRestController {
     /**
      * 관련 아이템 목록조회
      *
-     * @param request HTTP요청
+     * @param request     HTTP요청
      * @param templateSeq 템플릿SEQ
-     * @param search 검색조건
+     * @param search      검색조건
      * @return 관련아이템 목록
      * @throws Exception 에외
      */
     @ApiOperation(value = "관련 아이템 목록조회")
     @GetMapping("/{templateSeq}/relations")
     public ResponseEntity<?> getRelationList(HttpServletRequest request,
-            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq, @Valid @SearchParam RelSearchDTO search)
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
+            @Valid @SearchParam RelSearchDTO search)
             throws Exception {
 
         search.setRelSeq(templateSeq);
@@ -547,7 +547,7 @@ public class TemplateRestController {
                 String extra = Integer.toString(e.getLineNumber());
                 invalidList.add(new InvalidDataDTO("templateBody", message, extra));
                 tpsLogger.fail(actionType, message, true);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 String message = e.getMessage();
                 invalidList.add(new InvalidDataDTO("templateBody", message));
                 tpsLogger.fail(actionType, message, true);

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
-
-import org.springframework.data.domain.Pageable;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.tps.common.dto.HistSearchDTO;
 import jmnet.moka.core.tps.common.dto.RelSearchDTO;
@@ -15,22 +13,15 @@ import jmnet.moka.core.tps.mvc.page.dto.PageSearchDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.entity.PageHist;
 import jmnet.moka.core.tps.mvc.page.vo.PageVO;
+import org.springframework.data.domain.Pageable;
 
 /**
- * <pre>
- * 페이지 서비스 
- * 2020. 1. 8. ssc 최초생성
- * </pre>
- * 
- * @since 2020. 1. 8. 오후 2:06:54
- * @author ssc
+ * 페이지 서비스
  */
 public interface PageService {
     /**
-     * <pre>
      * 페이지트리조회
-     * </pre>
-     * 
+     *
      * @param search 검색정보
      * @return 페이지목록
      */
@@ -38,17 +29,15 @@ public interface PageService {
 
     /**
      * 페이지정보 조회
-     * 
+     *
      * @param pageSeq 페이지순번
      * @return 페이지정보
      */
-    public Optional<Page> findByPageSeq(Long pageSeq);
+    public Optional<Page> findPageBySeq(Long pageSeq);
 
     /**
-     * <pre>
      * 페이지정보 등록
-     * </pre>
-     * 
+     *
      * @param page 등록할 페이지정보
      * @return 등록된 페이지정보
      * @throws TemplateParseException, UnsupportedEncodingException, IOException
@@ -57,91 +46,81 @@ public interface PageService {
             throws TemplateParseException, UnsupportedEncodingException, IOException;
 
     /**
-     * <pre>
      * 페이지정보 수정
-     * </pre>
-     * 
+     *
      * @param page 수정할 페이지정보
      * @return 수정된 페이지정보
      * @throws TemplateParseException, IOException
      */
-    public Page updatePage(Page page) throws Exception;
+    public Page updatePage(Page page)
+            throws Exception;
 
     /**
-     * <pre>
      * 페이지정보 삭제
-     * </pre>
-     * 
-     * @param page 삭제 할 페이지
+     *
+     * @param page     삭제 할 페이지
      * @param userName 삭제하는 작업자아이디
      */
     public void deletePage(Page page, String userName);
 
     /**
      * 기존에 등록된 pageUrl 페이지조회
-     * 
-     * @param pageUrl 페이지주소
+     *
+     * @param pageUrl  페이지주소
      * @param domainId 도메인아이디
      * @return 페이지정보
      */
-    public List<Page> findByPageUrl(String pageUrl, String domainId);
+    public List<Page> findPageByPageUrl(String pageUrl, String domainId);
 
     /**
      * 페이지 히스토리 목록 조회
-     * 
-     * @param search 검색조건
+     *
+     * @param search   검색조건
      * @param pageable 페이징
      * @return 히스토리 목록
      */
-    public org.springframework.data.domain.Page<PageHist> findHistoryList(HistSearchDTO search,
-            Pageable pageable);
+    public org.springframework.data.domain.Page<PageHist> findAllPageHist(HistSearchDTO search, Pageable pageable);
 
 
     /**
      * 페이지 목록 조회
-     * 
-     * @param search 검색조건
+     *
+     * @param search   검색조건
      * @param pageable 페이징
      * @return 페이지 목록
      */
-    public org.springframework.data.domain.Page<Page> findList(PageSearchDTO search,
-            Pageable pageable);
+    public org.springframework.data.domain.Page<Page> findAllPage(PageSearchDTO search, Pageable pageable);
 
     /**
-     * <pre>
      * 관련 페이지 조회
-     * </pre>
-     * 
+     *
      * @param search 검색조건
      * @return 페이지 목록
      */
-    public List<PageVO> findRelList(RelSearchDTO search);
+    public List<PageVO> findAllPageRel(RelSearchDTO search);
 
     /**
-     * <pre>
      * 관련 페이지 조회건수
-     * </pre>
-     * 
+     *
      * @param search 검색조건
      * @return 페이지 건수
      */
-    public Long findRelCount(RelSearchDTO search);
-    
+    public Long countPageRel(RelSearchDTO search);
+
     /**
      * 도메인아이디와 관련된 페이지 목록 조회
+     *
      * @param domainId 도메인아이디
      * @param pageable 페이지
      * @return 페이지 목록
      */
-    public org.springframework.data.domain.Page<Page> findByDomainId(String domainId, Pageable pageable);
+    public org.springframework.data.domain.Page<Page> findPageByDomainId(String domainId, Pageable pageable);
 
     /**
-     * <pre>
-      * 컴포넌트정보 변경에 따른, 관련아이템 업데이트
-     * </pre>
-     * 
+     * 컴포넌트정보 변경에 따른, 관련아이템 업데이트
+     *
      * @param newComponent 변경된 컴포넌트
      * @param orgComponent 원본 컴포넌트
      */
-    public void updateRelItems(Component newComponent, Component orgComponent);
+    public void updatePageRelItems(Component newComponent, Component orgComponent);
 }

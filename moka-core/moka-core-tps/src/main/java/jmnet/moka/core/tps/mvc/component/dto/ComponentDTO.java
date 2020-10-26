@@ -1,12 +1,10 @@
 package jmnet.moka.core.tps.mvc.component.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -210,12 +208,6 @@ public class ComponentDTO implements Serializable {
      * 이전 수동데이타셋 : 디비에 없는 필드
      */
     private DatasetDTO prevDeskDataset;
-
-    /**
-     * 광고
-     */
-    @JsonInclude
-    private LinkedHashSet<ComponentAdDTO> componentAdList;
 
     public ComponentItem toComponentItem() {
         ComponentItem componentItem = new ComponentItem();

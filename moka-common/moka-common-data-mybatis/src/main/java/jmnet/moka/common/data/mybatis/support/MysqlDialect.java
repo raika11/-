@@ -16,15 +16,27 @@ public class MysqlDialect implements Dialect {
 
     private String getSQL(String sql, int scale) {
         StringBuffer buf = new StringBuffer();
-        buf.append(NL).append(sql);
-        buf.append(NL).append(" LIMIT ").append(scale);
+        buf
+                .append(NL)
+                .append(sql);
+        buf
+                .append(NL)
+                .append(" LIMIT ")
+                .append(scale);
         return buf.toString();
     }
 
     private String getSQL(String sql, int offset, int scale) {
         StringBuffer buf = new StringBuffer();
-        buf.append(NL).append(sql);
-        buf.append(NL).append(" LIMIT ").append(offset).append(" , ").append(scale);
+        buf
+                .append(NL)
+                .append(sql);
+        buf
+                .append(NL)
+                .append(" LIMIT ")
+                .append(offset)
+                .append(" , ")
+                .append(scale);
         return buf.toString();
     }
 

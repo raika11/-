@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
 import jmnet.moka.core.tps.mvc.group.entity.Group;
-import jmnet.moka.core.tps.mvc.member.entity.QGroup;
+import jmnet.moka.core.tps.mvc.group.entity.QGroup;
 import jmnet.moka.core.tps.mvc.member.entity.QMember;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

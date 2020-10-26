@@ -21,43 +21,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
  * <pre>
  * Mybatis PaginationInterceptor
  * 2017. 4. 21. ince 최초생성
  * </pre>
- * 
- * @since 2017. 4. 21. 오후 3:32:17
+ *
  * @author ince
+ * @since 2017. 4. 21. 오후 3:32:17
  */
-@Intercepts({@Signature(type = Executor.class, method = "query",
-        args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
+@Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
 public class PaginationInterceptor implements Interceptor {
-    private final transient Logger log = LoggerFactory.getLogger(PaginationInterceptor.class);
-
     private final static int MAPPED_STATEMENT_INDEX = 0;
-
     private final static int PARAMETER_INDEX = 1;
-
     private final static int ROWBOUNDS_INDEX = 2;
-
     private final static int MAX_VALUE_CONDITION = RowBounds.NO_ROW_LIMIT;
-
+    private final transient Logger log = LoggerFactory.getLogger(PaginationInterceptor.class);
     private Dialect dialect;
 
     /**
-     * 
      * <pre>
      * 쿼리 실행 전 처리
      * </pre>
-     * 
+     *
      * @param invocation org.apache.ibatis.plugin.Invocation
      * @return 쿼리 요청 정보
      * @throws Throwable
      * @see org.apache.ibatis.plugin.Interceptor#intercept(org.apache.ibatis.plugin.Invocation)
      */
     @Override
-    public Object intercept(Invocation invocation) throws Throwable {
+    public Object intercept(Invocation invocation)
+            throws Throwable {
         final Object[] queryArgs = invocation.getArgs();
         if (queryArgs[ROWBOUNDS_INDEX] != null) {
             final RowBounds rowBounds = (RowBounds) queryArgs[ROWBOUNDS_INDEX];
@@ -70,12 +63,11 @@ public class PaginationInterceptor implements Interceptor {
     }
 
     /**
-     * 
      * <pre>
      * 파라미터 중 페이징 쿼리 전용 파라미터가 있을 경우
      * 페이징 쿼리 적용
      * </pre>
-     * 
+     *
      * @param queryArgs 쿼리 정보
      */
     private void processIntercept(final Object[] queryArgs) {
@@ -85,11 +77,12 @@ public class PaginationInterceptor implements Interceptor {
         if (rowBounds != null) {
             int offset = rowBounds.getOffset();
             int limit = rowBounds.getLimit();
-            if (dialect.supportsLimit()
-                    && (offset != RowBounds.NO_ROW_OFFSET || limit != RowBounds.NO_ROW_LIMIT)) {
+            if (dialect.supportsLimit() && (offset != RowBounds.NO_ROW_OFFSET || limit != RowBounds.NO_ROW_LIMIT)) {
                 log.debug("Pagination query prepare ...");
                 BoundSql boundSql = ms.getBoundSql(parameter);
-                String sql = boundSql.getSql().trim();
+                String sql = boundSql
+                        .getSql()
+                        .trim();
                 if (dialect.supportsLimitOffset()) {
                     sql = dialect.getLimitedSQL(sql, offset, limit);
                     offset = RowBounds.NO_ROW_OFFSET;
@@ -98,8 +91,7 @@ public class PaginationInterceptor implements Interceptor {
                 }
                 BoundSql newBoundSql = copyFromBoundSql(ms, boundSql, sql);
                 log.debug("Mybatis Page Search：" + sql);
-                MappedStatement newMs =
-                        copyFromMappedStatement(ms, new BoundSqlSqlSource(newBoundSql));
+                MappedStatement newMs = copyFromMappedStatement(ms, new BoundSqlSqlSource(newBoundSql));
                 queryArgs[MAPPED_STATEMENT_INDEX] = newMs;
             }
         }
@@ -108,10 +100,10 @@ public class PaginationInterceptor implements Interceptor {
 
     /**
      * 페이징 처리 쿼리에 대한 파라미터 처리
-     * 
-     * @param ms MappedStatement
+     *
+     * @param ms       MappedStatement
      * @param boundSql BoundSql
-     * @param sql 변경 할 쿼리문
+     * @param sql      변경 할 쿼리문
      * @return BoundSql
      */
     private BoundSql copyFromBoundSql(MappedStatement ms, BoundSql boundSql, String sql) {
@@ -121,13 +113,19 @@ public class PaginationInterceptor implements Interceptor {
         if (mappings.isEmpty()) {
             newMappings = new ArrayList<>();
         } else {
-            newMappings = mappings.stream().filter(item -> {
-                return !item.getProperty().equals("limit") && !item.getProperty().equals("offset");
-            }).collect(Collectors.toList());
+            newMappings = mappings
+                    .stream()
+                    .filter(item -> {
+                        return !item
+                                .getProperty()
+                                .equals("limit") && !item
+                                .getProperty()
+                                .equals("offset");
+                    })
+                    .collect(Collectors.toList());
         }
 
-        BoundSql newBoundSql = new BoundSql(ms.getConfiguration(), sql, newMappings,
-                boundSql.getParameterObject());
+        BoundSql newBoundSql = new BoundSql(ms.getConfiguration(), sql, newMappings, boundSql.getParameterObject());
         for (ParameterMapping mapping : newMappings) {
             String prop = mapping.getProperty();
             if (boundSql.hasAdditionalParameter(prop)) {
@@ -139,18 +137,16 @@ public class PaginationInterceptor implements Interceptor {
     }
 
     /**
-     * 
      * <pre>
      * 페이지 쿼리 적용 후 MappedStatement 재 생성
      * </pre>
-     * 
-     * @param ms MappedStatement
+     *
+     * @param ms           MappedStatement
      * @param newSqlSource SqlSource
      * @return MappedStatement
      */
     private MappedStatement copyFromMappedStatement(MappedStatement ms, SqlSource newSqlSource) {
-        Builder builder = new MappedStatement.Builder(ms.getConfiguration(), ms.getId(),
-                newSqlSource, ms.getSqlCommandType());
+        Builder builder = new MappedStatement.Builder(ms.getConfiguration(), ms.getId(), newSqlSource, ms.getSqlCommandType());
         builder.resource(ms.getResource());
         builder.fetchSize(ms.getFetchSize());
         builder.statementType(ms.getStatementType());
@@ -175,14 +171,34 @@ public class PaginationInterceptor implements Interceptor {
     }
 
     /**
-     * 
+     * <pre>
+     * mybatis-config 파일을 읽어 dialectClass 설정
+     * </pre>
+     *
+     * @param props Properties
+     * @see org.apache.ibatis.plugin.Interceptor#setProperties(java.util.Properties)
+     */
+    @Override
+    public void setProperties(Properties props) {
+        String dialectClass = props.getProperty("dialectClass");
+        try {
+            dialect = (Dialect) Class
+                    .forName(dialectClass)
+                    .newInstance();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(dialectClass + " : can not init!");
+        }
+    }
+
+
+    /**
      * <pre>
      * org.apache.ibatis.mapping.BoundSql 구현 객체
      * 2018. 1. 5. 차상인 최초생성
      * </pre>
-     * 
-     * @since 2018. 1. 5. 오후 3:01:44
+     *
      * @author 차상인
+     * @since 2018. 1. 5. 오후 3:01:44
      */
     public static class BoundSqlSqlSource implements SqlSource {
         BoundSql boundSql;
@@ -194,25 +210,6 @@ public class PaginationInterceptor implements Interceptor {
         @Override
         public BoundSql getBoundSql(Object parameterObject) {
             return boundSql;
-        }
-    }
-
-    /**
-     * 
-     * <pre>
-     * mybatis-config 파일을 읽어 dialectClass 설정
-     * </pre>
-     * 
-     * @param props Properties
-     * @see org.apache.ibatis.plugin.Interceptor#setProperties(java.util.Properties)
-     */
-    @Override
-    public void setProperties(Properties props) {
-        String dialectClass = props.getProperty("dialectClass");
-        try {
-            dialect = (Dialect) Class.forName(dialectClass).newInstance();
-        } catch (Exception e) {
-            throw new IllegalArgumentException(dialectClass + " : can not init!");
         }
     }
 }

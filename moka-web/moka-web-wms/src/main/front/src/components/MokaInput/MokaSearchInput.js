@@ -40,6 +40,10 @@ const propTypes = {
      * 검색버튼의 추가 스타일
      */
     buttonClassName: PropTypes.string,
+    /**
+     * name field
+     */
+    name: PropTypes.string,
 };
 const defaultProps = {
     placeholder: '검색어를 입력하세요',
@@ -51,7 +55,7 @@ const defaultProps = {
  * 검색 버튼이 붙어있는 input
  */
 const MokaSearchInput = (props) => {
-    const { placeholder, value, onChange, className, searchText, onSearch, variant, buttonClassName, ...rest } = props;
+    const { placeholder, value, onChange, className, searchText, onSearch, variant, buttonClassName, name, ...rest } = props;
 
     /**
      * 키 입력
@@ -75,6 +79,7 @@ const MokaSearchInput = (props) => {
                 value={value}
                 onChange={onChange}
                 type="text"
+                name={name}
                 inputProps={{
                     ...rest,
                     onKeyPress: handleKeyPress,

@@ -1,85 +1,106 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
-import { getReservedList, defaultSearch } from '@store/reserved';
+import { getReservedList, changeSearchOption, initialState } from '@store/reserved';
 
 /**
  * 예약어 검색
  */
 const ReservedSearch = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
-    const { domains, latestDomainId } = useSelector((store) => ({
-        reserved: store.auth.domains,
+    const { latestDomainId, domainList, search: storeSearch } = useSelector((store) => ({
         latestDomainId: store.auth.latestDomainId,
+        domainList: store.auth.domainList,
+        search: store.reserved.search,
     }));
 
-    const [search] = useState(defaultSearch);
-    const [domainRows, setDomainRows] = useState([]);
-    const [searchType, setSearchType] = useState('reservedId');
-    const [keyWord, setKeyword] = useState('');
-    const [, setSelectedDomain] = useState(search.domainId);
+    const [search, setSearch] = useState(initialState.search);
 
     useEffect(() => {
-        const option = {
-            ...search,
-            domainId: latestDomainId,
-        };
-        dispatch(getReservedList(option));
+        // 스토어의 search 객체 변경 시 로컬 state에 셋팅
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    /**
+     * latestDomainId를 예약어의 search.domainId로 변경
+     */
+    useEffect(() => {
+        if (latestDomainId && latestDomainId !== search.domainId) {
+            dispatch(
+                getReservedList(
+                    changeSearchOption({
+                        ...search,
+                        domainId: latestDomainId,
+                        page: 0,
+                    }),
+                ),
+            );
+        }
     }, [dispatch, latestDomainId, search]);
 
-    // 검색버튼 클릭
-    const onSearch = (e) => {
-        const option = {
-            ...search,
-            searchType,
-            domainId: latestDomainId,
-            keyword: keyWord,
-        };
-        dispatch(getReservedList(option));
-    };
-
-    useEffect(() => {
-        if (domains) {
-            const rows = domains.map((m) => {
-                return {
-                    id: m.domainId,
-                    name: m.domainName,
-                };
-            });
-            setDomainRows(rows);
-        }
-    }, [domains]);
+    /**
+     * 검색
+     */
+    const handleSearch = useCallback(() => {
+        dispatch(
+            getReservedList(
+                changeSearchOption({
+                    ...search,
+                    page: 0,
+                }),
+            ),
+        );
+    }, [dispatch, search]);
 
     const handleChangeSearchOption = (e) => {
-        if (e.target.name === 'selectedDomain') {
-            setSelectedDomain(e.target.value);
+        if (e.target.name === 'domainId') {
+            dispatch(
+                changeSearchOption({
+                    ...search,
+                    domainId: e.target.value,
+                }),
+            );
+            history.push('/reserved');
         } else if (e.target.name === 'searchType') {
-            setSearchType(e.target.value);
+            dispatch(
+                changeSearchOption({
+                    ...search,
+                    searchType: e.target.value,
+                }),
+            );
         } else if (e.target.name === 'keyword') {
-            setKeyword(e.target.value);
+            dispatch(
+                changeSearchOption({
+                    ...search,
+                    keyword: e.target.value,
+                }),
+            );
         }
     };
 
     return (
         <Form className="mb-10">
-            <MokaInput as="select" className="m-0 mb-2" onChange={handleChangeSearchOption}>
-                {domainRows.map((r) => (
-                    <option key={r.id} value={r.id}>
-                        {r.name}
+            <MokaInput as="select" className="m-0 mb-2" value={search.domainId || undefined} onChange={handleChangeSearchOption} name="domainId">
+                {domainList.map((domain) => (
+                    <option key={domain.domainId} value={domain.domainId}>
+                        {domain.domainName}
                     </option>
                 ))}
             </MokaInput>
             <Form.Row className="m-0 mb-2">
                 <Col xs={5} className="p-0 pr-2">
-                    <MokaInput as="select" onChange={handleChangeSearchOption}>
+                    <MokaInput as="select" value={search.searchType || undefined} onChange={handleChangeSearchOption} name="searchType">
+                        <option value="all">전체</option>
                         <option value="reservedId">코드</option>
                         <option value="reservedValue">값</option>
                     </MokaInput>
                 </Col>
                 <Col xs={7} className="p-0">
-                    <MokaSearchInput onChange={handleChangeSearchOption} onSearch={onSearch} />
+                    <MokaSearchInput value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
                 </Col>
             </Form.Row>
         </Form>

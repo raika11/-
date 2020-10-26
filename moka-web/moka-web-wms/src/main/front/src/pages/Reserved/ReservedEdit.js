@@ -169,7 +169,7 @@ const ReservedEdit = () => {
      * 저장 이벤트
      * @param event 이벤트 객체
      */
-    const handleSaveClick = (e) => {
+    const handleClickSave = (e) => {
         let newReserved = '';
         if (reservedSeq) {
             newReserved = {
@@ -246,7 +246,7 @@ const ReservedEdit = () => {
                     <MokaInputLabel label="사용여부" labelWidth={80} as="switch" className="mb-0" inputProps={{ id: 'useYn', label: '' }} name="useYn" onChange={handleChange} />
                     {/* 버튼 그룹 */}
                     <Form.Group className="mb-0 d-flex align-items-center">
-                        <Button variant="dark" className="mr-05" onClick={handleSaveClick}>
+                        <Button variant="dark" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>
                         <Button variant="secondary" onClick={handleDeleteClick}>

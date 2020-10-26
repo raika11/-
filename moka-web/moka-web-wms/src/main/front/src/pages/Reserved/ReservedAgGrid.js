@@ -4,7 +4,7 @@ import { columnDefs } from './ReservedAgGridColumns';
 import { MokaTable } from '@components';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { changeSearchOption, clearReserved, getReservedList, initialState } from '@store/reserved';
+import { changeSearchOption, clearReserved, getReservedList } from '@store/reserved';
 
 /**
  * 예약어 AgGrid 컴포넌트
@@ -12,26 +12,16 @@ import { changeSearchOption, clearReserved, getReservedList, initialState } from
 const ReservedAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const [search, setSearch] = useState(initialState);
-    const { total, list, search: storeSearch, latestReservedSeq, loading } = useSelector((store) => ({
+    const { total, list, search, reserved, loading } = useSelector((store) => ({
         total: store.reserved.total,
         list: store.reserved.list,
         search: store.reserved.search,
-        latestReservedSeq: store.reserved.latestReservedSeq,
+        reserved: store.reserved.reserved,
         loading: store.loading['reserved/GET_RESERVED_LIST'],
     }));
 
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
-    useEffect(() => {
-        dispatch(getReservedList());
-    }, [dispatch]);
-
     /**
-     * 테이블에서 검색옵션 변경하는 경우
-     * @param {object} payload 변경된 값
+     * 테이블에서 검색옵션 변경
      */
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
@@ -47,12 +37,12 @@ const ReservedAgGrid = () => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((params) => history.push(`/reserved/${params.reservedSeq}`), [history]);
+    const handleRowClicked = useCallback((reserved) => history.push(`/reserved/${reserved.reservedSeq}`), [history]);
 
     /**
      * 예약어 추가 버튼 클릭
      */
-    const onAddClick = useCallback(() => {
+    const handleClickAdd = useCallback(() => {
         history.push('/reserved');
         dispatch(clearReserved());
     }, [dispatch, history]);
@@ -60,7 +50,7 @@ const ReservedAgGrid = () => {
     return (
         <>
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="dark" onClick={onAddClick}>
+                <Button variant="dark" onClick={handleClickAdd}>
                     예약어추가
                 </Button>
             </div>
@@ -68,15 +58,16 @@ const ReservedAgGrid = () => {
             <MokaTable
                 columnDefs={columnDefs}
                 rowData={list}
-                getRowNodeId={(params) => params.reservedSeq}
+                getRowNodeId={(reserved) => reserved.reservedSeq}
                 agGridHeight={550}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}
                 page={search.page}
                 size={search.size}
-                selected={String(latestReservedSeq)}
+                selected={reserved.reservedSeq}
                 onChangeSearchOption={handleChangeSearchOption}
+                preventRowClickCell={['delete']}
             />
         </>
     );

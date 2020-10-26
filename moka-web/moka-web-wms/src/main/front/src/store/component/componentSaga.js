@@ -1,16 +1,26 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { startLoading, finishLoading } from '~/stores/loadingStore';
-import { NETWORK_ERROR_MESSAGE } from '@/constants';
+import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
+import { startLoading, finishLoading } from '@store/loading';
 
 import * as act from './componentAction';
 import * as api from './componentApi';
+
+/**
+ * 컴포넌트 목록 조회
+ */
+const getComponentList = callApiAfterActions(act.GET_COMPONENT_LIST, api.getComponentList, (store) => store.component);
+
+/**
+ * 템플릿 조회
+ */
+const getComponent = createRequestSaga(act.GET_COMPONENT, api.getComponent);
 
 /**
  * 여러개의 컴포넌트 한번에 저장
  * @param {array} param0.payload.componentList 컴포넌트리스트
  * @param {func} param0.payload.callback 콜백
  */
-export function* saveComponentList({ payload: { componentList, callback } }) {
+function* saveComponentList({ payload: { componentList, callback } }) {
     let ACTION = act.SAVE_COMPONENT_LIST;
     let callbackData = {};
 
@@ -30,5 +40,7 @@ export function* saveComponentList({ payload: { componentList, callback } }) {
 }
 
 export default function* saga() {
+    yield takeLatest(act.GET_COMPONENT_LIST, getComponentList);
+    yield takeLatest(act.GET_COMPONENT, getComponent);
     yield takeLatest(act.SAVE_COMPONENT_LIST, saveComponentList);
 }

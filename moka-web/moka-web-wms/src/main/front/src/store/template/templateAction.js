@@ -18,8 +18,8 @@ export const CLEAR_RELATION_LIST = 'template/CLEAR_RELATION_LIST';
 export const CLEAR_HISTORY = 'template/CLEAR_HISTORY';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearTemplate = createAction(CLEAR_TEMPLATE);
-export const clearList = createAction(CLEAR_STORE);
-export const clearSearch = createAction(CLEAR_STORE);
+export const clearList = createAction(CLEAR_LIST);
+export const clearSearch = createAction(CLEAR_SEARCH);
 export const clearRelationList = createAction(CLEAR_RELATION_LIST);
 export const clearHistory = createAction(CLEAR_HISTORY);
 

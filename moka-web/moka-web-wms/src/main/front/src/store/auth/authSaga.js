@@ -1,6 +1,5 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { enqueueToast } from '@store/notification/toastAction';
 import { setLocalItem } from '@utils/storageUtil';
 import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
@@ -20,25 +19,8 @@ export function* loginJwtSaga({ payload }) {
             window.location.reload();
         } else {
             // 인증없음
-            yield put(
-                enqueueToast({
-                    key: `loginNoAuth${new Date()}`,
-                    message: data.header.message,
-                }),
-            );
         }
-    } catch (err) {
-        yield put(
-            enqueueToast({
-                key: `loginJwt${new Date().getTime() + Math.random()}`,
-                message: '서버 에러',
-                options: {
-                    variant: 'error',
-                    persist: true,
-                },
-            }),
-        );
-    }
+    } catch (err) {}
 }
 
 /**
@@ -59,15 +41,12 @@ export function* logoutSaga() {
             message.callback = () => {
                 window.location.href = '/';
             };
-            yield put(enqueueToast(message));
             setLocalItem({ key: 'Authorization', value: undefined });
         } else {
             message.message = data.header.message;
-            yield put(enqueueToast(message));
         }
     } catch (err) {
         message.message = '서버 에러';
-        yield put(enqueueToast(message));
     }
 }
 

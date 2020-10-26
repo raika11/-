@@ -8,12 +8,12 @@ import * as act from './templateAction';
 /**
  * 템플릿 목록 조회
  */
-const getTemplateList = callApiAfterActions(act.getTemplateList, api.getTemplateList, (store) => store.template);
+const getTemplateList = callApiAfterActions(act.GET_TEMPLATE_LIST, api.getTemplateList, (store) => store.template);
 
 /**
  * 템플릿 조회
  */
-const getTemplate = createRequestSaga(act.getTemplate, api.getTemplate);
+const getTemplate = createRequestSaga(act.GET_TEMPLATE, api.getTemplate);
 
 /**
  * 저장

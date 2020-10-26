@@ -1,22 +1,21 @@
 import axios from './axios';
 import { setLocalItem, getLocalItem } from '@utils/storageUtil';
 import { store } from '@store/store';
-import { enqueueToast } from '@store/notification/toastAction';
 
 const goToLogin = (message) => {
     setLocalItem({ key: 'Authorization', value: undefined });
-    store.dispatch(
-        enqueueToast({
-            key: 'loginAuthorization',
-            message,
-            callback: () => {
-                window.location.reload();
-            },
-            options: {
-                persist: true,
-            },
-        }),
-    );
+    // store.dispatch(
+    //     enqueueToast({
+    //         key: 'loginAuthorization',
+    //         message,
+    //         callback: () => {
+    //             window.location.reload();
+    //         },
+    //         options: {
+    //             persist: true,
+    //         },
+    //     }),
+    // );
 };
 
 /** 요청 인터셉터 */

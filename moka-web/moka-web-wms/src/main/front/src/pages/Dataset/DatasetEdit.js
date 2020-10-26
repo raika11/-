@@ -16,7 +16,7 @@ const DatasetEdit = () => {
     const [autoListModalShow, setAutoListModalShow] = useState(false);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" width={688} className="mr-10 custom-scroll" title="데이터셋 정보">
+        <MokaCard titleClassName="h-100 mb-0 pb-0" width={688} className="mr-10 custom-scroll flex-fill" title="데이터셋 정보">
             <Form>
                 {/* 데이터셋아이디, 버튼그룹 */}
                 <Form.Row className="mb-2">

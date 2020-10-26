@@ -16,6 +16,7 @@ const Template = React.lazy(() => import('@pages/Template'));
 const Dataset = React.lazy(() => import('@pages/Dataset'));
 const Container = React.lazy(() => import('@pages/Container'));
 const Reserved = React.lazy(() => import('@pages/Reserved'));
+const Component = React.lazy(() => import('@pages/Component'));
 
 const routes = [
     {
@@ -132,6 +133,16 @@ const routes = [
         name: 'Reserved',
         displayName: '예약어관리',
         component: Reserved,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/component',
+        name: 'Component',
+        displayName: '컴포넌트관리',
+        component: Component,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

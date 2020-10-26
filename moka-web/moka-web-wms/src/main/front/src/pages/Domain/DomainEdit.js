@@ -225,7 +225,7 @@ const DomainEdit = ({ history }) => {
      * 저장 이벤트
      * @param event 이벤트 객체
      */
-    const handleSubmit = (event) => {
+    const handleClickSave = (event) => {
         event.preventDefault();
         event.stopPropagation();
 
@@ -310,7 +310,7 @@ const DomainEdit = ({ history }) => {
     return (
         <div className="d-flex justify-content-center mb-20">
             {loading && <div className="opacity-box"></div>}
-            <Form noValidate onSubmit={handleSubmit} style={{ width: 605 }}>
+            <Form style={{ width: 605 }}>
                 {/* 도메인ID */}
                 <Form.Group as={Row}>
                     <Form.Label column xs={3} className="pt-1 pr-0 pl-0 mb-0">
@@ -448,7 +448,7 @@ const DomainEdit = ({ history }) => {
                 </Form.Group>
                 {/* 버튼 */}
                 <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                    <Button type="submit" variant="primary" className="float-left mr-10 pr-20 pl-20">
+                    <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
                         저장
                     </Button>
                     <Button className="float-left mr-10 pr-20 pl-20" variant="gray150">

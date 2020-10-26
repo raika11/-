@@ -120,7 +120,7 @@ const TemplateEdit = () => {
      * 저장 이벤트
      * @param {object} e 이벤트
      */
-    const handleSubmit = (e) => {
+    const handleClickSave = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -244,7 +244,7 @@ const TemplateEdit = () => {
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="primary" className="mr-05" onClick={handleSubmit}>
+                        <Button variant="primary" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>
                         <Button variant="danger" disabled={btnDisabled} onClick={handleDelete}>

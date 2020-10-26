@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
+import { Route } from 'react-router-dom';
 import { MokaCard } from '@components';
 
 const ReservedList = React.lazy(() => import('./ReservedList'));
@@ -26,11 +27,18 @@ const Reserved = () => {
                 </MokaCard>
 
                 {/* 예약어 정보 */}
-                <MokaCard width={780} titleClassName="mb-0" title="예약어 정보">
-                    <Suspense>
-                        <ReservedEdit />
-                    </Suspense>
-                </MokaCard>
+
+                <Route
+                    path={['/reserved', '/reserved/:reservedSeq']}
+                    exact
+                    render={() => (
+                        <MokaCard width={780} titleClassName="mb-0" title="예약어 정보">
+                            <Suspense>
+                                <ReservedEdit />
+                            </Suspense>
+                        </MokaCard>
+                    )}
+                />
             </div>
         </>
     );

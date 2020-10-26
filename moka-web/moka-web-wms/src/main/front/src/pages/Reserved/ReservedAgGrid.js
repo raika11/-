@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { columnDefs } from './ReservedAgGridColumns';
-import { MokaTable } from '@components';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
+import { MokaTable } from '@components';
+import { columnDefs } from './ReservedAgGridColumns';
 import { changeSearchOption, clearReserved, getReservedList, GET_RESERVED_LIST } from '@store/reserved';
 
 /**

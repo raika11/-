@@ -17,7 +17,7 @@ export const saveReserved = createAction(SAVE_RESERVED, ({ type, actions, callba
  * 예약어 삭제 action
  */
 export const [DELETE_RESERVED, DELETE_RESERVED_SUCCESS, DELETE_RESERVED_FAILURE] = createRequestActionTypes('reserved/DELETE_RESERVED');
-export const deleteReserved = createAction(DELETE_RESERVED, ({ reservedSeq, callback }) => ({ reservedSeq, callback }));
+export const deleteReserved = createAction(DELETE_RESERVED, ({ reservedSet, callback }) => ({ reservedSet, callback }));
 
 /**
  * 예약어 상세 조회 action

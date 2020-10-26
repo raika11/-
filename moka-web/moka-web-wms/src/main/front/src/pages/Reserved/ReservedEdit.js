@@ -13,8 +13,17 @@ import { MokaInputLabel } from '@components';
  * 예약어 정보 컴포넌트
  */
 const ReservedEdit = () => {
-    let history = useHistory();
+    const history = useHistory();
+    const dispatch = useDispatch();
     const { reservedSeq: paramSeq } = useParams();
+    const { latestDomainId, reserved, loading, invalidList } = useSelector((store) => ({
+        reserved: store.reserved.reserved,
+        latestDomainId: store.auth.latestDomainId,
+        loading: store.reserved[GET_RESERVED] || store.reserved[SAVE_RESERVED],
+        invalidList: store.reserved.invalidList,
+    }));
+
+    // state
     const [reservedId, setReservedId] = useState('');
     const [reservedSeq, setReservedSeq] = useState('');
     const [reservedValue, setReservedValue] = useState('');
@@ -26,33 +35,14 @@ const ReservedEdit = () => {
     const [reservedIdError, setReservedIdError] = useState(false);
     const [reservedValueError, setReservedValueError] = useState(false);
 
-    const { latestDomainId, reserved, loading, invalidList } = useSelector((store) => ({
-        reserved: store.reserved.reserved,
-        latestDomainId: store.auth.latestDomainId,
-        loading: store.reserved[GET_RESERVED] || store.reserved[SAVE_RESERVED],
-        invalidList: store.reserved.invalidList,
-    }));
-    const dispatch = useDispatch();
-
-    /**
-     * 예약어 데이터 셋팅
-     */
-    useEffect(() => {
-        setReservedId(reserved.reservedId || '');
-        setReservedSeq(reserved.reservedSeq || '');
-        setReservedValue(reserved.reservedValue || '');
-        setdescription(reserved.description || '');
-        setUseYn(reserved.useYn || 'N');
-    }, [reserved]);
-
     /**
      * input 값 변경
      */
     const handleChangeValue = ({ target }) => {
         const { name, value, checked } = target;
         if (name === 'useYn') {
-            const usedVal = checked ? 'Y' : 'N';
-            setUseYn(usedVal);
+            const useVal = checked ? 'Y' : 'N';
+            setUseYn(useVal);
         } else if (name === 'reservedId') {
             setReservedId(value);
             setReservedIdError(false);
@@ -91,26 +81,6 @@ const ReservedEdit = () => {
         dispatch(changeInvalidList(errList));
         return !isInvalid;
     };
-
-    useEffect(() => {
-        if (paramSeq) {
-            dispatch(getReserved(paramSeq));
-        } else {
-            dispatch(clearReserved());
-        }
-    }, [dispatch, paramSeq]);
-
-    useEffect(() => {
-        // 파라미터에 seq가 있는데 데이터가 없으면 조회
-        let paramReservedSeq = Number(paramSeq);
-
-        if (paramSeq && reservedSeq !== paramSeq && !paramState) {
-            dispatch(getReserved(paramReservedSeq));
-            setParamState(true);
-        } else if (!paramSeq && reservedSeq) {
-            dispatch(clearReserved({ reservedInfo: true }));
-        }
-    }, [dispatch, paramSeq, paramState, reservedSeq]);
 
     /**
      * 예약어 수정
@@ -170,7 +140,6 @@ const ReservedEdit = () => {
      */
     const handleClickSave = () => {
         let newReserved = '';
-        debugger;
         if (reservedSeq) {
             newReserved = {
                 ...reserved,
@@ -204,24 +173,51 @@ const ReservedEdit = () => {
     };
 
     /**
-     * 삭제 이벤트
+     * 삭제 버튼
      */
     const handleClickDelete = () => {
-        const reservedSet = {
-            domainId: latestDomainId,
-            seq: reservedSeq,
-        };
-        toastr.confirm('삭제하시겠습니까?', {
+        toastr.confirm('정말 삭제하시겠습니까?', {
             onOk: () => {
-                if (reserved.reservedId) {
-                    dispatch(deleteReserved({ callback: () => history.push('/reserved'), reservedSet }));
-                } else {
-                    console.log('삭제할 수 없습니다.');
-                }
+                const reservedSet = {
+                    domainId: latestDomainId,
+                    reservedSeq: reservedSeq,
+                };
+                dispatch(deleteReserved({ callback: () => history.push('/reserved'), reservedSet }));
             },
             onCancel: () => {},
         });
     };
+
+    /**
+     * 예약어 데이터 셋팅
+     */
+    useEffect(() => {
+        setReservedId(reserved.reservedId || '');
+        setReservedSeq(reserved.reservedSeq || '');
+        setReservedValue(reserved.reservedValue || '');
+        setdescription(reserved.description || '');
+        setUseYn(reserved.useYn || 'N');
+    }, [reserved]);
+
+    useEffect(() => {
+        if (paramSeq) {
+            dispatch(getReserved(paramSeq));
+        } else {
+            dispatch(clearReserved());
+        }
+    }, [dispatch, paramSeq]);
+
+    useEffect(() => {
+        // 파라미터에 seq가 있는데 데이터가 없으면 조회
+        let paramReservedSeq = Number(paramSeq);
+
+        if (paramSeq && reservedSeq !== paramSeq && !paramState) {
+            dispatch(getReserved(paramReservedSeq));
+            setParamState(true);
+        } else if (!paramSeq && reservedSeq) {
+            dispatch(clearReserved({ reservedInfo: true }));
+        }
+    }, [dispatch, paramSeq, paramState, reservedSeq]);
 
     useEffect(() => {
         // invalidList 처리
@@ -248,10 +244,9 @@ const ReservedEdit = () => {
                         labelWidth={80}
                         as="switch"
                         className="mb-0"
-                        inputProps={{ id: 'useYn', label: '' }}
+                        inputProps={{ id: 'useYn', label: '', checked: useYn === 'Y' }}
                         name="useYn"
                         onChange={handleChangeValue}
-                        checked={useYn === 'Y' && true}
                     />
                     {/* 버튼 그룹 */}
                     <Form.Group className="mb-0 d-flex align-items-center">
@@ -275,7 +270,7 @@ const ReservedEdit = () => {
                             onChange={handleChangeValue}
                             isInvalid={reservedIdError}
                             required
-                            value={reserved.reservedId}
+                            value={reservedId}
                         />
                     </Col>
                 </Form.Row>
@@ -291,7 +286,7 @@ const ReservedEdit = () => {
                             onChange={handleChangeValue}
                             isInvalid={reservedValueError}
                             required
-                            value={reserved.reservedValue}
+                            value={reservedValue}
                         />
                     </Col>
                 </Form.Row>
@@ -303,7 +298,7 @@ const ReservedEdit = () => {
                     placeholder="설명을 입력하세요"
                     name="description"
                     onChange={handleChangeValue}
-                    value={reserved.description}
+                    value={description}
                 />
             </Form>
         </>

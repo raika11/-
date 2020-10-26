@@ -345,3 +345,11 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+/* -----------------------
+* 컴포넌트관리
+* ---------------------- */
+.component-padding-box {
+    margin: 0px -1 * $card-spacer-x;
+    padding: 0px $card-spacer-x;
+}

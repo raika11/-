@@ -32,6 +32,9 @@ import {
     faMinusSquare,
     faMinus,
     faSignOutAlt,
+    faCalendarAlt as falCalendarAlt,
+    faMinusCircle as falMinusCircle,
+    faClock as falClock,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faAngleLeft, faAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
@@ -68,6 +71,9 @@ library.add(faMinusSquare);
 library.add(faMinus);
 library.add(faSignOutAlt);
 library.add(fadImage);
+library.add(falCalendarAlt);
+library.add(falMinusCircle);
+library.add(falClock);
 
 const propTypes = {
     /**

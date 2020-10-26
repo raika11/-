@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 const propTypes = {
     /**
@@ -26,18 +27,28 @@ const propTypes = {
      * inputProps (배열 | 오브젝트)
      * 배열일 경우 배열의 수만큼 input 생성
      */
-    inputProps: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
+    inputList: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
+    /**
+     * 아이콘 여부 (있을 경우 append에 추가됨)
+     */
+    icon: PropTypes.node,
+    /**
+     * 아이콘 클릭 이벤트
+     */
+    onIconClick: PropTypes.func,
 };
 const defaultProps = {
     target: '_blank',
-    inputProps: {},
+    inputList: {},
+    icon: null,
+    onIconClick: null,
 };
 
 /**
  * Prepend 링크를 포함한 input
  */
 const MokaPrependLinkInput = (props) => {
-    const { to, linkText, className, inputProps, target } = props;
+    const { to, linkText, className, inputList, target, icon, onIconClick } = props;
 
     return (
         <InputGroup className={className}>
@@ -46,7 +57,14 @@ const MokaPrependLinkInput = (props) => {
                     <InputGroup.Text>{linkText}</InputGroup.Text>
                 </Link>
             </InputGroup.Prepend>
-            {Array.isArray(inputProps) ? inputProps.map((obj, idx) => <Form.Control key={idx} {...obj} />) : <Form.Control {...inputProps} />}
+            {Array.isArray(inputList) ? inputList.map((obj, idx) => <Form.Control key={idx} {...obj} />) : <Form.Control {...inputList} />}
+            {icon && (
+                <InputGroup.Append>
+                    <Button variant="dark" onClick={onIconClick}>
+                        {icon}
+                    </Button>
+                </InputGroup.Append>
+            )}
         </InputGroup>
     );
 };

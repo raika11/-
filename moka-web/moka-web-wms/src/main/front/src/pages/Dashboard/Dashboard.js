@@ -257,7 +257,7 @@ const Dashboard = () => {
                                     className="mb-3"
                                     to="/404"
                                     linkText="ID : 3"
-                                    inputProps={[
+                                    inputList={[
                                         {
                                             placeholder: '템플릿위치그룹',
                                             disabled: true,

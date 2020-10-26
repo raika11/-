@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
+import MokaPrependLinkInput from './MokaPrependLinkInput';
 
 const propTypes = {
     /**
@@ -32,7 +33,7 @@ const propTypes = {
     /**
      * input element의 타입(기본 input)
      */
-    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile']),
+    as: PropTypes.oneOf(['input', 'textarea', 'prependLink']),
     /**
      * input의 type
      */
@@ -133,6 +134,7 @@ const MokaInputGroup = forwardRef((props, ref) => {
                     value={value}
                     required={required}
                     onChange={onChange}
+                    name={name}
                 />
             );
         }
@@ -159,13 +161,17 @@ const MokaInputGroup = forwardRef((props, ref) => {
      * inputGroup 생성
      */
     const createInputGroup = () => {
-        return (
-            <InputGroup className={clsx('flex-fill', inputGroupClassName)}>
-                {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
-                {createControl()}
-                {append && <InputGroup.Append>{append}</InputGroup.Append>}
-            </InputGroup>
-        );
+        if (as !== 'prependLink') {
+            return (
+                <InputGroup className={clsx('flex-fill', inputGroupClassName)}>
+                    {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
+                    {createControl()}
+                    {append && <InputGroup.Append>{append}</InputGroup.Append>}
+                </InputGroup>
+            );
+        } else {
+            return <MokaPrependLinkInput {...inputProps} />;
+        }
     };
 
     return label ? (

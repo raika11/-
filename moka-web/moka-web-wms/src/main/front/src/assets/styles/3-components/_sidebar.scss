@@ -119,10 +119,12 @@ a.sidebar-link {
 }
 
 // Chevron
+.collapsed-box [data-toggle="collapse"],
 .sidebar [data-toggle="collapse"] {
   position: relative;
 }
 
+.collapsed-box [data-toggle="collapse"]:before,
 .sidebar [data-toggle="collapse"]:before {
   content: " ";
   border: solid;
@@ -135,14 +137,21 @@ a.sidebar-link {
   right: 1.5rem;
   transition: all .2s ease-out;
 }
+.collapsed-box [data-toggle="collapse"]:before {
+  top: 0.3rem;
+}
 
+.collapsed-box [data-toggle="collapse"]:not(.collapsed):before,
 .sidebar [aria-expanded="true"]:before,
 .sidebar [data-toggle="collapse"]:not(.collapsed):before {
   transform: rotate(-135deg);
   top: 1.4rem;
 }
+.collapsed-box [data-toggle="collapse"]:not(.collapsed):before {
+  top: 0.3rem;
+}
 
-.sidebar .sidebar-dropdown [data-toggle="collapse"]::before {
+.sidebar .sidebar-dropdown [data-toggle="collapse"]:before {
   top: 1rem;
 }
 

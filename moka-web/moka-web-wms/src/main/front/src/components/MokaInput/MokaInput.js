@@ -77,7 +77,7 @@ const defaultProps = {};
  * 기본 input
  */
 const MokaInput = forwardRef((props, ref) => {
-    const { className, as, type, placeholder, onChange, value, name, children, inputProps, mask, isInvalid, disabled } = props;
+    const { className, as, type, placeholder, onChange, value, name, children, inputProps, mask, isInvalid, disabled, ...rest } = props;
 
     // 셀렉트
     if (as === 'select') {
@@ -94,6 +94,7 @@ const MokaInput = forwardRef((props, ref) => {
                 custom
                 isInvalid={isInvalid}
                 disabled={disabled}
+                {...rest}
             >
                 {children}
             </Form.Control>
@@ -112,6 +113,7 @@ const MokaInput = forwardRef((props, ref) => {
                 value={value}
                 onChange={onChange}
                 name={name}
+                {...rest}
             />
         );
     }
@@ -128,6 +130,7 @@ const MokaInput = forwardRef((props, ref) => {
                 value={value}
                 onChange={onChange}
                 name={name}
+                {...rest}
             />
         );
     }
@@ -145,6 +148,7 @@ const MokaInput = forwardRef((props, ref) => {
                 value={value}
                 onChange={onChange}
                 name={name}
+                {...rest}
             />
         );
     }
@@ -161,6 +165,7 @@ const MokaInput = forwardRef((props, ref) => {
                 value={value}
                 onChange={onChange}
                 name={name}
+                {...rest}
             />
         );
     }
@@ -196,6 +201,7 @@ const MokaInput = forwardRef((props, ref) => {
                     placeholder={placeholder}
                     type={type}
                     name={name}
+                    {...rest}
                 />
             )}
         </InputMask>

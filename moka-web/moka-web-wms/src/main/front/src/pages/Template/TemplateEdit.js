@@ -172,7 +172,7 @@ const TemplateEdit = () => {
     /**
      * 삭제 이벤트
      */
-    const handleDelete = () => {
+    const handleClickDelete = () => {
         toastr.confirm('정말 삭제하시겠습니까?', {
             onOk: () => {
                 dispatch(
@@ -247,7 +247,7 @@ const TemplateEdit = () => {
                         <Button variant="primary" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="danger" disabled={btnDisabled} onClick={handleDelete}>
+                        <Button variant="danger" disabled={btnDisabled} onClick={handleClickDelete}>
                             삭제
                         </Button>
                     </div>

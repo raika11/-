@@ -15,7 +15,7 @@ import { getApi, getLang } from '@store/codeMgt';
  * 도메인 상세/수정/등록
  * @param history rect-router-dom useHisotry
  */
-const DomainEdit = ({ history }) => {
+const DomainEdit = ({ history, onDelete }) => {
     const { domainId: paramId } = useParams();
     const elLang = useRef();
     const elApiCodeId = useRef();
@@ -253,7 +253,7 @@ const DomainEdit = ({ history }) => {
      * 도메인 삭제
      * @param {object} response response
      */
-    const deleteCallback = (response) => {
+    /*const deleteCallback = (response) => {
         if (response.header.success) {
             dispatch(
                 deleteDomain({
@@ -271,12 +271,12 @@ const DomainEdit = ({ history }) => {
         } else {
             notification('warning', response.header.message);
         }
-    };
+    };*/
 
     /**
      * 삭제 버튼 클릭
      */
-    const handleClickDelete = () => {
+    /*const handleClickDelete = () => {
         toastr.confirm('정말 삭제하시겠습니까?', {
             onOk: () => {
                 dispatch(
@@ -288,6 +288,10 @@ const DomainEdit = ({ history }) => {
             },
             onCancel: () => {},
         });
+    };*/
+
+    const handleClickDelete = () => {
+        onDelete(domain);
     };
 
     useEffect(() => {

@@ -121,7 +121,8 @@ function* hasRelationList({ payload: { domainId, callback } }) {
     }
 
     if (typeof callback === 'function') {
-        yield call(callback, callbackData);
+        debugger;
+        yield call(callback, callbackData, domainId);
     }
 
     yield put(finishLoading(ACTION));

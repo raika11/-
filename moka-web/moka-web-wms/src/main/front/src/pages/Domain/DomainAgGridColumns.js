@@ -1,6 +1,8 @@
 import React from 'react';
 import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toastr } from 'react-redux-toastr';
+import { MokaTableDeleteButton } from '@components';
 
 export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 export const columnDefs = [
@@ -26,13 +28,15 @@ export const columnDefs = [
         field: 'useYn',
         width: 50,
         cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => {
-            const useYn = params.data.useYn;
+        cellRendererFramework: (row) => {
+            /*const useYn = params.data.useYn;
             let clazz = 'color-gray150';
             if (useYn === 'Y') {
                 clazz = 'color-primary';
             }
-            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
+            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;*/
+            const { data } = row;
+            return <MokaTableDeleteButton {...row} onClick={data.delete} />;
         },
         //preventRowClick: true,
     },

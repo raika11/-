@@ -2,33 +2,29 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
-import { changeSearchOption, getDomainList, initialState } from '@store/domain';
+import { GET_DOMAIN_LIST, changeSearchOption, getDomainList, initialState, deleteDomain, hasRelationList } from '@store/domain';
 import { columnDefs } from './DomainAgGridColumns';
+import { notification, toastr } from '@utils/toastUtil';
 
 /**
  * 도메인 AgGrid 목록
  */
-const DomainAgGrid = () => {
+const DomainAgGrid = (props) => {
+    const { onDelete } = props;
     const dispatch = useDispatch();
     const history = useHistory();
     const [search, setSearch] = useState(initialState);
+    const [domainRows, setDomainRows] = useState([]);
     const { domain, list, total, search: storeSearch, loading } = useSelector(
         (store) => ({
             domain: store.domain.domain,
             list: store.domain.list,
             total: store.domain.total,
             search: store.domain.search,
+            loading: store.loading[GET_DOMAIN_LIST],
         }),
         shallowEqual,
     );
-
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
-    useEffect(() => {
-        dispatch(getDomainList());
-    }, [dispatch]);
 
     /**
      * 테이블에서 검색옵션 변경
@@ -49,10 +45,31 @@ const DomainAgGrid = () => {
      */
     const handleRowClicked = useCallback((rowData) => history.push(`/domain/${rowData.domainId}`), [history]);
 
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    useEffect(() => {
+        dispatch(getDomainList());
+    }, [dispatch]);
+
+    useEffect(() => {
+        setDomainRows(
+            list.map((row) => ({
+                id: String(row.domainId),
+                domainId: row.domainId,
+                domainName: row.domainName,
+                domainUrl: row.domainUrl,
+                delete: onDelete,
+            })),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [list]);
+
     return (
         <MokaTable
             columnDefs={columnDefs}
-            rowData={list}
+            rowData={domainRows}
             onRowNodeId={(rowData) => rowData.domainId}
             agGridHeight={600}
             onRowClicked={handleRowClicked}

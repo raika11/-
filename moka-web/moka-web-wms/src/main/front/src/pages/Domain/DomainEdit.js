@@ -276,7 +276,7 @@ const DomainEdit = ({ history }) => {
     /**
      * 삭제 버튼 클릭
      */
-    const handleDelete = () => {
+    const handleClickDelete = () => {
         toastr.confirm('정말 삭제하시겠습니까?', {
             onOk: () => {
                 dispatch(
@@ -455,7 +455,7 @@ const DomainEdit = ({ history }) => {
                         취소
                     </Button>
                     {paramId && (
-                        <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleDelete}>
+                        <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleClickDelete}>
                             삭제
                         </Button>
                     )}

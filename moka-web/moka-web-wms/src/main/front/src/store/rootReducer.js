@@ -12,6 +12,7 @@ import toast from '@store/notification/toastReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
 import reserved from '@store/reserved/reservedReducer';
 import dataset from '@store/dataset/datasetReducer';
+import datasetRelationList from '@store/dataset/datasetRelationListReducer';
 
 export default combineReducers({
     toastr,
@@ -26,4 +27,5 @@ export default combineReducers({
     codeMgt,
     reserved,
     dataset,
+    datasetRelationList,
 });

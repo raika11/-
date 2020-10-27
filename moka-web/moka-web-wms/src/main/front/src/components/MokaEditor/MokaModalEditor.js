@@ -1,10 +1,10 @@
-import React, { useCallback, forwardRef, useState, useRef, useImperativeHandle } from 'react';
+import React, { Suspense, useCallback, forwardRef, useState, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from 'react-bootstrap/Button';
 import defaultOptions from './options';
 import { MokaModal, MokaIcon } from '@components';
-import MonacoEditor from './MonacoEditor';
+const MonacoEditor = React.lazy(() => import('./MonacoEditor'));
 
 const propTypes = {
     /**
@@ -122,13 +122,15 @@ const MokaModalEditor = forwardRef((props, ref) => {
             centered
         >
             <div className="position-relative h-100 w-100 overflow-hidden">
-                <MonacoEditor
-                    ref={editorRef}
-                    defaultValue={defaultValue}
-                    language={language}
-                    options={{ ...defaultOptions, ...options, wordWrap }}
-                    editorDidMount={editorDidMount}
-                />
+                <Suspense>
+                    <MonacoEditor
+                        ref={editorRef}
+                        defaultValue={defaultValue}
+                        language={language}
+                        options={{ ...defaultOptions, ...options, wordWrap }}
+                        editorDidMount={editorDidMount}
+                    />
+                </Suspense>
                 {/* 워드랩 버튼 */}
                 <Button variant="white" className="absolute-top-right border mt-1 mr-3" onClick={handleWordWrap}>
                     <MokaIcon iconName={wordWrap ? 'fal-arrow-to-right' : 'fal-repeat'} />

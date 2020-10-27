@@ -1,8 +1,8 @@
-import React, { useCallback, forwardRef, useState, useRef, useImperativeHandle } from 'react';
+import React, { Suspense, useCallback, forwardRef, useState, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import { MokaIcon, MokaCard } from '@components';
 import defaultOptions from './options';
-import MonacoEditor from './MonacoEditor';
+const MonacoEditor = React.lazy(() => import('./MonacoEditor'));
 
 const propTypes = {
     /**
@@ -128,7 +128,15 @@ const MokaCardEditor = forwardRef((props, ref) => {
             width={width}
             height={height}
         >
-            <MonacoEditor ref={editorRef} defaultValue={defaultValue} language={language} options={{ ...defaultOptions, ...options, wordWrap }} editorDidMount={editorDidMount} />
+            <Suspense>
+                <MonacoEditor
+                    ref={editorRef}
+                    defaultValue={defaultValue}
+                    language={language}
+                    options={{ ...defaultOptions, ...options, wordWrap }}
+                    editorDidMount={editorDidMount}
+                />
+            </Suspense>
         </MokaCard>
     );
 });

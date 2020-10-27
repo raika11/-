@@ -58,11 +58,11 @@ const MokaPrependLinkInput = forwardRef((props, ref) => {
         if (to) {
             return (
                 <Link to={to} target={target} className="w-100">
-                    <InputGroup.Text>{linkText}</InputGroup.Text>
+                    <InputGroup.Text className="prepend-link-text">{linkText}</InputGroup.Text>
                 </Link>
             );
         }
-        return <InputGroup.Text className="w-100">{linkText}</InputGroup.Text>;
+        return <InputGroup.Text className="w-100 prepend-link-text">{linkText}</InputGroup.Text>;
     };
 
     /**
@@ -96,7 +96,7 @@ const MokaPrependLinkInput = forwardRef((props, ref) => {
 
     return (
         <InputGroup className={className}>
-            <InputGroup.Prepend style={{ width: 100 }}>{createPrependLink()}</InputGroup.Prepend>
+            <InputGroup.Prepend style={{ width: 70 }}>{createPrependLink()}</InputGroup.Prepend>
             {Array.isArray(inputList) ? inputList.map((obj, idx) => createInput(obj, idx)) : createInput(inputList)}
             {icon && (
                 <InputGroup.Append>

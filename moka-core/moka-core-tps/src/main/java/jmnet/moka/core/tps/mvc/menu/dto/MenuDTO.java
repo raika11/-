@@ -33,9 +33,8 @@ public class MenuDTO implements Serializable {
     /**
      * 대메뉴코드
      */
-    @NotNull(message = "{tps.menu.error.invalid.menuId}")
-    @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.invalid.menuId}")
-    private String parentMenuId;
+    @Builder.Default
+    private String parentMenuId = "00";
 
     /**
      * 메뉴코드 (GRP_CD+MID_CD+DTL_CD)
@@ -47,17 +46,16 @@ public class MenuDTO implements Serializable {
     /**
      * 메뉴명
      */
-    @NotNull(message = "{tps.domain.error.invalid.menuNm1}")
-    @Pattern(regexp = ".+", message = "{tps.menu.error.invalid.menuNm1}")
-    @Length(min = 1, max = 50, message = "{tps.menu.error.invalid.menuNm2}")
+    @NotNull(message = "{tps.menu.error.notnull.menuNm}")
+    @Length(min = 1, max = 50, message = "{tps.menu.error.length.menuNm}")
     private String menuNm;
 
     /**
      * 메뉴 표시 명
      */
-    @NotNull(message = "{tps.domain.error.invalid.menuDisplayNm1}")
-    @Pattern(regexp = ".+", message = "{tps.menu.error.invalid.menuDisplayNm1}")
-    @Length(min = 1, max = 50, message = "{tps.menu.error.invalid.menuDisplayNm2}")
+    @NotNull(message = "{tps.menu.error.notnull.menuDisplayNm}")
+    @Pattern(regexp = ".+", message = "{tps.menu.error.length.menuDisplayNm}")
+    @Length(min = 1, max = 50, message = "{tps.menu.error.length.menuDisplayNm}")
     private String menuDisplayNm;
 
     @Builder.Default
@@ -66,8 +64,8 @@ public class MenuDTO implements Serializable {
     /**
      * 사용여부(Y:사용, N:미사용)
      */
-    @NotNull(message = "{tps.menu.error.invalid.usedYn}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.menu.error.invalid.usedYn}")
+    @NotNull(message = "{tps.common.error.pattern.usedYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.usedYn}")
     @Builder.Default
     private String usedYn = "Y";
 
@@ -80,16 +78,14 @@ public class MenuDTO implements Serializable {
     /**
      * 메뉴 페이지 URL
      */
-    @NotNull(message = "{tps.domain.error.notnull.domainUrl}")
-    @Pattern(regexp = ".+", message = "{tps.domain.error.invalid.menuUrl1}")
-    @Length(min = 1, max = 512, message = "{tps.domain.error.invalid.menuUrl2}")
+    @Length(min = 0, max = 512, message = "{tps.menu.error.length.menuUrl}")
     @Builder.Default
     private String menuUrl = "";
 
     /**
      * 아이콘 명
      */
-    @Length(min = 0, max = 200, message = "{tps.domain.error.invalid.iconNm}")
+    @Length(min = 0, max = 200, message = "{tps.menu.error.length.iconNm}")
     private String iconNm;
 
     /**

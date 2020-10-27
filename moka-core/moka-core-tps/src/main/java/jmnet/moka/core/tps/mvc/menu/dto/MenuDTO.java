@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -101,6 +102,7 @@ public class MenuDTO implements Serializable {
     /**
      * 등록일시
      */
+    @DTODateTimeFormat
     protected Date regDt;
 
     /**
@@ -112,5 +114,6 @@ public class MenuDTO implements Serializable {
     /**
      * 수정일시
      */
+    @DTODateTimeFormat
     protected Date modDt;
 }

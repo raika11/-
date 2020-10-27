@@ -22,10 +22,6 @@ const propTypes = {
      */
     labelClassName: PropTypes.string,
     /**
-     * input의 className
-     */
-    inputClassName: PropTypes.string,
-    /**
      * required 일 경우 라벨 옆에 * 표기
      */
     required: PropTypes.bool,
@@ -35,47 +31,56 @@ const propTypes = {
      * imageFile -> MokaImageInput
      * none -> label만 그림 (input 없음)
      * autocomplete -> MokaAutocomplete
+     * ---------------------------------------------------------------------------------------------
      */
     as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'none', 'autocomplete']),
     /**
-     * input의 type
+     * MokaInput의 className
+     */
+    inputClassName: PropTypes.string,
+    /**
+     * MokaInput의 type
      */
     type: PropTypes.string,
     /**
-     * input의 placeholder
+     * MokaInput의 placeholder
      */
     placeholder: PropTypes.string,
     /**
-     * input의 value
+     * MokaInput의 value
      */
     value: PropTypes.any,
     /**
-     * 값 valid 체크
+     * MokaInput의 isInvalid
      */
     isInvalid: PropTypes.bool,
     /**
-     * input의 disabled
+     * MokaInput의 disabled
      */
     disabled: PropTypes.bool,
     /**
-     * input의 onChange
+     * MokaInput의 onChange
      */
     onChange: PropTypes.func,
     /**
-     * name
+     * MokaInput의 id
+     */
+    id: PropTypes.string,
+    /**
+     * MokaInput의 name
      */
     name: PropTypes.string,
     /**
-     * 그 외 input props
+     * 그 외 MokaInput의 props
+     * 자세한 설명은 MokaInput의 inputProps를 참고한다
      */
     inputProps: PropTypes.shape({
-        id: PropTypes.string,
         custom: PropTypes.bool,
         readOnly: PropTypes.bool,
         plaintext: PropTypes.bool,
     }),
     /**
-     * react-input-mask의 mask string
+     * MokaInput의 mask string
      */
     mask: PropTypes.string,
 };
@@ -95,8 +100,9 @@ const defaultProps = {
 const MokaInputLabel = forwardRef((props, ref) => {
     // label props
     const { label, labelWidth, className, labelClassName, required } = props;
+
     // input props
-    const { inputClassName, as, type, placeholder, onChange, value, name, children, inputProps, mask, isInvalid, disabled } = props;
+    const { inputClassName, as, type, placeholder, onChange, value, id, name, children, inputProps, mask, isInvalid, disabled } = props;
 
     return (
         <Form.Group className={clsx('d-flex', 'align-items-center', className)}>
@@ -107,17 +113,18 @@ const MokaInputLabel = forwardRef((props, ref) => {
             {as !== 'none' && (
                 <MokaInput
                     ref={ref}
-                    className={inputClassName}
                     as={as}
-                    type={type}
-                    placeholder={placeholder}
-                    onChange={onChange}
-                    value={value}
+                    id={id}
                     name={name}
-                    inputProps={inputProps}
-                    mask={mask}
+                    value={value}
+                    onChange={onChange}
+                    className={inputClassName}
                     isInvalid={isInvalid}
                     disabled={disabled}
+                    mask={mask}
+                    placeholder={placeholder}
+                    type={type}
+                    inputProps={inputProps}
                 >
                     {children}
                 </MokaInput>

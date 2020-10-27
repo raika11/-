@@ -40,19 +40,21 @@ const propTypes = {
      */
     onChange: PropTypes.func,
     /**
+     * input id값
+     */
+    id: PropTypes.string,
+    /**
      * name
      */
     name: PropTypes.string,
     /**
+     * ---------------------------------------------------------------------------------------------
      * value, placeholder, type, onChange, disabled, name, isInvalid가 아닌
      * input의 추가 props를 정의한다.
      * (input 형태에 따라 필요한 props가 각기 다르기 때문에 모두 명시하지 않음, 아래는 예제 props)
+     * ---------------------------------------------------------------------------------------------
      */
     inputProps: PropTypes.shape({
-        /**
-         * input id값
-         */
-        id: PropTypes.string,
         /**
          * custom 여부(라디오, 체크박스)
          */
@@ -77,7 +79,7 @@ const defaultProps = {};
  * 기본 input
  */
 const MokaInput = forwardRef((props, ref) => {
-    const { className, as, type, placeholder, onChange, value, name, children, inputProps, mask, isInvalid, disabled, ...rest } = props;
+    const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, mask, isInvalid, disabled, ...rest } = props;
 
     // 셀렉트
     if (as === 'select') {
@@ -86,14 +88,14 @@ const MokaInput = forwardRef((props, ref) => {
                 ref={ref}
                 as="select"
                 {...inputProps}
-                className={clsx('flex-fill', className)}
-                placeholder={placeholder}
-                onChange={onChange}
-                value={value}
+                id={id}
                 name={name}
-                custom
+                className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
+                value={value || undefined}
+                onChange={onChange}
+                custom
                 {...rest}
             >
                 {children}
@@ -107,12 +109,13 @@ const MokaInput = forwardRef((props, ref) => {
                 ref={ref}
                 as="textarea"
                 {...inputProps}
+                id={id}
+                name={name}
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value}
+                value={value || undefined}
                 onChange={onChange}
-                name={name}
                 {...rest}
             />
         );
@@ -124,12 +127,13 @@ const MokaInput = forwardRef((props, ref) => {
                 ref={ref}
                 type="radio"
                 {...inputProps}
+                id={id}
+                name={name}
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value}
+                value={value || undefined}
                 onChange={onChange}
-                name={name}
                 {...rest}
             />
         );
@@ -141,13 +145,14 @@ const MokaInput = forwardRef((props, ref) => {
                 ref={ref}
                 type="switch"
                 {...inputProps}
-                label={inputProps.label || ''}
+                id={id}
+                name={name}
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value}
+                value={value || undefined}
                 onChange={onChange}
-                name={name}
+                label={inputProps.label || ''}
                 {...rest}
             />
         );
@@ -159,12 +164,13 @@ const MokaInput = forwardRef((props, ref) => {
                 ref={ref}
                 type="checkbox"
                 {...inputProps}
+                id={id}
+                name={name}
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value}
+                value={value || undefined}
                 onChange={onChange}
-                name={name}
                 {...rest}
             />
         );
@@ -182,7 +188,7 @@ const MokaInput = forwardRef((props, ref) => {
         <InputMask
             mask={mask}
             onChange={onChange}
-            value={value}
+            value={value || ''}
             disabled={disabled}
             {...inputProps}
             // onPaste={inputProps.onPaste}
@@ -197,14 +203,15 @@ const MokaInput = forwardRef((props, ref) => {
                     as={as}
                     {...inputProps}
                     {...maskProps}
+                    id={id}
+                    name={name}
                     className={clsx('flex-fill', className)}
                     isInvalid={isInvalid}
                     disabled={disabled}
-                    value={value}
+                    value={value || ''}
                     onChange={onChange}
                     placeholder={placeholder}
                     type={type}
-                    name={name}
                     {...rest}
                 />
             )}

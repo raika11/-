@@ -19,7 +19,23 @@ export const initialState = {
         searchType: 'all',
         keyword: '',
     },
-    component: {},
+    component: {
+        domain: {},
+        template: {},
+        dataset: {},
+        skin: {},
+        dataType: 'NONE',
+        periodYn: 'N',
+        schServiceType: 'all',
+        schLang: 'all',
+        schCodeId: '',
+        pagingYn: 'N',
+        pagingType: 'N',
+        perPageCount: 0,
+        maxPageCount: 0,
+        dispPageCount: 0,
+        moreCount: 0,
+    },
     componentError: null,
     inputTag: '',
     invalidList: [],
@@ -80,7 +96,7 @@ export default handleActions(
         [act.GET_COMPONENT_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.component = body;
-                draft.inputTag = `<tems:cp id='${body.componentSeq}' name='${body.componentName}' />`;
+                draft.inputTag = `<tems:cp id="${body.componentSeq}" name="${body.componentName}" />`;
                 draft.componentError = initialState.componentError;
             });
         },

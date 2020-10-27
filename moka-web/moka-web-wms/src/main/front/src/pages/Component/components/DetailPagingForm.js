@@ -63,8 +63,9 @@ const DetailPagingForm = (props) => {
                                         label="페이징사용여부"
                                         labelWidth={112}
                                         className="mb-0"
+                                        id="paging-yn"
                                         as="switch"
-                                        inputProps={{ id: 'pageingyn', checked: pagingYn === 'Y' }}
+                                        inputProps={{ checked: pagingYn === 'Y' }}
                                         onChange={(e) => {
                                             if (!e.target.checked) {
                                                 setPagingYn('N');
@@ -81,18 +82,20 @@ const DetailPagingForm = (props) => {
                                     <Col xs={4} className="d-flex p-0 pl-3 align-items-center">
                                         <MokaInput
                                             as="radio"
+                                            id="paging-type-n"
                                             name="pagingType"
                                             value="N"
-                                            inputProps={{ label: '이전/다음', id: 'paging-type-n', custom: true, checked: pagingType === 'N' }}
+                                            inputProps={{ label: '이전/다음', custom: true, checked: pagingType === 'N' }}
                                             onChange={(e) => {
                                                 setPagingType(e.target.value);
                                             }}
                                         />
                                         <MokaInput
                                             as="radio"
+                                            id="paging-type-m"
                                             name="pagingType"
                                             value="M"
-                                            inputProps={{ label: '더보기', id: 'paging-type-m', custom: true, checked: pagingType === 'M' }}
+                                            inputProps={{ label: '더보기', custom: true, checked: pagingType === 'M' }}
                                             onChange={(e) => {
                                                 setPagingType(e.target.value);
                                             }}

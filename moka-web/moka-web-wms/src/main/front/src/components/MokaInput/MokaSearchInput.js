@@ -9,18 +9,6 @@ import MokaInput from './MokaInput';
 
 const propTypes = {
     /**
-     * input의 placeholder
-     */
-    placeholder: PropTypes.string,
-    /**
-     * input value
-     */
-    value: PropTypes.string,
-    /**
-     * input onChange 이벤트
-     */
-    onChange: PropTypes.func,
-    /**
      * inputGroup의 추가 스타일
      */
     className: PropTypes.string,
@@ -41,9 +29,45 @@ const propTypes = {
      */
     buttonClassName: PropTypes.string,
     /**
-     * name field
+     * MokaInput의 placeholder
+     */
+    placeholder: PropTypes.string,
+    /**
+     * MokaInput의 value
+     */
+    value: PropTypes.any,
+    /**
+     * MokaInput의 isInvalid
+     */
+    isInvalid: PropTypes.bool,
+    /**
+     * MokaInput의 disabled
+     */
+    disabled: PropTypes.bool,
+    /**
+     * MokaInput의 onChange
+     */
+    onChange: PropTypes.func,
+    /**
+     * MokaInput의 id
+     */
+    id: PropTypes.string,
+    /**
+     * MokaInput의 name
      */
     name: PropTypes.string,
+    /**
+     * 그 외 MokaInput의 props
+     * 자세한 설명은 MokaInput의 inputProps를 참고한다
+     */
+    inputProps: PropTypes.shape({
+        readOnly: PropTypes.bool,
+        plaintext: PropTypes.bool,
+    }),
+    /**
+     * MokaInput의 mask string
+     */
+    mask: PropTypes.string,
 };
 const defaultProps = {
     placeholder: '검색어를 입력하세요',
@@ -55,7 +79,14 @@ const defaultProps = {
  * 검색 버튼이 붙어있는 input
  */
 const MokaSearchInput = (props) => {
-    const { placeholder, value, onChange, className, searchText, onSearch, variant, buttonClassName, name, ...rest } = props;
+    // group props
+    const { className } = props;
+
+    // 검색버튼 props
+    const { buttonClassName, searchText, onSearch, variant } = props;
+
+    // input props
+    const { placeholder, onChange, value, id, name, mask, inputProps, isInvalid, disabled } = props;
 
     /**
      * 키 입력
@@ -74,16 +105,21 @@ const MokaSearchInput = (props) => {
     return (
         <Form.Group as={Row} className={clsx('mb-0', className)}>
             <MokaInput
-                className="mr-2 flex-fill"
-                placeholder={placeholder}
-                value={value}
-                onChange={onChange}
+                as="input"
                 type="text"
-                name={name}
+                className="mr-2 flex-fill"
                 inputProps={{
-                    ...rest,
+                    ...inputProps,
                     onKeyPress: handleKeyPress,
                 }}
+                id={id}
+                name={name}
+                isInvalid={isInvalid}
+                disabled={disabled}
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+                mask={mask}
             />
             <Button variant={variant} className={buttonClassName} style={{ minWidth: 53 }} onClick={onSearch}>
                 {searchText}

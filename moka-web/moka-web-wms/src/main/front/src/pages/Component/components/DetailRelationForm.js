@@ -17,20 +17,17 @@ const DetailRelationForm = (props) => {
                 label="템플릿"
                 as="prependLink"
                 inputProps={{
-                    to: `/template/${template.templateSeq}`,
-                    target: '_blank',
-                    linkText: `ID: ${template.templateSeq}`,
+                    to: template.templateSeq ? `/template/${template.templateSeq}` : undefined,
+                    linkText: template.templateSeq ? `ID: ${template.templateSeq}` : 'ID',
                     inputList: [
                         {
                             value: template.tpZone,
-                            readOnly: true,
                             disabled: true,
                             style: { width: 175 },
                             className: 'bg-white flex-grow-0',
                         },
                         {
                             value: template.templateName,
-                            readOnly: true,
                             disabled: true,
                             className: 'flex-fill bg-white',
                         },
@@ -46,10 +43,8 @@ const DetailRelationForm = (props) => {
                         label="데이터"
                         as="switch"
                         className="mb-0 h-100"
-                        inputProps={{
-                            id: 'data-type-check',
-                            checked: dataType !== 'NONE',
-                        }}
+                        id="data-type-check"
+                        inputProps={{ checked: dataType !== 'NONE' }}
                         onChange={(e) => {
                             if (!e.target.checked) {
                                 setDataType('NONE');
@@ -67,8 +62,9 @@ const DetailRelationForm = (props) => {
                                 className="d-flex align-items-center h-100 flex-grow-0"
                                 style={{ width: 100 }}
                                 as="radio"
+                                id="data-type-desk"
                                 name="dataType"
-                                inputProps={{ label: '수동', custom: true, id: 'data-type-desk', checked: dataType === 'DESK' }}
+                                inputProps={{ label: '수동', custom: true, checked: dataType === 'DESK' }}
                                 onChange={() => {
                                     setDataType('DESK');
                                 }}
@@ -81,8 +77,9 @@ const DetailRelationForm = (props) => {
                                 className="d-flex align-items-center h-100 flex-grow-0"
                                 style={{ width: 70 }}
                                 as="radio"
+                                id="data-type-auto"
                                 name="dataType"
-                                inputProps={{ label: '자동', custom: true, id: 'data-type-auto', checked: dataType === 'AUTO' }}
+                                inputProps={{ label: '자동', custom: true, checked: dataType === 'AUTO' }}
                                 onChange={() => {
                                     setDataType('AUTO');
                                 }}
@@ -94,6 +91,7 @@ const DetailRelationForm = (props) => {
                                     inputList={{
                                         placeholder: '데이터셋을 선택해주세요',
                                         className: 'bg-white',
+                                        disabled: true,
                                     }}
                                     icon={<MokaIcon iconName="fal-search" />}
                                 />
@@ -144,11 +142,10 @@ const DetailRelationForm = (props) => {
                 label="뷰스킨"
                 as="prependLink"
                 inputProps={{
-                    to: `/skin/${skin.skinSeq}`,
-                    target: '_blank',
-                    linkText: `ID: ${skin.skinSeq}`,
+                    to: skin.skinSeq ? `/skin/${skin.skinSeq}` : undefined,
+                    linkText: skin.skinSeq ? `ID: ${skin.skinSeq}` : 'ID',
                     inputList: {
-                        value: skin.skinName,
+                        value: skin.skinName || '',
                         readOnly: true,
                         disabled: true,
                         className: 'bg-white',

@@ -31,7 +31,7 @@ const PageEdit = () => {
                     </Button>
                 </Form.Group>
                 {/* 사용여부 */}
-                <MokaInputLabel as="switch" className="mb-2" label="사용여부" inputProps={{ id: 'useYn', label: '' }} />
+                <MokaInputLabel as="switch" className="mb-2" label="사용여부" id="useYn" inputProps={{ label: '' }} />
                 {/* 사이트 ID, URL */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="px-0">
@@ -68,7 +68,7 @@ const PageEdit = () => {
                 {/* 이동URL */}
                 <Form.Row className="mb-2">
                     <Col xs={4} className="px-0">
-                        <MokaInputLabel as="switch" className="mb-0 h-100" inputProps={{ id: 'moveUrl' }} label="이동URL" />
+                        <MokaInputLabel as="switch" className="mb-0 h-100" id="moveUrl" label="이동URL" />
                     </Col>
                     <Col xs={8} className="px-0">
                         <MokaSearchInput className="pl-2" onSearch={() => setMoveModalShow(true)} disabled />

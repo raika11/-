@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import clsx from 'clsx';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel, MokaDateTimePicker } from '@components';
+
+const dateFormat = 'YYYY-MM-DD';
+const timeFormat = 'HH:mm';
 
 const DetailPeriodForm = (props) => {
     const { periodYn, periodStartDt, periodEndDt, setPeriodYn, setPeriodStartDt, setPeriodEndDt } = props;
@@ -60,11 +64,9 @@ const DetailPeriodForm = (props) => {
                                     <MokaInputLabel
                                         label="사용기간"
                                         as="switch"
+                                        id="period-yn"
                                         className="mb-0 h-100"
-                                        inputProps={{
-                                            id: 'period-yn',
-                                            checked: periodYn === 'Y',
-                                        }}
+                                        inputProps={{ checked: periodYn === 'Y' }}
                                         onChange={(e) => {
                                             if (!e.target.checked) {
                                                 setPeriodYn('N');
@@ -76,11 +78,39 @@ const DetailPeriodForm = (props) => {
                                 </Col>
                                 <Col xs={9} className="d-flex align-items-center p-0">
                                     {/* 시작일 */}
-                                    <MokaDateTimePicker className="flex-grow-0 mr-1" timeFormat={null} disabled={disabled} value={periodStartDt} onChange={handleStartDt} />
-                                    <MokaDateTimePicker className="flex-grow-0 mr-1" dateFormat={null} disabled={disabled} value={periodStartDt} onChange={handleStartDt} />~
-                                    {/* 종료일 */}
-                                    <MokaDateTimePicker className="flex-grow-0 mx-1" disabled={disabled} timeFormat={null} value={periodEndDt} onChange={handleEndDt} />
-                                    <MokaDateTimePicker className="flex-grow-0" disabled={disabled} dateFormat={null} value={periodEndDt} onChange={handleEndDt} />
+                                    <MokaDateTimePicker
+                                        className="flex-grow-0 mr-1"
+                                        dateFormat={dateFormat}
+                                        timeFormat={null}
+                                        disabled={disabled}
+                                        value={moment(periodStartDt).format(dateFormat)}
+                                        onChange={handleStartDt}
+                                    />
+                                    <MokaDateTimePicker
+                                        className="flex-grow-0 mr-1"
+                                        dateFormat={null}
+                                        timeFormat={timeFormat}
+                                        disabled={disabled}
+                                        value={moment(periodStartDt).format(timeFormat)}
+                                        onChange={handleStartDt}
+                                    />
+                                    ~{/* 종료일 */}
+                                    <MokaDateTimePicker
+                                        className="flex-grow-0 mx-1"
+                                        disabled={disabled}
+                                        dateFormat={dateFormat}
+                                        timeFormat={null}
+                                        value={moment(periodEndDt).format(dateFormat)}
+                                        onChange={handleEndDt}
+                                    />
+                                    <MokaDateTimePicker
+                                        className="flex-grow-0"
+                                        disabled={disabled}
+                                        dateFormat={null}
+                                        timeFormat={timeFormat}
+                                        value={moment(periodEndDt).format(timeFormat)}
+                                        onChange={handleEndDt}
+                                    />
                                 </Col>
                             </Form.Row>
                         </Col>

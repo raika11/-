@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import MokaPrependLinkInput from './MokaPrependLinkInput';
+import MokaInput from './MokaInput';
 
 const propTypes = {
     /**
@@ -23,53 +24,9 @@ const propTypes = {
      */
     labelClassName: PropTypes.string,
     /**
-     * input의 className
-     */
-    inputClassName: PropTypes.string,
-    /**
      * required 일 경우 라벨 옆에 * 표기
      */
     required: PropTypes.bool,
-    /**
-     * input element의 타입(기본 input)
-     */
-    as: PropTypes.oneOf(['input', 'textarea', 'prependLink']),
-    /**
-     * input의 type
-     */
-    type: PropTypes.string,
-    /**
-     * input의 placeholder
-     */
-    placeholder: PropTypes.string,
-    /**
-     * input의 value
-     */
-    value: PropTypes.any,
-    /**
-     * 값 valid 체크
-     */
-    isInvalid: PropTypes.bool,
-    /**
-     * input의 disabled
-     */
-    disabled: PropTypes.bool,
-    /**
-     * input의 onChange
-     */
-    onChange: PropTypes.func,
-    /**
-     * name
-     */
-    name: PropTypes.string,
-    /**
-     * 그 외 input props
-     */
-    inputProps: PropTypes.shape({
-        custom: PropTypes.bool,
-        readOnly: PropTypes.bool,
-        plaintext: PropTypes.bool,
-    }),
     /**
      * inputGroup의 className
      */
@@ -86,6 +43,62 @@ const propTypes = {
      * style 객체
      */
     style: PropTypes.object,
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * input element의 타입(기본 input)
+     * prependLink -> MokaPrependLinkInput
+     * ---------------------------------------------------------------------------------------------
+     */
+    as: PropTypes.oneOf(['input', 'textarea', 'prependLink']),
+    /**
+     * MokaInput의 className
+     */
+    inputClassName: PropTypes.string,
+    /**
+     * MokaInput의 type
+     */
+    type: PropTypes.string,
+    /**
+     * MokaInput의 placeholder
+     */
+    placeholder: PropTypes.string,
+    /**
+     * MokaInput의 value
+     */
+    value: PropTypes.any,
+    /**
+     * MokaInput의 isInvalid
+     */
+    isInvalid: PropTypes.bool,
+    /**
+     * MokaInput의 disabled
+     */
+    disabled: PropTypes.bool,
+    /**
+     * MokaInput의 onChange
+     */
+    onChange: PropTypes.func,
+    /**
+     * MokaInput의 id
+     */
+    id: PropTypes.string,
+    /**
+     * MokaInput의 name
+     */
+    name: PropTypes.string,
+    /**
+     * 그 외 MokaInput의 props
+     * 자세한 설명은 MokaInput의 inputProps를 참고한다
+     */
+    inputProps: PropTypes.shape({
+        custom: PropTypes.bool,
+        readOnly: PropTypes.bool,
+        plaintext: PropTypes.bool,
+    }),
+    /**
+     * MokaInput의 mask string
+     */
+    mask: PropTypes.string,
 };
 const defaultProps = {
     label: null,
@@ -100,67 +113,14 @@ const defaultProps = {
  * 라벨 붙여주는 inputGroup
  */
 const MokaInputGroup = forwardRef((props, ref) => {
-    const {
-        label,
-        labelWidth,
-        className,
-        labelClassName,
-        inputClassName,
-        required,
-        as,
-        type,
-        placeholder,
-        onChange,
-        value,
-        name,
-        inputProps,
-        isInvalid,
-        disabled,
-        inputGroupClassName,
-        append,
-        prepend,
-        style,
-    } = props;
+    // label props
+    const { label, labelWidth, className, labelClassName, required } = props;
 
-    /**
-     * input 생성
-     */
-    const createControl = () => {
-        // textarea
-        if (as === 'textarea') {
-            return (
-                <Form.Control
-                    ref={ref}
-                    as="textarea"
-                    {...inputProps}
-                    className={inputClassName}
-                    isInvalid={isInvalid}
-                    disabled={disabled}
-                    value={value}
-                    required={required}
-                    onChange={onChange}
-                    name={name}
-                />
-            );
-        }
+    // inputGroup props
+    const { inputGroupClassName, append, prepend, style } = props;
 
-        return (
-            <Form.Control
-                ref={ref}
-                as={as}
-                {...inputProps}
-                className={inputClassName}
-                isInvalid={isInvalid}
-                disabled={disabled}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                type={type}
-                required={required}
-                name={name}
-            />
-        );
-    };
+    // input props
+    const { inputClassName, as, type, placeholder, onChange, value, id, name, mask, inputProps, isInvalid, disabled } = props;
 
     /**
      * inputGroup 생성
@@ -170,7 +130,21 @@ const MokaInputGroup = forwardRef((props, ref) => {
             return (
                 <InputGroup className={clsx('flex-fill', inputGroupClassName)} style={style}>
                     {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
-                    {createControl()}
+                    <MokaInput
+                        ref={ref}
+                        as={as}
+                        className={inputClassName}
+                        {...inputProps}
+                        id={id}
+                        name={name}
+                        isInvalid={isInvalid}
+                        disabled={disabled}
+                        value={value}
+                        onChange={onChange}
+                        type={type}
+                        placeholder={placeholder}
+                        mask={mask}
+                    />
                     {append && <InputGroup.Append>{append}</InputGroup.Append>}
                 </InputGroup>
             );

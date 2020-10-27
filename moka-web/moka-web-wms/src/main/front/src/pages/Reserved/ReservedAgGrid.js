@@ -37,12 +37,12 @@ const ReservedAgGrid = () => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((reserved) => history.push(`/reserved/${reserved.reservedSeq}`), [history]);
+    const handleRowClick = useCallback((reserved) => history.push(`/reserved/${reserved.reservedSeq}`), [history]);
 
     /**
      * 예약어 추가 버튼 클릭
      */
-    const handleClickAdd = useCallback(() => {
+    const handleAddClick = useCallback(() => {
         history.push('/reserved');
         dispatch(clearReserved());
     }, [dispatch, history]);
@@ -50,7 +50,7 @@ const ReservedAgGrid = () => {
     return (
         <>
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="dark" onClick={handleClickAdd}>
+                <Button variant="dark" onClick={handleAddClick}>
                     예약어추가
                 </Button>
             </div>
@@ -60,7 +60,7 @@ const ReservedAgGrid = () => {
                 rowData={list}
                 onRowNodeId={(reserved) => reserved.reservedSeq}
                 agGridHeight={550}
-                onRowClicked={handleRowClicked}
+                onRowClicked={handleRowClick}
                 loading={loading}
                 total={total}
                 page={search.page}

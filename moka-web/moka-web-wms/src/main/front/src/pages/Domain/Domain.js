@@ -22,7 +22,7 @@ const Domain = () => {
     /**
      * 도메인 추가
      */
-    const handleClickAddDomain = () => {
+    const handleAddClickDomain = () => {
         history.push('/domain');
     };
 
@@ -90,7 +90,7 @@ const Domain = () => {
                 width={480}
             >
                 <div className="mb-3 d-flex justify-content-end">
-                    <Button variant="dark" className={clsx('p-0', 'mr-05')} onClick={handleClickAddDomain} style={{ width: '100px', height: '32px' }}>
+                    <Button variant="dark" className={clsx('p-0', 'mr-05')} onClick={handleAddClickDomain} style={{ width: '100px', height: '32px' }}>
                         도메인 추가
                     </Button>
                 </div>

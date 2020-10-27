@@ -322,7 +322,8 @@ const DomainEdit = ({ history, onDelete }) => {
                         <MokaInputLabel
                             label="사용여부"
                             as="switch"
-                            inputProps={{ id: 'domain-useYN', label: '', checked: useYn === 'Y' && true }}
+                            inputProps={{ label: '', checked: useYn === 'Y' && true }}
+                            id="domain-useYN"
                             name="useYN"
                             onChange={handleChangeValue}
                             required

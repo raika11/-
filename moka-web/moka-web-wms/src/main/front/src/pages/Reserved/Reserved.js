@@ -27,7 +27,6 @@ const Reserved = () => {
                 </MokaCard>
 
                 {/* 예약어 정보 */}
-
                 <Route
                     path={['/reserved', '/reserved/:reservedSeq']}
                     exact

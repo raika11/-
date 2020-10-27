@@ -8,7 +8,7 @@ const CodeMgtEdit = () => {
     /**
      * 코드 추가 버튼 클릭
      */
-    const handleClickAdd = {};
+    const handleAddClick = {};
 
     return (
         <>
@@ -23,7 +23,7 @@ const CodeMgtEdit = () => {
                     <MokaSearchInput />
                 </Col>
                 <Col xs={1} className="p-0">
-                    <Button variant="dark" onClick={handleClickAdd}>
+                    <Button variant="dark" onClick={handleAddClick}>
                         코드 추가
                     </Button>
                 </Col>

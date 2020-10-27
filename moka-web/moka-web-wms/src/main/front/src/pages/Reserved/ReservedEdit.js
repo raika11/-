@@ -244,8 +244,9 @@ const ReservedEdit = () => {
                         labelWidth={80}
                         as="switch"
                         className="mb-0"
-                        inputProps={{ id: 'useYn', label: '', checked: useYn === 'Y' }}
+                        id="useYn"
                         name="useYn"
+                        inputProps={{ label: '', checked: useYn === 'Y' }}
                         onChange={handleChangeValue}
                     />
                     {/* 버튼 그룹 */}

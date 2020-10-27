@@ -3,6 +3,7 @@ package jmnet.moka.web.wms.mvc.main.controller;
 import io.swagger.annotations.ApiOperation;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -85,6 +87,14 @@ public class AppRestController {
             throws MokaException {
 
         return getResponseDynamicFormDTO(DEFAULT_SITE, channelName, partId);
+    }
+
+    @ApiOperation(value = "Dynamic Form 저장")
+    @PostMapping("/dynamic-form/{channelId}")
+    public ResponseEntity<?> postDynamicForm(@PathVariable("channelId") String channelId, HttpServletRequest request, @Valid PartDTO partDTO)
+            throws MokaException {
+
+        return getResponseDynamicFormDTO(DEFAULT_SITE, channelId, partDTO.getId());
     }
 
     @ApiOperation(value = "Dynamic Form 데이터 조회")

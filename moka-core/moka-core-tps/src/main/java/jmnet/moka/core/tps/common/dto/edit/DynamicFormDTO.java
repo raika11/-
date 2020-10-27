@@ -40,6 +40,11 @@ import lombok.ToString;
 public class DynamicFormDTO {
 
     /**
+     * 채널 ID
+     */
+    private String id;
+
+    /**
      * 채널명 화면명 또는 업무명이라고 보면 됨
      */
     private String name;

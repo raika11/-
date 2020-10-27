@@ -75,6 +75,7 @@ public class DynamicFormHelper {
             synchronized (DynamicFormHelper.class) {
                 try {
                     dynamicFormDTO = xmlMapper.readValue(file, DynamicFormDTO.class);
+                    dynamicFormDTO.setId(formatKey);
                     refineFieldGroup(dynamicFormDTO);
                 } catch (IOException e) {
                     throw new MokaException(e.getMessage());

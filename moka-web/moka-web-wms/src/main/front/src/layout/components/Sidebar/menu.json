@@ -162,6 +162,17 @@
                                                 "depth": "3",
                                                 "useYn": "Y",
                                                 "parentMenuId": "02012"
+                                            },
+                                            {
+                                                "seq": "20",
+                                                "menuId": "02012002",
+                                                "menuName": "Dynamic Form",
+                                                "menuDispName": "Dynamic Form",
+                                                "menuPath": "/dynamic",
+                                                "menuOrder": "1",
+                                                "depth": "3",
+                                                "useYn": "Y",
+                                                "parentMenuId": "02012"
                                             }
                                         ]
                                     }

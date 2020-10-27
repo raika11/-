@@ -1,9 +1,13 @@
 package jmnet.moka.core.tms.mvc.view;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.cache.CacheManager;
+import jmnet.moka.common.proxy.http.HttpProxy;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
@@ -37,6 +41,8 @@ public class DigitalSpecialView extends AbstractView {
     @Autowired(required = false)
     private CacheManager cacheManager;
 
+    @Autowired
+    private HttpProxy httpProxy;
 
     @Override
     protected boolean generatesDownloadContent() {
@@ -57,9 +63,23 @@ public class DigitalSpecialView extends AbstractView {
     protected final void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) {
 
         // 머지 옵션설정
-        MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
+//        MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
+        MergeContext mergeContext = (MergeContext)model.get(MokaConstants.MERGE_CONTEXT);
+
+        // TODO digital specail 정보를 가져오는 api를 정의하고 정보를 가져온다.
+        // PC와 Mobile을 구분한다.
+        // 메타 정보의 수정이 필요한 부분을 체크한다.
 
 
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter writer;
+        try {
+            writer = response.getWriter();
+            writer.print(this.httpProxy.getString("https://digitalspecial.joins.com/special/2020/0918_kepco"));
+            writer.close();
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
 
     }
 

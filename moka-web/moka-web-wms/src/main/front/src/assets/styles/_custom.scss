@@ -259,6 +259,10 @@ body {
                     }
                 }
             }
+
+            &[data-match='Y'] {
+                color: rgba($orange, 0.5)
+            }
         }
 
         .tree-buttons {

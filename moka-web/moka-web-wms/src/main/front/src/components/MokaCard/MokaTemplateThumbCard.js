@@ -173,7 +173,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
                         </p>
                         {menus.length > 0 && <IconDropButton />}
                     </div>
-                    <p className="pt-0 pl-05 mb-0 text-truncate">{data.tpZone}</p>
+                    <p className="pt-0 pl-05 mb-0 text-truncate">{data.templateGroupName}</p>
                 </div>
             </div>
         </div>

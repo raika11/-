@@ -18,16 +18,8 @@ export const getComponent = ({ componentSeq }) => {
 
 // 컴포넌트 저장(application/json)
 export const postComponent = ({ component }) => {
-    const componentSet = {
-        ...component,
-        dataset: { datasetSeq: component.datasetSeq },
-        skin: { skinSeq: component.skinSeq },
-        domain: { domainId: component.domainId },
-        template: { templateSeq: component.templateSeq },
-    };
-
     return instance
-        .post('/api/components', componentSet, {
+        .post('/api/components', component, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -58,16 +50,8 @@ export const postAllComponents = ({ componentList }) => {
 
 // 컴포넌트 수정(application/json)
 export const putComponent = ({ component }) => {
-    const componentSet = {
-        ...component,
-        dataset: { datasetSeq: component.datasetSeq },
-        skin: { skinSeq: component.skinSeq },
-        domain: { domainId: component.domainId },
-        template: { templateSeq: component.templateSeq },
-    };
-
     return instance
-        .put(`/api/components/${component.componentSeq}`, componentSet, {
+        .put(`/api/components/${component.componentSeq}`, component, {
             headers: {
                 'Content-Type': 'application/json',
             },

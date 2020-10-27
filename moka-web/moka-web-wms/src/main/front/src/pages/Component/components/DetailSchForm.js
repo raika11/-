@@ -31,17 +31,13 @@ const DetailSchForm = (props) => {
 
     return (
         <Form className="collapsed-box">
-            <Card.Title
-                className={clsx('mb-2', 'cursor-pointer', { collapsed: !open })}
-                aria-controls={controls}
-                aria-expanded={open}
-                data-toggle="collapse"
-                onClick={handleClickTitle}
-            >
-                검색설정
+            <Card.Title className={clsx('mb-2', { collapsed: !open })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
+                <p className="mb-0 d-inline cursor-pointer" onClick={handleClickTitle}>
+                    검색설정
+                </p>
             </Card.Title>
             <Collapse in={open} timeout={3000}>
-                <div id={controls}>
+                <div id={controls} className="mt-3">
                     <div className="d-flex justify-content-center">
                         <Col xs={11} className="p-0">
                             <Form.Row className="mb-2">

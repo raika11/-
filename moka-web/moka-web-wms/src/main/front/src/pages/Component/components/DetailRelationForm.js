@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import copy from 'copy-to-clipboard';
 import { MokaInput, MokaInputLabel, MokaInputGroup, MokaIcon, MokaPrependLinkInput } from '@components';
 import { notification } from '@utils/toastUtil';
+import { TemplateListModal } from '@pages/commons';
 
 const DetailRelationForm = (props) => {
-    const { template, dataType, dataset, inputTag, delWords, skin, matchZone, setTemplate, setDataType, setDataset, setDelWords, setSkin, setMatchZone } = props;
+    const {
+        template,
+        dataType,
+        dataset,
+        inputTag,
+        delWords,
+        skin,
+        matchZone,
+        setTemplate,
+        setDataType,
+        setDataset,
+        setDelWords,
+        setSkin,
+        setMatchZone,
+        prevAutoDataset,
+        prevDeskDataset,
+    } = props;
+
+    // state
+    const [templateModalShow, setTemplateModalShow] = useState(false);
 
     return (
         <Form>
@@ -21,18 +41,21 @@ const DetailRelationForm = (props) => {
                     linkText: template.templateSeq ? `ID: ${template.templateSeq}` : 'ID',
                     inputList: [
                         {
-                            value: template.tpZone,
+                            value: template.templateGroupName,
                             disabled: true,
                             style: { width: 175 },
                             className: 'bg-white flex-grow-0',
+                            placeholder: '템플릿 위치그룹',
                         },
                         {
                             value: template.templateName,
                             disabled: true,
                             className: 'flex-fill bg-white',
+                            placeholder: '템플릿명',
                         },
                     ],
                     icon: <MokaIcon iconName="fal-search" />,
+                    onIconClick: () => setTemplateModalShow(true),
                 }}
                 required
             />
@@ -67,10 +90,16 @@ const DetailRelationForm = (props) => {
                                 inputProps={{ label: '수동', custom: true, checked: dataType === 'DESK' }}
                                 onChange={() => {
                                     setDataType('DESK');
+                                    if (prevDeskDataset !== null) {
+                                        setDataset(prevDeskDataset);
+                                    } else {
+                                        setDataset({});
+                                    }
                                 }}
                             />
-                            {dataType === 'DESK' && <MokaInput placeholder="ID" value={dataset.datasetSeq} disabled />}
+                            {dataType === 'DESK' && <MokaInput placeholder="ID" value={prevDeskDataset ? prevDeskDataset.datasetSeq : ''} disabled />}
                         </Col>
+
                         {/* 데이터셋 > 자동 */}
                         <Col xs={6} className="d-flex p-0">
                             <MokaInput
@@ -82,18 +111,25 @@ const DetailRelationForm = (props) => {
                                 inputProps={{ label: '자동', custom: true, checked: dataType === 'AUTO' }}
                                 onChange={() => {
                                     setDataType('AUTO');
+                                    if (prevAutoDataset !== null) {
+                                        setDataset(prevAutoDataset);
+                                    } else {
+                                        setDataset({});
+                                    }
                                 }}
                             />
                             {dataType === 'AUTO' && (
                                 <MokaPrependLinkInput
-                                    to={`/dataset/${dataset.datasetSeq}`}
-                                    linkText={`ID: ${dataset.datasetSeq}`}
+                                    to={prevAutoDataset ? `/dataset/${prevAutoDataset.datasetSeq}` : undefined}
+                                    linkText={prevAutoDataset ? `ID: ${prevAutoDataset.datasetSeq}` : 'ID'}
                                     inputList={{
-                                        placeholder: '데이터셋을 선택해주세요',
+                                        placeholder: '데이터셋 선택',
                                         className: 'bg-white',
                                         disabled: true,
                                     }}
                                     icon={<MokaIcon iconName="fal-search" />}
+                                    // 아이콘 클릭했을 때 데이터셋 팝업 열고, 데이터셋 선택하면 화면에 보여줌
+                                    // onIconClick: () => {}
                                 />
                             )}
                         </Col>
@@ -108,6 +144,7 @@ const DetailRelationForm = (props) => {
                 append={
                     <Button
                         variant="dark"
+                        disabled={inputTag === ''}
                         onClick={() => {
                             copy(inputTag);
                             notification('success', '태그를 복사하였습니다');
@@ -161,6 +198,16 @@ const DetailRelationForm = (props) => {
                     setMatchZone(e.target.value);
                 }}
             />
+
+            {/* 템플릿 선택 팝업 */}
+            {templateModalShow && (
+                <TemplateListModal
+                    show={templateModalShow}
+                    onHide={() => setTemplateModalShow(false)}
+                    onClickSave={(template) => setTemplate(template)}
+                    selected={template.templateSeq}
+                />
+            )}
         </Form>
     );
 };

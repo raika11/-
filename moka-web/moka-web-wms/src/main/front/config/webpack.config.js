@@ -52,8 +52,9 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 // output filename에 날짜 추가
+function pad(n) { return n<10 ? "0"+n : n }
 const currentDate = new Date();
-const buildDatetime = `${currentDate.getFullYear()}${currentDate.getMonth()+1}${currentDate.getDate()}${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getMilliseconds()}`;
+const buildDatetime = `${currentDate.getFullYear()}${pad(currentDate.getMonth()+1)}${pad(currentDate.getDate())}${pad(currentDate.getHours())}${pad(currentDate.getMinutes())}`;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.

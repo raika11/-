@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import clsx from 'clsx';
-import InputMask from 'react-input-mask';
+// import InputMask from 'react-input-mask';
 import PropTypes from 'prop-types';
 
 import Form from 'react-bootstrap/Form';
@@ -40,11 +40,11 @@ const propTypes = {
      */
     onChange: PropTypes.func,
     /**
-     * input id값
+     * input id
      */
     id: PropTypes.string,
     /**
-     * name
+     * input의 name
      */
     name: PropTypes.string,
     /**
@@ -73,7 +73,11 @@ const propTypes = {
      */
     mask: PropTypes.string,
 };
-const defaultProps = {};
+const defaultProps = {
+    as: 'input',
+    type: 'text',
+    inputProps: {},
+};
 
 /**
  * 기본 input
@@ -94,7 +98,7 @@ const MokaInput = forwardRef((props, ref) => {
                 isInvalid={isInvalid}
                 disabled={disabled}
                 value={value || undefined}
-                onChange={onChange}
+                onChange={onChange || undefined}
                 custom
                 {...rest}
             >
@@ -114,7 +118,7 @@ const MokaInput = forwardRef((props, ref) => {
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value || undefined}
+                value={value || ''}
                 onChange={onChange}
                 {...rest}
             />
@@ -133,7 +137,7 @@ const MokaInput = forwardRef((props, ref) => {
                 isInvalid={isInvalid}
                 disabled={disabled}
                 value={value || undefined}
-                onChange={onChange}
+                onChange={onChange || undefined}
                 {...rest}
             />
         );
@@ -151,7 +155,7 @@ const MokaInput = forwardRef((props, ref) => {
                 isInvalid={isInvalid}
                 disabled={disabled}
                 value={value || undefined}
-                onChange={onChange}
+                onChange={onChange || undefined}
                 label={inputProps.label || ''}
                 {...rest}
             />
@@ -170,7 +174,7 @@ const MokaInput = forwardRef((props, ref) => {
                 isInvalid={isInvalid}
                 disabled={disabled}
                 value={value || undefined}
-                onChange={onChange}
+                onChange={onChange || undefined}
                 {...rest}
             />
         );
@@ -185,38 +189,56 @@ const MokaInput = forwardRef((props, ref) => {
     }
 
     return (
-        <InputMask
-            mask={mask}
-            onChange={onChange}
-            value={value || ''}
-            disabled={disabled}
+        <Form.Control
+            ref={ref}
+            as={as}
             {...inputProps}
-            // onPaste={inputProps.onPaste}
-            // onMouseDown={inputProps.onMouseDown}
-            // onFocus={inputProps.onFocus}
-            // onBlur={inputProps.onBlur}
-            // readOnly={inputProps.readOnly}
-        >
-            {(maskProps) => (
-                <Form.Control
-                    ref={ref}
-                    as={as}
-                    {...inputProps}
-                    {...maskProps}
-                    id={id}
-                    name={name}
-                    className={clsx('flex-fill', className)}
-                    isInvalid={isInvalid}
-                    disabled={disabled}
-                    value={value || ''}
-                    onChange={onChange}
-                    placeholder={placeholder}
-                    type={type}
-                    {...rest}
-                />
-            )}
-        </InputMask>
+            id={id}
+            name={name}
+            className={clsx('flex-fill', className)}
+            isInvalid={isInvalid}
+            disabled={disabled}
+            value={value || ''}
+            onChange={onChange}
+            placeholder={placeholder}
+            type={type}
+            {...rest}
+        />
     );
+
+    // return (
+    //     <InputMask
+    //         mask={mask}
+    //         onChange={onChange || undefined}
+    //         value={value || undefined}
+    //         disabled={disabled}
+    //         // readOnly={inputProps.readOnly}
+    //         // onPaste={inputProps.onPaste}
+    //         // onMouseDown={inputProps.onMouseDown}
+    //         // onFocus={inputProps.onFocus}
+    //         // onBlur={inputProps.onBlur}
+    //         {...inputProps}
+    //     >
+    //         {(maskProps) => (
+    //             <Form.Control
+    //                 ref={ref}
+    //                 as={as}
+    //                 {...inputProps}
+    //                 {...maskProps}
+    //                 id={id}
+    //                 name={name}
+    //                 className={clsx('flex-fill', className)}
+    //                 isInvalid={isInvalid}
+    //                 disabled={disabled}
+    //                 value={value || undefined}
+    //                 onChange={onChange || undefined}
+    //                 placeholder={placeholder}
+    //                 type={type}
+    //                 {...rest}
+    //             />
+    //         )}
+    //     </InputMask>
+    // );
 });
 
 MokaInput.propTypes = propTypes;

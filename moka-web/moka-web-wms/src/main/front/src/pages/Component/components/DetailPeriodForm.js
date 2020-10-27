@@ -7,9 +7,6 @@ import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel, MokaDateTimePicker } from '@components';
 
-const dateFormat = 'YYYY-MM-DD';
-const timeFormat = 'HH:mm';
-
 const DetailPeriodForm = (props) => {
     const { periodYn, periodStartDt, periodEndDt, setPeriodYn, setPeriodStartDt, setPeriodEndDt } = props;
     const [disabled, setDisabled] = useState(true);
@@ -25,7 +22,9 @@ const DetailPeriodForm = (props) => {
      * @param {object} date moment object
      */
     const handleStartDt = (date) => {
-        setPeriodStartDt(date);
+        if (typeof date === 'object') {
+            setPeriodStartDt(date);
+        }
     };
 
     /**
@@ -33,7 +32,9 @@ const DetailPeriodForm = (props) => {
      * @param {object} date moment object
      */
     const handleEndDt = (date) => {
-        setPeriodEndDt(date);
+        if (typeof date === 'object') {
+            setPeriodEndDt(date);
+        }
     };
 
     useEffect(() => {
@@ -46,17 +47,13 @@ const DetailPeriodForm = (props) => {
 
     return (
         <Form className="collapsed-box">
-            <Card.Title
-                className={clsx('mb-2', 'cursor-pointer', { collapsed: !open })}
-                aria-controls={controls}
-                aria-expanded={open}
-                data-toggle="collapse"
-                onClick={handleClickTitle}
-            >
-                기간설정
+            <Card.Title className={clsx('mb-2', { collapsed: !open })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
+                <p className="mb-0 d-inline cursor-pointer" onClick={handleClickTitle}>
+                    기간설정
+                </p>
             </Card.Title>
-            <Collapse in={open} timeout={3000}>
-                <div id={controls}>
+            <Collapse in={open}>
+                <div id={controls} className="mt-3">
                     <div className="d-flex justify-content-center">
                         <Col xs={11} className="p-0">
                             <Form.Row>
@@ -76,41 +73,11 @@ const DetailPeriodForm = (props) => {
                                         }}
                                     />
                                 </Col>
+                                {/* 시작일 종료일 */}
                                 <Col xs={9} className="d-flex align-items-center p-0">
-                                    {/* 시작일 */}
-                                    <MokaDateTimePicker
-                                        className="flex-grow-0 mr-1"
-                                        dateFormat={dateFormat}
-                                        timeFormat={null}
-                                        disabled={disabled}
-                                        value={moment(periodStartDt).format(dateFormat)}
-                                        onChange={handleStartDt}
-                                    />
-                                    <MokaDateTimePicker
-                                        className="flex-grow-0 mr-1"
-                                        dateFormat={null}
-                                        timeFormat={timeFormat}
-                                        disabled={disabled}
-                                        value={moment(periodStartDt).format(timeFormat)}
-                                        onChange={handleStartDt}
-                                    />
-                                    ~{/* 종료일 */}
-                                    <MokaDateTimePicker
-                                        className="flex-grow-0 mx-1"
-                                        disabled={disabled}
-                                        dateFormat={dateFormat}
-                                        timeFormat={null}
-                                        value={moment(periodEndDt).format(dateFormat)}
-                                        onChange={handleEndDt}
-                                    />
-                                    <MokaDateTimePicker
-                                        className="flex-grow-0"
-                                        disabled={disabled}
-                                        dateFormat={null}
-                                        timeFormat={timeFormat}
-                                        value={moment(periodEndDt).format(timeFormat)}
-                                        onChange={handleEndDt}
-                                    />
+                                    <MokaDateTimePicker className="flex-grow-0 mx-2" disabled={disabled} value={periodStartDt} onChange={handleStartDt} />
+                                    ~
+                                    <MokaDateTimePicker className="flex-grow-0 mx-2" disabled={disabled} value={periodEndDt} onChange={handleEndDt} />
                                 </Col>
                             </Form.Row>
                         </Col>

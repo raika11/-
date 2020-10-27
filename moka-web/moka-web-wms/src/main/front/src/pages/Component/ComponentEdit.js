@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import { initialState, getComponent, clearComponent, clearRelationList } from '@store/component';
+import { initialState, getComponent, clearComponent, clearRelationList, changeComponent, saveComponent } from '@store/component';
 import { DB_DATEFORMAT } from '@/constants';
+import { notification } from '@utils/toastUtil';
 
 import BasicForm from './components/BasicForm';
 import DetailRelationForm from './components/DetailRelationForm';
@@ -54,6 +55,70 @@ const ComponentEdit = () => {
     const [maxPageCount, setMaxPageCount] = useState(initialComponent.maxPageCount);
     const [dispPageCount, setDispPageCount] = useState(initialComponent.dispPageCount);
     const [moreCount, setMoreCount] = useState(initialComponent.moreCount);
+
+    const validate = (temp) => {
+        return true;
+    };
+
+    // 저장 버튼
+    const handleClickSave = () => {
+        let temp = {
+            ...component,
+            componentName,
+            description,
+            template,
+            dataset,
+            dataType,
+            delWords,
+            skin,
+            matchZone,
+            periodYn,
+            periodStartDt: null,
+            periodEndDt: null,
+            schServiceType,
+            schLang,
+            schCodeId,
+            pagingYn,
+            pagingType,
+            perPageCount,
+            maxPageCount,
+            dispPageCount,
+            moreCount,
+        };
+
+        if (periodYn === 'Y') {
+            let sdt = moment(periodStartDt).format(DB_DATEFORMAT);
+            let edt = moment(periodEndDt).format(DB_DATEFORMAT);
+            if (sdt !== 'Invalid date') {
+                temp.periodStartDt = sdt;
+            }
+            if (edt !== 'Invalid date') {
+                temp.periodEndDt = edt;
+            }
+        }
+
+        if (validate(temp)) {
+            dispatch(
+                saveComponent({
+                    actions: [changeComponent(temp)],
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            notification('success', header.message);
+                            history.push(`/component/${body.componentSeq}`);
+                        } else {
+                            notification('warning', header.message);
+                        }
+                    },
+                }),
+            );
+        }
+    };
+
+    // 삭제 버튼
+    const handleClickDelete = () => {};
+
+    // 복사 버튼
+    const handleClickCopy = () => {};
 
     useEffect(() => {
         // 스토어에서 가져온 컴포넌트 데이터 셋팅
@@ -105,6 +170,9 @@ const ComponentEdit = () => {
                 setComponentName={setComponentName}
                 description={description}
                 setDescription={setDescription}
+                onClickSave={handleClickSave}
+                onClickDelete={handleClickDelete}
+                onClickCopy={handleClickCopy}
             />
             <hr className="divider" />
             <div className="custom-scroll component-padding-box" style={{ height: 563 }}>
@@ -112,6 +180,8 @@ const ComponentEdit = () => {
                     template={template}
                     dataType={dataType}
                     dataset={dataset}
+                    prevAutoDataset={component.prevAutoDataset}
+                    prevDeskDataset={component.prevDeskDataset}
                     inputTag={inputTag}
                     delWords={delWords}
                     skin={skin}

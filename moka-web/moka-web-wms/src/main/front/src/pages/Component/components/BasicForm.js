@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
 
 const BasicForm = (props) => {
-    const { componentSeq, componentName, description, setComponentName, setDescription } = props;
+    const { componentSeq, componentName, description, setComponentName, setDescription, onClickSave, onClickCopy, onClickDelete } = props;
 
     return (
         <Form>
@@ -16,16 +16,17 @@ const BasicForm = (props) => {
                 </Col>
                 <Col xs={6} className="p-0 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button variant="dark" className="mr-2">
+                        <Button variant="dark" className="mr-2" onClick={onClickCopy}>
                             설정복사
                         </Button>
-                        <Button variant="dark">복사</Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="primary" className="mr-2">
+                        <Button variant="primary" className="mr-2" onClick={onClickSave}>
                             저장
                         </Button>
-                        <Button variant="danger">삭제</Button>
+                        <Button variant="danger" onClick={onClickDelete}>
+                            삭제
+                        </Button>
                     </div>
                 </Col>
             </Form.Row>

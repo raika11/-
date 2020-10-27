@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import DateTime from 'react-datetime';
-import InputElement from 'react-input-mask';
+import InputMask from 'react-input-mask';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
@@ -11,6 +11,10 @@ moment.locale('ko');
 
 const propTypes = {
     /**
+     * width
+     */
+    width: PropTypes.number,
+    /**
      * placeholder
      */
     placeholder: PropTypes.string,
@@ -19,9 +23,9 @@ const propTypes = {
      */
     defaultValue: PropTypes.string,
     /**
-     * value
+     * value => Date 객체!!!
      */
-    value: PropTypes.string,
+    value: PropTypes.any,
     /**
      * value 변경
      */
@@ -29,11 +33,11 @@ const propTypes = {
     /**
      * 날짜포맷(moment)
      */
-    dateFormat: PropTypes.string,
+    dateFormat: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     /**
      * 시간포맷(moment)
      */
-    timeFormat: PropTypes.string,
+    timeFormat: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     /**
      * input disabled 속성
      */
@@ -52,7 +56,7 @@ const defaultProps = {
  * TimePicker
  */
 const MokaDateTimePicker = forwardRef((props, ref) => {
-    const { placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, ...rest } = props;
+    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, ...rest } = props;
 
     // 날짜시간 포맷
     const dateTimeFormat = (() => {
@@ -80,8 +84,8 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
     // input element 생성
     const renderInput = (props, openCalendar, closeCalendar) => {
         return (
-            <InputGroup>
-                <InputElement
+            <InputGroup style={{ width }}>
+                <InputMask
                     {...props}
                     onFocus={(e) => {
                         e.preventDefault();
@@ -106,7 +110,6 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
             locale="ko"
             dateFormat={dateFormat}
             timeFormat={timeFormat}
-            defaultValue={defaultValue || moment().format(dateTimeFormat)}
             value={value}
             onChange={onChange}
             {...rest}

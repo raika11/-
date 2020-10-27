@@ -10,13 +10,7 @@ import { MokaSearchInput, MokaInput } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { getTemplateList, changeSearchOption, initialState } from '@store/template';
 import { getTpSize, getTpZone } from '@store/codeMgt';
-
-const defaultSearchType = [
-    { id: 'all', name: '전체' },
-    { id: 'templateSeq', name: '템플릿ID' },
-    { id: 'templateName', name: '템플릿명' },
-    { id: 'templateBody', name: '템플릿본문' },
-];
+import { defaultTemplateSearchType } from '@pages/commons';
 
 /**
  * 템플릿 검색 컴포넌트
@@ -171,7 +165,7 @@ const TemplateSearch = () => {
                             });
                         }}
                     >
-                        {defaultSearchType.map((type) => (
+                        {defaultTemplateSearchType.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
                             </option>

@@ -28,7 +28,6 @@ import {
     MokaIcon,
     MokaImageInput,
     MokaModal,
-    MokaCodeListModal,
     MokaCardTabs,
 } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
@@ -246,8 +245,8 @@ const Dashboard = () => {
                             <Form.Group>
                                 <Form.Label>9) Datetime picker</Form.Label>
                                 <MokaDateTimePicker className="mb-3" placeholder="날짜를 선택해주세요" />
-                                <MokaDateTimePicker className="mb-3" dateFormat={null} />
-                                <MokaDateTimePicker className="mb-3" timeFormat={null} />
+                                <MokaDateTimePicker className="mb-3" dateFormat={false} />
+                                <MokaDateTimePicker className="mb-3" timeFormat={false} />
                             </Form.Group>
 
                             {/* 앞에 뭐 들어가는 input */}
@@ -350,14 +349,14 @@ const Dashboard = () => {
                                 <Button className="mr-2" onClick={() => setShowLMS(true)}>
                                     대중소 모달
                                 </Button>
-                                <MokaCodeListModal
+                                {/* <MokaCodeListModal
                                     show={showLMS}
                                     onHide={() => setShowLMS(false)}
                                     onOk={(codeData) => {
                                         toastr.success('선택한 코드', codeData.codeId);
                                     }}
                                     title="분류 검색(화면 틀어지는건 나중에 처리)"
-                                />
+                                /> */}
 
                                 {/* 테마변경 */}
                                 {/* <Button className="mr-2" onClick={() => dispatch(changeTheme('classic'))}>

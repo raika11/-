@@ -16,6 +16,7 @@ import component from '@store/component/componentReducer';
 import page from '@store/page/pageReducer';
 import pageHistory from '@store/page/pageHistoryReducer';
 import dynamicForm from '@store/dynamic/dynamicFormReducer';
+import relation from '@store/relation/relationReducer';
 
 export default combineReducers({
     toastr,
@@ -34,4 +35,5 @@ export default combineReducers({
     page,
     pageHistory,
     dynamicForm,
+    relation,
 });

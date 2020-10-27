@@ -18,10 +18,10 @@ export default [
     },
     {
         headerName: '위치그룹',
-        field: 'tpZone',
+        field: 'templateGroupName',
         width: 100,
         cellStyle: { fontSize: '12px' },
-        tooltipField: 'tpZone',
+        tooltipField: 'templateGroupName',
     },
     {
         headerName: '',

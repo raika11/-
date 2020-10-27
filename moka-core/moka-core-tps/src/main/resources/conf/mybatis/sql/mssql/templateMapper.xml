@@ -208,7 +208,7 @@
     </choose>
 
     <choose>
-      <when test="templateGroup != null and templateGroup != ''">
+      <when test="templateGroup != 'all' and templateGroup != null and templateGroup != ''">
         #{templateGroup},
       </when>
       <otherwise>

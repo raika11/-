@@ -95,5 +95,6 @@ public class TemplateSearchDTO extends SearchDTO {
         useTotal = MokaConstants.YES;
         searchType = TpsConstants.SEARCH_TYPE_ALL;
         returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        templateGroup = TpsConstants.SEARCH_TYPE_ALL;
     }
 }

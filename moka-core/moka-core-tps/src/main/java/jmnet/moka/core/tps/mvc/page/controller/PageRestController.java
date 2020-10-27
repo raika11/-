@@ -1,8 +1,6 @@
 package jmnet.moka.core.tps.mvc.page.controller;
 
 import io.swagger.annotations.ApiOperation;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -398,54 +396,54 @@ public class PageRestController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    /**
-     * 페이지 PURGE
-     *
-     * @param request 요청
-     * @param pageSeq 페이지 순번 (필수)
-     * @return 퍼지성공여부
-     * @throws URISyntaxException
-     * @throws IOException
-     * @throws Exception          기타예외
-     */
-    @ApiOperation(value = "페이지 PURGE - 삭제될 수 있음")
-    @GetMapping("/{pageSeq}/purge")
-    public ResponseEntity<?> getPurge(HttpServletRequest request,
-            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq)
-            throws Exception {
-
-        // 데이타유효성검사.
-        validData(request, pageSeq, null, ActionType.SELECT);
-
-        // 1.1 아이디체크
-        validData(request, pageSeq, null, ActionType.SELECT);
-
-        // 1.2. 데이타 존재여부 검사
-        Page page = pageService.findPageBySeq(pageSeq)
-                               .orElseThrow(() -> {
-                                   String message = messageByLocale.get("tps.page.error.no-data", request);
-                                   tpsLogger.fail(ActionType.SELECT, message, true);
-                                   return new NoDataException(message);
-                               });
-
-        // 페이지 바니시 퍼지. 성공실패여부는 리턴하지 않는다.
-        String message = purgeHelper.purgeVarnish(request, page);
-
-        boolean success = true;
-        if (McpString.isNotEmpty(message)) {
-            success = false;
-        }
-
-        ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(success);
-        resultDTO.getHeader()
-                 .setSuccess(success);
-        resultDTO.getHeader()
-                 .setMessage(message);
-
-        log.debug("[PAGE PURGE] pageSeq: {}, pageUrl: {}", pageSeq, page.getPageUrl());
-
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    }
+    //    /**
+    //     * 페이지 PURGE
+    //     *
+    //     * @param request 요청
+    //     * @param pageSeq 페이지 순번 (필수)
+    //     * @return 퍼지성공여부
+    //     * @throws URISyntaxException
+    //     * @throws IOException
+    //     * @throws Exception          기타예외
+    //     */
+    //    @ApiOperation(value = "페이지 PURGE - 삭제될 수 있음")
+    //    @GetMapping("/{pageSeq}/purge")
+    //    public ResponseEntity<?> getPurge(HttpServletRequest request,
+    //            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq)
+    //            throws Exception {
+    //
+    //        // 데이타유효성검사.
+    //        validData(request, pageSeq, null, ActionType.SELECT);
+    //
+    //        // 1.1 아이디체크
+    //        validData(request, pageSeq, null, ActionType.SELECT);
+    //
+    //        // 1.2. 데이타 존재여부 검사
+    //        Page page = pageService.findPageBySeq(pageSeq)
+    //                               .orElseThrow(() -> {
+    //                                   String message = messageByLocale.get("tps.page.error.no-data", request);
+    //                                   tpsLogger.fail(ActionType.SELECT, message, true);
+    //                                   return new NoDataException(message);
+    //                               });
+    //
+    //        // 페이지 바니시 퍼지. 성공실패여부는 리턴하지 않는다.
+    //        String message = purgeHelper.purgeVarnish(request, page);
+    //
+    //        boolean success = true;
+    //        if (McpString.isNotEmpty(message)) {
+    //            success = false;
+    //        }
+    //
+    //        ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(success);
+    //        resultDTO.getHeader()
+    //                 .setSuccess(success);
+    //        resultDTO.getHeader()
+    //                 .setMessage(message);
+    //
+    //        log.debug("[PAGE PURGE] pageSeq: {}, pageUrl: {}", pageSeq, page.getPageUrl());
+    //
+    //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    //    }
 
     /**
      * 페이지 히스토리 목록조회

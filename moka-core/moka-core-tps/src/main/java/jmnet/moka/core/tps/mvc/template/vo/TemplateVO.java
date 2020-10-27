@@ -1,11 +1,14 @@
 package jmnet.moka.core.tps.mvc.template.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jmnet.moka.core.common.MokaConstants;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 @Alias("TemplateVO")
@@ -16,7 +19,7 @@ import org.apache.ibatis.type.Alias;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TemplateVO implements Serializable {
-    
+
     private static final long serialVersionUID = 8921206765125787780L;
 
     /**
@@ -66,8 +69,8 @@ public class TemplateVO implements Serializable {
     /**
      * 템플릿그룹명
      */
-    @Column(name = "TP_ZONE")
-    private String tpZone;
+    @Column(name = "TEMPLATE_GROUP_NAME")
+    private String templateGroupName;
 
     /**
      * 템플릿 사용여부

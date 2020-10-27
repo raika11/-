@@ -1,18 +1,16 @@
 package jmnet.moka.core.tps.mvc.template.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
-
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +29,8 @@ public class TemplateSimpleDTO implements Serializable {
 
     private static final long serialVersionUID = -1994333408930259505L;
 
-    public static final Type TYPE = new TypeReference<List<TemplateSimpleDTO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<TemplateSimpleDTO>>() {
+    }.getType();
 
     /**
      * 템플릿SEQ
@@ -55,6 +54,7 @@ public class TemplateSimpleDTO implements Serializable {
     /**
      * 템플릿그룹명
      */
+    @Column(name = "TEMPLATE_GROUP_NAME")
     private String templateGroupName;
 
 }

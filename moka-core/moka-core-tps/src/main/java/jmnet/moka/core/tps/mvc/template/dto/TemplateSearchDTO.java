@@ -22,9 +22,9 @@ import org.apache.ibatis.type.Alias;
  * 템플릿 검색 DTO
  * 2020. 2. 14. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 2. 14. 오후 4:54:01
+ *
  * @author ssc
+ * @since 2020. 2. 14. 오후 4:54:01
  */
 @AllArgsConstructor
 @Setter
@@ -75,7 +75,7 @@ public class TemplateSearchDTO extends SearchDTO {
     /**
      * 템플릿그룹(템플릿위치그룹)
      */
-    private String tpZone;
+    private String templateGroup;
 
     /**
      * 템플릿 최소 가로사이즈

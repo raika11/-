@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 import { toastr } from 'react-redux-toastr';
 
@@ -6,6 +8,9 @@ import { MokaTreeView, MokaIcon } from '@components';
 import data from './tree_data';
 
 const PageTree = () => {
+    const history = useHistory();
+    const dispatch = useDispatch();
+
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState(['3', '41']);
 

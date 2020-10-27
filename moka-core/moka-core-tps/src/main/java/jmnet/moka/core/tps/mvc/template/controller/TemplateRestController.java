@@ -498,18 +498,18 @@ public class TemplateRestController {
      * 템플릿 히스토리 상세조회
      *
      * @param request HTTP 요청
-     * @param seq     순번
+     * @param histSeq 순번
      * @return 템플릿 히스토리
      * @throws NoDataException 데이터없음
      */
     @ApiOperation(value = "템플릿 히스토리 상세조회")
-    @GetMapping("/{templateSeq}/histories/{seq}")
+    @GetMapping("/{templateSeq}/histories/{histSeq}")
     public ResponseEntity<?> getHistory(HttpServletRequest request,
-            @PathVariable("seq") @Min(value = 0, message = "{tps.templatehist.error.min.seq}") Long seq)
+            @PathVariable("histSeq") @Min(value = 0, message = "{tps.templatehist.error.min.seq}") Long histSeq)
             throws NoDataException {
 
         // 템플릿 히스토리 조회
-        TemplateHist history = templateHistService.findTemplateHistBySeq(seq)
+        TemplateHist history = templateHistService.findTemplateHistBySeq(histSeq)
                                                   .orElseThrow(() -> {
                                                       String message = messageByLocale.get("tps.templatehist.error.no-data", request);
                                                       tpsLogger.fail(ActionType.SELECT, message, true);

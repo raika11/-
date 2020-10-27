@@ -76,7 +76,7 @@ public class PageNode implements Serializable {
      * 검색 일치 여부
      */
     @Builder.Default
-    private boolean match = false;
+    private String match = MokaConstants.NO;
 
     /**
      * 사용여부

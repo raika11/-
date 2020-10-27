@@ -8,7 +8,7 @@ import * as act from './pageAction';
 /**
  * 페이지 목록 조회
  */
-const getPageList = callApiAfterActions(act.GET_PAGE_TREE, api.getPageTree, (store) => store.page);
+const getPageTree = callApiAfterActions(act.GET_PAGE_TREE, api.getPageTree, (store) => store.page);
 
 /**
  * 페이지 조회
@@ -200,7 +200,7 @@ const getHistory = createRequestSaga(act.GET_HISTORY, api.getHistory);
 
 /** saga */
 export default function* saga() {
-    yield takeLatest(act.GET_PAGE_TREE, getPageList);
+    yield takeLatest(act.GET_PAGE_TREE, getPageTree);
     yield takeLatest(act.GET_PAGE, getPage);
     yield takeLatest(act.SAVE_PAGE, savePage);
     yield takeLatest(act.DELETE_PAGE, deletePage);

@@ -51,19 +51,19 @@ export const putPage = ({ page }) => {
 };
 
 // 관련 아이템 확인
-// export const hasRelationList = ({ pageSeq }) => {
-//     return instance.get(`/api/pages/${pageSeq}/has-relations`).catch((err) => {
-//         throw err;
-//     });
-// };
+export const hasRelationList = ({ pageSeq }) => {
+    return instance.get(`/api/pages/${pageSeq}/has-relations`).catch((err) => {
+        throw err;
+    });
+};
 
 // 관련 아이템 조회
-// export const getRelationList = ({ search }) => {
-//     const queryString = qs.stringify(search);
-//     return instance.get(`/api/pages/${search.pageSeq}/relations?${queryString}`).catch((err) => {
-//         throw err;
-//     });
-// };
+export const getRelationList = ({ search }) => {
+    const queryString = qs.stringify(search);
+    return instance.get(`/api/pages/${search.pageSeq}/relations?${queryString}`).catch((err) => {
+        throw err;
+    });
+};
 
 // 페이지 히스토리 목록 조회
 export const getHistoryList = ({ search }) => {

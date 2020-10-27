@@ -91,13 +91,13 @@ public class PageServiceImpl implements PageService {
             if (page.getParent() == null || page.getParent()
                                                 .getPageSeq() == 0) {
                 rootNode = new PageNode(page);
-                rootNode.setMatch(getMatch(page, search));
+                rootNode.setMatch(getMatch(page, search) ? "Y" : "N");
             } else {
                 PageNode parentNode = rootNode.findNode(page.getParent()
                                                             .getPageSeq(), rootNode);
                 if (parentNode != null) {
                     PageNode pageNode = new PageNode(page);
-                    pageNode.setMatch(getMatch(page, search));
+                    pageNode.setMatch(getMatch(page, search) ? "Y" : "N");
                     parentNode.addNode(pageNode);
                 }
             }

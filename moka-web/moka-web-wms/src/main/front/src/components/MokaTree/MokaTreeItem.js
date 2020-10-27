@@ -25,6 +25,7 @@ const propTypes = {
     nodeData: PropTypes.shape({
         depth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         useYn: PropTypes.oneOf(['Y', 'N']),
+        match: PropTypes.oneOf(['Y', 'N']),
     }).isRequired,
     /**
      * 트리라벨에 마우스 hover할 때 나오는 버튼 리스트
@@ -35,7 +36,7 @@ const defaultProps = {};
 
 const MokaTreeItem = (props) => {
     const { nodeId, selected, nodeData, onSelected, labelHoverButtons } = props;
-    const { depth, useYn } = nodeData;
+    const { depth, useYn, match } = nodeData;
 
     /**
      * 노드 선택 시 실행
@@ -51,7 +52,7 @@ const MokaTreeItem = (props) => {
 
     return (
         <li className="tree-item" onClick={handleSelected} key={nodeId} data-depth={depth} data-useyn={useYn}>
-            <div className={clsx('tree-label', { selected: selected === nodeId })}>
+            <div className={clsx('tree-label', { selected: selected === nodeId })} data-match={match}>
                 <Button variant="gray150" size="sm" className="mr-1" disabled>
                     <MokaIcon iconName="fal-minus" />
                 </Button>

@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import * as act from './templateAction';
+import * as act from './pageAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
 export const initialState = {

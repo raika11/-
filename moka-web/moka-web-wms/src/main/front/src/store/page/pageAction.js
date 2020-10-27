@@ -26,7 +26,7 @@ export const clearHistory = createAction(CLEAR_HISTORY);
 /**
  * 데이터 조회
  */
-export const [GET_PAGE_TREE, GET_PAGE_TREE_SUCCESS, GET_PAGE_TREE_FAILURE] = createRequestActionTypes('page/GET_PAGE_LIST');
+export const [GET_PAGE_TREE, GET_PAGE_TREE_SUCCESS, GET_PAGE_TREE_FAILURE] = createRequestActionTypes('page/GET_PAGE_TREE');
 export const [GET_PAGE, GET_PAGE_SUCCESS, GET_PAGE_FAILURE] = createRequestActionTypes('page/GET_PAGE');
 export const getPageTree = createAction(GET_PAGE_TREE, (...actions) => actions);
 export const getPage = createAction(GET_PAGE, (pageSeq) => pageSeq);

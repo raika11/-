@@ -47,18 +47,22 @@ const propTypes = {
             onClick: PropTypes.func,
         }),
     ),
+    /**
+     * 로딩중 여부
+     */
+    loading: PropTypes.bool,
 };
 const defaultProps = {
     expanded: [],
     hoverButtons: [],
+    loading: false,
 };
 
 /**
  * 트리뷰 컴포넌트
  */
 const MokaTreeView = (props) => {
-    const { data, height } = props;
-    const { pageName, pageSeq, depth } = data;
+    const { data, height, loading } = props;
 
     /**
      * 트리아이템 생성 함수
@@ -79,19 +83,24 @@ const MokaTreeView = (props) => {
     return (
         <div className="border custom-scroll treeview" style={{ height }}>
             <ul className="list-unstyled tree-list">
-                <MokaTreeCategory
-                    nodeId={String(pageSeq)}
-                    nodeData={{
-                        pageName,
-                        pageSeq,
-                        depth,
-                    }}
-                    {...props}
-                >
-                    {data.nodes.map((nodes, idx) => {
-                        return createTreeItem(nodes, idx);
-                    })}
-                </MokaTreeCategory>
+                {!loading && data && (
+                    <MokaTreeCategory
+                        nodeId={String(data.pageSeq)}
+                        nodeData={{
+                            pageName: data.pageName,
+                            pageSeq: data.pageSeq,
+                            depth: data.depth,
+                            useYn: data.useYn,
+                            match: data.match,
+                        }}
+                        {...props}
+                    >
+                        {data.nodes &&
+                            data.nodes.map((nodes, idx) => {
+                                return createTreeItem(nodes, idx);
+                            })}
+                    </MokaTreeCategory>
+                )}
             </ul>
         </div>
     );

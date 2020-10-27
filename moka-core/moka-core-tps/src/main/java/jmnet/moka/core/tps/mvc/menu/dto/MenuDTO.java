@@ -3,10 +3,11 @@ package jmnet.moka.core.tps.mvc.menu.dto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -94,13 +95,22 @@ public class MenuDTO implements Serializable {
     /**
      * 등록자
      */
-    @Column(name = "REG_ID")
     private String regId = "";
 
+    /**
+     * 등록일시
+     */
+    @DTODateTimeFormat
+    protected Date regDt;
 
     /**
      * 수정자
      */
-    @Column(name = "MOD_ID")
     private String modId = "";
+
+    /**
+     * 수정일시
+     */
+    @DTODateTimeFormat
+    protected Date modDt;
 }

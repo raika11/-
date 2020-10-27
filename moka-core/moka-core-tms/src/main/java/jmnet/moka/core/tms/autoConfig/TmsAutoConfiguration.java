@@ -1,7 +1,6 @@
 package jmnet.moka.core.tms.autoConfig;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import jmnet.moka.common.TimeHumanizer;
@@ -186,7 +185,8 @@ public class TmsAutoConfiguration {
     @Bean(name = "mergeHandlerMapping")
     @ConditionalOnMissingBean(name = "mergeHandlerMapping")
     public AbstractHandlerMapping mergeHandlerMapping(@Autowired List<HandlerAndView> handlerAndViewList, @Autowired DomainResolver domainResolver,
-            @Autowired(required = false) HandlerInterceptorAdapter tmsHandlerInterceptor) throws ClassNotFoundException {
+            @Autowired(required = false) HandlerInterceptorAdapter tmsHandlerInterceptor)
+            throws ClassNotFoundException {
         try {
             AbstractHandlerMapping handlerMapping = new DefaultMergeHandlerMapping(appContext, domainResolver, handlerAndViewList);
             if (tmsHandlerInterceptor != null && this.tmsInterceptorEnable) {
@@ -220,11 +220,12 @@ public class TmsAutoConfiguration {
      */
     @Bean(name = "mergeViewResolver")
     @ConditionalOnMissingBean(name = "mergeViewResolver")
-    public ViewResolver mergeViewResolver(@Autowired List<HandlerAndView> handlerAndViewList) throws ClassNotFoundException {
+    public ViewResolver mergeViewResolver(@Autowired List<HandlerAndView> handlerAndViewList)
+            throws ClassNotFoundException {
         final DefaultMergeViewResolver resolver = new DefaultMergeViewResolver(0);
         for (HandlerAndView handlerAndView : handlerAndViewList) {
             appContext.registerBean(handlerAndView.getViewName(), Class.forName(handlerAndView.getViewClass()),
-                                    (beanDefinition) -> beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON));
+                    (beanDefinition) -> beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON));
             View view = (View) appContext.getBean(handlerAndView.getViewName());
             resolver.addView(handlerAndView.getViewName(), view);
         }
@@ -241,30 +242,33 @@ public class TmsAutoConfiguration {
 
     @Bean
     public Docket tmsApi() {
-        ApiInfo commandApiInfo = new ApiInfoBuilder().title("TMS Command API")
-                                                     .description("TMS의 관리를 위해 사용되는 api 모음")
-                                                     .version("1.0.0")
-                                                     //                .termsOfServiceUrl(termsOfServiceUrl)
-                                                     .contact(contact)
-                                                     .license("Commerce License")
-                                                     .licenseUrl("http://www.ssc.co.kr")
-                                                     .build();
-        return new Docket(DocumentationType.SWAGGER_2).securitySchemes(securitySchemes())
-                                                                         .securityContexts(securityContexts())
-                                                                         .groupName("commandApi")
-                                                                         .select()
-                                                                         .apis(RequestHandlerSelectors.basePackage("jmnet.moka.core.tms"))
-                                                                         .paths(PathSelectors.ant("/command/*"))
-                                                                         .build()
-                                                                         .apiInfo(commandApiInfo);
+        ApiInfo commandApiInfo = new ApiInfoBuilder()
+                .title("TMS Command API")
+                .description("TMS의 관리를 위해 사용되는 api 모음")
+                .version("1.0.0")
+                //                .termsOfServiceUrl(termsOfServiceUrl)
+                .contact(contact)
+                .license("Commerce License")
+                .licenseUrl("http://www.ssc.co.kr")
+                .build();
+        return new Docket(DocumentationType.SWAGGER_2)
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts())
+                .groupName("commandApi")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("jmnet.moka.core.tms"))
+                .paths(PathSelectors.ant("/command/*"))
+                .build()
+                .apiInfo(commandApiInfo);
     }
 
     private List<SecurityContext> securityContexts() {
         List<SecurityReference> securityReferences = Collections.singletonList(new SecurityReference("basicAuth", new AuthorizationScope[0]));
-        return Collections.singletonList(SecurityContext.builder()
-                                                        .securityReferences(securityReferences)
-                                                        .forPaths(PathSelectors.any())
-                                                        .build());
+        return Collections.singletonList(SecurityContext
+                .builder()
+                .securityReferences(securityReferences)
+                .forPaths(PathSelectors.any())
+                .build());
     }
 
     private List<SecurityScheme> securitySchemes() {

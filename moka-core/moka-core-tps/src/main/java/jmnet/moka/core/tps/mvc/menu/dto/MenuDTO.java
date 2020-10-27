@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.menu.dto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
@@ -97,10 +98,19 @@ public class MenuDTO implements Serializable {
     @Column(name = "REG_ID")
     private String regId = "";
 
+    /**
+     * 등록일시
+     */
+    protected Date regDt;
 
     /**
      * 수정자
      */
     @Column(name = "MOD_ID")
     private String modId = "";
+
+    /**
+     * 수정일시
+     */
+    protected Date modDt;
 }

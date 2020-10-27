@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
@@ -96,7 +95,6 @@ public class MenuDTO implements Serializable {
     /**
      * 등록자
      */
-    @Column(name = "REG_ID")
     private String regId = "";
 
     /**
@@ -108,7 +106,6 @@ public class MenuDTO implements Serializable {
     /**
      * 수정자
      */
-    @Column(name = "MOD_ID")
     private String modId = "";
 
     /**

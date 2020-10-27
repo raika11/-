@@ -493,6 +493,34 @@ public class PageRestController {
     }
 
     /**
+     * 페이지 히스토리 상세조회
+     *
+     * @param request HTTP 요청
+     * @param histSeq 순번
+     * @return 페이지 히스토리
+     * @throws NoDataException 데이터없음
+     */
+    @ApiOperation(value = "페이지 히스토리 상세조회")
+    @GetMapping("/{pageSeq}/histories/{histSeq}")
+    public ResponseEntity<?> getHistory(HttpServletRequest request,
+            @PathVariable("histSeq") @Min(value = 0, message = "{tps.pagehist.error.min.seq}") Long histSeq)
+            throws NoDataException {
+
+        // 페이지 히스토리 조회
+        PageHist history = pageService.findPageHistBySeq(histSeq)
+                                      .orElseThrow(() -> {
+                                          String message = messageByLocale.get("tps.pagehist.error.no-data", request);
+                                          tpsLogger.fail(ActionType.SELECT, message, true);
+                                          return new NoDataException(message);
+                                      });
+        PageHist historyDTO = modelMapper.map(history, PageHist.class);
+
+        ResultDTO<HistDTO> resultDTO = new ResultDTO<HistDTO>(convertToHistDto(historyDTO));
+        tpsLogger.success(ActionType.SELECT, true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
      * 페이지 목록조회(목록용)
      *
      * @param request 요청

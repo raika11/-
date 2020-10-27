@@ -379,6 +379,11 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
+    public Optional<PageHist> findPageHistBySeq(Long histSeq) {
+        return pageHistRepository.findById(histSeq);
+    }
+
+    @Override
     public org.springframework.data.domain.Page<Page> findAllPage(PageSearchDTO search, Pageable pageable) {
         return pageRepository.findList(search, pageable);
     }

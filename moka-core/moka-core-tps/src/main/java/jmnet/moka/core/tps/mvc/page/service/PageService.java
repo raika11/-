@@ -81,6 +81,13 @@ public interface PageService {
      */
     public org.springframework.data.domain.Page<PageHist> findAllPageHist(HistSearchDTO search, Pageable pageable);
 
+    /**
+     * 페이지 히스토리 상세 조회
+     *
+     * @param histSeq 히스토리SEQ
+     * @return 히스토리 목록
+     */
+    public Optional<PageHist> findPageHistBySeq(Long histSeq);
 
     /**
      * 페이지 목록 조회

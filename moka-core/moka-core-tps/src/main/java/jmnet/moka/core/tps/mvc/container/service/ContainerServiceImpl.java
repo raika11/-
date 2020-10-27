@@ -245,6 +245,12 @@ public class ContainerServiceImpl implements ContainerService {
         return containerHistRepository.findList(search, pageable);
     }
 
+
+    @Override
+    public Optional<ContainerHist> findContainerHistBySeq(Long histSeq) {
+        return containerHistRepository.findById(histSeq);
+    }
+
     @Override
     public void updateRelItems(Component newComponent, Component orgComponent) {
 

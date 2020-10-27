@@ -14,7 +14,7 @@ const defaultSearchType = [
     { id: 'all', name: '전체' },
     { id: 'pageSeq', name: '페이지ID' },
     { id: 'pageName', name: '페이지명' },
-    { id: 'pageBody', name: '서비스명' },
+    { id: 'pageServiceName', name: '서비스명' },
     { id: 'pageBody', name: '페이지본문' },
 ];
 

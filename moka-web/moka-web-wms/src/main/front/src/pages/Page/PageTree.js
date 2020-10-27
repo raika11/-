@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 import { toastr } from 'react-redux-toastr';
 
-import { GET_PAGE_TREE, getPageTree, changeSearchOption } from '@store/page/pageAction';
+import { GET_PAGE_TREE, getPageTree, changeSearchOption, getPage } from '@store/page/pageAction';
 
 import { MokaTreeView, MokaIcon } from '@components';
 
@@ -17,7 +17,7 @@ const PageTree = () => {
 
     //state
     const [selected, setSelected] = useState('');
-    const [expanded, setExpanded] = useState(['3', '41']);
+    const [expanded, setExpanded] = useState([]);
 
     const { tree, search, loading, page } = useSelector((store) => ({
         tree: store.page.tree,
@@ -25,6 +25,26 @@ const PageTree = () => {
         loading: store.loading[GET_PAGE_TREE],
         page: store.page.page,
     }));
+
+    useEffect(() => {
+        if (tree) {
+            if (selected === '' && expanded.length == 0) {
+                setExpanded([String(tree.pageSeq)]);
+                setSelected(String(tree.pageSeq));
+            }
+        }
+    }, [tree]);
+
+    const handleClick = useCallback((tree) => {
+        const option = {
+            pageSeq: tree.pageSeq,
+            callback: (result) => {
+                history.push(`/page/${tree.pageSeq}`);
+            }
+        };
+        setSelected(String(tree.pageSeq));
+        dispatch(getPage(option));
+    });
 
     return (
         <MokaTreeView
@@ -45,9 +65,7 @@ const PageTree = () => {
                 );
             }}
             selected={selected}
-            onSelected={(tree) => {
-                setSelected(String(tree.pageSeq));
-            }}
+            onSelected={handleClick}
             labelHoverButtons={[
                 {
                     icon: <MokaIcon iconName="fal-plus" />,

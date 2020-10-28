@@ -65,7 +65,6 @@ public class AppRestController {
                                                .add("MAX_PAGE_COUNT", TpsConstants.MAX_PAGE_COUNT) // 최대 페이지수
                                                .add("DISP_PAGE_COUNT", TpsConstants.DISP_PAGE_COUNT) // 표출 페이지수
                                                .add("MORE_COUNT", TpsConstants.MORE_COUNT) // 더보기 건수
-                                               .add("LIST_PARAGRAPH", TpsConstants.LIST_PARAGRAPH) // 컴포넌트 광고 리스트단락수
                                                .add("EXCLUDE_PAGE_SERVICE_NAME_LIST", excludePageServiceName)      // 페이지서비스명 제외명칭
                                                .getMap();
 

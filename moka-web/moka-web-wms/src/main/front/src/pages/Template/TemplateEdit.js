@@ -8,15 +8,15 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
-import { changeTemplate, saveTemplate, hasRelationList, changeInvalidList, deleteTemplate } from '@store/template';
-import { notification, toastr } from '@utils/toastUtil';
+import { changeTemplate, saveTemplate, changeInvalidList } from '@store/template';
+import { notification } from '@utils/toastUtil';
 import CopyModal from './modals/CopyModal';
 import AddComponentModal from './modals/AddComponentModal';
 
 /**
  * 템플릿 정보/수정 컴포넌트
  */
-const TemplateEdit = () => {
+const TemplateEdit = ({ onDelete }) => {
     const { templateSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -144,45 +144,8 @@ const TemplateEdit = () => {
         }
     };
 
-    /**
-     * 템플릿 삭제
-     * @param {object} response response
-     */
-    const deleteCallback = (response) => {
-        if (response.header.success) {
-            dispatch(
-                deleteTemplate({
-                    templateSeq: template.templateSeq,
-                    callback: (response) => {
-                        if (response.header.success) {
-                            notification('success', response.header.message);
-                            history.push('/template');
-                        } else {
-                            notification('warning', response.header.message);
-                        }
-                    },
-                }),
-            );
-        } else {
-            notification('warning', response.header.message);
-        }
-    };
-
-    /**
-     * 삭제 이벤트
-     */
     const handleClickDelete = () => {
-        toastr.confirm('정말 삭제하시겠습니까?', {
-            onOk: () => {
-                dispatch(
-                    hasRelationList({
-                        templateSeq: template.templateSeq,
-                        callback: deleteCallback,
-                    }),
-                );
-            },
-            onCancle: () => {},
-        });
+        onDelete(template);
     };
 
     useEffect(() => {

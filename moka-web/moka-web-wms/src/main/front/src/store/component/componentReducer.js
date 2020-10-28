@@ -31,10 +31,6 @@ export const initialState = {
         schCodeId: '',
         pagingYn: 'N',
         pagingType: 'N',
-        perPageCount: 0,
-        maxPageCount: 0,
-        dispPageCount: 0,
-        moreCount: 0,
     },
     componentError: null,
     inputTag: '',
@@ -102,8 +98,6 @@ export default handleActions(
         },
         [act.GET_COMPONENT_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.component = initialState.component;
-                draft.inputTag = initialState.inputTag;
                 draft.componentError = payload;
             });
         },

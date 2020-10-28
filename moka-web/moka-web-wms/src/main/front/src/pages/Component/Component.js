@@ -1,10 +1,13 @@
-import React, { useState, Suspense } from 'react';
+import React, { useCallback, useState, Suspense } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
+import { clearStore, deleteComponent, hasRelationList } from '@store/component';
+import { notification, toastr } from '@utils/toastUtil';
 
 const ComponentList = React.lazy(() => import('./ComponentList'));
 const ComponentEdit = React.lazy(() => import('./ComponentEdit'));
@@ -14,11 +17,63 @@ const ComponentEdit = React.lazy(() => import('./ComponentEdit'));
  */
 const Component = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [openTabIdx, setOpenTabIdx] = useState(0);
 
+    /**
+     * 도메인 삭제
+     * @param {object} response response
+     */
+    const deleteCallback = useCallback(
+        (response, componentSeq) => {
+            if (response.header.success) {
+                dispatch(
+                    deleteComponent({
+                        componentSeq: componentSeq,
+                        callback: (response) => {
+                            if (response.header.success) {
+                                notification('success', '삭제하였습니다.');
+                                history.push('/component');
+                            } else {
+                                notification('warning', response.header.message);
+                            }
+                        },
+                    }),
+                );
+            } else {
+                notification('warning', response.header.message);
+            }
+        },
+        [dispatch, history],
+    );
+
+    /**
+     * 삭제 버튼 클릭
+     * @param {object} component 컴포넌트 데이터
+     */
+    const handleClickDelete = useCallback(
+        (component) => {
+            const { componentSeq, componentName } = component;
+
+            toastr.confirm(`${componentSeq}_${componentName}을 정말 삭제하시겠습니까?`, {
+                onOk: () => {
+                    dispatch(
+                        hasRelationList({
+                            componentSeq,
+                            callback: deleteCallback,
+                        }),
+                    );
+                },
+                onCancel: () => {},
+            });
+        },
+        [deleteCallback, dispatch],
+    );
+
     React.useEffect(() => {
+        // unmount시 스토어초기화
         return () => {
-            // dispatch(clearStore());
+            dispatch(clearStore());
             // dispatch(clearRelationList());
             // dispatch(clearHistory());
         };
@@ -35,7 +90,7 @@ const Component = () => {
             {/* 리스트 */}
             <MokaCard width={412} className="mr-10" titleClassName="mb-0" title="컴포넌트 검색">
                 <Suspense>
-                    <ComponentList />
+                    <ComponentList onDelete={handleClickDelete} />
                 </Suspense>
             </MokaCard>
 
@@ -46,7 +101,7 @@ const Component = () => {
                     render={() => (
                         <>
                             {/* 등록/수정 */}
-                            <ComponentEdit />
+                            <ComponentEdit onDelete={handleClickDelete} />
 
                             {/* 탭 */}
                             <MokaIconTabs

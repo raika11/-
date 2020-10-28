@@ -13,7 +13,7 @@ import CopyModal from './modals/CopyModal';
 /**
  * 템플릿 AgGrid 컴포넌트
  */
-const TemplateAgGrid = () => {
+const TemplateAgGrid = ({ onDelete }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -63,12 +63,13 @@ const TemplateAgGrid = () => {
                     id: data.templateSeq,
                     name: data.templateName,
                     thumb: data.templateThumb,
+                    onDelete,
                 })),
             );
         } else {
             setRowData([]);
         }
-    }, [list]);
+    }, [list, onDelete]);
 
     return (
         <>
@@ -134,6 +135,7 @@ const TemplateAgGrid = () => {
                         },
                         {
                             title: '삭제',
+                            onClick: onDelete,
                         },
                     ]}
                 />

@@ -1,4 +1,5 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import produce from 'immer';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
@@ -6,7 +7,8 @@ import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
-import { clearStore, clearHistory, clearRelationList } from '@store/template';
+import { clearStore, clearHistory, clearRelationList, deleteTemplate, hasRelationList } from '@store/template';
+import { notification, toastr } from '@utils/toastUtil';
 
 import TemplateEditor from './TemplateEditor';
 const TemplateList = React.lazy(() => import('./TemplateList'));
@@ -23,7 +25,10 @@ const TemplateHistoryList = React.lazy(() => import('./relations/TemplateHistory
  * 템플릿 관리
  */
 const Template = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
+
+    // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [openTabIdx, setOpenTabIdx] = useState(0);
 
@@ -73,6 +78,54 @@ const Template = () => {
         );
     };
 
+    /**
+     * 템플릿 삭제
+     * @param {object} response response
+     */
+    const deleteCallback = useCallback(
+        (response, templateSeq) => {
+            if (response.header.success) {
+                dispatch(
+                    deleteTemplate({
+                        templateSeq: templateSeq,
+                        callback: (response) => {
+                            if (response.header.success) {
+                                notification('success', response.header.message);
+                                history.push('/template');
+                            } else {
+                                notification('warning', response.header.message);
+                            }
+                        },
+                    }),
+                );
+            } else {
+                notification('warning', response.header.message);
+            }
+        },
+        [dispatch, history],
+    );
+
+    /**
+     * 삭제 이벤트
+     */
+    const handleClickDelete = useCallback(
+        (template) => {
+            const { templateSeq, templateName } = template;
+            toastr.confirm(`${templateSeq}_${templateName}을 정말 삭제하시겠습니까?`, {
+                onOk: () => {
+                    dispatch(
+                        hasRelationList({
+                            templateSeq: template.templateSeq,
+                            callback: deleteCallback,
+                        }),
+                    );
+                },
+                onCancle: () => {},
+            });
+        },
+        [deleteCallback, dispatch],
+    );
+
     React.useEffect(() => {
         return () => {
             dispatch(clearStore());
@@ -92,7 +145,7 @@ const Template = () => {
             {/* 리스트 */}
             <MokaCard width={412} className="mr-10" titleClassName="mb-0" title="템플릿 검색" expansion={expansionState[0]} onExpansion={handleListExpansion} foldable>
                 <Suspense>
-                    <TemplateList />
+                    <TemplateList onDelete={handleClickDelete} />
                 </Suspense>
             </MokaCard>
 
@@ -113,7 +166,7 @@ const Template = () => {
                                 tabWidth={412}
                                 tabs={[
                                     <Suspense>
-                                        <TemplateEdit show={openTabIdx === '0'} />
+                                        <TemplateEdit show={openTabIdx === '0'} onDelete={handleClickDelete} />
                                     </Suspense>,
                                     <Suspense>
                                         <TemplatePageList show={openTabIdx === '1'} />

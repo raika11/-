@@ -11,7 +11,7 @@ import * as api from './componentApi';
 const getComponentList = callApiAfterActions(act.GET_COMPONENT_LIST, api.getComponentList, (store) => store.component);
 
 /**
- * 템플릿 조회
+ * 컴포넌트 조회
  */
 const getComponent = createRequestSaga(act.GET_COMPONENT, api.getComponent);
 
@@ -133,10 +133,45 @@ function* copyComponent({ payload: { componentSeq, componentName, callback } }) 
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 삭제
+ * @param {string|number} param0.payload.componentSeq 컴포넌트ID (필수)
+ * @param {func} param0.payload.callback 콜백
+ */
+export function* deleteComponent({ payload: { componentSeq, callback } }) {
+    const ACTION = act.DELETE_COMPONENT;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.deleteComponent, { componentSeq });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.GET_COMPONENT_SUCCESS,
+                payload: callbackData,
+            });
+
+            // 목록 다시 검색
+            yield put({ type: act.GET_COMPONENT_LIST });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData, componentSeq);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
 export default function* saga() {
     yield takeLatest(act.GET_COMPONENT_LIST, getComponentList);
     yield takeLatest(act.GET_COMPONENT, getComponent);
     yield takeLatest(act.SAVE_COMPONENT_LIST, saveComponentList);
     yield takeLatest(act.SAVE_COMPONENT, saveComponent);
     yield takeLatest(act.COPY_COMPONENT, copyComponent);
+    yield takeLatest(act.DELETE_COMPONENT, deleteComponent);
 }

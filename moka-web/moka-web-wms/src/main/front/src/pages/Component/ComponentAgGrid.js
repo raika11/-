@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './ComponentAgGridColums';
@@ -10,7 +10,7 @@ import { GET_COMPONENT_LIST, getComponentList, changeSearchOption } from '@store
 /**
  * 컴포넌트 AgGrid 컴포넌트
  */
-const ComponentAgGrid = () => {
+const ComponentAgGrid = ({ onDelete }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -21,6 +21,19 @@ const ComponentAgGrid = () => {
         loading: store.loading[GET_COMPONENT_LIST],
         component: store.component.component,
     }));
+
+    // state
+    const [rowData, setRowData] = useState([]);
+
+    useEffect(() => {
+        console.log(onDelete);
+        setRowData(
+            list.map((data) => ({
+                ...data,
+                onDelete,
+            })),
+        );
+    }, [list, onDelete]);
 
     /**
      * 테이블 검색옵션 변경
@@ -59,7 +72,7 @@ const ComponentAgGrid = () => {
             <MokaTable
                 agGridHeight={512}
                 columnDefs={columnDefs}
-                rowData={list}
+                rowData={rowData}
                 onRowNodeId={(component) => component.componentSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}

@@ -262,7 +262,7 @@ const Dashboard = () => {
                                             disabled: true,
                                             className: 'bg-white',
                                         },
-                                        { placeholder: '템플릿명' },
+                                        { placeholder: '템플릿명', disabled: true },
                                     ]}
                                 />
                                 <MokaSearchInput variant="warning" onSearch={() => toastr.success('테스트', '성공')} />

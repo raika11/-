@@ -20,15 +20,19 @@ const { component: initialComponent } = initialState;
 /**
  * 컴포넌트 정보/수정 컴포넌트
  */
-const ComponentEdit = () => {
+const ComponentEdit = ({ onDelete }) => {
     const { componentSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { component, inputTag, latestDomainId, invalidList } = useSelector((store) => ({
+    const { component, inputTag, latestDomainId, invalidList, MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT } = useSelector((store) => ({
         component: store.component.component,
         inputTag: store.component.inputTag,
         latestDomainId: store.auth.latestDomainId,
         invalidList: store.template.invalidList,
+        MORE_COUNT: store.app.MORE_COUNT,
+        DISP_PAGE_COUNT: store.app.DISP_PAGE_COUNT,
+        PER_PAGE_COUNT: store.app.PER_PAGE_COUNT,
+        MAX_PAGE_COUNT: store.app.MAX_PAGE_COUNT,
     }));
 
     // state
@@ -52,10 +56,10 @@ const ComponentEdit = () => {
     // 목록 설정
     const [pagingYn, setPagingYn] = useState(initialComponent.pagingYn);
     const [pagingType, setPagingType] = useState(initialComponent.pagingType);
-    const [perPageCount, setPerPageCount] = useState(initialComponent.perPageCount);
-    const [maxPageCount, setMaxPageCount] = useState(initialComponent.maxPageCount);
-    const [dispPageCount, setDispPageCount] = useState(initialComponent.dispPageCount);
-    const [moreCount, setMoreCount] = useState(initialComponent.moreCount);
+    const [perPageCount, setPerPageCount] = useState(PER_PAGE_COUNT);
+    const [maxPageCount, setMaxPageCount] = useState(MAX_PAGE_COUNT);
+    const [dispPageCount, setDispPageCount] = useState(DISP_PAGE_COUNT);
+    const [moreCount, setMoreCount] = useState(MORE_COUNT);
 
     const componentNameRegex = /[^\s\t\n]+/;
 
@@ -150,9 +154,6 @@ const ComponentEdit = () => {
         }
     };
 
-    // 삭제 버튼
-    const handleClickDelete = () => {};
-
     useEffect(() => {
         // 스토어에서 가져온 컴포넌트 데이터 셋팅
         setComponentName(component.componentName || '');
@@ -171,11 +172,11 @@ const ComponentEdit = () => {
         setSchLang(component.schLang);
         setPagingYn(component.pagingYn);
         setPagingType(component.pagingType);
-        setPerPageCount(component.perPageCount);
-        setMaxPageCount(component.maxPageCount);
-        setDispPageCount(component.dispPageCount);
-        setMoreCount(component.moreCount);
-    }, [component]);
+        setPerPageCount(component.perPageCount || PER_PAGE_COUNT);
+        setMaxPageCount(component.maxPageCount || MAX_PAGE_COUNT);
+        setDispPageCount(component.dispPageCount || DISP_PAGE_COUNT);
+        setMoreCount(component.moreCount || MORE_COUNT);
+    }, [DISP_PAGE_COUNT, MAX_PAGE_COUNT, MORE_COUNT, PER_PAGE_COUNT, component]);
 
     useEffect(() => {
         // 컴포넌트의 도메인ID를 latestDomainId에 저장
@@ -206,7 +207,7 @@ const ComponentEdit = () => {
                 description={description}
                 setDescription={setDescription}
                 onClickSave={handleClickSave}
-                onClickDelete={handleClickDelete}
+                onClickDelete={() => onDelete(component)}
                 invalidList={invalidList}
             />
             <hr className="divider" />

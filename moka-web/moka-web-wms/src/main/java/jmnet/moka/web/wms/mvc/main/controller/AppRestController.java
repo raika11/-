@@ -41,6 +41,9 @@ public class AppRestController {
     @Value("${tps.upload.path.url}")
     private String uploadPathUrl;
 
+    @Value("${tps.page.servicename.excludes}")
+    private String[] excludePageServiceName;
+
     @Autowired
     private TpsLogger tpsLogger;
 
@@ -56,15 +59,15 @@ public class AppRestController {
     @GetMapping("/init")
     public ResponseEntity<?> getAppInitData(HttpServletRequest request) {
 
-        Map<String, Object> result = MapBuilder
-                .getInstance()
-                .add("UPLOAD_PATH_URL", uploadPathUrl) // 파일 서비스 prefix
-                .add("PER_PAGE_COUNT", TpsConstants.PER_PAGE_COUNT) // 페이지당 건수
-                .add("MAX_PAGE_COUNT", TpsConstants.MAX_PAGE_COUNT) // 최대 페이지수
-                .add("DISP_PAGE_COUNT", TpsConstants.DISP_PAGE_COUNT) // 표출 페이지수
-                .add("MORE_COUNT", TpsConstants.MORE_COUNT) // 더보기 건수
-                .add("LIST_PARAGRAPH", TpsConstants.LIST_PARAGRAPH) // 컴포넌트 광고 리스트단락수
-                .getMap();
+        Map<String, Object> result = MapBuilder.getInstance()
+                                               .add("UPLOAD_PATH_URL", uploadPathUrl) // 파일 서비스 prefix
+                                               .add("PER_PAGE_COUNT", TpsConstants.PER_PAGE_COUNT) // 페이지당 건수
+                                               .add("MAX_PAGE_COUNT", TpsConstants.MAX_PAGE_COUNT) // 최대 페이지수
+                                               .add("DISP_PAGE_COUNT", TpsConstants.DISP_PAGE_COUNT) // 표출 페이지수
+                                               .add("MORE_COUNT", TpsConstants.MORE_COUNT) // 더보기 건수
+                                               .add("LIST_PARAGRAPH", TpsConstants.LIST_PARAGRAPH) // 컴포넌트 광고 리스트단락수
+                                               .add("EXCLUDE_PAGE_SERVICE_NAME_LIST", excludePageServiceName)      // 페이지서비스명 제외명칭
+                                               .getMap();
 
 
 

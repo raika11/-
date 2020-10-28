@@ -161,7 +161,7 @@ public class ComponentRestController {
         }
 
         Component component = modelMapper.map(componentDTO, Component.class);
-        
+
         try {
             // 등록
             Component returnVal = componentService.insertComponent(component);
@@ -255,6 +255,11 @@ public class ComponentRestController {
                                                      tpsLogger.fail(ActionType.UPDATE, message, true);
                                                      return new NoDataException(message);
                                                  });
+
+        if (componentDTO.getDataset() != null && componentDTO.getDataset()
+                                                             .getDatasetSeq() == null) {
+            componentDTO.setDataset(null);
+        }
 
         try {
             // 업데이트

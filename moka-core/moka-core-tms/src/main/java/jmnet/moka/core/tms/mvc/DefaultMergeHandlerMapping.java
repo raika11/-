@@ -55,9 +55,9 @@ public class DefaultMergeHandlerMapping extends AbstractHandlerMapping {
         }
 
         String requestPath = resolvePath(request);
-
+        List<String> pathList =  this.getPathList(requestPath);
         for (AbstractHandler handler : this.handlerList) {
-            HandlerMethod handlerMethod = handler.resolvable(request, requestPath, this.getPathList(requestPath), domainId);
+            HandlerMethod handlerMethod = handler.resolvable(request, requestPath, pathList, domainId);
             if (handlerMethod != null) {
                 return handlerMethod;
             }

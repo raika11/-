@@ -76,12 +76,18 @@ const TemplateListModal = (props) => {
         };
     }, [dispatch]);
 
-    const onClickSaveTrigger = () => {
+    /**
+     * 등록 버튼 클릭
+     */
+    const handleClickSave = () => {
         if (onClickSave) onClickSave(selectedTemplate);
         onHide();
     };
 
-    const onClickCancleTrigger = () => {
+    /**
+     * 취소 버튼 클릭
+     */
+    const handleClickCancle = () => {
         if (onClickCancle) onClickCancle();
         onHide();
     };
@@ -213,8 +219,8 @@ const TemplateListModal = (props) => {
             title="템플릿 검색"
             size="md"
             buttons={[
-                { text: '등록', onClick: onClickSaveTrigger },
-                { text: '취소', variant: 'gray150', onClick: onClickCancleTrigger },
+                { text: '등록', onClick: handleClickSave },
+                { text: '취소', variant: 'gray150', onClick: handleClickCancle },
             ]}
             footerClassName="justify-content-center"
             draggable
@@ -366,6 +372,7 @@ const TemplateListModal = (props) => {
                     onChangeSearchOption={handleChangeSearchOption}
                     onClick={handleRowClicked}
                     selected={selected}
+                    pageSizes={MODAL_PAGESIZE_OPTIONS}
                 />
             )}
         </MokaModal>

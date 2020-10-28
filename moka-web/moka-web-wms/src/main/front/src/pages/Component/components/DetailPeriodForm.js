@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
 import clsx from 'clsx';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -8,13 +7,15 @@ import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel, MokaDateTimePicker } from '@components';
 
 const DetailPeriodForm = (props) => {
-    const { periodYn, periodStartDt, periodEndDt, setPeriodYn, setPeriodStartDt, setPeriodEndDt } = props;
+    const { periodYn, periodStartDt, periodEndDt, setPeriodYn, setPeriodStartDt, setPeriodEndDt, available } = props;
     const [disabled, setDisabled] = useState(true);
     const [open, setOpen] = useState(false);
     const controls = `component-collapse-period-form`;
 
     const handleClickTitle = () => {
-        setOpen(!open);
+        if (available) {
+            setOpen(!open);
+        }
     };
 
     /**
@@ -45,9 +46,13 @@ const DetailPeriodForm = (props) => {
         }
     }, [periodYn]);
 
+    useEffect(() => {
+        setOpen(available);
+    }, [available]);
+
     return (
         <Form className="collapsed-box">
-            <Card.Title className={clsx('mb-2', { collapsed: !open })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
+            <Card.Title className={clsx('mb-2', { collapsed: !open, disabled: !available })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
                 <p className="mb-0 d-inline cursor-pointer" onClick={handleClickTitle}>
                     기간설정
                 </p>

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import { initialState, getComponent, clearComponent, clearRelationList, changeComponent, saveComponent } from '@store/component';
+import { initialState, getComponent, clearComponent, clearRelationList, changeComponent, saveComponent, changeInvalidList } from '@store/component';
 import { DB_DATEFORMAT } from '@/constants';
 import { notification } from '@utils/toastUtil';
 
@@ -39,6 +39,7 @@ const ComponentEdit = () => {
     const [dataType, setDataType] = useState(initialComponent.dataType);
     const [delWords, setDelWords] = useState(initialComponent.delWords);
     const [skin, setSkin] = useState(initialComponent.skin);
+    const [zone, setZone] = useState('');
     const [matchZone, setMatchZone] = useState('');
     // 사용기간 설정
     const [periodYn, setPeriodYn] = useState(initialComponent.periodYn);
@@ -56,8 +57,33 @@ const ComponentEdit = () => {
     const [dispPageCount, setDispPageCount] = useState(initialComponent.dispPageCount);
     const [moreCount, setMoreCount] = useState(initialComponent.moreCount);
 
+    /**
+     * 유효성 검사
+     * @param {object} temp 컴포넌트데이터
+     */
     const validate = (temp) => {
-        return true;
+        let isInvalid = false;
+        let errList = [];
+
+        // 컴포넌트명 체크
+        if (!/[^\s\t\n]+/.test(temp.componentName)) {
+            errList.push({
+                field: 'componentName',
+                reason: '',
+            });
+            isInvalid = isInvalid | true;
+        }
+        // 템플릿 체크
+        if (!temp.template.templateSeq) {
+            errList.push({
+                field: 'template',
+                reason: '',
+            });
+            isInvalid = isInvalid | true;
+        }
+
+        dispatch(changeInvalidList(errList));
+        return !isInvalid;
     };
 
     // 저장 버튼
@@ -71,7 +97,7 @@ const ComponentEdit = () => {
             dataType,
             delWords,
             skin,
-            matchZone,
+            zone,
             periodYn,
             periodStartDt: null,
             periodEndDt: null,
@@ -87,6 +113,7 @@ const ComponentEdit = () => {
         };
 
         if (periodYn === 'Y') {
+            // 기간설정이 있는 경우 moment 객체를 DB에 저장가능한 string 문자열로 치환
             let sdt = moment(periodStartDt).format(DB_DATEFORMAT);
             let edt = moment(periodEndDt).format(DB_DATEFORMAT);
             if (sdt !== 'Invalid date') {
@@ -122,13 +149,14 @@ const ComponentEdit = () => {
 
     useEffect(() => {
         // 스토어에서 가져온 컴포넌트 데이터 셋팅
-        setComponentName(component.componentName);
-        setDescription(component.description);
+        setComponentName(component.componentName || '');
+        setDescription(component.description || '');
         setTemplate(component.template || initialComponent.template);
         setDataset(component.dataset || initialComponent.dataset);
         setDataType(component.dataType);
         setDelWords(component.delWords);
         setSkin(component.skin || initialComponent.skin);
+        setZone(component.zone);
         setMatchZone(component.matchZone);
         setPeriodYn(component.periodYn);
         setPeriodStartDt(moment(component.periodStartDt, DB_DATEFORMAT));
@@ -173,9 +201,10 @@ const ComponentEdit = () => {
                 onClickSave={handleClickSave}
                 onClickDelete={handleClickDelete}
                 onClickCopy={handleClickCopy}
+                invalidList={invalidList}
             />
             <hr className="divider" />
-            <div className="custom-scroll component-padding-box" style={{ height: 563 }}>
+            <div className="custom-scroll component-padding-box pb-10" style={{ height: 563 }}>
                 <DetailRelationForm
                     template={template}
                     dataType={dataType}
@@ -185,13 +214,15 @@ const ComponentEdit = () => {
                     inputTag={inputTag}
                     delWords={delWords}
                     skin={skin}
+                    zone={zone}
                     matchZone={matchZone}
                     setTemplate={setTemplate}
                     setDataType={setDataType}
                     setDataset={setDataset}
                     setDelWords={setDelWords}
                     setSkin={setSkin}
-                    setMatchZone={setMatchZone}
+                    setZone={setZone}
+                    invalidList={invalidList}
                 />
                 <hr className="divider" />
                 <DetailPeriodForm
@@ -201,6 +232,7 @@ const ComponentEdit = () => {
                     setPeriodYn={setPeriodYn}
                     setPeriodStartDt={setPeriodStartDt}
                     setPeriodEndDt={setPeriodEndDt}
+                    available={dataType !== 'NONE'}
                 />
                 <hr className="divider" />
                 <DetailSchForm
@@ -210,6 +242,7 @@ const ComponentEdit = () => {
                     setSchServiceType={setSchServiceType}
                     setSchLang={setSchLang}
                     setSchCodeId={setSchCodeId}
+                    available={dataType !== 'NONE'}
                 />
                 <hr className="divider" />
                 <DetailPagingForm
@@ -225,6 +258,7 @@ const ComponentEdit = () => {
                     setMaxPageCount={setMaxPageCount}
                     setDispPageCount={setDispPageCount}
                     setMoreCount={setMoreCount}
+                    available={dataType !== 'NONE'}
                 />
             </div>
         </MokaCard>

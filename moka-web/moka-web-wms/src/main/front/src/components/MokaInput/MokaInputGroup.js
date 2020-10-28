@@ -44,6 +44,10 @@ const propTypes = {
      */
     style: PropTypes.object,
     /**
+     * InputGroup의 isInvalid
+     */
+    isInvalid: PropTypes.bool,
+    /**
      * ---------------------------------------------------------------------------------------------
      * input element의 타입(기본 input)
      * prependLink -> MokaPrependLinkInput
@@ -66,10 +70,6 @@ const propTypes = {
      * MokaInput의 value
      */
     value: PropTypes.any,
-    /**
-     * MokaInput의 isInvalid
-     */
-    isInvalid: PropTypes.bool,
     /**
      * MokaInput의 disabled
      */
@@ -117,10 +117,10 @@ const MokaInputGroup = forwardRef((props, ref) => {
     const { label, labelWidth, className, labelClassName, required } = props;
 
     // inputGroup props
-    const { inputGroupClassName, append, prepend, style } = props;
+    const { inputGroupClassName, append, prepend, style, isInvalid } = props;
 
     // input props
-    const { inputClassName, as, type, placeholder, onChange, value, id, name, mask, inputProps, isInvalid, disabled } = props;
+    const { inputClassName, as, type, placeholder, onChange, value, id, name, mask, inputProps, disabled } = props;
 
     /**
      * inputGroup 생성
@@ -128,7 +128,7 @@ const MokaInputGroup = forwardRef((props, ref) => {
     const createInputGroup = () => {
         if (as !== 'prependLink') {
             return (
-                <InputGroup className={clsx('flex-fill', inputGroupClassName)} style={style}>
+                <InputGroup className={clsx('flex-fill', inputGroupClassName, { 'is-invalid': isInvalid })} style={style}>
                     {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
                     <MokaInput
                         ref={ref}
@@ -137,7 +137,6 @@ const MokaInputGroup = forwardRef((props, ref) => {
                         {...inputProps}
                         id={id}
                         name={name}
-                        isInvalid={isInvalid}
                         disabled={disabled}
                         value={value}
                         onChange={onChange}
@@ -149,7 +148,7 @@ const MokaInputGroup = forwardRef((props, ref) => {
                 </InputGroup>
             );
         } else {
-            return <MokaPrependLinkInput {...inputProps} />;
+            return <MokaPrependLinkInput {...inputProps} isInvalid={isInvalid} />;
         }
     };
 

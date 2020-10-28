@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -15,19 +15,33 @@ const DetailRelationForm = (props) => {
         inputTag,
         delWords,
         skin,
+        zone,
         matchZone,
         setTemplate,
         setDataType,
         setDataset,
         setDelWords,
         setSkin,
-        setMatchZone,
+        setZone,
         prevAutoDataset,
         prevDeskDataset,
+        invalidList,
     } = props;
 
     // state
     const [templateModalShow, setTemplateModalShow] = useState(false);
+    const [templateError, setTemplateError] = useState(false);
+
+    useEffect(() => {
+        // invalidList 처리
+        if (invalidList.length > 0) {
+            invalidList.forEach((i) => {
+                if (i.field === 'template') {
+                    setTemplateError(true);
+                }
+            });
+        }
+    }, [invalidList]);
 
     return (
         <Form>
@@ -57,6 +71,7 @@ const DetailRelationForm = (props) => {
                     icon: <MokaIcon iconName="fal-search" />,
                     onIconClick: () => setTemplateModalShow(true),
                 }}
+                isInvalid={templateError}
                 required
             />
             {/* 데이터셋 */}
@@ -190,21 +205,34 @@ const DetailRelationForm = (props) => {
                     icon: <MokaIcon iconName="fal-search" />,
                 }}
             />
-            <MokaInputLabel
-                label="영역 설정"
-                className="mb-2"
-                value={matchZone}
-                onChange={(e) => {
-                    setMatchZone(e.target.value);
-                }}
-            />
+            {/* 매칭영역 설정 */}
+            <Form.Row className="mb-2">
+                <Col xs={4} className="p-0">
+                    <MokaInputLabel label="매칭영역" className="mb-0" value={matchZone} disabled />
+                </Col>
+                <Col xs={8} className="p-0">
+                    <MokaInputLabel
+                        label="영역 목록"
+                        className="mb-0"
+                        value={zone}
+                        onChange={(e) => {
+                            setZone(e.target.value);
+                        }}
+                    />
+                </Col>
+            </Form.Row>
 
             {/* 템플릿 선택 팝업 */}
             {templateModalShow && (
                 <TemplateListModal
                     show={templateModalShow}
                     onHide={() => setTemplateModalShow(false)}
-                    onClickSave={(template) => setTemplate(template)}
+                    onClickSave={(template) => {
+                        setTemplate(template);
+                        if (template.templateSeq) {
+                            setTemplateError(false);
+                        }
+                    }}
                     selected={template.templateSeq}
                 />
             )}

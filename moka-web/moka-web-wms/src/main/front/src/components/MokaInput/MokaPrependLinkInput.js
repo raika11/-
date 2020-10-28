@@ -1,7 +1,8 @@
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
-
+import clsx from 'clsx';
 import { Link } from 'react-router-dom';
+
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import MokaInput from './MokaInput';
@@ -19,6 +20,10 @@ const propTypes = {
      * 링크 텍스트
      */
     linkText: PropTypes.string,
+    /**
+     * InputGroup의 isInvalid
+     */
+    isInvalid: PropTypes.bool,
     /**
      * InputGroup 컴포넌트의 추가적인 클래스명
      */
@@ -41,6 +46,7 @@ const propTypes = {
 const defaultProps = {
     target: '_blank',
     inputList: {},
+    isInvalid: false,
     icon: null,
     onIconClick: null,
 };
@@ -49,7 +55,7 @@ const defaultProps = {
  * Prepend 링크를 포함한 input
  */
 const MokaPrependLinkInput = forwardRef((props, ref) => {
-    const { to, linkText, className, inputList, target, icon, onIconClick } = props;
+    const { to, linkText, className, inputList, target, icon, onIconClick, isInvalid } = props;
 
     /**
      * prepend의 link 생성
@@ -95,7 +101,7 @@ const MokaPrependLinkInput = forwardRef((props, ref) => {
     };
 
     return (
-        <InputGroup className={className}>
+        <InputGroup className={clsx(className, { 'is-invalid': isInvalid })}>
             <InputGroup.Prepend style={{ width: 70 }}>{createPrependLink()}</InputGroup.Prepend>
             {Array.isArray(inputList) ? inputList.map((obj, idx) => createInput(obj, idx)) : createInput(inputList)}
             {icon && (

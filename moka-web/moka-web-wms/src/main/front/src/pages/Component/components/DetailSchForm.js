@@ -9,7 +9,7 @@ import { MokaInputLabel } from '@components';
 import { getLang, getServiceType } from '@store/codeMgt';
 
 const DetailSchForm = (props) => {
-    const { schServiceType, schLang, schCodeId, setSchServiceType, setSchLang, setSchCodeId } = props;
+    const { schServiceType, schLang, schCodeId, setSchServiceType, setSchLang, setSchCodeId, available } = props;
     const dispatch = useDispatch();
     const controls = `component-collapse-sch-form`;
     const [open, setOpen] = useState(false);
@@ -20,7 +20,9 @@ const DetailSchForm = (props) => {
     }));
 
     const handleClickTitle = () => {
-        setOpen(!open);
+        if (available) {
+            setOpen(!open);
+        }
     };
 
     useEffect(() => {
@@ -29,9 +31,13 @@ const DetailSchForm = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        setOpen(available);
+    }, [available]);
+
     return (
         <Form className="collapsed-box">
-            <Card.Title className={clsx('mb-2', { collapsed: !open })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
+            <Card.Title className={clsx('mb-2', { collapsed: !open, disabled: !available })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
                 <p className="mb-0 d-inline cursor-pointer" onClick={handleClickTitle}>
                     검색설정
                 </p>

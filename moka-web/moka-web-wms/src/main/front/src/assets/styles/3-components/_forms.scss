@@ -28,3 +28,21 @@
 .form-control-plaintext {
   outline: none;
 }
+
+/**
+ * input-group의 invalid 처리
+ * bootstrap/scss/mixins/_forms.scss 참고하여서 추가함
+ */
+@each $state, $data in $input-group-validation-states {
+  .input-group {
+    @include form-validation-state-selector($state) {
+      .input-group-text, .form-control {
+        border-color: map-get($data, color);
+        &:focus {
+          border-color: map-get($data, color);
+          box-shadow: 0 0 0 $input-focus-width rgba(map-get($data, color), .25);
+        }
+      }
+    }
+  }
+}

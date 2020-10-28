@@ -155,8 +155,13 @@ public class ComponentRestController {
         // 데이터 유효성 검사
         validData(request, componentDTO, ActionType.INSERT);
 
-        Component component = modelMapper.map(componentDTO, Component.class);
+        if (componentDTO.getDataset() != null && componentDTO.getDataset()
+                                                             .getDatasetSeq() == null) {
+            componentDTO.setDataset(null);
+        }
 
+        Component component = modelMapper.map(componentDTO, Component.class);
+        
         try {
             // 등록
             Component returnVal = componentService.insertComponent(component);

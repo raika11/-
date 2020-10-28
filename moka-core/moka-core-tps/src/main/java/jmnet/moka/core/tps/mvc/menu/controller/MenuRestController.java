@@ -269,6 +269,11 @@ public class MenuRestController {
             throws Exception {
 
         // 데이터 조회
+        String noContentMessage = messageByLocale.get("tps.menu.error.no-data", request);
+        Menu parentMenu = menuService
+                .findMenuById(parentMenuId)
+                .orElseThrow(() -> new NoDataException(noContentMessage));
+
         List<Menu> menuList = menuService.findAllMenuByParentId(parentMenuId);
 
         try {
@@ -281,6 +286,9 @@ public class MenuRestController {
                         .findFirst()
                         .ifPresent(menuOrder -> {
                             menu.setMenuOrder(menuOrder.getMenuOrder());
+                            // 순서 뿐만 아니라 depth도 부모의 depth의 +1하여 저장한다.
+                            menu.setDepth(parentMenu.getDepth() + 1);
+                            menuService.updateMenu(menu);
                         }));
             }
 

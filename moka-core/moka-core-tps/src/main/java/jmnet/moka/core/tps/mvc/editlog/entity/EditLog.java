@@ -14,7 +14,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +28,6 @@ import org.hibernate.annotations.Nationalized;
 @Setter
 @Builder
 @Entity
-@Data
 @Table(name = "TB_CMS_EDIT_LOG")
 public class EditLog implements Serializable {
 

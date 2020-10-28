@@ -55,13 +55,13 @@ public class MenuNode implements Serializable {
      * @param menu Menu Entity
      */
     public MenuNode(MenuDTO menu) {
-        this.seq = menu.getSeq();
+        this.seq = menu.getMenuSeq();
         this.menuId = menu.getMenuId();
         this.menuNm = menu.getMenuNm();
         this.menuDisplayNm = menu.getMenuDisplayNm();
         this.menuUrl = menu.getMenuUrl();
         this.menuOrder = menu.getMenuOrder();
-        this.depth = menu.getDepth();
+        this.depth = menu.getMenuOrder();
         this.useYn = menu.getUsedYn();
         this.parentMenuId = menu.getParentMenuId();
         this.iconName = menu.getIconNm();
@@ -101,8 +101,9 @@ public class MenuNode implements Serializable {
      * @return 존재여부
      */
     public boolean hasChild() {
-        return this.getNodes() != null && this.getNodes()
-                                              .size() > 0;
+        return this.getNodes() != null && this
+                .getNodes()
+                .size() > 0;
     }
 
     /**
@@ -123,26 +124,31 @@ public class MenuNode implements Serializable {
     public void sort() {
         if (this.getNodes() != null) {
             // 자식노드가 하나만 있을경우는, 자식의 자식노드를 정렬하도록 한다.
-            if (this.getNodes()
+            if (this
+                    .getNodes()
                     .size() == 1) {
-                this.getNodes()
-                    .get(0)
-                    .sort();
+                this
+                        .getNodes()
+                        .get(0)
+                        .sort();
             } else {
-                this.getNodes()
-                    .sort((a, b) -> {
+                this
+                        .getNodes()
+                        .sort((a, b) -> {
 
-                        if (a.getNodes() != null && a.getNodes()
-                                                     .size() > 0) {
-                            a.sort();
-                        }
-                        if (b.getNodes() != null && b.getNodes()
-                                                     .size() > 0) {
-                            b.sort();
-                        }
+                            if (a.getNodes() != null && a
+                                    .getNodes()
+                                    .size() > 0) {
+                                a.sort();
+                            }
+                            if (b.getNodes() != null && b
+                                    .getNodes()
+                                    .size() > 0) {
+                                b.sort();
+                            }
 
-                        return a.getMenuOrder() - b.getMenuOrder();
-                    });
+                            return a.getMenuOrder() - b.getMenuOrder();
+                        });
             }
         }
     }

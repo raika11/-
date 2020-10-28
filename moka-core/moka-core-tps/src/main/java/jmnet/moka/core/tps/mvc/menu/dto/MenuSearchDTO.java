@@ -42,6 +42,6 @@ public class MenuSearchDTO extends SearchDTO {
 
     // 정렬 기본값을 설정
     public MenuSearchDTO() {
-        super(MenuVO.class, "menuId,asc,menuOrder,asc");
+        super(MenuVO.class, "menuOrder,asc,menuId,asc");
     }
 }

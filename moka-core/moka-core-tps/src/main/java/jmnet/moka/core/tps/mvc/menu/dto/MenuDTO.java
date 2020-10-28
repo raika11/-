@@ -29,7 +29,7 @@ public class MenuDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<MenuDTO>>() {
     }.getType();
 
-    private Long seq;
+    private Long menuSeq;
 
     /**
      * 대메뉴코드
@@ -59,8 +59,6 @@ public class MenuDTO implements Serializable {
     @Length(min = 1, max = 50, message = "{tps.menu.error.length.menuDisplayNm}")
     private String menuDisplayNm;
 
-    @Builder.Default
-    private Integer depth = 1;
 
     /**
      * 사용여부(Y:사용, N:미사용)

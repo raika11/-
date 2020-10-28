@@ -58,7 +58,7 @@ public class EditFormRestController {
     @GetMapping("/{channelId}")
     public ResponseEntity<?> getEditForm(@PathVariable("channelId") String channelId, @RequestParam(value = "partId", required = false) String partId)
             throws MokaException {
-
+        
         return getResponseEditFormDTO(DEFAULT_SITE, channelId, partId);
     }
 

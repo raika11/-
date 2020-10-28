@@ -23,5 +23,5 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, MenuRepositor
 
     public Optional<Menu> findByMenuId(String menuId);
 
-    public List<Menu> findAllByParentMenuId(String parentMenuId);
+    public List<Menu> findAllByParentMenuIdOrderByMenuOrder(String parentMenuId);
 }

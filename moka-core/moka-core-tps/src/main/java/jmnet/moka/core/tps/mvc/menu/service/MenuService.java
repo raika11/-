@@ -65,6 +65,14 @@ public interface MenuService {
     List<Menu> findAllMenu();
 
     /**
+     * 메뉴 일련번호로 상세 조회
+     *
+     * @param menuSeq 메뉴 일련번호
+     * @return 메뉴 정보
+     */
+    Optional<Menu> findMenuBySeq(Long menuSeq);
+
+    /**
      * 메뉴 아이디로 상세 조회
      *
      * @param menuId 메뉴 ID

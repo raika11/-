@@ -34,6 +34,10 @@ const propTypes = {
      * 그때 전달받는 함수.
      */
     setFileValue: PropTypes.func,
+    /**
+     * 이미지 alt
+     */
+    alt: PropTypes.string,
 };
 const defaultProps = {
     width: 171,
@@ -44,6 +48,7 @@ const defaultProps = {
         heading: null,
         body: '이미지파일만 등록할 수 있습니다',
     },
+    alt: '이미지 로드 실패',
 };
 
 /**
@@ -51,7 +56,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue } = props;
+    const { width, height, alertProps, img, setFileValue, alt } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -63,6 +68,19 @@ const MokaImageInput = forwardRef((props, ref) => {
     const wrapRef = useRef(null);
     const defaultRef = useRef(null);
 
+    const imageHide = () => {
+        imgRef.current.classList.add('d-none');
+        defaultRef.current.classList.remove('d-none');
+        defaultRef.current.classList.add('d-flex');
+        imgRef.current.src = '';
+    };
+
+    const imageShow = () => {
+        imgRef.current.classList.remove('d-none');
+        defaultRef.current.classList.add('d-none');
+        defaultRef.current.classList.remove('d-flex');
+    };
+
     /**
      * input의 file 삭제하는 함수
      */
@@ -70,18 +88,19 @@ const MokaImageInput = forwardRef((props, ref) => {
         if (setFileValue) {
             setFileValue(null);
         }
-        imgRef.current.classList.add('d-none');
-        defaultRef.current.classList.remove('d-none');
-        defaultRef.current.classList.add('d-flex');
+        if (inputRef.current) {
+            inputRef.current.value = null;
+        }
+        imageHide();
     }, [setFileValue]);
 
     // 리턴 ref 설정
     useImperativeHandle(
         ref,
         () => ({
-            input: inputRef.current,
-            previewImg: imgRef.current,
-            defaultText: defaultRef.current,
+            inputRef: inputRef.current,
+            imgRef: imgRef.current,
+            defaultTextRef: defaultRef.current,
             deleteFile: deleteFile,
         }),
         [deleteFile],
@@ -105,8 +124,10 @@ const MokaImageInput = forwardRef((props, ref) => {
                     imgRef.current.className = 'portrait';
                 }
                 setImgSrc(src);
-                defaultRef.current.classList.add('d-none');
-                defaultRef.current.classList.remove('d-flex');
+                imageShow();
+            };
+            image.onerror = () => {
+                imageShow();
             };
         },
         [height, width],
@@ -146,9 +167,7 @@ const MokaImageInput = forwardRef((props, ref) => {
         if (img) {
             previewImg(img);
         } else {
-            imgRef.current.classList.add('d-none');
-            defaultRef.current.classList.remove('d-none');
-            defaultRef.current.classList.add('d-flex');
+            imageHide();
         }
     }, [img, previewImg]);
 
@@ -167,7 +186,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         as="div"
                     >
                         {/* 이미지 미리보기 */}
-                        <Figure.Image width={width} height={height} alt={`${width}x${height}`} src={imgSrc} ref={imgRef} />
+                        <Figure.Image width={width} height={height} alt={alt} src={imgSrc} ref={imgRef} />
 
                         {/* input file */}
                         <input {...inputProps} />

@@ -53,7 +53,6 @@ const propTypes = {
 };
 
 const defaultProps = {
-    img: bg,
     alt: '썸네일이미지',
     data: {
         templateName: '',
@@ -89,6 +88,9 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
                 } else {
                     imgRef.current.className = 'portrait';
                 }
+                imgRef.current.style.visibility = 'visible';
+            };
+            image.onerror = () => {
                 imgRef.current.style.visibility = 'visible';
             };
         }
@@ -156,7 +158,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
                 <div className="position-relative overflow-hidden flex-fill cursor-pointer">
                     <div className="w-100 h-100 absolute-top">
                         <div ref={wrapperRef} className="w-100 h-100 d-flex align-item-centers rounded-top justify-content-center overflow-hidden" onClick={handleThumbClick}>
-                            {img && <BSImage src={bg} alt={alt} ref={imgRef} style={{ visibility: 'hidden' }} />}
+                            {img && <BSImage src={img} alt={alt} ref={imgRef} style={{ visibility: 'hidden' }} />}
                             {!img && (
                                 <div className="w-100 d-flex align-items-center justify-content-center bg-light">
                                     <MokaIcon iconName="fad-image" size="2x" className="color-gray150" />

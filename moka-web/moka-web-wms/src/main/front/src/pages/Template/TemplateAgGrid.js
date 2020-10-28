@@ -23,12 +23,13 @@ const TemplateAgGrid = ({ onDelete }) => {
     const [copyModalShow, setCopyModalShow] = useState(false);
     const [copyModalData, setCopyModalData] = useState({});
 
-    const { total, list, search, loading, template } = useSelector((store) => ({
+    const { total, list, search, loading, template, UPLOAD_PATH_URL } = useSelector((store) => ({
         total: store.template.total,
         list: store.template.list,
         search: store.template.search,
         loading: store.loading[GET_TEMPLATE_LIST],
         template: store.template.template,
+        UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
     }));
 
     /**
@@ -58,18 +59,24 @@ const TemplateAgGrid = ({ onDelete }) => {
     useEffect(() => {
         if (list.length > 0) {
             setRowData(
-                list.map((data) => ({
-                    ...data,
-                    id: data.templateSeq,
-                    name: data.templateName,
-                    thumb: data.templateThumb,
-                    onDelete,
-                })),
+                list.map((data) => {
+                    let thumb = data.templateThumb;
+                    if (thumb && thumb !== '') {
+                        thumb = `//stg-backoffice.joongang.co.kr${UPLOAD_PATH_URL}/${thumb}`;
+                    }
+                    return {
+                        ...data,
+                        id: data.templateSeq,
+                        name: data.templateName,
+                        thumb,
+                        onDelete,
+                    };
+                }),
             );
         } else {
             setRowData([]);
         }
-    }, [list, onDelete]);
+    }, [UPLOAD_PATH_URL, list, onDelete]);
 
     return (
         <>

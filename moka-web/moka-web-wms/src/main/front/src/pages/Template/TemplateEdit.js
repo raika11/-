@@ -20,12 +20,13 @@ const TemplateEdit = ({ onDelete }) => {
     const { templateSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { template, inputTag, tpZoneRows, latestDomainId, invalidList } = useSelector((store) => ({
+    const { template, inputTag, tpZoneRows, latestDomainId, invalidList, UPLOAD_PATH_URL } = useSelector((store) => ({
         template: store.template.template,
         inputTag: store.template.inputTag,
         tpZoneRows: store.codeMgt.tpZoneRows,
         latestDomainId: store.auth.latestDomainId,
         invalidList: store.template.invalidList,
+        UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
     }));
 
     // state
@@ -36,6 +37,7 @@ const TemplateEdit = ({ onDelete }) => {
     const [templateGroup, setTemplateGroup] = useState(undefined);
     const [templateThumb, setTemplateThumb] = useState(undefined);
     const [fileValue, setFileValue] = useState(null);
+    const [thumbSrc, setThumbSrc] = useState();
     const [description, setDescription] = useState('');
     const [btnDisabled, setBtnDisabled] = useState(true);
 
@@ -167,7 +169,13 @@ const TemplateEdit = ({ onDelete }) => {
         setTemplateWidth(template.templateWidth || 0);
         setTemplateGroup(template.templateGroup || '');
         setTemplateThumb(template.templateThumb);
-    }, [template]);
+        if (template.templateThumb && template.templateThumb !== '') {
+            setThumbSrc(`//stg-backoffice.joongang.co.kr${UPLOAD_PATH_URL}/${template.templateThumb}`);
+        } else {
+            setThumbSrc(null);
+        }
+        imgFileRef.current.deleteFile();
+    }, [UPLOAD_PATH_URL, template]);
 
     useEffect(() => {
         // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
@@ -291,7 +299,7 @@ const TemplateEdit = ({ onDelete }) => {
                         </>
                     }
                     labelClassName="justify-content-end mr-3"
-                    inputProps={{ width: 284, height: 280, setFileValue }}
+                    inputProps={{ width: 284, height: 280, img: thumbSrc, alt: templateName, setFileValue }}
                     className="mb-2"
                 />
                 {/* 설명 */}

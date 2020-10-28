@@ -77,7 +77,6 @@ const PageEdit = () => {
     }, [dispatch, pageSeq]);
 
     useEffect(() => {
-        debugger;
         // 스토어에서 가져온 템플릿 데이터 셋팅
         setPageName(page.pageName);
         setPageServiceName(page.pageServiceName);
@@ -139,7 +138,6 @@ const PageEdit = () => {
      * 각 항목별 값 변경
      */
     const handleChangeValue = ({ target }) => {
-        debugger;
         const { name, value, checked } = target;
 
         if (name === 'useYn') {

@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.menu.controller;
 
 import io.swagger.annotations.ApiOperation;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
@@ -291,10 +292,9 @@ public class MenuRestController {
                             menuService.updateMenu(menu);
                         }));
             }
-
-            menuList.sort((o1, o2) -> {
-                return o1.getMenuOrder() - o2.getMenuOrder();
-            });
+            if (menuList != null) {
+                menuList.sort(Comparator.comparingInt(Menu::getMenuOrder));
+            }
 
             // 결과리턴
             List<MenuDTO> resultList = modelMapper.map(menuList, MenuDTO.TYPE);
@@ -503,5 +503,41 @@ public class MenuRestController {
         }
     }
 
+    /**
+     * 삭제
+     *
+     * @param request 요청
+     * @param menuId  삭제 할 메뉴아이디 (필수)
+     * @return 삭제성공여부
+     * @throws InvalidDataException 데이타유효성오류
+     * @throws NoDataException      삭제 할 메뉴 없음
+     * @throws Exception            그 외 에러처리
+     */
+    @ApiOperation(value = "메뉴 권한 존재 여부")
+    @DeleteMapping("/{menuId}/exist-auth")
+    public ResponseEntity<?> existAuth(HttpServletRequest request,
+            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId)
+            throws InvalidDataException, NoDataException, Exception {
+
+
+        // 메뉴 데이터 조회
+        String noContentMessage = messageByLocale.get("tps.menu.error.no-data", request);
+        menuService
+                .findMenuById(menuId)
+                .orElseThrow(() -> new NoDataException(noContentMessage));
+
+        try {
+            boolean exists = menuService.isUsedGroupOrMember(menuId);
+            // 결과리턴
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, exists ? messageByLocale.get("tps.menu.error.delete.related", request) : null);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO SELECT MENU] menuId: {}) {}", menuId, e.getMessage());
+            // 액션 로그에 에러 로그 출력
+            tpsLogger.error(e);
+            throw new Exception(messageByLocale.get("tps.common.error", request), e);
+        }
+    }
 
 }

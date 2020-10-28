@@ -13,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * <pre>
@@ -104,7 +102,7 @@ public class TpsLogger {
      * @param isEditLogWrite 편집 로그 출력 여부
      */
     public void success(ActionType actionType, boolean isEditLogWrite) {
-        success(actionType, null, false);
+        success(actionType, null, isEditLogWrite);
     }
 
     /**
@@ -317,9 +315,7 @@ public class TpsLogger {
                 .getAuthentication();
         String memberId = auth != null ? (String) auth.getPrincipal() : MokaConstants.USER_UNKNOWN;
 
-        HttpServletRequest req = RequestContextHolder.getRequestAttributes() != null
-                ? ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
-                : null;
+        HttpServletRequest req = HttpHelper.getRequest();
         if (actionType == null && req != null) {
             actionType = getAction(req.getMethod());
         }

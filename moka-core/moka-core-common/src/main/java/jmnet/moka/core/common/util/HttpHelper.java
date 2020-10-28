@@ -137,9 +137,18 @@ public class HttpHelper {
      * @return client ip
      */
     public static String getRemoteAddr() {
-        HttpServletRequest req = RequestContextHolder.getRequestAttributes() != null
+        HttpServletRequest req = getRequest();
+        return req != null ? getRemoteAddr(req) : MokaConstants.IP_UNKNOWN;
+    }
+
+    /**
+     * RequestContextHolder를 통해 HttpServletRequest를 얻어낸다.
+     *
+     * @return HttpServletRequest
+     */
+    public static HttpServletRequest getRequest() {
+        return RequestContextHolder.getRequestAttributes() != null
                 ? ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
                 : null;
-        return req != null ? getRemoteAddr(req) : MokaConstants.IP_UNKNOWN;
     }
 }

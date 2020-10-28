@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.RegAudit;
@@ -35,6 +36,7 @@ public class EditFormHist extends RegAudit {
     @Column(name = "EDIT_FORM_SEQ", nullable = false)
     private Long editFormSeq;
 
+    @Lob
     @Column(name = "FORM_DATA", nullable = false)
     private String formData;
 

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
@@ -51,7 +52,15 @@ public class EditForm extends BaseAudit implements Serializable {
     /**
      * Edit Form Data
      */
+    @Lob
     @Column(name = "FORM_DATA", nullable = false)
     private String formData;
+
+    /**
+     * 사용여부(Y:사용, N:미사용)
+     */
+    @Column(name = "USED_YN")
+    @Builder.Default
+    private String usedYn = "Y";
 
 }

@@ -21,22 +21,22 @@ import org.springframework.data.domain.Page;
 public interface EditFormService {
 
     /**
-     * 도메인목록조회
+     * 편집 폼목록조회
      *
      * @param search 검색조건
-     * @return 도메인목록
+     * @return 편집 폼목록
      */
     public Page<EditForm> findAllEditForm(SearchDTO search);
 
     /**
-     * 도메인목록 전체조회(페이징X)
+     * 편집 폼목록 전체조회(페이징X)
      *
-     * @return 도메인목록
+     * @return 편집 폼목록
      */
     public List<EditForm> findAllEditForm();
 
     /**
-     * 도메인 조회
+     * 편집 폼 조회
      *
      * @param editForm 편집폼
      * @return 편집폼정보
@@ -44,17 +44,17 @@ public interface EditFormService {
     public Optional<EditForm> findEditForm(EditForm editForm);
 
     /**
-     * 도메인 추가
+     * 편집 폼 추가
      *
-     * @param editForm 도메인
-     * @return 등록된 도메인
+     * @param editForm 편집 폼
+     * @return 등록된 편집 폼
      * @throws Exception 예외처리
      */
     public EditForm insertEditForm(EditForm editForm)
             throws Exception;
 
     /**
-     * 도메인 수정
+     * 편집 폼 수정
      *
      * @param editForm 수정할 편집폼정보
      * @return 수정된 편집폼정보
@@ -62,36 +62,36 @@ public interface EditFormService {
     public EditForm updateEditForm(EditForm editForm);
 
     /**
-     * 도메인 삭제
+     * 편집 폼 삭제
      *
-     * @param editFormId 도메인아이디
+     * @param editFormId 편집 폼아이디
      * @throws Exception 예외처리
      */
     public void deleteEditFormById(String editFormId)
             throws Exception;
 
     /**
-     * 도메인 삭제
+     * 편집 폼 삭제
      *
-     * @param editForm 도메인
+     * @param editForm 편집 폼
      * @throws Exception 예외처리
      */
     public void deleteEditForm(EditForm editForm)
             throws Exception;
 
     /**
-     * 중복 도메인아이디인지 체크한다
+     * 중복 편집 폼 아이디인지 체크한다
      *
-     * @param editFormId 도메인아이디
+     * @param editForm 폼 정보
      * @return 중복여부
      */
-    public boolean isDuplicatedId(String editFormId);
+    public boolean isDuplicatedId(EditForm editForm);
 
     /**
      * 관련된 정보가 있는지 조사한다.
      *
-     * @param editFormId 도메인아이디
-     * @return 관련아이템 여부
+     * @param editFormSeq 폼 일련번호
+     * @return 사용여부
      */
-    public boolean hasRelations(String editFormId);
+    public boolean isUsedPage(Long editFormSeq);
 }

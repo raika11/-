@@ -40,8 +40,8 @@ function* saveEditForm({ payload: { type, channelId, partId, actions, callback }
         }
 
         // 도메인 데이터
-        const edit = yield select((store) => store.editForm.editForm);
-        const response = type === 'insert' ? yield call(editFormApi.postEditForm, { channelId, partId, edit }) : yield call(editFormApi.putEditForm, { edit });
+        const editForm = yield select((store) => store.editForm.editForm);
+        const response = type === 'insert' ? yield call(editFormApi.postEditForm, { channelId, partId, editForm }) : yield call(editFormApi.putEditForm, { editForm });
         callbackData = response.data;
 
         if (response.data.header.success) {

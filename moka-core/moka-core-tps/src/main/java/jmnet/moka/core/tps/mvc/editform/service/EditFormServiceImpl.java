@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormHist;
 import jmnet.moka.core.tps.mvc.editform.repository.EditFormHistRepository;
 import jmnet.moka.core.tps.mvc.editform.repository.EditFormRepository;
 import org.springframework.data.domain.Page;
@@ -52,11 +53,25 @@ public class EditFormServiceImpl implements EditFormService {
     @Override
     public EditForm insertEditForm(EditForm editForm)
             throws Exception {
-        return null;
+        editForm = editFormRepository.save(editForm);
+        if (editForm.getEditFormSeq() > 0) {
+            editFormHistRepository.save(EditFormHist
+                    .builder()
+                    .editFormSeq(editForm.getEditFormSeq())
+                    .formData(editForm.getFormData())
+                    .build());
+        }
+        return editForm;
     }
 
     @Override
     public EditForm updateEditForm(EditForm editForm) {
+        editForm = editFormRepository.save(editForm);
+        editFormHistRepository.save(EditFormHist
+                .builder()
+                .editFormSeq(editForm.getEditFormSeq())
+                .formData(editForm.getFormData())
+                .build());
         return null;
     }
 
@@ -73,12 +88,15 @@ public class EditFormServiceImpl implements EditFormService {
     }
 
     @Override
-    public boolean isDuplicatedId(String editFormId) {
-        return false;
+    public boolean isDuplicatedId(EditForm editForm) {
+        return editFormRepository
+                .findEditForm(editForm)
+                .isPresent();
     }
 
     @Override
-    public boolean hasRelations(String editFormId) {
+    public boolean isUsedPage(Long editFormSeq) {
         return false;
     }
+
 }

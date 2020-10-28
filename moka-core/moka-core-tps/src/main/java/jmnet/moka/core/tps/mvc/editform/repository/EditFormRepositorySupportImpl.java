@@ -44,7 +44,7 @@ public class EditFormRepositorySupportImpl extends QuerydslRepositorySupport imp
                         .getPartId()
                         .toUpperCase()));
 
-        return Optional.of(query.fetchOne());
+        return Optional.ofNullable(query.fetchFirst());
     }
 
 }

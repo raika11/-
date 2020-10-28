@@ -35,9 +35,10 @@ public class DigitalSpecialHandler extends AbstractHandler {
     @Override
     public HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId) {
         // case-insensitive URI 처리
-        if (pathList.size() == 2 && requestPath.toLowerCase()
-                                               .startsWith(MokaConstants.MERGE_DIGITAL_SPECIAL_PREFIX)) {
-            // 디지털스페셜 처리 : /digitalspecial(case insensitive)/id
+        if (pathList.size() == 2
+                && requestPath.toLowerCase().startsWith(MokaConstants.MERGE_DIGITAL_SPECIAL_PREFIX)
+                && !pathList.get(1).equals("list")) {
+            // 디지털스페셜 처리 : /digitalspecial(case insensitive)/id, list는 제외
             String digitalSpecialId = pathList.get(1);
             // 머지 옵션설정
             MergeContext mergeContext = new MergeContext();

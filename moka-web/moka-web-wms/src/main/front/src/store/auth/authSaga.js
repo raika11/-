@@ -12,11 +12,11 @@ import * as authAction from './authAction';
 export function* loginJwtSaga({ payload }) {
     try {
         const response = yield call(api.loginJwt, payload);
-        const { headers, data } = response;
+        const { headers } = response;
 
         if (headers.authorization) {
-            setLocalItem({ key: 'Authorization', value: headers.authorization });
-            window.location.reload();
+            yield call(setLocalItem, { key: 'Authorization', value: headers.authorization });
+            yield call(window.location.reload());
         } else {
             // 인증없음
         }
@@ -26,28 +26,16 @@ export function* loginJwtSaga({ payload }) {
 /**
  * 로그아웃
  */
-export function* logoutSaga() {
-    let message = {};
-    message.key = 'logout';
-    message.options = { variant: 'error', persist: true };
-
+export function* logout() {
     try {
         const response = yield call(api.logout);
         const { data } = response;
 
         if (data.header.success) {
-            message.message = '로그아웃하였습니다';
-            message.options = { variant: 'success' };
-            message.callback = () => {
-                window.location.href = '/';
-            };
-            setLocalItem({ key: 'Authorization', value: undefined });
-        } else {
-            message.message = data.header.message;
+            yield call(setLocalItem, { key: 'Authorization', value: undefined });
+            yield call(window.location.reload());
         }
-    } catch (err) {
-        message.message = '서버 에러';
-    }
+    } catch (err) {}
 }
 
 /**
@@ -148,7 +136,7 @@ export function* getDomainList({ payload: domainId }) {
  */
 export default function* authSaga() {
     yield takeLatest(authAction.LOGIN_JWT, loginJwtSaga);
-    yield takeLatest(authAction.LOGOUT, logoutSaga);
+    yield takeLatest(authAction.LOGOUT, logout);
     yield takeLatest(authAction.GET_MENU, getMenuSaga);
     yield takeLatest(authAction.GET_DOMAIN_LIST, getDomainList);
 }

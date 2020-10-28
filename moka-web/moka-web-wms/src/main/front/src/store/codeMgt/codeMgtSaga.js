@@ -1,9 +1,20 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
+import { callApiAfterActions } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { CODETYPE_LANG, CODETYPE_SERVICE_TYPE, CODETYPE_PAGE_TYPE, CODETYPE_TP_SIZE, CODETYPE_TP_ZONE, CODETYPE_API } from '@/constants';
 
 import * as api from './codeMgtApi';
 import * as act from './codeMgtAction';
+
+/**
+ * 코드 그룹 목록 조회
+ */
+export const getCodeMgtGrpList = callApiAfterActions(act.GET_CODE_MGT_GRP_LIST, api.getCodeMgtGrpList, (store) => store.codeMgt);
+
+/**
+ * 코드 목록 조회
+ */
+export const getCodeMgtList = callApiAfterActions(act.GET_CODE_MGT_LIST, api.getCodeMgtList, (store) => store.codeMgt);
 
 /**
  * 조회용 데이터 사가 생성함수
@@ -48,6 +59,8 @@ export const getApi = createReadOnlySaga(act.GET_API, 'apiRows', CODETYPE_API);
 
 /** saga */
 export default function* codeMgt() {
+    yield takeLatest(act.GET_CODE_MGT_GRP_LIST, getCodeMgtGrpList);
+    yield takeLatest(act.GET_CODE_MGT_LIST, getCodeMgtList);
     yield takeLatest(act.GET_TP_SIZE, getTpSize);
     yield takeLatest(act.GET_TP_ZONE, getTpZone);
     yield takeLatest(act.GET_LANG, getLang);

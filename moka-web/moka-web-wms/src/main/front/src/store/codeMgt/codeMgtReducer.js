@@ -6,7 +6,7 @@ import { PAGESIZE_OPTIONS } from '@/constants';
 /**
  * initialState
  */
-const initialState = {
+export const initialState = {
     // 코드 그룹 검색 조건
     grpSearch: {
         page: 0,
@@ -42,38 +42,32 @@ export default handleActions(
         /**
          * 검색조건 변경
          */
-        [act.CHANGE_SEARCH_GRP_OPTION]: (state, { payload: { key, value } }) => {
+        [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.grpSearch[key] = value;
-            });
-        },
-        [act.CHANGE_SEARCH_GRP_OPTIONS]: (state, { payload: arr }) => {
-            return produce(state, (draft) => {
-                for (let idx = 0; idx < arr.length; idx++) {
-                    let obj = arr[idx];
-                    draft.grpSearch[obj.key] = obj.value;
-                }
-            });
-        },
-        [act.CHANGE_SEARCH_CD_OPTION]: (state, { payload: { key, value } }) => {
-            return produce(state, (draft) => {
-                draft.cdSearch[key] = value;
-            });
-        },
-        [act.CHANGE_SEARCH_CD_OPTIONS]: (state, { payload: arr }) => {
-            return produce(state, (draft) => {
-                for (let idx = 0; idx < arr.length; idx++) {
-                    let obj = arr[idx];
-                    draft.cdSearch[obj.key] = obj.value;
-                }
+                draft.grpSearch = payload;
+                draft.cdSearch = payload;
             });
         },
         /**
          * 데이터 조회
          */
-        [act.GET_CODE_MGT_LIST_SUCCESS]: (state, { payload: body }) => {
+        [act.GET_CODE_MGT_GRP_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.cdList = body.cdList;
+                draft.grpList = body.list;
+                draft.grpTotal = body.totalCnt;
+                draft.grpError = initialState.grpError;
+            });
+        },
+        [act.GET_CODE_MGT_GRP_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.grpList = initialState.grpList;
+                draft.grpTotal = initialState.grpTotal;
+                draft.grpError = payload;
+            });
+        },
+        [act.GET_CODE_MGT_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.cdList = body.list;
                 draft.cdTotal = body.totalCnt;
                 draft.cdError = initialState.cdError;
             });

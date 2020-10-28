@@ -81,7 +81,6 @@ export function* deleteReserved({ payload: { reservedSet, callback } }) {
 
     yield put(startLoading(ACTION));
     try {
-        debugger;
         const response = yield call(reservedAPI.deleteReserved, reservedSet.reservedSeq);
         callbackData = response.data;
 

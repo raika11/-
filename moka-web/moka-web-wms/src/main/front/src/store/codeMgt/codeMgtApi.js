@@ -9,17 +9,17 @@ export const getCodeMgtGrpList = ({ grpSearch }) => {
     });
 };
 
-// 코드 목록 조회(페이징 없음)
-export const getUseCodeMgtList = (grpCd) => {
-    return instance.get(`/api/codeMgtGrps/${grpCd}/useCodeMgts`).catch((err) => {
-        throw err;
-    });
-};
-
 // 코드 목록 조회
 export const getCodeMgtList = ({ cdSearch }) => {
     const queryString = qs.stringify(cdSearch);
     return instance.get(`/api/codeMgtGrps/${cdSearch.grpCd}/codeMgts?${queryString}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 코드 목록 조회(페이징 없음)
+export const getUseCodeMgtList = (grpCd) => {
+    return instance.get(`/api/codeMgtGrps/${grpCd}/codeMgts`).catch((err) => {
         throw err;
     });
 };

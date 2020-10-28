@@ -4,14 +4,8 @@ import { createRequestActionTypes } from '@store/commons/saga';
 /**
  * 검색조건 변경 액션
  */
-export const CHANGE_SEARCH_GRP_OPTION = 'codeMgt/CHANGE_SEARCH_GRP_OPTION';
-export const CHANGE_SEARCH_GRP_OPTIONS = 'codeMgt/CHANGE_SEARCH_GRP_OPTIONS';
-export const changeSearchGrpOption = createAction(CHANGE_SEARCH_GRP_OPTION, ({ key, value }) => ({ key, value }));
-export const changeSearchGrpOptions = createAction(CHANGE_SEARCH_GRP_OPTIONS, (payload) => payload);
-export const CHANGE_SEARCH_CD_OPTION = 'codeMgt/CHANGE_SEARCH_CD_OPTION';
-export const CHANGE_SEARCH_CD_OPTIONS = 'codeMgt/CHANGE_SEARCH_CD_OPTIONS';
-export const changeSearchCdOption = createAction(CHANGE_SEARCH_CD_OPTION, ({ key, value }) => ({ key, value }));
-export const changeSearhCdOptions = createAction(CHANGE_SEARCH_CD_OPTIONS, (payload) => payload);
+export const CHANGE_SEARCH_OPTION = 'codeMgt/CHANGE_SEARCH_GRP_OPTION';
+export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
 
 /**
  * 스토어 데이터 삭제 액션
@@ -24,8 +18,8 @@ export const clearCodeMgt = createAction(CLEAR_CODE_MGT, (payload) => payload);
  */
 export const [GET_CODE_MGT_GRP_LIST, GET_CODE_MGT_GRP_LIST_SUCCESS, GET_CODE_MGT_GRP_LIST_FAILURE] = createRequestActionTypes('codeMgt/GET_CODE_MGT_GRP_LIST');
 export const [GET_CODE_MGT_LIST, GET_CODE_MGT_LIST_SUCCESS, GET_CODE_MGT_LIST_FAILURE] = createRequestActionTypes('codeMgt/GET_CODE_MGT_LIST');
-export const getCodeMgtGrpList = createAction(GET_CODE_MGT_GRP_LIST, (payload) => payload);
-export const getCodeMgtList = createAction(GET_CODE_MGT_LIST, (payload) => payload);
+export const getCodeMgtGrpList = createAction(GET_CODE_MGT_GRP_LIST, (...actions) => actions);
+export const getCodeMgtList = createAction(GET_CODE_MGT_LIST, (...actions) => actions);
 
 /**
  * 조회용 데이터 액션

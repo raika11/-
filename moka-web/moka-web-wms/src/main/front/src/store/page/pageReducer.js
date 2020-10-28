@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './pageAction';
+import { PAGE_TYPE_HTML } from '@/constants';
 
 /**
  * initialState
@@ -13,7 +14,33 @@ export const initialState = {
         searchType: 'all',
         keyword: '',
     },
-    page: {},
+    page: {
+        pageSeq: null,
+        domain: {
+            domainId: null,
+            domainName: null,
+            domainAddress: null,
+        },
+        pageName: null,
+        pageServiceName: null,
+        pageDisplayName: null,
+        parent: {
+            pageSeq: null,
+            pageName: null,
+            pageUrl: null,
+        },
+        pageType: PAGE_TYPE_HTML,
+        pageUrl: null,
+        pageOrd: 1,
+        pageBody: '',
+        urlParam: '',
+        useYn: 'Y',
+        fileYn: 'N',
+        kwd: null,
+        description: null,
+        moveYn: 'N',
+        moveUrl: null,
+    },
     pageError: null,
     pageBody: '',
     inputTag: '',
@@ -103,6 +130,22 @@ export default handleActions(
                 draft.invalidList = payload;
             });
         },
+        // 트리에서 서브 페이지 추가
+        [act.INSERT_SUB_PAGE]: (state, { payload: { parent, latestDomainId } }) => ({
+            ...state,
+            page: {
+                ...initialState.page,
+                domain: {
+                    ...initialState.page.domain,
+                    domainId: latestDomainId,
+                },
+                parent: {
+                    ...parent,
+                },
+                pageUrl: parent ? parent.pageUrl : null,
+            },
+            pageError: null,
+        }),
         /**
          * 데이터 삭제
          */

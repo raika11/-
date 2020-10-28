@@ -66,6 +66,7 @@ public class AppRestController {
                                                .add("DISP_PAGE_COUNT", TpsConstants.DISP_PAGE_COUNT) // 표출 페이지수
                                                .add("MORE_COUNT", TpsConstants.MORE_COUNT) // 더보기 건수
                                                .add("EXCLUDE_PAGE_SERVICE_NAME_LIST", excludePageServiceName)      // 페이지서비스명 제외명칭
+                                               .add("PAGE_TYPE_HTML", TpsConstants.PAGE_TYPE_HTML)      // 페이지 기본타입
                                                .getMap();
 
 

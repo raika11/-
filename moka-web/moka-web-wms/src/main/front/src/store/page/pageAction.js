@@ -42,6 +42,15 @@ export const changePage = createAction(CHANGE_PAGE, (page) => page);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 /**
+ * 트리에서 서브 페이지 추가
+ */
+export const INSERT_SUB_PAGE = 'page/INSERT_SUB_PAGE';
+export const insertSubPage = createAction(INSERT_SUB_PAGE, ({ parent, latestDomainId }) => ({
+    parent,
+    latestDomainId,
+}));
+
+/**
  * 저장
  */
 export const SAVE_PAGE = 'page/SAVE_PAGE';

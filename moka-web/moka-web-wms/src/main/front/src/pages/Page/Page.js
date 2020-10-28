@@ -1,12 +1,15 @@
 import React, { useState, Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import produce from 'immer';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 
-import { MokaCardEditor, MokaCard, MokaIcon } from '@components';
+import { MokaCard, MokaIcon } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { MokaIconTabs } from '@/components/MokaTabs';
+import { clearStore, clearHistory, clearRelationList } from '@store/page';
 
+import PageEditor from './PageEditor';
 const PageList = React.lazy(() => import('./PageList'));
 const PageEdit = React.lazy(() => import('./PageEdit'));
 
@@ -23,6 +26,7 @@ const PageHistoryList = React.lazy(() => import('./relations/PageHistoryList'));
  * 페이지 관리
  */
 const Page = () => {
+    const dispatch = useDispatch();
     const [expansionState, setExpansionState] = useState([true, false, true]);
 
     /**
@@ -71,6 +75,14 @@ const Page = () => {
         );
     };
 
+    React.useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+            dispatch(clearRelationList());
+            dispatch(clearHistory());
+        };
+    }, [dispatch]);
+
     return (
         <div className="d-flex">
             <Helmet>
@@ -102,13 +114,7 @@ const Page = () => {
                     render={() => (
                         <>
                             {/* 에디터 */}
-                            <MokaCardEditor
-                                className="mr-10 flex-fill"
-                                title="에디터 영역"
-                                height={CARD_DEFAULT_HEIGHT}
-                                expansion={expansionState[1]}
-                                onExpansion={handleEditorExpansion}
-                            />
+                            <PageEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
                             {/* 탭 */}
                             <MokaIconTabs

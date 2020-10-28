@@ -13,46 +13,8 @@ const getPageTree = callApiAfterActions(act.GET_PAGE_TREE, api.getPageTree, (sto
 /**
  * 페이지 조회
  */
-function* getPage({ payload: { pageSeq, callback } }) {
-    const ACTION = act.GET_PAGE;
-    let response, callbackData;
-
-    yield put(startLoading(ACTION));
-    try {
-        response = yield call(api.getPage, { pageSeq });
-        
-        if (response.data.header.success) {
-            callbackData = response.data;
-
-            // 성공 액션 실행
-            yield put({
-                type: act.GET_PAGE_SUCCESS,
-                payload: response.data,
-            });
-        } else {
-            callbackData = response.data;
-
-            // 실패 액션 실행
-            yield put({
-                type: act.GET_PAGE_FAILURE,
-                payload: response.data,
-            });
-        }
-    } catch (e) {
-        callbackData = errorResponse(e);
-
-        // 실패 액션 실행
-        yield put({
-            type: act.GET_PAGE_FAILURE,
-            payload: callbackData,
-        });
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-    yield put(finishLoading(ACTION));
-}
+// const getPage = ({ payload: { param, callback } }) => callApiWithParam(act.GET_PAGE, api.getPage, param, callback);
+const getPage = createRequestSaga(act.GET_PAGE, api.getPage);
 
 /**
  * 저장

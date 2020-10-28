@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 import { toastr } from 'react-redux-toastr';
 
-import { GET_PAGE_TREE, getPageTree, changeSearchOption, getPage } from '@store/page/pageAction';
+import { GET_PAGE_TREE, getPageTree, changeSearchOption, getPage, insertSubPage } from '@store/page/pageAction';
 
 import { MokaTreeView, MokaIcon } from '@components';
 
@@ -19,10 +19,11 @@ const PageTree = () => {
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState([]);
 
-    const { tree, search, loading, page } = useSelector((store) => ({
+    const { tree, search, loading, latestDomainId, page } = useSelector((store) => ({
         tree: store.page.tree,
         search: store.page.search,
         loading: store.loading[GET_PAGE_TREE],
+        latestDomainId: store.auth.latestDomainId,
         page: store.page.page,
     }));
 
@@ -33,18 +34,50 @@ const PageTree = () => {
                 setSelected(String(tree.pageSeq));
             }
         }
-    }, [tree]);
+    }, [expanded.length, selected, tree]);
 
-    const handleClick = useCallback((tree) => {
-        const option = {
-            pageSeq: tree.pageSeq,
-            callback: (result) => {
-                history.push(`/page/${tree.pageSeq}`);
-            }
+    /**
+     * 트리 클릭. 페이지 수정창 로드
+     * @param {*} item
+     */
+    const handleClick = useCallback(
+        (item) => {
+            const option = {
+                pageSeq: item.pageSeq,
+                callback: (result) => {
+                    if (result.header.success) {
+                        setSelected(String(item.pageSeq));
+                        history.push(`/page/${item.pageSeq}`);
+                    }
+                },
+            };
+            dispatch(getPage(option));
+        },
+        [dispatch, history],
+    );
+
+    /**
+     * 트리에서 추가버튼 클릭.
+     * @param {*} item
+     */
+    const handleInsertSub = (item) => {
+        const parent = {
+            pageSeq: item.pageSeq,
+            pageName: item.pageName,
+            pageUrl: item.pageUrl,
         };
-        setSelected(String(tree.pageSeq));
-        dispatch(getPage(option));
-    });
+        setSelected([String(item.pageSeq)]);
+        dispatch(insertSubPage({ parent, latestDomainId }));
+        history.push('/page');
+    };
+
+    /**
+     * 트리에서 삭제버튼 클릭.
+     * @param {*} tree
+     */
+    const handelDelete = (tree) => {
+        toastr.success('- 아이콘 클릭', tree.pageName);
+    };
 
     return (
         <MokaTreeView
@@ -69,16 +102,12 @@ const PageTree = () => {
             labelHoverButtons={[
                 {
                     icon: <MokaIcon iconName="fal-plus" />,
-                    onClick: (tree) => {
-                        toastr.warning('+ 아이콘 클릭', tree.pageName);
-                    },
+                    onClick: handleInsertSub,
                     variant: 'warning',
                 },
                 {
                     icon: <MokaIcon iconName="fal-minus" />,
-                    onClick: (tree) => {
-                        toastr.success('- 아이콘 클릭', tree.pageName);
-                    },
+                    onClick: handelDelete,
                     variant: 'warning',
                 },
             ]}

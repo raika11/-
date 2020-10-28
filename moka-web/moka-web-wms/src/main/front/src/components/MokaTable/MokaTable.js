@@ -170,17 +170,27 @@ const MokaTable = (props) => {
      * ag-grid가 화면에 그릴 row data가 변경되었을 때 실행된다.
      * (selected 값이 있을 때 select함)
      */
+    const handleSelected = useCallback(() => {
+        if (gridApi) {
+            gridApi.deselectAll();
+        }
+        if (selected && gridApi) {
+            const selectedNode = gridApi.getRowNode(selected);
+            if (selectedNode) {
+                selectedNode.selectThisNode(true);
+            }
+        }
+    }, [selected, gridApi]);
+
     const handleRowDataUpdated = useCallback(() => {
         setTimeout(function () {
-            if (selected && gridApi) {
-                const selectedNode = gridApi.getRowNode(selected);
-                if (selectedNode) {
-                    gridApi.deselectAll();
-                    selectedNode.selectThisNode(true);
-                }
-            }
+            handleSelected();
         });
-    }, [selected, gridApi]);
+    }, [handleSelected]);
+
+    useEffect(() => {
+        handleSelected();
+    }, [handleSelected]);
 
     return (
         <>
@@ -201,7 +211,6 @@ const MokaTable = (props) => {
                     onRowDragMove={handleRowDragMove}
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
-                    selected={selected}
                     defaultColDef={
                         {
                             // tooltipComponent: 'mokaTooltip',

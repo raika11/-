@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import copy from 'copy-to-clipboard';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { MokaCard, MokaInputLabel, MokaIcon, MokaInput, MokaInputGroup } from '@components';
+import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
 import { changeTemplate, saveTemplate, hasRelationList, changeInvalidList, deleteTemplate } from '@store/template';
 import { notification, toastr } from '@utils/toastUtil';
@@ -303,17 +302,7 @@ const TemplateEdit = () => {
                     inputProps={{ rows: 2 }}
                     className="mb-2"
                     disabled
-                    append={
-                        <Button
-                            variant="dark"
-                            onClick={() => {
-                                copy(inputTag);
-                                notification('success', '태그를 복사하였습니다');
-                            }}
-                        >
-                            <MokaIcon iconName="fal-copy" />
-                        </Button>
-                    }
+                    append={<MokaCopyTextButton copyText={inputTag} />}
                 />
                 {/* 대표이미지 */}
                 <MokaInputLabel

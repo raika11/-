@@ -5,6 +5,14 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 const propTypes = {
     /**
+     * 이미지 Card width
+     */
+    cardWidth: PropTypes.number,
+    /**
+     * 이미지 Card height
+     */
+    cardHeight: PropTypes.number,
+    /**
      * 리스트 데이터
      */
     rowData: PropTypes.arrayOf(
@@ -71,13 +79,15 @@ const defaultProps = {
     displayPageNum: DISPLAY_PAGE_NUM,
     onChangeSearchOption: null,
     paging: true,
+    cardWidth: 174,
+    cardHeight: 192,
 };
 
 /**
  * 썸네일 테이블
  */
 const MokaThumbTable = (props) => {
-    const { tableHeight, onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, menus, rowData, selected } = props;
+    const { cardWidth, cardHeight, tableHeight, onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, menus, rowData, selected } = props;
 
     return (
         <>
@@ -87,8 +97,8 @@ const MokaThumbTable = (props) => {
                         <MokaTemplateThumbCard
                             key={data.id}
                             data={data}
-                            width={174}
-                            height={192}
+                            width={cardWidth}
+                            height={cardHeight}
                             img={data.thumb}
                             alt={data.name}
                             menus={menus}

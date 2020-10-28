@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
 
 const BasicForm = (props) => {
-    const { componentSeq, componentName, description, setComponentName, setDescription, onClickSave, onClickCopy, onClickDelete } = props;
+    const { componentSeq, componentName, description, setComponentName, setDescription, onClickSave, onClickCopy, onClickDelete, invalidList } = props;
+    const [componentNameError, setComponentNameError] = useState(false);
+
+    useEffect(() => {
+        // invalidList 처리
+        if (invalidList.length > 0) {
+            invalidList.forEach((i) => {
+                if (i.field === 'componentName') {
+                    setComponentNameError(true);
+                }
+            });
+        }
+    }, [invalidList]);
 
     return (
         <Form>
@@ -41,6 +53,7 @@ const BasicForm = (props) => {
                         onChange={(e) => {
                             setComponentName(e.target.value);
                         }}
+                        isInvalid={componentNameError}
                         required
                     />
                 </Col>

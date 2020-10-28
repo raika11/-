@@ -11,6 +11,7 @@ import { MokaModal, MokaInput, MokaSearchInput, MokaIcon, MokaTable, MokaThumbTa
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
+import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
 export const defaultTemplateSearchType = [
     { id: 'all', name: '전체' },
@@ -75,12 +76,18 @@ const TemplateListModal = (props) => {
         };
     }, [dispatch]);
 
-    const onClickSaveTrigger = () => {
+    /**
+     * 등록 버튼 클릭
+     */
+    const handleClickSave = () => {
         if (onClickSave) onClickSave(selectedTemplate);
         onHide();
     };
 
-    const onClickCancleTrigger = () => {
+    /**
+     * 취소 버튼 클릭
+     */
+    const handleClickCancle = () => {
         if (onClickCancle) onClickCancle();
         onHide();
     };
@@ -177,6 +184,7 @@ const TemplateListModal = (props) => {
             changeSearchOption({
                 ...search,
                 domainId: latestDomainId,
+                size: MODAL_PAGESIZE_OPTIONS[0],
                 page: 0,
             }),
         );
@@ -211,10 +219,10 @@ const TemplateListModal = (props) => {
             title="템플릿 검색"
             size="md"
             buttons={[
-                { text: '등록', onClick: onClickSaveTrigger },
-                { text: '취소', variant: 'gray150', onClick: onClickCancleTrigger },
+                { text: '등록', onClick: handleClickSave },
+                { text: '취소', variant: 'gray150', onClick: handleClickCancle },
             ]}
-            footerClassName="align-items-center"
+            footerClassName="justify-content-center"
             draggable
         >
             <Form>
@@ -298,7 +306,7 @@ const TemplateListModal = (props) => {
                         </MokaInput>
                     </Col>
                     {/* 키워드 */}
-                    <Col xs={6} className="p-0 pr-2">
+                    <Col xs={6} className="p-0">
                         <MokaSearchInput
                             value={search.keyword}
                             onChange={(e) => {
@@ -313,7 +321,7 @@ const TemplateListModal = (props) => {
                         />
                     </Col>
                     {/* 버튼 그룹 */}
-                    <Col xs={2} className="p-0">
+                    <Col xs={2} className="p-0 pl-2">
                         <Nav
                             as={ButtonGroup}
                             size="sm"
@@ -349,10 +357,12 @@ const TemplateListModal = (props) => {
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
                     selected={selected}
+                    pageSizes={MODAL_PAGESIZE_OPTIONS}
                 />
             )}
             {listType === 'thumbnail' && (
                 <MokaThumbTable
+                    cardWidth={182}
                     tableHeight={501}
                     rowData={rowData}
                     loading={loading}
@@ -362,6 +372,7 @@ const TemplateListModal = (props) => {
                     onChangeSearchOption={handleChangeSearchOption}
                     onClick={handleRowClicked}
                     selected={selected}
+                    pageSizes={MODAL_PAGESIZE_OPTIONS}
                 />
             )}
         </MokaModal>

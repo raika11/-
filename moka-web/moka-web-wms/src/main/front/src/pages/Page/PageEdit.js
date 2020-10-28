@@ -8,15 +8,21 @@ import Button from 'react-bootstrap/Button';
 import { MokaSearchInput, MokaCard, MokaInput, MokaInputLabel } from '@components';
 import MovePageListModal from './modals/MovePageListModal';
 import { getPageType } from '@store/codeMgt';
-import { initialState, changePage, savePage, hasRelationList, changeInvalidList, deletePage } from '@store/page';
+import { initialState, getPage, changePage, savePage, hasRelationList, changeInvalidList, deletePage } from '@store/page';
 import { notification, toastr } from '@utils/toastUtil';
 
 const PageEdit = () => {
-    const { pageSeq } = useParams();
+    const { pageSeq: paramPageSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
     const { page, pageTypeRows, latestDomainId, invalidList } = useSelector((store) => ({
         page: store.page.page,
+        pageError: store.page.pageError,
+        loading:
+            store.loading['page/GET_PAGE'] ||
+            store.loading['page/POST_PAGE'] ||
+            store.loading['page/PUT_PAGE'] ||
+            store.loading['page/DELETE_PAGE'],
         pageTypeRows: store.codeMgt.pageTypeRows,
         latestDomainId: store.auth.latestDomainId,
         invalidList: store.page.invalidList,
@@ -63,24 +69,39 @@ const PageEdit = () => {
     }, [pageType, pageTypeRows]);
 
     useEffect(() => {
-        // 코드 조회
-        dispatch(getPageType());
+        if (!pageTypeRows || pageTypeRows.length <= 0) {
+            dispatch(getPageType());
+        }
+
+        // url로 다이렉트로 페이지 조회하는 경우
+        if (paramPageSeq && paramPageSeq !== page.pageSeq) {
+            const option = {
+                pageSeq: paramPageSeq,
+                callback: (result) => {
+                    if (!result.header.success) {
+                        history.push(`/page`);
+                    }
+                }
+            };
+            dispatch(getPage(option));
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        if (pageSeq) {
+        if (paramPageSeq) {
             setBtnDisabled(false);
         } else {
             setBtnDisabled(true);
         }
-    }, [dispatch, pageSeq]);
+    }, [dispatch, paramPageSeq]);
 
     useEffect(() => {
-        // 스토어에서 가져온 템플릿 데이터 셋팅
+        // 스토어에서 가져온 페이지 데이터 셋팅
         setPageName(page.pageName);
         setPageServiceName(page.pageServiceName);
         setPageDisplayName(page.pageDisplayName);
+        setParent(page.parent);
         setPageType(page.pageType);
         setPageUrl(page.pageUrl);
         setPageOrd(page.pageOrd);
@@ -151,6 +172,10 @@ const PageEdit = () => {
                 setPageNameError(true);
             }
         } else if (name === 'pageServiceName') {
+            const url = `${
+                parent.pageUrl === '/' ? '' : parent.pageUrl
+            }/${value}`;
+            setPageUrl(url);
             setPageServiceName(value);
         } else if (name === 'pageType') {
             setPageType(value);
@@ -286,6 +311,7 @@ const PageEdit = () => {
             pageName,
             pageServiceName,
             pageDisplayName,
+            parent,
             pageType,
             pageUrl,
             pageOrd,
@@ -308,7 +334,7 @@ const PageEdit = () => {
     };
 
     /**
-     * 템플릿 삭제
+     * 페이지 삭제
      * @param {object} response response
      */
     const deleteCallback = (response) => {
@@ -371,7 +397,7 @@ const PageEdit = () => {
                 {/* 페이지 ID, URL */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="px-0">
-                        <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={pageSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
+                        <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={paramPageSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
                     <Col xs={6} className="px-0">
                         <MokaInputLabel label="URL" labelWidth={47} className="mb-0" value={pageUrl || ''} inputProps={{ plaintext: true }} />

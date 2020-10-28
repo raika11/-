@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
 
 import { changeLatestDomainId } from '@store/auth';
-import { getPageTree, changeSearchOption, initialState } from '@store/page';
+import { getPageTree, changeSearchOption, initialState, clearPage } from '@store/page';
 
 const defaultSearchType = [
     { id: 'all', name: '전체' },
@@ -50,11 +50,13 @@ const PageSearch = () => {
                 }),
             ),
         );
+        history.push('/page');
     }, [dispatch, search]);
 
     useEffect(() => {
         // latestDomainId 변경 => 템플릿의 search.domainId 변경
         if (latestDomainId && latestDomainId !== search.domainId) {
+            
             dispatch(
                 getPageTree(
                     changeSearchOption({
@@ -66,6 +68,19 @@ const PageSearch = () => {
         }
     }, [dispatch, latestDomainId, search]);
 
+    /**
+     * 도메인 변경. 다른검색조건 초기화(즉시조회)
+     */
+    const handleChangeDomain = useCallback(
+        (e) => {
+            dispatch(changeLatestDomainId(e.target.value));
+
+            dispatch(clearPage());
+            history.push('/page');
+        },
+        [dispatch, history]
+    );
+
     return (
         <Form className="mb-10">
             {/* 도메인 선택 */}
@@ -74,10 +89,7 @@ const PageSearch = () => {
                     as="select"
                     className="w-100"
                     value={search.domainId || undefined}
-                    onChange={(e) => {
-                        dispatch(changeLatestDomainId(e.target.value));
-                        history.push('/page');
-                    }}
+                    onChange={handleChangeDomain}
                 >
                     {domainList.map((domain) => (
                         <option key={domain.domainId} value={domain.domainId}>

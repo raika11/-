@@ -7,27 +7,25 @@ import { changePageBody, getPage, clearPage, clearHistory, clearRelationList } f
 
 const PageEditor = (props) => {
     const { expansion, onExpansion } = props;
-    const { pageSeq } = useParams();
+    const { pageSeq: paramPageSeq } = useParams();
     const dispatch = useDispatch();
-    const { pageBody, page, latestDomainId } = useSelector((store) => ({
+    const { pageBody, page, latestDomainId, error, loading, tag } = useSelector((store) => ({
         pageBody: store.page.pageBody,
         page: store.page.page,
         latestDomainId: store.auth.latestDomainId,
+        error: store.page.pageError,
+        loading:  store.loading['page/GET_PAGE'],
+        tag: store.page.tag
     }));
 
     // state
     const [title, setTitle] = useState('페이지 편집');
+    const [errorObj, setErrorObj] = useState({});
 
     /**
-     * onBlur
-     * @param {string} value 에디터 내용
+     * 타이틀 변경
      */
-    const handleBlur = (value) => {
-        dispatch(changePageBody(value));
-    };
-
     useEffect(() => {
-        // 타이틀 변경
         if (page.pageSeq) {
             setTitle(`페이지 편집(${page.pageSeq}_${page.pageName})`);
         } else {
@@ -39,7 +37,7 @@ const PageEditor = (props) => {
         // 페이지의 도메인ID를 latestDomainId에 저장
         if (Object.prototype.hasOwnProperty.call(page, 'domain')) {
             const domainId = page.domain.domainId;
-            if (latestDomainId !== domainId) {
+            if (domainId && latestDomainId !== domainId) {
                 dispatch(changeLatestDomainId(domainId));
             }
         }
@@ -48,16 +46,56 @@ const PageEditor = (props) => {
 
     useEffect(() => {
         // 페이지seq가 있을 때 데이터 조회
-        if (pageSeq) {
-            dispatch(getPage({ pageSeq: pageSeq }));
+        if (paramPageSeq) {
+            dispatch(getPage({ pageSeq: paramPageSeq }));
         } else {
             dispatch(clearPage());
             dispatch(clearRelationList());
             dispatch(clearHistory());
         }
-    }, [dispatch, pageSeq]);
+    }, [dispatch, paramPageSeq]);
 
-    return <MokaCardEditor className="mr-10 flex-fill" title={title} expansion={expansion} onExpansion={onExpansion} defaultValue={pageBody} onBlur={handleBlur} />;
+    useEffect(() => {
+        let bodyError = 0;
+        if (error && error.body && Array.isArray(error.body.list)) {
+            error.body.list.forEach((e) => {
+                const { field, reason, extra } = e;
+                if (field === 'pageBody') {
+                    setErrorObj({
+                        error: true,
+                        message: reason,
+                        line: Number(extra)
+                    });
+                    bodyError++;
+                }
+            });
+        }
+        if (bodyError < 1) setErrorObj({});
+    }, [error]);
+
+    /**
+     * onBlur
+     * @param {string} value 에디터 내용
+     */
+    const handleBlur = (value) => {
+        dispatch(changePageBody(value));
+    };
+
+    return (
+        <MokaCardEditor 
+            className="mr-10 flex-fill"
+            title={title} 
+            expansion={expansion}
+            onExpansion={onExpansion}
+            defaultValue={pageBody}
+            onBlur={handleBlur}
+            loading={loading}
+            tag={tag}
+            error={errorObj.error}
+            errorline={errorObj.line}
+            errorMessage={errorObj.message}
+        />
+    );
 };
 
 export default PageEditor;

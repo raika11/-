@@ -385,10 +385,10 @@ const DomainEdit = ({ history, onDelete }) => {
                             as="radio"
                             inputProps={{
                                 custom: true,
-                                id: 'domain-pc',
                                 label: 'PC',
                                 checked: servicePlatform === 'P' && true,
                             }}
+                            id="domain-pc"
                             name="servicePlatform"
                             onChange={handleChangeValue}
                             value="P"
@@ -398,7 +398,8 @@ const DomainEdit = ({ history, onDelete }) => {
                     </Col>
                     <Col xs={1} className="p-0 mr-10">
                         <MokaInput
-                            inputProps={{ custom: true, label: 'Mobile', id: 'domain-mobile', checked: servicePlatform === 'M' && true }}
+                            inputProps={{ custom: true, label: 'Mobile', checked: servicePlatform === 'M' && true }}
+                            id="domain-mobile"
                             as="radio"
                             value="M"
                             name="servicePlatform"

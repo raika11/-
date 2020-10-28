@@ -37,8 +37,8 @@ public class ComponentVO implements Serializable {
     /**
      * 템플릿그룹(템플릿위치그룹)
      */
-    @Column(name = "TP_ZONE")
-    private String tpZone;
+    @Column(name = "TEMPLATE_GROUP_NAME")
+    private String templateGroupName;
 
     /**
      * 사용여부

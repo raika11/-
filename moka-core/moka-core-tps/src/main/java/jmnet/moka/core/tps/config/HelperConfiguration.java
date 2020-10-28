@@ -2,7 +2,7 @@ package jmnet.moka.core.tps.config;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
-import jmnet.moka.core.tps.helper.DynamicFormHelper;
+import jmnet.moka.core.tps.helper.EditFormHelper;
 import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
@@ -67,8 +67,8 @@ public class HelperConfiguration {
      * @return 빈
      */
     @Bean
-    public DynamicFormHelper dynamicFormHelper() {
+    public EditFormHelper editFormHelper() {
         final XmlMapper xmlMapper = new XmlMapper();
-        return new DynamicFormHelper(xmlMapper);
+        return new EditFormHelper(xmlMapper);
     }
 }

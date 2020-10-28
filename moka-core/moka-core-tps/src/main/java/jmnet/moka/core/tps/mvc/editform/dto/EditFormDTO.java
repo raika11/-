@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.common.dto.edit;
+package jmnet.moka.core.tps.mvc.editform.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,7 +37,7 @@ import lombok.ToString;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class DynamicFormDTO {
+public class EditFormDTO {
 
     /**
      * 채널 ID

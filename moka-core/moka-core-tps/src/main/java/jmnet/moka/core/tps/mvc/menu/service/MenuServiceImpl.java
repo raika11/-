@@ -112,6 +112,8 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Menu insertMenu(Menu menu) {
+        // 신규 등록시 메뉴 순서는 형제 매뉴 중 가장 큰 순서 + 1
+        menu.setMenuOrder(menuRepository.findMaxOrder(menu.getParentMenuId()) + 1);
         return menuRepository.save(menu);
     }
 

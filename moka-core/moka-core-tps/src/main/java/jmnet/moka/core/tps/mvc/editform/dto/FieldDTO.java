@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.common.dto.edit;
+package jmnet.moka.core.tps.mvc.editform.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

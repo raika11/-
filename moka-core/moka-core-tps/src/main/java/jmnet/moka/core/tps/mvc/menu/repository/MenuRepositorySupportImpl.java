@@ -59,4 +59,18 @@ public class MenuRepositorySupportImpl extends QuerydslRepositorySupport impleme
         QueryResults<Menu> list = query.fetchResults();
         return new PageImpl<Menu>(list.getResults(), pageable, list.getTotal());
     }
+
+    @Override
+    public int findMaxOrder(String parentMenuId) {
+        QMenu qMenu = QMenu.menu;
+
+        JPQLQuery<Menu> query = from(qMenu);
+        query.where(qMenu.parentMenuId
+                .toUpperCase()
+                .contains(parentMenuId.toUpperCase()));
+        query.orderBy(qMenu.menuOrder.desc());
+
+        Menu menu = query.fetchFirst();
+        return menu != null ? menu.getMenuOrder() : 0;
+    }
 }

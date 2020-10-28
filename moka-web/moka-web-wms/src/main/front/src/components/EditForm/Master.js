@@ -15,7 +15,7 @@ const propTypes = {
 /**
  * 기본 input
  */
-const DynamicForm = (props) => {
+const EditForm = (props) => {
     const { formData } = props;
     const [formFields, setFormFields] = useState(null);
     const [testValue, setTestValue] = useState('test');
@@ -158,6 +158,6 @@ const DynamicForm = (props) => {
     );
 };
 
-DynamicForm.prototype = propTypes;
+EditForm.prototype = propTypes;
 
-export default DynamicForm;
+export default EditForm;

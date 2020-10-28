@@ -166,9 +166,9 @@
                                             {
                                                 "seq": "20",
                                                 "menuId": "02012002",
-                                                "menuName": "Dynamic Form",
-                                                "menuDispName": "Dynamic Form",
-                                                "menuPath": "/dynamic",
+                                                "menuName": "Edit Form",
+                                                "menuDispName": "Edit Form",
+                                                "menuPath": "/edit-form",
                                                 "menuOrder": "1",
                                                 "depth": "3",
                                                 "useYn": "Y",

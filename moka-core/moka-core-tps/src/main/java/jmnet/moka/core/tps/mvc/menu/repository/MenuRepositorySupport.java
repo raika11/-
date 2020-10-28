@@ -18,4 +18,6 @@ import org.springframework.data.domain.Page;
  */
 public interface MenuRepositorySupport {
     public Page<Menu> findAll(MenuSearchDTO searchDTO);
+
+    public int findMaxOrder(String parentMenuId);
 }

@@ -2,18 +2,18 @@ import { takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
 
-import * as dynamicFormApi from './dynamicFormApi';
-import * as dynamicFormAction from './dynamicFormAction';
+import * as editFormApi from './editFormApi';
+import * as editFormAction from './editFormAction';
 
 /**
  * 목록
  */
-const getDynamicFormList = callApiAfterActions(dynamicFormAction.GET_DYNAMIC_LIST, dynamicFormApi.getDynamicFormList, (state) => state.dynamic);
+const getEditFormList = callApiAfterActions(editFormAction.GET_EDIT_FORM_LIST, editFormApi.getEditFormList, (state) => state.edit);
 
 /**
  * 데이터 조회
  */
-const getDynamicForm = createRequestSaga(dynamicFormAction.GET_DYNAMIC, dynamicFormApi.getDynamicForm);
+const getEditForm = createRequestSaga(editFormAction.GET_EDIT_FORM, editFormApi.getEditForm);
 
 /**
  * 등록/수정
@@ -21,12 +21,12 @@ const getDynamicForm = createRequestSaga(dynamicFormAction.GET_DYNAMIC, dynamicF
  * @param {array} param0.payload.actions 선처리 액션들
  * @param {func} param0.payload.callback 콜백
  */
-function* saveDynamicForm({ payload: { type, channelId, actions, callback } }) {
-    const ACTION = dynamicFormAction.SAVE_DYNAMIC;
+function* saveEditForm({ payload: { type, channelId, partId, actions, callback } }) {
+    const ACTION = editFormAction.SAVE_EDIT_FORM;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
-    console.log(channelId);
+
     try {
         // actions 먼저 처리
         if (actions && actions.length > 0) {
@@ -40,24 +40,24 @@ function* saveDynamicForm({ payload: { type, channelId, actions, callback } }) {
         }
 
         // 도메인 데이터
-        const dynamic = yield select((store) => store.dynamicForm.dynamicForm);
-        const response = type === 'insert' ? yield call(dynamicFormApi.postDynamicForm, { channelId, dynamic }) : yield call(dynamicFormApi.putDynamicForm, { dynamic });
+        const edit = yield select((store) => store.editForm.editForm);
+        const response = type === 'insert' ? yield call(editFormApi.postEditForm, { channelId, partId, edit }) : yield call(editFormApi.putEditForm, { edit });
         callbackData = response.data;
 
         if (response.data.header.success) {
             yield put({
-                type: dynamicFormAction.GET_DYNAMIC_SUCCESS,
+                type: editFormAction.GET_EDIT_FORM_SUCCESS,
                 payload: response.data,
             });
 
             // 목록 다시 검색
-            yield put({ type: dynamicFormAction.GET_DYNAMIC_LIST });
+            yield put({ type: editFormAction.GET_EDIT_FORM_LIST });
 
             // auth 도메인 목록 다시 조회
-            //yield put(getDynamicForms(dynamic.dynamicId));
+            //yield put(getEditForms(edit.channelId));
         } else {
             yield put({
-                type: dynamicFormAction.GET_DYNAMIC_FAILURE,
+                type: editFormAction.GET_EDIT_FORM_FAILURE,
                 payload: response.data,
             });
         }
@@ -65,7 +65,7 @@ function* saveDynamicForm({ payload: { type, channelId, actions, callback } }) {
         callbackData = errorResponse(e);
 
         yield put({
-            type: dynamicFormAction.GET_DYNAMIC_FAILURE,
+            type: editFormAction.GET_EDIT_FORM_FAILURE,
             payload: callbackData,
         });
     }
@@ -79,30 +79,30 @@ function* saveDynamicForm({ payload: { type, channelId, actions, callback } }) {
 
 /**
  * 삭제
- * @param {string} param0.payload.dynamicId 도메인아이디
+ * @param {string} param0.payload.channelId 도메인아이디
  * @param {func} param0.payload.callback 콜백
  */
-function* deleteDynamicForm({ payload: { dynamicId, callback } }) {
-    const ACTION = dynamicFormAction.DELETE_DYNAMIC;
+function* deleteEditForm({ payload: { channelId, callback } }) {
+    const ACTION = editFormAction.DELETE_EDIT_FORM;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(dynamicFormApi.deleteDynamicForm, { dynamicId });
+        const response = yield call(editFormApi.deleteEditForm, { channelId });
         callbackData = response.data;
 
         if (response.data.header.success) {
-            yield put({ type: dynamicFormAction.DELETE_DYNAMIC_SUCCESS });
+            yield put({ type: editFormAction.DELETE_EDIT_FORM_SUCCESS });
 
             // 목록 다시 검색
-            yield put({ type: dynamicFormAction.GET_DYNAMIC_LIST });
+            yield put({ type: editFormAction.GET_EDIT_FORM_LIST });
 
             // auth 도메인 목록 다시 조회
-            //yield put(getDynamicFormList());
+            //yield put(getEditFormList());
         } else {
             yield put({
-                type: dynamicFormAction.DELETE_DYNAMIC_FAILURE,
+                type: editFormAction.DELETE_EDIT_FORM_FAILURE,
                 payload: response.data,
             });
         }
@@ -110,7 +110,7 @@ function* deleteDynamicForm({ payload: { dynamicId, callback } }) {
         callbackData = errorResponse(e);
 
         yield put({
-            type: dynamicFormAction.DELETE_DYNAMIC_FAILURE,
+            type: editFormAction.DELETE_EDIT_FORM_FAILURE,
             payload: callbackData,
         });
     }
@@ -122,9 +122,9 @@ function* deleteDynamicForm({ payload: { dynamicId, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-export default function* dynamicSaga() {
-    yield takeLatest(dynamicFormAction.GET_DYNAMIC_LIST, getDynamicFormList);
-    yield takeLatest(dynamicFormAction.GET_DYNAMIC, getDynamicForm);
-    yield takeLatest(dynamicFormAction.SAVE_DYNAMIC, saveDynamicForm);
-    yield takeLatest(dynamicFormAction.DELETE_DYNAMIC, deleteDynamicForm);
+export default function* editSaga() {
+    yield takeLatest(editFormAction.GET_EDIT_FORM_LIST, getEditFormList);
+    yield takeLatest(editFormAction.GET_EDIT_FORM, getEditForm);
+    yield takeLatest(editFormAction.SAVE_EDIT_FORM, saveEditForm);
+    yield takeLatest(editFormAction.DELETE_EDIT_FORM, deleteEditForm);
 }

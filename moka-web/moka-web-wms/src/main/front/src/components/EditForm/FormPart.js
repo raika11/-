@@ -12,7 +12,7 @@ import { MokaInputLabel } from '../MokaInput';
 import FormField from './FormField';
 import { useDispatch } from 'react-redux';
 import t from '@/utils/toastUtil';
-import { saveDynamicForm, changeDynamicForm } from '@store/dynamic';
+import { saveEditForm, changeEditForm } from '@/store/editForm';
 
 const propTypes = {
     part: PropTypes.any,
@@ -26,19 +26,18 @@ const FormPart = (props) => {
     const dispatch = useDispatch();
 
     const handleClickSave = (event) => {
-        t.confirm('111', () => {
-            insertDynamicFormPart(part);
-        });
+        insertEditFormPart({ partJson: JSON.stringify(part) });
     };
 
-    const insertDynamicFormPart = (tmp) => {
+    const insertEditFormPart = (tmp) => {
         dispatch(
-            saveDynamicForm({
+            saveEditForm({
                 type: 'insert',
                 channelId: channelId,
+                partId: part.id,
                 actions: [
-                    changeDynamicForm({
-                        ...part,
+                    changeEditForm({
+                        ...{ partJson: JSON.stringify(part) },
                         ...tmp,
                     }),
                 ],

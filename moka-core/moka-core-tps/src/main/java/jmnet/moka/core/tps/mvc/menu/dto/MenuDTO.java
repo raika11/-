@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -65,7 +66,7 @@ public class MenuDTO implements Serializable {
      * 사용여부(Y:사용, N:미사용)
      */
     @NotNull(message = "{tps.common.error.pattern.usedYn}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.usedYn}")
+    @Pattern(regexp = "^[Y|N]$", message = "{tps.common.error.pattern.usedYn}")
     @Builder.Default
     private String usedYn = "Y";
 
@@ -78,14 +79,14 @@ public class MenuDTO implements Serializable {
     /**
      * 메뉴 페이지 URL
      */
-    @Length(min = 0, max = 512, message = "{tps.menu.error.length.menuUrl}")
+    @Size(max = 512, message = "{tps.menu.error.length.menuUrl}")
     @Builder.Default
     private String menuUrl = "";
 
     /**
      * 아이콘 명
      */
-    @Length(min = 0, max = 200, message = "{tps.menu.error.length.iconNm}")
+    @Size(max = 200, message = "{tps.menu.error.length.iconNm}")
     private String iconNm;
 
     /**

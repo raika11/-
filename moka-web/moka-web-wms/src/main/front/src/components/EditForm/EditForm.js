@@ -16,13 +16,13 @@ const propTypes = {
 /**
  * 기본 input
  */
-const DynamicForm = (props) => {
+const EditForm = (props) => {
     const { formData } = props;
-    const [dynamicForm, setDynamicForm] = useState(formData);
+    const [editForm, setEditForm] = useState(formData);
 
     const renderFormData = () => {
         const formRows = [];
-        if (dynamicForm != null && dynamicForm !== '') {
+        if (editForm != null && editForm !== '') {
             let rows = formData.parts.length / 2;
             if (formData.parts.length !== rows * 2) {
                 rows++;
@@ -36,7 +36,7 @@ const DynamicForm = (props) => {
                         if (part.active === 'Y') {
                             resultRenderInfo.push(
                                 <Col lg={6} key={part.id}>
-                                    <FormPart part={part} channelId={dynamicForm.id} />
+                                    <FormPart part={part} channelId={editForm.id} />
                                 </Col>,
                             );
                         }
@@ -52,13 +52,13 @@ const DynamicForm = (props) => {
 
     useEffect(() => {
         if (formData) {
-            setDynamicForm(formData);
+            setEditForm(formData);
         }
-    }, [formData, setDynamicForm]);
+    }, [formData, setEditForm]);
 
     return <div>{renderFormData()}</div>;
 };
 
-DynamicForm.prototype = propTypes;
+EditForm.prototype = propTypes;
 
-export default DynamicForm;
+export default EditForm;

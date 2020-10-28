@@ -8,8 +8,8 @@ import reservedSaga from '@store/reserved/reservedSaga';
 import datasetdSaga from '@store/dataset/datasetSaga';
 import componentSaga from '@store/component/componentSaga';
 import pageSaga from '@store/page/pageSaga';
-import dynamicFormSaga from '@store/dynamic/dynamicFormSaga';
+import editFormSaga from '@/store/editForm/editFormSaga';
 
 export default function* rootSaga() {
-    yield all([authSaga(), domainSaga(), templateSaga(), codeMgtSaga(), reservedSaga(), datasetdSaga(), componentSaga(), pageSaga(), dynamicFormSaga()]);
+    yield all([authSaga(), domainSaga(), templateSaga(), codeMgtSaga(), reservedSaga(), datasetdSaga(), componentSaga(), pageSaga(), editFormSaga()]);
 }

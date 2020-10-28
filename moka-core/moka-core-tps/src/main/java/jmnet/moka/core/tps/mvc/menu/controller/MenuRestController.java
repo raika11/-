@@ -1,12 +1,11 @@
 package jmnet.moka.core.tps.mvc.menu.controller;
 
 import io.swagger.annotations.ApiOperation;
-import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.MapBuilder;
@@ -22,6 +21,7 @@ import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthBatchDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthSimpleDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuOrderDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,15 +67,14 @@ public class MenuRestController {
     /**
      * 메뉴목록조회
      *
-     * @param request 요청
-     * @param search  검색조건
+     * @param search 검색조건
      * @return 메뉴목록
      */
     @ApiOperation(value = "메뉴 목록 조회")
     @GetMapping
-    public ResponseEntity<?> getMenuList(HttpServletRequest request, @SearchParam MenuSearchDTO search) {
+    public ResponseEntity<?> getMenuList(@SearchParam MenuSearchDTO search) {
 
-        ResultListDTO<MenuDTO> resultListMessage = new ResultListDTO<MenuDTO>();
+        ResultListDTO<MenuDTO> resultListMessage = new ResultListDTO<>();
 
         // 조회
         if (McpString.isYes(search.getUseTotal())) {
@@ -89,7 +88,7 @@ public class MenuRestController {
             resultListMessage.setList(menuDtoList);
         }
 
-        ResultDTO<ResultListDTO<MenuDTO>> resultDto = new ResultDTO<ResultListDTO<MenuDTO>>(resultListMessage);
+        ResultDTO<ResultListDTO<MenuDTO>> resultDto = new ResultDTO<>(resultListMessage);
 
         tpsLogger.success(true);
 
@@ -99,18 +98,17 @@ public class MenuRestController {
     /**
      * 메뉴목록조회
      *
-     * @param request 요청
      * @return 메뉴목록
      */
     @ApiOperation(value = "메뉴 목록 트리 조회")
     @GetMapping("/tree")
-    public ResponseEntity<?> getMenuTree(HttpServletRequest request) {
+    public ResponseEntity<?> getMenuTree() {
 
         // 조회
         MenuNode menuNode = menuService.findMenuTree();
 
         // 리턴값 설정
-        ResultDTO<MenuNode> resultDto = new ResultDTO<MenuNode>(menuNode);
+        ResultDTO<MenuNode> resultDto = new ResultDTO<>(menuNode);
 
         tpsLogger.success();
 
@@ -125,15 +123,13 @@ public class MenuRestController {
      * @param request 요청
      * @param menuId  메뉴아이디 (필수)
      * @return 메뉴정보
-     * @throws NoDataException      메뉴 정보가 없음
-     * @throws InvalidDataException 메뉴 아이디 형식오류
+     * @throws NoDataException 메뉴 정보가 없음
      */
     @ApiOperation(value = "메뉴 조회")
     @GetMapping("/{menuId}")
     public ResponseEntity<?> getMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId,
-            @NotNull Principal principal)
-            throws NoDataException, InvalidDataException {
+            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId)
+            throws NoDataException {
 
         String message = messageByLocale.get("tps.menu.error.no-data", request);
         Menu menu = menuService
@@ -144,47 +140,42 @@ public class MenuRestController {
 
         tpsLogger.success();
 
-        ResultDTO<MenuDTO> resultDto = new ResultDTO<MenuDTO>(dto);
+        ResultDTO<MenuDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
      * 메뉴 중복 아이디 체크
      *
-     * @param request HTTP 요청
-     * @param menuId  메뉴아이디
+     * @param menuId 메뉴아이디
      * @return 중복 여부
      */
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{menuId}/exists")
-    public ResponseEntity<?> duplicateCheckId(HttpServletRequest request,
+    public ResponseEntity<?> duplicateCheckId(
             @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId) {
 
         boolean duplicated = menuService.isDuplicatedId(menuId);
-        ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(duplicated);
+        ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**
      * 등록
      *
-     * @param request   요청
-     * @param menuDTO   등록할 메뉴정보
-     * @param principal 로그인사용자 세션
+     * @param request 요청
+     * @param menuDTO 등록할 메뉴정보
      * @return 등록된 메뉴정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "메뉴 등록")
     @PostMapping
-    public ResponseEntity<?> postMenu(HttpServletRequest request, @Valid MenuDTO menuDTO, @NotNull Principal principal,
-            @RequestAttribute Long processStartTime)
+    public ResponseEntity<?> postMenu(HttpServletRequest request, @Valid MenuDTO menuDTO)
             throws InvalidDataException, Exception {
 
         // MenuDTO -> Menu 변환
         Menu menu = modelMapper.map(menuDTO, Menu.class);
-        //        menu.setRegDt(McpDate.now());
-        menu.setRegId(principal.getName());
 
         try {
             // insert
@@ -193,7 +184,7 @@ public class MenuRestController {
 
                 // 결과리턴
                 MenuDTO dto = modelMapper.map(returnValue, MenuDTO.class);
-                ResultDTO<MenuDTO> resultDto = new ResultDTO<MenuDTO>(dto);
+                ResultDTO<MenuDTO> resultDto = new ResultDTO<>(dto);
 
                 // 액션 로그에 성공 로그 출력
                 tpsLogger.success();
@@ -219,10 +210,9 @@ public class MenuRestController {
     /**
      * 수정
      *
-     * @param request   요청
-     * @param menuId    메뉴아이디
-     * @param menuDTO   수정할 메뉴정보
-     * @param principal 로그인사용자세션
+     * @param request 요청
+     * @param menuId  메뉴아이디
+     * @param menuDTO 수정할 메뉴정보
      * @return 수정된 메뉴정보
      * @throws Exception 그외 모든 에러
      */
@@ -230,7 +220,7 @@ public class MenuRestController {
     @PutMapping("/{menuId}")
     public ResponseEntity<?> putMenu(HttpServletRequest request,
             @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId,
-            @Valid MenuDTO menuDTO, @NotNull Principal principal)
+            @Valid MenuDTO menuDTO)
             throws Exception {
 
 
@@ -239,7 +229,7 @@ public class MenuRestController {
         Menu newMenu = modelMapper.map(menuDTO, Menu.class);
 
         // 오리진 데이터 조회
-        Menu orgMenu = menuService
+        menuService
                 .findMenuById(newMenu.getMenuId())
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
@@ -250,7 +240,53 @@ public class MenuRestController {
 
             // 결과리턴
             MenuDTO dto = modelMapper.map(returnValue, MenuDTO.class);
-            ResultDTO<MenuDTO> resultDto = new ResultDTO<MenuDTO>(dto);
+            ResultDTO<MenuDTO> resultDto = new ResultDTO<>(dto);
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success();
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE MENU]", e);
+            // 액션 로그에 에러 로그 출력
+            tpsLogger.error(e);
+            throw new Exception(messageByLocale.get("tps.menu.error.save", request), e);
+        }
+    }
+
+    /**
+     * 순서 수정
+     *
+     * @param request 요청
+     * @return 수정된 메뉴정보
+     * @throws Exception 그외 모든 에러
+     */
+    @ApiOperation(value = "메뉴 수정")
+    @PutMapping("/{parentMenuId}/change-order-children")
+    public ResponseEntity<?> putMenuOrder(HttpServletRequest request,
+            @PathVariable("parentMenuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.pattern.parentMenuId}") String parentMenuId,
+            @RequestBody List<@Valid MenuOrderDTO> menuOrders)
+            throws Exception {
+
+        // 데이터 조회
+        List<Menu> menuList = menuService.findAllMenuByParentId(parentMenuId);
+        List<MenuDTO> resultList = new ArrayList<>();
+        try {
+            if (menuList != null) {
+                menuList.forEach((Menu menu) -> menuOrders
+                        .stream()
+                        .filter(menuOrder -> menuOrder
+                                .getMenuId()
+                                .equals(menu.getMenuId()))
+                        .findFirst()
+                        .ifPresent(menuOrder -> {
+                            menu.setMenuOrder(menuOrder.getMenuOrder());
+                            resultList.add(modelMapper.map(menuService.updateMenu(menu), MenuDTO.class));
+                        }));
+            }
+            // 결과리턴
+            ResultDTO<List<MenuDTO>> resultDto = new ResultDTO<>(resultList);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success();
@@ -276,10 +312,9 @@ public class MenuRestController {
      */
     @ApiOperation(value = "여러 메뉴의 그룹 권한 수정")
     @PutMapping("/groups/auths")
-    public ResponseEntity<?> putGroupMenuAuthBatch(HttpServletRequest request, @Valid MenuAuthBatchDTO menuAuthBatchDTO,
-            @RequestAttribute Long processStartTime)
+    public ResponseEntity<?> putGroupMenuAuthBatch(HttpServletRequest request, @Valid MenuAuthBatchDTO menuAuthBatchDTO)
             throws Exception {
-        Boolean success = false;
+
         try {
             menuAuthBatchDTO
                     .getMenuIds()
@@ -290,8 +325,8 @@ public class MenuRestController {
                             tpsLogger.skip(ex.toString());
                         }
                     });
-            success = true;
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(success);
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success();
@@ -316,10 +351,9 @@ public class MenuRestController {
      */
     @ApiOperation(value = "메뉴 권한 수정")
     @PutMapping("/members/auths")
-    public ResponseEntity<?> putMemberMenuAuth(HttpServletRequest request, @Valid MenuAuthBatchDTO menuAuthBatchDTO,
-            @RequestAttribute Long processStartTime)
+    public ResponseEntity<?> putMemberMenuAuth(HttpServletRequest request, @Valid MenuAuthBatchDTO menuAuthBatchDTO)
             throws Exception {
-        Boolean success = false;
+
         try {
             menuAuthBatchDTO
                     .getMenuIds()
@@ -330,8 +364,8 @@ public class MenuRestController {
                             tpsLogger.skip(ex.toString());
                         }
                     });
-            success = true;
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(success);
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success();
@@ -355,10 +389,10 @@ public class MenuRestController {
      * @throws Exception 그외 모든 에러
      */
     @ApiOperation(value = "메뉴 권한 수정")
-    @DeleteMapping("/{menuId}/auths")
+    @DeleteMapping("/auths")
     public ResponseEntity<?> deleteMemberMenuAuth(HttpServletRequest request, List<Long> menuAuthSeqs)
             throws Exception {
-        Boolean success = Boolean.FALSE;
+        
         try {
             menuAuthSeqs.forEach(seq -> {
                 try {
@@ -367,8 +401,8 @@ public class MenuRestController {
                     tpsLogger.skip(ex.toString());
                 }
             });
-            success = Boolean.TRUE;
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(success);
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success();
@@ -391,10 +425,8 @@ public class MenuRestController {
      * @param menuAuthType       권한 구분
      * @param menuAuthSimpleDTOs 권한 정보 목록
      * @return 성공 결과 수
-     * @throws Exception
      */
-    public int saveMenuAuth(String menuId, MenuAuthTypeCode menuAuthType, List<MenuAuthSimpleDTO> menuAuthSimpleDTOs)
-            throws Exception {
+    public int saveMenuAuth(String menuId, MenuAuthTypeCode menuAuthType, List<MenuAuthSimpleDTO> menuAuthSimpleDTOs) {
         AtomicInteger successCount = new AtomicInteger(0);
         menuAuthSimpleDTOs.forEach(menuAuthSimpleDTO -> {
             MenuAuth menuAuth = modelMapper.map(menuAuthSimpleDTO, MenuAuth.class);
@@ -426,8 +458,7 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 삭제")
     @DeleteMapping("/{menuId}")
     public ResponseEntity<?> deleteMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId,
-            @NotNull Principal principal)
+            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId)
             throws InvalidDataException, NoDataException, Exception {
 
 
@@ -449,7 +480,7 @@ public class MenuRestController {
             }
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(success);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {

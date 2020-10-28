@@ -1,7 +1,7 @@
 package jmnet.moka.web.wms.util;
 
 import jmnet.moka.core.common.exception.MokaException;
-import jmnet.moka.core.tps.helper.DynamicFormHelper;
+import jmnet.moka.core.tps.helper.EditFormHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +27,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class EditFormTest {
 
     @Autowired
-    private DynamicFormHelper dynamicFormHelper;
+    private EditFormHelper editFormHelper;
 
     @Test
     public void initFormData()
             throws MokaException {
 
-        dynamicFormHelper.mapping("joongang", "15re_home_bottom");
+        editFormHelper.mapping("joongang", "15re_home_bottom");
 
-        System.out.println(dynamicFormHelper.getPart("joongang", "15re_home_bottom.xml", "bottom_photo_vod"));
+        System.out.println(editFormHelper.getPart("joongang", "15re_home_bottom.xml", "bottom_photo_vod"));
     }
 
     public static void grouping() {

@@ -61,7 +61,7 @@ public class MenuNode implements Serializable {
         this.menuDisplayNm = menu.getMenuDisplayNm();
         this.menuUrl = menu.getMenuUrl();
         this.menuOrder = menu.getMenuOrder();
-        this.depth = menu.getMenuOrder();
+        this.depth = menu.getDepth();
         this.useYn = menu.getUsedYn();
         this.parentMenuId = menu.getParentMenuId();
         this.iconName = menu.getIconNm();

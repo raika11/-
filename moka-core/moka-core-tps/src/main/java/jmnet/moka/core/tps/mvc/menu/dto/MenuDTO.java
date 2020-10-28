@@ -59,6 +59,8 @@ public class MenuDTO implements Serializable {
     @Length(min = 1, max = 50, message = "{tps.menu.error.length.menuDisplayNm}")
     private String menuDisplayNm;
 
+    @Builder.Default
+    private Integer depth = 1;
 
     /**
      * 사용여부(Y:사용, N:미사용)

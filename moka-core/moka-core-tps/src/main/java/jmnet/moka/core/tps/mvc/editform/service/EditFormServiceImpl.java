@@ -36,17 +36,17 @@ public class EditFormServiceImpl implements EditFormService {
 
     @Override
     public Page<EditForm> findAllEditForm(SearchDTO search) {
-        return null;
+        return editFormRepository.findAll(search.getPageable());
     }
 
     @Override
     public List<EditForm> findAllEditForm() {
-        return null;
+        return editFormRepository.findAll();
     }
 
     @Override
     public Optional<EditForm> findEditForm(EditForm editForm) {
-        return Optional.empty();
+        return editFormRepository.findEditForm(editForm);
     }
 
     @Override

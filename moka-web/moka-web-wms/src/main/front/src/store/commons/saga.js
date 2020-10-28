@@ -32,12 +32,15 @@ export const createRequestActionTypes = (actionType) => {
 export function createRequestSaga(actionType, api) {
     const SUCCESS = `${actionType}_SUCCESS`;
     const FAILURE = `${actionType}_FAILURE`;
+    let callbackData = {};
 
     return function* (action) {
+        const { callback } = action.payload;
         yield put(startLoading(actionType));
 
         try {
             const response = yield call(api, action.payload);
+            callbackData = response.data;
 
             if (response.data.header.success) {
                 yield put({
@@ -51,10 +54,15 @@ export function createRequestSaga(actionType, api) {
                 });
             }
         } catch (e) {
+            callbackData = errorResponse(e);
             yield put({
                 type: FAILURE,
                 payload: errorResponse(e),
             });
+        }
+
+        if (typeof callback === 'function') {
+            yield call(callback, callbackData);
         }
 
         yield put(finishLoading(actionType)); // 로딩 끝
@@ -108,44 +116,6 @@ export const callApiAfterActions = (actionType, api, targetStateSelector) => {
                 payload: errorResponse(e),
             });
         }
-        yield put(finishLoading(actionType));
-    };
-};
-
-/**
- * api를 호출할 때 넘겨받은 param을 넘겨 호출한다
- * @param {string} actionType 액션타입
- * @param {function} api api
- * @param {*} param 파라미터
- */
-export const callApiWithParam = (actionType, api, param) => {
-    const SUCCESS = `${actionType}_SUCCESS`;
-    const FAILURE = `${actionType}_FAILURE`;
-
-    return function* () {
-        yield put(startLoading(actionType));
-
-        try {
-            const response = yield call(api, param);
-
-            if (response.data.header.success) {
-                yield put({
-                    type: SUCCESS,
-                    payload: response.data,
-                });
-            } else {
-                yield put({
-                    type: FAILURE,
-                    payload: response.data,
-                });
-            }
-        } catch (e) {
-            yield put({
-                type: FAILURE,
-                payload: errorResponse(e),
-            });
-        }
-
         yield put(finishLoading(actionType));
     };
 };

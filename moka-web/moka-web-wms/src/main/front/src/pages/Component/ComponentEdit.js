@@ -57,6 +57,8 @@ const ComponentEdit = () => {
     const [dispPageCount, setDispPageCount] = useState(initialComponent.dispPageCount);
     const [moreCount, setMoreCount] = useState(initialComponent.moreCount);
 
+    const componentNameRegex = /[^\s\t\n]+/;
+
     /**
      * 유효성 검사
      * @param {object} temp 컴포넌트데이터
@@ -66,7 +68,7 @@ const ComponentEdit = () => {
         let errList = [];
 
         // 컴포넌트명 체크
-        if (!/[^\s\t\n]+/.test(temp.componentName)) {
+        if (!componentNameRegex.test(temp.componentName)) {
             errList.push({
                 field: 'componentName',
                 reason: '',
@@ -124,6 +126,13 @@ const ComponentEdit = () => {
             }
         }
 
+        if (!temp.domain.domainId) {
+            // 도메인 정보가 없으면 latestDomainId 셋팅
+            temp.domain = {
+                domainId: latestDomainId,
+            };
+        }
+
         if (validate(temp)) {
             dispatch(
                 saveComponent({
@@ -143,9 +152,6 @@ const ComponentEdit = () => {
 
     // 삭제 버튼
     const handleClickDelete = () => {};
-
-    // 복사 버튼
-    const handleClickCopy = () => {};
 
     useEffect(() => {
         // 스토어에서 가져온 컴포넌트 데이터 셋팅
@@ -195,17 +201,18 @@ const ComponentEdit = () => {
             <BasicForm
                 componentSeq={component.componentSeq}
                 componentName={componentName}
+                componentNameRegex={componentNameRegex}
                 setComponentName={setComponentName}
                 description={description}
                 setDescription={setDescription}
                 onClickSave={handleClickSave}
                 onClickDelete={handleClickDelete}
-                onClickCopy={handleClickCopy}
                 invalidList={invalidList}
             />
             <hr className="divider" />
             <div className="custom-scroll component-padding-box pb-10" style={{ height: 563 }}>
                 <DetailRelationForm
+                    componentSeq={component.componentSeq}
                     template={template}
                     dataType={dataType}
                     dataset={dataset}

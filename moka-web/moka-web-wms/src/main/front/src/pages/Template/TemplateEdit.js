@@ -191,7 +191,8 @@ const TemplateEdit = () => {
         } else {
             setBtnDisabled(true);
         }
-    }, [dispatch, templateSeq]);
+        setTemplateNameError(false);
+    }, [templateSeq]);
 
     useEffect(() => {
         // 스토어에서 가져온 템플릿 데이터 셋팅

@@ -64,19 +64,20 @@ const DatsetListModal = (props) => {
         setSelected(defaultSelected);
     }, [defaultSelected]);
 
-    useEffect(() => {
-        // unmount 시 스토어 초기화
-        return () => {
-            dispatch(clearStore());
-        };
-    }, [dispatch]);
+    /**
+     * 모달 닫기
+     */
+    const handleHide = () => {
+        dispatch(clearStore());
+        onHide();
+    };
 
     /**
      * 등록 버튼 클릭
      */
     const handleClickSave = () => {
         if (onClickSave) onClickSave(selectedDataset);
-        onHide();
+        handleHide();
     };
 
     /**
@@ -84,7 +85,7 @@ const DatsetListModal = (props) => {
      */
     const handleClickCancle = () => {
         if (onClickCancle) onClickCancle();
-        onHide();
+        handleHide();
     };
 
     /**
@@ -124,16 +125,18 @@ const DatsetListModal = (props) => {
     }, []);
 
     useEffect(() => {
-        dispatch(
-            changeSearchOption({
-                ...search,
-                domainId: latestDomainId,
-                size: MODAL_PAGESIZE_OPTIONS[0],
-                page: 0,
-            }),
-        );
+        if (show) {
+            dispatch(
+                changeSearchOption({
+                    ...search,
+                    domainId: latestDomainId,
+                    size: MODAL_PAGESIZE_OPTIONS[0],
+                    page: 0,
+                }),
+            );
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, latestDomainId]);
+    }, [dispatch, latestDomainId, show]);
 
     useEffect(() => {
         // rowData 변경
@@ -152,7 +155,7 @@ const DatsetListModal = (props) => {
     return (
         <MokaModal
             show={show}
-            onHide={onHide}
+            onHide={handleHide}
             title="데이터셋 검색"
             size="md"
             buttons={[

@@ -46,6 +46,12 @@ export const saveComponent = createAction(SAVE_COMPONENT, ({ actions, callback }
 export const saveComponentList = createAction(SAVE_COMPONENT_LIST, (payload) => payload);
 
 /**
+ * 복사
+ */
+export const COPY_COMPONENT = 'component/COPY_COMPONENT';
+export const copyComponent = createAction(COPY_COMPONENT, ({ componentSeq, componentName, callback }) => ({ componentSeq, componentName, callback }));
+
+/**
  * 삭제
  */
 export const [DELETE_COMPONENT, DELETE_COMPONENT_SUCCESS] = createRequestActionTypes('component/DELETE_COMPONENT');

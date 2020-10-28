@@ -104,9 +104,39 @@ export function* saveComponent({ payload: { actions, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 복사
+ * @param {number} param0.payload.componentSeq 컴포넌트아이디
+ * @param {string} param0.payload.componentName 컴포넌트명
+ * @param {func} param0.payload.callback 콜백
+ */
+function* copyComponent({ payload: { componentSeq, componentName, callback } }) {
+    const ACTION = act.COPY_COMPONENT;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.copyComponent, { componentSeq, componentName });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            yield put({ type: act.GET_COMPONENT_LIST });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
 export default function* saga() {
     yield takeLatest(act.GET_COMPONENT_LIST, getComponentList);
     yield takeLatest(act.GET_COMPONENT, getComponent);
     yield takeLatest(act.SAVE_COMPONENT_LIST, saveComponentList);
     yield takeLatest(act.SAVE_COMPONENT, saveComponent);
+    yield takeLatest(act.COPY_COMPONENT, copyComponent);
 }

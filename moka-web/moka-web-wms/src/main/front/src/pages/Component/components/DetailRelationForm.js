@@ -7,6 +7,7 @@ import { TemplateListModal, DatasetListModal, SkinListModal } from '@pages/commo
 
 const DetailRelationForm = (props) => {
     const {
+        componentSeq,
         template,
         dataType,
         dataset,
@@ -42,6 +43,10 @@ const DetailRelationForm = (props) => {
             });
         }
     }, [invalidList]);
+
+    useEffect(() => {
+        setTemplateError(false);
+    }, [componentSeq]);
 
     return (
         <Form>
@@ -207,44 +212,38 @@ const DetailRelationForm = (props) => {
             </Form.Row>
 
             {/* 템플릿 선택 팝업 */}
-            {templateModalShow && (
-                <TemplateListModal
-                    show={templateModalShow}
-                    onHide={() => setTemplateModalShow(false)}
-                    onClickSave={(template) => {
-                        setTemplate(template);
-                        if (template.templateSeq) {
-                            setTemplateError(false);
-                        }
-                    }}
-                    selected={template.templateSeq}
-                />
-            )}
+            <TemplateListModal
+                show={templateModalShow}
+                onHide={() => setTemplateModalShow(false)}
+                onClickSave={(template) => {
+                    setTemplate(template);
+                    if (template.templateSeq) {
+                        setTemplateError(false);
+                    }
+                }}
+                selected={template.templateSeq}
+            />
 
             {/* 데이터셋 선택 팝업 */}
-            {datasetModalShow && (
-                <DatasetListModal
-                    show={datasetModalShow}
-                    onHide={() => setDatasetModalShow(false)}
-                    onClickSave={(dataset) => {
-                        setDataset(dataset);
-                    }}
-                    selected={dataset.datasetSeq}
-                    exclude={[]}
-                />
-            )}
+            <DatasetListModal
+                show={datasetModalShow}
+                onHide={() => setDatasetModalShow(false)}
+                onClickSave={(dataset) => {
+                    setDataset(dataset);
+                }}
+                selected={dataset.datasetSeq}
+                exclude={[]}
+            />
 
             {/* 스킨 선택 팝업 */}
-            {skinModalShow && (
-                <SkinListModal
-                    show={skinModalShow}
-                    onHide={() => setSkinModalShow(false)}
-                    onClickSave={(skin) => {
-                        setSkin(skin);
-                    }}
-                    selected={skin.skinSeq}
-                />
-            )}
+            <SkinListModal
+                show={skinModalShow}
+                onHide={() => setSkinModalShow(false)}
+                onClickSave={(skin) => {
+                    setSkin(skin);
+                }}
+                selected={skin.skinSeq}
+            />
         </Form>
     );
 };

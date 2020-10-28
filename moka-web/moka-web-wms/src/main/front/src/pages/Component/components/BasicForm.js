@@ -3,10 +3,15 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
+import CopyModal from '../modals/ComponentCopyModal';
 
 const BasicForm = (props) => {
-    const { componentSeq, componentName, description, setComponentName, setDescription, onClickSave, onClickCopy, onClickDelete, invalidList } = props;
+    const { componentSeq, componentName, componentNameRegex, description, setComponentName, setDescription, onClickSave, onClickDelete, invalidList } = props;
+
+    // state
     const [componentNameError, setComponentNameError] = useState(false);
+    const [btnDisabled, setBtnDisabled] = useState(false);
+    const [copyModalShow, setCopyModalShow] = useState(false);
 
     useEffect(() => {
         // invalidList 처리
@@ -19,6 +24,15 @@ const BasicForm = (props) => {
         }
     }, [invalidList]);
 
+    useEffect(() => {
+        if (!componentSeq) {
+            setBtnDisabled(true);
+        } else {
+            setBtnDisabled(false);
+        }
+        setComponentNameError(false);
+    }, [componentSeq]);
+
     return (
         <Form>
             {/* 컴포넌트아이디, 버튼그룹 */}
@@ -28,7 +42,7 @@ const BasicForm = (props) => {
                 </Col>
                 <Col xs={6} className="p-0 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button variant="dark" className="mr-2" onClick={onClickCopy}>
+                        <Button variant="dark" className="mr-2" onClick={() => setCopyModalShow(true)} disabled={btnDisabled}>
                             설정복사
                         </Button>
                     </div>
@@ -36,7 +50,7 @@ const BasicForm = (props) => {
                         <Button variant="primary" className="mr-2" onClick={onClickSave}>
                             저장
                         </Button>
-                        <Button variant="danger" onClick={onClickDelete}>
+                        <Button variant="danger" onClick={onClickDelete} disabled={btnDisabled}>
                             삭제
                         </Button>
                     </div>
@@ -52,6 +66,9 @@ const BasicForm = (props) => {
                         value={componentName}
                         onChange={(e) => {
                             setComponentName(e.target.value);
+                            if (componentNameRegex.test(e.target.value)) {
+                                setComponentNameError(false);
+                            }
                         }}
                         isInvalid={componentNameError}
                         required
@@ -68,6 +85,9 @@ const BasicForm = (props) => {
                     setDescription(e.target.value);
                 }}
             />
+
+            {/* 복사 모달 */}
+            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} componentSeq={componentSeq} />
         </Form>
     );
 };

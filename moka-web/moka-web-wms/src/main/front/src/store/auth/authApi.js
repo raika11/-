@@ -1,4 +1,3 @@
-import qs from 'qs';
 import instance from '../commons/axios';
 
 export const menu = () => {
@@ -10,10 +9,7 @@ export const loginJwt = ({ userId, userPassword }) => {
     return instance
         .post(
             '/loginJwt',
-            {
-                userId,
-                userPassword,
-            },
+            { userId, userPassword },
             {
                 headers: {
                     'Content-Type': 'application/json',

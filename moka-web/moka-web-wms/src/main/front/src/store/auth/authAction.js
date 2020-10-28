@@ -2,11 +2,11 @@ import { createAction } from 'redux-actions';
 import { createRequestActionTypes } from '@store/commons/saga';
 
 // 로그인
-export const LOGIN_JWT = 'auth/loginJwt';
+export const LOGIN_JWT = 'auth/LOGIN_JWT';
 export const loginJwt = createAction(LOGIN_JWT);
 
 // 로그아웃
-export const LOGOUT = 'auth/logout';
+export const LOGOUT = 'auth/LOGOUT';
 export const logout = createAction(LOGOUT);
 
 // 메뉴 조회

@@ -54,7 +54,7 @@ public class EditFormRestController {
         this.objectMapper = objectMapper;
     }
 
-    @ApiOperation(value = "Dynamic Form 데이터 조회")
+    @ApiOperation(value = "Edit Form 데이터 조회")
     @GetMapping("/{channelId}")
     public ResponseEntity<?> getEditForm(@PathVariable("channelId") String channelId, @RequestParam(value = "partId", required = false) String partId)
             throws MokaException {
@@ -62,24 +62,9 @@ public class EditFormRestController {
         return getResponseEditFormDTO(DEFAULT_SITE, channelId, partId);
     }
 
-    @ApiOperation(value = "Dynamic Form 저장")
-    @PostMapping("/{channelId}/parts/{partId}")
-    public ResponseEntity<?> postEditFormPart(@PathVariable("channelId") String channelId, @PathVariable("partId") String partId,
-            @RequestParam("partJson") String partJson)
-            throws MokaException {
 
-        try {
-            // objectMapper로 json 파싱이 정상적으로 이루어지는지 체크
-            objectMapper.readValue(partJson, PartDTO.class);
 
-            return new ResponseEntity<>(partJson, HttpStatus.OK);
-
-        } catch (IOException ex) {
-            throw new MokaException(ex);
-        }
-    }
-
-    @ApiOperation(value = "Dynamic Form 데이터 조회")
+    @ApiOperation(value = "Edit Form 데이터 조회")
     @GetMapping("/dynamic-form/{site}/{channelId}")
     public ResponseEntity<?> getEditForm(@PathVariable("site") String site, @PathVariable("channelId") String channelId,
             @RequestParam(value = "partId", required = false) String partId)
@@ -102,6 +87,23 @@ public class EditFormRestController {
 
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Edit form part 저장")
+    @PostMapping("/{channelId}/parts/{partId}")
+    public ResponseEntity<?> postEditFormPart(@PathVariable("channelId") String channelId, @PathVariable("partId") String partId,
+            @RequestParam("partJson") String partJson)
+            throws MokaException {
+
+        try {
+            // objectMapper로 json 파싱이 정상적으로 이루어지는지 체크
+            objectMapper.readValue(partJson, PartDTO.class);
+
+            return new ResponseEntity<>(partJson, HttpStatus.OK);
+
+        } catch (IOException ex) {
+            throw new MokaException(ex);
+        }
     }
 
 }

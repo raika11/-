@@ -1,11 +1,11 @@
 package jmnet.moka.core.tps.mvc.menu.controller;
 
 import io.swagger.annotations.ApiOperation;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.MapBuilder;
@@ -121,19 +121,19 @@ public class MenuRestController {
      * 메뉴정보 조회
      *
      * @param request 요청
-     * @param menuId  메뉴아이디 (필수)
+     * @param menuSeq 메뉴 일련번호 (필수)
      * @return 메뉴정보
      * @throws NoDataException 메뉴 정보가 없음
      */
     @ApiOperation(value = "메뉴 조회")
-    @GetMapping("/{menuId}")
+    @GetMapping("/{menuSeq}")
     public ResponseEntity<?> getMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId)
+            @PathVariable("menuSeq") @Min(value = 0, message = "{tps.menu.error.min.menuSeq}") Long menuSeq)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.menu.error.no-data", request);
         Menu menu = menuService
-                .findMenuById(menuId)
+                .findMenuBySeq(menuSeq)
                 .orElseThrow(() -> new NoDataException(message));
 
         MenuDTO dto = modelMapper.map(menu, MenuDTO.class);
@@ -211,16 +211,15 @@ public class MenuRestController {
      * 수정
      *
      * @param request 요청
-     * @param menuId  메뉴아이디
+     * @param menuSeq 메뉴 일련번호
      * @param menuDTO 수정할 메뉴정보
      * @return 수정된 메뉴정보
      * @throws Exception 그외 모든 에러
      */
     @ApiOperation(value = "메뉴 수정")
-    @PutMapping("/{menuId}")
+    @PutMapping("/{menuSeq}")
     public ResponseEntity<?> putMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId,
-            @Valid MenuDTO menuDTO)
+            @PathVariable("menuSeq") @Min(value = 0, message = "{tps.menu.error.min.menuSeq}") Long menuSeq, @Valid MenuDTO menuDTO)
             throws Exception {
 
 
@@ -230,7 +229,7 @@ public class MenuRestController {
 
         // 오리진 데이터 조회
         menuService
-                .findMenuById(newMenu.getMenuId())
+                .findMenuBySeq(menuSeq)
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
         try {
@@ -262,7 +261,7 @@ public class MenuRestController {
      * @return 수정된 메뉴정보
      * @throws Exception 그외 모든 에러
      */
-    @ApiOperation(value = "메뉴 수정")
+    @ApiOperation(value = "메뉴 순서 조절")
     @PutMapping("/{parentMenuId}/change-order-children")
     public ResponseEntity<?> putMenuOrder(HttpServletRequest request,
             @PathVariable("parentMenuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.pattern.parentMenuId}") String parentMenuId,
@@ -270,8 +269,13 @@ public class MenuRestController {
             throws Exception {
 
         // 데이터 조회
+        String noContentMessage = messageByLocale.get("tps.menu.error.no-data", request);
+        Menu parentMenu = menuService
+                .findMenuById(parentMenuId)
+                .orElseThrow(() -> new NoDataException(noContentMessage));
+
         List<Menu> menuList = menuService.findAllMenuByParentId(parentMenuId);
-        List<MenuDTO> resultList = new ArrayList<>();
+
         try {
             if (menuList != null) {
                 menuList.forEach((Menu menu) -> menuOrders
@@ -282,10 +286,18 @@ public class MenuRestController {
                         .findFirst()
                         .ifPresent(menuOrder -> {
                             menu.setMenuOrder(menuOrder.getMenuOrder());
-                            resultList.add(modelMapper.map(menuService.updateMenu(menu), MenuDTO.class));
+                            // 순서 뿐만 아니라 depth도 부모의 depth의 +1하여 저장한다.
+                            menu.setDepth(parentMenu.getDepth() + 1);
+                            menuService.updateMenu(menu);
                         }));
             }
+
+            menuList.sort((o1, o2) -> {
+                return o1.getMenuOrder() - o2.getMenuOrder();
+            });
+
             // 결과리턴
+            List<MenuDTO> resultList = modelMapper.map(menuList, MenuDTO.TYPE);
             ResultDTO<List<MenuDTO>> resultDto = new ResultDTO<>(resultList);
 
             // 액션 로그에 성공 로그 출력
@@ -392,7 +404,7 @@ public class MenuRestController {
     @DeleteMapping("/auths")
     public ResponseEntity<?> deleteMemberMenuAuth(HttpServletRequest request, List<Long> menuAuthSeqs)
             throws Exception {
-        
+
         try {
             menuAuthSeqs.forEach(seq -> {
                 try {

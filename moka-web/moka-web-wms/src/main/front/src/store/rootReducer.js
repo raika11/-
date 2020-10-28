@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { reducer as toastr } from 'react-redux-toastr';
+import app from '@store/app/appReducer';
 import loading from '@store/loading/loadingReducer';
 import layout from '@store/layout/layoutReducer';
 import auth from '@store/auth/authReducer';
@@ -20,6 +21,7 @@ import relation from '@store/relation/relationReducer';
 
 export default combineReducers({
     toastr,
+    app,
     loading,
     layout,
     auth,

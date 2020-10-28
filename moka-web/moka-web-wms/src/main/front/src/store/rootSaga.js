@@ -1,5 +1,6 @@
 import { all } from 'redux-saga/effects';
 
+import appSaga from '@store/app/appSaga';
 import authSaga from '@store/auth/authSaga';
 import domainSaga from '@store/domain/domainSaga';
 import templateSaga from '@store/template/templateSaga';
@@ -11,5 +12,5 @@ import pageSaga from '@store/page/pageSaga';
 import editFormSaga from '@/store/editForm/editFormSaga';
 
 export default function* rootSaga() {
-    yield all([authSaga(), domainSaga(), templateSaga(), codeMgtSaga(), reservedSaga(), datasetdSaga(), componentSaga(), pageSaga(), editFormSaga()]);
+    yield all([appSaga(), authSaga(), domainSaga(), templateSaga(), codeMgtSaga(), reservedSaga(), datasetdSaga(), componentSaga(), pageSaga(), editFormSaga()]);
 }

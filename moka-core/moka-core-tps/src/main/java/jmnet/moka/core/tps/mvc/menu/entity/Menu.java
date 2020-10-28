@@ -34,7 +34,7 @@ public class Menu extends BaseAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ_NO", nullable = false)
-    private Long seq;
+    private Long menuSeq;
 
     /**
      * 대메뉴코드

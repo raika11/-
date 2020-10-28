@@ -1,17 +1,13 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 // BrowserRouter
 import { BrowserRouter } from 'react-router-dom';
-
-// redux
-import { Provider } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 
-import store from './store';
 import Routes from './routes/Routes';
-import { getLocalItem } from '@utils/storageUtil';
 import SignIn from '@pages/Auth/SignIn';
-// import { loginJwt } from '@store/auth/authApi';
+import { init } from '@store/app';
 
 // https://www.npmjs.com/package/react-redux-toastr
 const toastrOptions = {
@@ -22,75 +18,42 @@ const toastrOptions = {
     },
 };
 
-// const AppContext = ({ children }) => <Provider store={store}>{children}</Provider>;
+const WithToastr = ({ children }) => (
+    <React.Fragment>
+        {children}
+        <ReduxToastr timeOut={5000} newestOnTop={true} position="top-right" transitionIn="fadeIn" transitionOut="fadeOut" progressBar closeOnToastrClick options={toastrOptions} />
+    </React.Fragment>
+);
 
 const App = () => {
-    const token = getLocalItem({ key: 'Authorization' });
-    console.log(token);
+    const dispatch = useDispatch();
 
-    // if (token) {
-    //     async function authCheck() {
-    //         const response = await loginJwt();
+    const { AppLoading, AppError } = useSelector((store) => ({
+        AppLoading: store.app.AppLoading,
+        AppError: store.app.AppError,
+    }));
 
-    //         if (response.data.header.success) {
-    //             return (
-    //                 <AppContext>
-    //                     <BrowserRouter>
-    //                         <Routes />
-    //                     </BrowserRouter>
+    React.useEffect(() => {
+        dispatch(init());
+    }, [dispatch]);
 
-    //                     <ReduxToastr
-    //                         timeOut={5000}
-    //                         newestOnTop={true}
-    //                         position="top-right"
-    //                         transitionIn="fadeIn"
-    //                         transitionOut="fadeOut"
-    //                         progressBar
-    //                         closeOnToastrClick
-    //                         options={toastrOptions}
-    //                     />
-    //                 </AppContext>
-    //             );
-    //         } else {
-    //             return (
-    //                 <AppContext>
-    //                     <SignIn />
-    //                 </AppContext>
-    //             );
-    //         }
-    //     }
-
-    //     authCheck();
-    // }
-
-    // return (
-    //     <AppContext>
-    //         <SignIn />
-    //     </AppContext>
-    // );
-
-    return (
-        <Provider store={store}>
-            {token ? (
+    if (!AppLoading && !AppError) {
+        return (
+            <WithToastr>
                 <BrowserRouter>
                     <Routes />
                 </BrowserRouter>
-            ) : (
+            </WithToastr>
+        );
+    } else if (AppError) {
+        return (
+            <WithToastr>
                 <SignIn />
-            )}
+            </WithToastr>
+        );
+    }
 
-            <ReduxToastr
-                timeOut={5000}
-                newestOnTop={true}
-                position="top-right"
-                transitionIn="fadeIn"
-                transitionOut="fadeOut"
-                progressBar
-                closeOnToastrClick
-                options={toastrOptions}
-            />
-        </Provider>
-    );
+    return null;
 };
 
 export default App;

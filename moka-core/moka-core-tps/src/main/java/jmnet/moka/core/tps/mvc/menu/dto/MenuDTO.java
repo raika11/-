@@ -29,7 +29,7 @@ public class MenuDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<MenuDTO>>() {
     }.getType();
 
-    private Long seq;
+    private Long menuSeq;
 
     /**
      * 대메뉴코드

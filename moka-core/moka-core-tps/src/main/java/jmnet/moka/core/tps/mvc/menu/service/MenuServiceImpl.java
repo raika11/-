@@ -97,12 +97,17 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Menu> findAllMenuByParentId(String parentMenuId) {
-        return menuRepository.findAllByParentMenuId(parentMenuId);
+        return menuRepository.findAllByParentMenuIdOrderByMenuOrder(parentMenuId);
     }
 
     @Override
     public List<Menu> findAllMenu() {
         return menuRepository.findAll();
+    }
+
+    @Override
+    public Optional<Menu> findMenuBySeq(Long menuSeq) {
+        return menuRepository.findById(menuSeq);
     }
 
     @Override

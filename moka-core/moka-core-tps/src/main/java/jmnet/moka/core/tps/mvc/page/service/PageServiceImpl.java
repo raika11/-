@@ -308,8 +308,12 @@ public class PageServiceImpl implements PageService {
             throws Exception {
 
         // 1. 기존 관련아이템은 삭제 후, 저장
-        Long returnValue = pageRelMapper.deleteByPageSeq(page.getPageSeq());
-        if (returnValue < 0) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        int returnValue = 1;
+        paramMap.put("pageSeq", page.getPageSeq());
+        paramMap.put("returnValue", returnValue);
+        pageRelMapper.deleteByPageSeq(paramMap);
+        if ((int) paramMap.get("returnValue") < 0) {
             log.debug("DELETE FAIL WMS_PAGE_REL : {} ", returnValue);
             throw new Exception("Failed to delete WMS_PAGE_REL. error code: " + returnValue);
         }

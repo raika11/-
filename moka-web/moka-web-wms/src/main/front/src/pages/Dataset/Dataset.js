@@ -24,7 +24,7 @@ const Dataset = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={412} className="mr-10" titleClassName="mb-0" title="데이터셋 검색">
+            <MokaCard width={412} className="mr-gutter" titleClassName="mb-0" title="데이터셋 검색">
                 <Suspense>
                     <DatasetList />
                 </Suspense>

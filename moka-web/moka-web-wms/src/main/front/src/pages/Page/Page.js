@@ -93,7 +93,7 @@ const Page = () => {
 
             {/* 리스트 */}
             <MokaCard
-                className="mr-10"
+                className="mr-gutter"
                 headerClassName="pb-0"
                 titleClassName="mb-0"
                 title="페이지관리"

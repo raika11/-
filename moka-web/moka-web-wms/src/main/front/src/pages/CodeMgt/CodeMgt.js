@@ -20,7 +20,7 @@ const CodeMgt = () => {
                 </Helmet>
 
                 {/* 기타코드 리스트 */}
-                <MokaCard width={260} className="mr-10" titleClassName="mb-0">
+                <MokaCard width={260} className="mr-gutter" titleClassName="mb-0">
                     <Suspense>
                         <CodeMgtList />
                     </Suspense>

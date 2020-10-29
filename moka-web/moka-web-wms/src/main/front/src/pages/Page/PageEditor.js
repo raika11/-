@@ -14,8 +14,8 @@ const PageEditor = (props) => {
         page: store.page.page,
         latestDomainId: store.auth.latestDomainId,
         error: store.page.pageError,
-        loading:  store.loading['page/GET_PAGE'],
-        tag: store.page.tag
+        loading: store.loading['page/GET_PAGE'],
+        tag: store.page.tag,
     }));
 
     // state
@@ -64,7 +64,7 @@ const PageEditor = (props) => {
                     setErrorObj({
                         error: true,
                         message: reason,
-                        line: Number(extra)
+                        line: Number(extra),
                     });
                     bodyError++;
                 }
@@ -82,9 +82,9 @@ const PageEditor = (props) => {
     };
 
     return (
-        <MokaCardEditor 
-            className="mr-10 flex-fill"
-            title={title} 
+        <MokaCardEditor
+            className="mr-gutter flex-fill"
+            title={title}
             expansion={expansion}
             onExpansion={onExpansion}
             defaultValue={pageBody}

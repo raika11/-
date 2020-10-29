@@ -20,7 +20,7 @@ const Reserved = () => {
                 </Helmet>
 
                 {/* 예약어 검색 */}
-                <MokaCard width={412} className="mr-10" titleClassName="mb-0" title="예약어 검색">
+                <MokaCard width={412} className="mr-gutter" titleClassName="mb-0" title="예약어 검색">
                     <Suspense>
                         <ReservedList />
                     </Suspense>

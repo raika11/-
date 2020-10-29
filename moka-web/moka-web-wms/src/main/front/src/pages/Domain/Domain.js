@@ -82,7 +82,7 @@ const Domain = () => {
             </Helmet>
             {/* 리스트 */}
             <MokaCard
-                className="mb-0 mr-10"
+                className="mb-0 mr-gutter"
                 height={CARD_DEFAULT_HEIGHT}
                 headerClassName="d-flex justify-content-between align-item-center"
                 title="도메인 관리"
@@ -100,7 +100,7 @@ const Domain = () => {
             </MokaCard>
 
             {/* 탭 */}
-            <MokaCard className="mr-10 mb-0" headerClassName="d-flex justify-content-between align-item-center" title="도메인 추가" height={CARD_DEFAULT_HEIGHT} width={820}>
+            <MokaCard className="mr-gutter mb-0" headerClassName="d-flex justify-content-between align-item-center" title="도메인 추가" height={CARD_DEFAULT_HEIGHT} width={820}>
                 <Suspense>
                     <Switch>
                         <Route path={['/domain', '/domain/:domainId']} exact render={() => <DomainEdit onDelete={handleClickDelete} />} />

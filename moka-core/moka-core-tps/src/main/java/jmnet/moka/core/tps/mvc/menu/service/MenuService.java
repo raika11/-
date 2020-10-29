@@ -58,6 +58,14 @@ public interface MenuService {
     List<Menu> findAllMenuByParentId(String parentMenuId);
 
     /**
+     * 하위 메뉴 건수 조회
+     *
+     * @param parentMenuId 검색 조건
+     * @return 검색 결과
+     */
+    Long countMenuByParentId(String parentMenuId);
+
+    /**
      * 메뉴 전체 목록 조회
      *
      * @return 메뉴 목록

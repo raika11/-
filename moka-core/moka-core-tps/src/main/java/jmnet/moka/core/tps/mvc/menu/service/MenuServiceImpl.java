@@ -101,6 +101,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public Long countMenuByParentId(String parentMenuId) {
+        return menuRepository.countByParentMenuId(parentMenuId);
+    }
+
+    @Override
     public List<Menu> findAllMenu() {
         return menuRepository.findAll();
     }

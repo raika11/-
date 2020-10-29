@@ -185,7 +185,7 @@ public class MenuRestController {
 
                 // 결과리턴
                 MenuDTO dto = modelMapper.map(returnValue, MenuDTO.class);
-                ResultDTO<MenuDTO> resultDto = new ResultDTO<>(dto);
+                ResultDTO<MenuDTO> resultDto = new ResultDTO<>(dto, messageByLocale.get("tps.menu.success.insert", request));
 
                 // 액션 로그에 성공 로그 출력
                 tpsLogger.success();
@@ -240,7 +240,7 @@ public class MenuRestController {
 
             // 결과리턴
             MenuDTO dto = modelMapper.map(returnValue, MenuDTO.class);
-            ResultDTO<MenuDTO> resultDto = new ResultDTO<>(dto);
+            ResultDTO<MenuDTO> resultDto = new ResultDTO<>(dto, messageByLocale.get("tps.menu.success.update", request));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success();
@@ -298,7 +298,7 @@ public class MenuRestController {
 
             // 결과리턴
             List<MenuDTO> resultList = modelMapper.map(menuList, MenuDTO.TYPE);
-            ResultDTO<List<MenuDTO>> resultDto = new ResultDTO<>(resultList);
+            ResultDTO<List<MenuDTO>> resultDto = new ResultDTO<>(resultList, messageByLocale.get("tps.menu.success.change-menuOrder", request));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success();
@@ -517,19 +517,31 @@ public class MenuRestController {
                 .findMenuById(menuId)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
         boolean success = false;
+        String message = "";
         try {
+
             // 삭제
-            if (!menuService.isUsedGroupOrMember(menuId)) {
-                menuService.deleteMenu(menu);
-                success = true;
-                // 액션 로그에 성공 로그 출력
-                tpsLogger.success();
+            if (menuService.isUsedGroupOrMember(menuId)) {
+                if (menuService.countMenuByParentId(menuId) == 0) {
+                    menuService.deleteMenu(menu);
+                    success = true;
+                    message = messageByLocale.get("tps.menu.success.delete", request);
+                } else {
+                    message = messageByLocale.get("tps.menu.error.delete.exist.children", request);
+                }
             } else {
-                tpsLogger.fail(messageByLocale.get("tps.menu.error.delete.related", request));
+                message = messageByLocale.get("tps.menu.error.delete.related", request);
+            }
+
+            if (success) {
+                // 액션 로그에 성공 로그 출력
+                tpsLogger.success(message);
+            } else {
+                tpsLogger.fail(message);
             }
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(success);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, message);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {

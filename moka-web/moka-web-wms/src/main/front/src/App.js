@@ -29,8 +29,8 @@ const App = () => {
     const dispatch = useDispatch();
 
     const { APP_LOADING, APP_ERROR } = useSelector((store) => ({
-        APP_LOADING: store.app.AppLoading,
-        APP_ERROR: store.app.AppError,
+        APP_LOADING: store.app.APP_LOADING,
+        APP_ERROR: store.app.APP_ERROR,
     }));
 
     React.useEffect(() => {

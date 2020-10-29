@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
+import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
 import { changeTemplate, saveTemplate, changeInvalidList } from '@store/template';
@@ -110,7 +111,7 @@ const TemplateEdit = ({ onDelete }) => {
                         notification('success', header.message);
                         history.push(`/template/${body.templateSeq}`);
                     } else {
-                        notification('warning', header.message || '실패하였습니다');
+                        notification('warning', header.message);
                     }
                 },
             }),
@@ -168,16 +169,18 @@ const TemplateEdit = ({ onDelete }) => {
         setTemplateWidth(template.templateWidth || 0);
         setTemplateGroup(template.templateGroup || '');
         setTemplateThumb(template.templateThumb);
-        if (template.templateThumb && template.templateThumb !== '') {
-            setThumbSrc(`//stg-backoffice.joongang.co.kr${UPLOAD_PATH_URL}/${template.templateThumb}`);
+    }, [template]);
+
+    useEffect(() => {
+        if (templateThumb && templateThumb !== '') {
+            setThumbSrc(`${API_BASE_URL}${UPLOAD_PATH_URL}/${templateThumb}`);
         } else {
             setThumbSrc(null);
         }
-        imgFileRef.current.deleteFile();
-    }, [UPLOAD_PATH_URL, template]);
+    }, [UPLOAD_PATH_URL, templateThumb]);
 
     useEffect(() => {
-        setFileValue(null);
+        imgFileRef.current.deleteFile();
     }, [template.templateSeq]);
 
     useEffect(() => {

@@ -68,6 +68,11 @@ body {
         color: $gray-550;
     }
 }
+.thumb-card-selected {
+    transition: none 0s ease 0s;
+    box-shadow: 0 0 0 1px $primary !important;
+    border-color: $primary !important;
+}
 
 .template-group-label {
     right: 2px;

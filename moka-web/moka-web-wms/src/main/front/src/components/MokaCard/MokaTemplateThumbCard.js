@@ -1,10 +1,9 @@
 import React, { useRef, useEffect, forwardRef } from 'react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-
 import Dropdown from 'react-bootstrap/Dropdown';
 import BSImage from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
-
 import { MokaIcon } from '@components';
 import bg from '@assets/images/bg.jpeg';
 
@@ -67,7 +66,7 @@ const defaultProps = {
  * TODO selected 처리해야함
  */
 const MokaTemplateThumbCard = forwardRef((props, ref) => {
-    const { onClick, menus, width, height, data, img, alt } = props;
+    const { onClick, menus, width, height, data, img, alt, selected } = props;
     const imgRef = useRef(null);
     const wrapperRef = useRef(null);
 
@@ -154,7 +153,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
 
     return (
         <div ref={ref} className="p-03" style={{ width, height }}>
-            <div className="border rounded d-flex flex-direction-column h-100 w-100">
+            <div className={clsx('border rounded d-flex flex-direction-column h-100 w-100', { 'thumb-card-selected': selected })}>
                 <div className="position-relative overflow-hidden flex-fill cursor-pointer">
                     <div className="w-100 h-100 absolute-top">
                         <div ref={wrapperRef} className="w-100 h-100 d-flex align-item-centers rounded-top justify-content-center overflow-hidden" onClick={handleThumbClick}>

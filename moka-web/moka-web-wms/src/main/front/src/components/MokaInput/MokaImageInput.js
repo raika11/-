@@ -48,7 +48,7 @@ const defaultProps = {
         heading: null,
         body: '이미지파일만 등록할 수 있습니다',
     },
-    alt: '이미지 로드 실패',
+    alt: '이미지',
 };
 
 /**
@@ -73,7 +73,6 @@ const MokaImageInput = forwardRef((props, ref) => {
         defaultRef.current.classList.remove('d-none');
         defaultRef.current.classList.add('d-flex');
         setImgSrc(null);
-        setAlert(false);
     };
 
     const imageShow = () => {
@@ -93,6 +92,7 @@ const MokaImageInput = forwardRef((props, ref) => {
             inputRef.current.value = null;
         }
         imageHide();
+        setAlert(false);
     }, [setFileValue]);
 
     // 리턴 ref 설정
@@ -153,14 +153,15 @@ const MokaImageInput = forwardRef((props, ref) => {
         } else {
             // 이미지가 아닐 경우 alert 처리
             setAlert(true);
+            imageHide();
         }
     };
 
-    const onDragEnter = (e) => {
+    const handleDragEnter = (e) => {
         wrapRef.current.classList.add('dropzone-dragover');
     };
 
-    const onDragLeave = (e) => {
+    const handleDragLeave = (e) => {
         wrapRef.current.classList.remove('dropzone-dragover');
     };
 
@@ -173,7 +174,7 @@ const MokaImageInput = forwardRef((props, ref) => {
     }, [img, previewImg]);
 
     return (
-        <Dropzone onDrop={onDrop} onDragEnter={onDragEnter} onDragLeave={onDragLeave} preventDropOnDocument>
+        <Dropzone onDrop={onDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} preventDropOnDocument>
             {({ getRootProps, getInputProps }) => {
                 const inputProps = getInputProps();
                 inputRef.current = inputProps.ref.current;
@@ -187,7 +188,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         as="div"
                     >
                         {/* 이미지 미리보기 */}
-                        <Figure.Image width={width} height={height} alt={alt} src={imgSrc} ref={imgRef} />
+                        <Figure.Image width={width} height={height} className="mb-0" alt={alt} src={imgSrc} ref={imgRef} />
 
                         {/* input file */}
                         {alert === false && imgSrc === null && <input {...inputProps} />}

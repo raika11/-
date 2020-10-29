@@ -265,7 +265,7 @@ const Dashboard = () => {
                                         { placeholder: '템플릿명', disabled: true },
                                     ]}
                                 />
-                                <MokaSearchInput variant="warning" onSearch={() => toastr.success('테스트', '성공')} />
+                                {/* <MokaSearchInput variant="warning" onSearch={() => toastr.success('테스트', '성공')} /> */}
                             </Form.Group>
                         </Form>,
                         <React.Fragment>

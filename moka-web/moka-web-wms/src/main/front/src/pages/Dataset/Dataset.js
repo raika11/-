@@ -1,9 +1,11 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
+import { useDispatch } from 'react-redux';
+import { clearStore } from '@store/dataset';
 
 const DatasetEdit = React.lazy(() => import('./DatasetEdit'));
 const DatasetList = React.lazy(() => import('./DatasetList'));
@@ -15,6 +17,13 @@ const DatasetContainerList = React.lazy(() => import('./relations/DatasetContain
 const DatasetComponentList = React.lazy(() => import('./relations/DatasetComponentList'));
 
 const Dataset = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    });
+
     return (
         <div className="d-flex">
             <Helmet>

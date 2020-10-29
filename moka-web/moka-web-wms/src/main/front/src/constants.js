@@ -34,3 +34,10 @@ export const CODETYPE_SERVICE_TYPE = 'SERVICE_TYPE';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';
+
+// API 파라미터 힌트
+export const API_PARAM_HINT_DATASET_SEQ = 'datasetSeq';
+export const API_PARAM_HINT_BUSE_ID = 'buseId';
+export const API_PARAM_HINT_GIJA_ID = 'gijaId';
+export const API_PARAM_HINT_SERIES_ID = 'seriesId';
+export const API_PARAM_HINT_CODE_ID = 'codeId';

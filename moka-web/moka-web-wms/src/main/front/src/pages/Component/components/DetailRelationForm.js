@@ -33,6 +33,28 @@ const DetailRelationForm = (props) => {
     const [skinModalShow, setSkinModalShow] = useState(false);
     const [templateError, setTemplateError] = useState(false);
 
+    const handleChangeDataset = (e) => {
+        const { value, checked } = e.target;
+        if (!checked) return;
+
+        setDataType(value);
+        if (value === 'AUTO') {
+            if (prevAutoDataset) {
+                setDataset(prevAutoDataset);
+            } else {
+                setDataset({});
+            }
+        } else if (value === 'DESK') {
+            if (prevDeskDataset) {
+                setDataset(prevDeskDataset);
+            } else {
+                setDataset({});
+            }
+        } else {
+            setDataset({});
+        }
+    };
+
     useEffect(() => {
         // invalidList 처리
         if (invalidList.length > 0) {
@@ -107,15 +129,9 @@ const DetailRelationForm = (props) => {
                                 as="radio"
                                 id="data-type-desk"
                                 name="dataType"
+                                value="DESK"
                                 inputProps={{ label: '수동', custom: true, checked: dataType === 'DESK' }}
-                                onChange={() => {
-                                    setDataType('DESK');
-                                    if (prevDeskDataset) {
-                                        setDataset(prevDeskDataset);
-                                    } else {
-                                        setDataset({});
-                                    }
-                                }}
+                                onChange={handleChangeDataset}
                             />
                             {dataType === 'DESK' && <MokaInput placeholder="ID" value={prevDeskDataset ? prevDeskDataset.datasetSeq : ''} disabled />}
                         </Col>
@@ -128,23 +144,18 @@ const DetailRelationForm = (props) => {
                                 as="radio"
                                 id="data-type-auto"
                                 name="dataType"
+                                value="AUTO"
                                 inputProps={{ label: '자동', custom: true, checked: dataType === 'AUTO' }}
-                                onChange={() => {
-                                    setDataType('AUTO');
-                                    if (prevAutoDataset) {
-                                        setDataset(prevAutoDataset);
-                                    } else {
-                                        setDataset({});
-                                    }
-                                }}
+                                onChange={handleChangeDataset}
                             />
                             {dataType === 'AUTO' && (
                                 <MokaPrependLinkInput
-                                    to={prevAutoDataset ? `/dataset/${prevAutoDataset.datasetSeq}` : undefined}
-                                    linkText={prevAutoDataset ? `ID: ${prevAutoDataset.datasetSeq}` : 'ID'}
+                                    to={dataset.datasetSeq ? `/dataset/${dataset.datasetSeq}` : undefined}
+                                    linkText={dataset.datasetSeq ? `ID: ${dataset.datasetSeq}` : 'ID'}
                                     inputList={{
                                         placeholder: '데이터셋 선택',
                                         className: 'bg-white',
+                                        value: dataset.datasetName,
                                         disabled: true,
                                     }}
                                     icon={<MokaIcon iconName="fal-search" />}
@@ -194,7 +205,7 @@ const DetailRelationForm = (props) => {
                     onIconClick: () => setSkinModalShow(true),
                 }}
             />
-            {/* 매칭영역 설정 */}
+            {/* 영역 설정 */}
             <Form.Row className="mb-2">
                 <Col xs={4} className="p-0">
                     <MokaInputLabel label="매칭영역" className="mb-0" value={matchZone} disabled />
@@ -232,7 +243,7 @@ const DetailRelationForm = (props) => {
                     setDataset(dataset);
                 }}
                 selected={dataset.datasetSeq}
-                exclude={[]}
+                exclude={prevDeskDataset ? prevDeskDataset.datasetSeq : undefined}
             />
 
             {/* 스킨 선택 팝업 */}

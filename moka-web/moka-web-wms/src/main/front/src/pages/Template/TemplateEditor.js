@@ -9,14 +9,16 @@ const TemplateEditor = (props) => {
     const { expansion, onExpansion } = props;
     const { templateSeq } = useParams();
     const dispatch = useDispatch();
-    const { templateBody, template, latestDomainId } = useSelector((store) => ({
+    const { templateBody, template, invalidList, latestDomainId } = useSelector((store) => ({
         templateBody: store.template.templateBody,
         template: store.template.template,
+        invalidList: store.template.invalidList,
         latestDomainId: store.auth.latestDomainId,
     }));
 
     // state
     const [title, setTitle] = useState('템플릿 편집');
+    const [error, setError] = useState({});
 
     /**
      * onBlur
@@ -57,7 +59,30 @@ const TemplateEditor = (props) => {
         }
     }, [dispatch, templateSeq]);
 
-    return <MokaCardEditor className="mr-10 flex-fill" title={title} expansion={expansion} onExpansion={onExpansion} defaultValue={templateBody} onBlur={handleBlur} />;
+    useEffect(() => {
+        let isInvalid = false;
+
+        // invalidList 처리
+        if (invalidList.length > 0) {
+            invalidList.forEach((i) => {
+                if (i.field === 'templateBody') {
+                    setError({
+                        line: Number(i.extra),
+                        message: i.reason,
+                    });
+                    isInvalid = isInvalid || true;
+                }
+            });
+        }
+
+        if (!isInvalid) {
+            setError({});
+        }
+    }, [invalidList]);
+
+    return (
+        <MokaCardEditor className="mr-10 flex-fill" error={error} title={title} expansion={expansion} onExpansion={onExpansion} defaultValue={templateBody} onBlur={handleBlur} />
+    );
 };
 
 export default TemplateEditor;

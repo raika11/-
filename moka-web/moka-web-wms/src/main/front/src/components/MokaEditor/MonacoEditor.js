@@ -54,12 +54,16 @@ const MonacoEditor = forwardRef((props, ref) => {
     const [editor, setEditor] = useState(null);
 
     // 리턴 ref 설정
-    useImperativeHandle(ref, () => ({
-        container: containerElement.current,
-        monaco,
-        editorInstance: editorRef.current,
-        getValue: () => editorRef.current.getValue(),
-    }));
+    useImperativeHandle(
+        ref,
+        () => ({
+            container: containerElement.current,
+            monaco,
+            editorInstance: editor,
+            getValue: () => editor.getValue(),
+        }),
+        [editor],
+    );
 
     useEffect(() => {
         // Component Did Mount (에디터 인스턴스 생성)

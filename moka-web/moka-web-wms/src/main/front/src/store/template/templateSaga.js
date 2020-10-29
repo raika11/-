@@ -60,10 +60,10 @@ function* saveTemplate({ payload: { actions, callback } }) {
         } else {
             callbackData = response.data;
 
-            // 실패 액션 실행
+            // invalidList 셋팅
             yield put({
-                type: act.GET_TEMPLATE_FAILURE,
-                payload: response.data,
+                type: act.CHANGE_INVALID_LIST,
+                payload: response.data.body.list,
             });
         }
     } catch (e) {

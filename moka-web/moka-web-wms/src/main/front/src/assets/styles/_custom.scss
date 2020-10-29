@@ -372,3 +372,27 @@ body {
     padding: 0px $card-spacer-x;
     padding-top: 3px;
 }
+
+/* -----------------------
+* Monaco Editor
+* ---------------------- */
+.errorContextGlyphMargin {
+    background-image: url('../images/icon/error_icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-x: right;
+    cursor: pointer;
+    height: 16px !important;
+    width: 16px !important;
+    margin-top: 1px;
+    margin-left: 9px;
+}
+.errorContextDecoration {
+    background-color: rgba($red, 0.09);
+}
+// 에디터 glyph hover message
+.monaco-hover .hover-row {
+    font-family: 'Noto Sans KR';
+    padding: 0px 4px;
+    font-size: 13px;
+}

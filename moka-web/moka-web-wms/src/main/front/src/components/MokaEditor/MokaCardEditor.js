@@ -1,8 +1,8 @@
-import React, { Suspense, useCallback, forwardRef, useState, useRef, useImperativeHandle } from 'react';
+import React, { Suspense, forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MokaIcon, MokaCard } from '@components';
 import defaultOptions from './options';
-const MonacoEditor = React.lazy(() => import('./MonacoEditor'));
+import MokaEditor from './MokaEditorCore';
 
 const propTypes = {
     /**
@@ -22,6 +22,16 @@ const propTypes = {
      */
     title: PropTypes.string,
     /**
+     * 확장 여부
+     */
+    expansion: PropTypes.bool,
+    /**
+     * 확장 버튼 클릭 콜백
+     */
+    onExpansion: PropTypes.func,
+    /**
+     * ---------------------------------------------------------
+     * 에디터가 사용하는 props
      * language
      */
     language: PropTypes.oneOf(['html', 'javascript', 'css', 'json', 'xml']),
@@ -35,23 +45,33 @@ const propTypes = {
      */
     onBlur: PropTypes.func,
     /**
-     * 확장 여부
+     * 에러표시 객체
      */
-    expansion: PropTypes.bool,
+    error: PropTypes.shape({
+        /**
+         * 에러 line 몇번째 줄인지
+         */
+        line: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        /**
+         * 노출할 에러 문구
+         */
+        message: PropTypes.string,
+    }),
     /**
-     * 확장 버튼 클릭 콜백
+     * 삽입 태그
      */
-    onExpansion: PropTypes.func,
+    tag: PropTypes.string,
 };
 const defaultProps = {
     // card props
     title: '에디터',
+    expansion: false,
+    onExpansion: null,
     // editor props
     language: 'html',
     defaultValue: '',
     onBlur: null,
-    expansion: false,
-    onExpansion: null,
+    error: {},
 };
 
 /**
@@ -59,30 +79,10 @@ const defaultProps = {
  * (wordwrap, expansion 아이콘 있음)
  */
 const MokaCardEditor = forwardRef((props, ref) => {
-    const { width, height, defaultValue, language, options, className, title, onBlur, expansion, onExpansion } = props;
+    const { width, height, defaultValue, language, options, className, title, onBlur, expansion, onExpansion, error, tag } = props;
 
     // editor state
     const [wordWrap, setWordWrap] = useState(defaultOptions.wordWrap);
-
-    const editorRef = useRef(null);
-    useImperativeHandle(ref, () => editorRef.current);
-
-    /**
-     * editorDidMount
-     * @param {object} monaco 모나코 obj
-     * @param {object} editor 에디터 instance obj
-     */
-    const editorDidMount = useCallback(
-        (monaco, editor) => {
-            /** onDidBlurEditorText */
-            if (typeof onBlur === 'function') {
-                editor.onDidBlurEditorText(() => {
-                    onBlur(editor.getValue());
-                });
-            }
-        },
-        [onBlur],
-    );
 
     /**
      * 에디터 확장
@@ -129,13 +129,7 @@ const MokaCardEditor = forwardRef((props, ref) => {
             height={height}
         >
             <Suspense>
-                <MonacoEditor
-                    ref={editorRef}
-                    defaultValue={defaultValue}
-                    language={language}
-                    options={{ ...defaultOptions, ...options, wordWrap }}
-                    editorDidMount={editorDidMount}
-                />
+                <MokaEditor ref={ref} defaultValue={defaultValue} language={language} options={{ ...options, wordWrap }} onBlur={onBlur} error={error} tag={tag} />
             </Suspense>
         </MokaCard>
     );

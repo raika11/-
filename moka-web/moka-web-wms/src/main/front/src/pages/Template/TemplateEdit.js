@@ -91,7 +91,7 @@ const TemplateEdit = ({ onDelete }) => {
                 field: 'templateName',
                 reason: '',
             });
-            isInvalid = isInvalid | true;
+            isInvalid = isInvalid || true;
         }
 
         dispatch(changeInvalidList(errList));

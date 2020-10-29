@@ -12,7 +12,6 @@ import SidebarItem from './SidebarItem';
 import menu from './menu.json';
 
 const Sidebar = (props) => {
-    const { nonResponsive } = props;
     const dispatch = useDispatch();
     const nodes = menu.resultInfo.body.nodes.nodes;
 
@@ -50,8 +49,8 @@ const Sidebar = (props) => {
     return (
         <nav
             className={clsx('sidebar', {
-                toggled: !sidebarIsOpen && !nonResponsive,
-                'sidebar-sticky': sidebarIsSticky && !nonResponsive,
+                toggled: !sidebarIsOpen,
+                'sidebar-sticky': sidebarIsSticky,
             })}
         >
             <div className="sidebar-content">

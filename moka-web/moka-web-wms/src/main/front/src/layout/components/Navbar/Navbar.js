@@ -8,10 +8,13 @@ import NavButtons from './NavButtons';
 
 import { toggleSidebar } from '@store/layout/layoutAction';
 
-const MokaNavbar = ({ nonResponsive }) => {
+const MokaNavbar = () => {
     const dispatch = useDispatch();
 
-    const onToggleSidebar = () => {
+    /**
+     * 사이드바 토글 버튼
+     */
+    const handleToggleSidebar = () => {
         dispatch(toggleSidebar());
     };
 
@@ -20,11 +23,9 @@ const MokaNavbar = ({ nonResponsive }) => {
             <div className="d-flex justify-content-between align-items-center w-100 h-100">
                 <div className="d-flex align-items-center">
                     {/* sidebar toggle button */}
-                    {!nonResponsive && (
-                        <span className="sidebar-toggle d-flex mr-2" onClick={onToggleSidebar}>
-                            <i className="hamburger align-self-center" />
-                        </span>
-                    )}
+                    <span className="sidebar-toggle d-flex mr-2" onClick={handleToggleSidebar}>
+                        <i className="hamburger align-self-center" />
+                    </span>
 
                     {/* breadcrumb */}
                     <Breadcrumb />

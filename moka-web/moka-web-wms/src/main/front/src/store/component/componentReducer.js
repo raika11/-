@@ -43,7 +43,6 @@ export default handleActions(
          * 검색조건 변경
          */
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
-            console.log(payload);
             return produce(state, (draft) => {
                 draft.search = payload;
             });

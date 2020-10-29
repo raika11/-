@@ -10,14 +10,6 @@ import { MokaSearchInput, MokaInput } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { getPageTree, changeSearchOption, initialState, clearPage } from '@store/page';
 
-const defaultSearchType = [
-    { id: 'all', name: '전체' },
-    { id: 'pageSeq', name: '페이지ID' },
-    { id: 'pageName', name: '페이지명' },
-    { id: 'pageServiceName', name: '서비스명' },
-    { id: 'pageBody', name: '페이지본문' },
-];
-
 /**
  * 페이지 검색 컴포넌트
  */
@@ -56,7 +48,6 @@ const PageSearch = () => {
     useEffect(() => {
         // latestDomainId 변경 => 템플릿의 search.domainId 변경
         if (latestDomainId && latestDomainId !== search.domainId) {
-            
             dispatch(
                 getPageTree(
                     changeSearchOption({
@@ -78,19 +69,14 @@ const PageSearch = () => {
             dispatch(clearPage());
             history.push('/page');
         },
-        [dispatch, history]
+        [dispatch, history],
     );
 
     return (
         <Form className="mb-10">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
-                <MokaInput
-                    as="select"
-                    className="w-100"
-                    value={search.domainId || undefined}
-                    onChange={handleChangeDomain}
-                >
+                <MokaInput as="select" className="w-100" value={search.domainId || undefined} onChange={handleChangeDomain}>
                     {domainList.map((domain) => (
                         <option key={domain.domainId} value={domain.domainId}>
                             {domain.domainName}
@@ -111,7 +97,7 @@ const PageSearch = () => {
                             });
                         }}
                     >
-                        {defaultSearchType.map((type) => (
+                        {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
                             </option>

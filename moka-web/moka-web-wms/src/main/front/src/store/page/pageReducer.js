@@ -14,6 +14,13 @@ export const initialState = {
         searchType: 'all',
         keyword: '',
     },
+    searchTypeList: [
+        { id: 'all', name: '전체' },
+        { id: 'pageSeq', name: '페이지ID' },
+        { id: 'pageName', name: '페이지명' },
+        { id: 'pageServiceName', name: '서비스명' },
+        { id: 'pageBody', name: 'TEMS 소스' },
+    ],
     page: {
         pageSeq: null,
         domain: {
@@ -144,6 +151,7 @@ export default handleActions(
                 },
                 pageUrl: parent ? parent.pageUrl : null,
             },
+            pageBody: initialState.pageBody,
             pageError: null,
         }),
         /**

@@ -18,11 +18,7 @@ const PageEdit = () => {
     const { page, pageTypeRows, latestDomainId, invalidList } = useSelector((store) => ({
         page: store.page.page,
         pageError: store.page.pageError,
-        loading:
-            store.loading['page/GET_PAGE'] ||
-            store.loading['page/POST_PAGE'] ||
-            store.loading['page/PUT_PAGE'] ||
-            store.loading['page/DELETE_PAGE'],
+        loading: store.loading['page/GET_PAGE'] || store.loading['page/POST_PAGE'] || store.loading['page/PUT_PAGE'] || store.loading['page/DELETE_PAGE'],
         pageTypeRows: store.codeMgt.pageTypeRows,
         latestDomainId: store.auth.latestDomainId,
         invalidList: store.page.invalidList,
@@ -81,7 +77,7 @@ const PageEdit = () => {
                     if (!result.header.success) {
                         history.push(`/page`);
                     }
-                }
+                },
             };
             dispatch(getPage(option));
         }
@@ -105,12 +101,12 @@ const PageEdit = () => {
         setPageType(page.pageType);
         setPageUrl(page.pageUrl);
         setPageOrd(page.pageOrd);
-        setUrlParam(page.pageUrlParam);
+        setUrlParam(page.urlParam);
         setUseYn(page.useYn);
-        setFileYn(page.pageFileYn);
-        setKwd(page.pageKwd);
-        setDescription(page.pageDescription);
-        setMoveYn(page.MoveYn);
+        setFileYn(page.fileYn);
+        setKwd(page.kwd);
+        setDescription(page.description);
+        setMoveYn(page.moveYn);
         setMoveUrl(page.MoveUrl);
     }, [page]);
 
@@ -172,9 +168,7 @@ const PageEdit = () => {
                 setPageNameError(true);
             }
         } else if (name === 'pageServiceName') {
-            const url = `${
-                parent.pageUrl === '/' ? '' : parent.pageUrl
-            }/${value}`;
+            const url = `${parent.pageUrl === '/' ? '' : parent.pageUrl}/${value}`;
             setPageUrl(url);
             setPageServiceName(value);
         } else if (name === 'pageType') {
@@ -378,19 +372,23 @@ const PageEdit = () => {
         <MokaCard titleClassName="h-100 mb-0 pb-0" title="사이트 정보">
             <Form>
                 {/* 버튼 그룹 */}
-                <Form.Group className="mb-3">
-                    <Button variant="dark" className="mr-05">
-                        W3C
-                    </Button>
-                    <Button variant="dark" className="mr-05">
-                        미리보기
-                    </Button>
-                    <Button variant="secondary" className="mr-05" onClick={handleClickSave}>
-                        전송
-                    </Button>
-                    <Button variant="secondary" className="mr-05" disabled={btnDisabled} onClick={handleClickDelete}>
-                        삭제
-                    </Button>
+                <Form.Group className="mb-3 d-flex justify-content-between">
+                    <div className="d-flex">
+                        <Button variant="dark" className="mr-05" disabled={btnDisabled}>
+                            W3C
+                        </Button>
+                        <Button variant="dark" className="mr-05" disabled={btnDisabled}>
+                            미리보기
+                        </Button>
+                    </div>
+                    <div className="d-flex">
+                        <Button variant="primary" className="mr-05" onClick={handleClickSave}>
+                            전송
+                        </Button>
+                        <Button variant="danger" disabled={btnDisabled} onClick={handleClickDelete}>
+                            삭제
+                        </Button>
+                    </div>
                 </Form.Group>
                 {/* 사용여부 */}
                 <MokaInputLabel as="switch" className="mb-2" label="사용여부" id="useYn" name="useYn" inputProps={{ checked: useYn === 'Y' }} onChange={handleChangeValue} />
@@ -476,7 +474,7 @@ const PageEdit = () => {
                             name="moveYn"
                             label="이동URL"
                             isInvalid={moveUrlError}
-                            inputProps={{ label: '', checked: moveYn === 'Y' }}
+                            inputProps={{ checked: moveYn === 'Y' }}
                             onChange={handleChangeValue}
                         />
                     </Col>
@@ -493,7 +491,7 @@ const PageEdit = () => {
                             id="fileYn"
                             name="fileYn"
                             label="파일저장"
-                            inputProps={{ label: '', checked: fileYn === 'Y' }}
+                            inputProps={{ checked: fileYn === 'Y' }}
                             onChange={handleChangeValue}
                         />
                     </Col>

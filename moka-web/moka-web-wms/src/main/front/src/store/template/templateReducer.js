@@ -25,7 +25,7 @@ export const initialState = {
         { id: 'all', name: '전체' },
         { id: 'templateSeq', name: '템플릿ID' },
         { id: 'templateName', name: '템플릿명' },
-        { id: 'templateBody', name: '템플릿본문' },
+        { id: 'templateBody', name: 'TEMS 소스' },
     ],
     template: {},
     templateError: null,

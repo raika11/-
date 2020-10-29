@@ -84,6 +84,10 @@ const DatsetListModal = (props) => {
      * 모달 닫기
      */
     const handleHide = () => {
+        setRowData([]);
+        setTotal(initialState.total);
+        setError(null);
+        setCnt(0);
         onHide();
     };
 

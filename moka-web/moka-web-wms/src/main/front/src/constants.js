@@ -9,7 +9,7 @@ export const ACCEPTED_IMAGE_TYPES = ['image/gif', 'image/jpeg', 'image/png'];
 export const UPLOAD_PATH_URL = '/mokastore/';
 
 // 카드 컴포넌트 기본 높이
-export const CARD_DEFAULT_HEIGHT = 801;
+export const CARD_DEFAULT_HEIGHT = 817;
 // 카드 접혔을 때 넓이
 export const CARD_FOLDING_WIDTH = 32;
 

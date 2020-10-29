@@ -74,7 +74,7 @@ const Container = () => {
             {/* 리스트 */}
             <MokaCard
                 width={412}
-                className="mr-10"
+                className="mr-gutter"
                 headerClassName="pb-0"
                 titleClassName="mb-0"
                 title="컨테이너 검색"
@@ -94,7 +94,7 @@ const Container = () => {
                     render={() => (
                         <>
                             {/* 에디터 */}
-                            <MokaCardEditor className="mr-10 flex-fill" title="(컨테이너명)" expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+                            <MokaCardEditor className="mr-gutter flex-fill" title="(컨테이너명)" expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
                             {/* 탭 */}
                             <MokaIconTabs

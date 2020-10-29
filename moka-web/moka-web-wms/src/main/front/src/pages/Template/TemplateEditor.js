@@ -81,7 +81,15 @@ const TemplateEditor = (props) => {
     }, [invalidList]);
 
     return (
-        <MokaCardEditor className="mr-10 flex-fill" error={error} title={title} expansion={expansion} onExpansion={onExpansion} defaultValue={templateBody} onBlur={handleBlur} />
+        <MokaCardEditor
+            className="mr-gutter flex-fill"
+            error={error}
+            title={title}
+            expansion={expansion}
+            onExpansion={onExpansion}
+            defaultValue={templateBody}
+            onBlur={handleBlur}
+        />
     );
 };
 

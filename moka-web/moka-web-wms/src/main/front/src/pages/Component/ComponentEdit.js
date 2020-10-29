@@ -198,7 +198,7 @@ const ComponentEdit = ({ onDelete }) => {
     }, [dispatch, componentSeq]);
 
     return (
-        <MokaCard width={688} title="컴포넌트 편집" className="flex-fill mr-10">
+        <MokaCard width={688} title="컴포넌트 편집" className="flex-fill mr-gutter">
             <BasicForm
                 componentSeq={component.componentSeq}
                 componentName={componentName}

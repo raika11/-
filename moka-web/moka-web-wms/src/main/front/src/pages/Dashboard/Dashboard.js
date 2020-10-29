@@ -90,7 +90,7 @@ const Dashboard = () => {
 
             <div className="d-flex">
                 <MokaCard
-                    className="mr-10 flex-shrink-0"
+                    className="mr-gutter flex-shrink-0"
                     title="왼쪽 영역"
                     titleClassName="mb-0"
                     expansion={expansionState[0]}
@@ -155,7 +155,7 @@ const Dashboard = () => {
                 </MokaCard>
 
                 <MokaCardTabs
-                    className="mr-10"
+                    className="mr-gutter"
                     tabs={[
                         <Form>
                             {/* Form 예제 */}

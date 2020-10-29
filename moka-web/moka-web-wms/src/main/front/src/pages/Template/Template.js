@@ -143,7 +143,7 @@ const Template = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={412} className="mr-10" titleClassName="mb-0" title="템플릿 검색" expansion={expansionState[0]} onExpansion={handleListExpansion} foldable>
+            <MokaCard width={412} className="mr-gutter" titleClassName="mb-0" title="템플릿 검색" expansion={expansionState[0]} onExpansion={handleListExpansion} foldable>
                 <Suspense>
                     <TemplateList onDelete={handleClickDelete} />
                 </Suspense>

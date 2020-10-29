@@ -5,7 +5,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import BSImage from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon } from '@components';
-import bg from '@assets/images/bg.jpeg';
 
 const propTypes = {
     /**

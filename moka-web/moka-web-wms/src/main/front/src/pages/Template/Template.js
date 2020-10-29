@@ -1,7 +1,7 @@
 import React, { useState, Suspense, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import produce from 'immer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -15,7 +15,7 @@ const TemplateList = React.lazy(() => import('./TemplateList'));
 const TemplateEdit = React.lazy(() => import('./TemplateEdit'));
 
 // relations
-const TemplatePageList = React.lazy(() => import('./relations/TemplatePageList'));
+const RelationPageList = React.lazy(() => import('@pages/commons/RelationPageList'));
 const TemplateSkinList = React.lazy(() => import('./relations/TemplateSkinList'));
 const TemplateContainerList = React.lazy(() => import('./relations/TemplateContainerList'));
 const TemplateComponentList = React.lazy(() => import('./relations/TemplateComponentList'));
@@ -27,6 +27,10 @@ const TemplateHistoryList = React.lazy(() => import('./relations/TemplateHistory
 const Template = () => {
     const history = useHistory();
     const dispatch = useDispatch();
+
+    const { template } = useSelector((store) => ({
+        template: store.template.template,
+    }));
 
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
@@ -149,56 +153,48 @@ const Template = () => {
                 </Suspense>
             </MokaCard>
 
+            {/* 에디터 */}
             <Switch>
-                <Route
-                    path={['/template', '/template/:templateSeq']}
-                    exact
-                    render={() => (
-                        <>
-                            {/* 에디터 */}
-                            <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
-
-                            {/* 탭 */}
-                            <MokaIconTabs
-                                expansion={expansionState[2]}
-                                onExpansion={handleTabExpansion}
-                                onSelectNav={(idx) => setOpenTabIdx(idx)}
-                                tabWidth={412}
-                                tabs={[
-                                    <Suspense>
-                                        <TemplateEdit show={openTabIdx === '0'} onDelete={handleClickDelete} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <TemplatePageList show={openTabIdx === '1'} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <TemplateSkinList show={openTabIdx === '2'} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <TemplateContainerList show={openTabIdx === '3'} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <TemplateComponentList show={openTabIdx === '4'} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <TemplateHistoryList show={openTabIdx === '5'} />
-                                    </Suspense>,
-                                ]}
-                                tabNavWidth={48}
-                                tabNavPosition="right"
-                                tabNavs={[
-                                    { title: '템플릿 정보', text: 'Info' },
-                                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
-                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },
-                                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
-                                    { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
-                                ]}
-                            />
-                        </>
-                    )}
-                />
+                <Route path={['/template', '/template/:templateSeq']} exact render={() => <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />} />
             </Switch>
+
+            {/* 탭 */}
+            <MokaIconTabs
+                expansion={expansionState[2]}
+                onExpansion={handleTabExpansion}
+                onSelectNav={(idx) => setOpenTabIdx(idx)}
+                tabWidth={412}
+                tabs={[
+                    <Suspense>
+                        <TemplateEdit show={openTabIdx === '0'} onDelete={handleClickDelete} />
+                    </Suspense>,
+                    <Suspense>
+                        <RelationPageList show={openTabIdx === '1'} relSeqType="TP" relSeq={template.templateSeq} />
+                    </Suspense>,
+                    <Suspense>
+                        <TemplateSkinList show={openTabIdx === '2'} />
+                    </Suspense>,
+                    <Suspense>
+                        <TemplateContainerList show={openTabIdx === '3'} />
+                    </Suspense>,
+                    <Suspense>
+                        <TemplateComponentList show={openTabIdx === '4'} />
+                    </Suspense>,
+                    <Suspense>
+                        <TemplateHistoryList show={openTabIdx === '5'} />
+                    </Suspense>,
+                ]}
+                tabNavWidth={48}
+                tabNavPosition="right"
+                tabNavs={[
+                    { title: '템플릿 정보', text: 'Info' },
+                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
+                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
+                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },
+                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
+                    { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
+                ]}
+            />
         </div>
     );
 };

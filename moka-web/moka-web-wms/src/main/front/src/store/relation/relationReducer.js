@@ -14,6 +14,7 @@ export const initialState = {
         relType: null,
         relSeq: null,
         relSeqType: null,
+        relSeq: null,
     },
 };
 

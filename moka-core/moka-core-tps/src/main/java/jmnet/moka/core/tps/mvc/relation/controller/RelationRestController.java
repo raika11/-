@@ -17,6 +17,7 @@ import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
+import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.page.vo.PageVO;
@@ -67,7 +68,7 @@ public class RelationRestController {
      * @return 관련아이템 목록
      * @throws Exception 예외
      */
-    @ApiOperation(value = "관련 아이템 목록조회")
+    @ApiOperation(value = "관련 아이템 목록조회(부모찾기)")
     @GetMapping
     public ResponseEntity<?> getRelationList(HttpServletRequest request, @Valid @SearchParam RelationSearchDTO search)
             throws Exception {
@@ -128,6 +129,18 @@ public class RelationRestController {
             } else if (relType.equals(MokaConstants.ITEM_COMPONENT)) {
 
                 // 컴포넌트 목록 조회
+//                search.setEntityClass(ComponentVO.class);
+//                search.setDefaultSort("componentSeq,desc");
+//
+//                List<ComponentVO> returnValue = relationService.findAllComponent(search);
+//
+//                ResultListDTO<ComponentVO> resultList = new ResultListDTO<ComponentVO>();
+//                resultList.setList(returnValue);
+//                resultList.setTotalCnt(search.getTotal());
+//
+//                ResultDTO<ResultListDTO<ComponentVO>> resultDTO = new ResultDTO<ResultListDTO<ComponentVO>>(resultList);
+//                tpsLogger.success(ActionType.SELECT, true);
+//                return new ResponseEntity<>(resultDTO, HttpStatus.OK);
                 search.setDefaultSort("componentSeq,desc");
                 Pageable pageable = search.getPageable();
 

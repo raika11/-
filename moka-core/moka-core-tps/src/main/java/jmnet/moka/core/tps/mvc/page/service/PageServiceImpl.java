@@ -313,8 +313,8 @@ public class PageServiceImpl implements PageService {
         paramMap.put("returnValue", returnValue);
         pageRelMapper.deleteByPageSeq(paramMap);
         if ((int) paramMap.get("returnValue") < 0) {
-            log.debug("DELETE FAIL WMS_PAGE_REL : {} ", returnValue);
-            throw new Exception("Failed to delete WMS_PAGE_REL. error code: " + returnValue);
+            log.debug("DELETE FAIL PAGE RELATION : {} ", returnValue);
+            throw new Exception("Failed to delete PAGE RELATION error code: " + returnValue);
         }
         insertPageRel(page);
 

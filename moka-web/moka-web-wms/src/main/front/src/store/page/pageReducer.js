@@ -1,7 +1,6 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './pageAction';
-import { PAGE_TYPE_HTML } from '@/constants';
 
 /**
  * initialState
@@ -36,11 +35,11 @@ export const initialState = {
             pageName: null,
             pageUrl: null,
         },
-        pageType: PAGE_TYPE_HTML,
+        pageType: null,
         pageUrl: null,
         pageOrd: 1,
         pageBody: '',
-        urlParam: '',
+        urlParam: null,
         useYn: 'Y',
         fileYn: 'N',
         kwd: null,

@@ -153,4 +153,6 @@ public class MokaConstants {
 
     public static final String YES = McpString.YES;
     public static final String NO = McpString.NO;
+
+    public static final String ROOT_MENU_ID = "";
 }

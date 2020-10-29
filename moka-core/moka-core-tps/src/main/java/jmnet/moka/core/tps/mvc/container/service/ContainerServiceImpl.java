@@ -3,7 +3,9 @@ package jmnet.moka.core.tps.mvc.container.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpDate;
@@ -212,10 +214,14 @@ public class ContainerServiceImpl implements ContainerService {
             throws Exception {
 
         // 1. 기존 관련아이템은 삭제 후, 저장
-        Long returnValue = containerRelMapper.deleteByContainerSeq(container.getContainerSeq());
-        if (returnValue < 0) {
-            log.debug("DELETE FAIL CONTAINER_REL : {} ", returnValue);
-            throw new Exception("Failed to delete CONTAINER_REL. error code: " + returnValue);
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        paramMap.put("pageSeq", container.getContainerSeq());
+        paramMap.put("returnValue", returnValue);
+        containerRelMapper.deleteByContainerSeq(paramMap);
+        if ((int) paramMap.get("returnValue") < 0) {
+            log.debug("DELETE FAIL CONTAINER RELATION : {} ", returnValue);
+            throw new Exception("Failed to delete CONTAINER RELATION error code: " + returnValue);
         }
         insertRel(container);
 

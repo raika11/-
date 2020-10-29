@@ -127,7 +127,7 @@ public interface ComponentService {
      * @param pageable Pageable
      * @return 컴포넌트 목록
      */
-    public Page<Component> findAllRel(RelationSearchDTO search, Pageable pageable);
+    public Page<Component> findAllComponentRel(RelationSearchDTO search, Pageable pageable);
 
     /**
      * 도메인아이디와 관련된 컴포넌트수

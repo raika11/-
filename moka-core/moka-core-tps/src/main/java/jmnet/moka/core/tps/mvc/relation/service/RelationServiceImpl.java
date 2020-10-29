@@ -4,11 +4,14 @@
 
 package jmnet.moka.core.tps.mvc.relation.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.ad.service.AdService;
+import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
+import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
@@ -73,8 +76,41 @@ public class RelationServiceImpl implements RelationService {
 
     @Override
     public Page<Component> findAllComponent(RelationSearchDTO search, Pageable pageable) {
-        return componentService.findAllRel(search, pageable);
+        return componentService.findAllComponentRel(search, pageable);
     }
+//    public List<ComponentVO> findAllComponent(RelationSearchDTO search) {
+//        String itemType = search.getRelSeqType();
+//        if (itemType.equals(MokaConstants.ITEM_TEMPLATE) || itemType.equals(MokaConstants.ITEM_DATASET)) {
+//            search.setDefaultSort("componentSeq,desc");
+//            Pageable pageable = search.getPageable();
+//            Page<Component> cpList = componentService.findAllComponentRel(search, pageable);
+//            List<ComponentVO> retList = new ArrayList<ComponentVO>();
+//            Integer relOrd = 0;
+//            for(Component cp: cpList) {
+//                ComponentVO vo = ComponentVO.builder()
+//                    .componentSeq(cp.getComponentSeq())
+//                    .componentName(cp.getComponentName())
+//                    .templateGroupName(cp.getTemplate().getTemplateGroupName())
+////                    .useYn(MokaConstants.YES)
+//                    .templateSeq(cp.getTemplate().getTemplateSeq())
+//                    .relOrd(relOrd)
+//                    .build();
+//                retList.add(vo);
+//            }
+//            search.setTotal((long) retList.size());
+//            return retList;
+//        } else {
+//            String searchType;
+//            switch (search.getRelSeqType()) {
+//                case MokaConstants.ITEM_PAGE: searchType = "pageSeq"; break;
+//                case MokaConstants.ITEM_CONTENT_SKIN: searchType = "skinSeq"; break;
+//                case MokaConstants.ITEM_CONTAINER: searchType = "containerSeq"; break;
+//                default: searchType = "pageSeq";
+//            }
+//            ComponentSearchDTO cpSearch = ComponentSearchDTO.builder().searchType(searchType).keyword(search.getRelSeq().toString()).build();
+//            return componentService.findAllComponent(cpSearch);
+//        }
+//    }
 
     @Override
     public Boolean hasRelations(Long seq, String itemType) {
@@ -175,7 +211,7 @@ public class RelationServiceImpl implements RelationService {
             // 컴포넌트 목록 조회
             search.setDefaultSort("componentSeq,desc");
             Pageable pageable = search.getPageable();
-            Page<Component> components = componentService.findAllRel(search, pageable);
+            Page<Component> components = componentService.findAllComponentRel(search, pageable);
             if (components.getTotalElements() > 0) {
                 return true;
             }

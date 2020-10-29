@@ -296,7 +296,7 @@ public class ComponentServiceImpl implements ComponentService {
     }
 
     @Override
-    public Page<Component> findAllRel(RelationSearchDTO search, Pageable pageable) {
+    public Page<Component> findAllComponentRel(RelationSearchDTO search, Pageable pageable) {
         if (search.getRelSeqType()
                   .equals(MokaConstants.ITEM_TEMPLATE)) {
             // 템플릿

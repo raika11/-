@@ -61,6 +61,7 @@ const PageTree = () => {
      * @param {*} item
      */
     const handleInsertSub = (item) => {
+        debugger;
         const parent = {
             pageSeq: item.pageSeq,
             pageName: item.pageName,

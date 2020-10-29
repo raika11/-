@@ -15,13 +15,14 @@ const PageEdit = () => {
     const { pageSeq: paramPageSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { page, pageTypeRows, latestDomainId, invalidList } = useSelector((store) => ({
+    const { page, pageError, loading, pageTypeRows, latestDomainId, invalidList, PAGE_TYPE_HTML } = useSelector((store) => ({
         page: store.page.page,
         pageError: store.page.pageError,
         loading: store.loading['page/GET_PAGE'] || store.loading['page/POST_PAGE'] || store.loading['page/PUT_PAGE'] || store.loading['page/DELETE_PAGE'],
         pageTypeRows: store.codeMgt.pageTypeRows,
         latestDomainId: store.auth.latestDomainId,
         invalidList: store.page.invalidList,
+        PAGE_TYPE_HTML: store.app.PAGE_TYPE_HTML,
     }));
 
     // state
@@ -29,7 +30,7 @@ const PageEdit = () => {
     const [pageServiceName, setPageServiceName] = useState(initialState.pageServiceName);
     const [pageDisplayName, setPageDisplayName] = useState(initialState.pageDisplayName);
     const [parent, setParent] = useState(initialState.parent);
-    const [pageType, setPageType] = useState(initialState.pageType);
+    const [pageType, setPageType] = useState(initialState.pageType || PAGE_TYPE_HTML);
     const [pageUrl, setPageUrl] = useState(initialState.pageUrl);
     const [pageOrd, setPageOrd] = useState(initialState.pageOrd);
     const [urlParam, setUrlParam] = useState(initialState.urlParam);
@@ -98,7 +99,7 @@ const PageEdit = () => {
         setPageServiceName(page.pageServiceName);
         setPageDisplayName(page.pageDisplayName);
         setParent(page.parent);
-        setPageType(page.pageType);
+        setPageType(page.pageType || PAGE_TYPE_HTML);
         setPageUrl(page.pageUrl);
         setPageOrd(page.pageOrd);
         setUrlParam(page.urlParam);
@@ -108,7 +109,7 @@ const PageEdit = () => {
         setDescription(page.description);
         setMoveYn(page.moveYn);
         setMoveUrl(page.MoveUrl);
-    }, [page]);
+    }, [PAGE_TYPE_HTML, page]);
 
     useEffect(() => {
         // invalidList 처리

@@ -133,6 +133,7 @@ const TemplateAgGrid = ({ onDelete }) => {
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
                     onClick={handleRowClicked}
+                    selected={template.templateSeq}
                     menus={[
                         {
                             title: '복사본 생성',

@@ -69,6 +69,7 @@ const TemplateListModal = (props) => {
      */
     const handleHide = () => {
         dispatch(clearStore());
+        setListType('list');
         onHide();
     };
 
@@ -303,9 +304,10 @@ const TemplateListModal = (props) => {
                             ))}
                         </MokaInput>
                     </Col>
-                    {/* 키워드 */}
-                    <Col xs={6} className="p-0">
+                    <Col xs={8} className="p-0 d-flex">
+                        {/* 키워드 */}
                         <MokaSearchInput
+                            className="pr-2 flex-fill"
                             value={search.keyword}
                             onChange={(e) => {
                                 dispatch(
@@ -317,9 +319,7 @@ const TemplateListModal = (props) => {
                             }}
                             onSearch={handleSearch}
                         />
-                    </Col>
-                    {/* 버튼 그룹 */}
-                    <Col xs={2} className="p-0 pl-2">
+                        {/* 버튼 그룹 */}
                         <Nav
                             as={ButtonGroup}
                             size="sm"

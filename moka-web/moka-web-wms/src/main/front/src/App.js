@@ -28,16 +28,16 @@ const WithToastr = ({ children }) => (
 const App = () => {
     const dispatch = useDispatch();
 
-    const { AppLoading, AppError } = useSelector((store) => ({
-        AppLoading: store.app.AppLoading,
-        AppError: store.app.AppError,
+    const { APP_LOADING, APP_ERROR } = useSelector((store) => ({
+        APP_LOADING: store.app.AppLoading,
+        APP_ERROR: store.app.AppError,
     }));
 
     React.useEffect(() => {
         dispatch(init());
     }, [dispatch]);
 
-    if (!AppLoading && !AppError) {
+    if (!APP_LOADING && !APP_ERROR) {
         return (
             <WithToastr>
                 <BrowserRouter>
@@ -45,7 +45,7 @@ const App = () => {
                 </BrowserRouter>
             </WithToastr>
         );
-    } else if (AppError) {
+    } else if (APP_ERROR) {
         return (
             <WithToastr>
                 <SignIn />

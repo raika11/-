@@ -9,16 +9,11 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 import { MokaModal, MokaInput, MokaSearchInput, MokaIcon, MokaTable, MokaThumbTable } from '@components';
 import { getTpZone, getTpSize } from '@store/codeMgt';
-import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
+import { initialState, GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
-export const defaultTemplateSearchType = [
-    { id: 'all', name: '전체' },
-    { id: 'templateSeq', name: '템플릿ID' },
-    { id: 'templateName', name: '템플릿명' },
-    { id: 'templateBody', name: '템플릿본문' },
-];
+export const { searchTypeList } = initialState;
 
 const propTypes = {
     show: PropTypes.bool,
@@ -301,7 +296,7 @@ const TemplateListModal = (props) => {
                                 );
                             }}
                         >
-                            {defaultTemplateSearchType.map((type) => (
+                            {searchTypeList.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>

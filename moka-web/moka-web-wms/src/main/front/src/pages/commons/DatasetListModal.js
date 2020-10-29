@@ -5,15 +5,11 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { GET_DATASET_LIST, clearStore, getDatasetList, changeSearchOption } from '@store/dataset';
+import { initialState, getDatasetListModal, GET_DATASET_LIST_MODAL } from '@store/dataset';
 import columnDefs from './DatasetListModalColums';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
-export const defaultDatasetSearchType = [
-    { id: 'all', name: '전체' },
-    { id: 'datasetSeq', name: '데이터셋ID' },
-    { id: 'datasetName', name: '데이터셋명' },
-];
+export const { searchTypeList } = initialState;
 
 const propTypes = {
     show: PropTypes.bool,
@@ -45,19 +41,19 @@ const DatsetListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
     const dispatch = useDispatch();
 
-    const { latestDomainId, search, total, list, error, loading } = useSelector((store) => ({
+    const { latestDomainId, loading } = useSelector((store) => ({
         latestDomainId: store.auth.latestDomainId,
-        search: store.dataset.search,
-        total: store.dataset.total,
-        list: store.dataset.list,
-        error: store.dataset.error,
-        loading: store.loading[GET_DATASET_LIST],
+        loading: store.loading[GET_DATASET_LIST_MODAL],
     }));
 
     // state
+    const [search, setSearch] = useState(initialState.search);
+    const [total, setTotal] = useState(initialState.total);
+    const [error, setError] = useState(initialState.error);
     const [selected, setSelected] = useState('');
     const [selectedDataset, setSelectedDataset] = useState({});
     const [rowData, setRowData] = useState([]);
+    const [cnt, setCnt] = useState(0);
 
     useEffect(() => {
         // 선택된 값 셋팅
@@ -65,10 +61,29 @@ const DatsetListModal = (props) => {
     }, [defaultSelected]);
 
     /**
+     * 리스트 조회 콜백
+     */
+    const responseCallback = ({ header, body }) => {
+        if (header.success) {
+            setRowData(
+                body.list.map((data) => ({
+                    ...data,
+                    autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '수동형',
+                })),
+            );
+            setTotal(body.totalCnt);
+            setError(initialState.error);
+        } else {
+            setRowData([]);
+            setTotal(initialState.total);
+            setError(body);
+        }
+    };
+
+    /**
      * 모달 닫기
      */
     const handleHide = () => {
-        dispatch(clearStore());
         onHide();
     };
 
@@ -91,30 +106,25 @@ const DatsetListModal = (props) => {
     /**
      * 검색
      */
-    const handleSearch = useCallback(() => {
+    const handleSearch = (search) => {
         dispatch(
-            getDatasetList(
-                changeSearchOption({
-                    ...search,
-                    page: 0,
-                }),
-            ),
+            getDatasetListModal({
+                search,
+                callback: responseCallback,
+            }),
         );
-    }, [dispatch, search]);
+    };
 
     /**
      * 테이블 검색옵션 변경
      */
-    const handleChangeSearchOption = useCallback(
-        ({ key, value }) => {
-            let temp = { ...search, [key]: value };
-            if (key !== 'page') {
-                temp['page'] = 0;
-            }
-            dispatch(getDatasetList(changeSearchOption(temp)));
-        },
-        [dispatch, search],
-    );
+    const handleChangeSearchOption = ({ key, value }) => {
+        let temp = { ...search, [key]: value };
+        if (key !== 'page') {
+            temp['page'] = 0;
+        }
+        setSearch(temp);
+    };
 
     /**
      * 목록에서 Row클릭
@@ -125,32 +135,18 @@ const DatsetListModal = (props) => {
     }, []);
 
     useEffect(() => {
-        if (show) {
-            dispatch(
-                changeSearchOption({
-                    ...search,
-                    domainId: latestDomainId,
-                    size: MODAL_PAGESIZE_OPTIONS[0],
-                    page: 0,
-                }),
-            );
+        if (show && cnt < 1) {
+            handleSearch({
+                ...search,
+                domainId: latestDomainId,
+                size: MODAL_PAGESIZE_OPTIONS[0],
+                page: 0,
+                exclude,
+            });
+            setCnt(cnt + 1);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, latestDomainId, show]);
-
-    useEffect(() => {
-        // rowData 변경
-        if (list.length > 0) {
-            setRowData(
-                list.map((data) => ({
-                    ...data,
-                    autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '수동형',
-                })),
-            );
-        } else {
-            setRowData([]);
-        }
-    }, [list]);
+    }, [latestDomainId, show, exclude, cnt]);
 
     return (
         <MokaModal
@@ -176,15 +172,13 @@ const DatsetListModal = (props) => {
                             className="mb-0"
                             value={search.searchType}
                             onChange={(e) => {
-                                dispatch(
-                                    changeSearchOption({
-                                        ...search,
-                                        searchType: e.target.value,
-                                    }),
-                                );
+                                setSearch({
+                                    ...search,
+                                    searchType: e.target.value,
+                                });
                             }}
                         >
-                            {defaultDatasetSearchType.map((type) => (
+                            {searchTypeList.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>
@@ -196,12 +190,10 @@ const DatsetListModal = (props) => {
                         <MokaSearchInput
                             value={search.keyword}
                             onChange={(e) => {
-                                dispatch(
-                                    changeSearchOption({
-                                        ...search,
-                                        keyword: e.target.value,
-                                    }),
-                                );
+                                setSearch({
+                                    ...search,
+                                    keyword: e.target.value,
+                                });
                             }}
                             onSearch={handleSearch}
                         />

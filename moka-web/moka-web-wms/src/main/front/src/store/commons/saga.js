@@ -28,44 +28,48 @@ export const createRequestActionTypes = (actionType) => {
  * API 호출
  * @param {string} actionType 액션명
  * @param {func} api API 함수
+ * @param {bool} simpleCall SUCCESS/FAILURE 액션 유무
  */
-export function createRequestSaga(actionType, api) {
-    const SUCCESS = `${actionType}_SUCCESS`;
-    const FAILURE = `${actionType}_FAILURE`;
-    let callbackData = {};
-
+export function createRequestSaga(actionType, api, simpleCall = false) {
     return function* (action) {
         const { callback } = action.payload;
+        let callbackData;
+
         yield put(startLoading(actionType));
 
         try {
             const response = yield call(api, action.payload);
             callbackData = response.data;
 
-            if (response.data.header.success) {
-                yield put({
-                    type: SUCCESS,
-                    payload: response.data,
-                });
-            } else {
-                yield put({
-                    type: FAILURE,
-                    payload: response.data,
-                });
+            if (!simpleCall) {
+                if (response.data.header.success) {
+                    yield put({
+                        type: `${actionType}_SUCCESS`,
+                        payload: response.data,
+                    });
+                } else {
+                    yield put({
+                        type: `${actionType}_FAILURE`,
+                        payload: response.data,
+                    });
+                }
             }
         } catch (e) {
             callbackData = errorResponse(e);
-            yield put({
-                type: FAILURE,
-                payload: errorResponse(e),
-            });
+
+            if (!simpleCall) {
+                yield put({
+                    type: `${actionType}_FAILURE`,
+                    payload: errorResponse(e),
+                });
+            }
         }
 
         if (typeof callback === 'function') {
             yield call(callback, callbackData);
         }
 
-        yield put(finishLoading(actionType)); // 로딩 끝
+        yield put(finishLoading(actionType));
     };
 }
 

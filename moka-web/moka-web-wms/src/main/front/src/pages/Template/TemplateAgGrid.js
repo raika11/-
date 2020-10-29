@@ -7,7 +7,8 @@ import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { MokaTable, MokaIcon, MokaThumbTable } from '@components';
-import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template/templateAction';
+import { API_BASE_URL } from '@/constants';
+import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template';
 import CopyModal from './modals/CopyModal';
 
 /**
@@ -62,7 +63,7 @@ const TemplateAgGrid = ({ onDelete }) => {
                 list.map((data) => {
                     let thumb = data.templateThumb;
                     if (thumb && thumb !== '') {
-                        thumb = `//stg-backoffice.joongang.co.kr${UPLOAD_PATH_URL}/${thumb}`;
+                        thumb = `${API_BASE_URL}${UPLOAD_PATH_URL}/${thumb}`;
                     }
                     return {
                         ...data,

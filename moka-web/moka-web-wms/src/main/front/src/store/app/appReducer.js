@@ -5,8 +5,8 @@ import * as act from './appAction';
  * initialState
  */
 const initialState = {
-    AppLoading: true,
-    AppError: false,
+    APP_LOADING: true,
+    APP_ERROR: false,
 };
 
 /**
@@ -16,12 +16,12 @@ export default handleActions(
     {
         [act.INIT_SUCCESS]: (state, { payload: { body } }) => ({
             ...body,
-            AppLoading: false,
-            AppError: false,
+            APP_LOADING: false,
+            APP_ERROR: false,
         }),
         [act.INIT_FAILURE]: () => ({
-            AppLoading: false,
-            AppError: true,
+            APP_LOADING: false,
+            APP_ERROR: true,
         }),
     },
     initialState,

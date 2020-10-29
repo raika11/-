@@ -16,6 +16,11 @@ export const initialState = {
         searchType: 'all',
         keyword: '',
     },
+    searchTypeList: [
+        { id: 'all', name: '전체' },
+        { id: 'datasetSeq', name: '데이터셋ID' },
+        { id: 'datasetName', name: '데이터셋명' },
+    ],
     dataset: {},
     datasetError: null,
     invalidList: [],

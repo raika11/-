@@ -30,10 +30,10 @@
     border: 1px solid $gray-400;
   }
 
-  .alert-message:not(:nth-child(2)) {
-    @include border-left-radius(0);
-    border-left: 0;
-  }
+  // .alert-message:not(:nth-child(2)) {
+  //   @include border-left-radius(0);
+  //   border-left: 0;
+  // }
 
   .alert-icon {
     @include border-left-radius($alert-border-radius);

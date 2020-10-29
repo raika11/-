@@ -30,6 +30,12 @@ export const getDatasetList = createAction(GET_DATASET_LIST, (...actions) => act
 export const getDataset = createAction(GET_DATASET, (datasetSeq) => datasetSeq);
 
 /**
+ * 모달 데이터 조회
+ */
+export const GET_DATASET_LIST_MODAL = 'dataset/GET_DATASET_LIST_MODAL';
+export const getDatasetListModal = createAction(GET_DATASET_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+
+/**
  * 데이터 변경
  */
 export const CHANGE_DATASET = 'dataset/CHANGE_DATASET';

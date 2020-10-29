@@ -13,6 +13,8 @@ import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.common.utils.dto.ResultMapDTO;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
@@ -517,11 +519,19 @@ public class MenuRestController {
                 .findMenuById(menuId)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
         boolean success = false;
-        String message = "";
+        String message;
+        Menu parentMenu = null;
         try {
+            if (!McpString
+                    .defaultValue(menu.getParentMenuId(), MokaConstants.ROOT_MENU_ID)
+                    .equals(MokaConstants.ROOT_MENU_ID)) {
+                parentMenu = menuService
+                        .findMenuById(menu.getParentMenuId())
+                        .orElse(null);
+            }
 
             // 삭제
-            if (menuService.isUsedGroupOrMember(menuId)) {
+            if (!menuService.isUsedGroupOrMember(menuId)) {
                 if (menuService.countMenuByParentId(menuId) == 0) {
                     menuService.deleteMenu(menu);
                     success = true;
@@ -541,8 +551,13 @@ public class MenuRestController {
             }
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, message);
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            ResultMapDTO resultMapDTO = new ResultMapDTO(MapBuilder
+                    .getInstance()
+                    .add("success", success)
+                    .add("parentMenu", parentMenu)
+                    .getMap(), message);
+
+            return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO DELETE MENU] menuId: {}) {}", menuId, e.getMessage());

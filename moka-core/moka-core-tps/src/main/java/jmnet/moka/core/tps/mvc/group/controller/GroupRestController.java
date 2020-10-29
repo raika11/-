@@ -16,12 +16,12 @@ import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.helper.PurgeHelper;
-import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.group.dto.GroupDTO;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
 import jmnet.moka.core.tps.mvc.group.entity.Group;
 import jmnet.moka.core.tps.mvc.group.service.GroupService;
+import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -60,7 +60,7 @@ public class GroupRestController {
 
     private final CodeMgtService codeMgtService;
 
-    private final RelationHelper relationHelper;
+    private final RelationService relationService;
 
     private final ApiCodeHelper apiCodeHelper;
 
@@ -72,12 +72,12 @@ public class GroupRestController {
     private final TpsLogger tpsLogger;
 
     public GroupRestController(GroupService groupService, ModelMapper modelMapper, MessageByLocale messageByLocale, CodeMgtService codeMgtService,
-            RelationHelper relationHelper, ApiCodeHelper apiCodeHelper, PurgeHelper purgeHelper, TpsLogger tpsLogger) {
+            RelationService relationService, ApiCodeHelper apiCodeHelper, PurgeHelper purgeHelper, TpsLogger tpsLogger) {
         this.groupService = groupService;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
         this.codeMgtService = codeMgtService;
-        this.relationHelper = relationHelper;
+        this.relationService = relationService;
         this.apiCodeHelper = apiCodeHelper;
         this.purgeHelper = purgeHelper;
         this.tpsLogger = tpsLogger;
@@ -126,9 +126,8 @@ public class GroupRestController {
             throws NoDataException {
 
         String message = messageByLocale.get("tps.group.error.no-data", request);
-        Group group = groupService
-                .findGroupById(groupCd)
-                .orElseThrow(() -> new NoDataException(message));
+        Group group = groupService.findGroupById(groupCd)
+                                  .orElseThrow(() -> new NoDataException(message));
 
         GroupDTO dto = modelMapper.map(group, GroupDTO.class);
 
@@ -219,9 +218,8 @@ public class GroupRestController {
         Group newGroup = modelMapper.map(groupDTO, Group.class);
 
         // 오리진 데이터 조회
-        groupService
-                .findGroupById(newGroup.getGroupCd())
-                .orElseThrow(() -> new NoDataException(infoMessage));
+        groupService.findGroupById(newGroup.getGroupCd())
+                    .orElseThrow(() -> new NoDataException(infoMessage));
 
 
 
@@ -289,9 +287,8 @@ public class GroupRestController {
 
         // 그룹 데이터 조회
         String noContentMessage = messageByLocale.get("tps.group.error.no-data", request);
-        Group member = groupService
-                .findGroupById(groupCd)
-                .orElseThrow(() -> new NoDataException(noContentMessage));
+        Group member = groupService.findGroupById(groupCd)
+                                   .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 관련 데이터 조회
         if (groupService.hasMembers(groupCd)) {

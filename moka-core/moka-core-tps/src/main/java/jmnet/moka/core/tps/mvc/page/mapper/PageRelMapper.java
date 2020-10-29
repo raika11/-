@@ -5,8 +5,8 @@ package jmnet.moka.core.tps.mvc.page.mapper;
 
 import java.util.Map;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.mvc.page.vo.PageVO;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 
 /**
  * <pre>
@@ -17,6 +17,6 @@ import jmnet.moka.core.tps.mvc.page.vo.PageVO;
  * @author ssc
  * @since 2020. 7. 8. 오후 12:34:59
  */
-public interface PageRelMapper extends BaseMapper<PageVO, RelSearchDTO> {
+public interface PageRelMapper extends BaseMapper<PageVO, RelationSearchDTO> {
     void deleteByPageSeq(Map<String, Object> map);
 }

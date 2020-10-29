@@ -16,13 +16,11 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.PurgeHelper;
-import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentDTO;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentHistDTO;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
@@ -33,6 +31,7 @@ import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
+import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +64,9 @@ public class ComponentRestController {
     private ComponentHistService componentHistService;
 
     @Autowired
+    private RelationService relationService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -72,9 +74,6 @@ public class ComponentRestController {
 
     @Autowired
     private PurgeHelper purgeHelper;
-
-    @Autowired
-    private RelationHelper relationHelper;
 
     @Autowired
     private TpsLogger tpsLogger;
@@ -390,7 +389,7 @@ public class ComponentRestController {
                                               });
 
         // 관련아이템 확인
-        Boolean hasRels = relationHelper.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
+        Boolean hasRels = relationService.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
         if (hasRels) {
             String relMessage = messageByLocale.get("tps.component.error.delete.related", request);
             tpsLogger.fail(ActionType.DELETE, relMessage, true);
@@ -471,7 +470,7 @@ public class ComponentRestController {
                         });
 
         try {
-            Boolean chkRels = relationHelper.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
+            Boolean chkRels = relationService.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
 
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
             tpsLogger.success(ActionType.SELECT, true);
@@ -484,37 +483,37 @@ public class ComponentRestController {
         }
     }
 
-    /**
-     * 관련 아이템 목록조회
-     *
-     * @param request      HTTP요청
-     * @param componentSeq 컴포넌트SEQ
-     * @param search       검색조건
-     * @return 관련아이템 목록
-     * @throws NoDataException 데이터없음
-     */
-    @ApiOperation(value = "관련 아이템 목록조회")
-    @GetMapping("/{componentSeq}/relations")
-    public ResponseEntity<?> getRelationList(HttpServletRequest request,
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
-            @Valid @SearchParam RelSearchDTO search)
-            throws NoDataException {
-
-        search.setRelSeq(componentSeq);
-        search.setRelSeqType(MokaConstants.ITEM_COMPONENT);
-
-        // 컴포넌트 확인
-        componentService.findComponentBySeq(search.getRelSeq())
-                        .orElseThrow(() -> {
-                            String message = messageByLocale.get("tps.component.error.no-data", request);
-                            tpsLogger.fail(ActionType.SELECT, message, true);
-                            return new NoDataException(message);
-                        });
-
-        ResponseEntity<?> response = relationHelper.findRelations(search);
-        tpsLogger.success(ActionType.SELECT, true);
-        return response;
-    }
+    //    /**
+    //     * 관련 아이템 목록조회
+    //     *
+    //     * @param request      HTTP요청
+    //     * @param componentSeq 컴포넌트SEQ
+    //     * @param search       검색조건
+    //     * @return 관련아이템 목록
+    //     * @throws NoDataException 데이터없음
+    //     */
+    //    @ApiOperation(value = "관련 아이템 목록조회")
+    //    @GetMapping("/{componentSeq}/relations")
+    //    public ResponseEntity<?> getRelationList(HttpServletRequest request,
+    //            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
+    //            @Valid @SearchParam RelationSearchDTO search)
+    //            throws NoDataException {
+    //
+    //        search.setRelSeq(componentSeq);
+    //        search.setRelSeqType(MokaConstants.ITEM_COMPONENT);
+    //
+    //        // 컴포넌트 확인
+    //        componentService.findComponentBySeq(search.getRelSeq())
+    //                        .orElseThrow(() -> {
+    //                            String message = messageByLocale.get("tps.component.error.no-data", request);
+    //                            tpsLogger.fail(ActionType.SELECT, message, true);
+    //                            return new NoDataException(message);
+    //                        });
+    //
+    //        ResponseEntity<?> response = relationHelper.findRelations(search);
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return response;
+    //    }
 
     /**
      * 컴포넌트 데이터 유효성 검사

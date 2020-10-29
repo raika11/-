@@ -72,7 +72,7 @@ public class ComponentWork extends RegAudit {
      */
     @Column(name = "DATA_TYPE")
     @Builder.Default
-    private String dataType = TpsConstants.DATATYPE_DESK;
+    private String dataType = TpsConstants.DATATYPE_NONE;
 
     /**
      * 스냅샷여부
@@ -98,7 +98,7 @@ public class ComponentWork extends RegAudit {
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.dataType = this.dataType == null ? TpsConstants.DATATYPE_DESK : this.dataType;
+        this.dataType = this.dataType == null ? TpsConstants.DATATYPE_NONE : this.dataType;
         this.snapshotYn = McpString.defaultValue(this.snapshotYn, MokaConstants.NO);
         this.componentOrd = this.componentOrd == null ? 1 : this.componentOrd;
     }

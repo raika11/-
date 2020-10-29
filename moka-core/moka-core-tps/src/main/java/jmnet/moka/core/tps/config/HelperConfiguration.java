@@ -4,7 +4,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import jmnet.moka.core.tps.helper.PurgeHelper;
-import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,16 +28,6 @@ public class HelperConfiguration {
     @Bean
     public UploadFileHelper uploadFileHelper() {
         return new UploadFileHelper();
-    }
-
-    /**
-     * 관련 페이지,콘텐츠스킨,컨테이너 조회 헬퍼
-     *
-     * @return 빈
-     */
-    @Bean
-    public RelationHelper relationHelper() {
-        return new RelationHelper();
     }
 
     /**

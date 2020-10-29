@@ -19,18 +19,17 @@ import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.dto.HistDTO;
 import jmnet.moka.core.tps.common.dto.HistSearchDTO;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.PurgeHelper;
-import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerSearchDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.entity.ContainerHist;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
 import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
+import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,13 +57,13 @@ public class ContainerRestController {
     private ContainerService containerService;
 
     @Autowired
+    private RelationService relationService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private MessageByLocale messageByLocale;
-
-    @Autowired
-    private RelationHelper relationHelper;
 
     @Autowired
     private PurgeHelper purgeHelper;
@@ -290,7 +289,7 @@ public class ContainerRestController {
 
 
         // 관련 데이터 확인
-        if (relationHelper.hasRelations(containerSeq, MokaConstants.ITEM_CONTAINER)) {
+        if (relationService.hasRelations(containerSeq, MokaConstants.ITEM_CONTAINER)) {
             String relMessage = messageByLocale.get("tps.container.error.delete.related", request);
             tpsLogger.fail(ActionType.DELETE, relMessage, true);
             throw new Exception(relMessage);
@@ -390,37 +389,37 @@ public class ContainerRestController {
         return histDTO;
     }
 
-    /**
-     * 관련 아이템 목록조회
-     *
-     * @param request      요청
-     * @param containerSeq 컨테이너순번
-     * @param search       컨테이너의 관련아이템(페이지,본문) 검색 조건
-     * @return 관련아이템(페이지, 본문) 목록
-     * @throws Exception 예외
-     */
-    @ApiOperation(value = "관련 아이템 목록조회")
-    @GetMapping("/{containerSeq}/relations")
-    public ResponseEntity<?> getRelationList(HttpServletRequest request,
-            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq,
-            @Valid @SearchParam RelSearchDTO search)
-            throws Exception {
-
-        search.setRelSeq(containerSeq);
-        search.setRelSeqType(MokaConstants.ITEM_CONTAINER);
-
-        // 컨테이너 확인
-        containerService.findContainerBySeq(containerSeq)
-                        .orElseThrow(() -> {
-                            String message = messageByLocale.get("tps.container.error.no-data", request);
-                            tpsLogger.fail(ActionType.SELECT, message, true);
-                            return new NoDataException(message);
-                        });
-
-        ResponseEntity<?> response = relationHelper.findRelations(search);
-        tpsLogger.success(ActionType.SELECT, true);
-        return response;
-    }
+    //    /**
+    //     * 관련 아이템 목록조회
+    //     *
+    //     * @param request      요청
+    //     * @param containerSeq 컨테이너순번
+    //     * @param search       컨테이너의 관련아이템(페이지,본문) 검색 조건
+    //     * @return 관련아이템(페이지, 본문) 목록
+    //     * @throws Exception 예외
+    //     */
+    //    @ApiOperation(value = "관련 아이템 목록조회")
+    //    @GetMapping("/{containerSeq}/relations")
+    //    public ResponseEntity<?> getRelationList(HttpServletRequest request,
+    //            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq,
+    //            @Valid @SearchParam RelationSearchDTO search)
+    //            throws Exception {
+    //
+    //        search.setRelSeq(containerSeq);
+    //        search.setRelSeqType(MokaConstants.ITEM_CONTAINER);
+    //
+    //        // 컨테이너 확인
+    //        containerService.findContainerBySeq(containerSeq)
+    //                        .orElseThrow(() -> {
+    //                            String message = messageByLocale.get("tps.container.error.no-data", request);
+    //                            tpsLogger.fail(ActionType.SELECT, message, true);
+    //                            return new NoDataException(message);
+    //                        });
+    //
+    //        ResponseEntity<?> response = relationHelper.findRelations(search);
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return response;
+    //    }
 
     /**
      * 관련 아이템 존재여부
@@ -445,7 +444,7 @@ public class ContainerRestController {
                         });
 
         try {
-            Boolean chkRels = relationHelper.hasRelations(containerSeq, MokaConstants.ITEM_TEMPLATE);
+            Boolean chkRels = relationService.hasRelations(containerSeq, MokaConstants.ITEM_TEMPLATE);
 
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
             tpsLogger.success(ActionType.SELECT, true);

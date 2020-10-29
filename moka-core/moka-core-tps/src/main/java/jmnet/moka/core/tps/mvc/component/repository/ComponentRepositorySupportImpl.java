@@ -7,12 +7,12 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.QComponent;
 import jmnet.moka.core.tps.mvc.dataset.entity.QDataset;
 import jmnet.moka.core.tps.mvc.domain.entity.QDomain;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.template.entity.QTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -73,7 +73,7 @@ public class ComponentRepositorySupportImpl extends QuerydslRepositorySupport im
     }
 
     @Override
-    public Page<Component> findListByTemplate(RelSearchDTO search, Pageable pageable) {
+    public Page<Component> findListByTemplate(RelationSearchDTO search, Pageable pageable) {
         QComponent component = QComponent.component;
         QDomain domain = QDomain.domain;
         QTemplate template = QTemplate.template;
@@ -114,7 +114,7 @@ public class ComponentRepositorySupportImpl extends QuerydslRepositorySupport im
     }
 
     @Override
-    public Page<Component> findListByDataset(RelSearchDTO search, Pageable pageable) {
+    public Page<Component> findListByDataset(RelationSearchDTO search, Pageable pageable) {
         QComponent component = QComponent.component;
         QDomain domain = QDomain.domain;
         QTemplate template = QTemplate.template;

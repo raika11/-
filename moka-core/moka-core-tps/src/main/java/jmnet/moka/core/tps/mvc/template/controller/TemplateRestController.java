@@ -18,15 +18,14 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.PurgeHelper;
-import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
+import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateHistDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSearchDTO;
@@ -70,6 +69,9 @@ public class TemplateRestController {
     private TemplateHistService templateHistService;
 
     @Autowired
+    private RelationService relationService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -77,9 +79,6 @@ public class TemplateRestController {
 
     @Autowired
     private PurgeHelper purgeHelper;
-
-    @Autowired
-    private RelationHelper relationHelper;
 
     @Autowired
     private UploadFileHelper uploadFileHelper;
@@ -360,7 +359,7 @@ public class TemplateRestController {
                                            });
 
         // 관련 데이터 확인
-        Boolean hasRels = relationHelper.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
+        Boolean hasRels = relationService.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
         if (hasRels) {
             String relMessage = messageByLocale.get("tps.template.error.delete.related", request);
             tpsLogger.fail(ActionType.DELETE, relMessage, true);
@@ -413,7 +412,7 @@ public class TemplateRestController {
                        });
 
         try {
-            Boolean chkRels = relationHelper.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
+            Boolean chkRels = relationService.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
 
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels);
             tpsLogger.success(ActionType.SELECT, true);
@@ -426,37 +425,37 @@ public class TemplateRestController {
         }
     }
 
-    /**
-     * 관련 아이템 목록조회
-     *
-     * @param request     HTTP요청
-     * @param templateSeq 템플릿SEQ
-     * @param search      검색조건
-     * @return 관련아이템 목록
-     * @throws Exception 에외
-     */
-    @ApiOperation(value = "관련 아이템 목록조회")
-    @GetMapping("/{templateSeq}/relations")
-    public ResponseEntity<?> getRelationList(HttpServletRequest request,
-            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
-            @Valid @SearchParam RelSearchDTO search)
-            throws Exception {
-
-        search.setRelSeq(templateSeq);
-        search.setRelSeqType(MokaConstants.ITEM_TEMPLATE);
-
-        // 템플릿 확인
-        templateService.findTemplateBySeq(templateSeq)
-                       .orElseThrow(() -> {
-                           String message = messageByLocale.get("tps.template.error.no-data", request);
-                           tpsLogger.fail(ActionType.SELECT, message, true);
-                           return new NoDataException(message);
-                       });
-
-        ResponseEntity<?> response = relationHelper.findRelations(search);
-        tpsLogger.success(ActionType.SELECT, true);
-        return response;
-    }
+    //    /**
+    //     * 관련 아이템 목록조회
+    //     *
+    //     * @param request     HTTP요청
+    //     * @param templateSeq 템플릿SEQ
+    //     * @param search      검색조건
+    //     * @return 관련아이템 목록
+    //     * @throws Exception 에외
+    //     */
+    //    @ApiOperation(value = "관련 아이템 목록조회")
+    //    @GetMapping("/{templateSeq}/relations")
+    //    public ResponseEntity<?> getRelationList(HttpServletRequest request,
+    //            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
+    //            @Valid @SearchParam RelationSearchDTO search)
+    //            throws Exception {
+    //
+    //        search.setRelSeq(templateSeq);
+    //        search.setRelSeqType(MokaConstants.ITEM_TEMPLATE);
+    //
+    //        // 템플릿 확인
+    //        templateService.findTemplateBySeq(templateSeq)
+    //                       .orElseThrow(() -> {
+    //                           String message = messageByLocale.get("tps.template.error.no-data", request);
+    //                           tpsLogger.fail(ActionType.SELECT, message, true);
+    //                           return new NoDataException(message);
+    //                       });
+    //
+    //        ResponseEntity<?> response = relationHelper.findRelations(search);
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return response;
+    //    }
 
     /**
      * 템플릿 히스토리 목록조회

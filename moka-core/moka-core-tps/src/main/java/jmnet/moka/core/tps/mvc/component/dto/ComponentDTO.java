@@ -102,7 +102,7 @@ public class ComponentDTO implements Serializable {
      */
     @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)]{4}$", message = "{tps.component.error.pattern.dataType}")
     @Builder.Default
-    private String dataType = TpsConstants.DATATYPE_DESK;
+    private String dataType = TpsConstants.DATATYPE_NONE;
 
     /**
      * 삭제단어-단어구분은 개행

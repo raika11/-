@@ -11,8 +11,8 @@ export const initialState = {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
         domainId: '',
-        sort: null,
         relType: null,
+        relSeq: null,
         relSeqType: null,
     },
 };

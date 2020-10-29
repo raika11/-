@@ -6,25 +6,25 @@ package jmnet.moka.core.tps.mvc.dataset.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetSearchDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.dataset.mapper.DatasetMapper;
 import jmnet.moka.core.tps.mvc.dataset.repository.DatasetRepository;
 import jmnet.moka.core.tps.mvc.dataset.vo.DatasetVO;
 import jmnet.moka.core.tps.mvc.desking.service.DeskingService;
+import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  * <pre>
- * 
+ *
  * 2020. 4. 24. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 4. 24. 오후 4:23:25
+ *
  * @author ssc
+ * @since 2020. 4. 24. 오후 4:23:25
  */
 @Service
 @Slf4j
@@ -37,7 +37,7 @@ public class DatasetServiceImpl implements DatasetService {
     private DeskingService deskingService;
 
     @Autowired
-    private RelationHelper relationHelper;
+    private RelationService relationService;
 
     @Autowired
     private DatasetMapper datasetMapper;
@@ -65,12 +65,14 @@ public class DatasetServiceImpl implements DatasetService {
     @Override
     public boolean isRelated(Long datasetSeq) {
         // desking 사용여부 조회
-        if (deskingService.usedByDatasetSeq(datasetSeq))
+        if (deskingService.usedByDatasetSeq(datasetSeq)) {
             return true;
+        }
 
         // compnent, container, skin, page
-        if (relationHelper.hasRelations(datasetSeq, MokaConstants.ITEM_DATASET))
+        if (relationService.hasRelations(datasetSeq, MokaConstants.ITEM_DATASET)) {
             return true;
+        }
 
         return false;
     }
@@ -85,8 +87,9 @@ public class DatasetServiceImpl implements DatasetService {
     @Override
     public boolean deleteAfterCheckDataset(Long datasetSeq) {
         // 사용여부 조사
-        if (isRelated(datasetSeq))
+        if (isRelated(datasetSeq)) {
             return false;
+        }
 
         // 삭제
         datasetRepository.deleteById(datasetSeq);

@@ -1,8 +1,7 @@
 package jmnet.moka.core.tps.mvc.component.entity;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,16 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import com.fasterxml.jackson.core.type.TypeReference;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.entity.RegAudit;
@@ -27,8 +20,6 @@ import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -49,7 +40,8 @@ public class ComponentHist extends RegAudit {
 
     private static final long serialVersionUID = -5085329432096691213L;
 
-    public static final Type TYPE = new TypeReference<List<ComponentHist>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<ComponentHist>>() {
+    }.getType();
 
     /**
      * 일련번호
@@ -90,7 +82,7 @@ public class ComponentHist extends RegAudit {
      */
     @Column(name = "DATA_TYPE")
     @Builder.Default
-    private String dataType = TpsConstants.DATATYPE_DESK;
+    private String dataType = TpsConstants.DATATYPE_NONE;
 
     /**
      * 스냅샷본문
@@ -110,6 +102,6 @@ public class ComponentHist extends RegAudit {
     @PreUpdate
     public void prePersist() {
         this.workType = McpString.defaultValue(this.workType, TpsConstants.WORKTYPE_UPDATE);
-        this.dataType = McpString.defaultValue(this.dataType, TpsConstants.DATATYPE_DESK);
+        this.dataType = McpString.defaultValue(this.dataType, TpsConstants.DATATYPE_NONE);
     }
 }

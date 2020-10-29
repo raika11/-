@@ -7,7 +7,6 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
@@ -22,6 +21,7 @@ import jmnet.moka.core.tps.mvc.dataset.service.DatasetService;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.skin.service.SkinService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -296,7 +296,7 @@ public class ComponentServiceImpl implements ComponentService {
     }
 
     @Override
-    public Page<Component> findAllRel(RelSearchDTO search, Pageable pageable) {
+    public Page<Component> findAllRel(RelationSearchDTO search, Pageable pageable) {
         if (search.getRelSeqType()
                   .equals(MokaConstants.ITEM_TEMPLATE)) {
             // 템플릿

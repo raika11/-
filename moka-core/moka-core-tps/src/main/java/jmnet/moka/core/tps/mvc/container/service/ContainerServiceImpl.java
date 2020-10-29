@@ -15,7 +15,6 @@ import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.HistSearchDTO;
 import jmnet.moka.core.tps.common.dto.ItemDTO;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerSearchDTO;
@@ -28,11 +27,13 @@ import jmnet.moka.core.tps.mvc.container.repository.ContainerHistRepository;
 import jmnet.moka.core.tps.mvc.container.repository.ContainerRelRepository;
 import jmnet.moka.core.tps.mvc.container.repository.ContainerRepository;
 import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -82,8 +83,9 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
+    @Transactional
     public Container insertContainer(Container container)
-            throws TemplateParseException, UnsupportedEncodingException, IOException {
+            throws TemplateParseException, IOException {
 
         // 1. 관련정보 추가
         insertRel(container);
@@ -319,7 +321,7 @@ public class ContainerServiceImpl implements ContainerService {
     //검색조건에 해당하는 아이템을 사용중인 컨테이너 목록 조회(부모찾기)
     // : 컴포넌트,템플릿,데이타셋,광고에서 사용하는 함수
     @Override
-    public Page<Container> findAllContainerRel(RelSearchDTO search, Pageable pageable) {
+    public Page<Container> findAllContainerRel(RelationSearchDTO search, Pageable pageable) {
         return containerRepository.findRelList(search, pageable);
     }
 }

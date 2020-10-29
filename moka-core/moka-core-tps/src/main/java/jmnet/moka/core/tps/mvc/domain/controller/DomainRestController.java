@@ -19,12 +19,12 @@ import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.helper.PurgeHelper;
-import jmnet.moka.core.tps.helper.RelationHelper;
 import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
+import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -71,7 +71,7 @@ public class DomainRestController {
 
     private final CodeMgtService codeMgtService;
 
-    private final RelationHelper relationHelper;
+    private final RelationService relationService;
 
     private final ApiCodeHelper apiCodeHelper;
 
@@ -83,12 +83,12 @@ public class DomainRestController {
     private final TpsLogger tpsLogger;
 
     public DomainRestController(DomainService domainService, ModelMapper modelMapper, MessageByLocale messageByLocale, CodeMgtService codeMgtService,
-            RelationHelper relationHelper, ApiCodeHelper apiCodeHelper, PurgeHelper purgeHelper, TpsLogger tpsLogger) {
+            RelationService relationService, ApiCodeHelper apiCodeHelper, PurgeHelper purgeHelper, TpsLogger tpsLogger) {
         this.domainService = domainService;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
         this.codeMgtService = codeMgtService;
-        this.relationHelper = relationHelper;
+        this.relationService = relationService;
         this.apiCodeHelper = apiCodeHelper;
         this.purgeHelper = purgeHelper;
         this.tpsLogger = tpsLogger;
@@ -136,9 +136,8 @@ public class DomainRestController {
             throws NoDataException {
 
         String message = messageByLocale.get("tps.domain.error.no-data", request);
-        Domain domain = domainService
-                .findDomainById(domainId)
-                .orElseThrow(() -> new NoDataException(message));
+        Domain domain = domainService.findDomainById(domainId)
+                                     .orElseThrow(() -> new NoDataException(message));
 
         DomainDTO dto = modelMapper.map(domain, DomainDTO.class);
 
@@ -235,9 +234,8 @@ public class DomainRestController {
         Domain newDomain = modelMapper.map(domainDTO, Domain.class);
 
         // 오리진 데이터 조회
-        domainService
-                .findDomainById(newDomain.getDomainId())
-                .orElseThrow(() -> new NoDataException(infoMessage));
+        domainService.findDomainById(newDomain.getDomainId())
+                     .orElseThrow(() -> new NoDataException(infoMessage));
 
         setHostAndPath(request, newDomain, domainDTO);
 
@@ -278,12 +276,11 @@ public class DomainRestController {
             throws NoDataException {
 
         String message = messageByLocale.get("tps.domain.error.no-data", request);
-        domainService
-                .findDomainById(domainId)
-                .orElseThrow(() -> new NoDataException(message));
+        domainService.findDomainById(domainId)
+                     .orElseThrow(() -> new NoDataException(message));
 
         // 관련 데이터 조회
-        boolean isRelated = relationHelper.isRelatedDomain(domainId);
+        boolean isRelated = relationService.isRelatedDomain(domainId);
 
         // 결과리턴
         ResultDTO<Boolean> resultDto = new ResultDTO<>(isRelated);
@@ -310,13 +307,12 @@ public class DomainRestController {
 
         // 도메인 데이터 조회
         String noContentMessage = messageByLocale.get("tps.domain.error.no-data", request);
-        Domain domain = domainService
-                .findDomainById(domainId)
-                .orElseThrow(() -> new NoDataException(noContentMessage));
+        Domain domain = domainService.findDomainById(domainId)
+                                     .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 관련 데이터 조회
         try {
-            if (relationHelper.isRelatedDomain(domainId)) {
+            if (relationService.isRelatedDomain(domainId)) {
                 // 액션 로그에 실패 로그 출력
                 tpsLogger.fail(ActionType.DELETE, messageByLocale.get("tps.domain.error.delete.exist-related", request));
                 throw new Exception(messageByLocale.get("tps.domain.error.delete.exist-related", request));

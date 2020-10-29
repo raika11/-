@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.tps.common.dto.HistSearchDTO;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.page.dto.PageNode;
 import jmnet.moka.core.tps.mvc.page.dto.PageSearchDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.entity.PageHist;
 import jmnet.moka.core.tps.mvc.page.vo.PageVO;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -104,7 +104,7 @@ public interface PageService {
      * @param search 검색조건
      * @return 페이지 목록
      */
-    public List<PageVO> findAllPageRel(RelSearchDTO search);
+    public List<PageVO> findAllPageRel(RelationSearchDTO search);
 
     /**
      * 관련 페이지 조회건수
@@ -112,7 +112,7 @@ public interface PageService {
      * @param search 검색조건
      * @return 페이지 건수
      */
-    public Long countPageRel(RelSearchDTO search);
+    public Long countPageRel(RelationSearchDTO search);
 
     /**
      * 도메인아이디와 관련된 페이지 목록 조회

@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import jmnet.moka.common.data.mybatis.support.McpMybatis;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
@@ -19,7 +18,6 @@ import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.HistSearchDTO;
 import jmnet.moka.core.tps.common.dto.ItemDTO;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
@@ -34,6 +32,7 @@ import jmnet.moka.core.tps.mvc.page.repository.PageHistRepository;
 import jmnet.moka.core.tps.mvc.page.repository.PageRelRepository;
 import jmnet.moka.core.tps.mvc.page.repository.PageRepository;
 import jmnet.moka.core.tps.mvc.page.vo.PageVO;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -160,7 +159,7 @@ public class PageServiceImpl implements PageService {
     @Override
     @Transactional
     public Page insertPage(Page page)
-            throws TemplateParseException, UnsupportedEncodingException, IOException {
+            throws TemplateParseException, IOException {
         // 1. 관련정보 추가
         insertPageRel(page);
 
@@ -309,7 +308,7 @@ public class PageServiceImpl implements PageService {
 
         // 1. 기존 관련아이템은 삭제 후, 저장
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        int returnValue = 1;
+        Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
         paramMap.put("pageSeq", page.getPageSeq());
         paramMap.put("returnValue", returnValue);
         pageRelMapper.deleteByPageSeq(paramMap);
@@ -393,12 +392,12 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public List<PageVO> findAllPageRel(RelSearchDTO search) {
-        return pageRelMapper.findAll(search, McpMybatis.getRowBounds(search.getPage(), search.getSize()));
+    public List<PageVO> findAllPageRel(RelationSearchDTO search) {
+        return pageRelMapper.findAll(search);
     }
 
     @Override
-    public Long countPageRel(RelSearchDTO search) {
+    public Long countPageRel(RelationSearchDTO search) {
         return pageRelMapper.count(search);
     }
 

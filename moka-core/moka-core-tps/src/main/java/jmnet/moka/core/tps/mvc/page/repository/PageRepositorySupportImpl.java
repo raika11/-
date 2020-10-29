@@ -113,7 +113,7 @@ public class PageRepositorySupportImpl extends QuerydslRepositorySupport impleme
     }
 
     // @Override
-    // public org.springframework.data.domain.Page<Page> findRelPages(RelSearchDTO search,
+    // public org.springframework.data.domain.Page<Page> findRelPages(RelationSearchDTO search,
     // Pageable pageable) {
     // QPageRel pageRel = QPageRel.pageRel;
     // QPage page = QPage.page;

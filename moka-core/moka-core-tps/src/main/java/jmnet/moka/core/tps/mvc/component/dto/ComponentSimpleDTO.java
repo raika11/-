@@ -1,21 +1,17 @@
 package jmnet.moka.core.tps.mvc.component.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
-
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,7 +30,8 @@ public class ComponentSimpleDTO implements Serializable {
 
     private static final long serialVersionUID = -5912885230431022389L;
 
-    public static final Type TYPE = new TypeReference<List<ComponentSimpleDTO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<ComponentSimpleDTO>>() {
+    }.getType();
 
     /**
      * 컴포넌트SEQ
@@ -54,7 +51,7 @@ public class ComponentSimpleDTO implements Serializable {
      */
     @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)]{4}$", message = "{tps.component.error.pattern.dataType}")
     @Builder.Default
-    private String dataType = TpsConstants.DATATYPE_DESK;
+    private String dataType = TpsConstants.DATATYPE_NONE;
 
     /**
      * 도메인

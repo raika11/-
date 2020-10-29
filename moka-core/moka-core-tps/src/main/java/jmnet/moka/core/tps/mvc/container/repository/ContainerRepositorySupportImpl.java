@@ -7,10 +7,10 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.entity.QContainer;
 import jmnet.moka.core.tps.mvc.container.entity.QContainerRel;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +33,7 @@ public class ContainerRepositorySupportImpl extends QuerydslRepositorySupport im
     //검색조건에 해당하는 아이템을 사용중인 컨테이너 목록 조회(부모찾기)
     //   : 컴포넌트,템플릿,데이타셋,광고에서 사용하는 함수
     @Override
-    public Page<Container> findRelList(RelSearchDTO search, Pageable pageable) {
+    public Page<Container> findRelList(RelationSearchDTO search, Pageable pageable) {
         QContainerRel containerRel = QContainerRel.containerRel;
         QContainer container = QContainer.container;
 

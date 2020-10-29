@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.tps.common.dto.HistSearchDTO;
-import jmnet.moka.core.tps.common.dto.RelSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerSearchDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.entity.ContainerHist;
 import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -104,6 +104,6 @@ public interface ContainerService {
      * @param search 검색조건
      * @return 컨테이너 목록
      */
-    public Page<Container> findAllContainerRel(RelSearchDTO search, Pageable pageable);
+    public Page<Container> findAllContainerRel(RelationSearchDTO search, Pageable pageable);
 
 }

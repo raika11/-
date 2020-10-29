@@ -118,7 +118,7 @@ public class Component extends BaseAudit {
      */
     @Column(name = "DATA_TYPE")
     @Builder.Default
-    private String dataType = TpsConstants.DATATYPE_DESK;
+    private String dataType = TpsConstants.DATATYPE_NONE;
 
     /**
      * 삭제단어-단어구분은 개행
@@ -224,7 +224,7 @@ public class Component extends BaseAudit {
     @PreUpdate
     public void prePersist() {
         this.periodYn = McpString.defaultValue(this.periodYn, MokaConstants.NO);
-        this.dataType = McpString.defaultValue(this.dataType, TpsConstants.DATATYPE_DESK);
+        this.dataType = McpString.defaultValue(this.dataType, TpsConstants.DATATYPE_NONE);
         this.pagingYn = McpString.defaultValue(this.pagingYn, MokaConstants.NO);
         this.perPageCount = this.perPageCount == null ? TpsConstants.PER_PAGE_COUNT : this.perPageCount;
         this.maxPageCount = this.maxPageCount == null ? TpsConstants.MAX_PAGE_COUNT : this.maxPageCount;

@@ -161,7 +161,6 @@ const TemplateEdit = ({ onDelete }) => {
 
     useEffect(() => {
         // 스토어에서 가져온 템플릿 데이터 셋팅
-        setFileValue(null);
         setTemplateName(template.templateName || '');
         setCropWidth(template.cropWidth || 0);
         setCropHeight(template.cropHeight || 0);
@@ -176,6 +175,10 @@ const TemplateEdit = ({ onDelete }) => {
         }
         imgFileRef.current.deleteFile();
     }, [UPLOAD_PATH_URL, template]);
+
+    useEffect(() => {
+        setFileValue(null);
+    }, [template.templateSeq]);
 
     useEffect(() => {
         // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅

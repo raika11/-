@@ -9,14 +9,14 @@ export default [
     {
         headerName: '데이터셋명',
         field: 'datasetName',
-        width: 333,
+        width: 363,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'datasetName',
     },
     {
         headerName: '데이터유형',
         field: 'autoCreateYnName',
-        width: 120,
+        width: 90,
         cellStyle: { fontSize: '12px' },
     },
 ];

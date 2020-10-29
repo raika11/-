@@ -38,36 +38,37 @@ const propTypes = {
      */
     dismissible: PropTypes.bool,
     /**
+     * dismissible이 true일 때 show state
+     */
+    show: PropTypes.bool,
+    /**
      * dismissible이 true일 때 onClick 필수
      */
-    onClose: PropTypes.func,
+    onHide: PropTypes.func,
     /**
      * children
      */
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 };
 const defaultProps = {
+    show: true,
     variant: 'primary',
     buttons: [],
     outline: true,
-    dismissible: true,
+    dismissible: false,
 };
 
 /**
  * 밑에 버튼 나오는 Alert
  */
 const MokaAlertWithButtons = forwardRef((props, ref) => {
-    const { variant, outline, className, buttons, title, dismissible, onClose, children, ...rest } = props;
-
-    // alert state
-    const [show, setShow] = useState(true);
+    const { show, variant, outline, className, buttons, title, dismissible, onHide, children, ...rest } = props;
 
     /**
      * 닫기 버튼
      */
     const handleClose = () => {
-        if (onClose) onClose();
-        setShow(false);
+        if (onHide) onHide();
     };
 
     if (show) {
@@ -78,7 +79,7 @@ const MokaAlertWithButtons = forwardRef((props, ref) => {
                     'alert-outline': outline,
                 })}
                 variant={variant}
-                dismissible={dismissible}
+                dismissible={show && dismissible}
                 onClose={handleClose}
                 {...rest}
             >

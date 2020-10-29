@@ -72,7 +72,8 @@ const MokaImageInput = forwardRef((props, ref) => {
         imgRef.current.classList.add('d-none');
         defaultRef.current.classList.remove('d-none');
         defaultRef.current.classList.add('d-flex');
-        imgRef.current.src = '';
+        setImgSrc(null);
+        setAlert(false);
     };
 
     const imageShow = () => {
@@ -189,7 +190,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         <Figure.Image width={width} height={height} alt={alt} src={imgSrc} ref={imgRef} />
 
                         {/* input file */}
-                        <input {...inputProps} />
+                        {alert === false && imgSrc === null && <input {...inputProps} />}
 
                         {/* alert */}
                         <div className="absolute-top">

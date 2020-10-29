@@ -4,14 +4,14 @@ import { createRequestActionTypes } from '@store/commons/saga';
 /**
  * 검색조건 변경
  */
-export const CHANGE_SEARCH_OPTION = 'template/CHANGE_SEARCH_OPTION';
+export const CHANGE_SEARCH_OPTION = 'dataset/CHANGE_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
 
 /**
  * 스토어 데이터 삭제
  */
 export const CLEAR_STORE = 'dataset/CLEAR_STORE';
-export const CLEAR_DATASET = 'dataset/CLEAR_TEMPLATE';
+export const CLEAR_DATASET = 'dataset/CLEAR_DATASET';
 export const CLEAR_LIST = 'dataset/CLEAR_LIST';
 export const CLEAR_SEARCH = 'dataset/CLEAR_SEARCH';
 export const CLEAR_RELATION_LIST = 'dataset/CLEAR_RELATION_LIST';
@@ -27,7 +27,7 @@ export const clearRelationList = createAction(CLEAR_RELATION_LIST);
 export const [GET_DATASET_LIST, GET_DATASET_LIST_SUCCESS, GET_DATASET_LIST_FAILURE] = createRequestActionTypes('dataset/GET_DATASET_LIST');
 export const [GET_DATASET, GET_DATASET_SUCCESS, GET_DATASET_FAILURE] = createRequestActionTypes('dataset/GET_DATASET');
 export const getDatasetList = createAction(GET_DATASET_LIST, (...actions) => actions);
-export const getDataset = createAction(GET_DATASET, (domainSeq) => domainSeq);
+export const getDataset = createAction(GET_DATASET, (datasetSeq) => datasetSeq);
 
 /**
  * 데이터 변경

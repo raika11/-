@@ -21,6 +21,26 @@ export const initialState = {
     invalidList: [],
 };
 
+const parseApiCoulnm = (state, body) => {
+    let dataApiParamShape = null;
+    if (body.dataApiParamShape) {
+        const shape = JSON.parse(body.dataApiParamShape);
+        if (shape.totalCnt > 0) {
+            dataApiParamShape = { ...shape.list[0].parameter };
+        }
+    }
+
+    return produce(state, (draft) => {
+        draft.dataset = {
+            ...body,
+            dataApiParam: body.dataApiParam ? JSON.parse(body.dataApiParam) : null,
+            dataApiParamShape,
+        };
+        draft.datasetError = initialState.datasetError;
+        draft.invalidList = initialState.invalidList;
+    });
+};
+
 export default handleActions(
     {
         /**
@@ -31,12 +51,38 @@ export default handleActions(
                 draft.search = payload;
             });
         },
+        [act.CLEAR_DATASET]: (state) => {
+            return produce(state, (draft) => {
+                draft.dataset = initialState.dataset;
+                draft.datasetError = initialState.datasetError;
+                draft.invalidList = initialState.invalidList;
+            });
+        },
         /**
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
         /**
-         * 데이터 조회
+         * 데이터셋 조회
+         */
+        [act.GET_DATASET_SUCCESS]: (state, { payload: { body } }) => {
+            return parseApiCoulnm(state, body);
+            /*return produce(state, (draft) => {
+                draft.dataset = body;
+                draft.datasetError = initialState.datasetError;
+                draft.invalidList = initialState.invalidList;
+            });*/
+        },
+        [act.GET_DATASET_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.dataset = initialState.dataset;
+                draft.datasetError = payload;
+                draft.invalidList = payload.body;
+            });
+        },
+
+        /**
+         * 데이터셋 리스트 조회
          */
         [act.GET_DATASET_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {

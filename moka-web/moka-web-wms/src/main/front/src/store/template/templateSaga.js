@@ -154,23 +154,7 @@ function* copyTemplate({ payload: { templateSeq, templateName, domainId, callbac
  * @param {string|number} param0.payload.templateseq 템플릿ID (필수)
  * @param {func} param0.payload.callback 콜백
  */
-function* hasRelationList({ payload: { templateSeq, callback } }) {
-    const ACTION = act.HAS_RELATION_LIST;
-    let callbackData = {};
-
-    yield put(startLoading(ACTION));
-    try {
-        const response = yield call(api.hasRelationList, { templateSeq });
-        callbackData = response.data;
-    } catch (e) {
-        callbackData = errorResponse(e);
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-    yield put(finishLoading(ACTION));
-}
+const hasRelationList = createRequestSaga(act.HAS_RELATION_LIST, api.hasRelationList, true);
 
 /**
  * 관련아이템 목록 조회

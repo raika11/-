@@ -20,9 +20,14 @@ const propTypes = {
      */
     language: PropTypes.oneOf(['html', 'javascript', 'css', 'json', 'xml']),
     /**
-     * defaultValue (기본값)
+     * 에디터 생성 시에 기본값으로 들어가는 value
+     * => defaultValue가 변경되면 에디터가 다시 create된다!
      */
     defaultValue: PropTypes.string,
+    /**
+     * 에디터가 create된 상태에서, 단순히 에디터의 내용만 바꿈
+     */
+    value: PropTypes.string,
     /**
      * theme
      */
@@ -47,10 +52,9 @@ const defaultProps = {
  * https://microsoft.github.io/monaco-editor/index.html
  */
 const MonacoEditor = forwardRef((props, ref) => {
-    const { language, defaultValue, theme, options, editorDidMount } = props;
+    const { language, defaultValue, value, theme, options, editorDidMount } = props;
 
     const containerElement = useRef(null);
-    const editorRef = useRef(null);
     const [editor, setEditor] = useState(null);
 
     // 리턴 ref 설정
@@ -75,7 +79,6 @@ const MonacoEditor = forwardRef((props, ref) => {
             ...options,
         });
         setEditor(instance);
-        editorRef.current = instance;
 
         if (editorDidMount) {
             editorDidMount(monaco, instance);
@@ -84,14 +87,34 @@ const MonacoEditor = forwardRef((props, ref) => {
     }, [defaultValue]);
 
     useEffect(() => {
-        // Component Did Update (에디터 업데이트)
+        // Component Did Update (value 변경)
+        if (editor && value) {
+            // **** editor.setValue로 처리하지 않는다 ****
+            // 에디터 인스턴스의 Undo, Redo 히스토리를 유지해야하므로 아래와 같이 처리함
+            editor.pushUndoStop();
+            const model = editor.getModel();
+            model.pushEditOperations(
+                [],
+                [
+                    {
+                        range: model.getFullModelRange(),
+                        text: value,
+                    },
+                ],
+            );
+            editor.pushUndoStop();
+        }
+    }, [editor, value]);
+
+    useEffect(() => {
+        // Component Did Update (options 변경)
         if (editor) {
             editor.updateOptions(options);
         }
     }, [options, editor]);
 
     useEffect(() => {
-        // Component Did Update (에디터 업데이트)
+        // Component Did Update (language 변경)
         if (editor) {
             monaco.editor.setModelLanguage(editor.getModel(), language);
         }
@@ -105,7 +128,6 @@ const MonacoEditor = forwardRef((props, ref) => {
                 if (model) {
                     model.dispose();
                 }
-                editorRef.current = null;
             }
         };
     }, [editor]);

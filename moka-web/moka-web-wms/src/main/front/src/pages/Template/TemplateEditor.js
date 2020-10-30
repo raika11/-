@@ -18,6 +18,7 @@ const TemplateEditor = (props) => {
 
     // state
     const [title, setTitle] = useState('템플릿 편집');
+    const [defaultValue, setDefalutValue] = useState('');
     const [error, setError] = useState({});
 
     /**
@@ -32,10 +33,14 @@ const TemplateEditor = (props) => {
         // 타이틀 변경
         if (template.templateSeq) {
             setTitle(`템플릿 편집(${template.templateSeq}_${template.templateName})`);
+            // defaultValue 변경
+            setDefalutValue(templateBody);
         } else {
             setTitle('템플릿 편집');
+            setDefalutValue('');
         }
-    }, [template]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [template.templateSeq]);
 
     useEffect(() => {
         // 템플릿의 도메인ID를 latestDomainId에 저장
@@ -87,7 +92,8 @@ const TemplateEditor = (props) => {
             title={title}
             expansion={expansion}
             onExpansion={onExpansion}
-            defaultValue={templateBody}
+            defaultValue={defaultValue}
+            value={templateBody}
             onBlur={handleBlur}
         />
     );

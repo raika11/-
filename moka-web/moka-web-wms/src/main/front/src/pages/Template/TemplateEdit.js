@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -18,7 +18,6 @@ import AddComponentModal from './modals/AddComponentModal';
  * 템플릿 정보/수정 컴포넌트
  */
 const TemplateEdit = ({ onDelete }) => {
-    const { templateSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
     const { template, inputTag, tpZoneRows, latestDomainId, invalidList, UPLOAD_PATH_URL } = useSelector((store) => ({
@@ -152,13 +151,14 @@ const TemplateEdit = ({ onDelete }) => {
     };
 
     useEffect(() => {
-        if (templateSeq) {
+        if (template.templateSeq) {
             setBtnDisabled(false);
         } else {
             setBtnDisabled(true);
         }
         setTemplateNameError(false);
-    }, [templateSeq]);
+        imgFileRef.current.deleteFile();
+    }, [template.templateSeq]);
 
     useEffect(() => {
         // 스토어에서 가져온 템플릿 데이터 셋팅
@@ -178,10 +178,6 @@ const TemplateEdit = ({ onDelete }) => {
             setThumbSrc(null);
         }
     }, [UPLOAD_PATH_URL, templateThumb]);
-
-    useEffect(() => {
-        imgFileRef.current.deleteFile();
-    }, [template.templateSeq]);
 
     useEffect(() => {
         // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
@@ -230,7 +226,7 @@ const TemplateEdit = ({ onDelete }) => {
                     </div>
                 </Form.Group>
                 {/* 템플릿ID */}
-                <MokaInputLabel className="mb-2" label="템플릿ID" value={templateSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="템플릿ID" value={template.templateSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 템플릿명 */}
                 <MokaInputLabel
                     className="mb-2"

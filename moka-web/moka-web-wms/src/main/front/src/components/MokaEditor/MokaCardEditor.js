@@ -37,8 +37,13 @@ const propTypes = {
     language: PropTypes.oneOf(['html', 'javascript', 'css', 'json', 'xml']),
     /**
      * 에디터 생성 시에 기본값으로 들어가는 value
+     * => defaultValue가 변경되면 에디터가 다시 create된다!
      */
     defaultValue: PropTypes.string,
+    /**
+     * 에디터가 create된 상태에서, 단순히 에디터의 내용만 바꿈
+     */
+    value: PropTypes.string,
     /**
      * Blur 이벤트 콜백
      * @param {string} value
@@ -79,7 +84,7 @@ const defaultProps = {
  * (wordwrap, expansion 아이콘 있음)
  */
 const MokaCardEditor = forwardRef((props, ref) => {
-    const { width, height, defaultValue, language, options, className, title, onBlur, expansion, onExpansion, error, tag } = props;
+    const { width, height, defaultValue, value, language, options, className, title, onBlur, expansion, onExpansion, error, tag } = props;
 
     // editor state
     const [wordWrap, setWordWrap] = useState(defaultOptions.wordWrap);
@@ -129,7 +134,7 @@ const MokaCardEditor = forwardRef((props, ref) => {
             height={height}
         >
             <Suspense>
-                <MokaEditor ref={ref} defaultValue={defaultValue} language={language} options={{ ...options, wordWrap }} onBlur={onBlur} error={error} tag={tag} />
+                <MokaEditor ref={ref} defaultValue={defaultValue} value={value} language={language} options={{ ...options, wordWrap }} onBlur={onBlur} error={error} tag={tag} />
             </Suspense>
         </MokaCard>
     );

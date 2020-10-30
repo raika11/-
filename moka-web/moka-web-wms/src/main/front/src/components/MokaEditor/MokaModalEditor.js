@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import defaultOptions from './options';
 import { MokaModal, MokaIcon } from '@components';
-const MonacoEditor = React.lazy(() => import('./MonacoEditor'));
+import MokaEditor from './MokaEditorCore';
 
 const propTypes = {
     /**
@@ -40,18 +40,42 @@ const propTypes = {
      */
     buttons: PropTypes.arrayOf(PropTypes.shape({})),
     /**
+     * ---------------------------------------------------------
+     * 에디터가 사용하는 props
      * language
      */
     language: PropTypes.oneOf(['html', 'javascript', 'css', 'json', 'xml']),
     /**
      * 에디터 생성 시에 기본값으로 들어가는 value
+     * => defaultValue가 변경되면 에디터가 다시 create된다!
      */
     defaultValue: PropTypes.string,
+    /**
+     * 에디터가 create된 상태에서, 단순히 에디터의 내용만 바꿈
+     */
+    value: PropTypes.string,
     /**
      * Blur 이벤트 콜백
      * @param {string} value
      */
     onBlur: PropTypes.func,
+    /**
+     * 에러표시 객체
+     */
+    error: PropTypes.shape({
+        /**
+         * 에러 line 몇번째 줄인지
+         */
+        line: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        /**
+         * 노출할 에러 문구
+         */
+        message: PropTypes.string,
+    }),
+    /**
+     * 삽입 태그
+     */
+    tag: PropTypes.string,
 };
 const defaultProps = {
     // modal props
@@ -72,30 +96,13 @@ const defaultProps = {
  * (wordwrap 아이콘 있음)
  */
 const MokaModalEditor = forwardRef((props, ref) => {
-    const { show, onHide, title, width, height, className, bodyClassName, footerClassName, size, buttons, onBlur, defaultValue, language, options } = props;
+    const { show, onHide, title, width, height, className, bodyClassName, footerClassName, size, buttons } = props;
+
+    // editor props
+    const { onBlur, defaultValue, value, language, options, error, tag } = props;
 
     // editor state
     const [wordWrap, setWordWrap] = useState(defaultOptions.wordWrap);
-
-    const editorRef = useRef(null);
-    useImperativeHandle(ref, () => editorRef.current);
-
-    /**
-     * editorDidMount
-     * @param {object} monaco 모나코 obj
-     * @param {object} editor 에디터 instance obj
-     */
-    const editorDidMount = useCallback(
-        (monaco, editor) => {
-            /** onDidBlurEditorText */
-            if (typeof onBlur === 'function') {
-                editor.onDidBlurEditorText(() => {
-                    onBlur(editor.getValue());
-                });
-            }
-        },
-        [onBlur],
-    );
 
     /**
      * 에디터 word wrap 옵션 변경
@@ -122,15 +129,9 @@ const MokaModalEditor = forwardRef((props, ref) => {
             centered
         >
             <div className="position-relative h-100 w-100 overflow-hidden">
-                <Suspense>
-                    <MonacoEditor
-                        ref={editorRef}
-                        defaultValue={defaultValue}
-                        language={language}
-                        options={{ ...defaultOptions, ...options, wordWrap }}
-                        editorDidMount={editorDidMount}
-                    />
-                </Suspense>
+                {/* 에디터 */}
+                <MokaEditor ref={ref} defaultValue={defaultValue} value={value} language={language} options={{ ...options, wordWrap }} onBlur={onBlur} error={error} tag={tag} />
+
                 {/* 워드랩 버튼 */}
                 <Button variant="white" className="absolute-top-right border mt-1 mr-3" onClick={handleWordWrap}>
                     <MokaIcon iconName={wordWrap ? 'fal-arrow-to-right' : 'fal-repeat'} />

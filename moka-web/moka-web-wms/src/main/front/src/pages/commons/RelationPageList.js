@@ -81,18 +81,16 @@ const RelationPageList = (props) => {
             dispatch(
                 getRelationList(
                     changeSearchOption({
-                        ...search,
+                        ...initialState.search,
                         relSeq,
                         relSeqType,
                         relType: 'PG',
                         domainId: latestDomainId,
-                        page: 0,
                     }),
                 ),
             );
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, relSeq, relSeqType]);
+    }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
         <MokaCard titleClassName="mb-0" title="페이지 검색">

@@ -34,7 +34,7 @@ const Template = () => {
 
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
-    const [openTabIdx, setOpenTabIdx] = useState(0);
+    const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     /**
      * 리스트 확장 시
@@ -162,26 +162,26 @@ const Template = () => {
             <MokaIconTabs
                 expansion={expansionState[2]}
                 onExpansion={handleTabExpansion}
-                onSelectNav={(idx) => setOpenTabIdx(idx)}
+                onSelectNav={(idx) => setActiveTabIdx(idx)}
                 tabWidth={412}
                 tabs={[
                     <Suspense>
-                        <TemplateEdit show={openTabIdx === '0'} onDelete={handleClickDelete} />
+                        <TemplateEdit show={activeTabIdx === '0'} onDelete={handleClickDelete} />
                     </Suspense>,
                     <Suspense>
-                        <RelationPageList show={openTabIdx === '1'} relSeqType="TP" relSeq={template.templateSeq} />
+                        <RelationPageList show={activeTabIdx === '1'} relSeqType="TP" relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <TemplateSkinList show={openTabIdx === '2'} />
+                        <TemplateSkinList show={activeTabIdx === '2'} />
                     </Suspense>,
                     <Suspense>
-                        <TemplateContainerList show={openTabIdx === '3'} />
+                        <TemplateContainerList show={activeTabIdx === '3'} />
                     </Suspense>,
                     <Suspense>
-                        <TemplateComponentList show={openTabIdx === '4'} />
+                        <TemplateComponentList show={activeTabIdx === '4'} />
                     </Suspense>,
                     <Suspense>
-                        <TemplateHistoryList show={openTabIdx === '5'} />
+                        <TemplateHistoryList show={activeTabIdx === '5'} />
                     </Suspense>,
                 ]}
                 tabNavWidth={48}

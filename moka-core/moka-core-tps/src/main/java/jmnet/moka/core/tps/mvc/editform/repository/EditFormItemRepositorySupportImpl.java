@@ -4,7 +4,8 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
-import jmnet.moka.core.tps.mvc.editform.entity.QEditForm;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormItem;
+import jmnet.moka.core.tps.mvc.editform.entity.QEditFormItem;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
@@ -19,29 +20,25 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-10-23 09:38
  */
-public class EditFormRepositorySupportImpl extends QuerydslRepositorySupport implements EditFormRepositorySupport {
+public class EditFormItemRepositorySupportImpl extends QuerydslRepositorySupport implements EditFormItemRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
-    public EditFormRepositorySupportImpl(JPAQueryFactory queryFactory) {
+    public EditFormItemRepositorySupportImpl(JPAQueryFactory queryFactory) {
         super(EditForm.class);
         this.queryFactory = queryFactory;
     }
 
     @Override
-    public Optional<EditForm> findEditForm(EditForm editForm) {
-        QEditForm qEditForm = QEditForm.editForm;
+    public Optional<EditFormItem> findEditFormItem(EditFormItem editFormItem) {
+        QEditFormItem qEditFormItem = QEditFormItem.editFormItem;
 
-        JPQLQuery<EditForm> query = from(qEditForm);
-        query.where(qEditForm.channelId
+        JPQLQuery<EditFormItem> query = from(qEditFormItem);
+        query.where(qEditFormItem.formSeq.eq(editFormItem.getFormSeq()));
+        query.where(qEditFormItem.itemId
                 .toUpperCase()
-                .contains(editForm
-                        .getChannelId()
-                        .toUpperCase()));
-        query.where(qEditForm.partId
-                .toUpperCase()
-                .contains(editForm
-                        .getPartId()
+                .contains(editFormItem
+                        .getItemId()
                         .toUpperCase()));
 
         return Optional.ofNullable(query.fetchFirst());

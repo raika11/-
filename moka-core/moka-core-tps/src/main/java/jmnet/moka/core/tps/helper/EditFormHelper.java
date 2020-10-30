@@ -18,7 +18,7 @@ import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.common.code.EditFieldTypeCode;
-import jmnet.moka.core.tps.mvc.editform.dto.EditFormDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.ChannelFormatDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldGroupDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.OptionDTO;
@@ -41,7 +41,7 @@ import org.springframework.beans.factory.annotation.Value;
 @Slf4j
 public class EditFormHelper {
 
-    private final Map<String, EditFormDTO> editFormMap;
+    private final Map<String, ChannelFormatDTO> editFormMap;
 
     private final XmlMapper xmlMapper;
 
@@ -61,21 +61,21 @@ public class EditFormHelper {
      * @return ChannelFormatDTO
      * @throws MokaException 오류 처리
      */
-    public EditFormDTO mapping(String site, String channelId)
+    public ChannelFormatDTO mapping(String site, String channelId)
             throws MokaException {
-        String formatKey = site + "_" + channelId;
+        String formatKey = site + "/" + channelId;
         File file = McpFile.getFile(String.format(xmlFilePath, site, channelId));
         if (!file.exists()) {
             throw new MokaException(new FileNotFoundException(file.getAbsolutePath()));
         }
-        EditFormDTO editFormDTO = editFormMap.get(formatKey);
+        ChannelFormatDTO editFormDTO = editFormMap.get(formatKey);
         if (editFormDTO == null || !editFormDTO
                 .getLastModified()
                 .equals(file.lastModified())) {
             synchronized (EditFormHelper.class) {
                 try {
-                    editFormDTO = xmlMapper.readValue(file, EditFormDTO.class);
-                    editFormDTO.setId(formatKey);
+                    editFormDTO = xmlMapper.readValue(file, ChannelFormatDTO.class);
+                    editFormDTO.setFormId(formatKey);
                     refineFieldGroup(editFormDTO);
                 } catch (IOException e) {
                     throw new MokaException(e.getMessage());
@@ -87,20 +87,35 @@ public class EditFormHelper {
         return editFormMap.get(formatKey);
     }
 
+    public ChannelFormatDTO mapping(String site, String fileName, byte[] contents)
+            throws MokaException {
+        String formId = site + "/" + fileName;
+        ChannelFormatDTO editFormDTO;
+        try {
+            editFormDTO = xmlMapper.readValue(contents, ChannelFormatDTO.class);
+            editFormDTO.setFormId(formId);
+            refineFieldGroup(editFormDTO);
+        } catch (IOException e) {
+            throw new MokaException(e.getMessage());
+        }
+
+        return editFormDTO;
+    }
+
     /**
      * field 목록의 그룹별로 묶는다.
      *
      * @param editFormDTO ChannelFormatDTO
      */
-    public void refineFieldGroup(EditFormDTO editFormDTO) {
+    public void refineFieldGroup(ChannelFormatDTO editFormDTO) {
 
         editFormDTO
                 .getParts()
-                .forEach(partDTO -> {
+                .forEach(editFormItemDTO -> {
                     SortedMap<Integer, List<FieldDTO>> groupMap = new TreeMap<>();
-                    partDTO.setFieldGroups(new ArrayList<>());
+                    editFormItemDTO.setFieldGroups(new ArrayList<>());
                     Integer currentGroupNumber = 1;
-                    for (FieldDTO fieldDTO : partDTO.getFields()) {
+                    for (FieldDTO fieldDTO : editFormItemDTO.getFields()) {
                         refineOptions(fieldDTO);
                         if (McpString.isEmpty(fieldDTO.getGroup())) {
                             fieldDTO.setGroup(currentGroupNumber);
@@ -110,7 +125,7 @@ public class EditFormHelper {
                         groupInnerFields.add(fieldDTO);
                         groupMap.put(currentGroupNumber, groupInnerFields);
                     }
-                    partDTO.setFields(null);
+                    editFormItemDTO.setFields(null);
                     for (Entry<Integer, List<FieldDTO>> entry : groupMap.entrySet()) {
                         Integer group = entry.getKey();
                         List<FieldDTO> fieldDTOS = entry.getValue();
@@ -129,7 +144,7 @@ public class EditFormHelper {
                                 .fields(fieldDTOS)
                                 .group(group)
                                 .build();
-                        partDTO
+                        editFormItemDTO
                                 .getFieldGroups()
                                 .add(fieldGroupDTO);
                     }
@@ -169,12 +184,12 @@ public class EditFormHelper {
      */
     public PartDTO getPart(String site, String channelId, String partId)
             throws MokaException {
-        EditFormDTO editFormDTO = getChannelFormat(site, channelId);
+        ChannelFormatDTO editFormDTO = getChannelFormat(site, channelId);
         return editFormDTO
                 .getParts()
                 .stream()
                 .filter(part -> part
-                        .getId()
+                        .getItemId()
                         .equals(partId))
                 .findFirst()
                 .orElseThrow(() -> new MokaException(EditFormHelper.class.getName()));
@@ -187,7 +202,7 @@ public class EditFormHelper {
      * @param channelId 채널명
      * @return ChannelFormatDTO
      */
-    public EditFormDTO getChannelFormat(String site, String channelId)
+    public ChannelFormatDTO getChannelFormat(String site, String channelId)
             throws MokaException {
         return mapping(site, channelId);
     }

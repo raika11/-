@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.lang.reflect.Type;
 import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,17 +16,17 @@ import lombok.Setter;
 
 /**
  * <pre>
- * 필드 목록을 group 값으로 필드 목록을 분리
+ * 편집 폼 검색
  * Project : moka
- * Package : jmnet.moka.core.tps.common.dto.edit
- * ClassName : FieldDTO
+ * Package : jmnet.moka.core.tps.common.dto
+ * ClassName : EditFormDTO
  * Created : 2020-10-25 ince
  * </pre>
  *
  * @author ince
- * @since 2020-10-25 08:26
+ * @since 2020-10-25 07:36
  */
-@JsonRootName("fieldGroup")
+@JsonRootName("channelFormat")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -31,15 +34,16 @@ import lombok.Setter;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class FieldGroupDTO {
-    /**
-     * 그룹번호
-     */
-    private Integer group;
-    /**
-     * 필드 목록
-     */
-    private List<FieldDTO> fields;
+public class EditFormSearchDTO extends SearchDTO {
+
+    public static final Type TYPE = new TypeReference<List<EditFormSearchDTO>>() {
+    }.getType();
+
+    private Long formSeq;
+
+    private Long itemSeq;
+
+    private String formId;
 
 
 }

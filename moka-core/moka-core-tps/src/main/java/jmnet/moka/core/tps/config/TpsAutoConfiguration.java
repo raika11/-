@@ -28,7 +28,7 @@ import org.springframework.util.StringUtils;
 @Configuration
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
 @Import({HelperConfiguration.class, PreviewConfiguration.class, TpsJpaConfiguration.class, TpsQuerydslConfiguration.class,
-         TpsMybatisConfiguration.class, SwaggerConfiguration.class})
+         TpsMybatisConfiguration.class, SwaggerConfiguration.class, AsyncTaskConfiguration.class})
 @ComponentScan(basePackages = {"jmnet.moka.core.tps.mvc", "jmnet.moka.core.tps.common.logger"})
 public class TpsAutoConfiguration {
 

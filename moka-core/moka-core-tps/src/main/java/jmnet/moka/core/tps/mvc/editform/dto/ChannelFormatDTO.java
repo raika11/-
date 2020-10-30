@@ -5,17 +5,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.lang.reflect.Type;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <pre>
- * 편집 폼
+ * XML 파싱용 DTO
+ * xml - channelFormat Element
  * Project : moka
  * Package : jmnet.moka.core.tps.common.dto
  * ClassName : EditFormDTO
@@ -30,15 +35,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class EditFormDTO {
+public class ChannelFormatDTO {
 
-    public static final Type TYPE = new TypeReference<List<EditFormDTO>>() {
+    public static final Type TYPE = new TypeReference<List<ChannelFormatDTO>>() {
     }.getType();
-
-    private Long formSeq;
 
     /**
      * 채널 ID
@@ -48,21 +53,26 @@ public class EditFormDTO {
     /**
      * 채널명 화면명 또는 업무명이라고 보면 됨
      */
+    @JacksonXmlProperty(localName = "name")
     private String formName;
 
     /**
      * 서비스 페이지 url
      */
+    @JacksonXmlProperty(localName = "url")
     private String serviceUrl;
 
     /**
      * 서비스 페이지 url url 값과 동일함. 다른 채널을 찾지 못함.
      */
+    @JacksonXmlProperty(localName = "baseurl")
     private String baseUrl;
 
-
-    //@JsonManagedReference
-    //private List<EditFormItemDTO> editFormItems;
+    /**
+     * 채널의 부분 요소 목록
+     */
+    @JacksonXmlElementWrapper(localName = "parts")
+    private List<PartDTO> parts;
 
 
     /**

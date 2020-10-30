@@ -1,7 +1,7 @@
 package jmnet.moka.core.tps.mvc.editform.repository;
 
 import java.util.Optional;
-import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormItem;
 
 /**
  * <pre>
@@ -15,6 +15,6 @@ import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
  * @author ince
  * @since 2020-10-23 09:38
  */
-public interface EditFormRepositorySupport {
-    public Optional<EditForm> findEditForm(EditForm editForm);
+public interface EditFormItemRepositorySupport {
+    public Optional<EditFormItem> findEditFormItem(EditFormItem editFormItem);
 }

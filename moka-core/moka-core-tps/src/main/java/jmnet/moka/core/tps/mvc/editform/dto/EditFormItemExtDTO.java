@@ -13,17 +13,18 @@ import lombok.Setter;
 
 /**
  * <pre>
- * 필드 목록을 group 값으로 필드 목록을 분리
+ * EditFormItem 확장 클래스
+ * formData를 객체로 변환
  * Project : moka
  * Package : jmnet.moka.core.tps.common.dto.edit
- * ClassName : FieldDTO
+ * ClassName : Part
  * Created : 2020-10-25 ince
  * </pre>
  *
  * @author ince
- * @since 2020-10-25 08:26
+ * @since 2020-10-25 07:41
  */
-@JsonRootName("fieldGroup")
+@JsonRootName("part")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -31,15 +32,11 @@ import lombok.Setter;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class FieldGroupDTO {
-    /**
-     * 그룹번호
-     */
-    private Integer group;
-    /**
-     * 필드 목록
-     */
-    private List<FieldDTO> fields;
+public class EditFormItemExtDTO extends EditFormItemDTO {
 
+    /**
+     * 필드 그룹 목록
+     */
+    private List<FieldGroupDTO> fieldGroups;
 
 }

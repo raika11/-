@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.code.EditFormStatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,7 +19,7 @@ import lombok.ToString;
 
 /**
  * <pre>
- * 채널(화면)의 부분 요소(영역)
+ * 채널(화면)의 부분 요소(영역) - legacy xml 처리 용
  * Project : moka
  * Package : jmnet.moka.core.tps.common.dto.edit
  * ClassName : Part
@@ -41,16 +42,28 @@ import lombok.ToString;
 public class PartDTO {
 
     /**
+     * Form Item ID
+     */
+    @JacksonXmlProperty(localName = "id")
+    private String itemId;
+
+    /**
+     * Form Item Title
+     */
+    @JacksonXmlProperty(localName = "title")
+    private String itemTitle;
+
+    /**
      * 사용 여부
      */
-    @JacksonXmlProperty(isAttribute = true)
-    private String active = MokaConstants.YES;
+    @JacksonXmlProperty(isAttribute = true, localName = "active")
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 상태
      */
     @JacksonXmlProperty(isAttribute = true)
-    private String status;
+    private EditFormStatusCode status;
 
     /**
      * 작성자
@@ -59,7 +72,7 @@ public class PartDTO {
     private String user;
 
     /**
-     * 수정일시
+     * XML 수정일시
      */
     @JacksonXmlProperty(isAttribute = true, localName = "modifydate")
     private String modifyDate;
@@ -69,16 +82,6 @@ public class PartDTO {
      */
     @JacksonXmlProperty(isAttribute = true, localName = "reservedate")
     private String reserveDate;
-
-    /**
-     * 아이디
-     */
-    private String id;
-
-    /**
-     * 화면 내 영역 명
-     */
-    private String title;
 
     /**
      * 필드 목록
@@ -96,6 +99,5 @@ public class PartDTO {
      */
     @JacksonXmlElementWrapper(localName = "outputlist")
     private List<OutputDTO> outputs;
-
 
 }

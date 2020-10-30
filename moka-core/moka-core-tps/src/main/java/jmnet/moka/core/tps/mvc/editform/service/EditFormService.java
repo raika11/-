@@ -1,9 +1,13 @@
 package jmnet.moka.core.tps.mvc.editform.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.common.exception.MokaException;
+import jmnet.moka.core.tps.common.code.EditFormStatusCode;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormItem;
 import org.springframework.data.domain.Page;
 
 /**
@@ -26,7 +30,7 @@ public interface EditFormService {
      * @param search 검색조건
      * @return 편집 폼목록
      */
-    public Page<EditForm> findAllEditForm(SearchDTO search);
+    public Page<EditForm> findAllEditForm(EditFormSearchDTO search);
 
     /**
      * 편집 폼목록 전체조회(페이징X)
@@ -38,10 +42,42 @@ public interface EditFormService {
     /**
      * 편집 폼 조회
      *
+     * @param formSeq 편집폼 일련번호
+     * @return 편집폼정보
+     */
+    public Optional<EditForm> findEditFormBySeq(Long formSeq);
+
+    /**
+     * 편집 폼 조회
+     *
+     * @param formId 편집폼 ID
+     * @return 편집폼정보
+     */
+    public Optional<EditForm> findEditFormById(String formId);
+
+    /**
+     * 편집 폼 조회
+     *
      * @param editForm 편집폼
      * @return 편집폼정보
      */
     public Optional<EditForm> findEditForm(EditForm editForm);
+
+    /**
+     * 편집 폼 조회
+     *
+     * @param itemSeq 편집폼 아이템 일련번호
+     * @return 편집폼 아이템 정보
+     */
+    public Optional<EditFormItem> findEditFormItemBySeq(Long itemSeq);
+
+    /**
+     * 편집 폼 조회
+     *
+     * @param editFormItem 편집폼
+     * @return 편집폼정보
+     */
+    public Optional<EditFormItem> findEditFormItem(EditFormItem editFormItem);
 
     /**
      * 편집 폼 추가
@@ -54,6 +90,26 @@ public interface EditFormService {
             throws Exception;
 
     /**
+     * 편집 폼 추가
+     *
+     * @param editFormItem 편집 폼
+     * @return 등록된 편집 폼
+     * @throws Exception 예외처리
+     */
+    public EditFormItem insertEditFormItem(EditFormItem editFormItem)
+            throws Exception;
+
+    /**
+     * 편집 폼 추가
+     *
+     * @param editFormItem 편집 폼
+     * @return 등록된 편집 폼
+     * @throws Exception 예외처리
+     */
+    public EditFormItem insertEditFormItem(EditFormItem editFormItem, EditFormStatusCode status, Date reserveDt)
+            throws MokaException;
+
+    /**
      * 편집 폼 수정
      *
      * @param editForm 수정할 편집폼정보
@@ -62,22 +118,43 @@ public interface EditFormService {
     public EditForm updateEditForm(EditForm editForm);
 
     /**
-     * 편집 폼 삭제
+     * 편집 폼 수정
      *
-     * @param editFormId 편집 폼아이디
-     * @throws Exception 예외처리
+     * @param editFormItem 수정할 편집폼정보
+     * @return 수정된 편집폼정보
      */
-    public void deleteEditFormById(String editFormId)
+    public EditFormItem updateEditFormItem(EditFormItem editFormItem);
+
+    /**
+     * 편집 폼 수정
+     *
+     * @param editFormItem 수정할 편집폼정보
+     * @param status       편집 폼 상태
+     * @param reserveDt    예약 일시
+     * @return 수정된 편집폼정보
+     */
+    public EditFormItem updateEditFormItem(EditFormItem editFormItem, EditFormStatusCode status, Date reserveDt)
             throws Exception;
 
     /**
      * 편집 폼 삭제
      *
-     * @param editForm 편집 폼
+     * @param formSeq 편집 폼 일련번호
      * @throws Exception 예외처리
      */
-    public void deleteEditForm(EditForm editForm)
+    public int deleteEditFormBySeq(Long formSeq)
             throws Exception;
+
+    /**
+     * 편집 폼 삭제
+     *
+     * @param formSeq 편집 폼 일련번호
+     * @param itemSeq 편집 폼 아이템 일련번호
+     * @throws Exception 예외처리
+     */
+    public int deleteEditFormItem(Long formSeq, Long itemSeq)
+            throws Exception;
+
 
     /**
      * 중복 편집 폼 아이디인지 체크한다
@@ -86,6 +163,14 @@ public interface EditFormService {
      * @return 중복여부
      */
     public boolean isDuplicatedId(EditForm editForm);
+
+    /**
+     * 중복 편집 폼 아이디인지 체크한다
+     *
+     * @param editFormItem 폼 정보
+     * @return 중복여부
+     */
+    public boolean isDuplicatedId(EditFormItem editFormItem);
 
     /**
      * 관련된 정보가 있는지 조사한다.

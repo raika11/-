@@ -1,12 +1,17 @@
 package jmnet.moka.core.tps.mvc.editform.entity;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
@@ -14,6 +19,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 /**
  * 편집 폼
@@ -30,31 +36,34 @@ public class EditForm extends BaseAudit implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 마지막 수정일시
+     */
+    @CreatedDate
+    @Column(name = "LAST_DT")
+    @Builder.Default
+    protected Date lastDt = new Date();
+    /**
      * Edit Form 일련번호
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "EDIT_FORM_SEQ", nullable = false)
-    private Long editFormSeq;
-
+    @Column(name = "FORM_SEQ", nullable = false)
+    private Long formSeq;
     /**
-     * Channel ID
+     * Form ID - legacy xml 파일명
      */
-    @Column(name = "CHANNEL_ID", nullable = false)
-    private String channelId;
-
+    @Column(name = "FORM_ID", nullable = false)
+    private String formId;
     /**
-     * Form Part ID
+     * Form name - xml channelFormat name
      */
-    @Column(name = "PART_ID", nullable = false)
-    private String partId;
-
+    @Column(name = "FORM_NAME", nullable = false)
+    private String formName;
     /**
-     * Edit Form Data
+     * Service Url
      */
-    @Lob
-    @Column(name = "FORM_DATA", nullable = false)
-    private String formData;
+    @Column(name = "SERVICE_URL", nullable = false)
+    private String serviceUrl;
 
     /**
      * 사용여부(Y:사용, N:미사용)
@@ -62,5 +71,16 @@ public class EditForm extends BaseAudit implements Serializable {
     @Column(name = "USED_YN")
     @Builder.Default
     private String usedYn = "Y";
+    /**
+     * Base Url
+     */
+    @Column(name = "BASE_URL", nullable = false)
+    private String baseUrl;
+    /**
+     * 편집 폼 아이템 목록
+     */
+    @Builder.Default
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "editForm", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private Set<EditFormItem> editFormItems = new LinkedHashSet<EditFormItem>();
 
 }

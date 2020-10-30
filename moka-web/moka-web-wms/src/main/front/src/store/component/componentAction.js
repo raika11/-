@@ -25,7 +25,7 @@ export const clearSearch = createAction(CLEAR_SEARCH);
 export const [GET_COMPONENT_LIST, GET_COMPONENT_LIST_SUCCESS, GET_COMPONENT_LIST_FAILURE] = createRequestActionTypes('component/GET_COMPONENT_LIST');
 export const [GET_COMPONENT, GET_COMPONENT_SUCCESS, GET_COMPONENT_FAILURE] = createRequestActionTypes('component/GET_COMPONENT');
 export const getComponentList = createAction(GET_COMPONENT_LIST, (...actions) => actions);
-export const getComponent = createAction(GET_COMPONENT, (componentSeq) => componentSeq);
+export const getComponent = createAction(GET_COMPONENT, ({ componentSeq }) => ({ componentSeq }));
 
 /**
  * 데이터 변경

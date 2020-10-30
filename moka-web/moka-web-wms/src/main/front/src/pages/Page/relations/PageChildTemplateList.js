@@ -1,20 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RelationTemplateList } from '@pages/commons';
+import { ITEM_PG } from '@/constants';
+import TemplateHtmlModal from '../modals/TemplateHtmlModal';
 
-import { MokaCard } from '@components';
-import Search from './PageChildTemplateSearch';
-import AgGrid from './PageChildTemplateAgGrid';
+const PageChildTemplateList = ({ show }) => {
+    const { page } = useSelector((store) => ({
+        page: store.page.page,
+    }));
 
-/**
- * 관련 컨테이너
- */
-const PageChildTemplateList = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [selected, setSelected] = useState({});
+
+    const handleRowClicked = (data) => {
+        setSelected(data);
+        setShowModal(true);
+    };
+
     return (
-        <MokaCard titleClassName="mb-0" title="템플릿 검색">
-            {/* 검색 및 버튼 */}
-            <Search />
-            {/* 목록 및 페이징 */}
-            <AgGrid />
-        </MokaCard>
+        <React.Fragment>
+            <RelationTemplateList show={show} relSeqType={ITEM_PG} relSeq={page.pageSeq} onRowClicked={handleRowClicked} />
+            <TemplateHtmlModal data={selected} show={showModal} onHide={() => setShowModal(false)} />
+        </React.Fragment>
     );
 };
 

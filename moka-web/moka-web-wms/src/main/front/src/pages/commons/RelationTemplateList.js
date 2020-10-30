@@ -1,10 +1,325 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 
-const propTypes = {};
-const defaultProps = {};
+import { ITEM_PG, ITEM_CT, API_BASE_URL } from '@/constants';
+import { MokaCard, MokaInput, MokaSearchInput, MokaTableTypeButton, MokaTable, MokaThumbTable } from '@components';
+import { defaultTemplateSearchType } from '@pages/commons';
+import { getTemplateList, changeSearchOption, initialState, clearStore, GET_TEMPLATE_LIST } from '@store/template';
+import columnDefs from './RelationTemplateListColums';
 
-const RelationTemplateList = (props) => {};
+const propTypes = {
+    /**
+     * relSeq의 타입
+     */
+    relSeqType: PropTypes.oneOf([ITEM_CT, ITEM_PG]),
+    /**
+     * relSeq
+     */
+    relSeq: PropTypes.number,
+    /**
+     * show === true이면 리스트를 조회한다
+     */
+    show: PropTypes.bool,
+    /**
+     * row의 append 버튼 클릭 이벤트
+     */
+    onAppend: PropTypes.func,
+    /**
+     * row 클릭 이벤트
+     */
+    onRowClicked: PropTypes.func,
+};
+const defaultProps = {
+    show: true,
+};
+
+/**
+ * relSeq와
+ * 관련된 하위(자식의) 템플릿 리스트
+ */
+const RelationTemplateList = (props) => {
+    const { relSeq, relSeqType, show, onAppend, onRowClicked } = props;
+    const dispatch = useDispatch();
+
+    const { domainList, tpSizeRows, tpZoneRows, latestDomainId, search: storeSearch, list, total, UPLOAD_PATH_URL, loading } = useSelector((store) => ({
+        domainList: store.auth.domainList,
+        tpSizeRows: store.codeMgt.tpSizeRows,
+        tpZoneRows: store.codeMgt.tpZoneRows,
+        latestDomainId: store.auth.latestDomainId,
+        search: store.template.search,
+        list: store.template.list,
+        total: store.template.total,
+        UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
+        loading: store.loading[GET_TEMPLATE_LIST],
+    }));
+
+    // state
+    const [search, setSearch] = useState(initialState.search);
+    const [listType, setListType] = useState('list');
+    const [rowData, setRowData] = useState([]);
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    /**
+     * 테이블 검색옵션 변경
+     */
+    const handleChangeSearchOption = ({ key, value }) => {
+        let temp = { ...search, [key]: value };
+        if (key !== 'page') {
+            temp['page'] = 0;
+        }
+        dispatch(getTemplateList(changeSearchOption(temp)));
+    };
+
+    /**
+     * 검색
+     */
+    const handleSearch = () => {
+        handleChangeSearchOption({ key: 'page', value: 0 });
+    };
+
+    /**
+     * 템플릿 사이즈 변경 함수
+     * @param {object} e change이벤트
+     */
+    const handleChangeTpSize = (e) => {
+        if (e.target.value === 'all') {
+            setSearch({
+                ...search,
+                widthMin: null,
+                widthMax: null,
+            });
+            return;
+        }
+        try {
+            const { widthmin, widthmax } = e.target.selectedOptions[0].dataset;
+            setSearch({
+                ...search,
+                widthMin: Number(widthmin),
+                widthMax: Number(widthmax),
+            });
+        } catch (err) {
+            setSearch({
+                ...search,
+                widthMin: null,
+                widthMax: null,
+            });
+        }
+    };
+
+    /**
+     * row클릭
+     * @param {object} data row data
+     */
+    const handleRowClicked = (data) => {
+        if (onRowClicked) {
+            onRowClicked(data);
+        }
+    };
+
+    /**
+     * 태그 삽입 버튼 클릭
+     * @param {object} data row data
+     */
+    const handleClickAppend = useCallback(
+        (data) => {
+            if (onAppend) {
+                onAppend(data);
+            }
+        },
+        [onAppend],
+    );
+
+    /**
+     * 링크 버튼 클릭
+     * @param {object} data row data
+     */
+    const handleClickLink = (data) => {
+        window.open(`template/${data.templateSeq}`);
+    };
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
+
+    useEffect(() => {
+        // row 생성
+        setRowData(
+            list.map((data) => {
+                let thumb = data.templateThumb;
+                if (thumb && thumb !== '') {
+                    thumb = `${API_BASE_URL}${UPLOAD_PATH_URL}/${thumb}`;
+                }
+                return {
+                    ...data,
+                    id: data.templateSeq,
+                    name: data.templateName,
+                    thumb,
+                    handleClickAppend,
+                    handleClickLink,
+                };
+            }),
+        );
+    }, [UPLOAD_PATH_URL, handleClickAppend, list]);
+
+    useEffect(() => {
+        if (show) {
+            dispatch(
+                getTemplateList(
+                    changeSearchOption({
+                        ...initialState.search,
+                        keyword: relSeq,
+                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : 'containerSeq',
+                        domainId: latestDomainId,
+                    }),
+                ),
+            );
+        }
+    }, [show, latestDomainId, dispatch, relSeq, relSeqType]);
+
+    return (
+        <MokaCard titleClassName="mb-0" title="템플릿 검색">
+            <Form className="mb-10">
+                {/* 도메인 선택 */}
+                <Form.Row className="mb-2">
+                    <MokaInput
+                        as="select"
+                        className="w-100"
+                        value={search.domainId || undefined}
+                        onChange={(e) => {
+                            handleChangeSearchOption({
+                                key: 'domainId',
+                                value: e.target.value,
+                            });
+                        }}
+                    >
+                        {domainList.map((domain) => (
+                            <option key={domain.domainId} value={domain.domainId}>
+                                {domain.domainName}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    {/* 템플릿 위치그룹 */}
+                    <Col xs={7} className="p-0 pr-2">
+                        <MokaInput
+                            as="select"
+                            value={search.templateGroup}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    templateGroup: e.target.value,
+                                });
+                            }}
+                        >
+                            <option value="all">위치그룹 전체</option>
+                            {tpZoneRows.map((cd) => (
+                                <option key={cd.dtlCd} value={cd.dtlCd}>
+                                    {cd.cdNm}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </Col>
+                    {/* 템플릿 사이즈 */}
+                    <Col xs={5} className="p-0">
+                        <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize}>
+                            <option value="all">사이즈 전체</option>
+                            {tpSizeRows.map((cd) => (
+                                <option key={cd.dtlCd} value={cd.dtlCd} data-widthmin={cd.cdNmEtc1} data-widthmax={cd.cdNmEtc2}>
+                                    {cd.cdNm}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    {/* 검색조건 */}
+                    <Col xs={4} className="p-0 pr-2">
+                        <MokaInput
+                            as="select"
+                            value={search.searchType}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    searchType: e.target.value,
+                                });
+                            }}
+                        >
+                            {relSeqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
+                            {relSeqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
+                            {defaultTemplateSearchType.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </Col>
+                    {/* 키워드 */}
+                    <Col xs={8} className="p-0">
+                        <MokaSearchInput
+                            value={search.keyword}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    keyword: e.target.value,
+                                });
+                            }}
+                            onSearch={handleSearch}
+                        />
+                    </Col>
+                </Form.Row>
+            </Form>
+
+            {/* 버튼 그룹 */}
+            <div className="d-flex mb-10">
+                <MokaTableTypeButton onSelect={(selectedKey) => setListType(selectedKey)} />
+                <div className="pt-0">
+                    <Button variant="dark" onClick={() => window.open('/template')}>
+                        템플릿 추가
+                    </Button>
+                </div>
+            </div>
+
+            {/* ag-grid table */}
+            {listType === 'list' && (
+                <MokaTable
+                    agGridHeight={528}
+                    columnDefs={columnDefs}
+                    rowData={rowData}
+                    onRowNodeId={(template) => template.templateSeq}
+                    onRowClicked={handleRowClicked}
+                    loading={loading}
+                    total={total}
+                    page={search.page}
+                    size={search.size}
+                    onChangeSearchOption={handleChangeSearchOption}
+                    preventRowClickCell={['append', 'link']}
+                />
+            )}
+            {listType === 'thumbnail' && (
+                <MokaThumbTable
+                    tableHeight={528}
+                    rowData={rowData}
+                    loading={loading}
+                    total={total}
+                    page={search.page}
+                    size={search.size}
+                    onChangeSearchOption={handleChangeSearchOption}
+                    onClick={handleRowClicked}
+                />
+            )}
+        </MokaCard>
+    );
+};
 
 RelationTemplateList.propTypes = propTypes;
 RelationTemplateList.defaultProps = defaultProps;

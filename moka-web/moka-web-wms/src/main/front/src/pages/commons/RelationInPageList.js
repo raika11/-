@@ -62,15 +62,11 @@ const RelationInPageList = (props) => {
      * 테이블 검색옵션 변경
      */
     const handleChangeSearchOption = ({ key, value }) => {
-        dispatch(
-            getRelationList(
-                changeSearchOption({
-                    ...search,
-                    [key]: value,
-                    page: 0,
-                }),
-            ),
-        );
+        let temp = { ...search, [key]: value };
+        if (key !== 'page') {
+            temp['page'] = 0;
+        }
+        dispatch(getRelationList(changeSearchOption(temp)));
     };
 
     /**

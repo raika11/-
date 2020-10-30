@@ -67,6 +67,10 @@ const propTypes = {
      * 확장 여부를 직접 제어하려는 경우 사용한다.
      */
     onExpansion: PropTypes.func,
+    /**
+     * 로딩 여부
+     */
+    loading: PropTypes.bool,
 };
 const defaultProps = {
     width: 410,
@@ -74,13 +78,14 @@ const defaultProps = {
     foldable: false,
     expansion: true,
     buttons: [],
+    loading: false,
 };
 
 /**
  * 카드 컴포넌트
  */
 const MokaCard = forwardRef((props, ref) => {
-    const { className, headerClassName, bodyClassName, titleClassName, width, height, title, titleAs, children, expansion, onExpansion, buttons, foldable } = props;
+    const { className, headerClassName, bodyClassName, titleClassName, width, height, title, titleAs, children, expansion, onExpansion, buttons, foldable, loading } = props;
     const [localExpandState, setLocalExpandState] = useState(true);
 
     useEffect(() => {
@@ -146,6 +151,7 @@ const MokaCard = forwardRef((props, ref) => {
             className={clsx('flex-shrink-0', className, { fold: foldable && !localExpandState })}
             style={{ width: foldable && !localExpandState ? CARD_FOLDING_WIDTH : width, height }}
         >
+            {loading && <div className="opacity-box"></div>}
             <Card.Header className={clsx({ 'd-flex': foldable, 'justify-content-between': foldable, 'align-items-center': foldable }, headerClassName)}>
                 {/* 카드 타이틀 */}
                 {titleAs ? (

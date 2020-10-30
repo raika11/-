@@ -30,6 +30,10 @@ const propTypes = {
      */
     onExpansion: PropTypes.func,
     /**
+     * 로딩 여부
+     */
+    loading: PropTypes.bool,
+    /**
      * ---------------------------------------------------------
      * 에디터가 사용하는 props
      * language
@@ -84,7 +88,10 @@ const defaultProps = {
  * (wordwrap, expansion 아이콘 있음)
  */
 const MokaCardEditor = forwardRef((props, ref) => {
-    const { width, height, defaultValue, value, language, options, className, title, onBlur, expansion, onExpansion, error, tag } = props;
+    const { width, height, className, title, expansion, onExpansion, loading } = props;
+
+    // editor props
+    const { defaultValue, value, language, options, onBlur, error, tag } = props;
 
     // editor state
     const [wordWrap, setWordWrap] = useState(defaultOptions.wordWrap);
@@ -132,6 +139,7 @@ const MokaCardEditor = forwardRef((props, ref) => {
             ]}
             width={width}
             height={height}
+            loading={loading}
         >
             <Suspense>
                 <MokaEditor ref={ref} defaultValue={defaultValue} value={value} language={language} options={{ ...options, wordWrap }} onBlur={onBlur} error={error} tag={tag} />

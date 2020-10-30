@@ -27,7 +27,7 @@ export const clearHistory = createAction(CLEAR_HISTORY);
 export const [GET_TEMPLATE_LIST, GET_TEMPLATE_LIST_SUCCESS, GET_TEMPLATE_LIST_FAILURE] = createRequestActionTypes('template/GET_TEMPLATE_LIST');
 export const [GET_TEMPLATE, GET_TEMPLATE_SUCCESS, GET_TEMPLATE_FAILURE] = createRequestActionTypes('template/GET_TEMPLATE');
 export const getTemplateList = createAction(GET_TEMPLATE_LIST, (...actions) => actions);
-export const getTemplate = createAction(GET_TEMPLATE, (templateSeq) => templateSeq);
+export const getTemplate = createAction(GET_TEMPLATE, ({ templateSeq, callback }) => ({ templateSeq, callback }));
 
 /**
  * 데이터 변경

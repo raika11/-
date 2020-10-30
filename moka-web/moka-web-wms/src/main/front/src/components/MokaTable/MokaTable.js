@@ -217,6 +217,7 @@ const MokaTable = (props) => {
                         }
                     }
                     frameworkComponents={{ mokaTooltip: Tooltip }}
+                    suppressRowClickSelection
                 />
             </div>
             {/* 페이징 */}

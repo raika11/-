@@ -40,6 +40,10 @@ const propTypes = {
      */
     buttons: PropTypes.arrayOf(PropTypes.shape({})),
     /**
+     * 로딩 여부
+     */
+    loading: PropTypes.bool,
+    /**
      * ---------------------------------------------------------
      * 에디터가 사용하는 props
      * language
@@ -96,7 +100,7 @@ const defaultProps = {
  * (wordwrap 아이콘 있음)
  */
 const MokaModalEditor = forwardRef((props, ref) => {
-    const { show, onHide, title, width, height, className, bodyClassName, footerClassName, size, buttons } = props;
+    const { show, onHide, title, width, height, className, bodyClassName, footerClassName, size, buttons, loading } = props;
 
     // editor props
     const { onBlur, defaultValue, value, language, options, error, tag } = props;
@@ -126,6 +130,7 @@ const MokaModalEditor = forwardRef((props, ref) => {
             draggable
             size={size}
             buttons={buttons}
+            loading={loading}
             centered
         >
             <div className="position-relative h-100 w-100 overflow-hidden">

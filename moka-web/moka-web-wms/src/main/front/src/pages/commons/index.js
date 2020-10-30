@@ -12,3 +12,4 @@ export { default as RelationInContainerList } from './RelationInContainerList';
 export { default as RelationInComponentList } from './RelationInComponentList';
 
 // 관련 아이템 (상위 => 하위)
+export { default as RelationTemplateList } from './RelationTemplateList';

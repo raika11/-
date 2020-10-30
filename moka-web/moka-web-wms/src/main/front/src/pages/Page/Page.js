@@ -36,6 +36,7 @@ const Page = () => {
         tree: store.page.tree,
     }));
     const [expansionState, setExpansionState] = useState([true, false, true]);
+    const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     /**
      * 리스트 확장 시
@@ -223,6 +224,7 @@ const Page = () => {
                                 expansion={expansionState[2]}
                                 onExpansion={handleTabExpansion}
                                 height={CARD_DEFAULT_HEIGHT}
+                                onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                                 tabWidth={412}
                                 tabs={[
                                     <Suspense>
@@ -241,7 +243,7 @@ const Page = () => {
                                         <PageChildComponentList />
                                     </Suspense>,
                                     <Suspense>
-                                        <PageChildTemplateList />
+                                        <PageChildTemplateList show={activeTabIdx === 5} />
                                     </Suspense>,
                                     <Suspense>
                                         <PageChildAdList />

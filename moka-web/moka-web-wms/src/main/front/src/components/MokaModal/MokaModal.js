@@ -65,12 +65,17 @@ const propTypes = {
      * 첫 위치를 align-items-center로 설정
      */
     centered: PropTypes.bool,
+    /**
+     * 로딩 여부
+     */
+    loading: PropTypes.bool,
 };
 
 const defaultProps = {
     title: '',
     draggable: false,
     centered: false,
+    loading: false,
 };
 
 /**
@@ -78,7 +83,7 @@ const defaultProps = {
  * DraggableModal이지만, draggable이 false인 경우 핸들을 제거
  */
 const MokaModal = (props) => {
-    const { width, height, show, onHide, title, children, buttons, draggable, centered, className, headerClassName, bodyClassName, footerClassName, ...rest } = props;
+    const { width, height, show, onHide, title, children, buttons, draggable, centered, className, headerClassName, bodyClassName, footerClassName, loading, ...rest } = props;
 
     /**
      * draggable 껍데기 컴포넌트 생성
@@ -107,7 +112,10 @@ const MokaModal = (props) => {
             </Modal.Header>
 
             {/* 컨텐츠 */}
-            <Modal.Body className={bodyClassName}>{children}</Modal.Body>
+            <Modal.Body className={bodyClassName}>
+                {children}
+                {loading && <div className="opacity-box"></div>}
+            </Modal.Body>
 
             {/* 푸터 버튼 */}
             {buttons && (

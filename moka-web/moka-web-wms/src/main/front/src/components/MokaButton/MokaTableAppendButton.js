@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { MokaIcon } from '@components';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 const propTypes = {
     /**
@@ -20,7 +22,6 @@ const defaultProps = {
 
 /**
  * 테이블에 들어가는 append 버튼
- * @param {*} props
  */
 const MokaTableAppendButton = (props) => {
     const { data, onClick } = props;
@@ -38,9 +39,13 @@ const MokaTableAppendButton = (props) => {
     );
 
     return (
-        <Button variant="gray150" className="py-0 px-05" onClick={handleClick}>
-            <MokaIcon iconName="fal-file-plus" />
-        </Button>
+        <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+            <OverlayTrigger overlay={<Tooltip id="tooltip-table-append-button">태그삽입</Tooltip>}>
+                <Button variant="white" className="border p-0 moka-table-button" onClick={handleClick}>
+                    <MokaIcon iconName="fal-file-plus" />
+                </Button>
+            </OverlayTrigger>
+        </div>
     );
 };
 

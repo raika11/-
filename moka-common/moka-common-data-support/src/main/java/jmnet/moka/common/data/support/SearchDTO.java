@@ -29,7 +29,7 @@ import org.springframework.util.MultiValueMap;
 @AllArgsConstructor
 @Setter
 @Getter
-@Builder
+
 public class SearchDTO implements Serializable {
 
     private static final long serialVersionUID = -2765846428393381760L;

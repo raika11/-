@@ -1,35 +1,33 @@
 /**
  * msp-tps CodeMgtRepositorySupportImpl.java 2020. 6. 18. 오후 3:54:36 ssc
  */
-package jmnet.moka.core.tps.mvc.codeMgt.repository;
+package jmnet.moka.core.tps.mvc.codemgt.repository;
 
-import java.util.List;
-
-import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
-import jmnet.moka.core.tps.mvc.codeMgt.entity.QCodeMgt;
-import jmnet.moka.core.tps.mvc.codeMgt.entity.QCodeMgtGrp;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tps.mvc.codeMgt.dto.CodeMgtSearchDTO;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeMgtGrp;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
- * 
+ *
  * 2020. 6. 18. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 6. 18. 오후 3:54:36
+ *
  * @author ssc
+ * @since 2020. 6. 18. 오후 3:54:36
  */
-public class CodeMgtRepositorySupportImpl extends QuerydslRepositorySupport
-        implements CodeMgtRepositorySupport {
+public class CodeMgtRepositorySupportImpl extends QuerydslRepositorySupport implements CodeMgtRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
@@ -49,9 +47,13 @@ public class CodeMgtRepositorySupportImpl extends QuerydslRepositorySupport
         builder.and(codeMgt.codeMgtGrp.grpCd.eq(grpCd));
         builder.and(codeMgt.usedYn.eq("Y"));
 
-        JPQLQuery<CodeMgt> query = queryFactory.selectFrom(codeMgt).orderBy(codeMgt.cdOrd.asc());
+        JPQLQuery<CodeMgt> query = queryFactory.selectFrom(codeMgt)
+                                               .orderBy(codeMgt.cdOrd.asc());
 
-        return query.innerJoin(codeMgt.codeMgtGrp, codeMgtGrp).fetchJoin().where(builder).fetch();
+        return query.innerJoin(codeMgt.codeMgtGrp, codeMgtGrp)
+                    .fetchJoin()
+                    .where(builder)
+                    .fetch();
     }
 
     @Override
@@ -76,8 +78,10 @@ public class CodeMgtRepositorySupportImpl extends QuerydslRepositorySupport
 
         JPQLQuery<CodeMgt> query = queryFactory.selectFrom(codeMgt);
         query = getQuerydsl().applyPagination(pageable, query);
-        QueryResults<CodeMgt> list = query.innerJoin(codeMgt.codeMgtGrp, codeMgtGrp).fetchJoin()
-                .where(builder).fetchResults();
+        QueryResults<CodeMgt> list = query.innerJoin(codeMgt.codeMgtGrp, codeMgtGrp)
+                                          .fetchJoin()
+                                          .where(builder)
+                                          .fetchResults();
 
         return new PageImpl<CodeMgt>(list.getResults(), pageable, list.getTotal());
     }

@@ -15,7 +15,7 @@ import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
-import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
+import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.mapper.DomainMapper;

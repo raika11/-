@@ -1,13 +1,14 @@
-package jmnet.moka.core.tps.mvc.codeMgt.dto;
-
-import javax.validation.constraints.NotNull;
+package jmnet.moka.core.tps.mvc.codemgt.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.TpsConstants;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
 @Setter

@@ -16,7 +16,7 @@ import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.helper.PurgeHelper;
-import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
+import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.group.dto.GroupDTO;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
 import jmnet.moka.core.tps.mvc.group.entity.Group;

@@ -1,29 +1,28 @@
-package jmnet.moka.core.tps.mvc.codeMgt.service;
+package jmnet.moka.core.tps.mvc.codemgt.service;
 
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
-
-import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
-import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgtGrp;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
+import jmnet.moka.core.tps.mvc.codemgt.repository.CodeMgtGrpRepository;
+import jmnet.moka.core.tps.mvc.codemgt.repository.CodeMgtRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import jmnet.moka.core.tps.mvc.codeMgt.dto.CodeMgtSearchDTO;
-import jmnet.moka.core.tps.mvc.codeMgt.repository.CodeMgtRepository;
-import jmnet.moka.core.tps.mvc.codeMgt.repository.CodeMgtGrpRepository;
 
 /**
  * <pre>
  * 기타코드 Service Impl
  * 2020. 4. 14. jeon 최초생성
  * </pre>
- * 
- * @since 2020. 4. 14. 오후 6:17:33
+ *
  * @author jeon
+ * @since 2020. 4. 14. 오후 6:17:33
  */
 @Service
 @Slf4j

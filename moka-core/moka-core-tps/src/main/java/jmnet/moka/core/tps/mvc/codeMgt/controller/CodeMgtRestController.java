@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.codeMgt.controller;
+package jmnet.moka.core.tps.mvc.codemgt.controller;
 
 import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
@@ -10,16 +10,27 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
+import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
-import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgtGrp;
+import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
+import jmnet.moka.core.tps.exception.InvalidDataException;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDTO;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtGrpDTO;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
+import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,33 +41,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.common.data.support.SearchParam;
-import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.common.utils.McpString;
-import jmnet.moka.common.utils.dto.ResultDTO;
-import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.mvc.codeMgt.dto.CodeMgtDTO;
-import jmnet.moka.core.tps.mvc.codeMgt.dto.CodeMgtSearchDTO;
-import jmnet.moka.core.tps.mvc.codeMgt.dto.CodeMgtGrpDTO;
-import jmnet.moka.core.tps.mvc.codeMgt.service.CodeMgtService;
 
 /**
  * <pre>
  * 공통코드
  * 2020. 1. 8. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 1. 8. 오후 2:09:06
+ *
  * @author ssc
+ * @since 2020. 1. 8. 오후 2:09:06
  */
 @RestController
 @Slf4j
-@RequestMapping("/api/codeMgtGrps")
+@RequestMapping("/api/codemgt-grps")
 public class CodeMgtRestController {
 
     @Autowired
@@ -73,59 +70,49 @@ public class CodeMgtRestController {
 
     /**
      * 그룹 목록조회
-     * 
-     * @param request 요청
-     * @param search 검색조건
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param search           검색조건
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 공통코드그룹 목록
      */
     @ApiOperation(value = "그룹 목록조회")
     @GetMapping
-    public ResponseEntity<?> getCodeMgtGrpList(
-        HttpServletRequest request,
-        @Valid @SearchParam SearchDTO search,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) {
+    public ResponseEntity<?> getCodeMgtGrpList(HttpServletRequest request, @Valid @SearchParam SearchDTO search, @NotNull Principal principal,
+            @RequestAttribute Long processStartTime) {
         // 조회
         Page<CodeMgtGrp> returnValue = codeMgtService.findGrpList(search.getPageable());
 
         // 리턴값 설정
         ResultListDTO<CodeMgtGrpDTO> resultListMessage = new ResultListDTO<CodeMgtGrpDTO>();
-        List<CodeMgtGrpDTO> dtoList =
-                modelMapper.map(returnValue.getContent(), CodeMgtGrpDTO.TYPE);
+        List<CodeMgtGrpDTO> dtoList = modelMapper.map(returnValue.getContent(), CodeMgtGrpDTO.TYPE);
         resultListMessage.setTotalCnt(returnValue.getTotalElements());
         resultListMessage.setList(dtoList);
 
-        ResultDTO<ResultListDTO<CodeMgtGrpDTO>> resultDto =
-                new ResultDTO<ResultListDTO<CodeMgtGrpDTO>>(resultListMessage);
+        ResultDTO<ResultListDTO<CodeMgtGrpDTO>> resultDto = new ResultDTO<ResultListDTO<CodeMgtGrpDTO>>(resultListMessage);
         actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
      * 코드 목록조회. 페이징있음.
-     * 
-     * @param request 요청
-     * @param grpCd rmfnq코드
-     * @param search 검색조건
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param grpCd            rmfnq코드
+     * @param search           검색조건
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 코드 목록
      * @throws Exception
      * @throws InvalidDataException
      */
     @ApiOperation(value = "코드 목록조회")
-    @GetMapping("/{grpCd}/codeMgts")
-    public ResponseEntity<?> getCodeMgtList(
-        HttpServletRequest request,
-        @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$",
-                message = "{tps.codeMgtGrp.error.invalid.grpCd2}") String grpCd,
-        @Valid @SearchParam CodeMgtSearchDTO search,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws InvalidDataException, Exception {
+    @GetMapping("/{grpCd}/codemgts")
+    public ResponseEntity<?> getCodeMgtList(HttpServletRequest request,
+            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.invalid.grpCd2}") String grpCd,
+            @Valid @SearchParam CodeMgtSearchDTO search, @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            throws InvalidDataException, Exception {
         // 데이타유효성검사.
         validSearchData(request, grpCd, search, principal, processStartTime, ActionType.SELECT);
 
@@ -138,32 +125,28 @@ public class CodeMgtRestController {
         resultListMessage.setTotalCnt(returnValue.getTotalElements());
         resultListMessage.setList(codeDtoList);
 
-        ResultDTO<ResultListDTO<CodeMgtDTO>> resultDto =
-                new ResultDTO<ResultListDTO<CodeMgtDTO>>(resultListMessage);
+        ResultDTO<ResultListDTO<CodeMgtDTO>> resultDto = new ResultDTO<ResultListDTO<CodeMgtDTO>>(resultListMessage);
         actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
      * 사용중인 코드 목록조회. 페이징없음.
-     * 
-     * @param request 요청
-     * @param grpCd 그룹코드
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param grpCd            그룹코드
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 코드 목록
      * @throws Exception
      * @throws InvalidDataException
      */
     @ApiOperation(value = "사용중인 코드 목록조회")
-    @GetMapping("/{grpCd}/useCodeMgts")
-    public ResponseEntity<?> getUseCodeMgtList(
-        HttpServletRequest request,
-        @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$",
-                message = "{tps.codeMgtGrp.error.invalid.grpCd2}") String grpCd,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws InvalidDataException, Exception {
+    @GetMapping("/{grpCd}/use-codemgts")
+    public ResponseEntity<?> getUseCodeMgtList(HttpServletRequest request,
+            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.invalid.grpCd2}") String grpCd,
+            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            throws InvalidDataException, Exception {
 
         // 조회
         List<CodeMgt> returnValue = codeMgtService.findUseList(grpCd);
@@ -174,40 +157,36 @@ public class CodeMgtRestController {
         resultListMessage.setTotalCnt(returnValue.size());
         resultListMessage.setList(codeDtoList);
 
-        ResultDTO<ResultListDTO<CodeMgtDTO>> resultDto =
-                new ResultDTO<ResultListDTO<CodeMgtDTO>>(resultListMessage);
+        ResultDTO<ResultListDTO<CodeMgtDTO>> resultDto = new ResultDTO<ResultListDTO<CodeMgtDTO>>(resultListMessage);
         actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
      * 그룹 상세조회
-     * 
-     * @param request 요청
-     * @param seqNo 그룹SEQ (필수)
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param seqNo            그룹SEQ (필수)
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 공통코드그룹정보
-     * @throws NoDataException 공통코드그룹 정보가 없음
+     * @throws NoDataException      공통코드그룹 정보가 없음
      * @throws InvalidDataException 공통코드그룹 아이디 형식오류
-     * @throws Exception 기타예외
+     * @throws Exception            기타예외
      */
     @ApiOperation(value = "그룹 상세조회")
     @GetMapping("/{seqNo}")
-    public ResponseEntity<?> getCodeMgtGrp(
-        HttpServletRequest request,
-        @PathVariable("seqNo") @Min(value = 0,
-                message = "{tps.codeMgtGrp.error.invalid.seqNo}") Long seqNo,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws NoDataException, InvalidDataException, Exception {
+    public ResponseEntity<?> getCodeMgtGrp(HttpServletRequest request,
+            @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.invalid.seqNo}") Long seqNo, @NotNull Principal principal,
+            @RequestAttribute Long processStartTime)
+            throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
         validGrpData(request, seqNo, null, principal, processStartTime, ActionType.SELECT);
 
         String message = messageByLocale.get("tps.codeMgtGrp.error.noContent", request);
         CodeMgtGrp codeMgtGrp = codeMgtService.findByGrpSeqNo(seqNo)
-                .orElseThrow(() -> new NoDataException(message));
+                                              .orElseThrow(() -> new NoDataException(message));
 
         // 하위코드갯수 조회
         Long count = codeMgtService.countCodeMgtByGrpCd(codeMgtGrp.getGrpCd());
@@ -222,24 +201,19 @@ public class CodeMgtRestController {
 
     /**
      * 그룹정보 유효성 검사
-     * 
-     * @param request 요청
-     * @param seqNo 공통코드그룹아이디. 0이면 등록일때 유효성 검사
-     * @param codeMgtGrpDTO 공통코드그룹정보
-     * @param principal 작업자
+     *
+     * @param request          요청
+     * @param seqNo            공통코드그룹아이디. 0이면 등록일때 유효성 검사
+     * @param codeMgtGrpDTO    공통코드그룹정보
+     * @param principal        작업자
      * @param processStartTime 작업시간
-     * @param actionType 작업구분(INSERT OR UPDATE)
+     * @param actionType       작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성예외
-     * @throws Exception 기타예외
+     * @throws Exception            기타예외
      */
-    private void validGrpData(
-        HttpServletRequest request,
-        Long seqNo,
-        CodeMgtGrpDTO codeMgtGrpDTO,
-        Principal principal,
-        Long processStartTime,
-        ActionType actionType
-    ) throws InvalidDataException, Exception {
+    private void validGrpData(HttpServletRequest request, Long seqNo, CodeMgtGrpDTO codeMgtGrpDTO, Principal principal, Long processStartTime,
+            ActionType actionType)
+            throws InvalidDataException, Exception {
 
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
@@ -253,10 +227,8 @@ public class CodeMgtRestController {
 
             // grpCd중복검사
             Long countGrpCd = codeMgtService.countCodeMgtGrpByGrpCd(codeMgtGrpDTO.getGrpCd());
-            if ((seqNo == 0 && countGrpCd > 0)
-                    || seqNo > 0 && countGrpCd > 1) {
-                String message =
-                        messageByLocale.get("tps.codeMgtGrp.error.invalid.dupGrpCd", request);
+            if ((seqNo == 0 && countGrpCd > 0) || seqNo > 0 && countGrpCd > 1) {
+                String message = messageByLocale.get("tps.codeMgtGrp.error.invalid.dupGrpCd", request);
                 actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
                 invalidList.add(new InvalidDataDTO("grpCd", message));
             }
@@ -271,24 +243,19 @@ public class CodeMgtRestController {
 
     /**
      * 검색정보 유효성 검사
-     * 
-     * @param request 요청
-     * @param grpCd 공통코드그룹아이디
+     *
+     * @param request          요청
+     * @param grpCd            공통코드그룹아이디
      * @param codeMgtSearchDTO 검색정보
-     * @param principal 작업자
+     * @param principal        작업자
      * @param processStartTime 작업시간
-     * @param actionType 작업구분(INSERT OR UPDATE)
+     * @param actionType       작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성예외
-     * @throws Exception 기타예외
+     * @throws Exception            기타예외
      */
-    private void validSearchData(
-        HttpServletRequest request,
-        String grpCd,
-        CodeMgtSearchDTO codeMgtSearchDTO,
-        Principal principal,
-        Long processStartTime,
-        ActionType actionType
-    ) throws InvalidDataException, Exception {
+    private void validSearchData(HttpServletRequest request, String grpCd, CodeMgtSearchDTO codeMgtSearchDTO, Principal principal,
+            Long processStartTime, ActionType actionType)
+            throws InvalidDataException, Exception {
 
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
@@ -302,30 +269,26 @@ public class CodeMgtRestController {
         }
 
         if (invalidList.size() > 0) {
-            String validMessage =
-                    messageByLocale.get("tps.codeMgtGrp.error.invalidContent", request);
+            String validMessage = messageByLocale.get("tps.codeMgtGrp.error.invalidContent", request);
             throw new InvalidDataException(invalidList, validMessage);
         }
     }
 
     /**
      * 그룹등록
-     * 
-     * @param request 요청
-     * @param codeMgtGrpDTO 등록할 코드그룹정보
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param codeMgtGrpDTO    등록할 코드그룹정보
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 등록된 예약어정보
      * @throws Exception
      */
     @ApiOperation(value = "그룹등록")
     @PostMapping
-    public ResponseEntity<?> postCodeMgtGrp(
-        HttpServletRequest request,
-        @Valid CodeMgtGrpDTO codeMgtGrpDTO,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws Exception {
+    public ResponseEntity<?> postCodeMgtGrp(HttpServletRequest request, @Valid CodeMgtGrpDTO codeMgtGrpDTO, @NotNull Principal principal,
+            @RequestAttribute Long processStartTime)
+            throws Exception {
 
         // 데이타유효성검사.
         validGrpData(request, (long) 0, codeMgtGrpDTO, principal, processStartTime, ActionType.INSERT);
@@ -352,28 +315,23 @@ public class CodeMgtRestController {
 
     /**
      * 그룹수정
-     * 
-     * @param request 요청
-     * @param seqNo 그룹순번
-     * @param codeMgtGrpDTO 수정할 그룹정보
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param seqNo            그룹순번
+     * @param codeMgtGrpDTO    수정할 그룹정보
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 수정된 그룹정보
      * @throws InvalidDataException 데이타 유효성오류
-     * @throws NoDataException 데이타 없음
-     * @throws Exception 기타예외
+     * @throws NoDataException      데이타 없음
+     * @throws Exception            기타예외
      */
     @ApiOperation(value = "그룹 수정")
     @PutMapping("/{seqNo}")
-    public ResponseEntity<?> putCodeMgtGrp(
-        HttpServletRequest request,
-        @PathVariable("seqNo") @Min(value = 0,
-            message = "{tps.codeMgtGrp.error.invalid.seqNo}") Long seqNo,
-        @Valid CodeMgtGrpDTO codeMgtGrpDTO,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws InvalidDataException, NoDataException, Exception
-    {
+    public ResponseEntity<?> putCodeMgtGrp(HttpServletRequest request,
+            @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.invalid.seqNo}") Long seqNo, @Valid CodeMgtGrpDTO codeMgtGrpDTO,
+            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            throws InvalidDataException, NoDataException, Exception {
 
         // 데이타유효성검사.
         validGrpData(request, seqNo, codeMgtGrpDTO, principal, processStartTime, ActionType.UPDATE);
@@ -381,7 +339,7 @@ public class CodeMgtRestController {
         String infoMessage = messageByLocale.get("tps.codeMgtGrp.error.noContent", request);
         CodeMgtGrp newCodeMgtGrp = modelMapper.map(codeMgtGrpDTO, CodeMgtGrp.class);
         CodeMgtGrp orgCodeMgtGrp = codeMgtService.findByGrpSeqNo(seqNo)
-                .orElseThrow(() -> new NoDataException(infoMessage));
+                                                 .orElseThrow(() -> new NoDataException(infoMessage));
 
         try {
             // 수정
@@ -403,29 +361,25 @@ public class CodeMgtRestController {
 
     /**
      * 그룹삭제
-     * 
-     * @param request 요청
-     * @param seqNo 삭제 할 그룹순번 (필수)
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param seqNo            삭제 할 그룹순번 (필수)
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 삭제성공여부
      * @throws NoDataException 예약어정보 없음 오류
-     * @throws Exception 기타예외
+     * @throws Exception       기타예외
      */
     @ApiOperation(value = "그룹 삭제")
     @DeleteMapping("/{seqNo}")
-    public ResponseEntity<?> deleteCodeMgtGrp(
-        HttpServletRequest request,
-        @PathVariable("seqNo") @Min(value = 0,
-            message = "{tps.codeMgtGrp.error.invalid.seqNo}") Long seqNo,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws NoDataException, Exception
-    {
+    public ResponseEntity<?> deleteCodeMgtGrp(HttpServletRequest request,
+            @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.invalid.seqNo}") Long seqNo, @NotNull Principal principal,
+            @RequestAttribute Long processStartTime)
+            throws NoDataException, Exception {
         // 1. 데이타 존재여부 검사
         String noContentMessage = messageByLocale.get("tps.codeMgtGrp.error.noContent", request);
         CodeMgtGrp codeMgtGrp = codeMgtService.findByGrpSeqNo(seqNo)
-                .orElseThrow(() -> new NoDataException(noContentMessage));
+                                              .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 2. 삭제
         try {
@@ -444,32 +398,29 @@ public class CodeMgtRestController {
 
     /**
      * 코드정보 조회
-     * 
-     * @param request 요청
-     * @param seqNo 코드순번 (필수)
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param seqNo            코드순번 (필수)
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 코드정보
-     * @throws NoDataException 코드 정보가 없음
+     * @throws NoDataException      코드 정보가 없음
      * @throws InvalidDataException 코드 아이디 형식오류
-     * @throws Exception 기타예외
+     * @throws Exception            기타예외
      */
     @ApiOperation(value = "코드 상세조회")
-    @GetMapping("/codeMgts/{seqNo}")
-    public ResponseEntity<?> getCodeMgt(
-        HttpServletRequest request,
-        @PathVariable("seqNo") @Min(value = 0,
-                message = "{tps.codeMgt.error.invalid.seqNo}") Long seqNo,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws NoDataException, InvalidDataException, Exception {
+    @GetMapping("/codemgts/{seqNo}")
+    public ResponseEntity<?> getCodeMgt(HttpServletRequest request,
+            @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.invalid.seqNo}") Long seqNo, @NotNull Principal principal,
+            @RequestAttribute Long processStartTime)
+            throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
         validData(request, seqNo, null, principal, processStartTime, ActionType.SELECT);
 
         String message = messageByLocale.get("tps.codeMgt.error.noContent", request);
-        CodeMgt codeMgt =
-                codeMgtService.findBySeqNo(seqNo).orElseThrow(() -> new NoDataException(message));
+        CodeMgt codeMgt = codeMgtService.findBySeqNo(seqNo)
+                                        .orElseThrow(() -> new NoDataException(message));
 
         CodeMgtDTO dto = modelMapper.map(codeMgt, CodeMgtDTO.class);
         ResultDTO<CodeMgtDTO> resultDto = new ResultDTO<CodeMgtDTO>(dto);
@@ -481,24 +432,19 @@ public class CodeMgtRestController {
 
     /**
      * 코드정보 유효성 검사
-     * 
-     * @param request 요청
-     * @param seqNo 코드 순번. 0이면 등록일때 유효성 검사
-     * @param codeMgtDTO 코드정보
-     * @param principal 작업자
+     *
+     * @param request          요청
+     * @param seqNo            코드 순번. 0이면 등록일때 유효성 검사
+     * @param codeMgtDTO       코드정보
+     * @param principal        작업자
      * @param processStartTime 작업시간
-     * @param actionType 작업구분(INSERT OR UPDATE)
+     * @param actionType       작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성예외
-     * @throws Exception 기타예외
+     * @throws Exception            기타예외
      */
-    private void validData(
-        HttpServletRequest request,
-        Long seqNo,
-        CodeMgtDTO codeMgtDTO,
-        Principal principal,
-        Long processStartTime,
-        ActionType actionType
-    ) throws InvalidDataException, Exception {
+    private void validData(HttpServletRequest request, Long seqNo, CodeMgtDTO codeMgtDTO, Principal principal, Long processStartTime,
+            ActionType actionType)
+            throws InvalidDataException, Exception {
 
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
@@ -511,7 +457,8 @@ public class CodeMgtRestController {
             }
 
             // 그룹의 grpSeqNo정보 검사
-            Long grpSeqNo = codeMgtDTO.getCodeMgtGrp().getSeqNo();
+            Long grpSeqNo = codeMgtDTO.getCodeMgtGrp()
+                                      .getSeqNo();
             if (grpSeqNo == null || grpSeqNo < 0) {
                 String message = messageByLocale.get("tps.codeMgt.error.invalid.grpCd", request);
                 actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
@@ -519,7 +466,8 @@ public class CodeMgtRestController {
             }
 
             // 그룹아이디 정보 검사
-            String grpCd = codeMgtDTO.getCodeMgtGrp().getGrpCd();
+            String grpCd = codeMgtDTO.getCodeMgtGrp()
+                                     .getGrpCd();
             if (McpString.isEmpty(grpCd)) {
                 String message = messageByLocale.get("tps.codeMgt.error.invalid.grpCd", request);
                 actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
@@ -534,7 +482,9 @@ public class CodeMgtRestController {
                     actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
                     invalidList.add(new InvalidDataDTO("grpCd", message));
                 } else {
-                    if (!codeMgtGrp.get().getGrpCd().equals(grpCd)) {
+                    if (!codeMgtGrp.get()
+                                   .getGrpCd()
+                                   .equals(grpCd)) {
                         String message = messageByLocale.get("tps.codeMgt.error.invalid.matchGrpCd", request);
                         actionLogger.fail(principal.getName(), actionType, System.currentTimeMillis() - processStartTime, message);
                         invalidList.add(new InvalidDataDTO("grpCd", message));
@@ -559,22 +509,19 @@ public class CodeMgtRestController {
 
     /**
      * 코드등록
-     * 
-     * @param request 요청
-     * @param codeMgtDTO 등록할 코드정보
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param codeMgtDTO       등록할 코드정보
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 등록된 코드정보
      * @throws Exception
      */
     @ApiOperation(value = "코드등록")
-    @PostMapping("/codeMgts")
-    public ResponseEntity<?> postCodeMgt(
-        HttpServletRequest request,
-        @Valid CodeMgtDTO codeMgtDTO,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws Exception {
+    @PostMapping("/codemgts")
+    public ResponseEntity<?> postCodeMgt(HttpServletRequest request, @Valid CodeMgtDTO codeMgtDTO, @NotNull Principal principal,
+            @RequestAttribute Long processStartTime)
+            throws Exception {
 
         // 데이타유효성검사.
         validData(request, (long) 0, codeMgtDTO, principal, processStartTime, ActionType.INSERT);
@@ -600,34 +547,31 @@ public class CodeMgtRestController {
 
     /**
      * 코드수정
-     * 
-     * @param request 요청
-     * @param seqNo 코드순
-     * @param codeMgtDTO 수정할 코드정보
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param seqNo            코드순
+     * @param codeMgtDTO       수정할 코드정보
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 수정된 코드정보
      * @throws InvalidDataException 데이타 유효성오류
-     * @throws NoDataException 데이타 없음
-     * @throws Exception 기타예외
+     * @throws NoDataException      데이타 없음
+     * @throws Exception            기타예외
      */
     @ApiOperation(value = "코드수정")
-    @PutMapping("/codeMgts/{seqNo}")
-    public ResponseEntity<?> putCodeMgt(
-        HttpServletRequest request,
-        @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.invalid.seqNo}") Long seqNo,
-        @Valid CodeMgtDTO codeMgtDTO,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws InvalidDataException, NoDataException, Exception {
+    @PutMapping("/codemgts/{seqNo}")
+    public ResponseEntity<?> putCodeMgt(HttpServletRequest request,
+            @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.invalid.seqNo}") Long seqNo, @Valid CodeMgtDTO codeMgtDTO,
+            @NotNull Principal principal, @RequestAttribute Long processStartTime)
+            throws InvalidDataException, NoDataException, Exception {
         // 데이타유효성검사.
         validData(request, seqNo, codeMgtDTO, principal, processStartTime, ActionType.UPDATE);
 
         // 수정
         String infoMessage = messageByLocale.get("tps.codeMgt.error.noContent", request);
         CodeMgt newCodeMgt = modelMapper.map(codeMgtDTO, CodeMgt.class);
-        CodeMgt orgCodeMgt =
-                codeMgtService.findBySeqNo(seqNo).orElseThrow(() -> new NoDataException(infoMessage));
+        CodeMgt orgCodeMgt = codeMgtService.findBySeqNo(seqNo)
+                                           .orElseThrow(() -> new NoDataException(infoMessage));
 
         try {
             CodeMgt returnValue = codeMgtService.updateCodeMgt(newCodeMgt);
@@ -649,28 +593,26 @@ public class CodeMgtRestController {
 
     /**
      * 코드삭제
-     * 
-     * @param request 요청
-     * @param seqNo 삭제 할 코드순번 (필수)
-     * @param principal 로그인사용자 세션
+     *
+     * @param request          요청
+     * @param seqNo            삭제 할 코드순번 (필수)
+     * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
-     * @throws NoDataException 코드정보 없음 오류
-     * @throws Exception 기타예외
+     * @throws NoDataException      코드정보 없음 오류
+     * @throws Exception            기타예외
      */
     @ApiOperation(value = "코드삭제")
-    @DeleteMapping("/codeMgts/{seqNo}")
-    public ResponseEntity<?> deleteCodeMgt(
-        HttpServletRequest request,
-        @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.invalid.seqNo}") Long seqNo,
-        @NotNull Principal principal,
-        @RequestAttribute Long processStartTime
-    ) throws InvalidDataException, NoDataException, Exception {
+    @DeleteMapping("/codemgts/{seqNo}")
+    public ResponseEntity<?> deleteCodeMgt(HttpServletRequest request,
+            @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.invalid.seqNo}") Long seqNo, @NotNull Principal principal,
+            @RequestAttribute Long processStartTime)
+            throws InvalidDataException, NoDataException, Exception {
         // 1. 데이타 존재여부 검사
         String noContentMessage = messageByLocale.get("tps.codeMgt.error.noContent", request);
         CodeMgt codeMgt = codeMgtService.findBySeqNo(seqNo)
-                .orElseThrow(() -> new NoDataException(noContentMessage));
+                                        .orElseThrow(() -> new NoDataException(noContentMessage));
 
         try {
             // 2. 삭제

@@ -1,23 +1,22 @@
 /**
  * msp-tps CodeMgtRepositorySupport.java 2020. 6. 18. 오후 3:54:13 ssc
  */
-package jmnet.moka.core.tps.mvc.codeMgt.repository;
+package jmnet.moka.core.tps.mvc.codemgt.repository;
 
 import java.util.List;
-
-import jmnet.moka.core.tps.mvc.codeMgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import jmnet.moka.core.tps.mvc.codeMgt.dto.CodeMgtSearchDTO;
 
 /**
  * <pre>
- * 
+ *
  * 2020. 6. 18. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 6. 18. 오후 3:54:13
+ *
  * @author ssc
+ * @since 2020. 6. 18. 오후 3:54:13
  */
 public interface CodeMgtRepositorySupport {
 

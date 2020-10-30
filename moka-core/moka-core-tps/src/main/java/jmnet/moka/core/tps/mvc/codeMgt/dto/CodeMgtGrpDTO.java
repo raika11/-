@@ -1,18 +1,18 @@
-package jmnet.moka.core.tps.mvc.codeMgt.dto;
+package jmnet.moka.core.tps.mvc.codemgt.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -20,9 +20,9 @@ import org.hibernate.validator.constraints.Length;
  * 공통코드 그룹 DTO
  * 2020. 4. 14. jeon 최초생성
  * </pre>
- * 
- * @since 2020. 4. 14. 오전 10:24:33
+ *
  * @author jeon
+ * @since 2020. 4. 14. 오전 10:24:33
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,7 +34,8 @@ public class CodeMgtGrpDTO implements Serializable {
 
     private static final long serialVersionUID = -6243730311717090869L;
 
-    public static final Type TYPE = new TypeReference<List<CodeMgtGrpDTO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<CodeMgtGrpDTO>>() {
+    }.getType();
 
     /**
      * 일련번호

@@ -32,14 +32,15 @@ export const createRequestActionTypes = (actionType) => {
  */
 export function createRequestSaga(actionType, api, simpleCall = false) {
     return function* (action) {
-        const { callback } = action.payload;
+        const payload = action.payload;
+        const { callback } = payload;
         let callbackData;
 
         yield put(startLoading(actionType));
 
         try {
             const response = yield call(api, action.payload);
-            callbackData = response.data;
+            callbackData = { ...response.data, payload };
 
             if (!simpleCall) {
                 if (response.data.header.success) {

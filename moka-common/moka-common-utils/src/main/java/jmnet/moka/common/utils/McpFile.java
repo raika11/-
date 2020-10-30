@@ -19,7 +19,6 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
-import jmnet.moka.common.utils.exception.Filesizelimitexceededexception;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.time.FastDateFormat;
 import org.slf4j.Logger;
@@ -83,14 +82,14 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * 리소스 기준 경로를 리턴 합니다.
      * </pre>
      *
-     * @param mountPath
+     * @param basePath 기본 저장 경로
      * @return 리소스 저장 기준 경로
      */
-    public static String getDatePath(final String mountPath) {
-        final String basePath = mountPath + FastDateFormat
+    public static String getDatePath(final String basePath) {
+        return basePath + FastDateFormat
                 .getInstance("/yyyy/MM/dd")
                 .format(Calendar.getInstance());
-        return basePath;
+
     }
 
     /**
@@ -99,13 +98,12 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * 날짜를 외부로 부터 전달 받는다.
      * </pre>
      *
-     * @param mountPath
-     * @param date
+     * @param basePath 기본 저장 경로
+     * @param date     날짜
      * @return 파일 경로 String
      */
-    public static String getDatePath(final String mountPath, String date) {
-        final String basePath = mountPath + date;
-        return basePath;
+    public static String getDatePath(final String basePath, String date) {
+        return basePath + date;
     }
 
     /**
@@ -113,7 +111,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * 파일명을 리턴 한다.
      * </pre>
      *
-     * @param file
+     * @param file File
      * @return 파일명 String
      */
     public static String getFilename(File file) {
@@ -134,7 +132,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
     /**
      * 파일 확장자를 구한다.
      *
-     * @param file MultipartFile 파일
+     * @param file 파일
      * @return 파일 확장자 String
      */
     public static String getExtension(File file) {
@@ -165,7 +163,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
     /**
      * 이미지 파일인지 확인한다.
      *
-     * @param file
+     * @param file File
      * @return 이미지 파일 여부
      */
     public static boolean isImageFile(File file) {
@@ -178,7 +176,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
     /**
      * 동영상 파일인지 확인한다.
      *
-     * @param file
+     * @param file File
      * @return 동영상 파일 여부
      */
     public static boolean isVideoFile(File file) {
@@ -191,7 +189,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
     /**
      * 오디오 파일인지 확인한다.
      *
-     * @param file
+     * @param file File
      * @return 오디오 파일 여부
      */
     public static boolean isAudioFile(File file) {
@@ -204,7 +202,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
     /**
      * 문서 파일인지 확인한다.
      *
-     * @param file
+     * @param file File
      * @return 문서 파일 여부
      */
     public static boolean isDocumentFile(File file) {
@@ -219,7 +217,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * 이미지 파일 사이즈 정보를 리턴 합니다.
      * </pre>
      *
-     * @param file
+     * @param file File
      * @return Map<String, Object>
      */
     public static Map<String, Object> getImageSize(File file) {
@@ -256,7 +254,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * @param filename 파일명
      * @param blobBody blob데이터
      * @return 파일
-     * @throws Exception 예외처리
+     * @throws Exception 예외처리 예외처리
      */
     public static String processImageBlob(final String filepath, String filename, String blobBody)
             throws Exception {
@@ -274,7 +272,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * @param filepath 파일경로
      * @param blobBody blob데이터
      * @return 파일
-     * @throws Exception 예외처리
+     * @throws Exception 예외처리 예외처리
      */
     public static File processImageBlob(final String filepath, String blobBody)
             throws Exception {
@@ -289,14 +287,12 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
     /**
      * 파라미터 조합을 통한 파일이 저장될 물리 경로를 리턴 한다.
      *
-     * @param mountPath 마운트 경로
-     * @param filename  파일명
+     * @param basePath 마운트 경로
+     * @param filename 파일명
      * @return 파일의 물리 경로
-     * @throws Exception
      */
-    public static String getFilepath(final String mountPath, final String filename)
-            throws Exception {
-        return getFilepath(mountPath, filename, true);
+    public static String getFilepath(final String basePath, final String filename) {
+        return getFilepath(basePath, filename, true);
     }
 
     /**
@@ -308,10 +304,8 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * @param filename    파일 명
      * @param isMountPath 파일 경로가 마운트 경로인지 여부
      * @return 파일의 물리 경로
-     * @throws Exception
      */
-    public static String getFilepath(final String filePath, final String filename, boolean isMountPath)
-            throws IOException {
+    public static String getFilepath(final String filePath, final String filename, boolean isMountPath) {
         String destFilePath = (isMountPath ? getDatePath(filePath) : filePath) + "/";
         mkDestdir(destFilePath);
         return destFilePath + filename;
@@ -322,14 +316,13 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * 파라미터 조합을 통한 파일이 저장될 물리 경로를 리턴 한다.
      * </pre>
      *
-     * @param mountPath 파일 패스
-     * @param date      날짜
-     * @param filename  파일 명
+     * @param basePath 파일 패스
+     * @param date     날짜
+     * @param filename 파일 명
      * @return String 파일 저장 경로
-     * @throws Exception
      */
-    public static String getFilepath(final String mountPath, final String date, final String filename) {
-        String destFilePath = getDatePath(mountPath, date) + "/";
+    public static String getFilepath(final String basePath, final String date, final String filename) {
+        String destFilePath = getDatePath(basePath, date) + "/";
         mkDestdir(destFilePath);
         return destFilePath + filename;
     }
@@ -342,8 +335,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * @param file 소스 파일
      * @return 파일 기본 정보
      */
-    public static Map<String, Object> getBasicInfo(File file)
-            throws Exception {
+    public static Map<String, Object> getBasicInfo(File file) {
         if (file == null) {
             return null;
         }
@@ -366,11 +358,10 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      *
      * @param file GIF 애니메이션 파일
      * @return 이미지 프레임 목록
-     * @throws IOException
      */
     public static List<BufferedImage> getGifFrames(File file)
             throws Exception {
-        List<BufferedImage> frames = new ArrayList<BufferedImage>();
+        List<BufferedImage> frames = new ArrayList<>();
         ImageReader reader = ImageIO
                 .getImageReadersByFormatName("gif")
                 .next();
@@ -392,44 +383,33 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * 파일을 복사한다.
      * </pre>
      *
-     * @param fromFilepath
-     * @param toFilepath
-     * @throws Exception
+     * @param targetFilepath 원본 파일 경로
+     * @param copyFilepath   복사 파일 경로
+     * @throws Exception 예외처리
      */
-    public static void copyFile(String fromFilepath, String toFilepath)
+    public static void copyFile(String targetFilepath, String copyFilepath)
             throws Exception {
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-        try {
-            fis = new FileInputStream(fromFilepath);
-            fos = new FileOutputStream(toFilepath);
-            int data = 0;
+        try (FileInputStream fis = new FileInputStream(targetFilepath); FileOutputStream fos = new FileOutputStream(copyFilepath)) {
+            int data;
             while ((data = fis.read()) != -1) {
                 fos.write(data);
             }
         } catch (IOException ex) {
-            logger.debug("fileWrite erorr filepath : {}", fromFilepath);
+            logger.debug("fileWrite erorr filepath : {}", targetFilepath);
             throw ex;
-        } finally {
-            if (fis != null) {
-                fis.close();
-            }
-            if (fos != null) {
-                fos.close();
-            }
         }
     }
 
     /**
      * 파일이 이미지 파일인지 확장자와 mimeType을 구별한다.
      *
-     * @param file
+     * @param file File
      * @return 이미지 mimeType 여부 boolean
-     * @throws Exception
+     * @throws Exception 예외처리
      */
     public static boolean checkImage(File file)
             throws Exception {
-        Boolean isValid = isImageFile(file);
+        boolean isValid = isImageFile(file);
         if (isValid) {
             Path filePath = Paths.get(file.getPath());
             String mimeType = Files.probeContentType(filePath);
@@ -449,35 +429,27 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
     /**
      * 파일 사이즈 체크 (MB)
      *
-     * @param file     파일
-     * @param filesize 체크 사이즈
+     * @param file          파일
+     * @param limitFileSize 체크 사이즈
      * @return 파일 크기 초콰 여부 boolean
      */
-    public static boolean checkFileSize(File file, long filesize, String type)
-            throws Exception {
+    public static boolean checkFileSize(File file, long limitFileSize, String type) {
         boolean isVaild = true;
         if (file == null) {
-            return isVaild;
+            isVaild = false;
         } else {
             if (type.equals(McpFile.IMG)) {
-                if (file.length() > filesize) {
-                    return isVaild;
-                } else {
+                if (file.length() > limitFileSize) {
                     isVaild = false;
                 }
             }
             if (type.equals(McpFile.MOV)) {
-                if (file.length() > filesize) {
-                    return isVaild;
-                } else {
+                if (file.length() > limitFileSize) {
                     isVaild = false;
                 }
             }
         }
-        if (isVaild) {
-            throw new Filesizelimitexceededexception();
-        } else {
-        }
+
         return isVaild;
     }
 
@@ -489,7 +461,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      *
      * @param filePath 파일경로
      * @param contents 바이너리 정보
-     * @throws Exception
+     * @throws Exception 예외처리
      */
     public static void fileWrite(String filePath, byte[]... contents)
             throws Exception {
@@ -523,7 +495,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      *
      * @param filePath 파일경로
      * @param contents 바이너리 정보
-     * @throws Exception
+     * @throws Exception 예외처리
      */
     public static void fileWrite(String filePath, String... contents)
             throws Exception {
@@ -534,9 +506,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
             dir.mkdirs();
         }
 
-        BufferedWriter output = null;
-        try {
-            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file.getPath()), DEFAULT_CHARSET));
+        try (BufferedWriter output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file.getPath()), DEFAULT_CHARSET))) {
 
             for (String content : contents) {
                 output.write(content);
@@ -545,10 +515,6 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
         } catch (FileNotFoundException ex) {
             logger.debug("fileWrite erorr filepath : {}", filePath);
             throw ex;
-        } finally {
-            if (output != null) {
-                output.close();
-            }
         }
     }
 
@@ -557,30 +523,16 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * 디렉토리를 읽어 prefix로 시작하는 파일의 갯수를 구한다.
      * </pre>
      *
-     * @param mountPath 파일 경로
-     * @param date      날짜
-     * @param prefix    접두어
+     * @param basePath 파일 경로
+     * @param date     날짜
+     * @param prefix   접두어
      * @return 파일 건수
      */
-    public static int getFileCount(String mountPath, String date, String prefix) {
+    public static int getFileCount(String basePath, String date, String prefix) {
 
-        String filePath = getDatePath(mountPath, date);
+        String filePath = getDatePath(basePath, date);
 
-        File dir = new File(filePath);
-
-        int fileCount = 0;
-        if (dir.exists() && dir.isDirectory()) {
-            File[] files = dir.listFiles();
-            for (File file : files) {
-                if (file
-                        .getName()
-                        .startsWith(prefix)) {
-                    fileCount++;
-                }
-            }
-        }
-
-        return fileCount;
+        return getFileCount(filePath, prefix);
     }
 
     /**
@@ -599,15 +551,46 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
         int fileCount = 0;
         if (dir.exists() && dir.isDirectory()) {
             File[] files = dir.listFiles();
-            for (File file : files) {
-                if (file
-                        .getName()
-                        .startsWith(prefix)) {
-                    fileCount++;
+            if (files != null) {
+                for (File file : files) {
+                    if (file
+                            .getName()
+                            .startsWith(prefix)) {
+                        fileCount++;
+                    }
                 }
             }
         }
 
         return fileCount;
+    }
+
+    /**
+     * <pre>
+     * 파일을 삭제한다
+     * </pre>
+     *
+     * @param filePaths 파일경로
+     * @return 삭제 여부
+     */
+    public static boolean deleteFile(String... filePaths) {
+        for (String filePath : filePaths) {
+            if (!filePath.isEmpty()) {
+                File file = new File(filePath);
+
+                if (file.exists()) {
+                    try {
+                        boolean ret = file.delete();
+                        logger.debug("File Delete: {}, Result: {}", file, ret);
+                    } catch (Exception e) {
+                        logger.error("File Delete Fail: {}, Error: {}", file, e);
+                        return false;
+                    }
+                }
+            } else {
+                logger.error("That file doesn't exist: {}", filePath);
+            }
+        }
+        return true;
     }
 }

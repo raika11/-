@@ -11,16 +11,14 @@ import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.common.utils.McpFile;
+import jmnet.moka.core.tps.common.util.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.web.multipart.MultipartFile;
-import jmnet.moka.common.utils.McpFile;
-import jmnet.moka.core.tps.common.util.FileUtil;
-import jmnet.moka.core.tps.common.util.ImageUtil;
 
 public class UploadFileHelper {
     private static final Logger logger = LoggerFactory.getLogger(UploadFileHelper.class);
@@ -40,8 +38,8 @@ public class UploadFileHelper {
     @Value("${tps.upload.path.url}")
     private String urlPathPrefix;
 
-//    @Value("${tps.upload.rms.path.prefix}")
-//    private String rmsPathPrefix;
+    //    @Value("${tps.upload.rms.path.prefix}")
+    //    private String rmsPathPrefix;
 
     @SuppressWarnings("serial")
     public UploadFileHelper() {
@@ -54,7 +52,7 @@ public class UploadFileHelper {
 
     /**
      * property로 지정해놓은 업무 path 문자열 가져옴
-     * 
+     *
      * @param business 업무
      * @return 업무 path 문자열
      */
@@ -64,15 +62,19 @@ public class UploadFileHelper {
 
     /**
      * 업무와 path로 실제 경로 가져옴
-     * 
+     *
      * @param business 업무
-     * @param paths 나머지 path
+     * @param paths    나머지 path
      * @return 실제 경로
      */
     public String getRealPath(String business, String... paths) {
         StringBuffer sb = new StringBuffer(128);
 
-        sb.append(this.realPathPrefix).append("/").append(getBusinessProperty(business)).append("/")
+        sb
+                .append(this.realPathPrefix)
+                .append("/")
+                .append(getBusinessProperty(business))
+                .append("/")
                 .append(String.join("/", paths));
 
         return sb.toString();
@@ -80,13 +82,17 @@ public class UploadFileHelper {
 
     /**
      * 디비에 저장된 경로로 실제 경로 가져옴
+     *
      * @param dbPath 디비에 저장된 경로
      * @return 실제경로
      */
     public String getRealPathByDB(String dbPath) {
         StringBuffer sb = new StringBuffer(128);
 
-        sb.append(this.realPathPrefix).append("/").append(dbPath);
+        sb
+                .append(this.realPathPrefix)
+                .append("/")
+                .append(dbPath);
 
         return sb.toString();
     }
@@ -95,14 +101,19 @@ public class UploadFileHelper {
      * 서비스 경로 가져옴
      *
      * @param business 업무
-     * @param paths 나머지 path
+     * @param paths    나머지 path
      * @return 서비스 경로
      */
     public String getUri(String business, String... paths) {
         StringBuffer sb = new StringBuffer(128);
 
-        sb.append("/").append(this.urlPathPrefix).append("/").append(getBusinessProperty(business)).append("/")
-          .append(String.join("/", paths));
+        sb
+                .append("/")
+                .append(this.urlPathPrefix)
+                .append("/")
+                .append(getBusinessProperty(business))
+                .append("/")
+                .append(String.join("/", paths));
 
         return sb.toString();
     }
@@ -111,41 +122,43 @@ public class UploadFileHelper {
      * 디비에 저정될 경로 가져옴. urlPathPrefix을 제외한 경로 리턴
      *
      * @param business 업무
-     * @param paths 나머지 path
+     * @param paths    나머지 path
      * @return 서비스 경로
      */
     public String getDbUri(String business, String... paths) {
         StringBuffer sb = new StringBuffer(128);
 
-        sb.append(getBusinessProperty(business)).append("/")
-          .append(String.join("/", paths));
+        sb
+                .append(getBusinessProperty(business))
+                .append("/")
+                .append(String.join("/", paths));
 
         return sb.toString();
     }
 
-//    /**
-//     * RMS에 보여질 파일을 업로드할 실제 경로 가져옴
-//     *
-//     * @param volumePath 볼륨패스
-//     * @return 실제 경로
-//     */
-//    public String getRealRmsPath(String volumePath, String... paths) {
-//        StringBuffer sb = new StringBuffer(128);
-//
-//        sb.append(this.rmsPathPrefix).append("/").append(volumePath).append("/")
-//                .append(String.join("/", paths));
-//
-//        return sb.toString();
-//    }
+    //    /**
+    //     * RMS에 보여질 파일을 업로드할 실제 경로 가져옴
+    //     *
+    //     * @param volumePath 볼륨패스
+    //     * @return 실제 경로
+    //     */
+    //    public String getRealRmsPath(String volumePath, String... paths) {
+    //        StringBuffer sb = new StringBuffer(128);
+    //
+    //        sb.append(this.rmsPathPrefix).append("/").append(volumePath).append("/")
+    //                .append(String.join("/", paths));
+    //
+    //        return sb.toString();
+    //    }
 
     /**
      * 파일 업로드
-     * 
+     *
      * @param realPath 저장할 실제 경로
-     * @param mfile 멀티파트파일
+     * @param mfile    멀티파트파일
      * @return 결과
      * @throws IllegalStateException illegal state
-     * @throws IOException 입출력
+     * @throws IOException           입출력
      */
     public boolean saveFile(String realPath, MultipartFile mfile)
             throws IllegalStateException, IOException {
@@ -176,14 +189,15 @@ public class UploadFileHelper {
 
     /**
      * 이미지를 저장한다
-     * 
-     * @param realPath 저장할 실제 경로
+     *
+     * @param realPath  저장할 실제 경로
      * @param imageData 이미지 데이터
-     * @param maxWidth 최대 넓이
+     * @param maxWidth  최대 넓이
      * @return 저장 결과
      * @throws Exception 예외처리
      */
-    public boolean saveImage(String realPath, byte[] imageData, int maxWidth) throws Exception {
+    public boolean saveImage(String realPath, byte[] imageData, int maxWidth)
+            throws Exception {
         try {
             // 이미지 리사이즈하여 저장함
             InputStream inputStream = new ByteArrayInputStream(imageData);
@@ -201,25 +215,27 @@ public class UploadFileHelper {
 
     /**
      * 이미지를 저장한다
-     * 
-     * @param realPath 저장할 실제 경로
+     *
+     * @param realPath  저장할 실제 경로
      * @param imageData 이미지 데이터
      * @return 저장 결과
      * @throws Exception 예외처리
      */
-    public boolean saveImage(String realPath, byte[] imageData) throws Exception {
+    public boolean saveImage(String realPath, byte[] imageData)
+            throws Exception {
         return this.saveImage(realPath, imageData, THUMBNAIL_MAX_WIDTH);
     }
 
     /**
      * 이미지를 복사한다
-     * 
-     * @param realPath 저장할 실제 경로
+     *
+     * @param realPath           저장할 실제 경로
      * @param targetFileRealPath 복사 대상 파일의 실제 경로
      * @return 복사 결과
      * @throws Exception 예외처리
      */
-    public boolean copyFile(String realPath, String targetFileRealPath) throws Exception {
+    public boolean copyFile(String realPath, String targetFileRealPath)
+            throws Exception {
         try {
             File targetFile = new File(targetFileRealPath);
             File file = new File(realPath);
@@ -253,24 +269,26 @@ public class UploadFileHelper {
 
     /**
      * 파일을 삭제한다
-     * 
+     *
      * @param realPath 삭제할 파일 실제 경로
      * @return 삭제 결과
      * @throws Exception 예외처리
      */
-    public boolean deleteFile(String realPath) throws Exception {
-        return FileUtil.deleteFile(realPath);
+    public boolean deleteFile(String realPath)
+            throws Exception {
+        return McpFile.deleteFile(realPath);
     }
 
     /**
      * 업무 관련 폴더를 생성한다
-     * 
+     *
      * @param business 업무
-     * @param paths 나머지 path
+     * @param paths    나머지 path
      * @return 경로
      * @throws Exception 예외처리
      */
-    public boolean createBusinessDir(String business, String... paths) throws Exception {
+    public boolean createBusinessDir(String business, String... paths)
+            throws Exception {
         String realPath = getRealPath(business, paths);
         File dir = new File(realPath);
 
@@ -289,13 +307,14 @@ public class UploadFileHelper {
 
     /**
      * 업무 관련 폴더를 삭제한다
-     * 
+     *
      * @param business 업무
-     * @param paths 나머지 path
+     * @param paths    나머지 path
      * @return 경로
      * @throws Exception 예외처리
      */
-    public boolean deleteBusinessDir(String business, String... paths) throws Exception {
+    public boolean deleteBusinessDir(String business, String... paths)
+            throws Exception {
         String realPath = getRealPath(business, paths);
         File dir = new File(realPath);
 
@@ -315,12 +334,13 @@ public class UploadFileHelper {
      * <pre>
      * 이미지 사이즈(가로, 세로)를 구한다
      * </pre>
-     * 
+     *
      * @param imgPath 이미지경로
      * @return [width, height]
      * @throws IOException 입출력예외
      */
-    public int[] getImgFileSize(String imgPath) throws IOException {
+    public int[] getImgFileSize(String imgPath)
+            throws IOException {
         int[] imgSize = new int[2];
 
         if (this.imgFileSizeCache.containsKey(imgPath)) {
@@ -337,12 +357,13 @@ public class UploadFileHelper {
 
     /**
      * 이미지 사이즈(가로, 세로)를 구한다
-     * 
+     *
      * @param mfile 멀티파트파일
      * @return [width, height]
      * @throws IOException 입출력
      */
-    public int[] getImgFileSize(MultipartFile mfile) throws IOException {
+    public int[] getImgFileSize(MultipartFile mfile)
+            throws IOException {
         int[] imgSize = new int[2];
 
         BufferedImage image = ImageIO.read(mfile.getInputStream());

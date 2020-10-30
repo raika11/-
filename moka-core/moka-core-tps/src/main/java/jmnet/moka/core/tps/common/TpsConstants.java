@@ -156,4 +156,7 @@ public class TpsConstants {
      */
     public static final String HEADER_MENU_ID = "x-menuid";
 
+    // 최상위 메뉴 ID
+    public static final String ROOT_MENU_ID = "00";
+
 }

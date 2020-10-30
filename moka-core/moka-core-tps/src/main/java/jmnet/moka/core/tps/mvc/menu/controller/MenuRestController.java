@@ -14,8 +14,8 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -523,8 +523,8 @@ public class MenuRestController {
         Menu parentMenu = null;
         try {
             if (!McpString
-                    .defaultValue(menu.getParentMenuId(), MokaConstants.ROOT_MENU_ID)
-                    .equals(MokaConstants.ROOT_MENU_ID)) {
+                    .defaultValue(menu.getParentMenuId(), TpsConstants.ROOT_MENU_ID)
+                    .equals(TpsConstants.ROOT_MENU_ID)) {
                 parentMenu = menuService
                         .findMenuById(menu.getParentMenuId())
                         .orElse(null);

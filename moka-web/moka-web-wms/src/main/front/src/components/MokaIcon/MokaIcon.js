@@ -4,76 +4,78 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
-import { faCoffee } from '@moka/fontawesome-pro-light-svg-icons';
 import {
-    faAngleDoubleLeft,
-    faSearch,
-    faExpandArrows,
-    faCompressArrowsAlt,
-    faArrowToRight,
-    faRepeat,
-    faFile,
-    faFileAlt,
-    faBox,
-    faBallot,
-    faNewspaper,
-    faAd,
-    faHistory,
-    faFilePlus,
-    faExternalLink,
-    faEllipsisV,
+    faCoffee as falCoffee,
+    faAngleDoubleLeft as falAngleDoubleLeft,
+    faSearch as falSearch,
+    faExpandArrows as falExpandArrows,
+    faCompressArrowsAlt as falCompressArrowsAlt,
+    faArrowToRight as falArrowToRight,
+    faRepeat as falRepeat,
+    faFile as falFile,
+    faFileAlt as falFileAlt,
+    faBox as falBox,
+    faBallot as falBallot,
+    faNewspaper as falNewspaper,
+    faAd as falAd,
+    faHistory as falHistory,
+    faFilePlus as falFilePlus,
+    faExternalLink as falExternalLink,
+    faEllipsisV as falEllipsisV,
     faPlus as falPlus,
     faMinus as falMinus,
-    faThList,
-    faFileImport,
-    faFileSearch,
-    faCopy,
-    faCloudUpload,
-    faMinusSquare,
-    faMinus,
-    faSignOutAlt,
+    faFileImport as falFileImport,
+    faFileSearch as falFileSearch,
+    faCopy as falCopy,
+    faCloudUpload as falCloudUpload,
+    faMinusSquare as falMinusSquare,
+    faSignOutAlt as falSignOutAlt,
     faCalendarAlt as falCalendarAlt,
     faMinusCircle as falMinusCircle,
     faClock as falClock,
 } from '@moka/fontawesome-pro-light-svg-icons';
-import { faAngleLeft, faAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
+import { faThList as fasThList, faThLarge as fasThLarge, faAngleLeft as fasAngleLeft, faAngleRight as fasAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
 
-// 아이콘 등록
-library.add(faCoffee);
-library.add(faAngleDoubleLeft);
-library.add(faSearch);
-library.add(faExpandArrows);
-library.add(faCompressArrowsAlt);
-library.add(faArrowToRight);
-library.add(faRepeat);
-library.add(faFile);
-library.add(faFileAlt);
-library.add(faBox);
-library.add(faBallot);
-library.add(faRepeat);
-library.add(faNewspaper);
-library.add(faAd);
-library.add(faHistory);
-library.add(faFilePlus);
-library.add(faExternalLink);
-library.add(faEllipsisV);
-library.add(faAngleLeft);
-library.add(faAngleRight);
+// 아이콘 등록 (fal)
+library.add(falCoffee);
+library.add(falAngleDoubleLeft);
+library.add(falSearch);
+library.add(falExpandArrows);
+library.add(falCompressArrowsAlt);
+library.add(falArrowToRight);
+library.add(falRepeat);
+library.add(falFile);
+library.add(falFileAlt);
+library.add(falBox);
+library.add(falBallot);
+library.add(falNewspaper);
+library.add(falAd);
+library.add(falHistory);
+library.add(falFilePlus);
+library.add(falExternalLink);
+library.add(falEllipsisV);
 library.add(falPlus);
 library.add(falMinus);
-library.add(faThList);
-library.add(faFileImport);
-library.add(faFileSearch);
-library.add(faCopy);
-library.add(faCloudUpload);
-library.add(faMinusSquare);
-library.add(faMinus);
-library.add(faSignOutAlt);
-library.add(fadImage);
+library.add(falFileImport);
+library.add(falFileSearch);
+library.add(falCopy);
+library.add(falCloudUpload);
+library.add(falMinusSquare);
+library.add(falMinus);
+library.add(falSignOutAlt);
 library.add(falCalendarAlt);
 library.add(falMinusCircle);
 library.add(falClock);
+
+// 아이콘 등록 (fas)
+library.add(fasThLarge);
+library.add(fasThList);
+library.add(fasAngleLeft);
+library.add(fasAngleRight);
+
+// 아이콘 등록 (fad)
+library.add(fadImage);
 
 const propTypes = {
     /**

@@ -2,11 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './TemplateAgGridColumns';
-
-import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { MokaTable, MokaIcon, MokaThumbTable } from '@components';
+import { MokaTable, MokaThumbTable, MokaTableTypeButton } from '@components';
 import { API_BASE_URL } from '@/constants';
 import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template';
 import CopyModal from './modals/CopyModal';
@@ -83,22 +80,11 @@ const TemplateAgGrid = ({ onDelete }) => {
         <>
             {/* 버튼 그룹 */}
             <div className="d-flex mb-10">
-                <Nav
-                    as={ButtonGroup}
-                    size="sm"
-                    className="mr-auto"
-                    defaultActiveKey="list"
+                <MokaTableTypeButton
                     onSelect={(selectedKey) => {
                         setListType(selectedKey);
                     }}
-                >
-                    <Nav.Link eventKey="list" as={Button} variant="gray150">
-                        <MokaIcon iconName="fal-th-list" />
-                    </Nav.Link>
-                    <Nav.Link eventKey="thumbnail" as={Button} variant="gray150">
-                        <MokaIcon iconName="fal-th-list" />
-                    </Nav.Link>
-                </Nav>
+                />
                 <div className="pt-0">
                     <Button variant="dark" onClick={() => history.push('/template')}>
                         템플릿 추가

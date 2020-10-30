@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaTable } from '@components';
+
+import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
 import columnDefs from './RelationInContainerListColums';
 import { ITEM_DS, ITEM_TP, ITEM_CP } from '@/constants';
+import { relationAgGridHeight, relationDSAgGridHeight } from './index';
 
 const propTypes = {
     /**
@@ -29,19 +32,22 @@ const defaultProps = {
 /**
  * 오른쪽 탭에 들어가는
  * 관련된 상위(부모의) 컨테이너 리스트
+ *
+ * 데이터셋 관리 => 도메인 select 추가
  */
 const RelationInContainerList = (props) => {
     const { show, relSeqType, relSeq } = props;
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const { search: storeSearch, list, total, error, loading, latestDomainId } = useSelector((store) => ({
+    const { search: storeSearch, list, total, error, loading, latestDomainId, domainList } = useSelector((store) => ({
         search: store.relation.search,
         list: store.relation.list,
         total: store.relation.total,
         error: store.relation.error,
         loading: store.loading[GET_RELATION_LIST],
         latestDomainId: store.auth.latestDomainId,
+        domainList: store.auth.domainList,
     }));
 
     // state
@@ -108,8 +114,26 @@ const RelationInContainerList = (props) => {
 
     return (
         <MokaCard titleClassName="mb-0" title="컨테이너 검색">
+            {/* 도메인 선택 */}
+            {relSeqType === ITEM_DS && (
+                <Form.Row className="mb-2">
+                    <MokaInput
+                        as="select"
+                        className="w-100"
+                        value={search.domainId || undefined}
+                        onChange={(e) => handleChangeSearchOption({ key: 'domainId', value: e.target.value })}
+                    >
+                        {domainList.map((domain) => (
+                            <option key={domain.domainId} value={domain.domainId}>
+                                {domain.domainName}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </Form.Row>
+            )}
+
             {/* 버튼 */}
-            <div className="d-flex justify-content-end mb-3">
+            <div className="d-flex justify-content-end mb-2">
                 <Button variant="dark" onClick={() => history.push('/container')}>
                     컨테이너 추가
                 </Button>
@@ -117,7 +141,7 @@ const RelationInContainerList = (props) => {
 
             {/* 테이블 */}
             <MokaTable
-                agGridHeight={625}
+                agGridHeight={relSeqType === ITEM_DS ? relationDSAgGridHeight : relationAgGridHeight}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(data) => data.containerSeq}

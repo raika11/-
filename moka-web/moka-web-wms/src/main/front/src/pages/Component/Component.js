@@ -111,7 +111,7 @@ const Component = () => {
 
             {/* 탭 */}
             <MokaIconTabs
-                onSelectNav={(idx) => setActiveTabIdx(idx)}
+                onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                 tabWidth={412}
                 tabs={[
                     <Suspense>

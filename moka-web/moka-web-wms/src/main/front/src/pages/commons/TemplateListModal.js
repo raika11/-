@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import Nav from 'react-bootstrap/Nav';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-
-import { MokaModal, MokaInput, MokaSearchInput, MokaIcon, MokaTable, MokaThumbTable } from '@components';
+import { MokaModal, MokaInput, MokaSearchInput, MokaTable, MokaThumbTable, MokaTableTypeButton } from '@components';
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { initialState, GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
@@ -180,14 +176,13 @@ const TemplateListModal = (props) => {
         if (show) {
             dispatch(
                 changeSearchOption({
-                    ...search,
+                    ...initialState.search,
                     domainId: latestDomainId,
                     size: MODAL_PAGESIZE_OPTIONS[0],
                     page: 0,
                 }),
             );
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, latestDomainId, show]);
 
     useEffect(() => {
@@ -320,22 +315,11 @@ const TemplateListModal = (props) => {
                             onSearch={handleSearch}
                         />
                         {/* 버튼 그룹 */}
-                        <Nav
-                            as={ButtonGroup}
-                            size="sm"
-                            className="mr-auto h-100"
-                            defaultActiveKey="list"
+                        <MokaTableTypeButton
                             onSelect={(selectedKey) => {
                                 setListType(selectedKey);
                             }}
-                        >
-                            <Nav.Link eventKey="list" as={Button} variant="gray150">
-                                <MokaIcon iconName="fal-th-list" />
-                            </Nav.Link>
-                            <Nav.Link eventKey="thumbnail" as={Button} variant="gray150">
-                                <MokaIcon iconName="fal-th-list" />
-                            </Nav.Link>
-                        </Nav>
+                        />
                     </Col>
                 </Form.Row>
             </Form>

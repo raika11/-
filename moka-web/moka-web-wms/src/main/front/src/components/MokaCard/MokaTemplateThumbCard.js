@@ -62,7 +62,7 @@ const defaultProps = {
 };
 
 /**
- * TODO selected 처리해야함
+ * 템플릿 썸네일 카드 컴포넌트
  */
 const MokaTemplateThumbCard = forwardRef((props, ref) => {
     const { onClick, menus, width, height, data, img, alt, selected } = props;

@@ -44,16 +44,16 @@ const PageEditor = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, page]);
 
-    useEffect(() => {
-        // 페이지seq가 있을 때 데이터 조회
-        if (paramPageSeq) {
-            dispatch(getPage({ pageSeq: paramPageSeq }));
-        } else {
-            dispatch(clearPage());
-            dispatch(clearRelationList());
-            dispatch(clearHistory());
-        }
-    }, [dispatch, paramPageSeq]);
+    // useEffect(() => {
+    //     // 페이지seq가 있을 때 데이터 조회
+    //     if (paramPageSeq) {
+    //         dispatch(getPage({ pageSeq: paramPageSeq }));
+    //     } else {
+    //         dispatch(clearPage());
+    //         dispatch(clearRelationList());
+    //         dispatch(clearHistory());
+    //     }
+    // }, [dispatch, paramPageSeq]);
 
     useEffect(() => {
         let bodyError = 0;

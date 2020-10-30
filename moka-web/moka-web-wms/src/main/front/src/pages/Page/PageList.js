@@ -2,11 +2,11 @@ import React from 'react';
 import Search from './PageSearch';
 import Tree from './PageTree';
 
-const PageList = () => {
+const PageList = ({ onDelete }) => {
     return (
         <>
             <Search />
-            <Tree />
+            <Tree onDelete={onDelete} />
         </>
     );
 };

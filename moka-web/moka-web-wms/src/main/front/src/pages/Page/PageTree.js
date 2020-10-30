@@ -4,14 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 import { toastr } from 'react-redux-toastr';
 
-import { GET_PAGE_TREE, getPageTree, changeSearchOption, getPage, insertSubPage } from '@store/page/pageAction';
+import { GET_PAGE_TREE, getPage, insertSubPage } from '@store/page/pageAction';
 
 import { MokaTreeView, MokaIcon } from '@components';
 
 /**
  * 페이지 Tree 컴포넌트
  */
-const PageTree = () => {
+const PageTree = ({ onDelete }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -29,7 +29,7 @@ const PageTree = () => {
 
     useEffect(() => {
         if (tree) {
-            if (selected === '' && expanded.length == 0) {
+            if (selected === '' && expanded.length === 0) {
                 setExpanded([String(tree.pageSeq)]);
                 setSelected(String(tree.pageSeq));
             }
@@ -61,7 +61,6 @@ const PageTree = () => {
      * @param {*} item
      */
     const handleInsertSub = (item) => {
-        debugger;
         const parent = {
             pageSeq: item.pageSeq,
             pageName: item.pageName,
@@ -70,14 +69,6 @@ const PageTree = () => {
         setSelected([String(item.pageSeq)]);
         dispatch(insertSubPage({ parent, latestDomainId }));
         history.push('/page');
-    };
-
-    /**
-     * 트리에서 삭제버튼 클릭.
-     * @param {*} tree
-     */
-    const handelDelete = (tree) => {
-        toastr.success('- 아이콘 클릭', tree.pageName);
     };
 
     return (
@@ -108,7 +99,7 @@ const PageTree = () => {
                 },
                 {
                     icon: <MokaIcon iconName="fal-minus" />,
-                    onClick: handelDelete,
+                    onClick: onDelete,
                     variant: 'warning',
                 },
             ]}

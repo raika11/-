@@ -1,13 +1,15 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import produce from 'immer';
-import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { MokaIconTabs } from '@/components/MokaTabs';
-import { clearStore, clearHistory, clearRelationList } from '@store/page';
+import { clearStore, clearHistory, clearRelationList, deletePage, getPageTree } from '@store/page';
+import { notification, toastr } from '@utils/toastUtil';
 
 import PageEditor from './PageEditor';
 const PageList = React.lazy(() => import('./PageList'));
@@ -26,7 +28,13 @@ const PageHistoryList = React.lazy(() => import('./relations/PageHistoryList'));
  * 페이지 관리
  */
 const Page = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
+
+    const { page, tree } = useSelector((store) => ({
+        page: store.page.page,
+        tree: store.page.tree,
+    }));
     const [expansionState, setExpansionState] = useState([true, false, true]);
 
     /**
@@ -75,13 +83,107 @@ const Page = () => {
         );
     };
 
+    /**
+     * 템플릿 삭제
+     * @param {object} response response
+     */
+    const deleteCallback = useCallback(
+        (response, templateSeq) => {
+            if (response.header.success) {
+                dispatch(
+                    deletePage({
+                        templateSeq: templateSeq,
+                        callback: (response) => {
+                            if (response.header.success) {
+                                notification('success', response.header.message);
+                                history.push('/template');
+                            } else {
+                                notification('warning', response.header.message);
+                            }
+                        },
+                    }),
+                );
+            } else {
+                notification('warning', response.header.message);
+            }
+        },
+        [dispatch, history],
+    );
+
+    // 노드 찾기(재귀함수)
+    // 리턴: {findSeq: page.pageSeq,node: null,path: [String(pageTree.pageSeq)]};
+    const findNode = useCallback((findInfo, rootNode) => {
+        if (rootNode.pageSeq === findInfo.findSeq) {
+            return produce(findInfo, (draft) => draft);
+        }
+
+        if (rootNode.nodes && rootNode.nodes.length > 0) {
+            for (let i = 0; i < rootNode.nodes.length; i++) {
+                const newInfo = produce(findInfo, (draft) => {
+                    draft.node = rootNode.nodes[i];
+                });
+                const fnode = findNode(newInfo, rootNode.nodes[i]);
+                if (fnode !== null && fnode.node !== null) {
+                    return fnode;
+                }
+            }
+            return null;
+        }
+        return null;
+    }, []);
+
+    /**
+     * 삭제 이벤트
+     */
+    const handleClickDelete = useCallback(
+        (item) => {
+            debugger;
+            if (item.pageUrl === '/') {
+                toastr.warning('', '메인화면은 삭제할 수 없습니다.');
+            } else {
+                let findInfo = {
+                    findSeq: item.pageSeq,
+                    node: null,
+                };
+                let fnode = findNode(findInfo, tree);
+
+                let msg;
+                if (fnode.node.nodes && fnode.node.nodes.length > 0) {
+                    msg = `하위 페이지도 삭제됩니다. ${item.pageName}(${item.pageUrl})을(를) 삭제하시겠습니까?`;
+                } else {
+                    msg = `${item.pageSeq}_${item.pageName}(${item.pageUrl})을(를) 삭제하시겠습니까?`;
+                }
+
+                toastr.confirm(msg, {
+                    onOk: () => {
+                        const option = {
+                            pageSeq: item.pageSeq,
+                            callback: (response) => {
+                                if (response.header.success) {
+                                    notification('success', response.header.message);
+                                    history.push('/page');
+                                } else {
+                                    notification('warning', response.header.message);
+                                }
+                            },
+                        };
+                        dispatch(deletePage(option));
+                    },
+                    onCancle: () => {},
+                });
+            }
+        },
+        [dispatch, findNode, history, tree],
+    );
+
     React.useEffect(() => {
         return () => {
             dispatch(clearStore());
             dispatch(clearRelationList());
             dispatch(clearHistory());
         };
-    }, [dispatch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="d-flex">
@@ -103,7 +205,7 @@ const Page = () => {
                 onExpansion={handleListExpansion}
             >
                 <Suspense>
-                    <PageList />
+                    <PageList onDelete={handleClickDelete} />
                 </Suspense>
             </MokaCard>
 
@@ -124,7 +226,7 @@ const Page = () => {
                                 tabWidth={412}
                                 tabs={[
                                     <Suspense>
-                                        <PageEdit />
+                                        <PageEdit onDelete={handleClickDelete} />
                                     </Suspense>,
                                     <Suspense>
                                         <PageChildPageList />

@@ -43,7 +43,7 @@ const PageSearch = () => {
             ),
         );
         history.push('/page');
-    }, [dispatch, search]);
+    }, [dispatch, history, search]);
 
     useEffect(() => {
         // latestDomainId 변경 => 템플릿의 search.domainId 변경

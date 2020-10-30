@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.persistence.Column;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.exception.NoSortColumnException;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +26,7 @@ import org.springframework.util.MultiValueMap;
  *
  * @author ince
  */
+@AllArgsConstructor
 @Setter
 @Getter
 @Builder

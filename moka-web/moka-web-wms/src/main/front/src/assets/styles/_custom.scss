@@ -43,6 +43,9 @@ body {
     background-color: $white;
     opacity: 0.5;
     z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* -----------------------

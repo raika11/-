@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MokaPagination, MokaTemplateThumbCard } from '@components';
+import { MokaPagination, MokaTemplateThumbCard, MokaLoader } from '@components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 const propTypes = {
@@ -67,6 +67,10 @@ const propTypes = {
      * 선택된 아이디
      */
     selected: PropTypes.any,
+    /**
+     * 로딩 여부
+     */
+    loading: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -81,17 +85,26 @@ const defaultProps = {
     paging: true,
     cardWidth: 174,
     cardHeight: 192,
+    loading: false,
 };
 
 /**
  * 썸네일 테이블
  */
 const MokaThumbTable = (props) => {
-    const { cardWidth, cardHeight, tableHeight, onClick, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, menus, rowData, selected } = props;
+    // table props
+    const { loading, tableHeight } = props;
+
+    // card props
+    const { cardWidth, cardHeight, onClick, menus, rowData, selected } = props;
+
+    // pagination props
+    const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
 
     return (
         <>
             <div className="mb-3 border" style={{ height: tableHeight }}>
+                {loading && <MokaLoader />}
                 <div className="d-flex flex-wrap align-content-start custom-scroll p-05 h-100 overflow-y-scroll">
                     {rowData.map((data) => (
                         <MokaTemplateThumbCard

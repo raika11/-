@@ -6,7 +6,7 @@ import Card from 'react-bootstrap/Card';
 
 import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/constants';
 import Button from 'react-bootstrap/Button';
-import { MokaIcon } from '@components';
+import { MokaIcon, MokaLoader } from '@components';
 
 const propTypes = {
     /**
@@ -151,7 +151,7 @@ const MokaCard = forwardRef((props, ref) => {
             className={clsx('flex-shrink-0', className, { fold: foldable && !localExpandState })}
             style={{ width: foldable && !localExpandState ? CARD_FOLDING_WIDTH : width, height }}
         >
-            {loading && <div className="opacity-box"></div>}
+            {loading && <MokaLoader />}
             <Card.Header className={clsx({ 'd-flex': foldable, 'justify-content-between': foldable, 'align-items-center': foldable }, headerClassName)}>
                 {/* 카드 타이틀 */}
                 {titleAs ? (

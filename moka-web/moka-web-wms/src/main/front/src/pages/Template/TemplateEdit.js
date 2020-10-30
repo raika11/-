@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
-import { changeTemplate, saveTemplate, changeInvalidList } from '@store/template';
+import { changeTemplate, saveTemplate, changeInvalidList, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import { notification } from '@utils/toastUtil';
 import CopyModal from './modals/CopyModal';
 import AddComponentModal from './modals/AddComponentModal';
@@ -20,13 +20,14 @@ import AddComponentModal from './modals/AddComponentModal';
 const TemplateEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { template, inputTag, tpZoneRows, latestDomainId, invalidList, UPLOAD_PATH_URL } = useSelector((store) => ({
+    const { template, inputTag, tpZoneRows, latestDomainId, invalidList, UPLOAD_PATH_URL, loading } = useSelector((store) => ({
         template: store.template.template,
         inputTag: store.template.inputTag,
         tpZoneRows: store.codeMgt.tpZoneRows,
         latestDomainId: store.auth.latestDomainId,
         invalidList: store.template.invalidList,
         UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
+        loading: store.loading[GET_TEMPLATE] || store.loading[DELETE_TEMPLATE] || store.loading[SAVE_TEMPLATE],
     }));
 
     // state
@@ -204,7 +205,7 @@ const TemplateEdit = ({ onDelete }) => {
     }, [invalidList]);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" title="템플릿 정보">
+        <MokaCard titleClassName="h-100 mb-0 pb-0" title="템플릿 정보" loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">

@@ -1,1 +1,1 @@
-export { default as MokaLoader } from './MokaLoader';
+export { default } from './MokaLoader';

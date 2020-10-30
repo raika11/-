@@ -61,7 +61,7 @@ export const deleteTemplate = createAction(DELETE_TEMPLATE, ({ templateSeq, call
  * 관련아이템있는지 확인
  */
 export const HAS_RELATION_LIST = 'template/HAS_RELATION_LIST';
-export const hasRelationList = createAction(HAS_RELATION_LIST, (payload) => payload);
+export const hasRelationList = createAction(HAS_RELATION_LIST, ({ templateSeq, callback }) => ({ templateSeq, callback }));
 
 /**
  * 히스토리 검색조건 변경

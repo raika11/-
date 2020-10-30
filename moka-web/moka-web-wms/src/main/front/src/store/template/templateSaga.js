@@ -151,8 +151,6 @@ function* copyTemplate({ payload: { templateSeq, templateName, domainId, callbac
 
 /**
  * 관련 아이템 체크
- * @param {string|number} param0.payload.templateseq 템플릿ID (필수)
- * @param {func} param0.payload.callback 콜백
  */
 const hasRelationList = createRequestSaga(act.HAS_RELATION_LIST, api.hasRelationList, true);
 

@@ -78,14 +78,6 @@ export const hasRelationList = ({ templateSeq }) => {
     });
 };
 
-// 관련 아이템 조회
-export const getRelationList = ({ search }) => {
-    const queryString = qs.stringify(search);
-    return instance.get(`/api/templates/${search.templateSeq}/relations?${queryString}`).catch((err) => {
-        throw err;
-    });
-};
-
 // 템플릿 히스토리 조회
 export const getHistoryList = ({ search }) => {
     const queryString = qs.stringify(search);

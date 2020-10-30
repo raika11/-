@@ -111,7 +111,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
             }
         }
         if (onSelectNav) {
-            onSelectNav(eventKey);
+            onSelectNav(Number(eventKey));
         }
     };
 

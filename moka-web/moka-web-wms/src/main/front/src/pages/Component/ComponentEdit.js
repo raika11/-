@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import { initialState, getComponent, clearComponent, clearRelationList, changeComponent, saveComponent, changeInvalidList } from '@store/component';
+import { initialState, getComponent, clearComponent, changeComponent, saveComponent, changeInvalidList } from '@store/component';
 import { DB_DATEFORMAT } from '@/constants';
 import { notification } from '@utils/toastUtil';
 
@@ -193,7 +193,6 @@ const ComponentEdit = ({ onDelete }) => {
             dispatch(getComponent({ componentSeq: componentSeq }));
         } else {
             dispatch(clearComponent());
-            dispatch(clearRelationList());
         }
     }, [dispatch, componentSeq]);
 

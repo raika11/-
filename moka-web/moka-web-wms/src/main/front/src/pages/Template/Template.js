@@ -166,22 +166,22 @@ const Template = () => {
                 tabWidth={412}
                 tabs={[
                     <Suspense>
-                        <TemplateEdit show={activeTabIdx === '0'} onDelete={handleClickDelete} />
+                        <TemplateEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
                     </Suspense>,
                     <Suspense>
-                        <RelationInPageList show={activeTabIdx === '1'} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
+                        <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <RelationInSkinList show={activeTabIdx === '2'} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
+                        <RelationInSkinList show={activeTabIdx === 2} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <RelationInContainerList show={activeTabIdx === '3'} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
+                        <RelationInContainerList show={activeTabIdx === 3} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <RelationInComponentList show={activeTabIdx === '4'} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
+                        <RelationInComponentList show={activeTabIdx === 4} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <TemplateHistoryList show={activeTabIdx === '5'} />
+                        <TemplateHistoryList show={activeTabIdx === 5} />
                     </Suspense>,
                 ]}
                 tabNavWidth={48}

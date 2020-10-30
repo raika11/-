@@ -148,6 +148,11 @@ export function* deleteComponent({ payload: { componentSeq, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 관련 아이템 체크
+ */
+const hasRelationList = createRequestSaga(act.HAS_RELATION_LIST, api.hasRelationList, true);
+
 export default function* saga() {
     yield takeLatest(act.GET_COMPONENT_LIST, getComponentList);
     yield takeLatest(act.GET_COMPONENT, getComponent);
@@ -155,4 +160,5 @@ export default function* saga() {
     yield takeLatest(act.SAVE_COMPONENT, saveComponent);
     yield takeLatest(act.COPY_COMPONENT, copyComponent);
     yield takeLatest(act.DELETE_COMPONENT, deleteComponent);
+    yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
 }

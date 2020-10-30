@@ -115,19 +115,18 @@ const Component = () => {
                 tabWidth={412}
                 tabs={[
                     <Suspense>
-                        <RelationInPageList show={activeTabIdx === '0'} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
+                        <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
                     </Suspense>,
                     <Suspense>
-                        <RelationInSkinList show={activeTabIdx === '1'} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
+                        <RelationInSkinList show={activeTabIdx === 1} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
                     </Suspense>,
                     <Suspense>
-                        <RelationInContainerList show={activeTabIdx === '2'} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
+                        <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
                     </Suspense>,
                 ]}
                 tabNavWidth={48}
                 tabNavPosition="right"
                 tabNavs={[
-                    { title: '템플릿 정보', text: 'Info' },
                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
                     { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },

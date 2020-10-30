@@ -76,14 +76,6 @@ export const hasRelationList = ({ componentSeq }) => {
     });
 };
 
-// 관련 아이템 조회
-export const getRelationList = ({ search }) => {
-    const queryString = qs.stringify(search);
-    return instance.get(`/api/components/${search.componentSeq}/relations?${queryString}`).catch((err) => {
-        throw err;
-    });
-};
-
 // 컴포넌트 히스토리 조회
 export const getHistoryList = ({ search }) => {
     const queryString = qs.stringify(search);

@@ -1,6 +1,6 @@
 package jmnet.moka.core.tps.mvc.merge;
 
-import java.io.IOException;
+import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,12 +11,16 @@ import javax.validation.Valid;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
+import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.mapper.ComponentWorkMapper;
 import jmnet.moka.core.tps.mvc.component.vo.DeskingComponentWorkVO;
@@ -26,9 +30,8 @@ import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -43,10 +46,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
+@Slf4j
 @RequestMapping("/api/merge")
 public class MergeRestController {
-
-    private static final Logger logger = LoggerFactory.getLogger(MergeRestController.class);
 
     @Autowired
     private GenericApplicationContext appContext;
@@ -66,19 +68,46 @@ public class MergeRestController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private TpsLogger tpsLogger;
+
+    /**
+     * tems 문법검사
+     *
+     * @param request 요청
+     * @param content tems소스
+     * @return 랜더링된 결과
+     * @throws Exception 예외
+     */
+    @ApiOperation(value = "tems 문법검사")
     @PostMapping(value = "/syntax")
     public ResponseEntity<?> postSyntax(HttpServletRequest request, String content)
             throws Exception {
+        List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+
         try {
             TemplateParserHelper.checkSyntax(content);
-        } catch (IOException | TemplateParseException e) {
-            throw e;
+        } catch (TemplateParseException e) {
+            String message = e.getMessage();
+            String extra = Integer.toString(e.getLineNumber());
+            invalidList.add(new InvalidDataDTO("content", message, extra));
+            tpsLogger.fail(ActionType.SELECT, message, true);
+            String validMessage = messageByLocale.get("tps.merge.error.syntax", request);
+            throw new InvalidDataException(invalidList, validMessage);
+        } catch (Exception e) {
+            String message = e.getMessage();
+            invalidList.add(new InvalidDataDTO("content", message));
+            tpsLogger.fail(ActionType.SELECT, message, true);
+            String validMessage = messageByLocale.get("tps.merge.error.syntax", request);
+            throw new InvalidDataException(invalidList, validMessage);
         }
+
         ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     // HTML 검사시 merge
+    @ApiOperation(value = "HTML ")
     @PostMapping(value = "/previewPG", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postPreviewPG(HttpServletRequest request, @RequestBody @Valid PageDTO pageDto)
             throws Exception {

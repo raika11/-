@@ -3,17 +3,18 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaCardEditor } from '@components';
 import { changeLatestDomainId } from '@store/auth/authAction';
-import { changeTemplateBody, getTemplate, clearTemplate, clearHistory } from '@store/template/templateAction';
+import { changeTemplateBody, getTemplate, clearTemplate, clearHistory, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template/templateAction';
 
 const TemplateEditor = (props) => {
     const { expansion, onExpansion } = props;
     const { templateSeq } = useParams();
     const dispatch = useDispatch();
-    const { templateBody, template, invalidList, latestDomainId } = useSelector((store) => ({
+    const { templateBody, template, invalidList, latestDomainId, loading } = useSelector((store) => ({
         templateBody: store.template.templateBody,
         template: store.template.template,
         invalidList: store.template.invalidList,
         latestDomainId: store.auth.latestDomainId,
+        loading: store.loading[GET_TEMPLATE] || store.loading[DELETE_TEMPLATE] || store.loading[SAVE_TEMPLATE],
     }));
 
     // state
@@ -94,6 +95,7 @@ const TemplateEditor = (props) => {
             defaultValue={defaultValue}
             value={templateBody}
             onBlur={handleBlur}
+            loading={loading}
         />
     );
 };

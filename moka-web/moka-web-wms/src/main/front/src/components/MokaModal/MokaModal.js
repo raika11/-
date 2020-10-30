@@ -5,6 +5,7 @@ import Draggable from 'react-draggable';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ModalDialog from 'react-bootstrap/ModalDialog';
+import { MokaLoader } from '@components';
 
 const propTypes = {
     /**
@@ -114,7 +115,7 @@ const MokaModal = (props) => {
             {/* 컨텐츠 */}
             <Modal.Body className={bodyClassName}>
                 {children}
-                {loading && <div className="opacity-box"></div>}
+                {loading && <MokaLoader />}
             </Modal.Body>
 
             {/* 푸터 버튼 */}

@@ -19,7 +19,7 @@ const PageChildPageSearch = (props) => {
                     </Form.Control>
                 </Col>
                 <Col xs={8} className="px-0 pl-2">
-                    <MokaSearchInput />
+                    <MokaSearchInput onChange={() => {}} />
                 </Col>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">

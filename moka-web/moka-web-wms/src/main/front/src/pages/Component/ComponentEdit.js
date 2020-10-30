@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import { initialState, getComponent, clearComponent, changeComponent, saveComponent, changeInvalidList } from '@store/component';
+import { initialState, getComponent, clearComponent, changeComponent, saveComponent, changeInvalidList, GET_COMPONENT, SAVE_COMPONENT, DELETE_COMPONENT } from '@store/component';
 import { DB_DATEFORMAT } from '@/constants';
 import { notification } from '@utils/toastUtil';
 
@@ -24,7 +24,7 @@ const ComponentEdit = ({ onDelete }) => {
     const { componentSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { component, inputTag, latestDomainId, invalidList, MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT } = useSelector((store) => ({
+    const { component, inputTag, latestDomainId, invalidList, MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT, loading } = useSelector((store) => ({
         component: store.component.component,
         inputTag: store.component.inputTag,
         latestDomainId: store.auth.latestDomainId,
@@ -33,6 +33,7 @@ const ComponentEdit = ({ onDelete }) => {
         DISP_PAGE_COUNT: store.app.DISP_PAGE_COUNT,
         PER_PAGE_COUNT: store.app.PER_PAGE_COUNT,
         MAX_PAGE_COUNT: store.app.MAX_PAGE_COUNT,
+        loading: store.loading[GET_COMPONENT] || store.loading[SAVE_COMPONENT] || store.loading[DELETE_COMPONENT],
     }));
 
     // state
@@ -197,7 +198,7 @@ const ComponentEdit = ({ onDelete }) => {
     }, [dispatch, componentSeq]);
 
     return (
-        <MokaCard width={688} title="컴포넌트 편집" className="flex-fill mr-gutter">
+        <MokaCard width={688} title="컴포넌트 편집" className="flex-fill mr-gutter" loading={loading}>
             <BasicForm
                 componentSeq={component.componentSeq}
                 componentName={componentName}

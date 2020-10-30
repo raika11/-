@@ -7,8 +7,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { notification, toastr } from '@utils/toastUtil';
-import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, deleteDomain, changeInvalidList, hasRelationList, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
+import { notification } from '@utils/toastUtil';
+import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, changeInvalidList } from '@store/domain';
 import { getApi, getLang } from '@store/codeMgt';
 import { MokaInput, MokaInputLabel } from '@components';
 
@@ -37,12 +37,11 @@ const DomainEdit = ({ history, onDelete }) => {
     const [domainUrlError, setDomainUrlError] = useState(false);
 
     // getter
-    const { domain, langRows, apiRows, loading, invalidList } = useSelector(
+    const { domain, langRows, apiRows, invalidList } = useSelector(
         (store) => ({
             domain: store.domain.domain,
             langRows: store.codeMgt.langRows,
             apiRows: store.codeMgt.apiRows,
-            loading: store.loading[GET_DOMAIN] || store.loading[SAVE_DOMAIN],
             invalidList: store.domain.invalidList,
         }),
         shallowEqual,
@@ -314,7 +313,6 @@ const DomainEdit = ({ history, onDelete }) => {
 
     return (
         <div className="d-flex justify-content-center mb-20">
-            {loading && <div className="opacity-box"></div>}
             <Form style={{ width: 605 }}>
                 {/* 사용여부 */}
                 <Form.Row>

@@ -140,7 +140,7 @@ public class MergeRestController {
             resultDto = new ResultDTO<String>(HttpStatus.OK, content);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Fail to Merge : %s", pageDto.getPageUrl(), e);
+            log.error("Fail to Merge : %s", pageDto.getPageUrl(), e);
             throw new Exception(messageByLocale.get("tps.common.error.merge", request), e);
         }
     }

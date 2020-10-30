@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaCardEditor } from '@components';
 import { changeLatestDomainId } from '@store/auth/authAction';
-import { changeTemplateBody, getTemplate, clearTemplate, clearHistory, clearRelationList } from '@store/template/templateAction';
+import { changeTemplateBody, getTemplate, clearTemplate, clearHistory } from '@store/template/templateAction';
 
 const TemplateEditor = (props) => {
     const { expansion, onExpansion } = props;
@@ -59,7 +59,6 @@ const TemplateEditor = (props) => {
             dispatch(getTemplate({ templateSeq: templateSeq }));
         } else {
             dispatch(clearTemplate());
-            dispatch(clearRelationList());
             dispatch(clearHistory());
         }
     }, [dispatch, templateSeq]);

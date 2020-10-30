@@ -1,6 +1,6 @@
 import React, { useCallback, useState, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -8,9 +8,15 @@ import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { clearStore, deleteComponent, hasRelationList } from '@store/component';
 import { notification, toastr } from '@utils/toastUtil';
+import { ITEM_CP } from '@/constants';
 
 const ComponentList = React.lazy(() => import('./ComponentList'));
 const ComponentEdit = React.lazy(() => import('./ComponentEdit'));
+
+// relations
+const RelationInPageList = React.lazy(() => import('@pages/commons/RelationInPageList'));
+const RelationInSkinList = React.lazy(() => import('@pages/commons/RelationInSkinList'));
+const RelationInContainerList = React.lazy(() => import('@pages/commons/RelationInContainerList'));
 
 /**
  * 컴포넌트 관리
@@ -18,7 +24,13 @@ const ComponentEdit = React.lazy(() => import('./ComponentEdit'));
 const Component = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const [openTabIdx, setOpenTabIdx] = useState(0);
+
+    const { component } = useSelector((store) => ({
+        component: store.component.component,
+    }));
+
+    // state
+    const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     /**
      * 도메인 삭제
@@ -74,8 +86,6 @@ const Component = () => {
         // unmount시 스토어초기화
         return () => {
             dispatch(clearStore());
-            // dispatch(clearRelationList());
-            // dispatch(clearHistory());
         };
     }, [dispatch]);
 
@@ -94,54 +104,35 @@ const Component = () => {
                 </Suspense>
             </MokaCard>
 
+            {/* 등록/수정 */}
             <Switch>
-                <Route
-                    path={['/component', '/component/:componentSeq']}
-                    exact
-                    render={() => (
-                        <>
-                            {/* 등록/수정 */}
-                            <ComponentEdit onDelete={handleClickDelete} />
-
-                            {/* 탭 */}
-                            <MokaIconTabs
-                                onSelectNav={(idx) => setOpenTabIdx(idx)}
-                                tabWidth={412}
-                                // tabs={[
-                                //     <Suspense>
-                                //         <TemplateEdit show={openTabIdx === '0'} />
-                                //     </Suspense>,
-                                //     <Suspense>
-                                //         <TemplatePageList show={openTabIdx === '1'} />
-                                //     </Suspense>,
-                                //     <Suspense>
-                                //         <TemplateSkinList show={openTabIdx === '2'} />
-                                //     </Suspense>,
-                                //     <Suspense>
-                                //         <TemplateContainerList show={openTabIdx === '3'} />
-                                //     </Suspense>,
-                                //     <Suspense>
-                                //         <TemplateComponentList show={openTabIdx === '4'} />
-                                //     </Suspense>,
-                                //     <Suspense>
-                                //         <TemplateHistoryList show={openTabIdx === '5'} />
-                                //     </Suspense>,
-                                // ]}
-                                tabNavWidth={48}
-                                tabNavPosition="right"
-                                tabNavs={[
-                                    { title: '템플릿 정보', text: 'Info' },
-                                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
-                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },
-                                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
-                                    { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
-                                ]}
-                            />
-                        </>
-                    )}
-                />
+                <Route path={['/component', '/component/:componentSeq']} exact render={() => <ComponentEdit onDelete={handleClickDelete} />} />
             </Switch>
+
+            {/* 탭 */}
+            <MokaIconTabs
+                onSelectNav={(idx) => setActiveTabIdx(idx)}
+                tabWidth={412}
+                tabs={[
+                    <Suspense>
+                        <RelationInPageList show={activeTabIdx === '0'} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
+                    </Suspense>,
+                    <Suspense>
+                        <RelationInSkinList show={activeTabIdx === '1'} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
+                    </Suspense>,
+                    <Suspense>
+                        <RelationInContainerList show={activeTabIdx === '2'} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
+                    </Suspense>,
+                ]}
+                tabNavWidth={48}
+                tabNavPosition="right"
+                tabNavs={[
+                    { title: '템플릿 정보', text: 'Info' },
+                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
+                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
+                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },
+                ]}
+            />
         </div>
     );
 };

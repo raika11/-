@@ -14,13 +14,11 @@ export const CLEAR_STORE = 'template/CLEAR_STORE';
 export const CLEAR_TEMPLATE = 'template/CLEAR_TEMPLATE';
 export const CLEAR_LIST = 'template/CLEAR_LIST';
 export const CLEAR_SEARCH = 'template/CLEAR_SEARCH';
-export const CLEAR_RELATION_LIST = 'template/CLEAR_RELATION_LIST';
 export const CLEAR_HISTORY = 'template/CLEAR_HISTORY';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearTemplate = createAction(CLEAR_TEMPLATE);
 export const clearList = createAction(CLEAR_LIST);
 export const clearSearch = createAction(CLEAR_SEARCH);
-export const clearRelationList = createAction(CLEAR_RELATION_LIST);
 export const clearHistory = createAction(CLEAR_HISTORY);
 
 /**
@@ -60,39 +58,10 @@ export const [DELETE_TEMPLATE, DELETE_TEMPLATE_SUCCESS] = createRequestActionTyp
 export const deleteTemplate = createAction(DELETE_TEMPLATE, ({ templateSeq, callback }) => ({ templateSeq, callback }));
 
 /**
- * 관련아이템 검색조건 변경
- */
-export const CHANGE_SEARCH_PG_OPTION = 'template/CHANGE_SEARCH_PG_OPTION';
-export const CHANGE_SEARCH_SK_OPTION = 'template/CHANGE_SEARCH_SK_OPTION';
-export const CHANGE_SEARCH_CT_OPTION = 'template/CHANGE_SEARCH_CT_OPTION';
-export const CHANGE_SEARCH_CP_OPTION = 'template/CHANGE_SEARCH_CP_OPTION';
-export const changeSearchPGOption = createAction(CHANGE_SEARCH_PG_OPTION, (search) => search);
-export const changeSearchSKOption = createAction(CHANGE_SEARCH_SK_OPTION, (search) => search);
-export const changeSearchCTOption = createAction(CHANGE_SEARCH_CT_OPTION, (search) => search);
-export const changeSearchCPOption = createAction(CHANGE_SEARCH_CP_OPTION, (search) => search);
-
-/**
- * 관련아이템 데이터 조회
+ * 관련아이템있는지 확인
  */
 export const HAS_RELATION_LIST = 'template/HAS_RELATION_LIST';
-export const [GET_RELATION_LIST, GET_RELATION_LIST_SUCCESS, GET_RELATION_LIST_FAILURE] = createRequestActionTypes('template/GET_RELATION_LIST');
 export const hasRelationList = createAction(HAS_RELATION_LIST, (payload) => payload);
-export const getRelationPGList = createAction(GET_RELATION_LIST, (...actions) => ({
-    actions: actions,
-    relType: 'PG',
-}));
-export const getRelationSKList = createAction(GET_RELATION_LIST, (...actions) => ({
-    actions: actions,
-    relType: 'SK',
-}));
-export const getRelationCTList = createAction(GET_RELATION_LIST, (...actions) => ({
-    actions: actions,
-    relType: 'CT',
-}));
-export const getRelationCPList = createAction(GET_RELATION_LIST, (...actions) => ({
-    actions: actions,
-    relType: 'CP',
-}));
 
 /**
  * 히스토리 검색조건 변경

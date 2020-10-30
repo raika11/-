@@ -6,24 +6,28 @@ export default [
         headerName: 'ID',
         field: 'containerSeq',
         width: 50,
-        // cellClass: 'ag-cell-center',
-        // cellStyle: { textAlign: 'center' },
     },
     {
         headerName: '컨테이너명',
-        field: 'pageName',
+        field: 'containerName',
         width: 158,
     },
     {
         headerName: '',
         field: 'preview',
         width: 36,
-        cellRendererFramework: (row) => <MokaTablePreviewButton {...row} />,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTablePreviewButton {...row} onClick={data.handleClickPreview} />;
+        },
     },
     {
         headerName: '',
         field: 'link',
         width: 36,
-        cellRendererFramework: (row) => <MokaTableLinkButton {...row} />,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;
+        },
     },
 ];

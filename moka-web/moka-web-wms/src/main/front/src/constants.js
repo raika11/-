@@ -20,6 +20,14 @@ export const MODAL_PAGESIZE_OPTIONS = [15, 30, 60];
 // 그룹당 페이지수
 export const DISPLAY_PAGE_NUM = 5;
 
+// TEMS 아이템 타입
+export const ITEM_PG = 'PG';
+export const ITEM_SK = 'SK';
+export const ITEM_CT = 'CT';
+export const ITEM_CP = 'CP';
+export const ITEM_TP = 'TG';
+export const ITEM_DS = 'DS';
+
 // 공통코드 : API 공통코드
 export const CODETYPE_API = 'API';
 // 공통코드 : 페이지타입

@@ -11,6 +11,7 @@ export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) =>
  * 스토어 데이터 삭제
  */
 export const CLEAR_STORE = 'relation/CLEAR_STORE';
+export const clearStore = createAction(CLEAR_STORE);
 
 /**
  * 데이터 조회

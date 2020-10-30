@@ -157,54 +157,6 @@ function* copyTemplate({ payload: { templateSeq, templateName, domainId, callbac
 const hasRelationList = createRequestSaga(act.HAS_RELATION_LIST, api.hasRelationList, true);
 
 /**
- * 관련아이템 목록 조회
- * @param {string} param0.payload.relType PG|SK|CT|CP
- * @param {array} param0.payload.actions api 호출 전 액션
- */
-function* getRelationList({ payload: { actions, relType } }) {
-    const ACTION = act.GET_RELATION_LIST;
-
-    yield put(startLoading(ACTION));
-
-    try {
-        // 검색 전에 배열로 들어온 액션들을 먼저 실행시킨다
-        if (actions && actions.length > 0) {
-            for (let i = 0; i < actions.length; i++) {
-                const act = actions[i];
-                if (act) {
-                    yield put({
-                        type: act.type,
-                        payload: act.payload,
-                    });
-                }
-            }
-        }
-        // 검색 조건
-        const searchOption = yield select((store) => store.templateRelationList[relType]);
-        const response = yield call(api.getRelationList, searchOption);
-
-        if (response.data.header.success) {
-            yield put({
-                type: act.GET_RELATION_LIST_SUCCESS,
-                payload: { ...response.data, relType },
-            });
-        } else {
-            yield put({
-                type: act.GET_RELATION_LIST_FAILURE,
-                payload: { relType, payload: response.data },
-            });
-        }
-    } catch (e) {
-        yield put({
-            type: act.GET_RELATION_LIST_FAILURE,
-            payload: { relType, payload: errorResponse(e) },
-        });
-    }
-
-    yield put(finishLoading(ACTION));
-}
-
-/**
  * 히스토리 목록 조회
  */
 const getHistoryList = callApiAfterActions(act.GET_HISTORY_LIST, api.getHistoryList, (store) => store.templateHistory);
@@ -217,6 +169,5 @@ export default function* saga() {
     yield takeLatest(act.DELETE_TEMPLATE, deleteTemplate);
     yield takeLatest(act.COPY_TEMPLATE, copyTemplate);
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
-    yield takeLatest(act.GET_RELATION_LIST, getRelationList);
     yield takeLatest(act.GET_HISTORY_LIST, getHistoryList);
 }

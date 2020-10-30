@@ -133,6 +133,7 @@ const MokaEditorCore = forwardRef((props, ref) => {
     }, [error]);
 
     useEffect(() => {
+        // tag가 있으면 태그 삽입
         if (tag && tag !== '') {
             const editorInstance = editorRef.current.editorInstance;
             const monaco = editorRef.current.monaco;

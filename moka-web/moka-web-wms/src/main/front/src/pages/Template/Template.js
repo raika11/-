@@ -7,7 +7,8 @@ import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
-import { clearStore, clearHistory, clearRelationList, deleteTemplate, hasRelationList } from '@store/template';
+import { ITEM_TP } from '@/constants';
+import { clearStore, clearHistory, deleteTemplate, hasRelationList } from '@store/template';
 import { notification, toastr } from '@utils/toastUtil';
 
 import TemplateEditor from './TemplateEditor';
@@ -15,10 +16,10 @@ const TemplateList = React.lazy(() => import('./TemplateList'));
 const TemplateEdit = React.lazy(() => import('./TemplateEdit'));
 
 // relations
-const RelationPageList = React.lazy(() => import('@pages/commons/RelationPageList'));
-const TemplateSkinList = React.lazy(() => import('./relations/TemplateSkinList'));
-const TemplateContainerList = React.lazy(() => import('./relations/TemplateContainerList'));
-const TemplateComponentList = React.lazy(() => import('./relations/TemplateComponentList'));
+const RelationInPageList = React.lazy(() => import('@pages/commons/RelationInPageList'));
+const RelationInSkinList = React.lazy(() => import('@pages/commons/RelationInSkinList'));
+const RelationInContainerList = React.lazy(() => import('@pages/commons/RelationInContainerList'));
+const RelationInComponentList = React.lazy(() => import('@pages/commons/RelationInComponentList'));
 const TemplateHistoryList = React.lazy(() => import('./relations/TemplateHistoryList'));
 
 /**
@@ -133,7 +134,6 @@ const Template = () => {
     React.useEffect(() => {
         return () => {
             dispatch(clearStore());
-            dispatch(clearRelationList());
             dispatch(clearHistory());
         };
     }, [dispatch]);
@@ -169,16 +169,16 @@ const Template = () => {
                         <TemplateEdit show={activeTabIdx === '0'} onDelete={handleClickDelete} />
                     </Suspense>,
                     <Suspense>
-                        <RelationPageList show={activeTabIdx === '1'} relSeqType="TP" relSeq={template.templateSeq} />
+                        <RelationInPageList show={activeTabIdx === '1'} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <TemplateSkinList show={activeTabIdx === '2'} />
+                        <RelationInSkinList show={activeTabIdx === '2'} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <TemplateContainerList show={activeTabIdx === '3'} />
+                        <RelationInContainerList show={activeTabIdx === '3'} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <TemplateComponentList show={activeTabIdx === '4'} />
+                        <RelationInComponentList show={activeTabIdx === '4'} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
                         <TemplateHistoryList show={activeTabIdx === '5'} />

@@ -1,16 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
-import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption } from '@store/relation';
-import columnDefs from './RelationPageListColums';
+import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
+import columnDefs from './RelationInPageListColums';
+import { ITEM_TP, ITEM_CP, ITEM_CT, ITEM_SK, ITEM_DS } from '@/constants';
+
+const propTypes = {
+    /**
+     * relSeq의 타입
+     */
+    relSeqType: PropTypes.oneOf([ITEM_TP, ITEM_CP, ITEM_CT, ITEM_SK, ITEM_DS]),
+    /**
+     * relSeq
+     */
+    relSeq: PropTypes.number,
+    /**
+     * show === true이면 리스트를 조회한다
+     */
+    show: PropTypes.bool,
+};
+const defaultProps = {
+    show: true,
+};
 
 /**
  * 오른쪽 탭에 들어가는
- * 관련 페이지 리스트
+ * 관련된 상위(부모의) 페이지 리스트
  */
-const RelationPageList = (props) => {
+const RelationInPageList = (props) => {
     const { show, relSeqType, relSeq } = props;
     const history = useHistory();
     const dispatch = useDispatch();
@@ -49,7 +69,7 @@ const RelationPageList = (props) => {
 
     /**
      * row의 프리뷰 버튼 클릭
-     * @param {object} data 페이지데이터
+     * @param {object} data row 데이터
      */
     const handleClickPreview = (data) => {
         // 프리뷰 버튼 클릭
@@ -57,14 +77,11 @@ const RelationPageList = (props) => {
 
     /**
      * row의 링크 버튼 클릭
-     * @param {object} data 페이지데이터
+     * @param {object} data row 데이터
      */
     const handleClickLink = (data) => {
         window.open(`/page/${data.pageSeq}`);
     };
-
-    // TODO
-    // 다른 버튼들도 기능 만들어서 추가 ㄱ
 
     useEffect(() => {
         setRowData(
@@ -75,6 +92,12 @@ const RelationPageList = (props) => {
             })),
         );
     }, [list]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     useEffect(() => {
         if (show && relSeq) {
@@ -96,12 +119,7 @@ const RelationPageList = (props) => {
         <MokaCard titleClassName="mb-0" title="페이지 검색">
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-3">
-                <Button
-                    variant="dark"
-                    onClick={() => {
-                        history.push('/page');
-                    }}
-                >
+                <Button variant="dark" onClick={() => history.push('/page')}>
                     페이지 추가
                 </Button>
             </div>
@@ -125,4 +143,7 @@ const RelationPageList = (props) => {
     );
 };
 
-export default RelationPageList;
+RelationInPageList.propTypes = propTypes;
+RelationInPageList.defaultProps = defaultProps;
+
+export default RelationInPageList;

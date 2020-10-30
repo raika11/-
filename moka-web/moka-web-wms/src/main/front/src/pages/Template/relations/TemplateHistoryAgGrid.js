@@ -44,7 +44,7 @@ const TemplateHistoryAgGrid = () => {
             agGridHeight={625}
             columnDefs={columnDefs}
             rowData={list}
-            onRowNodeId={(page) => page.pageSeq}
+            onRowNodeId={(history) => history.seq}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}

@@ -22,7 +22,7 @@ const Dataset = () => {
         return () => {
             dispatch(clearStore());
         };
-    });
+    }, [dispatch]);
 
     return (
         <div className="d-flex">

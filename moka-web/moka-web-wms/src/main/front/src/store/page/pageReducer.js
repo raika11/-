@@ -108,6 +108,7 @@ export default handleActions(
                 draft.pageBody = body.pageBody;
                 draft.inputTag = initialState.inputTag;
                 draft.pageError = initialState.pageError;
+                draft.invalidList = initialState.invalidList;
             });
         },
         [act.GET_PAGE_FAILURE]: (state, { payload }) => {
@@ -116,6 +117,7 @@ export default handleActions(
                 draft.pageBody = initialState.pageBody;
                 draft.inputTag = initialState.inputTag;
                 draft.pageError = payload;
+                draft.invalidList = payload.body ? payload.body : initialState.invalidList;
             });
         },
         /**

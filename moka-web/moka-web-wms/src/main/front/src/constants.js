@@ -49,3 +49,6 @@ export const API_PARAM_HINT_BUSE_ID = 'buseId';
 export const API_PARAM_HINT_GIJA_ID = 'gijaId';
 export const API_PARAM_HINT_SERIES_ID = 'seriesId';
 export const API_PARAM_HINT_CODE_ID = 'codeId';
+
+// W3C검사 URL
+export const W3C_URL = 'https://validator.w3.org/check';

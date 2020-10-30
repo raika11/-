@@ -17,6 +17,7 @@ import page from '@store/page/pageReducer';
 import pageHistory from '@store/page/pageHistoryReducer';
 import editForm from '@/store/editForm/editFormReducer';
 import relation from '@store/relation/relationReducer';
+import merge from '@store/merge/mergeReducer';
 
 export default combineReducers({
     toastr,
@@ -36,4 +37,5 @@ export default combineReducers({
     pageHistory,
     editForm,
     relation,
+    merge,
 });

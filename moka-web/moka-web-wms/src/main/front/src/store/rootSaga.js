@@ -11,7 +11,21 @@ import componentSaga from '@store/component/componentSaga';
 import pageSaga from '@store/page/pageSaga';
 import editFormSaga from '@/store/editForm/editFormSaga';
 import relationSaga from '@store/relation/relationSaga';
+import mergeSaga from '@store/merge/mergeSaga';
 
 export default function* rootSaga() {
-    yield all([appSaga(), authSaga(), domainSaga(), templateSaga(), codeMgtSaga(), reservedSaga(), datasetdSaga(), componentSaga(), pageSaga(), editFormSaga(), relationSaga()]);
+    yield all([
+        appSaga(),
+        authSaga(),
+        domainSaga(),
+        templateSaga(),
+        codeMgtSaga(),
+        reservedSaga(),
+        datasetdSaga(),
+        componentSaga(),
+        pageSaga(),
+        editFormSaga(),
+        relationSaga(),
+        mergeSaga(),
+    ]);
 }

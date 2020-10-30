@@ -2,10 +2,12 @@ package jmnet.moka.core.common.util;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import jmnet.moka.core.common.MokaConstants;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -150,5 +152,14 @@ public class HttpHelper {
         return RequestContextHolder.getRequestAttributes() != null
                 ? ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
                 : null;
+    }
+
+    /**
+     * 현재 locale 정보를 반환한다.
+     *
+     * @return Locale
+     */
+    public static Locale getLocale() {
+        return LocaleContextHolder.getLocale();
     }
 }

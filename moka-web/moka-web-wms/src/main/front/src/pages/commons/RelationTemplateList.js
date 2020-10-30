@@ -141,7 +141,7 @@ const RelationTemplateList = (props) => {
      * @param {object} data row data
      */
     const handleClickLink = (data) => {
-        window.open(`template/${data.templateSeq}`);
+        window.open(`/template/${data.templateSeq}`);
     };
 
     useEffect(() => {

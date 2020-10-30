@@ -1,19 +1,27 @@
-import React from 'react';
-import { MokaCard } from '@components';
-import Search from './PageChildComponentSearch';
-import AgGrid from './PageChildComponentAgGrid';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RelationComponentList } from '@pages/commons';
+import { ITEM_PG } from '@/constants';
+import ComponentHtmlModal from '../modals/ComponentHtmlModal';
 
-/**
- * 관련 컴포넌트
- */
-const PageChildComponentList = () => {
+const PageChildComponentList = ({ show }) => {
+    const { page } = useSelector((store) => ({
+        page: store.page.page,
+    }));
+
+    const [showModal, setShowModal] = useState(false);
+    const [selected, setSelected] = useState({});
+
+    const handleRowClicked = (data) => {
+        setSelected(data);
+        setShowModal(true);
+    };
+
     return (
-        <MokaCard title="컴포넌트 검색" titleClassName="mb-0">
-            {/* 검색 및 버튼 */}
-            <Search />
-            {/* 목록 및 페이징 */}
-            <AgGrid />
-        </MokaCard>
+        <React.Fragment>
+            <RelationComponentList show={show} relSeqType={ITEM_PG} relSeq={page.pageSeq} onRowClicked={handleRowClicked} />
+            <ComponentHtmlModal data={selected} show={showModal} onHide={() => setShowModal(false)} />
+        </React.Fragment>
     );
 };
 

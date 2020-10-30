@@ -8,8 +8,7 @@ import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@componen
 import { initialState, getDatasetListModal, GET_DATASET_LIST_MODAL } from '@store/dataset';
 import columnDefs from './DatasetListModalColums';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
-
-export const { searchTypeList } = initialState;
+import { defaultDatasetSearchType } from './index';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -182,7 +181,7 @@ const DatsetListModal = (props) => {
                                 });
                             }}
                         >
-                            {searchTypeList.map((type) => (
+                            {defaultDatasetSearchType.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>

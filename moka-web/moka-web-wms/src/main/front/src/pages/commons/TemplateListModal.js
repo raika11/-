@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+
+import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import { MokaModal, MokaInput, MokaSearchInput, MokaTable, MokaThumbTable, MokaTableTypeButton } from '@components';
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { initialState, GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
-import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
-
-export const { searchTypeList } = initialState;
+import { defaultTemplateSearchType } from './index';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -292,7 +292,7 @@ const TemplateListModal = (props) => {
                                 );
                             }}
                         >
-                            {searchTypeList.map((type) => (
+                            {defaultTemplateSearchType.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>

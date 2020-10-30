@@ -19,6 +19,14 @@ export const initialState = {
         searchType: 'all',
         keyword: '',
     },
+    searchTypeList: [
+        { id: 'all', name: '전체' },
+        { id: 'componentSeq', name: '컴포넌트ID' },
+        { id: 'componentName', name: '컴포넌트명' },
+        { id: 'templateSeq', name: '템플릿ID' },
+        { id: 'templateName', name: '템플릿명' },
+        { id: 'templateBody', name: 'TEMS 소스' },
+    ],
     component: {
         domain: {},
         template: {},

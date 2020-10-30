@@ -404,7 +404,7 @@ public class DatasetRestController {
                 return new ResponseEntity<>(resultDto, HttpStatus.OK);
             }
             tpsLogger.success(ActionType.SELECT, true);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO LOAD API LIST] : %s", targetUrl, e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD API LIST]", e, true);

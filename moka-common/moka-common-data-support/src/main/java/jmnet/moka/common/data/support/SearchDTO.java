@@ -3,26 +3,31 @@ package jmnet.moka.common.data.support;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Column;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.exception.NoSortColumnException;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.util.MultiValueMap;
-import jmnet.moka.common.utils.McpString;
-import jmnet.moka.common.utils.exception.NoSortColumnException;
 
 /**
  * SearchDTO
- * 
- * @author ince
  *
+ * @author ince
  */
+@Setter
+@Getter
+@Builder
 public class SearchDTO implements Serializable {
 
     private static final long serialVersionUID = -2765846428393381760L;
@@ -68,6 +73,32 @@ public class SearchDTO implements Serializable {
     protected String defaultSort;
 
     /**
+     * 검색타입
+     */
+    private String searchType;
+
+    /**
+     * 검색어
+     */
+    private String keyword;
+
+    /**
+     * 총갯수 사용여부
+     */
+    @Builder.Default
+    private String useTotal = McpString.YES;
+
+    /**
+     * 총갯수
+     */
+    private Long total;
+
+    /**
+     * 검색결과 성공여부
+     */
+    private Integer returnValue;
+
+    /**
      * @return the extraParamMap
      */
     public MultiValueMap<String, String> getExtraParamMap() {
@@ -90,8 +121,11 @@ public class SearchDTO implements Serializable {
     }
 
     public String getString(String key, int idx) {
-        return McpString.defaultValue(!extraParamMap.isEmpty() && extraParamMap.get(key) != null
-                && extraParamMap.get(key).size() > idx ? extraParamMap.get(key).get(idx) : "");
+        return McpString.defaultValue(!extraParamMap.isEmpty() && extraParamMap.get(key) != null && extraParamMap
+                .get(key)
+                .size() > idx ? extraParamMap
+                .get(key)
+                .get(idx) : "");
     }
 
     public void add(String key, String value) {
@@ -100,8 +134,8 @@ public class SearchDTO implements Serializable {
 
     /**
      * Add all the values of the given list to the current list of values for the given key.
-     * 
-     * @param key they key
+     *
+     * @param key    they key
      * @param values the values to be added
      * @since 5.0
      */
@@ -111,7 +145,7 @@ public class SearchDTO implements Serializable {
 
     /**
      * Add all the values of the given {@code MultiValueMap} to the current values.
-     * 
+     *
      * @param values the values to be added
      * @since 5.0
      */
@@ -121,8 +155,8 @@ public class SearchDTO implements Serializable {
 
     /**
      * Set the given single value under the given key.
-     * 
-     * @param key the key
+     *
+     * @param key   the key
      * @param value the value to set
      */
     public void set(String key, String value) {
@@ -131,7 +165,7 @@ public class SearchDTO implements Serializable {
 
     /**
      * Set the given values under.
-     * 
+     *
      * @param values the values.
      */
     public void setAll(Map<String, String> values) {
@@ -184,7 +218,7 @@ public class SearchDTO implements Serializable {
 
     /**
      * sort condition add, format:field,direction
-     * 
+     *
      * @param sort the sort to add
      */
     public void addSort(String sort) {
@@ -195,7 +229,7 @@ public class SearchDTO implements Serializable {
 
     /**
      * sort condition remove, format:field,direction
-     * 
+     *
      * @param sort the sort to remove
      */
     public void removeSort(String sort) {
@@ -206,7 +240,7 @@ public class SearchDTO implements Serializable {
 
     /**
      * sort condition remove
-     * 
+     *
      * @param idx condition index
      */
     public void removeSort(int idx) {
@@ -217,7 +251,7 @@ public class SearchDTO implements Serializable {
 
     /**
      * sort condition multiple remove
-     * 
+     *
      * @param list sort condition list
      */
     public void removeAllSort(Collection<String> list) {
@@ -237,7 +271,7 @@ public class SearchDTO implements Serializable {
 
     /**
      * Pageable 반환
-     * 
+     *
      * @return Pageable
      */
     public Pageable getPageable() {
@@ -246,7 +280,7 @@ public class SearchDTO implements Serializable {
 
     /**
      * Pageable 반환
-     * 
+     *
      * @param sortList 정렬정보
      * @return Pageable
      */
@@ -256,13 +290,12 @@ public class SearchDTO implements Serializable {
 
     /**
      * 정렬 조건 목록 반환
-     * 
+     *
      * @return 정렬 조건 목록
      */
     public List<Order> getOrderList() {
         if (this.sort == null && McpString.isNotEmpty(defaultSort)) {
-            List<String> sortList = 
-                    new ArrayList<>(Arrays.asList(new String[] {this.defaultSort}));
+            List<String> sortList = new ArrayList<>(Collections.singletonList(this.defaultSort));
             this.setSort(sortList);
         }
         return getOrderList(this.sort);
@@ -270,22 +303,21 @@ public class SearchDTO implements Serializable {
 
     /**
      * <pre>
-     * 정렬 조건 목록 반환 파라미터로 받은 정렬정보와 서버에서 사용 할 정렬정보가 
-     * 서로 달라 매핑 처리해야 하는 경우 사용 
+     * 정렬 조건 목록 반환 파라미터로 받은 정렬정보와 서버에서 사용 할 정렬정보가
+     * 서로 달라 매핑 처리해야 하는 경우 사용
      * 외부에서 정렬조건을 정제하여 사용
      * </pre>
-     * 
+     *
      * @param sortList 정렬정보
      * @return 정렬 조건 목록
      */
     public List<Order> getOrderList(List<String> sortList) {
-        List<Order> orderList = new ArrayList<Sort.Order>();
+        List<Order> orderList = new ArrayList<>();
         if (sortList != null) {
-            sortList.stream().forEach(item -> {
+            sortList.forEach(item -> {
                 if (item != null) {
                     if (item.split(",").length > 1) {
-                        orderList.add(new Order(Direction.fromString(item.split(",")[1]),
-                                item.split(",")[0]));
+                        orderList.add(new Order(Direction.fromString(item.split(",")[1]), item.split(",")[0]));
                     } else {
                         orderList.add(Order.asc(item));
                     }
@@ -296,7 +328,8 @@ public class SearchDTO implements Serializable {
         return orderList;
     }
 
-    public SearchDTO() {}
+    public SearchDTO() {
+    }
 
     public SearchDTO(String defaultSort) {
         this.defaultSort = defaultSort;
@@ -326,30 +359,29 @@ public class SearchDTO implements Serializable {
      * <pre>
      * Vo기준 정렬필드조회
      * </pre>
-     * 
+     *
      * @return 정렬필드목록
      * @throws NoSortColumnException 정렬컬럼이 Vo에 없음 예외
      */
-    protected List<String> getSortByColumn() throws NoSortColumnException {
+    protected List<String> getSortByColumn()
+            throws NoSortColumnException {
         if (this.voClass == null) {
             throw new NoSortColumnException("Entity Class not set");
         }
-        List<String> sortList = new ArrayList<String>();
+        List<String> sortList = new ArrayList<>();
         if (this.sort == null && McpString.isNotEmpty(defaultSort)) {
-            this.setSort(Arrays.asList(new String[] {this.defaultSort}));
+            this.setSort(Collections.singletonList(this.defaultSort));
         } else {
             sortList.addAll(this.sort);
         }
-        List<String> sortByColumnList = new ArrayList<String>();
+        List<String> sortByColumnList = new ArrayList<>();
         for (String sort : sortList) {
             String[] splitted = sort.split(",");
             if (splitted.length == 2) {
                 try {
-                    sortByColumnList
-                            .add(getColumnNameFromAnnotation(splitted[0]) + " " + splitted[1]);
+                    sortByColumnList.add(getColumnNameFromAnnotation(splitted[0]) + " " + splitted[1]);
                 } catch (NoSuchFieldException | SecurityException e) {
-                    throw new NoSortColumnException(String.format("Sort Column not matched: %s %s",
-                            this.voClass.getName(), sort));
+                    throw new NoSortColumnException(String.format("Sort Column not matched: %s %s", this.voClass.getName(), sort));
                 }
             }
         }

@@ -489,7 +489,7 @@ public class MenuRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO SELECT MENU] menuId: {}) {}", menuId, e.getMessage());
+            log.error("[FAIL TO SELECT MENU] menuId: {} {}", menuId, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
             throw new Exception(messageByLocale.get("tps.common.error", request), e);
@@ -560,7 +560,7 @@ public class MenuRestController {
             return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE MENU] menuId: {}) {}", menuId, e.getMessage());
+            log.error("[FAIL TO DELETE MENU] menuId: {} {}", menuId, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
             throw new Exception(messageByLocale.get("tps.menu.error.delete", request), e);

@@ -509,7 +509,7 @@ public class EditFormRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE MENU] menuId: {}) {}", formSeq, e.getMessage());
+            log.error("[FAIL TO DELETE MENU] menuId: {} {}", formSeq, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
             throw new Exception(messageByLocale.get("tps.edit-form.error.delete", request), e);
@@ -560,7 +560,7 @@ public class EditFormRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE MENU] menuId: {}) {}", formSeq, e.getMessage());
+            log.error("[FAIL TO DELETE MENU] menuId: {} {}", formSeq, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
             throw new Exception(messageByLocale.get("tps.edit-form.error.delete", request), e);

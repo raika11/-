@@ -279,7 +279,7 @@ public class ComponentRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE COMPONENT] seq: {}) {}", componentDTO.getComponentSeq(), e.getMessage());
+            log.error("[FAIL TO UPDATE COMPONENT] seq: {} {}", componentDTO.getComponentSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE COMPONENT]", e, true);
             throw new Exception(messageByLocale.get("tps.component.error.save", request), e);
         }
@@ -344,7 +344,7 @@ public class ComponentRestController {
                 }
             }
         } catch (Exception e) {
-            log.error("[COMPONENT HISTORY LOAD FAIL] seq: {}) {}", componentDTO.getComponentSeq(), e.getMessage());
+            log.error("[COMPONENT HISTORY LOAD FAIL] seq: {} {}", componentDTO.getComponentSeq(), e.getMessage());
         }
 
         // 히스토리에서 자동 데이터셋 찾아서 셋팅
@@ -359,7 +359,7 @@ public class ComponentRestController {
                 }
             }
         } catch (Exception e) {
-            log.error("[COMPONENT HISTORY LOAD FAIL] seq: {}) {}", componentDTO.getComponentSeq(), e.getMessage());
+            log.error("[COMPONENT HISTORY LOAD FAIL] seq: {} {}", componentDTO.getComponentSeq(), e.getMessage());
         }
 
         return componentDTO;
@@ -406,7 +406,7 @@ public class ComponentRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE COMPONENT] seq: {}) {}", componentSeq, e.getMessage());
+            log.error("[FAIL TO DELETE COMPONENT] seq: {} {}", componentSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE COMPONENT]", e, true);
             throw new Exception(messageByLocale.get("tps.component.error.delete", request), e);
         }
@@ -477,7 +477,7 @@ public class ComponentRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[COMPONENT RELATION EXISTENCE CHECK FAILED] seq: {}) {}", componentSeq, e.getMessage());
+            log.error("[COMPONENT RELATION EXISTENCE CHECK FAILED] seq: {} {}", componentSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[COMPONENT RELATION EXISTENCE CHECK FAILEDE]", e, true);
             throw new Exception(messageByLocale.get("tps.component.error.hasRelations", request), e);
         }

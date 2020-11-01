@@ -342,7 +342,7 @@ public class DatasetRestController {
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE DATASET] seq: {}) {}", datasetDTO.getDatasetSeq(), e.getMessage());
+            log.error("[FAIL TO UPDATE DATASET] seq: {} {}", datasetDTO.getDatasetSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE DATASET]", e, true);
             throw new Exception(messageByLocale.get("tps.dataset.error.save", request), e);
         }
@@ -457,7 +457,7 @@ public class DatasetRestController {
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE DATASET] seq: {}) {}", datasetSeq, e.getMessage());
+            log.error("[FAIL TO DELETE DATASET] seq: {} {}", datasetSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE DATASET]", e, true);
             throw new Exception(messageByLocale.get("tps.dataset.error.delete", request), e);
         }
@@ -526,7 +526,7 @@ public class DatasetRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[DATASET RELATION EXISTENCE CHECK FAILED] seq: {}) {}", datasetSeq, e.getMessage());
+            log.error("[DATASET RELATION EXISTENCE CHECK FAILED] seq: {} {}", datasetSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[DATASET RELATION EXISTENCE CHECK FAILEDE]", e, true);
             throw new Exception(messageByLocale.get("tps.dataset.error.hasRelations", request), e);
         }

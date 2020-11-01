@@ -253,7 +253,7 @@ public class ContainerRestController {
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE CONTAINER] seq: {}) {}", containerDTO.getContainerSeq(), e.getMessage());
+            log.error("[FAIL TO UPDATE CONTAINER] seq: {} {}", containerDTO.getContainerSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE CONTAINER]", e, true);
             throw new Exception(messageByLocale.get("tps.container.error.save", request), e);
         }
@@ -306,7 +306,7 @@ public class ContainerRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE CONTAINER] seq: {}) {}", containerSeq, e.getMessage());
+            log.error("[FAIL TO DELETE CONTAINER] seq: {} {}", containerSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE CONTAINER]", e, true);
             throw new Exception(messageByLocale.get("tps.container.error.delete", request), e);
         }
@@ -451,7 +451,7 @@ public class ContainerRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[CONTAINER RELATION EXISTENCE CHECK FAILED] seq: {}) {}", containerSeq, e.getMessage());
+            log.error("[CONTAINER RELATION EXISTENCE CHECK FAILED] seq: {} {}", containerSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[CONTAINER RELATION EXISTENCE CHECK FAILEDE]", e, true);
             throw new Exception(messageByLocale.get("tps.container.error.hasRelation", request), e);
         }

@@ -309,7 +309,7 @@ public class GroupRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE GROUP] groupCd: {}) {}", groupCd, e.getMessage());
+            log.error("[FAIL TO DELETE GROUP] groupCd: {} {}", groupCd, e.getMessage());
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
             throw new Exception(messageByLocale.get("tps.group.error.delete", request), e);

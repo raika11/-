@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
@@ -91,36 +92,52 @@ public class MergeRestController {
             String message = e.getMessage();
             String extra = Integer.toString(e.getLineNumber());
             invalidList.add(new InvalidDataDTO("content", message, extra));
-            tpsLogger.fail(ActionType.SELECT, message, true);
             String validMessage = messageByLocale.get("tps.merge.error.syntax", request);
+            log.error("[FAILED DUE TO AN ERROR IN GRAMMAR (TemplateParseException)]", e);
+            tpsLogger.fail(ActionType.SELECT, message, true);
             throw new InvalidDataException(invalidList, validMessage);
         } catch (Exception e) {
             String message = e.getMessage();
             invalidList.add(new InvalidDataDTO("content", message));
-            tpsLogger.fail(ActionType.SELECT, message, true);
             String validMessage = messageByLocale.get("tps.merge.error.syntax", request);
+            log.error("[FAILED DUE TO AN ERROR IN GRAMMAR (TemplateParseException)]", e);
+            tpsLogger.fail(ActionType.SELECT, message, true);
             throw new InvalidDataException(invalidList, validMessage);
         }
 
         ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
+        tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    // HTML 검사시 merge
-    @ApiOperation(value = "HTML ")
+    /**
+     * 페이지 미리보기
+     *
+     * @param request 요청
+     * @param pageDto 페이지정보
+     * @return 페이지 랜더링된 HTML소스
+     * @throws Exception 예외
+     */
+    @ApiOperation(value = "페이지 미리보기")
     @PostMapping(value = "/previewPG", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postPreviewPG(HttpServletRequest request, @RequestBody @Valid PageDTO pageDto)
             throws Exception {
-        ResultDTO<?> resultDto = null;
+
         // 도메인
-        String message = messageByLocale.get("tps.domain.error.no-data", request);
-        Domain domainInfo = domainService.findDomainById(pageDto.getDomain()
-                                                                .getDomainId())
-                                         .orElseThrow(() -> new NoDataException(message));
-
+        Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
+                                         .orElseThrow(() -> {
+                                             String message = messageByLocale.get("tps.common.error.no-data", request);
+                                             tpsLogger.fail(ActionType.SELECT, message, true);
+                                             return new NoDataException(message);
+                                        });
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
-
         DomainItem domainItem = domainDto.toDomainItem();
+
+        // 페이지
+        PageItem pageItem = pageDto.toPageItem();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
+
 
         try {
             // merger
@@ -128,62 +145,76 @@ public class MergeRestController {
             // appContext.getBean(MspPreviewTemplateMerger.class, domainItem);
             MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
 
-            PageItem pageItem = pageDto.toPageItem();
-            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-            pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
-                                                                   .format(df));
-
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, null, true);
 
             String content = sb.toString();
-            resultDto = new ResultDTO<String>(HttpStatus.OK, content);
+            ResultDTO<String>  resultDto = new ResultDTO<String>(HttpStatus.OK, content);
+            tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("Fail to Merge : %s", pageDto.getPageUrl(), e);
-            throw new Exception(messageByLocale.get("tps.common.error.merge", request), e);
+            log.error("[FAIL TO MERGE] pageSeq: {} {}", pageDto.getPageSeq(), e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
+            throw new Exception(messageByLocale.get("tps.merge.error.page", request), e);
         }
     }
 
-    // 컴포넌트 미리보기
+    /**
+     * 컴포넌트 미리보기
+     *
+     * @param request 요청
+     * @param pageSeq 페이지SEQ
+     * @param componentWorkSeq 작업중인 컴포넌트SEQ
+     * @param principal 작업자
+     * @param resourceYn 미리보기 리소스 포함여부
+     * @return 컴포넌트 랜더링된 HTML소스
+     * @throws Exception 예외
+     */
+    @ApiOperation(value = "컴포넌트 미리보기")
     @GetMapping(value = "/previewCP")
     public ResponseEntity<?> getPreviewCP(HttpServletRequest request, Long pageSeq, Long componentWorkSeq, Principal principal, String resourceYn)
             throws Exception {
-        ResultDTO<?> resultDto = null;
 
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+
+        // 페이지
+        Page pageInfo = pageService.findPageBySeq(pageSeq)
+            .orElseThrow(() -> {
+                String message = messageByLocale.get("tps.common.error.no-data", request);
+                tpsLogger.fail(ActionType.SELECT, message, true);
+                return new NoDataException(message);
+            });
+
+        PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
+        PageItem pageItem = pageDto.toPageItem();
+        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
+
+        // 도메인
+        Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
+            .orElseThrow(() -> {
+                String message = messageByLocale.get("tps.common.error.no-data", request);
+                tpsLogger.fail(ActionType.SELECT, message, true);
+                return new NoDataException(message);
+            });
+        DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
+        DomainItem domainItem = domainDto.toDomainItem();
+
 
         try {
-            // 페이지
-            String messagePG = messageByLocale.get("tps.page.error.noContent", request);
-            Page pageInfo = pageService.findPageBySeq(pageSeq)
-                                       .orElseThrow(() -> new NoDataException(messagePG));
-            PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
-            PageItem pageItem = pageDto.toPageItem();
-            pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
-                                                                   .format(df));
-
-            // 도메인
-            String messageDM = messageByLocale.get("tps.domain.error.no-data", request);
-            Domain domainInfo = domainService.findDomainById(pageDto.getDomain()
-                                                                    .getDomainId())
-                                             .orElseThrow(() -> new NoDataException(messageDM));
-            DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
-            DomainItem domainItem = domainDto.toDomainItem();
-
             // 컴포넌트 : work 컴포넌트정보를 모두 보내지는 않는다.
-            String messageCP = messageByLocale.get("tps.common.error.no-data", request);
             DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentsWorkBySeq(componentWorkSeq);
             if (componentVO == null) {
-                throw new NoDataException(messageCP);
+                String message = messageByLocale.get("tps.common.error.no-data", request);
+                tpsLogger.fail(ActionType.SELECT, message, true);
+                throw new NoDataException(message);
             }
             ComponentItem componentItem = componentVO.toComponentItem();
-            componentItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
-                                                                        .format(df));
+            componentItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
 
             List<String> componentIdList = new ArrayList<String>(1);
-            componentIdList.add(componentVO.getComponentSeq()
-                                           .toString());
+            componentIdList.add(componentVO.getComponentSeq().toString());
+
+            // merger
             MokaPreviewTemplateMerger dtm =
                     (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(),
                                                                    componentVO.getEditionSeq(), componentIdList);
@@ -192,11 +223,14 @@ public class MergeRestController {
             StringBuilder sb = dtm.merge(pageItem, componentItem, false, resourceYn.equals("Y"), false, false);
 
             String content = sb.toString();
-            resultDto = new ResultDTO<String>(HttpStatus.OK, content);
+            ResultDTO<String> resultDto = new ResultDTO<String>(HttpStatus.OK, content);
+            tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.common.error.merge", request), e);
+            log.error("[FAIL TO MERGE] componentWorkSeq: {} {}", componentWorkSeq, e.getMessage());
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
+            throw new Exception(messageByLocale.get("tps.merge.error.component", request), e);
         }
     }
 }

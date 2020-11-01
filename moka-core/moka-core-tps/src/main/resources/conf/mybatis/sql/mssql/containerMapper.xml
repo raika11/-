@@ -2,39 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.container.mapper.ContainerMapper">
 
-	<sql id="findAllWhere">
-		WHERE CONTAINER.DOMAIN_ID = #{domainId}
-		<!-- 검색 조건 -->
-		<if test="keyword != null and keyword != ''">
-			<choose>
-				<when test="searchType == 'containerSeq'">
-					AND CONTAINER.CONTAINER_SEQ = #{keyword}
-				</when>
-				<when test="searchType == 'containerName'">
-					AND CONTAINER.CONTAINER_NAME like '%${keyword}%'
-				</when>
-				<when test="searchType == 'containerBody'">
-					AND CONTAINER.CONTAINER_BODY like '%${keyword}%'
-				</when>
-				<when test="searchType == 'all'">
-					AND (
-						CONTAINER.CONTAINER_SEQ like '%${keyword}%'
-						OR CONTAINER.CONTAINER_NAME like '%${keyword}%' 
-						OR CONTAINER.CONTAINER_BODY like '%${keyword}%'
-					)
-				</when>
-			</choose>
-		</if>
-	</sql>
-	
-	<sql id="findAllOrder">
-		<if test="sortByColumn != null">
-			ORDER BY
-			<foreach open="" close="" collection="sortByColumn" item="sortItem" separator=",">
-				${sortItem}
-			</foreach>
-		</if>
-	</sql>
+	<!-- 페이지의 관련컨테이너 목록 조회 -->
+	<select id="findPageChildRels" parameterType="ContainerSearchDTO" resultType="ContainerVO" statementType="CALLABLE">
+		{ call UPA_WMS_CONTAINER_LIST_SEL_BY_PAGE(
+		#{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+		#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+		#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+	</select>
+
+	<!-- 콘텐츠스킨의 관련컨테이너 목록 조회 -->
+	<select id="findSkinChildRels" parameterType="ContainerSearchDTO" resultType="ContainerVO" statementType="CALLABLE">
+		{ call UPA_WMS_CONTAINER_LIST_SEL_BY_SKIN(
+		#{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+		#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+		#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+	</select>
 
 	<select id="findAll" parameterType="ContainerSearchDTO" resultType="ContainerVO" statementType="CALLABLE">
 		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_CONTAINER_LIST_SEL(
@@ -81,62 +69,5 @@
 			#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }
 	</select>
-	
-	<!-- 관련컨테이너 공통 컬럼  -->
-	<sql id="childRelsColumns">
-		CONTAINER.DOMAIN_ID,
-		CONTAINER.CONTAINER_SEQ,
-		CONTAINER.CONTAINER_NAME,
-		CONTAINER.CONTAINER_BODY
-	</sql>
-	
-	<!-- 페이지의 관련컨테이너 목록 조회 -->
-	<select id="findPageChildRels" parameterType="ContainerSearchDTO" resultType="ContainerVO">
-		SELECT  	
-			DISTINCT		
-			<include refid="childRelsColumns" />,
-			PREL.REL_ORDER
-		FROM WMS_PAGE_REL PREL, WMS_CONTAINER CONTAINER
-		<include refid="findAllWhere" />
-			AND PAGE_SEQ = #{keyword} 
-			AND PREL.REL_TYPE ='CT'
-			AND PREL.REL_SEQ = CONTAINER.CONTAINER_SEQ
-		<include refid="findAllOrder" />
-	</select>
-	
-	<select id="findPageChildRelsCount" parameterType="ContainerSearchDTO" resultType="java.lang.Long">
-		SELECT 
-			COUNT(DISTINCT CONTAINER.CONTAINER_SEQ) AS TOTAL_CNT
-		FROM WMS_PAGE_REL PREL, WMS_CONTAINER CONTAINER
-		<include refid="findAllWhere" />
-			AND PAGE_SEQ = #{keyword} 
-			AND PREL.REL_TYPE ='CT'
-			AND PREL.REL_SEQ = CONTAINER.CONTAINER_SEQ
-	</select>
-	
-	<!-- 콘텐츠스킨의 관련컨테이너 목록 조회 -->
-	<select id="findSkinChildRels" parameterType="ContainerSearchDTO" resultType="ContainerVO">
-		SELECT 
-			DISTINCT 			
-			<include refid="childRelsColumns" />,
-			REL_ORDER
-		FROM WMS_SKIN_REL AS PREL, WMS_CONTAINER CONTAINER
-		<include refid="findAllWhere" />
-			AND PREL.SKIN_SEQ = #{keyword}
-			AND PREL.REL_TYPE ='CT'
-			AND PREL.REL_SEQ = CONTAINER.CONTAINER_SEQ
-		<include refid="findAllOrder" />
-	</select>
-	
-	<select id="findSkinChildRelsCount" parameterType="ContainerSearchDTO" resultType="java.lang.Long">
-		SELECT 
-			COUNT(DISTINCT CONTAINER.CONTAINER_SEQ) AS TOTAL_CNT
-		FROM WMS_SKIN_REL PREL, WMS_CONTAINER CONTAINER
-		<include refid="findAllWhere" />
-			AND PREL.SKIN_SEQ = #{keyword}
-			AND PREL.REL_TYPE ='CT'
-			AND PREL.REL_SEQ = CONTAINER.CONTAINER_SEQ
-	</select>
-	
-	
+
 </mapper>

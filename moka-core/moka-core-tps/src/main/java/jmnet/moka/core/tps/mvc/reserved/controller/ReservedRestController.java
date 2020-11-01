@@ -225,7 +225,7 @@ public class ReservedRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE RESERVED] seq: {}) {}", reservedDTO.getReservedSeq(), e.getMessage());
+            log.error("[FAIL TO UPDATE RESERVED] seq: {} {}", reservedDTO.getReservedSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE RESERVED]", e, true);
             throw new Exception(messageByLocale.get("tps.reserved.error.save", request), e);
         }
@@ -267,7 +267,7 @@ public class ReservedRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE RESERVED] seq: {}) {}", reservedSeq, e.getMessage());
+            log.error("[FAIL TO DELETE RESERVED] seq: {} {}", reservedSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE RESERVED]", e, true);
             throw new Exception(messageByLocale.get("tps.reserved.error.delete", request), e);
         }

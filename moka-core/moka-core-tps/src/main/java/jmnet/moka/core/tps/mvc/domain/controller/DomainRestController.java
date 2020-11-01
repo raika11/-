@@ -336,7 +336,7 @@ public class DomainRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE DOMAIN] domainId: {}) {}", domainId, e.getMessage());
+            log.error("[FAIL TO DELETE DOMAIN] domainId: {} {}", domainId, e.getMessage());
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
             throw new Exception(messageByLocale.get("tps.domain.error.delete", request), e);

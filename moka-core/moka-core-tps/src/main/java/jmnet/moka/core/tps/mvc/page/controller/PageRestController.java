@@ -312,7 +312,7 @@ public class PageRestController {
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE PAGE] seq: {}) {}", pageDTO.getPageSeq(), e.getMessage());
+            log.error("[FAIL TO UPDATE PAGE] seq: {} {}", pageDTO.getPageSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE PAGE]", e, true);
             throw new Exception(messageByLocale.get("tps.page.error.save", request), e);
         }
@@ -357,7 +357,7 @@ public class PageRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE PAGE] seq: {}) {}", pageSeq, e.getMessage());
+            log.error("[FAIL TO DELETE PAGE] seq: {} {}", pageSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE PAGE]", e, true);
             throw new Exception(messageByLocale.get("tps.page.error.delete", request), e);
         }

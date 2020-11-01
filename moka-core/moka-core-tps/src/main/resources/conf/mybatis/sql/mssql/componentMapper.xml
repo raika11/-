@@ -2,252 +2,127 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.component.mapper.ComponentMapper">
 
-	<sql id="findAllWhere">
-		WHERE
-		<!-- 도메인 조건 -->
-		COMPONENT.DOMAIN_ID = #{domainId}
-		<!-- 검색 조건 -->
-		<if test="keyword != null and keyword != ''">
-			<choose>
-				<when test="searchType == 'componentSeq'">
-					AND COMPONENT.COMPONENT_SEQ = #{keyword}
-				</when>
-				<when test="searchType == 'componentName'">
-					AND COMPONENT.COMPONENT_NAME like '%${keyword}%'
-				</when>
-				<when test="searchType == 'templateSeq'">
-					AND COMPONENT.TEMPLATE_SEQ = #{keyword}
-				</when>
-				<when test="searchType == 'templateName'">
-					AND TEMPLATE_NAME like '%${keyword}%'
-				</when>
-				<when test="searchType == 'all'">
-					AND (COMPONENT.COMPONENT_SEQ = #{keyword}
-						OR COMPONENT.COMPONENT_NAME like '%${keyword}%'
-						OR COMPONENT.TEMPLATE_SEQ = #{keyword}
-						OR TEMPLATE_NAME like '%${keyword}%')
-				</when>
-			</choose>
-		</if>
-		<!-- 템플릿 그룹 조건 -->
-		<if test="tpZone != null and tpZone != '' and tpZone != 'all'">
-			AND TEMPLATE.TEMPLATE_GROUP = #{tpZone}
-		</if>
-	</sql>
+	<!-- 페이지의 관련컴포넌트 목록 조회 -->
+	<select id="findPageChildRelList" parameterType="ComponentSearchDTO" resultType="ComponentVO"
+		statementType="CALLABLE">
+		{ call UPA_WMS_COMPONENT_LIST_SEL_BY_PAGE(
+		#{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+		<choose>
+			<when test="templateGroup != 'all' and templateGroup != null and templateGroup != ''">
+				#{templateGroup},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+		#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+		#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+	</select>
 
-	<sql id="findAllOrder">
-		<if test="sortByColumn != null">
-			ORDER BY
-			<foreach open="" close="" collection="sortByColumn" item="sortItem" separator=",">
-				${sortItem}
-			</foreach>
-		</if>
-	</sql>
+	<!-- 콘텐츠스킨의 관련컴포넌트 목록 조회 -->
+	<select id="findSkinChildRelList" parameterType="ComponentSearchDTO" resultType="ComponentVO"
+		statementType="CALLABLE">
+		{ call UPA_WMS_COMPONENT_LIST_SEL_BY_SKIN(
+		#{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+		<choose>
+			<when test="templateGroup != 'all' and templateGroup != null and templateGroup != ''">
+				#{templateGroup},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+		#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+		#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+	</select>
+
+	<!-- 컨테이너의 관련컴포넌트 목록 조회 -->
+	<select id="findContainerChildRelList" parameterType="ComponentSearchDTO" resultType="ComponentVO"
+		statementType="CALLABLE">
+		{ call UPA_WMS_COMPONENT_LIST_SEL_BY_CONTAINER(
+		#{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+		<choose>
+			<when test="templateGroup != 'all' and templateGroup != null and templateGroup != ''">
+				#{templateGroup},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
+		#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+		#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+	</select>
 
 	<select id="findAll" parameterType="ComponentSearchDTO" resultType="ComponentVO" statementType="CALLABLE">
 		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_COMPONENT_LIST_SEL(
-			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
-			<choose>
-				<when test="searchType == 'all' and keyword != null and keyword != ''">
-					#{keyword},
-				</when>
-				<otherwise>
-					NULL,
-				</otherwise>
-			</choose>
+		#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
+		<choose>
+			<when test="searchType == 'all' and keyword != null and keyword != ''">
+				#{keyword},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
 
-			<choose>
-				<when test="searchType == 'componentSeq' and keyword != null and keyword != ''">
-					#{keyword},
-				</when>
-				<otherwise>
-					NULL,
-				</otherwise>
-			</choose>
+		<choose>
+			<when test="searchType == 'componentSeq' and keyword != null and keyword != ''">
+				#{keyword},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
 
-			<choose>
-				<when test="searchType == 'componentName' and keyword != null and keyword != ''">
-					#{keyword},
-				</when>
-				<otherwise>
-					NULL,
-				</otherwise>
-			</choose>
+		<choose>
+			<when test="searchType == 'componentName' and keyword != null and keyword != ''">
+				#{keyword},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
 
-			<choose>
-				<when test="searchType == 'templateSeq' and keyword != null and keyword != ''">
-					#{keyword},
-				</when>
-				<otherwise>
-					NULL,
-				</otherwise>
-			</choose>
+		<choose>
+			<when test="searchType == 'templateSeq' and keyword != null and keyword != ''">
+				#{keyword},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
 
-			<choose>
-				<when test="searchType == 'templateName' and keyword != null and keyword != ''">
-					#{keyword},
-				</when>
-				<otherwise>
-					NULL,
-				</otherwise>
-			</choose>
+		<choose>
+			<when test="searchType == 'templateName' and keyword != null and keyword != ''">
+				#{keyword},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
 
-			<choose>
-				<when test="tpZone != null and tpZone != ''">
-					#{tpZone},
-				</when>
-				<otherwise>
-					NULL,
-				</otherwise>
-			</choose>
+		<choose>
+			<when test="templateGroup != 'all' and templateGroup != null and templateGroup != ''">
+				#{templateGroup},
+			</when>
+			<otherwise>
+				NULL,
+			</otherwise>
+		</choose>
 
-			#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
-			#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
-			#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		#{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+		#{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+		#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }
 	</select>
-	
-	<!-- 관련컴포넌트 공통 컬럼  -->
-	<sql id="childRelsColumns">
-		COMPONENT.COMPONENT_SEQ,
-		COMPONENT.COMPONENT_NAME,
-		TEMPLATE.TEMPLATE_SEQ,
-		TEMPLATE.TEMPLATE_NAME,
-		(SELECT A.CD_NM FROM TB_15RE_CODE_MGT A, TB_15RE_CODE_MGT_GRP B WHERE A.GRP_CD = B.GRP_CD AND B.GRP_CD = 'TP_ZONE' AND A.DTL_CD = TEMPLATE.TEMPLATE_GROUP ) AS TP_ZONE
-	</sql>
-		
-	<!-- 페이지의 관련컴포넌트 목록 조회  -->
-	<select id="findPageChildRelList" parameterType="ComponentSearchDTO" resultType="ComponentVO" statementType="CALLABLE">
-
-
-
-		SELECT * FROM (
-			SELECT
-				<include refid="childRelsColumns" />,
-				OUT_ORDER,
-				IN_ORDER,
-				(@rownum := @rownum + 1) AS REL_ORDER
-			FROM (
-				SELECT 
-					PREL.REL_SEQ, PREL.REL_ORDER AS OUT_ORDER, PREL.REL_ORDER AS IN_ORDER
-				FROM TB_WMS_PAGE_REL PREL WHERE PREL.PAGE_SEQ = #{keyword} AND PREL.REL_TYPE ='CP'
-				UNION
-				SELECT 
-					CTREL.REL_SEQ, PREL.REL_ORDER AS OUT_ORDER, CTREL.REL_ORDER AS IN_ORDER
-				FROM TB_WMS_PAGE_REL PREL,  TB_WMS_CONTAINER_REL CTREL
-				WHERE PREL.PAGE_SEQ = #{keyword} 
-				AND PREL.REL_TYPE ='CT'
-				AND PREL.REL_SEQ = CTREL.CONTAINER_SEQ 
-				AND CTREL.REL_TYPE ='CP'
-				AND CTREL.REL_SEQ NOT IN (SELECT REL_SEQ  FROM TB_WMS_PAGE_REL  WHERE PAGE_SEQ = #{keyword} AND REL_TYPE ='CP')
-			) AS X, TB_WMS_COMPONENT COMPONENT, TB_WMS_TEMPLATE TEMPLATE, (SELECT @rownum:= 0) AS TMP
-			<include refid="findAllWhere"/>
-				AND X.REL_SEQ = COMPONENT.COMPONENT_SEQ
-				AND COMPONENT.TEMPLATE_SEQ = TEMPLATE.TEMPLATE_SEQ
-			ORDER BY OUT_ORDER ASC, IN_ORDER ASC
-		) AS M
-		<include refid="findAllOrder" />
-	</select>
-	
-	<select id="findPageChildRelsCount"
-		parameterType="componentSearchDTO"
-		resultType="java.lang.Long">
-		SELECT 
-			COUNT(COMPONENT.COMPONENT_SEQ) AS TOTAL_CNT
-		FROM (
-			SELECT PREL.REL_SEQ FROM TB_WMS_PAGE_REL PREL WHERE PREL.PAGE_SEQ = #{keyword} AND PREL.REL_TYPE ='CP'
-			UNION
-			SELECT CTREL.REL_SEQ FROM TB_WMS_PAGE_REL PREL,  TB_WMS_CONTAINER_REL CTREL
-			WHERE PREL.PAGE_SEQ = #{keyword} 
-			AND PREL.REL_TYPE ='CT'
-			AND PREL.REL_SEQ = CTREL.CONTAINER_SEQ 
-			AND CTREL.REL_TYPE ='CP'
-		) AS X, TB_WMS_COMPONENT COMPONENT, TB_WMS_TEMPLATE TEMPLATE
-		<include refid="findAllWhere"/>
-			AND X.REL_SEQ = COMPONENT.COMPONENT_SEQ
-			AND COMPONENT.TEMPLATE_SEQ = TEMPLATE.TEMPLATE_SEQ
-	</select>
-	
-	<!-- 콘텐츠스킨의 관련컴포넌트 목록 조회  -->
-	<select id="findSkinChildRels"
-		parameterType="componentSearchDTO"
-		resultType="componentVO">
-		SELECT * FROM (
-			SELECT
-				<include refid="childRelsColumns" />,
-				OUT_ORDER,
-				IN_ORDER,
-				(@rownum := @rownum + 1) AS REL_ORDER
-			FROM (
-				SELECT 
-					PREL.REL_SEQ, PREL.REL_ORDER AS OUT_ORDER, PREL.REL_ORDER AS IN_ORDER
-				FROM TB_WMS_SKIN_REL PREL WHERE PREL.SKIN_SEQ = #{keyword} AND PREL.REL_TYPE ='CP'
-				UNION
-				SELECT
-					CTREL.REL_SEQ, PREL.REL_ORDER AS OUT_ORDER, CTREL.REL_ORDER AS IN_ORDER 
-				FROM TB_WMS_SKIN_REL PREL,  TB_WMS_CONTAINER_REL CTREL
-				WHERE PREL.SKIN_SEQ = #{keyword} 
-				AND PREL.REL_TYPE ='CT'
-				AND PREL.REL_SEQ = CTREL.CONTAINER_SEQ 
-				AND CTREL.REL_TYPE ='CP'
-				AND CTREL.REL_SEQ NOT IN (SELECT REL_SEQ  FROM TB_WMS_SKIN_REL  WHERE SKIN_SEQ = #{keyword} AND REL_TYPE ='CP')
-			) AS X, TB_WMS_COMPONENT COMPONENT, TB_WMS_TEMPLATE TEMPLATE, (SELECT @rownum:= 0) AS TMP
-			<include refid="findAllWhere"/>
-				AND X.REL_SEQ = COMPONENT.COMPONENT_SEQ
-				AND COMPONENT.TEMPLATE_SEQ = TEMPLATE.TEMPLATE_SEQ
-			ORDER BY OUT_ORDER ASC, IN_ORDER ASC
-		) AS M
-		<include refid="findAllOrder" />
-	</select>
-	
-	<select id="findSkinChildRelsCount"
-		parameterType="componentSearchDTO"
-		resultType="java.lang.Long">
-		SELECT 
-			COUNT(COMPONENT.COMPONENT_SEQ) AS TOTAL_CNT
-		FROM (
-			SELECT PREL.REL_SEQ FROM TB_WMS_SKIN_REL PREL WHERE PREL.SKIN_SEQ = #{keyword} AND PREL.REL_TYPE ='CP'
-			UNION
-			SELECT CTREL.REL_SEQ FROM TB_WMS_SKIN_REL PREL,  TB_WMS_CONTAINER_REL CTREL
-			WHERE PREL.SKIN_SEQ = #{keyword} 
-			AND PREL.REL_TYPE ='CT'
-			AND PREL.REL_SEQ = CTREL.CONTAINER_SEQ 
-			AND CTREL.REL_TYPE ='CP'
-		) AS X, TB_WMS_COMPONENT COMPONENT, TB_WMS_TEMPLATE TEMPLATE
-		<include refid="findAllWhere"/>
-			AND X.REL_SEQ = COMPONENT.COMPONENT_SEQ
-			AND COMPONENT.TEMPLATE_SEQ = TEMPLATE.TEMPLATE_SEQ
-	</select>
-	
-	<!-- 컨테이너의 관련컴포넌트 목록 조회  -->
-	<select id="findContainerChildRels"
-		parameterType="componentSearchDTO"
-		resultType="componentVO">
-		SELECT
-			DISTINCT
-			<include refid="childRelsColumns" />,
-			X.REL_ORDER
-		FROM TB_WMS_CONTAINER_REL X, TB_WMS_COMPONENT COMPONENT, TB_WMS_TEMPLATE TEMPLATE
-		<include refid="findAllWhere"/>
-			AND X.CONTAINER_SEQ = #{keyword}
-			AND X.REL_TYPE ='CP'
-			AND X.REL_SEQ = COMPONENT.COMPONENT_SEQ
-			AND COMPONENT.TEMPLATE_SEQ = TEMPLATE.TEMPLATE_SEQ
-		<include refid="findAllOrder" />
-	</select>
-
-	<select id="findContainerChildRelsCount"
-		parameterType="componentSearchDTO"
-		resultType="java.lang.Long">
-		SELECT
-			COUNT(DISTINCT COMPONENT.COMPONENT_SEQ) AS TOTAL_CNT
-		FROM TB_WMS_CONTAINER_REL AS X, TB_WMS_COMPONENT COMPONENT, TB_WMS_TEMPLATE TEMPLATE
-		<include refid="findAllWhere"/>
-			AND X.CONTAINER_SEQ = #{keyword}
-			AND X.REL_TYPE ='CP'
-			AND X.REL_SEQ = COMPONENT.COMPONENT_SEQ
-			AND COMPONENT.TEMPLATE_SEQ = TEMPLATE.TEMPLATE_SEQ
-	</select>
-	
 </mapper>

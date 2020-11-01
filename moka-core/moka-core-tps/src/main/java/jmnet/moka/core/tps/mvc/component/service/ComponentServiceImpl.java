@@ -145,7 +145,7 @@ public class ComponentServiceImpl implements ComponentService {
         //                ad.setComponentSeq(returnComp.getComponentSeq());
         //            }
         //            Set<ComponentAd> returnAds = componentAdService.insertComponentAdList(ads);
-        //            log.debug("[COMPONENT INSERT] seq: {}) AdList Insert success",
+        //            log.debug("[COMPONENT INSERT] seq: {} AdList Insert success",
         //                    returnComp.getComponentSeq());
         //
         //            returnComp.setComponentAdList(returnAds);
@@ -153,7 +153,7 @@ public class ComponentServiceImpl implements ComponentService {
 
         // 히스토리 생성
         componentHistService.insertComponentHist(returnComp);
-        log.debug("[COMPONENT INSERT] seq: {}) History Insert success", returnComp.getComponentSeq());
+        log.debug("[COMPONENT INSERT] seq: {} History Insert success", returnComp.getComponentSeq());
 
         // DB반영
         entityManager.refresh(returnComp);
@@ -241,7 +241,7 @@ public class ComponentServiceImpl implements ComponentService {
                                      .build();
 
             Dataset returnDataset = datasetService.insertDataset(dataset);
-            log.debug("[COMPONENT INSERT] seq: {}) Dataset Insert success", component.getComponentSeq());
+            log.debug("[COMPONENT INSERT] seq: {} Dataset Insert success", component.getComponentSeq());
 
             return returnDataset;
         }

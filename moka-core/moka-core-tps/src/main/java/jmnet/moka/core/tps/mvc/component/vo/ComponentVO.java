@@ -56,8 +56,8 @@ public class ComponentVO implements Serializable {
     /**
      * 관련 컴포넌트 순서
      */
-    @Column(name = "REL_ORDER")
+    @Column(name = "REL_ORD")
     @Builder.Default
-    private Integer relOrder = 1;
+    private Integer relOrd = 1;
 
 }

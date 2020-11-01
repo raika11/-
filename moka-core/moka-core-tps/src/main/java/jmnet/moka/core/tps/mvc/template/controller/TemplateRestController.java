@@ -295,7 +295,7 @@ public class TemplateRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE TEMPLATE] seq: {}) {}", templateDTO.getTemplateSeq(), e.getMessage());
+            log.error("[FAIL TO UPDATE TEMPLATE] seq: {} {}", templateDTO.getTemplateSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE TEMPLATE]", e, true);
             throw new Exception(messageByLocale.get("tps.template.error.save", request), e);
         }
@@ -382,7 +382,7 @@ public class TemplateRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE TEMPLATE] seq: {}) {}", templateSeq, e.getMessage());
+            log.error("[FAIL TO DELETE TEMPLATE] seq: {} {}", templateSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE TEMPLATE]", e, true);
             throw new Exception(messageByLocale.get("tps.template.error.delete", request), e);
         }
@@ -419,7 +419,7 @@ public class TemplateRestController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[TEMPLATE RELATION EXISTENCE CHECK FAILED] seq: {}) {}", templateSeq, e.getMessage());
+            log.error("[TEMPLATE RELATION EXISTENCE CHECK FAILED] seq: {} {}", templateSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[TEMPLATE RELATION EXISTENCE CHECK FAILEDE]", e, true);
             throw new Exception(messageByLocale.get("tps.template.error.hasRelation", request), e);
         }

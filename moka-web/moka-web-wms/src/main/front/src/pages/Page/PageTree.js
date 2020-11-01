@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
-import { toastr } from 'react-redux-toastr';
 
 import { GET_PAGE_TREE, getPage, insertSubPage } from '@store/page/pageAction';
 

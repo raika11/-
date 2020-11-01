@@ -4,11 +4,10 @@ import { createRequestActionTypes } from '@store/commons/saga';
 /**
  * 페이지 미리보기
  */
-export const [PREVIEW_PAGE, PREVIEW_PAGE_SUCCESS, PREVIEW_PAGE_FAILURE] = createRequestActionTypes('merge/PREVIEW_PAGE');
-export const previewPage = createAction(PREVIEW_PAGE, ({ content, url, page }) => ({
+export const PREVIEW_PAGE = 'merge/PREVIEW_PAGE';
+export const previewPage = createAction(PREVIEW_PAGE, ({ content, callback }) => ({
     content,
-    url,
-    page,
+    callback
 }));
 
 /**
@@ -30,8 +29,9 @@ export const clearStore = createAction(CLEAR_STORE);
 /**
  * W3C검사. syntax 체크 -> 머지결과 -> HTML검사
  */
-export const [W3C_PAGE, W3C_PAGE_SUCCESS, W3C_PAGE_FAILURE] = createRequestActionTypes('merge/W3C_PAGE');
-export const w3cPage = createAction(W3C_PAGE, ({ content, page }) => ({
+export const W3C_PAGE = 'merge/W3C_PAGE';
+export const w3cPage = createAction(W3C_PAGE, ({ content, page, callback }) => ({
     content,
     page,
+    callback,
 }));

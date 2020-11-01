@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -11,14 +12,16 @@ import { getPageType } from '@store/codeMgt';
 import { previewPage, w3cPage } from '@store/merge';
 import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
 import { notification } from '@utils/toastUtil';
+import { API_BASE_URL, W3C_URL } from '@/constants';
 
 const PageEdit = ({ onDelete }) => {
     const { pageSeq: paramPageSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { page, loading, pageTypeRows, latestDomainId, invalidList, PAGE_TYPE_HTML } = useSelector((store) => ({
+    const { page, pageBody, loading, pageTypeRows, latestDomainId, invalidList, PAGE_TYPE_HTML } = useSelector((store) => ({
         page: store.page.page,
-        loading: store.loading['page/GET_PAGE'] || store.loading['page/POST_PAGE'] || store.loading['page/PUT_PAGE'] || store.loading['page/DELETE_PAGE'],
+        pageBody: store.page.pageBody,
+        loading: store.loading['page/GET_PAGE'] || store.loading['page/POST_PAGE'] || store.loading['page/PUT_PAGE'] || store.loading['page/DELETE_PAGE'] || store.loading['merge/PREVIEW_PAGE'] || store.loading['merge/W3C_PAGE'],
         pageTypeRows: store.codeMgt.pageTypeRows,
         latestDomainId: store.auth.latestDomainId,
         invalidList: store.page.invalidList,
@@ -364,23 +367,105 @@ const PageEdit = ({ onDelete }) => {
      */
     const handleClickPreviewOpen = useCallback(() => {
         const option = {
-            content: page.pageBody,
-            url: '/preview/page',
-            page,
+            content: pageBody,
+            callback: ({ header, body }) => {
+                if (header.success) {
+                    const item = produce(page, (draft) => {
+                        draft.pageBody = pageBody;
+                    });
+                    popupPreview('/preview/page', item);
+                } else {
+                    notification('warning', header.message || '미리보기에 실패하였습니다');
+                }
+            },
         };
         dispatch(previewPage(option));
-    }, [dispatch, page]);
+    }, [dispatch, page, pageBody]);
 
+    /**
+     * 미리보기 팝업띄움.
+     */
+    const popupPreview = (url, item) => {
+        const targetUrl = `${API_BASE_URL}${url}`;
+
+        // 폼 생성
+        const f = document.createElement('form');
+        f.setAttribute('method', 'post');
+        f.setAttribute('action', targetUrl);
+        f.setAttribute('target', '_blank');
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const propName in item) {
+            if (typeof item[propName] === 'object') {
+                const subObject = item[propName];
+                // eslint-disable-next-line no-restricted-syntax
+                for (const inPropName in subObject) {
+                    if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = `${propName}.${inPropName}`;
+                        input.value = item[propName][inPropName];
+                        f.appendChild(input);
+                    }
+                }
+            } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = propName;
+                input.value = item[propName];
+                f.appendChild(input);
+            }
+        }
+
+        document.getElementsByTagName('body')[0].appendChild(f);
+        f.submit();
+        f.remove();
+    };
+    
     /**
      * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사
      */
     const handleClickW3COpen = useCallback(() => {
+        const tempPage = produce(page, (draft) => {
+            draft.pageBody = pageBody;
+        });
+
         const option = {
-            content: page.pageBody,
-            page,
+            content: pageBody,
+            page: tempPage,
+            callback: ({ header, body }) => {
+                if (header.success) {
+                    popupW3C(body);
+                } else {
+                    notification('warning', header.message || 'W3C검사에 실패했습니다');
+                }
+            },
         };
         dispatch(w3cPage(option));
-    }, [dispatch, page]);
+    }, [dispatch, page, pageBody]);
+
+    /**
+     * W3C 팝업띄움.
+     */
+    const popupW3C = (body) => {
+        const targetUrl = W3C_URL;
+    
+        // 폼 생성
+        const f = document.createElement('form');
+        f.setAttribute('method', 'post');
+        f.setAttribute('action', targetUrl);
+        f.setAttribute('target', '_blank');
+        f.setAttribute('enctype', 'multipart/form-data');
+    
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'fragment';
+        input.value = body;
+        f.appendChild(input);
+        document.getElementsByTagName('body')[0].appendChild(f);
+        f.submit();
+        f.remove();
+    };
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title="사이트 정보" loading={loading}>

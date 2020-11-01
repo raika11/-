@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { columnDefs, rowData } from './PageChildContainerAgGridColumns';
+import { columnDefs, rowData } from '@pages/commons/RelationContainerListColumns';
 import { MokaTable } from '@components';
 
 /**

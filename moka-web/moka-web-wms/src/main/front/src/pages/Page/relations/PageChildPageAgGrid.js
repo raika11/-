@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { columnDefs, rowData } from './PageChildPageAgGridColumns';
 import { MokaTable } from '@components';
-import PageHtmlModal from '../modals/PageHtmlModal';
+import PageHtmlModal from '@pages/commons/PageHtmlModal';
 
 /**
  * 관련페이지 AgGrid 목록

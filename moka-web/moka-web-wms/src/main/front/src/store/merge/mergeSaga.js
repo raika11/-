@@ -1,52 +1,61 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { API_BASE_URL, W3C_URL } from '@/constants';
+import produce from 'immer';
 
 import * as api from './mergeApi';
 import * as act from './mergeAction';
 
-// 미리보기 팝업띄움.
-const popupPreview = (url, item) => {
-    const targetUrl = `${API_BASE_URL}${url}`;
+/**
+ * 미리보기
+ */
+const previewPageSaga = createRequestSaga(act.PREVIEW_PAGE, api.postSyntax, true);
 
-    // 폼 생성
-    const f = document.createElement('form');
-    f.setAttribute('method', 'post');
-    f.setAttribute('action', targetUrl);
-    f.setAttribute('target', '_blank');
+/**
+ * W3C검사
+ */
+function* w3cPageSaga(action) {
+    yield put(startLoading(act.W3C_PAGE)); // 로딩 시작
+    let callbackData = {};
+    let message = '';
+    const { content, page, callback } = action.payload;
+    
+    try {
+        const resSyntax = yield call(api.postSyntax, { content });
+        callbackData = resSyntax.data;
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const propName in item) {
-        if (typeof item[propName] === 'object') {
-            const subObject = item[propName];
-            // eslint-disable-next-line no-restricted-syntax
-            for (const inPropName in subObject) {
-                if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = `${propName}.${inPropName}`;
-                    input.value = item[propName][inPropName];
-                    f.appendChild(input);
-                }
+        if (resSyntax.data.header.success) {
+            // 랜더링된 html받아온다
+            const resPreview = yield call(api.postPreviewPG, { page });
+            callbackData = resPreview.data;
+
+            if (!resPreview.data.header.success) {
+                message = '랜더링에 오류가 있어 W3C검사에 실패했습니다.';
             }
-        } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = propName;
-            input.value = item[propName];
-            f.appendChild(input);
+        } else {
+            message = '문법에 오류가 있어 W3C검사에 실패했습니다.';
         }
+    } catch (e) {
+        message = 'W3C검사에 실패했습니다.';
     }
+    
+    yield put(finishLoading(act.W3C_PAGE)); // 로딩 끝
 
-    document.getElementsByTagName('body')[0].appendChild(f);
-    f.submit();
-    f.remove();
-};
+    // 에러가 있을 경우, 메세지 수정.
+    callbackData = produce(callbackData, (draft) => {
+        if (!draft.header.success) {
+            draft.header.message = message;
+        }
+    });
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+}
 
 /** saga */
 export default function* mergeSaga() {
-    // yield takeLatest(act.PREVIEW_PAGE, previewPageSaga);
+    yield takeLatest(act.PREVIEW_PAGE, previewPageSaga);
+    yield takeLatest(act.W3C_PAGE, w3cPageSaga);
     // yield takeLatest(act.PREVIEW_COMPONENT, previewComponentSaga);
-    // yield takeLatest(act.W3C_PAGE, w3cPageSaga);
 }

@@ -6,7 +6,7 @@ import produce from 'immer';
 import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { CARD_DEFAULT_HEIGHT, ITEM_PG } from '@/constants';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { clearStore, clearHistory, clearRelationList, deletePage, getPageTree } from '@store/page';
 import { notification, toastr } from '@utils/toastUtil';
@@ -17,10 +17,10 @@ const PageEdit = React.lazy(() => import('./PageEdit'));
 
 // relations
 const PageChildPageList = React.lazy(() => import('./relations/PageChildPageList'));
-const PageChildContainerList = React.lazy(() => import('./relations/PageChildContainerList'));
 const PageChildSkinList = React.lazy(() => import('./relations/PageChildSkinList'));
-const PageChildComponentList = React.lazy(() => import('./relations/PageChildComponentList'));
-const PageChildTemplateList = React.lazy(() => import('./relations/PageChildTemplateList'));
+const RelationContainerList = React.lazy(() => import('@pages/commons/RelationContainerList'));
+const RelationComponentList = React.lazy(() => import('@pages/commons/RelationComponentList'));
+const RelationTemplateList = React.lazy(() => import('@pages/commons/RelationTemplateList'));
 const PageChildAdList = React.lazy(() => import('./relations/PageChildAdList'));
 const PageHistoryList = React.lazy(() => import('./relations/PageHistoryList'));
 
@@ -138,7 +138,6 @@ const Page = () => {
      */
     const handleClickDelete = useCallback(
         (item) => {
-            debugger;
             if (item.pageUrl === '/') {
                 toastr.warning('', '메인화면은 삭제할 수 없습니다.');
             } else {
@@ -237,19 +236,19 @@ const Page = () => {
                                         <PageChildSkinList />
                                     </Suspense>,
                                     <Suspense>
-                                        <PageChildContainerList />
+                                        <RelationContainerList show={activeTabIdx === 3} relSeqType={ITEM_PG} relSeq={page.pageSeq}/>
                                     </Suspense>,
                                     <Suspense>
-                                        <PageChildComponentList />
+                                        <RelationComponentList show={activeTabIdx === 4} relSeqType={ITEM_PG} relSeq={page.pageSeq}/>
                                     </Suspense>,
                                     <Suspense>
-                                        <PageChildTemplateList show={activeTabIdx === 5} />
+                                        <RelationTemplateList show={activeTabIdx === 5} relSeqType={ITEM_PG} relSeq={page.pageSeq}/>
                                     </Suspense>,
                                     <Suspense>
                                         <PageChildAdList />
                                     </Suspense>,
                                     <Suspense>
-                                        <PageHistoryList />
+                                        <PageHistoryList show={activeTabIdx === 7} />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}
@@ -257,7 +256,7 @@ const Page = () => {
                                 tabNavs={[
                                     { title: '사이트 정보', text: 'Info' },
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-box" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
                                     { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },

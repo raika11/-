@@ -3,18 +3,17 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaCardEditor } from '@components';
 import { changeLatestDomainId } from '@store/auth/authAction';
-import { changePageBody, getPage, clearPage, clearHistory, clearRelationList } from '@store/page/pageAction';
+import { changePageBody } from '@store/page/pageAction';
 
 const PageEditor = (props) => {
     const { expansion, onExpansion } = props;
-    const { pageSeq: paramPageSeq } = useParams();
     const dispatch = useDispatch();
     const { pageBody, page, latestDomainId, error, loading, tag } = useSelector((store) => ({
         pageBody: store.page.pageBody,
         page: store.page.page,
         latestDomainId: store.auth.latestDomainId,
         error: store.page.pageError,
-        loading: store.loading['page/GET_PAGE'],
+        loading: store.loading['page/GET_PAGE'] || store.loading['page/POST_PAGE'] || store.loading['page/PUT_PAGE'] || store.loading['page/DELETE_PAGE'] || store.loading['merge/PREVIEW_PAGE'] || store.loading['merge/W3C_PAGE'],
         tag: store.page.tag,
     }));
 
@@ -87,7 +86,7 @@ const PageEditor = (props) => {
             title={title}
             expansion={expansion}
             onExpansion={onExpansion}
-            defaultValue={pageBody}
+            value={pageBody}
             onBlur={handleBlur}
             loading={loading}
             tag={tag}

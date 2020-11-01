@@ -1,44 +1,37 @@
 import React from 'react';
-import AppendButton from '../components/ContainerAppendButton';
-import LinkButton from '../components/ContainerLinkButton';
+import { MokaTableAppendButton, MokaTableLinkButton } from '@components';
 
 export const columnDefs = [
     {
-        // rowDrag: true,
         headerName: 'ID',
         field: 'containerSeq',
         width: 50,
-        // rowDragText: (params, dragItemCount) => {
-        //     if (dragItemCount > 0) {
-        //         const message =
-        //             params.rowNodes && dragItemCount > 1
-        //                 ? params.rowNodes.reduce((prev, next) => `${prev.data.containerName},${next.data.containerName}`)
-        //                 : params.rowNode.data.containerName;
-        //         return params.rowNodes && dragItemCount > 1 ? `${message}외 [${dragItemCount - 1}건]` : message;
-        //     }
-        //     return params.rowNode.data.contentsId;
-        // },
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '컨테이너명',
         field: 'containerName',
-        // cellClass: 'ag-cell-center',
-        // cellStyle: { textAlign: 'center' },
-        width: 230,
+        width: 158,
+        cellStyle: { fontSize: '12px' },
+        tooltipField: 'containerName',
     },
     {
         headerName: '',
         field: 'append',
-        width: 40,
-        cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => <AppendButton {...params} />,
+        width: 36,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTableAppendButton {...row} onClick={data.handleClickAppend} />;
+        },
     },
     {
         headerName: '',
         field: 'link',
-        width: 40,
-        cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => <LinkButton {...params} />,
+        width: 36,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;
+        },
     },
 ];
 

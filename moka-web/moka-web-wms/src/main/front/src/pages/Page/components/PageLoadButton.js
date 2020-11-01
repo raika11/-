@@ -1,40 +1,23 @@
-import React, { useCallback } from 'react';
-import { toastr } from 'react-redux-toastr';
-import { MokaIcon } from '@components';
-import { Button } from 'react-bootstrap';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { MokaTableLoadButton } from '@components';
+import { changePageBody } from '@store/page';
+import { toastr } from '@utils/toastUtil';
 
 const PageLoadButton = (props) => {
-    const handleClick = useCallback(
-        (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            const { data } = props;
-            if (data) {
-                console.log(data);
-            }
-            toastr.confirm(
-                <>
-                    <p>불러오기 시 작업 중인 템플릿 본문 내용이 사라집니다.</p>
-                    <p>불러오시겠습니까?</p>
-                </>,
-                {
-                    onOk: () => alert('OK: clicked'),
-                    onCancle: () => alert('CANCLE: clicked'),
-                    okText: '예',
-                    cancelText: '아니오',
-                    // custom css selector
-                    // id: 'my-custom-id'
-                },
-            );
-        },
-        [props],
-    );
+    const dispatch = useDispatch();
+    const { data } = props;
 
-    return (
-        <Button variant="white" onClick={handleClick}>
-            <MokaIcon iconName="fal-file-import" />
-        </Button>
-    );
+    const handleClick = () => {
+        toastr.confirm('불러오기 시 작업 중인 tems 소스가 날라갑니다. 불러오시겠습니까?', {
+            onOk: () => {
+                dispatch(changePageBody(data.pageBody));
+            },
+            onCancle: () => {},
+        });
+    };
+
+    return <MokaTableLoadButton onClick={handleClick} />;
 };
 
 export default PageLoadButton;

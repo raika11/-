@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { ITEM_PG, ITEM_CT, ITEM_SK } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 import { getComponentList, changeSearchOption, initialState, clearStore, GET_COMPONENT_LIST } from '@store/component';
-import columnDefs from './RelationComponentListColums';
+import { columnDefs } from './RelationContainerListColumns';
 import { defaultComponentSearchType, relationUNAgGridHeight } from '@pages/commons';
 import ComponentHtmlModal from './ComponentHtmlModal';
 
@@ -38,7 +38,7 @@ const defaultProps = {
  * relSeq와
  * 관련된 하위(자식의) 템플릿 리스트
  */
-const RelationComponentList = (props) => {
+const RelationContainerList = (props) => {
     const { relSeq, relSeqType, show, onAppend } = props;
     const dispatch = useDispatch();
 
@@ -142,7 +142,7 @@ const RelationComponentList = (props) => {
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" title="컴포넌트 검색">
+            <MokaCard titleClassName="mb-0" title="컨테이너 검색">
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>
@@ -188,7 +188,7 @@ const RelationComponentList = (props) => {
                 {/* 버튼 그룹 */}
                 <div className="d-flex mb-10 justify-content-end">
                     <Button variant="dark" onClick={() => window.open('/component')}>
-                        컴포넌트 추가
+                        컨테이너 추가
                     </Button>
                 </div>
 
@@ -212,7 +212,7 @@ const RelationComponentList = (props) => {
     );
 };
 
-RelationComponentList.propTypes = propTypes;
-RelationComponentList.defaultProps = defaultProps;
+RelationContainerList.propTypes = propTypes;
+RelationContainerList.defaultProps = defaultProps;
 
-export default RelationComponentList;
+export default RelationContainerList;

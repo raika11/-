@@ -13,7 +13,6 @@ const getPageTree = callApiAfterActions(act.GET_PAGE_TREE, api.getPageTree, (sto
 /**
  * 페이지 조회
  */
-// const getPage = ({ payload: { param, callback } }) => callApiWithParam(act.GET_PAGE, api.getPage, param, callback);
 const getPage = createRequestSaga(act.GET_PAGE, api.getPage);
 
 /**

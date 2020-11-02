@@ -21,24 +21,27 @@ const Dataset = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const deleteCallback = (response, datasetSeq) => {
-        console.log(response);
-        console.log(datasetSeq);
-        /*if (response.header.success) {
-            dispatch(
-                deleteDataset({
-                    datasetSeq,
-                    callback: (response) => {
-                        if (response.header.success) {
-                            history.push('/dataset');
-                        }
-                        toast.result(response);
-                    },
-                }),
-            );
+    const deleteCallback = (response) => {
+        const { header, body, payload } = response;
+        if (header.success) {
+            if (!body) {
+                dispatch(
+                    deleteDataset({
+                        datasetSeq: payload.datasetSeq,
+                        callback: (response) => {
+                            if (response.header.success) {
+                                history.push('/dataset');
+                            }
+                            toast.result(response);
+                        },
+                    }),
+                );
+            } else {
+                toast.result(response);
+            }
         } else {
             toast.result(response);
-        }*/
+        }
     };
 
     const handleClickDelete = (dataset) => {
@@ -52,9 +55,7 @@ const Dataset = () => {
                     }),
                 );
             },
-            () => {
-                console.log('취소');
-            },
+            () => {},
         );
     };
 

@@ -40,3 +40,9 @@ export const saveEditForm = createAction(SAVE_EDIT_FORM, ({ type, channelId, par
  */
 export const [DELETE_EDIT_FORM, DELETE_EDIT_FORM_SUCCESS, DELETE_EDIT_FORM_FAILURE] = createRequestActionTypes('editForm/DELETE_EDIT_FORM');
 export const deleteEditForm = createAction(DELETE_EDIT_FORM, ({ partId, callback }) => ({ partId, callback }));
+
+/**
+ * 중복체크
+ */
+export const DUPLICATE_CHECK = 'editForm/DUPLICATE_CHECK';
+export const duplicateCheck = createAction(DUPLICATE_CHECK, ({ formId, callback }) => ({ formId, callback }));

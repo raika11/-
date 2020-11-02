@@ -18,7 +18,7 @@ const Container = React.lazy(() => import('@pages/Container'));
 const Reserved = React.lazy(() => import('@pages/Reserved'));
 const Component = React.lazy(() => import('@pages/Component'));
 const CodeMgt = React.lazy(() => import('@pages/CodeMgt'));
-// const EditForm = React.lazy(() => import('@pages/EditForm'));
+const EditForm = React.lazy(() => import('@pages/EditForm'));
 
 const routes = [
     {
@@ -160,16 +160,16 @@ const routes = [
         exact: false,
         strict: true,
     },
-    // {
-    //     path: '/edit-form',
-    //     name: 'edit-form',
-    //     displayName: 'Edit Form',
-    //     component: EditForm,
-    //     layout: SidebarOpenLayout,
-    //     nonResponsive: true,
-    //     exact: false,
-    //     strict: true,
-    // },
+    {
+        path: '/edit-form',
+        name: 'edit-form',
+        displayName: 'Edit Form',
+        component: EditForm,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
 ];
 
 export default routes;

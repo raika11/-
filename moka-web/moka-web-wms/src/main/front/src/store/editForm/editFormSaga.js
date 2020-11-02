@@ -8,7 +8,7 @@ import * as editFormAction from './editFormAction';
 /**
  * 목록
  */
-const getEditFormList = callApiAfterActions(editFormAction.GET_EDIT_FORM_LIST, editFormApi.getEditFormList, (state) => state.edit);
+const getEditFormList = callApiAfterActions(editFormAction.GET_EDIT_FORM_LIST, editFormApi.getEditFormList, (state) => state.editForm);
 
 /**
  * 데이터 조회

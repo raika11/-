@@ -11,7 +11,7 @@ import { Button, Card, Col, Row } from 'react-bootstrap';
 import { MokaInputLabel } from '../MokaInput';
 import FormField from './FormField';
 import { useDispatch } from 'react-redux';
-import t from '@/utils/toastUtil';
+import toast from '@/utils/toastUtil';
 import { saveEditForm, changeEditForm } from '@/store/editForm';
 
 const propTypes = {
@@ -42,7 +42,7 @@ const FormPart = (props) => {
                     }),
                 ],
                 callback: (response) => {
-                    t.result(response);
+                    toast.result(response);
                 },
             }),
         );

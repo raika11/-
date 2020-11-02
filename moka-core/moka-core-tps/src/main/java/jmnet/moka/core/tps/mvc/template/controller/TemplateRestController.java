@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpString;
@@ -27,18 +26,14 @@ import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateDTO;
-import jmnet.moka.core.tps.mvc.template.dto.TemplateHistDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSearchDTO;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
-import jmnet.moka.core.tps.mvc.template.entity.TemplateHist;
 import jmnet.moka.core.tps.mvc.template.service.TemplateHistService;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -457,69 +452,96 @@ public class TemplateRestController {
     //        return response;
     //    }
 
-    /**
-     * 템플릿 히스토리 목록조회
-     *
-     * @param request     HTTP요청
-     * @param templateSeq 템플릿SEQ
-     * @param search      검색조건
-     * @return 템플릿 히스토리 목록
-     */
-    @ApiOperation(value = "템플릿 히스토리 목록조회")
-    @GetMapping("/{templateSeq}/histories")
-    public ResponseEntity<?> getHistoryList(HttpServletRequest request,
-            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
-            @Valid @SearchParam SearchDTO search) {
-
-        // 페이징조건 설정 (order by seq desc)
-        List<String> sort = new ArrayList<String>();
-        sort.add("seq,desc");
-        search.setSort(sort);
-        Pageable pageable = search.getPageable();
-
-        // 조회
-        Page<TemplateHist> historyList = templateHistService.findAllTemplateHist(templateSeq, search, pageable);
-
-        // entity -> DTO
-        List<TemplateHistDTO> historiesDTO = modelMapper.map(historyList.getContent(), TemplateHistDTO.TYPE);
-
-        // 리턴 DTO 생성
-        ResultListDTO<TemplateHistDTO> resultList = new ResultListDTO<TemplateHistDTO>();
-        resultList.setTotalCnt(historyList.getTotalElements());
-        resultList.setList(historiesDTO);
-
-        ResultDTO<ResultListDTO<TemplateHistDTO>> resultDTO = new ResultDTO<ResultListDTO<TemplateHistDTO>>(resultList);
-        tpsLogger.success(ActionType.SELECT, true);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    }
-
-    /**
-     * 템플릿 히스토리 상세조회
-     *
-     * @param request HTTP 요청
-     * @param histSeq 순번
-     * @return 템플릿 히스토리
-     * @throws NoDataException 데이터없음
-     */
-    @ApiOperation(value = "템플릿 히스토리 상세조회")
-    @GetMapping("/{templateSeq}/histories/{histSeq}")
-    public ResponseEntity<?> getHistory(HttpServletRequest request,
-            @PathVariable("histSeq") @Min(value = 0, message = "{tps.templatehist.error.min.seq}") Long histSeq)
-            throws NoDataException {
-
-        // 템플릿 히스토리 조회
-        TemplateHist history = templateHistService.findTemplateHistBySeq(histSeq)
-                                                  .orElseThrow(() -> {
-                                                      String message = messageByLocale.get("tps.templatehist.error.no-data", request);
-                                                      tpsLogger.fail(ActionType.SELECT, message, true);
-                                                      return new NoDataException(message);
-                                                  });
-        TemplateHistDTO historyDTO = modelMapper.map(history, TemplateHistDTO.class);
-
-        ResultDTO<TemplateHistDTO> resultDTO = new ResultDTO<TemplateHistDTO>(historyDTO);
-        tpsLogger.success(ActionType.SELECT, true);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    }
+    //    /**
+    //     * 템플릿 히스토리 목록조회
+    //     *
+    //     * @param request     HTTP요청
+    //     * @param templateSeq 템플릿SEQ
+    //     * @param search      검색조건
+    //     * @return 템플릿 히스토리 목록
+    //     */
+    //    @ApiOperation(value = "템플릿 히스토리 목록조회")
+    //    @GetMapping("/{templateSeq}/histories")
+    //    public ResponseEntity<?> getHistoryList(HttpServletRequest request,
+    //            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
+    //            @Valid @SearchParam SearchDTO search) {
+    //
+    //        // 페이징조건 설정 (order by seq desc)
+    //        List<String> sort = new ArrayList<String>();
+    //        sort.add("seq,desc");
+    //        search.setSort(sort);
+    //        Pageable pageable = search.getPageable();
+    //
+    //        // 조회
+    //        Page<TemplateHist> histList = templateHistService.findAllTemplateHist(templateSeq, search, pageable);
+    //
+    //        // entity -> DTO
+    //        List<HistSimpleDTO> histDTOList = histList.stream()
+    //                                                  .map(this::convertToHistSimpleDto)
+    //                                                  .collect(Collectors.toList());
+    //
+    //        ResultListDTO<HistSimpleDTO> resultList = new ResultListDTO<HistSimpleDTO>();
+    //        resultList.setTotalCnt(histList.getTotalElements());
+    //        resultList.setList(histDTOList);
+    //
+    //        ResultDTO<ResultListDTO<HistSimpleDTO>> resultDTO = new ResultDTO<ResultListDTO<HistSimpleDTO>>(resultList);
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    //    }
+    //
+    //    /**
+    //     * Page History Entity -> History DTO 변환
+    //     *
+    //     * @param hist history정보
+    //     * @return historyDTO
+    //     */
+    //    private HistSimpleDTO convertToHistSimpleDto(TemplateHist hist) {
+    //        HistSimpleDTO histDTO = modelMapper.map(hist, HistSimpleDTO.class);
+    //        histDTO.setRegDt(hist.getRegDt());
+    //        histDTO.setRegId(hist.getRegId());
+    //        return histDTO;
+    //    }
+    //
+    //    /**
+    //     * 템플릿 히스토리 상세조회
+    //     *
+    //     * @param request HTTP 요청
+    //     * @param histSeq 순번
+    //     * @return 템플릿 히스토리
+    //     * @throws NoDataException 데이터없음
+    //     */
+    //    @ApiOperation(value = "템플릿 히스토리 상세조회")
+    //    @GetMapping("/{templateSeq}/histories/{histSeq}")
+    //    public ResponseEntity<?> getHistory(HttpServletRequest request,
+    //            @PathVariable("histSeq") @Min(value = 0, message = "{tps.templatehist.error.min.seq}") Long histSeq)
+    //            throws NoDataException {
+    //
+    //        // 템플릿 히스토리 조회
+    //        TemplateHist history = templateHistService.findTemplateHistBySeq(histSeq)
+    //                                                  .orElseThrow(() -> {
+    //                                                      String message = messageByLocale.get("tps.templatehist.error.no-data", request);
+    //                                                      tpsLogger.fail(ActionType.SELECT, message, true);
+    //                                                      return new NoDataException(message);
+    //                                                  });
+    //
+    //        ResultDTO<HistDTO> resultDTO = new ResultDTO<HistDTO>(convertToHistDto(history));
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    //    }
+    //
+    //    /**
+    //     * Page History Entity -> History DTO 변환
+    //     *
+    //     * @param hist history정보
+    //     * @return historyDTO
+    //     */
+    //    private HistDTO convertToHistDto(TemplateHist hist) {
+    //        HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
+    //        histDTO.setBody(hist.getTemplateBody());
+    //        histDTO.setRegDt(hist.getRegDt());
+    //        histDTO.setRegId(hist.getRegId());
+    //        return histDTO;
+    //    }
 
     /**
      * 템플릿 데이터 유효성 검사

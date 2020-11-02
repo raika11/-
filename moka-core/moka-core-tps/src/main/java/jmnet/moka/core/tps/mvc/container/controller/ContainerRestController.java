@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -16,8 +15,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
-import jmnet.moka.core.tps.common.dto.HistDTO;
-import jmnet.moka.core.tps.common.dto.HistSearchDTO;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -26,7 +23,6 @@ import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerSearchDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
-import jmnet.moka.core.tps.mvc.container.entity.ContainerHist;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
 import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
@@ -313,81 +309,81 @@ public class ContainerRestController {
 
     }
 
-    /**
-     * 컨테이너 히스토리 목록조회
-     *
-     * @param request      요청
-     * @param containerSeq 컨테이너순번
-     * @param search       검색조건
-     * @return 히스토리 목록
-     */
-    @ApiOperation(value = "컨테이너 히스토리 목록조회")
-    @GetMapping("/{containerSeq}/histories")
-    public ResponseEntity<?> getHistoryList(HttpServletRequest request,
-            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq,
-            @Valid @SearchParam HistSearchDTO search) {
-
-        search.setSeq(containerSeq);
-
-        // 조회
-        org.springframework.data.domain.Page<ContainerHist> histList = containerService.findAllContainerHist(search, search.getPageable());
-
-        // entity -> DTO
-        List<HistDTO> histDTOList = histList.stream()
-                                            .map(this::convertToHistDto)
-                                            .collect(Collectors.toList());
-
-        // 리턴 DTO 생성
-        ResultListDTO<HistDTO> resultList = new ResultListDTO<HistDTO>();
-        resultList.setTotalCnt(histList.getTotalElements());
-        resultList.setList(histDTOList);
-
-        ResultDTO<ResultListDTO<HistDTO>> resultDTO = new ResultDTO<ResultListDTO<HistDTO>>(resultList);
-        tpsLogger.success(ActionType.SELECT, true);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    }
-
-    /**
-     * 컨테이너 히스토리 상세조회
-     *
-     * @param request HTTP 요청
-     * @param histSeq 순번
-     * @return 페이지 히스토리
-     * @throws NoDataException 데이터없음
-     */
-    @ApiOperation(value = "컨테이너 히스토리 상세조회")
-    @GetMapping("/{containerSeq}/histories/{histSeq}")
-    public ResponseEntity<?> getHistory(HttpServletRequest request,
-            @PathVariable("histSeq") @Min(value = 0, message = "{tps.containerhist.error.min.seq}") Long histSeq)
-            throws NoDataException {
-
-        // 템플릿 히스토리 조회
-        ContainerHist history = containerService.findContainerHistBySeq(histSeq)
-                                                .orElseThrow(() -> {
-                                                    String message = messageByLocale.get("tps.containerhist.error.no-data", request);
-                                                    tpsLogger.fail(ActionType.SELECT, message, true);
-                                                    return new NoDataException(message);
-                                                });
-        ContainerHist historyDTO = modelMapper.map(history, ContainerHist.class);
-
-        ResultDTO<HistDTO> resultDTO = new ResultDTO<HistDTO>(convertToHistDto(historyDTO));
-        tpsLogger.success(ActionType.SELECT, true);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    }
-
-    /**
-     * Container History Entity -> History DTO 변환
-     *
-     * @param hist history정보
-     * @return historyDTO
-     */
-    private HistDTO convertToHistDto(ContainerHist hist) {
-        HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
-        histDTO.setBody(hist.getContainerBody());
-        histDTO.setRegDt(hist.getRegDt());
-        histDTO.setRegId(hist.getRegId());
-        return histDTO;
-    }
+    //    /**
+    //     * 컨테이너 히스토리 목록조회
+    //     *
+    //     * @param request      요청
+    //     * @param containerSeq 컨테이너순번
+    //     * @param search       검색조건
+    //     * @return 히스토리 목록
+    //     */
+    //    @ApiOperation(value = "컨테이너 히스토리 목록조회")
+    //    @GetMapping("/{containerSeq}/histories")
+    //    public ResponseEntity<?> getHistoryList(HttpServletRequest request,
+    //            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq,
+    //            @Valid @SearchParam HistSearchDTO search) {
+    //
+    //        search.setSeq(containerSeq);
+    //
+    //        // 조회
+    //        org.springframework.data.domain.Page<ContainerHist> histList = containerService.findAllContainerHist(search, search.getPageable());
+    //
+    //        // entity -> DTO
+    //        List<HistDTO> histDTOList = histList.stream()
+    //                                            .map(this::convertToHistDto)
+    //                                            .collect(Collectors.toList());
+    //
+    //        // 리턴 DTO 생성
+    //        ResultListDTO<HistDTO> resultList = new ResultListDTO<HistDTO>();
+    //        resultList.setTotalCnt(histList.getTotalElements());
+    //        resultList.setList(histDTOList);
+    //
+    //        ResultDTO<ResultListDTO<HistDTO>> resultDTO = new ResultDTO<ResultListDTO<HistDTO>>(resultList);
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    //    }
+    //
+    //    /**
+    //     * 컨테이너 히스토리 상세조회
+    //     *
+    //     * @param request HTTP 요청
+    //     * @param histSeq 순번
+    //     * @return 페이지 히스토리
+    //     * @throws NoDataException 데이터없음
+    //     */
+    //    @ApiOperation(value = "컨테이너 히스토리 상세조회")
+    //    @GetMapping("/{containerSeq}/histories/{histSeq}")
+    //    public ResponseEntity<?> getHistory(HttpServletRequest request,
+    //            @PathVariable("histSeq") @Min(value = 0, message = "{tps.containerhist.error.min.seq}") Long histSeq)
+    //            throws NoDataException {
+    //
+    //        // 템플릿 히스토리 조회
+    //        ContainerHist history = containerService.findContainerHistBySeq(histSeq)
+    //                                                .orElseThrow(() -> {
+    //                                                    String message = messageByLocale.get("tps.containerhist.error.no-data", request);
+    //                                                    tpsLogger.fail(ActionType.SELECT, message, true);
+    //                                                    return new NoDataException(message);
+    //                                                });
+    //        ContainerHist historyDTO = modelMapper.map(history, ContainerHist.class);
+    //
+    //        ResultDTO<HistDTO> resultDTO = new ResultDTO<HistDTO>(convertToHistDto(historyDTO));
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    //    }
+    //
+    //    /**
+    //     * Container History Entity -> History DTO 변환
+    //     *
+    //     * @param hist history정보
+    //     * @return historyDTO
+    //     */
+    //    private HistDTO convertToHistDto(ContainerHist hist) {
+    //        HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
+    //        histDTO.setBody(hist.getContainerBody());
+    //        histDTO.setRegDt(hist.getRegDt());
+    //        histDTO.setRegId(hist.getRegId());
+    //        return histDTO;
+    //    }
 
     //    /**
     //     * 관련 아이템 목록조회

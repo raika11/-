@@ -12,7 +12,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.common.dto.HistSearchDTO;
+import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.QDomain;
 import jmnet.moka.core.tps.mvc.skin.entity.QSkin;
 import jmnet.moka.core.tps.mvc.skin.entity.QSkinHist;

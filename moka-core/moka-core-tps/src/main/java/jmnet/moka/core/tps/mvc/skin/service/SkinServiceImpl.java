@@ -17,6 +17,7 @@ import jmnet.moka.core.tps.common.dto.ItemDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
+import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.skin.dto.SkinSearchDTO;
 import jmnet.moka.core.tps.mvc.skin.entity.Skin;
@@ -292,4 +293,15 @@ public class SkinServiceImpl implements SkinService {
     public int countByDomainId(String domainId) {
         return skinRepository.countByDomain_DomainId(domainId);
     }
+
+    @Override
+    public org.springframework.data.domain.Page<SkinHist> findAllSkinHist(HistSearchDTO search, Pageable pageable) {
+        return skinHistRepository.findList(search, pageable);
+    }
+
+    @Override
+    public Optional<SkinHist> findSkinHistBySeq(Long histSeq) {
+        return skinHistRepository.findById(histSeq);
+    }
+
 }

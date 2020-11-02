@@ -1,0 +1,157 @@
+/*
+ * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+ */
+
+package jmnet.moka.core.tps.mvc.history.controller;
+
+/**
+ * Description: 히스토리
+ *
+ * @author ssc
+ * @since 2020-11-02
+ */
+import io.swagger.annotations.ApiOperation;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.history.dto.HistDTO;
+import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
+import jmnet.moka.core.tps.mvc.history.dto.HistSimpleDTO;
+import jmnet.moka.core.tps.mvc.history.service.HistoryService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@Validated
+@Slf4j
+@RequestMapping("/api/histories")
+public class HistoryRestController {
+
+    @Autowired
+    private HistoryService historyService;
+
+    @Autowired
+    private MessageByLocale messageByLocale;
+
+    @Autowired
+    private TpsLogger tpsLogger;
+
+    /**
+     * 히스토리 목록조회
+     *
+     * @param request 요청
+     * @param search  검색조건
+     * @return 히스토리 목록
+     */
+    @ApiOperation(value = "히스토리 목록조회")
+    @GetMapping
+    public ResponseEntity<?> getHistoryList(HttpServletRequest request, @Valid @SearchParam HistSearchDTO search)
+            throws Exception {
+
+        String itemType = search.getSeqType();
+        ResultListDTO<HistSimpleDTO> resultList = new ResultListDTO<HistSimpleDTO>();
+
+        try {
+            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
+                // 페이지 히스토리 조회
+                List<HistSimpleDTO> histList = historyService.findAllPageHist(search);
+                resultList.setTotalCnt(search.getTotal());
+                resultList.setList(histList);
+
+            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
+                // 스킨 히스토리 조회
+                List<HistSimpleDTO> histList = historyService.findAllSkinHist(search);
+                resultList.setTotalCnt(search.getTotal());
+                resultList.setList(histList);
+
+            } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
+                // 컨테이너 히스토리 조회
+                List<HistSimpleDTO> histList = historyService.findAllContainerHist(search);
+                resultList.setTotalCnt(search.getTotal());
+                resultList.setList(histList);
+
+            } else if (itemType.equals(MokaConstants.ITEM_TEMPLATE)) {
+                // 템플릿 히스토리 조회
+                List<HistSimpleDTO> histList = historyService.findAllTemplateHist(search);
+                resultList.setTotalCnt(search.getTotal());
+                resultList.setList(histList);
+            }
+
+            ResultDTO<ResultListDTO<HistSimpleDTO>> resultDTO = new ResultDTO<ResultListDTO<HistSimpleDTO>>(resultList);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD HISTORY LIST]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD HISTORY LIST]", e, true);
+            throw new Exception(messageByLocale.get("tps.history.error.select", request), e);
+        }
+    }
+
+    /**
+     * 히스토리 상세조회
+     *
+     * @param request HTTP 요청
+     * @param histSeq 순번
+     * @return 페이지 히스토리
+     * @throws NoDataException 데이터없음
+     */
+    @ApiOperation(value = "히스토리 상세조회")
+    @GetMapping("/{histSeq}")
+    public ResponseEntity<?> getHistory(HttpServletRequest request,
+            @PathVariable("histSeq") @Min(value = 0, message = "{tps.history.error.min.histseq}") Long histSeq,
+            @Valid @SearchParam HistSearchDTO search)
+            throws Exception {
+
+        String itemType = search.getSeqType();
+
+        try {
+            HistDTO hist = null;
+
+            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
+                // 페이지 히스토리 조회
+                hist = historyService.findPageHist(histSeq);
+
+            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
+                // 스킨 히스토리 조회
+                hist = historyService.findSkinHist(histSeq);
+
+            } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
+                // 컨테이너 히스토리 조회
+                hist = historyService.findContainerHist(histSeq);
+
+            } else if (itemType.equals(MokaConstants.ITEM_TEMPLATE)) {
+                // 템플릿 히스토리 조회
+                hist = historyService.findTemplateHist(histSeq);
+            }
+
+            ResultDTO<HistDTO> resultDTO = new ResultDTO<HistDTO>(hist);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (NoDataException e) {
+            String message = messageByLocale.get("tps.common.error.no-data", request);
+            tpsLogger.fail(ActionType.SELECT, message, true);
+            throw new NoDataException(message);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD HISTORY]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD HISTORY]", e, true);
+            throw new Exception(messageByLocale.get("tps.history.error.histseq.select", request), e);
+        }
+    }
+}

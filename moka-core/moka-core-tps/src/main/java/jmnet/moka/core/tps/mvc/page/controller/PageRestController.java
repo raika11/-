@@ -5,7 +5,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -19,8 +18,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
-import jmnet.moka.core.tps.common.dto.HistDTO;
-import jmnet.moka.core.tps.common.dto.HistSearchDTO;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -33,7 +30,6 @@ import jmnet.moka.core.tps.mvc.page.dto.PageNode;
 import jmnet.moka.core.tps.mvc.page.dto.PageSearchDTO;
 import jmnet.moka.core.tps.mvc.page.dto.ParentPageDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
-import jmnet.moka.core.tps.mvc.page.entity.PageHist;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
@@ -364,7 +360,7 @@ public class PageRestController {
     }
 
     /**
-     * 페이지서 비스URL 사용여부 체크
+     * 페이지서 서비스URL 사용여부 체크
      *
      * @param request  요청
      * @param pageUrl  페이지 서비스 URL
@@ -445,80 +441,94 @@ public class PageRestController {
     //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     //    }
 
-    /**
-     * 페이지 히스토리 목록조회
-     *
-     * @param request 요청
-     * @param pageSeq 페이지순번
-     * @param search  검색조건
-     * @return 히스토리 목록
-     */
-    @ApiOperation(value = "페이지 히스토리 목록조회")
-    @GetMapping("/{pageSeq}/histories")
-    public ResponseEntity<?> getHistoryList(HttpServletRequest request,
-            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
-            @Valid @SearchParam HistSearchDTO search) {
-
-        search.setSeq(pageSeq);
-
-        // 조회
-        org.springframework.data.domain.Page<PageHist> histList = pageService.findAllPageHist(search, search.getPageable());
-
-        // entity -> DTO
-        List<HistDTO> histDTOList = histList.stream()
-                                            .map(this::convertToHistDto)
-                                            .collect(Collectors.toList());
-
-        ResultListDTO<HistDTO> resultList = new ResultListDTO<HistDTO>();
-        resultList.setTotalCnt(histList.getTotalElements());
-        resultList.setList(histDTOList);
-
-        ResultDTO<ResultListDTO<HistDTO>> resultDTO = new ResultDTO<ResultListDTO<HistDTO>>(resultList);
-        tpsLogger.success(ActionType.SELECT, true);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    }
-
-    /**
-     * Page History Entity -> History DTO 변환
-     *
-     * @param hist history정보
-     * @return historyDTO
-     */
-    private HistDTO convertToHistDto(PageHist hist) {
-        HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
-        histDTO.setBody(hist.getPageBody());
-        histDTO.setRegDt(hist.getRegDt());
-        histDTO.setRegId(hist.getRegId());
-        return histDTO;
-    }
-
-    /**
-     * 페이지 히스토리 상세조회
-     *
-     * @param request HTTP 요청
-     * @param histSeq 순번
-     * @return 페이지 히스토리
-     * @throws NoDataException 데이터없음
-     */
-    @ApiOperation(value = "페이지 히스토리 상세조회")
-    @GetMapping("/{pageSeq}/histories/{histSeq}")
-    public ResponseEntity<?> getHistory(HttpServletRequest request,
-            @PathVariable("histSeq") @Min(value = 0, message = "{tps.pagehist.error.min.seq}") Long histSeq)
-            throws NoDataException {
-
-        // 페이지 히스토리 조회
-        PageHist history = pageService.findPageHistBySeq(histSeq)
-                                      .orElseThrow(() -> {
-                                          String message = messageByLocale.get("tps.pagehist.error.no-data", request);
-                                          tpsLogger.fail(ActionType.SELECT, message, true);
-                                          return new NoDataException(message);
-                                      });
-        PageHist historyDTO = modelMapper.map(history, PageHist.class);
-
-        ResultDTO<HistDTO> resultDTO = new ResultDTO<HistDTO>(convertToHistDto(historyDTO));
-        tpsLogger.success(ActionType.SELECT, true);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    }
+    //    /**
+    //     * 페이지 히스토리 목록조회
+    //     *
+    //     * @param request 요청
+    //     * @param pageSeq 페이지순번
+    //     * @param search  검색조건
+    //     * @return 히스토리 목록
+    //     */
+    //    @ApiOperation(value = "페이지 히스토리 목록조회")
+    //    @GetMapping("/{pageSeq}/histories")
+    //    public ResponseEntity<?> getHistoryList(HttpServletRequest request,
+    //            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
+    //            @Valid @SearchParam HistSearchDTO search) {
+    //
+    //        search.setSeq(pageSeq);
+    //
+    //        // 조회
+    //        org.springframework.data.domain.Page<PageHist> histList = pageService.findAllPageHist(search, search.getPageable());
+    //
+    //        // entity -> DTO
+    //        List<HistSimpleDTO> histDTOList = histList.stream()
+    //                                                  .map(this::convertToHistSimpleDto)
+    //                                                  .collect(Collectors.toList());
+    //
+    //        ResultListDTO<HistSimpleDTO> resultList = new ResultListDTO<HistSimpleDTO>();
+    //        resultList.setTotalCnt(histList.getTotalElements());
+    //        resultList.setList(histDTOList);
+    //
+    //        ResultDTO<ResultListDTO<HistSimpleDTO>> resultDTO = new ResultDTO<ResultListDTO<HistSimpleDTO>>(resultList);
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    //    }
+    //
+    //    /**
+    //     * Page History Entity -> History DTO 변환
+    //     *
+    //     * @param hist history정보
+    //     * @return historyDTO
+    //     */
+    //    private HistSimpleDTO convertToHistSimpleDto(PageHist hist) {
+    //        HistSimpleDTO histDTO = modelMapper.map(hist, HistSimpleDTO.class);
+    //        histDTO.setRegDt(hist.getRegDt());
+    //        histDTO.setRegId(hist.getRegId());
+    //        return histDTO;
+    //    }
+    //
+    //    /**
+    //     * 페이지 히스토리 상세조회
+    //     *
+    //     * @param request HTTP 요청
+    //     * @param histSeq 순번
+    //     * @return 페이지 히스토리
+    //     * @throws NoDataException 데이터없음
+    //     */
+    //    @ApiOperation(value = "페이지 히스토리 상세조회")
+    //    @GetMapping("/{pageSeq}/histories/{histSeq}")
+    //    public ResponseEntity<?> getHistory(HttpServletRequest request,
+    //            @PathVariable("histSeq") @Min(value = 0, message = "{tps.pagehist.error.min.seq}") Long histSeq)
+    //            throws NoDataException {
+    //
+    //        // 페이지 히스토리 조회
+    //        PageHist history = pageService.findPageHistBySeq(histSeq)
+    //                                      .orElseThrow(() -> {
+    //                                          String message = messageByLocale.get("tps.pagehist.error.no-data", request);
+    //                                          tpsLogger.fail(ActionType.SELECT, message, true);
+    //                                          return new NoDataException(message);
+    //                                      });
+    //        //        PageHist historyDTO = modelMapper.map(history, PageHist.class);
+    //
+    //        ResultDTO<HistDTO> resultDTO = new ResultDTO<HistDTO>(convertToHistDto(history));
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    //    }
+    //
+    //
+    //    /**
+    //     * Page History Entity -> History DTO 변환
+    //     *
+    //     * @param hist history정보
+    //     * @return historyDTO
+    //     */
+    //    private HistDTO convertToHistDto(PageHist hist) {
+    //        HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
+    //        histDTO.setBody(hist.getPageBody());
+    //        histDTO.setRegDt(hist.getRegDt());
+    //        histDTO.setRegId(hist.getRegId());
+    //        return histDTO;
+    //    }
 
     /**
      * 페이지 목록조회(목록용)

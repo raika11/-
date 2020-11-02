@@ -173,7 +173,7 @@ public class EditFormRestController {
                         }
                     });
         }
-        ResultMapDTO resultMapDTO = new ResultMapDTO();
+        ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
         resultMapDTO.addBodyAttribute("editForm", editFormDTO);
         resultMapDTO.addBodyAttribute("editFormItems", editFormItemExtDTOS);
         return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);

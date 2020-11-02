@@ -58,6 +58,11 @@ public class EditFormDTO {
     private String serviceUrl;
 
     /**
+     * 사용여부
+     */
+    private String usedYn;
+
+    /**
      * 서비스 페이지 url url 값과 동일함. 다른 채널을 찾지 못함.
      */
     private String baseUrl;

@@ -3,8 +3,8 @@ package jmnet.moka.core.tps.mvc.member.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
 import org.springframework.data.domain.Page;
 
@@ -15,7 +15,7 @@ public interface MemberService {
      * @param search 검색 조건
      * @return 검색 결과 목록
      */
-    Page<Member> findAllMember(SearchDTO search);
+    Page<Member> findAllMember(MemberSearchDTO search);
 
     /**
      * 전체 멤버 조회

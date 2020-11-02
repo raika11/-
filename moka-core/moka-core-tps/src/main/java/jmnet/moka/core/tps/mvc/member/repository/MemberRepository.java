@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, String>, JpaSpecificationExecutor<Member> {
+public interface MemberRepository extends JpaRepository<Member, String>, JpaSpecificationExecutor<Member>, MemberRepositorySupport {
 
     public Optional<Member> findByMemberId(String memberId);
 }

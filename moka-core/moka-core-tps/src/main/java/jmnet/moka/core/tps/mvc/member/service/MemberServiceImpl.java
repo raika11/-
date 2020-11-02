@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.group.repository.GroupMemberRepository;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
 import jmnet.moka.core.tps.mvc.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
@@ -26,8 +26,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Page<Member> findAllMember(SearchDTO search) {
-        return memberRepository.findAll(search.getPageable());
+    public Page<Member> findAllMember(MemberSearchDTO search) {
+        return memberRepository.findAllMember(search);
     }
 
     @Override
@@ -128,9 +128,7 @@ public class MemberServiceImpl implements MemberService {
 
         member
                 .getGroupMembers()
-                .forEach(groupMember -> {
-                    this.deleteGroupMember(groupMember);
-                });
+                .forEach(this::deleteGroupMember);
         memberRepository.delete(member);
     }
 
@@ -138,9 +136,7 @@ public class MemberServiceImpl implements MemberService {
     public void deleteMemberById(String memberId) {
         this
                 .findMemberById(memberId)
-                .ifPresent(member -> {
-                    deleteMember(member);
-                });
+                .ifPresent(this::deleteMember);
     }
 
     @Override

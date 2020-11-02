@@ -30,6 +30,15 @@ public class ResultMapDTO extends ResultDTO<Map<String, Object>> {
         this(status, body, null);
     }
 
+    public ResultMapDTO(HttpStatus status) {
+        this(status, (String) null);
+    }
+
+    public ResultMapDTO(HttpStatus status, String message) {
+        header = ResultHeaderDTO.create(status, message);
+        this.body = new HashMap<>();
+    }
+
     public ResultMapDTO(HttpStatus status, Map<String, Object> body, String message) {
         header = ResultHeaderDTO.create(status, message);
         this.body = new HashMap<>();

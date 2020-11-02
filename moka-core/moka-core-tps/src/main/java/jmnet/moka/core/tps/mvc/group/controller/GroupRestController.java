@@ -126,8 +126,9 @@ public class GroupRestController {
             throws NoDataException {
 
         String message = messageByLocale.get("tps.group.error.no-data", request);
-        Group group = groupService.findGroupById(groupCd)
-                                  .orElseThrow(() -> new NoDataException(message));
+        Group group = groupService
+                .findGroupById(groupCd)
+                .orElseThrow(() -> new NoDataException(message));
 
         GroupDTO dto = modelMapper.map(group, GroupDTO.class);
 
@@ -218,8 +219,9 @@ public class GroupRestController {
         Group newGroup = modelMapper.map(groupDTO, Group.class);
 
         // 오리진 데이터 조회
-        groupService.findGroupById(newGroup.getGroupCd())
-                    .orElseThrow(() -> new NoDataException(infoMessage));
+        groupService
+                .findGroupById(newGroup.getGroupCd())
+                .orElseThrow(() -> new NoDataException(infoMessage));
 
 
 
@@ -258,13 +260,11 @@ public class GroupRestController {
             @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd)
             throws NoDataException {
 
-        String message = messageByLocale.get("tps.group.error.no-data", request);
-
-        groupService.hasMembers(groupCd);
-
+        boolean exists = groupService.hasMembers(groupCd);
+        String message = exists ? messageByLocale.get("tps.group.success.select.exist-member") : "";
 
         // 결과리턴
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(groupService.hasMembers(groupCd));
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, message);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -287,14 +287,15 @@ public class GroupRestController {
 
         // 그룹 데이터 조회
         String noContentMessage = messageByLocale.get("tps.group.error.no-data", request);
-        Group member = groupService.findGroupById(groupCd)
-                                   .orElseThrow(() -> new NoDataException(noContentMessage));
+        Group member = groupService
+                .findGroupById(groupCd)
+                .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 관련 데이터 조회
         if (groupService.hasMembers(groupCd)) {
             // 액션 로그에 실패 로그 출력
-            tpsLogger.fail(ActionType.DELETE, messageByLocale.get("tps.group.error.delete.exsit-member", request));
-            throw new InvalidDataException(messageByLocale.get("tps.group.error.delete.exsit-member", request));
+            tpsLogger.fail(ActionType.DELETE, messageByLocale.get("tps.group.error.delete.exist-member", request));
+            throw new InvalidDataException(messageByLocale.get("tps.group.error.delete.exist-member", request));
         }
 
         try {

@@ -1,7 +1,10 @@
 package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
 import javax.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +31,9 @@ import lombok.Setter;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MemberDTO {
+
+    public static final Type TYPE = new TypeReference<List<MemberDTO>>() {
+    }.getType();
     /**
      * 사용자ID
      */

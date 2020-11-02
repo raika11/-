@@ -29,7 +29,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Getter
 @Setter
 @Builder
-@Table(name = "TB_CMS_EDIT_FORM")
+@Table(name = "TB_WMS_EDIT_FORM")
 @Entity
 public class EditForm extends BaseAudit implements Serializable {
 

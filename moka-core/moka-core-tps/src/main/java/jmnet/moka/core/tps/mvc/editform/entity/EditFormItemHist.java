@@ -31,7 +31,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @Entity
-@Table(name = "TB_CMS_EDIT_FORM_ITEM_HIST")
+@Table(name = "TB_WMS_EDIT_FORM_ITEM_HIST")
 public class EditFormItemHist extends BaseAudit {
 
     private static final long serialVersionUID = 1L;

@@ -25,7 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@Table(name = "TB_CMS_EDIT_FORM_ITEM")
+@Table(name = "TB_WMS_EDIT_FORM_ITEM")
 @Entity
 public class EditFormItem extends BaseAudit {
 

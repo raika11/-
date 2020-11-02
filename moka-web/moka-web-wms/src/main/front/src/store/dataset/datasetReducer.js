@@ -64,6 +64,15 @@ export default handleActions(
             });
         },
         /**
+         * 데이터 변경
+         */
+        [act.CHANGE_DATASET]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.dataset = payload;
+            });
+        },
+
+        /**
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,

@@ -5,7 +5,7 @@ import { getTemplate, changeTemplateBody, saveTemplate, clearTemplate, GET_TEMPL
 import { notification } from '@utils/toastUtil';
 
 const TemplateHtmlModal = (props) => {
-    const { show, onHide, data } = props;
+    const { show, onHide, templateSeq } = props;
     const dispatch = useDispatch();
 
     const { template, templateBody, invalidList, loading } = useSelector((store) => ({
@@ -40,7 +40,7 @@ const TemplateHtmlModal = (props) => {
                     } else {
                         notification('warning', header.message);
                     }
-                    onHide();
+                    handleHide();
                 },
             }),
         );
@@ -55,14 +55,14 @@ const TemplateHtmlModal = (props) => {
     };
 
     useEffect(() => {
-        if (data.templateSeq) {
+        if (templateSeq && show) {
             dispatch(
                 getTemplate({
-                    templateSeq: data.templateSeq,
+                    templateSeq: templateSeq,
                 }),
             );
         }
-    }, [data.templateSeq, dispatch]);
+    }, [templateSeq, show, dispatch]);
 
     useEffect(() => {
         setDefalutValue(templateBody);
@@ -92,7 +92,7 @@ const TemplateHtmlModal = (props) => {
 
     return (
         <MokaModalEditor
-            title={data.templateName}
+            title={template.templateName || ''}
             show={show}
             onHide={handleHide}
             onBlur={handleBlur}

@@ -18,11 +18,10 @@ import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 /**
- * 데이타셋 VO
- * 2020. 4. 24. ssc 최초생성
- * 
- * @since 2020. 4. 24. 오후 4:26:55
+ * 데이타셋 VO 2020. 4. 24. ssc 최초생성
+ *
  * @author ssc
+ * @since 2020. 4. 24. 오후 4:26:55
  */
 @Alias("DatasetVO")
 @NoArgsConstructor
@@ -35,7 +34,8 @@ public class DatasetVO implements Serializable {
 
     private static final long serialVersionUID = -4690007468161992681L;
 
-    public static final Type TYPE = new TypeReference<List<DatasetVO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<DatasetVO>>() {
+    }.getType();
 
     /**
      * 데이터셋SEQ
@@ -59,7 +59,7 @@ public class DatasetVO implements Serializable {
     /**
      * 사용여부
      */
-    @Column(name = "USE_YN")
+    @Column(name = "USED_YN")
     @Builder.Default
-    private String useYn = MokaConstants.NO;
+    private String usedYn = MokaConstants.NO;
 }

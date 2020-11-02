@@ -75,9 +75,9 @@ public class TemplateVO implements Serializable {
     /**
      * 템플릿 사용여부
      */
-    @Column(name = "USE_YN")
+    @Column(name = "USED_YN")
     @Builder.Default
-    private String useYn = MokaConstants.NO;
+    private String usedYn = MokaConstants.NO;
 
     /**
      * 삽입된 템플릿 순서 (템플릿을 관련아이템으로 조회시 사용)

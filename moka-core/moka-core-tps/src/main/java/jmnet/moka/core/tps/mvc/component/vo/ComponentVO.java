@@ -43,9 +43,9 @@ public class ComponentVO implements Serializable {
     /**
      * 사용여부
      */
-    @Column(name = "USE_YN")
+    @Column(name = "USED_YN")
     @Builder.Default
-    private String useYn = MokaConstants.NO;
+    private String usedYn = MokaConstants.NO;
 
     /**
      * 템플릿SEQ

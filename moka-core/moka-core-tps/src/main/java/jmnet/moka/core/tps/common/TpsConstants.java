@@ -159,4 +159,7 @@ public class TpsConstants {
     // 최상위 메뉴 ID
     public static final String ROOT_MENU_ID = "00";
 
+    // 히스토리 날짜검색 포맷
+    public static final String HISTORY_DATE_FORMAT = "YYYY-MM-DD";
+
 }

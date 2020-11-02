@@ -68,9 +68,13 @@ public class PageHistRepositorySupportImpl extends QuerydslRepositorySupport imp
                     keywordDtList = McpDate.betweenDate(MokaConstants.JSON_DATE_FORMAT, keyword);
                 } catch (ParseException e) {
                 }
-                builder.and(pageHist.regId.contains(keyword)
-                                          .or(pageHist.regDt.between(Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(0)),
-                                                                     Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(1)))));
+                if(keywordDtList != null){
+                    builder.and(pageHist.regId.contains(keyword)
+                        .or(pageHist.regDt.between(Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(0)),
+                            Expressions.dateTemplate(Date.class, "{0}", keywordDtList.get(1)))));
+                }else{
+                    builder.and(pageHist.regId.contains(keyword));
+                }
             }
         }
 

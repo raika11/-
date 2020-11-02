@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.history.mapper.HistoryMapper">
+
+  <!-- resultSet이 단일인 경우 -->
+  <select id="findAll" parameterType="HistSearchDTO" resultType="HistSimpleDTO"
+    statementType="CALLABLE">
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_HISTORY_LIST_SEL(
+    #{seq, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{seqType, mode=IN, jdbcType=VARCHAR, javaType=string},
+    <choose>
+      <when test="searchType == 'all' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'regDt' and startRegDt != null">
+        #{startRegDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'regDt' and endRegDt != null">
+        #{endRegDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'regId' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+</mapper>

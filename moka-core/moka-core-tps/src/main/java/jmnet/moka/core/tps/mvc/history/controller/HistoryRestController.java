@@ -26,6 +26,7 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.history.dto.HistDTO;
 import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
 import jmnet.moka.core.tps.mvc.history.dto.HistSimpleDTO;
+import jmnet.moka.core.tps.mvc.history.mapper.HistoryMapper;
 import jmnet.moka.core.tps.mvc.history.service.HistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,9 @@ public class HistoryRestController {
 
     @Autowired
     private HistoryService historyService;
+
+    @Autowired
+    HistoryMapper historyMapper;
 
     @Autowired
     private MessageByLocale messageByLocale;
@@ -68,6 +72,10 @@ public class HistoryRestController {
         ResultListDTO<HistSimpleDTO> resultList = new ResultListDTO<HistSimpleDTO>();
 
         try {
+//            List<HistSimpleDTO> histList = historyMapper.findAll(search);
+//            resultList.setTotalCnt(search.getTotal());
+//            resultList.setList(histList);
+
             if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                 // 페이지 히스토리 조회
                 List<HistSimpleDTO> histList = historyService.findAllPageHist(search);

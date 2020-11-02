@@ -60,7 +60,8 @@ const DomainAgGrid = (props) => {
                 domainId: row.domainId,
                 domainName: row.domainName,
                 domainUrl: row.domainUrl,
-                delete: onDelete,
+                usedYn: row.usedYn,
+                onDelete,
             })),
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps

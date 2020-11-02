@@ -33,7 +33,7 @@ export const columnDefs = [
             }
             return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;*/
             const { data } = row;
-            return <MokaTableDeleteButton {...row} onClick={data.delete} />;
+            return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;
         },
         //preventRowClick: true,
     },

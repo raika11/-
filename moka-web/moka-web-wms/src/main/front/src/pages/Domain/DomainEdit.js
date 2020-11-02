@@ -25,7 +25,7 @@ const DomainEdit = ({ history, onDelete }) => {
     const [domainId, setDomainId] = useState('');
     const [domainName, setDomainName] = useState('');
     const [domainUrl, setDomainUrl] = useState('');
-    const [useYn, setUseYn] = useState('Y');
+    const [usedYn, setUsedYn] = useState('Y');
     const [servicePlatform, setServicePlatform] = useState('P');
     const [lang, setLang] = useState('KR');
     const [apiCodeId, setApiCodeId] = useState('');
@@ -76,7 +76,7 @@ const DomainEdit = ({ history, onDelete }) => {
             setApiCodeId(value);
         } else if (name === 'useYN') {
             const usedValue = checked ? 'Y' : 'N';
-            setUseYn(usedValue);
+            setUsedYn(usedValue);
         }
     };
 
@@ -149,7 +149,7 @@ const DomainEdit = ({ history, onDelete }) => {
         setDomainName(domain.domainName || '');
         setServicePlatform(domain.servicePlatform || 'P');
         setLang(domain.lang || (elLang.current[0] ? elLang.current[0].value : ''));
-        setUseYn(domain.useYn || 'Y');
+        setUsedYn(domain.usedYn || 'Y');
         setDomainUrl(domain.domainUrl || '');
         setApiCodeId(domain.apiCodeId || (elApiCodeId.current[0] ? elApiCodeId.current[0].value : ''));
         setDescription(domain.description || '');
@@ -234,7 +234,7 @@ const DomainEdit = ({ history, onDelete }) => {
             servicePlatform,
             lang,
             domainUrl,
-            useYn,
+            useYn: usedYn,
             apiCodeId,
             description,
         };
@@ -319,7 +319,7 @@ const DomainEdit = ({ history, onDelete }) => {
                         <MokaInputLabel
                             label="사용여부"
                             as="switch"
-                            inputProps={{ label: '', checked: useYn === 'Y' && true }}
+                            inputProps={{ label: '', checked: usedYn === 'Y' && true }}
                             id="domain-useYN"
                             name="useYN"
                             onChange={handleChangeValue}

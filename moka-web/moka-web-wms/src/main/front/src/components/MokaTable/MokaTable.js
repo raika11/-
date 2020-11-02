@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaPagination } from '@components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
@@ -22,6 +23,10 @@ const propTypes = {
      * agGrid 높이
      */
     agGridHeight: PropTypes.number,
+    /**
+     * 테이블 헤더 여부
+     */
+    header: PropTypes.bool,
     /**
      * 로딩 텍스트
      */
@@ -91,13 +96,19 @@ const defaultProps = {
     preventRowClickCell: [],
     rowSelection: 'single',
     dragging: false,
+    header: true,
 };
 
 const MokaTable = (props) => {
-    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection, selected } = props;
-    const { onAppendClick, onDeleteClick } = props;
-    const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
+    // table props
+    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection, selected, header } = props;
     const { dragging, onRowDragMove } = props;
+
+    // button props
+    const { onAppendClick, onDeleteClick } = props;
+
+    // paging props
+    const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
     const [gridApi, setGridApi] = useState(null);
 
     /**
@@ -195,7 +206,7 @@ const MokaTable = (props) => {
     return (
         <>
             {/* 목록 */}
-            <div className="ag-theme-moka-grid" style={{ height: `${agGridHeight}px` }}>
+            <div className={clsx('ag-theme-moka-grid', { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }}>
                 <AgGridReact
                     columnDefs={columnDefs}
                     rowData={rowData}
@@ -218,6 +229,7 @@ const MokaTable = (props) => {
                     }
                     frameworkComponents={{ mokaTooltip: Tooltip }}
                     suppressRowClickSelection
+                    headerHeight={!header ? 0 : undefined}
                 />
             </div>
             {/* 페이징 */}

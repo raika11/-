@@ -7,8 +7,8 @@ const AreaList = () => {
     return (
         <React.Fragment>
             <AgGrid1Dpeth />
-            {/* <AgGrid2Depth />
-            <AgGrid3Depth /> */}
+            <AgGrid2Depth />
+            <AgGrid3Depth />
         </React.Fragment>
     );
 };

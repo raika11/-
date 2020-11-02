@@ -49,6 +49,7 @@ const ContainerHtmlModal = (props) => {
             show={show}
             onHide={handleHide}
             defaultValue={container.containerBody}
+            value={container.containerBody}
             buttons={[{ text: '닫기', variant: 'gray150', onClick: handleHide }]}
             loading={loading}
             options={{

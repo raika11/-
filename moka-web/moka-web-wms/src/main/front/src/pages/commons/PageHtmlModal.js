@@ -48,7 +48,8 @@ const PageHtmlModal = (props) => {
             title={page.pageName || ''}
             show={show}
             onHide={handleHide}
-            defaultValue={page.pageBody}
+            defaulValue={page.pageBody}
+            value={page.pageBody}
             buttons={[{ text: '닫기', variant: 'gray150', onClick: handleHide }]}
             options={{
                 readOnly: true,

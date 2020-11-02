@@ -149,14 +149,18 @@ export default {
             attention: true,
             okText: '예',
             cancelText: '아니오',
-            onOk: (id) => {
+            onOk: () => {
                 if (ok) {
-                    ok(id);
+                    ok(true);
                 }
             },
-            onCancel: () => {
+            onCancel: (id) => {
                 if (cancel) {
-                    cancel();
+                    cancel(false);
+                } else {
+                    if (ok) {
+                        ok(false);
+                    }
                 }
             },
         });

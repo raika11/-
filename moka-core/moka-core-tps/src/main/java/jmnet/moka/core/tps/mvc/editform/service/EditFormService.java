@@ -56,6 +56,14 @@ public interface EditFormService {
     public Optional<EditForm> findEditFormById(String formId);
 
     /**
+     * 편집 폼 건수
+     *
+     * @param formId 편집폼 ID
+     * @return 편집폼정보
+     */
+    public int countEditFormById(String formId);
+
+    /**
      * 편집 폼 조회
      *
      * @param editForm 편집폼

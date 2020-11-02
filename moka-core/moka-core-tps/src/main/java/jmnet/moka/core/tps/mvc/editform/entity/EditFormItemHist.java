@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
@@ -21,6 +20,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 /**
  * 편집 폼 아이템 이력
@@ -52,7 +52,8 @@ public class EditFormItemHist extends BaseAudit {
     private Long seqNo;
     @Column(name = "ITEM_SEQ", nullable = false)
     private Long itemSeq;
-    @Lob
+
+    @Nationalized
     @Column(name = "FORM_DATA", nullable = false)
     private String formData;
     /**

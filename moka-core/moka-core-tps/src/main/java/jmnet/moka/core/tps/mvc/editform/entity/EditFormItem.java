@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
@@ -16,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 /**
  * 편집 폼 아이템
@@ -61,13 +61,14 @@ public class EditFormItem extends BaseAudit {
     /**
      * Form Item Title
      */
+    @Nationalized
     @Column(name = "ITEM_TITLE", nullable = false)
     private String itemTitle;
 
     /**
      * Edit Form Data
      */
-    @Lob
+    @Nationalized
     @Column(name = "FORM_DATA", nullable = false)
     private String formData;
 

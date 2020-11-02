@@ -74,10 +74,15 @@ public class EditFormServiceImpl implements EditFormService {
         return editFormRepository.findByFormId(formId);
     }
 
+    public int countEditFormById(String formId) {
+        return editFormRepository.countByFormId(formId);
+    }
+
     @Override
     public Optional<EditForm> findEditForm(EditForm editForm) {
         return editFormRepository.findByFormId(editForm.getFormId());
     }
+
 
     @Override
     public Optional<EditFormItem> findEditFormItemBySeq(Long itemSeq) {

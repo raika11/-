@@ -52,3 +52,6 @@ export const API_PARAM_HINT_CODE_ID = 'codeId';
 
 // W3C검사 URL
 export const W3C_URL = 'https://validator.w3.org/check';
+
+// tems
+export const TEMS_PREFIX = 'tems';

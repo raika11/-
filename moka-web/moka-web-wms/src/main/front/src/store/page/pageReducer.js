@@ -200,6 +200,13 @@ export default handleActions(
                 draft.pageError = initialState.pageError;
             });
         },
+        /**
+         * 태그추가
+         */
+        [act.APPEND_TAG]: (state, { payload }) => ({
+            ...state,
+            inputTag: payload,
+        }),
     },
     initialState,
 );

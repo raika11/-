@@ -93,3 +93,9 @@ export const [GET_HISTORY_LIST, GET_HISTORY_LIST_SUCCESS, GET_HISTORY_LIST_FAILU
 export const [GET_HISTORY, GET_HISTORY_SUCCESS, GET_HISTORY_FAILURE] = createRequestActionTypes('page/GET_HISTORY');
 export const getHistoryList = createAction(GET_HISTORY_LIST, (...actions) => actions);
 export const getHistory = createAction(GET_HISTORY, ({ pageSeq, histSeq }) => ({ pageSeq, histSeq }));
+
+/**
+ * 태그삽입
+ */
+export const APPEND_TAG = 'page/APPEND_TAG';
+export const appendTag = createAction(APPEND_TAG, (inputTag) => inputTag);

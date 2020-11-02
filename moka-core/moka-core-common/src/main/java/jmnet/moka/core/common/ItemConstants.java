@@ -79,7 +79,7 @@ public class ItemConstants {
     public static String COMPONENT_SNAPSHOT_YN = "snapshotYn";
     public static String COMPONENT_SNAPSHOT_BODY = "snapshotBody";
     public static String COMPONENT_SKIN_ID = "skinId";
-//    public static String COMPONENT_PREVIEW_RESOURCE = "previewResource";
+    //    public static String COMPONENT_PREVIEW_RESOURCE = "previewResource";
     public static String COMPONENT_CREATE_YMDT = "create";
     public static String COMPONENT_CREATOR = "ceator";
     public static String COMPONENT_MODIFIED_YMDT = ITEM_MODIFIED;
@@ -96,7 +96,9 @@ public class ItemConstants {
     /* Component Item DEL_WORDS default */
     public static String CP_DEL_WORDS_COLUMN = "newstitle";
 
-    /** Component Ad In List */
+    /**
+     * Component Ad In List
+     */
     public static String COMPONENTAD_LIST = "componentAdList";
 
     /* Template Item */
@@ -196,7 +198,7 @@ public class ItemConstants {
         public static String PAGE_DISPLAY_NAME = "PAGE_DISPLAY_NAME";
         public static String PAGE_PARENT_ID = "PARENT_PAGE_SEQ";
         public static String PAGE_TYPE = "PAGE_TYPE"; // 페이지유형 text/html, application/json,
-                                                      // text/javascript, text/plain, text/xml
+        // text/javascript, text/plain, text/xml
         public static String PAGE_URL = "PAGE_URL";
         public static String PAGE_ORDER = "PAGE_ORD";
         public static String PAGE_BODY = "PAGE_BODY";
@@ -243,12 +245,12 @@ public class ItemConstants {
         public static String COMPONENT_DISP_PAGE_COUNT = "DISP_PAGE_COUNT"; // 표출 페이지수
         public static String COMPONENT_MORE_COUNT = "MORE_COUNT"; // 더보기 건수
         public static String COMPONENT_SEARCH_SERVICE_TYPE = "SCH_SERVICE_TYPE"; // 검색서비스유형(기타코드)
-        public static String COMPONENT_SEARCH_LANG = "SCH_LANGUAGE"; // 검색언어(기타코드)
+        public static String COMPONENT_SEARCH_LANG = "SCH_LANG"; // 검색언어(기타코드)
         public static String COMPONENT_SEARCH_CODE_ID = "SCH_CODE_ID"; // 검색코드ID
         public static String COMPONENT_SNAPSHOT_YN = "SNAPSHOT_YN";
         public static String COMPONENT_SNAPSHOT_BODY = "SNAPSHOT_BODY";
         public static String COMPONENT_SKIN_ID = "SKIN_SEQ";
-//        public static String COMPONENT_PREVIEW_RESOURCE = "PREVIEW_RSRC";
+        //        public static String COMPONENT_PREVIEW_RESOURCE = "PREVIEW_RSRC";
         public static String COMPONENT_CREATE_YMDT = "REG_DT";
         public static String COMPONENT_CREATOR = "REG_ID";
         public static String COMPONENT_MODIFIED_YMDT = "MOD_DT";
@@ -256,7 +258,7 @@ public class ItemConstants {
 
         public static String COMPONENTAD_COMPONENT_ID = "COMPONENT_SEQ";
         public static String COMPONENTAD_AD_ID = "AD_SEQ";
-//        public static String COMPONENTAD_AD_NAME = "AD_NAME";
+        //        public static String COMPONENTAD_AD_NAME = "AD_NAME";
         public static String COMPONENTAD_LIST_PARAGRAPH = "LIST_PARAGRAPH";
 
         /* Template Item */

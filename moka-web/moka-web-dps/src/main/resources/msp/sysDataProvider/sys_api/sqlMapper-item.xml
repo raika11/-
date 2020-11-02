@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dps.item">
   <select id="domain_list" parameterType="hashmap" resultType="map">
     SELECT [DOMAIN_ID]
@@ -16,11 +17,11 @@
       ,[MOD_DT]
       ,[MOD_ID] FROM TB_WMS_DOMAIN
   </select>
-  
+
   <select id="domain_total" parameterType="hashmap" resultType="map">
     SELECT count(1) FROM TB_WMS_DOMAIN
   </select>
-  
+
   <select id="reserved_list" parameterType="hashmap" resultType="map">
     SELECT [RESERVED_SEQ]
       ,[DOMAIN_ID]
@@ -34,55 +35,55 @@
       ,[MOD_ID] FROM TB_WMS_RESERVED
     WHERE DOMAIN_ID = #{domainId}
   </select>
-  
+
   <select id="page_list" parameterType="hashmap" resultType="map">
-  	<choose>
-	  	<when test='tBody.equalsIgnoreCase("Y") || tBody == null'>
-	  	 SELECT [PAGE_SEQ]
-			,[DOMAIN_ID]
-			,[PAGE_NAME]
-			,[PAGE_SERVICE_NAME]
-			,[PAGE_DISPLAY_NAME]
-			,[PARENT_PAGE_SEQ]
-			,[PAGE_TYPE]
-			,[PAGE_URL]
-			,[PAGE_ORD]
-			,[PAGE_BODY]
-			,[USE_YN]
-			,[KWD]
-			,[DESCRIPTION]
-			,[MOVE_YN]
-			,[MOVE_URL]
-			,[REG_DT]
-			,[REG_ID]
-			,[MOD_DT]
-			,[MOD_ID]
-	  	</when>
-	  	<otherwise>
-	     SELECT [PAGE_SEQ]
-			,[DOMAIN_ID]
-			,[PAGE_NAME]
-			,[PAGE_SERVICE_NAME]
-			,[PAGE_DISPLAY_NAME]
-			,[PARENT_PAGE_SEQ]
-			,[PAGE_TYPE]
-			,[PAGE_URL]
-			,[PAGE_ORD]
-			,[USE_YN]
-			,[KWD]
-			,[DESCRIPTION]
-			,[MOVE_YN]
-			,[MOVE_URL]
-			,[REG_DT]
-			,[REG_ID]
-			,[MOD_DT]
-			,[MOD_ID]
-	  	</otherwise>
-  	</choose>
-  	FROM TB_WMS_PAGE
-	WHERE USE_YN='Y'
-	<if test="domainId != null">AND DOMAIN_ID = #{domainId}</if>
-	<if test="id != null">AND PAGE_SEQ = #{id}</if>
+    <choose>
+      <when test='tBody.equalsIgnoreCase("Y") || tBody == null'>
+        SELECT [PAGE_SEQ]
+        ,[DOMAIN_ID]
+        ,[PAGE_NAME]
+        ,[PAGE_SERVICE_NAME]
+        ,[PAGE_DISPLAY_NAME]
+        ,[PARENT_PAGE_SEQ]
+        ,[PAGE_TYPE]
+        ,[PAGE_URL]
+        ,[PAGE_ORD]
+        ,[PAGE_BODY]
+        ,[USE_YN]
+        ,[KWD]
+        ,[DESCRIPTION]
+        ,[MOVE_YN]
+        ,[MOVE_URL]
+        ,[REG_DT]
+        ,[REG_ID]
+        ,[MOD_DT]
+        ,[MOD_ID]
+      </when>
+      <otherwise>
+        SELECT [PAGE_SEQ]
+        ,[DOMAIN_ID]
+        ,[PAGE_NAME]
+        ,[PAGE_SERVICE_NAME]
+        ,[PAGE_DISPLAY_NAME]
+        ,[PARENT_PAGE_SEQ]
+        ,[PAGE_TYPE]
+        ,[PAGE_URL]
+        ,[PAGE_ORD]
+        ,[USE_YN]
+        ,[KWD]
+        ,[DESCRIPTION]
+        ,[MOVE_YN]
+        ,[MOVE_URL]
+        ,[REG_DT]
+        ,[REG_ID]
+        ,[MOD_DT]
+        ,[MOD_ID]
+      </otherwise>
+    </choose>
+    FROM TB_WMS_PAGE
+    WHERE USE_YN='Y'
+    <if test="domainId != null">AND DOMAIN_ID = #{domainId}</if>
+    <if test="id != null">AND PAGE_SEQ = #{id}</if>
   </select>
 
   <select id="container" parameterType="hashmap" resultType="map">
@@ -116,19 +117,18 @@
       ,[DISP_PAGE_COUNT]
       ,[MORE_COUNT]
       ,[SCH_SERVICE_TYPE]
-      ,[SCH_LANGUAGE]
+      ,[SCH_LANG]
       ,[SCH_CODE_ID]
       ,[SNAPSHOT_YN]
       ,[SNAPSHOT_BODY]
       ,[SKIN_SEQ]
-      ,[PREVIEW_RSRC]
       ,[REG_DT]
       ,[REG_ID]
       ,[MOD_DT]
       ,[MOD_ID] FROM TB_WMS_COMPONENT
 	WHERE COMPONENT_SEQ = #{id}
   </select>
-  
+
   <select id="component_work" parameterType="hashmap" resultType="map">
 	SELECT 
 	  c.COMPONENT_SEQ,
@@ -154,7 +154,6 @@
 	  (CASE WHEN w.SEQ IS NULL THEN c.SNAPSHOT_YN ELSE w.SNAPSHOT_YN END) AS SNAPSHOT_YN,
 	  (CASE WHEN w.SEQ IS NULL THEN c.SNAPSHOT_BODY ELSE w.SNAPSHOT_BODY END) AS SNAPSHOT_BODY,
 	  c.SKIN_SEQ,
-	  c.PREVIEW_RSRC,
 	  w.CREATE_YMDT,
 	  (CASE WHEN w.SEQ IS NULL THEN c.CREATOR ELSE w.CREATOR END) AS CREATOR,
 	  (CASE WHEN w.SEQ IS NULL THEN c.MODIFIED_YMDT ELSE w.CREATE_YMDT END) AS MODIFIED_YMDT,
@@ -164,7 +163,7 @@
 	  ON c.COMPONENT_SEQ = w.COMPONENT_SEQ AND w.CREATOR = #{creator}
 	WHERE  c.COMPONENT_SEQ = #{id}
   </select>
-  
+
   <select id="component_ad_list" parameterType="hashmap" resultType="map">
     SELECT [SEQ]
       ,[COMPONENT_SEQ]
@@ -173,7 +172,7 @@
 	WHERE COMPONENT_SEQ = #{id}
 	ORDER BY LIST_PARAGRAPH
   </select>
-  
+
   <select id="template" parameterType="hashmap" resultType="map">
     SELECT [TEMPLATE_SEQ]
       ,[DOMAIN_ID]
@@ -191,7 +190,7 @@
       ,[MOD_ID] FROM TB_WMS_TEMPLATE
 	WHERE TEMPLATE_SEQ = #{id}
   </select>
-  
+
   <select id="dataset" parameterType="hashmap" resultType="map">
     SELECT [DATASET_SEQ]
       ,[DATASET_NAME]
@@ -207,7 +206,7 @@
       ,[MOD_ID] FROM TB_WMS_DATASET
 	WHERE  DATASET_SEQ = #{id}
   </select>
-  
+
   <select id="ad" parameterType="hashmap" resultType="map">
     SELECT [AD_SEQ]
       ,[DOMAIN_ID]

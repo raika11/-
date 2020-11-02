@@ -23,11 +23,10 @@ import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * 예약어 DTO
- * 2020. 6. 17. ssc 최초생성
- * 
- * @since 2020. 6. 17. 오전 11:41:42
+ * 예약어 DTO 2020. 6. 17. ssc 최초생성
+ *
  * @author ssc
+ * @since 2020. 6. 17. 오전 11:41:42
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,7 +39,8 @@ public class ReservedDTO implements Serializable {
 
     private static final long serialVersionUID = -3909058066495143951L;
 
-    public static final Type TYPE = new TypeReference<List<ReservedDTO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<ReservedDTO>>() {
+    }.getType();
 
     /**
      * 예약어SEQ
@@ -59,8 +59,7 @@ public class ReservedDTO implements Serializable {
      * 예약어ID
      */
     @NotNull(message = "{tps.reserved.error.notnull.reservedId}")
-    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+",
-            message = "{tps.reserved.error.pattern.reservedId}")
+    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+", message = "{tps.reserved.error.pattern.reservedId}")
     @Length(max = 24, message = "{tps.reserved.error.length.reservedId}")
     private String reservedId;
 
@@ -81,10 +80,10 @@ public class ReservedDTO implements Serializable {
     /**
      * 사용여부(Y:사용, N:미사용)
      */
-    @NotNull(message = "{tps.reserved.error.notnull.useYn}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.reserved.error.pattern.useYn}")
+    @NotNull(message = "{tps.reserved.error.notnull.usedYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.reserved.error.pattern.usedYn}")
     @Builder.Default
-    private String useYn = MokaConstants.YES;
+    private String usedYn = MokaConstants.YES;
 
 
 

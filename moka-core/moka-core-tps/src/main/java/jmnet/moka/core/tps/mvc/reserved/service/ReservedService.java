@@ -79,4 +79,12 @@ public interface ReservedService {
      */
     public int countReservedByDomainId(String domainId);
 
+    /**
+     * 예약어 중복검사
+     *
+     * @param reservedId 예약어ID
+     * @param domainId   도메인
+     * @return 중복여부
+     */
+    boolean isDuplicatedId(String reservedId, String domainId);
 }

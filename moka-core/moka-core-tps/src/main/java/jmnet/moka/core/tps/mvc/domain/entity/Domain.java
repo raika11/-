@@ -62,9 +62,9 @@ public class Domain extends BaseAudit {
     /**
      * 사용여부 Y : 예, N : 아니오
      */
-    @Column(name = "USE_YN", columnDefinition = "char", nullable = false)
+    @Column(name = "USED_YN", columnDefinition = "char", nullable = false)
     @Builder.Default
-    private String useYn = MokaConstants.YES;
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 언어
@@ -98,7 +98,7 @@ public class Domain extends BaseAudit {
     @PrePersist
     public void prePersist() {
         this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
-        this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
+        this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
         this.lang = McpString.defaultValue(this.lang, TpsConstants.DEFAULT_LANG);
     }
 
@@ -108,7 +108,7 @@ public class Domain extends BaseAudit {
     @PreUpdate
     public void preUpdate() {
         this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
-        this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
+        this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
         this.lang = McpString.defaultValue(this.lang, TpsConstants.DEFAULT_LANG);
     }
 }

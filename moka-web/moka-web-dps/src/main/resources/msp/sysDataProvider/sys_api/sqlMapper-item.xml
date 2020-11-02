@@ -7,7 +7,7 @@
       ,[DOMAIN_NAME]
       ,[DOMAIN_URL]
       ,[SERVICE_PLATFORM]
-      ,[USE_YN]
+      ,[USED_YN]
       ,[LANG]
       ,[API_PATH]
       ,[API_HOST]
@@ -28,7 +28,7 @@
       ,[RESERVED_ID]
       ,[RESERVED_VALUE]
       ,[DESCRIPTION]
-      ,[USE_YN]
+      ,[USED_YN]
       ,[REG_DT]
       ,[REG_ID]
       ,[MOD_DT]
@@ -49,7 +49,7 @@
         ,[PAGE_URL]
         ,[PAGE_ORD]
         ,[PAGE_BODY]
-        ,[USE_YN]
+        ,[USED_YN]
         ,[KWD]
         ,[DESCRIPTION]
         ,[MOVE_YN]
@@ -69,7 +69,7 @@
         ,[PAGE_TYPE]
         ,[PAGE_URL]
         ,[PAGE_ORD]
-        ,[USE_YN]
+        ,[USED_YN]
         ,[KWD]
         ,[DESCRIPTION]
         ,[MOVE_YN]
@@ -81,7 +81,7 @@
       </otherwise>
     </choose>
     FROM TB_WMS_PAGE
-    WHERE USE_YN='Y'
+    WHERE USED_YN='Y'
     <if test="domainId != null">AND DOMAIN_ID = #{domainId}</if>
     <if test="id != null">AND PAGE_SEQ = #{id}</if>
   </select>
@@ -217,7 +217,7 @@
       ,[PERIOD_YN]
       ,[PERIOD_START_DT]
       ,[PERIOD_END_DT]
-      ,[USE_YN]
+      ,[USED_YN]
       ,[AD_WIDTH]
       ,[AD_HEIGHT]
       ,[DESCRIPTION]

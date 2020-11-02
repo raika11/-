@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -65,7 +66,7 @@ public class ReservedRestController {
     /**
      * 예약어목록조회
      *
-     * @param search  검색조건
+     * @param search 검색조건
      * @return 예약어목록
      */
     @ApiOperation(value = "예약어 목록조회")
@@ -271,6 +272,24 @@ public class ReservedRestController {
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE RESERVED]", e, true);
             throw new Exception(messageByLocale.get("tps.reserved.error.delete", request), e);
         }
+    }
+
+    /**
+     * 동일 아이디 존재 여부
+     *
+     * @param reservedId 예약어ID
+     * @param domainId   도메인ID
+     * @return 중복여부
+     */
+    @ApiOperation(value = "동일 아이디 존재 여부")
+    @GetMapping("/{reservedId}/exists")
+    public ResponseEntity<?> duplicateCheckId(@PathVariable("reservedId")
+    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+", message = "{tps.reserved.error.pattern.reservedId}") String reservedId, String domainId) {
+
+        boolean duplicated = reservedService.isDuplicatedId(reservedId, domainId);
+        ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
+        tpsLogger.success(ActionType.SELECT, true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
 

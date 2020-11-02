@@ -134,9 +134,9 @@ public class Page extends BaseAudit {
     /**
      * 사용여부
      */
-    @Column(name = "USE_YN", columnDefinition = "char", nullable = false)
+    @Column(name = "USED_YN", columnDefinition = "char", nullable = false)
     @Builder.Default
-    private String useYn = MokaConstants.YES;
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 파일여부
@@ -184,7 +184,7 @@ public class Page extends BaseAudit {
     public void prePersist() {
         this.pageOrd = this.pageOrd == null ? 1 : this.pageOrd;
         this.pageBody = McpString.defaultValue(this.pageBody);
-        this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
+        this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
         this.fileYn = McpString.defaultValue(this.fileYn, MokaConstants.NO);
         this.moveYn = McpString.defaultValue(this.moveYn, MokaConstants.NO);
     }

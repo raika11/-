@@ -10,7 +10,7 @@ public class ItemConstants {
     public static final String DOMAIN_NAME = "name";
     public static final String DOMAIN_URL = "url";
     public static final String DOMAIN_SERVICE_PLATFORM = "servicePlatform";
-    public static final String DOMAIN_USE_YN = "useYn";
+    public static final String DOMAIN_USE_YN = "usedYn";
     public static final String DOMAIN_LANG = "lang";
     public static final String DOMAIN_API_HOST = "apiHost";
     public static final String DOMAIN_API_PATH = "apiPath";
@@ -32,7 +32,7 @@ public class ItemConstants {
     public static String PAGE_ORDER = "order";
     public static String PAGE_BODY = "body";
     public static String PAGE_URL_PARAM = "urlParam";
-    public static String PAGE_USE_YN = "useYn";
+    public static String PAGE_USE_YN = "usedYn";
     public static String PAGE_FILE_YN = "fileYn";
     public static String PAGE_KEYWORD = "keyword";
     public static String PAGE_DESCRIPTION = "desc";
@@ -139,7 +139,7 @@ public class ItemConstants {
     public static String AD_PERIOD_YN = "periodYn";
     public static String AD_PERIOD_START_YMDT = "periodStart";
     public static String AD_PERIOD_END_YMDT = "periodEnd";
-    public static String AD_USE_YN = "useYn";
+    public static String AD_USE_YN = "usedYn";
     public static String AD_WIDTH = "width";
     public static String AD_HEIGHT = "height";
     public static String AD_DESCRIPTION = "desc";
@@ -172,7 +172,7 @@ public class ItemConstants {
         public static String DOMAIN_NAME = "DOMAIN_NAME";
         public static String DOMAIN_URL = "DOMAIN_URL";
         public static String DOMAIN_SERVICE_PLATFORM = "SERVICE_PLATFORM";
-        public static String DOMAIN_USE_YN = "USE_YN";
+        public static String DOMAIN_USE_YN = "USED_YN";
         public static String DOMAIN_LANG = "LANG";
         public static String DOMAIN_API_HOST = "API_HOST";
         public static String DOMAIN_API_PATH = "API_PATH";
@@ -187,7 +187,7 @@ public class ItemConstants {
         public static final String RESERVED_ID = "RESERVED_ID";
         public static final String RESERVED_VALUE = "RESERVED_VALUE";
         public static final String RESERVED_DESCRIPTION = "DESCRIPTION";
-        public static final String RESERVED_USE_YN = "USE_YN";
+        public static final String RESERVED_USE_YN = "USED_YN";
         public static final String RESERVED_MODIFED_YMDT = "MOD_DT";
 
         /* Page Item */
@@ -203,7 +203,7 @@ public class ItemConstants {
         public static String PAGE_ORDER = "PAGE_ORD";
         public static String PAGE_BODY = "PAGE_BODY";
         public static String PAGE_URL_PARAM = "URL_PARAM";
-        public static String PAGE_USE_YN = "USE_YN";
+        public static String PAGE_USE_YN = "USED_YN";
         public static String PAGE_FILE_YN = "FILE_YN";
         public static String PAGE_KEYWORD = "KWD";
         public static String PAGE_DESCRIPTION = "DESCRIPTION";

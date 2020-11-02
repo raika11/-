@@ -71,9 +71,9 @@ public class DomainDTO implements Serializable {
     /**
      * 사용여부 Y : 예, N : 아니오
      */
-    @NotNull(message = "{tps.domain.error.notnull.useYn}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.domain.error.notnull.useYn}")
-    private String useYn;
+    @NotNull(message = "{tps.domain.error.notnull.usedYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.domain.error.notnull.usedYn}")
+    private String usedYn;
 
     /**
      * 언어
@@ -107,7 +107,7 @@ public class DomainDTO implements Serializable {
         domainItem.put(ItemConstants.DOMAIN_NAME, this.domainName);
         domainItem.put(ItemConstants.DOMAIN_URL, this.domainUrl);
         domainItem.put(ItemConstants.DOMAIN_SERVICE_PLATFORM, this.servicePlatform);
-        domainItem.put(ItemConstants.DOMAIN_USE_YN, this.useYn);
+        domainItem.put(ItemConstants.DOMAIN_USE_YN, this.usedYn);
         domainItem.put(ItemConstants.DOMAIN_LANG, this.lang);
         domainItem.put(ItemConstants.DOMAIN_API_HOST, this.apiHost);
         domainItem.put(ItemConstants.DOMAIN_API_PATH, this.apiPath);

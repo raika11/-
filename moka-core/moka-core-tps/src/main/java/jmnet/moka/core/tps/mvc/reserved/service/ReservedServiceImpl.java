@@ -61,4 +61,11 @@ public class ReservedServiceImpl implements ReservedService {
     public int countReservedByDomainId(String domainId) {
         return reservedRepository.countByDomain_DomainId(domainId);
     }
+
+    @Override
+    public boolean isDuplicatedId(String reservedId, String domainId) {
+        int count = reservedRepository.countByReservedIdAndDomain_DomainId(reservedId, domainId);
+        return count > 0 ? true : false;
+    }
+
 }

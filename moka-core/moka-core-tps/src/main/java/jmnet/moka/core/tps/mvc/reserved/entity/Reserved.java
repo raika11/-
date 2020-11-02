@@ -75,9 +75,9 @@ public class Reserved extends BaseAudit {
     /**
      * 사용여부
      */
-    @Column(name = "USE_YN", columnDefinition = "char")
+    @Column(name = "USED_YN", columnDefinition = "char")
     @Builder.Default
-    private String useYn = MokaConstants.YES;
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 신규등록, 수정 전 처리
@@ -85,7 +85,7 @@ public class Reserved extends BaseAudit {
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.useYn = McpString.defaultValue(this.useYn, MokaConstants.YES);
+        this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
     }
 
 }

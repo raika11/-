@@ -87,10 +87,10 @@ public class PageSimpleDTO implements Serializable {
     /**
      * 사용여부
      */
-    @NotNull(message = "{tps.page.error.notnull.useYn}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.pattern.useYn}")
+    @NotNull(message = "{tps.page.error.notnull.usedYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.pattern.usedYn}")
     @Builder.Default
-    private String useYn = MokaConstants.YES;
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 상세정보

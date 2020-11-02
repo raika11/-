@@ -119,10 +119,10 @@ public class PageDTO implements Serializable {
     /**
      * 사용여부
      */
-    @NotNull(message = "{tps.page.error.notnull.useYn}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.pattern.useYn}")
+    @NotNull(message = "{tps.page.error.notnull.usedYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.pattern.usedYn}")
     @Builder.Default
-    private String useYn = MokaConstants.YES;
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 파일여부
@@ -188,7 +188,7 @@ public class PageDTO implements Serializable {
         pageItem.put(ItemConstants.PAGE_ORDER, this.pageOrd);
         pageItem.put(ItemConstants.PAGE_BODY, this.pageBody);
         pageItem.put(ItemConstants.PAGE_URL_PARAM, this.urlParam);
-        pageItem.put(ItemConstants.PAGE_USE_YN, this.useYn);
+        pageItem.put(ItemConstants.PAGE_USE_YN, this.usedYn);
         pageItem.put(ItemConstants.PAGE_FILE_YN, this.fileYn);
         pageItem.put(ItemConstants.PAGE_DESCRIPTION, this.description);
         pageItem.put(ItemConstants.PAGE_MOVE_YN, this.moveYn);

@@ -82,7 +82,7 @@ public class PageNode implements Serializable {
      * 사용여부
      */
     @Builder.Default
-    private String useYn = MokaConstants.YES;
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 자식노드
@@ -113,8 +113,8 @@ public class PageNode implements Serializable {
         this.pageOrd = page.getPageOrd()
                            .intValue();
         this.btnShow = false;
-        this.useYn = page.getUseYn()
-                         .equals("Y") ? "Y" : "N";
+        this.usedYn = page.getUsedYn()
+                          .equals("Y") ? "Y" : "N";
     }
 
     /**

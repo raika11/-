@@ -32,6 +32,7 @@ const defaultProps = {};
 
 /**
  * 템플릿 리스트 공통 모달
+ * (템플릿 스토어 사용)
  */
 const TemplateListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected } = props;

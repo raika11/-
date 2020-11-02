@@ -24,6 +24,19 @@ export const initialState = {
         { id: 'containerName', name: '컨테이너명' },
         { id: 'templateBody', name: 'TEMS 소스' },
     ],
+    ref: {
+        total: 0,
+        error: null,
+        list: [],
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            sort: 'containerSeq,desc',
+            domainId: null,
+            searchType: 'all',
+            keyword: '',
+        },
+    },
     container: {},
     containerBody: '',
     containerError: null,
@@ -39,6 +52,11 @@ export default handleActions(
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;
+            });
+        },
+        [act.CHANGE_REF_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.ref.search = payload;
             });
         },
         /**
@@ -64,6 +82,11 @@ export default handleActions(
         [act.CLEAR_SEARCH]: (state) => {
             return produce(state, (draft) => {
                 draft.search = initialState.search;
+            });
+        },
+        [act.CLEAR_REF]: (state) => {
+            return produce(state, (draft) => {
+                draft.ref = initialState.ref;
             });
         },
         /**
@@ -94,6 +117,20 @@ export default handleActions(
         [act.GET_CONTAINER_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.containerError = payload;
+            });
+        },
+        [act.GET_CONTAINER_REF_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.ref.list = body.list;
+                draft.ref.total = body.totalCnt;
+                draft.ref.error = initialState.ref.error;
+            });
+        },
+        [act.GET_CONTAINER_REF_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.ref.list = initialState.list;
+                draft.ref.total = initialState.total;
+                draft.ref.error = payload;
             });
         },
         /**

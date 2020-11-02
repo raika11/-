@@ -6,6 +6,7 @@ import { notification } from '@utils/toastUtil';
 
 /**
  * 템플릿 TEMS 소스 수정 모달
+ * (템플릿 스토어 사용)
  */
 const TemplateHtmlModal = (props) => {
     const { show, onHide, templateSeq } = props;

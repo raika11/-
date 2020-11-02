@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 
 import { ITEM_PG, ITEM_SK } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { initialState, getContainerList, changeSearchOption, clearStore, GET_CONTAINER_LIST } from '@store/container';
+import { initialState, getContainerRefList, changeRefSearchOption, clearRef, GET_CONTAINER_REF_LIST } from '@store/container';
 import { columnDefs } from './RelationContainerListColumns';
 import { defaultContainerSearchType, relationUNAgGridHeight } from '@pages/commons';
 import ContainerHtmlModal from './ContainerHtmlModal';
@@ -43,10 +43,10 @@ const RelationContainerList = (props) => {
     const dispatch = useDispatch();
 
     const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
-        list: store.container.list,
-        search: store.container.search,
-        total: store.container.total,
-        loading: store.loading[GET_CONTAINER_LIST],
+        list: store.container.ref.list,
+        search: store.container.ref.search,
+        total: store.container.ref.total,
+        loading: store.loading[GET_CONTAINER_REF_LIST],
         latestDomainId: store.auth.latestDomainId,
     }));
 
@@ -55,7 +55,7 @@ const RelationContainerList = (props) => {
     }, [storeSearch]);
 
     // state
-    const [search, setSearch] = useState(initialState.search);
+    const [search, setSearch] = useState(initialState.ref.search);
     const [rowData, setRowData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selected, setSelected] = useState({});
@@ -68,7 +68,7 @@ const RelationContainerList = (props) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(getContainerList(changeSearchOption(temp)));
+        dispatch(getContainerRefList(changeRefSearchOption(temp)));
     };
 
     /**
@@ -110,7 +110,7 @@ const RelationContainerList = (props) => {
 
     useEffect(() => {
         return () => {
-            dispatch(clearStore());
+            dispatch(clearRef());
         };
     }, [dispatch]);
 
@@ -128,9 +128,9 @@ const RelationContainerList = (props) => {
     useEffect(() => {
         if (show) {
             dispatch(
-                getContainerList(
-                    changeSearchOption({
-                        ...initialState.search,
+                getContainerRefList(
+                    changeRefSearchOption({
+                        ...initialState.ref.search,
                         keyword: relSeq,
                         searchType: relSeqType === ITEM_PG ? 'pageSeq' : 'skinSeq',
                         domainId: latestDomainId,

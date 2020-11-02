@@ -27,7 +27,7 @@ const ReservedEdit = () => {
     const [reservedId, setReservedId] = useState('');
     const [reservedSeq, setReservedSeq] = useState('');
     const [reservedValue, setReservedValue] = useState('');
-    const [useYn, setUseYn] = useState('N');
+    const [usedYn, setUsedYn] = useState('N');
     const [description, setdescription] = useState('');
     const [paramState, setParamState] = useState(false);
 
@@ -40,9 +40,9 @@ const ReservedEdit = () => {
      */
     const handleChangeValue = ({ target }) => {
         const { name, value, checked } = target;
-        if (name === 'useYn') {
+        if (name === 'usedYn') {
             const useVal = checked ? 'Y' : 'N';
-            setUseYn(useVal);
+            setUsedYn(useVal);
         } else if (name === 'reservedId') {
             setReservedId(value);
             setReservedIdError(false);
@@ -147,7 +147,7 @@ const ReservedEdit = () => {
                 reservedId,
                 reservedValue,
                 description,
-                useYn,
+                usedYn,
             };
         } else {
             newReserved = {
@@ -155,13 +155,13 @@ const ReservedEdit = () => {
                 reservedId,
                 reservedValue,
                 description,
-                useYn,
+                usedYn,
             };
         }
-        if (newReserved.useYn === 'Y') {
-            newReserved.useYn = 'Y';
+        if (newReserved.usedYn === 'Y') {
+            newReserved.usedYn = 'Y';
         } else {
-            newReserved.useYn = 'N';
+            newReserved.usedYn = 'N';
         }
         if (validate(newReserved)) {
             if (paramSeq) {
@@ -196,7 +196,7 @@ const ReservedEdit = () => {
         setReservedSeq(reserved.reservedSeq || '');
         setReservedValue(reserved.reservedValue || '');
         setdescription(reserved.description || '');
-        setUseYn(reserved.useYn || 'N');
+        setUsedYn(reserved.usedYn || 'N');
     }, [reserved]);
 
     useEffect(() => {
@@ -242,9 +242,9 @@ const ReservedEdit = () => {
                     labelWidth={80}
                     as="switch"
                     className="mb-0"
-                    id="useYn"
-                    name="useYn"
-                    inputProps={{ label: '', checked: useYn === 'Y' }}
+                    id="usedYn"
+                    name="usedYn"
+                    inputProps={{ label: '', checked: usedYn === 'Y' }}
                     onChange={handleChangeValue}
                 />
                 {/* 버튼 그룹 */}

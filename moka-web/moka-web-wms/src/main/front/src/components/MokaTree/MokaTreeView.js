@@ -90,7 +90,7 @@ const MokaTreeView = (props) => {
                             pageName: data.pageName,
                             pageSeq: data.pageSeq,
                             depth: data.depth,
-                            useYn: data.useYn,
+                            usedYn: data.usedYn,
                             match: data.match,
                             pageUrl: data.pageUrl,
                         }}

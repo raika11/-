@@ -21,7 +21,13 @@ const PageEdit = ({ onDelete }) => {
     const { page, pageBody, loading, pageTypeRows, latestDomainId, invalidList, PAGE_TYPE_HTML } = useSelector((store) => ({
         page: store.page.page,
         pageBody: store.page.pageBody,
-        loading: store.loading['page/GET_PAGE'] || store.loading['page/POST_PAGE'] || store.loading['page/PUT_PAGE'] || store.loading['page/DELETE_PAGE'] || store.loading['merge/PREVIEW_PAGE'] || store.loading['merge/W3C_PAGE'],
+        loading:
+            store.loading['page/GET_PAGE'] ||
+            store.loading['page/POST_PAGE'] ||
+            store.loading['page/PUT_PAGE'] ||
+            store.loading['page/DELETE_PAGE'] ||
+            store.loading['merge/PREVIEW_PAGE'] ||
+            store.loading['merge/W3C_PAGE'],
         pageTypeRows: store.codeMgt.pageTypeRows,
         latestDomainId: store.auth.latestDomainId,
         invalidList: store.page.invalidList,
@@ -37,7 +43,7 @@ const PageEdit = ({ onDelete }) => {
     const [pageUrl, setPageUrl] = useState(initialState.pageUrl);
     const [pageOrd, setPageOrd] = useState(initialState.pageOrd);
     const [urlParam, setUrlParam] = useState(initialState.urlParam);
-    const [useYn, setUseYn] = useState(initialState.useYn);
+    const [usedYn, setUsedYn] = useState(initialState.usedYn);
     const [fileYn, setFileYn] = useState(initialState.fileYn);
     const [kwd, setKwd] = useState(initialState.kwd);
     const [description, setDescription] = useState(initialState.description);
@@ -106,7 +112,7 @@ const PageEdit = ({ onDelete }) => {
         setPageUrl(page.pageUrl);
         setPageOrd(page.pageOrd);
         setUrlParam(page.urlParam);
-        setUseYn(page.useYn);
+        setUsedYn(page.usedYn);
         setFileYn(page.fileYn);
         setKwd(page.kwd);
         setDescription(page.description);
@@ -162,8 +168,8 @@ const PageEdit = ({ onDelete }) => {
         ({ target }) => {
             const { name, value, checked } = target;
 
-            if (name === 'useYn') {
-                setUseYn(checked ? 'Y' : 'N');
+            if (name === 'usedYn') {
+                setUsedYn(checked ? 'Y' : 'N');
             } else if (name === 'pageName') {
                 setPageName(value);
                 const regex = /[^\s\t\n]+/;
@@ -324,7 +330,7 @@ const PageEdit = ({ onDelete }) => {
                 pageUrl,
                 pageOrd,
                 urlParam,
-                useYn,
+                usedYn,
                 fileYn,
                 kwd,
                 description,
@@ -357,7 +363,7 @@ const PageEdit = ({ onDelete }) => {
             parent,
             submitPage,
             urlParam,
-            useYn,
+            usedYn,
             validate,
         ],
     );
@@ -421,7 +427,7 @@ const PageEdit = ({ onDelete }) => {
         f.submit();
         f.remove();
     };
-    
+
     /**
      * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사
      */
@@ -449,14 +455,14 @@ const PageEdit = ({ onDelete }) => {
      */
     const popupW3C = (body) => {
         const targetUrl = W3C_URL;
-    
+
         // 폼 생성
         const f = document.createElement('form');
         f.setAttribute('method', 'post');
         f.setAttribute('action', targetUrl);
         f.setAttribute('target', '_blank');
         f.setAttribute('enctype', 'multipart/form-data');
-    
+
         let input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'fragment';
@@ -490,7 +496,7 @@ const PageEdit = ({ onDelete }) => {
                     </div>
                 </Form.Group>
                 {/* 사용여부 */}
-                <MokaInputLabel as="switch" className="mb-2" label="사용여부" id="useYn" name="useYn" inputProps={{ checked: useYn === 'Y' }} onChange={handleChangeValue} />
+                <MokaInputLabel as="switch" className="mb-2" label="사용여부" id="usedYn" name="usedYn" inputProps={{ checked: usedYn === 'Y' }} onChange={handleChangeValue} />
                 {/* 페이지 ID, URL */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="px-0">

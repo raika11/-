@@ -10,7 +10,8 @@ export default [
     {
         headerName: '페이지명',
         field: 'pageName',
-        width: 158,
+        width: 238,
+        tooltipField: 'pageName',
     },
     {
         headerName: '',

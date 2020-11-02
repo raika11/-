@@ -50,7 +50,7 @@ export const initialState = {
         pageOrd: 1,
         pageBody: '',
         urlParam: null,
-        useYn: 'Y',
+        usedYn: 'Y',
         fileYn: 'N',
         kwd: null,
         description: null,

@@ -10,7 +10,7 @@ export default [
     {
         headerName: '컴포넌트명',
         field: 'componentName',
-        width: 194,
+        width: 274,
     },
     {
         headerName: '',

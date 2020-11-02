@@ -15,13 +15,13 @@ export const columnDefs = [
     },
     {
         headerName: '',
-        field: 'useYn',
+        field: 'usedYn',
         width: 50,
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (params) => {
-            const useYn = params.data.useYn;
+            const usedYn = params.data.usedYn;
             let clazz = 'color-gray150';
-            if (useYn === 'Y') {
+            if (usedYn === 'Y') {
                 clazz = 'color-primary';
             }
             return <FontAwesomeIcon className="align-middle mr-2" icon={faCircle} fixedWidth className={clazz} />;

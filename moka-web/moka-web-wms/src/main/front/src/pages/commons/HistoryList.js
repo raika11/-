@@ -4,7 +4,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { ITEM_PG, ITEM_SK, ITEM_TP } from '@/constants';
-import { defaultHistorySearchType, relationDSAgGridHeight } from './index';
+import { defaultHistorySearchType, relationAgGridHeight } from './index';
 import { MokaCard, MokaTable, MokaSearchInput, MokaInputLabel } from '@components';
 import { initialState, changeSearchOption, getHistoryList, GET_HISTORY_LIST, clearStore, getHistory } from '@store/history';
 import columDefs from './HistoryListColums';
@@ -182,7 +182,7 @@ const HistoryList = (props) => {
                 </Form.Row>
             </Form>
             <MokaTable
-                agGridHeight={relationDSAgGridHeight}
+                agGridHeight={relationAgGridHeight}
                 columnDefs={columDefs}
                 rowData={rowData}
                 onRowNodeId={(history) => history.seq}

@@ -24,7 +24,7 @@ const propTypes = {
      */
     nodeData: PropTypes.shape({
         depth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        useYn: PropTypes.oneOf(['Y', 'N']),
+        usedYn: PropTypes.oneOf(['Y', 'N']),
         match: PropTypes.oneOf(['Y', 'N']),
     }).isRequired,
     /**
@@ -36,7 +36,7 @@ const defaultProps = {};
 
 const MokaTreeItem = (props) => {
     const { nodeId, selected, nodeData, onSelected, labelHoverButtons } = props;
-    const { depth, useYn, match } = nodeData;
+    const { depth, usedYn, match } = nodeData;
 
     /**
      * 노드 선택 시 실행
@@ -51,7 +51,7 @@ const MokaTreeItem = (props) => {
     };
 
     return (
-        <li className="tree-item" onClick={handleSelected} key={nodeId} data-depth={depth} data-useyn={useYn}>
+        <li className="tree-item" onClick={handleSelected} key={nodeId} data-depth={depth} data-usedyn={usedYn}>
             <div className={clsx('tree-label', { selected: selected === nodeId })} data-match={match}>
                 <Button variant="gray150" size="sm" className="mr-1" disabled>
                     <MokaIcon iconName="fal-minus" />

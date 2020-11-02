@@ -34,6 +34,10 @@ const propTypes = {
      */
     height: PropTypes.number,
     /**
+     * 헤더 여부 (false 이면 헤더가 나오지 않음)
+     */
+    header: PropTypes.bool,
+    /**
      * title
      */
     title: PropTypes.string,
@@ -79,13 +83,30 @@ const defaultProps = {
     expansion: true,
     buttons: [],
     loading: false,
+    header: true,
 };
 
 /**
  * 카드 컴포넌트
  */
 const MokaCard = forwardRef((props, ref) => {
-    const { className, headerClassName, bodyClassName, titleClassName, width, height, title, titleAs, children, expansion, onExpansion, buttons, foldable, loading } = props;
+    const {
+        header,
+        className,
+        headerClassName,
+        bodyClassName,
+        titleClassName,
+        width,
+        height,
+        title,
+        titleAs,
+        children,
+        expansion,
+        onExpansion,
+        buttons,
+        foldable,
+        loading,
+    } = props;
     const [localExpandState, setLocalExpandState] = useState(true);
 
     useEffect(() => {
@@ -152,17 +173,19 @@ const MokaCard = forwardRef((props, ref) => {
             style={{ width: foldable && !localExpandState ? CARD_FOLDING_WIDTH : width, height }}
         >
             {loading && <MokaLoader />}
-            <Card.Header className={clsx({ 'd-flex': foldable, 'justify-content-between': foldable, 'align-items-center': foldable }, headerClassName)}>
-                {/* 카드 타이틀 */}
-                {titleAs ? (
-                    titleAs
-                ) : (
-                    <React.Fragment>
-                        <Card.Title className={clsx({ 'd-none': foldable && !localExpandState }, titleClassName)}>{title}</Card.Title>
-                        {createButtons()}
-                    </React.Fragment>
-                )}
-            </Card.Header>
+            {header && (
+                <Card.Header className={clsx({ 'd-flex': foldable, 'justify-content-between': foldable, 'align-items-center': foldable }, headerClassName)}>
+                    {/* 카드 타이틀 */}
+                    {titleAs ? (
+                        titleAs
+                    ) : (
+                        <React.Fragment>
+                            <Card.Title className={clsx({ 'd-none': foldable && !localExpandState }, titleClassName)}>{title}</Card.Title>
+                            {createButtons()}
+                        </React.Fragment>
+                    )}
+                </Card.Header>
+            )}
 
             {/* 카드 본문 */}
             <Card.Body className={clsx({ 'd-none': foldable && !localExpandState }, 'custom-scroll', bodyClassName)}>{children}</Card.Body>

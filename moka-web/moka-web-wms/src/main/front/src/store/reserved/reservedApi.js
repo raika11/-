@@ -40,7 +40,7 @@ export const putReserved = ({ reserved }) => {
         reservedId: reserved.reservedId,
         reservedValue: reserved.reservedValue,
         description: reserved.description,
-        useYn: reserved.useYn,
+        usedYn: reserved.usedYn,
         'domain.domainId': reserved.domain.domainId,
     };
     return instance.put(`/api/reserveds/${reserved.reservedSeq}`, qs.stringify(reservedSet)).catch((err) => {

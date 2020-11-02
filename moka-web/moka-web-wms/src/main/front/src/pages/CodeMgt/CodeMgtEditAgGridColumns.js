@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const columnDefs = [
     {
         headerName: '코드그룹',

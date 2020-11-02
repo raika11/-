@@ -33,6 +33,7 @@ import {
     faCalendarAlt as falCalendarAlt,
     faMinusCircle as falMinusCircle,
     faClock as falClock,
+    faPencil,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faThList as fasThList, faThLarge as fasThLarge, faAngleLeft as fasAngleLeft, faAngleRight as fasAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
@@ -67,6 +68,7 @@ library.add(falSignOutAlt);
 library.add(falCalendarAlt);
 library.add(falMinusCircle);
 library.add(falClock);
+library.add(faPencil);
 
 // 아이콘 등록 (fas)
 library.add(fasThLarge);

@@ -18,8 +18,8 @@ export const getCodeMgtList = ({ cdSearch }) => {
 };
 
 // 그룹 상세 조회
-export const getCodeMgtGrp = (grpSeq) => {
-    return instance.get(`/api/codemgt-grps/${grpSeq}`).catch((err) => {
+export const getCodeMgtGrp = (grpCd) => {
+    return instance.get(`/api/codemgt-grps/${grpCd}`).catch((err) => {
         throw err;
     });
 };
@@ -32,20 +32,19 @@ export const getCodeMgt = (cdSeq) => {
 };
 
 // 그룹 등록
-export const postCodeMgtGrp = ({ codeMgtGrp }) => {
-    return instance.post('/api/codemgt-grps', qs.stringify(codeMgtGrp)).catch((err) => {
+export const postCodeMgtGrp = ({ grp }) => {
+    return instance.post('/api/codemgt-grps', qs.stringify(grp)).catch((err) => {
         throw err;
     });
 };
 
 // 코드 등록
-export const postCodeMgt = ({ codeMgt }) => {
+export const postCodeMgt = ({ cd }) => {
     const codeMgts = {
-        ...codeMgt,
+        ...cd,
+        'codeMgtGrp.seqNo': cd.codeMgtGrp.seqNo,
+        'codeMgtGrp.grpCd': cd.codeMgtGrp.grpCd,
         codeMgtGrp: undefined,
-        grpCd: codeMgt.grpCd,
-        seqNo: codeMgt.seqNo,
-        // 'codeMgt.grpCd': codeMgt.codeTypeSeq
     };
     return instance.post('/api/codemgt-grps/codemgts', qs.stringify(codeMgts)).catch((err) => {
         throw err;
@@ -53,35 +52,34 @@ export const postCodeMgt = ({ codeMgt }) => {
 };
 
 // 그룹 수정
-export const putCodeMgtGrp = ({ codeMgtGrp }) => {
-    return instance.put(`/api/codemgt-grps/${codeMgtGrp.grpSeq}`, qs.stringify(codeMgtGrp)).catch((err) => {
+export const putCodeMgtGrp = ({ grp }) => {
+    return instance.put(`/api/codemgt-grps/${grp.grpSeq}`, qs.stringify(grp)).catch((err) => {
         throw err;
     });
 };
 
 // 코드 수정
-// export const putEtccode = ({ etccode }) => {
-//     const etccodeSet = {
-//         ...etccode,
-//         'etccodeType.codeTypeId': etccode.codeTypeId,
-//         'etccodeType.codeTypeSeq': etccode.codeTypeSeq
-//     };
-//     return instance
-//         .put(`/api/codemgt-grps/codemgts/${etccodeSet.seq}`, qs.stringify(etccodeSet))
-//         .catch((err) => {
-//             throw err;
-//         });
-// };
+export const putCodeMgt = ({ cd }) => {
+    const codeMgts = {
+        ...cd,
+        'codeMgtGrp.seqNo': cd.codeMgtGrp.seqNo,
+        'codeMgtGrp.grpCd': cd.codeMgtGrp.grpCd,
+        codeMgtGrp: undefined,
+    };
+    return instance.put(`/api/codemgt-grps/codemgts/${codeMgts.cdSeq}`, qs.stringify(codeMgts)).catch((err) => {
+        throw err;
+    });
+};
 
 // 그룹 삭제
-export const deleteCodeMgtGrp = (grpSeq) => {
+export const deleteCodeMgtGrp = ({ grpSeq }) => {
     return instance.delete(`/api/codemgt-grps/${grpSeq}`).catch((err) => {
         throw err;
     });
 };
 
 // 코드 삭제
-export const deleteCodeMgt = (cdSeq) => {
+export const deleteCodeMgt = ({ cdSeq }) => {
     return instance.delete(`/api/codemgt-grps/codemgts/${cdSeq}`).catch((err) => {
         throw err;
     });

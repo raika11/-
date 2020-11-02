@@ -1,11 +1,10 @@
 import React from 'react';
-import { faPencil } from '@moka/fontawesome-pro-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CodeMgtEditButton from './components/CodeMgtEditButton';
 
 export const columnDefs = [
     {
         headerName: '기타코드',
-        field: 'grpCd',
+        field: 'cdNm',
         width: 160,
     },
     {
@@ -13,6 +12,9 @@ export const columnDefs = [
         field: 'edit',
         width: 50,
         cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (row) => <FontAwesomeIcon icon={faPencil} fixedWidth />,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <CodeMgtEditButton {...row} onClick={data.edit} data={data} />;
+        },
     },
 ];

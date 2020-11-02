@@ -19,13 +19,15 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         sort: undefined,
         grpCd: null,
-        searchType: 'all',
+        searchType: 'dtlCd',
         keyword: '',
     },
     grpList: [],
+    grp: {},
     grpTotal: 0,
     grpError: null,
     cdList: [],
+    cd: {},
     cdTotal: 0,
     cdError: null,
     // 조회용 데이터
@@ -40,6 +42,25 @@ export const initialState = {
 export default handleActions(
     {
         /**
+         * 스토어 클리어
+         */
+        [act.CLEAR_CODE_MGT]: () => initialState,
+        [act.CLEAR_GRP]: (state) => {
+            return produce(state, (draft) => {
+                draft.grp = initialState.grp;
+                draft.grpError = initialState.grpError;
+                draft.grpTotal = initialState.grpTotal;
+                draft.grpSearch = initialState.grpSearch;
+            });
+        },
+        [act.CLEAR_CD_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.cdTotal = initialState.cdTotal;
+                draft.cdSearch = initialState.cdSearch;
+                draft.cdList = initialState.cdList;
+            });
+        },
+        /**
          * 검색조건 변경
          */
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
@@ -49,7 +70,20 @@ export default handleActions(
             });
         },
         /**
-         * 데이터 조회
+         * 데이터 변경
+         */
+        [act.CHANGE_GRP]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.grp = payload;
+            });
+        },
+        [act.CHANGE_CD]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.cd = payload;
+            });
+        },
+        /**
+         * 목록 조회
          */
         [act.GET_CODE_MGT_GRP_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
@@ -76,6 +110,58 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.cdList = initialState.cdList;
                 draft.cdTotal = initialState.cdTotal;
+                draft.cdError = payload;
+            });
+        },
+        /**
+         * 상세 조회, 등록, 수정
+         */
+        [act.GET_CODE_MGT_GRP_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.grp = body;
+                draft.grpError = initialState.grpError;
+            });
+        },
+        [act.GET_CODE_MGT_GRP_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.grp = initialState.grp;
+                draft.grpError = payload;
+            });
+        },
+        [act.GET_CODE_MGT_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.cd = body;
+                draft.cdError = initialState.cdError;
+            });
+        },
+        [act.GET_CODE_MGT_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.cd = initialState.cd;
+                draft.cdError = payload;
+            });
+        },
+        /**
+         * 데이터 삭제
+         */
+        [act.DELETE_CODE_MGT_GRP_SUCCESS]: (state) => {
+            return produce(state, (draft) => {
+                draft.grp = initialState.grp;
+                draft.grpError = initialState.grpError;
+            });
+        },
+        [act.DELETE_CODE_MGT_GRP_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.grpError = payload;
+            });
+        },
+        [act.DELETE_CODE_MGT_SUCCESS]: (state) => {
+            return produce(state, (draft) => {
+                draft.cd = initialState.cd;
+                draft.cdError = initialState.cdError;
+            });
+        },
+        [act.DELETE_CODE_MGT_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
                 draft.cdError = payload;
             });
         },

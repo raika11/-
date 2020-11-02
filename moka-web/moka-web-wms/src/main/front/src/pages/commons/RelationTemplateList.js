@@ -175,7 +175,7 @@ const RelationTemplateList = (props) => {
                     changeSearchOption({
                         ...initialState.search,
                         keyword: relSeq,
-                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : 'containerSeq',
+                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : relSeqType === ITEM_SK ? 'skinSeq' : 'containerSeq',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -318,7 +318,7 @@ const RelationTemplateList = (props) => {
                     />
                 )}
             </MokaCard>
-            <TemplateHtmlModal data={selected} show={showModal} onHide={() => setShowModal(false)} />
+            <TemplateHtmlModal templateSeq={selected.templateSeq} show={showModal} onHide={() => setShowModal(false)} />
         </>
     );
 };

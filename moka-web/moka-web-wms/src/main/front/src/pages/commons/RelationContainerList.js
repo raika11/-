@@ -10,7 +10,7 @@ import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@component
 import { getComponentList, changeSearchOption, initialState, clearStore, GET_COMPONENT_LIST } from '@store/component';
 import { columnDefs } from './RelationContainerListColumns';
 import { defaultComponentSearchType, relationUNAgGridHeight } from '@pages/commons';
-import ComponentHtmlModal from './ComponentHtmlModal';
+import TemplateHtmlModal from './TemplateHtmlModal';
 
 const propTypes = {
     /**
@@ -207,7 +207,7 @@ const RelationContainerList = (props) => {
                     preventRowClickCell={['append', 'link']}
                 />
             </MokaCard>
-            <ComponentHtmlModal data={selected} show={showModal} onHide={() => setShowModal(false)} />
+            <TemplateHtmlModal templateSeq={undefined} show={showModal} onHide={() => setShowModal(false)} />
         </>
     );
 };

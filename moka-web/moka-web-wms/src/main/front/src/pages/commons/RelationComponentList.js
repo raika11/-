@@ -10,7 +10,7 @@ import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@component
 import { getComponentList, changeSearchOption, initialState, clearStore, GET_COMPONENT_LIST } from '@store/component';
 import columnDefs from './RelationComponentListColums';
 import { defaultComponentSearchType, relationUNAgGridHeight } from '@pages/commons';
-import ComponentHtmlModal from './ComponentHtmlModal';
+import TemplateHtmlModal from './TemplateHtmlModal';
 
 const propTypes = {
     /**
@@ -132,7 +132,7 @@ const RelationComponentList = (props) => {
                     changeSearchOption({
                         ...initialState.search,
                         keyword: relSeq,
-                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : 'containerSeq',
+                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : relSeqType === ITEM_SK ? 'skinSeq' : 'containerSeq',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -207,7 +207,7 @@ const RelationComponentList = (props) => {
                     preventRowClickCell={['append', 'link']}
                 />
             </MokaCard>
-            <ComponentHtmlModal data={selected} show={showModal} onHide={() => setShowModal(false)} />
+            <TemplateHtmlModal templateSeq={selected.templateSeq} show={showModal} onHide={() => setShowModal(false)} />
         </>
     );
 };

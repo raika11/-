@@ -213,7 +213,6 @@ const DomainEdit = ({ history, onDelete }) => {
                             }),
                         );
                     } else {
-                        console.log('hh');
                         notification('warning', '중복된 도메인아이디가 존재합니다.');
                     }
                 },

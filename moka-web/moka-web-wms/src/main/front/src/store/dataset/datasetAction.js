@@ -34,13 +34,20 @@ export const getDataset = createAction(GET_DATASET, (datasetSeq) => datasetSeq);
  * 모달 데이터 조회
  */
 export const GET_DATASET_LIST_MODAL = 'dataset/GET_DATASET_LIST_MODAL';
-export const getDatasetListModal = createAction(GET_DATASET_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
-
+export const getDatasetListModal = createAction(GET_DATASET_LIST_MODAL, ({ search, callback, type }) => ({ search, callback, type }));
+export const GET_DATASET_API_LIST = 'dataset/GET_DATASET_API_LIST';
+export const getDatasetApiList = createAction(GET_DATASET_API_LIST, ({ search, callback, type }) => ({ search, callback, type }));
 /**
  * 데이터 변경
  */
 export const CHANGE_DATASET = 'dataset/CHANGE_DATASET';
 export const changeDataset = createAction(CHANGE_DATASET, (dataset) => dataset);
+
+/**
+ * 저장
+ */
+export const SAVE_DATASET = 'dataset/SAVE_DATASET';
+export const saveDataset = createAction(SAVE_DATASET, ({ type, actions, callback }) => ({ type, actions, callback }));
 
 /**
  * 관련아이템 검색조건 변경

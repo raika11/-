@@ -9,51 +9,50 @@ import { API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_GIJA
 import { getDatasetListModal, initialState } from '@store/dataset';
 import { useDispatch } from 'react-redux';
 
-const defaultSearch = {
-    apiCodeId: null,
-    searchType: 'datasetSeqLike',
-    keyword: '',
-    page: 0,
-    size: 999,
-    sort: 'datasetSeq,desc',
-    listType: 'auto',
-};
-
 const DatasetParameter = (props) => {
-    const { dataApiParamShapes, onChange, dataApiParam } = props;
+    const { dataApiParamShapes, onChange, dataApiParam, options } = props;
     const [fieldInfos, setFieldInfos] = useState(dataApiParamShapes);
-    const [options, setOptions] = useState({
-        [API_PARAM_HINT_DATASET_SEQ]: [],
-        [API_PARAM_HINT_BUSE_ID]: [],
-        [API_PARAM_HINT_GIJA_ID]: [],
-        [API_PARAM_HINT_SERIES_ID]: [],
-        [API_PARAM_HINT_CODE_ID]: [],
-    });
-
     const dispatch = useDispatch();
 
-    const handleChangeValue = (event, key) => {
+    const handleChangeValue = (event, name, defaultValue) => {
         const { value } = event.target;
-        const { type } = fieldInfos[key];
+        const { type } = fieldInfos[name];
         let regex = /./;
         if (type === 'number') {
             regex = /^[0-9\b]+$/;
         }
+
+        let tmp = dataApiParam;
+
         if (value === '' || regex.test(value)) {
-            handleChangeComponentValue(key, value);
+            tmp = {
+                ...tmp,
+                [name]: value,
+            };
         }
+
+        if (tmp[name] === '') {
+            if (defaultValue) {
+                tmp = {
+                    ...tmp,
+                    [name]: defaultValue,
+                };
+            } else {
+                delete tmp[name];
+            }
+        }
+
+        onChange(tmp);
     };
 
-    const handleChangeAutoCompleteValue = (event, key, value) => {
-        handleChangeComponentValue(key, value);
-    };
-
-    const handleChangeComponentValue = (key, value) => {
-        setFieldInfos(
-            produce(fieldInfos, (draft) => {
-                draft[key].defaultValue = value;
-            }),
-        );
+    const handleChangeAutoCompleteValue = (event, name, value) => {
+        if (value) {
+            const values = [];
+            value.map((data) => values.push(data.value));
+            onChange({ ...dataApiParam, [name]: values.join(',') });
+        } else {
+            onChange(value);
+        }
     };
 
     // 파라미터의 힌트가 자동완성될 수 있는지 체크
@@ -96,60 +95,6 @@ const DatasetParameter = (props) => {
         return '';
     }, []);
 
-    const test = useCallback(async () => {
-        const response = await datasetAPI.getDatasetList({ search: defaultSearch });
-        const datasetList = response.data.body.list;
-        const datasetOption = [];
-
-        for (const dataset of datasetList) {
-            /*datasetOption.push({
-                value: '' + dataset.datasetSeq,
-                label: dataset.datasetName,
-            });*/
-
-            datasetOption.push({
-                value: '' + dataset.datasetSeq,
-                label: dataset.datasetName,
-            });
-        }
-        //console.log(datasetOption);
-        setOptions({ ...options, [API_PARAM_HINT_DATASET_SEQ]: datasetOption });
-        //return datasetOption;
-        //console.log(datasetList);
-    });
-
-    const responseCallback = ({ header, body }, type) => {
-        if (header.success) {
-            const option = [];
-            body.list.map((data) => {
-                option.push({
-                    value: '' + data.datasetSeq,
-                    label: data.datasetName,
-                });
-            });
-            setOptions({ ...options, [API_PARAM_HINT_DATASET_SEQ]: option });
-        } else {
-        }
-    };
-
-    /**
-     * 검색
-     */
-    const handleSearch = (search) => {
-        dispatch(
-            getDatasetListModal({
-                search,
-                callback: responseCallback,
-            }),
-        );
-    };
-
-    useEffect(() => {
-        handleSearch(defaultSearch);
-        //onChange(fieldInfos);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     useEffect(() => {
         setFieldInfos(dataApiParamShapes);
     }, [dataApiParamShapes]);
@@ -158,7 +103,6 @@ const DatasetParameter = (props) => {
         let renderer = null;
         const fieldInfo = fieldInfos[key];
         if (fieldInfo) {
-            //console.log(fieldInfo);
             const { name, desc = '', defaultValue: apiDefaultValue, hints, require: required } = fieldInfo;
 
             // 자동완성가능여부 체크
@@ -168,8 +112,8 @@ const DatasetParameter = (props) => {
             // 데이터 타입 체크
             const type = getDataType(hints);
 
+            let value = apiDefaultValue;
             if (isAutocomplete) {
-                let value = apiDefaultValue;
                 if (dataApiParam && dataApiParam[name]) {
                     if (isAutocomplete) {
                         let param = [];
@@ -181,12 +125,9 @@ const DatasetParameter = (props) => {
                             param = [{ seq: dataApiParam[name] }];
                         }
                         value = param;
-                    } else {
-                        value = dataApiParam[name];
                     }
                 }
-                console.log(key, value);
-                console.log(key, apiDefaultValue);
+
                 renderer = (
                     <>
                         <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'text-right', 'mr-3')} style={{ width: 80 }} key={`${name}_label`}>
@@ -201,23 +142,24 @@ const DatasetParameter = (props) => {
                                 isMulti={isMultiple}
                                 searchIcon={true}
                                 value={value}
-                                onChange={(value, event) => {
-                                    console.log(value);
-                                    console.log(apiDefaultValue);
-                                    handleChangeAutoCompleteValue(event, key, value);
-                                }}
+                                onChange={(value, event) => handleChangeAutoCompleteValue(event, name, value)}
+                                required={required}
                             />
                         </Col>
                     </>
                 );
             } else {
+                if (dataApiParam && dataApiParam[name]) {
+                    value = dataApiParam[name];
+                }
+
                 renderer = (
                     <MokaInputLabel
                         label={desc}
                         labelWidth={80}
                         className="flex-fill mb-0 mr-2"
-                        value={apiDefaultValue}
-                        onChange={(event) => handleChangeValue(event, key)}
+                        value={value}
+                        onChange={(event) => handleChangeValue(event, name, apiDefaultValue)}
                         required={required}
                     />
                 );

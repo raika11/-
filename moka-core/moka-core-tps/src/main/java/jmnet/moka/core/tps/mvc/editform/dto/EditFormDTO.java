@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.lang.reflect.Type;
 import java.util.List;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class EditFormDTO {
     /**
      * 채널 ID
      */
+    @Size(min = 1, max = 30, message = "{tps.edit-form.error.size.formId}")
     private String formId;
 
     /**

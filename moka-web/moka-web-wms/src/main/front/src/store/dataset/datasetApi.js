@@ -18,6 +18,7 @@ export const getDataset = (datasetSeq) => {
 
 // 데이타셋 저장
 export const postDataset = ({ dataset }) => {
+    console.log(dataset);
     const queryString = qs.stringify(dataset);
     return instance.post(`/api/datasets?${queryString}`).catch((err) => {
         throw err;

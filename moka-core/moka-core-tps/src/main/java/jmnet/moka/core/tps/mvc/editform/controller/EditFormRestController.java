@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
@@ -564,6 +565,46 @@ public class EditFormRestController {
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
             throw new Exception(messageByLocale.get("tps.edit-form.error.delete", request), e);
+        }
+    }
+
+    /**
+     * ID 존재 여부
+     *
+     * @param formId 편집 폼 ID (필수)
+     * @return 존재여부
+     * @throws InvalidDataException 데이타유효성오류
+     * @throws NoDataException      삭제 할 메뉴 없음
+     * @throws Exception            그 외 에러처리
+     */
+    @ApiOperation(value = "편집 폼 삭제")
+    @DeleteMapping("/{formId}/exists")
+    public ResponseEntity<?> getExistFormId(
+            @PathVariable("formId") @Size(min = 1, max = 30, message = "{tps.edit-form.error.size.formId}") String formId)
+            throws InvalidDataException, NoDataException, Exception {
+
+
+        boolean exists = false;
+        String message = "";
+
+        try {
+
+            // 삭제
+            if (editFormService.countEditFormById(formId) > 0) {
+                exists = true;
+                message = messageByLocale.get("tps.edit-form.error.duplicate.formId");
+            }
+
+            // 결과리턴
+            ResultDTO<Boolean> resultDTO = new ResultDTO<>(exists, message);
+
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE MENU] menuId: {} {}", formId, e.getMessage());
+            // 액션 로그에 에러 로그 출력
+            tpsLogger.error(e);
+            throw new Exception(messageByLocale.get("tps.edit-form.error.select", formId), e);
         }
     }
 

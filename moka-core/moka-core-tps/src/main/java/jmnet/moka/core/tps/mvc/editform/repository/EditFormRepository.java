@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface EditFormRepository extends JpaRepository<EditForm, Long>, EditFormItemRepositorySupport {
 
     public Optional<EditForm> findByFormId(String formId);
+
+    public int countByFormId(String formId);
 }

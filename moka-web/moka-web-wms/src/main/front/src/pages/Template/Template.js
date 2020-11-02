@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_TP } from '@/constants';
-import { clearStore, clearHistory, deleteTemplate, hasRelationList } from '@store/template';
+import { clearStore, clearHistory, deleteTemplate, hasRelationList, changeTemplateBody } from '@store/template';
 import { notification, toastr } from '@utils/toastUtil';
 
 import TemplateEditor from './TemplateEditor';
@@ -20,7 +20,7 @@ const RelationInPageList = React.lazy(() => import('@pages/commons/RelationInPag
 const RelationInSkinList = React.lazy(() => import('@pages/commons/RelationInSkinList'));
 const RelationInContainerList = React.lazy(() => import('@pages/commons/RelationInContainerList'));
 const RelationInComponentList = React.lazy(() => import('@pages/commons/RelationInComponentList'));
-const TemplateHistoryList = React.lazy(() => import('./relations/TemplateHistoryList'));
+const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 
 /**
  * 템플릿 관리
@@ -131,6 +131,22 @@ const Template = () => {
         [deleteCallback, dispatch],
     );
 
+    /**
+     * 히스토리 로드 버튼 이벤트
+     */
+    const handleClickLoad = ({ header, body }) => {
+        if (header.success) {
+            toastr.confirm('불러오기 시 작업 중인 템플릿 본문 내용이 날라갑니다. 불러오시겠습니까?', {
+                onOk: () => {
+                    dispatch(changeTemplateBody(body.body));
+                },
+                onCancle: () => {},
+            });
+        } else {
+            notification('error', header.message);
+        }
+    };
+
     React.useEffect(() => {
         return () => {
             dispatch(clearStore());
@@ -181,7 +197,7 @@ const Template = () => {
                         <RelationInComponentList show={activeTabIdx === 4} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <TemplateHistoryList show={activeTabIdx === 5} />
+                        <HistoryList show={activeTabIdx === 5} seqType={ITEM_TP} seq={template.templateSeq} onLoad={handleClickLoad} />
                     </Suspense>,
                 ]}
                 tabNavWidth={48}

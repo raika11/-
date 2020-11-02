@@ -7,7 +7,6 @@ import layout from '@store/layout/layoutReducer';
 import auth from '@store/auth/authReducer';
 import domain from '@store/domain/domainReducer';
 import template from '@store/template/templateReducer';
-import templateHistory from '@store/template/templateHistoryReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
 import reserved from '@store/reserved/reservedReducer';
 import dataset from '@store/dataset/datasetReducer';
@@ -18,6 +17,7 @@ import page from '@store/page/pageReducer';
 import pageHistory from '@store/page/pageHistoryReducer';
 import editForm from '@/store/editForm/editFormReducer';
 import relation from '@store/relation/relationReducer';
+import history from '@store/history/historyReducer';
 import merge from '@store/merge/mergeReducer';
 
 export default combineReducers({
@@ -28,7 +28,6 @@ export default combineReducers({
     auth,
     domain,
     template,
-    templateHistory,
     codeMgt,
     reserved,
     dataset,
@@ -39,5 +38,6 @@ export default combineReducers({
     pageHistory,
     editForm,
     relation,
+    history,
     merge,
 });

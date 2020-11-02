@@ -25,7 +25,7 @@ export const ITEM_PG = 'PG';
 export const ITEM_SK = 'SK';
 export const ITEM_CT = 'CT';
 export const ITEM_CP = 'CP';
-export const ITEM_TP = 'TG';
+export const ITEM_TP = 'TP';
 export const ITEM_DS = 'DS';
 
 // 공통코드 : API 공통코드

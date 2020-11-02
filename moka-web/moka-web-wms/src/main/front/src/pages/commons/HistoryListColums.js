@@ -1,5 +1,5 @@
 import React from 'react';
-import TemplateLoadButton from '../components/TemplateLoadButton';
+import { MokaTableLoadButton } from '@components';
 
 export default [
     {
@@ -7,8 +7,6 @@ export default [
         field: 'seq',
         width: 70,
         tooltipField: 'seq',
-        // cellClass: 'ag-cell-center',
-        // cellStyle: { textAlign: 'center' },
     },
     {
         headerName: '작업일시',
@@ -25,6 +23,9 @@ export default [
         headerName: '',
         field: 'load',
         width: 36,
-        cellRendererFramework: (row) => <TemplateLoadButton {...row} />,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;
+        },
     },
 ];

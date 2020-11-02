@@ -69,15 +69,3 @@ export const deleteTemplate = createAction(DELETE_TEMPLATE, ({ templateSeq, call
  */
 export const HAS_RELATION_LIST = 'template/HAS_RELATION_LIST';
 export const hasRelationList = createAction(HAS_RELATION_LIST, ({ templateSeq, callback }) => ({ templateSeq, callback }));
-
-/**
- * 히스토리 검색조건 변경
- */
-export const CHANGE_SEARCH_HIST_OPTION = 'template/CHANGE_SEARCH_HIST_OPTION';
-export const changeSearchHistOption = createAction(CHANGE_SEARCH_HIST_OPTION, (search) => search);
-
-/**
- * 히스토리 데이터 조회
- */
-export const [GET_HISTORY_LIST, GET_HISTORY_LIST_SUCCESS, GET_HISTORY_LIST_FAILURE] = createRequestActionTypes('template/GET_HISTORY_LIST');
-export const getHistoryList = createAction(GET_HISTORY_LIST, (...actions) => actions);

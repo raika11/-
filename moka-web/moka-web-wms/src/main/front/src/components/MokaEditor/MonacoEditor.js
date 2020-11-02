@@ -88,7 +88,7 @@ const MonacoEditor = forwardRef((props, ref) => {
 
     useEffect(() => {
         // Component Did Update (value 변경)
-        if (editor && value) {
+        if (editor) {
             // **** editor.setValue로 처리하지 않는다 ****
             // 에디터 인스턴스의 Undo, Redo 히스토리를 유지해야하므로 아래와 같이 처리함
             editor.pushUndoStop();
@@ -101,6 +101,7 @@ const MonacoEditor = forwardRef((props, ref) => {
                         text: value,
                     },
                 ],
+                () => null,
             );
             editor.pushUndoStop();
         }

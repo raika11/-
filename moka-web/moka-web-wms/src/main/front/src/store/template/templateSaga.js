@@ -159,11 +159,6 @@ function* copyTemplate({ payload: { templateSeq, templateName, domainId, callbac
  */
 const hasRelationList = createRequestSaga(act.HAS_RELATION_LIST, api.hasRelationList, true);
 
-/**
- * 히스토리 목록 조회
- */
-const getHistoryList = callApiAfterActions(act.GET_HISTORY_LIST, api.getHistoryList, (store) => store.templateHistory);
-
 /** saga */
 export default function* saga() {
     yield takeLatest(act.GET_TEMPLATE_LIST, getTemplateList);
@@ -172,6 +167,5 @@ export default function* saga() {
     yield takeLatest(act.DELETE_TEMPLATE, deleteTemplate);
     yield takeLatest(act.COPY_TEMPLATE, copyTemplate);
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
-    yield takeLatest(act.GET_HISTORY_LIST, getHistoryList);
     yield takeLatest(act.GET_TEMPLATE_LOOKUP_LIST, getTemplateLookupList);
 }

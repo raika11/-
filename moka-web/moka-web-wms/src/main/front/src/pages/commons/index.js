@@ -3,6 +3,7 @@ import { initialState as componentInitialState } from '@store/component';
 import { initialState as templateInitialState } from '@store/template';
 import { initialState as datasetInitialState } from '@store/dataset';
 import { initialState as containerInitialState } from '@store/container';
+import { initialState as historyInitialState } from '@store/history';
 
 // 검색조건
 export const { searchTypeList: defaultPageSearchType } = pageInitialState;
@@ -10,6 +11,7 @@ export const { searchTypeList: defaultComponentSearchType } = componentInitialSt
 export const { searchTypeList: defaultTemplateSearchType } = templateInitialState;
 export const { searchTypeList: defaultDatasetSearchType } = datasetInitialState;
 export const { searchTypeList: defaultContainerSearchType } = containerInitialState;
+export const { searchTypeList: defaultHistorySearchType } = historyInitialState;
 
 // 공통 모달
 export { default as TemplateListModal } from './TemplateListModal';
@@ -30,3 +32,6 @@ export { default as LookupTemplateList } from './LookupTemplateList';
 export { default as LookupComponentList } from './LookupComponentList';
 export { default as LookupContainerList } from './LookupContainerList';
 export { default as LookupPageList } from './LookupPageList';
+
+// 우측 히스토리 리스트
+export { default as HistoryList } from './HistoryList';

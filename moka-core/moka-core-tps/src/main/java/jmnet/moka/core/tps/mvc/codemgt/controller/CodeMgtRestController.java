@@ -162,11 +162,48 @@ public class CodeMgtRestController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
+    //    /**
+    //     * 그룹 상세조회
+    //     *
+    //     * @param request          요청
+    //     * @param seqNo            그룹SEQ (필수)
+    //     * @param principal        로그인사용자 세션
+    //     * @param processStartTime 작업시간
+    //     * @return 공통코드그룹정보
+    //     * @throws NoDataException      공통코드그룹 정보가 없음
+    //     * @throws InvalidDataException 공통코드그룹 아이디 형식오류
+    //     * @throws Exception            기타예외
+    //     */
+    //    @ApiOperation(value = "그룹 상세조회")
+    //    @GetMapping("/{seqNo}")
+    //    public ResponseEntity<?> getCodeMgtGrp(HttpServletRequest request,
+    //            @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.invalid.seqNo}") Long seqNo, @NotNull Principal principal,
+    //            @RequestAttribute Long processStartTime)
+    //            throws NoDataException, InvalidDataException, Exception {
+    //
+    //        // 데이타유효성검사.
+    //        validGrpData(request, seqNo, null, principal, processStartTime, ActionType.SELECT);
+    //
+    //        String message = messageByLocale.get("tps.codeMgtGrp.error.noContent", request);
+    //        CodeMgtGrp codeMgtGrp = codeMgtService.findByGrpSeqNo(seqNo)
+    //                                              .orElseThrow(() -> new NoDataException(message));
+    //
+    //        // 하위코드갯수 조회
+    //        Long count = codeMgtService.countCodeMgtByGrpCd(codeMgtGrp.getGrpCd());
+    //
+    //        CodeMgtGrpDTO dto = modelMapper.map(codeMgtGrp, CodeMgtGrpDTO.class);
+    //        dto.setCountCodeMgt(count);
+    //
+    //        ResultDTO<CodeMgtGrpDTO> resultDto = new ResultDTO<CodeMgtGrpDTO>(dto);
+    //        actionLogger.success(principal.getName(), ActionType.SELECT, System.currentTimeMillis() - processStartTime);
+    //        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    //    }
+
     /**
      * 그룹 상세조회
      *
      * @param request          요청
-     * @param seqNo            그룹SEQ (필수)
+     * @param grpCd            그룹코드 (필수)
      * @param principal        로그인사용자 세션
      * @param processStartTime 작업시간
      * @return 공통코드그룹정보
@@ -175,17 +212,17 @@ public class CodeMgtRestController {
      * @throws Exception            기타예외
      */
     @ApiOperation(value = "그룹 상세조회")
-    @GetMapping("/{seqNo}")
+    @GetMapping("/{grpCd}")
     public ResponseEntity<?> getCodeMgtGrp(HttpServletRequest request,
-            @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.invalid.seqNo}") Long seqNo, @NotNull Principal principal,
+            @PathVariable("grpCd") @NotNull(message = "{tps.codeMgt.error.invalid.grpCd}") String grpCd, @NotNull Principal principal,
             @RequestAttribute Long processStartTime)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
-        validGrpData(request, seqNo, null, principal, processStartTime, ActionType.SELECT);
+        //        validGrpData(request, seqNo, null, principal, processStartTime, ActionType.SELECT);
 
         String message = messageByLocale.get("tps.codeMgtGrp.error.noContent", request);
-        CodeMgtGrp codeMgtGrp = codeMgtService.findByGrpSeqNo(seqNo)
+        CodeMgtGrp codeMgtGrp = codeMgtService.findByGrpCd(grpCd)
                                               .orElseThrow(() -> new NoDataException(message));
 
         // 하위코드갯수 조회

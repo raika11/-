@@ -123,5 +123,10 @@ public class CodeMgtServiceImpl implements CodeMgtService {
         return codeMgtRepository.findByDtlCd(dtlCd);
     }
 
+    @Override
+    public Optional<CodeMgtGrp> findByGrpCd(String grpCd) {
+        return codeMgtGrpRepository.findByGrpCd(grpCd);
+    }
+
 }
 

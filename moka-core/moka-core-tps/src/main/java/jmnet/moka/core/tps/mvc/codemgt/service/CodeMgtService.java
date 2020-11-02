@@ -163,4 +163,5 @@ public interface CodeMgtService {
      */
     public Optional<CodeMgt> findByDtlCd(String dtlCd);
 
+    public Optional<CodeMgtGrp> findByGrpCd(String grpCd);
 }

@@ -3,6 +3,7 @@
  */
 package jmnet.moka.core.tps.mvc.codemgt.repository;
 
+import java.util.Optional;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CodeMgtGrpRepository extends JpaRepository<CodeMgtGrp, Long> {
     public Long countByGrpCd(String grpCd);
+
+    // grpCd로 CodeMgt 조회
+    public Optional<CodeMgtGrp> findByGrpCd(String grpCd);
 }

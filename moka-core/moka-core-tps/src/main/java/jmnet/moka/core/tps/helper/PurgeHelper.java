@@ -30,9 +30,6 @@ public class PurgeHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(PurgeHelper.class);
 
-    @Value("${tms.api.host}")
-    private String tmsApiHost;
-
     @Value("${tms.hosts}")
     private String[] tmsHosts;
 

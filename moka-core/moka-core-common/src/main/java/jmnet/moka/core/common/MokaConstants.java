@@ -27,8 +27,8 @@ public class MokaConstants {
     public final static String DOMAIN_CODE_JSON = "code.json";
     public final static String DEFAULT_PATH = "0000";                // 공통, 기본 폴더명
 
-    public static final String INTERCEPTOR_DEBUG = "msp.interceptor.debug";
-    public static final String INTERCEPTOR_IGNORE = "msp.interceptor.ignore";
+    public static final String INTERCEPTOR_DEBUG = "moka.interceptor.debug";
+    public static final String INTERCEPTOR_IGNORE = "moka.interceptor.ignore";
     public final static String INTERCEPTOR_REFUSED = "interceptorRefused";
 
     /* Jpa PersistanceUnit Names */

@@ -86,9 +86,6 @@ public class TmsAutoConfiguration {
     @Value("${tms.template.loader.cache}")
     private boolean templateLoaderCache;
 
-    @Value("${tms.default.template.domain}")
-    private String defaultTemplateDomain;
-
     private GenericApplicationContext appContext;
 
     private ApiHttpProxyFactory apiHttpProxyFactory;

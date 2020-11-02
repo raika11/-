@@ -41,7 +41,7 @@ export const copyDataset = ({ datasetSeq, datasetName }) => {
 };
 
 // 관련 아이템 확인
-export const hasRelationList = (datasetSeq) => {
+export const hasRelationList = ({ datasetSeq }) => {
     return instance.get(`/api/datasets/${datasetSeq}/has-relations`).catch((err) => {
         throw err;
     });
@@ -57,6 +57,7 @@ export const getRelationList = ({ search }) => {
 
 // 데이타셋 삭제
 export const deleteDataset = (datasetSeq) => {
+    debugger;
     return instance.delete(`/api/datasets/${datasetSeq}`).catch((err) => {
         throw err;
     });

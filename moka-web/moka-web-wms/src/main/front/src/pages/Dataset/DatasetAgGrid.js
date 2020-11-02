@@ -7,10 +7,12 @@ import { useHistory } from 'react-router-dom';
 /**
  * 데이터셋 AgGrid 컴포넌트
  */
-const DatasetAgGrid = () => {
+const DatasetAgGrid = (props) => {
+    const { onDelete } = props;
     const dispatch = useDispatch();
     const history = useHistory();
     const [search, setSearch] = useState(initialState);
+    const [datasetRows, setDatasetRows] = useState([]);
 
     const { dataset, list, search: storeSearch, total, loading } = useSelector((store) => ({
         dataset: store.dataset.dataset,
@@ -23,6 +25,19 @@ const DatasetAgGrid = () => {
     useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
+
+    useEffect(() => {
+        setDatasetRows(
+            list.map((row) => ({
+                id: String(row.datasetSeq),
+                datasetSeq: row.datasetSeq,
+                datasetName: row.datasetName,
+                autoCreateYn: row.autoCreateYn,
+                usedYn: row.usedYn,
+                onDelete,
+            })),
+        );
+    }, [list, onDelete]);
     /**
      * 테이블에서 검색옵션 변경
      */
@@ -49,10 +64,10 @@ const DatasetAgGrid = () => {
             size={storeSearch.size}
             page={storeSearch.page}
             total={total}
-            rowData={list}
+            rowData={datasetRows}
             loading={loading}
             selected={dataset.datasetSeq}
-            onRowNodeId={(rowData) => rowData.datasetSeq}
+            onRowNodeId={(rowData) => rowData.id}
             onChangeSearchOption={handleChangeSearchOption}
             onRowClicked={handleRowClicked}
         />

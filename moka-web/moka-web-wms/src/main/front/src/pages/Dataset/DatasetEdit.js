@@ -14,7 +14,6 @@ import DatasetApiListModal from '@pages/Dataset/modals/DatasetApiListModal';
 import qs from 'qs';
 import { notification } from '@utils/toastUtil';
 import { API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_CODE_ID, API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID } from '@/constants';
-import { changeDomain, duplicateCheck, saveDomain } from '@store/domain';
 
 const defaultSearch = {
     apiCodeId: null,

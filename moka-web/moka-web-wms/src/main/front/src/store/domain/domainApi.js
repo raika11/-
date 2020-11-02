@@ -38,7 +38,7 @@ export const putDomain = ({ domain }) => {
 
 // 관련아이템 확인
 export const hasRelationList = ({ domainId }) => {
-    return instance.get(`/api/domains/${domainId}/hasRelations`).catch((err) => {
+    return instance.get(`/api/domains/${domainId}/has-relations`).catch((err) => {
         throw err;
     });
 };

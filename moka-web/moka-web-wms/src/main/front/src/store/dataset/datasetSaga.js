@@ -4,8 +4,6 @@ import { callApiAfterActions, createRequestSaga, errorResponse } from '../common
 
 import * as datasetAction from './datasetAction';
 import * as datasetAPI from './datasetApi';
-import * as domainAction from '@store/domain/domainAction';
-import * as domainAPI from '@store/domain/domainApi';
 
 const getDatasetList = callApiAfterActions(datasetAction.getDatasetList, datasetAPI.getDatasetList, (store) => store.dataset);
 const getDataset = createRequestSaga(datasetAction.GET_DATASET, datasetAPI.getDataset);
@@ -78,10 +76,47 @@ function* saveDomain({ payload: { type, actions, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+function* deleteDataset({ payload: { datasetSeq, callback } }) {
+    const ACTION = datasetAction.DELETE_DATASET;
+    const SUCCESS = datasetAction.DELETE_DATASET_SUCCESS;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(datasetAPI.deleteDataset, datasetSeq);
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: SUCCESS,
+                payload: response.data,
+            });
+
+            // 목록 다시 검색
+            yield put({ type: datasetAction.GET_DATASET_LIST });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData, datasetSeq);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 관련 아이템 여부 조회
+ */
+const hasRelationList = createRequestSaga(datasetAction.HAS_RELATION_LIST, datasetAPI.hasRelationList, true);
+
 export default function* saga() {
     yield takeLatest(datasetAction.GET_DATASET_LIST, getDatasetList);
     yield takeLatest(datasetAction.GET_DATASET, getDataset);
     yield takeLatest(datasetAction.GET_DATASET_LIST_MODAL, getDatasetListModal);
     yield takeLatest(datasetAction.GET_DATASET_API_LIST, getDatasetApiList);
     yield takeLatest(datasetAction.SAVE_DATASET, saveDomain);
+    yield takeLatest(datasetAction.hasRelationList, hasRelationList);
+    yield takeLatest(datasetAction.deleteDataset, deleteDataset);
 }

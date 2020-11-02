@@ -1,11 +1,12 @@
 import React, { Suspense, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { useDispatch } from 'react-redux';
-import { clearStore } from '@store/dataset';
+import { clearStore, deleteDataset, hasRelationList } from '@store/dataset';
+import toast from '@utils/toastUtil';
 
 const DatasetEdit = React.lazy(() => import('./DatasetEdit'));
 const DatasetList = React.lazy(() => import('./DatasetList'));
@@ -18,6 +19,45 @@ const DatasetComponentList = React.lazy(() => import('./relations/DatasetCompone
 
 const Dataset = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const deleteCallback = (response, datasetSeq) => {
+        console.log(response);
+        console.log(datasetSeq);
+        /*if (response.header.success) {
+            dispatch(
+                deleteDataset({
+                    datasetSeq,
+                    callback: (response) => {
+                        if (response.header.success) {
+                            history.push('/dataset');
+                        }
+                        toast.result(response);
+                    },
+                }),
+            );
+        } else {
+            toast.result(response);
+        }*/
+    };
+
+    const handleClickDelete = (dataset) => {
+        toast.confirm(
+            `${dataset.datasetSeq}을(를) 정말 삭제 하시겠습니까?`,
+            () => {
+                dispatch(
+                    hasRelationList({
+                        datasetSeq: dataset.datasetSeq,
+                        callback: deleteCallback,
+                    }),
+                );
+            },
+            () => {
+                console.log('취소');
+            },
+        );
+    };
+
     useEffect(() => {
         return () => {
             dispatch(clearStore());
@@ -35,7 +75,7 @@ const Dataset = () => {
             {/* 리스트 */}
             <MokaCard width={412} className="mr-gutter" titleClassName="mb-0" title="데이터셋 검색">
                 <Suspense>
-                    <DatasetList />
+                    <DatasetList onDelete={handleClickDelete} />
                 </Suspense>
             </MokaCard>
 
@@ -46,7 +86,7 @@ const Dataset = () => {
                     render={() => (
                         <>
                             <Suspense>
-                                <DatasetEdit />
+                                <DatasetEdit onDelete={handleClickDelete} />
                             </Suspense>
                             <MokaIconTabs
                                 foldable={false}

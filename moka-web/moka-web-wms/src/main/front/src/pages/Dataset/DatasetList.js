@@ -5,11 +5,12 @@ import AgGrid from './DatasetAgGrid';
 /**
  * 데이터셋 리스트 컴포넌트
  */
-const DatasetList = () => {
+const DatasetList = (props) => {
+    const { onDelete } = props;
     return (
         <>
             <Search />
-            <AgGrid />
+            <AgGrid onDelete={onDelete} />
         </>
     );
 };

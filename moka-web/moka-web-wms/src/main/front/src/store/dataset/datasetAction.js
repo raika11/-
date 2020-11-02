@@ -50,6 +50,11 @@ export const SAVE_DATASET = 'dataset/SAVE_DATASET';
 export const saveDataset = createAction(SAVE_DATASET, ({ type, actions, callback }) => ({ type, actions, callback }));
 
 /**
+ * 삭제
+ */
+export const [DELETE_DATASET, DELETE_DATASET_SUCCESS, DELETE_DATASET_FAILURE] = createRequestActionTypes('dataset/DELETE_DATASET');
+export const deleteDataset = createAction(DELETE_DATASET, ({ datasetSeq, callback }) => ({ datasetSeq, callback }));
+/**
  * 관련아이템 검색조건 변경
  */
 export const CHANGE_SEARCH_PG_OPTION = 'dataset/CHANGE_SEARCH_PG_OPTION';
@@ -66,7 +71,7 @@ export const changeSearchCPOption = createAction(CHANGE_SEARCH_CP_OPTION, (searc
  */
 export const HAS_RELATION_LIST = 'dataset/HAS_RELATION_LIST';
 export const [GET_RELATION_LIST, GET_RELATION_LIST_SUCCESS, GET_RELATION_LIST_FAILURE] = createRequestActionTypes('dataset/GET_RELATION_LIST');
-export const hasRelationList = createAction(HAS_RELATION_LIST, (payload) => payload);
+export const hasRelationList = createAction(HAS_RELATION_LIST, ({ datasetSeq, callback }) => ({ datasetSeq, callback }));
 export const getRelationPGList = createAction(GET_RELATION_LIST, (...actions) => ({
     actions: actions,
     relType: 'PG',

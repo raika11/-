@@ -5,18 +5,18 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG, ITEM_CT, ITEM_SK } from '@/constants';
+import { ITEM_PG, ITEM_SK } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { getComponentList, changeSearchOption, initialState, clearStore, GET_COMPONENT_LIST } from '@store/component';
+import { initialState, getContainerList, changeSearchOption, clearStore, GET_CONTAINER_LIST } from '@store/container';
 import { columnDefs } from './RelationContainerListColumns';
-import { defaultComponentSearchType, relationUNAgGridHeight } from '@pages/commons';
-import TemplateHtmlModal from './TemplateHtmlModal';
+import { defaultContainerSearchType, relationUNAgGridHeight } from '@pages/commons';
+import ContainerHtmlModal from './ContainerHtmlModal';
 
 const propTypes = {
     /**
      * relSeq의 타입
      */
-    relSeqType: PropTypes.oneOf([ITEM_CT, ITEM_PG, ITEM_SK]),
+    relSeqType: PropTypes.oneOf([ITEM_PG, ITEM_SK]),
     /**
      * relSeq
      */
@@ -36,17 +36,17 @@ const defaultProps = {
 
 /**
  * relSeq와
- * 관련된 하위(자식의) 템플릿 리스트
+ * 관련된 하위(자식의) 컨테이너 리스트
  */
 const RelationContainerList = (props) => {
     const { relSeq, relSeqType, show, onAppend } = props;
     const dispatch = useDispatch();
 
     const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
-        list: store.component.list,
-        search: store.component.search,
-        total: store.component.total,
-        loading: store.loading[GET_COMPONENT_LIST],
+        list: store.container.list,
+        search: store.container.search,
+        total: store.container.total,
+        loading: store.loading[GET_CONTAINER_LIST],
         latestDomainId: store.auth.latestDomainId,
     }));
 
@@ -68,7 +68,7 @@ const RelationContainerList = (props) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(getComponentList(changeSearchOption(temp)));
+        dispatch(getContainerList(changeSearchOption(temp)));
     };
 
     /**
@@ -105,7 +105,7 @@ const RelationContainerList = (props) => {
      * @param {object} data row data
      */
     const handleClickLink = (data) => {
-        window.open(`/component/${data.componentSeq}`);
+        window.open(`/container/${data.containerSeq}`);
     };
 
     useEffect(() => {
@@ -128,11 +128,11 @@ const RelationContainerList = (props) => {
     useEffect(() => {
         if (show) {
             dispatch(
-                getComponentList(
+                getContainerList(
                     changeSearchOption({
                         ...initialState.search,
                         keyword: relSeq,
-                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : 'containerSeq',
+                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : 'skinSeq',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -162,8 +162,7 @@ const RelationContainerList = (props) => {
                             >
                                 {relSeqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
                                 {relSeqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
-                                {relSeqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
-                                {defaultComponentSearchType.map((type) => (
+                                {defaultContainerSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.name}
                                     </option>
@@ -187,7 +186,7 @@ const RelationContainerList = (props) => {
 
                 {/* 버튼 그룹 */}
                 <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="dark" onClick={() => window.open('/component')}>
+                    <Button variant="dark" onClick={() => window.open('/container')}>
                         컨테이너 추가
                     </Button>
                 </div>
@@ -197,7 +196,7 @@ const RelationContainerList = (props) => {
                     agGridHeight={relationUNAgGridHeight}
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    onRowNodeId={(data) => data.componentSeq}
+                    onRowNodeId={(data) => data.containerSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
                     total={total}
@@ -207,7 +206,7 @@ const RelationContainerList = (props) => {
                     preventRowClickCell={['append', 'link']}
                 />
             </MokaCard>
-            <TemplateHtmlModal templateSeq={undefined} show={showModal} onHide={() => setShowModal(false)} />
+            <ContainerHtmlModal containerSeq={selected.containerSeq} show={showModal} onHide={() => setShowModal(false)} />
         </>
     );
 };

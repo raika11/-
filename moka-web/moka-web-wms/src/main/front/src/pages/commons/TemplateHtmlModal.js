@@ -4,6 +4,9 @@ import { MokaModalEditor } from '@components';
 import { getTemplate, changeTemplateBody, saveTemplate, clearTemplate, GET_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import { notification } from '@utils/toastUtil';
 
+/**
+ * 템플릿 TEMS 소스 수정 모달
+ */
 const TemplateHtmlModal = (props) => {
     const { show, onHide, templateSeq } = props;
     const dispatch = useDispatch();

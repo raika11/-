@@ -1,11 +1,13 @@
 import { initialState as componentInitialState } from '@store/component';
 import { initialState as templateInitialState } from '@store/template';
 import { initialState as datasetInitialState } from '@store/dataset';
+import { initialState as containerInitialState } from '@store/container';
 
 // 검색조건
 export const { searchTypeList: defaultComponentSearchType } = componentInitialState;
 export const { searchTypeList: defaultTemplateSearchType } = templateInitialState;
 export const { searchTypeList: defaultDatasetSearchType } = datasetInitialState;
+export const { searchTypeList: defaultContainerSearchType } = containerInitialState;
 
 // 공통 모달
 export { default as TemplateListModal } from './TemplateListModal';

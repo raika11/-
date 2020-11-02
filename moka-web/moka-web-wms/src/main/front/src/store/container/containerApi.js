@@ -47,14 +47,6 @@ export const hasRelationList = (containerSeq) => {
     });
 };
 
-// 관련 아이템 조회
-export const getRelationList = ({ search }) => {
-    const queryString = qs.stringify(search);
-    return instance.get(`/api/containers/${search.relSeq}/relations?${queryString}`).catch((err) => {
-        throw err;
-    });
-};
-
 // 컨테이너 삭제
 export const deleteContainer = (containerSeq) => {
     return instance.delete(`/api/containers/${containerSeq}`).catch((err) => {

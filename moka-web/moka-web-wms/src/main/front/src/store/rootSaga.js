@@ -8,6 +8,7 @@ import codeMgtSaga from '@store/codeMgt/codeMgtSaga';
 import reservedSaga from '@store/reserved/reservedSaga';
 import datasetdSaga from '@store/dataset/datasetSaga';
 import componentSaga from '@store/component/componentSaga';
+import containerSaga from '@store/container/containerSaga';
 import pageSaga from '@store/page/pageSaga';
 import editFormSaga from '@/store/editForm/editFormSaga';
 import relationSaga from '@store/relation/relationSaga';
@@ -23,6 +24,7 @@ export default function* rootSaga() {
         reservedSaga(),
         datasetdSaga(),
         componentSaga(),
+        containerSaga(),
         pageSaga(),
         editFormSaga(),
         relationSaga(),

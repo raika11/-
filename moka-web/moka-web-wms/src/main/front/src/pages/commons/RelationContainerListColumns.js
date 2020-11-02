@@ -11,7 +11,7 @@ export const columnDefs = [
     {
         headerName: '컨테이너명',
         field: 'containerName',
-        width: 158,
+        width: 238,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'containerName',
     },

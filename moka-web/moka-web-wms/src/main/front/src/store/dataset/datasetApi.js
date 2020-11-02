@@ -57,7 +57,6 @@ export const getRelationList = ({ search }) => {
 
 // 데이타셋 삭제
 export const deleteDataset = (datasetSeq) => {
-    debugger;
     return instance.delete(`/api/datasets/${datasetSeq}`).catch((err) => {
         throw err;
     });

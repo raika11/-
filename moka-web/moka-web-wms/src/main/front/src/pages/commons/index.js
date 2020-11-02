@@ -1,9 +1,11 @@
+import { initialState as pageInitialState } from '@store/page';
 import { initialState as componentInitialState } from '@store/component';
 import { initialState as templateInitialState } from '@store/template';
 import { initialState as datasetInitialState } from '@store/dataset';
 import { initialState as containerInitialState } from '@store/container';
 
 // 검색조건
+export const { searchTypeList: defaultPageSearchType } = pageInitialState;
 export const { searchTypeList: defaultComponentSearchType } = componentInitialState;
 export const { searchTypeList: defaultTemplateSearchType } = templateInitialState;
 export const { searchTypeList: defaultDatasetSearchType } = datasetInitialState;
@@ -22,7 +24,9 @@ export { default as RelationInSKinList } from './RelationInSkinList';
 export { default as RelationInContainerList } from './RelationInContainerList';
 export { default as RelationInComponentList } from './RelationInComponentList';
 
-// 관련 아이템 (상위 => 하위)
-export const relationUNAgGridHeight = 608;
-export { default as RelationTemplateList } from './RelationTemplateList';
-export { default as RelationComponentList } from './RelationComponentList';
+// Lookup 아이템 (상위 => 하위)
+export const LookupAgGridHeight = 608;
+export { default as LookupTemplateList } from './LookupTemplateList';
+export { default as LookupComponentList } from './LookupComponentList';
+export { default as LookupContainerList } from './LookupContainerList';
+export { default as LookupPageList } from './LookupPageList';

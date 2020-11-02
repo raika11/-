@@ -24,7 +24,7 @@ export const initialState = {
         { id: 'containerName', name: '컨테이너명' },
         { id: 'templateBody', name: 'TEMS 소스' },
     ],
-    ref: {
+    lookup: {
         total: 0,
         error: null,
         list: [],
@@ -54,9 +54,9 @@ export default handleActions(
                 draft.search = payload;
             });
         },
-        [act.CHANGE_REF_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CHANGE_LOOKUP_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.ref.search = payload;
+                draft.lookup.search = payload;
             });
         },
         /**
@@ -84,9 +84,9 @@ export default handleActions(
                 draft.search = initialState.search;
             });
         },
-        [act.CLEAR_REF]: (state) => {
+        [act.CLEAR_LOOKUP]: (state) => {
             return produce(state, (draft) => {
-                draft.ref = initialState.ref;
+                draft.lookup = initialState.lookup;
             });
         },
         /**
@@ -119,18 +119,18 @@ export default handleActions(
                 draft.containerError = payload;
             });
         },
-        [act.GET_CONTAINER_REF_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_CONTAINER_LOOKUP_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.ref.list = body.list;
-                draft.ref.total = body.totalCnt;
-                draft.ref.error = initialState.ref.error;
+                draft.lookup.list = body.list;
+                draft.lookup.total = body.totalCnt;
+                draft.lookup.error = initialState.lookup.error;
             });
         },
-        [act.GET_CONTAINER_REF_LIST_FAILURE]: (state, { payload }) => {
+        [act.GET_CONTAINER_LOOKUP_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.ref.list = initialState.list;
-                draft.ref.total = initialState.total;
-                draft.ref.error = payload;
+                draft.lookup.list = initialState.lookup.list;
+                draft.lookup.total = initialState.lookup.total;
+                draft.lookup.error = payload;
             });
         },
         /**

@@ -27,6 +27,22 @@ export const initialState = {
         { id: 'templateName', name: '템플릿명' },
         { id: 'templateBody', name: 'TEMS 소스' },
     ],
+    lookup: {
+        total: 0,
+        error: null,
+        list: [],
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            sort: 'templateSeq,desc',
+            domainId: null,
+            templateGroup: 'all',
+            widthMin: null,
+            widthMax: null,
+            searchType: 'all',
+            keyword: '',
+        },
+    },
     template: {},
     templateError: null,
     templateBody: '',
@@ -42,6 +58,11 @@ export default handleActions(
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;
+            });
+        },
+        [act.CHANGE_LOOKUP_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.lookup.search = payload;
             });
         },
         /**
@@ -67,6 +88,11 @@ export default handleActions(
         [act.CLEAR_SEARCH]: (state) => {
             return produce(state, (draft) => {
                 draft.search = initialState.search;
+            });
+        },
+        [act.CLEAR_LOOKUP]: (state) => {
+            return produce(state, (draft) => {
+                draft.lookup = initialState.lookup;
             });
         },
         /**
@@ -100,6 +126,20 @@ export default handleActions(
                 draft.templateBody = initialState.templateBody;
                 draft.inputTag = initialState.inputTag;
                 draft.templateError = payload;
+            });
+        },
+        [act.GET_TEMPLATE_LOOKUP_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.lookup.list = body.list;
+                draft.lookup.total = body.totalCnt;
+                draft.lookup.error = initialState.lookup.error;
+            });
+        },
+        [act.GET_TEMPLATE_LOOKUP_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.lookup.list = initialState.lookup.list;
+                draft.lookup.total = initialState.lookup.total;
+                draft.lookup.error = payload;
             });
         },
         /**

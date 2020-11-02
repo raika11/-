@@ -11,9 +11,9 @@ import * as api from './containerApi';
 const getContainerList = callApiAfterActions(act.GET_CONTAINER_LIST, api.getContainerList, (store) => store.container);
 
 /**
- * 컨테이너 참고용 목록(ref) 조회
+ * 컨테이너 lookup 목록 조회
  */
-const getContainerRefList = callApiAfterActions(act.GET_CONTAINER_REF_LIST, api.getContainerList, (store) => store.container.ref);
+const getContainerLookupList = callApiAfterActions(act.GET_CONTAINER_LOOKUP_LIST, api.getContainerList, (store) => store.container.lookup);
 
 /**
  * 컨테이너 조회
@@ -137,5 +137,5 @@ export default function* saga() {
     yield takeLatest(act.DELETE_CONTAINER, deleteContainer);
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
     yield takeLatest(act.GET_CONTAINER_MODAL, getContainerModal);
-    yield takeLatest(act.GET_CONTAINER_REF_LIST, getContainerRefList);
+    yield takeLatest(act.GET_CONTAINER_LOOKUP_LIST, getContainerLookupList);
 }

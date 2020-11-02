@@ -27,6 +27,20 @@ export const initialState = {
         { id: 'templateName', name: '템플릿명' },
         { id: 'templateBody', name: 'TEMS 소스' },
     ],
+    lookup: {
+        total: 0,
+        error: null,
+        list: [],
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            sort: 'componentSeq,desc',
+            domainId: null,
+            templateGroup: 'all',
+            searchType: 'all',
+            keyword: '',
+        },
+    },
     component: {
         domain: {},
         template: {},
@@ -55,6 +69,11 @@ export default handleActions(
                 draft.search = payload;
             });
         },
+        [act.CHANGE_LOOKUP_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.lookup.search = payload;
+            });
+        },
         /**
          * 스토어 데이터 초기화
          */
@@ -77,6 +96,11 @@ export default handleActions(
         [act.CLEAR_SEARCH]: (state) => {
             return produce(state, (draft) => {
                 draft.search = initialState.search;
+            });
+        },
+        [act.CLEAR_LOOKUP]: (state) => {
+            return produce(state, (draft) => {
+                draft.lookup = initialState.lookup;
             });
         },
         /**
@@ -106,6 +130,20 @@ export default handleActions(
         [act.GET_COMPONENT_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.componentError = payload;
+            });
+        },
+        [act.GET_COMPONENT_LOOKUP_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.lookup.list = body.list;
+                draft.lookup.total = body.totalCnt;
+                draft.lookup.error = initialState.lookup.error;
+            });
+        },
+        [act.GET_COMPONENT_LOOKUP_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.lookup.list = initialState.lookup.list;
+                draft.lookup.total = initialState.lookup.total;
+                draft.lookup.error = payload;
             });
         },
         /**

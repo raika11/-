@@ -8,19 +8,19 @@ import Button from 'react-bootstrap/Button';
 import { ITEM_PG, ITEM_CT, ITEM_SK, API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTableTypeButton, MokaTable, MokaThumbTable } from '@components';
 import { defaultTemplateSearchType } from '@pages/commons';
-import { getTemplateList, changeSearchOption, initialState, clearStore, GET_TEMPLATE_LIST } from '@store/template';
-import columnDefs from './RelationTemplateListColums';
+import { getTemplateLookupList, changeLookupSearchOption, initialState, clearLookup, GET_TEMPLATE_LOOKUP_LIST } from '@store/template';
+import columnDefs from './LookupTemplateListColums';
 import TemplateHtmlModal from './TemplateHtmlModal';
 
 const propTypes = {
     /**
-     * relSeq의 타입
+     * seq의 타입
      */
-    relSeqType: PropTypes.oneOf([ITEM_CT, ITEM_PG]),
+    seqType: PropTypes.oneOf([ITEM_CT, ITEM_SK, ITEM_PG]),
     /**
-     * relSeq
+     * seq
      */
-    relSeq: PropTypes.number,
+    seq: PropTypes.number,
     /**
      * show === true이면 리스트를 조회한다
      */
@@ -35,11 +35,10 @@ const defaultProps = {
 };
 
 /**
- * relSeq와
- * 관련된 하위(자식의) 템플릿 리스트
+ * seq, seqType을 검색조건으로 사용하는 Lookup 템플릿 리스트
  */
-const RelationTemplateList = (props) => {
-    const { relSeq, relSeqType, show, onAppend } = props;
+const LookupTemplateList = (props) => {
+    const { seq, seqType, show, onAppend } = props;
     const dispatch = useDispatch();
 
     const { domainList, tpSizeRows, tpZoneRows, latestDomainId, search: storeSearch, list, total, UPLOAD_PATH_URL, loading } = useSelector((store) => ({
@@ -47,15 +46,15 @@ const RelationTemplateList = (props) => {
         tpSizeRows: store.codeMgt.tpSizeRows,
         tpZoneRows: store.codeMgt.tpZoneRows,
         latestDomainId: store.auth.latestDomainId,
-        search: store.template.search,
-        list: store.template.list,
-        total: store.template.total,
+        search: store.template.lookup.search,
+        list: store.template.lookup.list,
+        total: store.template.lookup.total,
         UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
-        loading: store.loading[GET_TEMPLATE_LIST],
+        loading: store.loading[GET_TEMPLATE_LOOKUP_LIST],
     }));
 
     // state
-    const [search, setSearch] = useState(initialState.search);
+    const [search, setSearch] = useState(initialState.lookup.search);
     const [listType, setListType] = useState('list');
     const [rowData, setRowData] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -73,7 +72,7 @@ const RelationTemplateList = (props) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(getTemplateList(changeSearchOption(temp)));
+        dispatch(getTemplateLookupList(changeLookupSearchOption(temp)));
     };
 
     /**
@@ -144,7 +143,7 @@ const RelationTemplateList = (props) => {
 
     useEffect(() => {
         return () => {
-            dispatch(clearStore());
+            dispatch(clearLookup());
         };
     }, [dispatch]);
 
@@ -171,17 +170,19 @@ const RelationTemplateList = (props) => {
     useEffect(() => {
         if (show) {
             dispatch(
-                getTemplateList(
-                    changeSearchOption({
-                        ...initialState.search,
-                        keyword: relSeq,
-                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : relSeqType === ITEM_SK ? 'skinSeq' : 'containerSeq',
+                getTemplateLookupList(
+                    changeLookupSearchOption({
+                        ...initialState.lookup.search,
+                        keyword: seq,
+                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_SK ? 'skinSeq' : seqType === ITEM_CT ? 'containerSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
             );
+        } else {
+            dispatch(clearLookup());
         }
-    }, [show, latestDomainId, dispatch, relSeq, relSeqType]);
+    }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
         <>
@@ -253,9 +254,9 @@ const RelationTemplateList = (props) => {
                                     });
                                 }}
                             >
-                                {relSeqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {relSeqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
-                                {relSeqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
+                                {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
+                                {seqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
+                                {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
                                 {defaultTemplateSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.name}
@@ -323,7 +324,7 @@ const RelationTemplateList = (props) => {
     );
 };
 
-RelationTemplateList.propTypes = propTypes;
-RelationTemplateList.defaultProps = defaultProps;
+LookupTemplateList.propTypes = propTypes;
+LookupTemplateList.defaultProps = defaultProps;
 
-export default RelationTemplateList;
+export default LookupTemplateList;

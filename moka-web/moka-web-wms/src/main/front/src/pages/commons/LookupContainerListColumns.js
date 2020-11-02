@@ -35,6 +35,8 @@ export const columnDefs = [
     },
 ];
 
+export default columnDefs;
+
 export const rowData = [
     {
         containerSeq: 16,

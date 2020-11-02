@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { MokaModal, MokaSearchInput, MokaTable } from '@components';
 
 // 임시 데이터
-import { columnDefs, rowData } from '@pages/commons/RelationContainerListColumns';
+import { columnDefs, rowData } from '@/pages/commons/LookupContainerListColumns';
 
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';

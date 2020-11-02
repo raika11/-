@@ -11,6 +11,11 @@ import * as act from './pageAction';
 const getPageTree = callApiAfterActions(act.GET_PAGE_TREE, api.getPageTree, (store) => store.page);
 
 /**
+ * 페이지 lookup 목록 조회
+ */
+const getPageLookupList = callApiAfterActions(act.GET_PAGE_LOOKUP_LIST, api.getPageList, (store) => store.page.lookup);
+
+/**
  * 페이지 조회
  */
 const getPage = createRequestSaga(act.GET_PAGE, api.getPage);
@@ -141,54 +146,6 @@ function* hasRelationList({ payload: { pageSeq, callback } }) {
 }
 
 /**
- * 관련아이템 목록 조회
- * @param {string} param0.payload.relType PG|SK|CT|CP
- * @param {array} param0.payload.actions api 호출 전 액션
- */
-function* getRelationList({ payload: { actions, relType } }) {
-    const ACTION = act.GET_RELATION_LIST;
-
-    yield put(startLoading(ACTION));
-
-    try {
-        // 검색 전에 배열로 들어온 액션들을 먼저 실행시킨다
-        if (actions && actions.length > 0) {
-            for (let i = 0; i < actions.length; i++) {
-                const act = actions[i];
-                if (act) {
-                    yield put({
-                        type: act.type,
-                        payload: act.payload,
-                    });
-                }
-            }
-        }
-        // 검색 조건
-        const searchOption = yield select((store) => store.pageRelationList[relType]);
-        const response = yield call(api.getRelationList, searchOption);
-
-        if (response.data.header.success) {
-            yield put({
-                type: act.GET_RELATION_LIST_SUCCESS,
-                payload: { ...response.data, relType },
-            });
-        } else {
-            yield put({
-                type: act.GET_RELATION_LIST_FAILURE,
-                payload: { relType, payload: response.data },
-            });
-        }
-    } catch (e) {
-        yield put({
-            type: act.GET_RELATION_LIST_FAILURE,
-            payload: { relType, payload: errorResponse(e) },
-        });
-    }
-
-    yield put(finishLoading(ACTION));
-}
-
-/**
  * 히스토리 목록 조회
  */
 const getHistoryList = callApiAfterActions(act.GET_HISTORY_LIST, api.getHistoryList, (store) => store.pageHistory);
@@ -205,7 +162,7 @@ export default function* saga() {
     yield takeLatest(act.SAVE_PAGE, savePage);
     yield takeLatest(act.DELETE_PAGE, deletePage);
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
-    yield takeLatest(act.GET_RELATION_LIST, getRelationList);
     yield takeLatest(act.GET_HISTORY_LIST, getHistoryList);
     yield takeLatest(act.GET_HISTORY, getHistory);
+    yield takeLatest(act.GET_PAGE_LOOKUP_LIST, getPageLookupList);
 }

@@ -3,12 +3,12 @@ import { createRequestActionTypes } from '@store/commons/saga';
 
 /**
  * 검색조건 변경
- * 기본 리스트 + 관련탭에서 사용하는 참고 리스트(ref)
+ * 기본 리스트 + 관련탭에서 사용하는 lookup 리스트
  */
 export const CHANGE_SEARCH_OPTION = 'container/CHANGE_SEARCH_OPTION';
-export const CHANGE_REF_SEARCH_OPTION = 'container/CHANGE_REF_SEARCH_OPTION';
+export const CHANGE_LOOKUP_SEARCH_OPTION = 'container/CHANGE_REF_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
-export const changeRefSearchOption = createAction(CHANGE_REF_SEARCH_OPTION, (search) => search);
+export const changeLookupSearchOption = createAction(CHANGE_LOOKUP_SEARCH_OPTION, (search) => search);
 
 /**
  * 스토어 데이터 삭제
@@ -17,12 +17,12 @@ export const CLEAR_STORE = 'container/CLEAR_STORE';
 export const CLEAR_CONTAINER = 'container/CLEAR_CONTAINER';
 export const CLEAR_LIST = 'container/CLEAR_LIST';
 export const CLEAR_SEARCH = 'container/CLEAR_SEARCH';
-export const CLEAR_REF = 'container/CLEAR_REF';
+export const CLEAR_LOOKUP = 'container/CLEAR_LOOKUP';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearContainer = createAction(CLEAR_CONTAINER);
 export const clearList = createAction(CLEAR_LIST);
 export const clearSearch = createAction(CLEAR_SEARCH);
-export const clearRef = createAction(CLEAR_REF);
+export const clearLookup = createAction(CLEAR_LOOKUP);
 
 /**
  * 데이터 조회
@@ -31,8 +31,8 @@ export const [GET_CONTAINER_LIST, GET_CONTAINER_LIST_SUCCESS, GET_CONTAINER_LIST
 export const [GET_CONTAINER, GET_CONTAINER_SUCCESS, GET_CONTAINER_FAILURE] = createRequestActionTypes('container/GET_CONTAINER');
 export const getContainerList = createAction(GET_CONTAINER_LIST, (...actions) => actions);
 export const getContainer = createAction(GET_CONTAINER, ({ containerSeq }) => ({ containerSeq }));
-export const [GET_CONTAINER_REF_LIST, GET_CONTAINER_REF_LIST_SUCCESS, GET_CONTAINER_REF_LIST_FAILURE] = createRequestActionTypes('container/GET_CONTAINER_REF_LIST');
-export const getContainerRefList = createAction(GET_CONTAINER_REF_LIST, (...actions) => actions);
+export const [GET_CONTAINER_LOOKUP_LIST, GET_CONTAINER_LOOKUP_LIST_SUCCESS, GET_CONTAINER_LOOKUP_LIST_FAILURE] = createRequestActionTypes('container/GET_CONTAINER_LOOKUP_LIST');
+export const getContainerLookupList = createAction(GET_CONTAINER_LOOKUP_LIST, (...actions) => actions);
 
 /**
  * 모달 데이터(일시적인 데이터) 조회

@@ -5,22 +5,22 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG, ITEM_SK } from '@/constants';
+import { ITEM_PG, ITEM_CT, ITEM_SK } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { initialState, getContainerRefList, changeRefSearchOption, clearRef, GET_CONTAINER_REF_LIST } from '@store/container';
-import { columnDefs } from './RelationContainerListColumns';
-import { defaultContainerSearchType, relationUNAgGridHeight } from '@pages/commons';
-import ContainerHtmlModal from './ContainerHtmlModal';
+import { getComponentLookupList, changeLookupSearchOption, initialState, clearLookup, GET_COMPONENT_LOOKUP_LIST } from '@store/component';
+import columnDefs from './LookupComponentListColums';
+import { defaultComponentSearchType, LookupAgGridHeight } from '@pages/commons';
+import TemplateHtmlModal from './TemplateHtmlModal';
 
 const propTypes = {
     /**
-     * relSeq의 타입
+     * seq의 타입
      */
-    relSeqType: PropTypes.oneOf([ITEM_PG, ITEM_SK]),
+    seqType: PropTypes.oneOf([ITEM_SK, ITEM_PG]),
     /**
-     * relSeq
+     * seq
      */
-    relSeq: PropTypes.number,
+    seq: PropTypes.number,
     /**
      * show === true이면 리스트를 조회한다
      */
@@ -35,18 +35,17 @@ const defaultProps = {
 };
 
 /**
- * relSeq와
- * 관련된 하위(자식의) 컨테이너 리스트
+ * seq, seqType을 검색조건으로 사용하는 Lookup 컴포넌트 리스트
  */
-const RelationContainerList = (props) => {
-    const { relSeq, relSeqType, show, onAppend } = props;
+const LookupComponentList = (props) => {
+    const { seq, seqType, show, onAppend } = props;
     const dispatch = useDispatch();
 
     const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
-        list: store.container.ref.list,
-        search: store.container.ref.search,
-        total: store.container.ref.total,
-        loading: store.loading[GET_CONTAINER_REF_LIST],
+        list: store.component.lookup.list,
+        search: store.component.lookup.search,
+        total: store.component.lookup.total,
+        loading: store.loading[GET_COMPONENT_LOOKUP_LIST],
         latestDomainId: store.auth.latestDomainId,
     }));
 
@@ -55,7 +54,7 @@ const RelationContainerList = (props) => {
     }, [storeSearch]);
 
     // state
-    const [search, setSearch] = useState(initialState.ref.search);
+    const [search, setSearch] = useState(initialState.lookup.search);
     const [rowData, setRowData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selected, setSelected] = useState({});
@@ -63,19 +62,19 @@ const RelationContainerList = (props) => {
     /**
      * 테이블 검색옵션 변경
      */
-    const handleChangeSearchOption = ({ key, value }) => {
+    const handlechangeLookupSearchOption = ({ key, value }) => {
         let temp = { ...search, [key]: value };
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(getContainerRefList(changeRefSearchOption(temp)));
+        dispatch(getComponentLookupList(changeLookupSearchOption(temp)));
     };
 
     /**
      * 검색
      */
     const handleSearch = () => {
-        handleChangeSearchOption({ key: 'page', value: 0 });
+        handlechangeLookupSearchOption({ key: 'page', value: 0 });
     };
 
     /**
@@ -105,12 +104,12 @@ const RelationContainerList = (props) => {
      * @param {object} data row data
      */
     const handleClickLink = (data) => {
-        window.open(`/container/${data.containerSeq}`);
+        window.open(`/component/${data.componentSeq}`);
     };
 
     useEffect(() => {
         return () => {
-            dispatch(clearRef());
+            dispatch(clearLookup());
         };
     }, [dispatch]);
 
@@ -128,21 +127,23 @@ const RelationContainerList = (props) => {
     useEffect(() => {
         if (show) {
             dispatch(
-                getContainerRefList(
-                    changeRefSearchOption({
-                        ...initialState.ref.search,
-                        keyword: relSeq,
-                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : 'skinSeq',
+                getComponentLookupList(
+                    changeLookupSearchOption({
+                        ...initialState.lookup.search,
+                        keyword: seq,
+                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_SK ? 'skinSeq' : seqType === ITEM_CT ? 'containerSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
             );
+        } else {
+            dispatch(clearLookup());
         }
-    }, [show, latestDomainId, dispatch, relSeq, relSeqType]);
+    }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" title="컨테이너 검색">
+            <MokaCard titleClassName="mb-0" title="컴포넌트 검색">
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>
@@ -160,9 +161,10 @@ const RelationContainerList = (props) => {
                                     });
                                 }}
                             >
-                                {relSeqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {relSeqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
-                                {defaultContainerSearchType.map((type) => (
+                                {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
+                                {seqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
+                                {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
+                                {defaultComponentSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.name}
                                     </option>
@@ -186,32 +188,32 @@ const RelationContainerList = (props) => {
 
                 {/* 버튼 그룹 */}
                 <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="dark" onClick={() => window.open('/container')}>
-                        컨테이너 추가
+                    <Button variant="dark" onClick={() => window.open('/component')}>
+                        컴포넌트 추가
                     </Button>
                 </div>
 
                 {/* ag-grid table */}
                 <MokaTable
-                    agGridHeight={relationUNAgGridHeight}
+                    agGridHeight={LookupAgGridHeight}
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    onRowNodeId={(data) => data.containerSeq}
+                    onRowNodeId={(data) => data.componentSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
                     total={total}
                     page={search.page}
                     size={search.size}
-                    onChangeSearchOption={handleChangeSearchOption}
+                    onchangeLookupSearchOption={handlechangeLookupSearchOption}
                     preventRowClickCell={['append', 'link']}
                 />
             </MokaCard>
-            <ContainerHtmlModal containerSeq={selected.containerSeq} show={showModal} onHide={() => setShowModal(false)} />
+            <TemplateHtmlModal templateSeq={selected.templateSeq} show={showModal} onHide={() => setShowModal(false)} />
         </>
     );
 };
 
-RelationContainerList.propTypes = propTypes;
-RelationContainerList.defaultProps = defaultProps;
+LookupComponentList.propTypes = propTypes;
+LookupComponentList.defaultProps = defaultProps;
 
-export default RelationContainerList;
+export default LookupComponentList;

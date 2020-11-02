@@ -5,48 +5,47 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG, ITEM_CT, ITEM_SK } from '@/constants';
+import { ITEM_PG } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { getComponentList, changeSearchOption, initialState, clearStore, GET_COMPONENT_LIST } from '@store/component';
-import columnDefs from './RelationComponentListColums';
-import { defaultComponentSearchType, relationUNAgGridHeight } from '@pages/commons';
-import TemplateHtmlModal from './TemplateHtmlModal';
+import { initialState, getPageLookupList, changeLookupSearchOption, clearLookup, GET_PAGE_LOOKUP_LIST } from '@store/page';
+import columnDefs from './LookupPageListColumns';
+import { defaultPageSearchType, LookupAgGridHeight } from '@pages/commons';
+import PageHtmlModal from './PageHtmlModal';
 
 const propTypes = {
     /**
-     * relSeq의 타입
+     * seq의 타입
      */
-    relSeqType: PropTypes.oneOf([ITEM_CT, ITEM_PG, ITEM_SK]),
+    seqType: PropTypes.oneOf([ITEM_PG]),
     /**
-     * relSeq
+     * seq
      */
-    relSeq: PropTypes.number,
+    seq: PropTypes.number,
     /**
      * show === true이면 리스트를 조회한다
      */
     show: PropTypes.bool,
     /**
-     * row의 append 버튼 클릭 이벤트
+     * row의 load 버튼 클릭 이벤트
      */
-    onAppend: PropTypes.func,
+    onLoad: PropTypes.func,
 };
 const defaultProps = {
     show: true,
 };
 
 /**
- * relSeq와
- * 관련된 하위(자식의) 템플릿 리스트
+ * seq, seqType을 검색조건으로 사용하는 Lookup 페이지 리스트
  */
-const RelationComponentList = (props) => {
-    const { relSeq, relSeqType, show, onAppend } = props;
+const LookupPageList = (props) => {
+    const { seq, seqType, show, onLoad } = props;
     const dispatch = useDispatch();
 
     const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
-        list: store.component.list,
-        search: store.component.search,
-        total: store.component.total,
-        loading: store.loading[GET_COMPONENT_LIST],
+        list: store.page.lookup.list,
+        search: store.page.lookup.search,
+        total: store.page.lookup.total,
+        loading: store.loading[GET_PAGE_LOOKUP_LIST],
         latestDomainId: store.auth.latestDomainId,
     }));
 
@@ -55,7 +54,7 @@ const RelationComponentList = (props) => {
     }, [storeSearch]);
 
     // state
-    const [search, setSearch] = useState(initialState.search);
+    const [search, setSearch] = useState(initialState.lookup.search);
     const [rowData, setRowData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selected, setSelected] = useState({});
@@ -68,7 +67,7 @@ const RelationComponentList = (props) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(getComponentList(changeSearchOption(temp)));
+        dispatch(getPageLookupList(changeLookupSearchOption(temp)));
     };
 
     /**
@@ -88,29 +87,37 @@ const RelationComponentList = (props) => {
     };
 
     /**
-     * 태그 삽입 버튼 클릭
+     * 로드 버튼 클릭
      * @param {object} data row data
      */
-    const handleClickAppend = useCallback(
+    const handleClickLoad = useCallback(
         (data) => {
-            if (onAppend) {
-                onAppend(data);
+            if (onLoad) {
+                onLoad(data);
             }
         },
-        [onAppend],
+        [onLoad],
     );
+
+    /**
+     * preview 버튼 클릭
+     * @param {object} data row data
+     */
+    const handleClickPreview = (data) => {
+        // preview
+    };
 
     /**
      * 링크 버튼 클릭
      * @param {object} data row data
      */
     const handleClickLink = (data) => {
-        window.open(`/component/${data.componentSeq}`);
+        window.open(`/page/${data.pageSeq}`);
     };
 
     useEffect(() => {
         return () => {
-            dispatch(clearStore());
+            dispatch(clearLookup());
         };
     }, [dispatch]);
 
@@ -119,30 +126,33 @@ const RelationComponentList = (props) => {
         setRowData(
             list.map((data) => ({
                 ...data,
-                handleClickAppend,
+                handleClickLoad,
                 handleClickLink,
+                handleClickPreview,
             })),
         );
-    }, [handleClickAppend, list]);
+    }, [handleClickLoad, list]);
 
     useEffect(() => {
         if (show) {
             dispatch(
-                getComponentList(
-                    changeSearchOption({
-                        ...initialState.search,
-                        keyword: relSeq,
-                        searchType: relSeqType === ITEM_PG ? 'pageSeq' : relSeqType === ITEM_SK ? 'skinSeq' : 'containerSeq',
+                getPageLookupList(
+                    changeLookupSearchOption({
+                        ...initialState.lookup.search,
+                        keyword: seq,
+                        searchType: seqType === ITEM_PG ? 'pageSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
             );
+        } else {
+            dispatch(clearLookup());
         }
-    }, [show, latestDomainId, dispatch, relSeq, relSeqType]);
+    }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" title="컴포넌트 검색">
+            <MokaCard titleClassName="mb-0" title="페이지 검색">
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>
@@ -160,10 +170,8 @@ const RelationComponentList = (props) => {
                                     });
                                 }}
                             >
-                                {relSeqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {relSeqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
-                                {relSeqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
-                                {defaultComponentSearchType.map((type) => (
+                                {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
+                                {defaultPageSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.name}
                                     </option>
@@ -187,32 +195,32 @@ const RelationComponentList = (props) => {
 
                 {/* 버튼 그룹 */}
                 <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="dark" onClick={() => window.open('/component')}>
-                        컴포넌트 추가
+                    <Button variant="dark" onClick={() => window.open('/page')}>
+                        페이지 추가
                     </Button>
                 </div>
 
                 {/* ag-grid table */}
                 <MokaTable
-                    agGridHeight={relationUNAgGridHeight}
+                    agGridHeight={LookupAgGridHeight}
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    onRowNodeId={(data) => data.componentSeq}
+                    onRowNodeId={(data) => data.pageSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
                     total={total}
                     page={search.page}
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
-                    preventRowClickCell={['append', 'link']}
+                    preventRowClickCell={['load', 'preview', 'link']}
                 />
             </MokaCard>
-            <TemplateHtmlModal templateSeq={selected.templateSeq} show={showModal} onHide={() => setShowModal(false)} />
+            <PageHtmlModal pageSeq={selected.pageSeq} show={showModal} onHide={() => setShowModal(false)} />
         </>
     );
 };
 
-RelationComponentList.propTypes = propTypes;
-RelationComponentList.defaultProps = defaultProps;
+LookupPageList.propTypes = propTypes;
+LookupPageList.defaultProps = defaultProps;
 
-export default RelationComponentList;
+export default LookupPageList;

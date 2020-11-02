@@ -20,6 +20,16 @@ export const initialState = {
         { id: 'pageServiceName', name: '서비스명' },
         { id: 'pageBody', name: 'TEMS 소스' },
     ],
+    lookup: {
+        total: 0,
+        error: null,
+        list: [],
+        search: {
+            domainId: null,
+            searchType: 'all',
+            keyword: '',
+        },
+    },
     page: {
         pageSeq: null,
         domain: {
@@ -63,6 +73,11 @@ export default handleActions(
                 draft.search = payload;
             });
         },
+        [act.CHANGE_LOOKUP_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.lookup.search = payload;
+            });
+        },
         /**
          * 스토어 데이터 초기화
          */
@@ -85,6 +100,11 @@ export default handleActions(
         [act.CLEAR_SEARCH]: (state) => {
             return produce(state, (draft) => {
                 draft.search = initialState.search;
+            });
+        },
+        [act.CLEAR_LOOKUP]: (state) => {
+            return produce(state, (draft) => {
+                draft.lookup = initialState.lookup;
             });
         },
         /**
@@ -118,6 +138,20 @@ export default handleActions(
                 draft.inputTag = initialState.inputTag;
                 draft.pageError = payload;
                 draft.invalidList = payload.body ? payload.body : initialState.invalidList;
+            });
+        },
+        [act.GET_PAGE_LOOKUP_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.lookup.list = body.list;
+                draft.lookup.total = body.totalCnt;
+                draft.lookup.error = initialState.lookup.error;
+            });
+        },
+        [act.GET_PAGE_LOOKUP_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.lookup.list = initialState.lookup.list;
+                draft.lookup.total = initialState.lookup.total;
+                draft.lookup.error = payload;
             });
         },
         /**

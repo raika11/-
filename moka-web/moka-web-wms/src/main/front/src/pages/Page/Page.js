@@ -16,11 +16,11 @@ const PageList = React.lazy(() => import('./PageList'));
 const PageEdit = React.lazy(() => import('./PageEdit'));
 
 // relations
-const PageChildPageList = React.lazy(() => import('./relations/PageChildPageList'));
+const LookupPageList = React.lazy(() => import('@pages/commons/LookupPageList'));
 const PageChildSkinList = React.lazy(() => import('./relations/PageChildSkinList'));
-const RelationContainerList = React.lazy(() => import('@pages/commons/RelationContainerList'));
-const RelationComponentList = React.lazy(() => import('@pages/commons/RelationComponentList'));
-const RelationTemplateList = React.lazy(() => import('@pages/commons/RelationTemplateList'));
+const LookupContainerList = React.lazy(() => import('@pages/commons/LookupContainerList'));
+const LookupComponentList = React.lazy(() => import('@/pages/commons/LookupComponentList'));
+const LookupTemplateList = React.lazy(() => import('@/pages/commons/LookupTemplateList'));
 const PageChildAdList = React.lazy(() => import('./relations/PageChildAdList'));
 const PageHistoryList = React.lazy(() => import('./relations/PageHistoryList'));
 
@@ -230,19 +230,19 @@ const Page = () => {
                                         <PageEdit onDelete={handleClickDelete} />
                                     </Suspense>,
                                     <Suspense>
-                                        <PageChildPageList />
+                                        <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} />
                                     </Suspense>,
                                     <Suspense>
                                         <PageChildSkinList />
                                     </Suspense>,
                                     <Suspense>
-                                        <RelationContainerList show={activeTabIdx === 3} relSeqType={ITEM_PG} relSeq={page.pageSeq}/>
+                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <RelationComponentList show={activeTabIdx === 4} relSeqType={ITEM_PG} relSeq={page.pageSeq}/>
+                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <RelationTemplateList show={activeTabIdx === 5} relSeqType={ITEM_PG} relSeq={page.pageSeq}/>
+                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_PG} seq={page.pageSeq} />
                                     </Suspense>,
                                     <Suspense>
                                         <PageChildAdList />

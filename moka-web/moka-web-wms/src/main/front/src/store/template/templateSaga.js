@@ -11,6 +11,11 @@ import * as act from './templateAction';
 const getTemplateList = callApiAfterActions(act.GET_TEMPLATE_LIST, api.getTemplateList, (store) => store.template);
 
 /**
+ * 템플릿 lookup 목록 조회
+ */
+const getTemplateLookupList = callApiAfterActions(act.GET_TEMPLATE_LOOKUP_LIST, api.getTemplateList, (store) => store.template.lookup);
+
+/**
  * 템플릿 조회
  */
 const getTemplate = createRequestSaga(act.GET_TEMPLATE, api.getTemplate);
@@ -168,4 +173,5 @@ export default function* saga() {
     yield takeLatest(act.COPY_TEMPLATE, copyTemplate);
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
     yield takeLatest(act.GET_HISTORY_LIST, getHistoryList);
+    yield takeLatest(act.GET_TEMPLATE_LOOKUP_LIST, getTemplateLookupList);
 }

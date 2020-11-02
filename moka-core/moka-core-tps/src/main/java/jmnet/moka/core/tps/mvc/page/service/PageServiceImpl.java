@@ -398,7 +398,8 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public Long countPageRel(RelationSearchDTO search) {
-        return pageRelMapper.count(search);
+        pageRelMapper.findAll(search);
+        return search.getTotal();
     }
 
     @Override

@@ -39,22 +39,6 @@ public class RelationSearchDTO extends SearchDTO {
     private static final long serialVersionUID = -5762199095013181372L;
 
     /**
-     * 총갯수 사용여부
-     */
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.useTotal}")
-    private String useTotal;
-
-    /**
-     * 총갯수
-     */
-    private Long total;
-
-    /**
-     * 검색결과 성공여부
-     */
-    private Integer returnValue;
-
-    /**
      * 리턴 될 관련유형 (TP:템플릿, CP: 컴포넌트, AD:광고, CT:컨테이너, DS: 데이타셋)
      */
     @Pattern(regexp = "^(PG)|(CT)|(CP)|(TP)|(CS)|(AD)|(TP)|(RS)$", message = "{tps.relation.error.pattern.relType}")
@@ -81,8 +65,8 @@ public class RelationSearchDTO extends SearchDTO {
     // 검색 조건의 기본값을 설정
     public RelationSearchDTO() {
         super("pageSeq,desc");
-        useTotal = MokaConstants.YES;
-        returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        super.setUseTotal(MokaConstants.YES);
+        super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
     }
 
     public Pageable getPageableAfterClearSort() {

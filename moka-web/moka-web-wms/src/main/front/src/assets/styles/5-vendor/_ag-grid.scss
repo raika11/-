@@ -15,6 +15,12 @@
     ));
 }
 
+.ag-theme-moka-grid.ag-header-no {
+    .ag-header {
+        display: none;
+    }
+}
+
 .ag-theme-moka-grid .ag-root-wrapper-body {
     overflow: hidden;
     height: unset !important;

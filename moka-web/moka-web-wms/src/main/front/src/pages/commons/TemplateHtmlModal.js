@@ -101,6 +101,7 @@ const TemplateHtmlModal = (props) => {
             onHide={handleHide}
             onBlur={handleBlur}
             defaultValue={defaultValue}
+            value={templateBody}
             buttons={[
                 { text: '저장', variant: 'primary', onClick: handleClickSave },
                 { text: '닫기', variant: 'gray150', onClick: handleHide },

@@ -1,15 +1,8 @@
-import React, { useState, Suspense, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import produce from 'immer';
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 
-import { MokaCard, MokaIcon } from '@components';
-import { MokaIconTabs } from '@/components/MokaTabs';
-import { ITEM_TP } from '@/constants';
-
 const AreaList = React.lazy(() => import('./AreaList'));
+const AreaEdit = React.lazy(() => import('./AreaEdit'));
 
 /**
  * 편집영역관리
@@ -26,6 +19,11 @@ const Area = () => {
             {/* 편집영역 리스트 */}
             <Suspense>
                 <AreaList />
+            </Suspense>
+
+            {/* 편집영역 등록/수정 */}
+            <Suspense>
+                <AreaEdit />
             </Suspense>
         </div>
     );

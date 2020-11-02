@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG, ITEM_CT, ITEM_SK, API_BASE_URL } from '@/constants';
+import { ITEM_PG, ITEM_CT, ITEM_SK, API_BASE_URL, ITEM_TP } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTableTypeButton, MokaTable, MokaThumbTable } from '@components';
 import { defaultTemplateSearchType } from '@pages/commons';
 import { getTemplateLookupList, changeLookupSearchOption, initialState, clearLookup, GET_TEMPLATE_LOOKUP_LIST } from '@store/template';
@@ -127,7 +127,7 @@ const LookupTemplateList = (props) => {
     const handleClickAppend = useCallback(
         (data) => {
             if (onAppend) {
-                onAppend(data);
+                onAppend(ITEM_TP, data);
             }
         },
         [onAppend],

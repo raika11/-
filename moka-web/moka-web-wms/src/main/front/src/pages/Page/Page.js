@@ -6,9 +6,9 @@ import produce from 'immer';
 import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
-import { CARD_DEFAULT_HEIGHT, ITEM_PG } from '@/constants';
+import { CARD_DEFAULT_HEIGHT, ITEM_PG, ITEM_TP, ITEM_CT, ITEM_CP, TEMS_PREFIX } from '@/constants';
 import { MokaIconTabs } from '@/components/MokaTabs';
-import { clearStore, clearHistory, clearRelationList, deletePage, getPageTree } from '@store/page';
+import { clearStore, clearHistory, clearRelationList, deletePage, appendTag } from '@store/page';
 import { notification, toastr } from '@utils/toastUtil';
 
 import PageEditor from './PageEditor';
@@ -84,33 +84,6 @@ const Page = () => {
         );
     };
 
-    /**
-     * 템플릿 삭제
-     * @param {object} response response
-     */
-    const deleteCallback = useCallback(
-        (response, templateSeq) => {
-            if (response.header.success) {
-                dispatch(
-                    deletePage({
-                        templateSeq: templateSeq,
-                        callback: (response) => {
-                            if (response.header.success) {
-                                notification('success', response.header.message);
-                                history.push('/template');
-                            } else {
-                                notification('warning', response.header.message);
-                            }
-                        },
-                    }),
-                );
-            } else {
-                notification('warning', response.header.message);
-            }
-        },
-        [dispatch, history],
-    );
-
     // 노드 찾기(재귀함수)
     // 리턴: {findSeq: page.pageSeq,node: null,path: [String(pageTree.pageSeq)]};
     const findNode = useCallback((findInfo, rootNode) => {
@@ -174,6 +147,26 @@ const Page = () => {
             }
         },
         [dispatch, findNode, history, tree],
+    );
+
+    /**
+     * tems태그 삽입
+     */
+    const handleAppendTag = useCallback(
+        (itemType, row) => {
+            let tag = null;
+            if (itemType === ITEM_CT) {
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.containerSeq}" name="${row.containerName}"/>\n`;
+            } else if (itemType === ITEM_CP) {
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
+            } else if (itemType === ITEM_TP) {
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
+                // } else if (itemType === ITEM_CP) {
+                //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
+            }
+            dispatch(appendTag(tag));
+        },
+        [dispatch],
     );
 
     React.useEffect(() => {
@@ -242,7 +235,7 @@ const Page = () => {
                                         <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_PG} seq={page.pageSeq} />
+                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
                                         <PageChildAdList />

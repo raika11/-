@@ -8,13 +8,19 @@ import { changePageBody } from '@store/page/pageAction';
 const PageEditor = (props) => {
     const { expansion, onExpansion } = props;
     const dispatch = useDispatch();
-    const { pageBody, page, latestDomainId, error, loading, tag } = useSelector((store) => ({
+    const { pageBody, page, latestDomainId, error, loading, inputTag } = useSelector((store) => ({
         pageBody: store.page.pageBody,
         page: store.page.page,
         latestDomainId: store.auth.latestDomainId,
         error: store.page.pageError,
-        loading: store.loading['page/GET_PAGE'] || store.loading['page/POST_PAGE'] || store.loading['page/PUT_PAGE'] || store.loading['page/DELETE_PAGE'] || store.loading['merge/PREVIEW_PAGE'] || store.loading['merge/W3C_PAGE'],
-        tag: store.page.tag,
+        loading:
+            store.loading['page/GET_PAGE'] ||
+            store.loading['page/POST_PAGE'] ||
+            store.loading['page/PUT_PAGE'] ||
+            store.loading['page/DELETE_PAGE'] ||
+            store.loading['merge/PREVIEW_PAGE'] ||
+            store.loading['merge/W3C_PAGE'],
+        inputTag: store.page.inputTag,
     }));
 
     // state
@@ -89,7 +95,7 @@ const PageEditor = (props) => {
             value={pageBody}
             onBlur={handleBlur}
             loading={loading}
-            tag={tag}
+            tag={inputTag}
             error={errorObj.error}
             errorline={errorObj.line}
             errorMessage={errorObj.message}

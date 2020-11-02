@@ -178,6 +178,17 @@ const MokaTable = (props) => {
     };
 
     /**
+     * usedYn에 따른 row 색상 처리
+     * @param {object} instance 인스턴스
+     */
+    const getRowClass = (instance) => {
+        if (instance.node.data.usedYn === 'N') {
+            return 'usedyn-n';
+        }
+        return undefined;
+    };
+
+    /**
      * ag-grid가 화면에 그릴 row data가 변경되었을 때 실행된다.
      * (selected 값이 있을 때 select함)
      */
@@ -229,7 +240,7 @@ const MokaTable = (props) => {
                     }
                     frameworkComponents={{ mokaTooltip: Tooltip }}
                     suppressRowClickSelection
-                    headerHeight={!header ? 0 : undefined}
+                    getRowClass={getRowClass}
                 />
             </div>
             {/* 페이징 */}

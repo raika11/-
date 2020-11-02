@@ -8,7 +8,8 @@ import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIcon } from '@components';
 import { CARD_DEFAULT_HEIGHT, ITEM_PG, ITEM_TP, ITEM_CT, ITEM_CP, TEMS_PREFIX } from '@/constants';
 import { MokaIconTabs } from '@/components/MokaTabs';
-import { clearStore, clearHistory, clearRelationList, deletePage, appendTag } from '@store/page';
+import { clearStore, deletePage, appendTag, changePageBody } from '@store/page';
+import { clearStore as clearHistoryStore } from '@store/history';
 import { notification, toastr } from '@utils/toastUtil';
 
 import PageEditor from './PageEditor';
@@ -22,7 +23,7 @@ const LookupContainerList = React.lazy(() => import('@pages/commons/LookupContai
 const LookupComponentList = React.lazy(() => import('@/pages/commons/LookupComponentList'));
 const LookupTemplateList = React.lazy(() => import('@/pages/commons/LookupTemplateList'));
 const PageChildAdList = React.lazy(() => import('./relations/PageChildAdList'));
-const PageHistoryList = React.lazy(() => import('./relations/PageHistoryList'));
+const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 
 /**
  * 페이지 관리
@@ -161,7 +162,7 @@ const Page = () => {
                 tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
             } else if (itemType === ITEM_TP) {
                 tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
-                // } else if (itemType === ITEM_CP) {
+                // } else if (itemType === ITEM_AD) {
                 //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             }
             dispatch(appendTag(tag));
@@ -169,11 +170,26 @@ const Page = () => {
         [dispatch],
     );
 
+    /**
+     * 히스토리 로드 버튼 이벤트
+     */
+    const handleClickLoad = ({ header, body }) => {
+        if (header.success) {
+            toastr.confirm('불러오기 시 작업 중인 tems소스가 날라갑니다. 불러오시겠습니까?', {
+                onOk: () => {
+                    dispatch(changePageBody(body.body));
+                },
+                onCancle: () => {},
+            });
+        } else {
+            notification('error', header.message);
+        }
+    };
+
     React.useEffect(() => {
         return () => {
             dispatch(clearStore());
-            dispatch(clearRelationList());
-            dispatch(clearHistory());
+            dispatch(clearHistoryStore());
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -241,7 +257,7 @@ const Page = () => {
                                         <PageChildAdList />
                                     </Suspense>,
                                     <Suspense>
-                                        <PageHistoryList show={activeTabIdx === 7} />
+                                        <HistoryList show={activeTabIdx === 7} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickLoad} />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}

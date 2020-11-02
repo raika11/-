@@ -5,7 +5,7 @@
 
 
   <select id="findAll" parameterType="MenuSearchDTO" resultType="MenuVO" statementType="CALLABLE">
-    {call UPA_TB_CMS_MENU_LIST_SEL(
+    {call UPA_CMS_MENU_LIST_SEL(
     #{memberId, mode=IN, jdbcType=VARCHAR, javaType=string}
     )}
   </select>

@@ -47,7 +47,7 @@ public class MenuNode implements Serializable {
 
     private String iconName;
 
-    List<MenuNode> nodes;
+    List<MenuNode> children;
 
     /**
      * 노드생성
@@ -79,7 +79,7 @@ public class MenuNode implements Serializable {
             return rootNode;
         } else {
             if (rootNode.hasChild()) {
-                for (MenuNode menuNode : rootNode.getNodes()) {
+                for (MenuNode menuNode : rootNode.getChildren()) {
                     if (findId.equals(menuNode.getMenuId())) {
                         return menuNode;
                     } else if (menuNode.hasChild()) {
@@ -101,8 +101,8 @@ public class MenuNode implements Serializable {
      * @return 존재여부
      */
     public boolean hasChild() {
-        return this.getNodes() != null && this
-                .getNodes()
+        return this.getChildren() != null && this
+                .getChildren()
                 .size() > 0;
     }
 
@@ -112,37 +112,37 @@ public class MenuNode implements Serializable {
      * @param menuNode MenuNode
      */
     public void addNode(MenuNode menuNode) {
-        if (this.nodes == null) {
-            this.nodes = new ArrayList<>();
+        if (this.children == null) {
+            this.children = new ArrayList<>();
         }
-        this.nodes.add(menuNode);
+        this.children.add(menuNode);
     }
 
     /**
      * 정렬
      */
     public void sort() {
-        if (this.getNodes() != null) {
+        if (this.getChildren() != null) {
             // 자식노드가 하나만 있을경우는, 자식의 자식노드를 정렬하도록 한다.
             if (this
-                    .getNodes()
+                    .getChildren()
                     .size() == 1) {
                 this
-                        .getNodes()
+                        .getChildren()
                         .get(0)
                         .sort();
             } else {
                 this
-                        .getNodes()
+                        .getChildren()
                         .sort((a, b) -> {
 
-                            if (a.getNodes() != null && a
-                                    .getNodes()
+                            if (a.getChildren() != null && a
+                                    .getChildren()
                                     .size() > 0) {
                                 a.sort();
                             }
-                            if (b.getNodes() != null && b
-                                    .getNodes()
+                            if (b.getChildren() != null && b
+                                    .getChildren()
                                     .size() > 0) {
                                 b.sort();
                             }

@@ -39,6 +39,12 @@ export const [GET_PAGE_LOOKUP_LIST, GET_PAGE_LOOKUP_LIST_SUCCESS, GET_PAGE_LOOKU
 export const getPageLookupList = createAction(GET_PAGE_LOOKUP_LIST, (...actions) => actions);
 
 /**
+ * 모달 데이터(일시적인 데이터) 조회
+ */
+export const GET_PAGE_MODAL = 'page/GET_PAGE_MODAL';
+export const getPageModal = createAction(GET_PAGE_MODAL, ({ pageSeq, callback }) => ({ pageSeq, callback }));
+
+/**
  * 데이터 변경
  */
 export const CHANGE_PAGE_BODY = 'page/CHANGE_PAGE_BODY';

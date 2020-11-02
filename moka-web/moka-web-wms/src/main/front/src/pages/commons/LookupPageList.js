@@ -170,7 +170,6 @@ const LookupPageList = (props) => {
                                     });
                                 }}
                             >
-                                {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
                                 {defaultPageSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.name}

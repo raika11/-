@@ -93,16 +93,13 @@ const MonacoEditor = forwardRef((props, ref) => {
             // 에디터 인스턴스의 Undo, Redo 히스토리를 유지해야하므로 아래와 같이 처리함
             editor.pushUndoStop();
             const model = editor.getModel();
-            model.pushEditOperations(
-                [],
-                [
-                    {
-                        range: model.getFullModelRange(),
-                        text: value,
-                    },
-                ],
-                () => null,
-            );
+            editor.executeEdits('update', [
+                {
+                    range: model.getFullModelRange(),
+                    text: value,
+                    forceMoveMarkers: true,
+                },
+            ]);
             editor.pushUndoStop();
         }
     }, [editor, value]);

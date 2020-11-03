@@ -227,7 +227,7 @@ const TemplateEdit = ({ onDelete }) => {
                     </div>
                 </Form.Group>
                 {/* 템플릿ID */}
-                <MokaInputLabel className="mb-2" label="템플릿ID" value={template.templateSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="템플릿ID" value={template.templateSeq} inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 템플릿명 */}
                 <MokaInputLabel
                     className="mb-2"

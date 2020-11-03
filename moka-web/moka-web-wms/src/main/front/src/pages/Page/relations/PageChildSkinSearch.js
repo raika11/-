@@ -18,7 +18,7 @@ const PageChildSkinSearch = () => {
                     </Form.Control>
                 </Col>
                 <Col xs={8} className="px-0 pl-2">
-                    <MokaSearchInput />
+                    <MokaSearchInput disabled />
                 </Col>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">

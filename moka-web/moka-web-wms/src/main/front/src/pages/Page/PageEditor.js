@@ -24,6 +24,7 @@ const PageEditor = (props) => {
     }));
 
     // state
+    const [defaultValue, setDefaultValue] = useState('');
     const [title, setTitle] = useState('페이지 편집');
     const [errorObj, setErrorObj] = useState({});
 
@@ -37,6 +38,16 @@ const PageEditor = (props) => {
             setTitle('페이지 편집');
         }
     }, [page]);
+
+    useEffect(() => {
+        // defaultValue 셋팅
+        if (page.pageSeq) {
+            setDefaultValue(pageBody);
+        } else {
+            setDefaultValue('');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page.pageSeq]);
 
     useEffect(() => {
         // 페이지의 도메인ID를 latestDomainId에 저장
@@ -92,6 +103,7 @@ const PageEditor = (props) => {
             title={title}
             expansion={expansion}
             onExpansion={onExpansion}
+            defaultValue={defaultValue}
             value={pageBody}
             onBlur={handleBlur}
             loading={loading}

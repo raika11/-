@@ -108,7 +108,7 @@ export default handleActions(
                 draft.reserved = initialState.reserved;
                 draft.reservedError = initialState.reservedError;
                 draft.invalidList = initialState.invalidList;
-                draft.latestReservedSeq = null;
+                draft.latestReservedSeq = initialState.latestReservedSeq;
             });
         },
         [act.CLEAR_LIST]: (state) => {

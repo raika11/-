@@ -71,6 +71,31 @@ export function* saveReserved({ payload: { type, actions, callback } }) {
 }
 
 /**
+ * 예약어아이디 중복 체크
+ * @param {string} param0.payload.reservedId 예약어아이디
+ * @param {func} param0.payload.callback 콜백
+ */
+function* duplicateCheck({ payload: { duplicateSet, callback } }) {
+    const ACTION = reservedAction.DUPLICATE_CHECK;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(reservedAPI.duplicateCheck, { duplicateSet });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(true);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
  * 예약어 삭제
  * @param {} param0.payload.reservedSet
  * @param {func} param0.payload.callback 콜백
@@ -130,6 +155,7 @@ export const getReserved = createRequestSaga(reservedAction.GET_RESERVED, reserv
 export default function* saga() {
     yield takeLatest(reservedAction.GET_RESERVED_LIST, getReservedList);
     yield takeLatest(reservedAction.GET_RESERVED, getReserved);
+    yield takeLatest(reservedAction.DUPLICATE_CHECK, duplicateCheck);
     yield takeLatest(reservedAction.SAVE_RESERVED, saveReserved);
     yield takeLatest(reservedAction.DELETE_RESERVED, deleteReserved);
 }

@@ -33,7 +33,9 @@ const CodeMgtEdit = () => {
                 ],
                 callback: (response) => {
                     if (response.header.success) {
+                        const { body } = response;
                         notification('success', '수정하였습니다.');
+                        history.push(`/codeMgt/${body.codeMgtGrp.grpCd}`);
                     } else {
                         notification('warning', '실패하였습니다.');
                     }

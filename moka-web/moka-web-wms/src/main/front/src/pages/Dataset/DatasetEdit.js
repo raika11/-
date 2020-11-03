@@ -14,7 +14,7 @@ import DatasetApiListModal from '@pages/Dataset/modals/DatasetApiListModal';
 import qs from 'qs';
 import toast from '@utils/toastUtil';
 import { API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_CODE_ID, API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID } from '@/constants';
-import CopyDatasetModal from '@pages/Dataset/modals/CopyDatasetModal';
+// import CopyDatasetModal from '@pages/Dataset/modals/CopyDatasetModal';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 
 const defaultSearch = {

@@ -192,12 +192,12 @@
                         "nodes": {
                             "nodes": [
                                 {
-                                    "seq": "16",
-                                    "menuId": "04001",
+                                    "seq": "18",
+                                    "menuId": "04003",
                                     "menuName": "menu",
-                                    "menuDispName": "메뉴 관리",
-                                    "menuPath": "/domain",
-                                    "menuOrder": "1",
+                                    "menuDispName": "메뉴관리",
+                                    "menuPath": "/menu",
+                                    "menuOrder": "4",
                                     "depth": "2",
                                     "useYn": "Y",
                                     "parentMenuId": "04"

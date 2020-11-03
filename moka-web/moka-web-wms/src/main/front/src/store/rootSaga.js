@@ -13,6 +13,7 @@ import pageSaga from '@store/page/pageSaga';
 import editFormSaga from '@/store/editForm/editFormSaga';
 import relationSaga from '@store/relation/relationSaga';
 import historySaga from '@store/history/historySaga';
+import menuSaga from '@store/menu/menuSaga';
 import mergeSaga from '@store/merge/mergeSaga';
 
 export default function* rootSaga() {
@@ -31,5 +32,6 @@ export default function* rootSaga() {
         relationSaga(),
         historySaga(),
         mergeSaga(),
+        menuSaga()
     ]);
 }

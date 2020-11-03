@@ -82,7 +82,7 @@ const defaultProps = {
  * 아이콘 토글로 탭 변경
  */
 const MokaIconTabs = forwardRef((props, ref) => {
-    const { foldable, className, height, tabs, tabWidth, tabNavPosition, tabNavs, tabNavWidth, placement, expansion, onExpansion, onSelectNav } = props;
+    const { foldable, className, height, tabs, tabWidth, tabNavPosition, tabNavs, tabNavWidth, placement, expansion, onExpansion, onSelectNav, tabContentClass } = props;
     const [activeKey, setActiveKey] = useState(0);
     const [isExpand, setIsExpand] = useState(true);
 
@@ -127,9 +127,13 @@ const MokaIconTabs = forwardRef((props, ref) => {
             <Tab.Container defaultActiveKey={activeKey}>
                 {/* 탭 컨텐츠 */}
                 <Tab.Content
-                    className={clsx('p-0', {
-                        'd-none': !isExpand,
-                    })}
+                    className={clsx(
+                        'p-0',
+                        {
+                            'd-none': !isExpand,
+                        },
+                        tabContentClass,
+                    )}
                     style={{ width: tabWidth }}
                 >
                     {tabs.map((tab, idx) => (

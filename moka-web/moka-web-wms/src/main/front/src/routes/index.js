@@ -20,6 +20,7 @@ const Component = React.lazy(() => import('@pages/Component'));
 const CodeMgt = React.lazy(() => import('@pages/CodeMgt'));
 const EditForm = React.lazy(() => import('@pages/EditForm'));
 const Area = React.lazy(() => import('@pages/Area'));
+const Menu = React.lazy(() => import('@pages/Menu'));
 
 const routes = [
     {
@@ -176,6 +177,16 @@ const routes = [
         name: 'Area',
         displayName: '편집영역관리',
         component: Area,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/menu',
+        name: 'menu',
+        displayName: '메뉴관리',
+        component: Menu,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

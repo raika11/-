@@ -177,6 +177,11 @@ const HistoryList = (props) => {
                                     ...search,
                                     regDt: moment(date).format(DB_DATEFORMAT),
                                 });
+                            } else {
+                                setSearch({
+                                    ...search,
+                                    regDt: null,
+                                });
                             }
                         }}
                     />

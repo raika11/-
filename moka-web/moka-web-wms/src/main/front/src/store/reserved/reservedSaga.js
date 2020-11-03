@@ -72,7 +72,7 @@ export function* saveReserved({ payload: { type, actions, callback } }) {
 
 /**
  * 예약어아이디 중복 체크
- * @param {string} param0.payload.reservedId 예약어아이디
+ * @param {string} param0.payload.duplicateSet 중복검사 데이터 오브젝트
  * @param {func} param0.payload.callback 콜백
  */
 function* duplicateCheck({ payload: { duplicateSet, callback } }) {

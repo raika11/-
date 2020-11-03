@@ -20,7 +20,7 @@ const getDatasetApiList = createRequestSaga(datasetAction.GET_DATASET_API_LIST, 
  * @param {array} param0.payload.actions 선처리 액션들
  * @param {func} param0.payload.callback 콜백
  */
-function* saveDomain({ payload: { type, actions, callback } }) {
+function* saveDataset({ payload: { type, actions, callback } }) {
     const ACTION = datasetAction.SAVE_DATASET;
     let callbackData = {};
 
@@ -116,7 +116,7 @@ export default function* saga() {
     yield takeLatest(datasetAction.GET_DATASET, getDataset);
     yield takeLatest(datasetAction.GET_DATASET_LIST_MODAL, getDatasetListModal);
     yield takeLatest(datasetAction.GET_DATASET_API_LIST, getDatasetApiList);
-    yield takeLatest(datasetAction.SAVE_DATASET, saveDomain);
+    yield takeLatest(datasetAction.SAVE_DATASET, saveDataset);
     yield takeLatest(datasetAction.hasRelationList, hasRelationList);
     yield takeLatest(datasetAction.deleteDataset, deleteDataset);
 }

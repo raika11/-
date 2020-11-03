@@ -80,6 +80,9 @@ const DatasetEdit = () => {
     };
 
     const handleClickSave = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
         const tmp = {
             ...storeDataset,
             datasetName,
@@ -91,6 +94,7 @@ const DatasetEdit = () => {
             dataApiParamShape: null,
         };
 
+        console.log(tmp);
         if (tmp.datasetSeq) {
             updateDataset(tmp);
         } else {
@@ -133,7 +137,7 @@ const DatasetEdit = () => {
 
     useEffect(() => {
         const search = { ...defaultSearch, apiCodeId: storeSearch.apiCodeId };
-        handleSearch(defaultSearch);
+        handleSearch(search);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [storeSearch.apiCodeId]);
 
@@ -197,25 +201,23 @@ const DatasetEdit = () => {
      */
     const insertDataset = (tmp) => {
         dispatch(
-            dispatch(
-                saveDataset({
-                    type: 'insert',
-                    actions: [
-                        changeDataset({
-                            ...storeDataset,
-                            ...tmp,
-                        }),
-                    ],
-                    callback: (response) => {
-                        if (response.header.success) {
-                            notification('success', '등록하였습니다.');
-                            history.push(`/dataset/${response.body.datasetSeq}`);
-                        } else {
-                            notification('warning', '실패하였습니다.');
-                        }
-                    },
-                }),
-            ),
+            saveDataset({
+                type: 'insert',
+                actions: [
+                    changeDataset({
+                        ...storeDataset,
+                        ...tmp,
+                    }),
+                ],
+                callback: (response) => {
+                    if (response.header.success) {
+                        notification('success', '등록하였습니다.');
+                        history.push(`/dataset/${response.body.datasetSeq}`);
+                    } else {
+                        notification('warning', '실패하였습니다.');
+                    }
+                },
+            }),
         );
     };
 

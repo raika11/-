@@ -198,7 +198,7 @@ const MokaInput = forwardRef((props, ref) => {
             className={clsx('flex-fill', className)}
             isInvalid={isInvalid}
             disabled={disabled}
-            value={value || ''}
+            value={value || undefined}
             onChange={onChange}
             placeholder={placeholder}
             type={type}

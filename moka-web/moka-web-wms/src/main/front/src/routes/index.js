@@ -19,6 +19,7 @@ const Reserved = React.lazy(() => import('@pages/Reserved'));
 const Component = React.lazy(() => import('@pages/Component'));
 const CodeMgt = React.lazy(() => import('@pages/CodeMgt'));
 const EditForm = React.lazy(() => import('@pages/EditForm'));
+const Area = React.lazy(() => import('@pages/Area'));
 
 const routes = [
     {
@@ -165,6 +166,16 @@ const routes = [
         name: 'edit-form',
         displayName: 'Edit Form',
         component: EditForm,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/Area',
+        name: 'Area',
+        displayName: '편집영역관리',
+        component: Area,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

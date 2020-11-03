@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import { MokaCard } from '@components';
+import Col from 'react-bootstrap/Col';
+import { MokaCard, MokaInputLabel } from '@components';
 
 const AreaEdit = () => {
     const [formType, setFormType] = useState('1depth');
 
     return (
         <MokaCard title="편집영역 등록" className="flex-fill">
-            {formType === '1depth' && <Form.Row>dddd</Form.Row>}
+            {formType === '1depth' && (
+                <div className="d-flex justify-content-center">
+                    <Col xs={10} className="p-0">
+                        <Form.Row className="mb-2">
+                            <MokaInputLabel className="mb-0" as="switch" labelWidth={87} label="사용여부" id="usedYn" />
+                        </Form.Row>
+                        <Form.Row className="mb-2">
+                            <Col xs={8} className="p-0">
+                                <MokaInputLabel className="mb-0" labelWidth={87} label="그룹 영역명" placeholder="그룹 영역명을 입력하세요" />
+                            </Col>
+                            <Col xs={4} className="p-0">
+                                <MokaInputLabel className="mb-0" labelWidth={87} label="영역코드" disabled />
+                            </Col>
+                        </Form.Row>
+                    </Col>
+                </div>
+            )}
             {formType !== '1depth' && <Form.Row>ddggg</Form.Row>}
         </MokaCard>
     );

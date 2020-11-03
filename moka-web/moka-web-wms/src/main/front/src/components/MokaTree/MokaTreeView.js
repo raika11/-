@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import MokaTreeCategory from './MokaTreeCategory';
 import MokaTreeItem from './MokaTreeItem';
+import { MokaLoader } from '@components';
 
 const propTypes = {
     /**
@@ -83,6 +84,7 @@ const MokaTreeView = (props) => {
     return (
         <div className="border custom-scroll treeview" style={{ height }}>
             <ul className="list-unstyled tree-list">
+                {loading && <MokaLoader />}
                 {!loading && data && (
                     <MokaTreeCategory
                         nodeId={String(data.pageSeq)}

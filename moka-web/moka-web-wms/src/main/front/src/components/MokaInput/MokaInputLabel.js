@@ -31,9 +31,10 @@ const propTypes = {
      * imageFile -> MokaImageInput
      * none -> label만 그림 (input 없음)
      * autocomplete -> MokaAutocomplete
+     * dateTimePicker -> MokaDateTimePicker
      * ---------------------------------------------------------------------------------------------
      */
-    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'none', 'autocomplete']),
+    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'none', 'autocomplete', 'dateTimePicker']),
     /**
      * MokaInput의 className
      */

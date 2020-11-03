@@ -107,6 +107,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
     return (
         <DateTime
             ref={ref}
+            className="flex-fill"
             locale="ko"
             dateFormat={dateFormat}
             timeFormat={timeFormat}

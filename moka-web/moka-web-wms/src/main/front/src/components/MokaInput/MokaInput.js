@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import Form from 'react-bootstrap/Form';
-import { MokaImageInput, MokaAutocomplete } from '@components';
+import { MokaImageInput, MokaAutocomplete, MokaDateTimePicker } from '@components';
 
 const propTypes = {
     /**
@@ -14,7 +14,7 @@ const propTypes = {
     /**
      * input element의 타입(기본 input)
      */
-    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'autocomplete']),
+    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'autocomplete', 'dateTimePicker']),
     /**
      * input의 type
      */
@@ -186,6 +186,10 @@ const MokaInput = forwardRef((props, ref) => {
     // auto complete
     else if (as === 'autocomplete') {
         return <MokaAutocomplete value={value} onChange={onChange} {...inputProps} />;
+    }
+    // dateTimePicker
+    else if (as === 'dateTimePicker') {
+        return <MokaDateTimePicker value={value} onChange={onChange} placeholder={placeholder} disabled={disabled} {...inputProps} />;
     }
 
     return (

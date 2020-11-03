@@ -6,8 +6,8 @@ import Main from '@/layout/components/Main';
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    const [userId, setUserId] = useState('ssc');
-    const [password, setPassword] = useState('ssc#2020');
+    const [userId, setUserId] = useState('ssc01');
+    const [password, setPassword] = useState('sscMoka#2020');
 
     const handleSubmit = (e) => {
         e.preventDefault();

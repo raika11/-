@@ -40,6 +40,7 @@ const success = (
         progressBar: true,
         showMethod: 'slideDown',
         timeOut: 3000,
+        escapeHtml: false,
     },
 ) => {
     toastr.success(title, message, options);
@@ -64,6 +65,7 @@ const error = (
         removeOnHover: false,
         attention: true,
         timeOut: 5000,
+        escapeHtml: false,
     },
 ) => {
     toastr.error(title, message, options);
@@ -86,6 +88,7 @@ const warning = (
         transitionOut: 'fadeOut',
         position: 'top-right',
         timeOut: 0,
+        escapeHtml: false,
     },
 ) => {
     toastr.warning(title, message, options);
@@ -119,6 +122,7 @@ export default {
             showMethod: 'slideDown',
             position: 'bottom-right',
             timeOut: 3000,
+            escapeHtml: false,
         });
     },
     info: (message) => {
@@ -128,6 +132,7 @@ export default {
             showMethod: 'slideDown',
             position: 'bottom-right',
             timeOut: 3000,
+            escapeHtml: false,
         });
     },
     fail: (message) => {
@@ -145,6 +150,7 @@ export default {
             progressBar: false,
             showMethod: 'slideDown',
             position: 'top-center',
+            escapeHtml: false,
             timeOut: 5000,
             attention: true,
             okText: '예',

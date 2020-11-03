@@ -5,6 +5,7 @@ package jmnet.moka.web.wms.config;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -16,8 +17,8 @@ import org.springframework.stereotype.Component;
  * 날짜형 문자열을 Date 클래스로 변환한다.
  * </pre>
  *
- * @since 2020. 10. 14. 오후 11:26:30
  * @author ince
+ * @since 2020. 10. 14. 오후 11:26:30
  */
 @Component
 public class DTOStringToDateConverter implements Converter<String, Date> {
@@ -26,9 +27,9 @@ public class DTOStringToDateConverter implements Converter<String, Date> {
     public Date convert(final String source) {
         SimpleDateFormat sdf = new SimpleDateFormat(MokaConstants.JSON_DATE_FORMAT);
         try {
-            return sdf.parse(source);
-        } catch(java.text.ParseException pe) {
-            return new Date();
+            return McpString.isNotEmpty(source) ? sdf.parse(source) : null;
+        } catch (java.text.ParseException pe) {
+            return null;
         }
     }
 

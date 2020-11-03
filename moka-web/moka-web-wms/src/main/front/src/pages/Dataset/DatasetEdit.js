@@ -12,8 +12,10 @@ import { changeDataset, clearDataset, GET_DATASET, getDataset, getDatasetListMod
 import DatasetParameter from '@pages/Dataset/component/DatasetParameter';
 import DatasetApiListModal from '@pages/Dataset/modals/DatasetApiListModal';
 import qs from 'qs';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_CODE_ID, API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID } from '@/constants';
+// import CopyDatasetModal from '@pages/Dataset/modals/CopyDatasetModal';
+import DefaultInputModal from '@pages/commons/DefaultInputModal';
 
 const defaultSearch = {
     apiCodeId: null,
@@ -29,10 +31,11 @@ const defaultSearch = {
 /**
  * 데이터셋 정보/수정 컴포넌트
  */
-const DatasetEdit = () => {
+const DatasetEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { datasetSeq } = useParams();
+    const { datasetSeq: paramSeq } = useParams();
+    const [datasetSeq, setDatasetSeq] = useState('');
     const [datasetName, setDatasetName] = useState('');
     const [autoCreateYn, setAutoCreateYn] = useState('N');
     const [description, setDescription] = useState('');
@@ -40,7 +43,8 @@ const DatasetEdit = () => {
     const [dataApiParam, setDataApiParam] = useState('');
     const [dataApiParamShape, setDataApiParamShape] = useState({});
     const [dataApiUrl, setDataApiUrl] = useState('');
-    const [autoListModalShow, setAutoListModalShow] = useState(false);
+    const [datasetApiListModalShow, setDatasetApiListModalShow] = useState(false);
+    const [copyDatasetModalShow, setCopyDatasetModalShow] = useState(false);
     const [options, setOptions] = useState({
         [API_PARAM_HINT_DATASET_SEQ]: [],
         [API_PARAM_HINT_BUSE_ID]: [],
@@ -94,7 +98,6 @@ const DatasetEdit = () => {
             dataApiParamShape: null,
         };
 
-        console.log(tmp);
         if (tmp.datasetSeq) {
             updateDataset(tmp);
         } else {
@@ -102,27 +105,30 @@ const DatasetEdit = () => {
         }
     };
 
-    const responseCallback = (payload) => {
-        const { header, body, payload: param } = payload;
-        if (header.success) {
-            const option = [];
-            body.list.map((data) => {
-                option.push({
-                    value: '' + data.datasetSeq,
-                    label: data.datasetName,
+    const responseCallback = useCallback(
+        (payload) => {
+            const { header, body, payload: param } = payload;
+            if (header.success) {
+                const option = [];
+                body.list.map((data) => {
+                    option.push({
+                        value: '' + data.datasetSeq,
+                        label: data.datasetName,
+                    });
                 });
-            });
-            setOptions({ ...options, [param.type]: option });
-        } else {
-        }
-    };
+                setOptions({ ...options, [param.type]: option });
+            } else {
+            }
+        },
+        [options],
+    );
 
     /**
      * 검색
      */
     const handleSearch = useCallback(
         (search) => {
-            if (options[API_PARAM_HINT_DATASET_SEQ].length === 0) {
+            if (options[API_PARAM_HINT_DATASET_SEQ].length === 0 && search.apiCodeId) {
                 dispatch(
                     getDatasetListModal({
                         search,
@@ -135,11 +141,15 @@ const DatasetEdit = () => {
         [dispatch, options, responseCallback],
     );
 
-    useEffect(() => {
-        const search = { ...defaultSearch, apiCodeId: storeSearch.apiCodeId };
-        handleSearch(search);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [storeSearch.apiCodeId]);
+    const handleClickDelete = () => {
+        onDelete(storeDataset);
+    };
+
+    const handleClickCopy = () => {
+        setCopyDatasetModalShow(true);
+        console.log('datasetSeq', datasetSeq);
+        console.log('datasetName', datasetName);
+    };
 
     const handleClickModalSave = (selectApi) => {
         const parameters = selectApi.parameter;
@@ -169,6 +179,12 @@ const DatasetEdit = () => {
         return dataApiUrl;
     };
 
+    useEffect(() => {
+        const search = { ...defaultSearch, apiCodeId: storeSearch.apiCodeId };
+        handleSearch(search);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [storeSearch.apiCodeId]);
+
     /**
      * 도메인 수정
      * @param {object} tmp 도메인
@@ -185,11 +201,7 @@ const DatasetEdit = () => {
                 ],
                 callback: (response) => {
                     // 만약 response.header.message로 서버 메세지를 전달해준다면, 그 메세지를 보여준다.
-                    if (response.header.success) {
-                        notification('success', '수정하였습니다.');
-                    } else {
-                        notification('warning', '실패하였습니다.');
-                    }
+                    toast.result(response);
                 },
             }),
         );
@@ -210,53 +222,34 @@ const DatasetEdit = () => {
                     }),
                 ],
                 callback: (response) => {
+                    toast.result(response);
                     if (response.header.success) {
-                        notification('success', '등록하였습니다.');
                         history.push(`/dataset/${response.body.datasetSeq}`);
-                    } else {
-                        notification('warning', '실패하였습니다.');
                     }
                 },
             }),
         );
     };
 
+    /**
+     * Copy 팝업 저장
+     * @param {object} data 정보
+     * @param callback 저장시 동작할 callback 함수
+     */
+    const handleClickCopyModalSave = (data, callback) => {
+        callback({ ...data, isInvalid: true });
+    };
+
     useEffect(() => {
-        if (datasetSeq) {
-            dispatch(getDataset(datasetSeq));
+        if (paramSeq) {
+            dispatch(getDataset(paramSeq));
         } else {
             dispatch(clearDataset());
         }
-    }, [dispatch, datasetSeq]);
+    }, [dispatch, paramSeq]);
 
     useEffect(() => {
-        /*let datasetName = '';
-        let autoCreateYn = 'N';
-        let dataApi = '';
-        let dataApiParam = '';
-        let dataApiParamShape = {};
-        let description = '';
-        let dataApiUrl = '';
-        let apiCodeId = storeSearch.apiCodeId;
-
-        if (storeDataset.autoCreateYn === 'Y') {
-            datasetName = storeDataset.datasetName;
-            autoCreateYn = storeDataset.autoCreateYn;
-            dataApiParam = storeDataset.dataApiParam;
-            dataApiParamShape = storeDataset.dataApiParamShape;
-            description = storeDataset.description;
-            dataApi = storeDataset.dataApi;
-            dataApiUrl = makeDataApiUrl(dataApi, dataApiParam);
-        }
-        setDatasetName(datasetName);
-        setAutoCreateYn(autoCreateYn);
-        setDataApi(dataApi);
-        setDataApiParam(dataApiParam);
-        setDataApiParamShape(dataApiParamShape);
-        setDescription(description);
-        setDataApiUrl(dataApiUrl);
-        setDataApiCode(apiCodeId);*/
-
+        setDatasetSeq(storeDataset.datasetSeq || '');
         setDatasetName(storeDataset.datasetName || '');
         setAutoCreateYn(storeDataset.autoCreateYn || 'N');
         setDataApi(storeDataset.dataApi || '');
@@ -276,20 +269,26 @@ const DatasetEdit = () => {
                 {/* 데이터셋아이디, 버튼그룹 */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <MokaInputLabel className="mb-0" label="데이터셋ID" value={storeDataset.datasetSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
+                        <MokaInputLabel className="mb-0" label="데이터셋ID" value={datasetSeq} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
                     <Col xs={6} className="p-0 d-flex justify-content-between">
                         <div className="d-flex">
-                            <Button variant="dark" className="mr-2">
+                            <Button variant="dark" className="mr-2" disabled={!datasetSeq && true}>
                                 데이터 보기
                             </Button>
-                            <Button variant="dark">복사</Button>
+                            <Button variant="dark" disabled={!datasetSeq && true} onClick={handleClickCopy}>
+                                복사
+                            </Button>
                         </div>
                         <div className="d-flex">
                             <Button variant="primary" className="mr-2" onClick={handleClickSave}>
                                 저장
                             </Button>
-                            <Button variant="danger">삭제</Button>
+                            {datasetSeq && (
+                                <Button variant="danger" onClick={handleClickDelete}>
+                                    삭제
+                                </Button>
+                            )}
                         </div>
                     </Col>
                 </Form.Row>
@@ -337,7 +336,7 @@ const DatasetEdit = () => {
                                 className="w-100"
                                 placeholder="데이터를 선택해주세요"
                                 value={decodeURIComponent(dataApiUrl)}
-                                onSearch={() => setAutoListModalShow(true)}
+                                onSearch={() => setDatasetApiListModalShow(true)}
                                 disabled={true}
                             />
                         )}
@@ -355,31 +354,6 @@ const DatasetEdit = () => {
                         {autoCreateYn === 'Y' && dataApiParamShape && (
                             <>
                                 <DatasetParameter dataApiParamShapes={dataApiParamShape} dataApiParam={dataApiParam} onChange={setDataApiParam} options={options} />
-
-                                {/*<Form.Row className="mb-2">
-                                    <MokaInputLabel label="데이터셋 ID" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                                    <Button>검색</Button>
-                                </Form.Row>
-                                <Form.Row className="mb-2">
-                                    <MokaInputLabel label="부서" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                                    <Button>검색</Button>
-                                </Form.Row>
-                                <Form.Row className="mb-2">
-                                    <MokaInputLabel label="분류" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                                    <Button>검색</Button>
-                                </Form.Row>
-                                <Form.Row className="mb-2">
-                                    <MokaInputLabel label="기자" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                                    <Button>검색</Button>
-                                </Form.Row>
-                                <Form.Row className="mb-2">
-                                    <MokaInputLabel label="시리즈" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                                    <Button>검색</Button>
-                                </Form.Row>
-                                <Form.Row className="mb-2">
-                                    <MokaInputLabel label="지역" labelWidth={80} className="flex-fill mb-0 mr-2" />
-                                    <Button>검색</Button>
-                                </Form.Row>*/}
                             </>
                         )}
                         <MokaInputLabel
@@ -397,7 +371,14 @@ const DatasetEdit = () => {
                 </Col>
             </div>
 
-            <DatasetApiListModal show={autoListModalShow} onHide={() => setAutoListModalShow(false)} onClickSave={handleClickModalSave} />
+            <DatasetApiListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} onClickSave={handleClickModalSave} />
+            <DefaultInputModal
+                title="데이타셋 복사"
+                inputData={{ title: '데이타셋명', value: datasetName, isInvalid: false }}
+                show={copyDatasetModalShow}
+                onHide={() => setCopyDatasetModalShow(false)}
+                onSave={handleClickCopyModalSave}
+            />
         </MokaCard>
     );
 };

@@ -3,17 +3,19 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { ITEM_PG, ITEM_SK, ITEM_TP } from '@/constants';
-import { defaultHistorySearchType, relationAgGridHeight } from './index';
+import moment from 'moment';
+import { ITEM_PG, ITEM_SK, ITEM_TP, ITEM_CT, DB_DATEFORMAT } from '@/constants';
+import { defaultHistorySearchType } from './index';
 import { MokaCard, MokaTable, MokaSearchInput, MokaInputLabel } from '@components';
 import { initialState, changeSearchOption, getHistoryList, GET_HISTORY_LIST, clearStore, getHistory } from '@store/history';
+import { notification } from '@utils/toastUtil';
 import columDefs from './HistoryListColums';
 
 const propTypes = {
     /**
      * seq의 타입
      */
-    seqType: PropTypes.oneOf([ITEM_TP, ITEM_SK, ITEM_PG]),
+    seqType: PropTypes.oneOf([ITEM_TP, ITEM_CT, ITEM_SK, ITEM_PG]),
     /**
      * seq
      */
@@ -59,14 +61,27 @@ const HistoryList = (props) => {
      * 검색 버튼
      */
     const handleSearch = () => {
-        dispatch(
-            getHistoryList(
-                changeSearchOption({
-                    ...search,
-                    page: 0,
-                }),
-            ),
-        );
+        if (search.seq && search.seqType) {
+            dispatch(
+                getHistoryList(
+                    changeSearchOption({
+                        ...search,
+                        page: 0,
+                    }),
+                ),
+            );
+        } else {
+            notification(
+                'warning',
+                seqType === ITEM_TP
+                    ? '템플릿을 선택해주세요'
+                    : seqType === ITEM_CT
+                    ? '컨테이너를 선택해주세요'
+                    : seqType === ITEM_SK
+                    ? '기사타입을 선택해주세요'
+                    : '페이지를 선택해주세요',
+            );
+        }
     };
 
     /**
@@ -145,8 +160,35 @@ const HistoryList = (props) => {
     return (
         <MokaCard title="히스토리" titleClassName="mb-0">
             <Form>
+                {/* 날짜 검색 */}
                 <Form.Row className="mb-2">
-                    <Col xs={4} className="p-0 pr-2">
+                    <MokaInputLabel
+                        label="날짜"
+                        as="dateTimePicker"
+                        labelWidth={28}
+                        className="mb-0 w-100"
+                        inputProps={{
+                            timeFormat: null,
+                        }}
+                        value={moment(search.regDt, DB_DATEFORMAT)}
+                        onChange={(date) => {
+                            if (typeof date === 'object') {
+                                setSearch({
+                                    ...search,
+                                    regDt: moment(date).format(DB_DATEFORMAT),
+                                });
+                            } else {
+                                setSearch({
+                                    ...search,
+                                    regDt: null,
+                                });
+                            }
+                        }}
+                    />
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    {/* 검색조건 */}
+                    <Col xs={5} className="p-0 pr-2">
                         <MokaInputLabel
                             label="구분"
                             as="select"
@@ -167,7 +209,8 @@ const HistoryList = (props) => {
                             ))}
                         </MokaInputLabel>
                     </Col>
-                    <Col xs={8} className="p-0 mb-0">
+                    {/* 키워드 */}
+                    <Col xs={7} className="p-0 mb-0">
                         <MokaSearchInput
                             value={search.keyword}
                             onChange={(e) => {
@@ -182,7 +225,7 @@ const HistoryList = (props) => {
                 </Form.Row>
             </Form>
             <MokaTable
-                agGridHeight={relationAgGridHeight}
+                agGridHeight={610}
                 columnDefs={columDefs}
                 rowData={rowData}
                 onRowNodeId={(history) => history.seq}

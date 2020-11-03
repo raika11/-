@@ -5,15 +5,14 @@
 package jmnet.moka.core.tps.mvc.history.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.text.ParseException;
 import java.util.Date;
-import java.util.regex.Matcher;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -39,7 +38,6 @@ import lombok.Setter;
 public class HistSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = -6207554369251550982L;
-    public static final String DATE_REGX = "(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])";
 
     /**
      * SEQ
@@ -53,6 +51,9 @@ public class HistSearchDTO extends SearchDTO {
     @Pattern(regexp = "^(PG)|(CS)|(CT)|(TP)|()$", message = "{tps.history.error.pattern.seqType}")
     private String seqType;
 
+    @DTODateTimeFormat
+    private Date regDt;
+
     // 정렬 기본값을 설정
     public HistSearchDTO() {
         super("regDt,desc");
@@ -62,34 +63,17 @@ public class HistSearchDTO extends SearchDTO {
     }
 
     public String getStartRegDt() {
-        if(this.getSearchType().equals("regDt")) {
-            String keyword = this.getKeyword(); // 날짜검색은 YYYY-MM-DD만 가능.
-            java.util.regex.Pattern pattern = java.util.regex.Pattern
-                .compile(DATE_REGX, java.util.regex.Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(keyword);
-            if(matcher.find()) {
-                return keyword;
-            } else {
-                return null;
-            }
+        if (regDt != null) {
+            return McpDate.dateStr(regDt);
         }
         return null;
     }
 
-    public String getEndRegDt() throws ParseException {
-        if(this.getSearchType().equals("regDt")) {
-            String keyword = this.getKeyword(); // 날짜검색은 YYYY-MM-DD만 가능.
-            java.util.regex.Pattern pattern = java.util.regex.Pattern
-                .compile(DATE_REGX, java.util.regex.Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(keyword);
-            if(matcher.find()) {
-                Date startDate = McpDate.date(keyword);
-                Date endDate = McpDate.datePlus(startDate, 1);  // 마지막날은 +1
-                String endDateStr = McpDate.dateStr(endDate, TpsConstants.HISTORY_DATE_FORMAT);
-                return endDateStr;
-            } else {
-                return null;
-            }
+    public String getEndRegDt() {
+        if (regDt != null) {
+            Date endDate = McpDate.datePlus(regDt, 1);  // 마지막날은 +1
+            String endDateStr = McpDate.dateStr(endDate, MokaConstants.JSON_DATE_FORMAT);
+            return endDateStr;
         }
         return null;
     }

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
 import { columnDefs } from './ReservedAgGridColumns';
-import { changeSearchOption, clearReserved, getReservedList, GET_RESERVED_LIST } from '@store/reserved';
+import { changeSearchOption, getReservedList, GET_RESERVED_LIST } from '@store/reserved';
 
 /**
  * 예약어 AgGrid 컴포넌트
@@ -42,10 +42,7 @@ const ReservedAgGrid = () => {
     /**
      * 예약어 추가 버튼 클릭
      */
-    const handleAddClick = useCallback(() => {
-        history.push('/reserved');
-        dispatch(clearReserved());
-    }, [dispatch, history]);
+    const handleAddClick = useCallback(() => history.push('/reserved'), [history]);
 
     return (
         <>

@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toastr } from 'react-redux-toastr';
 
-import { deleteReserved, getReserved, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+
 import { notification } from '@utils/toastUtil';
 import { MokaInputLabel } from '@components';
+import { deleteReserved, getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
 
 /**
  * 예약어 정보 컴포넌트
  */
 const ReservedEdit = () => {
+    const { reservedSeq: paramSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
-    const { reservedSeq: paramSeq } = useParams();
     const { latestDomainId, reserved, invalidList } = useSelector((store) => ({
         reserved: store.reserved.reserved,
         latestDomainId: store.auth.latestDomainId,
@@ -29,14 +30,32 @@ const ReservedEdit = () => {
     const [reservedValue, setReservedValue] = useState('');
     const [usedYn, setUsedYn] = useState('N');
     const [description, setdescription] = useState('');
-    const [paramState, setParamState] = useState(false);
 
     // error
     const [reservedIdError, setReservedIdError] = useState(false);
     const [reservedValueError, setReservedValueError] = useState(false);
 
+    useEffect(() => {
+        if (paramSeq) {
+            dispatch(getReserved(paramSeq));
+        } else {
+            dispatch(clearReserved());
+        }
+    }, [dispatch, paramSeq]);
+
     /**
-     * input 값 변경
+     * 예약어 데이터 셋팅
+     */
+    useEffect(() => {
+        setReservedId(reserved.reservedId || '');
+        setReservedSeq(reserved.reservedSeq || '');
+        setReservedValue(reserved.reservedValue || '');
+        setdescription(reserved.description || '');
+        setUsedYn(reserved.usedYn || 'N');
+    }, [reserved]);
+
+    /**
+     * input change
      */
     const handleChangeValue = ({ target }) => {
         const { name, value, checked } = target;
@@ -100,6 +119,7 @@ const ReservedEdit = () => {
                     // 만약 response.header.message로 서버 메세지를 전달해준다면, 그 메세지를 보여준다.
                     if (response.header.success) {
                         notification('success', '수정하였습니다.');
+                        history.push(`/reserved`);
                     } else {
                         notification('warning', '실패하였습니다.');
                     }
@@ -114,20 +134,36 @@ const ReservedEdit = () => {
      */
     const insertReserved = (tmp) => {
         dispatch(
-            saveReserved({
-                type: 'insert',
-                actions: [
-                    changeReserved({
-                        ...reserved,
-                        ...tmp,
-                    }),
-                ],
+            duplicateCheck({
+                duplicateSet: {
+                    reservedId: tmp.reservedId,
+                    domainId: tmp.domainId,
+                },
                 callback: (response) => {
-                    if (response.header.success) {
-                        notification('success', '등록하였습니다.');
-                        history.push(`/reserved`);
+                    const { body } = response;
+
+                    if (!body) {
+                        dispatch(
+                            saveReserved({
+                                type: 'insert',
+                                actions: [
+                                    changeReserved({
+                                        ...reserved,
+                                        ...tmp,
+                                    }),
+                                ],
+                                callback: (response) => {
+                                    if (response.header.success) {
+                                        notification('success', '등록하였습니다.');
+                                        dispatch(clearReserved());
+                                    } else {
+                                        notification('warning', '실패하였습니다.');
+                                    }
+                                },
+                            }),
+                        );
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        notification('warning', '중복된 예약어아이디가 존재합니다.');
                     }
                 },
             }),
@@ -139,7 +175,7 @@ const ReservedEdit = () => {
      * @param event 이벤트 객체
      */
     const handleClickSave = () => {
-        let newReserved = '';
+        let newReserved;
         if (reservedSeq) {
             newReserved = {
                 ...reserved,
@@ -187,37 +223,6 @@ const ReservedEdit = () => {
             onCancel: () => {},
         });
     };
-
-    /**
-     * 예약어 데이터 셋팅
-     */
-    useEffect(() => {
-        setReservedId(reserved.reservedId || '');
-        setReservedSeq(reserved.reservedSeq || '');
-        setReservedValue(reserved.reservedValue || '');
-        setdescription(reserved.description || '');
-        setUsedYn(reserved.usedYn || 'N');
-    }, [reserved]);
-
-    useEffect(() => {
-        if (paramSeq) {
-            dispatch(getReserved(paramSeq));
-        } else {
-            dispatch(clearReserved());
-        }
-    }, [dispatch, paramSeq]);
-
-    useEffect(() => {
-        // 파라미터에 seq가 있는데 데이터가 없으면 조회
-        let paramReservedSeq = Number(paramSeq);
-
-        if (paramSeq && reservedSeq !== paramSeq && !paramState) {
-            dispatch(getReserved(paramReservedSeq));
-            setParamState(true);
-        } else if (!paramSeq && reservedSeq) {
-            dispatch(clearReserved({ reservedInfo: true }));
-        }
-    }, [dispatch, paramSeq, paramState, reservedSeq]);
 
     useEffect(() => {
         // invalidList 처리

@@ -8,6 +8,12 @@ export const [GET_RESERVED_LIST, GET_RESERVED_LIST_SUCCESS, GET_RESERVED_LIST_FA
 export const getReservedList = createAction(GET_RESERVED_LIST, (...payload) => payload);
 
 /**
+ * 예약어 중복체크
+ */
+export const DUPLICATE_CHECK = 'reserved/DUPLICATE_CHECK';
+export const duplicateCheck = createAction(DUPLICATE_CHECK, ({ duplicateSet, callback }) => ({ duplicateSet, callback }));
+
+/**
  * 예약어 저장 action
  */
 export const SAVE_RESERVED = 'reserved/SAVE_RESERVED';

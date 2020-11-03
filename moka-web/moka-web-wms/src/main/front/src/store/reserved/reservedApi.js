@@ -19,6 +19,16 @@ export const postReserved = ({ reserved }) => {
     });
 };
 
+// 예약어아이디 중복 체크
+export const duplicateCheck = ({ duplicateSet }) => {
+    const qsString = {
+        domainId: duplicateSet.domainId,
+    };
+    return instance.get(`/api/reserveds/${duplicateSet.reservedId}/exists?${qs.stringify(qsString)}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 예약어 삭제
 export const deleteReserved = (reservedSeq) => {
     return instance.delete(`/api/reserveds/${reservedSeq}`).catch((err) => {

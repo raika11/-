@@ -3,11 +3,25 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.history.mapper.HistoryMapper">
 
+  <resultMap type="HistSimpleVO" id="HistMap">
+    <id property="seq" column="SEQ"/>
+    <result property="workType" column="WORK_TYPE"/>
+    <result property="regDt" column="REG_DT"/>
+    <result property="regId" column="REG_ID"/>
+    <result property="regNm" column="REG_NM"/>
+    <association property="domain" javaType="jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO">
+      <result property="domainId" column="DOMAIN_ID"/>
+      <result property="domainName" column="DOMAIN_NAME"/>
+      <result property="domainUrl" column="DOMAIN_URL"/>
+      <result property="servicePlatform" column="SERVICE_PLATFORM"/>
+    </association>
+  </resultMap>
+
   <!-- resultSet이 단일인 경우 -->
-  <select id="findAll" parameterType="HistSearchDTO" resultType="HistSimpleDTO"
+  <select id="findAll" parameterType="HistSearchDTO" resultMap="HistMap"
     statementType="CALLABLE">
     {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_HISTORY_LIST_SEL(
-    #{seq, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{seq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{seqType, mode=IN, jdbcType=VARCHAR, javaType=string},
     <choose>
       <when test="searchType == 'all' and keyword != null and keyword != ''">
@@ -19,7 +33,7 @@
     </choose>
 
     <choose>
-      <when test="searchType == 'regDt' and startRegDt != null">
+      <when test="regDt != null">
         #{startRegDt, mode=IN, jdbcType=VARCHAR, javaType=string},
       </when>
       <otherwise>
@@ -28,7 +42,7 @@
     </choose>
 
     <choose>
-      <when test="searchType == 'regDt' and endRegDt != null">
+      <when test="regDt != null">
         #{endRegDt, mode=IN, jdbcType=VARCHAR, javaType=string},
       </when>
       <otherwise>
@@ -38,6 +52,15 @@
 
     <choose>
       <when test="searchType == 'regId' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'regNm' and keyword != null and keyword != ''">
         #{keyword},
       </when>
       <otherwise>

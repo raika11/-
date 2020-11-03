@@ -10,7 +10,7 @@ package jmnet.moka.core.tps.mvc.history.mapper;
 
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
-import jmnet.moka.core.tps.mvc.history.dto.HistSimpleDTO;
+import jmnet.moka.core.tps.mvc.history.vo.HistSimpleVO;
 
 /**
  * Description: history
@@ -18,6 +18,6 @@ import jmnet.moka.core.tps.mvc.history.dto.HistSimpleDTO;
  * @author ohtah
  * @since 2020. 11. 3.
  */
-public interface HistoryMapper extends BaseMapper<HistSimpleDTO, HistSearchDTO> {
+public interface HistoryMapper extends BaseMapper<HistSimpleVO, HistSearchDTO> {
 
 }

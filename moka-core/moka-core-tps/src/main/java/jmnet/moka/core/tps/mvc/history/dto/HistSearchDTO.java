@@ -64,7 +64,7 @@ public class HistSearchDTO extends SearchDTO {
 
     public String getStartRegDt() {
         if (regDt != null) {
-            return McpDate.dateStr(regDt);
+            return McpDate.dateStr(regDt, MokaConstants.JSON_DATE_FORMAT);
         }
         return null;
     }

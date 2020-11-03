@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
-import { clearReserved, getReservedList, changeSearchOption, initialState } from '@store/reserved';
+import { getReservedList, changeSearchOption, initialState } from '@store/reserved';
 import { changeLatestDomainId } from '@store/auth';
 
 /**

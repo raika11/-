@@ -53,6 +53,10 @@ const propTypes = {
      */
     id: PropTypes.string,
     /**
+     * MokaInput의 className
+     */
+    inputClassName: PropTypes.string,
+    /**
      * MokaInput의 name
      */
     name: PropTypes.string,
@@ -86,7 +90,7 @@ const MokaSearchInput = (props) => {
     const { buttonClassName, searchText, onSearch, variant } = props;
 
     // input props
-    const { placeholder, onChange, value, id, name, mask, inputProps, isInvalid, disabled } = props;
+    const { placeholder, onChange, value, id, name, mask, inputProps, isInvalid, inputClassName, disabled } = props;
 
     /**
      * 키 입력
@@ -107,7 +111,7 @@ const MokaSearchInput = (props) => {
             <MokaInput
                 as="input"
                 type="text"
-                className="mr-2 flex-fill"
+                className={clsx('mr-2', 'flex-fill', inputClassName)}
                 inputProps={{
                     ...inputProps,
                     onKeyPress: handleKeyPress,

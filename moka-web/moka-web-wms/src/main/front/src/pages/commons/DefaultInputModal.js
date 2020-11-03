@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { MokaModal, MokaInputLabel } from '@components';
-import { copyTemplate } from '@store/template/templateAction';
-import { notification } from '@utils/toastUtil';
 
 /**
- * 템플릿 복사 Modal
+ * ModalBody로 Input 한개 있는 Modal
  */
 const DefaultInputModal = (props) => {
     const { title, show, onHide, inputData, onSave } = props;
@@ -48,6 +44,7 @@ const DefaultInputModal = (props) => {
 
     return (
         <MokaModal
+            width={600}
             show={show}
             onHide={handleClickHide}
             title={title}

@@ -34,9 +34,7 @@ const DetailRelationForm = (props) => {
     const [templateError, setTemplateError] = useState(false);
 
     const handleChangeDataset = (e) => {
-        const { value, checked } = e.target;
-        if (!checked) return;
-
+        const { value } = e.target;
         setDataType(value);
         if (value === 'AUTO') {
             if (prevAutoDataset) {
@@ -120,34 +118,18 @@ const DetailRelationForm = (props) => {
                     />
                 </Col>
                 {dataType !== 'NONE' && (
-                    <>
-                        {/* 데이터셋 > 수동 */}
-                        <Col xs={3} className="d-flex p-0 pr-3">
-                            <MokaInput
-                                className="d-flex align-items-center h-100 flex-grow-0"
-                                style={{ width: 100 }}
-                                as="radio"
-                                id="data-type-desk"
-                                name="dataType"
-                                value="DESK"
-                                inputProps={{ label: '수동', custom: true, checked: dataType === 'DESK' }}
-                                onChange={handleChangeDataset}
-                            />
-                            {dataType === 'DESK' && <MokaInput placeholder="ID" value={prevDeskDataset ? prevDeskDataset.datasetSeq : ''} disabled />}
+                    <React.Fragment>
+                        {/* 자동/수동 셀렉트 */}
+                        <Col xs={2} className="d-flex p-0 pr-3">
+                            <MokaInput as="select" value={dataType} onChange={handleChangeDataset}>
+                                <option value="DESK">편집</option>
+                                <option value="AUTO">자동</option>
+                            </MokaInput>
                         </Col>
 
-                        {/* 데이터셋 > 자동 */}
-                        <Col xs={6} className="d-flex p-0">
-                            <MokaInput
-                                className="d-flex align-items-center h-100 flex-grow-0"
-                                style={{ width: 70 }}
-                                as="radio"
-                                id="data-type-auto"
-                                name="dataType"
-                                value="AUTO"
-                                inputProps={{ label: '자동', custom: true, checked: dataType === 'AUTO' }}
-                                onChange={handleChangeDataset}
-                            />
+                        {/* 자동/수동에 따른 input */}
+                        <Col xs={7} className="p-0">
+                            {dataType === 'DESK' && <MokaInput placeholder="ID" value={prevDeskDataset ? prevDeskDataset.datasetSeq : ''} disabled />}
                             {dataType === 'AUTO' && (
                                 <MokaPrependLinkInput
                                     to={dataset.datasetSeq ? `/dataset/${dataset.datasetSeq}` : undefined}
@@ -164,7 +146,7 @@ const DetailRelationForm = (props) => {
                                 />
                             )}
                         </Col>
-                    </>
+                    </React.Fragment>
                 )}
             </Form.Row>
             {/* 입력태그 */}

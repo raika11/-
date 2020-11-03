@@ -209,6 +209,7 @@ const TemplateListModal = (props) => {
 
     return (
         <MokaModal
+            width={600}
             show={show}
             onHide={handleHide}
             title="템플릿 검색"

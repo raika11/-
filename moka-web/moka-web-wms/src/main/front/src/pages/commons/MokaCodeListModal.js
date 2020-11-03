@@ -146,6 +146,7 @@ const MokaCodeListModal = (props) => {
 
     return (
         <MokaModal
+            width={600}
             {...rest}
             show={show}
             onHide={onHide}

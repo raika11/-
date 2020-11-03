@@ -173,8 +173,8 @@ const routes = [
         strict: true,
     },
     {
-        path: '/Area',
-        name: 'Area',
+        path: '/area',
+        name: 'area',
         displayName: '편집영역관리',
         component: Area,
         layout: SidebarOpenLayout,

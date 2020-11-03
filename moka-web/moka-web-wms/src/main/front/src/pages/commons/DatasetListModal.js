@@ -153,6 +153,7 @@ const DatsetListModal = (props) => {
 
     return (
         <MokaModal
+            width={600}
             show={show}
             onHide={handleHide}
             title="데이터셋 검색"

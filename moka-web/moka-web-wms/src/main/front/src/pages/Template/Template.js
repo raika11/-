@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_TP } from '@/constants';
-import { clearStore, clearHistory, deleteTemplate, hasRelationList, changeTemplateBody } from '@store/template';
+import { clearStore, deleteTemplate, hasRelationList, changeTemplateBody } from '@store/template';
 import { notification, toastr } from '@utils/toastUtil';
 
 import TemplateEditor from './TemplateEditor';
@@ -151,7 +151,6 @@ const Template = () => {
     React.useEffect(() => {
         return () => {
             dispatch(clearStore());
-            dispatch(clearHistory());
         };
     }, [dispatch]);
 

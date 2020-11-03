@@ -17,6 +17,7 @@ export const { searchTypeList: defaultHistorySearchType } = historyInitialState;
 export { default as TemplateListModal } from './TemplateListModal';
 export { default as DatasetListModal } from './DatasetListModal';
 export { default as SkinListModal, defaultSkinSearchType } from './SkinListModal';
+export { default as DefaultInputModal } from './DefaultInputModal';
 
 // 관련 아이템 (하위 => 상위)
 export const relationAgGridHeight = 649;

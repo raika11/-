@@ -66,7 +66,7 @@ const MonacoEditor = forwardRef((props, ref) => {
                 const cursorPosition = editor.getSelection();
 
                 editor.pushUndoStop();
-                const range = new monaco.Range(cursorPosition.startLineNumber, 0, cursorPosition.endLineNumber, 0);
+                const range = new monaco.Range(cursorPosition.startLineNumber + 1, 0, cursorPosition.endLineNumber + 1, 0);
                 editor.executeEdits('insert', [{ range, text, forceMoveMarkers: true }]);
                 editor.pushUndoStop();
             }

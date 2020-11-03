@@ -17,13 +17,11 @@ export const CLEAR_STORE = 'template/CLEAR_STORE';
 export const CLEAR_TEMPLATE = 'template/CLEAR_TEMPLATE';
 export const CLEAR_LIST = 'template/CLEAR_LIST';
 export const CLEAR_SEARCH = 'template/CLEAR_SEARCH';
-export const CLEAR_HISTORY = 'template/CLEAR_HISTORY';
 export const CLEAR_LOOKUP = 'template/CLEAR_LOOKUP';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearTemplate = createAction(CLEAR_TEMPLATE);
 export const clearList = createAction(CLEAR_LIST);
 export const clearSearch = createAction(CLEAR_SEARCH);
-export const clearHistory = createAction(CLEAR_HISTORY);
 export const clearLookup = createAction(CLEAR_LOOKUP);
 
 /**

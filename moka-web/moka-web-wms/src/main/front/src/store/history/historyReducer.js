@@ -18,7 +18,7 @@ export const initialState = {
     },
     searchTypeList: [
         { id: 'all', name: '전체' },
-        { id: 'regNM', name: '작업자' },
+        { id: 'regNm', name: '작업자' },
         { id: 'regId', name: '작업자ID' },
     ],
     history: {},

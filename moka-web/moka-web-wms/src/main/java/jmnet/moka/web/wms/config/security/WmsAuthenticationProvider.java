@@ -12,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 
 /**
@@ -34,8 +36,8 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserServiceImpl userService;    //UserDetailsService
 
-    //	@Autowired
-    //	private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * <pre>
@@ -48,7 +50,8 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
      * @see org.springframework.security.authentication.AuthenticationProvider#authenticate(org.springframework.security.core.Authentication)
      */
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication)
+            throws AuthenticationException {
 
         Assert.notNull(authentication, "No authentication data provided");
 
@@ -56,16 +59,15 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
         String userPassword = (String) authentication.getCredentials();
 
         UserDTO userDetails = (UserDTO) userService.loadUserByUsername(userId);
-        /*
-        * 2020-10-13 차상인 주석 처리
-        * 임시 로그인 처리를 위해 비밀번호 체크 로직 주석 처리
-        if(!matchPassword(userDetails.getPassword(), userPassword)) {
-        	throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
-        }
-         */
 
-        if (McpString.defaultValue(userDetails.getStatus(), MokaConstants.NO)
-                     .equals(MokaConstants.NO)) {
+        if (!passwordEncoder.matches(userPassword, userDetails.getPassword())) {
+            throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
+        }
+
+
+        if (McpString
+                .defaultValue(userDetails.getStatus(), MokaConstants.NO)
+                .equals(MokaConstants.NO)) {
             throw new InsufficientAuthenticationException("This is a member whose use has been suspended.");
         }
 
@@ -97,11 +99,6 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> authentication) {
         return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication) || WmsJwtAuthenticationToken.class.isAssignableFrom(
                 authentication));
-    }
-
-    private boolean matchPassword(String loginPassword, String password) {
-        //      if (!passwordEncoder.matches(userPassword, userDetails.getPassword())) {
-        return loginPassword.equals(password);
     }
 
 }

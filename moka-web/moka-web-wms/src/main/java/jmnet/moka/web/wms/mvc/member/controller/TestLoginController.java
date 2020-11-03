@@ -1,7 +1,7 @@
 /**
  * msp-wms AATestLoginController.java 2020. 10. 7. 오후 2:09:06 ince
  */
-package jmnet.moka.web.wms.mvc.user.controller;
+package jmnet.moka.web.wms.mvc.member.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

@@ -6,7 +6,7 @@ import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { clearStore } from '@store/menu';
-import { notification, toastr } from '@utils/toastUtil';
+import toast from '@/utils/toastUtil';
 import { changeSearchOption, deleteMenu, existAuth } from '@store/menu';
 const MenuLargeLIst = React.lazy(() => import('./MenuLargeLIst'));
 const MenuMiddleLIst = React.lazy(() => import('./MenuMiddleLIst'));
@@ -57,7 +57,7 @@ const Menu = () => {
             setParentMenuId(btnParentmenuId);
             setMenuSearchInfo(0, btnDepth, '');
         } else {
-            notification('warning', '상위 메뉴를 선택하세요.');
+            toast.warn('상위 메뉴를 선택하세요.');
         }
     };
 
@@ -88,8 +88,9 @@ const Menu = () => {
         event.preventDefault();
         event.stopPropagation();
 
-        toastr.confirm(`삭제하시겠습니까?`, {
-            onOk: () => {
+        toast.confirm(
+            `삭제하시겠습니까?`,
+            () => {
                 let isSubList = false;
                 if (Number(depth) === 1) {
                     if (listMiddle.length > 0) {
@@ -101,7 +102,7 @@ const Menu = () => {
                     }
                 }
                 if (isSubList) {
-                    notification('error', '하위 메뉴가 존재하여 삭제할 수 없습니다.');
+                    toast.error('하위 메뉴가 존재하여 삭제할 수 없습니다.');
                 } else {
                     dispatch(
                         existAuth({
@@ -124,24 +125,29 @@ const Menu = () => {
                                                 const { header } = response;
                                                 const { body } = response;
                                                 if (body.success === true && header.success) {
-                                                    setMenuSearchInfo(body.parentMenu.menuSeq, body.parentMenu.depth, body.parentMenu.menuId);
-                                                    notification('success', header.message);
+                                                    console.log(body);
+                                                    if (body.parentMenu !== null) {
+                                                        setMenuSearchInfo(body.parentMenu.menuSeq, body.parentMenu.depth, body.parentMenu.menuId);
+                                                    } else {
+                                                        setMenuSearchInfo(0, 1, '');
+                                                    }
+                                                    toast.success(header.message);
                                                 } else {
-                                                    notification('warning', header.message);
+                                                    toast.error(header.message);
                                                 }
                                             },
                                         }),
                                     );
                                 } else {
-                                    notification('error', header.message);
+                                    toast.error(header.message);
                                 }
                             },
                         }),
                     );
                 }
             },
-            onCancel: () => {},
-        });
+            () => {},
+        );
     };
 
     return (

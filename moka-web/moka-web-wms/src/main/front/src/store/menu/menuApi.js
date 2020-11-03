@@ -1,7 +1,7 @@
 import qs from 'qs';
 import instance from '../commons/axios';
 
-// 메뉴목록 조회
+// 메뉴목록 조회(LIST)
 export const getMenuList = ({ search }) => {
     return instance.get(`/api/menus?${qs.stringify(search)}`).catch((err) => {
         throw err;

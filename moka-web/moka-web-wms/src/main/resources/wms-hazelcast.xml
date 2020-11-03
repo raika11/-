@@ -31,9 +31,9 @@
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
            http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd">
            
-	<instance-name>msp-wms</instance-name>
+	<instance-name>wms</instance-name>
     <group>
-        <name>msp-wms</name>
+        <name>wms</name>
         <password>dev-pass</password>
     </group>
     <properties>

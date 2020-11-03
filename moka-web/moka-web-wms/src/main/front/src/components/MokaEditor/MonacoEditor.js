@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle } from 'react';
+import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import * as monaco from '@moka/monaco-editor/esm/vs/editor/editor.api';
 
@@ -57,6 +57,23 @@ const MonacoEditor = forwardRef((props, ref) => {
     const containerElement = useRef(null);
     const [editor, setEditor] = useState(null);
 
+    /**
+     * 현재의 커서에 text를 추가하는 함수
+     */
+    const insertText = useCallback(
+        (text) => {
+            if (editor) {
+                const cursorPosition = editor.getSelection();
+
+                editor.pushUndoStop();
+                const range = new monaco.Range(cursorPosition.startLineNumber, 0, cursorPosition.endLineNumber, 0);
+                editor.executeEdits('insert', [{ range, text, forceMoveMarkers: true }]);
+                editor.pushUndoStop();
+            }
+        },
+        [editor],
+    );
+
     // 리턴 ref 설정
     useImperativeHandle(
         ref,
@@ -65,8 +82,9 @@ const MonacoEditor = forwardRef((props, ref) => {
             monaco,
             editorInstance: editor,
             getValue: () => editor.getValue(),
+            insertText: (text) => insertText(text),
         }),
-        [editor],
+        [editor, insertText],
     );
 
     useEffect(() => {
@@ -93,6 +111,12 @@ const MonacoEditor = forwardRef((props, ref) => {
             // 에디터 인스턴스의 Undo, Redo 히스토리를 유지해야하므로 아래와 같이 처리함
             editor.pushUndoStop();
             const model = editor.getModel();
+
+            // 기존의 커서 위치 기억
+            const c = editor.getSelection();
+            const cursorPosition = new monaco.Range(c.startLineNumber, c.startColumn, c.endLineNumber, c.endColumn);
+
+            // executeEdits
             editor.executeEdits('update', [
                 {
                     range: model.getFullModelRange(),
@@ -100,6 +124,9 @@ const MonacoEditor = forwardRef((props, ref) => {
                     forceMoveMarkers: true,
                 },
             ]);
+
+            // 원래 커서 위치로 이동
+            editor.setSelection(cursorPosition);
             editor.pushUndoStop();
         }
     }, [editor, value]);

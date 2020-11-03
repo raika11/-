@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.member.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
@@ -34,6 +35,7 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
     @Override
     public Page<Member> findAllMember(MemberSearchDTO memberSearchDTO) {
         QMember qMember = QMember.member;
+        QMember qRegMember = new QMember("regMember");
 
         JPQLQuery<Member> query = from(qMember);
 
@@ -46,10 +48,27 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
 
 
         QueryResults<Member> list = query
-                .leftJoin(qMember.regMember, qMember)
+                .leftJoin(qMember.regMember, qRegMember)
                 .fetchJoin()
                 .fetchResults();
 
         return new PageImpl<Member>(list.getResults(), memberSearchDTO.getPageable(), list.getTotal());
+    }
+
+    @Override
+    public Optional<Member> findByMemberId(String memberId) {
+        QMember qMember = QMember.member;
+        QMember qRegMember = new QMember("regMember");
+
+        JPQLQuery<Member> query = from(qMember);
+
+        query.where(qMember.memberId.eq(memberId));
+
+        Member member = query
+                .leftJoin(qMember.regMember, qRegMember)
+                .fetchJoin()
+                .fetchFirst();
+
+        return Optional.ofNullable(member);
     }
 }

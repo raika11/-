@@ -98,8 +98,8 @@ public class UserDTO implements UserDetails {
     }
 
     public static UserDTO create(Member user, List<GrantedAuthority> authorities) {
-        return new UserDTO(user.getMemberId(), null, user.getMobilePhone(), user.getDept(), user.getEmail(), null, user.getCompanyPhone(), null,
-                user.getGroup(), null, user.getMemberNm(), user.getStatus(), authorities, user.getStatus());
+        return new UserDTO(user.getMemberId(), null, user.getMobilePhone(), user.getDept(), user.getEmail(), user.getPassword(),
+                user.getCompanyPhone(), null, user.getGroup(), null, user.getMemberNm(), user.getStatus(), authorities, user.getStatus());
     }
 
     @Override

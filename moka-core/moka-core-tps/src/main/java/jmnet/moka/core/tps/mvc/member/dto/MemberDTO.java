@@ -6,11 +6,13 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 /**
  * <pre>
@@ -28,16 +30,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MemberDTO {
 
     public static final Type TYPE = new TypeReference<List<MemberDTO>>() {
     }.getType();
+
     /**
      * 사용자ID
      */
-
     private String memberId;
 
     /**
@@ -49,6 +51,7 @@ public class MemberDTO {
      * 상태(유효/정지)
      */
     @Builder.Default
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.member.error.pattern.status}")
     private String status = "N";
 
     /**
@@ -61,18 +64,21 @@ public class MemberDTO {
      * 핸드폰번호
      */
     @Builder.Default
+    @Pattern(regexp = "(^$|^[-0-9]{9,20}$)", message = "{tps.member.error.pattern.mobilePhone}")
     private String mobilePhone = "";
 
     /**
      * 회사전화
      */
     @Builder.Default
+    @Pattern(regexp = "(^$|^[-0-9]{9,20}$)", message = "{tps.member.error.pattern.companyPhone}")
     private String companyPhone = "";
 
     /**
      * 이메일
      */
     @Builder.Default
+    @Pattern(regexp = "^[-a-zA-Z0-9_.@]{0,100}$", message = "{tps.member.error.pattern.email}")
     private String email = "";
 
     /**
@@ -120,4 +126,9 @@ public class MemberDTO {
      */
     @Builder.Default
     private String remark = "";
+
+    /**
+     * 그룹 코드 목록
+     */
+    private List<MemberGroupSaveDTO> memberGroups;
 }

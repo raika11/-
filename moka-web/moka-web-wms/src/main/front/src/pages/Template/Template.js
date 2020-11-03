@@ -88,11 +88,12 @@ const Template = () => {
      * @param {object} response response
      */
     const deleteCallback = useCallback(
-        (response, templateSeq) => {
-            if (response.header.success) {
+        (response) => {
+            const { header, payload } = response;
+            if (header.success) {
                 dispatch(
                     deleteTemplate({
-                        templateSeq: templateSeq,
+                        templateSeq: payload.templateSeq,
                         callback: (response) => {
                             if (response.header.success) {
                                 notification('success', response.header.message);

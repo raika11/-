@@ -116,7 +116,7 @@ export function* deleteTemplate({ payload: { templateSeq, callback } }) {
     }
 
     if (typeof callback === 'function') {
-        yield call(callback, callbackData, templateSeq);
+        yield call(callback, callbackData);
     }
 
     yield put(finishLoading(ACTION));

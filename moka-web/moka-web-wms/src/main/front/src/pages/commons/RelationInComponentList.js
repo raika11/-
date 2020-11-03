@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
 import columnDefs from './RelationInComponentListColums';
-import { ITEM_TP, ITEM_DS } from '@/constants';
+import { ITEM_TP, ITEM_DS, ITEM_CP } from '@/constants';
 import { relationAgGridHeight, relationDSAgGridHeight } from './index';
 
 const propTypes = {
@@ -100,7 +100,7 @@ const RelationInComponentList = (props) => {
                         ...initialState.search,
                         relSeq,
                         relSeqType,
-                        relType: 'CP',
+                        relType: ITEM_CP,
                         domainId: latestDomainId,
                     }),
                 ),

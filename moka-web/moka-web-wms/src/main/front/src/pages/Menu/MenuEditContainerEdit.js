@@ -257,8 +257,6 @@ const MenuEditContainerEdit = (props) => {
     };
 
     useEffect(() => {
-        // invalidList 처리
-        console.log(invalidList);
         let errorMessage = '';
         if (invalidList.length > 0) {
             invalidList.forEach((i) => {
@@ -280,6 +278,12 @@ const MenuEditContainerEdit = (props) => {
                 errorMessage += '<p>' + i.reason + '</p>';
             });
             toast.error(errorMessage);
+        } else {
+            setMenuIdError(false);
+            setMenuNmError(false);
+            setMenuDisplayNmError(false);
+            setIconNmError(false);
+            setMenuUrlError(false);
         }
     }, [invalidList]);
 
@@ -323,7 +327,7 @@ const MenuEditContainerEdit = (props) => {
                                 isInvalid={menuIdError}
                                 onChange={handleChangeValue}
                                 placeholder="메뉴ID를 2~8자리 숫자로 입력하세요."
-                                inputProps={{ autocomplete: 'off' }}
+                                inputProps={{ autoComplete: 'off' }}
                             />
                         </Col>
                     </Form.Row>
@@ -339,7 +343,7 @@ const MenuEditContainerEdit = (props) => {
                             isInvalid={menuNmError}
                             onChange={handleChangeValue}
                             placeholder="메뉴명를 입력하세요."
-                            inputProps={{ autocomplete: 'off' }}
+                            inputProps={{ autoComplete: 'off' }}
                         />
                     </Col>
                 </Form.Row>
@@ -354,7 +358,7 @@ const MenuEditContainerEdit = (props) => {
                             isInvalid={menuDisplayNmError}
                             onChange={handleChangeValue}
                             placeholder="메뉴 노출명을 입력하세요."
-                            inputProps={{ autocomplete: 'off' }}
+                            inputProps={{ autoComplete: 'off' }}
                         />
                     </Col>
                 </Form.Row>
@@ -369,7 +373,7 @@ const MenuEditContainerEdit = (props) => {
                             isInvalid={iconNmError}
                             onChange={handleChangeValue}
                             placeholder="메뉴 ICON을 입력하세요."
-                            inputProps={{ autocomplete: 'off' }}
+                            inputProps={{ autoComplete: 'off' }}
                         />
                     </Col>
                 </Form.Row>
@@ -384,7 +388,7 @@ const MenuEditContainerEdit = (props) => {
                             isInvalid={menuUrlError}
                             onChange={handleChangeValue}
                             placeholder="메뉴페이지 URL을 입력하세요."
-                            inputProps={{ autocomplete: 'off' }}
+                            inputProps={{ autoComplete: 'off' }}
                         />
                     </Col>
                 </Form.Row>

@@ -26,11 +26,7 @@ const MenuLargeAgGrid = (props) => {
                 }),
             ),
         );
-    }, [depth, dispatch, parentMenuId]);
-
-    useEffect(() => {
-        dispatch(getMenuList());
-    }, [dispatch]);
+    }, [depth, dispatch, parentMenuId, menuId]);
 
     return (
         <>

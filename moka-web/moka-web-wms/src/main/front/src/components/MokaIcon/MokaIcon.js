@@ -33,6 +33,8 @@ import {
     faCalendarAlt as falCalendarAlt,
     faMinusCircle as falMinusCircle,
     faClock as falClock,
+    faMoneyCheck as falMoneyCheck, // 페이지탭 아이콘
+    faCalculator as falCalculator, // 컨테이너탭 아이콘
     faPencil,
     faSave,
 } from '@moka/fontawesome-pro-light-svg-icons';
@@ -69,6 +71,8 @@ library.add(falSignOutAlt);
 library.add(falCalendarAlt);
 library.add(falMinusCircle);
 library.add(falClock);
+library.add(falMoneyCheck);
+library.add(falCalculator);
 library.add(faPencil);
 library.add(faSave);
 

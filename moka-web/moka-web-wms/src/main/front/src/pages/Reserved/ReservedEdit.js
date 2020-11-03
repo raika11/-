@@ -30,7 +30,6 @@ const ReservedEdit = () => {
     const [reservedValue, setReservedValue] = useState('');
     const [usedYn, setUsedYn] = useState('N');
     const [description, setdescription] = useState('');
-    const [paramState, setParamState] = useState(false);
 
     // error
     const [reservedIdError, setReservedIdError] = useState(false);
@@ -121,7 +120,6 @@ const ReservedEdit = () => {
                     if (response.header.success) {
                         notification('success', '수정하였습니다.');
                         history.push(`/reserved`);
-                        dispatch(clearReserved());
                     } else {
                         notification('warning', '실패하였습니다.');
                     }
@@ -157,7 +155,6 @@ const ReservedEdit = () => {
                                 callback: (response) => {
                                     if (response.header.success) {
                                         notification('success', '등록하였습니다.');
-                                        history.push(`/reserved`);
                                         dispatch(clearReserved());
                                     } else {
                                         notification('warning', '실패하였습니다.');

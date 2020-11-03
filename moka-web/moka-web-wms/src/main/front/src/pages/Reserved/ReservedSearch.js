@@ -31,7 +31,6 @@ const ReservedSearch = () => {
      */
     useEffect(() => {
         if (latestDomainId && latestDomainId !== search.domainId) {
-            dispatch(clearReserved());
             dispatch(
                 getReservedList(
                     changeSearchOption({

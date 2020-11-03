@@ -28,7 +28,6 @@ import jmnet.moka.core.tps.mvc.container.repository.ContainerHistRepository;
 import jmnet.moka.core.tps.mvc.container.repository.ContainerRelRepository;
 import jmnet.moka.core.tps.mvc.container.repository.ContainerRepository;
 import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
-import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -247,12 +246,6 @@ public class ContainerServiceImpl implements ContainerService {
         containerRepository.deleteById(container.getContainerSeq());
 
     }
-
-    @Override
-    public Page<ContainerHist> findAllContainerHist(HistSearchDTO search, Pageable pageable) {
-        return containerHistRepository.findList(search, pageable);
-    }
-
 
     @Override
     public Optional<ContainerHist> findContainerHistBySeq(Long histSeq) {

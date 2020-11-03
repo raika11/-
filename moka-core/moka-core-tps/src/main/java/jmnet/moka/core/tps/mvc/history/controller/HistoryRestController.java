@@ -25,9 +25,9 @@ import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.history.dto.HistDTO;
 import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
-import jmnet.moka.core.tps.mvc.history.dto.HistSimpleDTO;
 import jmnet.moka.core.tps.mvc.history.mapper.HistoryMapper;
 import jmnet.moka.core.tps.mvc.history.service.HistoryService;
+import jmnet.moka.core.tps.mvc.history.vo.HistSimpleVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,39 +69,39 @@ public class HistoryRestController {
             throws Exception {
 
         String itemType = search.getSeqType();
-        ResultListDTO<HistSimpleDTO> resultList = new ResultListDTO<HistSimpleDTO>();
+        ResultListDTO<HistSimpleVO> resultList = new ResultListDTO<HistSimpleVO>();
 
         try {
-//            List<HistSimpleDTO> histList = historyMapper.findAll(search);
-//            resultList.setTotalCnt(search.getTotal());
-//            resultList.setList(histList);
+            List<HistSimpleVO> histList = historyMapper.findAll(search);
+            resultList.setTotalCnt(search.getTotal());
+            resultList.setList(histList);
 
-            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
-                // 페이지 히스토리 조회
-                List<HistSimpleDTO> histList = historyService.findAllPageHist(search);
-                resultList.setTotalCnt(search.getTotal());
-                resultList.setList(histList);
+            //            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
+            //                // 페이지 히스토리 조회
+            //                List<HistSimpleVO> histList = historyService.findAllPageHist(search);
+            //                resultList.setTotalCnt(search.getTotal());
+            //                resultList.setList(histList);
+            //
+            //            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
+            //                // 스킨 히스토리 조회
+            //                List<HistSimpleVO> histList = historyService.findAllSkinHist(search);
+            //                resultList.setTotalCnt(search.getTotal());
+            //                resultList.setList(histList);
+            //
+            //            } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
+            //                // 컨테이너 히스토리 조회
+            //                List<HistSimpleVO> histList = historyService.findAllContainerHist(search);
+            //                resultList.setTotalCnt(search.getTotal());
+            //                resultList.setList(histList);
+            //
+            //            } else if (itemType.equals(MokaConstants.ITEM_TEMPLATE)) {
+            //                // 템플릿 히스토리 조회
+            //                List<HistSimpleVO> histList = historyService.findAllTemplateHist(search);
+            //                resultList.setTotalCnt(search.getTotal());
+            //                resultList.setList(histList);
+            //            }
 
-            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
-                // 스킨 히스토리 조회
-                List<HistSimpleDTO> histList = historyService.findAllSkinHist(search);
-                resultList.setTotalCnt(search.getTotal());
-                resultList.setList(histList);
-
-            } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
-                // 컨테이너 히스토리 조회
-                List<HistSimpleDTO> histList = historyService.findAllContainerHist(search);
-                resultList.setTotalCnt(search.getTotal());
-                resultList.setList(histList);
-
-            } else if (itemType.equals(MokaConstants.ITEM_TEMPLATE)) {
-                // 템플릿 히스토리 조회
-                List<HistSimpleDTO> histList = historyService.findAllTemplateHist(search);
-                resultList.setTotalCnt(search.getTotal());
-                resultList.setList(histList);
-            }
-
-            ResultDTO<ResultListDTO<HistSimpleDTO>> resultDTO = new ResultDTO<ResultListDTO<HistSimpleDTO>>(resultList);
+            ResultDTO<ResultListDTO<HistSimpleVO>> resultDTO = new ResultDTO<ResultListDTO<HistSimpleVO>>(resultList);
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 

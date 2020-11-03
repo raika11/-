@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
-import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.skin.dto.SkinSearchDTO;
 import jmnet.moka.core.tps.mvc.skin.entity.Skin;
@@ -93,7 +92,5 @@ public interface SkinService {
      */
     public int countByDomainId(String domainId);
 
-    org.springframework.data.domain.Page<SkinHist> findAllSkinHist(HistSearchDTO search, Pageable pageable);
-    
     Optional<SkinHist> findSkinHistBySeq(Long histSeq);
 }

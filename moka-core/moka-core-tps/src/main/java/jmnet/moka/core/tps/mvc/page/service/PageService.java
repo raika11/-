@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
-import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
 import jmnet.moka.core.tps.mvc.page.dto.PageNode;
 import jmnet.moka.core.tps.mvc.page.dto.PageSearchDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
@@ -71,15 +70,6 @@ public interface PageService {
      * @return 페이지정보
      */
     public List<Page> findPageByPageUrl(String pageUrl, String domainId);
-
-    /**
-     * 페이지 히스토리 목록 조회
-     *
-     * @param search   검색조건
-     * @param pageable 페이징
-     * @return 히스토리 목록
-     */
-    public org.springframework.data.domain.Page<PageHist> findAllPageHist(HistSearchDTO search, Pageable pageable);
 
     /**
      * 페이지 히스토리 상세 조회

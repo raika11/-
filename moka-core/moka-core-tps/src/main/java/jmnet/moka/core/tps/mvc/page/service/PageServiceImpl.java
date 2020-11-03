@@ -20,7 +20,6 @@ import jmnet.moka.core.tps.common.dto.ItemDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
-import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
 import jmnet.moka.core.tps.mvc.page.dto.PageNode;
 import jmnet.moka.core.tps.mvc.page.dto.PageSearchDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
@@ -374,11 +373,6 @@ public class PageServiceImpl implements PageService {
         // return pageRepository.findByPageServiceUrlAndDomainInfo_DomainId(pageServiceUrl,
         // domainId);
         return pageRepository.findByPageUrl(pageUrl, domainId);
-    }
-
-    @Override
-    public org.springframework.data.domain.Page<PageHist> findAllPageHist(HistSearchDTO search, Pageable pageable) {
-        return pageHistRepository.findList(search, pageable);
     }
 
     @Override

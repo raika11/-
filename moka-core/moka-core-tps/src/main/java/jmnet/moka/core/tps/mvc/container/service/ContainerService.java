@@ -10,7 +10,6 @@ import jmnet.moka.core.tps.mvc.container.dto.ContainerSearchDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.entity.ContainerHist;
 import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
-import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,15 +58,6 @@ public interface ContainerService {
      * @param name      사용자명
      */
     public void deleteContainer(Container container, String name);
-
-    /**
-     * 컨테이너 히스토리 목록 조회
-     *
-     * @param search   검색조건
-     * @param pageable 페이징
-     * @return 히스토리 목록
-     */
-    public Page<ContainerHist> findAllContainerHist(HistSearchDTO search, Pageable pageable);
 
     /**
      * 컨테이너 히스토리 상세 조회

@@ -12,7 +12,7 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         seq: null,
         seqType: null,
-        regDt: undefined,
+        regDt: null,
         searchType: 'all',
         keyword: '',
     },

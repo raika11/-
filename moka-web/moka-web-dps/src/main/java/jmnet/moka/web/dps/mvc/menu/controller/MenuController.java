@@ -1,21 +1,14 @@
 package jmnet.moka.web.dps.mvc.menu.controller;
 
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.dps.mvc.menu.model.Menu;
 import jmnet.moka.web.dps.mvc.menu.model.MenuParser;
@@ -29,10 +22,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * <pre>
@@ -68,7 +57,7 @@ public class MenuController {
     @RequestMapping(method = RequestMethod.GET, path = "/menu.top", produces = "application/json")
     public ResponseEntity<?> menuTop(HttpServletRequest request, HttpServletResponse response){
         List<Map<String,Object>> resultList = new ArrayList<>();
-        for ( Menu menu:this.menuParser.getSubMenu("NewsGroup")) {
+        for ( Menu menu:this.menuParser.getChildrenMenu("NewsGroup")) {
             if ( menu.isIsShowTopMenu()) {
                 Map<String,Object> map = new HashMap<>();
                 map.put("Key",menu.getKey());
@@ -83,7 +72,7 @@ public class MenuController {
     @RequestMapping(method = RequestMethod.GET, path = "/menu.sub", produces = "application/json")
     public ResponseEntity<?> menuSub(HttpServletRequest request, HttpServletResponse response, @RequestParam String key){
         List<Map<String,Object>> resultList = new ArrayList<>();
-        for ( Menu menu:this.menuParser.getSubMenu(key)) {
+        for ( Menu menu:this.menuParser.getChildrenMenu(key)) {
             if ( menu.isIsShowTopMenu()) {
                 Map<String,Object> map = new HashMap<>();
                 map.put("Key",menu.getKey());
@@ -110,12 +99,23 @@ public class MenuController {
     }
 
     private void collectMegaMap(List<Map<String,Object>> resultList, String key) {
-        for ( Menu menu:this.menuParser.getSubMenu(key)) {
+        for ( Menu menu:this.menuParser.getChildrenMenu(key)) {
             if ( menu.isIsShowMegaMenu()) {
                 Map<String,Object> map = new HashMap<>();
                 map.put("Key",menu.getKey());
                 map.put("Display",menu.getDisplay());
                 map.put("Url", menu.getUrl().getPath());
+                List<Map<String,Object>> subMenu = new ArrayList<>();
+                for ( Menu childMenu : menu.getChildren()) {
+                    if ( childMenu.isIsShowMegaMenu()) {
+                        Map<String,Object> subMap = new HashMap<>();
+                        subMap.put("Key",childMenu.getKey());
+                        subMap.put("Display",childMenu.getDisplay());
+                        subMap.put("Url", childMenu.getUrl().getPath());
+                        subMenu.add(subMap);
+                    }
+                }
+                map.put("Children", subMenu);
                 resultList.add(map);
             }
         }

@@ -54,7 +54,7 @@ public class MenuParser {
         return this.menu;
     }
 
-    public List<Menu> getSubMenu(String parentKey) {
+    public List<Menu> getChildrenMenu(String parentKey) {
         if ( this.menu.getKey().equalsIgnoreCase(parentKey)) {
             return this.menu.getChildren();
         } else {

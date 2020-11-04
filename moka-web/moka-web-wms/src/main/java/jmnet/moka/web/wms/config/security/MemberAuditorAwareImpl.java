@@ -12,13 +12,14 @@ public class MemberAuditorAwareImpl implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         // Spring Security를 통한 Auditor 매핑
-        Authentication authentication = SecurityContextHolder.getContext()
-                                                             .getAuthentication();
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            return Optional.of("");
+            return Optional.ofNullable("");
         }
 
-        return Optional.of(authentication.getName());
+        return Optional.ofNullable(authentication.getName());
     }
 
 }

@@ -19,6 +19,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
@@ -328,6 +329,7 @@ public class MemberRestController {
             String bcryptPassword = passwordEncoder.encode(newPassword);
             orgMember.setExpireDt(McpDate.datePlus(McpDate.now(), 30));
             orgMember.setErrCnt(0);
+            orgMember.setPasswordModDt(McpDate.now());
             orgMember.setPassword(bcryptPassword);
 
             // 결과리턴
@@ -374,8 +376,42 @@ public class MemberRestController {
                 .getSmsAuth()
                 .equals(smsAuth)) {
             member.setErrCnt(0);
+            member.setStatus(MemberStatusCode.Y);
+            member.setLastLoginDt(null);
+            member.setPasswordModDt(null);
             memberService.updateMember(member);
         }
+
+        MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
+
+        // 결과리턴
+        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * Member 강제 잠금 해제
+     *
+     * @param memberId MemberID
+     * @return 관련아이템 존재 여부
+     * @throws NoDataException 데이터없음 예외처리
+     */
+    @ApiOperation(value = "Member 잠금 해제")
+    @GetMapping("/{memberId}/force-unlock")
+    public ResponseEntity<?> fouceUnlock(
+            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
+            throws NoDataException {
+
+        String noDataMsg = messageByLocale.get("tps.common.error.no-data");
+
+        Member member = memberService
+                .findMemberById(memberId)
+                .orElseThrow(() -> new NoDataException(noDataMsg));
+        member.setErrCnt(0);
+        member.setStatus(MemberStatusCode.Y);
+        member.setLastLoginDt(null);
+        member.setPasswordModDt(null);
+        memberService.updateMember(member);
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 

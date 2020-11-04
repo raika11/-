@@ -7,7 +7,7 @@ import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel, MokaDateTimePicker } from '@components';
 
 const DetailPeriodForm = (props) => {
-    const { periodYn, periodStartDt, periodEndDt, setPeriodYn, setPeriodStartDt, setPeriodEndDt, available } = props;
+    const { component, setComponent, available } = props;
     const [disabled, setDisabled] = useState(true);
     const [open, setOpen] = useState(false);
     const controls = `component-collapse-period-form`;
@@ -24,7 +24,7 @@ const DetailPeriodForm = (props) => {
      */
     const handleStartDt = (date) => {
         if (typeof date === 'object') {
-            setPeriodStartDt(date);
+            setComponent({ ...component, periodStartDt: date });
         }
     };
 
@@ -34,17 +34,17 @@ const DetailPeriodForm = (props) => {
      */
     const handleEndDt = (date) => {
         if (typeof date === 'object') {
-            setPeriodEndDt(date);
+            setComponent({ ...component, periodEndDt: date });
         }
     };
 
     useEffect(() => {
-        if (periodYn === 'Y') {
+        if (component.periodYn === 'Y') {
             setDisabled(false);
         } else {
             setDisabled(true);
         }
-    }, [periodYn]);
+    }, [component.periodYn]);
 
     useEffect(() => {
         setOpen(available);
@@ -68,21 +68,17 @@ const DetailPeriodForm = (props) => {
                                         as="switch"
                                         id="period-yn"
                                         className="mb-0 h-100"
-                                        inputProps={{ checked: periodYn === 'Y' }}
+                                        inputProps={{ checked: component.periodYn === 'Y' }}
                                         onChange={(e) => {
-                                            if (!e.target.checked) {
-                                                setPeriodYn('N');
-                                            } else {
-                                                setPeriodYn('Y');
-                                            }
+                                            setComponent({ ...component, periodYn: e.target.checked ? 'Y' : 'N' });
                                         }}
                                     />
                                 </Col>
                                 {/* 시작일 종료일 */}
                                 <Col xs={9} className="d-flex align-items-center p-0">
-                                    <MokaDateTimePicker className="flex-grow-0 mx-2" disabled={disabled} value={periodStartDt} onChange={handleStartDt} />
+                                    <MokaDateTimePicker className="flex-grow-0 mx-2" disabled={disabled} value={component.periodStartDt} onChange={handleStartDt} />
                                     ~
-                                    <MokaDateTimePicker className="flex-grow-0 mx-2" disabled={disabled} value={periodEndDt} onChange={handleEndDt} />
+                                    <MokaDateTimePicker className="flex-grow-0 mx-2" disabled={disabled} value={component.periodEndDt} onChange={handleEndDt} />
                                 </Col>
                             </Form.Row>
                         </Col>

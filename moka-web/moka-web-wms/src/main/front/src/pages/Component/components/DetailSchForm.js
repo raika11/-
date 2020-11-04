@@ -9,7 +9,7 @@ import { MokaInputLabel } from '@components';
 import { getLang, getServiceType } from '@store/codeMgt';
 
 const DetailSchForm = (props) => {
-    const { schServiceType, schLang, schCodeId, setSchServiceType, setSchLang, setSchCodeId, available } = props;
+    const { component, setComponent, available } = props;
     const dispatch = useDispatch();
     const controls = `component-collapse-sch-form`;
     const [open, setOpen] = useState(false);
@@ -57,10 +57,8 @@ const DetailSchForm = (props) => {
                                         labelWidth={45}
                                         className="mb-0"
                                         as="select"
-                                        value={schLang}
-                                        onChange={(e) => {
-                                            setSchLang(e.target.value);
-                                        }}
+                                        value={component.schLang}
+                                        onChange={(e) => setComponent({ ...component, schLang: e.target.value })}
                                     >
                                         <option value="all">전체</option>
                                         {langRows.map((cd) => (
@@ -77,10 +75,8 @@ const DetailSchForm = (props) => {
                                         labelWidth={85}
                                         className="mb-0"
                                         as="select"
-                                        value={schServiceType}
-                                        onChange={(e) => {
-                                            setSchServiceType(e.target.value);
-                                        }}
+                                        value={component.schServiceType}
+                                        onChange={(e) => setComponent({ ...component, schServiceType: e.target.value })}
                                     >
                                         <option value="all">전체</option>
                                         {serviceTypeRows.map((cd) => (
@@ -102,8 +98,8 @@ const DetailSchForm = (props) => {
                                         labelWidth={45}
                                         className="mb-0"
                                         as="autocomplete"
-                                        value={schCodeId}
-                                        onChange={setSchCodeId}
+                                        value={component.schCodeId}
+                                        onChange={(value) => setComponent({ ...component, schCodeId: value })}
                                         inputProps={{ options: [] }}
                                     />
                                 </Col>

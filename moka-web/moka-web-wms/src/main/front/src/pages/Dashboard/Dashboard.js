@@ -37,11 +37,12 @@ import { options } from './data';
 import bg from '@assets/images/bg.jpeg';
 
 const Dashboard = () => {
-    const { register } = useForm();
+    const { register, handleSubmit, errors } = useForm();
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [checked, setChecked] = useState(true);
     const [multiSelectValue, setMultiSelectValue] = useState([]);
+    const [serror, setSerror] = useState(false);
 
     // modal test
     const [showD, setShowD] = useState(false);
@@ -81,6 +82,10 @@ const Dashboard = () => {
             }),
         );
     };
+
+    React.useEffect(() => {
+        setSerror(errors['autocomplete-test'] ? true : false);
+    }, [errors]);
 
     return (
         <Container className="p-0" fluid>
@@ -159,7 +164,11 @@ const Dashboard = () => {
                 <MokaCardTabs
                     className="mr-gutter"
                     tabs={[
-                        <Form>
+                        <Form
+                            onSubmit={handleSubmit((data) => {
+                                console.log(data);
+                            })}
+                        >
                             {/* Form 예제 */}
                             {/* text input */}
                             <Form.Group>
@@ -205,15 +214,20 @@ const Dashboard = () => {
                                     <option>옵션1</option>
                                     <option>옵션2</option>
                                 </Form.Control>
-                                <Form.Label className="text-danger">* react-hook-form 사용한 autocomplete</Form.Label>
                                 {/* <MokaAutocomplete options={options} /> */}
+                                <Form.Label className="text-danger">* react-hook-form 사용한 autocomplete</Form.Label>
                                 <MokaUncontrolledInput
                                     name="autocomplete-test"
                                     defaultValue={null}
                                     as="autocomplete"
-                                    inputProps={{ options: options, isMulti: true }}
-                                    ref={register}
+                                    inputProps={{ options: options }}
+                                    onChange={(value) => {
+                                        setSerror(false);
+                                    }}
+                                    isInvalid={serror}
+                                    rules={{ required: true }}
                                 />
+                                <Button type="submit">valid</Button>
                             </Form.Group>
 
                             {/* checkbox */}

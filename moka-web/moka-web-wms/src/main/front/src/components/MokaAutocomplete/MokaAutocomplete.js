@@ -30,7 +30,7 @@ const propTypes = {
     /**
      * value
      */
-    value: PropTypes.any,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
     /**
      * onChange (value, event) => {}
      */

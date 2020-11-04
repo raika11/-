@@ -152,6 +152,7 @@ const MokaInputLabel = forwardRef((props, ref) => {
                     placeholder={placeholder}
                     type={type}
                     inputProps={inputProps}
+                    required={required}
                 >
                     {children}
                 </MokaUncontrolledInput>

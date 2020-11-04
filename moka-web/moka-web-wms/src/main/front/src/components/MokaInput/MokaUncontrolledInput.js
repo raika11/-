@@ -48,6 +48,12 @@ const propTypes = {
      */
     name: PropTypes.string,
     /**
+     * Controller의 rules
+     */
+    rules: PropTypes.shape({
+        required: PropTypes.bool,
+    }),
+    /**
      * ---------------------------------------------------------------------------------------------
      * value, placeholder, type, onChange, disabled, name, isInvalid가 아닌
      * input의 추가 props를 정의한다.
@@ -80,7 +86,7 @@ const defaultProps = {
  */
 const MokaUncontrolledInput = forwardRef((props, ref) => {
     const { control } = useForm();
-    const { className, as, type, placeholder, onChange, defaultValue, id, name, children, inputProps, isInvalid, disabled } = props;
+    const { className, as, type, placeholder, onChange, defaultValue, id, name, children, inputProps, isInvalid, disabled, rules } = props;
 
     // 셀렉트
     if (as === 'select') {
@@ -179,10 +185,24 @@ const MokaUncontrolledInput = forwardRef((props, ref) => {
     else if (as === 'autocomplete') {
         return (
             <Controller
-                defaultValue={defaultValue}
-                name={name}
                 control={control}
-                render={(props) => <MokaAutocomplete isInvalid={isInvalid} id={id} onChange={onChange} {...inputProps} {...props} />}
+                name={name}
+                rules={rules}
+                defaultValue={defaultValue}
+                render={(props) => {
+                    const { onChange: controllerChange, ...restControllerProps } = props;
+                    return (
+                        <MokaAutocomplete
+                            isInvalid={isInvalid}
+                            id={id}
+                            {...inputProps}
+                            onChange={(value) => {
+                                controllerChange(value);
+                            }}
+                            {...restControllerProps}
+                        />
+                    );
+                }}
             />
         );
     }

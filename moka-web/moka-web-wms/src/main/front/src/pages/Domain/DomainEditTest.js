@@ -22,9 +22,6 @@ const DomainEditTest = ({ history, onDelete }) => {
     const { domainId: paramId } = useParams();
     const { register, handleSubmit, setValue, errors } = useForm();
 
-    // entity
-    const [tempData, setTempData] = useState({});
-
     // error
     const [domainError, setDomainError] = useState({
         domainId: false,
@@ -58,31 +55,45 @@ const DomainEditTest = ({ history, onDelete }) => {
     }, [dispatch, paramId]);
 
     useEffect(() => {
-        setTempData(domain);
-    }, [domain]);
-
-    useEffect(() => {
         // 데이터 변경 시 useForm의 value 변경(setValue)
-        Object.keys(tempData).forEach((key) => {
+        Object.keys(domain).forEach((key) => {
             if (key === 'usedYn') {
-                setValue('usedYn', tempData[key] === 'Y' ? true : false);
+                setValue('usedYn', domain[key] === 'Y' ? true : false);
             } else if (key === 'lang') {
-                if (!tempData[key]) {
+                if (!domain[key]) {
                     if (langRows.length > 0) {
                         setValue('lang', langRows[0].dtlCd);
                     }
                 }
             } else if (key === 'apiCodeId') {
-                if (!tempData[key]) {
+                if (!domain[key]) {
                     if (apiRows.length > 0) {
                         setValue('apiCodeId', apiRows[0].dtlCd);
                     }
                 }
             } else {
-                setValue(`${key}`, tempData[key]);
+                setValue(`${key}`, domain[key]);
             }
         });
-    }, [apiRows, langRows, setValue, tempData]);
+    }, [apiRows, langRows, setValue, domain]);
+
+    /**
+     * input 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
+
+        if (name === 'domainId') {
+            if (/^\d{4}$/.test(value)) {
+                setDomainError({ ...domainError, domainId: false });
+            }
+        } else if (name === 'domainName') {
+            setDomainError({ ...domainError, domainName: false });
+        } else if (name === 'domainUrl') {
+            setDomainError({ ...domainError, domainUrl: false });
+        }
+    };
 
     /**
      * 에러 처리 테스트
@@ -223,11 +234,7 @@ const DomainEditTest = ({ history, onDelete }) => {
                             inputProps={{
                                 readOnly: domain.domainId && true,
                             }}
-                            onChange={(e) => {
-                                if (/^\d{4}$/.test(e.target.value)) {
-                                    setDomainError({ ...domainError, domainId: false });
-                                }
-                            }}
+                            onChange={handleChangeValue}
                             isInvalid={domainError.domainId}
                             required
                             uncontrolled
@@ -245,9 +252,7 @@ const DomainEditTest = ({ history, onDelete }) => {
                         required: 'required',
                     })}
                     isInvalid={domainError.domainName}
-                    onChange={() => {
-                        setDomainError({ ...domainError, domainName: false });
-                    }}
+                    onChange={handleChangeValue}
                     required
                     uncontrolled
                 />
@@ -262,9 +267,7 @@ const DomainEditTest = ({ history, onDelete }) => {
                     ref={register({
                         required: true,
                     })}
-                    onChange={(e) => {
-                        setDomainError({ ...domainError, domainUrl: false });
-                    }}
+                    onChange={handleChangeValue}
                     required
                     uncontrolled
                 />

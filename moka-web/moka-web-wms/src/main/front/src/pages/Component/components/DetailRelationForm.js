@@ -6,26 +6,7 @@ import { MokaInput, MokaInputLabel, MokaInputGroup, MokaIcon, MokaPrependLinkInp
 import { TemplateListModal, DatasetListModal, SkinListModal } from '@pages/commons';
 
 const DetailRelationForm = (props) => {
-    const {
-        componentSeq,
-        template,
-        dataType,
-        dataset,
-        inputTag,
-        delWords,
-        skin,
-        zone,
-        matchZone,
-        setTemplate,
-        setDataType,
-        setDataset,
-        setDelWords,
-        setSkin,
-        setZone,
-        prevAutoDataset,
-        prevDeskDataset,
-        invalidList,
-    } = props;
+    const { component, setComponent, inputTag, invalidList } = props;
 
     // state
     const [templateModalShow, setTemplateModalShow] = useState(false);
@@ -33,28 +14,75 @@ const DetailRelationForm = (props) => {
     const [skinModalShow, setSkinModalShow] = useState(false);
     const [templateError, setTemplateError] = useState(false);
 
-    const handleChangeDataset = (e) => {
-        const { value } = e.target;
-        setDataType(value);
-        if (value === 'AUTO') {
-            if (prevAutoDataset) {
-                setDataset(prevAutoDataset);
-            } else {
-                setDataset({});
-            }
-        } else if (value === 'DESK') {
-            if (prevDeskDataset) {
-                setDataset(prevDeskDataset);
-            } else {
-                setDataset({});
-            }
-        } else {
-            setDataset({});
+    const [skin, setSkin] = useState({});
+    const [dataset, setDataset] = useState({});
+    const [template, setTemplate] = useState({});
+
+    /**
+     * input 값 변경
+     */
+    const handleChangeValue = (e) => {
+        const { name, value, checked } = e.target;
+
+        if (name === 'dataType') {
+            setComponent({
+                ...component,
+                dataType: checked ? 'DESK' : 'NONE',
+            });
+        } else if (name === 'delWords') {
+            setComponent({
+                ...component,
+                delWords: value,
+            });
+        } else if (name === 'zone') {
+            setComponent({
+                ...component,
+                zone: value,
+            });
         }
     };
 
+    /**
+     * 데이터셋 변경
+     */
+    const handleChangeDataset = (e) => {
+        const { value } = e.target;
+        let result = { dataType: value };
+        if (value === 'AUTO') {
+            if (component.prevAutoDataset) {
+                result.dataset = component.prevAutoDataset;
+            } else {
+                result.dataset = {};
+            }
+        } else if (value === 'DESK') {
+            if (component.prevDeskDataset) {
+                result.dataset = component.prevDeskDataset;
+            } else {
+                result.dataset = {};
+            }
+        } else {
+            result.dataset = {};
+        }
+        setComponent({ ...component, ...result });
+    };
+
     useEffect(() => {
-        // invalidList 처리
+        if (component.skin) {
+            setSkin(component.skin);
+        }
+        if (component.dataset) {
+            setDataset(component.dataset);
+        }
+        if (component.template) {
+            setTemplate(component.template);
+        }
+    }, [component]);
+
+    useEffect(() => {
+        setTemplateError(false);
+    }, [component.componentSeq]);
+
+    useEffect(() => {
         if (invalidList.length > 0) {
             invalidList.forEach((i) => {
                 if (i.field === 'template') {
@@ -63,10 +91,6 @@ const DetailRelationForm = (props) => {
             });
         }
     }, [invalidList]);
-
-    useEffect(() => {
-        setTemplateError(false);
-    }, [componentSeq]);
 
     return (
         <Form>
@@ -107,21 +131,16 @@ const DetailRelationForm = (props) => {
                         as="switch"
                         className="mb-0 h-100"
                         id="data-type-check"
-                        inputProps={{ checked: dataType !== 'NONE' }}
-                        onChange={(e) => {
-                            if (!e.target.checked) {
-                                setDataType('NONE');
-                            } else {
-                                setDataType('DESK');
-                            }
-                        }}
+                        name="dataType"
+                        inputProps={{ checked: component.dataType !== 'NONE' }}
+                        onChange={handleChangeValue}
                     />
                 </Col>
-                {dataType !== 'NONE' && (
+                {component.dataType !== 'NONE' && (
                     <React.Fragment>
                         {/* 자동/수동 셀렉트 */}
                         <Col xs={2} className="d-flex p-0 pr-3">
-                            <MokaInput as="select" value={dataType} onChange={handleChangeDataset}>
+                            <MokaInput as="select" value={component.dataType} onChange={handleChangeDataset}>
                                 <option value="DESK">편집</option>
                                 <option value="AUTO">자동</option>
                             </MokaInput>
@@ -129,8 +148,8 @@ const DetailRelationForm = (props) => {
 
                         {/* 자동/수동에 따른 input */}
                         <Col xs={7} className="p-0">
-                            {dataType === 'DESK' && <MokaInput placeholder="ID" value={prevDeskDataset ? prevDeskDataset.datasetSeq : ''} disabled />}
-                            {dataType === 'AUTO' && (
+                            {component.dataType === 'DESK' && <MokaInput placeholder="ID" value={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : ''} disabled />}
+                            {component.dataType === 'AUTO' && (
                                 <MokaPrependLinkInput
                                     to={dataset.datasetSeq ? `/dataset/${dataset.datasetSeq}` : undefined}
                                     linkText={dataset.datasetSeq ? `ID: ${dataset.datasetSeq}` : 'ID'}
@@ -162,12 +181,11 @@ const DetailRelationForm = (props) => {
                 }
                 as="textarea"
                 className="mb-2"
+                name="delWords"
                 inputClassName="resize-none"
                 inputProps={{ rows: 4 }}
-                value={delWords}
-                onChange={(e) => {
-                    setDelWords(e.target.value);
-                }}
+                value={component.delWords}
+                onChange={handleChangeValue}
             />
             {/* 뷰스킨 */}
             <MokaInputGroup
@@ -190,17 +208,10 @@ const DetailRelationForm = (props) => {
             {/* 영역 설정 */}
             <Form.Row className="mb-2">
                 <Col xs={4} className="p-0">
-                    <MokaInputLabel label="매칭영역" className="mb-0" value={matchZone} disabled />
+                    <MokaInputLabel label="매칭영역" className="mb-0" value={component.matchZone} disabled />
                 </Col>
                 <Col xs={8} className="p-0">
-                    <MokaInputLabel
-                        label="영역 목록"
-                        className="mb-0"
-                        value={zone}
-                        onChange={(e) => {
-                            setZone(e.target.value);
-                        }}
-                    />
+                    <MokaInputLabel label="영역 목록" className="mb-0" value={component.zone} name="zone" onChange={handleChangeValue} />
                 </Col>
             </Form.Row>
 
@@ -209,7 +220,10 @@ const DetailRelationForm = (props) => {
                 show={templateModalShow}
                 onHide={() => setTemplateModalShow(false)}
                 onClickSave={(template) => {
-                    setTemplate(template);
+                    setComponent({
+                        ...component,
+                        template,
+                    });
                     if (template.templateSeq) {
                         setTemplateError(false);
                     }
@@ -221,22 +235,13 @@ const DetailRelationForm = (props) => {
             <DatasetListModal
                 show={datasetModalShow}
                 onHide={() => setDatasetModalShow(false)}
-                onClickSave={(dataset) => {
-                    setDataset(dataset);
-                }}
+                onClickSave={(dataset) => setComponent({ ...component, dataset })}
                 selected={dataset.datasetSeq}
-                exclude={prevDeskDataset ? prevDeskDataset.datasetSeq : undefined}
+                exclude={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : undefined}
             />
 
             {/* 스킨 선택 팝업 */}
-            <SkinListModal
-                show={skinModalShow}
-                onHide={() => setSkinModalShow(false)}
-                onClickSave={(skin) => {
-                    setSkin(skin);
-                }}
-                selected={skin.skinSeq}
-            />
+            <SkinListModal show={skinModalShow} onHide={() => setSkinModalShow(false)} onClickSave={(skin) => setComponent({ ...component, skin })} selected={skin.skinSeq} />
         </Form>
     );
 };

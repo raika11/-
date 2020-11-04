@@ -159,4 +159,11 @@ public class TpsConstants {
     // 최상위 메뉴 ID
     public static final String ROOT_MENU_ID = "00";
 
+    /**
+     * 편집영역 정렬
+     */
+    public static final String AREA_ALIGN_LEFT = "LEFT";
+    public static final String AREA_ALIGN_RIGHT = "RIGHT";
+    public static final String AREA_ALIGN_NONE = "NONE";
+
 }

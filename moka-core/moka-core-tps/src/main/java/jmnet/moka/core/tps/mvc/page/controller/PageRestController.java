@@ -273,7 +273,7 @@ public class PageRestController {
     @ApiOperation(value = "페이지 수정")
     @PutMapping(value = "/{pageSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putPage(HttpServletRequest request,
-            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.invalid.pageSeq}") Long pageSeq, @RequestBody @Valid PageDTO pageDTO,
+            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq, @RequestBody @Valid PageDTO pageDTO,
             Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 

@@ -2,10 +2,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { notification, toastr } from '@utils/toastUtil';
+
 import Search from './CodeMgtEditSearch';
 import AgGrid from './CodeMgtEditAgGrid';
 
-import { saveCodeMgt, deleteCodeMgt, changeCd } from '@store/codeMgt';
+import { saveCodeMgt, deleteCodeMgt, changeCd, clearCd } from '@store/codeMgt';
 
 /**
  * 기타코드 편집
@@ -36,6 +37,7 @@ const CodeMgtEdit = () => {
                         const { body } = response;
                         notification('success', '수정하였습니다.');
                         history.push(`/codeMgt/${body.codeMgtGrp.grpCd}`);
+                        dispatch(clearCd());
                     } else {
                         notification('warning', '실패하였습니다.');
                     }
@@ -63,6 +65,7 @@ const CodeMgtEdit = () => {
                         const { body } = response;
                         notification('success', '등록하였습니다.');
                         history.push(`/codeMgt/${body.codeMgtGrp.grpCd}`);
+                        dispatch(clearCd());
                     } else {
                         notification('warning', '실패하였습니다.');
                     }
@@ -78,7 +81,7 @@ const CodeMgtEdit = () => {
     const onClickSave = (code) => {
         toastr.confirm('적용하시겠습니까?', {
             onOk: () => {
-                if (!code.cdSeq) {
+                if (!code.seqNo) {
                     insertGrp(code);
                 } else {
                     updateGrp(code);

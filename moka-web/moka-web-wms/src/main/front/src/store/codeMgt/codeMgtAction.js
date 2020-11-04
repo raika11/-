@@ -12,9 +12,13 @@ export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) =>
  */
 export const CLEAR_CODE_MGT = 'codeMgt/CLEAR_CODE_MGT';
 export const CLEAR_GRP = 'codeMgt/CLEAR_GRP';
+export const CLEAR_CD = 'codeMgt/CLEAR_CD';
+export const CLEAR_GRP_LIST = 'codeMgt/CLEAR_GRP_LIST';
 export const CLEAR_CD_LIST = 'codeMgt/CLEAR_CD_LIST';
 export const clearCodeMgt = createAction(CLEAR_CODE_MGT, (payload) => payload);
 export const clearGrp = createAction(CLEAR_GRP, (payload) => payload);
+export const clearCd = createAction(CLEAR_CD, (payload) => payload);
+export const clearGrpList = createAction(CLEAR_GRP_LIST, (payload) => payload);
 export const clearCdList = createAction(CLEAR_CD_LIST, (payload) => payload);
 
 /**

@@ -66,7 +66,7 @@ export const putCodeMgt = ({ cd }) => {
         'codeMgtGrp.grpCd': cd.codeMgtGrp.grpCd,
         codeMgtGrp: undefined,
     };
-    return instance.put(`/api/codemgt-grps/codemgts/${codeMgts.cdSeq}`, qs.stringify(codeMgts)).catch((err) => {
+    return instance.put(`/api/codemgt-grps/codemgts/${codeMgts.seqNo}`, qs.stringify(codeMgts)).catch((err) => {
         throw err;
     });
 };

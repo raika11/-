@@ -49,8 +49,19 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.grp = initialState.grp;
                 draft.grpError = initialState.grpError;
+            });
+        },
+        [act.CLEAR_CD]: (state) => {
+            return produce(state, (draft) => {
+                draft.cd = initialState.cd;
+                draft.cdError = initialState.cdError;
+            });
+        },
+        [act.CLEAR_GRP_LIST]: (state) => {
+            return produce(state, (draft) => {
                 draft.grpTotal = initialState.grpTotal;
                 draft.grpSearch = initialState.grpSearch;
+                draft.grpList = initialState.grpList;
             });
         },
         [act.CLEAR_CD_LIST]: (state) => {

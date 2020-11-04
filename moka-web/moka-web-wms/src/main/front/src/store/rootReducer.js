@@ -19,6 +19,8 @@ import editForm from '@/store/editForm/editFormReducer';
 import relation from '@store/relation/relationReducer';
 import history from '@store/history/historyReducer';
 import merge from '@store/merge/mergeReducer';
+import group from '@store/group/groupReducer';
+
 import menu from '@store/menu/menuReducer';
 
 export default combineReducers({
@@ -42,4 +44,5 @@ export default combineReducers({
     history,
     merge,
     menu,
+    group,
 });

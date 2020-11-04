@@ -24,6 +24,7 @@ export const initialState = {
  * reducer
  */
 export default handleActions(
+
     {
         /**
          * 검색조건 변경

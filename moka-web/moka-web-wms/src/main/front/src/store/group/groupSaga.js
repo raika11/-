@@ -51,6 +51,7 @@ function* saveGroup({ payload: { type, actions, callback } }) {
     let callbackData = {};
 
     yield put(startLoading(ACTION));
+    //yield put(startLoading(ACTION));
 
     try {
         // actions 먼저 처리

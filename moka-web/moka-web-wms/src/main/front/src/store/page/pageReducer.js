@@ -11,6 +11,7 @@ export const initialState = {
     search: {
         domainId: null,
         searchType: 'all',
+        sort: 'pageSeq,asc',
         keyword: '',
     },
     searchTypeList: [

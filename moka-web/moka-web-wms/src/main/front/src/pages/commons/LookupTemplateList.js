@@ -314,6 +314,7 @@ const LookupTemplateList = (props) => {
                         total={total}
                         page={search.page}
                         size={search.size}
+                        cardWidth={174}
                         onChangeSearchOption={handleChangeSearchOption}
                         onClick={handleRowClicked}
                     />

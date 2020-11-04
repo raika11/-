@@ -14,6 +14,7 @@ export const { searchTypeList: defaultContainerSearchType } = containerInitialSt
 export const { searchTypeList: defaultHistorySearchType } = historyInitialState;
 
 // 공통 모달
+export { default as PageListModal } from './PageListModal';
 export { default as TemplateListModal } from './TemplateListModal';
 export { default as DatasetListModal } from './DatasetListModal';
 export { default as SkinListModal, defaultSkinSearchType } from './SkinListModal';

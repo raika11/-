@@ -84,7 +84,7 @@ public class LoopMerger extends AbstractElementMerger {
             this.dataSize = 0;
             Object dataListObj = null;
             List<?> dataList = null;
-            if (!dataId.equalsIgnoreCase("parent")) { //데이터셋 데이터를 가져오는 경우
+            if (!dataId.equalsIgnoreCase(Constants.PARENT)) { //데이터셋 데이터를 가져오는 경우
                 JSONResult jsonResult = templateMerger.getData(context, this.dataId);
                 if (jsonResult != null) {
                     dataListObj = jsonResult.get(select);

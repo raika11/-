@@ -314,7 +314,7 @@ const DatasetEdit = ({ onDelete }) => {
     /**
      * Copy 팝업 저장
      * @param {object} data 정보
-     * @param {function: void} callback 저장시 동작할 callback 함수
+     * @param callback 저장시 동작할 callback 함수
      */
     const handleClickCopyModalSave = (data, callback) => {
         if (data.value) {

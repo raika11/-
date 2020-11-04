@@ -32,7 +32,11 @@ const DefaultInputModal = (props) => {
      * 저장 버튼 클릭 이벤트
      */
     const handleClickSave = () => {
-        onSave(data, setData);
+        onSave(data, invalidCheckCallback);
+    };
+
+    const invalidCheckCallback = (isInvalid) => {
+        setData({ ...data, isInvalid });
     };
 
     /**

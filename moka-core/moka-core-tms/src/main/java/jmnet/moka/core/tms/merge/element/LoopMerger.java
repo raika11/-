@@ -2,7 +2,6 @@ package jmnet.moka.core.tms.merge.element;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
-import jmnet.moka.core.tms.merge.item.ComponentAd;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 import org.slf4j.Logger;
@@ -91,7 +89,7 @@ public class LoopMerger extends AbstractElementMerger {
                 if (jsonResult != null) {
                     dataListObj = jsonResult.get(select);
                     // 기본 데이터가 아닐 경우 한 번 더 벗겨낸다.
-                    if (select.equals(Constants.DEFAULT_LOOP_DATA_SELECT) == false) {
+                    if (!select.equals(Constants.DEFAULT_LOOP_DATA_SELECT)) {
                         dataListObj = ((JSONResult) dataListObj).get(Constants.DEFAULT_LOOP_DATA_SELECT);
                     }
                 }
@@ -100,10 +98,10 @@ public class LoopMerger extends AbstractElementMerger {
                 dataListObj = context.get(column);
             }
 
-            if (dataListObj != null && dataListObj instanceof List) {
+            if (dataListObj instanceof List) {
                 dataList = (List<?>) dataListObj;
                 this.dataSize = dataList.size();
-                if (fill == true) { // 지정된 count만큼 채울 경우
+                if (fill) { // 지정된 count만큼 채울 경우
                     if (count == -1) { // 지정된 count값이 없을 경우 데이터의 건수로 결정
                         count = dataSize;
                     }
@@ -159,7 +157,7 @@ public class LoopMerger extends AbstractElementMerger {
             debug("START", element, indent, sb);
         }
 
-        Map<String, String> emptyRow = new HashMap<String, String>(16);
+        Map<String, String> emptyRow = new HashMap<>(16);
         List<?> dataList = state.getDataList((MokaTemplateMerger) this.templateMerger, emptyRow);
         int dataSize = state.getDataSize(); // getDataList()를 먼저 호출해야 함
 
@@ -184,7 +182,7 @@ public class LoopMerger extends AbstractElementMerger {
                     Object evalObj = this.templateMerger
                             .getEvaluator()
                             .eval(state.filter, childContext);
-                    if (evalObj != null && (boolean) evalObj == false) {
+                    if (evalObj != null && !((boolean) evalObj)) {
                         dataIndex++;
                         continue;
                     }
@@ -241,7 +239,7 @@ public class LoopMerger extends AbstractElementMerger {
         }
         if (row instanceof Map) {
             @SuppressWarnings("unchecked") Map<String, Object> rowMap = (Map<String, Object>) row;
-            if (rowMap.containsKey(ItemConstants.CP_DEL_WORDS_COLUMN) && delWordList != null) {
+            if (rowMap.containsKey(ItemConstants.CP_DEL_WORDS_COLUMN)) {
                 String title = (String) rowMap.get(ItemConstants.CP_DEL_WORDS_COLUMN);
                 for (String delWord : delWordList) {
                     //TODO 기능 검증후 {삭제: } 제거

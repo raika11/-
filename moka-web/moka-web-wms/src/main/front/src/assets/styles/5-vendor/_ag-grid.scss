@@ -1,9 +1,18 @@
-// ag-grid.scss defines structural styles and should be imported first
+/* -------------------------------------------------------------------
+ * ag-grid.scss defines structural styles and should be imported first
+ * ------------------------------------------------------------------ */
 @import 'ag-grid-community/src/styles/ag-grid';
 @import 'ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin';
 
-/* 공통 목록 */
+.ag-react-container {
+    height: 100%;
+    width: 100%;
+}
 
+/* -------------------------------------------------------------------
+ * ag-theme-moka-grid (include ag-theme-aplpine)
+ * 기본 테이블 + appStack 테이블 스타일
+ * ------------------------------------------------------------------ */
 .ag-theme-moka-grid {
     @include ag-theme-alpine((
         odd-row-background-color: #fff,
@@ -15,60 +24,82 @@
     ));
 }
 
-.ag-theme-moka-grid.ag-header-no {
-    .ag-header {
-        display: none;
+.ag-theme-moka-grid {
+    &.ag-header-no {
+        .ag-header {
+            display: none;
+        }
     }
-}
 
-.ag-theme-moka-grid .ag-root-wrapper-body {
-    overflow: hidden;
-    height: unset !important;
-    min-height: unset !important;
-}
+    .ag-root-wrapper {
+        border: none;
 
-.ag-theme-moka-grid .ag-body-viewport {
-    @include custom-scroll;
-    overflow-y: scroll;
-}
+        .ag-root-wrapper-body {
+            overflow: hidden;
+            height: unset !important;
+            min-height: unset !important;
+        }
 
-.ag-theme-moka-grid .ag-header-cell {
-    padding-left: 6px;
-    padding-right: 6px;
-}
-.ag-theme-moka-grid .ag-cell {
-    padding-left: 5px;
-    padding-right: 5px;
-}
+        .ag-body-viewport {
+            @include custom-scroll;
+            overflow-y: scroll;
+        }
 
-.ag-theme-moka-grid .ag-cell-center {
-    text-align: center;
-}
+        .ag-header {
+            border-top: solid $table-border-width;
+            border-bottom: solid (2 * $table-border-width);
+            border-color: $table-border-color;
+            background-color: $white;
 
-.ag-theme-moka-grid .ag-row {
-    cursor: pointer;
+            .ag-header-cell {
+                padding-left: 6px;
+                padding-right: 6px;
+            }
+        }
 
-    // usedyn-n row
-    &.usedyn-n {
-        color: rgba($black, 0.6);
-        button {
-            color: rgba($black, 0.6);
+        .ag-cell {
+            padding-left: 5px;
+            padding-right: 5px;  
+        }
+
+        .ag-cell-center {
+            text-align: center;
+        }
+
+        .ag-row {
+            cursor: pointer;
+
+            .ag-row-last {
+                border-bottom-style: none;
+            }
+
+            // usedyn-n row
+            &.usedyn-n {
+                color: rgba($black, 0.6);
+                button {
+                    color: rgba($black, 0.6);
+                }
+            }
+
+            &:nth-of-type(odd) {
+                background-color: $table-accent-bg;
+            }
+
+            &:hover {
+                background-color: var(--ag-row-hover-color, rgba(33, 150, 243, 0.1));
+            }
+
+            &.ag-row-selected {
+                background-color: var(--ag-selected-row-background-color, rgba(33, 150, 243, 0.3));
+            }
         }
     }
 }
 
-.ag-theme-moka-grid .ag-row.ag-row-last {
-    border-bottom-style: none;
-}
-
-.ag-react-container {
-    height: 100%;
-    width: 100%;
-}
-
-
-/* 화면편집 */
-
+/* -------------------------------------------------------------------
+ * ag-theme-moka-desking-grid (include ag-theme-aplpine)
+ * 화면편집
+ * ------------------------------------------------------------------ */
 $padding-height: 10px;
 
 .ag-theme-moka-desking-grid {

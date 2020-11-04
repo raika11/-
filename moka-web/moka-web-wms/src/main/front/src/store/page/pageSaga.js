@@ -16,6 +16,11 @@ const getPageTree = callApiAfterActions(act.GET_PAGE_TREE, api.getPageTree, (sto
 const getPageLookupList = callApiAfterActions(act.GET_PAGE_LOOKUP_LIST, api.getPageList, (store) => store.page.lookup);
 
 /**
+ * 페이지 목록 조회 (모달용)
+ */
+const getPageListModal = createRequestSaga(act.GET_PAGE_LIST_MODAL, api.getPageList, true);
+
+/**
  * 페이지 조회
  */
 const getPage = createRequestSaga(act.GET_PAGE, api.getPage);
@@ -171,4 +176,5 @@ export default function* saga() {
     yield takeLatest(act.GET_HISTORY, getHistory);
     yield takeLatest(act.GET_PAGE_LOOKUP_LIST, getPageLookupList);
     yield takeLatest(act.GET_PAGE_MODAL, getPageModal);
+    yield takeLatest(act.GET_PAGE_LIST_MODAL, getPageListModal);
 }

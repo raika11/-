@@ -6,9 +6,10 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { ITEM_CP, ITEM_CT } from '@/constants';
 import { MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
-import SearchPageModal from '../modals/SearchPageModal';
 
-const AreaForm2Depth = () => {
+const AreaForm2Depth = (props) => {
+    const { onShowModal, page } = props;
+
     const { domainList } = useSelector((store) => ({
         domainList: store.auth.domainList,
     }));
@@ -16,7 +17,6 @@ const AreaForm2Depth = () => {
     // state
     const [areaNm, setAreaNm] = useState('');
     const [usedYn, setUsedYn] = useState('N');
-    const [modalShow, setModalShow] = useState(false);
     const [previewRsrc, setPreviewRsrc] = useState('');
 
     return (
@@ -67,7 +67,15 @@ const AreaForm2Depth = () => {
                 {/* 페이지 검색 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel as="none" className="mb-0" label="페이지" labelWidth={87} disabled />
-                    <MokaSearchInput className="w-100" inputClassName="bg-white" variant="dark" onSearch={() => setModalShow(true)} disabled />
+                    <MokaSearchInput
+                        className="w-100"
+                        inputClassName="bg-white"
+                        variant="dark"
+                        value={page.pageSeq ? `${page.pageName} (${page.pageUrl})` : ''}
+                        onSearch={() => onShowModal(true)}
+                        placeholder="페이지를 선택하세요"
+                        disabled
+                    />
                 </Form.Row>
 
                 {/* 컴포넌트/컨테이너 선택 */}
@@ -115,9 +123,6 @@ const AreaForm2Depth = () => {
                     <Button variant="gray150">취소</Button>
                 </Card.Footer>
             </Col>
-
-            {/* 페이지 검색 모달 */}
-            <SearchPageModal show={modalShow} onHide={() => setModalShow(false)} />
         </div>
     );
 };

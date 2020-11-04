@@ -29,7 +29,7 @@ public class ResultHeaderDTO implements Serializable {
     /**
      * 결과 유형
      **/
-    private String resultType;
+    private int resultType;
     /**
      * 결과 메세지
      **/
@@ -40,7 +40,7 @@ public class ResultHeaderDTO implements Serializable {
      **/
     private String redirect;
 
-    public ResultHeaderDTO(boolean success, int resultCode, String resultType, String message) {
+    public ResultHeaderDTO(boolean success, int resultCode, int resultType, String message) {
         this.success = success;
         this.resultCode = resultCode;
         this.resultType = resultType;
@@ -69,7 +69,7 @@ public class ResultHeaderDTO implements Serializable {
                 .builder()
                 .success(status.equals(HttpStatus.OK) || status.equals(HttpStatus.ACCEPTED))
                 .resultCode(status.value())
-                .resultType(status.name())
+                .resultType(status.value())
                 .message(McpString.defaultValue(message, status.getReasonPhrase()))
                 .build();
     }

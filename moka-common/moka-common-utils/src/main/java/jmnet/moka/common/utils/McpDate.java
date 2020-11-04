@@ -103,8 +103,9 @@ public class McpDate {
          * 메소드를 호출하는데, java.sql.Date를 사용하면 해당 메소드(getHours())가 존재하지 않아 오류가 발생하게 된다.
          */
         // java.sql.Date today = new java.sql.Date(cal.getTime().getTime());
-        java.util.Date today = new java.util.Date(cal.getTime()
-                                                     .getTime());
+        java.util.Date today = new java.util.Date(cal
+                .getTime()
+                .getTime());
 
         return today;
     }
@@ -126,8 +127,9 @@ public class McpDate {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
-        java.util.Date todayplus = new java.util.Date(cal.getTime()
-                                                         .getTime());
+        java.util.Date todayplus = new java.util.Date(cal
+                .getTime()
+                .getTime());
         return todayplus;
     }
 
@@ -179,8 +181,9 @@ public class McpDate {
             cal.set(Calendar.MILLISECOND, 0);
         }
 
-        java.util.Date todayplus = new java.util.Date(cal.getTime()
-                                                         .getTime());
+        java.util.Date todayplus = new java.util.Date(cal
+                .getTime()
+                .getTime());
         return todayplus;
     }
 
@@ -206,8 +209,9 @@ public class McpDate {
             cal.set(Calendar.MILLISECOND, 0);
         }
 
-        java.util.Date todayplus = new java.util.Date(cal.getTime()
-                                                         .getTime());
+        java.util.Date todayplus = new java.util.Date(cal
+                .getTime()
+                .getTime());
         return todayplus;
     }
 
@@ -226,8 +230,9 @@ public class McpDate {
         cal.setTime(date);
 
         cal.add(Calendar.MINUTE, plus * (-1));
-        java.util.Date todayplus = new java.util.Date(cal.getTime()
-                                                         .getTime());
+        java.util.Date todayplus = new java.util.Date(cal
+                .getTime()
+                .getTime());
         return todayplus;
     }
 
@@ -247,8 +252,9 @@ public class McpDate {
 
         cal.add(Calendar.MINUTE, plus);
 
-        java.util.Date todayplus = new java.util.Date(cal.getTime()
-                                                         .getTime());
+        java.util.Date todayplus = new java.util.Date(cal
+                .getTime()
+                .getTime());
         return todayplus;
     }
 
@@ -268,8 +274,9 @@ public class McpDate {
 
         cal.add(Calendar.HOUR, plus * (-1));
 
-        java.util.Date todayplus = new java.util.Date(cal.getTime()
-                                                         .getTime());
+        java.util.Date todayplus = new java.util.Date(cal
+                .getTime()
+                .getTime());
         return todayplus;
     }
 
@@ -289,8 +296,9 @@ public class McpDate {
 
         cal.add(Calendar.HOUR, plus);
 
-        java.util.Date todayplus = new java.util.Date(cal.getTime()
-                                                         .getTime());
+        java.util.Date todayplus = new java.util.Date(cal
+                .getTime()
+                .getTime());
         return todayplus;
     }
 
@@ -344,8 +352,7 @@ public class McpDate {
      * @return 현재날짜 String
      */
     public static String nowDateStr() {
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.YEAR) + String.format("%02d", (c.get(Calendar.MONTH) + 1)) + String.format("%02d", c.get(Calendar.DATE));
+        return dateStr(new Date(), DATE_FORMAT);
     }
 
     /**
@@ -356,9 +363,7 @@ public class McpDate {
      * @return 현재시간 String
      */
     public static String nowTimeStr() {
-        Calendar c = Calendar.getInstance();
-        return String.format("%02d", (c.get(Calendar.HOUR_OF_DAY))) + String.format("%02d", (c.get(Calendar.MINUTE))) + String.format("%02d",
-                                                                                                                                      (c.get(Calendar.SECOND)));
+        return dateStr(new Date(), TIME_FORMAT);
     }
 
     /**
@@ -398,8 +403,7 @@ public class McpDate {
         cal.clear();
         cal.setTime(date);
         return String.format("%02d", (cal.get(Calendar.HOUR_OF_DAY))) + String.format("%02d", (cal.get(Calendar.MINUTE))) + String.format("%02d",
-                                                                                                                                          (cal.get(
-                                                                                                                                                  Calendar.SECOND)));
+                (cal.get(Calendar.SECOND)));
     }
 
 
@@ -412,8 +416,9 @@ public class McpDate {
      * @return 년도 String
      */
     public static String yearStr() {
-        return String.valueOf(Calendar.getInstance()
-                                      .get(Calendar.YEAR));
+        return String.valueOf(Calendar
+                .getInstance()
+                .get(Calendar.YEAR));
     }
 
     /**
@@ -424,8 +429,9 @@ public class McpDate {
      * @return 월 String
      */
     public static String monthStr() {
-        return String.format("%02d", (Calendar.getInstance()
-                                              .get(Calendar.MONTH) + 1));
+        return String.format("%02d", (Calendar
+                .getInstance()
+                .get(Calendar.MONTH) + 1));
     }
 
     /**
@@ -436,8 +442,9 @@ public class McpDate {
      * @return 일 String
      */
     public static String dayStr() {
-        return String.format("%02d", (Calendar.getInstance()
-                                              .get(Calendar.DATE)));
+        return String.format("%02d", (Calendar
+                .getInstance()
+                .get(Calendar.DATE)));
     }
 
     /**
@@ -504,13 +511,23 @@ public class McpDate {
     }
 
     /**
+     * 기준 시간과 현재시간 차이 값을 구한다.
+     *
+     * @param baseDate 날짜
+     * @return 시간 차
+     */
+    public static Long term(Date baseDate) {
+        return baseDate.getTime() - now().getTime();
+    }
+
+    /**
      * 미래 시간과 현재시간 차이 값을 구한다.
      *
      * @param after 날짜
      * @return 시간 차
      */
-    public static Long term(Date after) {
-        return after.getTime() - now().getTime();
+    public static Long dayTerm(Date after) {
+        return (after.getTime() - now().getTime()) / (1000 * 24 * 60 * 60);
     }
 
     /**

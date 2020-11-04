@@ -55,3 +55,6 @@ export const W3C_URL = 'https://validator.w3.org/check';
 
 // tems
 export const TEMS_PREFIX = 'tems';
+
+// 수동 데이터셋 api
+export const DESKING_API = 'desking?ids=';

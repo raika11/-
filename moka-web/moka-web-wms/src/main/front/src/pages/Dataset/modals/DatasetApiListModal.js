@@ -134,7 +134,6 @@ const DatsetListModal = (props) => {
      * 목록에서 Row클릭
      */
     const handleRowClicked = useCallback((data) => {
-        console.log(data);
         setSelectedDataset(data);
         setSelected(data.id);
     }, []);

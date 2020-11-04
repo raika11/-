@@ -88,3 +88,9 @@ export const getRelationCPList = createAction(GET_RELATION_LIST, (...actions) =>
     actions: actions,
     relType: 'CP',
 }));
+
+/**
+ * 데이터셋 복사
+ */
+export const COPY_DATASET = 'dataset/COPY_DATASET';
+export const copyDataset = createAction(COPY_DATASET, ({ datasetSeq, datasetName, callback }) => ({ datasetSeq, datasetName, callback }));

@@ -1,18 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MokaAutocomplete, MokaInputLabel } from '@components';
 import Form from 'react-bootstrap/Form';
-import produce from 'immer';
 import { Col } from 'react-bootstrap';
 import clsx from 'clsx';
-import * as datasetAPI from '@store/dataset/datasetApi';
 import { API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID, API_PARAM_HINT_CODE_ID } from '@/constants';
-import { getDatasetListModal, initialState } from '@store/dataset';
-import { useDispatch } from 'react-redux';
 
 const DatasetParameter = (props) => {
     const { dataApiParamShapes, onChange, dataApiParam, options } = props;
     const [fieldInfos, setFieldInfos] = useState(dataApiParamShapes);
-    const dispatch = useDispatch();
 
     const handleChangeValue = (event, name, defaultValue) => {
         const { value } = event.target;

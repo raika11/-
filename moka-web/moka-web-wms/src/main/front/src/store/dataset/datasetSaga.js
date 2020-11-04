@@ -106,6 +106,28 @@ function* deleteDataset({ payload: { datasetSeq, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+function* copyDataset({ payload: { datasetSeq, datasetName, callback } }) {
+    const ACTION = datasetAction.COPY_DATASET;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(datasetAPI.copyDataset, { datasetSeq, datasetName });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({ type: datasetAction.GET_DATASET_LIST });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
 /**
  * 관련 아이템 여부 조회
  */
@@ -119,4 +141,5 @@ export default function* saga() {
     yield takeLatest(datasetAction.SAVE_DATASET, saveDataset);
     yield takeLatest(datasetAction.hasRelationList, hasRelationList);
     yield takeLatest(datasetAction.deleteDataset, deleteDataset);
+    yield takeLatest(datasetAction.COPY_DATASET, copyDataset);
 }

@@ -8,13 +8,12 @@ import Card from 'react-bootstrap/Card';
 import { MokaCard, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeDataset, clearDataset, GET_DATASET, getDataset, getDatasetListModal, saveDataset } from '@store/dataset';
+import { changeDataset, clearDataset, copyDataset, GET_DATASET, getDataset, getDatasetListModal, saveDataset } from '@store/dataset';
 import DatasetParameter from '@pages/Dataset/component/DatasetParameter';
 import DatasetApiListModal from '@pages/Dataset/modals/DatasetApiListModal';
 import qs from 'qs';
-import toast from '@utils/toastUtil';
-import { API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_CODE_ID, API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID } from '@/constants';
-// import CopyDatasetModal from '@pages/Dataset/modals/CopyDatasetModal';
+import toast, { notification } from '@utils/toastUtil';
+import { API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_CODE_ID, API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID, DESKING_API } from '@/constants';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 
 const defaultSearch = {
@@ -52,6 +51,7 @@ const DatasetEdit = ({ onDelete }) => {
         [API_PARAM_HINT_SERIES_ID]: [],
         [API_PARAM_HINT_CODE_ID]: [],
     });
+    const [isInvalid, setIsInvalid] = useState({ datasetName: false });
 
     const { dataset: storeDataset, search: storeSearch, loading } = useSelector((store) => ({
         dataset: store.dataset.dataset,
@@ -83,6 +83,12 @@ const DatasetEdit = ({ onDelete }) => {
         }
     };
 
+    const validate = (tmp) => {
+        console.log(dataApiParamShape);
+        console.log(dataApiParam);
+        return true;
+    };
+
     const handleClickSave = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -98,10 +104,12 @@ const DatasetEdit = ({ onDelete }) => {
             dataApiParamShape: null,
         };
 
-        if (tmp.datasetSeq) {
-            updateDataset(tmp);
-        } else {
-            insertDataset(tmp);
+        if (validate(tmp)) {
+            if (tmp.datasetSeq) {
+                updateDataset(tmp);
+            } else {
+                insertDataset(tmp);
+            }
         }
     };
 
@@ -147,11 +155,9 @@ const DatasetEdit = ({ onDelete }) => {
 
     const handleClickCopy = () => {
         setCopyDatasetModalShow(true);
-        console.log('datasetSeq', datasetSeq);
-        console.log('datasetName', datasetName);
     };
 
-    const handleClickModalSave = (selectApi) => {
+    const handleClickDatasetListModalSave = (selectApi) => {
         const parameters = selectApi.parameter;
         let apiParam = null;
         Object.keys(parameters).map((key) => {
@@ -179,15 +185,9 @@ const DatasetEdit = ({ onDelete }) => {
         return dataApiUrl;
     };
 
-    useEffect(() => {
-        const search = { ...defaultSearch, apiCodeId: storeSearch.apiCodeId };
-        handleSearch(search);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [storeSearch.apiCodeId]);
-
     /**
-     * 도메인 수정
-     * @param {object} tmp 도메인
+     *데이터셋 관리 수정
+     * @param {object} tmp 데이터셋
      */
     const updateDataset = (tmp) => {
         dispatch(
@@ -208,8 +208,8 @@ const DatasetEdit = ({ onDelete }) => {
     };
 
     /**
-     * 도메인 등록
-     * @param {object} tmp 도메인
+     * 더이터셋 등록
+     * @param {object} tmp 데이터셋
      */
     const insertDataset = (tmp) => {
         dispatch(
@@ -237,8 +237,41 @@ const DatasetEdit = ({ onDelete }) => {
      * @param callback 저장시 동작할 callback 함수
      */
     const handleClickCopyModalSave = (data, callback) => {
-        callback({ ...data, isInvalid: true });
+        if (data.value) {
+            dispatch(
+                copyDataset({
+                    datasetSeq,
+                    datasetName: data.value,
+                    callback: (response) => {
+                        const { header, body } = response;
+                        toast.result(response);
+                        if (header.success) {
+                            setCopyDatasetModalShow(false);
+                            history.push(`/dataset/${body.datasetSeq}`);
+                        }
+                    },
+                }),
+            );
+        } else {
+            callback(true);
+        }
     };
+
+    const handleClickOpenDataView = useCallback(
+        (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            let url = `${storeDataset.dataApiHost}/${storeDataset.dataApiPath}/`;
+            if (autoCreateYn === 'Y') {
+                url += `${dataApi}?${qs.stringify(dataApiParam)}`;
+            } else {
+                url += DESKING_API + datasetSeq;
+            }
+
+            window.open(url);
+        },
+        [autoCreateYn, dataApi, dataApiParam, datasetSeq, storeDataset],
+    );
 
     useEffect(() => {
         if (paramSeq) {
@@ -263,6 +296,12 @@ const DatasetEdit = ({ onDelete }) => {
         setDataApiUrl(makeDataApiUrl(dataApi, dataApiParam));
     }, [dataApi, dataApiParam]);
 
+    useEffect(() => {
+        const search = { ...defaultSearch, apiCodeId: storeSearch.apiCodeId };
+        handleSearch(search);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [storeSearch.apiCodeId]);
+
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" width={688} className="mr-gutter custom-scroll flex-fill" title="데이터셋 정보">
             <Form>
@@ -273,7 +312,7 @@ const DatasetEdit = ({ onDelete }) => {
                     </Col>
                     <Col xs={6} className="p-0 d-flex justify-content-between">
                         <div className="d-flex">
-                            <Button variant="dark" className="mr-2" disabled={!datasetSeq && true}>
+                            <Button variant="dark" className="mr-2" disabled={!datasetSeq && true} onClick={handleClickOpenDataView}>
                                 데이터 보기
                             </Button>
                             <Button variant="dark" disabled={!datasetSeq && true} onClick={handleClickCopy}>
@@ -302,6 +341,8 @@ const DatasetEdit = ({ onDelete }) => {
                             value={datasetName}
                             onChange={handleChangeValue}
                             placeholder="데이터셋명을 입력하세요"
+                            required
+                            isInvalid={isInvalid['datasetName']}
                         />
                     </Col>
                 </Form.Row>
@@ -371,10 +412,10 @@ const DatasetEdit = ({ onDelete }) => {
                 </Col>
             </div>
 
-            <DatasetApiListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} onClickSave={handleClickModalSave} />
+            <DatasetApiListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} onClickSave={handleClickDatasetListModalSave} />
             <DefaultInputModal
                 title="데이타셋 복사"
-                inputData={{ title: '데이타셋명', value: datasetName, isInvalid: false }}
+                inputData={{ title: '데이타셋명', value: `${datasetName}_복사`, isInvalid: false }}
                 show={copyDatasetModalShow}
                 onHide={() => setCopyDatasetModalShow(false)}
                 onSave={handleClickCopyModalSave}

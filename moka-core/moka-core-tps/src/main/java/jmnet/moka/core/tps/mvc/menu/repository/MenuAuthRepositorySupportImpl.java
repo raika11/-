@@ -18,11 +18,12 @@ public class MenuAuthRepositorySupportImpl extends QuerydslRepositorySupport imp
 
     @Override
     public Optional<MenuAuth> findGroupMemberDivMenu(String groupMemberId, String menuId, String groupMemberDiv) {
-        return findGroupMemberDivMenu(MenuAuth.builder()
-                                              .groupMemberDiv(groupMemberDiv)
-                                              .menuId(menuId)
-                                              .groupMemberId(groupMemberId)
-                                              .build());
+        return findGroupMemberDivMenu(MenuAuth
+                .builder()
+                .groupMemberDiv(groupMemberDiv)
+                .menuId(menuId)
+                .groupMemberId(groupMemberId)
+                .build());
     }
 
     @Override
@@ -35,6 +36,6 @@ public class MenuAuthRepositorySupportImpl extends QuerydslRepositorySupport imp
         query.where(qMenuAuth.menuId.eq(menuAuth.getMenuId()));
         query.where(qMenuAuth.groupMemberDiv.eq(menuAuth.getGroupMemberDiv()));
 
-        return Optional.of(query.fetchFirst());
+        return Optional.ofNullable(query.fetchFirst());
     }
 }

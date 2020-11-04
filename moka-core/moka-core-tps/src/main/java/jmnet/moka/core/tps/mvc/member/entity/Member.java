@@ -4,12 +4,15 @@ import java.util.Date;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import lombok.AllArgsConstructor;
@@ -58,8 +61,9 @@ public class Member extends BaseAudit {
      * 상태(유효/정지)
      */
     @Column(name = "STATUS", nullable = false)
+    @Enumerated(value = EnumType.STRING)
     @Builder.Default
-    private String status = "N";
+    private MemberStatusCode status = MemberStatusCode.Y;
 
     /**
      * J중앙I일간E기타M매거진A관리자D청백R기사수신
@@ -143,6 +147,12 @@ public class Member extends BaseAudit {
     private Date expireDt;
 
     /**
+     * 비밀번호 수정일시
+     */
+    @Column(name = "PWD_MOD_DT")
+    private Date passwordModDt;
+
+    /**
      * 비고
      */
     @Column(name = "BIGO")
@@ -159,4 +169,5 @@ public class Member extends BaseAudit {
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
     private Member regMember;
+
 }

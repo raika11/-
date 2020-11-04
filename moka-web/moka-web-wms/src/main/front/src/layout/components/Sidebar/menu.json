@@ -176,6 +176,17 @@
                                             }
                                         ]
                                     }
+                                },
+                                {
+                                    "seq": "42",
+                                    "menuId": "03002",
+                                    "menuName": "group",
+                                    "menuDispName": "그룹 관리",
+                                    "menuPath": "/group",
+                                    "menuOrder": "2",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "03"
                                 }
                             ]
                         }

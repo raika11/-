@@ -21,6 +21,7 @@ const CodeMgt = React.lazy(() => import('@pages/CodeMgt'));
 const EditForm = React.lazy(() => import('@pages/EditForm'));
 const Area = React.lazy(() => import('@pages/Area'));
 const Menu = React.lazy(() => import('@pages/Menu'));
+const Group = React.lazy(() => import('@pages/Group'));
 
 const routes = [
     {
@@ -187,6 +188,16 @@ const routes = [
         name: 'menu',
         displayName: '메뉴관리',
         component: Menu,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/group',
+        name: 'group',
+        displayName: '그룹관리',
+        component: Group,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

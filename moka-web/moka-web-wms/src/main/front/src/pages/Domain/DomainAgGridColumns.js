@@ -11,14 +11,12 @@ export const columnDefs = [
     {
         headerName: 'URL',
         field: 'domainUrl',
-        // cellClass: 'ag-cell-center',
-        // cellStyle: { textAlign: 'center' },
         width: 200,
     },
     {
         headerName: '도메인명',
         field: 'domainName',
-        width: 100,
+        width: 102,
     },
     {
         headerName: '',

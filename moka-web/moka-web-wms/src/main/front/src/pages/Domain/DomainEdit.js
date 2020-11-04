@@ -248,47 +248,6 @@ const DomainEdit = ({ history, onDelete }) => {
         }
     };
 
-    /**
-     * 도메인 삭제
-     * @param {object} response response
-     */
-    /*const deleteCallback = (response) => {
-        if (response.header.success) {
-            dispatch(
-                deleteDomain({
-                    domainId: domain.domainId,
-                    callback: (response) => {
-                        if (response.header.success) {
-                            notification('success', '삭제하였습니다.');
-                            history.push('/domain');
-                        } else {
-                            notification('warning', response.header.message);
-                        }
-                    },
-                }),
-            );
-        } else {
-            notification('warning', response.header.message);
-        }
-    };*/
-
-    /**
-     * 삭제 버튼 클릭
-     */
-    /*const handleClickDelete = () => {
-        toastr.confirm('정말 삭제하시겠습니까?', {
-            onOk: () => {
-                dispatch(
-                    hasRelationList({
-                        domainId: domain.domainId,
-                        callback: deleteCallback,
-                    }),
-                );
-            },
-            onCancel: () => {},
-        });
-    };*/
-
     const handleClickDelete = () => {
         onDelete(domain);
     };
@@ -314,25 +273,23 @@ const DomainEdit = ({ history, onDelete }) => {
         <div className="d-flex justify-content-center mb-20">
             <Form style={{ width: 605 }}>
                 {/* 사용여부 */}
-                <Form.Row>
-                    <Col xs={3} className="pl-0 pr-0">
-                        <MokaInputLabel
-                            label="사용여부"
-                            as="switch"
-                            inputProps={{ label: '', checked: usedYn === 'Y' && true }}
-                            id="domain-useYN"
-                            name="useYN"
-                            onChange={handleChangeValue}
-                            required
-                        />
-                    </Col>
-                </Form.Row>
+                <MokaInputLabel
+                    label="사용여부"
+                    className="mb-2"
+                    as="switch"
+                    inputProps={{ label: '', checked: usedYn === 'Y' && true }}
+                    id="domain-useYN"
+                    name="useYN"
+                    onChange={handleChangeValue}
+                    required
+                />
 
                 {/* 도메인ID */}
-                <Form.Row>
-                    <Col xs={4} className="pl-0 pr-0">
+                <Form.Row className="mb-2">
+                    <Col xs={4} className="p-0">
                         <MokaInputLabel
                             label="도메인ID"
+                            className="mb-0"
                             placeholder="ID"
                             onChange={handleChangeValue}
                             value={domainId}
@@ -345,37 +302,31 @@ const DomainEdit = ({ history, onDelete }) => {
                 </Form.Row>
 
                 {/* 도메인명 */}
-                <Form.Row>
-                    <Col xs={9} className="pl-0 pr-0">
-                        <MokaInputLabel
-                            label="도메인명"
-                            placeholder="도메인 명을 입력하세요"
-                            onChange={handleChangeValue}
-                            value={domainName}
-                            name="domainName"
-                            isInvalid={domainNameError}
-                            required
-                        />
-                    </Col>
-                </Form.Row>
+                <MokaInputLabel
+                    label="도메인명"
+                    className="mb-2"
+                    placeholder="도메인 명을 입력하세요"
+                    onChange={handleChangeValue}
+                    value={domainName}
+                    name="domainName"
+                    isInvalid={domainNameError}
+                    required
+                />
 
                 {/* 도메인주소 */}
-                <Form.Row>
-                    <Col xs={9} className="pl-0 pr-0">
-                        <MokaInputLabel
-                            label="도메인주소"
-                            placeholder="도메인 주소에서 http(s)://를 빼고 입력하세요"
-                            onChange={handleChangeValue}
-                            value={domainUrl}
-                            name="domainUrl"
-                            isInvalid={domainUrlError}
-                            required
-                        />
-                    </Col>
-                </Form.Row>
+                <MokaInputLabel
+                    label="도메인주소"
+                    className="mb-2"
+                    placeholder="도메인 주소에서 http(s)://를 빼고 입력하세요"
+                    onChange={handleChangeValue}
+                    value={domainUrl}
+                    name="domainUrl"
+                    isInvalid={domainUrlError}
+                    required
+                />
 
                 {/* 플랫폼 */}
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={3} className="p-0">
                         <MokaInputLabel
                             label="플랫폼"
@@ -393,7 +344,7 @@ const DomainEdit = ({ history, onDelete }) => {
                             required
                         />
                     </Col>
-                    <Col xs={1} className="p-0 mr-10">
+                    <Col xs={1} className="p-0">
                         <MokaInput
                             inputProps={{ custom: true, label: 'Mobile', checked: servicePlatform === 'M' && true }}
                             id="domain-mobile"
@@ -407,9 +358,9 @@ const DomainEdit = ({ history, onDelete }) => {
                 </Form.Row>
 
                 {/* 언어 */}
-                <Form.Row>
-                    <Col xs={4} className="pl-0 ml-0 pr-0 pl-0">
-                        <MokaInputLabel as="select" label="언어" className="pt-1 mr-0 pr-0 pl-0" onChange={handleChangeValue} value={lang} name="lang" inputProps={{ ref: elLang }}>
+                <Form.Row className="mb-2">
+                    <Col xs={4} className="p-0">
+                        <MokaInputLabel as="select" label="언어" className="mb-0" onChange={handleChangeValue} value={lang} name="lang" inputProps={{ ref: elLang }}>
                             {langRows &&
                                 langRows.map((row) => (
                                     <option key={row.id} value={row.dtlCd}>
@@ -421,9 +372,18 @@ const DomainEdit = ({ history, onDelete }) => {
                 </Form.Row>
 
                 {/* API 경로 */}
-                <Form.Row>
-                    <Col xs={9} className="pl-0 ml-0 pr-0 pl-0">
-                        <MokaInputLabel label="API 경로" as="select" onChange={handleChangeValue} custom value={apiCodeId} name="apiCodeId" inputProps={{ ref: elApiCodeId }}>
+                <Form.Row className="mb-2">
+                    <Col xs={9} className="p-0">
+                        <MokaInputLabel
+                            label="API 경로"
+                            as="select"
+                            className="mb-0"
+                            onChange={handleChangeValue}
+                            custom
+                            value={apiCodeId}
+                            name="apiCodeId"
+                            inputProps={{ ref: elApiCodeId }}
+                        >
                             {apiRows &&
                                 apiRows.map((row) => (
                                     <option key={row.id} value={row.dtlCd}>
@@ -435,11 +395,17 @@ const DomainEdit = ({ history, onDelete }) => {
                 </Form.Row>
 
                 {/* 메모 */}
-                <Form.Row>
-                    <Col xs={9} className="pl-0 pr-0">
-                        <MokaInputLabel as="textarea" label="매모" inputProps={{ rows: 3 }} onChange={handleChangeValue} value={description} name="description" />
-                    </Col>
-                </Form.Row>
+                <MokaInputLabel
+                    as="textarea"
+                    label="메모"
+                    className="mb-2"
+                    inputClassName="resize-none"
+                    inputProps={{ rows: 3 }}
+                    onChange={handleChangeValue}
+                    value={description}
+                    name="description"
+                />
+
                 {/* 버튼 */}
                 <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
                     <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>

@@ -34,6 +34,6 @@ export const disableStickySidebar = createAction(DISABLE_STICKY_SIDEBAR);
 export const INIT_SIDEBAR_OPEN_ITEM = 'layout/INIT_SIDEBAR_OPEN_ITEM';
 export const CHANGE_SIDEBAR_OPEN_ITEM = 'layout/CHANGE_SIDEBAR_OPEN_ITEM';
 
-/** 사이브다 열린 메뉴 변경 creator */
+/** 사이드바 열린 메뉴 변경 creator */
 export const initSidebarOpenItem = createAction(INIT_SIDEBAR_OPEN_ITEM, (payload) => payload);
 export const changeSidebarOpenItem = createAction(CHANGE_SIDEBAR_OPEN_ITEM, (payload) => payload);

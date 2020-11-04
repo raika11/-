@@ -10,8 +10,8 @@ export const LOGOUT = 'auth/LOGOUT';
 export const logout = createAction(LOGOUT);
 
 // 메뉴 조회
-export const [GET_MENU, GET_MENU_SUCCESS, GET_MENU_FAILURE] = createRequestActionTypes('auth/GET_MENU');
-export const getMenu = createAction(GET_MENU, (payload) => payload);
+export const [GET_USER_MENU_TREE, GET_USER_MENU_TREE_SUCCESS, GET_USER_MENU_TREE_FAILURE] = createRequestActionTypes('auth/GET_USER_MENU_TREE');
+export const getUserMenuTree = createAction(GET_USER_MENU_TREE, (payload) => payload);
 
 // 전체 도메인 조회
 export const [GET_DOMAIN_LIST, GET_DOMAIN_LIST_SUCCESS, GET_DOMAIN_LIST_FAILURE] = createRequestActionTypes('auth/GET_DOMAIN_LIST');

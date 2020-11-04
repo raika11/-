@@ -41,14 +41,14 @@ export function* logout() {
 /**
  * 메뉴 조회
  */
-export function* getMenuSaga() {
-    const ACTION = authAction.GET_MENU;
-    const SUCCESS = authAction.GET_MENU_SUCCESS;
-    const FAILURE = authAction.GET_MENU_FAILURE;
+export function* getUserMenuTree() {
+    const ACTION = authAction.GET_USER_MENU_TREE;
+    const SUCCESS = authAction.GET_USER_MENU_TREE_SUCCESS;
+    const FAILURE = authAction.GET_USER_MENU_TREE_FAILURE;
 
     yield put(startLoading(ACTION));
     try {
-        const response = yield call(api.getMenus);
+        const response = yield call(api.getUserMenuTree);
 
         if (response.data.header.success) {
             yield put({
@@ -137,6 +137,6 @@ export function* getDomainList({ payload: domainId }) {
 export default function* authSaga() {
     yield takeLatest(authAction.LOGIN_JWT, loginJwtSaga);
     yield takeLatest(authAction.LOGOUT, logout);
-    yield takeLatest(authAction.GET_MENU, getMenuSaga);
+    yield takeLatest(authAction.GET_USER_MENU_TREE, getUserMenuTree);
     yield takeLatest(authAction.GET_DOMAIN_LIST, getDomainList);
 }

@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 // routes
 import routes from './index';
-import { getDomainList } from '@store/auth/authAction';
+import { getUserMenuTree, getDomainList } from '@store/auth/authAction';
 
 // component
 import Loader from '@layout/components/Loader';
@@ -14,6 +14,7 @@ const Routes = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(getUserMenuTree());
         // 전체 도메인리스트 조회
         dispatch(getDomainList());
     }, [dispatch]);

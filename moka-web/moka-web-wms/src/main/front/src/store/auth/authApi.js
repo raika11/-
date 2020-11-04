@@ -1,9 +1,5 @@
 import instance from '../commons/axios';
 
-export const menu = () => {
-    return instance.get('/api/auth/menus');
-};
-
 // 로그인
 export const loginJwt = ({ userId, userPassword }) => {
     return instance
@@ -29,8 +25,8 @@ export const logout = () => {
 };
 
 // 메뉴목록 조회 : 권한 내에서 조회
-export const getMenus = () => {
-    return instance.get('/api/auth/menus').catch((err) => {
+export const getUserMenuTree = () => {
+    return instance.get('/api/members/menus').catch((err) => {
         throw err;
     });
 };

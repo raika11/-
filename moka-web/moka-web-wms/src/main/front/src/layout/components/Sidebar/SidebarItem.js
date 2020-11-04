@@ -24,16 +24,16 @@ const SidebarItem = (props) => {
     return (
         <li
             className={clsx('sidebar-item', {
-                active: location.pathname === nodeData.menuPath || null,
+                active: location.pathname === nodeData.menuUrl || null,
             })}
         >
-            <NavLink to={nodeData.menuPath || ''} className="sidebar-link" activeClassName="active">
+            <NavLink to={nodeData.menuUrl || ''} className="sidebar-link" activeClassName="active">
                 {nodeData.iconName && (
                     <span className="align-middle">
                         <MokaIcon iconName={nodeData.iconName} />
                     </span>
                 )}
-                {nodeData.menuDispName}
+                {nodeData.menuDisplayNm}
             </NavLink>
         </li>
     );

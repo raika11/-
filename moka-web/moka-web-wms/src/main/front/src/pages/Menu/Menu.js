@@ -44,7 +44,6 @@ const Menu = () => {
     }, [dispatch]);
 
     const handleRowClicked = (rowData) => {
-        console.log('rowData', rowData);
         setMenuSearchInfo(rowData.menuSeq, rowData.depth, rowData.menuId, rowData.parentMenuId);
     };
 

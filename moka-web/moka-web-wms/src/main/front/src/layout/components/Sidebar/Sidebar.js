@@ -1,10 +1,9 @@
-import React, { Suspense, useEffect, useCallback } from 'react';
+import React, { Suspense, useEffect, useCallback, useState } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-
-import { initSidebarOpenItem, changeSidebarOpenItem } from '@store/layout/layoutAction';
+import { changeSidebarOpenItem, initSidebarOpenItem } from '@store/layout/layoutAction';
 import SidebarCategory from './SidebarCategory';
 import SidebarItem from './SidebarItem';
 
@@ -13,6 +12,7 @@ import SidebarItem from './SidebarItem';
 
 const Sidebar = (props) => {
     const dispatch = useDispatch();
+    const location = useLocation();
     const { menu } = useSelector((store) => ({
         menu: store.auth.menu.children,
     }));
@@ -31,6 +31,7 @@ const Sidebar = (props) => {
                 result[item.menuId] = false;
                 return result;
             }, {});
+            console.log(initValue);
             dispatch(initSidebarOpenItem(initValue));
         }
     }, [dispatch, menu, sidebarOpenItem]);

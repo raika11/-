@@ -113,6 +113,7 @@
         "react-dropzone": "^11.2.0",
         "react-feather": "^2.0.8",
         "react-helmet": "^6.1.0",
+        "react-hook-form": "^6.10.1",
         "react-input-mask": "^2.0.4",
         "react-perfect-scrollbar": "^1.5.8",
         "react-popper": "^2.2.3",

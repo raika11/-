@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import MokaInput from './MokaInput';
+import MokaUncontrolledInput from './MokaUncontrolledInput';
 
 const propTypes = {
     /**
@@ -81,9 +82,9 @@ const propTypes = {
         plaintext: PropTypes.bool,
     }),
     /**
-     * MokaInput의 mask string
+     * uncontrolled가 true이면 MokaInputHookForm 사용한다
      */
-    mask: PropTypes.string,
+    uncontrolled: PropTypes.bool,
 };
 const defaultProps = {
     label: null,
@@ -93,6 +94,7 @@ const defaultProps = {
     required: false,
     inputProps: {},
     isInvalid: false,
+    uncontrolled: false,
 };
 
 /**
@@ -102,8 +104,14 @@ const MokaInputLabel = forwardRef((props, ref) => {
     // label props
     const { label, labelWidth, className, labelClassName, required } = props;
 
-    // input props
-    const { inputClassName, as, type, placeholder, onChange, value, id, name, children, inputProps, mask, isInvalid, disabled } = props;
+    // common props
+    const { inputClassName, as, type, placeholder, onChange, children, inputProps, isInvalid, disabled, id, name } = props;
+
+    // MokaInput props
+    const { value } = props;
+
+    // MokaUncontrolledInput props
+    const { defaultValue, uncontrolled } = props;
 
     return (
         <Form.Group className={clsx('d-flex', 'align-items-center', className)}>
@@ -111,24 +119,42 @@ const MokaInputLabel = forwardRef((props, ref) => {
                 {required && <span className="required-text">*</span>}
                 {label}
             </Form.Label>
-            {as !== 'none' && (
+            {as !== 'none' && !uncontrolled && (
                 <MokaInput
                     ref={ref}
                     as={as}
                     id={id}
                     name={name}
                     value={value}
+                    defaultValue={defaultValue}
                     onChange={onChange}
                     className={inputClassName}
                     isInvalid={isInvalid}
                     disabled={disabled}
-                    mask={mask}
                     placeholder={placeholder}
                     type={type}
                     inputProps={inputProps}
                 >
                     {children}
                 </MokaInput>
+            )}
+            {as !== 'none' && uncontrolled && (
+                <MokaUncontrolledInput
+                    ref={ref}
+                    as={as}
+                    id={id}
+                    name={name}
+                    defaultValue={defaultValue}
+                    onChange={onChange}
+                    className={inputClassName}
+                    isInvalid={isInvalid}
+                    disabled={disabled}
+                    placeholder={placeholder}
+                    type={type}
+                    inputProps={inputProps}
+                >
+                    {children}
+                </MokaUncontrolledInput>
             )}
         </Form.Group>
     );

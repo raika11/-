@@ -15,9 +15,20 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         sort: 'domainId,asc',
     },
-    domain: {},
+    domain: {
+        usedYn: 'N',
+        domainId: null,
+        domainName: '',
+        domainUrl: '',
+        servicePlatform: 'P',
+        lang: null,
+        apiHost: null,
+        apiPath: null,
+        apiCodeId: null,
+        description: '',
+    },
     domainError: {},
-    invalidList: [],
+    invalidList: {},
 };
 
 /**
@@ -100,9 +111,18 @@ export default handleActions(
             const { body } = payload;
 
             return produce(state, (draft) => {
-                draft.domain = initialState.domain;
                 draft.domainError = payload;
-                draft.invalidList = body;
+                const invalidToErrors = body.list.reduce(
+                    (ac, i) => ({
+                        ...ac,
+                        [i.field]: {
+                            type: 'notMatch',
+                            message: i.message,
+                        },
+                    }),
+                    {},
+                );
+                draft.invalidList = invalidToErrors;
             });
         },
         /**

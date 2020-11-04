@@ -1,10 +1,10 @@
 import React, { forwardRef } from 'react';
 import clsx from 'clsx';
-// import InputMask from 'react-input-mask';
 import PropTypes from 'prop-types';
-
+import { Controller, useForm } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
-import { MokaImageInput, MokaAutocomplete, MokaDateTimePicker } from '@components';
+import { MokaAutocomplete } from '@components';
+// import { MokaImageInput, MokaDateTimePicker } from '@components';
 
 const propTypes = {
     /**
@@ -24,9 +24,9 @@ const propTypes = {
      */
     placeholder: PropTypes.string,
     /**
-     * input의 value
+     * input의 defaultValue
      */
-    value: PropTypes.any,
+    defaultValue: PropTypes.any,
     /**
      * 값 valid 체크
      */
@@ -68,10 +68,6 @@ const propTypes = {
          */
         plaintext: PropTypes.bool,
     }),
-    /**
-     * react-input-mask의 mask string
-     */
-    mask: PropTypes.string,
 };
 const defaultProps = {
     as: 'input',
@@ -80,27 +76,27 @@ const defaultProps = {
 };
 
 /**
- * controlled input
+ * react-hook-form의 ref를 받아서 구현되는 uncontrolled input
  */
-const MokaInput = forwardRef((props, ref) => {
-    const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, mask, isInvalid, disabled, ...rest } = props;
+const MokaUncontrolledInput = forwardRef((props, ref) => {
+    const { control } = useForm();
+    const { className, as, type, placeholder, onChange, defaultValue, id, name, children, inputProps, isInvalid, disabled } = props;
 
     // 셀렉트
     if (as === 'select') {
         return (
             <Form.Control
+                {...inputProps}
                 ref={ref}
                 as="select"
-                {...inputProps}
                 id={id}
                 name={name}
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value || undefined}
+                defaultValue={defaultValue}
                 onChange={onChange}
                 custom
-                {...rest}
             >
                 {children}
             </Form.Control>
@@ -110,17 +106,16 @@ const MokaInput = forwardRef((props, ref) => {
     else if (as === 'textarea') {
         return (
             <Form.Control
+                {...inputProps}
                 ref={ref}
                 as="textarea"
-                {...inputProps}
                 id={id}
                 name={name}
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value || ''}
+                defaultValue={defaultValue}
                 onChange={onChange}
-                {...rest}
             />
         );
     }
@@ -128,17 +123,16 @@ const MokaInput = forwardRef((props, ref) => {
     else if (as === 'radio') {
         return (
             <Form.Check
+                {...inputProps}
                 ref={ref}
                 type="radio"
-                {...inputProps}
                 id={id}
                 name={name}
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value || undefined}
+                defaultValue={defaultValue}
                 onChange={onChange}
-                {...rest}
             />
         );
     }
@@ -146,18 +140,17 @@ const MokaInput = forwardRef((props, ref) => {
     else if (as === 'switch') {
         return (
             <Form.Check
+                {...inputProps}
                 ref={ref}
                 type="switch"
-                {...inputProps}
                 id={id}
                 name={name}
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value || undefined}
+                defaultValue={defaultValue}
                 onChange={onChange}
                 label={inputProps.label || ''}
-                {...rest}
             />
         );
     }
@@ -165,87 +158,58 @@ const MokaInput = forwardRef((props, ref) => {
     else if (as === 'checkbox') {
         return (
             <Form.Check
+                {...inputProps}
                 ref={ref}
                 type="checkbox"
-                {...inputProps}
                 id={id}
                 name={name}
                 className={clsx('flex-fill', className)}
                 isInvalid={isInvalid}
                 disabled={disabled}
-                value={value || undefined}
+                defaultValue={defaultValue}
                 onChange={onChange}
-                {...rest}
             />
         );
     }
     // 드롭가능한 이미지 파일
-    else if (as === 'imageFile') {
-        return <MokaImageInput ref={ref} {...inputProps} />;
-    }
+    // else if (as === 'imageFile') {
+    //     return <MokaImageInput ref={ref} {...inputProps} />;
+    // }
     // auto complete
     else if (as === 'autocomplete') {
-        return <MokaAutocomplete ref={ref} name={name} id={id} value={value} onChange={onChange} isInvalid={isInvalid} {...inputProps} />;
+        return (
+            <Controller
+                defaultValue={defaultValue}
+                name={name}
+                control={control}
+                render={(props) => <MokaAutocomplete isInvalid={isInvalid} id={id} onChange={onChange} {...inputProps} {...props} />}
+            />
+        );
     }
     // dateTimePicker
-    else if (as === 'dateTimePicker') {
-        return <MokaDateTimePicker value={value} onChange={onChange} placeholder={placeholder} disabled={disabled} {...inputProps} />;
-    }
+    // else if (as === 'dateTimePicker') {
+    //     return <MokaDateTimePicker onChange={onChange} placeholder={placeholder} disabled={disabled} {...inputProps} />;
+    // }
 
     return (
         <Form.Control
-            ref={ref}
-            as={as}
             {...inputProps}
+            ref={ref}
+            type={type}
+            as={as}
             id={id}
             name={name}
             className={clsx('flex-fill', className)}
             isInvalid={isInvalid}
             disabled={disabled}
-            value={value || ''}
+            defaultValue={defaultValue}
             onChange={onChange}
             placeholder={placeholder}
-            type={type}
-            {...rest}
         />
     );
-
-    // return (
-    //     <InputMask
-    //         mask={mask}
-    //         onChange={onChange || undefined}
-    //         value={value || undefined}
-    //         disabled={disabled}
-    //         // readOnly={inputProps.readOnly}
-    //         // onPaste={inputProps.onPaste}
-    //         // onMouseDown={inputProps.onMouseDown}
-    //         // onFocus={inputProps.onFocus}
-    //         // onBlur={inputProps.onBlur}
-    //         {...inputProps}
-    //     >
-    //         {(maskProps) => (
-    //             <Form.Control
-    //                 ref={ref}
-    //                 as={as}
-    //                 {...inputProps}
-    //                 {...maskProps}
-    //                 id={id}
-    //                 name={name}
-    //                 className={clsx('flex-fill', className)}
-    //                 isInvalid={isInvalid}
-    //                 disabled={disabled}
-    //                 value={value || undefined}
-    //                 onChange={onChange || undefined}
-    //                 placeholder={placeholder}
-    //                 type={type}
-    //                 {...rest}
-    //             />
-    //         )}
-    //     </InputMask>
-    // );
 });
 
-MokaInput.propTypes = propTypes;
-MokaInput.defaultProps = defaultProps;
+MokaUncontrolledInput.propTypes = propTypes;
+MokaUncontrolledInput.defaultProps = defaultProps;
 
-export default MokaInput;
+export default MokaUncontrolledInput;

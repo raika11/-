@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import clsx from 'clsx';
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
@@ -30,7 +30,7 @@ const propTypes = {
     /**
      * value
      */
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Array)]),
+    value: PropTypes.any,
     /**
      * onChange (value, event) => {}
      */
@@ -48,6 +48,10 @@ const propTypes = {
      * className
      */
     className: PropTypes.string,
+    /**
+     * invalid 여부
+     */
+    isInvalid: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -58,14 +62,15 @@ const defaultProps = {
     onChange: undefined,
     searchIcon: false,
     onClickSearchIcon: undefined,
+    isInvalid: false,
 };
 
 /**
  * 자동완성 컴포넌트
  * https://react-select.com/home
  */
-const MokaAutocomplete = (props) => {
-    const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, value, onChange, className, ...rest } = props;
+const MokaAutocomplete = forwardRef((props, ref) => {
+    const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, value, onChange, className, isInvalid, ...rest } = props;
 
     // 검색 아이콘
     const IndicatorsContainer = (props) => {
@@ -93,7 +98,10 @@ const MokaAutocomplete = (props) => {
 
     return (
         <Select
-            className={clsx('react-select-container', 'flex-fill', className)}
+            ref={ref}
+            className={clsx('react-select-container', 'flex-fill', className, {
+                'is-invalid': isInvalid,
+            })}
             classNamePrefix="react-select"
             closeMenuOnSelect={closeMenuOnSelect}
             isSearchable
@@ -108,7 +116,7 @@ const MokaAutocomplete = (props) => {
             {...rest}
         />
     );
-};
+});
 
 MokaAutocomplete.defaultProps = defaultProps;
 MokaAutocomplete.propTypes = propTypes;

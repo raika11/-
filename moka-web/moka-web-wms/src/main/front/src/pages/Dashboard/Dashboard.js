@@ -4,6 +4,7 @@ import produce from 'immer';
 import { Helmet } from 'react-helmet';
 import InputMask from 'react-input-mask';
 import { toastr } from 'react-redux-toastr';
+import { useForm } from 'react-hook-form';
 
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -18,12 +19,12 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 
 import {
     MokaPrependLinkInput,
-    MokaSearchInput,
     MokaDateTimePicker,
     MokaIconTabs,
     MokaCard,
     MokaAlertWithButtons,
     MokaAutocomplete,
+    MokaUncontrolledInput,
     MokaAlert,
     MokaIcon,
     MokaImageInput,
@@ -36,6 +37,7 @@ import { options } from './data';
 import bg from '@assets/images/bg.jpeg';
 
 const Dashboard = () => {
+    const { register } = useForm();
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [checked, setChecked] = useState(true);
@@ -203,7 +205,15 @@ const Dashboard = () => {
                                     <option>옵션1</option>
                                     <option>옵션2</option>
                                 </Form.Control>
-                                <MokaAutocomplete options={options} />
+                                <Form.Label className="text-danger">* react-hook-form 사용한 autocomplete</Form.Label>
+                                {/* <MokaAutocomplete options={options} /> */}
+                                <MokaUncontrolledInput
+                                    name="autocomplete-test"
+                                    defaultValue={null}
+                                    as="autocomplete"
+                                    inputProps={{ options: options, isMulti: true }}
+                                    ref={register}
+                                />
                             </Form.Group>
 
                             {/* checkbox */}

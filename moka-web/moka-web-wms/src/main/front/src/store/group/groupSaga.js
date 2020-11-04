@@ -1,6 +1,7 @@
 import { takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
+import qs from 'qs';
 
 import * as groupAPI from './groupApi';
 import * as groupAction from './groupAction';
@@ -8,7 +9,13 @@ import * as groupAction from './groupAction';
 /**
  * 그룹목록
  */
-const getGroupList = callApiAfterActions(groupAction.GET_GROUP_LIST, groupAPI.getGroupList, (state) => state.grp);
+const getGroupList = callApiAfterActions(groupAction.GET_GROUP_LIST, groupAPI.getGroupList, (state) =>
+{
+    console.log("aaaaaaaaa::" + state.group);
+    return state.group;
+}
+
+);
 
 /**
  * 그룹데이터 조회
@@ -20,14 +27,14 @@ const getGroup = createRequestSaga(groupAction.GET_GROUP, groupAPI.getGroup);
  * @param {string} param0.payload.grpCd 그룹코드
  * @param {func} param0.payload.callback 콜백
  */
-function* duplicateGroupCheck({ payload: { grpCd, callback } }) {
+function* duplicateGroupCheck({ payload: { groupCd, callback } }) {
     const ACTION = groupAction.duplicateGroupCheck;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(groupAPI.duplicateGroupCdCheck, grpCd);
+        const response = yield call(groupAPI.duplicateGroupCdCheck, groupCd);
         callbackData = response.data;
     } catch (e) {
         callbackData = errorResponse(true);
@@ -80,7 +87,7 @@ function* saveGroup({ payload: { type, actions, callback } }) {
             yield put({ type: groupAction.GET_GROUP_LIST });
 
             // auth 도메인 목록 다시 조회
-            //yield put(getGroup(group.grpCd));
+            //yield put(getGroup(group.groupCd));
         } else {
             yield put({
                 type: groupAction.GET_GROUP_FAILURE,
@@ -105,24 +112,24 @@ function* saveGroup({ payload: { type, actions, callback } }) {
 
 /**
  * 관련데이터 확인
- * @param {string} param0.payload.grpCd 그룹코드
+ * @param {string} param0.payload.groupCd 그룹코드
  * @param {func} param0.payload.callback 콜백
  */
-function* hasRelationList({ payload: { grpCd, callback } }) {
+function* hasRelationList({ payload: { groupCd, callback } }) {
     const ACTION = groupAction.HAS_RELATION_LIST;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(groupAPI.hasRelationList, { grpCd });
+        const response = yield call(groupAPI.hasRelationList, { groupCd });
         callbackData = response.data;
     } catch (e) {
         callbackData = errorResponse(e);
     }
 
     if (typeof callback === 'function') {
-        yield call(callback, callbackData, grpCd);
+        yield call(callback, callbackData, groupCd);
     }
 
     yield put(finishLoading(ACTION));
@@ -130,17 +137,17 @@ function* hasRelationList({ payload: { grpCd, callback } }) {
 
 /**
  * 삭제
- * @param {string} param0.payload.grpCd 그룹코드
+ * @param {string} param0.payload.groupCd 그룹코드
  * @param {func} param0.payload.callback 콜백
  */
-function* deleteGroup({ payload: { grpCd, callback } }) {
+function* deleteGroup({ payload: { groupCd, callback } }) {
     const ACTION = groupAction.DELETE_GROUP;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(groupAPI.deleteGroup, { grpCd });
+        const response = yield call(groupAPI.deleteGroup, { groupCd });
         callbackData = response.data;
 
         if (response.data.header.success) {

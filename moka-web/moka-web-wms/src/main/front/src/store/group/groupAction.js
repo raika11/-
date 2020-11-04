@@ -24,7 +24,15 @@ export const clearSearch = createAction(CLEAR_SEARCH);
  */
 export const [GET_GROUP_LIST, GET_GROUP_LIST_SUCCESS, GET_GROUP_LIST_FAILURE] = createRequestActionTypes('group/GET_GROUP_LIST');
 export const [GET_GROUP, GET_GROUP_SUCCESS, GET_GROUP_FAILURE] = createRequestActionTypes('group/GET_GROUP');
-export const getGroupList = createAction(GET_GROUP_LIST, (...actions) => actions);
+export const getGroupList = createAction(GET_GROUP_LIST, (...actions) =>
+{   console.log("액션탓음 ::" + actions);
+    return actions;
+});
+
+{
+    console.log("getGroupList::" + getGroupList);
+}
+
 export const getGroup = createAction(GET_GROUP, (grpCd) => grpCd);
 
 /**

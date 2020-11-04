@@ -4,14 +4,33 @@ import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import clsx from 'clsx';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import GroupEdit from '@pages/Group/GroupEdit';
 import GroupChildGroupMemberEdit from '@pages/Group/relations/GroupChildGroupMemberEdit';
-
+import {clearStore} from "@store/group";
 const MemberGroupList = React.lazy(() => import('./GroupList'));
 
+// relations
+
 const Group = () => {
-    const handleAdd = () => {};
+    // 히스토리셋팅
+    const history = useHistory();
+    const dispatch = useDispatch();
+
+    // 마스터 그리드 클릭시 초기화 이벤트
+    const handleClickAddGroup = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        history.push('/group');
+    };
+
+    React.useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     return (
         <div className="d-flex">
@@ -22,19 +41,21 @@ const Group = () => {
             </Helmet>
             {/*리스트*/}
             <MokaCard
+                title="사용자 그룹관리"
+                width={480}
+                titleClassName="h-100 mb-0 pb-0"
+                headerClassName="d-flex justify-content-between align-item-center"
                 className="mb-0 mr-10"
                 height={CARD_DEFAULT_HEIGHT}
-                headerClassName="d-flex justify-content-between align-item-center"
-                title="사용자 그룹관리"
-                titleClassName="h-100 mb-0 pb-0"
-                width={480}
             >
                 <div className="mb-3 d-flex justify-content-end">
-                    <Button variant="dark" onClick={handleAdd}>
-                        추가
+                    <Button variant="dark" onClick={handleClickAddGroup}>
+                        그룹 추가
                     </Button>
                 </div>
-                <MemberGroupList />
+                <Suspense>
+                    <MemberGroupList />
+                </Suspense>
             </MokaCard>
             <Switch>
                 <Route

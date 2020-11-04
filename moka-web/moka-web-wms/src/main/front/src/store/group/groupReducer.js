@@ -2,6 +2,7 @@ import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from '@store/group/groupAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
+import qs from 'qs';
 
 /**
  * initialState
@@ -13,7 +14,7 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        sort: 'grpCd,asc',
+        //sort: 'groupCd,asc', //그룹코드로 정의되어 잇지만 실제로는 이게 아님.
     },
     group: {},
     groupError: {},
@@ -74,6 +75,7 @@ export default handleActions(
          * 목록
          */
         [act.GET_GROUP_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            console.log("성공듀서탓음::" + state);
             return produce(state, (draft) => {
                 draft.error = initialState.error;
                 draft.list = body.list;
@@ -81,6 +83,8 @@ export default handleActions(
             });
         },
         [act.GET_GROUP_LIST_FAILURE]: (state, { payload }) => {
+            console.log("실패듀서탓음::" + decodeURIComponent(qs.stringify(payload)));
+
             return produce(state, (draft) => {
                 draft.error = payload;
                 draft.list = initialState.list;

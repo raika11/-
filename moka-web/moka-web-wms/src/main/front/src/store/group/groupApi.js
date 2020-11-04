@@ -3,28 +3,30 @@ import instance from '../commons/axios';
 
 // 그룹 목록 조회
 export const getGroupList = ({ search }) => {
+    console.log("그룹api탓음::group::" + qs.stringify(search));
     return instance.get(`/api/groups?${qs.stringify(search)}`).catch((err) => {
+        console.log("err::" + qs.stringify(err));
         throw err;
     });
 };
 
 // 그룹 조회
-export const getGroup = (grpCd) => {
-    return instance.get(`/api/groups/${grpCd}`).catch((err) => {
+export const getGroup = (groupCd) => {
+    return instance.get(`/api/groups/${groupCd}`).catch((err) => {
         throw err;
     });
 };
 
 // 그룹코드 중복 체크
-export const duplicateGroupCdCheck = (grpCd) => {
-    return instance.get(`/api/groups/${grpCd}/exists`).catch((err) => {
+export const duplicateGroupCdCheck = (groupCd) => {
+    return instance.get(`/api/groups/${groupCd}/exists`).catch((err) => {
         throw err;
     });
 };
 
 // 그룹 내 속한 멤버 존재 여부
-export const hasRelationList = (grpCd) => {
-    return instance.get(`/api/groups/${grpCd}/has-members`).catch((err) => {
+export const hasRelationList = (groupCd) => {
+    return instance.get(`/api/groups/${groupCd}/has-members`).catch((err) => {
         throw err;
     });
 };
@@ -38,14 +40,14 @@ export const postGroup = ({ grp }) => {
 
 //  그룹 수정
 export const putGroups = ({ grp }) => {
-    return instance.put(`/api/groups/${grp.grpCd}`, qs.stringify(grp)).catch((err) => {
+    return instance.put(`/api/groups/${grp.groupCd}`, qs.stringify(grp)).catch((err) => {
         throw err;
     });
 };
 
 // 그룹 삭제
-export const deleteGroup = ({ grpCd }) => {
-    return instance.delete(`/api/groups/${grpCd}`).catch((err) => {
+export const deleteGroup = ({ groupCd }) => {
+    return instance.delete(`/api/groups/${groupCd}`).catch((err) => {
         throw err;
     });
 };

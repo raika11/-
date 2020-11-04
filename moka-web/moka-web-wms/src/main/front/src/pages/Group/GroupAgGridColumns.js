@@ -6,31 +6,31 @@ export const localeText = { noRowsToShow: '조회 결과가 없습니다.', load
 export const columnDefs = [
     {
         headerName: '그룹코드',
-        field: 'grpCd',
-        //cellStyle: { textAlign: 'center' },
+        field: 'groupCd',
+        cellStyle: { textAlign: 'center' },
         width: 65,
     },
     {
         headerName: '그룹명',
-        field: 'grpNm',
+        field: 'groupNm',
         // cellClass: 'ag-cell-center',
         //cellStyle: { textAlign: 'center' },
         width: 75,
     },
     {
         headerName: '그룹 한글명',
-        field: 'grpKorNm',
+        field: 'groupKorNm',
         //cellStyle: { textAlign: 'center' },
         width: 95,
     },
     {
         headerName: '담당자',
-        field: 'memNm',
+        field: 'regId',
         width: 60,
     },
     {
         headerName: '등록일시',
-        field: 'regDt',
+        field: 'regDt', // 안나옴.
         width: 135,
     },
 ];

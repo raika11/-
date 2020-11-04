@@ -16,7 +16,7 @@ export default [
     {
         headerName: '페이지URL',
         field: 'pageUrl',
-        width: 263,
+        width: 264,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'pageUrl',
     },

@@ -26,9 +26,11 @@ const DomainEditTest = ({ history, onDelete }) => {
     const [tempData, setTempData] = useState({});
 
     // error
-    const [domainIdError, setDomainIdError] = useState(false);
-    const [domainNameError, setDomainNameError] = useState(false);
-    const [domainUrlError, setDomainUrlError] = useState(false);
+    const [domainError, setDomainError] = useState({
+        domainId: false,
+        domainName: false,
+        domainUrl: false,
+    });
 
     // getter
     const { domain, langRows, apiRows, invalidList } = useSelector(
@@ -88,23 +90,29 @@ const DomainEditTest = ({ history, onDelete }) => {
      * setError로 에러 추가해도 errors 가 변하지 않음 => submit될 때만 errors 변경됨
      */
     useEffect(() => {
-        const iv = Object.keys(errors).reduce(
-            (ac, current) => ({
-                ...ac,
-                [current]: {
-                    ...errors[current],
-                    ref: undefined,
-                },
-            }),
-            {},
-        );
+        const iv = Object.keys(errors).reduce((ac, current) => {
+            ac.push({
+                field: current,
+                reason: errors[current].message,
+            });
+            return ac;
+        }, []);
         dispatch(changeInvalidList(iv));
     }, [dispatch, errors]);
 
     useEffect(() => {
-        setDomainIdError(invalidList.domainId ? true : false);
-        setDomainNameError(invalidList.domainName ? true : false);
-        setDomainUrlError(invalidList.domainUrl ? true : false);
+        // invalidList 처리
+        if (invalidList.length > 0) {
+            setDomainError(
+                invalidList.reduce(
+                    (all, c) => ({
+                        ...all,
+                        [c.field]: true,
+                    }),
+                    {},
+                ),
+            );
+        }
     }, [invalidList]);
 
     /**
@@ -217,10 +225,10 @@ const DomainEditTest = ({ history, onDelete }) => {
                             }}
                             onChange={(e) => {
                                 if (/^\d{4}$/.test(e.target.value)) {
-                                    setDomainIdError(false);
+                                    setDomainError({ ...domainError, domainId: false });
                                 }
                             }}
-                            isInvalid={domainIdError}
+                            isInvalid={domainError.domainId}
                             required
                             uncontrolled
                         />
@@ -236,9 +244,9 @@ const DomainEditTest = ({ history, onDelete }) => {
                     ref={register({
                         required: 'required',
                     })}
-                    isInvalid={domainNameError}
+                    isInvalid={domainError.domainName}
                     onChange={() => {
-                        setDomainNameError(false);
+                        setDomainError({ ...domainError, domainName: false });
                     }}
                     required
                     uncontrolled
@@ -250,12 +258,12 @@ const DomainEditTest = ({ history, onDelete }) => {
                     className="mb-2"
                     placeholder="도메인 주소에서 http(s)://를 빼고 입력하세요"
                     name="domainUrl"
-                    isInvalid={domainUrlError}
+                    isInvalid={domainError.domainUrl}
                     ref={register({
                         required: true,
                     })}
                     onChange={(e) => {
-                        setDomainUrlError(false);
+                        setDomainError({ ...domainError, domainUrl: false });
                     }}
                     required
                     uncontrolled

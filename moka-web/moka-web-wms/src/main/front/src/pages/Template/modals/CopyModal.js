@@ -54,6 +54,7 @@ const CopyModal = (props) => {
 
     return (
         <MokaModal
+            width={600}
             show={show}
             onHide={handleHide}
             title="템플릿 설정복사"

@@ -108,21 +108,9 @@ export default handleActions(
             });
         },
         [act.GET_DOMAIN_FAILURE]: (state, { payload }) => {
-            const { body } = payload;
-
             return produce(state, (draft) => {
                 draft.domainError = payload;
-                const invalidToErrors = body.list.reduce(
-                    (ac, i) => ({
-                        ...ac,
-                        [i.field]: {
-                            type: 'notMatch',
-                            message: i.message,
-                        },
-                    }),
-                    {},
-                );
-                draft.invalidList = invalidToErrors;
+                draft.invalidList = payload.body.list;
             });
         },
         /**

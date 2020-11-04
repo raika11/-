@@ -215,6 +215,11 @@ const DomainEditTest = ({ history, onDelete }) => {
                             inputProps={{
                                 readOnly: domain.domainId && true,
                             }}
+                            onChange={(e) => {
+                                if (/^\d{4}$/.test(e.target.value)) {
+                                    setDomainIdError(false);
+                                }
+                            }}
                             isInvalid={domainIdError}
                             required
                             uncontrolled
@@ -249,6 +254,9 @@ const DomainEditTest = ({ history, onDelete }) => {
                     ref={register({
                         required: true,
                     })}
+                    onChange={(e) => {
+                        setDomainUrlError(false);
+                    }}
                     required
                     uncontrolled
                 />

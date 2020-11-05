@@ -76,12 +76,7 @@ const GroupAgGrid = (props) => {
         <MokaTable
             columnDefs={columnDefs}
             rowData={groupRows}
-            onRowNodeId={(rowData) =>
-            {
-                //console.log("groupCd::" + rowData.groupCd);
-                return parseInt(rowData.groupCd.replace('G',''));
-            }
-            }
+            onRowNodeId={(rowData) => rowData.groupCd}
             agGridHeight={600}
             onRowClicked={handleRowClicked}
             loading={loading}

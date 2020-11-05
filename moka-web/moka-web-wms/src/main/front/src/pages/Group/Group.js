@@ -1,28 +1,26 @@
-import React, { Suspense } from 'react';
-import { Helmet } from 'react-helmet';
+import React, { useState, Suspense } from 'react';
+import Helmet from 'react-helmet';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
-import clsx from 'clsx';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import GroupEdit from '@pages/Group/GroupEdit';
-import GroupChildGroupMemberEdit from '@pages/Group/relations/GroupChildGroupMemberEdit';
-import {clearStore} from "@store/group";
+import { deleteGroup, hasRelationList, clearStore} from "@store/group";
+import toast, {notification, toastr} from "@utils/toastUtil";
+
+
 const MemberGroupList = React.lazy(() => import('./GroupList'));
+const GroupEdit = React.lazy(() => import('./GroupEdit'));
 
 // relations
 
 const Group = () => {
-    // 히스토리셋팅
+// 히스토리셋팅
     const history = useHistory();
     const dispatch = useDispatch();
 
-    // 마스터 그리드 클릭시 초기화 이벤트
+// 마스터 그리드 클릭시 초기화 이벤트
     const handleClickAddGroup = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
         history.push('/group');
     };
 
@@ -31,6 +29,60 @@ const Group = () => {
             dispatch(clearStore());
         };
     }, [dispatch]);
+
+    /**
+     * 도메인 삭제
+     * @param {object} domain domain
+     */
+    const deleteCallback = (group) => {
+        toastr.confirm(`${group.groupCd}_${group.groupNm}을 정말 삭제하시겠습니까?`, {
+            onOk: () => {
+                dispatch(
+                    deleteGroup({
+                        groupCd: group.groupCd,
+                        callback: ({ header }) => {
+                            // 삭제 성공
+                            if (header.success) {
+                                notification('success', header.message);
+                                history.push('/group');
+                            }
+                            // 삭제 실패
+                            else {
+                                notification('warning', header.message);
+                            }
+                        },
+                    }),
+                );
+            },
+            onCancel: () => {},
+        });
+    };
+
+
+    /**
+     * 삭제 버튼 클릭
+     * @param {object} domain domain
+     */
+    const handleClickDelete = (group) => {
+        console.log("aaaaaaaaaaaaaaa:" + group.id);
+
+        const { groupCd } = group;
+        dispatch(
+            hasRelationList({
+                groupCd,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 관련 아이템 없음
+                        if (!body) deleteCallback(group);
+                        // 관련 아이템 있음
+                        else notification('warning', '사용 중인 그룹은 삭제할 수 없습니다');
+                    } else {
+                        notification('warning', header.message);
+                    }
+                },
+            }),
+        );
+    };
 
     return (
         <div className="d-flex">
@@ -59,11 +111,9 @@ const Group = () => {
             </MokaCard>
             <Switch>
                 <Route
-                    path={['/group', '/group/:grpCd']}
-                    exact
-                    render={() => (
+                    path={['/group', '/group/:groupCd']}
+                    exact render={() => (
                         <>
-                            {/* 탭 */}
                             <MokaIconTabs
                                 //expansion={expansionState[2]}
                                 //onExpansion={handleTabExpansion}
@@ -71,8 +121,10 @@ const Group = () => {
                                 height={CARD_DEFAULT_HEIGHT}
                                 tabs={[
                                     <Suspense>
-                                        <GroupEdit />
-                                    </Suspense>,
+                                        <GroupEdit onDelete={handleClickDelete}/>
+                                    </Suspense>
+                                    /*
+                                    ,
                                     <Suspense>
                                         <GroupChildGroupMemberEdit />
                                     </Suspense>,
@@ -81,6 +133,7 @@ const Group = () => {
                                             <MemberGroupList />
                                         </MokaCard>
                                     </Suspense>,
+                                     */
                                 ]}
                                 tabNavWidth={48}
                                 tabNavPosition="right"
@@ -90,10 +143,13 @@ const Group = () => {
                                     { title: '콘텐츠 스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
                                 ]}
                             />
+
                         </>
                     )}
                 />
             </Switch>
+
+
         </div>
     );
 };

@@ -1,18 +1,25 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Form, Button, Row } from 'react-bootstrap';
-import { MokaCard, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
-import { useParams, useHistory, withRouter } from 'react-router-dom';
+import { MokaCard, MokaInput, MokaInputLabel } from '@components';
+import { useParams, useHistory} from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { clearGroup, getGroup, saveGroup, changeGroup, duplicateGroupCheck, changeInvalidList } from '@store/group';
+import { clearGroup, getGroup, saveGroup, changeGroup, duplicateGroupCheck
+    , changeInvalidList, GET_GROUP, SAVE_GROUP, DELETE_GROUP } from '@store/group';
 import { notification } from '@utils/toastUtil';
+import {DELETE_DATASET, GET_DATASET, SAVE_DATASET} from "@store/dataset";
 
 
 /**
  * 그룹 상세/수정/등록
  * @param history rect-router-dom useHisotry
  */
-const GroupEdit = (history, onDelete) => {
-    const { groupId: paramCd } = useParams();
+const GroupEdit = (onDelete) => {
+
+    console.log(typeof onDelete);
+
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const { groupCd: paramCd } = useParams();
 
     // entity
     const [groupCd, setGroupCd] = useState('');
@@ -32,11 +39,10 @@ const GroupEdit = (history, onDelete) => {
         (store) => ({
             group: store.group.group,
             invalidList: store.group.invalidList,
+            loading: store.loading[GET_GROUP] || store.loading[SAVE_GROUP] || store.loading[DELETE_GROUP],
         }),
         shallowEqual,
     );
-
-    const dispatch = useDispatch();
 
     /**
      * 각 항목별 값 변경
@@ -44,12 +50,13 @@ const GroupEdit = (history, onDelete) => {
      */
     const handleChangeValue = ({ target }) => {
         const { name, value } = target;
+
         switch (name) {
             case 'groupCd':
                 const regex = /^[0-9\b]+$/;
                 //const regex = /^[gG]\w{1}u(\d{2}$/;
                 //if ((value === '' || regex.test(value)) &&
-                    if (value.length <= 3) {
+                if (value.length <= 3) {
                     setGroupCdError(false);
                     setGroupCd(value);
                 }
@@ -58,7 +65,7 @@ const GroupEdit = (history, onDelete) => {
                 setGroupNm(value);
                 setGroupNmError(false);
                 break;
-            case 'groupNmKor':
+            case 'groupKorNm':
                 setGroupKorNm(value);
                 setGroupKorNmError(false);
                 break;
@@ -72,40 +79,46 @@ const GroupEdit = (history, onDelete) => {
      * @param domain 도메인 정보를 가진 객체
      * @returns {boolean} 유효성 검사 결과
      */
-    /*
-    const validate = (domain) => {
+
+    const validate = (group) => {
         let isInvalid = false;
         let errList = [];
 
-        // 도메인아이디체크
-        if (!domain.domainId || domain.domainId === '') {
+        // 그룹코드체크
+        if (!group.groupCd || group.groupCd === '') {
             errList.push({
-                field: 'domainId',
-                reason: '',
+                field: 'groupCd',
+                reason: '그룹코드를 입력해주세요.',
             });
             isInvalid = isInvalid | true;
-        } else if (!/^\d{4}$/.test(domain.domainId)) {
+        } else if (group.groupCd !== '') {
+            const regExp = /^\d{2}$/;
+            const grpCd = group.groupCd.substr(1);
+            if(group.groupCd.substr(0, 1) !== "G"
+              || !regExp.test(grpCd))
+            {
+                errList.push({
+                    field: 'groupCd',
+                    reason: '그룹코드는 대문자G 숫자2자리입니다.',
+                });
+                isInvalid = isInvalid | true;
+            }
+        }
+
+        // 그룹 한글 체크
+        if (!/[^\s\t\n]+/.test(group.groupNm)) {
             errList.push({
-                field: 'domainId',
-                reason: '',
+                field: 'groupNm',
+                reason: '그룹명은 한글만 입력해주세요.',
             });
             isInvalid = isInvalid | true;
         }
 
-        // 도메인명 체크
-        if (!/[^\s\t\n]+/.test(domain.domainName)) {
+        // 그룹 한글 명 체크
+        if (!/[^\s\t\n]+/.test(group.groupKorNm)) {
             errList.push({
-                field: 'domainName',
-                reason: '',
-            });
-            isInvalid = isInvalid | true;
-        }
-
-        // 도메인url 체크
-        if (!/[^\s\t\n]+/.test(domain.domainUrl)) {
-            errList.push({
-                field: 'domainUrl',
-                reason: '',
+                field: 'groupKorNm',
+                reason: '그룹 한글명을 입력해주세요.',
             });
             isInvalid = isInvalid | true;
         }
@@ -113,15 +126,12 @@ const GroupEdit = (history, onDelete) => {
         dispatch(changeInvalidList(errList));
         return !isInvalid;
     };
-    */
 
 
      useEffect(() => {
         if (paramCd) {
-            console.log("getGroup::::::::::::");
             dispatch(getGroup(paramCd));
         } else {
-            console.log("clearGroup::::::::::::");
             dispatch(clearGroup());
         }
     }, [dispatch, paramCd]);
@@ -130,14 +140,15 @@ const GroupEdit = (history, onDelete) => {
      * group 수정
      * @param {object} tmp 도메인
      */
-    /*
-    const updateDomain = (tmp) => {
+
+    const updateGroup = (tmp) => {
+
         dispatch(
-            saveDomain({
+            saveGroup({
                 type: 'update',
                 actions: [
-                    changeDomain({
-                        ...domain,
+                    changeGroup({
+                        ...group,
                         ...tmp,
                     }),
                 ],
@@ -152,33 +163,32 @@ const GroupEdit = (history, onDelete) => {
             }),
         );
     };
-    */
+
     /**
      * group 등록
      * @param {object} tmp 도메인
      */
-    /*
-    const insertDomain = (tmp) => {
+    const insertGroup = (tmp) => {
         dispatch(
-            duplicateCheck({
-                domainId,
+            duplicateGroupCheck({
+                groupCd,
                 callback: (response) => {
                     const { body } = response;
 
                     if (!body) {
                         dispatch(
-                            saveDomain({
+                            saveGroup({
                                 type: 'insert',
                                 actions: [
-                                    changeDomain({
-                                        ...domain,
+                                    changeGroup({
+                                        ...group,
                                         ...tmp,
                                     }),
                                 ],
                                 callback: (response) => {
                                     if (response.header.success) {
                                         notification('success', '등록하였습니다.');
-                                        history.push(`/domain/${domainId}`);
+                                        history.push(`/group/${groupCd}`);
                                     } else {
                                         notification('warning', '실패하였습니다.');
                                     }
@@ -192,36 +202,32 @@ const GroupEdit = (history, onDelete) => {
             }),
         );
     };
-    */
+
     /**
      * group 저장 이벤트
      * @param event 이벤트 객체
      */
 
-    const handleClickSave = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+    const handleClickSave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-        /*
+
         const tmp = {
-            domainId,
-            domainName,
-            servicePlatform,
-            lang,
-            domainUrl,
-            useYn: usedYn,
-            apiCodeId,
-            description,
+            groupCd,
+            groupNm,
+            groupKorNm,
         };
 
         if (validate(tmp)) {
-            if (paramId) {
-                updateDomain(tmp);
+            console.log("groupCd::" + groupCd);
+            if (groupCd) {
+                updateGroup(tmp);
             } else {
-                insertDomain(tmp);
+                insertGroup(tmp);
             }
         }
-        */
+
     };
 
     /**
@@ -274,7 +280,7 @@ const GroupEdit = (history, onDelete) => {
                             onChange={handleChangeValue}
                             placeholder="GROUP CODE"
                             disabled={group.groupCd && true}
-                            //isInvalid={groupCdError}
+                            isInvalid={groupCdError}
                         />
                     </Col>
                     <Col xs={6}>* 한번입력하면 변경하실 수 없습니다. 신중히 입력하시기 바랍니다.</Col>
@@ -288,8 +294,7 @@ const GroupEdit = (history, onDelete) => {
                             value={groupNm}
                             onChange={handleChangeValue}
                             placeholder="그룹명을 입력하세요."
-                            disabled={group.groupNm && true}
-                            //isInvalid={groupNmError}
+                            isInvalid={groupNmError}
                         />
                     </Col>
                 </Form.Row>
@@ -302,8 +307,7 @@ const GroupEdit = (history, onDelete) => {
                             value={groupKorNm}
                             onChange={handleChangeValue}
                             placeholder="그룹 한글명을 입력하세요."
-                            disabled={group.groupKorNm && true}
-                            //isInvalid={groupNmError}
+                            isInvalid={groupNmKorError}
                         />
                     </Col>
                 </Form.Row>
@@ -330,12 +334,19 @@ const GroupEdit = (history, onDelete) => {
                     </Col>
                 </Form.Row>
                 <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                    <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
+                    <Button
+                        variant="primary"
+                        className="float-left mr-10 pr-20 pl-20"
+                        onClick={handleClickSave}>
                         저장
                     </Button>
-                    <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleClickDelete}>
-                        삭제
-                    </Button>
+                    { groupCd &&
+                        (<Button
+                            className="float-left mr-0 pr-20 pl-20"
+                            variant="gray150"
+                            onClick={handleClickDelete}>
+                            삭제
+                        </Button>)}
                 </Form.Group>
             </Form>
         </MokaCard>

@@ -3,7 +3,8 @@
         min-height: auto;
 
         &--is-focused,
-        &--is-menu-open {
+        &--is-menu-open,
+        &:hover {
             color: $input-focus-color;
             background-color: $input-focus-bg;
             border-color: $input-focus-border-color;

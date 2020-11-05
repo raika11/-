@@ -22,7 +22,6 @@ const SidebarItem = (props) => {
     const location = useLocation();
     let localPath = '';
     let menuPath = '';
-    let openMenu = false;
     if (location.pathname === '/') {
         localPath = location.pathname;
     } else if (location.pathname.length > 0) {
@@ -34,16 +33,14 @@ const SidebarItem = (props) => {
     } else if (nodeData.menuUrl.length > 0) {
         menuPath = nodeData.menuUrl.split('/')[1];
     }
-    if (localPath === menuPath) {
-        openMenu = true;
-    }
+
     return (
         <li
             className={clsx('sidebar-item', {
-                active: openMenu || null,
+                active: localPath === menuPath || null,
             })}
         >
-            <NavLink to={openMenu ? location.pathname : nodeData.menuUrl} className="sidebar-link" activeClassName="active">
+            <NavLink to={localPath === menuPath ? location.pathname : nodeData.menuUrl} className="sidebar-link" activeClassName="active">
                 {nodeData.iconName && (
                     <span className="align-middle">
                         <MokaIcon iconName={nodeData.iconName} />

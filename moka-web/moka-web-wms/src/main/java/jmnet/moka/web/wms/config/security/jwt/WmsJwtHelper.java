@@ -1,10 +1,5 @@
 package jmnet.moka.web.wms.config.security.jwt;
 
-import java.io.IOException;
-import java.util.Date;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -13,8 +8,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jmnet.moka.core.tps.mvc.user.dto.UserDTO;
-import jmnet.moka.core.tps.mvc.user.service.UserService;
+import java.io.IOException;
+import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
+import jmnet.moka.core.tps.mvc.auth.service.AuthService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 
 public class WmsJwtHelper {
     public static final String SECRET = "wmsjwt";
@@ -23,6 +23,7 @@ public class WmsJwtHelper {
     public static final String HEADER_STRING = "Authorization";
 
     private static ObjectMapper MAPPER = new ObjectMapper();
+
     static {
         MAPPER.setSerializationInclusion(Include.NON_EMPTY);
         MAPPER.setDefaultPropertyInclusion(Include.NON_NULL);
@@ -35,29 +36,32 @@ public class WmsJwtHelper {
         //session id를 넣는다.
         userDetails.setSessionId(sessionId);
         String detailsJson = MAPPER.writeValueAsString(userDetails);
-        String token = JWT.create().withSubject(detailsJson)
+        String token = JWT
+                .create()
+                .withSubject(detailsJson)
                 .withExpiresAt(new Date(System.currentTimeMillis() + WmsJwtHelper.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(WmsJwtHelper.SECRET.getBytes()));
         return token;
     }
 
-    public static Authentication getUsernamePasswordAuthentication(HttpServletRequest request,
-            UserService userService)
+    public static Authentication getUsernamePasswordAuthentication(HttpServletRequest request, AuthService authService)
             throws JsonParseException, JsonMappingException, IOException {
         String token = request.getHeader(WmsJwtHelper.HEADER_STRING);
         if (token != null) {
             // parse the token and validate it (decode)
-            String detailsJson = JWT.require(Algorithm.HMAC512(WmsJwtHelper.SECRET.getBytes()))
-                    .build().verify(token.replace(WmsJwtHelper.TOKEN_PREFIX, "")).getSubject();
+            String detailsJson = JWT
+                    .require(Algorithm.HMAC512(WmsJwtHelper.SECRET.getBytes()))
+                    .build()
+                    .verify(token.replace(WmsJwtHelper.TOKEN_PREFIX, ""))
+                    .getSubject();
 
             if (detailsJson != null) {
                 UserDTO userDetails = MAPPER.readValue(detailsJson, UserDTO.class);
 
                 // jwt token에서 복원한 userDetails의 권한을 설정한다.
-                userDetails.setAuthorities(userService.getAuthorities(userDetails.getPosition()));
+                userDetails.setAuthorities(authService.getAuthorities(userDetails.getPosition()));
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails.getUserId(), null,
-                                userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(userDetails.getUserId(), null, userDetails.getAuthorities());
                 authenticationToken.setDetails(userDetails);
                 return authenticationToken;
             }

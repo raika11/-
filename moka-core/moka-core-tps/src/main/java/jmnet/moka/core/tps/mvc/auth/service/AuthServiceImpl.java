@@ -1,14 +1,14 @@
-package jmnet.moka.core.tps.mvc.user.service;
+package jmnet.moka.core.tps.mvc.auth.service;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.repository.MemberRepository;
-import jmnet.moka.core.tps.mvc.user.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class AuthServiceImpl implements AuthService, UserDetailsService {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        Optional<Member> opt = memberRepository.findByMemberId(username);
+        Optional<MemberInfo> opt = memberRepository.findByMemberId(username);
 
 
         return opt.isPresent() ? UserDTO.create(opt.get(), getAuthorities(opt

@@ -1,10 +1,10 @@
-package jmnet.moka.core.tps.mvc.user.dto;
+package jmnet.moka.core.tps.mvc.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -91,7 +91,7 @@ public class UserDTO implements UserDetails {
 
 
 
-    public static UserDTO create(Member user, List<GrantedAuthority> authorities) {
+    public static UserDTO create(MemberInfo user, List<GrantedAuthority> authorities) {
         return new UserDTO(user.getMemberId(), null, user.getMobilePhone(), user.getDept(), user.getEmail(), user.getPassword(),
                 user.getCompanyPhone(), null, user.getGroup(), null, user.getMemberNm(), user
                 .getStatus()

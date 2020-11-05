@@ -12,8 +12,8 @@ import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.util.ResponseUtil;
-import jmnet.moka.core.tps.mvc.user.dto.UserDTO;
-import jmnet.moka.core.tps.mvc.user.service.UserService;
+import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
+import jmnet.moka.core.tps.mvc.auth.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class WmsJwtAuthorizationFilter extends BasicAuthenticationFilter {
     private static final Logger logger = LoggerFactory.getLogger(WmsJwtAuthorizationFilter.class);
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @Autowired
     private SessionRegistry sessionRegistry;
@@ -81,7 +81,7 @@ public class WmsJwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         // If header is present, try grab user principal from database and perform authorization
-        Authentication jwtAuth = WmsJwtHelper.getUsernamePasswordAuthentication(request, userService);
+        Authentication jwtAuth = WmsJwtHelper.getUsernamePasswordAuthentication(request, authService);
 
         UserDTO details = (UserDTO) jwtAuth.getDetails();
         if (expiredOrDuplicated(request, response, jwtAuth, details.getSessionId())) {

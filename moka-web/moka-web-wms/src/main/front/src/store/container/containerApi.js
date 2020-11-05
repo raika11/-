@@ -41,14 +41,14 @@ export const putContainer = ({ container }) => {
 };
 
 // 관련 아이템 확인
-export const hasRelationList = (containerSeq) => {
+export const hasRelationList = ({ containerSeq }) => {
     return instance.get(`/api/containers/${containerSeq}/has-relations`).catch((err) => {
         throw err;
     });
 };
 
 // 컨테이너 삭제
-export const deleteContainer = (containerSeq) => {
+export const deleteContainer = ({ containerSeq }) => {
     return instance.delete(`/api/containers/${containerSeq}`).catch((err) => {
         throw err;
     });

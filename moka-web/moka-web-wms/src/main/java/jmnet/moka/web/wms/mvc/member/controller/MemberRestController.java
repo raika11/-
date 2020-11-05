@@ -32,6 +32,8 @@ import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
+import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberBadCredentialsException;
+import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -297,7 +299,7 @@ public class MemberRestController {
      */
     @ApiOperation(value = "Member 수정")
     @PutMapping("/{memberId}/change-password")
-    public ResponseEntity<?> putMember(HttpServletRequest request,
+    public ResponseEntity<?> putChangePassword(HttpServletRequest request,
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @RequestParam("password")
             @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}") String password,
@@ -353,16 +355,16 @@ public class MemberRestController {
     }
 
     /**
-     * Member 잠금 해제
+     * Member 잠금 해제 요청
      *
      * @param memberId MemberID
      * @param smsAuth  문자 인증 번호
-     * @return 관련아이템 존재 여부
+     * @return 사용자 정보
      * @throws NoDataException 데이터없음 예외처리
      */
-    @ApiOperation(value = "Member 잠금 해제")
-    @GetMapping("/{memberId}/unlock")
-    public ResponseEntity<?> unlock(
+    @ApiOperation(value = "Member 잠금 해제 요청")
+    @GetMapping("/{memberId}/unlock-request")
+    public ResponseEntity<?> putUnlockRequest(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @RequestParam("smsAuth") @Size(min = 4, max = 6, message = "{tps.member.error.pattern.smsAuth}") String smsAuth)
             throws NoDataException {
@@ -390,15 +392,59 @@ public class MemberRestController {
     }
 
     /**
-     * Member 강제 잠금 해제
+     * Member SMS 문자로 잠금 해제
      *
      * @param memberId MemberID
-     * @return 관련아이템 존재 여부
+     * @param smsAuth  문자 인증 번호
+     * @return 사용자 정보
      * @throws NoDataException 데이터없음 예외처리
      */
     @ApiOperation(value = "Member 잠금 해제")
-    @GetMapping("/{memberId}/force-unlock")
-    public ResponseEntity<?> fouceUnlock(
+    @GetMapping("/{memberId}/unlock")
+    public ResponseEntity<?> putUnlock(
+            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @RequestParam("smsAuth") @Size(min = 4, max = 6, message = "{tps.member.error.pattern.smsAuth}") String smsAuth)
+            throws NoDataException {
+
+        String noDataMsg = messageByLocale.get("tps.common.error.no-data");
+
+        MemberInfo member = memberService
+                .findMemberById(memberId)
+                .orElseThrow(() -> new NoDataException(noDataMsg));
+        if (!member
+                .getSmsAuth()
+                .equals(smsAuth)) {
+            throw new SmsAuthNumberBadCredentialsException(messageByLocale.get("wms.login.error.unlock-sms-unmatched"));
+        }
+
+        if (McpDate.term(member.getSmsExp()) < 0) {
+            throw new SmsAuthNumberExpiredException(messageByLocale.get("wms.login.error.unlock-sms-expired"));
+        }
+
+        member.setErrCnt(0);
+        member.setStatus(MemberStatusCode.Y);
+        member.setLastLoginDt(null);
+        member.setPasswordModDt(null);
+        memberService.updateMember(member);
+
+
+        MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
+
+        // 결과리턴
+        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * Member 상태 활성화
+     *
+     * @param memberId MemberID
+     * @return 사용자 정보
+     * @throws NoDataException 데이터없음 예외처리
+     */
+    @ApiOperation(value = "Member 상태 활성화")
+    @GetMapping("/{memberId}/activation")
+    public ResponseEntity<?> putFouceUnlock(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws NoDataException {
 

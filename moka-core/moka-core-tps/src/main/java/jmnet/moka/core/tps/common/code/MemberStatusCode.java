@@ -4,9 +4,11 @@ package jmnet.moka.core.tps.common.code;
  * 사용자 상태 코드
  */
 public enum MemberStatusCode {
+    N("N", "신규"),
     Y("Y", "활성"),
-    P("P", "패스워드 오류 회수 초과"),
-    N("N", "비활성");
+    P("P", "잠김"),
+    R("R", "잠기 해제 요청"),
+    D("D", "삭제");
 
     private String code;
     private String name;
@@ -22,5 +24,9 @@ public enum MemberStatusCode {
 
     public String getName() {
         return name;
+    }
+
+    public static String getRegexp() {
+        return "[Y|N]{1}$";
     }
 }

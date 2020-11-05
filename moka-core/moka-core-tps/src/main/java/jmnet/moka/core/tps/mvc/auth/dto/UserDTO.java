@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,7 +49,7 @@ public class UserDTO implements UserDetails {
 
     private String sessionId;
 
-    private String status;
+    private MemberStatusCode status;
 
     private Integer errorCnt;
 
@@ -68,7 +69,7 @@ public class UserDTO implements UserDetails {
 
     public UserDTO(String userId, String allowMediaIds, String cellPhoneNo, String dept, String emailaddress, String password, String phoneNo,
             String photo, String position, String userLevel, String userName, String workYn, Collection<? extends GrantedAuthority> authorities,
-            String status, Integer errorCnt, Date expireDt, Date passwordModDt, Date lastLoginDt) {
+            MemberStatusCode status, Integer errorCnt, Date expireDt, Date passwordModDt, Date lastLoginDt) {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
@@ -95,9 +96,7 @@ public class UserDTO implements UserDetails {
         return new UserDTO(user.getMemberId(), null, user.getMobilePhone(), user.getDept(), user.getEmail(), user.getPassword(),
                 user.getCompanyPhone(), null, user.getGroup(), null, user.getMemberNm(), user
                 .getStatus()
-                .getCode(), authorities, user
-                .getStatus()
-                .getCode(), user.getErrCnt(), user.getExpireDt(), user.getPasswordModDt(), user.getLastLoginDt());
+                .getCode(), authorities, user.getStatus(), user.getErrCnt(), user.getExpireDt(), user.getPasswordModDt(), user.getLastLoginDt());
     }
 
     @Override
@@ -256,11 +255,11 @@ public class UserDTO implements UserDetails {
         this.sessionId = sessionId;
     }
 
-    public String getStatus() {
+    public MemberStatusCode getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(MemberStatusCode status) {
         this.status = status;
     }
 

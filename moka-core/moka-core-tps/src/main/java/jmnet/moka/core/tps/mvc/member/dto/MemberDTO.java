@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,8 +52,9 @@ public class MemberDTO {
      * 상태(유효/정지)
      */
     @Builder.Default
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.member.error.pattern.status}")
-    private String status = "N";
+    @Pattern(regexp = "[N|Y|P|R|D]{1}$", message = "{tps.member.error.pattern.status}")
+    private MemberStatusCode status = MemberStatusCode.D;
+
 
     /**
      * 부서

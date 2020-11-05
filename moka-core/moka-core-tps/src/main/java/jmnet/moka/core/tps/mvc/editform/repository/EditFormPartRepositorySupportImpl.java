@@ -4,8 +4,8 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
-import jmnet.moka.core.tps.mvc.editform.entity.EditFormItem;
-import jmnet.moka.core.tps.mvc.editform.entity.QEditFormItem;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
+import jmnet.moka.core.tps.mvc.editform.entity.QEditFormPart;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
@@ -20,25 +20,25 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-10-23 09:38
  */
-public class EditFormItemRepositorySupportImpl extends QuerydslRepositorySupport implements EditFormItemRepositorySupport {
+public class EditFormPartRepositorySupportImpl extends QuerydslRepositorySupport implements EditFormPartRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
-    public EditFormItemRepositorySupportImpl(JPAQueryFactory queryFactory) {
+    public EditFormPartRepositorySupportImpl(JPAQueryFactory queryFactory) {
         super(EditForm.class);
         this.queryFactory = queryFactory;
     }
 
     @Override
-    public Optional<EditFormItem> findEditFormItem(EditFormItem editFormItem) {
-        QEditFormItem qEditFormItem = QEditFormItem.editFormItem;
+    public Optional<EditFormPart> findEditFormPart(EditFormPart editFormPart) {
+        QEditFormPart qEditFormPart = QEditFormPart.editFormPart;
 
-        JPQLQuery<EditFormItem> query = from(qEditFormItem);
-        query.where(qEditFormItem.formSeq.eq(editFormItem.getFormSeq()));
-        query.where(qEditFormItem.itemId
+        JPQLQuery<EditFormPart> query = from(qEditFormPart);
+        query.where(qEditFormPart.formSeq.eq(editFormPart.getFormSeq()));
+        query.where(qEditFormPart.partId
                 .toUpperCase()
-                .contains(editFormItem
-                        .getItemId()
+                .contains(editFormPart
+                        .getPartId()
                         .toUpperCase()));
 
         return Optional.ofNullable(query.fetchFirst());

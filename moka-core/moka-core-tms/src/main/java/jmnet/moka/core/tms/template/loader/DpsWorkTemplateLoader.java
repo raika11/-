@@ -81,10 +81,6 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
             JSONArray jsonArray = (JSONArray) jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
             JSONObject jsonObject = (JSONObject) jsonArray.get(0);
             item = DPS_ITEM_FACTORY.getItem(itemType, jsonObject);
-            // ComponentItem인 경우 COMPONENT_AD를 처리한다
-            if (itemType.equals(MokaConstants.ITEM_COMPONENT)) {
-                setComponentAd(item, jsonResult);
-            }
             String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
             if (itemType.equals(MokaConstants.ITEM_PAGE) && item.getBoolYN(ItemConstants.PAGE_USE_YN)) {

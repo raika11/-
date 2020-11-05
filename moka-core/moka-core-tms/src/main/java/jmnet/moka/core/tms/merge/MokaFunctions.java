@@ -19,17 +19,19 @@ import jmnet.moka.core.tms.merge.item.PageItem;
  * @author kspark
  */
 public class MokaFunctions extends Functions {
-	public String cloc(String url, MergeContext context) {
+	public String cloc(String url, PageItem pageItem, ComponentItem componentItem) {
 		if ( url == null || url.length() == 0) return "";
-		PageItem pageItem = (PageItem)context.get(MokaConstants.MERGE_CONTEXT_PAGE);
-		ComponentItem componentItem = (ComponentItem)context.get(MokaConstants.MERGE_CONTEXT_PAGE);
 		String cloc = "joongang-" +
-				pageItem.getItemId() + "-" +
+				(pageItem==null?"none":pageItem.getItemId()) + "-" +
 				(componentItem==null?"none":componentItem.getItemId());
 		if ( url.contains("?")) {
 			return  url + "&cloc=" + cloc;
 		} else {
 			return  url + "?cloc=" + cloc;
 		}
+	}
+
+	public String cloc(String url, String cloc) {
+		return url.contains("?") ? url+"&cloc="+cloc : url+"?cloc="+cloc;
 	}
 }

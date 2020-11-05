@@ -25,9 +25,9 @@ import org.hibernate.annotations.Nationalized;
 @Getter
 @Setter
 @Builder
-@Table(name = "TB_WMS_EDIT_FORM_ITEM")
+@Table(name = "TB_WMS_EDIT_FORM_PART")
 @Entity
-public class EditFormItem extends BaseAudit {
+public class EditFormPart extends BaseAudit {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,8 +36,8 @@ public class EditFormItem extends BaseAudit {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ITEM_SEQ", nullable = false)
-    private Long itemSeq;
+    @Column(name = "PART_SEQ", nullable = false)
+    private Long partSeq;
 
     /**
      * Form Seq
@@ -55,15 +55,15 @@ public class EditFormItem extends BaseAudit {
     /**
      * Form Item ID
      */
-    @Column(name = "ITEM_ID", nullable = false)
-    private String itemId;
+    @Column(name = "PART_ID", nullable = false)
+    private String partId;
 
     /**
      * Form Item Title
      */
     @Nationalized
-    @Column(name = "ITEM_TITLE", nullable = false)
-    private String itemTitle;
+    @Column(name = "PART_TITLE", nullable = false)
+    private String partTitle;
 
     /**
      * Edit Form Data

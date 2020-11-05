@@ -4,7 +4,6 @@
 package jmnet.moka.web.wms.config.security;
 
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.HttpHelper;
@@ -130,7 +129,7 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
             }
 
             // 4. status 체크
-            if (!McpString.isYes(userDetails.getStatus(), MokaConstants.NO)) {
+            if (MemberStatusCode.Y != userDetails.getStatus()) {
                 throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.InsufficientAuthenticationException"));
             }
 

@@ -30,12 +30,12 @@ export default function* rootSaga() {
         componentSaga(),
         containerSaga(),
         pageSaga(),
+        areaSaga(),
         editFormSaga(),
         relationSaga(),
         historySaga(),
         mergeSaga(),
         menuSaga(),
-        areaSaga(),
         groupSaga(),
     ]);
 }

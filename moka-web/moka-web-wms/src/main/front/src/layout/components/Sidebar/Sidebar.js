@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useCallback, useState } from 'react';
+import React, { Suspense, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
@@ -10,12 +10,19 @@ import SidebarItem from './SidebarItem';
 // .json => api 변경
 //import menu from './menu.json';
 
-const Sidebar = (props) => {
+const Sidebar = () => {
     const dispatch = useDispatch();
     const location = useLocation();
     const { menu } = useSelector((store) => ({
         menu: store.auth.menu.children,
     }));
+
+    let localPath = '';
+    if (location.pathname === '/') {
+        localPath = location.pathname;
+    } else if (location.pathname.length > 0) {
+        localPath = location.pathname.split('/')[1];
+    }
 
     const { sidebarIsOpen, sidebarIsSticky, sidebarOpenItem } = useSelector((state) => ({
         sidebarIsOpen: state.layout.sidebarIsOpen,
@@ -25,16 +32,36 @@ const Sidebar = (props) => {
 
     useEffect(() => {
         // 사이드바 오픈 아이템 초기화
+        const openItem = {};
+        const getOpenMenuParentMenuId = (menu) => {
+            for (let i = 0; i < menu.length; i++) {
+                const menuItem = menu[i];
+
+                if (menuItem.children !== null) {
+                    const isOpen = getOpenMenuParentMenuId(menuItem.children);
+                    if (isOpen) {
+                        openItem[menuItem.parentMenuId] = true;
+                    }
+                } else {
+                    let menuPath = '';
+                    if (menuItem.menuUrl === '/') {
+                        menuPath = menuItem.menuUrl;
+                    } else if (menuItem.menuUrl.length > 0) {
+                        menuPath = menuItem.menuUrl.split('/')[1];
+                    }
+                    if (localPath === menuPath) {
+                        openItem[menuItem.parentMenuId] = true;
+                        return true;
+                    }
+                }
+            }
+        };
+
         if (menu !== undefined && Object.keys(sidebarOpenItem).length < 1) {
-            const expandChildren = menu.filter((menu) => menu.children);
-            const initValue = expandChildren.reduce((result, item, idx, array) => {
-                result[item.menuId] = false;
-                return result;
-            }, {});
-            console.log(initValue);
-            dispatch(initSidebarOpenItem(initValue));
+            getOpenMenuParentMenuId(menu);
+            dispatch(initSidebarOpenItem(openItem));
         }
-    }, [dispatch, menu, sidebarOpenItem]);
+    }, [dispatch, localPath, menu, sidebarOpenItem]);
 
     const changeNodeToggle = useCallback(
         ({ menuId }) => {

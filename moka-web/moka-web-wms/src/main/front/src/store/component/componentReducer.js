@@ -25,7 +25,6 @@ export const initialState = {
         { id: 'componentName', name: '컴포넌트명' },
         { id: 'templateSeq', name: '템플릿ID' },
         { id: 'templateName', name: '템플릿명' },
-        { id: 'templateBody', name: 'TEMS 소스' },
     ],
     lookup: {
         total: 0,

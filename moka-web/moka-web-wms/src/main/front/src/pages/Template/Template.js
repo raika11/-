@@ -25,7 +25,7 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 /**
  * 템플릿 관리
  */
-const Template = () => {
+const Template = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -178,9 +178,7 @@ const Template = () => {
             </MokaCard>
 
             {/* 에디터 */}
-            <Switch>
-                <Route path={['/template', '/template/:templateSeq']} exact render={() => <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />} />
-            </Switch>
+            <Route path={[match.url, `${match.url}/:templateSeq`]} exact render={() => <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />} />
 
             {/* 탭 */}
             <MokaIconTabs

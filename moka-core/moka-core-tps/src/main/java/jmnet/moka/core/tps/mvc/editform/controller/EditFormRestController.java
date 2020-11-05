@@ -28,12 +28,12 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import jmnet.moka.core.tps.mvc.editform.dto.ChannelFormatDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormDTO;
-import jmnet.moka.core.tps.mvc.editform.dto.EditFormItemDTO;
-import jmnet.moka.core.tps.mvc.editform.dto.EditFormItemExtDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartExtDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldGroupDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
-import jmnet.moka.core.tps.mvc.editform.entity.EditFormItem;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
 import jmnet.moka.core.tps.mvc.editform.service.EditFormService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -158,16 +158,16 @@ public class EditFormRestController {
                 .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
 
         EditFormDTO editFormDTO = modelMapper.map(editForm, EditFormDTO.class);
-        List<EditFormItemExtDTO> editFormItemExtDTOS = new ArrayList<>();
-        if (editForm.getEditFormItems() != null) {
+        List<EditFormPartExtDTO> editFormPartExtDTOS = new ArrayList<>();
+        if (editForm.getEditFormParts() != null) {
             editForm
-                    .getEditFormItems()
+                    .getEditFormParts()
                     .forEach(item -> {
                         try {
-                            EditFormItemExtDTO editFormItemExtDTO = modelMapper.map(item, EditFormItemExtDTO.class);
-                            editFormItemExtDTO.setFieldGroups(objectMapper.readValue(item.getFormData(), collectionType));
-                            editFormItemExtDTO.setFormData(null);
-                            editFormItemExtDTOS.add(editFormItemExtDTO);
+                            EditFormPartExtDTO editFormPartExtDTO = modelMapper.map(item, EditFormPartExtDTO.class);
+                            editFormPartExtDTO.setFieldGroups(objectMapper.readValue(item.getFormData(), collectionType));
+                            editFormPartExtDTO.setFormData(null);
+                            editFormPartExtDTOS.add(editFormPartExtDTO);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -175,7 +175,7 @@ public class EditFormRestController {
         }
         ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
         resultMapDTO.addBodyAttribute("editForm", editFormDTO);
-        resultMapDTO.addBodyAttribute("editFormItems", editFormItemExtDTOS);
+        resultMapDTO.addBodyAttribute("editFormParts", editFormPartExtDTOS);
         return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
     }
 
@@ -190,20 +190,20 @@ public class EditFormRestController {
      */
     @ApiOperation(value = "Edit Form 데이터 조회")
     @GetMapping("/{formSeq}/items/{itemSeq}")
-    public ResponseEntity<?> getEditFormItem(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
+    public ResponseEntity<?> getEditFormPart(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @PathVariable("itemSeq") @Min(value = 0, message = "{tps.edit-form.error.min.itemSeq}") Long itemSeq)
             throws NoDataException, IOException {
 
-        EditFormItem editFormItem = editFormService
-                .findEditFormItemBySeq(itemSeq)
+        EditFormPart editFormPart = editFormService
+                .findEditFormPartBySeq(itemSeq)
                 .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
 
-        EditFormItemExtDTO editFormItemExtDTO = modelMapper.map(editFormItem, EditFormItemExtDTO.class);
+        EditFormPartExtDTO editFormPartExtDTO = modelMapper.map(editFormPart, EditFormPartExtDTO.class);
 
-        editFormItemExtDTO.setFieldGroups(objectMapper.readValue(editFormItem.getFormData(), collectionType));
-        editFormItemExtDTO.setFormData(null);
+        editFormPartExtDTO.setFieldGroups(objectMapper.readValue(editFormPart.getFormData(), collectionType));
+        editFormPartExtDTO.setFormData(null);
 
-        ResultDTO<EditFormItemExtDTO> resultDTO = new ResultDTO<>(editFormItemExtDTO);
+        ResultDTO<EditFormPartExtDTO> resultDTO = new ResultDTO<>(editFormPartExtDTO);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 /*
@@ -248,22 +248,22 @@ public class EditFormRestController {
             //  for (MultipartFile file : files) {
             ChannelFormatDTO channelFormatDTO = editFormHelper.mapping(DEFAULT_SITE, file.getOriginalFilename(), file.getBytes());
             EditForm editForm = modelMapper.map(channelFormatDTO, EditForm.class);
-            editForm.setEditFormItems(new HashSet<>());
+            editForm.setEditFormParts(new HashSet<>());
             final EditForm newEditForm = editFormService.insertEditForm(editForm);
 
             channelFormatDTO
                     .getParts()
                     .forEach(partDTO -> {
-                        EditFormItem editFormItem = modelMapper.map(partDTO, EditFormItem.class);
-                        editFormItem.setFormSeq(newEditForm.getFormSeq());
+                        EditFormPart editFormPart = modelMapper.map(partDTO, EditFormPart.class);
+                        editFormPart.setFormSeq(newEditForm.getFormSeq());
                         try {
                             Date reserveDt = McpString.isNotEmpty(partDTO.getReserveDate())
                                     ? McpDate.date("yyyy/MM/dd HH:mm:ss", partDTO.getReserveDate())
                                     : null;
-                            editFormItem.setFormData(objectMapper.writeValueAsString(partDTO.getFieldGroups()));
+                            editFormPart.setFormData(objectMapper.writeValueAsString(partDTO.getFieldGroups()));
                             editForm
-                                    .getEditFormItems()
-                                    .add(editFormService.insertEditFormItem(editFormItem, partDTO.getStatus(), reserveDt));
+                                    .getEditFormParts()
+                                    .add(editFormService.insertEditFormPart(editFormPart, partDTO.getStatus(), reserveDt));
                         } catch (Exception e) {
                             log.error(e.toString());
                         }
@@ -287,13 +287,13 @@ public class EditFormRestController {
      * 편집 폼 등록
      *
      * @param editFormDTO   편집 폼 정보
-     * @param editFormItems 편집 폼 아이템 목록
+     * @param editFormParts 편집 폼 아이템 목록
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
     @ApiOperation(value = "Edit form 저장")
     @PostMapping
-    public ResponseEntity<?> postEditForm(@Valid EditFormDTO editFormDTO, @RequestBody List<@Valid EditFormItemDTO> editFormItems)
+    public ResponseEntity<?> postEditForm(@Valid EditFormDTO editFormDTO, @RequestBody List<@Valid EditFormPartDTO> editFormParts)
             throws MokaException {
 
         try {
@@ -303,28 +303,28 @@ public class EditFormRestController {
                 throw new DuplicateIdException(messageByLocale.get("tps.common.error.duplicated.id"));
             }
             Set<String> itemIdSet = new HashSet<>();
-            List<EditFormItemDTO> editFormItemDTOS = new ArrayList<>();
+            List<EditFormPartDTO> editFormPartDTOS = new ArrayList<>();
             EditForm newEditForm = editFormService.insertEditForm(editForm);
-            if (editFormItems != null && editFormItems.size() > 0) {
-                for (EditFormItemDTO editFormItemDTO : editFormItems) {
-                    if (itemIdSet.contains(editFormItemDTO.getItemId())) {
+            if (editFormParts != null && editFormParts.size() > 0) {
+                for (EditFormPartDTO editFormPartDTO : editFormParts) {
+                    if (itemIdSet.contains(editFormPartDTO.getPartId())) {
                         throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.itemId"));
                     }
-                    itemIdSet.add(editFormItemDTO.getItemId());
+                    itemIdSet.add(editFormPartDTO.getPartId());
                 }
-                for (EditFormItemDTO editFormItemDTO : editFormItems) {
-                    objectMapper.readValue(editFormItemDTO.getFormData(), collectionType);
-                    EditFormItem editFormItem = modelMapper.map(editFormItemDTO, EditFormItem.class);
-                    editFormItem.setFormSeq(newEditForm.getFormSeq());
-                    editFormItem = editFormService.insertEditFormItem(editFormItem, editFormItemDTO.getStatus(), editFormItemDTO.getReserveDt());
-                    editFormItemDTOS.add(modelMapper.map(editFormItem, EditFormItemDTO.class));
+                for (EditFormPartDTO editFormPartDTO : editFormParts) {
+                    objectMapper.readValue(editFormPartDTO.getFormData(), collectionType);
+                    EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
+                    editFormPart.setFormSeq(newEditForm.getFormSeq());
+                    editFormPart = editFormService.insertEditFormPart(editFormPart, editFormPartDTO.getStatus(), editFormPartDTO.getReserveDt());
+                    editFormPartDTOS.add(modelMapper.map(editFormPart, EditFormPartDTO.class));
                 }
             }
 
 
             ResultMapDTO resultMapDTO = new ResultMapDTO();
             resultMapDTO.addBodyAttribute("editForm", editFormDTO);
-            resultMapDTO.addBodyAttribute("editFormItems", editFormItemDTOS);
+            resultMapDTO.addBodyAttribute("editFormParts", editFormPartDTOS);
             return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
 
         } catch (Exception ex) {
@@ -336,28 +336,28 @@ public class EditFormRestController {
      * 편집 폼 아이템 저장
      *
      * @param formSeq         편집 폼 일련번호
-     * @param editFormItemDTO 편집 폼 아이템 정보
+     * @param editFormPartDTO 편집 폼 아이템 정보
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
     @ApiOperation(value = "Edit form item 저장")
     @PostMapping("/{formSeq}/items")
-    public ResponseEntity<?> postEditFormItem(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
-            @Valid EditFormItemDTO editFormItemDTO)
+    public ResponseEntity<?> postEditFormPart(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
+            @Valid EditFormPartDTO editFormPartDTO)
             throws MokaException {
 
         try {
-            objectMapper.readValue(editFormItemDTO.getFormData(), collectionType);
-            EditFormItem editFormItem = modelMapper.map(editFormItemDTO, EditFormItem.class);
+            objectMapper.readValue(editFormPartDTO.getFormData(), collectionType);
+            EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
 
-            if (editFormService.isDuplicatedId(editFormItem)) {
+            if (editFormService.isDuplicatedId(editFormPart)) {
                 throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.itemId"));
             }
-            editFormItem.setFormSeq(editFormItemDTO.getFormSeq());
-            editFormItem = editFormService.insertEditFormItem(editFormItem, editFormItemDTO.getStatus(), editFormItemDTO.getReserveDt());
+            editFormPart.setFormSeq(editFormPartDTO.getFormSeq());
+            editFormPart = editFormService.insertEditFormPart(editFormPart, editFormPartDTO.getStatus(), editFormPartDTO.getReserveDt());
 
-            ResultDTO<EditFormItemDTO> resultItemDTO = new ResultDTO<>(modelMapper.map(editFormItem, EditFormItemDTO.class));
-            return new ResponseEntity<>(resultItemDTO, HttpStatus.OK);
+            ResultDTO<EditFormPartDTO> resultPartDTO = new ResultDTO<>(modelMapper.map(editFormPart, EditFormPartDTO.class));
+            return new ResponseEntity<>(resultPartDTO, HttpStatus.OK);
 
         } catch (Exception ex) {
             throw new MokaException(ex);
@@ -369,14 +369,14 @@ public class EditFormRestController {
      *
      * @param formSeq       편집 폼 일련번호
      * @param editFormDTO   편집 폼 정보
-     * @param editFormItems 편집 폼 아이템 목록
+     * @param editFormParts 편집 폼 아이템 목록
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
     @ApiOperation(value = "Edit form part 수정")
     @PutMapping("/{formSeq}")
     public ResponseEntity<?> putEditForm(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
-            @Valid EditFormDTO editFormDTO, @RequestBody List<@Valid EditFormItemDTO> editFormItems)
+            @Valid EditFormDTO editFormDTO, @RequestBody List<@Valid EditFormPartDTO> editFormParts)
             throws MokaException {
 
         try {
@@ -389,40 +389,40 @@ public class EditFormRestController {
                 throw new DuplicateIdException(messageByLocale.get("tps.common.error.duplicated.id"));
             }
             Set<String> itemIdSet = new HashSet<>();
-            List<EditFormItemDTO> editFormItemDTOS = new ArrayList<>();
+            List<EditFormPartDTO> editFormPartDTOS = new ArrayList<>();
             editForm.setFormSeq(orgEditForm.getFormSeq());
             editForm = editFormService.updateEditForm(editForm);
 
-            if (editFormItems != null && editFormItems.size() > 0) {
-                for (EditFormItemDTO editFormItemDTO : editFormItems) {
-                    if (itemIdSet.contains(editFormItemDTO.getItemId())) {
+            if (editFormParts != null && editFormParts.size() > 0) {
+                for (EditFormPartDTO editFormPartDTO : editFormParts) {
+                    if (itemIdSet.contains(editFormPartDTO.getPartId())) {
                         throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.itemId"));
                     }
-                    itemIdSet.add(editFormItemDTO.getItemId());
+                    itemIdSet.add(editFormPartDTO.getPartId());
                 }
-                for (EditFormItemDTO editFormItemDTO : editFormItems) {
-                    objectMapper.readValue(editFormItemDTO.getFormData(), collectionType);
-                    final EditFormItem editFormItem = modelMapper.map(editFormItemDTO, EditFormItem.class);
-                    editFormItem.setFormSeq(editForm.getFormSeq());
+                for (EditFormPartDTO editFormPartDTO : editFormParts) {
+                    objectMapper.readValue(editFormPartDTO.getFormData(), collectionType);
+                    final EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
+                    editFormPart.setFormSeq(editForm.getFormSeq());
 
-                    EditFormItem orgEditFormItem = editFormService
-                            .findEditFormItem(editFormItem)
+                    EditFormPart orgEditFormPart = editFormService
+                            .findEditFormPart(editFormPart)
                             .orElse(null);
 
-                    if (orgEditFormItem != null) {
-                        editFormItem.setItemSeq(orgEditFormItem.getItemSeq());
-                        editFormService.updateEditFormItem(editFormItem, editFormItemDTO.getStatus(), editFormItemDTO.getReserveDt());
+                    if (orgEditFormPart != null) {
+                        editFormPart.setPartSeq(orgEditFormPart.getPartSeq());
+                        editFormService.updateEditFormPart(editFormPart, editFormPartDTO.getStatus(), editFormPartDTO.getReserveDt());
                     } else {
-                        editFormService.insertEditFormItem(editFormItem, editFormItemDTO.getStatus(), editFormItemDTO.getReserveDt());
+                        editFormService.insertEditFormPart(editFormPart, editFormPartDTO.getStatus(), editFormPartDTO.getReserveDt());
                     }
 
-                    editFormItemDTOS.add(modelMapper.map(editFormItem, EditFormItemDTO.class));
+                    editFormPartDTOS.add(modelMapper.map(editFormPart, EditFormPartDTO.class));
                 }
             }
 
             ResultMapDTO resultMapDTO = new ResultMapDTO();
             resultMapDTO.addBodyAttribute("editForm", editFormDTO);
-            resultMapDTO.addBodyAttribute("editFormItems", editFormItemDTOS);
+            resultMapDTO.addBodyAttribute("editFormParts", editFormPartDTOS);
             return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
 
         } catch (Exception ex) {
@@ -435,32 +435,32 @@ public class EditFormRestController {
      *
      * @param formSeq         편집 폼 일련번호
      * @param itemSeq         아이템 일련번호
-     * @param editFormItemDTO 편집 폼 아이템 정보
+     * @param editFormPartDTO 편집 폼 아이템 정보
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
     @ApiOperation(value = "Edit form item 수정")
     @PostMapping("/{formSeq}/items/{itemSeq}")
-    public ResponseEntity<?> putEditFormItem(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
+    public ResponseEntity<?> putEditFormPart(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @PathVariable("itemSeq") @Min(value = 0, message = "{tps.edit-form.error.min.itemSeq}") Long itemSeq,
-            @Valid EditFormItemDTO editFormItemDTO)
+            @Valid EditFormPartDTO editFormPartDTO)
             throws MokaException {
 
         try {
-            objectMapper.readValue(editFormItemDTO.getFormData(), collectionType);
-            EditFormItem editFormItem = modelMapper.map(editFormItemDTO, EditFormItem.class);
+            objectMapper.readValue(editFormPartDTO.getFormData(), collectionType);
+            EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
 
             editFormService
-                    .findEditFormItem(editFormItem)
+                    .findEditFormPart(editFormPart)
                     .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
 
-            editFormItem.setFormSeq(formSeq);
-            editFormItem.setItemSeq(itemSeq);
+            editFormPart.setFormSeq(formSeq);
+            editFormPart.setPartSeq(itemSeq);
 
-            editFormItem = editFormService.updateEditFormItem(editFormItem, editFormItemDTO.getStatus(), editFormItemDTO.getReserveDt());
+            editFormPart = editFormService.updateEditFormPart(editFormPart, editFormPartDTO.getStatus(), editFormPartDTO.getReserveDt());
 
-            ResultDTO<EditFormItemDTO> resultItemDTO = new ResultDTO<>(modelMapper.map(editFormItem, EditFormItemDTO.class));
-            return new ResponseEntity<>(resultItemDTO, HttpStatus.OK);
+            ResultDTO<EditFormPartDTO> resultPartDTO = new ResultDTO<>(modelMapper.map(editFormPart, EditFormPartDTO.class));
+            return new ResponseEntity<>(resultPartDTO, HttpStatus.OK);
 
         } catch (Exception ex) {
             throw new MokaException(ex);
@@ -529,7 +529,7 @@ public class EditFormRestController {
      */
     @ApiOperation(value = "편집 폼 삭제")
     @DeleteMapping("/{formSeq}/items/{itemSeq}")
-    public ResponseEntity<?> deleteEditFormItem(HttpServletRequest request,
+    public ResponseEntity<?> deleteEditFormPart(HttpServletRequest request,
             @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @PathVariable("itemSeq") @Min(value = 0, message = "{tps.edit-form.error.min.itemSeq}") Long itemSeq)
             throws InvalidDataException, NoDataException, Exception {
@@ -541,7 +541,7 @@ public class EditFormRestController {
         try {
 
             // 삭제
-            if (editFormService.deleteEditFormItem(formSeq, itemSeq) > 0) {
+            if (editFormService.deleteEditFormPart(formSeq, itemSeq) > 0) {
                 success = true;
                 message = messageByLocale.get("tps.edit-form-item.success.delete", request);
             } else {

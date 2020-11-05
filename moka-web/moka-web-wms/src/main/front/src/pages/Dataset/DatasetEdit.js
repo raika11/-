@@ -356,7 +356,16 @@ const DatasetEdit = ({ onDelete }) => {
 
     useEffect(() => {
         if (paramSeq) {
-            dispatch(getDataset(paramSeq));
+            dispatch(
+                getDataset({
+                    datasetSeq: paramSeq,
+                    callback: (response) => {
+                        if (!response.header.success) {
+                            toast.result(response);
+                        }
+                    },
+                }),
+            );
         } else {
             dispatch(clearDataset());
         }

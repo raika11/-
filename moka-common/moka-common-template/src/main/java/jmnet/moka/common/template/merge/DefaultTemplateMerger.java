@@ -113,7 +113,12 @@ public class DefaultTemplateMerger implements TemplateMerger<String> {
 		wrapItemEnd.evaluate(context, writer);
 		return writer.toString();
 	}
-	
+
+	@Override
+	public String preprocessToken(String token, MergeContext context) {
+		return token;
+	}
+
 	protected String makeClassName(String nodeName) {
 		String lower = nodeName.split(":")[1].toLowerCase();
 		String camelPresentation = lower.substring(0, 1).toUpperCase() + lower.substring(1);

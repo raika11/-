@@ -81,6 +81,6 @@ public class EditForm extends BaseAudit implements Serializable {
      */
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "editForm", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    private Set<EditFormItem> editFormItems = new LinkedHashSet<EditFormItem>();
+    private Set<EditFormPart> editFormParts = new LinkedHashSet<EditFormPart>();
 
 }

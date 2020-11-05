@@ -8,7 +8,8 @@ import { getUserMenuTree, getDomainList } from '@store/auth/authAction';
 
 // component
 import Loader from '@layout/components/Loader';
-import { ScrollToTop } from '@components';
+import { MokaLoader, ScrollToTop } from '@components';
+import SpinnerComponent from '@/pages/TestBoard/SpinnerComponent';
 
 const Routes = () => {
     const dispatch = useDispatch();
@@ -21,23 +22,23 @@ const Routes = () => {
 
     return (
         <ScrollToTop>
-            <Suspense fallback={<Loader />}>
-                <Switch>
-                    {routes.map(({ path, layout: Layout, component: Component, name, nonResponsive, ...rest }) => (
-                        <Route
-                            key={name}
-                            path={path}
-                            {...rest}
-                            render={(props) => (
-                                <Layout nonResponsive={nonResponsive}>
+            <Switch>
+                {routes.map(({ path, layout: Layout, component: Component, name, nonResponsive, ...rest }) => (
+                    <Route
+                        key={name}
+                        path={path}
+                        {...rest}
+                        render={(props) => (
+                            <Layout nonResponsive={nonResponsive}>
+                                <Suspense fallback={<MokaLoader clsOpt="black" />}>
                                     <Component {...props} />
-                                </Layout>
-                            )}
-                        />
-                    ))}
-                    <Redirect from="*" to="/404" />
-                </Switch>
-            </Suspense>
+                                </Suspense>
+                            </Layout>
+                        )}
+                    />
+                ))}
+                <Redirect from="*" to="/404" />
+            </Switch>
         </ScrollToTop>
     );
 };

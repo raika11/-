@@ -95,7 +95,7 @@ const TemplateAgGrid = ({ onDelete }) => {
             {/* ag-grid table */}
             {listType === 'list' && (
                 <MokaTable
-                    agGridHeight={501}
+                    agGridHeight={523}
                     columnDefs={columnDefs}
                     rowData={rowData}
                     onRowNodeId={(template) => template.templateSeq}
@@ -111,7 +111,7 @@ const TemplateAgGrid = ({ onDelete }) => {
             )}
             {listType === 'thumbnail' && (
                 <MokaThumbTable
-                    tableHeight={501}
+                    tableHeight={523}
                     rowData={rowData}
                     loading={loading}
                     total={total}

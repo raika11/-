@@ -104,9 +104,6 @@ const MokaTable = (props) => {
     const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection, selected, header } = props;
     const { dragging, onRowDragMove } = props;
 
-    // button props
-    const { onAppendClick, onDeleteClick } = props;
-
     // paging props
     const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
     const [gridApi, setGridApi] = useState(null);
@@ -143,27 +140,20 @@ const MokaTable = (props) => {
             if (!preventRowClickCell.includes(params.colDef.field)) {
                 onRowClicked(params.node.data);
             }
-            if (params.colDef.field === 'append') {
-                if (onAppendClick) onAppendClick(params.node.data);
-            }
-
-            if (params.colDef.field === 'delete') {
-                if (onDeleteClick) onDeleteClick(params.node.data);
-            }
         },
-        [onAppendClick, onDeleteClick, onRowClicked, preventRowClickCell],
+        [onRowClicked, preventRowClickCell],
     );
 
     const handleRowDragMove = (event) => {
-        var movingNode = event.node;
-        var overNode = event.overNode;
-        var rowNeedsToMove = movingNode !== overNode;
+        const movingNode = event.node;
+        const overNode = event.overNode;
+        const rowNeedsToMove = movingNode !== overNode;
         if (rowNeedsToMove) {
-            var movingData = movingNode.data;
-            var overData = overNode.data;
-            var fromIndex = rowData.indexOf(movingData);
-            var toIndex = rowData.indexOf(overData);
-            var newStore = rowData.slice();
+            const movingData = movingNode.data;
+            const overData = overNode.data;
+            const fromIndex = rowData.indexOf(movingData);
+            const toIndex = rowData.indexOf(overData);
+            const newStore = rowData.slice();
             moveInArray(newStore, fromIndex, toIndex);
             // rowData = newStore;
             gridApi.setRowData(newStore);
@@ -171,7 +161,7 @@ const MokaTable = (props) => {
             onRowDragMove(event, newStore);
         }
         function moveInArray(arr, fromIndex, toIndex) {
-            var element = arr[fromIndex];
+            const element = arr[fromIndex];
             arr.splice(fromIndex, 1);
             arr.splice(toIndex, 0, element);
         }
@@ -233,11 +223,7 @@ const MokaTable = (props) => {
                     onRowDragMove={handleRowDragMove}
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
-                    defaultColDef={
-                        {
-                            // tooltipComponent: 'mokaTooltip',
-                        }
-                    }
+                    // defaultColDef={{ tooltipComponent: 'mokaTooltip' }}
                     frameworkComponents={{ mokaTooltip: Tooltip }}
                     suppressRowClickSelection
                     getRowClass={getRowClass}

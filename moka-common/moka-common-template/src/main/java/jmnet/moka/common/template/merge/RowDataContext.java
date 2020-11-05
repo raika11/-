@@ -20,8 +20,8 @@ import jmnet.moka.common.JSONResult;
  */
 public class RowDataContext extends MergeContext {
 
-	public RowDataContext() {
-		super(false); //LoopContext는 root가 될 수 없다.
+	public RowDataContext(Functions functions) {
+		super(false, functions); //LoopContext는 root가 될 수 없다.
 	}
 	
     @SuppressWarnings("rawtypes")

@@ -24,6 +24,8 @@ public enum UnauthrizedErrorCode {
     EXPIRE_DATE(105, "EXPIRE_DATE"),
     LONG_TERM(106, "LONG_TERM"),
     PASSWORD_UNCHANGE(107, "PASSWORD_UNCHANGE"),
+    SMS_UNMATCHED(108, "SMS_UNMATCHED"),
+    SMS_EXPIRED(108, "SMS_EXPIRED"),
     PASSWORD_NOTI(999, "PASSWORD_NOTI");
 
     private final Integer code;

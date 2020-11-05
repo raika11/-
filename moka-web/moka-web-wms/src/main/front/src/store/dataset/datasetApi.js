@@ -10,7 +10,7 @@ export const getDatasetList = ({ search }) => {
 };
 
 // 데이타셋 조회
-export const getDataset = (datasetSeq) => {
+export const getDataset = ({ datasetSeq }) => {
     return instance.get(`/api/datasets/${datasetSeq}`).catch((err) => {
         throw err;
     });

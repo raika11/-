@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.menu.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuDTO;
@@ -62,28 +61,53 @@ public class MenuServiceImpl implements MenuService {
         return menuList.isEmpty() ? null : makeTree(modelMapper.map(menuList, MenuDTO.TYPE));
     }
 
+    /**
+     * 메뉴 목록을 Tree 자료구조로 생성한다.
+     *
+     * @param menuList 메뉴 목록
+     * @return 메뉴 Tree
+     */
     private MenuNode makeTree(List<MenuDTO> menuList) {
+        int maxDepth = menuList
+                .stream()
+                .max((o1, o2) -> o1.getDepth() - o2.getDepth())
+                .get()
+                .getDepth();
         MenuNode rootNode = new MenuNode();
         rootNode.setSeq((long) 0);
         rootNode.setMenuId(ROOT_MENU_ID);
         rootNode.setMenuNm("ROOT");
 
         for (MenuDTO menu : menuList) {
-            if (McpString.isEmpty(menu.getParentMenuId())) {
+            if (MenuService.ROOT_MENU_ID.equals(menu.getParentMenuId())) {
                 MenuNode menuNode = new MenuNode(menu);
-                rootNode.addNode(menuNode);
-                // rootNode.setMatch(getMatch(menu, search));
-            } else {
-                MenuNode parentNode = rootNode.findNode(menu.getParentMenuId(), rootNode);
-                if (parentNode != null) {
-                    MenuNode menuNode = new MenuNode(menu);
-                    // menuNode.setMatch(getMatch(menu, search));
-                    parentNode.addNode(menuNode);
-                }
+                rootNode.addNode(traceMenuNode(menuNode, menuList, maxDepth));
             }
         }
         rootNode.sort();
         return rootNode;
+    }
+
+    /**
+     * 전 메뉴를 순회하며 자신의 하위 메뉴를 찾는다.
+     *
+     * @param menuNode 메뉴 노드
+     * @param menuList 메뉴 목록
+     * @param maxDepth 전체 메뉴의 최대 깊이
+     * @return MenuNode
+     */
+    private MenuNode traceMenuNode(MenuNode menuNode, List<MenuDTO> menuList, int maxDepth) {
+        if (menuNode.getDepth() < maxDepth) {
+            for (MenuDTO menu : menuList) {
+                if (menu
+                        .getParentMenuId()
+                        .equals(menuNode.getMenuId())) {
+                    MenuNode child = new MenuNode(menu);
+                    menuNode.addNode(traceMenuNode(child, menuList, maxDepth));
+                }
+            }
+        }
+        return menuNode;
     }
 
     private Sort orderByIdAsc() {

@@ -21,6 +21,7 @@ import history from '@store/history/historyReducer';
 import merge from '@store/merge/mergeReducer';
 import menu from '@store/menu/menuReducer';
 import group from '@store/group/groupReducer';
+import area from '@store/area/areaReducer';
 
 export default combineReducers({
     toastr,
@@ -38,6 +39,7 @@ export default combineReducers({
     container,
     page,
     pageHistory,
+    area,
     editForm,
     relation,
     history,

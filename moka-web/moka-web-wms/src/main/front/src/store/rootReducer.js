@@ -20,6 +20,7 @@ import relation from '@store/relation/relationReducer';
 import history from '@store/history/historyReducer';
 import merge from '@store/merge/mergeReducer';
 import menu from '@store/menu/menuReducer';
+import area from '@store/area/areaReducer';
 
 export default combineReducers({
     toastr,
@@ -42,4 +43,5 @@ export default combineReducers({
     history,
     merge,
     menu,
+    area,
 });

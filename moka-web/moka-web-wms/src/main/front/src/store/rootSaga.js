@@ -15,6 +15,7 @@ import relationSaga from '@store/relation/relationSaga';
 import historySaga from '@store/history/historySaga';
 import menuSaga from '@store/menu/menuSaga';
 import mergeSaga from '@store/merge/mergeSaga';
+import areaSaga from '@store/area/areaSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -32,6 +33,7 @@ export default function* rootSaga() {
         relationSaga(),
         historySaga(),
         mergeSaga(),
-        menuSaga()
+        menuSaga(),
+        areaSaga(),
     ]);
 }

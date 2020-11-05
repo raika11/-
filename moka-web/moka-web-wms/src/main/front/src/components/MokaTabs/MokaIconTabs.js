@@ -94,7 +94,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
      * 버튼 선택 콜백
      * @param {any} eventKey 이벤트키
      */
-    const handleSelect = (eventKey) => {
+    const handleSelect = (eventKey, e) => {
         setActiveKey(eventKey);
         if (foldable) {
             if (!isExpand) {
@@ -113,6 +113,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
         if (onSelectNav) {
             onSelectNav(Number(eventKey));
         }
+        e.currentTarget.blur();
     };
 
     const tabNavPlacement = clsx({

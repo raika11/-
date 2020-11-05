@@ -56,7 +56,7 @@ const Sidebar = () => {
             }
         };
 
-        if (menu !== undefined && Object.keys(sidebarOpenItem).length < 1) {
+        if (menu !== undefined && Object.keys(sidebarOpenItem).length < 1 && localPath !== '/') {
             getOpenMenuParentMenuId(menu);
             console.log(openItem);
             dispatch(initSidebarOpenItem(openItem));

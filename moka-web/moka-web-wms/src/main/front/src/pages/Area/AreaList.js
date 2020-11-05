@@ -1,16 +1,9 @@
 import React from 'react';
-import AgGrid1Dpeth from './AreaAgGrid1Depth';
-import AgGrid2Depth from './AreaAgGrid2Depth';
-import AgGrid3Depth from './AreaAgGrid3Depth';
+import { Route } from 'react-router-dom';
+import Depth1 from './AreaAgGridDepth1';
 
-const AreaList = () => {
-    return (
-        <React.Fragment>
-            <AgGrid1Dpeth />
-            <AgGrid2Depth />
-            <AgGrid3Depth />
-        </React.Fragment>
-    );
+const AreaList = ({ match }) => {
+    return <Route path={[`${match.url}/:areaSeq`, match.url]} strict component={Depth1} />;
 };
 
 export default AreaList;

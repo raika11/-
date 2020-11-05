@@ -8,7 +8,9 @@ import * as api from './areaApi';
 /**
  * 편집영역 목록 조회
  */
-const getAreaList = callApiAfterActions(act.GET_AREA_LIST, api.getAreaList, (store) => store.area);
+const getAreaListDepth1 = callApiAfterActions(act.GET_AREA_LIST_DEPTH1, api.getAreaList, (store) => store.area.depth1);
+const getAreaListDepth2 = callApiAfterActions(act.GET_AREA_LIST_DEPTH2, api.getAreaList, (store) => store.area.depth2);
+const getAreaListDepth3 = callApiAfterActions(act.GET_AREA_LIST_DEPTH3, api.getAreaList, (store) => store.area.depth3);
 
 /**
  * 편집영역 조회
@@ -57,7 +59,7 @@ export function* saveArea({ payload: { actions, callback } }) {
             });
 
             // 목록 다시 검색
-            yield put({ type: act.GET_AREA_LIST });
+            // yield put({ type: act.GET_AREA_LIST });
         } else {
             yield put({
                 type: act.GET_AREA_FAILURE,
@@ -115,7 +117,9 @@ export function* deleteArea({ payload: { areaSeq, callback } }) {
 // const hasRelationList = createRequestSaga(act.HAS_RELATION_LIST, api.hasRelationList, true);
 
 export default function* saga() {
-    yield takeLatest(act.GET_AREA_LIST, getAreaList);
+    yield takeLatest(act.GET_AREA_LIST_DEPTH1, getAreaListDepth1);
+    yield takeLatest(act.GET_AREA_LIST_DEPTH2, getAreaListDepth2);
+    yield takeLatest(act.GET_AREA_LIST_DEPTH3, getAreaListDepth3);
     yield takeLatest(act.GET_AREA, getArea);
     yield takeLatest(act.SAVE_AREA, saveArea);
 }

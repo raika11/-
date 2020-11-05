@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MokaCard } from '@components';
 
-import AreaForm1Depth from './components/AreaForm1Depth';
+import AreaForm1Depth from './components/AreaForm1D';
 import AreaForm2Depth from './components/AreaForm2Depth';
 import AreaForm3Depth from './components/AreaForm3Depth';
 import { PageListModal } from '@pages/commons';

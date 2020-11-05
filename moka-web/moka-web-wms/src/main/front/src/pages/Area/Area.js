@@ -7,7 +7,7 @@ const AreaEdit = React.lazy(() => import('./AreaEdit'));
 /**
  * 편집영역관리
  */
-const Area = () => {
+const Area = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
@@ -18,7 +18,7 @@ const Area = () => {
 
             {/* 편집영역 리스트 */}
             <Suspense>
-                <AreaList />
+                <AreaList match={match} />
             </Suspense>
 
             {/* 편집영역 등록/수정 */}

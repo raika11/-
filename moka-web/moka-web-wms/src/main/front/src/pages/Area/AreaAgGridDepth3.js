@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
 
-const AreaAgGrid3Depth = () => {
+const AreaAgGridDepth3 = () => {
     return (
         <MokaCard header={false} width={280} className="mr-gutter">
             <Form.Row className="mb-2">
@@ -14,9 +14,9 @@ const AreaAgGrid3Depth = () => {
                 </Col>
             </Form.Row>
 
-            <MokaTable agGridHeight={738} rowData={[]} header={false} paging={false} dragging={false} />
+            <MokaTable agGridHeight={738} rowData={[]} header={false} paging={false} dragging={false} onRowNodeId={(data) => data.areaSeq} />
         </MokaCard>
     );
 };
 
-export default AreaAgGrid3Depth;
+export default AreaAgGridDepth3;

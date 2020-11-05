@@ -7,16 +7,38 @@ import { PAGESIZE_OPTIONS } from '@/constants';
  * initialState
  */
 export const initialState = {
-    total: 0,
-    error: null,
-    list: [],
-    search: {
-        page: 0,
-        size: PAGESIZE_OPTIONS[0],
-        domainId: null,
-        depth: 1,
-        searchType: 'all',
-        keyword: '',
+    depth1: {
+        list: [],
+        total: 0,
+        error: null,
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            domainId: null,
+            depth: 1,
+        },
+    },
+    depth2: {
+        list: [],
+        total: 0,
+        error: null,
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            domainId: null,
+            depth: 2,
+        },
+    },
+    depth3: {
+        list: [],
+        total: 0,
+        error: null,
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            domainId: null,
+            depth: 3,
+        },
     },
     area: {
         areaComps: [],
@@ -41,9 +63,19 @@ export default handleActions(
         /**
          * 검색조건 변경
          */
-        [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CHANGE_SEARCH_OPTION_DEPTH1]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.search = payload;
+                draft.depth1.search = payload;
+            });
+        },
+        [act.CHANGE_SEARCH_OPTION_DEPTH2]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.depth2.search = payload;
+            });
+        },
+        [act.CHANGE_SEARCH_OPTION_DEPTH3]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.depth3.search = payload;
             });
         },
         /**
@@ -57,33 +89,49 @@ export default handleActions(
                 draft.invalidList = initialState.invalidList;
             });
         },
-        [act.CLEAR_LIST]: (state) => {
-            return produce(state, (draft) => {
-                draft.list = initialState.list;
-                draft.total = initialState.total;
-                draft.error = initialState.error;
-            });
-        },
-        [act.CLEAR_SEARCH]: (state) => {
-            return produce(state, (draft) => {
-                draft.search = initialState.search;
-            });
-        },
         /**
          * 데이터 조회
          */
-        [act.GET_AREA_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_AREA_LIST_DEPTH1_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.list = body.list;
-                draft.total = body.totalCnt;
-                draft.error = initialState.error;
+                draft.depth1.list = body.list;
+                draft.depth1.total = body.total;
+                draft.depth1.error = initialState.depth1.error;
             });
         },
-        [act.GET_AREA_LIST_FAILURE]: (state, { payload }) => {
+        [act.GET_AREA_LIST_DEPTH1_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.list = initialState.list;
-                draft.total = initialState.total;
-                draft.error = payload;
+                draft.depth1.list = initialState.depth1.list;
+                draft.depth1.total = initialState.depth1.total;
+                draft.depth1.error = payload;
+            });
+        },
+        [act.GET_AREA_LIST_DEPTH2_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.depth2.list = body.list;
+                draft.depth2.total = body.total;
+                draft.depth2.error = initialState.depth2.error;
+            });
+        },
+        [act.GET_AREA_LIST_DEPTH2_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.depth2.list = initialState.depth2.list;
+                draft.depth2.total = initialState.depth2.total;
+                draft.depth2.error = payload;
+            });
+        },
+        [act.GET_AREA_LIST_DEPTH3_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.depth3.list = body.list;
+                draft.depth3.total = body.total;
+                draft.depth3.error = initialState.depth3.error;
+            });
+        },
+        [act.GET_AREA_LIST_DEPTH3_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.depth3.list = initialState.depth3.list;
+                draft.depth3.total = initialState.depth3.total;
+                draft.depth3.error = payload;
             });
         },
         [act.GET_AREA_SUCCESS]: (state, { payload: { body } }) => {

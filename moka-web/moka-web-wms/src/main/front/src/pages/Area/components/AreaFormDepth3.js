@@ -7,7 +7,7 @@ import Card from 'react-bootstrap/Card';
 import { ITEM_CP, ITEM_CT } from '@/constants';
 import { MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
 
-const AreaForm2Depth = (props) => {
+const AreaFormDepth3 = (props) => {
     const { onShowModal, page } = props;
 
     const { domainList } = useSelector((store) => ({
@@ -127,4 +127,4 @@ const AreaForm2Depth = (props) => {
     );
 };
 
-export default AreaForm2Depth;
+export default AreaFormDepth3;

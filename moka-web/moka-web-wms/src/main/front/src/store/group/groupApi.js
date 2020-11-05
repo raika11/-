@@ -32,15 +32,16 @@ export const hasRelationList = (groupCd) => {
 };
 
 // 그룹 등록
-export const postGroup = ({ grp }) => {
-    return instance.post('/api/groups', qs.stringify(grp)).catch((err) => {
+export const postGroup = ({ group }) => {
+    console.log("ppppppppppppppppppppppppost" + qs.stringify(group));
+    return instance.post('/api/groups', qs.stringify(group)).catch((err) => {
         throw err;
     });
 };
 
 //  그룹 수정
-export const putGroups = ({ grp }) => {
-    return instance.put(`/api/groups/${grp.groupCd}`, qs.stringify(grp)).catch((err) => {
+export const putGroups = ({ group }) => {
+    return instance.put(`/api/groups/${group.groupCd}`, qs.stringify(group)).catch((err) => {
         throw err;
     });
 };

@@ -158,11 +158,11 @@ const ComponentEdit = ({ onDelete }) => {
             <div className="custom-scroll component-padding-box pb-10" style={{ height: 563 }}>
                 <DetailRelationForm component={temp} setComponent={setTemp} inputTag={inputTag} invalidList={invalidList} />
                 <hr className="divider" />
-                <DetailPeriodForm component={temp} setComponent={setTemp} available={component.dataType !== 'NONE'} />
+                <DetailPeriodForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />
                 <hr className="divider" />
-                <DetailSchForm component={temp} setComponent={setTemp} available={component.dataType !== 'NONE'} />
+                <DetailSchForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />
                 <hr className="divider" />
-                <DetailPagingForm component={temp} setComponent={setTemp} available={component.dataType !== 'NONE'} />
+                <DetailPagingForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />
             </div>
         </MokaCard>
     );

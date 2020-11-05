@@ -37,12 +37,13 @@ import { options } from './data';
 import bg from '@assets/images/bg.jpeg';
 
 const Dashboard = () => {
-    const { register, handleSubmit, errors } = useForm();
+    const { register, handleSubmit, errors, control } = useForm();
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [checked, setChecked] = useState(true);
     const [multiSelectValue, setMultiSelectValue] = useState([]);
     const [serror, setSerror] = useState(false);
+    const [hookData, setHookData] = useState({});
 
     // modal test
     const [showD, setShowD] = useState(false);
@@ -164,11 +165,7 @@ const Dashboard = () => {
                 <MokaCardTabs
                     className="mr-gutter"
                     tabs={[
-                        <Form
-                            onSubmit={handleSubmit((data) => {
-                                console.log(data);
-                            })}
-                        >
+                        <Form>
                             {/* Form 예제 */}
                             {/* text input */}
                             <Form.Group>
@@ -215,19 +212,6 @@ const Dashboard = () => {
                                     <option>옵션2</option>
                                 </Form.Control>
                                 {/* <MokaAutocomplete options={options} /> */}
-                                <Form.Label className="text-danger">* react-hook-form 사용한 autocomplete</Form.Label>
-                                <MokaUncontrolledInput
-                                    name="autocomplete-test"
-                                    defaultValue={null}
-                                    as="autocomplete"
-                                    inputProps={{ options: options }}
-                                    onChange={(value) => {
-                                        setSerror(false);
-                                    }}
-                                    isInvalid={serror}
-                                    rules={{ required: true }}
-                                />
-                                <Button type="submit">valid</Button>
                             </Form.Group>
 
                             {/* checkbox */}
@@ -336,6 +320,26 @@ const Dashboard = () => {
                     tabs={[
                         <MokaCard titleClassName="h-100 mb-0" title="Modal 예제">
                             <div className="mb-3">
+                                <Form onSubmit={handleSubmit((data) => setHookData(data))} className="mb-3">
+                                    <Form.Control name="test-text" ref={register} />
+                                    <Form.Label className="text-danger">* react-hook-form 사용한 autocomplete</Form.Label>
+                                    <MokaUncontrolledInput
+                                        name="autocomplete-test"
+                                        defaultValue={null}
+                                        as="autocomplete"
+                                        inputProps={{ options: options }}
+                                        onChange={() => {
+                                            setSerror(false);
+                                        }}
+                                        isInvalid={serror}
+                                        rules={{ required: true }}
+                                        control={control}
+                                        className="mb-2"
+                                    />
+                                    <Button type="submit">submit</Button>
+                                    <div className="my-2">{JSON.stringify(hookData)}</div>
+                                </Form>
+
                                 <Button className="mr-2" onClick={() => setShowD(true)}>
                                     드래그 모달
                                 </Button>

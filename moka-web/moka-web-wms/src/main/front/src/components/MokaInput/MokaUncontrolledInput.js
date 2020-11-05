@@ -1,10 +1,9 @@
 import React, { forwardRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import { MokaAutocomplete } from '@components';
-// import { MokaImageInput, MokaDateTimePicker } from '@components';
 
 const propTypes = {
     /**
@@ -14,7 +13,7 @@ const propTypes = {
     /**
      * input element의 타입(기본 input)
      */
-    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'autocomplete', 'dateTimePicker']),
+    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'autocomplete']),
     /**
      * input의 type
      */
@@ -85,8 +84,7 @@ const defaultProps = {
  * react-hook-form의 ref를 받아서 구현되는 uncontrolled input
  */
 const MokaUncontrolledInput = forwardRef((props, ref) => {
-    const { control } = useForm();
-    const { className, as, type, placeholder, onChange, defaultValue, id, name, children, inputProps, isInvalid, disabled, rules } = props;
+    const { className, as, type, placeholder, onChange, defaultValue, id, name, children, inputProps, isInvalid, disabled, rules, control } = props;
 
     // 셀렉트
     if (as === 'select') {
@@ -177,28 +175,30 @@ const MokaUncontrolledInput = forwardRef((props, ref) => {
             />
         );
     }
-    // 드롭가능한 이미지 파일
-    // else if (as === 'imageFile') {
-    //     return <MokaImageInput ref={ref} {...inputProps} />;
-    // }
     // auto complete
     else if (as === 'autocomplete') {
         return (
             <Controller
-                control={control}
                 name={name}
                 rules={rules}
+                control={control}
                 defaultValue={defaultValue}
                 render={(props) => {
-                    const { onChange: controllerChange, ...restControllerProps } = props;
+                    const { onChange: controllerChange, value, ...restControllerProps } = props;
+                    // restControllerProps에 value 제외하여야함(이유는 모르겠음..)
+
                     return (
                         <MokaAutocomplete
-                            isInvalid={isInvalid}
                             id={id}
-                            {...inputProps}
+                            isInvalid={isInvalid}
                             onChange={(value) => {
                                 controllerChange(value);
+                                if (onChange) {
+                                    onChange(value);
+                                }
                             }}
+                            className={className}
+                            {...inputProps}
                             {...restControllerProps}
                         />
                     );
@@ -206,10 +206,6 @@ const MokaUncontrolledInput = forwardRef((props, ref) => {
             />
         );
     }
-    // dateTimePicker
-    // else if (as === 'dateTimePicker') {
-    //     return <MokaDateTimePicker onChange={onChange} placeholder={placeholder} disabled={disabled} {...inputProps} />;
-    // }
 
     return (
         <Form.Control

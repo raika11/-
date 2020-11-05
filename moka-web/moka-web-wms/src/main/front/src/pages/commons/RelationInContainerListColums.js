@@ -10,7 +10,7 @@ export default [
     {
         headerName: '컨테이너명',
         field: 'containerName',
-        width: 158,
+        width: 240,
     },
     {
         headerName: '',

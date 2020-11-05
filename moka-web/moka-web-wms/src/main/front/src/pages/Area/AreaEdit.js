@@ -21,7 +21,7 @@ const AreaEdit = () => {
     };
 
     return (
-        <MokaCard title="편집영역 등록" className="flex-fill">
+        <MokaCard title={`편집영역 ${area.areaSeq ? '정보' : '등록'}`} className="flex-fill">
             {/* 1뎁스 폼 */}
             {area.depth === 1 && <Form1 />}
             {/* 2뎁스 폼 */}

@@ -54,7 +54,6 @@ export const initialState = {
         usedYn: 'N',
     },
     areaError: null,
-    inputTag: '',
     invalidList: [],
 };
 
@@ -164,7 +163,6 @@ export default handleActions(
         // [act.DELETE_COMPONENT_SUCCESS]: (state) => {
         //     return produce(state, (draft) => {
         //         draft.component = initialState.component;
-        //         draft.inputTag = initialState.inputTag;
         //         draft.componentError = initialState.componentError;
         //     });
         // },

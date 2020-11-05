@@ -5,18 +5,18 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG, ITEM_SK } from '@/constants';
+import { ITEM_SK } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
-import columnDefs from './LookupContainerListColumns';
+import columnDefs from './LookupSkinListColumns';
 import { defaultContainerSearchType, LookupAgGridHeight } from '@pages/commons';
-import ContainerHtmlModal from './ContainerHtmlModal';
+// import ContainerHtmlModal from './ContainerHtmlModal';
 
 const propTypes = {
     /**
      * seq의 타입
      */
-    seqType: PropTypes.oneOf([ITEM_SK, ITEM_PG]),
+    seqType: PropTypes.oneOf([ITEM_SK]),
     /**
      * seq
      */
@@ -25,20 +25,16 @@ const propTypes = {
      * show === true이면 리스트를 조회한다
      */
     show: PropTypes.bool,
-    /**
-     * row의 append 버튼 클릭 이벤트
-     */
-    onAppend: PropTypes.func,
 };
 const defaultProps = {
     show: true,
 };
 
 /**
- * seq, seqType을 검색조건으로 사용하는 Lookup 컨테이너 리스트
+ * seq, seqType을 검색조건으로 사용하는 Lookup 기사타입 리스트
  */
-const LookupContainerList = (props) => {
-    const { seq, seqType, show, onAppend } = props;
+const LookupSkinList = (props) => {
+    const { seq, seqType, show } = props;
     const dispatch = useDispatch();
 
     const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
@@ -87,24 +83,11 @@ const LookupContainerList = (props) => {
     };
 
     /**
-     * 태그 삽입 버튼 클릭
-     * @param {object} data row data
-     */
-    const handleClickAppend = useCallback(
-        (data) => {
-            if (onAppend) {
-                onAppend(data);
-            }
-        },
-        [onAppend],
-    );
-
-    /**
      * 링크 버튼 클릭
      * @param {object} data row data
      */
     const handleClickLink = (data) => {
-        window.open(`/container/${data.containerSeq}`);
+        window.open(`/skin/${data.skinSeq}`);
     };
 
     useEffect(() => {
@@ -118,11 +101,10 @@ const LookupContainerList = (props) => {
         setRowData(
             list.map((data) => ({
                 ...data,
-                handleClickAppend,
                 handleClickLink,
             })),
         );
-    }, [handleClickAppend, list]);
+    }, [list]);
 
     useEffect(() => {
         if (show) {
@@ -131,7 +113,7 @@ const LookupContainerList = (props) => {
                     changeLookupSearchOption({
                         ...initialState.lookup.search,
                         keyword: seq,
-                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_SK ? 'skinSeq' : '',
+                        searchType: seqType === ITEM_SK ? 'skinSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -143,7 +125,7 @@ const LookupContainerList = (props) => {
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" title="컨테이너 검색">
+            <MokaCard titleClassName="mb-0" title="기사타입 검색">
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>
@@ -161,7 +143,6 @@ const LookupContainerList = (props) => {
                                     });
                                 }}
                             >
-                                {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
                                 {seqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
                                 {defaultContainerSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
@@ -187,8 +168,8 @@ const LookupContainerList = (props) => {
 
                 {/* 버튼 그룹 */}
                 <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="dark" onClick={() => window.open('/container')}>
-                        컨테이너 추가
+                    <Button variant="dark" onClick={() => window.open('/skin')}>
+                        기사타입 추가
                     </Button>
                 </div>
 
@@ -197,30 +178,30 @@ const LookupContainerList = (props) => {
                     agGridHeight={LookupAgGridHeight}
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    onRowNodeId={(data) => data.containerSeq}
+                    onRowNodeId={(data) => data.skinSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
                     total={total}
                     page={search.page}
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
-                    preventRowClickCell={['append', 'link']}
-                    selected={selected.containerSeq}
+                    preventRowClickCell={['link']}
+                    selected={selected.skinSeq}
                 />
             </MokaCard>
-            <ContainerHtmlModal
-                containerSeq={selected.containerSeq}
+            {/* <ContainerHtmlModal
+                containerSeq={selected.skinSeq}
                 show={showModal}
                 onHide={() => {
                     setShowModal(false);
                     setSelected({});
                 }}
-            />
+            /> */}
         </>
     );
 };
 
-LookupContainerList.propTypes = propTypes;
-LookupContainerList.defaultProps = defaultProps;
+LookupSkinList.propTypes = propTypes;
+LookupSkinList.defaultProps = defaultProps;
 
-export default LookupContainerList;
+export default LookupSkinList;

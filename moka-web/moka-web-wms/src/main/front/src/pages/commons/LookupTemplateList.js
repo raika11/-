@@ -304,6 +304,7 @@ const LookupTemplateList = (props) => {
                         size={search.size}
                         onChangeSearchOption={handleChangeSearchOption}
                         preventRowClickCell={['append', 'link']}
+                        selected={selected.templateSeq}
                     />
                 )}
                 {listType === 'thumbnail' && (
@@ -317,10 +318,18 @@ const LookupTemplateList = (props) => {
                         cardWidth={174}
                         onChangeSearchOption={handleChangeSearchOption}
                         onClick={handleRowClicked}
+                        selected={selected.templateSeq}
                     />
                 )}
             </MokaCard>
-            <TemplateHtmlModal templateSeq={selected.templateSeq} show={showModal} onHide={() => setShowModal(false)} />
+            <TemplateHtmlModal
+                templateSeq={selected.templateSeq}
+                show={showModal}
+                onHide={() => {
+                    setShowModal(false);
+                    setSelected({});
+                }}
+            />
         </>
     );
 };

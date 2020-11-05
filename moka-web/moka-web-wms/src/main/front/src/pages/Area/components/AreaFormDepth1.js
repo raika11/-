@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
+import { notification } from '@utils/toastUtil';
 import { MokaInputLabel } from '@components';
+import { saveArea, changeArea } from '@store/area';
 
-const AreaForm1Depth = () => {
+const AreaFormDepth1 = () => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const location = useLocation();
     const { domainList, area } = useSelector((store) => ({
         domainList: store.auth.domainList,
         area: store.area.area,
@@ -29,13 +35,48 @@ const AreaForm1Depth = () => {
             else setTemp({ ...temp, usedYn: 'N' });
         } else if (name === 'areaNm') {
             setTemp({ ...temp, areaNm: value });
+        } else if (name === 'domainId') {
+            setDomain({
+                domainId: e.target.value,
+            });
         }
+    };
+
+    /**
+     * 저장 버튼
+     */
+    const handleClickSave = () => {
+        const save = {
+            ...temp,
+            domain,
+        };
+        dispatch(
+            saveArea({
+                actions: [changeArea(save)],
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        notification('success', header.message);
+                        history.push(`${location.pathname}/${body.areaSeq}`);
+                    } else {
+                        notification('warning', header.message);
+                    }
+                },
+            }),
+        );
     };
 
     useEffect(() => {
         setTemp(area);
         setDomain(area.domain);
     }, [area]);
+
+    useEffect(() => {
+        if (!domain.domainId) {
+            if (domainList.length > 0) {
+                setDomain(domainList[0]);
+            }
+        }
+    }, [domain, domainList]);
 
     return (
         <div className="d-flex justify-content-center">
@@ -71,17 +112,19 @@ const AreaForm1Depth = () => {
                     </Col>
                 </Form.Row>
                 {/* 도메인 */}
-                <MokaInputLabel className="mb-2" as="select" label="도메인" labelWidth={87} value={domain.domainId}>
+                <MokaInputLabel className="mb-2" as="select" label="도메인" name="domainId" labelWidth={87} value={domain.domainId} onChange={handleChangeValue}>
                     {domainList.map((domain) => (
                         <option key={domain.domainId} value={domain.domianId}>
-                            {domain.domainUrl}
+                            {domain.domainName} ({domain.domainUrl})
                         </option>
                     ))}
                 </MokaInputLabel>
 
                 {/* 버튼 그룹 */}
                 <Card.Footer className="d-flex justify-content-center">
-                    <Button className="mr-10">저장</Button>
+                    <Button className="mr-10" onClick={handleClickSave}>
+                        저장
+                    </Button>
                     <Button variant="gray150">취소</Button>
                 </Card.Footer>
             </Col>
@@ -89,4 +132,4 @@ const AreaForm1Depth = () => {
     );
 };
 
-export default AreaForm1Depth;
+export default AreaFormDepth1;

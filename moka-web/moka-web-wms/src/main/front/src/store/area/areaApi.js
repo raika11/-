@@ -17,9 +17,9 @@ export const getArea = ({ areaSeq }) => {
 };
 
 // 편집영역 저장(application/json)
-export const postArea = ({ Area }) => {
+export const postArea = ({ area }) => {
     return instance
-        .post('/api/areas', Area, {
+        .post('/api/areas', area, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -30,9 +30,9 @@ export const postArea = ({ Area }) => {
 };
 
 // 편집영역 수정(application/json)
-export const putArea = ({ Area }) => {
+export const putArea = ({ area }) => {
     return instance
-        .put(`/api/areas/${Area.areaSeq}`, Area, {
+        .put(`/api/areas/${area.areaSeq}`, area, {
             headers: {
                 'Content-Type': 'application/json',
             },

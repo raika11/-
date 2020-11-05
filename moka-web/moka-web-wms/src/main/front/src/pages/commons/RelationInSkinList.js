@@ -31,7 +31,7 @@ const defaultProps = {
 
 /**
  * 오른쪽 탭에 들어가는
- * 관련된 상위(부모의) 스킨 리스트
+ * 관련된 상위(부모의) 기사타입 리스트
  *
  * 데이터셋 관리 => 도메인 select 추가
  */
@@ -109,7 +109,7 @@ const RelationInSkinList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="뷰스킨 검색">
+        <MokaCard titleClassName="mb-0" title="기사타입 검색">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-2">
@@ -131,7 +131,7 @@ const RelationInSkinList = (props) => {
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
                 <Button variant="dark" onClick={() => history.push('/skin')}>
-                    뷰스킨 추가
+                    기사타입 추가
                 </Button>
             </div>
 

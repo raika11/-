@@ -212,9 +212,17 @@ const LookupPageList = (props) => {
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
                     preventRowClickCell={['load', 'preview', 'link']}
+                    selected={selected.pageSeq}
                 />
             </MokaCard>
-            <PageHtmlModal pageSeq={selected.pageSeq} show={showModal} onHide={() => setShowModal(false)} />
+            <PageHtmlModal
+                pageSeq={selected.pageSeq}
+                show={showModal}
+                onHide={() => {
+                    setShowModal(false);
+                    setSelected({});
+                }}
+            />
         </>
     );
 };

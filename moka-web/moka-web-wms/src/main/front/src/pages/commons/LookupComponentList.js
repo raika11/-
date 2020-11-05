@@ -206,9 +206,17 @@ const LookupComponentList = (props) => {
                     size={search.size}
                     onchangeLookupSearchOption={handlechangeLookupSearchOption}
                     preventRowClickCell={['append', 'link']}
+                    selected={selected.componentSeq}
                 />
             </MokaCard>
-            <TemplateHtmlModal templateSeq={selected.templateSeq} show={showModal} onHide={() => setShowModal(false)} />
+            <TemplateHtmlModal
+                templateSeq={selected.templateSeq}
+                show={showModal}
+                onHide={() => {
+                    setShowModal(false);
+                    setSelected({});
+                }}
+            />
         </>
     );
 };

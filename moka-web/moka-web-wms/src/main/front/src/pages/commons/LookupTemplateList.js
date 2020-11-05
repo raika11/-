@@ -127,7 +127,7 @@ const LookupTemplateList = (props) => {
     const handleClickAppend = useCallback(
         (data) => {
             if (onAppend) {
-                onAppend(ITEM_TP, data);
+                onAppend(data, ITEM_TP);
             }
         },
         [onAppend],

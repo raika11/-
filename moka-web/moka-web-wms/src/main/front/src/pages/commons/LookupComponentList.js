@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG, ITEM_CT, ITEM_SK } from '@/constants';
+import { ITEM_PG, ITEM_CT, ITEM_SK, ITEM_CP } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 import { getComponentLookupList, changeLookupSearchOption, initialState, clearLookup, GET_COMPONENT_LOOKUP_LIST } from '@store/component';
 import columnDefs from './LookupComponentListColums';
@@ -93,7 +93,7 @@ const LookupComponentList = (props) => {
     const handleClickAppend = useCallback(
         (data) => {
             if (onAppend) {
-                onAppend(data);
+                onAppend(data, ITEM_CP);
             }
         },
         [onAppend],

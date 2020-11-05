@@ -12,6 +12,7 @@ export default [
         headerName: '작업일시',
         field: 'regDt',
         width: 156,
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '작업자',

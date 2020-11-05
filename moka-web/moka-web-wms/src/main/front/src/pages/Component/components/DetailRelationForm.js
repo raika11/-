@@ -187,10 +187,10 @@ const DetailRelationForm = (props) => {
                 value={component.delWords}
                 onChange={handleChangeValue}
             />
-            {/* 뷰스킨 */}
+            {/* 기사타입 */}
             <MokaInputGroup
                 className="mb-2"
-                label="뷰스킨"
+                label="기사타입"
                 as="prependLink"
                 inputProps={{
                     to: skin.skinSeq ? `/skin/${skin.skinSeq}` : undefined,
@@ -199,7 +199,7 @@ const DetailRelationForm = (props) => {
                         value: skin.skinName || '',
                         disabled: true,
                         className: 'bg-white',
-                        placeholder: '뷰스킨을 선택하세요',
+                        placeholder: '기사타입을 선택하세요',
                     },
                     icon: <MokaIcon iconName="fal-search" />,
                     onIconClick: () => setSkinModalShow(true),

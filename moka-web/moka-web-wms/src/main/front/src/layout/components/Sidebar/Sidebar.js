@@ -59,12 +59,9 @@ const Sidebar = () => {
 
         if (menu !== undefined && Object.keys(sidebarOpenItem).length < 1) {
             getOpenMenuParentMenuId(menu);
-            console.log(openItem);
             dispatch(initSidebarOpenItem(openItem));
         }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [menu]);
+    }, [dispatch, localPath, menu, sidebarOpenItem]);
 
     const changeNodeToggle = useCallback(
         ({ menuId }) => {

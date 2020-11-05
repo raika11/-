@@ -28,7 +28,7 @@ export const clearRelationList = createAction(CLEAR_RELATION_LIST);
 export const [GET_DATASET_LIST, GET_DATASET_LIST_SUCCESS, GET_DATASET_LIST_FAILURE] = createRequestActionTypes('dataset/GET_DATASET_LIST');
 export const [GET_DATASET, GET_DATASET_SUCCESS, GET_DATASET_FAILURE] = createRequestActionTypes('dataset/GET_DATASET');
 export const getDatasetList = createAction(GET_DATASET_LIST, (...actions) => actions);
-export const getDataset = createAction(GET_DATASET, (datasetSeq) => datasetSeq);
+export const getDataset = createAction(GET_DATASET, ({ datasetSeq, callback }) => ({ datasetSeq, callback }));
 
 /**
  * 모달 데이터 조회

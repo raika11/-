@@ -27,7 +27,7 @@ import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
@@ -90,7 +90,7 @@ public class MemberRestController {
         ResultListDTO<MemberDTO> resultListMessage = new ResultListDTO<>();
 
         // 조회
-        Page<Member> returnValue = memberService.findAllMember(search);
+        Page<MemberInfo> returnValue = memberService.findAllMember(search);
 
         // 리턴값 설정
         List<MemberDTO> memberDtoList = modelMapper.map(returnValue.getContent(), MemberDTO.TYPE);
@@ -120,7 +120,7 @@ public class MemberRestController {
             throws NoDataException {
 
         String message = messageByLocale.get("tps.common.error.no-data");
-        Member member = memberService
+        MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(message));
 
@@ -164,7 +164,7 @@ public class MemberRestController {
             throws InvalidDataException, Exception {
 
         // MemberDTO -> Member 변환
-        Member member = modelMapper.map(memberDTO, Member.class);
+        MemberInfo member = modelMapper.map(memberDTO, MemberInfo.class);
         if (McpString.isNotEmpty(member.getMemberId())) { // 자동 발번이 아닌 경우 중복 체크
             if (memberService.isDuplicatedId(member.getMemberId())) {
                 throw new InvalidDataException(messageByLocale.get("tps.member.error.duplicated.memberId"));
@@ -176,7 +176,7 @@ public class MemberRestController {
             member.setPassword(passwordEncoder.encode(member.getPassword()));
 
             // insert
-            Member returnValue = memberService.insertMember(member);
+            MemberInfo returnValue = memberService.insertMember(member);
             if (returnValue != null && memberDTO.getMemberGroups() != null) {
                 memberDTO
                         .getMemberGroups()
@@ -227,10 +227,10 @@ public class MemberRestController {
 
         // MemberDTO -> Member 변환
         String infoMessage = messageByLocale.get("tps.common.error.no-data");
-        Member newMember = modelMapper.map(memberDTO, Member.class);
+        MemberInfo newMember = modelMapper.map(memberDTO, MemberInfo.class);
 
         // 오리진 데이터 조회
-        Member orgMember = memberService
+        MemberInfo orgMember = memberService
                 .findMemberById(newMember.getMemberId())
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
@@ -240,7 +240,7 @@ public class MemberRestController {
             // 사용자 정보 수정시에는 패스워드 변경을 하지 않는다.
             newMember.setPassword(orgMember.getPassword());
             // update
-            Member returnValue = memberService.updateMember(newMember);
+            MemberInfo returnValue = memberService.updateMember(newMember);
 
             if (returnValue != null && memberDTO.getMemberGroups() != null) {
                 memberDTO
@@ -309,7 +309,7 @@ public class MemberRestController {
         String passwordSameMessage = messageByLocale.get("tps.member.error.same.password");
 
         // 오리진 데이터 조회
-        Member orgMember = memberService
+        MemberInfo orgMember = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
@@ -333,7 +333,7 @@ public class MemberRestController {
             orgMember.setPassword(bcryptPassword);
 
             // 결과리턴
-            Member returnValue = memberService.updateMember(orgMember);
+            MemberInfo returnValue = memberService.updateMember(orgMember);
 
             // 결과리턴
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
@@ -369,7 +369,7 @@ public class MemberRestController {
 
         String noDataMsg = messageByLocale.get("tps.common.error.no-data");
 
-        Member member = memberService
+        MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noDataMsg));
         if (member
@@ -404,7 +404,7 @@ public class MemberRestController {
 
         String noDataMsg = messageByLocale.get("tps.common.error.no-data");
 
-        Member member = memberService
+        MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noDataMsg));
         member.setErrCnt(0);
@@ -439,7 +439,7 @@ public class MemberRestController {
 
         // Member 데이터 조회
         String noContentMessage = messageByLocale.get("tps.common.error.no-data");
-        Member member = memberService
+        MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 

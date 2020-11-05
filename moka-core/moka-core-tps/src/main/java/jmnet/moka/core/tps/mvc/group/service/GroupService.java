@@ -3,7 +3,7 @@ package jmnet.moka.core.tps.mvc.group.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import org.springframework.data.domain.Page;
 
@@ -14,14 +14,14 @@ public interface GroupService {
      * @param search 검색 조건
      * @return 검색 결과 목록
      */
-    Page<Group> findAllGroup(GroupSearchDTO search);
+    Page<GroupInfo> findAllGroup(GroupSearchDTO search);
 
     /**
      * 전체 그룹 조회
      *
      * @return 그룹 목록
      */
-    List<Group> findAllGroup();
+    List<GroupInfo> findAllGroup();
 
     /**
      * 그룹 내 사용자 목록 조회
@@ -36,7 +36,7 @@ public interface GroupService {
      * @param groupId 그룹 ID
      * @return
      */
-    Optional<Group> findGroupById(String groupId);
+    Optional<GroupInfo> findGroupById(String groupId);
 
     /**
      * 그룹 등록
@@ -44,7 +44,7 @@ public interface GroupService {
      * @param group 그룹 정보
      * @return 그룹 정보
      */
-    Group insertGroup(Group group);
+    GroupInfo insertGroup(GroupInfo group);
 
     /**
      * 그룹 수정
@@ -52,14 +52,14 @@ public interface GroupService {
      * @param group 그룹 정보
      * @return 그룹 정보
      */
-    Group updateGroup(Group group);
+    GroupInfo updateGroup(GroupInfo group);
 
     /**
      * 그룹 삭제
      *
      * @param group 그룹 정보
      */
-    void deleteGroup(Group group);
+    void deleteGroup(GroupInfo group);
 
     /**
      * 그룹 삭제

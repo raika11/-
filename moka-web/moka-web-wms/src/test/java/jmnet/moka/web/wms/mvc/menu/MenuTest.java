@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
-import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.group.service.GroupService;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
@@ -68,7 +68,7 @@ public class MenuTest {
 
     @Test
     public void insertGroupMenuAuthTest() {
-        List<Group> groups = groupService.findAllGroup();
+        List<GroupInfo> groups = groupService.findAllGroup();
         List<Menu> menus = menuService.findAllMenu();
 
         menus.forEach(menu -> {

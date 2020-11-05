@@ -1,7 +1,7 @@
 package jmnet.moka.core.tps.mvc.group.repository;
 
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import org.springframework.data.domain.Page;
 
 /**
@@ -24,5 +24,5 @@ public interface GroupRepositorySupport {
      * @param searchDTO 검색 조건
      * @return 검색 결과
      */
-    public Page<Group> findAllGroup(GroupSearchDTO searchDTO);
+    public Page<GroupInfo> findAllGroup(GroupSearchDTO searchDTO);
 }

@@ -33,7 +33,7 @@ import org.hibernate.annotations.NotFoundAction;
 @Builder
 @Entity
 @Table(name = "TB_CMS_MEM")
-public class Member extends BaseAudit {
+public class MemberInfo extends BaseAudit {
 
     private static final long serialVersionUID = 1L;
 
@@ -168,6 +168,6 @@ public class Member extends BaseAudit {
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
-    private Member regMember;
+    private MemberInfo regMember;
 
 }

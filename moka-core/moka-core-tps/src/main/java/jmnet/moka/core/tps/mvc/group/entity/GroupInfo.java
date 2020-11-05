@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.RegAudit;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -29,7 +29,7 @@ import org.hibernate.annotations.NotFoundAction;
 @Entity
 @Table(name = "TB_CMS_GROUP")
 @EqualsAndHashCode(exclude = {"regUser"})
-public class Group extends RegAudit {
+public class GroupInfo extends RegAudit {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,5 +58,5 @@ public class Group extends RegAudit {
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
-    private Member regMember;
+    private MemberInfo regMember;
 }

@@ -19,7 +19,7 @@ import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.group.dto.GroupDTO;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.service.GroupService;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
@@ -96,7 +96,7 @@ public class GroupRestController {
         ResultListDTO<GroupDTO> resultListMessage = new ResultListDTO<>();
 
         // 조회
-        Page<Group> returnValue = groupService.findAllGroup(search);
+        Page<GroupInfo> returnValue = groupService.findAllGroup(search);
 
         // 리턴값 설정
         List<GroupDTO> memberDtoList = modelMapper.map(returnValue.getContent(), GroupDTO.TYPE);
@@ -126,7 +126,7 @@ public class GroupRestController {
             throws NoDataException {
 
         String message = messageByLocale.get("tps.group.error.no-data", request);
-        Group group = groupService
+        GroupInfo group = groupService
                 .findGroupById(groupCd)
                 .orElseThrow(() -> new NoDataException(message));
 
@@ -170,7 +170,7 @@ public class GroupRestController {
             throws InvalidDataException, Exception {
 
         // GroupDTO -> Group 변환
-        Group group = modelMapper.map(groupDTO, Group.class);
+        GroupInfo group = modelMapper.map(groupDTO, GroupInfo.class);
         if (McpString.isNotEmpty(group.getGroupCd())) { // 자동 발번이 아닌 경우 중복 체크
             if (groupService.isDuplicatedId(group.getGroupCd())) {
                 throw new InvalidDataException(messageByLocale.get("tps.group.error.duplicated.groupCd", request));
@@ -179,7 +179,7 @@ public class GroupRestController {
 
         try {
             // insert
-            Group returnValue = groupService.insertGroup(group);
+            GroupInfo returnValue = groupService.insertGroup(group);
 
 
             // 결과리턴
@@ -216,7 +216,7 @@ public class GroupRestController {
 
         // GroupDTO -> Group 변환
         String infoMessage = messageByLocale.get("tps.group.error.no-data", request);
-        Group newGroup = modelMapper.map(groupDTO, Group.class);
+        GroupInfo newGroup = modelMapper.map(groupDTO, GroupInfo.class);
 
         // 오리진 데이터 조회
         groupService
@@ -227,7 +227,7 @@ public class GroupRestController {
 
         try {
             // update
-            Group returnValue = groupService.updateGroup(newGroup);
+            GroupInfo returnValue = groupService.updateGroup(newGroup);
 
             // 결과리턴
             GroupDTO dto = modelMapper.map(returnValue, GroupDTO.class);
@@ -287,7 +287,7 @@ public class GroupRestController {
 
         // 그룹 데이터 조회
         String noContentMessage = messageByLocale.get("tps.group.error.no-data", request);
-        Group member = groupService
+        GroupInfo member = groupService
                 .findGroupById(groupCd)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 

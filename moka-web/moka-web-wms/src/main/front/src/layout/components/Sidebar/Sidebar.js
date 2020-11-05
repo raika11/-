@@ -61,7 +61,8 @@ const Sidebar = () => {
             getOpenMenuParentMenuId(menu);
             dispatch(initSidebarOpenItem(openItem));
         }
-    }, [dispatch, localPath, menu, sidebarOpenItem]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [localPath, menu]);
 
     const changeNodeToggle = useCallback(
         ({ menuId }) => {

@@ -13,7 +13,7 @@ const PageLoadButton = (props) => {
             onOk: () => {
                 dispatch(changePageBody(data.pageBody));
             },
-            onCancle: () => {},
+            onCancel: () => {},
         });
     };
 

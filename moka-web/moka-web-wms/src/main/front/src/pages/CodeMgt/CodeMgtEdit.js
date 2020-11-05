@@ -87,7 +87,7 @@ const CodeMgtEdit = () => {
                     updateGrp(code);
                 }
             },
-            onCancle: () => {},
+            onCancel: () => {},
             attention: false,
         });
     };
@@ -113,7 +113,7 @@ const CodeMgtEdit = () => {
                     }),
                 );
             },
-            onCancle: () => {},
+            onCancel: () => {},
             attention: false,
         });
     };

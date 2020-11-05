@@ -168,7 +168,7 @@ const CodeMgtListAgGrid = () => {
                     updateGrp(codeGrp);
                 }
             },
-            onCancle: () => {},
+            onCancel: () => {},
             attention: false,
         });
     };
@@ -199,7 +199,7 @@ const CodeMgtListAgGrid = () => {
                         }),
                     );
                 },
-                onCancle: () => {},
+                onCancel: () => {},
                 attention: false,
             },
         );

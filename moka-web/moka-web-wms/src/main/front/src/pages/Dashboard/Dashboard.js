@@ -351,7 +351,7 @@ const Dashboard = () => {
                                                 onOk: () => {
                                                     setShowD(false);
                                                 },
-                                                onCancle: () => {},
+                                                onCancel: () => {},
                                                 attention: false,
                                             });
                                         }}
@@ -366,7 +366,7 @@ const Dashboard = () => {
                                     onClick={() => {
                                         toastr.confirm('확인창', {
                                             onOk: () => alert('OK: clicked'),
-                                            onCancle: () => alert('CANCLE: clicked'),
+                                            onCancel: () => alert('CANCLE: clicked'),
                                         });
                                     }}
                                 >

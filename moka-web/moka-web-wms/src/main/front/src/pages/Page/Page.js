@@ -143,7 +143,7 @@ const Page = () => {
                         };
                         dispatch(deletePage(option));
                     },
-                    onCancle: () => {},
+                    onCancel: () => {},
                 });
             }
         },
@@ -179,7 +179,7 @@ const Page = () => {
                 onOk: () => {
                     dispatch(changePageBody(body.body));
                 },
-                onCancle: () => {},
+                onCancel: () => {},
             });
         } else {
             notification('error', header.message);

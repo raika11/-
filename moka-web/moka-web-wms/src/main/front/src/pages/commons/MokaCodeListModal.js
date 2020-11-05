@@ -37,7 +37,7 @@ const propTypes = {
     /**
      * 취소 버튼 클릭이벤트
      */
-    onCancle: PropTypes.func,
+    onCancel: PropTypes.func,
 };
 const defaultProps = {
     title: '',
@@ -47,7 +47,7 @@ const defaultProps = {
  * 대/중/소 코드 선택 모달
  */
 const MokaCodeListModal = (props) => {
-    const { show, onHide, title, buttons, onOk, onCancle, ...rest } = props;
+    const { show, onHide, title, buttons, onOk, onCancel, ...rest } = props;
 
     // 대중소 분류 코드 리스트
     const [lCodeList, setLCodeList] = useState([]);

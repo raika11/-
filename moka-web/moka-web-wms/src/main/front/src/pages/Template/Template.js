@@ -108,7 +108,7 @@ const Template = ({ match }) => {
                         }),
                     );
                 },
-                onCancle: () => {},
+                onCancel: () => {},
             });
         },
         [dispatch, history],
@@ -149,7 +149,7 @@ const Template = ({ match }) => {
                 onOk: () => {
                     dispatch(changeTemplateBody(body.body));
                 },
-                onCancle: () => {},
+                onCancel: () => {},
             });
         } else {
             notification('error', header.message);

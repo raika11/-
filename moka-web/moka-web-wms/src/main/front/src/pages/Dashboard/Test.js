@@ -267,7 +267,7 @@ const Test = () => {
                                                     onOk: () => {
                                                         setShowD(false);
                                                     },
-                                                    onCancle: () => {},
+                                                    onCancel: () => {},
                                                     attention: false,
                                                 });
                                             }}
@@ -283,7 +283,7 @@ const Test = () => {
                                     onClick={() => {
                                         // toastr.confirm('확인창', {
                                         //     onOk: () => console.log('OK: clicked'),
-                                        //     onCancle: () => console.log('CANCLE: clicked')
+                                        //     onCancel: () => console.log('CANCLE: clicked')
                                         // });
                                         toastr.success('ddd', 'ddd');
                                     }}

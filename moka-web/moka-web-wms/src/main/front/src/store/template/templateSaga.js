@@ -94,7 +94,6 @@ function* saveTemplate({ payload: { actions, callback } }) {
  */
 export function* deleteTemplate({ payload: { templateSeq, callback } }) {
     const ACTION = act.DELETE_TEMPLATE;
-    const SUCCESS = act.DELETE_TEMPLATE_SUCCESS;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
@@ -104,8 +103,7 @@ export function* deleteTemplate({ payload: { templateSeq, callback } }) {
 
         if (response.data.header.success) {
             yield put({
-                type: SUCCESS,
-                payload: response.data,
+                type: act.DELETE_TEMPLATE_SUCCESS,
             });
 
             // 목록 다시 검색

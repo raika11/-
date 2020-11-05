@@ -34,7 +34,7 @@ const Component = () => {
 
     /**
      * 컴포넌트 삭제
-     * @param {object} response response
+     * @param {object} component component
      */
     const deleteCallback = useCallback(
         (component) => {
@@ -43,18 +43,14 @@ const Component = () => {
                     dispatch(
                         deleteComponent({
                             componentSeq: component.componentSeq,
-                            callback: ({ header, body }) => {
+                            callback: ({ header }) => {
+                                // 삭제 성공
                                 if (header.success) {
-                                    // 삭제 성공
-                                    if (body) {
-                                        notification('success', '삭제하였습니다');
-                                        history.push('/component');
-                                    }
-                                    // 삭제 실패
-                                    else {
-                                        notification('warning', '삭제하지 못했습니다');
-                                    }
-                                } else {
+                                    notification('success', header.message);
+                                    history.push('/component');
+                                }
+                                // 삭제 실패
+                                else {
                                     notification('warning', header.message);
                                 }
                             },

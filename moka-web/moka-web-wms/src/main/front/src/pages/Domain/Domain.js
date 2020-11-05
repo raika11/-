@@ -32,43 +32,53 @@ const Domain = () => {
 
     /**
      * 도메인 삭제
-     * @param {object} response response
+     * @param {object} domain domain
      */
-    const deleteCallback = (response, domainId) => {
-        if (response.header.success) {
-            dispatch(
-                deleteDomain({
-                    domainId: domainId,
-                    callback: (response) => {
-                        if (response.header.success) {
-                            notification('success', '삭제하였습니다.');
-                            history.push('/domain');
-                        } else {
-                            notification('warning', response.header.message);
-                        }
-                    },
-                }),
-            );
-        } else {
-            notification('warning', response.header.message);
-        }
-    };
-
-    /**
-     * 삭제 버튼 클릭
-     */
-    const handleClickDelete = (domain) => {
+    const deleteCallback = (domain) => {
         toastr.confirm(`${domain.domainId}_${domain.domainName}을 정말 삭제하시겠습니까?`, {
             onOk: () => {
                 dispatch(
-                    hasRelationList({
+                    deleteDomain({
                         domainId: domain.domainId,
-                        callback: deleteCallback,
+                        callback: ({ header }) => {
+                            // 삭제 성공
+                            if (header.success) {
+                                notification('success', header.message);
+                                history.push('/domain');
+                            }
+                            // 삭제 실패
+                            else {
+                                notification('warning', header.message);
+                            }
+                        },
                     }),
                 );
             },
             onCancel: () => {},
         });
+    };
+
+    /**
+     * 삭제 버튼 클릭
+     * @param {object} domain domain
+     */
+    const handleClickDelete = (domain) => {
+        const { domainId } = domain;
+        dispatch(
+            hasRelationList({
+                domainId,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 관련 아이템 없음
+                        if (!body) deleteCallback(domain);
+                        // 관련 아이템 있음
+                        else notification('warning', '사용 중인 도메인은 삭제할 수 없습니다');
+                    } else {
+                        notification('warning', header.message);
+                    }
+                },
+            }),
+        );
     };
 
     React.useEffect(() => {

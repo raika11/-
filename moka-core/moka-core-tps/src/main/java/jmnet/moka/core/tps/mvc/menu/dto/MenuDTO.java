@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.menu.service.MenuService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class MenuDTO implements Serializable {
      * 대메뉴코드
      */
     @Builder.Default
-    private String parentMenuId = "00";
+    private String parentMenuId = MenuService.ROOT_MENU_ID;
 
     /**
      * 메뉴코드 (GRP_CD+MID_CD+DTL_CD)

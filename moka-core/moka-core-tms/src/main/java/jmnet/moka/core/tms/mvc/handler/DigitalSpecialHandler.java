@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class DigitalSpecialHandler extends AbstractHandler {
             // 디지털스페셜 처리 : /digitalspecial(case insensitive)/id, list는 제외
             String digitalSpecialId = pathList.get(1);
             // 머지 옵션설정
-            MergeContext mergeContext = new MergeContext();
+            MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
             mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
             mergeContext.set(MokaConstants.MERGE_PATH, requestPath);
             mergeContext.set(MokaConstants.MERGE_CONTEXT_DIGIAL_SPECIAL_ID, digitalSpecialId);

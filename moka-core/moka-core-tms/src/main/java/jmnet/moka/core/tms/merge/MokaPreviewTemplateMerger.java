@@ -36,6 +36,7 @@ import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
 public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     private static final Logger logger = LoggerFactory.getLogger(MokaPreviewTemplateMerger.class);
+    protected final static MokaFunctions MOKA_FUNCTIONS = new MokaFunctions();
     private DomainItem domainItem;
     private DomainResolver domainResolver;
     private String workerId;
@@ -43,15 +44,14 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem,
                                      DomainResolver domainResolver, AbstractTemplateLoader templateLoader,
-                                     DataLoader dataLoader)
-            throws IOException {
+                                     DataLoader dataLoader) {
         this(appContext, domainItem, domainResolver, templateLoader, dataLoader,null, null);
     }
 
     public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem,
                                      DomainResolver domainResolver, AbstractTemplateLoader templateLoader,
                                      DataLoader dataLoader,
-                                     String workerId, Long editionSeq) throws IOException {
+                                     String workerId, Long editionSeq)  {
         super(appContext, domainItem.getItemId(), templateLoader, dataLoader);
         this.domainResolver = domainResolver;
         this.domainItem = domainItem;
@@ -63,7 +63,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         DomainItem domainItem = (DomainItem) context.get(MokaConstants.MERGE_CONTEXT_DOMAIN);
         PageItem pageItem = (PageItem) context.get(MokaConstants.MERGE_CONTEXT_PAGE);
         // html인 경우만 baseTag 처리
-        if (pageItem.get(ItemConstants.PAGE_TYPE).equals("text/html") == false) {
+        if (!pageItem.get(ItemConstants.PAGE_TYPE).equals("text/html")) {
             return;
         }
         String domainUrl = "http://" + domainItem.get(ItemConstants.DOMAIN_URL) + "/" + pagePath;
@@ -89,15 +89,13 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     }
 
     public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage)
-            throws TemplateMergeException, UnsupportedEncodingException, IOException,
-            TemplateParseException {
+            throws TemplateMergeException, TemplateParseException {
     	return this.merge(pageItem, wrapItem, mergePage, true, false, true);	// 컴포넌트 미리보기 리소스 추가, 하이라이트 스크립트 제거, html wrap소스 추가
     }
             
     public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage, boolean resource, boolean highlight, boolean htmlWrap)
-            throws TemplateMergeException, UnsupportedEncodingException, IOException,
-            TemplateParseException {
-        MergeContext mergeContext = new MergeContext();
+            throws TemplateMergeException, TemplateParseException {
+        MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
         // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
         mergeContext.getMergeOptions().setPreview(true);
         if (this.workerId != null) {

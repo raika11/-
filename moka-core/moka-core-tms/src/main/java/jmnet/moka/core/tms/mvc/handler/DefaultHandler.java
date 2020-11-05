@@ -69,7 +69,7 @@ public class DefaultHandler extends AbstractHandler {
         // 템플릿 아이템이 존재할 경우 domainId, 템플릿 아이템 타입, 경로를 설정한다.
         try {
             String itemKey = this.domainTemplateMerger.getItemKey(domainId, requestPath);
-            MergeContext mergeContext = new MergeContext();
+            MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
             mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
             if (itemKey != null) {
                 // 머지 옵션설정
@@ -108,7 +108,7 @@ public class DefaultHandler extends AbstractHandler {
             String itemId = pathList.get(1);
             if (this.domainTemplateMerger.getItem(domainId, itemType, itemId) != null) {
                 // 머지 옵션설정
-                MergeContext mergeContext = new MergeContext();
+                MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
                 mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
                 mergeContext.set(MokaConstants.MERGE_PATH, requestPath);
                 mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, itemType);

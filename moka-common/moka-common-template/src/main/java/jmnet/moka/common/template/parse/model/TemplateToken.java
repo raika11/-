@@ -25,6 +25,7 @@ public class TemplateToken extends TemplateNode {
 	private String text;
 	private boolean isOnlyVariable;
     private boolean isCommented;
+    private boolean preprocessed = false;
 	
 	public TemplateToken(TemplateRoot templateRoot, String text, TemplateNode previous, int lineNumber) {
 		super(templateRoot, NODE_TOKEN, previous, lineNumber);
@@ -36,7 +37,7 @@ public class TemplateToken extends TemplateNode {
 //							|| Character.isWhitespace(codePoint) == false
 //							|| codePoint == '_'; });
 		
-		text.matches("[a-zA-Z_][a-zA-Z0-9_]+");
+//		text.matches("[a-zA-Z_][a-zA-Z0-9_]+");
 //		if ( this.isOnlyVariable && RESERVED_VARIABLES.contains(RESERVED_VARIABLE_PREFIX +this.text)) {
 //			this.text = RESERVED_VARIABLE_PREFIX + this.text;
 //		}
@@ -56,11 +57,16 @@ public class TemplateToken extends TemplateNode {
 
 	@Override
 	public void merge(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
+		//token에 대한 선처리를 수행한다.
+		if ( !this.preprocessed) {
+			this.text = merger.preprocessToken(this.text, context);
+			this.preprocessed = true;
+		}
         if (this.isCommented)
             return;
 		if ( this.isOnlyVariable) {
 			if ( context.has(this.text) ) {
-                Object value = context.get(this.text); 
+                Object value = context.get(this.text);
                 if ( value != null) {
                     sb.append(context.get(this.text));
                 } else {

@@ -25,7 +25,8 @@ public class MergeContext implements JexlContext, JexlContext.NamespaceResolver 
 //    protected final Map<String, Object> map;
     protected Map<String, Object> map;
     protected MergeContext parentContext ;
-    protected static final Functions defaultFunctions = new Functions();
+    protected static final Functions DEFAULT_FUNCTIONS = new Functions();
+    protected Functions functions;
 
     public MergeContext() {
         this(null, true, null);
@@ -38,21 +39,25 @@ public class MergeContext implements JexlContext, JexlContext.NamespaceResolver 
     public MergeContext(Functions functions) {
         this(null,true,functions);
     }
-    
+    public MergeContext(boolean isRoot, Functions functions) {
+        this(null,isRoot,functions);
+    }
+
     public MergeContext(Map<String, Object> vars, boolean isRoot, Functions functions) {
     	map = vars == null ? new HashMap<>(32) : vars;
     	if ( functions == null) {
-            map.put(null, defaultFunctions);
+            this.functions = DEFAULT_FUNCTIONS;
         } else {
-            map.put(null, functions);
+            this.functions = functions;
         }
-		if ( isRoot ) {
+        map.put(null, this.functions);
+        if ( isRoot ) {
 	        this.set(MERGE_OPTIONS, new MergeOptions());
 			this.set(CURRENT_INDENT, "");
 			this.set(PREV_HAS_TAIL_SPACE, false);
 		}
     }
-    
+
 //    public MergeContext(Map<String, Object> vars) {
 //        map = vars == null ? new HashMap<String, Object>(32) : vars;
 //        map.put(null, functions);
@@ -73,7 +78,7 @@ public class MergeContext implements JexlContext, JexlContext.NamespaceResolver 
      * @return 자식 컨텍스트
      */
     public MergeContext createChild() {
-		MergeContext context = new MergeContext(false);
+		MergeContext context = new MergeContext(false, this.functions);
 		context.setParent(this);
 		context.set(PARENT, this);
 		return context;
@@ -87,7 +92,7 @@ public class MergeContext implements JexlContext, JexlContext.NamespaceResolver 
      * @return 자식 컨텍스트
      */
     public MergeContext createRowDataChild() {
-    	MergeContext context = new RowDataContext();
+    	MergeContext context = new RowDataContext(this.functions);
     	context.setParent(this);
     	context.set(PARENT, this);
     	return context;

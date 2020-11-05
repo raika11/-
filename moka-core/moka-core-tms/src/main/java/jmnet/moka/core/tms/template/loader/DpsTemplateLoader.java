@@ -141,10 +141,6 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             JSONArray jsonArray = (JSONArray) jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
             JSONObject jsonObject = (JSONObject) jsonArray.get(0);
             item = DPS_ITEM_FACTORY.getItem(itemType, jsonObject);
-            // ComponentItem인 경우 COMPONENT_AD를 처리한다
-            if (itemType.equals(MokaConstants.ITEM_COMPONENT)) {
-                setComponentAd(item, jsonResult);
-            }
             String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
             // PG일 경우 URL과 매핑한다.
             if (itemType.equals(MokaConstants.ITEM_PAGE)) {
@@ -170,27 +166,6 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             }
         }
         return item;
-    }
-
-    protected void setComponentAd(MergeItem item, JSONResult jsonResult) {
-        JSONResult componentAdResult = (JSONResult) jsonResult.get(DATA_SELECT_COMPONENT_AD);
-        JSONArray jsonArray = (JSONArray) componentAdResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
-        List<Map<String, Object>> componentAdList = ResourceMapper.getDefaultObjectMapper()
-                                                                  .convertValue(jsonArray, ResourceMapper.TYPEREF_LIST_MAP);
-        if (componentAdList != null && componentAdList.size() > 0) {
-            List<ComponentAd> list = new ArrayList<ComponentAd>(4);
-            for (Map<String, Object> map : componentAdList) {
-                String adId = map.get(ItemConstants.DpsItemConstants.COMPONENTAD_AD_ID)
-                                 .toString();
-                //                String adName =
-                //                        (String) map.get(ItemConstants.DpsItemConstants.COMPONENTAD_AD_NAME);
-                int listParagraph = Integer.parseInt(map.get(ItemConstants.DpsItemConstants.COMPONENTAD_LIST_PARAGRAPH)
-                                                        .toString());
-                ComponentAd componentAd = new ComponentAd(adId, /*adName,*/ listParagraph);
-                list.add(componentAd);
-            }
-            item.put(ItemConstants.COMPONENTAD_LIST, list);
-        }
     }
 
     public MergeItem getItem(String itemType, String itemId) throws TemplateParseException, TemplateLoadException {

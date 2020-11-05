@@ -287,6 +287,28 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         return writer.toString();
     }
 
+    @Override
+    public String preprocessToken(String token, MergeContext context) {
+        // cloc 함수 처리
+        if ( token.contains("cloc(")) {
+            boolean hasPage = false;
+            boolean hasComponent = false;
+            if ( context.has(MokaConstants.MERGE_CONTEXT_PAGE)) {
+                hasPage = true;
+                if (context.has(MokaConstants.MERGE_CONTEXT_COMPONENT)) {
+                    hasComponent = true;
+                }
+            }
+            int clocParamStartIndex = token.indexOf("cloc(")+5;
+            int clocParamEndIndex = token.indexOf(")",clocParamStartIndex);
+            if ( hasPage ) {
+                return token.substring(0,clocParamEndIndex) + ",page"
+                            + (hasComponent ? ",component":",null") + token.substring(clocParamEndIndex);
+            }
+        }
+        return token;
+    }
+
 
     /**
      * <pre>

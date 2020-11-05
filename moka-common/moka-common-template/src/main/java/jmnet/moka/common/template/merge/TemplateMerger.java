@@ -39,7 +39,8 @@ public interface TemplateMerger<T> {
 	
 	public String getWrapItemEnd(String itemType, String itemId);
 	
-	
+	public String preprocessToken(String token, MergeContext context);
+
 	/**
 	 * 
 	 * <pre>

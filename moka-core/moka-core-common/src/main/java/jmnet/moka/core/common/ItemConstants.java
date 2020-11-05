@@ -96,11 +96,6 @@ public class ItemConstants {
     /* Component Item DEL_WORDS default */
     public static String CP_DEL_WORDS_COLUMN = "newstitle";
 
-    /**
-     * Component Ad In List
-     */
-    public static String COMPONENTAD_LIST = "componentAdList";
-
     /* Template Item */
     public static String TEMPLATE_ID = "id";
     public static String TEMPLATE_DOMAIN_ID = "domainId";
@@ -255,11 +250,6 @@ public class ItemConstants {
         public static String COMPONENT_CREATOR = "REG_ID";
         public static String COMPONENT_MODIFIED_YMDT = "MOD_DT";
         public static String COMPONENT_MODIFIER = "MOD_ID";
-
-        public static String COMPONENTAD_COMPONENT_ID = "COMPONENT_SEQ";
-        public static String COMPONENTAD_AD_ID = "AD_SEQ";
-        //        public static String COMPONENTAD_AD_NAME = "AD_NAME";
-        public static String COMPONENTAD_LIST_PARAGRAPH = "LIST_PARAGRAPH";
 
         /* Template Item */
         public static String TEMPLATE_ID = "TEMPLATE_SEQ";

@@ -10,5 +10,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AreaRepository extends JpaRepository<Area, Long>, AreaRepositorySupport {
-    Page<Area> findAllByDepth(Integer depth, Pageable pageable);
+    Page<Area> findAllByDomain_DomainIdAndDepth(String domainId, Integer depth, Pageable pageable);
 }

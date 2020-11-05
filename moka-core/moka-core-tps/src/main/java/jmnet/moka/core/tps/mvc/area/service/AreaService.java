@@ -23,4 +23,6 @@ public interface AreaService {
     Area insertArea(Area area);
 
     Area updateArea(Area area);
+
+    void deleteArea(Area area);
 }

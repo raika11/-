@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.mapper.AreaMapper;
@@ -40,7 +41,7 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public Page<Area> findAllArea(AreaSearchDTO search) {
-        return areaRepository.findAllByDomain_DomainIdAndDepth(search.getDomainId(), search.getDepth(), search.getPageable());
+        return areaRepository.findAllByDomain_DomainIdAndParent_AreaSeq(search.getDomainId(), search.getParentAreaSeq(), search.getPageable());
     }
 
     @Override
@@ -78,6 +79,16 @@ public class AreaServiceImpl implements AreaService {
 
         // 2. 삭제
         deleteOneArea(areaSeq);
+    }
+
+    @Override
+    public Long checkAreaComp(Area area) throws Exception {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Long success = (long)0;
+        paramMap.put("areaSeq", area.getAreaSeq());
+        paramMap.put("success", success);   // 1: 성공, -1: 페이지에 없는 컴포넌트, -2: 컨테이너에 없는 컴포넌트
+        areaMapper.checkAreaComp(paramMap);
+        return (long) paramMap.get("success");
     }
 
     private void deleteOneArea(Long areaSeq) {

@@ -36,7 +36,10 @@ public class AreaSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 5900493133914418299L;
 
-    private Integer depth;
+    /**
+     * 부모 편집영역SEQ
+     */
+    private Long parentAreaSeq;
 
     /**
      * 도메인

@@ -16,13 +16,45 @@ import org.springframework.data.domain.Page;
  * @since 2020-11-04
  */
 public interface AreaService {
+
+    /**
+     * 편집영역을 부모편집영역기준으로 조회
+     * @param search 검색조건
+     * @return 편집영역목록
+     */
     Page<Area> findAllArea(AreaSearchDTO search);
 
+    /**
+     * 편집영역조회(편집영역컴포넌트 포함)
+     * @param areaSeq 편집영역SEQ
+     * @return 편집영역
+     */
     Optional<Area> findAreaBySeq(Long areaSeq);
 
+    /**
+     * 편집영역등록(편집영역컴포넌트 포함)
+     * @param area 편집영역
+     * @return 등록된 편집영역
+     */
     Area insertArea(Area area);
 
+    /**
+     * 편집영역수정(편집영역컴포넌트 포함)
+     * @param area 편집영역
+     * @return 수정된 편집영역
+     */
     Area updateArea(Area area);
 
+    /**
+     * 편집영역삭제(편집영역컴포넌트 포함). 하위편집영역도 삭제됨
+     * @param area 삭제할 편집영역
+     */
     void deleteArea(Area area);
+
+    /**
+     * 편집영역 컴포넌트가 페이지에 존재하는지 조사한다.
+     * @param area 편집영역
+     * @return 1: 성공(올바르게 존재하면), -1: 페이지에 없는 컴포넌트, -2: 컨테이너에 없는 컴포넌트
+     */
+    Long checkAreaComp(Area area) throws Exception;
 }

@@ -14,4 +14,14 @@
     ) }
   </select>
 
+
+  <!-- 편집영역에 존재하는 컴포넌트가 페이지에 존재하는 조사한다. 1: 성공, -1: 페이지에 없는 컴포넌트, -2: 컨테이너에 없는 컴포넌트, -3: 없는 컴포넌트-->
+  <select id="checkAreaComp" parameterType="hashMap" resultType="java.lang.Long"
+      statementType="CALLABLE">
+		{call UPA_WMS_AREA_COMP_CHECK(
+			#{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+			#{success, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+  </select>
+
 </mapper>

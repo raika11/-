@@ -14,14 +14,23 @@ import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 
 /**
- * <pre>
- *
- * 2020. 7. 8. ssc 최초생성
- * </pre>
+ * 편집영역 Mapper
  *
  * @author ssc
  * @since 2020. 7. 8. 오후 12:34:59
  */
 public interface AreaMapper extends BaseMapper<AreaDTO, AreaSearchDTO> {
+
+    /**
+     * 하위 편집영역목록 조회
+     * @param map
+     * @return
+     */
     List<Long> findSubNodes(Map<String, Object> map);
+
+    /**
+     * 편집영역컴포넌트가 페이지내에 존재하는 지 체크
+     * @param map
+     */
+    void checkAreaComp(Map<String, Object> map);
 }

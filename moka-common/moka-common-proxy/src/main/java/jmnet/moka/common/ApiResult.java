@@ -36,6 +36,14 @@ public class ApiResult extends LinkedHashMap<String, Object> {
         return apiResult;
     }
 
+    public static ApiResult createApiResult(Object data) {
+        ApiResult apiResult = new ApiResult();
+        apiResult.put(ApiResult.MAIN_DATA, data);
+        apiResult.put("_CREATE_TIME", LocalDateTime.now().format(df));
+        apiResult.put("_WORK_TIME", 0);
+        return apiResult;
+    }
+
     public static ApiResult createApiErrorResult(Exception e) {
         ApiResult apiResult = new ApiResult();
         apiResult.put("ERROR", String.format("%s: %s", e.getClass().getName(), e.getMessage()));

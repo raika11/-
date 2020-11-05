@@ -9,7 +9,7 @@ import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore, deleteDomain, hasRelationList, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
 import { notification, toastr } from '@utils/toastUtil';
 
-const DomainEdit = React.lazy(() => import('./DomainEdit'));
+const DomainEdit = React.lazy(() => import('./DomainEditTest'));
 const DomainList = React.lazy(() => import('./DomainList'));
 
 /**

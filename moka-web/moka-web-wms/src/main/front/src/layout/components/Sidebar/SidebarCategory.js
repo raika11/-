@@ -31,7 +31,7 @@ const SidebarCategory = (props) => {
                         <MokaIcon iconName={nodeData.iconName} />
                     </span>
                 )}
-                <span className="align-middle">{nodeData.menuDispName}</span>
+                <span className="align-middle">{nodeData.menuDisplayNm}</span>
             </span>
             <Collapse in={open} timeout={3000}>
                 <div id={controls}>

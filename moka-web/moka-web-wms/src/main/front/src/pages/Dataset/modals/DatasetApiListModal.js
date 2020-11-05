@@ -95,8 +95,7 @@ const DatsetListModal = (props) => {
      * 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        if (onClickSave) onClickSave(selectedDataset);
-        handleHide();
+        if (onClickSave) onClickSave(selectedDataset, handleHide);
     };
 
     /**
@@ -156,7 +155,7 @@ const DatsetListModal = (props) => {
         <MokaModal
             show={show}
             onHide={handleHide}
-            title="데이터셋 검색"
+            title="자동 데이터셋 검색"
             size="md"
             buttons={[
                 { text: '등록', onClick: handleClickSave },

@@ -40,19 +40,15 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder;
 
 /**
- * @McpParam annotation이 선언되어 있는 Argument의 데이터유형이 SearchDTO이거나 SearchDTO를 상속 받은 클래스라면 extraParam
- *           map에 parameterMap을 add한다.
  * @author ince
- *
+ * @McpParam annotation이 선언되어 있는 Argument의 데이터유형이 SearchDTO이거나 SearchDTO를 상속 받은 클래스라면 extraParam map에 parameterMap을 add한다.
  */
 @Component
 public class SearchParamResolver implements HandlerMethodArgumentResolver {
 
     private final List<HandlerMethodArgumentResolver> argumentResolvers = new LinkedList<>();
-    private final Map<MethodParameter, HandlerMethodArgumentResolver> argumentResolverCache =
-            new ConcurrentHashMap<>(256);
-    private static final ParameterNameDiscoverer parameterNameDiscoverer =
-            new DefaultParameterNameDiscoverer();
+    private final Map<MethodParameter, HandlerMethodArgumentResolver> argumentResolverCache = new ConcurrentHashMap<>(256);
+    private static final ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
     public SearchParamResolver() {
 
@@ -65,9 +61,9 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
 
     @Override
     @Nullable
-    public Object resolveArgument(MethodParameter parameter,
-            @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
-            @Nullable WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
+            @Nullable WebDataBinderFactory binderFactory)
+            throws Exception {
 
         String name = ModelFactory.getNameForParameter(parameter);
         SearchParam ann = parameter.getParameterAnnotation(SearchParam.class);
@@ -79,7 +75,9 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
         BindingResult bindingResult = null;
 
         if (mavContainer.containsAttribute(name)) {
-            attribute = mavContainer.getModel().get(name);
+            attribute = mavContainer
+                    .getModel()
+                    .get(name);
         } else {
             // Create attribute instance
             try {
@@ -106,15 +104,17 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
                     bindRequestParameters(binder, webRequest);
                 }
                 validateIfApplicable(binder, parameter);
-                if (binder.getBindingResult().hasErrors()
-                        && isBindExceptionRequired(binder, parameter)) {
+                if (binder
+                        .getBindingResult()
+                        .hasErrors() && isBindExceptionRequired(binder, parameter)) {
                     throw new BindException(binder.getBindingResult());
                 }
             }
             // Value type adaptation, also covering java.util.Optional
-            if (!parameter.getParameterType().isInstance(attribute)) {
-                attribute = binder.convertIfNecessary(binder.getTarget(),
-                        parameter.getParameterType(), parameter);
+            if (!parameter
+                    .getParameterType()
+                    .isInstance(attribute)) {
+                attribute = binder.convertIfNecessary(binder.getTarget(), parameter.getParameterType(), parameter);
             }
             bindingResult = binder.getBindingResult();
         }
@@ -122,11 +122,14 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
         if (attribute instanceof SearchDTO) {
             if (webRequest.getParameterMap() != null) {
                 MultiValueMap<String, String> extraMap = new LinkedMultiValueMap<String, String>();
-                webRequest.getParameterMap().entrySet().forEach(etryKey -> {
-                    for (String value : etryKey.getValue()) {
-                        extraMap.add(etryKey.getKey(), value);
-                    }
-                });
+                webRequest
+                        .getParameterMap()
+                        .entrySet()
+                        .forEach(etryKey -> {
+                            for (String value : etryKey.getValue()) {
+                                extraMap.add(etryKey.getKey(), value);
+                            }
+                        });
                 ((SearchDTO) attribute).setExtraParamMap(extraMap);
                 if (extraMap.get("sort") != null) {
                     ((SearchDTO) attribute).setSort(extraMap.get("sort"));
@@ -143,29 +146,26 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
     }
 
     /**
-     * Extension point to create the model attribute if not found in the model, with subsequent
-     * parameter binding through bean properties (unless suppressed).
+     * Extension point to create the model attribute if not found in the model, with subsequent parameter binding through bean properties (unless
+     * suppressed).
      * <p>
-     * The default implementation typically uses the unique public no-arg constructor if available
-     * but also handles a "primary constructor" approach for data classes: It understands the
-     * JavaBeans {@link ConstructorProperties} annotation as well as runtime-retained parameter
-     * names in the bytecode, associating request parameters with constructor arguments by name. If
-     * no such constructor is found, the default constructor will be used (even if not public),
-     * assuming subsequent bean property bindings through setter methods.
-     * 
+     * The default implementation typically uses the unique public no-arg constructor if available but also handles a "primary constructor" approach
+     * for data classes: It understands the JavaBeans {@link ConstructorProperties} annotation as well as runtime-retained parameter names in the
+     * bytecode, associating request parameters with constructor arguments by name. If no such constructor is found, the default constructor will be
+     * used (even if not public), assuming subsequent bean property bindings through setter methods.
+     *
      * @param attributeName the name of the attribute (never {@code null})
-     * @param parameter the method parameter declaration
+     * @param parameter     the method parameter declaration
      * @param binderFactory for creating WebDataBinder instance
-     * @param webRequest the current request
+     * @param webRequest    the current request
      * @return the created model attribute (never {@code null})
      * @throws BindException in case of constructor argument binding failure
-     * @throws Exception in case of constructor invocation failure
-     * @see #constructAttribute(Constructor, String, MethodParameter, WebDataBinderFactory,
-     *      NativeWebRequest)
+     * @throws Exception     in case of constructor invocation failure
+     * @see #constructAttribute(Constructor, String, MethodParameter, WebDataBinderFactory, NativeWebRequest)
      * @see BeanUtils#findPrimaryConstructor(Class)
      */
-    protected Object createAttribute(String attributeName, MethodParameter parameter,
-            WebDataBinderFactory binderFactory, NativeWebRequest webRequest) throws Exception {
+    protected Object createAttribute(String attributeName, MethodParameter parameter, WebDataBinderFactory binderFactory, NativeWebRequest webRequest)
+            throws Exception {
 
         MethodParameter nestedParameter = parameter.nestedIfOptional();
         Class<?> clazz = nestedParameter.getNestedParameterType();
@@ -179,26 +179,27 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
                 try {
                     ctor = clazz.getDeclaredConstructor();
                 } catch (NoSuchMethodException ex) {
-                    throw new IllegalStateException(
-                            "No primary or default constructor found for " + clazz, ex);
+                    throw new IllegalStateException("No primary or default constructor found for " + clazz, ex);
                 }
             }
         }
 
-        Object attribute =
-                constructAttribute(ctor, attributeName, parameter, binderFactory, webRequest);
+        Object attribute = constructAttribute(ctor, attributeName, parameter, binderFactory, webRequest);
         if (parameter != nestedParameter) {
-            attribute = Optional.of(attribute);
+            attribute = Optional.ofNullable(attribute);
         }
 
         if (attribute instanceof SearchDTO) {
             if (webRequest.getParameterMap() != null) {
                 MultiValueMap<String, String> extraMap = new LinkedMultiValueMap<String, String>();
-                webRequest.getParameterMap().entrySet().forEach(etryKey -> {
-                    for (String value : etryKey.getValue()) {
-                        extraMap.add(etryKey.getKey(), value);
-                    }
-                });
+                webRequest
+                        .getParameterMap()
+                        .entrySet()
+                        .forEach(etryKey -> {
+                            for (String value : etryKey.getValue()) {
+                                extraMap.add(etryKey.getKey(), value);
+                            }
+                        });
                 ((SearchDTO) attribute).setExtraParamMap(extraMap);
             }
 
@@ -209,15 +210,14 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
 
     /**
      * Construct a new attribute instance with the given constructor.
-     * 
+     *
      * @since 5.0
-     * @deprecated as of 5.1, in favor of
-     *             {@link #constructAttribute(Constructor, String, MethodParameter, WebDataBinderFactory, NativeWebRequest)}
+     * @deprecated as of 5.1, in favor of {@link #constructAttribute(Constructor, String, MethodParameter, WebDataBinderFactory, NativeWebRequest)}
      */
     @Deprecated
     @Nullable
-    protected Object constructAttribute(Constructor<?> ctor, String attributeName,
-            WebDataBinderFactory binderFactory, NativeWebRequest webRequest) throws Exception {
+    protected Object constructAttribute(Constructor<?> ctor, String attributeName, WebDataBinderFactory binderFactory, NativeWebRequest webRequest)
+            throws Exception {
 
         return null;
     }
@@ -225,23 +225,21 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
     /**
      * Construct a new attribute instance with the given constructor.
      * <p>
-     * Called from
-     * {@link #createAttribute(String, MethodParameter, WebDataBinderFactory, NativeWebRequest)}
-     * after constructor resolution.
-     * 
-     * @param ctor the constructor to use
+     * Called from {@link #createAttribute(String, MethodParameter, WebDataBinderFactory, NativeWebRequest)} after constructor resolution.
+     *
+     * @param ctor          the constructor to use
      * @param attributeName the name of the attribute (never {@code null})
      * @param binderFactory for creating WebDataBinder instance
-     * @param webRequest the current request
+     * @param webRequest    the current request
      * @return the created model attribute (never {@code null})
      * @throws BindException in case of constructor argument binding failure
-     * @throws Exception in case of constructor invocation failure
+     * @throws Exception     in case of constructor invocation failure
      * @since 5.1
      */
     @SuppressWarnings("deprecation")
-    protected Object constructAttribute(Constructor<?> ctor, String attributeName,
-            MethodParameter parameter, WebDataBinderFactory binderFactory,
-            NativeWebRequest webRequest) throws Exception {
+    protected Object constructAttribute(Constructor<?> ctor, String attributeName, MethodParameter parameter, WebDataBinderFactory binderFactory,
+            NativeWebRequest webRequest)
+            throws Exception {
 
         Object constructed = constructAttribute(ctor, attributeName, binderFactory, webRequest);
         if (constructed != null) {
@@ -255,14 +253,11 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
 
         // A single data class constructor -> resolve constructor arguments from request parameters.
         ConstructorProperties cp = ctor.getAnnotation(ConstructorProperties.class);
-        String[] paramNames =
-                (cp != null ? cp.value() : parameterNameDiscoverer.getParameterNames(ctor));
-        Assert.state(paramNames != null,
-                () -> "Cannot resolve parameter names for constructor " + ctor);
+        String[] paramNames = (cp != null ? cp.value() : parameterNameDiscoverer.getParameterNames(ctor));
+        Assert.state(paramNames != null, () -> "Cannot resolve parameter names for constructor " + ctor);
         Class<?>[] paramTypes = ctor.getParameterTypes();
         Assert.state(paramNames.length == paramTypes.length,
-                () -> "Invalid number of parameter names: " + paramNames.length
-                        + " for constructor " + ctor);
+                () -> "Invalid number of parameter names: " + paramNames.length + " for constructor " + ctor);
 
         Object[] args = new Object[paramTypes.length];
         WebDataBinder binder = binderFactory.createBinder(webRequest, null, attributeName);
@@ -286,11 +281,9 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
                 }
             }
             try {
-                MethodParameter methodParam =
-                        new FieldAwareConstructorParameter(ctor, i, paramName);
+                MethodParameter methodParam = new FieldAwareConstructorParameter(ctor, i, paramName);
                 if (value == null && methodParam.isOptional()) {
-                    args[i] = (methodParam.getParameterType() == Optional.class ? Optional.empty()
-                            : null);
+                    args[i] = (methodParam.getParameterType() == Optional.class ? Optional.empty() : null);
                 } else {
                     args[i] = binder.convertIfNecessary(value, paramType, methodParam);
                 }
@@ -298,9 +291,12 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
                 ex.initPropertyName(paramName);
                 args[i] = value;
                 failedParams.add(paramName);
-                binder.getBindingResult().recordFieldValue(paramName, paramType, value);
-                binder.getBindingErrorProcessor().processPropertyAccessException(ex,
-                        binder.getBindingResult());
+                binder
+                        .getBindingResult()
+                        .recordFieldValue(paramName, paramType, value);
+                binder
+                        .getBindingErrorProcessor()
+                        .processPropertyAccessException(ex, binder.getBindingResult());
                 bindingFailure = true;
             }
         }
@@ -312,8 +308,7 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
                 if (!failedParams.contains(paramName)) {
                     Object value = args[i];
                     result.recordFieldValue(paramName, paramTypes[i], value);
-                    validateValueIfApplicable(binder, parameter, ctor.getDeclaringClass(),
-                            paramName, value);
+                    validateValueIfApplicable(binder, parameter, ctor.getDeclaringClass(), paramName, value);
                 }
             }
             throw new BindException(result);
@@ -326,8 +321,8 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
      * Whether to raise a fatal bind exception on validation errors.
      * <p>
      * The default implementation delegates to {@link #isBindExceptionRequired(MethodParameter)}.
-     * 
-     * @param binder the data binder used to perform data binding
+     *
+     * @param binder    the data binder used to perform data binding
      * @param parameter the method parameter declaration
      * @return {@code true} if the next method parameter is not of type {@link Errors}
      * @see #isBindExceptionRequired(MethodParameter)
@@ -338,23 +333,24 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
 
     /**
      * Whether to raise a fatal bind exception on validation errors.
-     * 
+     *
      * @param parameter the method parameter declaration
      * @return {@code true} if the next method parameter is not of type {@link Errors}
      * @since 5.0
      */
     protected boolean isBindExceptionRequired(MethodParameter parameter) {
         int i = parameter.getParameterIndex();
-        Class<?>[] paramTypes = parameter.getExecutable().getParameterTypes();
-        boolean hasBindingResult =
-                (paramTypes.length > (i + 1) && Errors.class.isAssignableFrom(paramTypes[i + 1]));
+        Class<?>[] paramTypes = parameter
+                .getExecutable()
+                .getParameterTypes();
+        boolean hasBindingResult = (paramTypes.length > (i + 1) && Errors.class.isAssignableFrom(paramTypes[i + 1]));
         return !hasBindingResult;
     }
 
     /**
      * Extension point to bind the request to the target object.
-     * 
-     * @param binder the data binder instance to use for the binding
+     *
+     * @param binder  the data binder instance to use for the binding
      * @param request the current request
      */
     protected void bindRequestParameters(WebDataBinder binder, NativeWebRequest request) {
@@ -367,11 +363,10 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
     /**
      * Validate the model attribute if applicable.
      * <p>
-     * The default implementation checks for {@code @javax.validation.Valid}, Spring's
-     * {@link org.springframework.validation.annotation.Validated}, and custom annotations whose
-     * name starts with "Valid".
-     * 
-     * @param binder the DataBinder to be used
+     * The default implementation checks for {@code @javax.validation.Valid}, Spring's {@link org.springframework.validation.annotation.Validated},
+     * and custom annotations whose name starts with "Valid".
+     *
+     * @param binder    the DataBinder to be used
      * @param parameter the method parameter declaration
      * @see WebDataBinder#validate(Object...)
      * @see SmartValidator#validate(Object, Errors, Object...)
@@ -403,18 +398,19 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
 
     /**
      * Determine any validation triggered by the given annotation.
-     * 
+     *
      * @param ann the annotation (potentially a validation annotation)
-     * @return the validation hints to apply (possibly an empty array), or {@code null} if this
-     *         annotation does not trigger any validation
+     * @return the validation hints to apply (possibly an empty array), or {@code null} if this annotation does not trigger any validation
      * @since 5.1
      */
     @Nullable
     private Object[] determineValidationHints(Annotation ann) {
         Validated validatedAnn = AnnotationUtils.getAnnotation(ann, Validated.class);
-        if (validatedAnn != null || ann.annotationType().getSimpleName().startsWith("Valid")) {
-            Object hints =
-                    (validatedAnn != null ? validatedAnn.value() : AnnotationUtils.getValue(ann));
+        if (validatedAnn != null || ann
+                .annotationType()
+                .getSimpleName()
+                .startsWith("Valid")) {
+            Object hints = (validatedAnn != null ? validatedAnn.value() : AnnotationUtils.getValue(ann));
             if (hints == null) {
                 return new Object[0];
             }
@@ -425,7 +421,7 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
 
     /**
      * {@link MethodParameter} subclass which detects field annotations as well.
-     * 
+     *
      * @since 5.1
      */
     private static class FieldAwareConstructorParameter extends MethodParameter {
@@ -435,8 +431,7 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
         @Nullable
         private volatile Annotation[] combinedAnnotations;
 
-        public FieldAwareConstructorParameter(Constructor<?> constructor, int parameterIndex,
-                String parameterName) {
+        public FieldAwareConstructorParameter(Constructor<?> constructor, int parameterIndex, String parameterName) {
             super(constructor, parameterIndex);
             this.parameterName = parameterName;
         }
@@ -483,21 +478,20 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
     /**
      * Validate the specified candidate value if applicable.
      * <p>
-     * The default implementation checks for {@code @javax.validation.Valid}, Spring's
-     * {@link org.springframework.validation.annotation.Validated}, and custom annotations whose
-     * name starts with "Valid".
-     * 
-     * @param binder the DataBinder to be used
-     * @param parameter the method parameter declaration
+     * The default implementation checks for {@code @javax.validation.Valid}, Spring's {@link org.springframework.validation.annotation.Validated},
+     * and custom annotations whose name starts with "Valid".
+     *
+     * @param binder     the DataBinder to be used
+     * @param parameter  the method parameter declaration
      * @param targetType the target type
-     * @param fieldName the name of the field
-     * @param value the candidate value
-     * @since 5.1
+     * @param fieldName  the name of the field
+     * @param value      the candidate value
      * @see #validateIfApplicable(WebDataBinder, MethodParameter)
      * @see SmartValidator#validateValue(Class, String, Object, Errors, Object...)
+     * @since 5.1
      */
-    protected void validateValueIfApplicable(WebDataBinder binder, MethodParameter parameter,
-            Class<?> targetType, String fieldName, @Nullable Object value) {
+    protected void validateValueIfApplicable(WebDataBinder binder, MethodParameter parameter, Class<?> targetType, String fieldName,
+            @Nullable Object value) {
 
         for (Annotation ann : parameter.getParameterAnnotations()) {
             Object[] validationHints = determineValidationHints(ann);
@@ -505,8 +499,7 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
                 for (Validator validator : binder.getValidators()) {
                     if (validator instanceof SmartValidator) {
                         try {
-                            ((SmartValidator) validator).validateValue(targetType, fieldName, value,
-                                    binder.getBindingResult(), validationHints);
+                            ((SmartValidator) validator).validateValue(targetType, fieldName, value, binder.getBindingResult(), validationHints);
                         } catch (IllegalArgumentException ex) {
                             // No corresponding field on the target class...
                         }

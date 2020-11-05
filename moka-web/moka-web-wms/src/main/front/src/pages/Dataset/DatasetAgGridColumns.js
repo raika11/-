@@ -8,19 +8,21 @@ export const columnDefs = [
     {
         headerName: 'ID',
         field: 'datasetSeq',
-        width: 80,
+        cellStyle: { fontSize: '12px' },
+        width: 50,
     },
     {
         headerName: '데이터셋명',
         field: 'datasetName',
         // cellClass: 'ag-cell-center',
-        // cellStyle: { textAlign: 'center' },
-        width: 150,
+        cellStyle: { fontSize: '12px' },
+        width: 214,
     },
     {
         headerName: '',
         field: 'autoCreateYn',
-        width: 80,
+        width: 50,
+        cellStyle: { fontSize: '12px' },
         cellRendererFramework: (params) => {
             const { autoCreateYn } = params.data;
             let autoCreateText = '수동형';
@@ -34,7 +36,7 @@ export const columnDefs = [
         headerName: '',
         field: 'delete',
         width: 50,
-        cellStyle: { textAlign: 'center' },
+        cellStyle: { fontSize: '12px' },
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;

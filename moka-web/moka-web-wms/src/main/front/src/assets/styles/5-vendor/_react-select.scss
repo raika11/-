@@ -3,10 +3,11 @@
         min-height: auto;
 
         &--is-focused,
-        &--is-menu-open {
+        &--is-menu-open,
+        &:hover {
             color: $input-focus-color;
             background-color: $input-focus-bg;
-            border-color: $input-focus-border-color !important;
+            border-color: $input-focus-border-color;
             box-shadow: $input-box-shadow, $input-focus-box-shadow;
         }
     }
@@ -45,6 +46,26 @@
 
     .react-select__menu {
         z-index: 2;
+    }
+}
+
+/**
+ * input-group의 invalid 처리
+ * bootstrap/scss/mixins/_forms.scss 참고하여서 추가함
+ */
+ @each $state, $data in $input-group-validation-states {
+    .react-select-container {
+        @include form-validation-state-selector($state) {
+            .react-select__control {
+                border-color: map-get($data, color);
+            }
+
+            .react-select__control--is-focused,
+            .react-select__control--is-menu-open {
+                border-color: map-get($data, color);
+                    box-shadow: 0 0 0 $input-focus-width rgba(map-get($data, color), .25);
+            }
+        }
     }
 }
 

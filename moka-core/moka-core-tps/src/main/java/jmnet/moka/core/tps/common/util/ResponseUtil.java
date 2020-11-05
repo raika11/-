@@ -6,31 +6,31 @@ package jmnet.moka.core.tps.common.util;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultHeaderDTO;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 /**
  * <pre>
- * 
+ *
  * 2020. 1. 10. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 1. 10. 오후 3:45:10
+ *
  * @author ssc
+ * @since 2020. 1. 10. 오후 3:45:10
  */
 public class ResponseUtil {
 
     /**
      * Response에 에러메세지를 JSON으로 내려준다.
-     * 
-     * @param response 응답객체
+     *
+     * @param response   응답객체
      * @param resultCode 에러코드
-     * @param message 에러메세지
+     * @param message    에러메세지
      * @throws IOException 예외
      */
     public static void error(HttpServletResponse response, int resultCode, String message)
@@ -41,14 +41,13 @@ public class ResponseUtil {
 
     /**
      * Response에 에러메세지를 JSON으로 내려준다.
-     * 
-     * @param response 응답객체
+     *
+     * @param response   응답객체
      * @param resultCode 에러코드
-     * @param message 에러메세지
+     * @param message    에러메세지
      * @throws IOException 예외
      */
-    public static ResultDTO<String> getErrorResultDTO(HttpServletResponse response, int resultCode,
-            String message) {
+    public static ResultDTO<String> getErrorResultDTO(HttpServletResponse response, int resultCode, String message) {
 
         setDefault(response);
 
@@ -61,15 +60,12 @@ public class ResponseUtil {
         return resultDTO;
     }
 
-    public static <T> ResponseEntity<?> getErrorResponseEntity(HttpServletResponse response,
-            int resultCode, String message) {
+    public static <T> ResponseEntity<?> getErrorResponseEntity(HttpServletResponse response, int resultCode, String message) {
 
-        return new ResponseEntity<>(getErrorResultDTO(response, resultCode, message),
-                HttpStatus.OK);
+        return new ResponseEntity<>(getErrorResultDTO(response, resultCode, message), HttpStatus.OK);
     }
 
-    public static <T> ResponseEntity<?> getErrorResponseEntity(HttpServletResponse response,
-            int resultCode, String message, T body) {
+    public static <T> ResponseEntity<?> getErrorResponseEntity(HttpServletResponse response, int resultCode, String message, T body) {
 
         setDefault(response);
 
@@ -84,15 +80,15 @@ public class ResponseUtil {
 
     /**
      * Response에 에러메세지를 JSON으로 내려준다. body에 에러목록을 넣는다.
-     * 
-     * @param response 응답객체
+     *
+     * @param response   응답객체
      * @param resultCode 에러코드
-     * @param message 에러메세지
-     * @param body 에러목록
+     * @param message    에러메세지
+     * @param body       에러목록
      * @throws IOException 예외
      */
-    public static <T> void error(HttpServletResponse response, int resultCode, String message,
-            T body) throws IOException {
+    public static <T> void error(HttpServletResponse response, int resultCode, String message, T body)
+            throws IOException {
 
         setDefault(response);
 
@@ -106,13 +102,36 @@ public class ResponseUtil {
     }
 
     /**
-     * Response에 성공메세지를 JSON으로 내려준다.
-     * 
-     * @param response 응답객체
+     * Response에 에러메세지를 JSON으로 내려준다. body에 에러목록을 넣는다.
+     *
+     * @param response   응답객체
      * @param resultCode 에러코드
-     * @param message 에러메세지
+     * @param message    에러메세지
+     * @param body       에러목록
+     * @param resultType 상세 에러 유형
+     * @throws IOException 예외
+     */
+    public static <T> void error(HttpServletResponse response, int resultCode, String message, T body, int resultType)
+            throws IOException {
+
+        setDefault(response);
+
+        ResultHeaderDTO header = new ResultHeaderDTO();
+        header.setSuccess(false);
+        header.setResultCode(resultCode);
+        header.setResultType(resultType);
+        header.setMessage(message);
+        ResultDTO<T> resultDTO = new ResultDTO<T>(header, body);
+
+        write(response, resultDTO);
+    }
+
+    /**
+     * Response에 성공메세지를 JSON으로 내려준다.
+     *
+     * @param response 응답객체
+     * @param message  에러메세지
      * @param redirect redirect url
-     * @param body 에러목록
      * @throws IOException 예외
      */
     public static void ok(HttpServletResponse response, String message, String redirect)
@@ -130,6 +149,31 @@ public class ResponseUtil {
         write(response, resultDTO);
     }
 
+    /**
+     * Response에 성공메세지를 JSON으로 내려준다.
+     *
+     * @param response   응답객체
+     * @param resultCode 응답 결과 코드
+     * @param message    메세지
+     * @param body       전문
+     * @param resultType 응답 결과 상세 코드
+     * @throws IOException IOException 처리
+     */
+    public static <T> void ok(HttpServletResponse response, int resultCode, String message, T body, int resultType)
+            throws IOException {
+
+        setDefault(response);
+
+        ResultHeaderDTO header = new ResultHeaderDTO();
+        header.setSuccess(true);
+        header.setResultCode(resultCode);
+        header.setResultType(resultType);
+        header.setMessage(message);
+        ResultDTO<T> resultDTO = new ResultDTO<T>(header, body);
+
+        write(response, resultDTO);
+    }
+
     private static void setDefault(HttpServletResponse response) {
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -141,7 +185,9 @@ public class ResponseUtil {
             throws IOException {
 
         PrintWriter out = response.getWriter();
-        out.print(ResourceMapper.getDefaultObjectMapper().writeValueAsString(resultDTO));
+        out.print(ResourceMapper
+                .getDefaultObjectMapper()
+                .writeValueAsString(resultDTO));
         out.flush();
         out.close();
     }

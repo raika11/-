@@ -1,0 +1,258 @@
+/*
+ * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+ */
+
+package jmnet.moka.core.tps.mvc.area.controller;
+
+import io.swagger.annotations.ApiOperation;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.exception.InvalidDataException;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
+import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
+import jmnet.moka.core.tps.mvc.area.dto.ParentAreaDTO;
+import jmnet.moka.core.tps.mvc.area.entity.Area;
+import jmnet.moka.core.tps.mvc.area.service.AreaService;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * Description: 편집영역 API
+ *
+ * @author ssc
+ * @since 2020-11-04
+ */
+@Controller
+@Validated
+@Slf4j
+@RequestMapping("/api/areas")
+public class AreaRestController {
+    @Autowired
+    private AreaService areaService;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private MessageByLocale messageByLocale;
+
+    @Autowired
+    private TpsLogger tpsLogger;
+
+    /**
+     * 편집영역 목록조회(depth별)
+     *
+     * @param search 검색조건
+     * @return 편집영역 목록
+     */
+    @ApiOperation(value = "편집영역 뎁스별 목록조회(depth별)")
+    @GetMapping
+    public ResponseEntity<?> getAreaList(@Valid @SearchParam AreaSearchDTO search)
+            throws NoDataException {
+
+        // depth조건 필수
+        if (search.getDepth() == null || search.getDepth() < 1) {
+            String message = messageByLocale.get("tps.area.error.min.depth");
+            tpsLogger.fail(message, true);
+            throw new NoDataException(message);
+        }
+
+        Page<Area> returnValue = areaService.findAllArea(search);
+        List<AreaDTO> areaDtoList = modelMapper.map(returnValue.getContent(), AreaDTO.TYPE);
+        ResultListDTO<AreaDTO> resultList = new ResultListDTO<AreaDTO>();
+        resultList.setList(areaDtoList);
+        resultList.setTotalCnt(returnValue.getTotalElements());
+
+        ResultDTO<ResultListDTO<AreaDTO>> resultDTO = new ResultDTO<ResultListDTO<AreaDTO>>(resultList);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * 편집영역 상세조회
+     *
+     * @param areaSeq 편집영역번호 (필수)
+     * @return 편집영역
+     * @throws NoDataException 데이터없음
+     */
+    @ApiOperation(value = "편집영역 상세조회")
+    @GetMapping("/{areaSeq}")
+    public ResponseEntity<?> getArea(@PathVariable("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
+            throws NoDataException {
+
+        Area area = areaService.findAreaBySeq(areaSeq)
+                               .orElseThrow(() -> {
+                                   String message = messageByLocale.get("tps.common.error.no-data");
+                                   tpsLogger.fail(message, true);
+                                   return new NoDataException(message);
+                               });
+
+        //        컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
+        //        페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.
+
+        AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);
+
+        ResultDTO<AreaDTO> resultDTO = new ResultDTO<AreaDTO>(areaDTO);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * 편집영역 등록
+     *
+     * @param areaDTO 편집영역DTO
+     * @return 편집영역
+     * @throws InvalidDataException 데이터유효성에러
+     * @throws Exception            편집영역오류 그외 모든 에러
+     */
+    @ApiOperation(value = "편집영역 등록")
+    @PostMapping(headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> postArea(@RequestBody @Valid AreaDTO areaDTO)
+            throws InvalidDataException, Exception {
+
+        // 데이터 유효성 검사
+        validData(areaDTO, ActionType.INSERT);
+
+        if (areaDTO.getAreaComps()
+                   .size() > 0) {
+
+            areaDTO.getAreaComps()
+                   .stream()
+                   .forEach((comp) -> comp.setArea(areaDTO));
+        }
+
+        Area area = modelMapper.map(areaDTO, Area.class);
+
+        try {
+            // 편집영역 등록
+            Area returnVal = areaService.insertArea(area);
+            AreaDTO returnValDTO = modelMapper.map(returnVal, AreaDTO.class);
+            if (returnVal.getParent() != null) {
+                ParentAreaDTO parentDto = modelMapper.map(returnVal.getParent(), ParentAreaDTO.class);
+                returnValDTO.setParent(parentDto);
+            }
+
+            String message = messageByLocale.get("tps.common.success.insert");
+            ResultDTO<AreaDTO> resultDTO = new ResultDTO<AreaDTO>(returnValDTO, message);
+            tpsLogger.success(ActionType.INSERT, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT AREA]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT AREA]", e, true);
+            throw new Exception(messageByLocale.get("tps.area.error.save"), e);
+        }
+    }
+
+    /**
+     * 편집영역 수정
+     *
+     * @param areaDTO 편집영역DTO
+     * @return 편집영역
+     * @throws InvalidDataException 데이터유효성에러
+     * @throws Exception            편집영역오류 그외 모든 에러
+     */
+    @ApiOperation(value = "편집영역 수정")
+    @PutMapping(value = "/{areaSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> putArea(HttpServletRequest request,
+            @PathVariable("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq, @RequestBody @Valid AreaDTO areaDTO)
+            throws InvalidDataException, Exception {
+
+        // 데이터 유효성 검사
+        validData(areaDTO, ActionType.UPDATE);
+
+        // 수정
+        Area newArea = modelMapper.map(areaDTO, Area.class);
+        Area orgArea = areaService.findAreaBySeq(areaSeq)
+                                  .orElseThrow(() -> {
+                                      String message = messageByLocale.get("tps.area.error.no-data");
+                                      tpsLogger.fail(ActionType.UPDATE, message, true);
+                                      return new NoDataException(message);
+                                  });
+
+        if (areaDTO.getAreaComps()
+                   .size() > 0) {
+
+            areaDTO.getAreaComps()
+                   .stream()
+                   .forEach((comp) -> comp.setArea(areaDTO));
+        }
+
+        Area area = modelMapper.map(areaDTO, Area.class);
+
+        try {
+            // 편집영역 수정
+            Area returnVal = areaService.updateArea(area);
+
+            AreaDTO returnValDTO = modelMapper.map(returnVal, AreaDTO.class);
+            if (returnVal.getParent() != null) {
+                ParentAreaDTO parentDto = modelMapper.map(returnVal.getParent(), ParentAreaDTO.class);
+                returnValDTO.setParent(parentDto);
+            }
+
+            String message = messageByLocale.get("tps.common.success.insert");
+            ResultDTO<AreaDTO> resultDTO = new ResultDTO<AreaDTO>(returnValDTO, message);
+            tpsLogger.success(ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE AREA]", e);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE AREA]", e, true);
+            throw new Exception(messageByLocale.get("tps.area.error.save"), e);
+        }
+    }
+
+    /**
+     * 편집영역 데이터 유효성 검사
+     *
+     * @param area       편집영역정보
+     * @param actionType 작업구분(INSERT OR UPDATE)
+     * @throws InvalidDataException 데이타유효성 오류
+     * @throws Exception            예외
+     */
+    private void validData(AreaDTO area, ActionType actionType)
+            throws InvalidDataException, Exception {
+        List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+
+        if (area != null) {
+            // 자식영역일 경우 부모가 있는지 조사
+            if (area.getDepth() > 1) {
+                if (area.getParent() == null) {
+                    String message = messageByLocale.get("tps.area.error.parentAreaSeq");
+                    invalidList.add(new InvalidDataDTO("parentAreaSeq", message));
+                    tpsLogger.fail(actionType, message, true);
+                }
+            }
+
+        }
+
+        if (invalidList.size() > 0) {
+            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
+            throw new InvalidDataException(invalidList, validMessage);
+        }
+    }
+}

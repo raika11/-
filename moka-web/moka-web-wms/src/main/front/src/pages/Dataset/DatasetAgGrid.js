@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MokaTable } from '@components';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { columnDefs } from './DatasetAgGridColumns';
 import { GET_DATASET_LIST, changeSearchOption, getDatasetList, initialState } from '@store/dataset';
 import { useHistory } from 'react-router-dom';
@@ -14,13 +14,16 @@ const DatasetAgGrid = (props) => {
     const [search, setSearch] = useState(initialState);
     const [datasetRows, setDatasetRows] = useState([]);
 
-    const { dataset, list, search: storeSearch, total, loading } = useSelector((store) => ({
-        dataset: store.dataset.dataset,
-        list: store.dataset.list,
-        search: store.dataset.search,
-        total: store.dataset.total,
-        loading: store.loading[GET_DATASET_LIST],
-    }));
+    const { dataset, list, search: storeSearch, total, loading } = useSelector(
+        (store) => ({
+            dataset: store.dataset.dataset,
+            list: store.dataset.list,
+            search: store.dataset.search,
+            total: store.dataset.total,
+            loading: store.loading[GET_DATASET_LIST],
+        }),
+        shallowEqual,
+    );
 
     useEffect(() => {
         setSearch(storeSearch);

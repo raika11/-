@@ -4,6 +4,7 @@ import produce from 'immer';
 import { Helmet } from 'react-helmet';
 import InputMask from 'react-input-mask';
 import { toastr } from 'react-redux-toastr';
+import { useForm } from 'react-hook-form';
 
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -18,12 +19,12 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 
 import {
     MokaPrependLinkInput,
-    MokaSearchInput,
     MokaDateTimePicker,
     MokaIconTabs,
     MokaCard,
     MokaAlertWithButtons,
     MokaAutocomplete,
+    MokaUncontrolledInput,
     MokaAlert,
     MokaIcon,
     MokaImageInput,
@@ -36,10 +37,13 @@ import { options } from './data';
 import bg from '@assets/images/bg.jpeg';
 
 const Dashboard = () => {
+    const { register, handleSubmit, errors, control } = useForm();
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [checked, setChecked] = useState(true);
     const [multiSelectValue, setMultiSelectValue] = useState([]);
+    const [serror, setSerror] = useState(false);
+    const [hookData, setHookData] = useState({});
 
     // modal test
     const [showD, setShowD] = useState(false);
@@ -79,6 +83,10 @@ const Dashboard = () => {
             }),
         );
     };
+
+    React.useEffect(() => {
+        setSerror(errors['autocomplete-test'] ? true : false);
+    }, [errors]);
 
     return (
         <Container className="p-0" fluid>
@@ -203,7 +211,7 @@ const Dashboard = () => {
                                     <option>옵션1</option>
                                     <option>옵션2</option>
                                 </Form.Control>
-                                <MokaAutocomplete options={options} />
+                                {/* <MokaAutocomplete options={options} /> */}
                             </Form.Group>
 
                             {/* checkbox */}
@@ -312,6 +320,26 @@ const Dashboard = () => {
                     tabs={[
                         <MokaCard titleClassName="h-100 mb-0" title="Modal 예제">
                             <div className="mb-3">
+                                <Form onSubmit={handleSubmit((data) => setHookData(data))} className="mb-3">
+                                    <Form.Control name="test-text" ref={register} />
+                                    <Form.Label className="text-danger">* react-hook-form 사용한 autocomplete</Form.Label>
+                                    <MokaUncontrolledInput
+                                        name="autocomplete-test"
+                                        defaultValue={null}
+                                        as="autocomplete"
+                                        inputProps={{ options: options }}
+                                        onChange={() => {
+                                            setSerror(false);
+                                        }}
+                                        isInvalid={serror}
+                                        rules={{ required: true }}
+                                        control={control}
+                                        className="mb-2"
+                                    />
+                                    <Button type="submit">submit</Button>
+                                    <div className="my-2">{JSON.stringify(hookData)}</div>
+                                </Form>
+
                                 <Button className="mr-2" onClick={() => setShowD(true)}>
                                     드래그 모달
                                 </Button>

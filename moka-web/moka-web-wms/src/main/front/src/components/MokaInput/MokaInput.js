@@ -80,7 +80,7 @@ const defaultProps = {
 };
 
 /**
- * 기본 input
+ * controlled input
  */
 const MokaInput = forwardRef((props, ref) => {
     const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, mask, isInvalid, disabled, ...rest } = props;
@@ -98,7 +98,7 @@ const MokaInput = forwardRef((props, ref) => {
                 isInvalid={isInvalid}
                 disabled={disabled}
                 value={value || undefined}
-                onChange={onChange || undefined}
+                onChange={onChange}
                 custom
                 {...rest}
             >
@@ -137,7 +137,7 @@ const MokaInput = forwardRef((props, ref) => {
                 isInvalid={isInvalid}
                 disabled={disabled}
                 value={value || undefined}
-                onChange={onChange || undefined}
+                onChange={onChange}
                 {...rest}
             />
         );
@@ -155,7 +155,7 @@ const MokaInput = forwardRef((props, ref) => {
                 isInvalid={isInvalid}
                 disabled={disabled}
                 value={value || undefined}
-                onChange={onChange || undefined}
+                onChange={onChange}
                 label={inputProps.label || ''}
                 {...rest}
             />
@@ -174,7 +174,7 @@ const MokaInput = forwardRef((props, ref) => {
                 isInvalid={isInvalid}
                 disabled={disabled}
                 value={value || undefined}
-                onChange={onChange || undefined}
+                onChange={onChange}
                 {...rest}
             />
         );
@@ -185,7 +185,7 @@ const MokaInput = forwardRef((props, ref) => {
     }
     // auto complete
     else if (as === 'autocomplete') {
-        return <MokaAutocomplete value={value} onChange={onChange} {...inputProps} />;
+        return <MokaAutocomplete ref={ref} name={name} id={id} value={value} onChange={onChange} isInvalid={isInvalid} {...inputProps} />;
     }
     // dateTimePicker
     else if (as === 'dateTimePicker') {

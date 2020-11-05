@@ -53,6 +53,7 @@ const ComponentCopyModal = (props) => {
 
     return (
         <MokaModal
+            width={600}
             show={show}
             onHide={handleHide}
             title="컴포넌트 설정복사"

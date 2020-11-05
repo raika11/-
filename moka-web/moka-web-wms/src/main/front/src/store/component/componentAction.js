@@ -38,7 +38,7 @@ export const getComponentLookupList = createAction(GET_COMPONENT_LOOKUP_LIST, (.
  * 데이터 변경
  */
 export const CHANGE_COMPONENT = 'component/CHANGE_COMPONENT';
-export const CHANGE_INVALID_LIST = 'domain/CHANGE_INVALID_LIST';
+export const CHANGE_INVALID_LIST = 'component/CHANGE_INVALID_LIST';
 export const changeComponent = createAction(CHANGE_COMPONENT, (component) => component);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 

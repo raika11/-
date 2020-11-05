@@ -7,8 +7,8 @@ import Card from 'react-bootstrap/Card';
 
 import { MokaCard, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeDataset, clearDataset, copyDataset, GET_DATASET, getDataset, getDatasetListModal, saveDataset } from '@store/dataset';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { changeDataset, clearDataset, copyDataset, GET_DATASET, getDataset, getDatasetListModal, SAVE_DATASET, saveDataset, DELETE_DATASET } from '@store/dataset';
 import DatasetParameter from '@pages/Dataset/component/DatasetParameter';
 import DatasetApiListModal from '@pages/Dataset/modals/DatasetApiListModal';
 import qs from 'qs';
@@ -25,6 +25,8 @@ const defaultSearch = {
     sort: 'datasetSeq,desc',
     listType: 'auto',
 };
+
+const defaultInvalid = { datasetName: false, dataApiUrl: false };
 
 //const DatasetParameter = React.lazy(() => import('./component/DatasetParameter'));
 /**
@@ -51,18 +53,26 @@ const DatasetEdit = ({ onDelete }) => {
         [API_PARAM_HINT_SERIES_ID]: [],
         [API_PARAM_HINT_CODE_ID]: [],
     });
-    const [isInvalid, setIsInvalid] = useState({ datasetName: false });
+    const [invalid, setInvalid] = useState(defaultInvalid);
 
-    const { dataset: storeDataset, search: storeSearch, loading } = useSelector((store) => ({
-        dataset: store.dataset.dataset,
-        search: store.dataset.search,
-        loading: store.loading[GET_DATASET],
-    }));
+    const { dataset: storeDataset, search: storeSearch, loading } = useSelector(
+        (store) => ({
+            dataset: store.dataset.dataset,
+            search: store.dataset.search,
+            loading: store.loading[GET_DATASET] || store.loading[SAVE_DATASET] || store.loading[DELETE_DATASET],
+        }),
+        shallowEqual,
+    );
 
+    /**
+     * 값 변경 이벤트
+     * @param {Object} event javascript event
+     */
     const handleChangeValue = (event) => {
         const { value, name } = event.target;
         if (name === 'datasetName') {
             setDatasetName(value);
+            setInvalid({ ...invalid, datasetName: false });
         } else if (name === 'autoCreateYn') {
             if (value === 'Y') {
                 setDataApi(storeDataset.dataApi || '');
@@ -77,18 +87,60 @@ const DatasetEdit = ({ onDelete }) => {
                 setDescription('');
                 setDataApiUrl('');
             }
+            setInvalid({ ...invalid, dataApiUrl: false });
             setAutoCreateYn(value);
         } else if (name === 'description') {
             setDescription(value);
         }
     };
 
+    /**
+     * validation check
+     * @param tmp 등록/수정 dataset
+     * @returns {boolean} validate 여부
+     */
     const validate = (tmp) => {
-        console.log(dataApiParamShape);
-        console.log(dataApiParam);
-        return true;
+        let invalidated = { ...invalid };
+        let isInvalid = false;
+
+        if (!tmp.datasetName || tmp.datasetName === '') {
+            invalidated = { ...invalidated, datasetName: true };
+        }
+
+        if (tmp.autoCreateYn === 'Y' && (!dataApiUrl || dataApiUrl === '')) {
+            invalidated = { ...invalidated, dataApiUrl: true };
+        }
+
+        Object.keys(dataApiParamShape).map((key) => {
+            const param = dataApiParamShape[key];
+            if (param.require) {
+                if (dataApiParam && dataApiParam[param.name]) {
+                    if (param.filter) {
+                        const regex = new RegExp(param.filter);
+                        if (!regex.test(dataApiParam[param.name])) {
+                            invalidated = { ...invalidated, [param.name]: true };
+                        }
+                    }
+                } else {
+                    invalidated = { ...invalidated, [param.name]: true };
+                }
+                //if (!dataApiParam || !dataApiParam[param.name])
+            }
+        });
+
+        Object.values(invalidated).map((value) => {
+            isInvalid = isInvalid | value;
+        });
+
+        setInvalid(invalidated);
+
+        return !isInvalid;
     };
 
+    /**
+     * 저장 이벤트
+     * @param {Object} event javascript event
+     */
     const handleClickSave = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -114,6 +166,10 @@ const DatasetEdit = ({ onDelete }) => {
     };
 
     const responseCallback = useCallback(
+        /**
+         * 자동완성 데이터를 넣어주기 위한 callback 함수
+         * @param payload 조회한 데이터에 대한 결과 값
+         */
         (payload) => {
             const { header, body, payload: param } = payload;
             if (header.success) {
@@ -131,10 +187,11 @@ const DatasetEdit = ({ onDelete }) => {
         [options],
     );
 
-    /**
-     * 검색
-     */
-    const handleSearch = useCallback(
+    const handleDatasetSearch = useCallback(
+        /**
+         * 자동완성 데이타셋 데이터 조회
+         * @param search 검색 값
+         */
         (search) => {
             if (options[API_PARAM_HINT_DATASET_SEQ].length === 0 && search.apiCodeId) {
                 dispatch(
@@ -149,36 +206,59 @@ const DatasetEdit = ({ onDelete }) => {
         [dispatch, options, responseCallback],
     );
 
+    /**
+     * 삭제 이벤트 핸들러
+     */
     const handleClickDelete = () => {
         onDelete(storeDataset);
     };
 
+    /**
+     * 복사 이벤트 핸들러
+     */
     const handleClickCopy = () => {
         setCopyDatasetModalShow(true);
     };
 
-    const handleClickDatasetListModalSave = (selectApi) => {
+    /**
+     * dataApiListPopup 저장 이벤트 핸들러
+     * @param {Object} selectApi 선택한 API
+     * @param {function} hideCallback 숨김 함수
+     */
+    const handleClickDatasetListModalSave = (selectApi, hideCallback) => {
         const parameters = selectApi.parameter;
-        let apiParam = null;
-        Object.keys(parameters).map((key) => {
-            const parameter = parameters[key];
-            if (parameter.defaultValue) {
-                if (apiParam === null) {
-                    apiParam = {};
+        if (parameters) {
+            setInvalid({ ...invalid, dataApiUrl: false });
+            let apiParam = null;
+            Object.keys(parameters).map((key) => {
+                const parameter = parameters[key];
+                if (parameter.defaultValue) {
+                    if (apiParam === null) {
+                        apiParam = {};
+                    }
+
+                    apiParam = { ...apiParam, [parameter.name]: parameter.defaultValue };
                 }
+            });
 
-                apiParam = { ...apiParam, [parameter.name]: parameter.defaultValue };
-            }
-        });
-
-        setDataApi(selectApi.id);
-        setDataApiParam(apiParam);
-        setDataApiParamShape(parameters || []);
+            setDataApi(selectApi.id);
+            setDataApiParam(apiParam);
+            setDataApiParamShape(parameters || []);
+            hideCallback();
+        } else {
+            toast.warn('하나 이상의 자동 데이타셋을 선택해 주세요.');
+        }
     };
 
+    /**
+     * DataApiUrl을 만들기 위한 함수
+     * @param {String} dataApi dataAPI
+     * @param {String} dataApiParam dataAPI Parameter
+     * @returns {String} dataApiUrl
+     */
     const makeDataApiUrl = (dataApi, dataApiParam) => {
         let dataApiUrl = dataApi;
-        if (dataApiParam) {
+        if (dataApiParam && Object.keys(dataApiParam).length > 0) {
             dataApiUrl += `?${qs.stringify(dataApiParam)}`;
         }
 
@@ -257,21 +337,22 @@ const DatasetEdit = ({ onDelete }) => {
         }
     };
 
-    const handleClickOpenDataView = useCallback(
-        (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            let url = `${storeDataset.dataApiHost}/${storeDataset.dataApiPath}/`;
-            if (autoCreateYn === 'Y') {
-                url += `${dataApi}?${qs.stringify(dataApiParam)}`;
-            } else {
-                url += DESKING_API + datasetSeq;
-            }
+    /**
+     * 데이터보기 클릭 이벤트
+     * @param {object} e javascript event
+     */
+    const handleClickOpenDataView = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let url = `${storeDataset.dataApiHost}/${storeDataset.dataApiPath}/`;
+        if (autoCreateYn === 'Y') {
+            url += `${dataApi}?${qs.stringify(dataApiParam)}`;
+        } else {
+            url += DESKING_API + datasetSeq;
+        }
 
-            window.open(url);
-        },
-        [autoCreateYn, dataApi, dataApiParam, datasetSeq, storeDataset],
-    );
+        window.open(url);
+    };
 
     useEffect(() => {
         if (paramSeq) {
@@ -290,6 +371,7 @@ const DatasetEdit = ({ onDelete }) => {
         setDataApiParamShape(storeDataset.dataApiParamShape || {});
         setDescription(storeDataset.description || '');
         setDataApiUrl(makeDataApiUrl(storeDataset.dataApi, storeDataset.dataApiParam) || '');
+        setInvalid(defaultInvalid);
     }, [storeDataset]);
 
     useEffect(() => {
@@ -298,12 +380,12 @@ const DatasetEdit = ({ onDelete }) => {
 
     useEffect(() => {
         const search = { ...defaultSearch, apiCodeId: storeSearch.apiCodeId };
-        handleSearch(search);
+        handleDatasetSearch(search);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [storeSearch.apiCodeId]);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" width={688} className="mr-gutter custom-scroll flex-fill" title="데이터셋 정보">
+        <MokaCard titleClassName="h-100 mb-0 pb-0" width={688} className="mr-gutter custom-scroll flex-fill" title="데이터셋 정보" loading={loading}>
             <Form>
                 {/* 데이터셋아이디, 버튼그룹 */}
                 <Form.Row className="mb-2">
@@ -342,7 +424,7 @@ const DatasetEdit = ({ onDelete }) => {
                             onChange={handleChangeValue}
                             placeholder="데이터셋명을 입력하세요"
                             required
-                            isInvalid={isInvalid['datasetName']}
+                            isInvalid={invalid['datasetName']}
                         />
                     </Col>
                 </Form.Row>
@@ -379,6 +461,7 @@ const DatasetEdit = ({ onDelete }) => {
                                 value={decodeURIComponent(dataApiUrl)}
                                 onSearch={() => setDatasetApiListModalShow(true)}
                                 disabled={true}
+                                isInvalid={invalid['dataApiUrl']}
                             />
                         )}
                     </Col>
@@ -394,7 +477,14 @@ const DatasetEdit = ({ onDelete }) => {
                         {/* 데이터셋의 파라미터에 따라 변경됨 */}
                         {autoCreateYn === 'Y' && dataApiParamShape && (
                             <>
-                                <DatasetParameter dataApiParamShapes={dataApiParamShape} dataApiParam={dataApiParam} onChange={setDataApiParam} options={options} />
+                                <DatasetParameter
+                                    dataApiParamShapes={dataApiParamShape}
+                                    dataApiParam={dataApiParam}
+                                    onChange={setDataApiParam}
+                                    options={options}
+                                    isInvalid={invalid}
+                                    onChangeValid={setInvalid}
+                                />
                             </>
                         )}
                         <MokaInputLabel

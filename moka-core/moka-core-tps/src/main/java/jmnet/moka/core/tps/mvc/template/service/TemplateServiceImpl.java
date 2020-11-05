@@ -4,19 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import jmnet.moka.core.tps.common.TpsConstants;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSearchDTO;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
@@ -24,15 +15,20 @@ import jmnet.moka.core.tps.mvc.template.entity.TemplateHist;
 import jmnet.moka.core.tps.mvc.template.mapper.TemplateMapper;
 import jmnet.moka.core.tps.mvc.template.repository.TemplateRepository;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
  * 템플릿 서비스 구현체
  * 2020. 1. 14. jeon 최초생성
  * </pre>
- * 
- * @since 2020. 1. 14. 오후 1:35:42
+ *
  * @author jeon
+ * @since 2020. 1. 14. 오후 1:35:42
  */
 @Service
 @Slf4j
@@ -59,18 +55,20 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public List<TemplateVO> findAllTemplate(TemplateSearchDTO search) {
-        if (search.getSearchType().equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {	// 페이지에서 관련 템플릿 검색
+        if (search.getSearchType()
+                  .equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 페이지에서 관련 템플릿 검색
             return templateMapper.findPageChildRelList(search);
-        } else if (search.getSearchType().equals("skinSeq")
-                && McpString.isNotEmpty(search.getKeyword())) {	// 콘텐츠스킨에서 관련 템플릿 검색
+        } else if (search.getSearchType()
+                         .equals("skinSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 콘텐츠스킨에서 관련 템플릿 검색
             return templateMapper.findSkinChildRelList(search);
-        } else if (search.getSearchType().equals("containerSeq")
-                && McpString.isNotEmpty(search.getKeyword())) {	// 컨테이너에서 관련 템플릿 검색
+        } else if (search.getSearchType()
+                         .equals("containerSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 컨테이너에서 관련 템플릿 검색
             return templateMapper.findContainerChildRelList(search);
         } else {
-            if (search.getSearchType().equals("pageSeq")
-                    || search.getSearchType().equals("skinSeq")
-                    || search.getSearchType().equals("containerSeq")) {
+            if (search.getSearchType()
+                      .equals("pageSeq") || search.getSearchType()
+                                                  .equals("skinSeq") || search.getSearchType()
+                                                                              .equals("containerSeq")) {
                 search.clearSort();
                 search.addSort("templateSeq,desc");
             }
@@ -79,13 +77,14 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public Optional<Template> findTemplateBySeq(Long templateSeq) throws NoDataException {
+    public Optional<Template> findTemplateBySeq(Long templateSeq) {
         return templateRepository.findById(templateSeq);
     }
 
     @Override
     @Transactional
-    public Template insertTemplate(Template template) throws Exception {
+    public Template insertTemplate(Template template)
+            throws Exception {
         Template returnVal = templateRepository.save(template);
         log.debug("Insert Template {}", returnVal.getTemplateSeq());
 
@@ -99,16 +98,19 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     @Transactional
-    public Template updateTemplate(Template template) throws Exception {
+    public Template updateTemplate(Template template)
+            throws Exception {
         Template returnVal = templateRepository.save(template);
         log.debug("Update Template {}", template.getTemplateSeq());
 
         // 히스토리 생성
         TemplateHist hist = TemplateHist.builder()
-                .templateBody(template.getTemplateBody())
-                .template(template).build();
+                                        .templateBody(template.getTemplateBody())
+                                        .template(template)
+                                        .build();
         if (template.getDomain() != null) {
-            hist.setDomainId(template.getDomain().getDomainId());
+            hist.setDomainId(template.getDomain()
+                                     .getDomainId());
         }
         templateHistService.insertTemplateHist(hist);
         log.debug("Insert Template History {}", returnVal.getTemplateSeq());
@@ -117,13 +119,15 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public void deleteTemplate(Template template) throws Exception {
+    public void deleteTemplate(Template template)
+            throws Exception {
         templateRepository.deleteById(template.getTemplateSeq());
         log.debug("Delete Template {}", template.getTemplateSeq());
     }
 
     @Override
-    public Template insertTemplate(Template template, boolean historySave) throws Exception {
+    public Template insertTemplate(Template template, boolean historySave)
+            throws Exception {
         if (historySave) {
             return this.insertTemplate(template);
         } else {
@@ -136,7 +140,8 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public Template updateTemplate(Template template, boolean historySave) throws Exception {
+    public Template updateTemplate(Template template, boolean historySave)
+            throws Exception {
         if (historySave) {
             return this.updateTemplate(template);
         } else {
@@ -151,20 +156,24 @@ public class TemplateServiceImpl implements TemplateService {
         return templateRepository.countByDomain_DomainId(domainId);
     }
 
-//    @Override
-//    public List<String> findDomainIdListByTemplateSeq(Long templateSeq) {
-//        return templateMapper.findDomainIdListByTemplateSeq(templateSeq);
-//    }
+    //    @Override
+    //    public List<String> findDomainIdListByTemplateSeq(Long templateSeq) {
+    //        return templateMapper.findDomainIdListByTemplateSeq(templateSeq);
+    //    }
 
     @Override
-    public String saveTemplateImage(Template template, MultipartFile thumbnail) throws Exception {
-        String extension = McpFile.getExtension(thumbnail.getOriginalFilename()).toLowerCase();
+    public String saveTemplateImage(Template template, MultipartFile thumbnail)
+            throws Exception {
+        String extension = McpFile.getExtension(thumbnail.getOriginalFilename())
+                                  .toLowerCase();
         String newFilename = String.valueOf(template.getTemplateSeq()) + "." + extension;
         // 이미지를 저장할 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS,template.getDomain().getDomainId(), newFilename);
+        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template.getDomain()
+                                                                                                    .getDomainId(), newFilename);
 
         if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
-            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS,template.getDomain().getDomainId(), newFilename);
+            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template.getDomain()
+                                                                                           .getDomainId(), newFilename);
             return uri;
         } else {
             return "";
@@ -172,17 +181,21 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public String copyTemplateImage(Template template, String copyTargetImgPath) throws Exception {
-        String extension = McpFile.getExtension(copyTargetImgPath).toLowerCase();
+    public String copyTemplateImage(Template template, String copyTargetImgPath)
+            throws Exception {
+        String extension = McpFile.getExtension(copyTargetImgPath)
+                                  .toLowerCase();
         String newFilename = String.valueOf(template.getTemplateSeq()) + "." + extension;
         // 이미지를 저장할 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template.getDomain().getDomainId(), newFilename);
+        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template.getDomain()
+                                                                                                    .getDomainId(), newFilename);
 
         // copy할 파일 실제 경로 구함
-//        String targetRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, copyTargetImgPath);
+        //        String targetRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, copyTargetImgPath);
 
         if (uploadFileHelper.copyFile(imageRealPath, copyTargetImgPath)) {
-            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template.getDomain().getDomainId(), newFilename);
+            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template.getDomain()
+                                                                                           .getDomainId(), newFilename);
             return uri;
         } else {
             return "";
@@ -190,7 +203,8 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public boolean deleteTemplateImage(Template template) throws Exception {
+    public boolean deleteTemplateImage(Template template)
+            throws Exception {
         // 이미지 실제 경로 생성
         String imageRealPath = uploadFileHelper.getRealPathByDB(template.getTemplateThumb());
         return uploadFileHelper.deleteFile(imageRealPath);

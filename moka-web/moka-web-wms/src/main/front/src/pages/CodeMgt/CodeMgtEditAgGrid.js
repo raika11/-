@@ -20,7 +20,6 @@ const CodeMgtEditAgGrid = (props) => {
     }));
     const [rowData, setRowData] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [selectedData, setSelectedData] = useState({});
 
     useEffect(() => {
         if (grpCd !== search.grpCd) {
@@ -66,7 +65,6 @@ const CodeMgtEditAgGrid = (props) => {
         (cd) => {
             history.push(`/codeMgt/${grpCd}/${cd.cdSeq}`);
             setShowEditModal(true);
-            setSelectedData(cd);
             dispatch(getCodeMgt(cd.cdSeq));
         },
         [dispatch, grpCd, history],
@@ -88,7 +86,7 @@ const CodeMgtEditAgGrid = (props) => {
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={cdList.cdSeq}
             />
-            <CodeMgtEditModal type="edit" show={showEditModal} onHide={() => setShowEditModal(false)} onSave={onSave} onDelete={onDelete} data={selectedData} />
+            <CodeMgtEditModal type="edit" show={showEditModal} onHide={() => setShowEditModal(false)} onSave={onSave} onDelete={onDelete} />
         </>
     );
 };

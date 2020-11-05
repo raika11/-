@@ -44,27 +44,27 @@ const Menu = () => {
     }, [dispatch]);
 
     const handleRowClicked = (rowData) => {
-        setMenuSearchInfo(rowData.menuSeq, rowData.depth, rowData.menuId);
+        setMenuSearchInfo(rowData.menuSeq, rowData.depth, rowData.menuId, rowData.parentMenuId);
     };
 
     const handleSaveOrder = () => {};
 
     const handleNewMenu = (event) => {
         const btnDepth = event.currentTarget.getAttribute('depth');
-        const btnParentmenuId = event.currentTarget.getAttribute('parentmenuid');
+        const btnParentMenuId = event.currentTarget.getAttribute('parentmenuid');
 
-        if (typeof btnParentmenuId !== 'undefined' && btnParentmenuId.length > 0) {
-            setParentMenuId(btnParentmenuId);
-            setMenuSearchInfo(0, btnDepth, '');
+        if (typeof btnParentMenuId !== 'undefined' && btnParentMenuId.length > 0) {
+            setMenuSearchInfo(0, btnDepth, '', btnParentMenuId);
         } else {
             toast.warn('상위 메뉴를 선택하세요.');
         }
     };
 
-    const setMenuSearchInfo = (menuSeq, depth, menuId) => {
+    const setMenuSearchInfo = (menuSeq, depth, menuId, parentmenuId) => {
         setMenuSeq(menuSeq);
         setMenuId(menuId);
         setDepth(depth);
+        setParentMenuId(parentmenuId);
         switch (Number(depth)) {
             case 1:
                 setLargeMenuId(menuId);
@@ -125,11 +125,10 @@ const Menu = () => {
                                                 const { header } = response;
                                                 const { body } = response;
                                                 if (body.success === true && header.success) {
-                                                    console.log(body);
                                                     if (body.parentMenu !== null) {
-                                                        setMenuSearchInfo(body.parentMenu.menuSeq, body.parentMenu.depth, body.parentMenu.menuId);
+                                                        setMenuSearchInfo(body.parentMenu.menuSeq, body.parentMenu.depth, body.parentMenu.menuId, body.parentMenuId);
                                                     } else {
-                                                        setMenuSearchInfo(0, 1, '');
+                                                        setMenuSearchInfo(0, 1, '', '00');
                                                     }
                                                     toast.success(header.message);
                                                 } else {

@@ -6,9 +6,15 @@ import clsx from 'clsx';
 import { API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID, API_PARAM_HINT_CODE_ID } from '@/constants';
 
 const DatasetParameter = (props) => {
-    const { dataApiParamShapes, onChange, dataApiParam, options } = props;
+    const { dataApiParamShapes, onChange, dataApiParam, options, isInvalid, onChangeValid } = props;
     const [fieldInfos, setFieldInfos] = useState(dataApiParamShapes);
 
+    /**
+     * 동적으로 생성된 input의 값을 변경한다.
+     * @param {Object} event javascript event
+     * @param {String} name 변경 할 input name
+     * @param defaultValue 기본 값
+     */
     const handleChangeValue = (event, name, defaultValue) => {
         const { value } = event.target;
         const { type } = fieldInfos[name];
@@ -18,7 +24,7 @@ const DatasetParameter = (props) => {
         }
 
         let tmp = dataApiParam;
-
+        onChangeValid({ ...isInvalid, [name]: false });
         if (value === '' || regex.test(value)) {
             tmp = {
                 ...tmp,
@@ -27,19 +33,26 @@ const DatasetParameter = (props) => {
         }
 
         if (tmp[name] === '') {
-            if (defaultValue) {
+            delete tmp[name];
+            /*if (defaultValue) {
                 tmp = {
                     ...tmp,
                     [name]: defaultValue,
                 };
             } else {
                 delete tmp[name];
-            }
+            }*/
         }
 
         onChange(tmp);
     };
 
+    /**
+     *
+     * @param {Object} event javascript event
+     * @param {String} name 자동완성 컴포넌트 이름
+     * @param value 변경 할 값
+     */
     const handleChangeAutoCompleteValue = (event, name, value) => {
         if (value) {
             const values = [];
@@ -50,53 +63,81 @@ const DatasetParameter = (props) => {
         }
     };
 
-    // 파라미터의 힌트가 자동완성될 수 있는지 체크
-    const isHintAutocomplete = useCallback((hints) => {
-        if (hints === API_PARAM_HINT_DATASET_SEQ) return true;
-        if (hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return true;
-        if (hints === API_PARAM_HINT_BUSE_ID) return true;
-        if (hints === `${API_PARAM_HINT_BUSE_ID}s`) return true;
-        if (hints === API_PARAM_HINT_GIJA_ID) return true;
-        if (hints === `${API_PARAM_HINT_GIJA_ID}s`) return true;
-        if (hints === API_PARAM_HINT_SERIES_ID) return true;
-        if (hints === `${API_PARAM_HINT_SERIES_ID}s`) return true;
-        if (hints === API_PARAM_HINT_CODE_ID) return true;
-        if (hints === `${API_PARAM_HINT_CODE_ID}s`) return true;
-        return false;
-    }, []);
+    const isHintAutocomplete = useCallback(
+        /**
+         * 파라미터의 힌트가 자동완성될 수 있는지 체크
+         * @param hints hints
+         * @returns {boolean} 자동완성 여부
+         */
+        (hints) => {
+            if (hints === API_PARAM_HINT_DATASET_SEQ) return true;
+            if (hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return true;
+            if (hints === API_PARAM_HINT_BUSE_ID) return true;
+            if (hints === `${API_PARAM_HINT_BUSE_ID}s`) return true;
+            if (hints === API_PARAM_HINT_GIJA_ID) return true;
+            if (hints === `${API_PARAM_HINT_GIJA_ID}s`) return true;
+            if (hints === API_PARAM_HINT_SERIES_ID) return true;
+            if (hints === `${API_PARAM_HINT_SERIES_ID}s`) return true;
+            if (hints === API_PARAM_HINT_CODE_ID) return true;
+            if (hints === `${API_PARAM_HINT_CODE_ID}s`) return true;
+            return false;
+        },
+        [],
+    );
 
     // 파라미터의 힌트가 복수인지 체크
-    const isHintMultiple = useCallback((hints) => {
-        if (hints === API_PARAM_HINT_DATASET_SEQ) return false;
-        if (hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return true;
-        if (hints === API_PARAM_HINT_BUSE_ID) return false;
-        if (hints === `${API_PARAM_HINT_BUSE_ID}s`) return true;
-        if (hints === API_PARAM_HINT_GIJA_ID) return false;
-        if (hints === `${API_PARAM_HINT_GIJA_ID}s`) return true;
-        if (hints === API_PARAM_HINT_SERIES_ID) return false;
-        if (hints === `${API_PARAM_HINT_SERIES_ID}s`) return true;
-        if (hints === API_PARAM_HINT_CODE_ID) return false;
-        if (hints === `${API_PARAM_HINT_CODE_ID}s`) return true;
-        return false;
-    }, []);
+    const isHintMultiple = useCallback(
+        /**
+         * 파라미터의 힌트가 복수인지 체크
+         * @param hints hints
+         * @returns {boolean} 복수 여부
+         */
+        (hints) => {
+            if (hints === API_PARAM_HINT_DATASET_SEQ) return false;
+            if (hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return true;
+            if (hints === API_PARAM_HINT_BUSE_ID) return false;
+            if (hints === `${API_PARAM_HINT_BUSE_ID}s`) return true;
+            if (hints === API_PARAM_HINT_GIJA_ID) return false;
+            if (hints === `${API_PARAM_HINT_GIJA_ID}s`) return true;
+            if (hints === API_PARAM_HINT_SERIES_ID) return false;
+            if (hints === `${API_PARAM_HINT_SERIES_ID}s`) return true;
+            if (hints === API_PARAM_HINT_CODE_ID) return false;
+            if (hints === `${API_PARAM_HINT_CODE_ID}s`) return true;
+            return false;
+        },
+        [],
+    );
 
-    // 파라미터의 힌트가 복수인지 체크
-    const getDataType = useCallback((hints) => {
-        if (hints === API_PARAM_HINT_DATASET_SEQ || hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return API_PARAM_HINT_DATASET_SEQ;
-        if (hints === API_PARAM_HINT_BUSE_ID || hints === `${API_PARAM_HINT_BUSE_ID}s`) return API_PARAM_HINT_BUSE_ID;
-        if (hints === API_PARAM_HINT_GIJA_ID || hints === `${API_PARAM_HINT_GIJA_ID}s`) return API_PARAM_HINT_GIJA_ID;
-        if (hints === API_PARAM_HINT_SERIES_ID || hints === `${API_PARAM_HINT_SERIES_ID}s`) return API_PARAM_HINT_SERIES_ID;
-        if (hints === API_PARAM_HINT_CODE_ID || hints === `${API_PARAM_HINT_CODE_ID}s`) return API_PARAM_HINT_CODE_ID;
-        return '';
-    }, []);
+    const getDataType = useCallback(
+        /**
+         * 자동완성 hints 타입을 구분
+         * @param hints 복수 hints / 단수 hints
+         * @returns {string} hints 타입
+         */
+        (hints) => {
+            if (hints === API_PARAM_HINT_DATASET_SEQ || hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return API_PARAM_HINT_DATASET_SEQ;
+            if (hints === API_PARAM_HINT_BUSE_ID || hints === `${API_PARAM_HINT_BUSE_ID}s`) return API_PARAM_HINT_BUSE_ID;
+            if (hints === API_PARAM_HINT_GIJA_ID || hints === `${API_PARAM_HINT_GIJA_ID}s`) return API_PARAM_HINT_GIJA_ID;
+            if (hints === API_PARAM_HINT_SERIES_ID || hints === `${API_PARAM_HINT_SERIES_ID}s`) return API_PARAM_HINT_SERIES_ID;
+            if (hints === API_PARAM_HINT_CODE_ID || hints === `${API_PARAM_HINT_CODE_ID}s`) return API_PARAM_HINT_CODE_ID;
+            return '';
+        },
+        [],
+    );
 
     useEffect(() => {
         setFieldInfos(dataApiParamShapes);
     }, [dataApiParamShapes]);
 
+    /**
+     * 동적 입력창 렌더링
+     * @param key 입력창을 만들 key 값
+     * @returns {JSX.Element} 동적 입력창 생성 값
+     */
     const render = (key) => {
         let renderer = null;
         const fieldInfo = fieldInfos[key];
+
         if (fieldInfo) {
             const { name, desc = '', defaultValue: apiDefaultValue, hints, require: required } = fieldInfo;
 
@@ -146,6 +187,8 @@ const DatasetParameter = (props) => {
             } else {
                 if (dataApiParam && dataApiParam[name]) {
                     value = dataApiParam[name];
+                } else {
+                    value = '';
                 }
 
                 renderer = (
@@ -156,6 +199,7 @@ const DatasetParameter = (props) => {
                         value={value}
                         onChange={(event) => handleChangeValue(event, name, apiDefaultValue)}
                         required={required}
+                        isInvalid={isInvalid[name]}
                     />
                 );
             }

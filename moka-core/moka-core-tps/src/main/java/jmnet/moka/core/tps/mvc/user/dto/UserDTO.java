@@ -2,10 +2,9 @@ package jmnet.moka.core.tps.mvc.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
-import jmnet.moka.core.tps.mvc.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -51,13 +50,15 @@ public class UserDTO implements UserDetails {
 
     private String status;
 
-    // private String createYmdt;
-    //
-    // private String creator;
-    //
-    // private String modifiedYmdt;
-    //
-    // private String modifier;
+    private Integer errorCnt;
+
+    private Date expireDt;
+
+    private Date passwordModDt;
+
+    private Date lastLoginDt;
+
+    private String notify;
 
     @JsonIgnore
     private Collection<? extends GrantedAuthority> authorities;
@@ -65,10 +66,9 @@ public class UserDTO implements UserDetails {
     public UserDTO() {
     }
 
-    public UserDTO(String userId, String allowMediaIds, String cellPhoneNo, String dept, String emailaddress,
-            // String createYmdt, String creator, String modifiedYmdt, String modifier,
-            String password, String phoneNo, String photo, String position, String userLevel, String userName, String workYn,
-            Collection<? extends GrantedAuthority> authorities, String status) {
+    public UserDTO(String userId, String allowMediaIds, String cellPhoneNo, String dept, String emailaddress, String password, String phoneNo,
+            String photo, String position, String userLevel, String userName, String workYn, Collection<? extends GrantedAuthority> authorities,
+            String status, Integer errorCnt, Date expireDt, Date passwordModDt, Date lastLoginDt) {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
@@ -81,25 +81,23 @@ public class UserDTO implements UserDetails {
         this.userLevel = userLevel;
         this.photo = photo;
         this.allowMediaIds = allowMediaIds;
-        // this.createYmdt = createYmdt;
-        // this.creator = creator;
-        // this.modifiedYmdt = modifiedYmdt;
-        // this.modifier = modifier;
         this.authorities = authorities;
         this.status = status;
+        this.errorCnt = errorCnt;
+        this.expireDt = expireDt;
+        this.passwordModDt = passwordModDt;
+        this.lastLoginDt = lastLoginDt;
     }
 
-    public static UserDTO create(User user, List<GrantedAuthority> authorities) {
-        return new UserDTO(user.getUserId(), user.getAllowMediaIds(), user.getCellPhoneNo(), String.valueOf(user.getDeptNo()), user.getEmailaddress(),
-                // user.getCreateYmdt(), user.getCreator(), user.getModifiedYmdt(),
-                // user.getModifier(),
-                user.getPassword(), user.getPhoneNo(), user.getPhoto(), user.getPosition(), user.getUserLevel(), user.getUserName(), user.getWorkYn(),
-                authorities, MokaConstants.YES);
-    }
+
 
     public static UserDTO create(Member user, List<GrantedAuthority> authorities) {
         return new UserDTO(user.getMemberId(), null, user.getMobilePhone(), user.getDept(), user.getEmail(), user.getPassword(),
-                user.getCompanyPhone(), null, user.getGroup(), null, user.getMemberNm(), user.getStatus(), authorities, user.getStatus());
+                user.getCompanyPhone(), null, user.getGroup(), null, user.getMemberNm(), user
+                .getStatus()
+                .getCode(), authorities, user
+                .getStatus()
+                .getCode(), user.getErrCnt(), user.getExpireDt(), user.getPasswordModDt(), user.getLastLoginDt());
     }
 
     @Override
@@ -266,4 +264,43 @@ public class UserDTO implements UserDetails {
         this.status = status;
     }
 
+    public Integer getErrorCnt() {
+        return errorCnt;
+    }
+
+    public void setErrorCnt(Integer errorCnt) {
+        this.errorCnt = errorCnt;
+    }
+
+    public Date getExpireDt() {
+        return expireDt;
+    }
+
+    public void setExpireDt(Date expireDt) {
+        this.expireDt = expireDt;
+    }
+
+    public Date getPasswordModDt() {
+        return passwordModDt;
+    }
+
+    public void setPasswordModDt(Date passwordModDt) {
+        this.passwordModDt = passwordModDt;
+    }
+
+    public Date getLastLoginDt() {
+        return lastLoginDt;
+    }
+
+    public void setLastLoginDt(Date lastLoginDt) {
+        this.lastLoginDt = lastLoginDt;
+    }
+
+    public String getNotify() {
+        return notify;
+    }
+
+    public void setNotify(String notify) {
+        this.notify = notify;
+    }
 }

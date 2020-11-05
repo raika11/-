@@ -21,12 +21,12 @@ const initialState = {
  */
 export default handleActions(
     {
-        [act.GET_MENU_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_USER_MENU_TREE_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.menu = body;
             });
         },
-        [act.GET_MENU_FAILURE]: (state) => {
+        [act.GET_USER_MENU_TREE_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.menu = initialState.menu;
             });

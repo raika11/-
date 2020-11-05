@@ -3,7 +3,7 @@
 	<cacheGroup name="default" gcInterval="1m" >
 		<cache expire="10s" enable="true">
 			<instance class="jmnet.moka.common.cache.HazelcastCache" name="hazelcast"/>
-		    <property name="config" value="classpath:hazelcast-default-stg.xml"/>
+		    <property name="config" value="classpath:tms-hazelcast-stg.xml"/>
 		    <type name="content" expire="1h"/>
 		</cache>
 		<cache expire="1m" enable="false">

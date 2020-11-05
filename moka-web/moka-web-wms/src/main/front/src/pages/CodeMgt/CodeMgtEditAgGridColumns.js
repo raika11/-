@@ -2,24 +2,22 @@ export const columnDefs = [
     {
         headerName: '코드그룹',
         field: 'grpCd',
-        width: 100,
+        width: 110,
     },
     {
         headerName: '코드',
         field: 'dtlCd',
-        // cellClass: 'ag-cell-center',
-        // cellStyle: { textAlign: 'center' },
-        width: 150,
+        width: 120,
     },
     {
         headerName: '코드명',
         field: 'cdNm',
-        width: 140,
+        width: 130,
     },
     {
         headerName: '영문명',
         field: 'cdEngNm',
-        width: 150,
+        width: 130,
     },
     {
         headerName: '비고',
@@ -29,22 +27,22 @@ export const columnDefs = [
     {
         headerName: '기타1',
         field: 'cdNmEtc1',
-        width: 180,
+        width: 160,
     },
     {
         headerName: '기타2',
         field: 'cdNmEtc2',
-        width: 180,
+        width: 160,
     },
     {
         headerName: '기타3',
         field: 'cdNmEtc3',
-        width: 180,
+        width: 160,
     },
     {
         headerName: '순서',
         field: 'cdOrd',
-        width: 50,
+        width: 40,
     },
     {
         headerName: '사용여부',

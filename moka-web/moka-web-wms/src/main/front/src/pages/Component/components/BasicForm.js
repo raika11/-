@@ -6,7 +6,7 @@ import { MokaInputLabel } from '@components';
 import CopyModal from '../modals/ComponentCopyModal';
 
 const BasicForm = (props) => {
-    const { componentSeq, componentName, componentNameRegex, description, setComponentName, setDescription, onClickSave, onClickDelete, invalidList } = props;
+    const { component, setComponent, componentNameRegex, onClickSave, onClickDelete, invalidList } = props;
 
     // state
     const [componentNameError, setComponentNameError] = useState(false);
@@ -25,20 +25,20 @@ const BasicForm = (props) => {
     }, [invalidList]);
 
     useEffect(() => {
-        if (!componentSeq) {
+        if (!component.componentSeq) {
             setBtnDisabled(true);
         } else {
             setBtnDisabled(false);
         }
         setComponentNameError(false);
-    }, [componentSeq]);
+    }, [component.componentSeq]);
 
     return (
         <Form>
             {/* 컴포넌트아이디, 버튼그룹 */}
             <Form.Row className="mb-2">
                 <Col xs={6} className="p-0">
-                    <MokaInputLabel className="mb-0" label="컴포넌트ID" value={componentSeq} inputProps={{ plaintext: true, readOnly: true }} />
+                    <MokaInputLabel className="mb-0" label="컴포넌트ID" value={component.componentSeq} inputProps={{ plaintext: true, readOnly: true }} />
                 </Col>
                 <Col xs={6} className="p-0 d-flex justify-content-between">
                     <div className="d-flex">
@@ -63,9 +63,12 @@ const BasicForm = (props) => {
                         className="mb-0"
                         label="컴포넌트명"
                         placeholder="컴포넌트명을 입력하세요"
-                        value={componentName}
+                        value={component.componentName}
                         onChange={(e) => {
-                            setComponentName(e.target.value);
+                            setComponent({
+                                ...component,
+                                componentName: e.target.value,
+                            });
                             if (componentNameRegex.test(e.target.value)) {
                                 setComponentNameError(false);
                             }
@@ -80,14 +83,17 @@ const BasicForm = (props) => {
                 className="mb-2 w-100"
                 label="설명"
                 placeholder="설명을 입력하세요"
-                value={description}
+                value={component.description}
                 onChange={(e) => {
-                    setDescription(e.target.value);
+                    setComponent({
+                        ...component,
+                        description: e.target.value,
+                    });
                 }}
             />
 
             {/* 복사 모달 */}
-            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} componentSeq={componentSeq} />
+            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} componentSeq={component.componentSeq} />
         </Form>
     );
 };

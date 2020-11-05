@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
-import { Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+
 import { MokaCard } from '@components';
 
 const CodeMgtList = React.lazy(() => import('./CodeMgtList'));
@@ -26,20 +27,22 @@ const CodeMgt = () => {
                     </Suspense>
                 </MokaCard>
 
-                <Route
-                    path={['/codeMgt', '/codeMgt/:grpCd', '/codeMgt/:grpCd/:cdSeq']}
-                    exact
-                    render={() => (
-                        <>
-                            {/* 기타코드 편집 */}
-                            <MokaCard width={1444} titleClassName="mb-0">
-                                <Suspense>
-                                    <CodeMgtEdit />
-                                </Suspense>
-                            </MokaCard>
-                        </>
-                    )}
-                />
+                <Switch>
+                    <Route
+                        path={['/codeMgt', '/codeMgt/:grpCd', '/codeMgt/:grpCd/:cdSeq']}
+                        exact
+                        render={() => (
+                            <>
+                                {/* 기타코드 편집 */}
+                                <MokaCard width={1300} titleClassName="mb-0">
+                                    <Suspense>
+                                        <CodeMgtEdit />
+                                    </Suspense>
+                                </MokaCard>
+                            </>
+                        )}
+                    />
+                </Switch>
             </div>
         </>
     );

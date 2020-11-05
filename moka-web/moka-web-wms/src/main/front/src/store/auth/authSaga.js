@@ -1,9 +1,10 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { setLocalItem } from '@utils/storageUtil';
 import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
+import toast from '@utils/toastUtil';
 
 /**
  * 로그인
@@ -12,13 +13,26 @@ import * as authAction from './authAction';
 export function* loginJwtSaga({ payload }) {
     try {
         const response = yield call(api.loginJwt, payload);
-        const { headers } = response;
+        const { headers, data } = response;
 
         if (headers.authorization) {
             yield call(setLocalItem, { key: 'Authorization', value: headers.authorization });
-            yield call(window.location.reload());
+            if (data.header.resultType === 0) {
+                toast.success(data.header.message.replace(/\\n/g, '<br/>'));
+                yield delay(1000);
+                yield call(window.location.reload());
+            } else {
+                // 패스워드 변경 안내 팝업으로 변경 예정
+                toast.confirm(data.header.message.replace(/\\n/g, '<br/>'), (ok) => {
+                    if (ok) {
+                        toast.info('비밀번호 변경 페이지로 이동. 기능 구현중...');
+                    } else {
+                        window.location.reload();
+                    }
+                });
+            }
         } else {
-            // 인증없음
+            toast.error(data.header.message.replace(/\\n/g, '<br/>'));
         }
     } catch (err) {}
 }
@@ -41,14 +55,14 @@ export function* logout() {
 /**
  * 메뉴 조회
  */
-export function* getMenuSaga() {
-    const ACTION = authAction.GET_MENU;
-    const SUCCESS = authAction.GET_MENU_SUCCESS;
-    const FAILURE = authAction.GET_MENU_FAILURE;
+export function* getUserMenuTree() {
+    const ACTION = authAction.GET_USER_MENU_TREE;
+    const SUCCESS = authAction.GET_USER_MENU_TREE_SUCCESS;
+    const FAILURE = authAction.GET_USER_MENU_TREE_FAILURE;
 
     yield put(startLoading(ACTION));
     try {
-        const response = yield call(api.getMenus);
+        const response = yield call(api.getUserMenuTree);
 
         if (response.data.header.success) {
             yield put({
@@ -137,6 +151,6 @@ export function* getDomainList({ payload: domainId }) {
 export default function* authSaga() {
     yield takeLatest(authAction.LOGIN_JWT, loginJwtSaga);
     yield takeLatest(authAction.LOGOUT, logout);
-    yield takeLatest(authAction.GET_MENU, getMenuSaga);
+    yield takeLatest(authAction.GET_USER_MENU_TREE, getUserMenuTree);
     yield takeLatest(authAction.GET_DOMAIN_LIST, getDomainList);
 }

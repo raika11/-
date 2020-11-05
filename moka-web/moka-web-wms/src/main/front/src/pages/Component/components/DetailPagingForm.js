@@ -7,21 +7,7 @@ import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel, MokaInput } from '@components';
 
 const DetailPagingForm = (props) => {
-    const {
-        perPageCount,
-        pagingYn,
-        pagingType,
-        maxPageCount,
-        dispPageCount,
-        moreCount,
-        setPerPageCount,
-        setPagingYn,
-        setPagingType,
-        setMaxPageCount,
-        setDispPageCount,
-        setMoreCount,
-        available,
-    } = props;
+    const { component, setComponent, available } = props;
 
     const [open, setOpen] = useState(false);
     const controls = `component-collapse-period-form`;
@@ -55,10 +41,8 @@ const DetailPagingForm = (props) => {
                                         labelWidth={112}
                                         className="mb-0"
                                         type="number"
-                                        value={perPageCount}
-                                        onChange={(e) => {
-                                            setPerPageCount(e.target.value);
-                                        }}
+                                        value={component.perPageCount}
+                                        onChange={(e) => setComponent({ ...component, perPageCount: e.target.value })}
                                     />
                                 </Col>
                                 {/* 페이징사용여부 */}
@@ -69,18 +53,18 @@ const DetailPagingForm = (props) => {
                                         className="mb-0"
                                         id="paging-yn"
                                         as="switch"
-                                        inputProps={{ checked: pagingYn === 'Y' }}
+                                        inputProps={{ checked: component.pagingYn === 'Y' }}
                                         onChange={(e) => {
-                                            if (!e.target.checked) {
-                                                setPagingYn('N');
+                                            if (e.target.checked) {
+                                                setComponent({ ...component, pagingYn: 'Y', pagingType: 'N' });
                                             } else {
-                                                setPagingYn('Y');
+                                                setComponent({ ...component, pagingYn: 'N' });
                                             }
                                         }}
                                     />
                                 </Col>
                             </Form.Row>
-                            {pagingYn === 'Y' && (
+                            {component.pagingYn === 'Y' && (
                                 <Form.Row>
                                     {/* 이전 다음 */}
                                     <Col xs={4} className="d-flex p-0 pl-3 align-items-center">
@@ -89,24 +73,20 @@ const DetailPagingForm = (props) => {
                                             id="paging-type-n"
                                             name="pagingType"
                                             value="N"
-                                            inputProps={{ label: '이전/다음', custom: true, checked: pagingType === 'N' }}
-                                            onChange={(e) => {
-                                                setPagingType(e.target.value);
-                                            }}
+                                            inputProps={{ label: '이전/다음', custom: true, checked: component.pagingType === 'N' }}
+                                            onChange={(e) => setComponent({ ...component, pagingType: e.target.value })}
                                         />
                                         <MokaInput
                                             as="radio"
                                             id="paging-type-m"
                                             name="pagingType"
                                             value="M"
-                                            inputProps={{ label: '더보기', custom: true, checked: pagingType === 'M' }}
-                                            onChange={(e) => {
-                                                setPagingType(e.target.value);
-                                            }}
+                                            inputProps={{ label: '더보기', custom: true, checked: component.pagingType === 'M' }}
+                                            onChange={(e) => setComponent({ ...component, pagingType: e.target.value })}
                                         />
                                     </Col>
                                     {/* 최대 페이지수 / 표출 페이지수 */}
-                                    {pagingType === 'N' && (
+                                    {component.pagingType === 'N' && (
                                         <>
                                             <Col xs={4} className="d-flex p-0 pr-2">
                                                 <MokaInputLabel
@@ -114,10 +94,8 @@ const DetailPagingForm = (props) => {
                                                     label="최대 페이지수"
                                                     labelWidth={96}
                                                     type="number"
-                                                    value={maxPageCount}
-                                                    onChange={(e) => {
-                                                        setMaxPageCount(e.target.value);
-                                                    }}
+                                                    value={component.maxPageCount}
+                                                    onChange={(e) => setComponent({ ...component, maxPageCount: e.target.value })}
                                                 />
                                             </Col>
                                             <Col xs={4} className="d-flex p-0">
@@ -126,26 +104,22 @@ const DetailPagingForm = (props) => {
                                                     label="표출 페이지수"
                                                     labelWidth={96}
                                                     type="number"
-                                                    value={dispPageCount}
-                                                    onChange={(e) => {
-                                                        setDispPageCount(e.target.value);
-                                                    }}
+                                                    value={component.dispPageCount}
+                                                    onChange={(e) => setComponent({ ...component, dispPageCount: e.target.value })}
                                                 />
                                             </Col>
                                         </>
                                     )}
                                     {/* 호출 건수 (더보기 건수) */}
-                                    {pagingType === 'M' && (
+                                    {component.pagingType === 'M' && (
                                         <Col xs={4} className="d-flex p-0">
                                             <MokaInputLabel
                                                 className="mb-0"
                                                 label="호출 건수"
                                                 labelWidth={80}
                                                 type="number"
-                                                value={moreCount}
-                                                onChange={(e) => {
-                                                    setMoreCount(e.target.value);
-                                                }}
+                                                value={component.moreCount}
+                                                onChange={(e) => setComponent({ ...component, moreCount: e.target.value })}
                                             />
                                         </Col>
                                     )}

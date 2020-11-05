@@ -14,9 +14,6 @@ import DetailPeriodForm from './components/DetailPeriodForm';
 import DetailSchForm from './components/DetailSchForm';
 import DetailPagingForm from './components/DetailPagingForm';
 
-// 기본값
-const { component: initialComponent } = initialState;
-
 /**
  * 컴포넌트 정보/수정 컴포넌트
  */
@@ -37,31 +34,7 @@ const ComponentEdit = ({ onDelete }) => {
     }));
 
     // state
-    const [componentName, setComponentName] = useState('');
-    const [description, setDescription] = useState('');
-    const [template, setTemplate] = useState(initialComponent.template);
-    const [dataset, setDataset] = useState(initialComponent.dataset);
-    const [dataType, setDataType] = useState(initialComponent.dataType);
-    const [delWords, setDelWords] = useState(initialComponent.delWords);
-    const [skin, setSkin] = useState(initialComponent.skin);
-    const [zone, setZone] = useState('');
-    const [matchZone, setMatchZone] = useState('');
-    // 사용기간 설정
-    const [periodYn, setPeriodYn] = useState(initialComponent.periodYn);
-    const [periodStartDt, setPeriodStartDt] = useState(null);
-    const [periodEndDt, setPeriodEndDt] = useState(null);
-    // 검색 설정
-    const [schServiceType, setSchServiceType] = useState(initialComponent.schServiceType);
-    const [schLang, setSchLang] = useState(initialComponent.schLang);
-    const [schCodeId, setSchCodeId] = useState(initialComponent.schCodeId);
-    // 목록 설정
-    const [pagingYn, setPagingYn] = useState(initialComponent.pagingYn);
-    const [pagingType, setPagingType] = useState(initialComponent.pagingType);
-    const [perPageCount, setPerPageCount] = useState(PER_PAGE_COUNT);
-    const [maxPageCount, setMaxPageCount] = useState(MAX_PAGE_COUNT);
-    const [dispPageCount, setDispPageCount] = useState(DISP_PAGE_COUNT);
-    const [moreCount, setMoreCount] = useState(MORE_COUNT);
-
+    const [temp, setTemp] = useState(initialState.component);
     const componentNameRegex = /[^\s\t\n]+/;
 
     /**
@@ -93,55 +66,40 @@ const ComponentEdit = ({ onDelete }) => {
         return !isInvalid;
     };
 
-    // 저장 버튼
+    /**
+     * 저장 버튼
+     */
     const handleClickSave = () => {
-        let temp = {
+        let saveData = {
             ...component,
-            componentName,
-            description,
-            template,
-            dataset,
-            dataType,
-            delWords,
-            skin,
-            zone,
-            periodYn,
+            ...temp,
             periodStartDt: null,
             periodEndDt: null,
-            schServiceType,
-            schLang,
-            schCodeId,
-            pagingYn,
-            pagingType,
-            perPageCount,
-            maxPageCount,
-            dispPageCount,
-            moreCount,
         };
 
-        if (periodYn === 'Y') {
+        if (saveData.periodYn === 'Y') {
             // 기간설정이 있는 경우 moment 객체를 DB에 저장가능한 string 문자열로 치환
-            let sdt = moment(periodStartDt).format(DB_DATEFORMAT);
-            let edt = moment(periodEndDt).format(DB_DATEFORMAT);
+            let sdt = moment(temp.periodStartDt).format(DB_DATEFORMAT);
+            let edt = moment(temp.periodEndDt).format(DB_DATEFORMAT);
             if (sdt !== 'Invalid date') {
-                temp.periodStartDt = sdt;
+                saveData.periodStartDt = sdt;
             }
             if (edt !== 'Invalid date') {
-                temp.periodEndDt = edt;
+                saveData.periodEndDt = edt;
             }
         }
 
-        if (!temp.domain.domainId) {
+        if (!saveData.domain.domainId) {
             // 도메인 정보가 없으면 latestDomainId 셋팅
-            temp.domain = {
+            saveData.domain = {
                 domainId: latestDomainId,
             };
         }
 
-        if (validate(temp)) {
+        if (validate(saveData)) {
             dispatch(
                 saveComponent({
-                    actions: [changeComponent(temp)],
+                    actions: [changeComponent(saveData)],
                     callback: ({ header, body }) => {
                         if (header.success) {
                             notification('success', header.message);
@@ -157,26 +115,15 @@ const ComponentEdit = ({ onDelete }) => {
 
     useEffect(() => {
         // 스토어에서 가져온 컴포넌트 데이터 셋팅
-        setComponentName(component.componentName || '');
-        setDescription(component.description || '');
-        setTemplate(component.template || initialComponent.template);
-        setDataset(component.dataset || initialComponent.dataset);
-        setDataType(component.dataType);
-        setDelWords(component.delWords);
-        setSkin(component.skin || initialComponent.skin);
-        setZone(component.zone);
-        setMatchZone(component.matchZone);
-        setPeriodYn(component.periodYn);
-        setPeriodStartDt(moment(component.periodStartDt, DB_DATEFORMAT));
-        setPeriodEndDt(moment(component.periodEndDt, DB_DATEFORMAT));
-        setSchServiceType(component.schServiceType);
-        setSchLang(component.schLang);
-        setPagingYn(component.pagingYn);
-        setPagingType(component.pagingType);
-        setPerPageCount(component.perPageCount || PER_PAGE_COUNT);
-        setMaxPageCount(component.maxPageCount || MAX_PAGE_COUNT);
-        setDispPageCount(component.dispPageCount || DISP_PAGE_COUNT);
-        setMoreCount(component.moreCount || MORE_COUNT);
+        setTemp({
+            ...component,
+            periodStartDt: moment(component.periodStartDt, DB_DATEFORMAT),
+            periodEndDt: moment(component.periodEndDt, DB_DATEFORMAT),
+            perPageCount: component.perPageCount || PER_PAGE_COUNT,
+            maxPageCount: component.maxPageCount || MAX_PAGE_COUNT,
+            dispPagecount: component.dispPageCount || DISP_PAGE_COUNT,
+            moreCount: component.moreCount || MORE_COUNT,
+        });
     }, [DISP_PAGE_COUNT, MAX_PAGE_COUNT, MORE_COUNT, PER_PAGE_COUNT, component]);
 
     useEffect(() => {
@@ -200,74 +147,22 @@ const ComponentEdit = ({ onDelete }) => {
     return (
         <MokaCard width={688} title="컴포넌트 편집" className="flex-fill mr-gutter" loading={loading}>
             <BasicForm
-                componentSeq={component.componentSeq}
-                componentName={componentName}
+                component={temp}
+                setComponent={setTemp}
                 componentNameRegex={componentNameRegex}
-                setComponentName={setComponentName}
-                description={description}
-                setDescription={setDescription}
                 onClickSave={handleClickSave}
                 onClickDelete={() => onDelete(component)}
                 invalidList={invalidList}
             />
             <hr className="divider" />
             <div className="custom-scroll component-padding-box pb-10" style={{ height: 563 }}>
-                <DetailRelationForm
-                    componentSeq={component.componentSeq}
-                    template={template}
-                    dataType={dataType}
-                    dataset={dataset}
-                    prevAutoDataset={component.prevAutoDataset}
-                    prevDeskDataset={component.prevDeskDataset}
-                    inputTag={inputTag}
-                    delWords={delWords}
-                    skin={skin}
-                    zone={zone}
-                    matchZone={matchZone}
-                    setTemplate={setTemplate}
-                    setDataType={setDataType}
-                    setDataset={setDataset}
-                    setDelWords={setDelWords}
-                    setSkin={setSkin}
-                    setZone={setZone}
-                    invalidList={invalidList}
-                />
+                <DetailRelationForm component={temp} setComponent={setTemp} inputTag={inputTag} invalidList={invalidList} />
                 <hr className="divider" />
-                <DetailPeriodForm
-                    periodYn={periodYn}
-                    periodStartDt={periodStartDt}
-                    periodEndDt={periodEndDt}
-                    setPeriodYn={setPeriodYn}
-                    setPeriodStartDt={setPeriodStartDt}
-                    setPeriodEndDt={setPeriodEndDt}
-                    available={dataType !== 'NONE'}
-                />
+                <DetailPeriodForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />
                 <hr className="divider" />
-                <DetailSchForm
-                    schServiceType={schServiceType}
-                    schLang={schLang}
-                    schCodeId={schCodeId}
-                    setSchServiceType={setSchServiceType}
-                    setSchLang={setSchLang}
-                    setSchCodeId={setSchCodeId}
-                    available={dataType !== 'NONE'}
-                />
+                <DetailSchForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />
                 <hr className="divider" />
-                <DetailPagingForm
-                    pagingYn={pagingYn}
-                    pagingType={pagingType}
-                    perPageCount={perPageCount}
-                    maxPageCount={maxPageCount}
-                    dispPageCount={dispPageCount}
-                    moreCount={moreCount}
-                    setPagingYn={setPagingYn}
-                    setPagingType={setPagingType}
-                    setPerPageCount={setPerPageCount}
-                    setMaxPageCount={setMaxPageCount}
-                    setDispPageCount={setDispPageCount}
-                    setMoreCount={setMoreCount}
-                    available={dataType !== 'NONE'}
-                />
+                <DetailPagingForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />
             </div>
         </MokaCard>
     );

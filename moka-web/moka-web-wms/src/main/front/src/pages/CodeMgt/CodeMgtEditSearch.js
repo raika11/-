@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { MokaSearchInput, MokaInput } from '@components';
-import { clearCdList, initialState, getCodeMgtList, changeSearchOption, getCodeMgtGrp } from '@store/codeMgt';
+import { MokaSearchInput, MokaInput, MokaModal } from '@components';
 import CodeMgtEditModal from './modals/CodeMgtEditModal';
+import { clearCdList, initialState, getCodeMgtList, changeSearchOption, getCodeMgtGrp } from '@store/codeMgt';
 
 /**
  * 기타코드 편집 검색
  */
 const CodeMgtEditSearch = (props) => {
     const { grpCd } = useParams();
-    const history = useHistory();
     const dispatch = useDispatch();
     const { onSave, onDelete } = props;
     const { search: storeSearch, grp } = useSelector((store) => ({
@@ -22,6 +21,7 @@ const CodeMgtEditSearch = (props) => {
     }));
     const [search, setSearch] = useState(initialState.cdSearch);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showAlertModal, setShowAlertModal] = useState(false);
 
     useEffect(() => {
         // 스토어의 search 객체 변경 시 로컬 state에 셋팅
@@ -40,6 +40,17 @@ const CodeMgtEditSearch = (props) => {
                 }),
             ),
         );
+    };
+
+    /**
+     * 코드 추가 버튼
+     */
+    const handleAdd = () => {
+        if (grpCd) {
+            setShowAddModal(true);
+        } else {
+            setShowAlertModal(true);
+        }
     };
 
     useEffect(() => {
@@ -95,17 +106,27 @@ const CodeMgtEditSearch = (props) => {
                 />
             </Col>
             <Col xs={1} className="p-0">
-                <Button
-                    variant="dark"
-                    onClick={() => {
-                        history.push(`/codeMgt/${grpCd}`);
-                        setShowAddModal(true);
-                    }}
-                >
+                <Button variant="dark" onClick={handleAdd}>
                     코드 추가
                 </Button>
             </Col>
-            <CodeMgtEditModal type="add" show={showAddModal} onHide={() => setShowAddModal(false)} onSave={onSave} onDelete={onDelete} data={grpCd} />
+            <CodeMgtEditModal type="add" show={showAddModal} onHide={() => setShowAddModal(false)} onSave={onSave} onDelete={onDelete} />
+            <MokaModal
+                draggable
+                show={showAlertModal}
+                onHide={() => setShowAlertModal(false)}
+                title="코드그룹 미선택"
+                buttons={[
+                    {
+                        text: '확인',
+                        variant: 'primary',
+                        onClick: () => setShowAlertModal(false),
+                    },
+                ]}
+                footerClassName="justify-content-center"
+            >
+                <div>코드그룹을 선택하세요</div>
+            </MokaModal>
         </Form.Row>
     );
 };

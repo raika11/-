@@ -35,10 +35,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throws UsernameNotFoundException {
         Optional<Member> opt = memberRepository.findByMemberId(username);
 
-        // 사용자를 못찾을 경우 Exception 발생
-        Member member = opt.orElseThrow(() -> new UsernameNotFoundException(username));
 
-        return UserDTO.create(member, getAuthorities(member.getGroupMembers()));
+        return opt.isPresent() ? UserDTO.create(opt.get(), getAuthorities(opt
+                .get()
+                .getGroupMembers())) : null;
     }
 
     /**

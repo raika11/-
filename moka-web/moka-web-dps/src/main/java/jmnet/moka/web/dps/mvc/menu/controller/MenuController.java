@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
+import jmnet.moka.common.ApiResult;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.dps.mvc.menu.model.Menu;
 import jmnet.moka.web.dps.mvc.menu.model.MenuParser;
@@ -51,7 +52,7 @@ public class MenuController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/menu.js", produces = "application/json")
     public ResponseEntity<?> menuAll(HttpServletRequest request, HttpServletResponse response){
-        return new ResponseEntity<>(this.menuParser.getAllMenu(), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResult.createApiResult(this.menuParser.getAllMenu()), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/menu.top", produces = "application/json")
@@ -66,7 +67,7 @@ public class MenuController {
                 resultList.add(map);
             }
         }
-        return new ResponseEntity<>(resultList, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResult.createApiResult(resultList), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/menu.sub", produces = "application/json")
@@ -81,7 +82,7 @@ public class MenuController {
                 resultList.add(map);
             }
         }
-        return new ResponseEntity<>(resultList, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResult.createApiResult(resultList), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/menu.mega", produces = "application/json")
@@ -95,7 +96,7 @@ public class MenuController {
         collectMegaMap(resultList,"Trend");
         collectMegaMap(resultList,"Reporter");
         collectMegaMap(resultList,"User");
-        return new ResponseEntity<>(resultList, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResult.createApiResult(resultList), HttpStatus.OK);
     }
 
     private void collectMegaMap(List<Map<String,Object>> resultList, String key) {

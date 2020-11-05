@@ -10,11 +10,11 @@ import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.common.code.EditFormStatusCode;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
-import jmnet.moka.core.tps.mvc.editform.entity.EditFormItem;
-import jmnet.moka.core.tps.mvc.editform.entity.EditFormItemHist;
-import jmnet.moka.core.tps.mvc.editform.mapper.EditFormItemMapper;
-import jmnet.moka.core.tps.mvc.editform.repository.EditFormItemHistRepository;
-import jmnet.moka.core.tps.mvc.editform.repository.EditFormItemRepository;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormPartHist;
+import jmnet.moka.core.tps.mvc.editform.mapper.EditFormPartMapper;
+import jmnet.moka.core.tps.mvc.editform.repository.EditFormPartHistRepository;
+import jmnet.moka.core.tps.mvc.editform.repository.EditFormPartRepository;
 import jmnet.moka.core.tps.mvc.editform.repository.EditFormRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -39,18 +39,18 @@ public class EditFormServiceImpl implements EditFormService {
 
     private final EditFormRepository editFormRepository;
 
-    private final EditFormItemRepository editFormItemRepository;
+    private final EditFormPartRepository editFormPartRepository;
 
-    private final EditFormItemHistRepository editFormItemHistRepository;
+    private final EditFormPartHistRepository editFormPartHistRepository;
 
-    private final EditFormItemMapper editFormItemMapper;
+    private final EditFormPartMapper editFormPartMapper;
 
-    public EditFormServiceImpl(EditFormRepository editFormRepository, EditFormItemRepository editFormItemRepository,
-            EditFormItemHistRepository editFormItemHistRepository, EditFormItemMapper editFormItemMapper) {
+    public EditFormServiceImpl(EditFormRepository editFormRepository, EditFormPartRepository editFormPartRepository,
+            EditFormPartHistRepository editFormPartHistRepository, EditFormPartMapper editFormPartMapper) {
         this.editFormRepository = editFormRepository;
-        this.editFormItemRepository = editFormItemRepository;
-        this.editFormItemHistRepository = editFormItemHistRepository;
-        this.editFormItemMapper = editFormItemMapper;
+        this.editFormPartRepository = editFormPartRepository;
+        this.editFormPartHistRepository = editFormPartHistRepository;
+        this.editFormPartMapper = editFormPartMapper;
     }
 
 
@@ -85,13 +85,13 @@ public class EditFormServiceImpl implements EditFormService {
 
 
     @Override
-    public Optional<EditFormItem> findEditFormItemBySeq(Long itemSeq) {
-        return editFormItemRepository.findById(itemSeq);
+    public Optional<EditFormPart> findEditFormPartBySeq(Long partSeq) {
+        return editFormPartRepository.findById(partSeq);
     }
 
     @Override
-    public Optional<EditFormItem> findEditFormItem(EditFormItem editFormItem) {
-        return editFormItemRepository.findEditFormItem(editFormItem);
+    public Optional<EditFormPart> findEditFormPart(EditFormPart editFormPart) {
+        return editFormPartRepository.findEditFormPart(editFormPart);
     }
 
     @Override
@@ -101,23 +101,23 @@ public class EditFormServiceImpl implements EditFormService {
     }
 
     @Override
-    public EditFormItem insertEditFormItem(EditFormItem editFormItem)
+    public EditFormPart insertEditFormPart(EditFormPart editFormPart)
             throws Exception {
-        editFormItem = editFormItemRepository.save(editFormItem);
-        if (editFormItem.getItemSeq() > 0) {
-            editFormItemHistRepository.save(EditFormItemHist
+        editFormPart = editFormPartRepository.save(editFormPart);
+        if (editFormPart.getPartSeq() > 0) {
+            editFormPartHistRepository.save(EditFormPartHist
                     .builder()
-                    .itemSeq(editFormItem.getItemSeq())
-                    .formData(editFormItem.getFormData())
+                    .partSeq(editFormPart.getPartSeq())
+                    .formData(editFormPart.getFormData())
                     .status(EditFormStatusCode.PUBLISH)
                     .approvalYn(MokaConstants.YES)
                     .build());
         }
-        return editFormItem;
+        return editFormPart;
     }
 
     @Override
-    public EditFormItem insertEditFormItem(EditFormItem editFormItem, EditFormStatusCode status, Date reserveDt)
+    public EditFormPart insertEditFormPart(EditFormPart editFormPart, EditFormStatusCode status, Date reserveDt)
             throws MokaException {
         // 예약 여부 체크
         boolean isReserved = false;
@@ -129,9 +129,9 @@ public class EditFormServiceImpl implements EditFormService {
                         .compareTo(reserveDt) <= 0) {
                     approvalYn = MokaConstants.YES;
                 } else {
-                    //PUBLISH 상태이지만, 예약일시가 도래하지 않은 정보는 item의 formData를 null로 처리하고 useYn을 N으로 처리한다.
+                    //PUBLISH 상태이지만, 예약일시가 도래하지 않은 정보는 part의 formData를 null로 처리하고 useYn을 N으로 처리한다.
                     isReserved = true;
-                    editFormItem.setUsedYn(MokaConstants.NO);
+                    editFormPart.setUsedYn(MokaConstants.NO);
                 }
             } else {
                 // 예약 발송 아님
@@ -139,35 +139,35 @@ public class EditFormServiceImpl implements EditFormService {
             }
         } else {
             // 신규 등록시
-            editFormItem.setUsedYn(MokaConstants.NO);
+            editFormPart.setUsedYn(MokaConstants.NO);
         }
 
-        editFormItem = editFormItemRepository.save(editFormItem);
+        editFormPart = editFormPartRepository.save(editFormPart);
 
-        if (editFormItem.getItemSeq() > 0) {
-            EditFormItemHist itemHist = editFormItemHistRepository.save(EditFormItemHist
+        if (editFormPart.getPartSeq() > 0) {
+            EditFormPartHist partHist = editFormPartHistRepository.save(EditFormPartHist
                     .builder()
-                    .itemSeq(editFormItem.getItemSeq())
-                    .formData(editFormItem.getFormData())
+                    .partSeq(editFormPart.getPartSeq())
+                    .formData(editFormPart.getFormData())
                     .status(status)
                     .reserveDt(reserveDt)
                     .approvalYn(approvalYn)
                     .build());
             if (isReserved) {
-                reservePublish(itemHist.getSeqNo(), McpDate.term(reserveDt));
+                reservePublish(partHist.getSeqNo(), McpDate.term(reserveDt));
             }
         }
-        return editFormItem;
+        return editFormPart;
     }
 
     @Override
     public EditForm updateEditForm(EditForm editForm) {
         editForm = editFormRepository.save(editForm);
         editForm
-                .getEditFormItems()
-                .forEach(item -> {
+                .getEditFormParts()
+                .forEach(part -> {
                     try {
-                        updateEditFormItem(item);
+                        updateEditFormPart(part);
                     } catch (Exception e) {
                         log.error(e.toString());
                     }
@@ -176,21 +176,21 @@ public class EditFormServiceImpl implements EditFormService {
     }
 
     @Override
-    public EditFormItem updateEditFormItem(EditFormItem editFormItem) {
-        editFormItem = editFormItemRepository.save(editFormItem);
-        if (editFormItem.getItemSeq() > 0) {
-            editFormItemHistRepository.save(EditFormItemHist
+    public EditFormPart updateEditFormPart(EditFormPart editFormPart) {
+        editFormPart = editFormPartRepository.save(editFormPart);
+        if (editFormPart.getPartSeq() > 0) {
+            editFormPartHistRepository.save(EditFormPartHist
                     .builder()
-                    .itemSeq(editFormItem.getItemSeq())
-                    .formData(editFormItem.getFormData())
+                    .partSeq(editFormPart.getPartSeq())
+                    .formData(editFormPart.getFormData())
                     .build());
         }
-        return editFormItem;
+        return editFormPart;
     }
 
-    public EditFormItem updateEditFormItem(EditFormItem editFormItem, EditFormStatusCode status, Date reserveDt)
+    public EditFormPart updateEditFormPart(EditFormPart editFormPart, EditFormStatusCode status, Date reserveDt)
             throws MokaException {
-        String formData = editFormItem.getFormData();
+        String formData = editFormPart.getFormData();
         // 예약 여부 체크
         boolean isReserved = false;
         String approvalYn = MokaConstants.NO;
@@ -201,7 +201,7 @@ public class EditFormServiceImpl implements EditFormService {
                         .compareTo(reserveDt) <= 0) {
                     approvalYn = MokaConstants.YES;
                 } else {
-                    //PUBLISH 상태이지만, 예약일시가 도래하지 않은 정보는 item의 formData를 null로 처리하고 useYn을 N으로 처리한다.
+                    //PUBLISH 상태이지만, 예약일시가 도래하지 않은 정보는 part의 formData를 null로 처리하고 useYn을 N으로 처리한다.
                     isReserved = true;
                 }
             } else {
@@ -210,21 +210,21 @@ public class EditFormServiceImpl implements EditFormService {
             }
         }
         if (!isReserved && McpString.isYes(approvalYn)) {
-            editFormItem = editFormItemRepository.save(editFormItem);
+            editFormPart = editFormPartRepository.save(editFormPart);
         }
 
-        EditFormItemHist itemHist = editFormItemHistRepository.save(EditFormItemHist
+        EditFormPartHist partHist = editFormPartHistRepository.save(EditFormPartHist
                 .builder()
-                .itemSeq(editFormItem.getItemSeq())
+                .partSeq(editFormPart.getPartSeq())
                 .formData(formData)
                 .status(status)
                 .reserveDt(reserveDt)
                 .approvalYn(approvalYn)
                 .build());
         if (isReserved) {
-            reservePublish(itemHist.getSeqNo(), McpDate.term(reserveDt));
+            reservePublish(partHist.getSeqNo(), McpDate.term(reserveDt));
         }
-        return editFormItem;
+        return editFormPart;
     }
 
     /**
@@ -239,11 +239,11 @@ public class EditFormServiceImpl implements EditFormService {
             throws MokaException {
         try {
             Thread.sleep(sleepMilliseconds);
-            editFormItemHistRepository
+            editFormPartHistRepository
                     .findById(seqNo)
-                    .ifPresent(editFormItemHist -> {
-                        editFormItemHist.setApprovalYn(MokaConstants.YES);
-                        editFormItemHistRepository.save(editFormItemHist);
+                    .ifPresent(editFormPartHist -> {
+                        editFormPartHist.setApprovalYn(MokaConstants.YES);
+                        editFormPartHistRepository.save(editFormPartHist);
                     });
         } catch (InterruptedException ie) {
             log.error("Edit Form publish failed : {}", seqNo, ie);
@@ -253,16 +253,16 @@ public class EditFormServiceImpl implements EditFormService {
     @Override
     public int deleteEditFormBySeq(Long formSeq)
             throws Exception {
-        return deleteEditFormItem(formSeq, 0L);
+        return deleteEditFormPart(formSeq, 0L);
     }
 
     @Override
-    public int deleteEditFormItem(Long formSeq, Long itemSeq)
+    public int deleteEditFormPart(Long formSeq, Long partSeq)
             throws Exception {
-        return editFormItemMapper.delete(EditFormSearchDTO
+        return editFormPartMapper.delete(EditFormSearchDTO
                 .builder()
                 .formSeq(formSeq)
-                .itemSeq(itemSeq)
+                .partSeq(partSeq)
                 .build());
     }
 
@@ -274,9 +274,9 @@ public class EditFormServiceImpl implements EditFormService {
     }
 
     @Override
-    public boolean isDuplicatedId(EditFormItem editFormItem) {
-        return editFormItemRepository
-                .findEditFormItem(editFormItem)
+    public boolean isDuplicatedId(EditFormPart editFormPart) {
+        return editFormPartRepository
+                .findEditFormPart(editFormPart)
                 .isPresent();
     }
 

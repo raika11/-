@@ -31,8 +31,8 @@ import org.hibernate.annotations.Nationalized;
 @Setter
 @Builder
 @Entity
-@Table(name = "TB_WMS_EDIT_FORM_ITEM_HIST")
-public class EditFormItemHist extends BaseAudit {
+@Table(name = "TB_WMS_EDIT_FORM_PART_HIST")
+public class EditFormPartHist extends BaseAudit {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -50,8 +50,8 @@ public class EditFormItemHist extends BaseAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ_NO", nullable = false)
     private Long seqNo;
-    @Column(name = "ITEM_SEQ", nullable = false)
-    private Long itemSeq;
+    @Column(name = "PART_SEQ", nullable = false)
+    private Long partSeq;
 
     @Nationalized
     @Column(name = "FORM_DATA", nullable = false)
@@ -65,8 +65,8 @@ public class EditFormItemHist extends BaseAudit {
     /**
      * 편집 폼 아이템 정보
      */
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, targetEntity = EditFormItem.class)
-    @JoinColumn(name = "ITEM_SEQ", referencedColumnName = "ITEM_SEQ", nullable = false, insertable = false, updatable = false)
-    private EditFormItem editFormItem;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, targetEntity = EditFormPart.class)
+    @JoinColumn(name = "PART_SEQ", referencedColumnName = "PART_SEQ", nullable = false, insertable = false, updatable = false)
+    private EditFormPart editFormPart;
 
 }

@@ -7,7 +7,7 @@ import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.common.code.EditFormStatusCode;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
-import jmnet.moka.core.tps.mvc.editform.entity.EditFormItem;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
 import org.springframework.data.domain.Page;
 
 /**
@@ -77,15 +77,15 @@ public interface EditFormService {
      * @param itemSeq 편집폼 아이템 일련번호
      * @return 편집폼 아이템 정보
      */
-    public Optional<EditFormItem> findEditFormItemBySeq(Long itemSeq);
+    public Optional<EditFormPart> findEditFormPartBySeq(Long itemSeq);
 
     /**
      * 편집 폼 조회
      *
-     * @param editFormItem 편집폼
+     * @param editFormPart 편집폼
      * @return 편집폼정보
      */
-    public Optional<EditFormItem> findEditFormItem(EditFormItem editFormItem);
+    public Optional<EditFormPart> findEditFormPart(EditFormPart editFormPart);
 
     /**
      * 편집 폼 추가
@@ -100,21 +100,21 @@ public interface EditFormService {
     /**
      * 편집 폼 추가
      *
-     * @param editFormItem 편집 폼
+     * @param editFormPart 편집 폼
      * @return 등록된 편집 폼
      * @throws Exception 예외처리
      */
-    public EditFormItem insertEditFormItem(EditFormItem editFormItem)
+    public EditFormPart insertEditFormPart(EditFormPart editFormPart)
             throws Exception;
 
     /**
      * 편집 폼 추가
      *
-     * @param editFormItem 편집 폼
+     * @param editFormPart 편집 폼
      * @return 등록된 편집 폼
      * @throws Exception 예외처리
      */
-    public EditFormItem insertEditFormItem(EditFormItem editFormItem, EditFormStatusCode status, Date reserveDt)
+    public EditFormPart insertEditFormPart(EditFormPart editFormPart, EditFormStatusCode status, Date reserveDt)
             throws MokaException;
 
     /**
@@ -128,20 +128,20 @@ public interface EditFormService {
     /**
      * 편집 폼 수정
      *
-     * @param editFormItem 수정할 편집폼정보
+     * @param editFormPart 수정할 편집폼정보
      * @return 수정된 편집폼정보
      */
-    public EditFormItem updateEditFormItem(EditFormItem editFormItem);
+    public EditFormPart updateEditFormPart(EditFormPart editFormPart);
 
     /**
      * 편집 폼 수정
      *
-     * @param editFormItem 수정할 편집폼정보
+     * @param editFormPart 수정할 편집폼정보
      * @param status       편집 폼 상태
      * @param reserveDt    예약 일시
      * @return 수정된 편집폼정보
      */
-    public EditFormItem updateEditFormItem(EditFormItem editFormItem, EditFormStatusCode status, Date reserveDt)
+    public EditFormPart updateEditFormPart(EditFormPart editFormPart, EditFormStatusCode status, Date reserveDt)
             throws Exception;
 
     /**
@@ -160,7 +160,7 @@ public interface EditFormService {
      * @param itemSeq 편집 폼 아이템 일련번호
      * @throws Exception 예외처리
      */
-    public int deleteEditFormItem(Long formSeq, Long itemSeq)
+    public int deleteEditFormPart(Long formSeq, Long itemSeq)
             throws Exception;
 
 
@@ -175,10 +175,10 @@ public interface EditFormService {
     /**
      * 중복 편집 폼 아이디인지 체크한다
      *
-     * @param editFormItem 폼 정보
+     * @param editFormPart 폼 정보
      * @return 중복여부
      */
-    public boolean isDuplicatedId(EditFormItem editFormItem);
+    public boolean isDuplicatedId(EditFormPart editFormPart);
 
     /**
      * 관련된 정보가 있는지 조사한다.

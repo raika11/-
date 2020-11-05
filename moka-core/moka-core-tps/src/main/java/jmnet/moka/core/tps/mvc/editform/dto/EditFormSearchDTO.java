@@ -41,7 +41,7 @@ public class EditFormSearchDTO extends SearchDTO {
 
     private Long formSeq;
 
-    private Long itemSeq;
+    private Long partSeq;
 
     private String formId;
 

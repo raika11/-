@@ -44,11 +44,12 @@ const Sidebar = () => {
                     }
                 } else {
                     let menuPath = '';
-                    if (menuItem.menuUrl.length > 0) {
+                    if (menuItem.menuUrl === '/') {
+                        menuPath = menuItem.menuUrl;
+                    } else if (menuItem.menuUrl.length > 0) {
                         menuPath = menuItem.menuUrl.split('/')[1];
                     }
                     if (localPath === menuPath) {
-                        console.log(menuItem.parentMenuId);
                         openItem[menuItem.parentMenuId] = true;
                         return true;
                     }
@@ -56,7 +57,7 @@ const Sidebar = () => {
             }
         };
 
-        if (menu !== undefined && Object.keys(sidebarOpenItem).length < 1 && localPath !== '/') {
+        if (menu !== undefined && Object.keys(sidebarOpenItem).length < 1) {
             getOpenMenuParentMenuId(menu);
             console.log(openItem);
             dispatch(initSidebarOpenItem(openItem));

@@ -135,14 +135,19 @@ const MokaEditorCore = forwardRef((props, ref) => {
     useEffect(() => {
         // tag가 있으면 태그 삽입
         if (tag && tag !== '') {
-            if (editorRef.current) {
+            const editor = editorRef.current;
+
+            if (editor) {
+                const monaco = editor.monaco;
+                const editorInstance = editor.editorInstance;
                 const str = tag.substr(13);
-                editorRef.current.insertText(str);
+                editor.insertText(str);
 
                 // 태그 넣은 후 개행 생성
-                // const moveRange = new monaco.Range(cursorPosition.startLineNumber + 1, 0, cursorPosition.endLineNumber + 1, 0);
-                // editorInstance.setSelection(moveRange);
-                // editorInstance.focus();
+                const c = editorInstance.getSelection();
+                const moveRange = new monaco.Range(c.startLineNumber + 1, str.length, c.endLineNumber + 1, str.length);
+                editorInstance.setSelection(moveRange);
+                editorInstance.focus();
             }
         }
     }, [tag]);

@@ -34,6 +34,7 @@ export { default as LookupTemplateList } from './LookupTemplateList';
 export { default as LookupComponentList } from './LookupComponentList';
 export { default as LookupContainerList } from './LookupContainerList';
 export { default as LookupPageList } from './LookupPageList';
+export { default as LookupSkinList } from './LookupSkinList';
 
 // 우측 히스토리 리스트
 export { default as HistoryList } from './HistoryList';

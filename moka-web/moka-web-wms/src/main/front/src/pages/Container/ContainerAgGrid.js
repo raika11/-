@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -7,7 +7,7 @@ import { MokaTable } from '@components';
 import columnDefs from './ContainerAgGridColumns';
 import { GET_CONTAINER_LIST, getContainerList, changeSearchOption } from '@store/container';
 
-const ContainerAgGrid = () => {
+const ContainerAgGrid = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { total, list, search, container, loading } = useSelector((store) => ({
@@ -18,8 +18,11 @@ const ContainerAgGrid = () => {
         loading: store.loading[GET_CONTAINER_LIST],
     }));
 
+    // state
+    const [rowData, setRowData] = useState([]);
+
     /**
-     * 예약어 추가 버튼 클릭
+     * 컨테이너 추가 버튼 클릭
      */
     const handleAddClick = useCallback(() => history.push('/container'), [history]);
 
@@ -42,6 +45,19 @@ const ContainerAgGrid = () => {
         [dispatch, search],
     );
 
+    useEffect(() => {
+        if (list.length > 0) {
+            setRowData(
+                list.map((data) => ({
+                    ...data,
+                    onDelete,
+                })),
+            );
+        } else {
+            setRowData([]);
+        }
+    }, [list, onDelete]);
+
     return (
         <>
             <div className="d-flex justify-content-end mb-2">
@@ -51,18 +67,18 @@ const ContainerAgGrid = () => {
             </div>
             {/* table */}
             <MokaTable
-                columnDefs={columnDefs}
-                rowData={list}
-                onRowNodeId={(container) => container.containerSeq}
                 agGridHeight={550}
+                columnDefs={columnDefs}
+                rowData={rowData}
+                onRowNodeId={(container) => container.containerSeq}
                 onRowClicked={handleRowClick}
                 loading={loading}
                 total={total}
                 page={search.page}
                 size={search.size}
-                selected={container.containerSeq}
                 onChangeSearchOption={handleChangeSearchOption}
                 preventRowClickCell={['delete']}
+                selected={container.containerSeq}
             />
         </>
     );

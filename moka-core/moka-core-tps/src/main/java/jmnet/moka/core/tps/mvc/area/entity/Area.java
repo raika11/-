@@ -87,14 +87,14 @@ public class Area extends BaseAudit {
     /**
      * 도메인
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "DOMAIN_ID", referencedColumnName = "DOMAIN_ID", nullable = false)
     private Domain domain;
 
     /**
      * 페이지
      */
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PAGE_SEQ", referencedColumnName = "PAGE_SEQ")
     private Page page;
 
@@ -108,7 +108,7 @@ public class Area extends BaseAudit {
     /**
      * 컨테이너
      */
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CONTAINER_SEQ", referencedColumnName = "CONTAINER_SEQ")
     private Container container;
 

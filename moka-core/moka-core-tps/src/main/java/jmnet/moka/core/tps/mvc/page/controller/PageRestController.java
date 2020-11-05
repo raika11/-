@@ -338,7 +338,7 @@ public class PageRestController {
         Page page = pageService.findPageBySeq(pageSeq)
                                .orElseThrow(() -> {
                                    String message = messageByLocale.get("tps.page.error.no-data", request);
-                                   tpsLogger.fail(ActionType.INSERT, message, true);
+                                   tpsLogger.fail(ActionType.DELETE, message, true);
                                    return new NoDataException(message);
                                });
 

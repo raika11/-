@@ -360,11 +360,13 @@ public class PageServiceImpl implements PageService {
         findPageBySeq(pageSeq).ifPresent(page -> {
             // 히스토리저장
             insertPageHist(page, TpsConstants.WORKTYPE_DELETE, userName);
+
+            log.info("[DELETE PAGE] domainId : {} pageSeq : {}", page.getDomain()
+                                                                     .getDomainId(), page.getPageSeq());
+
             // 삭제
             pageRepository.deleteById(page.getPageSeq());
 
-            log.info("[DELETE Page] domainId : {} pageSeq : {}", page.getDomain()
-                                                                     .getDomainId(), page.getPageSeq());
         });
     }
 

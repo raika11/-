@@ -1,16 +1,19 @@
 import React from 'react';
 import { MokaTableLinkButton } from '@components';
 
-export default [
+export const columnDefs = [
     {
         headerName: 'ID',
-        field: 'componentSeq',
+        field: 'containerSeq',
         width: 50,
+        cellStyle: { fontSize: '12px' },
     },
     {
-        headerName: '컴포넌트명',
-        field: 'componentName',
+        headerName: '기사타입명',
+        field: 'skinName',
         width: 276,
+        cellStyle: { fontSize: '12px' },
+        tooltipField: 'skinName',
     },
     {
         headerName: '',
@@ -22,3 +25,5 @@ export default [
         },
     },
 ];
+
+export default columnDefs;

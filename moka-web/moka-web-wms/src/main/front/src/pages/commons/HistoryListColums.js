@@ -11,12 +11,13 @@ export default [
     {
         headerName: '작업일시',
         field: 'regDt',
-        width: 155,
+        width: 156,
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '작업자',
         field: 'regId',
-        width: 99,
+        width: 100,
         tooltipField: 'regId',
     },
     {

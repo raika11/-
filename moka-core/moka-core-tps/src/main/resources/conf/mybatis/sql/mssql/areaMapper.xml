@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.area.mapper.AreaMapper">
+
+  <select id="findSubNodes" parameterType="hashMap" resultType="Long" statementType="CALLABLE">
+    {call UPA_WMS_AREA_TOPDOWN_LIST(
+    #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
+
+  <!-- 편집영역에 존재하는 컴포넌트가 페이지에 존재하는 조사한다. 1: 성공, -1: 페이지에 없는 컴포넌트, -2: 컨테이너에 없는 컴포넌트, -3: 없는 컴포넌트-->
+  <select id="checkAreaComp" parameterType="hashMap" resultType="java.lang.Long"
+      statementType="CALLABLE">
+		{call UPA_WMS_AREA_COMP_CHECK(
+			#{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+			#{success, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+  </select>
+
+</mapper>

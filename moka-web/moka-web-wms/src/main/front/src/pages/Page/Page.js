@@ -18,7 +18,7 @@ const PageEdit = React.lazy(() => import('./PageEdit'));
 
 // relations
 const LookupPageList = React.lazy(() => import('@pages/commons/LookupPageList'));
-const PageChildSkinList = React.lazy(() => import('./relations/PageChildSkinList'));
+const LookupSkinList = React.lazy(() => import('@pages/commons/LookupSkinList'));
 const LookupContainerList = React.lazy(() => import('@pages/commons/LookupContainerList'));
 const LookupComponentList = React.lazy(() => import('@/pages/commons/LookupComponentList'));
 const LookupTemplateList = React.lazy(() => import('@/pages/commons/LookupTemplateList'));
@@ -154,14 +154,14 @@ const Page = () => {
      * tems태그 삽입
      */
     const handleAppendTag = useCallback(
-        (itemType, row) => {
+        (data, itemType) => {
             let tag = null;
             if (itemType === ITEM_CT) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.containerSeq}" name="${row.containerName}"/>\n`;
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.containerSeq}" name="${data.containerName}"/>\n`;
             } else if (itemType === ITEM_CP) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.componentSeq}" name="${data.componentName}"/>\n`;
             } else if (itemType === ITEM_TP) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.templateSeq}" name="${data.templateName}"/>\n`;
                 // } else if (itemType === ITEM_AD) {
                 //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             }
@@ -242,13 +242,13 @@ const Page = () => {
                                         <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <PageChildSkinList />
+                                        <LookupSkinList show={activeTabIdx === 2} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq} />
+                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} />
+                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
                                         <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
@@ -263,7 +263,7 @@ const Page = () => {
                                 tabNavWidth={48}
                                 tabNavPosition="right"
                                 tabNavs={[
-                                    { title: '사이트 정보', text: 'Info' },
+                                    { title: '페이지 정보', text: 'Info' },
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
                                     { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },

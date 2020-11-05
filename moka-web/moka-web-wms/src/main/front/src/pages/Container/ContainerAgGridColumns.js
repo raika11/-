@@ -11,14 +11,14 @@ export default [
     {
         headerName: '컨테이너명',
         field: 'containerName',
-        width: 262,
+        width: 266,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'containerName',
     },
     {
         headerName: '',
         field: 'delete',
-        width: 40,
+        width: 36,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;

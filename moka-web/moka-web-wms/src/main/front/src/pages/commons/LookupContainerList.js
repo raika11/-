@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG, ITEM_SK } from '@/constants';
+import { ITEM_PG, ITEM_SK, ITEM_CT } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
 import columnDefs from './LookupContainerListColumns';
@@ -93,7 +93,7 @@ const LookupContainerList = (props) => {
     const handleClickAppend = useCallback(
         (data) => {
             if (onAppend) {
-                onAppend(data);
+                onAppend(data, ITEM_CT);
             }
         },
         [onAppend],
@@ -205,9 +205,17 @@ const LookupContainerList = (props) => {
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
                     preventRowClickCell={['append', 'link']}
+                    selected={selected.containerSeq}
                 />
             </MokaCard>
-            <ContainerHtmlModal containerSeq={selected.containerSeq} show={showModal} onHide={() => setShowModal(false)} />
+            <ContainerHtmlModal
+                containerSeq={selected.containerSeq}
+                show={showModal}
+                onHide={() => {
+                    setShowModal(false);
+                    setSelected({});
+                }}
+            />
         </>
     );
 };

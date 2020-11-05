@@ -8,6 +8,8 @@
 package jmnet.moka.core.tps.mvc.area.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
@@ -34,7 +36,17 @@ public class AreaSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 5900493133914418299L;
 
-    private Integer depth;
+    /**
+     * 부모 편집영역SEQ
+     */
+    private Long parentAreaSeq;
+
+    /**
+     * 도메인
+     */
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
+    private String domainId;
 
     /**
      * 생성자: 검색 조건의 기본값을 설정

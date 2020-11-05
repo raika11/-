@@ -21,7 +21,7 @@ const RelationInContainerList = React.lazy(() => import('@pages/commons/Relation
 /**
  * 컴포넌트 관리
  */
-const Component = () => {
+const Component = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -113,7 +113,7 @@ const Component = () => {
 
             {/* 등록/수정 */}
             <Switch>
-                <Route path={['/component', '/component/:componentSeq']} exact render={() => <ComponentEdit onDelete={handleClickDelete} />} />
+                <Route path={[match.url, `${match.url}/:componentSeq`]} exact render={() => <ComponentEdit onDelete={handleClickDelete} />} />
             </Switch>
 
             {/* 탭 */}

@@ -43,4 +43,4 @@ export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList)
  * 저장
  */
 export const SAVE_AREA = 'area/SAVE_AREA';
-export const saveArea = createAction(SAVE_AREA, ({ area, callback }) => ({ area, callback }));
+export const saveArea = createAction(SAVE_AREA, ({ actions, callback }) => ({ actions, callback }));

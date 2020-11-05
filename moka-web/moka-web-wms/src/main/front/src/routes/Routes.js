@@ -30,7 +30,7 @@ const Routes = () => {
                         {...rest}
                         render={(props) => (
                             <Layout nonResponsive={nonResponsive}>
-                                <Suspense fallback={<MokaLoader />}>
+                                <Suspense fallback={<MokaLoader clsOpt="black" />}>
                                     <Component {...props} />
                                 </Suspense>
                             </Layout>

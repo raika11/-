@@ -112,7 +112,7 @@ a.sidebar-link {
   font-weight: $sidebar-link-hover-font-weight;
 }
 
-.sidebar-dropdown .sidebar-item.active .sidebar-link {
+.sidebar-dropdown .sidebar-item.active > .sidebar-link {
   color: $sidebar-link-child-active-color;
   background: $sidebar-link-child-active-bg;
   font-weight: $sidebar-link-active-font-weight;

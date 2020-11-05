@@ -8,7 +8,8 @@ import { getUserMenuTree, getDomainList } from '@store/auth/authAction';
 
 // component
 import Loader from '@layout/components/Loader';
-import { ScrollToTop } from '@components';
+import { MokaLoader, ScrollToTop } from '@components';
+import SpinnerComponent from '@/pages/TestBoard/SpinnerComponent';
 
 const Routes = () => {
     const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const Routes = () => {
                         {...rest}
                         render={(props) => (
                             <Layout nonResponsive={nonResponsive}>
-                                <Suspense fallback={<Loader />}>
+                                <Suspense fallback={<MokaLoader />}>
                                     <Component {...props} />
                                 </Suspense>
                             </Layout>

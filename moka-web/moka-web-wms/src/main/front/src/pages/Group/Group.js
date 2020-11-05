@@ -30,60 +30,6 @@ const Group = () => {
         };
     }, [dispatch]);
 
-    /**
-     * 도메인 삭제
-     * @param {object} domain domain
-     */
-    const deleteCallback = (group) => {
-        toastr.confirm(`${group.groupCd}_${group.groupNm}을 정말 삭제하시겠습니까?`, {
-            onOk: () => {
-                dispatch(
-                    deleteGroup({
-                        groupCd: group.groupCd,
-                        callback: ({ header }) => {
-                            // 삭제 성공
-                            if (header.success) {
-                                notification('success', header.message);
-                                history.push('/group');
-                            }
-                            // 삭제 실패
-                            else {
-                                notification('warning', header.message);
-                            }
-                        },
-                    }),
-                );
-            },
-            onCancel: () => {},
-        });
-    };
-
-
-    /**
-     * 삭제 버튼 클릭
-     * @param {object} domain domain
-     */
-    const handleClickDelete = (group) => {
-        console.log("aaaaaaaaaaaaaaa:" + group.id);
-
-        const { groupCd } = group;
-        dispatch(
-            hasRelationList({
-                groupCd,
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        // 관련 아이템 없음
-                        if (!body) deleteCallback(group);
-                        // 관련 아이템 있음
-                        else notification('warning', '사용 중인 그룹은 삭제할 수 없습니다');
-                    } else {
-                        notification('warning', header.message);
-                    }
-                },
-            }),
-        );
-    };
-
     return (
         <div className="d-flex">
             <Helmet>
@@ -121,7 +67,7 @@ const Group = () => {
                                 height={CARD_DEFAULT_HEIGHT}
                                 tabs={[
                                     <Suspense>
-                                        <GroupEdit onDelete={handleClickDelete}/>
+                                        <GroupEdit/>
                                     </Suspense>
                                     /*
                                     ,

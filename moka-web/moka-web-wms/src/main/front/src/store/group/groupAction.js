@@ -33,22 +33,22 @@ export const getGroupList = createAction(GET_GROUP_LIST, (...actions) =>
     console.log("getGroupList::" + getGroupList);
 }
 
-export const getGroup = createAction(GET_GROUP, (grpCd) => grpCd);
+export const getGroup = createAction(GET_GROUP, (groupCd) => groupCd);
 
 /**
  * 중복체크
  */
 export const DUPLICATE_GROUP_CHECK = 'group/DUPLICATE_GROUP_CHECK';
-export const duplicateGroupCheck = createAction(DUPLICATE_GROUP_CHECK, ({ grpCd, callback }) => ({ grpCd, callback }));
+export const duplicateGroupCheck = createAction(DUPLICATE_GROUP_CHECK, ({ groupCd, callback }) => ({ groupCd, callback }));
 export const HAS_RELATION_LIST = 'group/HAS_RELATION_LIST';
-export const hasRelationList = createAction(HAS_RELATION_LIST, ({ grpCd, callback }) => ({ grpCd, callback }));
+export const hasRelationList = createAction(HAS_RELATION_LIST, ({ groupCd, callback }) => ({ groupCd, callback }));
 
 /**
  * 데이터 변경
  */
 export const CHANGE_GROUP = 'group/CHANGE_GROUP';
 export const CHANGE_INVALID_LIST = 'group/CHANGE_INVALID_LIST';
-export const changeGroup = createAction(CHANGE_GROUP, (grp) => grp);
+export const changeGroup = createAction(CHANGE_GROUP, (groupCd) => groupCd);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 
@@ -62,4 +62,4 @@ export const saveGroup = createAction(SAVE_GROUP, ({ type, actions, callback }) 
  * 삭제
  */
 export const [DELETE_GROUP, DELETE_GROUP_SUCCESS, DELETE_GROUP_FAILURE] = createRequestActionTypes('group/DELETE_GROUP');
-export const deleteGroup = createAction(DELETE_GROUP, ({ grpCd, callback }) => ({ grpCd, callback }));
+export const deleteGroup = createAction(DELETE_GROUP, ({ groupCd, callback }) => ({ groupCd, callback }));

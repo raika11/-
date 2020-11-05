@@ -3,10 +3,13 @@ import { Col, Form, Button, Row } from 'react-bootstrap';
 import { MokaCard, MokaInput, MokaInputLabel } from '@components';
 import { useParams, useHistory} from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { clearGroup, getGroup, saveGroup, changeGroup, duplicateGroupCheck
-    , changeInvalidList, GET_GROUP, SAVE_GROUP, DELETE_GROUP } from '@store/group';
+import {
+    clearGroup, getGroup, saveGroup, changeGroup, duplicateGroupCheck
+    , changeInvalidList, GET_GROUP, SAVE_GROUP, DELETE_GROUP, deleteGroup, hasRelationList
+} from '@store/group';
 import { notification } from '@utils/toastUtil';
-import {DELETE_DATASET, GET_DATASET, SAVE_DATASET} from "@store/dataset";
+import {toastr} from "react-redux-toastr";
+import {deleteReserved} from "@store/reserved";
 
 
 /**
@@ -43,6 +46,58 @@ const GroupEdit = (onDelete) => {
         }),
         shallowEqual,
     );
+
+    /**
+     * 삭제 버튼
+     */
+    const handleClickDelete = () => {
+
+
+        const { groupCd } = group;
+        dispatch(
+            hasRelationList({
+                groupCd,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 관련 아이템 없음
+                        if (!body) deleteCallback(group);
+                        // 관련 아이템 있음
+                        else notification('warning', '사용 중인 그룹은 삭제할 수 없습니다');
+                    } else {
+                        notification('warning', header.message);
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
+     * 도메인 삭제
+     * @param {object} domain domain
+     */
+    const deleteCallback = (group) => {
+        toastr.confirm(`${group.groupCd}_${group.groupNm}을 정말 삭제하시겠습니까?`, {
+            onOk: () => {
+                dispatch(
+                    deleteGroup({
+                        groupCd: group.groupCd,
+                        callback: ({ header }) => {
+                            // 삭제 성공
+                            if (header.success) {
+                                notification('success', header.message);
+                                history.push('/group');
+                            }
+                            // 삭제 실패
+                            else {
+                                notification('warning', header.message);
+                            }
+                        },
+                    }),
+                );
+            },
+            onCancel: () => {},
+        });
+    };
 
     /**
      * 각 항목별 값 변경
@@ -228,14 +283,6 @@ const GroupEdit = (onDelete) => {
             }
         }
 
-    };
-
-    /**
-     * group 삭제 이벤트
-     * @param
-     */
-    const handleClickDelete = () => {
-        onDelete(group);
     };
 
     useEffect(() => {

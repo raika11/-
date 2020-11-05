@@ -21,23 +21,23 @@ const Routes = () => {
 
     return (
         <ScrollToTop>
-            <Suspense fallback={<Loader />}>
-                <Switch>
-                    {routes.map(({ path, layout: Layout, component: Component, name, nonResponsive, ...rest }) => (
-                        <Route
-                            key={name}
-                            path={path}
-                            {...rest}
-                            render={(props) => (
-                                <Layout nonResponsive={nonResponsive}>
+            <Switch>
+                {routes.map(({ path, layout: Layout, component: Component, name, nonResponsive, ...rest }) => (
+                    <Route
+                        key={name}
+                        path={path}
+                        {...rest}
+                        render={(props) => (
+                            <Layout nonResponsive={nonResponsive}>
+                                <Suspense fallback={<Loader />}>
                                     <Component {...props} />
-                                </Layout>
-                            )}
-                        />
-                    ))}
-                    <Redirect from="*" to="/404" />
-                </Switch>
-            </Suspense>
+                                </Suspense>
+                            </Layout>
+                        )}
+                    />
+                ))}
+                <Redirect from="*" to="/404" />
+            </Switch>
         </ScrollToTop>
     );
 };

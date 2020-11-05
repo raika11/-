@@ -70,7 +70,7 @@ const ComponentAgGrid = ({ onDelete }) => {
 
             {/* ag-grid table */}
             <MokaTable
-                agGridHeight={512}
+                agGridHeight={528}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(component) => component.componentSeq}

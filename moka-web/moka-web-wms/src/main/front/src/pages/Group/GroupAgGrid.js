@@ -5,14 +5,15 @@ import { useHistory } from 'react-router-dom';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {changeSearchOption, GET_GROUP_LIST, getGroupList, initialState} from '@store/group';
 
-
+/**
+ * group AgGrid 목록
+ */
 const GroupAgGrid = (props) => {
     const { onDelete } = props;
     const history = useHistory();
     const dispatch = useDispatch();
     const [search, setSearch] = useState(initialState);
     const [groupRows, setGroupRows] = useState([]);
-
 
     const { group, list, total, search: storeSearch, loading } = useSelector(
         (store) => ({
@@ -40,11 +41,6 @@ const GroupAgGrid = (props) => {
         [dispatch, search],
     );
 
-    /**
-     * 목록에서 Row클릭
-     */
-    const handleRowClicked = useCallback((rowData) => history.push(`/group/${rowData.groupCd}`), [history]);
-
     useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
@@ -61,29 +57,39 @@ const GroupAgGrid = (props) => {
                 groupNm: row.groupNm,
                 groupKorNm: row.groupKorNm,
                 regId: row.regId,
-                regDt: row.regDt, // 현재 안나옴.
+                regDt: row.regDt, // 현재 서버에컬럼없음.
                 onDelete,
             })),
         );
-    }, [list]);
+    }, [list, onDelete]);
 
+    /**
+     * 목록에서 Row클릭
+     */
+    const handleRowClicked = useCallback((list) =>{
+        //console.log("list::" + this.list.id);
+        history.push(`/group/${list.id}`);
+    } , [history]);
+
+    let count = 0;
     return (
         <MokaTable
             columnDefs={columnDefs}
+            rowData={groupRows}
+            onRowNodeId={(rowData) =>
+            {
+                //console.log("groupCd::" + rowData.groupCd);
+                return parseInt(rowData.groupCd.replace('G',''));
+            }
+            }
             agGridHeight={600}
+            onRowClicked={handleRowClicked}
+            loading={loading}
+            total={total}
             page={search.page}
             size={search.size}
-            total={total}
-            rowData={groupRows}
-            onRowNodeId={(rowData) => {
-                //console.log("aaaaaaaaaaaaaa:" + rowData);
-                return rowData.groupCd}
-            }
-            //onRowClicked={handleRowClicked}
-            //selected={group.groupCd}
-            selected={group.groupCd}
-            loading={loading}
-            onChangeSearchOption={handleChangeSearchOption} // 페이지 아래 목록건수인데 동작을 안하네
+            selected={group.id}
+            onChangeSearchOption={handleChangeSearchOption}
         />
     );
 };

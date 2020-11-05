@@ -3,8 +3,10 @@ package jmnet.moka.core.tps.mvc.member.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
+import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
 import org.springframework.data.domain.Page;
 
@@ -55,7 +57,28 @@ public interface MemberService {
      * @param status   유효 상태
      * @return 멤버 정보
      */
-    Member updateMemberStatus(String memberId, String status);
+    Member updateMemberStatus(String memberId, MemberStatusCode status);
+
+    /**
+     * 멤버 상태 변경
+     *
+     * @param memberId 멤버 ID
+     * @param status   유효 상태
+     * @param errorCnt 비밀번호 오류 건수
+     * @param remark   비고
+     * @return 멤버 정보
+     */
+    Member updateMemberStatus(String memberId, MemberStatusCode status, Integer errorCnt, String remark);
+
+    /**
+     * 멤버 상태 변경
+     *
+     * @param memberId 멤버 ID
+     * @param status   유효 상태
+     * @param remark   비고
+     * @return 멤버 정보
+     */
+    Member updateMemberStatus(String memberId, MemberStatusCode status, String remark);
 
     /**
      * 멤버 로그인 정보 수정
@@ -81,6 +104,18 @@ public interface MemberService {
     /**
      * 멤버 로그인 정보 수정
      *
+     * @param memberId  멤버 ID
+     * @param loginDate 로그인 일시
+     * @param loginIp   로그인 아이피
+     * @param expireDt  계정만료일
+     * @param errCnt    비밀번호 오류 건수
+     * @return 멤버 정보
+     */
+    Member updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt, Integer errCnt);
+
+    /**
+     * 멤버 로그인 정보 수정
+     *
      * @param member    멤버 정보
      * @param loginDate 로그인 일시
      * @param loginIp   로그인 아이피
@@ -100,6 +135,18 @@ public interface MemberService {
     Member updateMemberLoginInfo(Member member, Date loginDate, String loginIp, Date expireDt);
 
     /**
+     * 멤버 로그인 정보 수정
+     *
+     * @param member    멤버 정보
+     * @param loginDate 로그인 일시
+     * @param loginIp   로그인 아이피
+     * @param expireDt  계정만료일
+     * @param errCnt    비밀번호 오류 건수
+     * @return 멤버 정보
+     */
+    Member updateMemberLoginInfo(Member member, Date loginDate, String loginIp, Date expireDt, Integer errCnt);
+
+    /**
      * 로그인 실패 정보 수정
      *
      * @param memberId 멤버 ID
@@ -107,6 +154,7 @@ public interface MemberService {
      * @return 멤버 정보
      */
     Member updateMemberLoginErrorCount(String memberId, Integer errorCnt);
+
 
     /**
      * 로그인 실패 정보 수정
@@ -177,4 +225,8 @@ public interface MemberService {
      * @param seqNo 그룹 멤버 일련번호
      */
     void deleteGroupMember(Long seqNo);
+
+    LoginLog insertLoginLog(LoginLog log);
+
+    List<LoginLog> findAllLoginLog(String memberId);
 }

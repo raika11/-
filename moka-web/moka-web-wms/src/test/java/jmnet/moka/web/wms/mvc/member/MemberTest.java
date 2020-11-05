@@ -3,6 +3,7 @@ package jmnet.moka.web.wms.mvc.member;
 import java.util.List;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.group.entity.Group;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.group.service.GroupService;
@@ -41,7 +42,7 @@ public class MemberTest {
                 .email("ssc@ssc.co.kr")
                 .companyPhone("02-555-5555")
                 .mobilePhone("010-5555-5555")
-                .status("Y")
+                .status(MemberStatusCode.Y)
                 .build();
         memberService.insertMember(member);
     }

@@ -4,10 +4,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.group.repository.GroupMemberRepository;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
+import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
 import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.member.repository.LoginLogRepository;
 import jmnet.moka.core.tps.mvc.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -20,9 +24,12 @@ public class MemberServiceImpl implements MemberService {
 
     private final GroupMemberRepository groupMemberRepository;
 
-    public MemberServiceImpl(MemberRepository memberRepository, GroupMemberRepository groupMemberRepository) {
+    private final LoginLogRepository loginLogRepository;
+
+    public MemberServiceImpl(MemberRepository memberRepository, GroupMemberRepository groupMemberRepository, LoginLogRepository loginLogRepository) {
         this.memberRepository = memberRepository;
         this.groupMemberRepository = groupMemberRepository;
+        this.loginLogRepository = loginLogRepository;
     }
 
     @Override
@@ -51,7 +58,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member updateMemberStatus(String memberId, String status) {
+    public Member updateMemberStatus(String memberId, MemberStatusCode status) {
         Optional<Member> optionalMember = this.findMemberById(memberId);
         Member member = null;
         if (optionalMember.isPresent()) {
@@ -63,27 +70,63 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member updateMemberStatus(String memberId, MemberStatusCode status, Integer errorCnt, String remark) {
+        Optional<Member> optionalMember = this.findMemberById(memberId);
+        Member member = null;
+        if (optionalMember.isPresent()) {
+            member = optionalMember.get();
+            member.setStatus(status);
+            if (errorCnt > -1) {
+                member.setErrCnt(errorCnt);
+            }
+            if (McpString.isNotEmpty(member.getRemark())) {
+                member.setRemark(member.getRemark() + "\n" + remark);
+            } else {
+                member.setRemark(remark);
+            }
+            member = updateMember(member);
+        }
+        return member;
+    }
+
+    @Override
+    public Member updateMemberStatus(String memberId, MemberStatusCode status, String remark) {
+        return updateMemberStatus(memberId, status, -1, remark);
+    }
+
+    @Override
     public Member updateMemberLoginInfo(String memberId, Date loginDate, String loginIp) {
         return updateMemberLoginInfo(memberId, loginDate, loginIp, null);
     }
 
     @Override
     public Member updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt) {
+        return updateMemberLoginInfo(memberId, loginDate, loginIp, expireDt, 0);
+    }
+
+    @Override
+    public Member updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt, Integer errCnt) {
         Optional<Member> optionalMember = this.findMemberById(memberId);
         return optionalMember
-                .map(value -> updateMemberLoginInfo(value, loginDate, loginIp, null))
+                .map(value -> updateMemberLoginInfo(value, loginDate, loginIp, expireDt, errCnt))
                 .orElse(null);
     }
 
     @Override
     public Member updateMemberLoginInfo(Member member, Date loginDate, String loginIp) {
-        return updateMemberLoginInfo(member, loginDate, loginIp, null);
+        return updateMemberLoginInfo(member, loginDate, loginIp, null, 0);
     }
 
     @Override
     public Member updateMemberLoginInfo(Member member, Date loginDate, String loginIp, Date expireDt) {
+        return updateMemberLoginInfo(member, loginDate, loginIp, expireDt, 0);
+    }
+
+    @Override
+    public Member updateMemberLoginInfo(Member member, Date loginDate, String loginIp, Date expireDt, Integer errCnt) {
         member.setLastLoginDt(loginDate);
         member.setLastLoginIp(loginIp);
+        member.setErrCnt(errCnt);
         if (expireDt != null) {
             member.setExpireDt(expireDt);
         }
@@ -167,5 +210,15 @@ public class MemberServiceImpl implements MemberService {
 
     public List<GroupMember> findGroupMemberList(String memberId) {
         return groupMemberRepository.findAllByMemberId(memberId);
+    }
+
+    @Override
+    public LoginLog insertLoginLog(LoginLog log) {
+        return loginLogRepository.save(log);
+    }
+
+    @Override
+    public List<LoginLog> findAllLoginLog(String memberId) {
+        return loginLogRepository.findAllByMemId(memberId);
     }
 }

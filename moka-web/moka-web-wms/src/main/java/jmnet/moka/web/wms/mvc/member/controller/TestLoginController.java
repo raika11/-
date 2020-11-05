@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.exception.InvalidDataException;
+import jmnet.moka.core.tps.mvc.member.entity.Member;
 import jmnet.moka.core.tps.mvc.user.dto.UserDTO;
-import jmnet.moka.core.tps.mvc.user.entity.User;
 import jmnet.moka.core.tps.mvc.user.service.UserService;
 import jmnet.moka.web.wms.config.security.jwt.WmsJwtHelper;
 import org.springframework.http.HttpStatus;
@@ -71,10 +71,10 @@ public class TestLoginController {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         String loginUserId = McpString.defaultValue(userId, MokaConstants.USER_UNKNOWN);
-        UserDTO userDetails = UserDTO.create(User
+        UserDTO userDetails = UserDTO.create(Member
                 .builder()
-                .userId(loginUserId)
-                .userName(MokaConstants.USER_UNKNOWN)
+                .memberId(loginUserId)
+                .memberNm(MokaConstants.USER_UNKNOWN)
                 .build(), grantedAuthorities);
 
         String detailsJson = MAPPER.writeValueAsString(userDetails);

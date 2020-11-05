@@ -37,9 +37,10 @@ const success = (
     message,
     options = {
         closeButton: true,
-        progressBar: true,
+        progressBar: false,
         showMethod: 'slideDown',
-        timeOut: 3000,
+        position: 'top-center',
+        timeOut: 2000,
         escapeHtml: false,
     },
 ) => {
@@ -120,7 +121,7 @@ export default {
             closeButton: true,
             progressBar: true,
             showMethod: 'slideDown',
-            position: 'bottom-right',
+            position: 'top-right',
             timeOut: 3000,
             escapeHtml: false,
         });
@@ -130,7 +131,7 @@ export default {
             closeButton: true,
             progressBar: true,
             showMethod: 'slideDown',
-            position: 'bottom-right',
+            position: 'top-right',
             timeOut: 3000,
             escapeHtml: false,
         });

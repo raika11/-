@@ -55,6 +55,8 @@ public class TpsConstants {
     public static final int HEADER_BAD_REQUEST = HttpStatus.BAD_REQUEST.value();        // 요청오류
     public static final int HEADER_BAD_GATEWAY = HttpStatus.BAD_GATEWAY.value();        // 요청오류
     public static final int HEADER_UNAUTHORIZED = HttpStatus.UNAUTHORIZED.value();        // 인증오류
+    public static final int HEADER_UNAUTHORIZED_GROUPWARE_NOTFOUND = 490;        // 그룹웨어 ID 없음 오류
+    public static final int HEADER_UNAUTHORIZED_USERNAME_NOTFOUND = 491;        //
     public static final int HEADER_FORBIDDEN = HttpStatus.FORBIDDEN.value();        // 인증오류
     public static final int HEADER_NO_DATA = HttpStatus.NO_CONTENT.value();           // 데이타없음
     public static final int HEADER_INVALID_DATA = HttpStatus.BAD_REQUEST.value();        // 데이타 유효성검사 실패

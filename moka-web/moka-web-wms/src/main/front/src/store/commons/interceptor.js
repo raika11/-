@@ -1,5 +1,6 @@
 import axios from './axios';
 import { setLocalItem, getLocalItem } from '@utils/storageUtil';
+import toast from '@utils/toastUtil';
 import { store } from '@store/store';
 
 const goToLogin = (message) => {
@@ -41,6 +42,9 @@ const onSuccess = (response) => {
 
 /** 응답 실패 */
 const onFail = (error) => {
+    if (typeof error.response === 'undefined') {
+        toast.error('네트워크가 불안정 합니다. 다시 시도해 주세요.');
+    }
     return Promise.reject(error);
 };
 

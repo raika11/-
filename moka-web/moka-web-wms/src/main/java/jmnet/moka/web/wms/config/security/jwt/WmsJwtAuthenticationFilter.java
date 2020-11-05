@@ -15,7 +15,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.util.ResponseUtil;
-import jmnet.moka.core.tps.mvc.user.dto.UserDTO;
+import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.web.wms.config.security.exception.AbstractAuthenticationException;
 import jmnet.moka.web.wms.config.security.exception.UnauthrizedErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;

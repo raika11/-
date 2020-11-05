@@ -3,9 +3,11 @@ package jmnet.moka.core.tps.mvc.group.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,6 +62,12 @@ public class GroupDTO {
      * 등록자
      */
     private String regId;
+
+    /**
+     * 등록일시
+     */
+    @DTODateTimeFormat
+    private Date regDt;
 
     /**
      * 등록자명

@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
-import jmnet.moka.core.tps.mvc.user.dto.UserDTO;
-import jmnet.moka.core.tps.mvc.user.service.UserService;
+import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
+import jmnet.moka.core.tps.mvc.auth.service.AuthService;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.web.wms.config.security.jwt.WmsJwtHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,15 +43,15 @@ public class TestLoginController {
 
     private static ObjectMapper MAPPER = new ObjectMapper();
 
-    private UserService userService;    //UserService
+    private AuthService authService;    //UserService
 
     /**
      * 생성자 UserService를 Autowired 하지 않고 Arguments로 받는다.
      *
-     * @param userService userService
+     * @param authService userService
      */
-    public TestLoginController(UserService userService) {
-        this.userService = userService;
+    public TestLoginController(AuthService authService) {
+        this.authService = authService;
     }
 
     /**
@@ -71,7 +71,7 @@ public class TestLoginController {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         String loginUserId = McpString.defaultValue(userId, MokaConstants.USER_UNKNOWN);
-        UserDTO userDetails = UserDTO.create(Member
+        UserDTO userDetails = UserDTO.create(MemberInfo
                 .builder()
                 .memberId(loginUserId)
                 .memberNm(MokaConstants.USER_UNKNOWN)

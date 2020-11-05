@@ -5,9 +5,9 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.group.entity.Group;
-import jmnet.moka.core.tps.mvc.group.entity.QGroup;
-import jmnet.moka.core.tps.mvc.member.entity.QMember;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
+import jmnet.moka.core.tps.mvc.group.entity.QGroupInfo;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,16 +30,16 @@ public class GroupRepositorySupportImpl extends QuerydslRepositorySupport implem
     private final JPAQueryFactory queryFactory;
 
     public GroupRepositorySupportImpl(JPAQueryFactory queryFactory) {
-        super(Group.class);
+        super(GroupInfo.class);
         this.queryFactory = queryFactory;
     }
 
     @Override
-    public Page<Group> findAllGroup(GroupSearchDTO searchDTO) {
-        QGroup qGroup = QGroup.group;
-        QMember qMember = QMember.member;
+    public Page<GroupInfo> findAllGroup(GroupSearchDTO searchDTO) {
+        QGroupInfo qGroup = QGroupInfo.groupInfo;
+        QMemberInfo qMember = QMemberInfo.memberInfo;
 
-        JPQLQuery<Group> query = from(qGroup);
+        JPQLQuery<GroupInfo> query = from(qGroup);
         if (McpString.isNotEmpty(searchDTO.getGroupCd())) {
             query.where(qGroup.groupCd
                     .toUpperCase()
@@ -59,11 +59,11 @@ public class GroupRepositorySupportImpl extends QuerydslRepositorySupport implem
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
-        QueryResults<Group> list = query
+        QueryResults<GroupInfo> list = query
                 .leftJoin(qGroup.regMember, qMember)
                 .fetchJoin()
                 .fetchResults();
 
-        return new PageImpl<Group>(list.getResults(), pageable, list.getTotal());
+        return new PageImpl<GroupInfo>(list.getResults(), pageable, list.getTotal());
     }
 }

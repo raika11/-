@@ -17,13 +17,7 @@ const AreaAgGrid1Depth = () => {
         <MokaCard header={false} width={280} className="mr-10">
             <Form.Row className="mb-2">
                 <Col xs={7} className="p-0">
-                    <MokaInput
-                        as="select"
-                        value={latestDomainId}
-                        onChange={(e) => {
-                            dispatch(changeLatestDomainId(e.target.value));
-                        }}
-                    >
+                    <MokaInput as="select" value={latestDomainId} onChange={(e) => dispatch(changeLatestDomainId(e.target.value))}>
                         {domainList.map((domain) => (
                             <option key={domain.domainId} value={domain.domainId}>
                                 {domain.domainName}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cacheConfig>
+	<cacheGroup name="default" gcInterval="1m" >
+		<cache expire="10s" enable="true">
+			<instance class="jmnet.moka.common.cache.HazelcastCache" name="hazelcast"/>
+		    <property name="config" value="classpath:tms-hazelcast.xml"/>
+		    <type name="content" expire="1h"/>
+		</cache>
+		<cache expire="1m" enable="false">
+			<instance class="jmnet.moka.common.cache.MemoryCache" name="memory"/>
+		    <type name="content" expire="1h"/>
+		    <type name="pg.merge" expire="1m"/>
+		    <type name="cp.merge" expire="1m"/>
+		    <type name="tp.merge" expire="1m"/>
+		</cache>
+		<cache expire="1m" enable="false">
+			<instance class="jmnet.moka.common.cache.InfinispanCache" name="infinispan"/>
+			<property name="config" value="classpath:infinispan-default.xml"/>
+		    <type name="content" expire="1h"/>
+		    <type name="pg.merge" expire="1m"/>
+		    <type name="cp.merge" expire="1m"/>
+		    <type name="tp.merge" expire="1m"/>
+		</cache>
+	</cacheGroup>
+</cacheConfig>

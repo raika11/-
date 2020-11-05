@@ -85,28 +85,31 @@ const Template = () => {
 
     /**
      * 템플릿 삭제
-     * @param {object} response response
+     * @param {object} template template
      */
     const deleteCallback = useCallback(
-        (response) => {
-            const { header, payload } = response;
-            if (header.success) {
-                dispatch(
-                    deleteTemplate({
-                        templateSeq: payload.templateSeq,
-                        callback: (response) => {
-                            if (response.header.success) {
-                                notification('success', response.header.message);
-                                history.push('/template');
-                            } else {
-                                notification('warning', response.header.message);
-                            }
-                        },
-                    }),
-                );
-            } else {
-                notification('warning', response.header.message);
-            }
+        (template) => {
+            toastr.confirm(`${template.templateSeq}_${template.templateName}을 삭제하시겠습니까?`, {
+                onOk: () => {
+                    dispatch(
+                        deleteTemplate({
+                            templateSeq: template.templateSeq,
+                            callback: ({ header }) => {
+                                // 삭제 성공
+                                if (header.success) {
+                                    notification('success', header.message);
+                                    history.push('/template');
+                                }
+                                // 삭제 실패
+                                else {
+                                    notification('warning', header.message);
+                                }
+                            },
+                        }),
+                    );
+                },
+                onCancle: () => {},
+            });
         },
         [dispatch, history],
     );
@@ -116,18 +119,23 @@ const Template = () => {
      */
     const handleClickDelete = useCallback(
         (template) => {
-            const { templateSeq, templateName } = template;
-            toastr.confirm(`${templateSeq}_${templateName}을 정말 삭제하시겠습니까?`, {
-                onOk: () => {
-                    dispatch(
-                        hasRelationList({
-                            templateSeq: template.templateSeq,
-                            callback: deleteCallback,
-                        }),
-                    );
-                },
-                onCancle: () => {},
-            });
+            const { templateSeq } = template;
+
+            dispatch(
+                hasRelationList({
+                    templateSeq,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            // 관련 아이템 없음
+                            if (!body) deleteCallback(template);
+                            // 관련 아이템 있음
+                            else notification('warning', '사용 중인 템플릿은 삭제할 수 없습니다');
+                        } else {
+                            notification('warning', header.message);
+                        }
+                    },
+                }),
+            );
         },
         [deleteCallback, dispatch],
     );

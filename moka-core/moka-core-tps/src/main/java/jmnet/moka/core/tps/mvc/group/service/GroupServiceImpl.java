@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
-import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.group.repository.GroupMemberRepository;
 import jmnet.moka.core.tps.mvc.group.repository.GroupRepository;
@@ -27,12 +27,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Page<Group> findAllGroup(GroupSearchDTO search) {
+    public Page<GroupInfo> findAllGroup(GroupSearchDTO search) {
         return groupRepository.findAllGroup(search);
     }
 
     @Override
-    public List<Group> findAllGroup() {
+    public List<GroupInfo> findAllGroup() {
         return groupRepository.findAll();
     }
 
@@ -42,13 +42,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Optional<Group> findGroupById(String groupId) {
+    public Optional<GroupInfo> findGroupById(String groupId) {
         return groupRepository.findById(groupId);
     }
 
     @Override
     @Transactional
-    public Group insertGroup(Group group) {
+    public GroupInfo insertGroup(GroupInfo group) {
         if (McpString.isEmpty(group.getGroupCd())) {
             group.setGroupCd(getNewGroupCd());
         }
@@ -57,12 +57,12 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public Group updateGroup(Group group) {
+    public GroupInfo updateGroup(GroupInfo group) {
         return groupRepository.save(group);
     }
 
     @Override
-    public void deleteGroup(Group group) {
+    public void deleteGroup(GroupInfo group) {
         groupRepository.delete(group);
     }
 
@@ -73,7 +73,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean isDuplicatedId(String groupId) {
-        Optional<Group> existingGroup = this.findGroupById(groupId);
+        Optional<GroupInfo> existingGroup = this.findGroupById(groupId);
         return existingGroup.isPresent();
     }
 

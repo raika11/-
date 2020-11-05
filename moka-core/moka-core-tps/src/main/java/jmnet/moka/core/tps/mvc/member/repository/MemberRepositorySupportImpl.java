@@ -6,8 +6,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
-import jmnet.moka.core.tps.mvc.member.entity.QMember;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -28,16 +28,16 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
     private final JPAQueryFactory queryFactory;
 
     public MemberRepositorySupportImpl(JPAQueryFactory queryFactory) {
-        super(Member.class);
+        super(MemberInfo.class);
         this.queryFactory = queryFactory;
     }
 
     @Override
-    public Page<Member> findAllMember(MemberSearchDTO memberSearchDTO) {
-        QMember qMember = QMember.member;
-        QMember qRegMember = new QMember("regMember");
+    public Page<MemberInfo> findAllMember(MemberSearchDTO memberSearchDTO) {
+        QMemberInfo qMember = QMemberInfo.memberInfo;
+        QMemberInfo qRegMember = new QMemberInfo("regMember");
 
-        JPQLQuery<Member> query = from(qMember);
+        JPQLQuery<MemberInfo> query = from(qMember);
 
         if (McpString.isNotEmpty(memberSearchDTO.getMemberId())) {
             query.where(qMember.memberId.eq(memberSearchDTO.getMemberId()));
@@ -47,24 +47,24 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
         }
 
 
-        QueryResults<Member> list = query
+        QueryResults<MemberInfo> list = query
                 .leftJoin(qMember.regMember, qRegMember)
                 .fetchJoin()
                 .fetchResults();
 
-        return new PageImpl<Member>(list.getResults(), memberSearchDTO.getPageable(), list.getTotal());
+        return new PageImpl<MemberInfo>(list.getResults(), memberSearchDTO.getPageable(), list.getTotal());
     }
 
     @Override
-    public Optional<Member> findByMemberId(String memberId) {
-        QMember qMember = QMember.member;
-        QMember qRegMember = new QMember("regMember");
+    public Optional<MemberInfo> findByMemberId(String memberId) {
+        QMemberInfo qMember = QMemberInfo.memberInfo;
+        QMemberInfo qRegMember = new QMemberInfo("regMember");
 
-        JPQLQuery<Member> query = from(qMember);
+        JPQLQuery<MemberInfo> query = from(qMember);
 
         query.where(qMember.memberId.eq(memberId));
 
-        Member member = query
+        MemberInfo member = query
                 .leftJoin(qMember.regMember, qRegMember)
                 .fetchJoin()
                 .fetchFirst();

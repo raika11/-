@@ -4,10 +4,10 @@ import java.util.List;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
-import jmnet.moka.core.tps.mvc.group.entity.Group;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.group.service.GroupService;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +33,7 @@ public class MemberTest {
     @Test
     public void memberInsertTest() {
 
-        Member member = Member
+        MemberInfo member = MemberInfo
                 .builder()
                 .memberId("ssc_test01")
                 .memberNm("관리자")
@@ -54,7 +54,7 @@ public class MemberTest {
 
     @Test
     public void groupInsertTest() {
-        Group group = Group
+        GroupInfo group = GroupInfo
                 .builder()
                 .groupCd("G01")
                 .groupKorNm("그룹1")
@@ -63,7 +63,7 @@ public class MemberTest {
 
         groupService.insertGroup(group);
 
-        group = Group
+        group = GroupInfo
                 .builder()
                 .groupCd("G02")
                 .groupKorNm("그룹2")
@@ -73,7 +73,7 @@ public class MemberTest {
         groupService.insertGroup(group);
 
         if (groupService.isDuplicatedId("G02")) {
-            group = Group
+            group = GroupInfo
                     .builder()
                     .groupCd("G02")
                     .groupKorNm("그룹2")
@@ -82,7 +82,7 @@ public class MemberTest {
             groupService.updateGroup(group);
         }
 
-        group = Group
+        group = GroupInfo
                 .builder()
                 .groupKorNm("그룹5")
                 .groupNm("G5")
@@ -92,7 +92,7 @@ public class MemberTest {
 
     @Test
     public void groupDeleteTest() {
-        List<Group> groups = groupService.findAllGroup();
+        List<GroupInfo> groups = groupService.findAllGroup();
         groups.forEach(group -> {
             if (!groupService.hasMembers(group.getGroupCd())) {
                 groupService.deleteGroup(group);
@@ -103,7 +103,7 @@ public class MemberTest {
 
     @Test
     public void groupMemberInsertTest() {
-        List<Group> groups = groupService.findAllGroup();
+        List<GroupInfo> groups = groupService.findAllGroup();
         groups.forEach(group -> {
             GroupMember groupMember = GroupMember
                     .builder()

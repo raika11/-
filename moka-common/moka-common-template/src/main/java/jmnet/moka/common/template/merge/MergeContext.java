@@ -25,19 +25,27 @@ public class MergeContext implements JexlContext, JexlContext.NamespaceResolver 
 //    protected final Map<String, Object> map;
     protected Map<String, Object> map;
     protected MergeContext parentContext ;
-    protected static final Functions functions = new Functions();
+    protected static final Functions defaultFunctions = new Functions();
 
     public MergeContext() {
-        this(null, true);
+        this(null, true, null);
     }
     
     public MergeContext(boolean isRoot) {
-    	this(null, isRoot);
+    	this(null, isRoot, null);
+    }
+
+    public MergeContext(Functions functions) {
+        this(null,true,functions);
     }
     
-    public MergeContext(Map<String, Object> vars, boolean isRoot) {
-    	map = vars == null ? new HashMap<String, Object>(32) : vars;
-    	map.put(null, functions);
+    public MergeContext(Map<String, Object> vars, boolean isRoot, Functions functions) {
+    	map = vars == null ? new HashMap<>(32) : vars;
+    	if ( functions == null) {
+            map.put(null, defaultFunctions);
+        } else {
+            map.put(null, functions);
+        }
 		if ( isRoot ) {
 	        this.set(MERGE_OPTIONS, new MergeOptions());
 			this.set(CURRENT_INDENT, "");
@@ -95,7 +103,7 @@ public class MergeContext implements JexlContext, JexlContext.NamespaceResolver 
     }
     
     public boolean hasParent() {
-    	return this.parentContext != null ? true : false;
+    	return this.parentContext != null;
     }
     
 
@@ -104,11 +112,8 @@ public class MergeContext implements JexlContext, JexlContext.NamespaceResolver 
     	if ( map.containsKey(name) ) {
     		return map.containsKey(name);
     	} else { // 자신에게 없을때 상위에서 찾는다.
-    		if ( this.parentContext != null  && this.parentContext.has(name) ) {
-    			return true;
-    		}
+            return this.parentContext != null && this.parentContext.has(name);
     	}
-    	return false;
     }
 
     @Override

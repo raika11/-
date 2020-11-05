@@ -3,6 +3,7 @@ package jmnet.moka.core.tms.mvc.handler;
 import java.lang.reflect.Method;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.core.tms.merge.MokaFunctions;
 import org.springframework.web.method.HandlerMethod;
 
 /**
@@ -10,6 +11,7 @@ import org.springframework.web.method.HandlerMethod;
  */
 public abstract class AbstractHandler {
     protected final static String HANDLER_METHOD_NAME = "merge";
+    protected final static MokaFunctions MOKA_FUNCTIONS = new MokaFunctions();
     protected String viewName;
     protected HandlerMethod handlerMethod;
 

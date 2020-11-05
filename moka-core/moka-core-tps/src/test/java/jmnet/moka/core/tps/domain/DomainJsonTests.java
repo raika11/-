@@ -1,5 +1,8 @@
 package jmnet.moka.core.tps.domain;
 
+import jmnet.moka.core.tps.mvc.auth.service.AuthService;
+import jmnet.moka.core.tps.mvc.auth.service.AuthServiceImpl;
+import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -8,18 +11,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import jmnet.moka.core.tps.mvc.domain.service.DomainService;
-import jmnet.moka.core.tps.mvc.user.service.UserService;
-import jmnet.moka.core.tps.mvc.user.service.UserServiceImpl;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = {DomainService.class},
-        includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
+@WebMvcTest(controllers = {DomainService.class}, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 public class DomainJsonTests {
     @MockBean
-    UserService userService;
+    AuthService authService;
     @MockBean
-    UserServiceImpl userDetailsService;
+    AuthServiceImpl userDetailsService;
 
     @MockBean
     DomainService domainService;

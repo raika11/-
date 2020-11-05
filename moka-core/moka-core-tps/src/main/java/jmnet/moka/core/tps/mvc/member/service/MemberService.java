@@ -7,7 +7,7 @@ import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import org.springframework.data.domain.Page;
 
 public interface MemberService {
@@ -17,14 +17,14 @@ public interface MemberService {
      * @param search 검색 조건
      * @return 검색 결과 목록
      */
-    Page<Member> findAllMember(MemberSearchDTO search);
+    Page<MemberInfo> findAllMember(MemberSearchDTO search);
 
     /**
      * 전체 멤버 조회
      *
      * @return 멤버 목록
      */
-    List<Member> findAllMember();
+    List<MemberInfo> findAllMember();
 
     /**
      * 멤버 ID로 멤버 상세 조회
@@ -32,7 +32,7 @@ public interface MemberService {
      * @param memberId 멤버 ID
      * @return
      */
-    Optional<Member> findMemberById(String memberId);
+    Optional<MemberInfo> findMemberById(String memberId);
 
     /**
      * 멤버 등록
@@ -40,7 +40,7 @@ public interface MemberService {
      * @param member 멤버 정보
      * @return 멤버 정보
      */
-    Member insertMember(Member member);
+    MemberInfo insertMember(MemberInfo member);
 
     /**
      * 멤버 수정
@@ -48,7 +48,7 @@ public interface MemberService {
      * @param member 멤버 정보
      * @return 멤버 정보
      */
-    Member updateMember(Member member);
+    MemberInfo updateMember(MemberInfo member);
 
     /**
      * 멤버 상태 변경
@@ -57,7 +57,7 @@ public interface MemberService {
      * @param status   유효 상태
      * @return 멤버 정보
      */
-    Member updateMemberStatus(String memberId, MemberStatusCode status);
+    MemberInfo updateMemberStatus(String memberId, MemberStatusCode status);
 
     /**
      * 멤버 상태 변경
@@ -68,7 +68,7 @@ public interface MemberService {
      * @param remark   비고
      * @return 멤버 정보
      */
-    Member updateMemberStatus(String memberId, MemberStatusCode status, Integer errorCnt, String remark);
+    MemberInfo updateMemberStatus(String memberId, MemberStatusCode status, Integer errorCnt, String remark);
 
     /**
      * 멤버 상태 변경
@@ -78,7 +78,7 @@ public interface MemberService {
      * @param remark   비고
      * @return 멤버 정보
      */
-    Member updateMemberStatus(String memberId, MemberStatusCode status, String remark);
+    MemberInfo updateMemberStatus(String memberId, MemberStatusCode status, String remark);
 
     /**
      * 멤버 로그인 정보 수정
@@ -88,7 +88,7 @@ public interface MemberService {
      * @param loginIp   로그인 아이피
      * @return 멤버 정보
      */
-    Member updateMemberLoginInfo(String memberId, Date loginDate, String loginIp);
+    MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp);
 
     /**
      * 멤버 로그인 정보 수정
@@ -99,7 +99,7 @@ public interface MemberService {
      * @param expireDt  계정만료일
      * @return 멤버 정보
      */
-    Member updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt);
+    MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt);
 
     /**
      * 멤버 로그인 정보 수정
@@ -111,7 +111,7 @@ public interface MemberService {
      * @param errCnt    비밀번호 오류 건수
      * @return 멤버 정보
      */
-    Member updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt, Integer errCnt);
+    MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt, Integer errCnt);
 
     /**
      * 멤버 로그인 정보 수정
@@ -121,7 +121,7 @@ public interface MemberService {
      * @param loginIp   로그인 아이피
      * @return 멤버 정보
      */
-    Member updateMemberLoginInfo(Member member, Date loginDate, String loginIp);
+    MemberInfo updateMemberLoginInfo(MemberInfo member, Date loginDate, String loginIp);
 
     /**
      * 멤버 로그인 정보 수정
@@ -132,7 +132,7 @@ public interface MemberService {
      * @param expireDt  계정만료일
      * @return 멤버 정보
      */
-    Member updateMemberLoginInfo(Member member, Date loginDate, String loginIp, Date expireDt);
+    MemberInfo updateMemberLoginInfo(MemberInfo member, Date loginDate, String loginIp, Date expireDt);
 
     /**
      * 멤버 로그인 정보 수정
@@ -144,7 +144,7 @@ public interface MemberService {
      * @param errCnt    비밀번호 오류 건수
      * @return 멤버 정보
      */
-    Member updateMemberLoginInfo(Member member, Date loginDate, String loginIp, Date expireDt, Integer errCnt);
+    MemberInfo updateMemberLoginInfo(MemberInfo member, Date loginDate, String loginIp, Date expireDt, Integer errCnt);
 
     /**
      * 로그인 실패 정보 수정
@@ -153,7 +153,7 @@ public interface MemberService {
      * @param errorCnt 오류 건수
      * @return 멤버 정보
      */
-    Member updateMemberLoginErrorCount(String memberId, Integer errorCnt);
+    MemberInfo updateMemberLoginErrorCount(String memberId, Integer errorCnt);
 
 
     /**
@@ -162,7 +162,7 @@ public interface MemberService {
      * @param memberId 멤버 ID
      * @return 멤버 정보
      */
-    Member addMemberLoginErrorCount(String memberId);
+    MemberInfo addMemberLoginErrorCount(String memberId);
 
     /**
      * 로그인 실패 정보 수정
@@ -170,7 +170,7 @@ public interface MemberService {
      * @param member 멤버 정보
      * @return 멤버 정보
      */
-    Member addMemberLoginErrorCount(Member member);
+    MemberInfo addMemberLoginErrorCount(MemberInfo member);
 
 
     /**
@@ -178,7 +178,7 @@ public interface MemberService {
      *
      * @param member 멤버 정보
      */
-    void deleteMember(Member member);
+    void deleteMember(MemberInfo member);
 
     /**
      * 멤버 삭제

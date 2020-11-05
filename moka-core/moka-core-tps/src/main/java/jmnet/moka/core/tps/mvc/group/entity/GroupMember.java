@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
-import jmnet.moka.core.tps.mvc.member.entity.Member;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -52,7 +52,7 @@ public class GroupMember extends BaseAudit {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GRP_CD", nullable = false, insertable = false, updatable = false)
-    private Group group;
+    private GroupInfo group;
 
     /**
      * 사용여부(Y:사용, N:미사용)
@@ -72,6 +72,6 @@ public class GroupMember extends BaseAudit {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID", nullable = false, insertable = false, updatable = false)
-    private Member member;
+    private MemberInfo member;
 
 }

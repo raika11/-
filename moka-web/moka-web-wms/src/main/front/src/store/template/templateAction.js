@@ -39,7 +39,7 @@ export const getTemplateLookupList = createAction(GET_TEMPLATE_LOOKUP_LIST, (...
  */
 export const CHANGE_TEMPLATE_BODY = 'template/CHANGE_TEMPLATE_BODY';
 export const CHANGE_TEMPLATE = 'template/CHANGE_TEMPLATE';
-export const CHANGE_INVALID_LIST = 'domain/CHANGE_INVALID_LIST';
+export const CHANGE_INVALID_LIST = 'template/CHANGE_INVALID_LIST';
 export const changeTemplateBody = createAction(CHANGE_TEMPLATE_BODY, (templateBody) => templateBody);
 export const changeTemplate = createAction(CHANGE_TEMPLATE, (template) => template);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);

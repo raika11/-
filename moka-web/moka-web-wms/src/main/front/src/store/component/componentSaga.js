@@ -135,8 +135,7 @@ export function* deleteComponent({ payload: { componentSeq, callback } }) {
 
         if (response.data.header.success) {
             yield put({
-                type: act.GET_COMPONENT_SUCCESS,
-                payload: callbackData,
+                type: act.DELETE_COMPONENT_SUCCESS,
             });
 
             // 목록 다시 검색

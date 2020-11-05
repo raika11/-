@@ -33,28 +33,36 @@ const Component = () => {
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     /**
-     * 도메인 삭제
+     * 컴포넌트 삭제
      * @param {object} response response
      */
     const deleteCallback = useCallback(
-        (response, componentSeq) => {
-            if (response.header.success) {
-                dispatch(
-                    deleteComponent({
-                        componentSeq: componentSeq,
-                        callback: (response) => {
-                            if (response.header.success) {
-                                notification('success', '삭제하였습니다.');
-                                history.push('/component');
-                            } else {
-                                notification('warning', response.header.message);
-                            }
-                        },
-                    }),
-                );
-            } else {
-                notification('warning', response.header.message);
-            }
+        (component) => {
+            toastr.confirm(`${component.componentSeq}_${component.componentName}을 삭제하시겠습니까?`, {
+                onOk: () => {
+                    dispatch(
+                        deleteComponent({
+                            componentSeq: component.componentSeq,
+                            callback: ({ header, body }) => {
+                                if (header.success) {
+                                    // 삭제 성공
+                                    if (body) {
+                                        notification('success', '삭제하였습니다');
+                                        history.push('/component');
+                                    }
+                                    // 삭제 실패
+                                    else {
+                                        notification('warning', '삭제하지 못했습니다');
+                                    }
+                                } else {
+                                    notification('warning', header.message);
+                                }
+                            },
+                        }),
+                    );
+                },
+                onCancel: () => {},
+            });
         },
         [dispatch, history],
     );
@@ -65,19 +73,22 @@ const Component = () => {
      */
     const handleClickDelete = useCallback(
         (component) => {
-            const { componentSeq, componentName } = component;
-
-            toastr.confirm(`${componentSeq}_${componentName}을 정말 삭제하시겠습니까?`, {
-                onOk: () => {
-                    dispatch(
-                        hasRelationList({
-                            componentSeq,
-                            callback: deleteCallback,
-                        }),
-                    );
-                },
-                onCancel: () => {},
-            });
+            const { componentSeq } = component;
+            dispatch(
+                hasRelationList({
+                    componentSeq,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            // 관련 아이템 없음
+                            if (!body) deleteCallback(component);
+                            // 관련 아이템 있음
+                            else notification('warning', '사용 중인 컴포넌트는 삭제할 수 없습니다');
+                        } else {
+                            notification('warning', header.message);
+                        }
+                    },
+                }),
+            );
         },
         [deleteCallback, dispatch],
     );

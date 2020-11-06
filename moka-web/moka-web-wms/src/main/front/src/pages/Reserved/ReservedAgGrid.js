@@ -56,7 +56,7 @@ const ReservedAgGrid = () => {
                 columnDefs={columnDefs}
                 rowData={list}
                 onRowNodeId={(reserved) => reserved.reservedSeq}
-                agGridHeight={550}
+                agGridHeight={569}
                 onRowClicked={handleRowClick}
                 loading={loading}
                 total={total}

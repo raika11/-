@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toastr } from 'react-redux-toastr';
 
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { MokaInputLabel } from '@components';
 import { deleteReserved, getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
 
@@ -102,26 +101,25 @@ const ReservedEdit = () => {
     };
 
     /**
-     * 예약어 수정
-     * @param {object} tmp 예약어
+     * 저장
+     * @param {object} tmp reserved
      */
-    const updateReserved = (tmp) => {
+    const saveCallback = (tmp, type) => {
         dispatch(
             saveReserved({
-                type: 'update',
+                type,
                 actions: [
                     changeReserved({
                         ...reserved,
                         ...tmp,
                     }),
                 ],
-                callback: (response) => {
-                    // 만약 response.header.message로 서버 메세지를 전달해준다면, 그 메세지를 보여준다.
-                    if (response.header.success) {
-                        notification('success', '수정하였습니다.');
-                        history.push(`/reserved`);
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                        history.push(`/reserved/${body.reservedSeq}`);
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -129,41 +127,28 @@ const ReservedEdit = () => {
     };
 
     /**
-     * 예약어 등록
+     * 중복 체크
      * @param {object} tmp 예약어
      */
-    const insertReserved = (tmp) => {
+    const checkDuplicated = (tmp) => {
         dispatch(
             duplicateCheck({
                 duplicateSet: {
                     reservedId: tmp.reservedId,
                     domainId: tmp.domainId,
                 },
-                callback: (response) => {
-                    const { body } = response;
-
-                    if (!body) {
-                        dispatch(
-                            saveReserved({
-                                type: 'insert',
-                                actions: [
-                                    changeReserved({
-                                        ...reserved,
-                                        ...tmp,
-                                    }),
-                                ],
-                                callback: (response) => {
-                                    if (response.header.success) {
-                                        notification('success', '등록하였습니다.');
-                                        dispatch(clearReserved());
-                                    } else {
-                                        notification('warning', '실패하였습니다.');
-                                    }
-                                },
-                            }),
-                        );
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 중복 없음
+                        if (!body) {
+                            saveCallback(tmp, 'update');
+                        }
+                        // 중복 있음
+                        else {
+                            toast.warning(header.message);
+                        }
                     } else {
-                        notification('warning', '중복된 예약어아이디가 존재합니다.');
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -171,8 +156,7 @@ const ReservedEdit = () => {
     };
 
     /**
-     * 저장 이벤트
-     * @param event 이벤트 객체
+     * 저장 버튼
      */
     const handleClickSave = () => {
         let newReserved;
@@ -199,11 +183,14 @@ const ReservedEdit = () => {
         } else {
             newReserved.usedYn = 'N';
         }
+
         if (validate(newReserved)) {
-            if (paramSeq) {
-                updateReserved(newReserved);
+            if (!paramSeq) {
+                // 등록
+                saveCallback(newReserved, 'insert');
             } else {
-                insertReserved(newReserved);
+                // 수정
+                checkDuplicated(newReserved);
             }
         }
     };
@@ -212,16 +199,17 @@ const ReservedEdit = () => {
      * 삭제 버튼
      */
     const handleClickDelete = () => {
-        toastr.confirm('정말 삭제하시겠습니까?', {
-            onOk: () => {
+        toast.confirm(
+            `${reservedId}를 삭제하시겠습니까?`,
+            () => {
                 const reservedSet = {
                     domainId: latestDomainId,
                     reservedSeq: reservedSeq,
                 };
                 dispatch(deleteReserved({ callback: () => history.push('/reserved'), reservedSet }));
             },
-            onCancel: () => {},
-        });
+            () => {},
+        );
     };
 
     useEffect(() => {
@@ -254,10 +242,10 @@ const ReservedEdit = () => {
                 />
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-0 d-flex align-items-center">
-                    <Button variant="dark" className="mr-05" onClick={handleClickSave}>
+                    <Button variant="primary" className="mr-05" onClick={handleClickSave}>
                         저장
                     </Button>
-                    <Button variant="secondary" onClick={handleClickDelete}>
+                    <Button variant="danger" onClick={handleClickDelete}>
                         삭제
                     </Button>
                 </Form.Group>

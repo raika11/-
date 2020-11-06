@@ -23,7 +23,7 @@ const getContainer = createRequestSaga(act.GET_CONTAINER, api.getContainer);
 /**
  * 컨테이너 (모달용) 조회
  */
-const getContainerModal = createRequestSaga(act.GET_CONTAINER, api.getContainer, true);
+const getContainerModal = createRequestSaga(act.GET_CONTAINER_MODAL, api.getContainer, true);
 
 /**
  * 저장/수정

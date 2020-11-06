@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
 import { MokaCard } from '@components';
-
-import { GET_RESERVED, SAVE_RESERVED } from '@store/reserved';
+import { GET_RESERVED, SAVE_RESERVED, DELETE_RESERVED } from '@store/reserved';
 
 const ReservedList = React.lazy(() => import('./ReservedList'));
 const ReservedEdit = React.lazy(() => import('./ReservedEdit'));
@@ -13,9 +12,9 @@ const ReservedEdit = React.lazy(() => import('./ReservedEdit'));
 /**
  * 예약어 관리 컴포넌트
  */
-const Reserved = () => {
+const Reserved = ({ match }) => {
     const { loading } = useSelector((store) => ({
-        loading: store.reserved[GET_RESERVED] || store.reserved[SAVE_RESERVED],
+        loading: store.loading[GET_RESERVED] || store.loading[SAVE_RESERVED] || store.loading[DELETE_RESERVED],
     }));
 
     return (
@@ -36,7 +35,7 @@ const Reserved = () => {
             {/* 예약어 정보 */}
             <Switch>
                 <Route
-                    path={['/reserved', '/reserved/:reservedSeq']}
+                    path={[match.url, `${match.url}/:reservedSeq`]}
                     exact
                     render={() => (
                         <MokaCard width={780} titleClassName="mb-0" title="예약어 정보" loading={loading}>

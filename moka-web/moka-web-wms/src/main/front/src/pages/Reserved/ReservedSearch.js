@@ -84,14 +84,14 @@ const ReservedSearch = () => {
                 ))}
             </MokaInput>
             <Form.Row className="m-0 mb-2">
-                <Col xs={5} className="p-0 pr-2">
-                    <MokaInput as="select" value={search.searchType || undefined} onChange={handleChangeSearchOption} name="searchType">
+                <Col xs={4} className="p-0 pr-2">
+                    <MokaInput as="select" value={search.searchType || 'all'} onChange={handleChangeSearchOption} name="searchType">
                         <option value="all">전체</option>
                         <option value="reservedId">코드</option>
                         <option value="reservedValue">값</option>
                     </MokaInput>
                 </Col>
-                <Col xs={7} className="p-0">
+                <Col xs={8} className="p-0">
                     <MokaSearchInput value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
                 </Col>
             </Form.Row>

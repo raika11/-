@@ -54,6 +54,17 @@ public class CacheManager {
         }
     }
 
+    public Cacheable getCache(Class<?> claz) {
+        for (CacheGroupManager cacheGrouManager: this.cacheGrouManagerMap.values()) {
+            for ( Cacheable cachable : cacheGrouManager.getCacheList() ) {
+                if ( claz.isInstance(cachable)) {
+                    return cachable;
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean enabled() {
         return this.cacheGroupSize > 0;
     }

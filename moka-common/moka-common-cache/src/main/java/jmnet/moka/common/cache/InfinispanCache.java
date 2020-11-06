@@ -31,6 +31,10 @@ public class InfinispanCache extends AbstractCache {
         this.ifnspsDelegator = new InfinispanDelegator(configLocation);
     }
 
+    public InfinispanDelegator getDelegater() {
+        return this.ifnspsDelegator;
+    }
+
     @Override
     public void set(String type, String key, String value) {
         set(type, key, value, this.getExpire(type));

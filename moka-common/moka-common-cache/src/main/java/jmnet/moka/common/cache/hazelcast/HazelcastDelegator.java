@@ -23,6 +23,10 @@ public class HazelcastDelegator {
         this.mapListener = new HazelcastMapListener();
     }
 
+    public HazelcastInstance getHazelcastInstance() {
+        return this.hzInstance;
+    }
+
     public IMap<String, String> getMap(String type) {
         if (this.hzInstance != null && this.hzInstance.getLifecycleService().isRunning()) {
             return this.hzInstance.getMap(type);

@@ -1,5 +1,6 @@
 package jmnet.moka.common.cache;
 
+import com.hazelcast.core.HazelcastInstance;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,6 +31,10 @@ public class HazelcastCache extends AbstractCache {
         String configLocation = this.propertyMap.get(CONFIG_PROPERTY);
         this.typeList = new LinkedList<String>();
         this.hzDelegator = new HazelcastDelegator(configLocation);
+    }
+
+    public HazelcastDelegator getHazelcastDelegator() {
+        return this.hzDelegator;
     }
 
     @Override

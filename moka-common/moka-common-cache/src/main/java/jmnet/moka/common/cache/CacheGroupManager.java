@@ -45,6 +45,10 @@ public class CacheGroupManager implements Runnable {
         this.gcThread.start();
     }
 
+    public List<Cacheable> getCacheList() {
+        return this.cacheList;
+    }
+
     public void set(String type, String key, String value) {
         for (Cacheable cache : this.cacheList) {
             cache.set(type, key, value);

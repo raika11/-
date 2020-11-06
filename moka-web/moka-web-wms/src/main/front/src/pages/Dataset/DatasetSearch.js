@@ -39,8 +39,7 @@ const DatasetSearch = () => {
 
     const handleChangeSearchValue = ({ target }) => {
         const { value, name } = target;
-        console.log(name);
-        console.log(value);
+
         setSearch({
             ...search,
             [name]: value,

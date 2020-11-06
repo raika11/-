@@ -246,8 +246,10 @@ const MokaInput = forwardRef((props, ref) => {
         Type = MokaDateTimePicker;
         inputObject = { ...inputObject, placeholder };
         /*return <MokaDateTimePicker value={value} onChange={onChange} placeholder={placeholder} disabled={disabled} {...inputProps} />;*/
-    } else {
-        inputObject = { ...inputObject, placeholder };
+    }
+    // 기본 input
+    else {
+        inputObject = { ...inputObject, placeholder, type };
     }
 
     return <Type {...inputObject}>{children}</Type>;

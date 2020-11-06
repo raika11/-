@@ -194,7 +194,12 @@ public class PageNode implements Serializable {
                             b.sort();
                         }
 
-                        return a.getPageOrd() - b.getPageOrd();
+                        if (a.getPageOrd()
+                             .equals(b.getPageOrd())) {
+                            return (int) (long) (a.getPageSeq() - b.getPageSeq());
+                        } else {
+                            return a.getPageOrd() - b.getPageOrd();
+                        }
                     });
             }
         }

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import MokaInput from './MokaInput';
-import MokaUncontrolledInput from './MokaUncontrolledInput';
 
 const propTypes = {
     /**
@@ -105,13 +104,10 @@ const MokaInputLabel = forwardRef((props, ref) => {
     const { label, labelWidth, className, labelClassName, required } = props;
 
     // common props
-    const { inputClassName, as, type, placeholder, onChange, children, inputProps, isInvalid, disabled, id, name } = props;
+    const { inputClassName, as, type, placeholder, onChange, children, inputProps, isInvalid, disabled, id, name, uncontrolled } = props;
 
     // MokaInput props
     const { value } = props;
-
-    // MokaUncontrolledInput props
-    const { defaultValue, uncontrolled } = props;
 
     return (
         <Form.Group className={clsx('d-flex', 'align-items-center', className)}>
@@ -119,7 +115,7 @@ const MokaInputLabel = forwardRef((props, ref) => {
                 {required && <span className="required-text">*</span>}
                 {label}
             </Form.Label>
-            {as !== 'none' && !uncontrolled && (
+            {as !== 'none' && (
                 <MokaInput
                     ref={ref}
                     as={as}
@@ -133,25 +129,7 @@ const MokaInputLabel = forwardRef((props, ref) => {
                     placeholder={placeholder}
                     type={type}
                     inputProps={inputProps}
-                >
-                    {children}
-                </MokaInput>
-            )}
-            {as !== 'none' && uncontrolled && (
-                <MokaInput
-                    ref={ref}
-                    as={as}
-                    id={id}
-                    name={name}
-                    defaultValue={value}
-                    onChange={onChange}
-                    className={inputClassName}
-                    isInvalid={isInvalid}
-                    disabled={disabled}
-                    placeholder={placeholder}
-                    type={type}
-                    inputProps={inputProps}
-                    uncontrolled
+                    uncontrolled={uncontrolled}
                 >
                     {children}
                 </MokaInput>

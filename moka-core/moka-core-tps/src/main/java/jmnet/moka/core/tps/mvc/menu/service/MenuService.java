@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.menu.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
@@ -255,4 +256,11 @@ public interface MenuService {
      * @return 메뉴 권한 목록
      */
     List<MenuAuth> findMenuAuthList(String menuId);
+
+    /**
+     * 전체 메뉴 path 정보를 불러온다.
+     *
+     * @return 메뉴 path
+     */
+    Set<String> findAllMenuUrl();
 }

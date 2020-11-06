@@ -2,7 +2,10 @@ package jmnet.moka.core.tps.mvc.menu.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuDTO;
@@ -300,6 +303,21 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<MenuAuth> findMenuAuthList(String menuId) {
         return menuAuthRepository.findAllByMenuId(menuId);
+    }
+
+    @Override
+    public Set<String> findAllMenuUrl() {
+        List<Menu> menuList = menuRepository.findByUsedYn(MokaConstants.YES);
+
+        return menuList
+                .stream()
+                .filter(menu -> McpString.isNotEmpty(menu.getMenuUrl()))
+                .map(menu -> {
+                    return menu
+                            .getMenuUrl()
+                            .trim();
+                })
+                .collect(Collectors.toSet());
     }
 
 }

@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { columnDefs, rowData } from '@/pages/commons/LookupContainerListColumns';
+import columnDefs from '@/pages/commons/LookupContainerListColumns';
 import { MokaTable } from '@components';
 
 /**
  * 관련광고 AgGrid 목록
  */
 const PageChildAdAgGrid = (props) => {
-    const [total] = useState(rowData.length);
+    const [total] = useState(0);
     const [loading] = useState(false);
     const [search] = useState({ page: 1, size: 10 });
 
@@ -26,8 +26,8 @@ const PageChildAdAgGrid = (props) => {
     return (
         <MokaTable
             columnDefs={columnDefs}
-            rowData={rowData}
-            getRowNodeId={(params) => params.containerSeq}
+            rowData={[]}
+            onRowNodeId={(params) => params.containerSeq}
             agGridHeight={550}
             onRowClicked={handleRowClicked}
             loading={loading}

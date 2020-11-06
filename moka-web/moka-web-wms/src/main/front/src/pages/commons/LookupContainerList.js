@@ -6,9 +6,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { ITEM_PG, ITEM_SK, ITEM_CT } from '@/constants';
-import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
+import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
-import columnDefs from './LookupContainerListColumns';
+import columnDefs, { ctColumnDefs } from './LookupContainerListColumns';
 import { defaultContainerSearchType, LookupAgGridHeight } from '@pages/commons';
 import ContainerHtmlModal from './ContainerHtmlModal';
 
@@ -145,10 +145,8 @@ const LookupContainerList = (props) => {
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>
-                        <Col xs={5} className="p-0 pr-2">
-                            <MokaInputLabel
-                                label="구분"
-                                labelWidth={28}
+                        <Col xs={4} className="p-0 pr-2">
+                            <MokaInput
                                 className="mb-0"
                                 as="select"
                                 value={search.searchType}
@@ -166,9 +164,9 @@ const LookupContainerList = (props) => {
                                         {type.name}
                                     </option>
                                 ))}
-                            </MokaInputLabel>
+                            </MokaInput>
                         </Col>
-                        <Col xs={7} className="p-0">
+                        <Col xs={8} className="p-0">
                             <MokaSearchInput
                                 value={search.keyword}
                                 onChange={(e) => {
@@ -184,16 +182,18 @@ const LookupContainerList = (props) => {
                 </Form>
 
                 {/* 버튼 그룹 */}
-                <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="dark" onClick={() => window.open('/container')}>
-                        컨테이너 추가
-                    </Button>
-                </div>
+                {seqType !== ITEM_CT && (
+                    <div className="d-flex mb-10 justify-content-end">
+                        <Button variant="dark" onClick={() => window.open('/container')}>
+                            컨테이너 추가
+                        </Button>
+                    </div>
+                )}
 
                 {/* ag-grid table */}
                 <MokaTable
                     agGridHeight={LookupAgGridHeight}
-                    columnDefs={columnDefs}
+                    columnDefs={seqType === ITEM_CT ? ctColumnDefs : columnDefs}
                     rowData={rowData}
                     onRowNodeId={(data) => data.containerSeq}
                     onRowClicked={handleRowClicked}

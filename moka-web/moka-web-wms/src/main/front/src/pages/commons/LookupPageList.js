@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { ITEM_PG } from '@/constants';
-import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
+import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getPageLookupList, changeLookupSearchOption, clearLookup, GET_PAGE_LOOKUP_LIST } from '@store/page';
 import columnDefs from './LookupPageListColumns';
 import { defaultPageSearchType, LookupAgGridHeight } from '@pages/commons';
@@ -154,10 +154,8 @@ const LookupPageList = (props) => {
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>
-                        <Col xs={5} className="p-0 pr-2">
-                            <MokaInputLabel
-                                label="구분"
-                                labelWidth={28}
+                        <Col xs={4} className="p-0 pr-2">
+                            <MokaInput
                                 className="mb-0"
                                 as="select"
                                 value={search.searchType}
@@ -173,9 +171,9 @@ const LookupPageList = (props) => {
                                         {type.name}
                                     </option>
                                 ))}
-                            </MokaInputLabel>
+                            </MokaInput>
                         </Col>
-                        <Col xs={7} className="p-0">
+                        <Col xs={8} className="p-0">
                             <MokaSearchInput
                                 value={search.keyword}
                                 onChange={(e) => {

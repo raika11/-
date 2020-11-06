@@ -4,9 +4,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import { initialState, getComponent, clearComponent, changeComponent, saveComponent, changeInvalidList, GET_COMPONENT, SAVE_COMPONENT, DELETE_COMPONENT } from '@store/component';
+import {
+    initialState,
+    getComponent,
+    clearComponent,
+    changeComponent,
+    saveComponent,
+    hasRelationList,
+    changeInvalidList,
+    GET_COMPONENT,
+    SAVE_COMPONENT,
+    DELETE_COMPONENT,
+} from '@store/component';
 import { DB_DATEFORMAT } from '@/constants';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 
 import BasicForm from './components/BasicForm';
 import DetailRelationForm from './components/DetailRelationForm';
@@ -67,6 +78,62 @@ const ComponentEdit = ({ onDelete }) => {
     };
 
     /**
+     * 저장
+     * @param {object} component component
+     */
+    const saveCallback = (component) => {
+        dispatch(
+            saveComponent({
+                actions: [changeComponent(component)],
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                        history.push(`/component/${body.componentSeq}`);
+                    } else {
+                        toast.warning(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
+     * 관련아이템 체크
+     * @param {object} component component
+     */
+    const checkRelationList = (component) => {
+        dispatch(
+            hasRelationList({
+                componentSeq: component.componentSeq,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 관련 아이템 없음
+                        if (!body) saveCallback(component);
+                        // 관련 아이템 있음
+                        else {
+                            toast.confirm(
+                                <React.Fragment>
+                                    다른 곳에서 사용 중입니다.
+                                    <br />
+                                    변경 시 전체 수정 반영됩니다.
+                                    <br />
+                                    수정하시겠습니까?
+                                </React.Fragment>,
+                                () => {
+                                    saveCallback(component);
+                                },
+                                () => {},
+                            );
+                        }
+                    } else {
+                        toast.error(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
      * 저장 버튼
      */
     const handleClickSave = () => {
@@ -89,27 +156,16 @@ const ComponentEdit = ({ onDelete }) => {
             }
         }
 
-        if (!saveData.domain.domainId) {
-            // 도메인 정보가 없으면 latestDomainId 셋팅
-            saveData.domain = {
-                domainId: latestDomainId,
-            };
-        }
-
         if (validate(saveData)) {
-            dispatch(
-                saveComponent({
-                    actions: [changeComponent(saveData)],
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            notification('success', header.message);
-                            history.push(`/component/${body.componentSeq}`);
-                        } else {
-                            notification('warning', header.message);
-                        }
-                    },
-                }),
-            );
+            if (!saveData.domain.domainId) {
+                // 도메인 정보가 없으면 latestDomainId 셋팅
+                saveData.domain = {
+                    domainId: latestDomainId,
+                };
+                saveCallback(saveData);
+            } else {
+                checkRelationList(saveData);
+            }
         }
     };
 

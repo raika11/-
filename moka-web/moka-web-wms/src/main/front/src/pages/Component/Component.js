@@ -144,7 +144,7 @@ const Component = ({ match }) => {
                 tabNavPosition="right"
                 tabNavs={[
                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
+                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                 ]}
             />

@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import moment from 'moment';
 import { ITEM_PG, ITEM_SK, ITEM_TP, ITEM_CT, DB_DATEFORMAT } from '@/constants';
 import { defaultHistorySearchType } from './index';
-import { MokaCard, MokaTable, MokaSearchInput, MokaInputLabel } from '@components';
+import { MokaCard, MokaTable, MokaSearchInput, MokaInput, MokaInputLabel } from '@components';
 import { initialState, changeSearchOption, getHistoryList, GET_HISTORY_LIST, clearStore, getHistory } from '@store/history';
 import { notification } from '@utils/toastUtil';
 import columDefs from './HistoryListColums';
@@ -188,11 +188,9 @@ const HistoryList = (props) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     {/* 검색조건 */}
-                    <Col xs={5} className="p-0 pr-2">
-                        <MokaInputLabel
-                            label="구분"
+                    <Col xs={4} className="p-0 pr-2">
+                        <MokaInput
                             as="select"
-                            labelWidth={28}
                             className="mb-0"
                             value={search.searchType || undefined}
                             onChange={(e) => {
@@ -207,10 +205,10 @@ const HistoryList = (props) => {
                                     {searchType.name}
                                 </option>
                             ))}
-                        </MokaInputLabel>
+                        </MokaInput>
                     </Col>
                     {/* 키워드 */}
-                    <Col xs={7} className="p-0 mb-0">
+                    <Col xs={8} className="p-0 mb-0">
                         <MokaSearchInput
                             value={search.keyword}
                             onChange={(e) => {

@@ -2,9 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
-import { GET_DOMAIN_LIST, changeSearchOption, getDomainList, initialState, deleteDomain, hasRelationList } from '@store/domain';
+import { GET_DOMAIN_LIST, changeSearchOption, getDomainList, initialState } from '@store/domain';
 import { columnDefs } from './DomainAgGridColumns';
-import { notification, toastr } from '@utils/toastUtil';
 
 /**
  * 도메인 AgGrid 목록
@@ -72,7 +71,7 @@ const DomainAgGrid = (props) => {
             columnDefs={columnDefs}
             rowData={domainRows}
             onRowNodeId={(rowData) => rowData.domainId}
-            agGridHeight={600}
+            agGridHeight={648}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}

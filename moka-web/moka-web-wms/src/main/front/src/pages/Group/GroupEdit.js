@@ -38,19 +38,15 @@ const GroupEdit = (onDelete) => {
     const [groupNmKorError, setGroupKorNmError] = useState(false);
 
     // getter
-    const { group, member, invalidList } = useSelector(
+    const { group, invalidList, memberNm } = useSelector(
+
         (store) =>{
-
-            //const mem = JSON.stringify(store.group.group.regMember);
-            //const mem2 = JSON.parse(store.group.group.regMember);
-            //console.log("bbbbbbbbbbbbbb", store.group.group.regMember.memberNm);
-
             return ({
             group: store.group.group,
             invalidList: store.group.invalidList,
+            memberNm : store.group.group.regMember && store.group.group.regMember.memberNm,
             loading: store.loading[GET_GROUP] || store.loading[SAVE_GROUP] || store.loading[DELETE_GROUP],
         })},
-
 
         shallowEqual,
     );
@@ -123,8 +119,6 @@ const GroupEdit = (onDelete) => {
         switch (name) {
             case 'groupCd':
                 const regex = /^[0-9\b]+$/;
-                //const regex = /^[gG]\w{1}u(\d{2}$/;
-                //if ((value === '' || regex.test(value)) &&
                 if (value.length <= 3) {
                     setGroupCdError(false);
                     setGroupCd(value);
@@ -221,7 +215,6 @@ const GroupEdit = (onDelete) => {
                 type: 'update',
                 actions: [
                     changeGroup({
-                        ...group,
                         ...tmp,
                     }),
                 ],
@@ -254,7 +247,6 @@ const GroupEdit = (onDelete) => {
                                 type: 'insert',
                                 actions: [
                                     changeGroup({
-                                        ...group,
                                         ...tmp,
                                     }),
                                 ],
@@ -285,19 +277,24 @@ const GroupEdit = (onDelete) => {
         e.preventDefault();
         e.stopPropagation();
 
+        /*
+        const tmp = {
+            groupCd : group.groupCd,
+            groupNm : group.groupNm,
+            groupKorNm : group.groupKorNm,
+        };
+        */
+
         const tmp = {
             groupCd,
             groupNm,
             groupKorNm,
-        };
-
+        }
 
         if (validate(tmp)) {
             if (paramCd) {
-                console.log("aaaaaaaaaaaaaaa");
                 updateGroup(tmp);
             } else {
-                console.log("bbbbbbbbbbbbbbb");
                 insertGroup(tmp);
             }
         }
@@ -329,13 +326,7 @@ const GroupEdit = (onDelete) => {
         setGroupCd(group.groupCd || '');
         setGroupNm(group.groupNm || '');
         setGroupKorNm(group.groupKorNm || '');
-
-        //const mem = JSON.stringify(group.regMember);
-        //const mem2 = JSON.parse(mem);
-        //console.log("bbbbbbbbbbbbbb", mem);
-        //console.log("bbbbbbbbbbbbbb", mem2);
-
-        //setRegId(mem.memberNm || '');
+        setRegId(memberNm || '');
         setRegDt(group.regDt || '');
 
     }, [group]);

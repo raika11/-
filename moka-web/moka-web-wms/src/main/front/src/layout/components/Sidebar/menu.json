@@ -178,6 +178,17 @@
                                     }
                                 },
                                 {
+                                    "seq": "130",
+                                    "menuId": "02012",
+                                    "menuName": "reporter",
+                                    "menuDispName": "기자 관리",
+                                    "menuPath": "/reporter",
+                                    "menuOrder": "13",
+                                    "depth": "2",
+                                    "useYn": "Y",
+                                    "parentMenuId": "02012"
+                                },
+                                {
                                     "seq": "42",
                                     "menuId": "03002",
                                     "menuName": "group",

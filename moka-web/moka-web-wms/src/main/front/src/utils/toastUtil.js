@@ -154,8 +154,8 @@ export default {
             escapeHtml: false,
             timeOut: 5000,
             attention: true,
-            okText: '예',
-            cancelText: '아니오',
+            okText: '확인',
+            cancelText: '취소',
             onOk: () => {
                 if (ok) {
                     ok(true);
@@ -168,6 +168,17 @@ export default {
                     if (ok) {
                         ok(false);
                     }
+                }
+            },
+        });
+    },
+    alert: (message, ok) => {
+        toastr.confirm(message, {
+            okText: '확인',
+            disableCancel: true,
+            onOk: () => {
+                if (ok) {
+                    ok(true);
                 }
             },
         });

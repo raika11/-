@@ -11,8 +11,8 @@ import { init } from '@store/app';
 
 // https://www.npmjs.com/package/react-redux-toastr
 const toastrOptions = {
-    okText: '예',
-    cancelText: '아니오',
+    okText: '확인',
+    cancelText: '취소',
     component: (props) => {
         console.log(props);
     },

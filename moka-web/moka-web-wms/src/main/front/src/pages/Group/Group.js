@@ -5,14 +5,15 @@ import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { deleteGroup, hasRelationList, clearStore} from "@store/group";
+import { clearStore} from "@store/group";
 import toast, {notification, toastr} from "@utils/toastUtil";
-
+// relations
 
 const MemberGroupList = React.lazy(() => import('./GroupList'));
 const GroupEdit = React.lazy(() => import('./GroupEdit'));
+const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));
 
-// relations
+
 
 const Group = () => {
 // 히스토리셋팅
@@ -69,11 +70,12 @@ const Group = () => {
                                     <Suspense>
                                         <GroupEdit/>
                                     </Suspense>
-                                    /*
                                     ,
                                     <Suspense>
                                         <GroupChildGroupMemberEdit />
-                                    </Suspense>,
+                                    </Suspense>
+                                    /*
+                                    ,
                                     <Suspense>
                                         <MokaCard title="메뉴 권한">
                                             <MemberGroupList />

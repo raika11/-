@@ -39,6 +39,7 @@ const DatasetSearch = () => {
 
     const handleChangeSearchValue = ({ target }) => {
         const { value, name } = target;
+        console.log(name);
         console.log(value);
         setSearch({
             ...search,
@@ -93,7 +94,7 @@ const DatasetSearch = () => {
         <Form className="mb-10">
             <Form.Row className="m-0 mb-2">
                 <Col xs={8} className="p-0 pr-2">
-                    <MokaInput as="select" name="apiCodeId" onChange={handleChangeSearchValue}>
+                    <MokaInput as="select" name="apiCodeId" onChange={handleChangeSearchValue} value={search.apiCodeId}>
                         {apiRows &&
                             apiRows.map((api) => (
                                 <option key={api.id} value={api.dtlCd}>
@@ -103,7 +104,7 @@ const DatasetSearch = () => {
                     </MokaInput>
                 </Col>
                 <Col xs={4} className="p-0">
-                    <MokaInput as="select" name="autoCreateYn" onChange={handleChangeSearchValue}>
+                    <MokaInput as="select" name="autoCreateYn" onChange={handleChangeSearchValue} value={search.autoCreateYn}>
                         {defaultAutoCreateYn &&
                             defaultAutoCreateYn.map((autoCreateYn) => (
                                 <option key={autoCreateYn.id} value={autoCreateYn.id}>
@@ -115,7 +116,7 @@ const DatasetSearch = () => {
             </Form.Row>
             <Form.Row className="m-0 mb-2">
                 <Col xs={5} className="p-0 pr-2">
-                    <MokaInput as="select" name="searchType" onChange={handleChangeSearchValue}>
+                    <MokaInput as="select" name="searchType" onChange={handleChangeSearchValue} value={search.searchType}>
                         {defaultSearchType &&
                             defaultSearchType.map((type) => (
                                 <option key={type.id} value={type.id}>

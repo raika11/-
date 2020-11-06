@@ -5,7 +5,7 @@ import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { clearStore} from "@store/group";
+import { clearStore} from "@store/reporterMgr";
 import toast, {notification, toastr} from "@utils/toastUtil";
 // relations
 

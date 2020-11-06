@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { Route, Switch } from 'react-router-dom';
 import MemberGroupEdit from '@pages/Group/GroupEdit';
 
-const MemberGroupList = React.lazy(() => import('./GroupList'));
+const MemberGroupList = React.lazy(() => import('./reporterMgrList'));
 
 const MemberGroup = () => {
     const handleAdd = () => {};

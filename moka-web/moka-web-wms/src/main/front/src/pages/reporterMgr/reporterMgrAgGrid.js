@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MokaTable } from '@components';
-import { columnDefs } from '@pages/Group/GroupAgGridColumns';
+import { columnDefs } from '@pages/reporterMgr/reporterMgrAgGridColumns';
 import { useHistory } from 'react-router-dom';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {changeSearchOption, GET_GROUP_LIST, getGroupList, initialState} from '@store/group';
+import {changeSearchOption, GET_GROUP_LIST, getGroupList, initialState} from '@store/reporterMgr';
 
 /**
  * group AgGrid 목록

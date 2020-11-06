@@ -7,15 +7,18 @@ import com.hazelcast.core.HazelcastInstance;
 import java.io.IOException;
 import java.util.Arrays;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.web.wms.config.ReactRoutesHandlerMapping;
 import jmnet.moka.web.wms.config.hazelcast.HazelcastSessionRegistry;
 import jmnet.moka.web.wms.config.infinispan.InfinispanSessionRegistry;
 import jmnet.moka.web.wms.config.security.jwt.WmsJwtAuthenticationFilter;
 import jmnet.moka.web.wms.config.security.jwt.WmsJwtAuthorizationFilter;
 import jmnet.moka.web.wms.config.security.jwt.WmsJwtHelper;
 import org.infinispan.spring.embedded.provider.SpringEmbeddedCacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -43,6 +46,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  */
 @Configuration
 @EnableWebSecurity
+@DependsOn(value = {"reactRoute"})
 //@Import(HazelcastHttpSessionConfiguration.class)
 //@Import(WmsInfinispanHttpSessionConfiguration.class)
 public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -50,14 +54,14 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${corsAllowedOrigin}")
     private String[] corsAllowedOrigin;
 
-    @Value("${react.routes}")
-    private String[] reactRoutes;
-
     @Value("${wms.session.registry.type}")
     private String sessionRegistryType;
 
     @Value("${tps.upload.path.url}")
     private String urlPathPrefix;
+
+    @Autowired
+    public ReactRoutesHandlerMapping reactRoute;
 
 
     /**
@@ -118,9 +122,11 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addLogoutHandler(wmsLogoutHandler())
                 .logoutUrl(TpsConstants.LOGOUT_PAGE);
 
-        for (int i = 0; i < this.reactRoutes.length; i++) {
-            this.reactRoutes[i] = this.reactRoutes[i] + "/**";
-        }
+        String[] reactRoutes = reactRoute
+                .getReactRoutesList()
+                .stream()
+                .map(s -> s + "/**")
+                .toArray(value -> new String[value]);
 
         http.authorizeRequests()
             // home, react 소스, 미리보기, 템플릿 이미지 허용
@@ -128,7 +134,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login")
             .permitAll()
             // react 서버렌더링 허용
-            .antMatchers(this.reactRoutes)
+            .antMatchers(reactRoutes)
             .permitAll()
             .anyRequest()
             .permitAll()

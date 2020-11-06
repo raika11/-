@@ -21,6 +21,10 @@ public class ReactRoutesHandlerMapping extends AbstractHandlerMapping {
     private Set<String> reactRoutesList;
     private HandlerMethod reactRoutesHandlerMethod;
 
+    public Set<String> getReactRoutesList() {
+        return reactRoutesList;
+    }
+
 
     public ReactRoutesHandlerMapping(String routesPath)
             throws NoSuchMethodException, SecurityException {

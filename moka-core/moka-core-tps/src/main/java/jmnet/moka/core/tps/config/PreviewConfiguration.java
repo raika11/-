@@ -85,7 +85,7 @@ public class PreviewConfiguration {
             logger.info("property {} not set, item will not cache",
                     "tms.item.preview.expire.seconds");
         }
-        return new DpsTemplateLoader(domainId, httpProxyDataLoader, templateLoaderCache, expire);
+        return new DpsTemplateLoader(appContext, domainId, httpProxyDataLoader, templateLoaderCache, expire);
     }
 
     @Bean
@@ -94,7 +94,7 @@ public class PreviewConfiguration {
             List<String> componentIdList) throws TemplateParseException, TmsException {
         HttpProxyDataLoader httpProxyDataLoader =
                 appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
-        return new DpsWorkTemplateLoader(domainId, httpProxyDataLoader, workerId, componentIdList);
+        return new DpsWorkTemplateLoader(appContext, domainId, httpProxyDataLoader, workerId, componentIdList);
     }
 
     @Bean

@@ -18,7 +18,6 @@ const PageEdit = React.lazy(() => import('./PageEdit'));
 
 // relations
 const LookupPageList = React.lazy(() => import('@pages/commons/LookupPageList'));
-const LookupSkinList = React.lazy(() => import('@pages/commons/LookupSkinList'));
 const LookupContainerList = React.lazy(() => import('@pages/commons/LookupContainerList'));
 const LookupComponentList = React.lazy(() => import('@/pages/commons/LookupComponentList'));
 const LookupTemplateList = React.lazy(() => import('@/pages/commons/LookupTemplateList'));
@@ -242,22 +241,19 @@ const Page = () => {
                                         <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupSkinList show={activeTabIdx === 2} />
+                                        <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
+                                        <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
+                                        <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
                                         <PageChildAdList />
                                     </Suspense>,
                                     <Suspense>
-                                        <HistoryList show={activeTabIdx === 7} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickLoad} />
+                                        <HistoryList show={activeTabIdx === 6} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickLoad} />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}
@@ -265,7 +261,6 @@ const Page = () => {
                                 tabNavs={[
                                     { title: '페이지 정보', text: 'Info' },
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
                                     { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },

@@ -6,8 +6,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { ITEM_PG, ITEM_CT, ITEM_SK, ITEM_CP } from '@/constants';
-import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
+import { MokaCard, MokaInput, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 import { getComponentLookupList, changeLookupSearchOption, initialState, clearLookup, GET_COMPONENT_LOOKUP_LIST } from '@store/component';
+import { getTpZone } from '@store/codeMgt';
 import columnDefs from './LookupComponentListColums';
 import { defaultComponentSearchType, LookupAgGridHeight } from '@pages/commons';
 import TemplateHtmlModal from './TemplateHtmlModal';
@@ -41,12 +42,13 @@ const LookupComponentList = (props) => {
     const { seq, seqType, show, onAppend } = props;
     const dispatch = useDispatch();
 
-    const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
+    const { list, search: storeSearch, total, loading, latestDomainId, tpZoneRows } = useSelector((store) => ({
         list: store.component.lookup.list,
         search: store.component.lookup.search,
         total: store.component.lookup.total,
         loading: store.loading[GET_COMPONENT_LOOKUP_LIST],
         latestDomainId: store.auth.latestDomainId,
+        tpZoneRows: store.codeMgt.tpZoneRows,
     }));
 
     useEffect(() => {
@@ -108,6 +110,13 @@ const LookupComponentList = (props) => {
     };
 
     useEffect(() => {
+        if (tpZoneRows.length < 1) {
+            dispatch(getTpZone());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
+
+    useEffect(() => {
         return () => {
             dispatch(clearLookup());
         };
@@ -143,6 +152,25 @@ const LookupComponentList = (props) => {
         <>
             <MokaCard titleClassName="mb-0" title="컴포넌트 검색">
                 <Form className="mb-2">
+                    {/* 위치그룹 */}
+                    <MokaInput
+                        as="select"
+                        className="mb-2"
+                        value={search.templateGroup}
+                        onChange={(e) => {
+                            setSearch({
+                                ...search,
+                                templateGroup: e.target.value,
+                            });
+                        }}
+                    >
+                        <option value="all">위치그룹 전체</option>
+                        {tpZoneRows.map((cd) => (
+                            <option key={cd.dtlCd} value={cd.dtlCd}>
+                                {cd.cdNm}
+                            </option>
+                        ))}
+                    </MokaInput>
                     {/* 검색조건, 키워드 */}
                     <Form.Row>
                         <Col xs={5} className="p-0 pr-2">
@@ -193,7 +221,7 @@ const LookupComponentList = (props) => {
 
                 {/* ag-grid table */}
                 <MokaTable
-                    agGridHeight={LookupAgGridHeight}
+                    agGridHeight={569}
                     columnDefs={columnDefs}
                     rowData={rowData}
                     onRowNodeId={(data) => data.componentSeq}

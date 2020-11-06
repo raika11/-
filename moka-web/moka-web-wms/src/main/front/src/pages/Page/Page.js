@@ -18,7 +18,6 @@ const PageEdit = React.lazy(() => import('./PageEdit'));
 
 // relations
 const LookupPageList = React.lazy(() => import('@pages/commons/LookupPageList'));
-const LookupSkinList = React.lazy(() => import('@pages/commons/LookupSkinList'));
 const LookupContainerList = React.lazy(() => import('@pages/commons/LookupContainerList'));
 const LookupComponentList = React.lazy(() => import('@/pages/commons/LookupComponentList'));
 const LookupTemplateList = React.lazy(() => import('@/pages/commons/LookupTemplateList'));

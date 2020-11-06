@@ -141,7 +141,7 @@ const LookupContainerList = (props) => {
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" title="컨테이너 검색">
+            <MokaCard titleClassName="mb-0" title="관련 컨테이너">
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>

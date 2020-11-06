@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
-import { MokaSearchInput, MokaCard, MokaInput, MokaInputLabel } from '@components';
+import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
 import { getPageType } from '@store/codeMgt';
 import { previewPage, w3cPage } from '@store/merge';
 import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
@@ -392,6 +393,16 @@ const PageEdit = ({ onDelete }) => {
         f.remove();
     };
 
+    /**
+     * page url 클릭
+     */
+    const handleClickOpenService = (e) => {
+        if (!loading && temp.pageUrl) {
+            let url = `//${temp.domain.domainUrl}${temp.pageUrl}`;
+            window.open(url);
+        }
+    };
+
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title="페이지 정보" loading={loading}>
             <Form>
@@ -430,7 +441,17 @@ const PageEdit = ({ onDelete }) => {
                         <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={pageSeq} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
                     <Col xs={6} className="px-0">
-                        <MokaInputLabel label="URL" labelWidth={47} className="mb-0" value={temp.pageUrl} inputProps={{ plaintext: true, readOnly: true }} />
+                        <MokaInputLabel
+                            label="URL"
+                            labelWidth={47}
+                            className="mb-0"
+                            value={temp.pageUrl}
+                            inputProps={{
+                                plaintext: true,
+                                readOnly: true,
+                                onClick: handleClickOpenService,
+                            }}
+                        />
                     </Col>
                 </Form.Row>
                 {/* 페이지명 */}
@@ -457,6 +478,7 @@ const PageEdit = ({ onDelete }) => {
                         placeholder="서비스명을 입력하세요"
                         required
                         isInvalid={error.pageServiceName}
+                        disabled={!btnDisabled || (temp.parent && temp.parent.pageSeq === null)}
                     />
                 </Form.Row>
                 {/* 표출명, 순서 */}

@@ -8,7 +8,7 @@ import AgGrid from './PageChildAdAgGrid';
  */
 const PageChildAdList = () => {
     return (
-        <MokaCard title="광고 검색" titleClassName="mb-0">
+        <MokaCard title="관련 광고" titleClassName="mb-0">
             <Search />
             <AgGrid />
         </MokaCard>

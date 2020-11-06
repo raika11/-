@@ -26,9 +26,9 @@ const PageEditor = (props) => {
     );
 
     // state
-    const [defaultValue, setDefaultValue] = useState('');
     const [title, setTitle] = useState('페이지 편집');
     const [error, setError] = useState({});
+    const [defaultValue, setDefaultValue] = useState('');
 
     /**
      * 타이틀 변경

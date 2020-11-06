@@ -80,6 +80,12 @@ function* savePage({ payload: { actions, callback } }) {
                 type: act.CHANGE_INVALID_LIST,
                 payload: response.data.body.list,
             });
+
+            // 실패 액션 실행
+            // yield put({
+            //     type: act.GET_PAGE_FAILURE,
+            //     payload: response.data,
+            // });
         }
     } catch (e) {
         callbackData = errorResponse(e);

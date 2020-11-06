@@ -71,7 +71,7 @@ const DetailSchForm = (props) => {
                                 {/* 서비스타입 */}
                                 <Col xs={6} className="p-0">
                                     <MokaInputLabel
-                                        label="서비스타입"
+                                        label="기사타입"
                                         labelWidth={85}
                                         className="mb-0"
                                         as="select"

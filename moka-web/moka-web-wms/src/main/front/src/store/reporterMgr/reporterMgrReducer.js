@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import * as act from '@store/group/groupAction';
+import * as act from '@store/reporterMgr/reporterMgrAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 import qs from 'qs';
 

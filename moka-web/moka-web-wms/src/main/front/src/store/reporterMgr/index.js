@@ -1,2 +1,2 @@
-export * from './groupAction';
-export * from './groupReducer';
+export * from './reporterMgrAction';
+export * from './reporterMgrReducer';

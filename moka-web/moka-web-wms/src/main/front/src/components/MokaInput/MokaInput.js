@@ -70,22 +70,24 @@ const propTypes = {
         plaintext: PropTypes.bool,
     }),
     /**
-     * react-input-mask의 mask string
+     * uncontrolled input (기본 false)
      */
-    mask: PropTypes.string,
+    uncontrolled: PropTypes.bool,
 };
 const defaultProps = {
     as: 'input',
     type: 'text',
     inputProps: {},
+    uncontrolled: false,
 };
 
 /**
  * controlled input
  */
 const MokaInput = forwardRef((props, ref) => {
-    const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, mask, isInvalid, disabled, uncontrolled, ...rest } = props;
+    const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, isInvalid, disabled, uncontrolled, ...rest } = props;
     const { rules, control } = props;
+
     let Type = Form.Control;
     let inputObject = {
         id,
@@ -94,6 +96,7 @@ const MokaInput = forwardRef((props, ref) => {
         isInvalid,
         disabled,
         onChange,
+        placeholder,
         ref,
         ...inputProps,
         ...rest,
@@ -247,7 +250,7 @@ const MokaInput = forwardRef((props, ref) => {
         inputObject = { ...inputObject, placeholder };
     }
 
-    return <Type {...inputObject}>{children && children}</Type>;
+    return <Type {...inputObject}>{children}</Type>;
 
     // return (
     //     <InputMask

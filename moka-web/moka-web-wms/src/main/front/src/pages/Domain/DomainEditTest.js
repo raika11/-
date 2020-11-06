@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 import { notification } from '@utils/toastUtil';
 import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, changeInvalidList } from '@store/domain';
 import { getApi, getLang } from '@store/codeMgt';
-import { MokaUncontrolledInput, MokaInputLabel } from '@components';
+import { MokaInput, MokaInputLabel } from '@components';
 
 /**
  * 도메인 상세/수정/등록
@@ -284,7 +284,7 @@ const DomainEditTest = ({ history, onDelete }) => {
                             }}
                             id="domain-pc"
                             name="servicePlatform"
-                            defaultValue="P"
+                            value="P"
                             className="mb-0 h-100"
                             ref={register}
                             required
@@ -292,7 +292,7 @@ const DomainEditTest = ({ history, onDelete }) => {
                         />
                     </Col>
                     <Col xs={1} className="p-0">
-                        <MokaUncontrolledInput
+                        <MokaInput
                             as="radio"
                             inputProps={{
                                 custom: true,
@@ -300,9 +300,10 @@ const DomainEditTest = ({ history, onDelete }) => {
                             }}
                             id="domain-mobile"
                             name="servicePlatform"
-                            defaultValue="M"
+                            value="M"
                             className="mb-0 h-100 align-items-center d-flex"
                             ref={register}
+                            uncontrolled
                         />
                     </Col>
                 </Form.Row>

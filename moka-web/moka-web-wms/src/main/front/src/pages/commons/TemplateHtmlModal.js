@@ -42,7 +42,7 @@ const TemplateHtmlModal = (props) => {
                     if (header.success) {
                         toast.success(header.message);
                     } else {
-                        toast.warning(header.message);
+                        toast.warn(header.message);
                     }
                     handleHide();
                 },
@@ -78,7 +78,7 @@ const TemplateHtmlModal = (props) => {
                             );
                         }
                     } else {
-                        toast.warning(header.message);
+                        toast.warn(header.message);
                     }
                 },
             }),

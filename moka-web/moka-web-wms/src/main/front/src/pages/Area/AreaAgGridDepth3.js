@@ -36,6 +36,7 @@ const AreaAgGridDepth3 = ({ match }) => {
                 depth: 3,
             }),
         );
+        history.push('/area');
     };
 
     return (

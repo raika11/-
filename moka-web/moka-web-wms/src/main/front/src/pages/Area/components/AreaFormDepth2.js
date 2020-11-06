@@ -1,23 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+
 import { ITEM_CP, ITEM_CT } from '@/constants';
 import { MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
+import { initialState } from '@store/area';
 
 const AreaFormDepth2 = (props) => {
     const { onShowModal, page } = props;
 
-    const { domainList } = useSelector((store) => ({
+    const { domainList, depth1List, area } = useSelector((store) => ({
         domainList: store.auth.domainList,
+        depth1List: store.area.depth1.list,
+        area: store.area.area,
     }));
 
     // state
-    const [areaNm, setAreaNm] = useState('');
-    const [usedYn, setUsedYn] = useState('N');
-    const [previewRsrc, setPreviewRsrc] = useState('');
+    const [temp, setTemp] = useState(initialState.area);
+    const [parentArea, setParentArea] = useState({});
+
+    const handleChangeValue = (e) => {
+        const { name, value, checked, selectedOptions } = e.target;
+
+        if (name === 'usedYn') {
+            if (checked) setTemp({ ...temp, usedYn: 'Y' });
+            else setTemp({ ...temp, usedYn: 'N' });
+        } else if (name === 'parentArea') {
+            const { areaNm } = selectedOptions[0].dataset;
+            setParentArea({ areaSeq: value, areaNm });
+        } else if (name === 'areaNm') {
+            setTemp({ ...temp, areaNm: value });
+        } else if (name === 'previewRsrc') {
+            setTemp({ ...temp, previewRsrc: value });
+        }
+    };
+
+    useEffect(() => {
+        setTemp(area);
+    }, [area]);
+
+    useEffect(() => {
+        setParentArea(area.parentArea);
+    }, [area.parentArea]);
 
     return (
         <div className="d-flex justify-content-center">
@@ -25,30 +52,29 @@ const AreaFormDepth2 = (props) => {
                 {/* 사용여부 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel
-                        className="mb-0"
                         as="switch"
+                        id="usedYn"
+                        name="usedYn"
                         labelWidth={87}
                         label="사용여부"
-                        id="usedYn"
-                        inputProps={{ checked: usedYn === 'Y' }}
-                        onChange={(e) => {
-                            if (e.target.checked) {
-                                setUsedYn('Y');
-                            } else {
-                                setUsedYn('N');
-                            }
-                        }}
+                        className="mb-0"
+                        inputProps={{ checked: temp.usedYn === 'Y' }}
+                        onChange={handleChangeValue}
                     />
                 </Form.Row>
-                {/* 1depth명 */}
+                {/* Depth1 리스트 */}
                 <Form.Row className="mb-2">
-                    <Col xs={8} className="p-0">
-                        <MokaInputLabel className="mb-0" as="select" labelWidth={87} label="그룹 영역" placeholder="1뎁스명이 들어가야함">
-                            <option>1뎁스 목록</option>
+                    <Col xs={7} className="p-0">
+                        <MokaInputLabel className="mb-0" as="select" labelWidth={87} label="그룹 영역" name="parentArea" value={parentArea.areaSeq} onChange={handleChangeValue}>
+                            {depth1List.map((area) => (
+                                <option key={area.areaSeq} value={area.areaSeq} data-areaNm={area.areaNm}>
+                                    {area.areaNm}
+                                </option>
+                            ))}
                         </MokaInputLabel>
                     </Col>
-                    <Col xs={4} className="p-0">
-                        <MokaInputLabel className="mb-0" labelWidth={87} label="영역코드" disabled />
+                    <Col xs={5} className="p-0">
+                        <MokaInputLabel className="mb-0" labelWidth={87} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
                     </Col>
                 </Form.Row>
                 {/* 도메인 */}
@@ -60,7 +86,7 @@ const AreaFormDepth2 = (props) => {
                     ))}
                 </MokaInputLabel>
                 {/* 영역명 */}
-                <MokaInputLabel className="mb-2" label="영역명" labelWidth={87} value={areaNm} onChange={(e) => setAreaNm(e.target.value)} />
+                <MokaInputLabel className="mb-2" label="영역명" labelWidth={87} name="areaNm" value={temp.areaNm} onChange={handleChangeValue} />
 
                 <hr className="divider" />
 
@@ -103,6 +129,7 @@ const AreaFormDepth2 = (props) => {
                 {/* 미리보기 리소스 */}
                 <MokaInputLabel
                     as="textarea"
+                    name="previewRsrc"
                     label={
                         <>
                             미리보기
@@ -113,8 +140,8 @@ const AreaFormDepth2 = (props) => {
                     labelWidth={87}
                     inputClassName="resize-none"
                     inputProps={{ rows: 5 }}
-                    value={previewRsrc}
-                    onChange={(e) => setPreviewRsrc(e.target.value)}
+                    value={temp.previewRsrc}
+                    onChange={handleChangeValue}
                 />
 
                 {/* 버튼 그룹 */}

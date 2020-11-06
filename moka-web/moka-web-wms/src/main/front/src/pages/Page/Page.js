@@ -154,7 +154,7 @@ const Page = () => {
      * tems태그 삽입
      */
     const handleAppendTag = useCallback(
-        (itemType, row) => {
+        (row, itemType) => {
             let tag = null;
             if (itemType === ITEM_CT) {
                 tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.containerSeq}" name="${row.containerName}"/>\n`;
@@ -260,7 +260,7 @@ const Page = () => {
                                 tabNavWidth={48}
                                 tabNavPosition="right"
                                 tabNavs={[
-                                    { title: '사이트 정보', text: 'Info' },
+                                    { title: '페이지 정보', text: 'Info' },
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },

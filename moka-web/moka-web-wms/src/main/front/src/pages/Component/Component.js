@@ -52,7 +52,7 @@ const Component = ({ match }) => {
                                 }
                                 // 삭제 실패
                                 else {
-                                    toast.warning(header.message);
+                                    toast.warn(header.message);
                                 }
                             },
                         }),
@@ -89,7 +89,7 @@ const Component = ({ match }) => {
                                 );
                             }
                         } else {
-                            toast.warning(header.message);
+                            toast.warn(header.message);
                         }
                     },
                 }),

@@ -38,6 +38,7 @@ const AreaAgGridDepth2 = ({ match }) => {
                 depth: 2,
             }),
         );
+        history.push('/area');
     };
 
     useEffect(() => {
@@ -48,9 +49,7 @@ const AreaAgGridDepth2 = ({ match }) => {
                     changeSearchOptionDepth3({
                         ...initialState.depth3.search,
                         domainId: latestDomainId,
-                        depth: 3,
-                        areaSeq: areaSeq,
-                        page: 0,
+                        parentAreaSeq: areaSeq,
                     }),
                 ),
             );

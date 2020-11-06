@@ -72,10 +72,16 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         this.cacheable = cacheable;
         this.itemExpireTime = itemExpireTime;
         HazelcastInstance hzInstance = null;
-        CacheManager cacheManager = appContext.getBean(CacheManager.class);
-        if ( cacheManager != null) {
-            HazelcastCache hzCache = (HazelcastCache) cacheManager.getCache(HazelcastCache.class);
-            hzInstance = hzCache.getHazelcastDelegator().getHazelcastInstance();
+        try {
+            CacheManager cacheManager = appContext.getBean(CacheManager.class);
+            if (cacheManager != null) {
+                HazelcastCache hzCache = (HazelcastCache) cacheManager.getCache(HazelcastCache.class);
+                hzInstance = hzCache
+                        .getHazelcastDelegator()
+                        .getHazelcastInstance();
+            }
+        } catch (Exception e) {
+            logger.warn("Load hazelcast Instance fail :{}", e.getMessage());
         }
 
         if ( hzInstance != null && cacheable) {

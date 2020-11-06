@@ -1,0 +1,93 @@
+{
+  "properties": [
+    {
+      "name": "rcv.taskmanager.envfile",
+      "type": "java.lang.String",
+      "description": "Description for rcv.taskmanager.envfile."
+    },
+    {
+      "name": "system.id",
+      "type": "java.lang.String",
+      "description": "Description for system.id."
+    },
+    {
+      "name": "rcv.imageResizerUrl",
+      "type": "java.lang.String",
+      "description": "Description for rcv.imageResizerUrl."
+    },
+    {
+      "name": "rcv.tempDir",
+      "type": "java.lang.String",
+      "description": "Description for rcv.tempDir."
+    },
+    {
+      "name": "rcv.pds.ftp.ip",
+      "type": "java.lang.String",
+      "description": "Description for rcv.pds.ftp.ip."
+    },
+    {
+      "name": "rcv.pds.ftp.user",
+      "type": "java.lang.String",
+      "description": "Description for rcv.pds.ftp.user."
+    },
+    {
+      "name": "rcv.pds.ftp.password",
+      "type": "java.lang.String",
+      "description": "Description for rcv.pds.ftp.password."
+    },
+    {
+      "name": "rcv.pds.ftp.rootDir",
+      "type": "java.lang.String",
+      "description": "Description for rcv.pds.ftp.rootDir."
+    },
+    {
+      "name": "rcv.pds.ftp.passive",
+      "type": "java.lang.String",
+      "description": "Description for rcv.pds.ftp.passive."
+    },
+    {
+      "name": "rcv.pds.ftp.port",
+      "type": "java.lang.String",
+      "description": "Description for rcv.pds.ftp.port."
+    },
+    {
+      "name": "spring.datasource.auto-commit",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.auto-commit."
+    },
+    {
+      "name": "spring.datasource.min-idle",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.min-idle."
+    },
+    {
+      "name": "spring.datasource.max-idle",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.max-idle."
+    },
+    {
+      "name": "spring.datasource.max-wait",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.max-wait."
+    },
+    {
+      "name": "spring.datasource.max-active",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.max-active."
+    },
+    {
+      "name": "spring.datasource.initial-size",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.initial-size."
+    },
+    {
+      "name": "spring.datasource.validation-query",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.validation-query."
+    },
+    {
+      "name": "rcv.taskmanager.smsListEnvFile",
+      "type": "java.lang.String",
+      "description": "Description for rcv.taskmanager.smsListEnvFile."
+    }
+  ] }

@@ -80,6 +80,12 @@ function* savePage({ payload: { actions, callback } }) {
                 type: act.CHANGE_INVALID_LIST,
                 payload: response.data.body.list,
             });
+
+            // 실패 액션 실행
+            // yield put({
+            //     type: act.GET_PAGE_FAILURE,
+            //     payload: response.data,
+            // });
         }
     } catch (e) {
         callbackData = errorResponse(e);
@@ -112,7 +118,7 @@ export function* deletePage({ payload: { pageSeq, callback } }) {
         const response = yield call(api.deletePage, { pageSeq });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({
                 type: SUCCESS,
                 payload: response.data,

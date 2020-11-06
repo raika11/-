@@ -101,7 +101,7 @@ export function* deleteTemplate({ payload: { templateSeq, callback } }) {
         const response = yield call(api.deleteTemplate, { templateSeq });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({
                 type: act.DELETE_TEMPLATE_SUCCESS,
             });

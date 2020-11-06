@@ -56,8 +56,8 @@ const GroupAgGrid = (props) => {
                 groupCd: row.groupCd,
                 groupNm: row.groupNm,
                 groupKorNm: row.groupKorNm,
-                regId: row.regId,
-                regDt: row.regDt, // 현재 서버에컬럼없음.
+                regId: row.regMember.memberNm,
+                regDt: row.regDt,
                 onDelete,
             })),
         );

@@ -152,7 +152,7 @@ function* deleteMenu({ payload: { menuId, actions, callback } }) {
         const response = yield call(menuAPI.deleteMenu, { menuId });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({ type: menuAction.DELETE_MENU_SUCCESS });
         } else {
             yield put({

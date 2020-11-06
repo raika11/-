@@ -16,7 +16,9 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         sort: 'groupCd,asc',
     },
-    group: {},
+    group: {
+        aaaa : {}
+    },
     groupError: {},
     invalidList: [],
 };

@@ -92,7 +92,7 @@ function* deleteEditForm({ payload: { channelId, callback } }) {
         const response = yield call(editFormApi.deleteEditForm, { channelId });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({ type: editFormAction.DELETE_EDIT_FORM_SUCCESS });
 
             // 목록 다시 검색

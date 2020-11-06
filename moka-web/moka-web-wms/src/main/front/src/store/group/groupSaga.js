@@ -9,13 +9,10 @@ import * as groupAction from './groupAction';
 /**
  * 그룹목록
  */
-const getGroupList = callApiAfterActions(groupAction.GET_GROUP_LIST, groupAPI.getGroupList, (state) =>
-{
-    console.log("aaaaaaaaa::" + state.group);
+const getGroupList = callApiAfterActions(groupAction.GET_GROUP_LIST, groupAPI.getGroupList, (state) => {
+    console.log('aaaaaaaaa::' + state.group);
     return state.group;
-}
-
-);
+});
 
 /**
  * 그룹데이터 조회
@@ -150,7 +147,7 @@ function* deleteGroup({ payload: { groupCd, callback } }) {
         const response = yield call(groupAPI.deleteGroup, { groupCd });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({ type: groupAction.DELETE_GROUP_SUCCESS });
 
             // 목록 다시 검색

@@ -393,7 +393,7 @@ const PageEdit = ({ onDelete }) => {
     };
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" title="사이트 정보" loading={loading}>
+        <MokaCard titleClassName="h-100 mb-0 pb-0" title="페이지 정보" loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
@@ -448,27 +448,16 @@ const PageEdit = ({ onDelete }) => {
                 </Form.Row>
                 {/* 서비스명, 서비스타입 */}
                 <Form.Row className="mb-2">
-                    <Col xs={8} className="px-0">
-                        <MokaInputLabel
-                            label="서비스명"
-                            value={temp.pageServiceName}
-                            name="pageServiceName"
-                            onChange={handleChangeValue}
-                            className="mb-0"
-                            placeholder="서비스명을 입력하세요"
-                            isInvalid={error.pageServiceName}
-                        />
-                    </Col>
-                    <Col xs={4} className="px-0 pl-2">
-                        {/* 페이지유형 */}
-                        <MokaInput as="select" className="mb-0" value={temp.pageType} onChange={handleChangeValue} name="pageType">
-                            {pageTypeRows.map((cd) => (
-                                <option key={cd.dtlCd} value={cd.dtlCd}>
-                                    {cd.cdNm}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </Col>
+                    <MokaInputLabel
+                        label="서비스명"
+                        value={temp.pageServiceName}
+                        name="pageServiceName"
+                        onChange={handleChangeValue}
+                        className="mb-0 w-100"
+                        placeholder="서비스명을 입력하세요"
+                        required
+                        isInvalid={error.pageServiceName}
+                    />
                 </Form.Row>
                 {/* 표출명, 순서 */}
                 <Form.Row className="mb-2">

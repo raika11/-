@@ -18,6 +18,7 @@ const PageEdit = React.lazy(() => import('./PageEdit'));
 
 // relations
 const LookupPageList = React.lazy(() => import('@pages/commons/LookupPageList'));
+const PageChildSkinList = React.lazy(() => import('./relations/PageChildSkinList'));
 const LookupContainerList = React.lazy(() => import('@pages/commons/LookupContainerList'));
 const LookupComponentList = React.lazy(() => import('@/pages/commons/LookupComponentList'));
 const LookupTemplateList = React.lazy(() => import('@/pages/commons/LookupTemplateList'));
@@ -142,7 +143,7 @@ const Page = () => {
                         };
                         dispatch(deletePage(option));
                     },
-                    onCancel: () => {},
+                    onCancle: () => {},
                 });
             }
         },
@@ -153,14 +154,14 @@ const Page = () => {
      * tems태그 삽입
      */
     const handleAppendTag = useCallback(
-        (data, itemType) => {
+        (itemType, row) => {
             let tag = null;
             if (itemType === ITEM_CT) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.containerSeq}" name="${data.containerName}"/>\n`;
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.containerSeq}" name="${row.containerName}"/>\n`;
             } else if (itemType === ITEM_CP) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.componentSeq}" name="${data.componentName}"/>\n`;
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
             } else if (itemType === ITEM_TP) {
-                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.templateSeq}" name="${data.templateName}"/>\n`;
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
                 // } else if (itemType === ITEM_AD) {
                 //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             }
@@ -178,7 +179,7 @@ const Page = () => {
                 onOk: () => {
                     dispatch(changePageBody(body.body));
                 },
-                onCancel: () => {},
+                onCancle: () => {},
             });
         } else {
             notification('error', header.message);
@@ -241,13 +242,19 @@ const Page = () => {
                                         <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
+                                        <PageChildSkinList />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
+                                        <PageChildSkinList />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
+                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq}  onAppend={handleAppendTag}/>
+                                    </Suspense>,
+                                    <Suspense>
+                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq}  onAppend={handleAppendTag}/>
+                                    </Suspense>,
+                                    <Suspense>
+                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
                                         <PageChildAdList />
@@ -259,7 +266,7 @@ const Page = () => {
                                 tabNavWidth={48}
                                 tabNavPosition="right"
                                 tabNavs={[
-                                    { title: '페이지 정보', text: 'Info' },
+                                    { title: '사이트 정보', text: 'Info' },
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },

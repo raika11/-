@@ -105,7 +105,7 @@ export function* deleteContainer({ payload: { containerSeq, callback } }) {
         const response = yield call(api.deleteContainer, { containerSeq });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({
                 type: act.GET_CONTAINER_SUCCESS,
                 payload: callbackData,

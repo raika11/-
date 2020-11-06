@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, state } from 'react';
 import { Col, Form, Button, Row } from 'react-bootstrap';
 import { MokaCard, MokaInput, MokaInputLabel } from '@components';
 import { useParams, useHistory} from 'react-router-dom';
@@ -38,12 +38,20 @@ const GroupEdit = (onDelete) => {
     const [groupNmKorError, setGroupKorNmError] = useState(false);
 
     // getter
-    const { group, invalidList } = useSelector(
-        (store) => ({
+    const { group, member, invalidList } = useSelector(
+        (store) =>{
+
+            //const mem = JSON.stringify(store.group.group.regMember);
+            //const mem2 = JSON.parse(store.group.group.regMember);
+            //console.log("bbbbbbbbbbbbbb", store.group.group.regMember.memberNm);
+
+            return ({
             group: store.group.group,
             invalidList: store.group.invalidList,
             loading: store.loading[GET_GROUP] || store.loading[SAVE_GROUP] || store.loading[DELETE_GROUP],
-        }),
+        })},
+
+
         shallowEqual,
     );
 
@@ -99,6 +107,12 @@ const GroupEdit = (onDelete) => {
         });
     };
 
+    const getByte = (str) => {
+            return str
+                .split('')
+                .map(s => s.charCodeAt(0))
+                .reduce((prev, c) => (prev + ((c === 10) ? 2 : ((c >> 7) ? 2 : 1))), 0); // 계산식에 관한 설명은 위 블로그에 있습니다.
+    }
     /**
      * 각 항목별 값 변경
      * @param target javascript event.target
@@ -117,12 +131,16 @@ const GroupEdit = (onDelete) => {
                 }
                 break;
             case 'groupNm':
-                setGroupNm(value);
-                setGroupNmError(false);
+                if(getByte(value) <= 20){
+                    setGroupNm(value);
+                    setGroupNmError(false);
+                }
                 break;
             case 'groupKorNm':
-                setGroupKorNm(value);
-                setGroupKorNmError(false);
+                if(getByte(value) <= 20) {
+                    setGroupKorNm(value);
+                    setGroupKorNmError(false);
+                }
                 break;
             default:
                 break;
@@ -311,7 +329,13 @@ const GroupEdit = (onDelete) => {
         setGroupCd(group.groupCd || '');
         setGroupNm(group.groupNm || '');
         setGroupKorNm(group.groupKorNm || '');
-        setRegId(group.regId || '');
+
+        //const mem = JSON.stringify(group.regMember);
+        //const mem2 = JSON.parse(mem);
+        //console.log("bbbbbbbbbbbbbb", mem);
+        //console.log("bbbbbbbbbbbbbb", mem2);
+
+        //setRegId(mem.memberNm || '');
         setRegDt(group.regDt || '');
 
     }, [group]);
@@ -326,7 +350,7 @@ const GroupEdit = (onDelete) => {
                             name="groupCd"
                             value={groupCd}
                             onChange={handleChangeValue}
-                            placeholder="GROUP CODE"
+                            placeholder="그룹코드를 입력해주세요."
                             disabled={group.groupCd && true}
                             isInvalid={groupCdError}
                         />
@@ -366,7 +390,7 @@ const GroupEdit = (onDelete) => {
                             labelWidth={160}
                             disabled={true}
                             name={regId}
-                            value={group.regId}
+                            value={regId}
                         />
                     </Col>
                 </Form.Row>

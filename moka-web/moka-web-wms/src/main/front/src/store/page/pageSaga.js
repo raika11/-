@@ -118,7 +118,7 @@ export function* deletePage({ payload: { pageSeq, callback } }) {
         const response = yield call(api.deletePage, { pageSeq });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({
                 type: SUCCESS,
                 payload: response.data,

@@ -98,7 +98,7 @@ export function* deleteCodeMgtGrpSaga({ payload: { grpSeq, callback } }) {
         const response = yield call(api.deleteCodeMgtGrp, { grpSeq });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({ type: act.DELETE_CODE_MGT_GRP_SUCCESS });
 
             // 목록 다시 검색

@@ -94,7 +94,7 @@ export function* deleteArea({ payload: { areaSeq, callback } }) {
     // try {
     //     const response = yield call(api.deleteComponent, { componentSeq });
     //     callbackData = response.data;
-    //     if (response.data.header.success) {
+    //     if (response.data.header.success && response.data.body) {
     //         yield put({
     //             type: act.GET_COMPONENT_SUCCESS,
     //             payload: callbackData,

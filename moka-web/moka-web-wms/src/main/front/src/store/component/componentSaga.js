@@ -133,7 +133,7 @@ export function* deleteComponent({ payload: { componentSeq, callback } }) {
         const response = yield call(api.deleteComponent, { componentSeq });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({
                 type: act.DELETE_COMPONENT_SUCCESS,
             });

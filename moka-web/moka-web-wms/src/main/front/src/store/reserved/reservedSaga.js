@@ -109,24 +109,13 @@ export function* deleteReserved({ payload: { reservedSet, callback } }) {
         const response = yield call(reservedAPI.deleteReserved, reservedSet.reservedSeq);
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({
                 type: reservedAction.DELETE_RESERVED_SUCCESS,
                 payload: response.data,
             });
 
             // 목록 검색
-            yield put({
-                type: reservedAction.GET_RESERVED_LIST,
-                payload: { domainId: reservedSet.domainId },
-            });
-        } else {
-            yield put({
-                type: reservedAction.DELETE_RESERVED_FAILURE,
-                payload: response.data,
-            });
-
-            // 목록 다시 검색
             yield put({
                 type: reservedAction.GET_RESERVED_LIST,
                 payload: { domainId: reservedSet.domainId },

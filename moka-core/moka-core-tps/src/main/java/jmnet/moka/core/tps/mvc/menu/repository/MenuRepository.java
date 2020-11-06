@@ -21,6 +21,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MenuRepository extends JpaRepository<Menu, Long>, MenuRepositorySupport {
     public List<Menu> findByUsedYn(String useYn, Sort sort);
 
+    public List<Menu> findByUsedYn(String useYn);
+
     public Optional<Menu> findByMenuId(String menuId);
 
     public List<Menu> findAllByParentMenuIdOrderByMenuOrder(String parentMenuId);

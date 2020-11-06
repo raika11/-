@@ -142,7 +142,7 @@ function* deleteDomain({ payload: { domainId, callback } }) {
         const response = yield call(domainAPI.deleteDomain, { domainId });
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({ type: domainAction.DELETE_DOMAIN_SUCCESS });
 
             // 목록 다시 검색

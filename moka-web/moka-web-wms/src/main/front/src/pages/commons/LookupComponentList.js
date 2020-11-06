@@ -10,7 +10,7 @@ import { MokaCard, MokaInput, MokaInputLabel, MokaSearchInput, MokaTable } from 
 import { getComponentLookupList, changeLookupSearchOption, initialState, clearLookup, GET_COMPONENT_LOOKUP_LIST } from '@store/component';
 import { getTpZone } from '@store/codeMgt';
 import columnDefs from './LookupComponentListColums';
-import { defaultComponentSearchType, LookupAgGridHeight } from '@pages/commons';
+import { defaultComponentSearchType } from '@pages/commons';
 import TemplateHtmlModal from './TemplateHtmlModal';
 
 const propTypes = {
@@ -173,10 +173,8 @@ const LookupComponentList = (props) => {
                     </MokaInput>
                     {/* 검색조건, 키워드 */}
                     <Form.Row>
-                        <Col xs={5} className="p-0 pr-2">
-                            <MokaInputLabel
-                                label="구분"
-                                labelWidth={28}
+                        <Col xs={4} className="p-0 pr-2">
+                            <MokaInput
                                 className="mb-0"
                                 as="select"
                                 value={search.searchType}
@@ -195,9 +193,9 @@ const LookupComponentList = (props) => {
                                         {type.name}
                                     </option>
                                 ))}
-                            </MokaInputLabel>
+                            </MokaInput>
                         </Col>
-                        <Col xs={7} className="p-0">
+                        <Col xs={8} className="p-0">
                             <MokaSearchInput
                                 value={search.keyword}
                                 onChange={(e) => {

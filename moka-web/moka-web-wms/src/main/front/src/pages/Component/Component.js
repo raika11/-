@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { clearStore, deleteComponent, hasRelationList } from '@store/component';
-import { notification, toastr } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { ITEM_CP } from '@/constants';
 
 const ComponentList = React.lazy(() => import('./ComponentList'));
@@ -38,27 +38,28 @@ const Component = ({ match }) => {
      */
     const deleteCallback = useCallback(
         (component) => {
-            toastr.confirm(`${component.componentSeq}_${component.componentName}을 삭제하시겠습니까?`, {
-                onOk: () => {
+            toast.confirm(
+                `${component.componentSeq}_${component.componentName}을 삭제하시겠습니까?`,
+                () => {
                     dispatch(
                         deleteComponent({
                             componentSeq: component.componentSeq,
                             callback: ({ header }) => {
                                 // 삭제 성공
                                 if (header.success) {
-                                    notification('success', header.message);
+                                    toast.success(header.message);
                                     history.push('/component');
                                 }
                                 // 삭제 실패
                                 else {
-                                    notification('warning', header.message);
+                                    toast.warning(header.message);
                                 }
                             },
                         }),
                     );
                 },
-                onCancel: () => {},
-            });
+                () => {},
+            );
         },
         [dispatch, history],
     );
@@ -78,9 +79,17 @@ const Component = ({ match }) => {
                             // 관련 아이템 없음
                             if (!body) deleteCallback(component);
                             // 관련 아이템 있음
-                            else notification('warning', '사용 중인 컴포넌트는 삭제할 수 없습니다');
+                            else {
+                                toast.alert(
+                                    <React.Fragment>
+                                        사용 중인 컴포넌트입니다.
+                                        <br />
+                                        삭제할 수 없습니다.
+                                    </React.Fragment>,
+                                );
+                            }
                         } else {
-                            notification('warning', header.message);
+                            toast.warning(header.message);
                         }
                     },
                 }),
@@ -135,7 +144,7 @@ const Component = ({ match }) => {
                 tabNavPosition="right"
                 tabNavs={[
                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-file-alt" /> },
+                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                 ]}
             />

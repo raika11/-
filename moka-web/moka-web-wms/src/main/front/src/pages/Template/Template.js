@@ -9,7 +9,7 @@ import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_TP } from '@/constants';
 import { clearStore, deleteTemplate, hasRelationList, changeTemplateBody } from '@store/template';
-import { notification, toastr } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 
 import TemplateEditor from './TemplateEditor';
 const TemplateList = React.lazy(() => import('./TemplateList'));
@@ -89,27 +89,28 @@ const Template = ({ match }) => {
      */
     const deleteCallback = useCallback(
         (template) => {
-            toastr.confirm(`${template.templateSeq}_${template.templateName}을 삭제하시겠습니까?`, {
-                onOk: () => {
+            toast.confirm(
+                `${template.templateSeq}_${template.templateName}을 삭제하시겠습니까?`,
+                () => {
                     dispatch(
                         deleteTemplate({
                             templateSeq: template.templateSeq,
                             callback: ({ header }) => {
                                 // 삭제 성공
                                 if (header.success) {
-                                    notification('success', header.message);
+                                    toast.success(header.message);
                                     history.push('/template');
                                 }
                                 // 삭제 실패
                                 else {
-                                    notification('warning', header.message);
+                                    toast.error(header.message);
                                 }
                             },
                         }),
                     );
                 },
-                onCancel: () => {},
-            });
+                () => {},
+            );
         },
         [dispatch, history],
     );
@@ -129,9 +130,17 @@ const Template = ({ match }) => {
                             // 관련 아이템 없음
                             if (!body) deleteCallback(template);
                             // 관련 아이템 있음
-                            else notification('warning', '사용 중인 템플릿은 삭제할 수 없습니다');
+                            else {
+                                toast.alert(
+                                    <React.Fragment>
+                                        사용 중인 템플릿입니다.
+                                        <br />
+                                        삭제할 수 없습니다.
+                                    </React.Fragment>,
+                                );
+                            }
                         } else {
-                            notification('warning', header.message);
+                            toast.error(header.message);
                         }
                     },
                 }),
@@ -145,14 +154,18 @@ const Template = ({ match }) => {
      */
     const handleClickLoad = ({ header, body }) => {
         if (header.success) {
-            toastr.confirm('불러오기 시 작업 중인 템플릿 본문 내용이 날라갑니다. 불러오시겠습니까?', {
-                onOk: () => {
+            toast.confirm(
+                <React.Fragment>
+                    현재 작업된 소스가 히스토리 내용으로 변경됩니다.
+                    <br />
+                    변경하시겠습니까?
+                </React.Fragment>,
+                () => {
                     dispatch(changeTemplateBody(body.body));
                 },
-                onCancel: () => {},
-            });
+            );
         } else {
-            notification('error', header.message);
+            toast.error(header.message);
         }
     };
 

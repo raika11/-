@@ -86,7 +86,7 @@ function* deleteDataset({ payload: { datasetSeq, callback } }) {
         const response = yield call(datasetAPI.deleteDataset, datasetSeq);
         callbackData = response.data;
 
-        if (response.data.header.success) {
+        if (response.data.header.success && response.data.body) {
             yield put({
                 type: SUCCESS,
                 payload: response.data,

@@ -6,8 +6,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInputLabel } from '@components';
+import toast from '@utils/toastUtil';
 import { notification } from '@utils/toastUtil';
-import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer } from '@store/container';
+import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
 /**
  * 컨테이너 정보/수정 컴포넌트
@@ -119,9 +120,49 @@ const ContainerEdit = ({ onDelete }) => {
             if (!container.containerSeq || container.containerSeq === '') {
                 // 새 컨테이너 저장 시에 도메인ID 셋팅
                 data.domain = { domainId: latestDomainId };
+                submitContainer(data);
+            } else {
+                checkRelationList(data);
             }
         }
-        submitContainer(data);
+    };
+
+    /**
+     * 관련아이템 체크
+     * @param {object} container container
+     */
+    const checkRelationList = (container) => {
+        const { containerSeq } = container;
+
+        dispatch(
+            hasRelationList({
+                containerSeq,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 관련 아이템 없음
+                        if (!body) submitContainer(container);
+                        // 관련 아이템 있음
+                        else {
+                            toast.confirm(
+                                <React.Fragment>
+                                    다른 곳에서 사용 중입니다.
+                                    <br />
+                                    변경 시 전체 수정 반영됩니다.
+                                    <br />
+                                    수정하시겠습니까?
+                                </React.Fragment>,
+                                () => {
+                                    submitContainer(container);
+                                },
+                                () => {},
+                            );
+                        }
+                    } else {
+                        toast.error(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     /**

@@ -1,11 +1,17 @@
 package jmnet.moka.web.wms.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
+import jmnet.moka.common.data.support.DTOModelMapper;
+import jmnet.moka.common.data.support.SearchParamResolver;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
+import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.tps.mvc.menu.service.MenuService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +34,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import org.springframework.web.servlet.resource.PathResourceResolver;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jmnet.moka.common.data.support.DTOModelMapper;
-import jmnet.moka.common.data.support.SearchParamResolver;
-import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
-import jmnet.moka.core.common.util.ResourceMapper;
 
 /**
  * Web MVC Configuration
- * 
- * @author ince
  *
+ * @author ince
  */
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
@@ -53,12 +52,17 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Autowired
     private ApplicationContext appContext;
 
+    @Autowired
+    private MenuService menuService;
+
 
     @Bean
     @ConditionalOnMissingBean
     public ModelMapper wmsModelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper
+                .getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT);
         return modelMapper;
     }
 
@@ -66,7 +70,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      * <pre>
      * LocaleResolver 설정
      * </pre>
-     * 
+     *
      * @return localeResolver
      */
     @Bean
@@ -79,22 +83,20 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      * <pre>
      * http request 언어 설정에 맞는 메시지를 가져오는 bean 생성
      * </pre>
-     * 
+     *
      * @return messageByLocale
      */
     @Bean
-    public MessageByLocale messageByLocale(
-            @Autowired @Qualifier("wmsMessageSource") MessageSource messageSource,
+    public MessageByLocale messageByLocale(@Autowired @Qualifier("wmsMessageSource") MessageSource messageSource,
             @Autowired @Qualifier("wmsLocaleResolver") LocaleResolver localeResolver) {
         return new MessageByLocale(messageSource, localeResolver);
     }
 
     /**
-     * 
      * <pre>
      * GeneralHandlerInterceptor 생성
      * </pre>
-     * 
+     *
      * @return GeneralHandlerInterceptor
      */
 
@@ -104,11 +106,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     /**
-     * 
      * <pre>
      * 전역 Interceptor 설정
      * </pre>
-     * 
+     *
      * @param registry 인터셉터레지스트리
      * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#addInterceptors(org.springframework.web.servlet.config.annotation.InterceptorRegistry)
      */
@@ -117,24 +118,28 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         // final LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         // localeChangeInterceptor.setParamName("language");
         // registry.addInterceptor(localeChangeInterceptor);
-        registry.addInterceptor(wmsHandlerInterceptor()).excludePathPatterns("/assets/**")
+        registry
+                .addInterceptor(wmsHandlerInterceptor())
+                .excludePathPatterns("/assets/**")
                 // .excludePathPatterns("/html/**")
                 .excludePathPatterns("/webjars/**");
     }
 
     /**
-     * 
      * <pre>
      * 정적 리소스 경로 설정
      * </pre>
-     * 
+     *
      * @param registry 리소스레지스트리
      * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurer#addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry)
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/assets/**").addResourceLocations("/assets/")
-                .resourceChain(false).addResolver(new PathResourceResolver());
+        registry
+                .addResourceHandler("/assets/**")
+                .addResourceLocations("/assets/")
+                .resourceChain(false)
+                .addResolver(new PathResourceResolver());
     }
 
 
@@ -143,8 +148,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        ObjectMapper objectMapper =
-                Jackson2ObjectMapperBuilder.json().applicationContext(this.appContext).build();
+        ObjectMapper objectMapper = Jackson2ObjectMapperBuilder
+                .json()
+                .applicationContext(this.appContext)
+                .build();
         ResourceMapper.setMspDefaultConfiguration(objectMapper);
         argumentResolvers.add(new DTOModelMapper(objectMapper, tpsEntityManager));
         argumentResolvers.add(new SearchParamResolver());
@@ -155,7 +162,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      * Chrome 브라우저의 개발자 도구를 열고 테스트할때, minify된 js나 css의 소스맵 요청시 발생하는 오류수정
      * http://mvpjava.com/spring-boot-security-httpfirewall
      * </pre>
-     * 
+     *
      * @return
      */
     @Bean
@@ -171,8 +178,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public HandlerMapping reactRoute() throws NoSuchMethodException, SecurityException {
-        ReactRoutesHandlerMapping handlerMapping = new ReactRoutesHandlerMapping(this.reactRoutes);
+    public HandlerMapping reactRoute()
+            throws NoSuchMethodException, SecurityException {
+        ReactRoutesHandlerMapping handlerMapping = new ReactRoutesHandlerMapping(menuService.findAllMenuUrl());
         handlerMapping.setOrder(-1);
         return handlerMapping;
     }

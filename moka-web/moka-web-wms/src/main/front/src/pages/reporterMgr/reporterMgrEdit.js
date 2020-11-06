@@ -1,3 +1,4 @@
+/*
 import React, { useEffect, useState, state } from 'react';
 import { Col, Form, Button, Row } from 'react-bootstrap';
 import { MokaCard, MokaInput, MokaInputLabel } from '@components';
@@ -16,6 +17,7 @@ import {toastr} from "react-redux-toastr";
  * 그룹 상세/수정/등록
  * @param history rect-router-dom useHisotry
  */
+
 const GroupEdit = (onDelete) => {
 
     console.log(typeof onDelete);

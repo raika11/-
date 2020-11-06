@@ -1,3 +1,4 @@
+/*
 import React, { useState, Suspense } from 'react';
 import Helmet from 'react-helmet';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
@@ -5,13 +6,13 @@ import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { clearStore} from "@store/reporterMgr";
+//import { clearStore} from "@store/reporterMgr";
 import toast, {notification, toastr} from "@utils/toastUtil";
 // relations
 
-const MemberGroupList = React.lazy(() => import('./GroupList'));
-const GroupEdit = React.lazy(() => import('./GroupEdit'));
-const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));
+//const MemberGroupList = React.lazy(() => import('./GroupList'));
+//const GroupEdit = React.lazy(() => import('./GroupEdit'));
+//const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));
 
 
 
@@ -38,7 +39,7 @@ const Group = () => {
                 <meta name="description" content="사용자 그룹관리 페이지 입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
-            {/*리스트*/}
+
             <MokaCard
                 title="사용자 그룹관리"
                 width={480}
@@ -74,14 +75,6 @@ const Group = () => {
                                 <Suspense>
                                     <GroupChildGroupMemberEdit />
                                 </Suspense>
-                                /*
-                                ,
-                                <Suspense>
-                                    <MokaCard title="메뉴 권한">
-                                        <MemberGroupList />
-                                    </MokaCard>
-                                </Suspense>,
-                                 */
                             ]}
                             tabNavWidth={48}
                             tabNavPosition="right"
@@ -103,3 +96,4 @@ const Group = () => {
 };
 
 export default Group;
+*/

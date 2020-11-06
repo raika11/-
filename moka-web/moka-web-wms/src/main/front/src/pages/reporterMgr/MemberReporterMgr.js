@@ -1,3 +1,4 @@
+/*
 import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
@@ -19,7 +20,7 @@ const MemberGroup = () => {
                 <meta name="description" content="사용자 그룹관리 페이지 입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
-            {/*리스트*/}
+
             <MokaCard
                 className="mb-0 mr-10"
                 height={CARD_DEFAULT_HEIGHT}
@@ -41,7 +42,7 @@ const MemberGroup = () => {
                     exact
                     render={() => (
                         <>
-                            {/* 탭 */}
+
                             <MokaIconTabs
                                 //expansion={expansionState[2]}
                                 //onExpansion={handleTabExpansion}
@@ -79,3 +80,4 @@ const MemberGroup = () => {
 };
 
 export default MemberGroup;
+*/

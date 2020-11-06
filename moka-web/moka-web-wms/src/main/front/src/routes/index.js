@@ -204,6 +204,7 @@ const routes = [
         exact: false,
         strict: true,
     },
+    /*
     {
         path: '/reporterMgr',
         name: 'reporterMgr',
@@ -214,6 +215,8 @@ const routes = [
         exact: false,
         strict: true,
     },
+    */
+
 ];
 
 export default routes;

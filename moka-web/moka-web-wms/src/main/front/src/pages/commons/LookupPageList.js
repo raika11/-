@@ -150,7 +150,7 @@ const LookupPageList = (props) => {
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" title="페이지 검색">
+            <MokaCard titleClassName="mb-0" title="관련 페이지">
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>

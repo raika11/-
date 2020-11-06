@@ -284,12 +284,24 @@ public class ReservedRestController {
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{reservedId}/exists")
     public ResponseEntity<?> duplicateCheckId(@PathVariable("reservedId")
-    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+", message = "{tps.reserved.error.pattern.reservedId}") String reservedId, String domainId) {
+    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+", message = "{tps.reserved.error.pattern.reservedId}") String reservedId, String domainId)
+            throws Exception {
 
-        boolean duplicated = reservedService.isDuplicatedId(reservedId, domainId);
-        ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
-        tpsLogger.success(ActionType.SELECT, true);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        try {
+            boolean duplicated = reservedService.isDuplicatedId(reservedId, domainId);
+            String message = "";
+            if (duplicated) {
+                message = messageByLocale.get("tps.reserved.error.duplicate.reservedId");
+            }
+
+            ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated, message);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO DUPLICATE RESERVED] : reservedId {} {}", reservedId, e.getMessage());
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO DUPLICATE RESERVED]", e, true);
+            throw new Exception(messageByLocale.get("tps.reserved.error.duplicate.reservedId"));
+        }
     }
 
 

@@ -1,7 +1,6 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './areaAction';
-import { PAGESIZE_OPTIONS } from '@/constants';
 
 /**
  * initialState
@@ -12,10 +11,7 @@ export const initialState = {
         total: 0,
         error: null,
         search: {
-            page: 0,
-            size: PAGESIZE_OPTIONS[0],
             domainId: null,
-            depth: 1,
         },
     },
     depth2: {
@@ -23,10 +19,8 @@ export const initialState = {
         total: 0,
         error: null,
         search: {
-            page: 0,
-            size: PAGESIZE_OPTIONS[0],
             domainId: null,
-            depth: 2,
+            parentAreaSeq: null,
         },
     },
     depth3: {
@@ -34,10 +28,8 @@ export const initialState = {
         total: 0,
         error: null,
         search: {
-            page: 0,
-            size: PAGESIZE_OPTIONS[0],
             domainId: null,
-            depth: 3,
+            parentAreaSeq: null,
         },
     },
     area: {
@@ -52,6 +44,12 @@ export const initialState = {
         parent: {},
         previewRsrc: '',
         usedYn: 'N',
+    },
+    areaCompLoad: {
+        byContainer: false,
+        byContainerMessage: null,
+        byPage: false,
+        byPageMessage: null,
     },
     areaError: null,
     invalidList: [],
@@ -133,9 +131,14 @@ export default handleActions(
                 draft.depth3.error = payload;
             });
         },
+        /**
+         * Area 데이터 상세 조회 결과
+         */
         [act.GET_AREA_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.area = body;
+                const { area, areaCompLoad } = body;
+                draft.area = area;
+                draft.areaCompLoad = areaCompLoad;
                 draft.areaError = initialState.areaError;
             });
         },

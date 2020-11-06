@@ -29,6 +29,12 @@
         .ag-header {
             display: none;
         }
+
+        .ag-root-wrapper {
+            border-top: solid $table-border-width;
+            border-bottom: solid $table-border-width;
+            border-color: $table-border-color;
+        }
     }
 
     .ag-root-wrapper {

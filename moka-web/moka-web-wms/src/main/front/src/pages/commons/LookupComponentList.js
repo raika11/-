@@ -150,7 +150,7 @@ const LookupComponentList = (props) => {
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" title="컴포넌트 검색">
+            <MokaCard titleClassName="mb-0" title="관련 컴포넌트">
                 <Form className="mb-2">
                     {/* 위치그룹 */}
                     <MokaInput

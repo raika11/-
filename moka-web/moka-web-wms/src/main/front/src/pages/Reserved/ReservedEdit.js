@@ -119,7 +119,7 @@ const ReservedEdit = () => {
                         toast.success(header.message);
                         history.push(`/reserved/${body.reservedSeq}`);
                     } else {
-                        toast.warning(header.message);
+                        toast.warn(header.message);
                     }
                 },
             }),
@@ -145,10 +145,10 @@ const ReservedEdit = () => {
                         }
                         // 중복 있음
                         else {
-                            toast.warning(header.message);
+                            toast.warn(header.message);
                         }
                     } else {
-                        toast.warning(header.message);
+                        toast.warn(header.message);
                     }
                 },
             }),

@@ -7,8 +7,9 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInput, MokaTable } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import { initialState, getAreaListDepth1, getAreaListDepth2, changeSearchOptionDepth1, changeSearchOptionDepth2, changeArea } from '@store/area';
+import { initialState, getAreaListDepth1, getAreaListDepth2, changeSearchOptionDepth1, changeSearchOptionDepth2, changeArea, getArea } from '@store/area';
 import Depth2 from './AreaAgGridDepth2';
+import columnDefs from './AreaAgGridColums';
 
 /**
  * 편집영역 > 첫번째 리스트
@@ -39,7 +40,6 @@ const AreaAgGrid1D = ({ match }) => {
                     changeSearchOptionDepth1({
                         ...search,
                         domainId: latestDomainId,
-                        page: 0,
                     }),
                 ),
             );
@@ -47,19 +47,18 @@ const AreaAgGrid1D = ({ match }) => {
     }, [dispatch, latestDomainId, search]);
 
     useEffect(() => {
-        // areaSeq가 있으면 2뎁스 리스트 조회
+        // areaSeq가 있으면 2뎁스 리스트 조회 + 상세 데이터 조회
         if (areaSeq) {
             dispatch(
                 getAreaListDepth2(
                     changeSearchOptionDepth2({
                         ...initialState.depth2.search,
                         domainId: latestDomainId,
-                        depth: 2,
-                        areaSeq: areaSeq,
-                        page: 0,
+                        parentAreaSeq: areaSeq,
                     }),
                 ),
             );
+            dispatch(getArea({ areaSeq }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [areaSeq, latestDomainId]);
@@ -68,7 +67,7 @@ const AreaAgGrid1D = ({ match }) => {
      * 목록에서 Row클릭
      */
     const handleRowClicked = (data) => {
-        history.push(`${match.url}/${data.areaSeq}`);
+        history.push(`/area/${data.areaSeq}`);
     };
 
     /**
@@ -81,6 +80,7 @@ const AreaAgGrid1D = ({ match }) => {
                 depth: 1,
             }),
         );
+        history.push('/area');
     };
 
     return (
@@ -112,6 +112,7 @@ const AreaAgGrid1D = ({ match }) => {
 
                 <MokaTable
                     agGridHeight={738}
+                    columnDefs={columnDefs}
                     rowData={list}
                     selected={areaSeq}
                     header={false}

@@ -123,7 +123,7 @@ const LookupSkinList = (props) => {
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" title="기사타입 검색">
+            <MokaCard titleClassName="mb-0" title="관련 기사타입">
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>

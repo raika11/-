@@ -183,7 +183,7 @@ const LookupTemplateList = (props) => {
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" title="템플릿 검색">
+            <MokaCard titleClassName="mb-0" title="관련 템플릿">
                 <Form className="mb-10">
                     <Form.Row className="mb-2">
                         {/* 템플릿 위치그룹 */}

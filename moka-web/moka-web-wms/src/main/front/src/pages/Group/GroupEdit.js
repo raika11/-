@@ -267,18 +267,19 @@ const GroupEdit = (onDelete) => {
         e.preventDefault();
         e.stopPropagation();
 
-
         const tmp = {
             groupCd,
             groupNm,
             groupKorNm,
         };
 
+
         if (validate(tmp)) {
-            console.log("groupCd::" + groupCd);
-            if (groupCd) {
+            if (paramCd) {
+                console.log("aaaaaaaaaaaaaaa");
                 updateGroup(tmp);
             } else {
+                console.log("bbbbbbbbbbbbbbb");
                 insertGroup(tmp);
             }
         }

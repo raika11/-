@@ -33,6 +33,7 @@
 		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_PAGE_REL_DELETE(
 			#{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }
-	</select>
+  </select>
+
 
 </mapper>

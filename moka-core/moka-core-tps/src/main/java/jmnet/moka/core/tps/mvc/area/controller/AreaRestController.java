@@ -13,12 +13,14 @@ import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.area.dto.AreaCompLoadDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.dto.ParentAreaDTO;
@@ -33,6 +35,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,22 +67,15 @@ public class AreaRestController {
     private TpsLogger tpsLogger;
 
     /**
-     * 편집영역 목록조회(depth별)
+     * 편집영역 목록조회(부모 편집영역별)
      *
      * @param search 검색조건
      * @return 편집영역 목록
      */
-    @ApiOperation(value = "편집영역 뎁스별 목록조회(depth별)")
+    @ApiOperation(value = "편집영역 목록조회(부모 편집영역별)")
     @GetMapping
     public ResponseEntity<?> getAreaList(@Valid @SearchParam AreaSearchDTO search)
             throws NoDataException {
-
-        // depth조건 필수
-        if (search.getDepth() == null || search.getDepth() < 1) {
-            String message = messageByLocale.get("tps.area.error.min.depth");
-            tpsLogger.fail(message, true);
-            throw new NoDataException(message);
-        }
 
         Page<Area> returnValue = areaService.findAllArea(search);
         List<AreaDTO> areaDtoList = modelMapper.map(returnValue.getContent(), AreaDTO.TYPE);
@@ -102,7 +98,7 @@ public class AreaRestController {
     @ApiOperation(value = "편집영역 상세조회")
     @GetMapping("/{areaSeq}")
     public ResponseEntity<?> getArea(@PathVariable("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
-            throws NoDataException {
+        throws Exception {
 
         Area area = areaService.findAreaBySeq(areaSeq)
                                .orElseThrow(() -> {
@@ -111,14 +107,32 @@ public class AreaRestController {
                                    return new NoDataException(message);
                                });
 
-        //        컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
-        //        페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.
+        try {
+            // 컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
+            // 페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.
+            AreaCompLoadDTO areaCompLoadDTO = new AreaCompLoadDTO();
+            Long check = areaService.checkAreaComp(area);
+            if(check == -1 || check == -3) {
+                areaCompLoadDTO.setByPage(true);  // true이면 해당 컴포넌트 미존재
+                areaCompLoadDTO.setByPageMessage(messageByLocale.get("tps.areaComp.error.bypage"));
+            }
+            if(check == -2 || check == -3) {
+                areaCompLoadDTO.setByContainer(true);  // true이면 해당 컴포넌트 미존재
+                areaCompLoadDTO.setByContainerMessage(messageByLocale.get("tps.areaComp.error.bycontainer"));
+            }
 
-        AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);
+            AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);
 
-        ResultDTO<AreaDTO> resultDTO = new ResultDTO<AreaDTO>(areaDTO);
-        tpsLogger.success(true);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
+            resultMapDTO.addBodyAttribute("area", areaDTO);
+            resultMapDTO.addBodyAttribute("areaCompLoad", areaCompLoadDTO);
+            tpsLogger.success(true);
+            return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD AREA]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD AREA]", e, true);
+            throw new Exception(messageByLocale.get("tps.area.error.select"), e);
+        }
     }
 
     /**
@@ -253,6 +267,45 @@ public class AreaRestController {
         if (invalidList.size() > 0) {
             String validMessage = messageByLocale.get("tps.common.error.invalidContent");
             throw new InvalidDataException(invalidList, validMessage);
+        }
+    }
+
+    /**
+     * 편집영역 삭제
+     *
+     * @param areaSeq 삭제 할 편집영역순번 (필수)
+     * @return 삭제성공여부
+     * @throws InvalidDataException 데이타유효성오류
+     * @throws NoDataException      페이지정보 없음 오류
+     * @throws Exception            기타예외
+     */
+    @ApiOperation(value = "편집영역 삭제")
+    @DeleteMapping("/{areaSeq}")
+    public ResponseEntity<?> deleteArea(@PathVariable("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
+            throws InvalidDataException, NoDataException, Exception {
+
+        // 1. 데이타 존재여부 검사
+        Area area = areaService.findAreaBySeq(areaSeq)
+                               .orElseThrow(() -> {
+                                   String message = messageByLocale.get("tps.area.error.no-data");
+                                   tpsLogger.fail(ActionType.DELETE, message, true);
+                                   return new NoDataException(message);
+                               });
+
+        try {
+            // 2. 삭제
+            areaService.deleteArea(area);
+
+            // 3. 결과리턴
+            String message = messageByLocale.get("tps.common.success.delete");
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
+            tpsLogger.success(ActionType.DELETE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE AREA] seq: {} {}", areaSeq, e.getMessage());
+            tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE AREA]", e, true);
+            throw new Exception(messageByLocale.get("tps.area.error.delete"), e);
         }
     }
 }

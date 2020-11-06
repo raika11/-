@@ -48,7 +48,7 @@ export const hasRelationList = createAction(HAS_RELATION_LIST, ({ groupCd, callb
  */
 export const CHANGE_GROUP = 'group/CHANGE_GROUP';
 export const CHANGE_INVALID_LIST = 'group/CHANGE_INVALID_LIST';
-export const changeGroup = createAction(CHANGE_GROUP, (groupCd) => groupCd);
+export const changeGroup = createAction(CHANGE_GROUP, (group) => group);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 

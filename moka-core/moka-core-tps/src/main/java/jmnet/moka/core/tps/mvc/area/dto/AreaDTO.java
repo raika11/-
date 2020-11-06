@@ -116,7 +116,7 @@ public class AreaDTO implements Serializable {
      * 컴포넌트목록
      */
     private Set<AreaCompDTO> areaComps = new LinkedHashSet<AreaCompDTO>();
-
+    
     public void addAreaComp(AreaCompDTO areaComp) {
 
         if (areaComp.getArea() == null) {

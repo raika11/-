@@ -38,25 +38,25 @@ export const initialState = {
             domainName: null,
             domainAddress: null,
         },
-        pageName: null,
-        pageServiceName: null,
-        pageDisplayName: null,
+        pageName: '',
+        pageServiceName: '',
+        pageDisplayName: '',
         parent: {
             pageSeq: null,
             pageName: null,
             pageUrl: null,
         },
         pageType: null,
-        pageUrl: null,
+        pageUrl: '',
         pageOrd: 1,
         pageBody: '',
-        urlParam: null,
+        urlParam: '',
         usedYn: 'Y',
         fileYn: 'N',
         kwd: null,
-        description: null,
+        description: '',
         moveYn: 'N',
-        moveUrl: null,
+        moveUrl: '',
     },
     pageError: null,
     pageBody: '',
@@ -138,7 +138,6 @@ export default handleActions(
                 draft.pageBody = initialState.pageBody;
                 draft.inputTag = initialState.inputTag;
                 draft.pageError = payload;
-                draft.invalidList = payload.body ? payload.body : initialState.invalidList;
             });
         },
         [act.GET_PAGE_LOOKUP_LIST_SUCCESS]: (state, { payload: { body } }) => {

@@ -82,6 +82,8 @@ const PageListModal = (props) => {
     const handleHide = () => {
         setRowData([]);
         setTotal(initialState.total);
+        setSelected('');
+        setSelected({});
         setError(null);
         setCnt(0);
         onHide();

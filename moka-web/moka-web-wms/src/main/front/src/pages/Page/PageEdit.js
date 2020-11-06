@@ -1,78 +1,56 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaSearchInput, MokaCard, MokaInput, MokaInputLabel } from '@components';
-import MovePageListModal from './modals/MovePageListModal';
 import { getPageType } from '@store/codeMgt';
 import { previewPage, w3cPage } from '@store/merge';
 import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
 import { notification } from '@utils/toastUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
+import { PageListModal } from '@pages/commons';
 
 const PageEdit = ({ onDelete }) => {
-    const { pageSeq: paramPageSeq } = useParams();
+    const { pageSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { page, pageBody, loading, pageTypeRows, latestDomainId, invalidList, PAGE_TYPE_HTML } = useSelector((store) => ({
-        page: store.page.page,
-        pageBody: store.page.pageBody,
-        loading:
-            store.loading['page/GET_PAGE'] ||
-            store.loading['page/POST_PAGE'] ||
-            store.loading['page/PUT_PAGE'] ||
-            store.loading['page/DELETE_PAGE'] ||
-            store.loading['merge/PREVIEW_PAGE'] ||
-            store.loading['merge/W3C_PAGE'],
-        pageTypeRows: store.codeMgt.pageTypeRows,
-        latestDomainId: store.auth.latestDomainId,
-        invalidList: store.page.invalidList,
-        PAGE_TYPE_HTML: store.app.PAGE_TYPE_HTML,
-    }));
+    const { page, pageBody, loading, pageTypeRows, latestDomainId, invalidList, PAGE_TYPE_HTML } = useSelector(
+        (store) => ({
+            page: store.page.page,
+            pageBody: store.page.pageBody,
+            loading:
+                store.loading['page/GET_PAGE'] ||
+                store.loading['page/POST_PAGE'] ||
+                store.loading['page/PUT_PAGE'] ||
+                store.loading['page/DELETE_PAGE'] ||
+                store.loading['merge/PREVIEW_PAGE'] ||
+                store.loading['merge/W3C_PAGE'],
+            pageTypeRows: store.codeMgt.pageTypeRows,
+            latestDomainId: store.auth.latestDomainId,
+            invalidList: store.page.invalidList,
+            PAGE_TYPE_HTML: store.app.PAGE_TYPE_HTML,
+        }),
+        [shallowEqual],
+    );
 
     // state
-    const [pageName, setPageName] = useState(initialState.pageName);
-    const [pageServiceName, setPageServiceName] = useState(initialState.pageServiceName);
-    const [pageDisplayName, setPageDisplayName] = useState(initialState.pageDisplayName);
-    const [parent, setParent] = useState(initialState.parent);
-    const [pageType, setPageType] = useState(initialState.pageType || PAGE_TYPE_HTML);
-    const [pageUrl, setPageUrl] = useState(initialState.pageUrl);
-    const [pageOrd, setPageOrd] = useState(initialState.pageOrd);
-    const [urlParam, setUrlParam] = useState(initialState.urlParam);
-    const [usedYn, setUsedYn] = useState(initialState.usedYn);
-    const [fileYn, setFileYn] = useState(initialState.fileYn);
-    const [kwd, setKwd] = useState(initialState.kwd);
-    const [description, setDescription] = useState(initialState.description);
-    const [moveYn, setMoveYn] = useState(initialState.moveYn);
-    const [moveUrl, setMoveUrl] = useState(initialState.moveUrl);
+    const [temp, setTemp] = useState(initialState.page);
+    const [error, setError] = useState({
+        pageName: false,
+        pageServiceName: false,
+        pageDisplayName: false,
+        pageType: false,
+        pageOrd: false,
+        moveUrl: false,
+    });
     const [btnDisabled, setBtnDisabled] = useState(true);
-
-    // error
-    const [pageNameError, setPageNameError] = useState(false);
-    const [pageServiceNameError, setPageServiceNameError] = useState(false);
-    const [pageDisplayNameError, setPageDisplayNameError] = useState(false);
-    // const [parentError, setParentError] = useState(false);
-    const [pageTypeError, setPagTypeError] = useState(false);
-    // const [pageUrlError, setPagUrlError] = useState(false);
-    const [pageOrdError, setPageOrdError] = useState(false);
-    // const [urlParamError, setUrlParamError] = useState(false);
-    // const [kwdError, setKwdError] = useState(false);
-    // const [descriptionError, setDescriptionError] = useState(false);
-    const [moveUrlError, setMoveUrlError] = useState(false);
 
     // modal state
     const [moveModalShow, setMoveModalShow] = useState(false);
-
-    useEffect(() => {
-        // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
-        if (pageType === '' && pageTypeRows.length > 0) {
-            setPageType(pageTypeRows[0].dtlCd);
-        }
-    }, [pageType, pageTypeRows]);
 
     useEffect(() => {
         if (!pageTypeRows || pageTypeRows.length <= 0) {
@@ -80,9 +58,9 @@ const PageEdit = ({ onDelete }) => {
         }
 
         // url로 다이렉트로 페이지 조회하는 경우
-        if (paramPageSeq && paramPageSeq !== page.pageSeq) {
+        if (pageSeq && pageSeq !== page.pageSeq) {
             const option = {
-                pageSeq: paramPageSeq,
+                pageSeq: pageSeq,
                 callback: (result) => {
                     if (!result.header.success) {
                         history.push(`/page`);
@@ -95,69 +73,39 @@ const PageEdit = ({ onDelete }) => {
     }, []);
 
     useEffect(() => {
-        if (paramPageSeq) {
+        if (pageSeq) {
             setBtnDisabled(false);
         } else {
             setBtnDisabled(true);
         }
-    }, [dispatch, paramPageSeq]);
+    }, [dispatch, pageSeq]);
 
     useEffect(() => {
-        // 스토어에서 가져온 페이지 데이터 셋팅
-        setPageName(page.pageName);
-        setPageServiceName(page.pageServiceName);
-        setPageDisplayName(page.pageDisplayName);
-        setParent(page.parent);
-        setPageType(page.pageType || PAGE_TYPE_HTML);
-        setPageUrl(page.pageUrl);
-        setPageOrd(page.pageOrd);
-        setUrlParam(page.urlParam);
-        setUsedYn(page.usedYn);
-        setFileYn(page.fileYn);
-        setKwd(page.kwd);
-        setDescription(page.description);
-        setMoveYn(page.moveYn);
-        setMoveUrl(page.MoveUrl);
+        setTemp({
+            ...page,
+            pageType: page.pageType || PAGE_TYPE_HTML,
+        });
     }, [PAGE_TYPE_HTML, page]);
+
+    useEffect(() => {
+        // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
+        if (temp.pageType === '' && pageTypeRows.length > 0) {
+            setTemp({ ...temp, pageType: pageTypeRows[0].dtlCd });
+        }
+    }, [temp, pageTypeRows]);
 
     useEffect(() => {
         // invalidList 처리
         if (invalidList.length > 0) {
-            invalidList.forEach((i) => {
-                if (i.field === 'pageName') {
-                    setPageNameError(true);
-                }
-                if (i.field === 'pageServiceName') {
-                    setPageServiceNameError(true);
-                }
-                if (i.field === 'pageDisplayName') {
-                    setPageDisplayNameError(true);
-                }
-                // if (i.field === 'parent') {
-                //     setParentError(true);
-                // }
-                if (i.field === 'pageType') {
-                    setPagTypeError(true);
-                }
-                // if (i.field === 'pageUrl') {
-                //     setPagUrlError(true);
-                // }
-                if (i.field === 'pagOrd') {
-                    setPageOrdError(true);
-                }
-                // if (i.field === 'urlParam') {
-                //     setUrlParamError(true);
-                // }
-                // if (i.field === 'kwd') {
-                //     setKwdError(true);
-                // }
-                // if (i.field === 'description') {
-                //     setDescriptionError(true);
-                // }
-                if (i.field === 'moveUrl') {
-                    setMoveUrlError(true);
-                }
-            });
+            setError(
+                invalidList.reduce(
+                    (all, c) => ({
+                        ...all,
+                        [c.field]: true,
+                    }),
+                    {},
+                ),
+            );
         }
     }, [invalidList]);
 
@@ -169,44 +117,42 @@ const PageEdit = ({ onDelete }) => {
             const { name, value, checked } = target;
 
             if (name === 'usedYn') {
-                setUsedYn(checked ? 'Y' : 'N');
+                setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
             } else if (name === 'pageName') {
-                setPageName(value);
-                const regex = /[^\s\t\n]+/;
-                if (regex.test(value)) {
-                    setPageNameError(false);
-                } else {
-                    setPageNameError(true);
+                setTemp({ ...temp, pageName: value });
+                if (/[^\s\t\n]+/.test(value)) {
+                    setError({ ...error, pageName: false });
                 }
             } else if (name === 'pageServiceName') {
-                const url = `${parent.pageUrl === '/' ? '' : parent.pageUrl}/${value}`;
-                setPageUrl(url);
-                setPageServiceName(value);
+                const url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${value}`;
+                setTemp({
+                    ...temp,
+                    pageUrl: url,
+                    pageServiceName: value,
+                });
             } else if (name === 'pageType') {
-                setPageType(value);
+                setTemp({ ...temp, pageType: value });
             } else if (name === 'pageDisplayName') {
-                setPageDisplayName(value);
+                setTemp({ ...temp, pageDisplayName: value });
             } else if (name === 'pageOrd') {
-                setPageOrd(value);
-                const regex = /^[\d]+$/;
-                if (regex.test(value)) {
-                    setPageOrdError(false);
-                } else {
-                    setPageOrdError(true);
+                setTemp({ ...temp, pageOrd: value });
+
+                if (/^[\d]+$/.test(value)) {
+                    setError({ ...error, pageOrd: false });
                 }
             } else if (name === 'moveYn') {
-                setMoveYn(checked ? 'Y' : 'N');
+                setTemp({ ...temp, moveYn: checked ? 'Y' : 'N' });
             } else if (name === 'fileYn') {
-                setFileYn(checked ? 'Y' : 'N');
+                setTemp({ ...temp, fileYn: checked ? 'Y' : 'N' });
             } else if (name === 'kwd') {
-                setKwd(value);
+                setTemp({ ...temp, kwd: value });
             } else if (name === 'description') {
-                setDescription(value);
+                setTemp({ ...temp, description: value });
             } else if (name === 'urlParam') {
-                setUrlParam(value);
+                setTemp({ ...temp, urlParam: value });
             }
         },
-        [parent],
+        [error, temp],
     );
 
     /**
@@ -302,7 +248,7 @@ const PageEdit = ({ onDelete }) => {
                             notification('success', header.message);
                             history.push(`/page/${body.pageSeq}`);
                         } else {
-                            notification('warning', header.message || '실패하였습니다');
+                            notification('warning', header.message);
                         }
                     },
                 }),
@@ -315,58 +261,31 @@ const PageEdit = ({ onDelete }) => {
      * 저장 이벤트
      * @param {object} e 이벤트
      */
-    const handleClickSave = useCallback(
-        (e) => {
-            e.preventDefault();
-            e.stopPropagation();
+    const handleClickSave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-            let temp = {
-                ...page,
-                pageName,
-                pageServiceName,
-                pageDisplayName,
-                parent,
-                pageType,
-                pageUrl,
-                pageOrd,
-                urlParam,
-                usedYn,
-                fileYn,
-                kwd,
-                description,
-                moveYn,
-                moveUrl,
-            };
+        let saveObj = {
+            ...page,
+            ...temp,
+        };
 
-            if (validate(temp)) {
-                if (!page.pageSeq || page.pageSeq === '') {
-                    // 새 페이지 저장 시에 도메인ID 셋팅
-                    temp.domain = { domainId: latestDomainId };
-                }
-                submitPage(temp);
+        if (validate(saveObj)) {
+            if (!page.pageSeq || page.pageSeq === '') {
+                // 새 페이지 저장 시에 도메인ID 셋팅
+                saveObj.domain = { domainId: latestDomainId };
             }
-        },
-        [
-            description,
-            fileYn,
-            kwd,
-            latestDomainId,
-            moveUrl,
-            moveYn,
-            page,
-            pageDisplayName,
-            pageName,
-            pageOrd,
-            pageServiceName,
-            pageType,
-            pageUrl,
-            parent,
-            submitPage,
-            urlParam,
-            usedYn,
-            validate,
-        ],
-    );
+            submitPage(saveObj);
+        }
+    };
+
+    /**
+     * 이동URL 팝업 저장 시
+     * @param {object} data data
+     */
+    const handleClickMoveSave = (data) => {
+        setTemp({ ...temp, moveUrl: data.pageUrl });
+    };
 
     /**
      * 미리보기 팝업
@@ -496,26 +415,34 @@ const PageEdit = ({ onDelete }) => {
                     </div>
                 </Form.Group>
                 {/* 사용여부 */}
-                <MokaInputLabel as="switch" className="mb-2" label="사용여부" id="usedYn" name="usedYn" inputProps={{ checked: usedYn === 'Y' }} onChange={handleChangeValue} />
+                <MokaInputLabel
+                    as="switch"
+                    className="mb-2"
+                    label="사용여부"
+                    id="usedYn"
+                    name="usedYn"
+                    inputProps={{ checked: temp.usedYn === 'Y' }}
+                    onChange={handleChangeValue}
+                />
                 {/* 페이지 ID, URL */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="px-0">
-                        <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={paramPageSeq || ''} inputProps={{ plaintext: true, readOnly: true }} />
+                        <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={pageSeq} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
                     <Col xs={6} className="px-0">
-                        <MokaInputLabel label="URL" labelWidth={47} className="mb-0" value={pageUrl || ''} inputProps={{ plaintext: true, readOnly: true }} />
+                        <MokaInputLabel label="URL" labelWidth={47} className="mb-0" value={temp.pageUrl} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
                 </Form.Row>
                 {/* 페이지명 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel
                         label="페이지명"
-                        value={pageName}
+                        value={temp.pageName}
                         name="pageName"
                         onChange={handleChangeValue}
                         className="mb-0 w-100"
                         placeholder="페이지명을 입력하세요"
-                        isInvalid={pageNameError}
+                        isInvalid={error.pageName}
                         required
                     />
                 </Form.Row>
@@ -524,17 +451,17 @@ const PageEdit = ({ onDelete }) => {
                     <Col xs={8} className="px-0">
                         <MokaInputLabel
                             label="서비스명"
-                            value={pageServiceName}
+                            value={temp.pageServiceName}
                             name="pageServiceName"
                             onChange={handleChangeValue}
                             className="mb-0"
                             placeholder="서비스명을 입력하세요"
-                            isInvalid={pageServiceNameError}
+                            isInvalid={error.pageServiceName}
                         />
                     </Col>
                     <Col xs={4} className="px-0 pl-2">
                         {/* 페이지유형 */}
-                        <MokaInput as="select" className="mb-0" value={pageType} onChange={handleChangeValue} name="pageType" isInvalid={pageTypeError}>
+                        <MokaInput as="select" className="mb-0" value={temp.pageType} onChange={handleChangeValue} name="pageType">
                             {pageTypeRows.map((cd) => (
                                 <option key={cd.dtlCd} value={cd.dtlCd}>
                                     {cd.cdNm}
@@ -548,12 +475,12 @@ const PageEdit = ({ onDelete }) => {
                     <Col xs={8} className="px-0">
                         <MokaInputLabel
                             label="표출명"
-                            value={pageDisplayName}
+                            value={temp.pageDisplayName}
                             name="pageDisplayName"
                             onChange={handleChangeValue}
                             className="mb-0"
                             placeholder="표출명을 입력하세요"
-                            isInvalid={pageDisplayNameError}
+                            isInvalid={error.pageDisplayName}
                         />
                     </Col>
                     <Col xs={4} className="px-0">
@@ -561,11 +488,11 @@ const PageEdit = ({ onDelete }) => {
                             label="순서"
                             labelWidth={43}
                             className="mb-0"
-                            value={pageOrd}
+                            value={temp.pageOrd}
                             name="pageOrd"
                             onChange={handleChangeValue}
                             required
-                            isInvalid={pageOrdError}
+                            isInvalid={error.pageOrd}
                         />
                     </Col>
                 </Form.Row>
@@ -578,17 +505,23 @@ const PageEdit = ({ onDelete }) => {
                             id="moveYn"
                             name="moveYn"
                             label="이동URL"
-                            isInvalid={moveUrlError}
-                            inputProps={{ checked: moveYn === 'Y' }}
+                            inputProps={{ checked: temp.moveYn === 'Y' }}
                             onChange={handleChangeValue}
                         />
                     </Col>
                     <Col xs={8} className="px-0">
-                        <MokaSearchInput className="pl-2" onSearch={() => setMoveModalShow(true)} disabled />
+                        <MokaSearchInput
+                            className="pl-2"
+                            value={temp.moveUrl}
+                            placeholder="이동URL"
+                            onSearch={() => setMoveModalShow(true)}
+                            inputProps={{ readOnly: true }}
+                            disabled={temp.moveYn === 'N'}
+                        />
                     </Col>
                 </Form.Row>
-                {/* 파일저장 */}
-                <Form.Row className="mb-2">
+                {/* 파일저장 => 주석처리 */}
+                {/* <Form.Row className="mb-2">
                     <Col xs={4} className="px-0">
                         <MokaInputLabel
                             as="switch"
@@ -596,20 +529,20 @@ const PageEdit = ({ onDelete }) => {
                             id="fileYn"
                             name="fileYn"
                             label="파일저장"
-                            inputProps={{ checked: fileYn === 'Y' }}
+                            inputProps={{ checked: temp.fileYn === 'Y' }}
                             onChange={handleChangeValue}
                         />
                     </Col>
-                </Form.Row>
+                </Form.Row> */}
                 {/* 키워드 */}
-                <MokaInputLabel className="mb-2" label="키워드" value={kwd} name="kwd" onChange={handleChangeValue} placeholder="키워드를 입력하세요" />
+                <MokaInputLabel className="mb-2" label="키워드" value={temp.kwd} name="kwd" onChange={handleChangeValue} placeholder="키워드를 입력하세요" />
                 {/* 설명 */}
                 <MokaInputLabel
                     className="mb-2"
                     inputClassName="resize-none"
                     as="textarea"
                     label="설명"
-                    value={description}
+                    value={temp.description}
                     name="description"
                     onChange={handleChangeValue}
                     inputProps={{ rows: 10 }}
@@ -624,13 +557,13 @@ const PageEdit = ({ onDelete }) => {
                             파라미터명
                         </>
                     }
-                    value={urlParam}
+                    value={temp.urlParam}
                     name="urlParam"
                     onChange={handleChangeValue}
                 />
             </Form>
 
-            <MovePageListModal show={moveModalShow} onHide={() => setMoveModalShow(false)} />
+            <PageListModal title="이동페이지 검색" show={moveModalShow} onHide={() => setMoveModalShow(false)} onClickSave={handleClickMoveSave} />
         </MokaCard>
     );
 };

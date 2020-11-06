@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { MokaCardEditor } from '@components';
 import { changeLatestDomainId } from '@store/auth/authAction';
 import { changePageBody } from '@store/page/pageAction';
@@ -8,25 +7,28 @@ import { changePageBody } from '@store/page/pageAction';
 const PageEditor = (props) => {
     const { expansion, onExpansion } = props;
     const dispatch = useDispatch();
-    const { pageBody, page, latestDomainId, error, loading, inputTag } = useSelector((store) => ({
-        pageBody: store.page.pageBody,
-        page: store.page.page,
-        latestDomainId: store.auth.latestDomainId,
-        error: store.page.pageError,
-        loading:
-            store.loading['page/GET_PAGE'] ||
-            store.loading['page/POST_PAGE'] ||
-            store.loading['page/PUT_PAGE'] ||
-            store.loading['page/DELETE_PAGE'] ||
-            store.loading['merge/PREVIEW_PAGE'] ||
-            store.loading['merge/W3C_PAGE'],
-        inputTag: store.page.inputTag,
-    }));
+    const { pageBody, page, latestDomainId, invalidList, loading, inputTag } = useSelector(
+        (store) => ({
+            pageBody: store.page.pageBody,
+            page: store.page.page,
+            latestDomainId: store.auth.latestDomainId,
+            invalidList: store.page.invalidList,
+            loading:
+                store.loading['page/GET_PAGE'] ||
+                store.loading['page/POST_PAGE'] ||
+                store.loading['page/PUT_PAGE'] ||
+                store.loading['page/DELETE_PAGE'] ||
+                store.loading['merge/PREVIEW_PAGE'] ||
+                store.loading['merge/W3C_PAGE'],
+            inputTag: store.page.inputTag,
+        }),
+        [shallowEqual],
+    );
 
     // state
     const [defaultValue, setDefaultValue] = useState('');
     const [title, setTitle] = useState('페이지 편집');
-    const [errorObj, setErrorObj] = useState({});
+    const [error, setError] = useState({});
 
     /**
      * 타이틀 변경
@@ -60,34 +62,24 @@ const PageEditor = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, page]);
 
-    // useEffect(() => {
-    //     // 페이지seq가 있을 때 데이터 조회
-    //     if (paramPageSeq) {
-    //         dispatch(getPage({ pageSeq: paramPageSeq }));
-    //     } else {
-    //         dispatch(clearPage());
-    //         dispatch(clearRelationList());
-    //         dispatch(clearHistory());
-    //     }
-    // }, [dispatch, paramPageSeq]);
-
     useEffect(() => {
-        let bodyError = 0;
-        if (error && error.body && Array.isArray(error.body.list)) {
-            error.body.list.forEach((e) => {
-                const { field, reason, extra } = e;
-                if (field === 'pageBody') {
-                    setErrorObj({
-                        error: true,
-                        message: reason,
-                        line: Number(extra),
-                    });
-                    bodyError++;
-                }
-            });
+        let isInvalid = false;
+
+        // invalidList 처리
+        invalidList.forEach((i) => {
+            if (i.field === 'pageBody') {
+                setError({
+                    line: Number(i.extra),
+                    message: i.reason,
+                });
+                isInvalid = isInvalid || true;
+            }
+        });
+
+        if (!isInvalid) {
+            setError({});
         }
-        if (bodyError < 1) setErrorObj({});
-    }, [error]);
+    }, [invalidList]);
 
     /**
      * onBlur
@@ -108,9 +100,7 @@ const PageEditor = (props) => {
             onBlur={handleBlur}
             loading={loading}
             tag={inputTag}
-            error={errorObj.error}
-            errorline={errorObj.line}
-            errorMessage={errorObj.message}
+            error={error}
         />
     );
 };

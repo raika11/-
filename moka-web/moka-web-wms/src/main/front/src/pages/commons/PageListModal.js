@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
-import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
+import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getPageListModal, GET_PAGE_LIST_MODAL } from '@store/page';
 import columnDefs from './PageListModalColums';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
@@ -30,6 +30,10 @@ const propTypes = {
      * 선택된 데이터셋아이디
      */
     selected: PropTypes.number,
+    /**
+     * 전달받은 domainId가 없으면 latestDomainId로 검색한다
+     */
+    domainId: PropTypes.string,
 };
 const defaultProps = {
     title: '페이지 검색',
@@ -39,7 +43,7 @@ const defaultProps = {
  * 페이지 리스트 공통 모달
  */
 const PageListModal = (props) => {
-    const { show, onHide, title, onClickSave, onClickCancle, selected: defaultSelected } = props;
+    const { show, onHide, title, onClickSave, onClickCancle, selected: defaultSelected, domainId } = props;
     const dispatch = useDispatch();
 
     const { latestDomainId, loading } = useSelector((store) => ({
@@ -140,14 +144,14 @@ const PageListModal = (props) => {
         if (show && cnt < 1) {
             handleSearch({
                 ...initialState.search,
-                domainId: latestDomainId,
+                domainId: !domainId ? latestDomainId : domainId,
                 size: MODAL_PAGESIZE_OPTIONS[0],
                 page: 0,
             });
             setCnt(cnt + 1);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [latestDomainId, show, cnt]);
+    }, [latestDomainId, domainId, show, cnt]);
 
     return (
         <MokaModal
@@ -167,9 +171,7 @@ const PageListModal = (props) => {
                 <Form.Row className="mb-2">
                     {/* 검색 조건 */}
                     <Col xs={4} className="p-0 pr-2">
-                        <MokaInputLabel
-                            label="구분"
-                            labelWidth={45}
+                        <MokaInput
                             as="select"
                             className="mb-0"
                             value={search.searchType}
@@ -185,7 +187,7 @@ const PageListModal = (props) => {
                                     {type.name}
                                 </option>
                             ))}
-                        </MokaInputLabel>
+                        </MokaInput>
                     </Col>
                     {/* 키워드 */}
                     <Col xs={8} className="p-0">

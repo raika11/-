@@ -7,7 +7,17 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInput, MokaTable } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import { initialState, getAreaListDepth1, getAreaListDepth2, changeSearchOptionDepth1, changeSearchOptionDepth2, changeArea, getArea } from '@store/area';
+import {
+    initialState,
+    getAreaListDepth1,
+    getAreaListDepth2,
+    clearArea,
+    changeSearchOptionDepth1,
+    changeSearchOptionDepth2,
+    changeSelectedDepth,
+    getAreaDepth1,
+    GET_AREA_LIST_DEPTH1,
+} from '@store/area';
 import Depth2 from './AreaAgGridDepth2';
 import columnDefs from './AreaAgGridColums';
 
@@ -18,11 +28,12 @@ const AreaAgGrid1D = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { areaSeq } = useParams();
-    const { domainList, latestDomainId, search: storeSearch, list } = useSelector((store) => ({
+    const { domainList, latestDomainId, search: storeSearch, list, loading } = useSelector((store) => ({
         domainList: store.auth.domainList,
         latestDomainId: store.auth.latestDomainId,
         search: store.area.depth1.search,
         list: store.area.depth1.list,
+        loading: store.loading[GET_AREA_LIST_DEPTH1],
     }));
 
     // state
@@ -58,7 +69,9 @@ const AreaAgGrid1D = ({ match }) => {
                     }),
                 ),
             );
-            dispatch(getArea({ areaSeq }));
+            dispatch(getAreaDepth1({ areaSeq }));
+        } else {
+            dispatch(clearArea(1));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [areaSeq, latestDomainId]);
@@ -68,18 +81,14 @@ const AreaAgGrid1D = ({ match }) => {
      */
     const handleRowClicked = (data) => {
         history.push(`/area/${data.areaSeq}`);
+        dispatch(changeSelectedDepth(1));
     };
 
     /**
      * 추가 버튼 클릭
      */
     const handleClickAdd = () => {
-        dispatch(
-            changeArea({
-                ...initialState.area,
-                depth: 1,
-            }),
-        );
+        dispatch(changeSelectedDepth(1));
         history.push('/area');
     };
 
@@ -113,6 +122,7 @@ const AreaAgGrid1D = ({ match }) => {
                 <MokaTable
                     agGridHeight={738}
                     columnDefs={columnDefs}
+                    loading={loading}
                     rowData={list}
                     selected={areaSeq}
                     header={false}
@@ -122,7 +132,7 @@ const AreaAgGrid1D = ({ match }) => {
                     onRowClicked={handleRowClicked}
                 />
             </MokaCard>
-            <Route path={[`${match.url}/:areaSeq`, match.url]} strict component={Depth2} />
+            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth2 {...props} parentSeq={areaSeq} baseUrl={`/area/${areaSeq}`} />} />
         </React.Fragment>
     );
 };

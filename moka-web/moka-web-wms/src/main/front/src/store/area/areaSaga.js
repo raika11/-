@@ -15,14 +15,16 @@ const getAreaListDepth3 = callApiAfterActions(act.GET_AREA_LIST_DEPTH3, api.getA
 /**
  * 편집영역 조회
  */
-const getArea = createRequestSaga(act.GET_AREA, api.getArea);
+const getAreaDepth1 = createRequestSaga(act.GET_AREA_DEPTH1, api.getArea);
+const getAreaDepth2 = createRequestSaga(act.GET_AREA_DEPTH2, api.getArea);
+const getAreaDepth3 = createRequestSaga(act.GET_AREA_DEPTH3, api.getArea);
 
 /**
  * 저장/수정
  * @param {array} param0.payload.actions 저장 전 액션리스트
  * @param {func} param0.payload.callback 콜백
  */
-export function* saveArea({ payload: { actions, callback } }) {
+export function* saveArea({ payload: { actions, callback, depth } }) {
     let ACTION = act.SAVE_AREA;
     let response,
         callbackData = {};
@@ -41,7 +43,7 @@ export function* saveArea({ payload: { actions, callback } }) {
         }
 
         // 편집영역 데이터
-        const area = yield select((store) => store.area.area);
+        const area = yield select((store) => store.area[`depth${depth}`].area);
 
         // 등록/수정 분기
         if (area.areaSeq) {
@@ -54,16 +56,23 @@ export function* saveArea({ payload: { actions, callback } }) {
 
         if (response.data.header.success) {
             yield put({
-                type: act.GET_AREA_SUCCESS,
-                payload: response.data,
+                type: act.CHANGE_AREA,
+                payload: {
+                    depth,
+                    area: response.data.body,
+                },
             });
-
-            // 목록 다시 검색
-            // yield put({ type: act.GET_AREA_LIST });
+            if (depth === 1) {
+                yield put({ type: act.GET_AREA_LIST_DEPTH1 });
+            } else if (depth === 2) {
+                yield put({ type: act.GET_AREA_LIST_DEPTH2 });
+            } else {
+                yield put({ type: act.GET_AREA_LIST_DEPTH3 });
+            }
         } else {
             yield put({
-                type: act.GET_AREA_FAILURE,
-                payload: response.data,
+                type: act.CHANGE_INVALID_LIST,
+                payload: response.data.body.list,
             });
         }
     } catch (e) {
@@ -120,6 +129,8 @@ export default function* saga() {
     yield takeLatest(act.GET_AREA_LIST_DEPTH1, getAreaListDepth1);
     yield takeLatest(act.GET_AREA_LIST_DEPTH2, getAreaListDepth2);
     yield takeLatest(act.GET_AREA_LIST_DEPTH3, getAreaListDepth3);
-    yield takeLatest(act.GET_AREA, getArea);
+    yield takeLatest(act.GET_AREA_DEPTH1, getAreaDepth1);
+    yield takeLatest(act.GET_AREA_DEPTH2, getAreaDepth2);
+    yield takeLatest(act.GET_AREA_DEPTH3, getAreaDepth3);
     yield takeLatest(act.SAVE_AREA, saveArea);
 }

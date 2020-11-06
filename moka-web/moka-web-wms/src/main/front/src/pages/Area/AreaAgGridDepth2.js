@@ -6,39 +6,41 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaTable } from '@components';
-import { initialState, changeArea, getAreaListDepth3, changeSearchOptionDepth3 } from '@store/area';
+import { initialState, changeSelectedDepth, clearArea, getAreaListDepth3, changeSearchOptionDepth3, GET_AREA_LIST_DEPTH2 } from '@store/area';
 import Depth3 from './AreaAgGridDepth3';
+import columnDefs from './AreaAgGridColums';
 
 /**
  * 편집영역 > 두번째 리스트
  */
-const AreaAgGridDepth2 = ({ match }) => {
+const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { areaSeq } = useParams();
-    const { list, latestDomainId } = useSelector((store) => ({
+    const { list, latestDomainId, loading } = useSelector((store) => ({
         list: store.area.depth2.list,
-        latestDomainId: store.authlatestDomainId,
+        latestDomainId: store.auth.latestDomainId,
+        loading: store.loading[GET_AREA_LIST_DEPTH2],
     }));
 
     /**
      * 목록에서 Row클릭
      */
     const handleRowClicked = (data) => {
-        history.push(`${match.url}/${data.areaSeq}`);
+        history.push(`${baseUrl}/${data.areaSeq}`);
+        dispatch(changeSelectedDepth(2));
     };
 
     /**
      * 추가 버튼 클릭
      */
     const handleClickAdd = () => {
-        dispatch(
-            changeArea({
-                ...initialState.area,
-                depth: 2,
-            }),
-        );
-        history.push('/area');
+        dispatch(changeSelectedDepth(2));
+        if (parentSeq) {
+            history.push(baseUrl);
+        } else {
+            history.push('/area');
+        }
     };
 
     useEffect(() => {
@@ -53,6 +55,8 @@ const AreaAgGridDepth2 = ({ match }) => {
                     }),
                 ),
             );
+        } else {
+            dispatch(clearArea(2));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [areaSeq, latestDomainId]);
@@ -71,12 +75,14 @@ const AreaAgGridDepth2 = ({ match }) => {
                 <MokaTable
                     agGridHeight={738}
                     rowData={list}
+                    columnDefs={columnDefs}
                     selected={areaSeq}
                     header={false}
                     paging={false}
                     dragging={false}
                     onRowNodeId={(data) => data.areaSeq}
                     onRowClicked={handleRowClicked}
+                    loading={loading}
                 />
             </MokaCard>
 

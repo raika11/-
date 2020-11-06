@@ -144,10 +144,12 @@ const MokaEditorCore = forwardRef((props, ref) => {
                 editor.insertText(str);
 
                 // 태그 넣은 후 개행 생성
-                const c = editorInstance.getSelection();
-                const moveRange = new monaco.Range(c.startLineNumber + 1, str.length, c.endLineNumber + 1, str.length);
-                editorInstance.setSelection(moveRange);
-                editorInstance.focus();
+                if (monaco && editorInstance) {
+                    const c = editorInstance.getSelection();
+                    const moveRange = new monaco.Range(c.startLineNumber + 1, str.length, c.endLineNumber + 1, str.length);
+                    editorInstance.setSelection(moveRange);
+                    editorInstance.focus();
+                }
             }
         }
     }, [tag]);

@@ -17,7 +17,7 @@ export const changeSearchOptionDepth3 = createAction(CHANGE_SEARCH_OPTION_DEPTH3
 export const CLEAR_STORE = 'area/CLEAR_STORE';
 export const CLEAR_AREA = 'area/CLEAR_AREA';
 export const clearStore = createAction(CLEAR_STORE);
-export const clearArea = createAction(CLEAR_AREA);
+export const clearArea = createAction(CLEAR_AREA, (depth) => depth);
 
 /**
  * 데이터 조회
@@ -25,22 +25,29 @@ export const clearArea = createAction(CLEAR_AREA);
 export const [GET_AREA_LIST_DEPTH1, GET_AREA_LIST_DEPTH1_SUCCESS, GET_AREA_LIST_DEPTH1_FAILURE] = createRequestActionTypes('area/GET_AREA_LIST_DEPTH1');
 export const [GET_AREA_LIST_DEPTH2, GET_AREA_LIST_DEPTH2_SUCCESS, GET_AREA_LIST_DEPTH2_FAILURE] = createRequestActionTypes('area/GET_AREA_LIST_DEPTH2');
 export const [GET_AREA_LIST_DEPTH3, GET_AREA_LIST_DEPTH3_SUCCESS, GET_AREA_LIST_DEPTH3_FAILURE] = createRequestActionTypes('area/GET_AREA_LIST_DEPTH3');
-export const [GET_AREA, GET_AREA_SUCCESS, GET_AREA_FAILURE] = createRequestActionTypes('area/GET_AREA');
 export const getAreaListDepth1 = createAction(GET_AREA_LIST_DEPTH1, (...actions) => actions);
 export const getAreaListDepth2 = createAction(GET_AREA_LIST_DEPTH2, (...actions) => actions);
 export const getAreaListDepth3 = createAction(GET_AREA_LIST_DEPTH3, (...actions) => actions);
-export const getArea = createAction(GET_AREA, ({ areaSeq }) => ({ areaSeq }));
+export const [GET_AREA_DEPTH1, GET_AREA_DEPTH1_SUCCESS, GET_AREA_DEPTH1_FAILURE] = createRequestActionTypes('area/GET_AREA_DEPTH1');
+export const [GET_AREA_DEPTH2, GET_AREA_DEPTH2_SUCCESS, GET_AREA_DEPTH2_FAILURE] = createRequestActionTypes('area/GET_AREA_DEPTH2');
+export const [GET_AREA_DEPTH3, GET_AREA_DEPTH3_SUCCESS, GET_AREA_DEPTH3_FAILURE] = createRequestActionTypes('area/GET_AREA_DEPTH3');
+export const getAreaDepth1 = createAction(GET_AREA_DEPTH1, ({ areaSeq }) => ({ areaSeq }));
+export const getAreaDepth2 = createAction(GET_AREA_DEPTH2, ({ areaSeq }) => ({ areaSeq }));
+export const getAreaDepth3 = createAction(GET_AREA_DEPTH3, ({ areaSeq }) => ({ areaSeq }));
+export const GET_AREA_FAILURE = 'area/GET_AREA_FAILURE';
 
 /**
  * 데이터 변경
  */
 export const CHANGE_AREA = 'area/CHANGE_AREA';
 export const CHANGE_INVALID_LIST = 'area/CHANGE_INVALID_LIST';
-export const changeArea = createAction(CHANGE_AREA, (area) => area);
+export const changeArea = createAction(CHANGE_AREA, ({ area, depth }) => ({ area, depth }));
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
+export const CHANGE_SELECTED_DEPTH = 'area/CHANGE_SELECTED_DEPTH';
+export const changeSelectedDepth = createAction(CHANGE_SELECTED_DEPTH, (depth) => depth);
 
 /**
  * 저장
  */
-export const SAVE_AREA = 'area/SAVE_AREA';
-export const saveArea = createAction(SAVE_AREA, ({ actions, callback }) => ({ actions, callback }));
+export const [SAVE_AREA, SAVE_AREA_SUCCESS] = createRequestActionTypes('area/SAVE_AREA');
+export const saveArea = createAction(SAVE_AREA, ({ actions, callback, depth }) => ({ actions, callback, depth }));

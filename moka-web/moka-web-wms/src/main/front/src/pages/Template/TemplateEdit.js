@@ -9,8 +9,8 @@ import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
-import { changeTemplate, saveTemplate, changeInvalidList, copyTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
-import { notification } from '@utils/toastUtil';
+import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, copyTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
+import toast from '@utils/toastUtil';
 import { DefaultInputModal } from '@pages/commons';
 import AddComponentModal from './modals/AddComponentModal';
 
@@ -113,10 +113,46 @@ const TemplateEdit = ({ onDelete }) => {
                 actions: [changeTemplate(tmp)],
                 callback: ({ header, body }) => {
                     if (header.success) {
-                        notification('success', header.message);
+                        toast.success(header.message);
                         history.push(`/template/${body.templateSeq}`);
                     } else {
-                        notification('warning', header.message);
+                        toast.warning(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
+     * 관련아이템 체크
+     * @param {object} temp template
+     */
+    const checkRelationList = (temp) => {
+        dispatch(
+            hasRelationList({
+                templateSeq: temp.templateSeq,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 관련 아이템 없음
+                        if (!body) submitTemplate(temp);
+                        // 관련 아이템 있음
+                        else {
+                            toast.confirm(
+                                <React.Fragment>
+                                    다른 곳에서 사용 중입니다.
+                                    <br />
+                                    변경 시 전체 수정 반영됩니다.
+                                    <br />
+                                    수정하시겠습니까?
+                                </React.Fragment>,
+                                () => {
+                                    submitTemplate(temp);
+                                },
+                                () => {},
+                            );
+                        }
+                    } else {
+                        toast.error(header.message);
                     }
                 },
             }),
@@ -147,8 +183,10 @@ const TemplateEdit = ({ onDelete }) => {
             if (!template.templateSeq || template.templateSeq === '') {
                 // 새 템플릿 저장 시에 도메인ID 셋팅
                 temp.domain = { domainId: latestDomainId };
+                submitTemplate(temp);
+            } else {
+                checkRelationList(temp);
             }
-            submitTemplate(temp);
         }
     };
 
@@ -182,10 +220,10 @@ const TemplateEdit = ({ onDelete }) => {
                     callback: ({ header, body }) => {
                         if (header.success) {
                             handleHideCopyModal();
-                            notification('success', header.message);
+                            toast.success(header.message);
                             history.push(`/template/${body.templateSeq}`);
                         } else {
-                            notification('warning', header.message);
+                            toast.warning(header.message);
                         }
                     },
                 }),

@@ -317,6 +317,16 @@ const LookupTemplateList = (props) => {
                         onChangeSearchOption={handleChangeSearchOption}
                         onClick={handleRowClicked}
                         selected={selected.templateSeq}
+                        menus={[
+                            {
+                                title: '태그삽입',
+                                onClick: handleClickAppend,
+                            },
+                            {
+                                title: '새창열기',
+                                onClick: handleClickLink,
+                            },
+                        ]}
                     />
                 )}
             </MokaCard>

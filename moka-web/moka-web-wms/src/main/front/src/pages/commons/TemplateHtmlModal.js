@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModalEditor } from '@components';
-import { getTemplate, changeTemplateBody, saveTemplate, clearTemplate, GET_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
-import { notification } from '@utils/toastUtil';
+import { getTemplate, changeTemplateBody, saveTemplate, clearTemplate, hasRelationList, GET_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
+import toast from '@utils/toastUtil';
 
 /**
  * 템플릿 TEMS 소스 수정 모달
@@ -33,18 +33,53 @@ const TemplateHtmlModal = (props) => {
     };
 
     /**
-     * 저장
+     * 템플릿 저장
      */
-    const handleClickSave = () => {
+    const submitTemplate = () => {
         dispatch(
             saveTemplate({
                 callback: ({ header }) => {
                     if (header.success) {
-                        notification('success', header.message);
+                        toast.success(header.message);
                     } else {
-                        notification('warning', header.message);
+                        toast.warning(header.message);
                     }
                     handleHide();
+                },
+            }),
+        );
+    };
+
+    /**
+     * 관련아이템 체크
+     */
+    const handleClickSave = () => {
+        dispatch(
+            hasRelationList({
+                templateSeq: template.templateSeq,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 관련 아이템 없음
+                        if (!body) submitTemplate();
+                        // 관련 아이템 있음
+                        else {
+                            toast.confirm(
+                                <React.Fragment>
+                                    다른 곳에서 사용 중입니다.
+                                    <br />
+                                    변경 시 전체 수정 반영됩니다.
+                                    <br />
+                                    수정하시겠습니까?
+                                </React.Fragment>,
+                                () => {
+                                    submitTemplate();
+                                },
+                                () => {},
+                            );
+                        }
+                    } else {
+                        toast.warning(header.message);
+                    }
                 },
             }),
         );

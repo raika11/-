@@ -10,15 +10,7 @@ import { MokaSearchInput, MokaInput } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { getComponentList, changeSearchOption, initialState } from '@store/component';
 import { getTpZone } from '@store/codeMgt';
-
-const defaultSearchType = [
-    { id: 'all', name: '전체' },
-    { id: 'componentSeq', name: '컴포넌트ID' },
-    { id: 'componentName', name: '컴포넌트명' },
-    { id: 'templateSeq', name: '템플릿ID' },
-    { id: 'templateName', name: '템플릿명' },
-    { id: 'templateBody', name: 'TEMS 소스' },
-];
+import { defaultComponentSearchType } from '@pages/commons';
 
 /**
  * 컴포넌트 검색 컴포넌트
@@ -117,7 +109,7 @@ const ComponentSearch = () => {
             </Form.Row>
             <Form.Group as={Row} className="mb-2">
                 {/* 검색조건 */}
-                <Col xs={5} className="p-0 pr-2">
+                <Col xs={4} className="p-0 pr-2">
                     <MokaInput
                         as="select"
                         value={search.searchType || 'all'}
@@ -128,7 +120,7 @@ const ComponentSearch = () => {
                             });
                         }}
                     >
-                        {defaultSearchType.map((type) => (
+                        {defaultComponentSearchType.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
                             </option>
@@ -136,7 +128,7 @@ const ComponentSearch = () => {
                     </MokaInput>
                 </Col>
                 {/* 키워드 */}
-                <Col xs={7} className="p-0">
+                <Col xs={8} className="p-0">
                     <MokaSearchInput
                         value={search.keyword}
                         onChange={(e) => {

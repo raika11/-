@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { ITEM_PG, ITEM_CT, ITEM_SK, ITEM_CP } from '@/constants';
-import { MokaCard, MokaInput, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
+import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { getComponentLookupList, changeLookupSearchOption, initialState, clearLookup, GET_COMPONENT_LOOKUP_LIST } from '@store/component';
 import { getTpZone } from '@store/codeMgt';
 import columnDefs from './LookupComponentListColums';
@@ -17,7 +17,7 @@ const propTypes = {
     /**
      * seq의 타입
      */
-    seqType: PropTypes.oneOf([ITEM_SK, ITEM_PG]),
+    seqType: PropTypes.oneOf([ITEM_CT, ITEM_SK, ITEM_PG]),
     /**
      * seq
      */

@@ -7,6 +7,7 @@ export default [
         field: 'seq',
         width: 70,
         tooltipField: 'seq',
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '작업일시',

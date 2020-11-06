@@ -18,7 +18,7 @@ const PageEdit = React.lazy(() => import('./PageEdit'));
 
 // relations
 const LookupPageList = React.lazy(() => import('@pages/commons/LookupPageList'));
-const PageChildSkinList = React.lazy(() => import('./relations/PageChildSkinList'));
+const LookupSkinList = React.lazy(() => import('@pages/commons/LookupSkinList'));
 const LookupContainerList = React.lazy(() => import('@pages/commons/LookupContainerList'));
 const LookupComponentList = React.lazy(() => import('@/pages/commons/LookupComponentList'));
 const LookupTemplateList = React.lazy(() => import('@/pages/commons/LookupTemplateList'));
@@ -242,19 +242,13 @@ const Page = () => {
                                         <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <PageChildSkinList />
+                                        <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
-                                        <PageChildSkinList />
+                                        <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq}  onAppend={handleAppendTag}/>
-                                    </Suspense>,
-                                    <Suspense>
-                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq}  onAppend={handleAppendTag}/>
-                                    </Suspense>,
-                                    <Suspense>
-                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
+                                        <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
                                         <PageChildAdList />

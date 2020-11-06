@@ -203,13 +203,13 @@ const Container = () => {
                                         <RelationInSkinList show={activeTabIdx === 2} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupContainerList show={activeTabIdx === 3} relSeqType={ITEM_CT} seq={container.containerSeq} />
+                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_CT} seq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupComponentList show={activeTabIdx === 4} relSeqType={ITEM_CT} seq={container.containerSeq} />
+                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_CT} seq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupTemplateList show={activeTabIdx === 5} relSeqType={ITEM_CT} seq={container.containerSeq} />
+                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_CT} seq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
                                         <HistoryList show={activeTabIdx === 6} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickLoad} />

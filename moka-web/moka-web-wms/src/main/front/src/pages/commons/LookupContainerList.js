@@ -16,7 +16,7 @@ const propTypes = {
     /**
      * seq의 타입
      */
-    seqType: PropTypes.oneOf([ITEM_SK, ITEM_PG]),
+    seqType: PropTypes.oneOf([ITEM_CT, ITEM_SK, ITEM_PG]),
     /**
      * seq
      */
@@ -131,7 +131,7 @@ const LookupContainerList = (props) => {
                     changeLookupSearchOption({
                         ...initialState.lookup.search,
                         keyword: seq,
-                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_SK ? 'skinSeq' : '',
+                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_SK ? 'skinSeq' : seqType === ITEM_CT ? 'containerSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -157,6 +157,7 @@ const LookupContainerList = (props) => {
                                     });
                                 }}
                             >
+                                {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
                                 {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
                                 {seqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
                                 {defaultContainerSearchType.map((type) => (

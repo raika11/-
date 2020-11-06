@@ -126,7 +126,6 @@ const MokaInputLabel = forwardRef((props, ref) => {
                     id={id}
                     name={name}
                     value={value}
-                    defaultValue={defaultValue}
                     onChange={onChange}
                     className={inputClassName}
                     isInvalid={isInvalid}
@@ -139,12 +138,12 @@ const MokaInputLabel = forwardRef((props, ref) => {
                 </MokaInput>
             )}
             {as !== 'none' && uncontrolled && (
-                <MokaUncontrolledInput
+                <MokaInput
                     ref={ref}
                     as={as}
                     id={id}
                     name={name}
-                    defaultValue={defaultValue}
+                    defaultValue={value}
                     onChange={onChange}
                     className={inputClassName}
                     isInvalid={isInvalid}
@@ -152,10 +151,10 @@ const MokaInputLabel = forwardRef((props, ref) => {
                     placeholder={placeholder}
                     type={type}
                     inputProps={inputProps}
-                    required={required}
+                    uncontrolled
                 >
                     {children}
-                </MokaUncontrolledInput>
+                </MokaInput>
             )}
         </Form.Group>
     );

@@ -118,7 +118,7 @@ const RelationInPageList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="페이지 검색">
+        <MokaCard titleClassName="mb-0" title="관련 페이지">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-2">

@@ -118,8 +118,6 @@ const LookupSkinList = (props) => {
                     }),
                 ),
             );
-        } else {
-            dispatch(clearLookup());
         }
     }, [show, latestDomainId, dispatch, seq, seqType]);
 

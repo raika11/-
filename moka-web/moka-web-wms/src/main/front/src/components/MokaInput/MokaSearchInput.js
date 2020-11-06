@@ -41,7 +41,7 @@ const propTypes = {
      */
     isInvalid: PropTypes.bool,
     /**
-     * MokaInput의 disabled
+     * MokaInput과 button의 disabled
      */
     disabled: PropTypes.bool,
     /**
@@ -125,7 +125,7 @@ const MokaSearchInput = (props) => {
                 placeholder={placeholder}
                 mask={mask}
             />
-            <Button variant={variant} className={buttonClassName} style={{ minWidth: 53 }} onClick={onSearch}>
+            <Button variant={variant} className={buttonClassName} style={{ minWidth: 53 }} onClick={onSearch} disabled={disabled}>
                 {searchText}
             </Button>
         </Form.Group>

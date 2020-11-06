@@ -136,8 +136,6 @@ const LookupComponentList = (props) => {
                     }),
                 ),
             );
-        } else {
-            dispatch(clearLookup());
         }
     }, [show, latestDomainId, dispatch, seq, seqType]);
 

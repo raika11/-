@@ -179,8 +179,6 @@ const LookupTemplateList = (props) => {
                     }),
                 ),
             );
-        } else {
-            dispatch(clearLookup());
         }
     }, [show, latestDomainId, dispatch, seq, seqType]);
 

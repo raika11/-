@@ -109,7 +109,7 @@ const RelationInSkinList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="기사타입 검색">
+        <MokaCard titleClassName="mb-0" title="관련 기사타입">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-2">

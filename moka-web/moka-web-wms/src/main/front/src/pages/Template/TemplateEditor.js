@@ -67,17 +67,15 @@ const TemplateEditor = (props) => {
         let isInvalid = false;
 
         // invalidList 처리
-        if (invalidList.length > 0) {
-            invalidList.forEach((i) => {
-                if (i.field === 'templateBody') {
-                    setError({
-                        line: Number(i.extra),
-                        message: i.reason,
-                    });
-                    isInvalid = isInvalid || true;
-                }
-            });
-        }
+        invalidList.forEach((i) => {
+            if (i.field === 'templateBody') {
+                setError({
+                    line: Number(i.extra),
+                    message: i.reason,
+                });
+                isInvalid = isInvalid || true;
+            }
+        });
 
         if (!isInvalid) {
             setError({});

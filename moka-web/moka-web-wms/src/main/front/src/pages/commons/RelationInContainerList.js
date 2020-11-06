@@ -109,7 +109,7 @@ const RelationInContainerList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="컨테이너 검색">
+        <MokaCard titleClassName="mb-0" title="관련 컨테이너">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-2">

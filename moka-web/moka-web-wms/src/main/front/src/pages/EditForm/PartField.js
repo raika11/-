@@ -4,10 +4,7 @@ import InputMask from 'react-input-mask';
 import PropTypes from 'prop-types';
 
 import Form from 'react-bootstrap/Form';
-import { MokaImageInput } from '@components';
-import MokaCard from '../MokaCard';
-import { Button, Card, Col, Row } from 'react-bootstrap';
-import { MokaInputLabel } from '../MokaInput';
+import { MokaImageInput, MokaInputLabel } from '@components';
 
 const propTypes = {
     field: PropTypes.any,
@@ -15,7 +12,7 @@ const propTypes = {
 /**
  * 기본 input
  */
-const FormField = (props) => {
+const PartField = (props) => {
     const { field, id, name } = props;
 
     const [fieldValue, setFieldValue] = useState('');
@@ -70,6 +67,6 @@ const FormField = (props) => {
     }
 };
 
-FormField.prototype = propTypes;
+PartField.prototype = propTypes;
 
-export default FormField;
+export default PartField;

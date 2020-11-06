@@ -5,11 +5,8 @@ import InputMask from 'react-input-mask';
 import PropTypes from 'prop-types';
 
 import Form from 'react-bootstrap/Form';
-import { MokaImageInput } from '@components';
-import MokaCard from '../MokaCard';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { MokaInputLabel } from '../MokaInput';
-import FormField from './FormField';
+import PartField from './PartField';
 import { useDispatch } from 'react-redux';
 import toast from '@/utils/toastUtil';
 import { saveEditForm, changeEditForm } from '@/store/editForm';
@@ -21,7 +18,7 @@ const propTypes = {
 /**
  * 기본 input
  */
-const FormPart = (props) => {
+const PartEdit = (props) => {
     const { part, channelId } = props;
     const dispatch = useDispatch();
 
@@ -57,7 +54,7 @@ const FormPart = (props) => {
                 {part.fieldGroups.map((fieldGroup) => (
                     <Form key={'F' + fieldGroup.group}>
                         {fieldGroup.fields.map((field, idx) => (
-                            <FormField field={field} key={`${field.group}_${idx}`} id={`${field.group}_${idx}`} name={`${field.group}_${idx}`}></FormField>
+                            <PartField field={field} key={`${field.group}_${idx}`} id={`${field.group}_${idx}`} name={`${field.group}_${idx}`}></PartField>
                         ))}
                     </Form>
                 ))}
@@ -71,6 +68,6 @@ const FormPart = (props) => {
     );
 };
 
-FormPart.prototype = propTypes;
+PartEdit.prototype = propTypes;
 
-export default FormPart;
+export default PartEdit;

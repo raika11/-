@@ -11,6 +11,8 @@ import { notification } from '@utils/toastUtil';
 import { clearEditForm, getEditForm, saveEditForm, changeEditForm, duplicateCheck, changeInvalidList } from '@store/editForm';
 import { getApi, getLang } from '@store/codeMgt';
 import { MokaInput, MokaInputLabel } from '@components';
+import EditFormPart from './PartList';
+import PartList from './PartList';
 
 /**
  * 편집폼 상세/수정/등록
@@ -39,8 +41,6 @@ const EditFormEdit = ({ history, onDelete }) => {
     const { editForm, langRows, apiRows, invalidList } = useSelector(
         (store) => ({
             editForm: store.editForm.editForm,
-            langRows: store.codeMgt.langRows,
-            apiRows: store.codeMgt.apiRows,
             invalidList: store.editForm.invalidList,
         }),
         shallowEqual,
@@ -396,6 +396,7 @@ const EditFormEdit = ({ history, onDelete }) => {
                     )}
                 </Form.Group>
             </Form>
+            <PartList formData={editForm}></PartList>
         </div>
     );
 };

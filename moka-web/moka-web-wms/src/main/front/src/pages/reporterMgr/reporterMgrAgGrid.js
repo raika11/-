@@ -1,15 +1,14 @@
-/*
 import React, { useCallback, useEffect, useState } from 'react';
 import { MokaTable } from '@components';
 import { columnDefs } from '@pages/reporterMgr/reporterMgrAgGridColumns';
 import { useHistory } from 'react-router-dom';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {changeSearchOption, GET_GROUP_LIST, getGroupList, initialState} from '@store/reporterMgr';
+import {changeSearchOption, GET_GROUP_LIST, getGroupList, initialState} from '@store/group';
 
 /**
  * group AgGrid 목록
  */
-/*
+
 const GroupAgGrid = (props) => {
     const { onDelete } = props;
     const history = useHistory();
@@ -31,7 +30,7 @@ const GroupAgGrid = (props) => {
     /**
      * 테이블에서 검색옵션 변경
      */
-/*
+
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
             let temp = { ...search, [key]: value };
@@ -68,7 +67,7 @@ const GroupAgGrid = (props) => {
     /**
      * 목록에서 Row클릭
      */
-/*
+
     const handleRowClicked = useCallback((list) =>{
         //console.log("list::" + this.list.id);
         history.push(`/group/${list.id}`);
@@ -94,4 +93,3 @@ const GroupAgGrid = (props) => {
 };
 
 export default GroupAgGrid;
-*/

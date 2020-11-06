@@ -203,13 +203,13 @@ const Container = () => {
                                         <RelationInSkinList show={activeTabIdx === 2} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupContainerList show={activeTabIdx === 3} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
+                                        <LookupContainerList show={activeTabIdx === 3} relSeqType={ITEM_CT} seq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupComponentList show={activeTabIdx === 4} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
+                                        <LookupComponentList show={activeTabIdx === 4} relSeqType={ITEM_CT} seq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupTemplateList show={activeTabIdx === 5} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
+                                        <LookupTemplateList show={activeTabIdx === 5} relSeqType={ITEM_CT} seq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
                                         <HistoryList show={activeTabIdx === 6} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickLoad} />
@@ -219,11 +219,11 @@ const Container = () => {
                                 tabNavPosition="right"
                                 tabNavs={[
                                     { title: '컨테이너 정보', text: 'Info' },
-                                    { title: '페이지 검색', icon: <MokaIcon iconName="fal-money-check" /> },
-                                    { title: '기사타입 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
-                                    { title: '컨테이너 검색', icon: <MokaIcon iconName="fal-calculator" /> },
-                                    { title: '컴포넌트 검색', icon: <MokaIcon iconName="fal-ballot" /> },
-                                    { title: '템플릿 검색', icon: <MokaIcon iconName="fal-newspaper" /> },
+                                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
+                                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
+                                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
+                                    { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },
                                     { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
                                 ]}
                             />

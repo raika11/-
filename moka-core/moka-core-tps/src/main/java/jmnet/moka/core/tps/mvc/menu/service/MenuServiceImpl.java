@@ -311,7 +311,9 @@ public class MenuServiceImpl implements MenuService {
 
         return menuList
                 .stream()
-                .filter(menu -> McpString.isNotEmpty(menu.getMenuUrl()))
+                .filter(menu -> McpString.isNotEmpty(menu.getMenuUrl()) && !menu
+                        .getMenuUrl()
+                        .equals("/"))
                 .map(menu -> {
                     return menu
                             .getMenuUrl()

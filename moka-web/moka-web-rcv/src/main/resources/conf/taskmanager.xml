@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<TaskManager>
+  <TaskGroup name="Jam XML Importer"
+    envFile="classpath:conf/taskgroup1.xml"/>
+  <TaskGroup name="CP XML Importer"
+    envFile="classpath:conf/taskgroup2.xml"/>
+  <TaskGroup name="CP XML 조판 Importer"
+    envFile="classpath:conf/taskgroup3.xml"/>
+  <TaskGroup name="Bulk"
+    envFile="classpath:conf/taskgroup4.xml"/>
+  <TaskGroup name="Receive->Article"
+    envFile="classpath:conf/taskgroup5.xml"/>
+
+<!--
+  <ReceiveTask name="ReceiveTask" queuePath="/mnd/task/receive"
+    storeData="true" actionLogger="mndActionLogger" taskName="RELAY" sync="false">
+
+    <TaskGroup name="ArticleTaskGroup-KR-Serial" cattr="A" ctype="KR">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.ArticleDbTask"
+        after="ContentPurge" name="ArticleDbTaskKrSerial" count="1"
+        queuePath="/mnd/task/articleDbTaskKrSerial" storeData="true"
+        actionLogger="mndActionLogger" taskName="DB_SAVE" rolling="false" retry="5"
+        sync="true">
+        <Include><![CDATA[ { dattr @@ [0,2,8] } ]]></Include>
+        <Exclude><![CDATA[ datetime << $date{yyyyMMdd\\-1M} ]]></Exclude>
+      </Task>
+    </TaskGroup>
+
+    <TaskGroup name="ArticleTaskGroup-EN-Serial" cattr="A" ctype="EN">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.ArticleDbTask"
+        after="ContentPurge" name="ArticleDbTaskEnSerial" count="1"
+        queuePath="/mnd/task/articleDbTaskEnSerial" storeData="true"
+        actionLogger="mndActionLogger" taskName="DB_SAVE" rolling="false" retry="5"
+        sync="true">
+        <Include>dattr == "0"</Include>
+        <Exclude><![CDATA[ datetime << $date{yyyyMMdd\\-1M} ]]></Exclude>
+      </Task>
+    </TaskGroup>
+
+    <TaskGroup name="ArticleTaskGroup-Serial" cattr="F">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.ArticleDbTask"
+        after="ContentPurge" name="ArticleDbTaskSerial" count="1"
+        queuePath="/mnd/task/articleDbTaskSerial" storeData="true"
+        actionLogger="mndActionLogger" taskName="DB_SAVE" rolling="false" retry="5"
+        sync="true">
+        <Include><![CDATA[ {ctype == "KH"} & {dattr == "0"} ]]></Include>
+        <Exclude><![CDATA[ datetime << $date{yyyyMMdd\\-1M} ]]></Exclude>
+      </Task>
+    </TaskGroup>
+
+    <TaskGroup name="XarticleTaskGroup-KR-Serial" cattr="X">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.ArticleDbTask"
+        after="ContentPurge" name="XarticleDbTaskKrSerial" count="1"
+        queuePath="/mnd/task/xarticleDbTaskKrSerial" storeData="true"
+        actionLogger="mndActionLogger" taskName="DB_SAVE" rolling="false" retry="5"
+        sync="true">
+        <Include>ctype == "KR"</Include>
+        <Exclude><![CDATA[ datetime << $date{yyyyMMdd\\-1M} ]]></Exclude>
+      </Task>
+    </TaskGroup>
+
+    <TaskGroup name="PhotoTaskGroup-Serial" cattr="P">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.PhotoDbTask"
+        after="ContentPurge" name="PhotoDbTaskYhSerial" count="1"
+        queuePath="/mnd/task/photoDbTaskYhSerial" storeData="true"
+        actionLogger="mndActionLogger" taskName="DB_SAVE" rolling="false" retry="5"
+        sync="true">
+        <Include><![CDATA[ {ctype == "YH"} & {lang == "KR"} & { dattr @@ [0,1,2,3] } ]]></Include>
+        <Exclude><![CDATA[ datetime << $date{yyyyMMdd\\-1M} ]]></Exclude>
+      </Task>
+    </TaskGroup>
+
+    <TaskGroup name="GraphicTaskGroup-Serial" cattr="G" ctype="YH">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.GraphicDbTask"
+        after="ContentPurge" name="GraphicDbTaskSerial" count="1"
+        queuePath="/mnd/task/graphicDbTaskSerial" storeData="true"
+        actionLogger="mndActionLogger" taskName="DB_SAVE" rolling="false" retry="5"
+        sync="true">
+        <Include><![CDATA[ {ctype == "YH"} & {lang == "KR"} & {dattr == "0"} ]]></Include>
+        <Exclude><![CDATA[ datetime << $date{yyyyMMdd\\-1M} ]]></Exclude>
+      </Task>
+    </TaskGroup>
+
+    <TaskGroup name="MpicTaskGroup-Serial" cattr="M" ctype="YH">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.MpicDbTask"
+        after="ContentPurge" name="MpicDbTaskSerial" count="1"
+        queuePath="/mnd/task/mpicDbTaskSerial" storeData="true"
+        actionLogger="mndActionLogger" taskName="DB_SAVE" rolling="false" retry="5"
+        sync="true">
+        <Include><![CDATA[ {ctype == "YH"} & {lang == "KR"} & {dattr == "0"} ]]></Include>
+        <Exclude><![CDATA[ datetime << $date{yyyyMMdd\\-1M} ]]></Exclude>
+      </Task>
+    </TaskGroup>
+
+    <TaskGroup name="CMS-Etc-Parallel-TC">
+      <Task class="com.yna.commons.task.TaskDelegator"
+        count="5" queuePath="/mnd/task/cmsEtcParallel-tc" storeData="true"
+        actionLogger="mndActionLogger" taskName="DB_SAVE" rolling="false" retry="5"
+        sync="false">
+        <Actor cattr="$" ctype="TC" class="com.yna.mnl.mnd.common.api.cldtask.task.actor.CodeDbTaskActor" />
+      </Task>
+      <Task class="com.yna.commons.task.TaskDelegator"
+        count="5" queuePath="/mnd/task/cmsEtcParallel-gv" storeData="true" after="ContentPurge"
+        actionLogger="mndActionLogger" taskName="DB_SAVE" rolling="false" retry="5"
+        sync="false">
+        <Actor cattr="%" ctype="GV" class="com.yna.mnl.mnd.common.api.cldtask.task.actor.CodeDbTaskActor" />
+      </Task>
+      <Include><![CDATA[ { cattr @@ [%,\$] } ]]></Include>
+    </TaskGroup>
+
+    <CommonTaskGroup name="ContentPurge">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.MmpClientTask" name="MmpTaskArticle"
+        count="1" queuePath="/mnd/task/mmpTaskArticle" storeData="true"
+        actionLogger="mndActionLogger" taskName="MMPS" rolling="true" retry="5"
+        sync="false">
+        <Include><![CDATA[ {cattr=="A"} & {media ** "70"} ]]></Include>
+        <Exclude><![CDATA[ datetime <= $date{yyyyMMdd\\-5d} ]]></Exclude>
+        <Exclude><![CDATA[ {cattr=="A"} & {dattr == "2"} ]]></Exclude>
+        <Exclude><![CDATA[ {cattr @@ [%,\$] } ]]></Exclude>
+        <Exclude>{operationType != OP_CREATE}</Exclude>
+        <Property name="threadPoolCnt">20</Property>
+        <Property name="timeout">10000</Property>
+        <Property name="mmfsHost.1">mmp1</Property>
+        <Property name="mmfsPort.1">8000</Property>
+        <Property name="mmfsHost.2">mmp2</Property>
+        <Property name="mmfsPort.2">8000</Property>
+      </Task>
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.MmpClientTask" name="MmpTask"
+        count="1" queuePath="/mnd/task/mmpTask" storeData="true"
+        actionLogger="mndActionLogger" taskName="MMPS" rolling="true" retry="5"
+        sync="false">
+        <Include>
+          <![CDATA[
+				{
+					{cattr @@ [X,P,G,M]}
+					&
+					{media ** "70"}
+				}
+				|
+				{cattr=="F" }
+				]]>
+        </Include>
+        <Exclude><![CDATA[ {systemOrigin == 8} ]]></Exclude>
+        <Exclude><![CDATA[ datetime <= $date{yyyyMMdd\\-5d} ]]></Exclude>
+        <Exclude><![CDATA[ {cattr @@ [%,\$] } ]]></Exclude>
+        <Exclude>{operationType != OP_CREATE}</Exclude>
+        <Property name="threadPoolCnt">20</Property>
+        <Property name="timeout">10000</Property>
+        <Property name="mmfsHost.1">mmp1</Property>
+        <Property name="mmfsPort.1">8000</Property>
+        <Property name="mmfsHost.2">mmp2</Property>
+        <Property name="mmfsPort.2">8000</Property>
+      </Task>
+    </CommonTaskGroup>
+  </ReceiveTask>
+
+  <ReceiveTask name="ReceiveTaskPurge" queuePath="/mnd/task/receivePurge"
+    storeData="true" actionLogger="mndActionLogger" taskName="RELAY" sync="false">
+    <TaskGroup name="PurgeNew">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.PurgeMnwSingle" name="ContentPurge"
+        count="1" queuePath="/mnd/task/purgeMnwSingle" storeData="true"
+        actionLogger="mndActionLogger" taskName="PURGE" rolling="false" retry="5"
+        sync="false">
+        <Include><![CDATA[ { cattr @@ [A,X,P,G,M,F] } ]]></Include>
+        <Exclude>{operationType == OP_CREATE}</Exclude>
+        <Property name="mnw.server">mnw1,mnw2</Property>
+        <Property name="mnw.path">/mnw/api/v1/purge/vw/single?types=</Property>
+        <Property name="mnw.subpath1"><![CDATA[/api/v1/content?id={{cid}}]]></Property>
+        <Property name="mnw.subpath2"><![CDATA[/api/v1/view?appcode=AND_PHONE_MNL_KR&cid={{cid}},/api/v1/view?appcode=iOS_PHONE_MNL_KR&cid={{cid}}]]></Property>
+        <Property name="mnw.port">9000</Property>
+        <Property name="mnw.ssl">false</Property>
+      </Task>
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.PurgeMnwType" name="ContentPurge"
+        count="1" queuePath="/mnd/task/purgeMnwType" storeData="true"
+        actionLogger="mndActionLogger" taskName="PURGE" rolling="false" retry="5"
+        sync="false">
+        <Include><![CDATA[ cattr=="%"]]></Include>
+        <Exclude>{operationType == OP_CREATE}</Exclude>
+        <Property name="mnw.server">mnw1,mnw2</Property>
+        <Property name="mnw.path">/mnw/api/v1/purge/vw/type?types=</Property>
+        <Property name="mnw.subpath"><![CDATA[/api/v1/people.premium]]></Property>
+        <Property name="mnw.port">9000</Property>
+        <Property name="mnw.ssl">false</Property>
+      </Task>
+    </TaskGroup>
+  </ReceiveTask>
+
+  <ReceiveTask name="ReceiveTaskPurgeMaw" queuePath="/mnd/task/receivePurgeMaw"
+    storeData="true" actionLogger="mndActionLogger" taskName="RELAY" sync="false">
+    <TaskGroup name="PurgeMaw">
+      <Task class="com.yna.mnl.mnd.common.api.cldtask.task.PurgeMnwSingle" name="ContentPurge"
+        count="1" queuePath="/mnd/task/purgeMawSingle" storeData="true"
+        actionLogger="mndActionLogger" taskName="PURGE" rolling="false" retry="5"
+        sync="false">
+        <Include><![CDATA[ { cattr @@ [A,X,P,G,M,F] } ]]></Include>
+        <Exclude>{operationType == OP_CREATE}</Exclude>
+        <Property name="mnw.server">maw1,maw2</Property>
+        <Property name="mnw.path">/maw/api/v1/purge.content/</Property>
+        <Property name="mnw.subpath1"><![CDATA[{{cid}}]]></Property>
+        <Property name="mnw.subpath2"><![CDATA[]]></Property>
+        <Property name="mnw.port">8720</Property>
+        <Property name="mnw.ssl">false</Property>
+      </Task>
+    </TaskGroup>
+  </ReceiveTask>
+  -->
+</TaskManager>

@@ -8,7 +8,7 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
-import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -72,5 +72,5 @@ public class GroupDTO {
     /**
      * 등록자명
      */
-    private MemberDTO regMember;
+    private MemberSimpleDTO regMember;
 }

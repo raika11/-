@@ -71,8 +71,8 @@ export function* saveContainer({ payload: { actions, callback } }) {
             yield put({ type: act.GET_CONTAINER_LIST });
         } else {
             yield put({
-                type: act.GET_CONTAINER_FAILURE,
-                payload: response.data,
+                type: act.CHANGE_INVALID_LIST,
+                payload: response.data.body.list,
             });
         }
     } catch (e) {

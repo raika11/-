@@ -7,7 +7,6 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInputLabel } from '@components';
 import toast from '@utils/toastUtil';
-import { notification } from '@utils/toastUtil';
 import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
 /**
@@ -94,10 +93,10 @@ const ContainerEdit = ({ onDelete }) => {
                 actions: [changeContainer(container)],
                 callback: ({ header, body }) => {
                     if (header.success) {
-                        notification('success', header.message);
+                        toast.success(header.message);
                         history.push(`/container/${body.containerSeq}`);
                     } else {
-                        notification('waring', header.message);
+                        toast.warn(header.message);
                     }
                 },
             }),

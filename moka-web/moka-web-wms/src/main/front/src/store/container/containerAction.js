@@ -67,3 +67,9 @@ export const deleteContainer = createAction(DELETE_CONTAINER, ({ containerSeq, c
  */
 export const HAS_RELATION_LIST = 'container/HAS_RELATION_LIST';
 export const hasRelationList = createAction(HAS_RELATION_LIST, ({ containerSeq, callback }) => ({ containerSeq, callback }));
+
+/**
+ * 태그삽입
+ */
+export const APPEND_TAG = 'page/APPEND_TAG';
+export const appendTag = createAction(APPEND_TAG, (inputTag) => inputTag);

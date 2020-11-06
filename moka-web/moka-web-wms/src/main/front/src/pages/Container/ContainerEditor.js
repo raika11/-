@@ -10,11 +10,12 @@ const ContainerEditor = (props) => {
     const { expansion, onExpansion } = props;
     const { containerSeq } = useParams();
     const dispatch = useDispatch();
-    const { containerBody, container, invalidList, latestDomainId, loading } = useSelector((store) => ({
+    const { containerBody, container, invalidList, latestDomainId, inputTag, loading } = useSelector((store) => ({
         containerBody: store.container.containerBody,
         container: store.container.container,
         invalidList: store.container.invalidList,
         latestDomainId: store.auth.latestDomainId,
+        inputTag: store.container.inputTag,
         loading: store.loading[GET_CONTAINER] || store.loading[DELETE_CONTAINER] || store.loading[SAVE_CONTAINER],
     }));
 
@@ -97,6 +98,7 @@ const ContainerEditor = (props) => {
             value={containerBody}
             onBlur={handleBlur}
             loading={loading}
+            tag={inputTag}
         />
     );
 };

@@ -23,6 +23,7 @@ const Area = React.lazy(() => import('@pages/Area'));
 const Menu = React.lazy(() => import('@pages/Menu'));
 const Group = React.lazy(() => import('@pages/Group'));
 const reporterMgr = React.lazy(() => import('@pages/reporterMgr'));
+const Special = React.lazy(() => import('@pages/Special'));
 
 const routes = [
     {
@@ -216,7 +217,17 @@ const routes = [
         strict: true,
     },
     */
+    {
+        path: '/special',
+        name: 'Special',
+        displayName: '디지털 스페셜 관리',
+        component: Special,
 
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
 ];
 
 export default routes;

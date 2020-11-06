@@ -161,6 +161,13 @@ export default handleActions(
                 draft.containerError = initialState.containerError;
             });
         },
+        /**
+         * 태그추가
+         */
+        [act.APPEND_TAG]: (state, { payload }) => ({
+            ...state,
+            inputTag: payload,
+        }),
     },
     initialState,
 );

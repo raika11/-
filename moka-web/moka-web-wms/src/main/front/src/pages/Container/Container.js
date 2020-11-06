@@ -1,4 +1,4 @@
-import React, { useState, useCallback, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import produce from 'immer';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,9 +6,9 @@ import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
-import { ITEM_CT } from '@/constants';
-import { notification, toastr } from '@utils/toastUtil';
-import { deleteContainer, hasRelationList, changeContainerBody } from '@store/container';
+import { ITEM_CT, ITEM_CP, ITEM_TP, TEMS_PREFIX } from '@/constants';
+import toast from '@utils/toastUtil';
+import { deleteContainer, hasRelationList, changeContainerBody, appendTag, clearStore } from '@store/container';
 
 import ContainerEditor from './ContainerEditor';
 const ContainerList = React.lazy(() => import('./ContainerList'));
@@ -89,17 +89,17 @@ const Container = () => {
      */
     const deleteCallback = useCallback(
         (container) => {
-            toastr.confirm(`${container.containerSeq}_${container.containerName}을 삭제하시겠습니까?`, {
+            toast.confirm(`${container.containerSeq}_${container.containerName}을 삭제하시겠습니까?`, {
                 onOk: () => {
                     dispatch(
                         deleteContainer({
                             containerSeq: container.containerSeq,
                             callback: ({ header }) => {
                                 if (header.success) {
-                                    notification('success', header.message);
+                                    toast.success(header.message);
                                     history.push('/container');
                                 } else {
-                                    notification('warning', header.message);
+                                    toast.error(header.message);
                                 }
                             },
                         }),
@@ -126,9 +126,17 @@ const Container = () => {
                             // 관련 아이템 없음
                             if (!body) deleteCallback(container);
                             // 관련 아이템 있음
-                            else notification('warning', '사용 중인 컨테이너는 삭제할 수 없습니다');
+                            else {
+                                toast.alert(
+                                    <React.Fragment>
+                                        사용 중인 템플릿입니다.
+                                        <br />
+                                        삭제할 수 없습니다.
+                                    </React.Fragment>,
+                                );
+                            }
                         } else {
-                            notification('warning', header.message);
+                            toast.error(header.message);
                         }
                     },
                 }),
@@ -138,20 +146,50 @@ const Container = () => {
     );
 
     /**
-     * 컨테이너 히스토리 로드 버튼
+     * 히스토리 로드 버튼 이벤트
      */
     const handleClickLoad = ({ header, body }) => {
         if (header.success) {
-            toastr.confirm('불러오기 시 작업 중인 컨테이너 소스 내용이 사라집니다. 불러오시겠습니까?', {
-                onOk: () => {
+            toast.confirm(
+                <React.Fragment>
+                    현재 작업된 소스가 히스토리 내용으로 변경됩니다.
+                    <br />
+                    변경하시겠습니까?
+                </React.Fragment>,
+                () => {
                     dispatch(changeContainerBody(body.body));
                 },
-                onCancel: () => {},
-            });
+            );
         } else {
-            notification('error', header.message);
+            toast.error(header.message);
         }
     };
+
+    /**
+     * tems태그 삽입
+     */
+    const handleAppendTag = useCallback(
+        (row, itemType) => {
+            let tag = null;
+            if (itemType === ITEM_CT) {
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.containerSeq}" name="${row.containerName}"/>\n`;
+            } else if (itemType === ITEM_CP) {
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
+            } else if (itemType === ITEM_TP) {
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
+                // } else if (itemType === ITEM_AD) {
+                //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
+            }
+            dispatch(appendTag(tag));
+        },
+        [dispatch],
+    );
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     return (
         <div className="d-flex">
@@ -206,10 +244,10 @@ const Container = () => {
                                         <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_CT} seq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_CT} seq={container.containerSeq} />
+                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_CT} seq={container.containerSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_CT} seq={container.containerSeq} />
+                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_CT} seq={container.containerSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
                                         <HistoryList show={activeTabIdx === 6} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickLoad} />

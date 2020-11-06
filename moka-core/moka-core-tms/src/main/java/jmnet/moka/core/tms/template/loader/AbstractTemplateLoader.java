@@ -1,8 +1,20 @@
 package jmnet.moka.core.tms.template.loader;
 
+import com.hazelcast.config.Config;
+import com.hazelcast.config.FileSystemXmlConfig;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import jmnet.moka.common.cache.CacheConfigParser;
+import jmnet.moka.common.cache.CacheManager;
+import jmnet.moka.common.cache.Cacheable;
+import jmnet.moka.common.cache.HazelcastCache;
+import jmnet.moka.common.cache.model.Cache;
+import jmnet.moka.common.cache.model.CacheGroup;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.TemplateLoader;
@@ -26,6 +38,12 @@ import jmnet.moka.core.tms.template.parse.model.PgTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.TpTemplateRoot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
 /**
  * <pre>
@@ -39,35 +57,37 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem> {
     public static final String URI_REST_PREFIX = "/*";
     protected String domainId;
-    protected Map<String, MergeItem> mergeItemMap;
-    protected Map<String, MokaTemplateRoot> templateRootMap;
+
+    protected ConcurrentMap<String, MergeItem> mergeItemMap;
+    protected ConcurrentMap<String, MokaTemplateRoot> templateRootMap;
     /*  REST 방식일 경우 URI에 "/*" 를 추가한다.     */
-    protected Map<String, String> uri2ItemMap;
-    protected TemplateLoader<MergeItem> assistantTemplateLoader;
+    protected ConcurrentMap<String, String> uri2ItemMap;
     protected boolean cacheable;
     protected long itemExpireTime;
-    protected boolean hasAssistantTemplateLoader = false;
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractTemplateLoader.class);
 
-    public AbstractTemplateLoader(String domainId) {
-        this(domainId, false, 0);
-    }
-
-    public AbstractTemplateLoader(String domainId, boolean cacheable, long itemExpireTime) {
+    public AbstractTemplateLoader(GenericApplicationContext appContext, String domainId, boolean cacheable, long itemExpireTime) {
         this.domainId = domainId;
         this.cacheable = cacheable;
         this.itemExpireTime = itemExpireTime;
+        HazelcastInstance hzInstance = null;
+        CacheManager cacheManager = appContext.getBean(CacheManager.class);
+        if ( cacheManager != null) {
+            HazelcastCache hzCache = (HazelcastCache) cacheManager.getCache(HazelcastCache.class);
+            hzInstance = hzCache.getHazelcastDelegator().getHazelcastInstance();
+        }
+
+        if ( hzInstance != null && cacheable) {
+            this.mergeItemMap = hzInstance.getMap("mergeItem");
+            this.uri2ItemMap = hzInstance.getMap("uri2Item");
+        } else {
+            this.uri2ItemMap = new ConcurrentHashMap<>();
+            this.mergeItemMap = new ConcurrentHashMap<>();
+        }
         if (cacheable) {
-            this.mergeItemMap = new ConcurrentHashMap<String, MergeItem>(256);
             this.templateRootMap = new ConcurrentHashMap<String, MokaTemplateRoot>(256);
         }
-        this.uri2ItemMap = new HashMap<String, String>(256);
-    }
-
-    public void setAssistantTemplateLoader(TemplateLoader<MergeItem> assistantTemplateLoader) {
-        this.assistantTemplateLoader = assistantTemplateLoader;
-        this.hasAssistantTemplateLoader = true;
     }
 
     public abstract void loadUri() throws TmsException;

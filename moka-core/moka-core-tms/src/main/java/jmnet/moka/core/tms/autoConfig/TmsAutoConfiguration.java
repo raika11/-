@@ -159,7 +159,7 @@ public class TmsAutoConfiguration {
         try {
             HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
             long itemExpireTime = TimeHumanizer.parseLong(this.itemExpireTimeStr, ITEM_EXPIRE_TIME);
-            templateLoader = new DpsTemplateLoader(domainId, httpProxyDataLoader, templateLoaderCache, itemExpireTime);
+            templateLoader = new DpsTemplateLoader(appContext, domainId, httpProxyDataLoader, templateLoaderCache, itemExpireTime);
         } catch (Exception e) {
             logger.warn("TemplateLoader Creation failed: {}", e.getMessage());
         }

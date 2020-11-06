@@ -19,6 +19,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.GenericApplicationContext;
 
 /**
  * <pre>
@@ -36,9 +37,9 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
     private static final Logger logger = LoggerFactory.getLogger(DpsWorkTemplateLoader.class);
     private static final DpsItemFactory DPS_ITEM_FACTORY = new DpsItemFactory();
 
-    public DpsWorkTemplateLoader(String domainId, HttpProxyDataLoader httpProxyDataLoader, String workerId, List<String> componentIdList)
+    public DpsWorkTemplateLoader(GenericApplicationContext appContext,String domainId, HttpProxyDataLoader httpProxyDataLoader, String workerId, List<String> componentIdList)
             throws TmsException {
-        super(domainId, httpProxyDataLoader, false, 0L);
+        super(appContext, domainId, httpProxyDataLoader, false, 0L);
         this.workerId = workerId;
         this.componentIdList = componentIdList;
     }
@@ -93,12 +94,7 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
         } catch (DataLoadException e) {
             throw new TemplateLoadException(String.format("TemplateItem load fail: %s %s %s", this.domainId, itemType, itemId), e);
         } catch (Exception e) {
-            if (this.hasAssistantTemplateLoader) {
-                logger.debug("Template Loaded Fail And Will Retry : {} {} {}", itemType, itemId, e.getMessage());
-                item = this.assistantTemplateLoader.getItem(itemType, itemId);
-            } else {
-                throw new TemplateLoadException(String.format("Template Loaded Fail: %s %s", itemType, itemId), e);
-            }
+            throw new TemplateLoadException(String.format("Template Loaded Fail: %s %s", itemType, itemId), e);
         }
         return item;
     }

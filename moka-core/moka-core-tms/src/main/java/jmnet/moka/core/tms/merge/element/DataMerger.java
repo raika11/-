@@ -108,7 +108,7 @@ public class DataMerger extends MokaAbstractElementMerger {
         }
         if (jsonResult != null) {
             context = context.createRowDataChild(); // row data를 포함할 수 있는 child context를 생성한다.
-            ((MokaTemplateMerger) templateMerger).setData(context, dataId, jsonResult);
+//            ((MokaTemplateMerger) templateMerger).setData(context, dataId, jsonResult);
             context.set(Constants.CURRENT_DATA_ID, dataId);
             // TODO context가 LoopContext 아닐 경우에는 _ROW 를 인식하지 못해 찾을 수 없는 문제가 있음
             // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에

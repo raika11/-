@@ -25,6 +25,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.GenericApplicationContext;
 
 /**
  * <pre>
@@ -66,13 +67,14 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
     protected HttpProxyDataLoader httpProxyDataLoader;
     private static final Logger logger = LoggerFactory.getLogger(DpsTemplateLoader.class);
     private static final DpsItemFactory DPS_ITEM_FACTORY = new DpsItemFactory();
-
-    public DpsTemplateLoader(String domainId, HttpProxyDataLoader httpProxyDataLoader)  {
-        this(domainId, httpProxyDataLoader, false, 0L);
+    private GenericApplicationContext appContext;
+    public DpsTemplateLoader(GenericApplicationContext appContext,String domainId, HttpProxyDataLoader httpProxyDataLoader)  {
+        this(appContext, domainId, httpProxyDataLoader, false, 0L);
     }
 
-    public DpsTemplateLoader(String domainId, HttpProxyDataLoader httpProxyDataLoader, boolean cacheable, long itemExpireSeconds) {
-        super(domainId, cacheable, itemExpireSeconds);
+    public DpsTemplateLoader(GenericApplicationContext appContext, String domainId, HttpProxyDataLoader httpProxyDataLoader, boolean cacheable,
+            long itemExpireSeconds) {
+        super(appContext, domainId, cacheable, itemExpireSeconds);
         try {
             this.httpProxyDataLoader = httpProxyDataLoader;
             loadUri();
@@ -104,16 +106,16 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
                     newUri2ItemMap.put(this.getPageUriLowerCase(pageItem), itemKey);
                 }
             }
-            this.uri2ItemMap = newUri2ItemMap;
+//            this.uri2ItemMap = newUri2ItemMap;
+            for ( String oldKey :this.uri2ItemMap.keySet() ) {
+                if ( !newUri2ItemMap.containsKey(oldKey)) {
+                    this.uri2ItemMap.remove(oldKey);
+                }
+            }
+            this.uri2ItemMap.putAll(newUri2ItemMap);
         } catch (Exception e) {
             throw new TmsException("Url load fail from DPS", e);
         }
-    }
-
-    @Override
-    public void setAssistantTemplateLoader(TemplateLoader<MergeItem> assistantTemplateLoader) {
-        this.assistantTemplateLoader = assistantTemplateLoader;
-        this.hasAssistantTemplateLoader = true;
     }
 
     /**
@@ -158,12 +160,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         } catch (DataLoadException e) {
             throw new TemplateLoadException(String.format("TemplateItem load fail: %s %s %s", this.domainId, itemType, itemId), e);
         } catch (Exception e) {
-            if (this.hasAssistantTemplateLoader) {
-                logger.debug("Template Loaded Fail And Will Retry : {} {} {}", itemType, itemId, e.getMessage());
-                item = this.assistantTemplateLoader.getItem(itemType, itemId);
-            } else {
                 throw new TemplateLoadException(String.format("Template Loaded Fail: %s %s", itemType, itemId), e);
-            }
         }
         return item;
     }

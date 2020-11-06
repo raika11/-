@@ -107,7 +107,7 @@ const TemplateEdit = ({ onDelete }) => {
      * 템플릿 등록
      * @param {object} tmp 템플릿
      */
-    const submitTemplate = (tmp) => {
+    const saveCallback = (tmp) => {
         dispatch(
             saveTemplate({
                 actions: [changeTemplate(tmp)],
@@ -134,7 +134,7 @@ const TemplateEdit = ({ onDelete }) => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         // 관련 아이템 없음
-                        if (!body) submitTemplate(temp);
+                        if (!body) saveCallback(temp);
                         // 관련 아이템 있음
                         else {
                             toast.confirm(
@@ -146,7 +146,7 @@ const TemplateEdit = ({ onDelete }) => {
                                     수정하시겠습니까?
                                 </React.Fragment>,
                                 () => {
-                                    submitTemplate(temp);
+                                    saveCallback(temp);
                                 },
                                 () => {},
                             );
@@ -183,7 +183,7 @@ const TemplateEdit = ({ onDelete }) => {
             if (!template.templateSeq || template.templateSeq === '') {
                 // 새 템플릿 저장 시에 도메인ID 셋팅
                 temp.domain = { domainId: latestDomainId };
-                submitTemplate(temp);
+                saveCallback(temp);
             } else {
                 checkRelationList(temp);
             }

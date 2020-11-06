@@ -41,8 +41,7 @@ const LookupTemplateList = (props) => {
     const { seq, seqType, show, onAppend } = props;
     const dispatch = useDispatch();
 
-    const { domainList, tpSizeRows, tpZoneRows, latestDomainId, search: storeSearch, list, total, UPLOAD_PATH_URL, loading } = useSelector((store) => ({
-        domainList: store.auth.domainList,
+    const { tpSizeRows, tpZoneRows, latestDomainId, search: storeSearch, list, total, UPLOAD_PATH_URL, loading } = useSelector((store) => ({
         tpSizeRows: store.codeMgt.tpSizeRows,
         tpZoneRows: store.codeMgt.tpZoneRows,
         latestDomainId: store.auth.latestDomainId,
@@ -186,26 +185,6 @@ const LookupTemplateList = (props) => {
         <>
             <MokaCard titleClassName="mb-0" title="템플릿 검색">
                 <Form className="mb-10">
-                    {/* 도메인 선택 */}
-                    <Form.Row className="mb-2">
-                        <MokaInput
-                            as="select"
-                            className="w-100"
-                            value={search.domainId || undefined}
-                            onChange={(e) => {
-                                handleChangeSearchOption({
-                                    key: 'domainId',
-                                    value: e.target.value,
-                                });
-                            }}
-                        >
-                            {domainList.map((domain) => (
-                                <option key={domain.domainId} value={domain.domainId}>
-                                    {domain.domainName}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </Form.Row>
                     <Form.Row className="mb-2">
                         {/* 템플릿 위치그룹 */}
                         <Col xs={7} className="p-0 pr-2">
@@ -291,7 +270,7 @@ const LookupTemplateList = (props) => {
                 {/* ag-grid table */}
                 {listType === 'list' && (
                     <MokaTable
-                        agGridHeight={528}
+                        agGridHeight={567}
                         columnDefs={columnDefs}
                         rowData={rowData}
                         onRowNodeId={(template) => template.templateSeq}
@@ -307,7 +286,7 @@ const LookupTemplateList = (props) => {
                 )}
                 {listType === 'thumbnail' && (
                     <MokaThumbTable
-                        tableHeight={528}
+                        tableHeight={567}
                         rowData={rowData}
                         loading={loading}
                         total={total}

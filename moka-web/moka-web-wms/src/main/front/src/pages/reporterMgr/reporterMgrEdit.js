@@ -6,7 +6,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
     clearGroup, getGroup, saveGroup, changeGroup, duplicateGroupCheck
     , changeInvalidList, GET_GROUP, SAVE_GROUP, DELETE_GROUP, deleteGroup, hasRelationList
-} from '@store/group';
+} from '@store/reporterMgr';
 import { notification } from '@utils/toastUtil';
 import {toastr} from "react-redux-toastr";
 

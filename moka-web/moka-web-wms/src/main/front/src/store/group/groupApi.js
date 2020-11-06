@@ -3,9 +3,7 @@ import instance from '../commons/axios';
 
 // 그룹 목록 조회
 export const getGroupList = ({ search }) => {
-    console.log("그룹api탓음::group::" + qs.stringify(search));
     return instance.get(`/api/groups?${qs.stringify(search)}`).catch((err) => {
-        console.log("err::" + qs.stringify(err));
         throw err;
     });
 };
@@ -33,7 +31,6 @@ export const hasRelationList = (groupCd) => {
 
 // 그룹 등록
 export const postGroup = ({ group }) => {
-    console.log("ppppppppppppppppppppppppost" + qs.stringify(group));
     return instance.post('/api/groups', qs.stringify(group)).catch((err) => {
         throw err;
     });

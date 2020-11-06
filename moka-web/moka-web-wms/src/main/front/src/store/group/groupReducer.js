@@ -14,7 +14,7 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        //sort: 'groupCd,asc', //그룹코드로 정의되어 잇지만 실제로는 이게 아님.
+        sort: 'groupCd,asc',
     },
     group: {},
     groupError: {},

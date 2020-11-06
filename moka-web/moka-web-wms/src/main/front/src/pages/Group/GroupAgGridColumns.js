@@ -24,7 +24,7 @@ export const columnDefs = [
         width: 95,
     },
     {
-        headerName: '담당자',
+        headerName: '등록자',
         field: 'regId',
         width: 60,
     },

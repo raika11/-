@@ -31,6 +31,7 @@ export const hasRelationList = (groupCd) => {
 
 // 그룹 등록
 export const postGroup = ({ group }) => {
+    console.log("iiiiiiiiiiiiiiiiiiiiiisert::" + decodeURIComponent(qs.stringify(group)));
     return instance.post('/api/groups', qs.stringify(group)).catch((err) => {
         throw err;
     });
@@ -38,6 +39,8 @@ export const postGroup = ({ group }) => {
 
 //  그룹 수정
 export const putGroups = ({ group }) => {
+    console.log("iiiiiiiiiiiiiiiiiiiiiisert::" + decodeURIComponent(qs.stringify(group)));
+
     return instance.put(`/api/groups/${group.groupCd}`, qs.stringify(group)).catch((err) => {
         throw err;
     });

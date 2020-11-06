@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.util.HttpHelper;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.editlog.entity.EditLog;
 import jmnet.moka.core.tps.mvc.editlog.repository.EditLogRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EditLogServiceImpl implements EditLogService {
 
-    private EditLogRepository editLogRepository;
+    private final EditLogRepository editLogRepository;
 
     public EditLogServiceImpl(EditLogRepository editLogRepository) {
         this.editLogRepository = editLogRepository;
@@ -51,32 +50,31 @@ public class EditLogServiceImpl implements EditLogService {
 
     @Override
     @Transactional
-    public EditLog insertEditLog(EditLog editLog)
-            throws Exception {
+    public EditLog insertEditLog(EditLog editLog) {
         log.debug("[INSERT DOMAIN] insert editLog, {}", editLog);
+        editLog.setErrMsg(McpString.ellipse(editLog.getErrMsg(), 490));
         return editLogRepository.save(editLog);
     }
 
     @Override
     public EditLog updateEditLog(EditLog editLog) {
+        editLog.setErrMsg(McpString.ellipse(editLog.getErrMsg(), 490));
         EditLog returnVal = editLogRepository.save(editLog);
         log.debug("[UPDATE DOMAIN] Edit Log SeqNo : {}", returnVal.getSeqNo());
         return returnVal;
     }
 
     @Override
-    public void deleteEditLogBySeqNo(Long seqNo)
-            throws Exception {
+    public void deleteEditLogBySeqNo(Long seqNo) {
         editLogRepository.deleteById(seqNo);
         log.debug("[DELETE DOMAIN] Edit Log seqNo : {}", seqNo);
     }
 
     @Override
-    public void deleteEditLog(EditLog editLog)
-            throws Exception {
+    public void deleteEditLog(EditLog editLog) {
         this.deleteEditLogBySeqNo(editLog.getSeqNo());
     }
-
+/*
     private EditLog makeEditLog(String memberId, ActionType action, String menuId, String successYn, String param) {
         return EditLog
                 .builder()
@@ -88,4 +86,5 @@ public class EditLogServiceImpl implements EditLogService {
                 .regIp(HttpHelper.getRemoteAddr())
                 .build();
     }
+ */
 }

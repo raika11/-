@@ -27,14 +27,11 @@ public interface EditLogService {
     Optional<EditLog> findEditLogById(Long logSeq);
 
     @Transactional
-    EditLog insertEditLog(EditLog editLog)
-            throws Exception;
+    EditLog insertEditLog(EditLog editLog);
 
     EditLog updateEditLog(EditLog editLog);
 
-    void deleteEditLogBySeqNo(Long seqNo)
-            throws Exception;
+    void deleteEditLogBySeqNo(Long seqNo);
 
-    void deleteEditLog(EditLog editLog)
-            throws Exception;
+    void deleteEditLog(EditLog editLog);
 }

@@ -1,4 +1,4 @@
-/*
+
 import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
@@ -42,35 +42,9 @@ const MemberGroup = () => {
                     exact
                     render={() => (
                         <>
-
-                            <MokaIconTabs
-                                //expansion={expansionState[2]}
-                                //onExpansion={handleTabExpansion}
-                                tabWidth={1000}
-                                height={CARD_DEFAULT_HEIGHT}
-                                tabs={[
-                                    <Suspense>
-                                        <MemberGroupEdit />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <MokaCard title="사용자 목록">
-                                            <MemberGroupList />
-                                        </MokaCard>
-                                    </Suspense>,
-                                    <Suspense>
-                                        <MokaCard title="메뉴 권한">
-                                            <MemberGroupList />
-                                        </MokaCard>
-                                    </Suspense>,
-                                ]}
-                                tabNavWidth={48}
-                                tabNavPosition="right"
-                                tabNavs={[
-                                    { title: '사이트 정보', text: 'Info' },
-                                    { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '콘텐츠 스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
-                                ]}
-                            />
+                            <Suspense>
+                                <MemberGroupEdit />
+                            </Suspense>,
                         </>
                     )}
                 />
@@ -80,4 +54,3 @@ const MemberGroup = () => {
 };
 
 export default MemberGroup;
-*/

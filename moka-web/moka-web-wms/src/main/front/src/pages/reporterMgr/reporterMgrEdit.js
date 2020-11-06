@@ -1,4 +1,4 @@
-/*
+
 import React, { useEffect, useState, state } from 'react';
 import { Col, Form, Button, Row } from 'react-bootstrap';
 import { MokaCard, MokaInput, MokaInputLabel } from '@components';
@@ -7,7 +7,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
     clearGroup, getGroup, saveGroup, changeGroup, duplicateGroupCheck
     , changeInvalidList, GET_GROUP, SAVE_GROUP, DELETE_GROUP, deleteGroup, hasRelationList
-} from '@store/reporterMgr';
+} from '@store/group';
 import { notification } from '@utils/toastUtil';
 import {toastr} from "react-redux-toastr";
 

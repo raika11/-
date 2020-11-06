@@ -61,7 +61,9 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String urlPathPrefix;
 
     @Autowired
-    public ReactRoutesHandlerMapping reactRoute;
+    private ReactRoutesHandlerMapping reactRoute;
+
+    private HttpSecurity httpSecurity;
 
 
     /**
@@ -140,6 +142,12 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .permitAll()
             .anyRequest()
             .authenticated();
+    }
+
+    @Bean
+    public HttpSecurity httpSecurity()
+            throws Exception {
+        return super.getHttp();
     }
 
     /**

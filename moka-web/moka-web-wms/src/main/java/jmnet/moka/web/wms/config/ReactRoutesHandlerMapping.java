@@ -25,6 +25,24 @@ public class ReactRoutesHandlerMapping extends AbstractHandlerMapping {
         return reactRoutesList;
     }
 
+    /**
+     * route 추가
+     *
+     * @param route 메뉴 경로
+     */
+    public void addReactRoutesList(String route) {
+        reactRoutesList.add(route);
+    }
+
+    /**
+     * route 제거
+     *
+     * @param route 메뉴 경로
+     */
+    public void removeReactRoutesList(String route) {
+        reactRoutesList.remove(route);
+    }
+
 
     public ReactRoutesHandlerMapping(String routesPath)
             throws NoSuchMethodException, SecurityException {

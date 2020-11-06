@@ -1,4 +1,4 @@
-/*
+
 import React, { useState, Suspense } from 'react';
 import Helmet from 'react-helmet';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
@@ -6,13 +6,12 @@ import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-//import { clearStore} from "@store/reporterMgr";
+import { clearStore} from "@store/group";
 import toast, {notification, toastr} from "@utils/toastUtil";
 // relations
+const MemberGroupList = React.lazy(() => import('./reporterMgrList'));
+const GroupEdit = React.lazy(() => import('./reporterMgrEdit'));
 
-//const MemberGroupList = React.lazy(() => import('./GroupList'));
-//const GroupEdit = React.lazy(() => import('./GroupEdit'));
-//const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));
 
 
 
@@ -71,17 +70,11 @@ const Group = () => {
                                 <Suspense>
                                     <GroupEdit/>
                                 </Suspense>
-                                ,
-                                <Suspense>
-                                    <GroupChildGroupMemberEdit />
-                                </Suspense>
                             ]}
                             tabNavWidth={48}
                             tabNavPosition="right"
                             tabNavs={[
-                                { title: '사이트 정보', text: 'Info' },
-                                { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
-                                { title: '콘텐츠 스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                { title: '사이트 정보', text: 'Info' }
                             ]}
                         />
 
@@ -96,4 +89,3 @@ const Group = () => {
 };
 
 export default Group;
-*/

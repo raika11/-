@@ -204,7 +204,6 @@ const routes = [
         exact: false,
         strict: true,
     },
-    /*
     {
         path: '/reporterMgr',
         name: 'reporterMgr',

@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.menu.controller;
+package jmnet.moka.web.wms.mvc.menu.controller;
 
 import io.swagger.annotations.ApiOperation;
 import java.util.Comparator;
@@ -29,6 +29,7 @@ import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
+import jmnet.moka.web.wms.mvc.menu.service.RouteConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+/**
+ * <pre>
+ * 메뉴 관리 Controller
+ * Project : moka
+ * Package : jmnet.moka.web.wms.mvc.menu.controller
+ * ClassName : MenuRestController
+ * Created : 2020-11-06 ince
+ * </pre>
+ *
+ * @author ince
+ * @since 2020-11-06 09:14
+ */
 @RestController
 @Validated
 @Slf4j
@@ -59,12 +72,16 @@ public class MenuRestController {
 
     private final TpsLogger tpsLogger;
 
+    private final RouteConfigService menuConfigService;
 
-    public MenuRestController(MenuService menuService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger) {
+
+    public MenuRestController(MenuService menuService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger,
+            RouteConfigService menuConfigService) {
         this.menuService = menuService;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
         this.tpsLogger = tpsLogger;
+        this.menuConfigService = menuConfigService;
     }
 
     /**
@@ -188,7 +205,7 @@ public class MenuRestController {
                 // 결과리턴
                 MenuDTO dto = modelMapper.map(returnValue, MenuDTO.class);
                 ResultDTO<MenuDTO> resultDto = new ResultDTO<>(dto, messageByLocale.get("tps.menu.success.insert", request));
-
+                menuConfigService.addMenuRoute(dto.getMenuUrl());
                 // 액션 로그에 성공 로그 출력
                 tpsLogger.success();
 
@@ -231,7 +248,7 @@ public class MenuRestController {
         Menu newMenu = modelMapper.map(menuDTO, Menu.class);
 
         // 오리진 데이터 조회
-        menuService
+        Menu orgMenu = menuService
                 .findMenuBySeq(menuSeq)
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
@@ -243,6 +260,13 @@ public class MenuRestController {
             // 결과리턴
             MenuDTO dto = modelMapper.map(returnValue, MenuDTO.class);
             ResultDTO<MenuDTO> resultDto = new ResultDTO<>(dto, messageByLocale.get("tps.menu.success.update", request));
+
+            // menu url이 변경 되었다면 route 설정 변경
+            if (McpString.isNotEmpty(orgMenu.getMenuUrl()) && !orgMenu
+                    .getMenuUrl()
+                    .equals(dto.getMenuUrl())) {
+                menuConfigService.changeMenuRoute(orgMenu.getMenuUrl(), dto.getMenuUrl());
+            }
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success();
@@ -544,6 +568,7 @@ public class MenuRestController {
             }
 
             if (success) {
+                menuConfigService.removeMenuRoute(menu.getMenuUrl());
                 // 액션 로그에 성공 로그 출력
                 tpsLogger.success(message);
             } else {

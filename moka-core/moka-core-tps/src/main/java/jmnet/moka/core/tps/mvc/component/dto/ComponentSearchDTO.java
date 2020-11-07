@@ -46,6 +46,11 @@ public class ComponentSearchDTO extends SearchDTO {
      */
     private String usePaging;
 
+    /**
+     * 편집영역용 컴포넌트 조회
+     */
+    private String useArea;
+
     // 검색 조건의 기본값을 설정
     public ComponentSearchDTO() {
         super(ComponentVO.class, "componentSeq,desc");
@@ -54,6 +59,7 @@ public class ComponentSearchDTO extends SearchDTO {
         this.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
         this.templateGroup = TpsConstants.SEARCH_TYPE_ALL;
         this.usePaging = MokaConstants.YES;
+        this.useArea = MokaConstants.NO;
     }
 
 }

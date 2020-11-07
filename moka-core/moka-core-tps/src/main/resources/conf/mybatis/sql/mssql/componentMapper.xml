@@ -26,6 +26,15 @@
       </otherwise>
     </choose>
 
+    <choose>
+      <when test="useArea = 'Y'">
+        #{useArea},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
     #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -70,6 +79,15 @@
     <choose>
       <when test="usePaging = 'Y'">
         #{usePaging},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="useArea = 'Y'">
+        #{useArea},
       </when>
       <otherwise>
         NULL,

@@ -7,9 +7,9 @@ import Button from 'react-bootstrap/Button';
 
 import { ITEM_PG } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
-import { initialState, getPageLookupList, changeLookupSearchOption, clearLookup, GET_PAGE_LOOKUP_LIST } from '@store/page';
+import { initialState, getPageLookupList, changeLookupSearchOption, clearLookup, getPageLookup, GET_PAGE_LOOKUP_LIST } from '@store/page';
 import columnDefs from './LookupPageListColumns';
-import { defaultPageSearchType, LookupAgGridHeight } from '@pages/commons';
+import { defaultPageSearchType, LookupAgGridHeight, LookupAgGridMineHeight } from '@pages/commons';
 import PageHtmlModal from './PageHtmlModal';
 
 const propTypes = {
@@ -93,10 +93,17 @@ const LookupPageList = (props) => {
     const handleClickLoad = useCallback(
         (data) => {
             if (onLoad) {
-                onLoad(data);
+                // 상세 데이터를 조회한다
+                const option = {
+                    pageSeq: data.pageSeq,
+                    callback: (response) => {
+                        onLoad(response);
+                    },
+                };
+                dispatch(getPageLookup(option));
             }
         },
-        [onLoad],
+        [dispatch, onLoad],
     );
 
     /**
@@ -104,7 +111,7 @@ const LookupPageList = (props) => {
      * @param {object} data row data
      */
     const handleClickPreview = (data) => {
-        // preview
+        window.open(`//${data.domain.domainUrl}${data.pageUrl}`);
     };
 
     /**
@@ -189,15 +196,17 @@ const LookupPageList = (props) => {
                 </Form>
 
                 {/* 버튼 그룹 */}
-                <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="dark" onClick={() => window.open('/page')}>
-                        페이지 추가
-                    </Button>
-                </div>
+                {seqType !== ITEM_PG && (
+                    <div className="d-flex mb-10 justify-content-end">
+                        <Button variant="dark" onClick={() => window.open('/page')}>
+                            페이지 추가
+                        </Button>
+                    </div>
+                )}
 
                 {/* ag-grid table */}
                 <MokaTable
-                    agGridHeight={LookupAgGridHeight}
+                    agGridHeight={seqType === ITEM_PG ? LookupAgGridMineHeight : LookupAgGridHeight}
                     columnDefs={columnDefs}
                     rowData={rowData}
                     onRowNodeId={(data) => data.pageSeq}

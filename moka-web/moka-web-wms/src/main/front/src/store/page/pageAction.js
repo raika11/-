@@ -36,7 +36,9 @@ export const [GET_PAGE, GET_PAGE_SUCCESS, GET_PAGE_FAILURE] = createRequestActio
 export const getPageTree = createAction(GET_PAGE_TREE, (...actions) => actions);
 export const getPage = createAction(GET_PAGE, ({ pageSeq, callback }) => ({ pageSeq, callback }));
 export const [GET_PAGE_LOOKUP_LIST, GET_PAGE_LOOKUP_LIST_SUCCESS, GET_PAGE_LOOKUP_LIST_FAILURE] = createRequestActionTypes('page/GET_PAGE_LOOKUP_LIST');
+export const [GET_PAGE_LOOKUP, GET_PAGE_LOOKUP_SUCCESS, GET_PAGE_LOOKUP_FAILURE] = createRequestActionTypes('page/GET_PAGE_LOOKUP');
 export const getPageLookupList = createAction(GET_PAGE_LOOKUP_LIST, (...actions) => actions);
+export const getPageLookup = createAction(GET_PAGE_LOOKUP, ({ pageSeq, callback }) => ({ pageSeq, callback }));
 
 /**
  * 모달 데이터(일시적인 데이터) 조회

@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { CARD_DEFAULT_HEIGHT, ITEM_PG, ITEM_TP, ITEM_CT, ITEM_CP, TEMS_PREFIX } from '@/constants';
+import toast from '@utils/toastUtil';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { clearStore, deletePage, appendTag, changePageBody } from '@store/page';
 import { clearStore as clearHistoryStore } from '@store/history';
@@ -172,16 +173,40 @@ const Page = () => {
     /**
      * 히스토리 로드 버튼 이벤트
      */
-    const handleClickLoad = ({ header, body }) => {
+    const handleClickHistLoad = ({ header, body }) => {
         if (header.success) {
-            toastr.confirm('불러오기 시 작업 중인 tems소스가 날라갑니다. 불러오시겠습니까?', {
-                onOk: () => {
+            toast.confirm(
+                <React.Fragment>
+                    현재 작업된 소스가 히스토리 내용으로 변경됩니다.
+                    <br />
+                    변경하시겠습니까?
+                </React.Fragment>,
+                () => {
                     dispatch(changePageBody(body.body));
                 },
-                onCancle: () => {},
-            });
+            );
         } else {
-            notification('error', header.message);
+            toast.error(header.message);
+        }
+    };
+
+    /**
+     * 페이지 로드 버튼 이벤트
+     */
+    const handleClickPageLoad = ({ header, body }) => {
+        if (header.success) {
+            toast.confirm(
+                <React.Fragment>
+                    현재 작업된 소스가 변경됩니다.
+                    <br />
+                    변경하시겠습니까?
+                </React.Fragment>,
+                () => {
+                    dispatch(changePageBody(body.pageBody));
+                },
+            );
+        } else {
+            toast.error(header.message);
         }
     };
 
@@ -238,7 +263,7 @@ const Page = () => {
                                         <PageEdit onDelete={handleClickDelete} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} />
+                                        <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickPageLoad} />
                                     </Suspense>,
                                     <Suspense>
                                         <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
@@ -253,7 +278,7 @@ const Page = () => {
                                         <PageChildAdList />
                                     </Suspense>,
                                     <Suspense>
-                                        <HistoryList show={activeTabIdx === 6} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickLoad} />
+                                        <HistoryList show={activeTabIdx === 6} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickHistLoad} />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}

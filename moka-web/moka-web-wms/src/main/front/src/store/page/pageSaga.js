@@ -31,6 +31,11 @@ const getPage = createRequestSaga(act.GET_PAGE, api.getPage);
 const getPageModal = createRequestSaga(act.GET_PAGE_MODAL, api.getPage, true);
 
 /**
+ * 페이지 조회
+ */
+const getPageLookup = createRequestSaga(act.GET_PAGE_LOOKUP, api.getPage);
+
+/**
  * 저장
  */
 function* savePage({ payload: { actions, callback } }) {
@@ -183,4 +188,5 @@ export default function* saga() {
     yield takeLatest(act.GET_PAGE_LOOKUP_LIST, getPageLookupList);
     yield takeLatest(act.GET_PAGE_MODAL, getPageModal);
     yield takeLatest(act.GET_PAGE_LIST_MODAL, getPageListModal);
+    yield takeLatest(act.GET_PAGE_LOOKUP, getPageLookup);
 }

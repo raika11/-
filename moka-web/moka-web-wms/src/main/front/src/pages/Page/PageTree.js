@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 
@@ -11,6 +11,7 @@ import { MokaTreeView, MokaIcon } from '@components';
  * 페이지 Tree 컴포넌트
  */
 const PageTree = ({ onDelete }) => {
+    const { pageSeq: paramPageSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -18,22 +19,83 @@ const PageTree = ({ onDelete }) => {
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState([]);
 
-    const { tree, search, loading, latestDomainId, page } = useSelector((store) => ({
+    const { tree, loading, latestDomainId, page } = useSelector((store) => ({
         tree: store.page.tree,
-        search: store.page.search,
         loading: store.loading[GET_PAGE_TREE],
         latestDomainId: store.auth.latestDomainId,
         page: store.page.page,
     }));
 
+    // 부모노드 찾기(재귀함수)
+    // 리턴: {findSeq: page.pageSeq,node: null,path: [String(pageTree.pageSeq)]};
+    const findNode = useCallback((findInfo, rootNode) => {
+        if (rootNode.pageSeq === findInfo.findSeq) {
+            return produce(findInfo, (draft) => draft);
+        }
+
+        if (rootNode.nodes && rootNode.nodes.length > 0) {
+            for (let i = 0; i < rootNode.nodes.length; i++) {
+                const newInfo = produce(findInfo, (draft) => {
+                    draft.node = rootNode.nodes[i];
+                    draft.path.push(String(rootNode.nodes[i].pageSeq));
+                });
+                const fnode = findNode(newInfo, rootNode.nodes[i]);
+                if (fnode !== null && fnode.node !== null) {
+                    return fnode;
+                }
+            }
+            return null;
+        }
+        return null;
+    }, []);
+
     useEffect(() => {
         if (tree) {
-            if (selected === '' && expanded.length === 0) {
-                setExpanded([String(tree.pageSeq)]);
-                setSelected(String(tree.pageSeq));
+            if (page.pageSeq) {
+                // 최초로딩일때만 트리노드 확장
+                // if (expanded.length <= 0) {
+                let findInfo = {
+                    findSeq: page.pageSeq,
+                    node: null,
+                    path: [String(tree.pageSeq)],
+                };
+                let fnode = findNode(findInfo, tree);
+                if (fnode) {
+                    setExpanded(fnode.path);
+                    setSelected(String(page.pageSeq));
+                    history.push(`/page/${page.pageSeq}`);
+                }
+            } else {
+                // 추가상태여부
+                const bSubInsert = !!(page.parent && page.parent.pageSeq);
+
+                // direct loading여부
+                let bDirectLoading = false;
+                const pathname = window.location.pathname.match(/^(\/page\/)(\d+)/);
+                if (paramPageSeq || (pathname && pathname[2])) {
+                    bDirectLoading = true;
+                }
+
+                if (!bDirectLoading && !bSubInsert) {
+                    setExpanded([]);
+                    setSelected('');
+
+                    const option = {
+                        pageSeq: tree.pageSeq,
+                        // callback: (result) => {
+                        //     if (result) history.push(`/page/${pageTree.pageSeq}`);
+                        // }
+                    };
+                    dispatch(getPage(option));
+                }
             }
+            // if (selected === '' && expanded.length === 0) {
+            //     setExpanded([String(tree.pageSeq)]);
+            //     setSelected(String(tree.pageSeq));
+            // }
         }
-    }, [expanded.length, selected, tree]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tree, page, history, findNode, paramPageSeq, dispatch]);
 
     /**
      * 트리 클릭. 페이지 수정창 로드
@@ -65,7 +127,7 @@ const PageTree = ({ onDelete }) => {
             pageName: item.pageName,
             pageUrl: item.pageUrl,
         };
-        setSelected([String(item.pageSeq)]);
+        setSelected(String(item.pageSeq));
         dispatch(insertSubPage({ parent, latestDomainId }));
         history.push('/page');
     };

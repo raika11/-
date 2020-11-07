@@ -14,7 +14,6 @@ import datasetRelationList from '@store/dataset/datasetRelationListReducer';
 import component from '@store/component/componentReducer';
 import container from '@store/container/containerReducer';
 import page from '@store/page/pageReducer';
-import pageHistory from '@store/page/pageHistoryReducer';
 import editForm from '@/store/editForm/editFormReducer';
 import relation from '@store/relation/relationReducer';
 import history from '@store/history/historyReducer';
@@ -38,7 +37,6 @@ export default combineReducers({
     component,
     container,
     page,
-    pageHistory,
     area,
     editForm,
     relation,

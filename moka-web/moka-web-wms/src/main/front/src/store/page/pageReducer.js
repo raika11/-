@@ -30,6 +30,8 @@ export const initialState = {
             searchType: 'all',
             keyword: '',
         },
+        page: {},
+        pageError: null,
     },
     page: {
         pageSeq: null,
@@ -152,6 +154,18 @@ export default handleActions(
                 draft.lookup.list = initialState.lookup.list;
                 draft.lookup.total = initialState.lookup.total;
                 draft.lookup.error = payload;
+            });
+        },
+        [act.GET_PAGE_LOOKUP_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.lookup.page = body;
+                draft.lookup.pageError = initialState.pageError;
+            });
+        },
+        [act.GET_PAGE_LOOKUP_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.lookup.page = initialState.page;
+                draft.lookup.pageError = payload;
             });
         },
         /**

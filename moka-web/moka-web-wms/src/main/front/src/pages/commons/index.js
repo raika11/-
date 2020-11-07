@@ -29,6 +29,7 @@ export { default as RelationInContainerList } from './RelationInContainerList';
 export { default as RelationInComponentList } from './RelationInComponentList';
 
 // Lookup 아이템 (상위 => 하위)
+export const LookupAgGridMineHeight = 648;
 export const LookupAgGridHeight = 608;
 export { default as LookupTemplateList } from './LookupTemplateList';
 export { default as LookupComponentList } from './LookupComponentList';

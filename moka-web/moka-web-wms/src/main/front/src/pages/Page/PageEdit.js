@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
 import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
 import { getPageType } from '@store/codeMgt';
@@ -16,10 +15,10 @@ import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/commons';
 
 const PageEdit = ({ onDelete }) => {
-    const { pageSeq } = useParams();
+    const { pageSeq: paramPageSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { page, pageBody, loading, pageTypeRows, latestDomainId, invalidList, PAGE_TYPE_HTML } = useSelector(
+    const { page, pageBody, loading, pageTypeRows, latestDomainId, invalidList, PAGE_TYPE_HTML, EXCLUDE_PAGE_SERVICE_NAME_LIST } = useSelector(
         (store) => ({
             page: store.page.page,
             pageBody: store.page.pageBody,
@@ -34,6 +33,7 @@ const PageEdit = ({ onDelete }) => {
             latestDomainId: store.auth.latestDomainId,
             invalidList: store.page.invalidList,
             PAGE_TYPE_HTML: store.app.PAGE_TYPE_HTML,
+            EXCLUDE_PAGE_SERVICE_NAME_LIST: store.app.EXCLUDE_PAGE_SERVICE_NAME_LIST,
         }),
         [shallowEqual],
     );
@@ -59,9 +59,9 @@ const PageEdit = ({ onDelete }) => {
         }
 
         // url로 다이렉트로 페이지 조회하는 경우
-        if (pageSeq && pageSeq !== page.pageSeq) {
+        if (paramPageSeq && paramPageSeq !== page.pageSeq) {
             const option = {
-                pageSeq: pageSeq,
+                pageSeq: paramPageSeq,
                 callback: (result) => {
                     if (!result.header.success) {
                         history.push(`/page`);
@@ -74,12 +74,12 @@ const PageEdit = ({ onDelete }) => {
     }, []);
 
     useEffect(() => {
-        if (pageSeq) {
+        if (paramPageSeq) {
             setBtnDisabled(false);
         } else {
             setBtnDisabled(true);
         }
-    }, [dispatch, pageSeq]);
+    }, [dispatch, paramPageSeq]);
 
     useEffect(() => {
         setTemp({
@@ -185,16 +185,16 @@ const PageEdit = ({ onDelete }) => {
             }
 
             // 서비스명 문자체크
-            if (!bRoot && !/[a-zA-Z_-]*$/.test(page.pageServiceName)) {
+            if (!bRoot && !/[a-zA-Z0-9_-]*$/.test(page.pageServiceName)) {
                 errList.push({
                     field: 'pageServiceName',
-                    reason: '서비스명에 가능한 문자는 [영문_-]입니다',
+                    reason: '서비스명에 가능한 문자는 [영문,숫자,_,-]입니다',
                 });
                 isInvalid = isInvalid | true;
             }
 
             // 서비스명 불가 문자체크
-            if (!bRoot && page.pageServiceName === 'command') {
+            if (!bRoot && EXCLUDE_PAGE_SERVICE_NAME_LIST.includes(page.pageServiceName)) {
                 errList.push({
                     field: 'pageServiceName',
                     reason: '등록할 수 없는 서비스명입니다',
@@ -227,6 +227,19 @@ const PageEdit = ({ onDelete }) => {
                     reason: '이동URL을 입력하세요',
                 });
                 isInvalid = isInvalid | true;
+            }
+
+            // 경로파라미터 문자체크
+            if (!bRoot && !/[a-zA-Z0-9_-]*$/.test(page.urlParam)) {
+                errList.push({
+                    field: 'urlParam',
+                    reason: '경로파라미터명에 가능한 문자는 [영문,숫자,_,-]입니다',
+                });
+                isInvalid = isInvalid | true;
+            }
+
+            if (isInvalid) {
+                console.error(errList);
             }
 
             dispatch(changeInvalidList(errList));
@@ -438,7 +451,7 @@ const PageEdit = ({ onDelete }) => {
                 {/* 페이지 ID, URL */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="px-0">
-                        <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={pageSeq} inputProps={{ plaintext: true, readOnly: true }} />
+                        <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={paramPageSeq} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
                     <Col xs={6} className="px-0">
                         <MokaInputLabel
@@ -524,10 +537,11 @@ const PageEdit = ({ onDelete }) => {
                         <MokaSearchInput
                             className="pl-2"
                             value={temp.moveUrl}
-                            placeholder="이동URL"
+                            placeholder="이동할 페이지를 선택하세요"
                             onSearch={() => setMoveModalShow(true)}
                             inputProps={{ readOnly: true }}
                             disabled={temp.moveYn === 'N'}
+                            isInvalid={error.moveUrl}
                         />
                     </Col>
                 </Form.Row>
@@ -557,6 +571,7 @@ const PageEdit = ({ onDelete }) => {
                     name="description"
                     onChange={handleChangeValue}
                     inputProps={{ rows: 10 }}
+                    placeholder="설명을 입력하세요"
                 />
                 {/* 경로 파라미터명 */}
                 <MokaInputLabel
@@ -571,6 +586,8 @@ const PageEdit = ({ onDelete }) => {
                     value={temp.urlParam}
                     name="urlParam"
                     onChange={handleChangeValue}
+                    placeholder="파라미터명을 입력하세요"
+                    isInvalid={error.urlParam}
                 />
             </Form>
 

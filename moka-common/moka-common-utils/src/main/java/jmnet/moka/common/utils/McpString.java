@@ -134,8 +134,8 @@ public class McpString extends StringUtils {
      * RESTFul 리소스 URI 를 리턴 한다.
      * </pre>
      *
-     * @param sourceUri
-     * @param pathVariables
+     * @param sourceUri     url
+     * @param pathVariables pathVariables
      * @return URI
      */
     public static String genUriWithPathVariables(String sourceUri, String... pathVariables) {
@@ -668,13 +668,87 @@ public class McpString extends StringUtils {
      * @return 최대길이까지 자른 문자열+'...'
      */
     public static String ellipse(String str, int maxCount) {
+        return ellipse(str, maxCount, false);
+    }
+
+    /**
+     * 문자열이 maxCount보다 긴 경우 substring하고 말줄임표 추가
+     *
+     * @param str      문자열
+     * @param maxCount 최대길이
+     * @param isByte   byte수로 자를지 여부
+     * @return 문자열
+     */
+    public static String ellipse(String str, int maxCount, boolean isByte) {
         if (!isEmpty(str)) {
-            if (str.length() > maxCount) {
-                str = str.substring(0, maxCount) + "...";
+            if (!isByte) {
+                if (str.length() > maxCount) {
+                    str = str.substring(0, maxCount) + "...";
+                }
+            } else {
+                int byteLength = 0;
+                int realByteLength = byteLength(str);
+                if (realByteLength > maxCount) {
+                    str = byteCut(str, maxCount) + "...";
+                }
             }
         }
         return str;
     }
+
+    /**
+     * byte수로 문자열을 자른다.
+     *
+     * @param str      문자열
+     * @param maxCount 최대 길이
+     * @return 문자열
+     */
+    public static String byteSubstring(String str, int maxCount) {
+        if (!isEmpty(str)) {
+            int byteLength = 0;
+            int realByteLength = byteLength(str);
+            if (realByteLength > maxCount) {
+                str = byteCut(str, maxCount);
+            }
+        }
+        return str;
+    }
+
+    /**
+     * byte수로 문자열을 자른다.
+     *
+     * @param str      문자열
+     * @param maxCount 최대 길이
+     * @return 문자열
+     */
+    private static String byteCut(String str, int maxCount) {
+        int byteLength = 0;
+        StringBuffer sb = new StringBuffer(McpString
+                .defaultValue(str)
+                .length());
+        for (int i = 0; i < str.length() && byteLength < maxCount; i++) {
+            byteLength += String
+                    .valueOf(str.charAt(i))
+                    .getBytes().length;
+            if (byteLength < maxCount) {
+                sb.append(str.charAt(i));
+            }
+        }
+        str = sb.toString();
+        return str;
+    }
+
+
+    public static int byteLength(String str) {
+        int byteLength = 0;
+        for (int i = 0; i < str.length(); i++) {
+            byteLength += String
+                    .valueOf(str.charAt(i))
+                    .getBytes().length;
+        }
+        return byteLength;
+    }
+
 
     /**
      * <pre>

@@ -52,13 +52,13 @@ public class EditLogServiceImpl implements EditLogService {
     @Transactional
     public EditLog insertEditLog(EditLog editLog) {
         log.debug("[INSERT DOMAIN] insert editLog, {}", editLog);
-        editLog.setErrMsg(McpString.ellipse(editLog.getErrMsg(), 490));
+        editLog.setErrMsg(McpString.byteSubstring(editLog.getErrMsg(), 1000));
         return editLogRepository.save(editLog);
     }
 
     @Override
     public EditLog updateEditLog(EditLog editLog) {
-        editLog.setErrMsg(McpString.ellipse(editLog.getErrMsg(), 490));
+        editLog.setErrMsg(McpString.byteSubstring(editLog.getErrMsg(), 1000));
         EditLog returnVal = editLogRepository.save(editLog);
         log.debug("[UPDATE DOMAIN] Edit Log SeqNo : {}", returnVal.getSeqNo());
         return returnVal;

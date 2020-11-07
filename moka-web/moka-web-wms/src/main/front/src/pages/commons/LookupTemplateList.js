@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { ITEM_PG, ITEM_CT, ITEM_SK, API_BASE_URL, ITEM_TP } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTableTypeButton, MokaTable, MokaThumbTable } from '@components';
 import { defaultTemplateSearchType } from '@pages/commons';
+import { getTpZone, getTpSize } from '@store/codeMgt';
 import { getTemplateLookupList, changeLookupSearchOption, initialState, clearLookup, GET_TEMPLATE_LOOKUP_LIST } from '@store/template';
 import columnDefs from './LookupTemplateListColums';
 import TemplateHtmlModal from './TemplateHtmlModal';
@@ -180,6 +181,12 @@ const LookupTemplateList = (props) => {
             );
         }
     }, [show, latestDomainId, dispatch, seq, seqType]);
+
+    useEffect(() => {
+        dispatch(getTpZone());
+        dispatch(getTpSize());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>

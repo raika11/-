@@ -41,10 +41,10 @@ const TemplateHtmlModal = (props) => {
                 callback: ({ header }) => {
                     if (header.success) {
                         toast.success(header.message);
+                        handleHide();
                     } else {
                         toast.warn(header.message);
                     }
-                    handleHide();
                 },
             }),
         );

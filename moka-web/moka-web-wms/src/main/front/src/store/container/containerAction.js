@@ -32,8 +32,9 @@ export const [GET_CONTAINER, GET_CONTAINER_SUCCESS, GET_CONTAINER_FAILURE] = cre
 export const getContainerList = createAction(GET_CONTAINER_LIST, (...actions) => actions);
 export const getContainer = createAction(GET_CONTAINER, ({ containerSeq }) => ({ containerSeq }));
 export const [GET_CONTAINER_LOOKUP_LIST, GET_CONTAINER_LOOKUP_LIST_SUCCESS, GET_CONTAINER_LOOKUP_LIST_FAILURE] = createRequestActionTypes('container/GET_CONTAINER_LOOKUP_LIST');
+export const [GET_CONTAINER_LOOKUP, GET_CONTAINER_LOOKUP_SUCCESS, GET_CONTAINER_LOOKUP_FAILURE] = createRequestActionTypes('container/GET_CONTAINER_LOOKUP');
 export const getContainerLookupList = createAction(GET_CONTAINER_LOOKUP_LIST, (...actions) => actions);
-
+export const getContainerLookup = createAction(GET_CONTAINER_LOOKUP, ({ containerSeq, callback }) => ({ containerSeq, callback }));
 /**
  * 모달 데이터(일시적인 데이터) 조회
  */

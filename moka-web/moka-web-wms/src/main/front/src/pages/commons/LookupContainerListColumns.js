@@ -1,5 +1,5 @@
 import React from 'react';
-import { MokaTableAppendButton, MokaTableLinkButton } from '@components';
+import { MokaTableAppendButton, MokaTableLinkButton, MokaTableLoadButton } from '@components';
 
 const columnDefs = [
     {
@@ -45,9 +45,18 @@ export const ctColumnDefs = [
     {
         headerName: '컨테이너명',
         field: 'containerName',
-        width: 276,
+        width: 240,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'containerName',
+    },
+    {
+        headerName: '',
+        field: 'load',
+        width: 36,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;
+        },
     },
     {
         headerName: '',

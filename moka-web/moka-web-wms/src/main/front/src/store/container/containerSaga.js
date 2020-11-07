@@ -21,6 +21,11 @@ const getContainerLookupList = callApiAfterActions(act.GET_CONTAINER_LOOKUP_LIST
 const getContainer = createRequestSaga(act.GET_CONTAINER, api.getContainer);
 
 /**
+ * 컨테이너 lookup 조회
+ */
+const getContainerLookup = createRequestSaga(act.GET_CONTAINER_LOOKUP, api.getContainer);
+
+/**
  * 컨테이너 (모달용) 조회
  */
 const getContainerModal = createRequestSaga(act.GET_CONTAINER_MODAL, api.getContainer, true);
@@ -138,4 +143,5 @@ export default function* saga() {
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
     yield takeLatest(act.GET_CONTAINER_MODAL, getContainerModal);
     yield takeLatest(act.GET_CONTAINER_LOOKUP_LIST, getContainerLookupList);
+    yield takeLatest(act.GET_CONTAINER_LOOKUP, getContainerLookup);
 }

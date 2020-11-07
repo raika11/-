@@ -7,9 +7,9 @@ import Button from 'react-bootstrap/Button';
 
 import { ITEM_PG, ITEM_SK, ITEM_CT } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
-import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
+import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, getContainerLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
 import columnDefs, { ctColumnDefs } from './LookupContainerListColumns';
-import { defaultContainerSearchType, LookupAgGridHeight } from '@pages/commons';
+import { defaultContainerSearchType, LookupAgGridHeight, LookupAgGridMineHeight } from '@pages/commons';
 import ContainerHtmlModal from './ContainerHtmlModal';
 
 const propTypes = {
@@ -29,6 +29,10 @@ const propTypes = {
      * row의 append 버튼 클릭 이벤트
      */
     onAppend: PropTypes.func,
+    /**
+     * row의 load 버튼 클릭 이벤트
+     */
+    onLoad: PropTypes.func,
 };
 const defaultProps = {
     show: true,
@@ -38,7 +42,7 @@ const defaultProps = {
  * seq, seqType을 검색조건으로 사용하는 Lookup 컨테이너 리스트
  */
 const LookupContainerList = (props) => {
-    const { seq, seqType, show, onAppend } = props;
+    const { seq, seqType, show, onAppend, onLoad } = props;
     const dispatch = useDispatch();
 
     const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
@@ -107,6 +111,26 @@ const LookupContainerList = (props) => {
         window.open(`/container/${data.containerSeq}`);
     };
 
+    /**
+     * 로드 버튼 클릭
+     * @param {object} data row data
+     */
+    const handleClickLoad = useCallback(
+        (data) => {
+            if (onLoad) {
+                // 상세 데이터를 조회한다
+                const option = {
+                    containerSeq: data.containerSeq,
+                    callback: (response) => {
+                        onLoad(response);
+                    },
+                };
+                dispatch(getContainerLookup(option));
+            }
+        },
+        [dispatch, onLoad],
+    );
+
     useEffect(() => {
         return () => {
             dispatch(clearLookup());
@@ -118,6 +142,7 @@ const LookupContainerList = (props) => {
         setRowData(
             list.map((data) => ({
                 ...data,
+                handleClickLoad,
                 handleClickAppend,
                 handleClickLink,
             })),
@@ -193,7 +218,7 @@ const LookupContainerList = (props) => {
 
                 {/* ag-grid table */}
                 <MokaTable
-                    agGridHeight={LookupAgGridHeight}
+                    agGridHeight={seqType === ITEM_CT ? LookupAgGridMineHeight : LookupAgGridHeight}
                     columnDefs={seqType === ITEM_CT ? ctColumnDefs : columnDefs}
                     rowData={rowData}
                     onRowNodeId={(data) => data.containerSeq}
@@ -203,13 +228,14 @@ const LookupContainerList = (props) => {
                     page={search.page}
                     size={search.size}
                     onChangeSearchOption={handleChangeSearchOption}
-                    preventRowClickCell={['append', 'link']}
+                    preventRowClickCell={['append', 'link', 'load']}
                     selected={selected.containerSeq}
                 />
             </MokaCard>
             <ContainerHtmlModal
                 containerSeq={selected.containerSeq}
                 show={showModal}
+                containerSave={(seqType === ITEM_PG || seqType === ITEM_SK) ? true : false}
                 onHide={() => {
                     setShowModal(false);
                     setSelected({});

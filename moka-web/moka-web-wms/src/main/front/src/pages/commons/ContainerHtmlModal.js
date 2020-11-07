@@ -1,57 +1,181 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MokaModalEditor } from '@components';
-import { getContainerModal } from '@store/container';
-import { notification } from '@utils/toastUtil';
+import { getContainerModal, getContainer, changeContainerBody, saveContainer, clearContainer, hasRelationList, GET_CONTAINER, SAVE_CONTAINER } from '@store/container';
+import toast, { notification } from '@utils/toastUtil';
 
 /**
  * 컨테이너 TEMS 소스 보여주는 모달
  * (수정 불가, local state만 사용)
  */
 const ContainerHtmlModal = (props) => {
-    const { show, onHide, containerSeq } = props;
+    const { show, onHide, containerSeq, containerSave = false } = props;
     const dispatch = useDispatch();
 
+    const { container, containerBody, invalidList, loading } = useSelector((store) => ({
+        container: store.container.container,
+        containerBody: store.container.containerBody,
+        invalidList: store.container.invalidList,
+        loading: store.loading[GET_CONTAINER] || store.loading[SAVE_CONTAINER],
+    }));
+
     // state
-    const [container, setContainer] = useState({});
-    const [loading, setLoading] = useState(false);
+    const [defaultValue, setDefalutValue] = useState('');
+    const [error, setError] = useState({});
+    const [buttons, setButtons] = useState(null);
+    const [containerModal, setContainerModal] = useState({});
+    const [loadingModal, setLoadingModal] = useState(false);
 
     /**
      * 닫기
      */
     const handleHide = () => {
-        setContainer({});
+        if (containerSave) {
+            setError({});
+            dispatch(clearContainer());
+        } else {
+            setContainerModal({});
+        }        
         onHide();
+    };
+
+    /**
+     * 컨테이너 저장
+     */
+    const submitContainer = () => {
+        dispatch(
+            saveContainer({
+                callback: ({ header }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                        handleHide();
+                    } else {
+                        toast.warn(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
+     * 관련아이템 체크
+     */
+    const handleClickSave = () => {
+        const options = {
+            containerSeq,
+            callback: ({ header, body }) => {
+                if (header.success) {
+                    // 관련 아이템 없음
+                    if (!body) submitContainer();
+                    // 관련 아이템 있음
+                    else {
+                        toast.confirm(
+                            <React.Fragment>
+                                다른 곳에서 사용 중입니다.
+                                <br />
+                                변경 시 전체 수정 반영됩니다.
+                                <br />
+                                수정하시겠습니까?
+                            </React.Fragment>,
+                            () => {
+                                submitContainer();
+                            },
+                            () => {},
+                        );
+                    }
+                } else {
+                    toast.warn(header.message);
+                }
+            },
+        };
+        dispatch(hasRelationList(options));
+    };
+    
+    /**
+     * onBlur
+     * @param {string} value 에디터 내용
+     */
+    const handleBlur = (value) => {
+        if (containerSave) {
+            dispatch(changeContainerBody(value));
+        }
     };
 
     useEffect(() => {
         if (containerSeq && show) {
-            setLoading(true);
-            dispatch(
-                getContainerModal({
-                    containerSeq,
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            setContainer(body);
-                        } else {
-                            notification(header.message);
-                        }
-                        setLoading(false);
-                    },
-                }),
-            );
+            if (containerSave) {
+                dispatch(
+                    getContainer({
+                        containerSeq: containerSeq,
+                    }),
+                );
+            
+                setButtons([
+                    { text: '저장', variant: 'primary', onClick: handleClickSave },
+                    { text: '닫기', variant: 'gray150', onClick: handleHide },
+                ]);
+            } else {
+                setLoadingModal(true);
+                dispatch(
+                    getContainerModal({
+                        containerSeq,
+                        callback: ({ header, body }) => {
+                            if (header.success) {
+                                setContainerModal(body);
+                            } else {
+                                notification(header.message);
+                            }
+                            setLoadingModal(false);
+                        },
+                    }),
+                );
+                setButtons([{ text: '닫기', variant: 'gray150', onClick: handleHide }]);
+            }
         }
-    }, [containerSeq, show, dispatch]);
+    }, [containerSeq, show, containerSave, dispatch]);
+
+    useEffect(() => {
+        if (containerSave) {
+            setDefalutValue(containerBody);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [container.containerSeq, containerSave]);
+
+    useEffect(() => {
+        if (containerSave) {
+            let isInvalid = false;
+
+            // invalidList 처리
+            if (invalidList.length > 0) {
+                invalidList.forEach((i) => {
+                    if (i.field === 'containerBody') {
+                        setError({
+                            line: Number(i.extra),
+                            message: i.reason,
+                        });
+                        isInvalid = isInvalid || true;
+                    }
+                });
+            }
+
+            if (!isInvalid) {
+                setError({});
+            }
+        }
+    }, [invalidList]);
 
     return (
         <MokaModalEditor
-            title={container.containerName || ''}
+            title={containerSave ? container.containerName || '' : containerModal.containerName || ''}
             show={show}
             onHide={handleHide}
-            defaultValue={container.containerBody}
-            buttons={[{ text: '닫기', variant: 'gray150', onClick: handleHide }]}
-            options={{ readOnly: true }}
-            loading={loading}
+            onBlur={handleBlur}
+            defaultValue={containerSave ? defaultValue : containerModal.containerBody}
+            value={containerSave ? containerBody : containerModal.containerBody}
+            buttons={buttons}
+            options={{ readOnly: !containerSave }}
+            error={error}
+            loading={containerSave ? loading : loadingModal}
         />
     );
 };

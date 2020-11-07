@@ -148,7 +148,7 @@ const Container = () => {
     /**
      * 히스토리 로드 버튼 이벤트
      */
-    const handleClickLoad = ({ header, body }) => {
+    const handleClickHistLoad = ({ header, body }) => {
         if (header.success) {
             toast.confirm(
                 <React.Fragment>
@@ -158,6 +158,26 @@ const Container = () => {
                 </React.Fragment>,
                 () => {
                     dispatch(changeContainerBody(body.body));
+                },
+            );
+        } else {
+            toast.error(header.message);
+        }
+    };
+
+    /**
+     * 컨테이너 로드 버튼 이벤트
+     */
+    const handleClickContainerLoad = ({ header, body }) => {
+        if (header.success) {
+            toast.confirm(
+                <React.Fragment>
+                    현재 작업된 소스가 변경됩니다.
+                    <br />
+                    변경하시겠습니까?
+                </React.Fragment>,
+                () => {
+                    dispatch(changeContainerBody(body.containerBody));
                 },
             );
         } else {
@@ -241,7 +261,7 @@ const Container = () => {
                                         <RelationInSkinList show={activeTabIdx === 2} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_CT} seq={container.containerSeq} />
+                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickContainerLoad} />
                                     </Suspense>,
                                     <Suspense>
                                         <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_CT} seq={container.containerSeq} onAppend={handleAppendTag} />
@@ -250,7 +270,7 @@ const Container = () => {
                                         <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_CT} seq={container.containerSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense>
-                                        <HistoryList show={activeTabIdx === 6} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickLoad} />
+                                        <HistoryList show={activeTabIdx === 6} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickHistLoad} />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}

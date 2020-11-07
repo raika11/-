@@ -36,6 +36,8 @@ export const initialState = {
             searchType: 'all',
             keyword: '',
         },
+        container: {},
+        containerError: null,
     },
     container: {},
     containerBody: '',
@@ -131,6 +133,17 @@ export default handleActions(
                 draft.lookup.list = initialState.lookup.list;
                 draft.lookup.total = initialState.lookup.total;
                 draft.lookup.error = payload;
+            });
+        },
+        [act.GET_CONTAINER_LOOKUP_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.lookup.container = body;
+                draft.lookup.containerError = initialState.containerError;
+            });
+        },
+        [act.GET_CONTAINER_LOOKUP_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.lookup.containerError = payload;
             });
         },
         /**

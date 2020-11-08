@@ -3,6 +3,7 @@ import React from 'react';
 // layout
 import { NoFrameLayout, SidebarCloseLayout, SidebarOpenLayout } from '@layout';
 import Page404 from '@pages/Auth/Page404';
+import ComponentDashboard from '@pages/Dashboard/ComponentDashboard';
 
 // page
 const Dashboard = React.lazy(() => import('@pages/Dashboard'));
@@ -226,6 +227,16 @@ const routes = [
         exact: false,
         strict: true,
     },*/
+    {
+        path: '/component-dashboard',
+        name: 'component-dashboard',
+        displayName: '컴포넌트 테스트용 대시보드',
+        component: ComponentDashboard,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
 ];
 
 export default routes;

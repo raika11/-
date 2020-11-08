@@ -72,7 +72,7 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     }
 
     @Override
-    public void deleteCodeMgtGrp(CodeMgtGrp codeMgtGrp, String name) {
+    public void deleteCodeMgtGrp(CodeMgtGrp codeMgtGrp) {
         log.info("[DELETE codeMgtGrp] seqNo : {}", codeMgtGrp.getSeqNo());
 
         codeMgtGrpRepository.deleteById(codeMgtGrp.getSeqNo());
@@ -102,7 +102,7 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     }
 
     @Override
-    public void deleteCodeMgt(CodeMgt codeMgt, String name) {
+    public void deleteCodeMgt(CodeMgt codeMgt) {
         log.info("[DELETE codeMgt] codeMgt seqNo : {}", codeMgt.getSeqNo());
 
         codeMgtRepository.deleteById(codeMgt.getSeqNo());

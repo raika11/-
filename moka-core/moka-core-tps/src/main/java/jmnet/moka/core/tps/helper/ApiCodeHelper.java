@@ -18,17 +18,14 @@ public class ApiCodeHelper {
     private MessageByLocale messageByLocale;
 
     /**
-     * <pre>
      * apiCodeId (공통코드) -> apiHost, apiPath
-     * </pre>
      *
-     * @param request   요청
      * @param codeMgts  API타입의 공통코드 목록
      * @param apiCodeId 공통코드
      * @return apiHost, apiPath
      * @throws InvalidDataException apiCodeId 가 공통코드에 없음 에러
      */
-    public Map<String, String> getDataApi(HttpServletRequest request, List<CodeMgt> codeMgts, String apiCodeId)
+    public Map<String, String> getDataApi(List<CodeMgt> codeMgts, String apiCodeId)
             throws InvalidDataException {
 
         Optional<CodeMgt> codeMgt = codeMgts.stream()
@@ -45,8 +42,8 @@ public class ApiCodeHelper {
             returnMap.put(TpsConstants.API_PATH, codeMgt.get()
                                                         .getCdNmEtc2());
         } else {
-            InvalidDataDTO validDto = new InvalidDataDTO("apiCodeId", messageByLocale.get("tps.dataset.error.invalid.apiCodeId", request));
-            String validMessage = messageByLocale.get("tps.common.error.invalidSearch", request);
+            InvalidDataDTO validDto = new InvalidDataDTO("apiCodeId", messageByLocale.get("tps.dataset.error.invalid.apiCodeId"));
+            String validMessage = messageByLocale.get("tps.common.error.invalidSearch");
             throw new InvalidDataException(validDto, validMessage);
         }
 

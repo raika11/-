@@ -49,23 +49,20 @@ public class PurgeHelper {
     private MessageByLocale messageByLocale;
 
     /**
-     * <pre>
      * tms퍼지. 모든 아이템에 해당. 한개 도메인 퍼지
-     * </pre>
-     * 
-     * @param request 요청
+     *
      * @param domainId 도메인아이디
      * @param itemType 아이템타입
      * @param seq 아이템순번
      * @return 실패시 실패메세지
      * @throws Exception
      */
-    public String purgeTms(HttpServletRequest request, String domainId, String itemType, Long seq)
+    public String purgeTms(String domainId, String itemType, Long seq)
             throws Exception {
 
         List<String> domainIds = new ArrayList<String>(1);
         domainIds.add(domainId);
-        return purgeTms(request, domainIds, itemType, seq);
+        return purgeTms(domainIds, itemType, seq);
     }
 
     public String purgeTmsDomain(HttpServletRequest request) {
@@ -106,18 +103,15 @@ public class PurgeHelper {
     }
 
     /**
-     * <pre>
      * tms퍼지. 모든 아이템에 해당. 여러개 도메인 퍼지
-     * </pre>
-     * 
-     * @param request 요청
-     * @param domainId 도메인아이디
+     *
+     * @param domainIds 도메인아이디
      * @param itemType 아이템타입
      * @param seq 아이템순번
      * @return 실패시 실패메세지
      * @throws Exception
      */
-    public String purgeTms(HttpServletRequest request, List<String> domainIds, String itemType,
+    public String purgeTms(List<String> domainIds, String itemType,
             Long seq) throws Exception {
 
         if (McpString.isEmpty(deployMode) || !deployMode.equals("periodic")) {
@@ -136,7 +130,7 @@ public class PurgeHelper {
         List<PurgeResult> purgeResultList = task.purge();
 
         boolean success = true;
-        String message = messageByLocale.get("tps.common.error.purge", request);
+        String message = messageByLocale.get("tps.common.error.purge");
         for (PurgeResult result : purgeResultList) {
             if (!result.isSuccess()) {
                 success = false;
@@ -153,16 +147,13 @@ public class PurgeHelper {
 
 
     /**
-     * <pre>
      * 바니쉬 퍼지. 페이지만 해당함.
-     * </pre>
-     * 
-     * @param request 요청
+     *
      * @param page 페이지엔티티
      * @return 실패시 실패메세지
      * @throws Exception
      */
-    public String purgeVarnish(HttpServletRequest request, Page page) throws Exception {
+    public String purgeVarnish(Page page) throws Exception {
 
         PagePurgeTask task = new PagePurgeTask();
         for (String host : varnishHosts) {
@@ -176,7 +167,7 @@ public class PurgeHelper {
         List<PurgeResult> purgeResultList = task.purge();
 
         boolean success = true;
-        String message = messageByLocale.get("tps.common.error.purge", request);
+        String message = messageByLocale.get("tps.common.error.purge");
         for (PurgeResult result : purgeResultList) {
             if (!result.isSuccess()) {
                 success = false;

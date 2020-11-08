@@ -59,13 +59,12 @@ public class HistoryRestController {
     /**
      * 히스토리 목록조회
      *
-     * @param request 요청
      * @param search  검색조건
      * @return 히스토리 목록
      */
     @ApiOperation(value = "히스토리 목록조회")
     @GetMapping
-    public ResponseEntity<?> getHistoryList(HttpServletRequest request, @Valid @SearchParam HistSearchDTO search)
+    public ResponseEntity<?> getHistoryList(@Valid @SearchParam HistSearchDTO search)
             throws Exception {
 
         String itemType = search.getSeqType();
@@ -76,31 +75,6 @@ public class HistoryRestController {
             resultList.setTotalCnt(search.getTotal());
             resultList.setList(histList);
 
-            //            if (itemType.equals(MokaConstants.ITEM_PAGE)) {
-            //                // 페이지 히스토리 조회
-            //                List<HistSimpleVO> histList = historyService.findAllPageHist(search);
-            //                resultList.setTotalCnt(search.getTotal());
-            //                resultList.setList(histList);
-            //
-            //            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
-            //                // 스킨 히스토리 조회
-            //                List<HistSimpleVO> histList = historyService.findAllSkinHist(search);
-            //                resultList.setTotalCnt(search.getTotal());
-            //                resultList.setList(histList);
-            //
-            //            } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
-            //                // 컨테이너 히스토리 조회
-            //                List<HistSimpleVO> histList = historyService.findAllContainerHist(search);
-            //                resultList.setTotalCnt(search.getTotal());
-            //                resultList.setList(histList);
-            //
-            //            } else if (itemType.equals(MokaConstants.ITEM_TEMPLATE)) {
-            //                // 템플릿 히스토리 조회
-            //                List<HistSimpleVO> histList = historyService.findAllTemplateHist(search);
-            //                resultList.setTotalCnt(search.getTotal());
-            //                resultList.setList(histList);
-            //            }
-
             ResultDTO<ResultListDTO<HistSimpleVO>> resultDTO = new ResultDTO<ResultListDTO<HistSimpleVO>>(resultList);
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -108,22 +82,20 @@ public class HistoryRestController {
         } catch (Exception e) {
             log.error("[FAIL TO LOAD HISTORY LIST]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD HISTORY LIST]", e, true);
-            throw new Exception(messageByLocale.get("tps.history.error.select", request), e);
+            throw new Exception(messageByLocale.get("tps.history.error.select"), e);
         }
     }
 
     /**
      * 히스토리 상세조회
      *
-     * @param request HTTP 요청
      * @param histSeq 순번
      * @return 페이지 히스토리
      * @throws NoDataException 데이터없음
      */
     @ApiOperation(value = "히스토리 상세조회")
     @GetMapping("/{histSeq}")
-    public ResponseEntity<?> getHistory(HttpServletRequest request,
-            @PathVariable("histSeq") @Min(value = 0, message = "{tps.history.error.min.histseq}") Long histSeq,
+    public ResponseEntity<?> getHistory(@PathVariable("histSeq") @Min(value = 0, message = "{tps.history.error.min.histseq}") Long histSeq,
             @Valid @SearchParam HistSearchDTO search)
             throws Exception {
 
@@ -153,13 +125,13 @@ public class HistoryRestController {
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
         } catch (NoDataException e) {
-            String message = messageByLocale.get("tps.common.error.no-data", request);
+            String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(ActionType.SELECT, message, true);
             throw new NoDataException(message);
         } catch (Exception e) {
             log.error("[FAIL TO LOAD HISTORY]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD HISTORY]", e, true);
-            throw new Exception(messageByLocale.get("tps.history.error.histseq.select", request), e);
+            throw new Exception(messageByLocale.get("tps.history.error.histseq.select"), e);
         }
     }
 }

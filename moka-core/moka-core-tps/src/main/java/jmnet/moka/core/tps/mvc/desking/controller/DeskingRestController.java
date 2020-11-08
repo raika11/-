@@ -169,7 +169,7 @@ public class DeskingRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.common.error.save", request), e);
+            throw new Exception(messageByLocale.get("tps.common.error.insert", request), e);
         }
     }
 

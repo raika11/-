@@ -63,14 +63,13 @@ public class RelationRestController {
     /**
      * 관련 아이템 목록조회
      *
-     * @param request HTTP요청
      * @param search  검색조건
      * @return 관련아이템 목록
      * @throws Exception 예외
      */
     @ApiOperation(value = "관련 아이템 목록조회(부모찾기)")
     @GetMapping
-    public ResponseEntity<?> getRelationList(HttpServletRequest request, @Valid @SearchParam RelationSearchDTO search)
+    public ResponseEntity<?> getRelationList(@Valid @SearchParam RelationSearchDTO search)
             throws Exception {
 
         String relType = search.getRelType();
@@ -160,7 +159,7 @@ public class RelationRestController {
         } catch (Exception e) {
             log.error("[RELATION SELECT FAILED] seq: {} {} {}", search.getRelSeqType(), search.getRelSeq(), e.getMessage());
             tpsLogger.error(ActionType.SELECT, "[RELATION SELECT FAILED]", e, true);
-            throw new Exception(messageByLocale.get("tps.relation.error.relations", request), e);
+            throw new Exception(messageByLocale.get("tps.common.error.has-relations"), e);
         }
     }
 

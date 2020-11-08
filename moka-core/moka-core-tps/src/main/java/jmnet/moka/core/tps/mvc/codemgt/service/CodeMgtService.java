@@ -86,9 +86,8 @@ public interface CodeMgtService {
      * </pre>
      *
      * @param codeMgtGrp 그룹정보grpCd
-     * @param name       사용자
      */
-    public void deleteCodeMgtGrp(CodeMgtGrp codeMgtGrp, String name);
+    public void deleteCodeMgtGrp(CodeMgtGrp codeMgtGrp);
 
     /**
      * <pre>
@@ -128,9 +127,8 @@ public interface CodeMgtService {
      * 코드정보 삭제
      *
      * @param codeMgt 코드정보
-     * @param name    사용자
      */
-    public void deleteCodeMgt(CodeMgt codeMgt, String name);
+    public void deleteCodeMgt(CodeMgt codeMgt);
 
     /**
      * <pre>

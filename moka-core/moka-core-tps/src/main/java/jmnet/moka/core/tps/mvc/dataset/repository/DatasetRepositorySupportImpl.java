@@ -52,5 +52,4 @@ public class DatasetRepositorySupportImpl extends QuerydslRepositorySupport impl
 
         return new PageImpl<Dataset>(list.getResults(), pageable, list.getTotal());
     }
-
 }

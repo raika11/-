@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 예약어 API 2020. 6. 17. ssc 최초생성
+ * 예약어 API
  *
  * @author ssc
  * @since 2020. 6. 17. 오전 11:46:08
@@ -92,7 +92,6 @@ public class ReservedRestController {
     /**
      * 예약어 상세조회
      *
-     * @param request     HTTP 요청
      * @param reservedSeq 예약어아이디 (필수)
      * @return 예약어정보
      * @throws NoDataException      예약어 정보가 없음
@@ -101,15 +100,14 @@ public class ReservedRestController {
      */
     @ApiOperation(value = "예약어 상세조회")
     @GetMapping("/{reservedSeq}")
-    public ResponseEntity<?> getReserved(HttpServletRequest request,
-            @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
+    public ResponseEntity<?> getReserved(@PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
             throws NoDataException, InvalidDataException, Exception {
 
-        validData(request, reservedSeq, null);
+        validData(reservedSeq, null);
 
         Reserved reserved = reservedService.findReservedBySeq(reservedSeq)
                                            .orElseThrow(() -> {
-                                               String message = messageByLocale.get("tps.common.error.no-data", request);
+                                               String message = messageByLocale.get("tps.common.error.no-data");
                                                tpsLogger.fail(message, true);
                                                return new NoDataException(message);
                                            });
@@ -123,13 +121,12 @@ public class ReservedRestController {
     /**
      * 예약어정보 유효성 검사
      *
-     * @param request     요청
      * @param reservedSeq 예약어 순번. 0이면 등록일때 유효성 검사
      * @param reservedDTO 예약어정보
      * @throws InvalidDataException 데이타유효성예외
      * @throws Exception            기타예외
      */
-    private void validData(HttpServletRequest request, Long reservedSeq, ReservedDTO reservedDTO)
+    private void validData(Long reservedSeq, ReservedDTO reservedDTO)
             throws InvalidDataException, Exception {
 
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
@@ -137,7 +134,7 @@ public class ReservedRestController {
         if (reservedDTO != null) {
             // url id와 json의 id가 동일한지 검사
             if (reservedSeq > 0 && !reservedSeq.equals(reservedDTO.getReservedSeq())) {
-                String message = messageByLocale.get("tps.common.error.no-data", request);
+                String message = messageByLocale.get("tps.common.error.no-data");
                 invalidList.add(new InvalidDataDTO("matchId", message));
             }
 
@@ -146,7 +143,7 @@ public class ReservedRestController {
         }
 
         if (invalidList.size() > 0) {
-            String validMessage = messageByLocale.get("tps.reserved.error.invalidContent", request);
+            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
             throw new InvalidDataException(invalidList, validMessage);
         }
     }
@@ -154,18 +151,17 @@ public class ReservedRestController {
     /**
      * 예약어 등록
      *
-     * @param request     요청
      * @param reservedDTO 등록할 예약어정보
      * @return 등록된 예약어정보
      * @throws Exception
      */
     @ApiOperation(value = "예약어 등록")
     @PostMapping
-    public ResponseEntity<?> postReserved(HttpServletRequest request, @Valid ReservedDTO reservedDTO)
+    public ResponseEntity<?> postReserved(@Valid ReservedDTO reservedDTO)
             throws Exception {
 
         // 데이타유효성검사.
-        validData(request, (long) 0, reservedDTO);
+        validData((long) 0, reservedDTO);
 
         // 등록
         Reserved reserved = modelMapper.map(reservedDTO, Reserved.class);
@@ -175,21 +171,20 @@ public class ReservedRestController {
 
             ReservedDTO dto = modelMapper.map(returnValue, ReservedDTO.class);
 
-            String message = messageByLocale.get("tps.common.success.insert", request);
+            String message = messageByLocale.get("tps.common.success.insert");
             ResultDTO<ReservedDTO> resultDto = new ResultDTO<ReservedDTO>(dto, message);
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO INSERT RESERVED]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT RESERVED]", e, true);
-            throw new Exception(messageByLocale.get("tps.reserved.error.save", request), e);
+            throw new Exception(messageByLocale.get("tps.common.error.insert"), e);
         }
     }
 
     /**
      * 예약어수정
      *
-     * @param request     요청
      * @param reservedSeq 예약어번호
      * @param reservedDTO 수정할 예약어정보
      * @return 수정된 예약어정보
@@ -199,19 +194,18 @@ public class ReservedRestController {
      */
     @ApiOperation(value = "예약어수정")
     @PutMapping("/{reservedSeq}")
-    public ResponseEntity<?> putReserved(HttpServletRequest request,
-            @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.invalid.reservedSeq}") Long reservedSeq,
+    public ResponseEntity<?> putReserved(@PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq,
             @Valid ReservedDTO reservedDTO)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이타유효성검사.
-        validData(request, reservedSeq, reservedDTO);
+        validData(reservedSeq, reservedDTO);
 
         // 수정
         Reserved newReserved = modelMapper.map(reservedDTO, Reserved.class);
         Reserved orgReserved = reservedService.findReservedBySeq(reservedSeq)
                                               .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.reserved.error.no-data", request);
+                                                  String message = messageByLocale.get("tps.common.error.no-data");
                                                   tpsLogger.fail(ActionType.UPDATE, message, true);
                                                   return new NoDataException(message);
                                               });
@@ -220,7 +214,7 @@ public class ReservedRestController {
 
             ReservedDTO dto = modelMapper.map(returnValue, ReservedDTO.class);
 
-            String message = messageByLocale.get("tps.common.success.update", request);
+            String message = messageByLocale.get("tps.common.success.update");
             ResultDTO<ReservedDTO> resultDto = new ResultDTO<ReservedDTO>(dto, message);
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -228,7 +222,7 @@ public class ReservedRestController {
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE RESERVED] seq: {} {}", reservedDTO.getReservedSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE RESERVED]", e, true);
-            throw new Exception(messageByLocale.get("tps.reserved.error.save", request), e);
+            throw new Exception(messageByLocale.get("tps.common.error.update"), e);
         }
 
     }
@@ -236,7 +230,6 @@ public class ReservedRestController {
     /**
      * 예약어삭제
      *
-     * @param request     요청
      * @param reservedSeq 삭제 할 예약어순번 (필수)
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
@@ -245,14 +238,13 @@ public class ReservedRestController {
      */
     @ApiOperation(value = "예약어삭제")
     @DeleteMapping("/{reservedSeq}")
-    public ResponseEntity<?> deleteReserved(HttpServletRequest request,
-            @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.invalid.reservedSeq}") Long reservedSeq)
+    public ResponseEntity<?> deleteReserved(@PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
             throws NoDataException, Exception {
 
         // 데이타 확인
         Reserved reserved = reservedService.findReservedBySeq(reservedSeq)
                                            .orElseThrow(() -> {
-                                               String message = messageByLocale.get("tps.reserved.error.no-data", request);
+                                               String message = messageByLocale.get("tps.common.error.no-data");
                                                tpsLogger.fail(ActionType.DELETE, message, true);
                                                return new NoDataException(message);
                                            });
@@ -262,7 +254,7 @@ public class ReservedRestController {
             reservedService.deleteReserved(reserved);
 
             // 3. 결과리턴
-            String message = messageByLocale.get("tps.common.success.delete", request);
+            String message = messageByLocale.get("tps.common.success.delete");
             ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -270,7 +262,7 @@ public class ReservedRestController {
         } catch (Exception e) {
             log.error("[FAIL TO DELETE RESERVED] seq: {} {}", reservedSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE RESERVED]", e, true);
-            throw new Exception(messageByLocale.get("tps.reserved.error.delete", request), e);
+            throw new Exception(messageByLocale.get("tps.common.error.delete"), e);
         }
     }
 

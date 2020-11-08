@@ -51,17 +51,24 @@ public class HistSearchDTO extends SearchDTO {
     @Pattern(regexp = "^(PG)|(CS)|(CT)|(TP)|()$", message = "{tps.history.error.pattern.seqType}")
     private String seqType;
 
+    /**
+     * 작업일자
+     */
     @DTODateTimeFormat
     private Date regDt;
 
-    // 정렬 기본값을 설정
     public HistSearchDTO() {
+        // 정렬 기본값을 설정
         super("regDt,desc");
         super.setUseTotal(MokaConstants.YES);
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
     }
 
+    /**
+     * 작업시작일자(프로시져용)
+     * @return 작업시작일자
+     */
     public String getStartRegDt() {
         if (regDt != null) {
             return McpDate.dateStr(regDt, MokaConstants.JSON_DATE_FORMAT);
@@ -69,6 +76,10 @@ public class HistSearchDTO extends SearchDTO {
         return null;
     }
 
+    /**
+     * 작업종료일자(프로시져용)
+     * @return 작업종료일자
+     */
     public String getEndRegDt() {
         if (regDt != null) {
             Date endDate = McpDate.datePlus(regDt, 1);  // 마지막날은 +1

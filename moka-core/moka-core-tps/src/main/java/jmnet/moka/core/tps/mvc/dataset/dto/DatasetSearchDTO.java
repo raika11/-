@@ -80,8 +80,8 @@ public class DatasetSearchDTO extends SearchDTO {
     @JsonIgnore
     private String apiHost;
 
-    // 정렬 기본값을 설정
     public DatasetSearchDTO() {
+        // 정렬 기본값을 설정
         super(DatasetVO.class, "datasetSeq,desc");
         autoCreateYn = TpsConstants.SEARCH_TYPE_ALL;
         useTotal = MokaConstants.YES;

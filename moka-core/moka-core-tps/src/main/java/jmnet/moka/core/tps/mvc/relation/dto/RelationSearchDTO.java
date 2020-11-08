@@ -17,22 +17,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.domain.Pageable;
 
 /**
- * <pre>
  * 컨테이너,컴포넌트,템플릿,데이타셋,광고가 사용된 관련 페이지,컨테이너,본문 조회조건
- * 2020. 4. 20. jeon 최초생성
- * </pre>
  *
- * @author jeon
+ * @author ssc
  * @since 2020. 4. 20. 오후 1:39:07
  */
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 public class RelationSearchDTO extends SearchDTO {
 
@@ -62,8 +63,8 @@ public class RelationSearchDTO extends SearchDTO {
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private String domainId;
 
-    // 검색 조건의 기본값을 설정
     public RelationSearchDTO() {
+        // 검색 조건의 기본값을 설정
         super("pageSeq,desc");
         super.setUseTotal(MokaConstants.YES);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);

@@ -40,35 +40,35 @@ public class CodeMgtGrpDTO implements Serializable {
     /**
      * 일련번호
      */
-    @Min(value = 0, message = "{tps.codeMgtGrp.error.invalid.seqNo}")
+    @Min(value = 0, message = "{tps.codeMgtGrp.error.min.seqNo}")
     private Long seqNo;
 
     /**
      * 그룹코드
      */
-    @NotNull(message = "{tps.codeMgtGrp.error.invalid.grpCd}")
-    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.invalid.grpCd2}")
-    @Length(min = 1, max = 12, message = "{tps.codeMgtGrp.error.invalid.grpCd3}")
+    @NotNull(message = "{tps.codeMgtGrp.error.notnull.grpCd}")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}")
+    @Length(min = 1, max = 12, message = "{tps.codeMgtGrp.error.length.grpCd}")
     private String grpCd;
 
     /**
      * 코드명
      */
-    @NotNull(message = "{tps.codeMgtGrp.error.invalid.cdNm}")
-    @Pattern(regexp = ".+", message = "{tps.codeMgtGrp.error.invalid.cdNm}")
-    @Length(min = 1, max = 100, message = "{tps.codeMgtGrp.error.invalid.cdNm2}")
+    @NotNull(message = "{tps.codeMgtGrp.error.notnull.cdNm}")
+    @Pattern(regexp = ".+", message = "{tps.codeMgtGrp.error.pattern.cdNm}")
+    @Length(min = 1, max = 100, message = "{tps.codeMgtGrp.error.length.cdNm}")
     private String cdNm;
 
     /**
      * 코드영문명
      */
-    @Length(max = 100, message = "{tps.codeMgtGrp.error.invalid.cdEngNm}")
+    @Length(max = 100, message = "{tps.codeMgtGrp.error.length.cdEngNm}")
     private String cdEngNm;
 
     /**
      * 코드코멘트
      */
-    @Length(max = 100, message = "{tps.codeMgtGrp.error.invalid.cdComment}")
+    @Length(max = 100, message = "{tps.codeMgtGrp.error.length.cdComment}")
     private String cdComment;
 
     /**

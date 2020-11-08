@@ -438,7 +438,7 @@ public class DeskingServiceImpl implements DeskingService {
         ComponentWork componentWork = componentWorkService.findComponentWorkBySeq(componentWorkSeq)
                 .orElseThrow(() -> new NoDataException(messageC));
 
-        String messageT = messageByLocale.get("tps.template.error.no-data");
+        String messageT = messageByLocale.get("tps.co.error.no-data");
         Template template = templateService.findTemplateBySeq(templateSeq)
                 .orElseThrow(() -> new NoDataException(messageT));
 

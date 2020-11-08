@@ -41,18 +41,36 @@ public class HistDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<HistDTO>>() {
     }.getType();
 
+    /**
+     * 히스토리 일련번호
+     */
     @NotNull(message = "{tps.common.error.invalid.seq}")
     private Long seq;
 
+    /**
+     * 도메인
+     */
     @NotNull(message = "{tps.common.error.invalid.domainId}")
     private DomainSimpleDTO domain;
 
+    /**
+     * 히스토리 tems소스
+     */
     private String body;
 
+    /**
+     * 작업유형 I/U/D
+     */
     private String workType;
 
+    /**
+     * 작업일자
+     */
     @DTODateTimeFormat
     private Date regDt;
 
+    /**
+     * 작업자ID
+     */
     private String regId;
 }

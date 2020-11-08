@@ -21,10 +21,7 @@ import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 /**
- * <pre>
  * 히스토리 정보
- * 2020. 5. 21. ssc 최초생성
- * </pre>
  *
  * @author ssc
  * @since 2020. 5. 21. 오전 11:17:30
@@ -43,21 +40,39 @@ public class HistSimpleVO implements Serializable {
     public static final Type TYPE = new TypeReference<List<HistSimpleVO>>() {
     }.getType();
 
+    /**
+     * 히스토리 일련번호
+     */
     @Column(name = "SEQ")
     private Long seq;
 
+    /**
+     * 도메인
+     */
     private DomainSimpleDTO domain;
 
+    /**
+     * 작업유형 I/U/D
+     */
     @Column(name = "WORK_TYPE")
     private String workType;
 
+    /**
+     * 작업일자
+     */
     @Column(name = "REG_DT")
     @DTODateTimeFormat
     private Date regDt;
 
+    /**
+     * 작업자ID
+     */
     @Column(name = "REG_ID")
     private String regId;
 
+    /**
+     * 작업자명
+     */
     @Column(name = "REG_NM")
     private String regNm;
 }

@@ -350,7 +350,7 @@ public class DomainRestController {
         if (!McpString.isNullOrEmpty(domainDTO.getApiCodeId())) {
             // apiCodeId -> apiHost, apiPath
             Map<String, String> apiInfo =
-                    apiCodeHelper.getDataApi(request, codeMgtService.findUseList(TpsConstants.DATAAPI), domainDTO.getApiCodeId());
+                    apiCodeHelper.getDataApi(codeMgtService.findUseList(TpsConstants.DATAAPI), domainDTO.getApiCodeId());
 
             domain.setApiHost(apiInfo.get(TpsConstants.API_HOST));
             domain.setApiPath(apiInfo.get(TpsConstants.API_PATH));

@@ -1,35 +1,29 @@
 package jmnet.moka.core.tps.mvc.code.service;
 
 import java.util.List;
+import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
+import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
+import jmnet.moka.core.tps.mvc.code.entity.ServiceMap;
+import jmnet.moka.core.tps.mvc.code.repository.MastercodeRepository;
+import jmnet.moka.core.tps.mvc.code.repository.ServiceMapRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
-import jmnet.moka.core.tps.mvc.code.mapper.CodeMapper;
-import jmnet.moka.core.tps.mvc.code.vo.CodeVO;
 
 @Service
 public class CodeServiceImpl implements CodeService {
-    
     @Autowired
-    private CodeMapper codeMapper;
+    private MastercodeRepository mastercodeRepository;
+
+    @Autowired
+    private ServiceMapRepository serviceMapRepository;
 
     @Override
-    public List<CodeVO> findSearchCodes(CodeSearchDTO search) {
-        return codeMapper.findSearchCodes(search);
+    public List<Mastercode> findAllMastercode(CodeSearchDTO search) {
+        return mastercodeRepository.findList(search);
     }
 
     @Override
-    public List<CodeVO> findLargeCodes(CodeSearchDTO search) {
-        return codeMapper.findLargeCodes(search);
-    }
-
-    @Override
-    public List<CodeVO> findMiddleCodes(CodeSearchDTO search) {
-        return codeMapper.findMiddleCodes(search);
-    }
-
-    @Override
-    public List<CodeVO> findSmallCodes(CodeSearchDTO search) {
-        return codeMapper.findSmallCodes(search);
+    public List<ServiceMap> findAllServiceMap(CodeSearchDTO search) {
+        return serviceMapRepository.findList(search);
     }
 }

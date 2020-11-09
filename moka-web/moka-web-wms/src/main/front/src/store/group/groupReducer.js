@@ -16,9 +16,7 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         sort: 'groupCd,asc',
     },
-    group: {
-        aaaa : {}
-    },
+    group: {},
     groupError: {},
     invalidList: [],
 };
@@ -27,7 +25,6 @@ export const initialState = {
  * reducer
  */
 export default handleActions(
-
     {
         /**
          * 검색조건 변경
@@ -77,7 +74,7 @@ export default handleActions(
          * 목록
          */
         [act.GET_GROUP_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            console.log("성공듀서탓음::" + state);
+            console.log('성공듀서탓음::' + state);
             return produce(state, (draft) => {
                 draft.error = initialState.error;
                 draft.list = body.list;
@@ -85,7 +82,7 @@ export default handleActions(
             });
         },
         [act.GET_GROUP_LIST_FAILURE]: (state, { payload }) => {
-            console.log("실패듀서탓음::" + decodeURIComponent(qs.stringify(payload)));
+            console.log('실패듀서탓음::' + decodeURIComponent(qs.stringify(payload)));
 
             return produce(state, (draft) => {
                 draft.error = payload;

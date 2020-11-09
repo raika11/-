@@ -1,5 +1,5 @@
 import React from 'react';
-import MemberGroupAgGrid from '@pages/reporterMgr/reporterMgrAgGrid';
+import MemberGroupAgGrid from '@pages/reporterMgr/ReporterMgrAgGrid';
 
 /**
  * 도메인 관리 리스트

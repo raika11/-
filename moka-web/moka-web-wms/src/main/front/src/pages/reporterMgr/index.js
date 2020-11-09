@@ -1,1 +1,1 @@
-export { default } from './reporterMgr';
+export { default } from './ReporterMgr';

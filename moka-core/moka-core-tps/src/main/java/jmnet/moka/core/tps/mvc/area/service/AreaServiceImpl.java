@@ -97,8 +97,7 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Long checkAreaComp(Area area)
-            throws Exception {
+    public Long checkAreaComp(Area area) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         Long success = (long) 0;
         paramMap.put("areaSeq", area.getAreaSeq());

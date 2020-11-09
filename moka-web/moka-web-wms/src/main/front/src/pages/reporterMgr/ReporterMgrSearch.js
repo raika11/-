@@ -3,8 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Row, Col } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
-import { initialState, getContainerList, changeSearchOption } from '@store/container';
-import { changeLatestDomainId } from '@store/auth';
+import { initialState, getReporterMgrList, changeSearchOption } from '@store/reporterMgr';
+
+//import { changeLatestDomainId } from '@store/auth';
 
 /**
  * 컨테이너 검색 컴포넌트
@@ -32,7 +33,7 @@ const ReporterMgrSearch = () => {
     useEffect(() => {
         if (latestDomainId && latestDomainId !== search.domainId) {
             dispatch(
-                getContainerList(
+                getReporterMgrList(
                     changeSearchOption({
                         ...search,
                         domainId: latestDomainId,
@@ -48,7 +49,7 @@ const ReporterMgrSearch = () => {
      */
     const handleSearch = useCallback(() => {
         dispatch(
-            getContainerList(
+            getReporterMgrList(
                 changeSearchOption({
                     ...search,
                     page: 0,
@@ -63,7 +64,7 @@ const ReporterMgrSearch = () => {
      */
     const handleChangeSearchOption = (e) => {
         if (e.target.name === 'domainId') {
-            dispatch(changeLatestDomainId(e.target.value));
+            //dispatch(changeLatestDomainId(e.target.value));
             history.push('/container');
         } else if (e.target.name === 'searchType') {
             setSearch({
@@ -81,15 +82,6 @@ const ReporterMgrSearch = () => {
     return (
         <Form className="mb-10">
             <Form.Group as={Row} className="mb-2">
-                <Col xs={5} className="p-0 pr-2">
-                    <MokaInput as="select" className="m-0 mb-2" value={search.searchType} onChange={handleChangeSearchOption} name="searchType">
-                        {searchTypeList.map((searchType) => (
-                            <option key={searchType.id} value={searchType.id}>
-                                {searchType.name}
-                            </option>
-                        ))}
-                    </MokaInput>
-                </Col>
                 <Col xs={7} className="p-0">
                     <MokaSearchInput value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
                 </Col>

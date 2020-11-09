@@ -120,8 +120,8 @@ public class PageNode implements Serializable {
     /**
      * 노드 찾기
      *
-     * @param findPageId 찾을 페이지 아이디
-     * @param rootNode   트리상의 찾기시작할 시작노드
+     * @param findPageSeq 찾을 페이지 아이디
+     * @param rootNode    트리상의 찾기시작할 시작노드
      * @return
      */
     public PageNode findNode(Long findPageSeq, PageNode rootNode) {

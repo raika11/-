@@ -5,7 +5,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -90,13 +89,12 @@ public class PageRestController {
     /**
      * 페이지 목록조회(트리용)
      *
-     * @param request 요청
-     * @param search  검색조건(검색조건있으나, 해당되는 페이지만 조회되는것은 아니다.)
+     * @param search 검색조건(검색조건있으나, 해당되는 페이지만 조회되는것은 아니다.)
      * @return 페이지 트리 목록(PageNode)
      */
     @ApiOperation(value = "페이지목록조회(트리용)")
     @GetMapping("/tree")
-    public ResponseEntity<?> getPageTree(HttpServletRequest request, @Valid @SearchParam PageSearchDTO search) {
+    public ResponseEntity<?> getPageTree(@Valid @SearchParam PageSearchDTO search) {
 
         PageNode pageNode = pageService.makeTree(search);
 
@@ -267,8 +265,8 @@ public class PageRestController {
      */
     @ApiOperation(value = "페이지 수정")
     @PutMapping(value = "/{pageSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> putPage(@PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq, @RequestBody @Valid PageDTO pageDTO,
-            Principal principal)
+    public ResponseEntity<?> putPage(@PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
+            @RequestBody @Valid PageDTO pageDTO, Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이타유효성검사.
@@ -288,7 +286,7 @@ public class PageRestController {
 
             // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
             purgeHelper.purgeTms(returnValue.getDomain()
-                                                     .getDomainId(), MokaConstants.ITEM_PAGE, returnValue.getPageSeq());
+                                            .getDomainId(), MokaConstants.ITEM_PAGE, returnValue.getPageSeq());
 
             // 결과리턴
             PageDTO dto = modelMapper.map(returnValue, PageDTO.class);
@@ -320,7 +318,8 @@ public class PageRestController {
      */
     @ApiOperation(value = "페이지 삭제")
     @DeleteMapping("/{pageSeq}")
-    public ResponseEntity<?> deletePage(@PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq, Principal principal)
+    public ResponseEntity<?> deletePage(@PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
+            Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 
         // 1.1 아이디체크
@@ -379,8 +378,9 @@ public class PageRestController {
         }
 
         String message = "";
-        if(ret)
+        if (ret) {
             messageByLocale.get("tps.page.error.duplicate.pageServiceName");
+        }
         ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(ret, message);
         tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -438,7 +438,7 @@ public class PageRestController {
     /**
      * 페이지 목록조회(목록용)
      *
-     * @param search  검색조건
+     * @param search 검색조건
      * @return 페이지 목록(PageDTO)
      * @throws NoDataException 등록된 페이지 없음
      */

@@ -23,6 +23,7 @@ public interface AreaMapper extends BaseMapper<AreaDTO, AreaSearchDTO> {
 
     /**
      * 하위 편집영역목록 조회
+     *
      * @param map
      * @return
      */
@@ -30,7 +31,15 @@ public interface AreaMapper extends BaseMapper<AreaDTO, AreaSearchDTO> {
 
     /**
      * 편집영역컴포넌트가 페이지내에 존재하는 지 체크
+     *
      * @param map
      */
     void checkAreaComp(Map<String, Object> map);
+
+    /**
+     * 편집영역 컴포넌트 삭제
+     *
+     * @param map
+     */
+    void deleteByAreaSeq(Map<String, Object> map);
 }

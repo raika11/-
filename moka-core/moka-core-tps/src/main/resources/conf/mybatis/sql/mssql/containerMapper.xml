@@ -10,7 +10,7 @@
     #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
-      <when test="usePaging = 'Y'">
+      <when test='usePaging != null and usePaging == "Y"'>
         #{usePaging},
       </when>
       <otherwise>

@@ -141,13 +141,14 @@ public class Area extends BaseAudit {
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "area", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
+    //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "area", cascade = {CascadeType.ALL})
     private Set<AreaComp> areaComps = new LinkedHashSet<AreaComp>();
 
     @PrePersist
     @PreUpdate
     public void prePersist() {
         this.depth = this.depth == null ? 1 : this.depth;
-        this.usedYn = this.usedYn == null ? MokaConstants.YES : MokaConstants.NO;
+        this.usedYn = this.usedYn == null ? MokaConstants.YES : this.usedYn;
         this.areaDiv = this.areaDiv == null ? MokaConstants.ITEM_COMPONENT : this.areaDiv;
         this.areaAlign = this.areaAlign == null ? TpsConstants.AREA_ALIGN_V : this.areaAlign;
         this.ordNo = this.ordNo == null ? 1 : this.ordNo;

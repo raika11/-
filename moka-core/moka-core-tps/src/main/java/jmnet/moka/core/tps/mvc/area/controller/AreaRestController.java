@@ -22,6 +22,7 @@ import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.dto.AreaCompLoadDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
+import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.dto.ParentAreaDTO;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
@@ -306,5 +307,23 @@ public class AreaRestController {
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE AREA]", e, true);
             throw new Exception(messageByLocale.get("tps.area.error.delete"), e);
         }
+    }
+
+    /**
+     * 편집영역 목록조회(트리용)
+     *
+     * @return 편집영역 트리 목록(AreaNode)
+     */
+    @ApiOperation(value = "편집영역 목록조회(트리용)")
+    @GetMapping("/tree")
+    public ResponseEntity<?> getAreaTree() {
+
+        AreaNode areaNode = areaService.makeTree();
+
+        ResultDTO<AreaNode> resultDto = new ResultDTO<AreaNode>(areaNode);
+
+        tpsLogger.success(true);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

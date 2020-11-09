@@ -18,7 +18,7 @@
     </choose>
 
     <choose>
-      <when test="usePaging = 'Y'">
+      <when test='usePaging != null and usePaging == "Y"'>
         #{usePaging},
       </when>
       <otherwise>
@@ -27,7 +27,7 @@
     </choose>
 
     <choose>
-      <when test="useArea = 'Y'">
+      <when test='useArea != null and useArea == "Y"'>
         #{useArea},
       </when>
       <otherwise>
@@ -77,7 +77,7 @@
     </choose>
 
     <choose>
-      <when test="usePaging = 'Y'">
+      <when test='usePaging != null and usePaging == "Y"'>
         #{usePaging},
       </when>
       <otherwise>
@@ -86,7 +86,7 @@
     </choose>
 
     <choose>
-      <when test="useArea = 'Y'">
+      <when test='useArea != null and useArea == "Y"'>
         #{useArea},
       </when>
       <otherwise>

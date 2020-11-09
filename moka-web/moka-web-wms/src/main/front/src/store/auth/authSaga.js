@@ -55,16 +55,22 @@ export function* logout() {
 /**
  * 메뉴 조회
  */
-export function* getUserMenuTree() {
+export function* getUserMenuTree({ payload: { pathName } }) {
     const ACTION = authAction.GET_USER_MENU_TREE;
     const SUCCESS = authAction.GET_USER_MENU_TREE_SUCCESS;
     const FAILURE = authAction.GET_USER_MENU_TREE_FAILURE;
-
     yield put(startLoading(ACTION));
     try {
         const response = yield call(api.getUserMenuTree);
 
         if (response.data.header.success) {
+            const menuOpens = {};
+            const menuPaths = [];
+            menuPaths.push('/404');
+            getOpenMenuParentMenuId(response.data.body.children, pathName, menuOpens, menuPaths);
+            response.data.body.menuPaths = menuPaths;
+            response.data.body.menuOpens = menuOpens;
+
             yield put({
                 type: SUCCESS,
                 payload: response.data,
@@ -87,6 +93,32 @@ export function* getUserMenuTree() {
     yield put(finishLoading(ACTION));
 }
 
+const getOpenMenuParentMenuId = (menu, pathName, menuOpens, menuPaths) => {
+    for (let i = 0; i < menu.length; i++) {
+        const menuItem = menu[i];
+        if (menuItem.menuUrl !== '') {
+            menuPaths.push(menuItem.menuUrl);
+        }
+        if (menuItem.children !== null) {
+            const isOpen = getOpenMenuParentMenuId(menuItem.children, pathName, menuOpens, menuPaths);
+            if (isOpen && menuItem.depth !== 1) {
+                menuOpens[menuItem.parentMenuId] = true;
+            }
+        } else {
+            let menuPath = '';
+            if (menuItem.menuUrl === '/') {
+                menuPath = menuItem.menuUrl;
+            } else if (menuItem.menuUrl.length > 0) {
+                menuPath = '/' + menuItem.menuUrl.split('/')[1];
+            }
+
+            if (pathName === menuPath) {
+                menuOpens[menuItem.parentMenuId] = true;
+                return true;
+            }
+        }
+    }
+};
 /**
  * 도메인 목록 검색 => latestDomainId 변경
  */

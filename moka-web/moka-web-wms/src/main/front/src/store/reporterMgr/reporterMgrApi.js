@@ -22,13 +22,6 @@ export const duplicateReporterMgrCheck = (repSeq) => {
     });
 };
 
-// // 그룹 내 속한 멤버 존재 여부
-// export const hasRelationList = (groupCd) => {
-//     return instance.get(`/api/groups/${groupCd}/has-members`).catch((err) => {
-//         throw err;
-//     });
-// };
-
 //  그룹 수정
 export const putReporterMgr = ({ reporterMgr }) => {
     console.log('iiiiiiiiiiiiiiiiiiiiiisert::' + decodeURIComponent(qs.stringify(reporterMgr)));

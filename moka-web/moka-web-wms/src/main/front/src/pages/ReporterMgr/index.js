@@ -1,2 +1,1 @@
-import ReporterMgr from './ReporterMgr';
-export default ReporterMgr;
+export { default } from './ReporterMgr';

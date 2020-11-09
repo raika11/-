@@ -15,6 +15,10 @@ const propTypes = {
      */
     tooltipText: PropTypes.string,
     /**
+     * tooltip의 id
+     */
+    tooltipId: PropTypes.string,
+    /**
      * className
      */
     className: PropTypes.string,
@@ -31,7 +35,7 @@ const defaultProps = {
  * overlay Tooltip 있는 버튼
  */
 const MokaOverlayTooltipButton = (props) => {
-    const { children, variant, tooltipText, className, onClick } = props;
+    const { children, variant, tooltipText, className, onClick, tooltipId } = props;
 
     const handleClick = useCallback(
         (e) => {
@@ -46,7 +50,7 @@ const MokaOverlayTooltipButton = (props) => {
     );
 
     return (
-        <OverlayTrigger overlay={<Tooltip>{tooltipText}</Tooltip>}>
+        <OverlayTrigger overlay={<Tooltip id={tooltipId}>{tooltipText}</Tooltip>}>
             <Button variant={variant} className={className} onClick={handleClick}>
                 {children}
             </Button>

@@ -73,10 +73,11 @@ const AreaFormDepth2 = (props) => {
     const handleClickSave = () => {
         const save = {
             ...temp,
-            container: Object.keys(temp.container).length > 0 ? temp.container : null,
+            container: temp.container && Object.keys(temp.container).length > 0 ? temp.container : null,
             page,
             parent,
             domain,
+            areaComps,
         };
         console.log(save);
 
@@ -280,7 +281,7 @@ const AreaFormDepth2 = (props) => {
 
                         {temp.areaDiv === ITEM_CP && (
                             <Col xs={8} className="p-0 pl-2 pr-2">
-                                <MokaInput as="select" name="areaComp" value={areaComp.areaSeq} onChange={handleChangeValue}>
+                                <MokaInput as="select" name="areaComp" value={areaComp.componentSeq} onChange={handleChangeValue}>
                                     <option hidden>컴포넌트를 선택하세요</option>
                                     {componentList.map((com) => (
                                         <option value={com.componentSeq} key={com.componentSeq} data-name={com.componentName}>

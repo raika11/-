@@ -1,4 +1,3 @@
-
 import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
@@ -8,7 +7,7 @@ import clsx from 'clsx';
 import { Route, Switch } from 'react-router-dom';
 import MemberGroupEdit from '@pages/Group/GroupEdit';
 
-const MemberGroupList = React.lazy(() => import('./reporterMgrList'));
+const MemberGroupList = React.lazy(() => import('./ReporterMgrList'));
 
 const MemberGroup = () => {
     const handleAdd = () => {};
@@ -44,7 +43,8 @@ const MemberGroup = () => {
                         <>
                             <Suspense>
                                 <MemberGroupEdit />
-                            </Suspense>,
+                            </Suspense>
+                            ,
                         </>
                     )}
                 />

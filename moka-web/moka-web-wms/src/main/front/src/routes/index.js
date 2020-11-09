@@ -48,7 +48,7 @@ const routes = [
         path: '/404',
         name: 'Page404',
         displayName: '404',
-        component: () => <Page404 defaultLink="/dashboard" />,
+        component: () => <Page404 defaultLink="/" />,
         layout: NoFrameLayout,
     },
     {

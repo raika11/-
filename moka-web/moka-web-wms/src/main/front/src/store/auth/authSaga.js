@@ -93,14 +93,12 @@ export function* getUserMenuTree({ payload: { pathName } }) {
     yield put(finishLoading(ACTION));
 }
 
-const getOpenMenuParentMenuId = (menu, pathName, menuOpens, menuPaths) => {
+const getOpenMenuParentMenuId = (menu, pathName, menuOpens, menuPaths, isOpen) => {
     for (let i = 0; i < menu.length; i++) {
         const menuItem = menu[i];
-        if (menuItem.menuUrl !== '') {
-            menuPaths.push(menuItem.menuUrl);
-        }
+        isOpen = false;
         if (menuItem.children !== null) {
-            const isOpen = getOpenMenuParentMenuId(menuItem.children, pathName, menuOpens, menuPaths);
+            getOpenMenuParentMenuId(menuItem.children, pathName, menuOpens, menuPaths, isOpen);
             if (isOpen && menuItem.depth !== 1) {
                 menuOpens[menuItem.parentMenuId] = true;
             }
@@ -112,9 +110,13 @@ const getOpenMenuParentMenuId = (menu, pathName, menuOpens, menuPaths) => {
                 menuPath = '/' + menuItem.menuUrl.split('/')[1];
             }
 
+            if (menuItem.menuUrl !== '') {
+                menuPaths.push(menuItem.menuUrl);
+            }
+
             if (pathName === menuPath) {
                 menuOpens[menuItem.parentMenuId] = true;
-                return true;
+                isOpen = true;
             }
         }
     }

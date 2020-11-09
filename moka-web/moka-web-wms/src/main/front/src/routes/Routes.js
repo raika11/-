@@ -24,6 +24,10 @@ const Routes = () => {
     useEffect(() => {
         if (menu.length === 0) {
             dispatch(getUserMenuTree({ pathName: pathName }));
+        } else {
+            if (menu.menuPaths.indexOf(pathName) < 0) {
+                window.location.href = '/404';
+            }
         }
     }, [dispatch, menu, pathName]);
 

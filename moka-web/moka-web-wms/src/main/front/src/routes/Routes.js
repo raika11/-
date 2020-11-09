@@ -1,21 +1,37 @@
 import React, { Suspense, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 
 // routes
 import routes from './index';
 import { getUserMenuTree, getDomainList } from '@store/auth/authAction';
-
-// component
-import Loader from '@layout/components/Loader';
 import { MokaLoader, ScrollToTop } from '@components';
-import SpinnerComponent from '@/pages/TestBoard/SpinnerComponent';
 
 const Routes = () => {
     const dispatch = useDispatch();
+    const location = useLocation();
+    const { menu } = useSelector((store) => ({
+        menu: store.auth.menu,
+    }));
+
+    let pathName = '';
+    if (location.pathname === '/') {
+        pathName = location.pathname;
+    } else if (location.pathname.length > 0) {
+        pathName = '/' + location.pathname.split('/')[1];
+    }
 
     useEffect(() => {
-        dispatch(getUserMenuTree());
+        if (menu.length === 0) {
+            dispatch(getUserMenuTree({ pathName: pathName }));
+        } else {
+            if (menu.menuPaths.indexOf(pathName) < 0) {
+                window.location.href = '/404';
+            }
+        }
+    }, [dispatch, menu, pathName]);
+
+    useEffect(() => {
         // 전체 도메인리스트 조회
         dispatch(getDomainList());
     }, [dispatch]);

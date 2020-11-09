@@ -8,7 +8,6 @@
 package jmnet.moka.core.tps.mvc.area.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -44,7 +43,6 @@ public class AreaSearchDTO extends SearchDTO {
     /**
      * 도메인
      */
-    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 

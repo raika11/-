@@ -74,8 +74,7 @@ public class AreaRestController {
      */
     @ApiOperation(value = "편집영역 목록조회(부모 편집영역별)")
     @GetMapping
-    public ResponseEntity<?> getAreaList(@Valid @SearchParam AreaSearchDTO search)
-            throws NoDataException {
+    public ResponseEntity<?> getAreaList(@Valid @SearchParam AreaSearchDTO search) {
 
         Page<Area> returnValue = areaService.findAllArea(search);
         List<AreaDTO> areaDtoList = modelMapper.map(returnValue.getContent(), AreaDTO.TYPE);
@@ -98,7 +97,7 @@ public class AreaRestController {
     @ApiOperation(value = "편집영역 상세조회")
     @GetMapping("/{areaSeq}")
     public ResponseEntity<?> getArea(@PathVariable("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
-        throws Exception {
+            throws Exception {
 
         Area area = areaService.findAreaBySeq(areaSeq)
                                .orElseThrow(() -> {
@@ -112,11 +111,11 @@ public class AreaRestController {
             // 페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.
             AreaCompLoadDTO areaCompLoadDTO = new AreaCompLoadDTO();
             Long check = areaService.checkAreaComp(area);
-            if(check == -1 || check == -3) {
+            if (check == -1 || check == -3) {
                 areaCompLoadDTO.setByPage(true);  // true이면 해당 컴포넌트 미존재
                 areaCompLoadDTO.setByPageMessage(messageByLocale.get("tps.areaComp.error.bypage"));
             }
-            if(check == -2 || check == -3) {
+            if (check == -2 || check == -3) {
                 areaCompLoadDTO.setByContainer(true);  // true이면 해당 컴포넌트 미존재
                 areaCompLoadDTO.setByContainerMessage(messageByLocale.get("tps.areaComp.error.bycontainer"));
             }

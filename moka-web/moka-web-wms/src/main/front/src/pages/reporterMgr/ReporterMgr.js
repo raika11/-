@@ -4,21 +4,27 @@ import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import { Route, Switch, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { clearStore } from '@store/group';
 import toast, { notification, toastr } from '@utils/toastUtil';
-// relations
-const MemberGroupList = React.lazy(() => import('./ReporterMgrList'));
-const GroupEdit = React.lazy(() => import('./ReporterMgrEdit'));
+import { GET_REPORTER_MGR, CHANGE_REPORTER_MGR } from '@store/reporterMgr';
 
-const Group = () => {
+// relations
+const ReporterMgrList = React.lazy(() => import('./ReporterMgrList'));
+const ReporterMgrEdit = React.lazy(() => import('./ReporterMgrEdit'));
+
+const ReporterMgr = () => {
     // 히스토리셋팅
     const history = useHistory();
     const dispatch = useDispatch();
 
+    const { loading } = useSelector((store) => ({
+        loading: store.loading[GET_REPORTER_MGR] || store.loading[CHANGE_REPORTER_MGR],
+    }));
+
     // 마스터 그리드 클릭시 초기화 이벤트
     const handleClickAddGroup = (e) => {
-        history.push('/group');
+        history.push('/reporterMgr');
     };
 
     React.useEffect(() => {
@@ -30,54 +36,41 @@ const Group = () => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>사용자 그룹관리</title>
-                <meta name="description" content="사용자 그룹관리 페이지 입니다." />
+                <title>기자 관리</title>
+                <meta name="description" content="기자 관리 페이지 입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             <MokaCard
-                title="사용자 그룹관리"
+                title="기자 관리"
                 width={480}
                 titleClassName="h-100 mb-0 pb-0"
                 headerClassName="d-flex justify-content-between align-item-center"
                 className="mb-0 mr-10"
                 height={CARD_DEFAULT_HEIGHT}
             >
-                <div className="mb-3 d-flex justify-content-end">
-                    <Button variant="dark" onClick={handleClickAddGroup}>
-                        그룹 추가
-                    </Button>
-                </div>
                 <Suspense>
-                    <MemberGroupList />
+                    <reporterMgrList />
                 </Suspense>
             </MokaCard>
-            <Switch>
-                <Route
-                    path={['/group', '/group/:groupCd']}
-                    exact
-                    render={() => (
-                        <>
-                            <MokaIconTabs
-                                //expansion={expansionState[2]}
-                                //onExpansion={handleTabExpansion}
-                                tabWidth={1000}
-                                height={CARD_DEFAULT_HEIGHT}
-                                tabs={[
-                                    <Suspense>
-                                        <GroupEdit />
-                                    </Suspense>,
-                                ]}
-                                tabNavWidth={48}
-                                tabNavPosition="right"
-                                tabNavs={[{ title: '사이트 정보', text: 'Info' }]}
-                            />
-                        </>
-                    )}
-                />
-            </Switch>
+
+            {/* 도메인 정보 */}
+            <MokaCard
+                title="기자 정보"
+                width={820}
+                titleClassName="mb-0"
+                headerClassName="d-flex justify-content-between align-item-center"
+                height={CARD_DEFAULT_HEIGHT}
+                loading={loading}
+            >
+                <Suspense>
+                    <Switch>
+                        <Route path={['/reporterMgr', '/reporterMgr/:repSeq']} exact render={() => <ReporterMgrEdit />} />
+                    </Switch>
+                </Suspense>
+            </MokaCard>
         </div>
     );
 };
 
-export default Group;
+export default ReporterMgr;

@@ -1,11 +1,17 @@
 import React from 'react';
-import MemberGroupAgGrid from '@pages/reporterMgr/ReporterMgrAgGrid';
+import MemberGroupAgGrid from './ReporterMgrAgGrid';
+import Search from './ReporterMgrSearch';
 
 /**
  * 도메인 관리 리스트
  */
-const GroupList = () => {
-    return <MemberGroupAgGrid />;
+const ReporterMgrList = () => {
+    return (
+        <>
+            <Search />;
+            <MemberGroupAgGrid />;
+        </>
+    );
 };
 
-export default GroupList;
+export default ReporterMgrList;

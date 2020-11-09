@@ -200,7 +200,7 @@ export default handleActions(
         [act.GET_AREA_DEPTH3_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 const { area, areaCompLoad } = body;
-                draft.depth2.area = area;
+                draft.depth3.area = area;
                 draft.areaCompLoad = areaCompLoad;
                 draft.areaError = initialState.areaError;
                 draft.invalidList = initialState.invalidList;

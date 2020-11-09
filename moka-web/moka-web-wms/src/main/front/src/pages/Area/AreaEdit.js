@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 import Form1 from './components/AreaFormDepth1';
 import Form2 from './components/AreaFormDepth2';
-import Form3 from './components/AreaFormDepth3';
 import { PageListModal } from '@pages/commons';
 
 const AreaEdit = () => {
@@ -16,6 +15,10 @@ const AreaEdit = () => {
     const [modalDomainId, setModalDomainId] = useState();
     const [page, setPage] = useState({});
 
+    /**
+     * 페이지선택 모달의 저장버튼
+     * @param {object} data page
+     */
     const handleClickSave = (data) => {
         setPage(data);
     };
@@ -25,9 +28,9 @@ const AreaEdit = () => {
             {/* 1뎁스 폼 */}
             {selectedDepth === 1 && <Form1 />}
             {/* 2뎁스 폼 */}
-            {selectedDepth === 2 && <Form2 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} page={page} />}
+            {selectedDepth === 2 && <Form2 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} page={page} depth={2} />}
             {/* 3뎁스 폼 */}
-            {selectedDepth === 3 && <Form3 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} page={page} />}
+            {selectedDepth === 3 && <Form2 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} page={page} depth={3} />}
 
             {/* 페이지 검색 모달 */}
             <PageListModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={handleClickSave} domainId={modalDomainId} />

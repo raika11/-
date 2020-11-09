@@ -12,15 +12,17 @@ import { GET_AREA_DEPTH2, saveArea, changeArea } from '@store/area';
 import toast from '@utils/toastUtil';
 
 const AreaFormDepth2 = (props) => {
-    const { onShowModal, page, onChangeModalDomainId } = props;
+    const { onShowModal, page, onChangeModalDomainId, depth } = props;
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const { domainList, depth1List, areaDepth1, area, loading } = useSelector((store) => ({
+    const { domainList, depth1List, depth2List, areaDepth1, areaDepth2, areaDepth3, loading } = useSelector((store) => ({
         domainList: store.auth.domainList,
         depth1List: store.area.depth1.list,
+        depth2List: store.area.depth2.list,
         areaDepth1: store.area.depth1.area,
-        area: store.area.depth2.area,
+        areaDepth2: store.area.depth2.area,
+        areaDepth3: store.area.depth3.area,
         loading: store.loading[GET_AREA_DEPTH2],
     }));
 
@@ -64,12 +66,18 @@ const AreaFormDepth2 = (props) => {
 
         dispatch(
             saveArea({
-                depth: 2,
-                actions: [changeArea({ area: save, depth: 2 })],
+                depth,
+                actions: [changeArea({ area: save, depth })],
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        history.push(`/area/${body.parent.areaSeq}/${body.areaSeq}`);
+                        // depth2 결과
+                        if (depth === 2) {
+                            history.push(`/area/${body.parent.areaSeq}/${body.areaSeq}`);
+                        }
+                        // depth3 결과 (아무행동 X)
+                        else {
+                        }
                     } else {
                         toast.warn(header.message);
                     }
@@ -79,19 +87,26 @@ const AreaFormDepth2 = (props) => {
     };
 
     useEffect(() => {
-        setTemp(area);
-    }, [area]);
+        if (depth === 2) {
+            setTemp(areaDepth2);
+        } else {
+            setTemp(areaDepth3);
+        }
+    }, [depth, areaDepth2, areaDepth3]);
 
     useEffect(() => {
         // parent, domain 데이터 셋팅
-        if (area.parent.areaSeq) {
-            setParent(area.parent);
-            setDomain(area.parent.domain);
-        } else {
+        if (temp.parent && temp.parent.areaSeq) {
+            setParent(temp.parent);
+            setDomain(temp.domain);
+        } else if (depth === 2) {
             setParent(areaDepth1);
-            setDomain(areaDepth1.domain);
+            setDomain(areaDepth1.domain || {});
+        } else {
+            setParent(areaDepth2);
+            setDomain(areaDepth2.domain || {});
         }
-    }, [area.parent, areaDepth1]);
+    }, [temp, depth, areaDepth1, areaDepth2]);
 
     useEffect(() => {
         // 도메인 변경 시 모달의 도메인 검색조건 변경
@@ -107,7 +122,7 @@ const AreaFormDepth2 = (props) => {
     }, [page]);
 
     return (
-        <MokaCard title={`편집영역 ${area.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>
+        <MokaCard title={`편집영역 ${temp.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>
             <div className="d-flex justify-content-center">
                 <Col xs={10} className="p-0">
                     {/* 사용여부 */}
@@ -123,30 +138,61 @@ const AreaFormDepth2 = (props) => {
                             onChange={handleChangeValue}
                         />
                     </Form.Row>
+
                     {/* Depth1 리스트 */}
-                    <Form.Row className="mb-2">
-                        <Col xs={7} className="p-0">
-                            <MokaInputLabel
-                                as="select"
-                                name="parent"
-                                className="mb-0"
-                                labelWidth={87}
-                                label="그룹 영역"
-                                value={parent.areaSeq}
-                                onChange={handleChangeValue}
-                                disabled={parent.areaSeq ? true : false}
-                            >
-                                {depth1List.map((area) => (
-                                    <option key={area.areaSeq} value={area.areaSeq} data-areanm={area.areaNm}>
-                                        {area.areaNm}
-                                    </option>
-                                ))}
-                            </MokaInputLabel>
-                        </Col>
-                        <Col xs={5} className="p-0">
-                            <MokaInputLabel className="mb-0" labelWidth={87} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
-                        </Col>
-                    </Form.Row>
+                    {depth === 2 && (
+                        <Form.Row className="mb-2">
+                            <Col xs={7} className="p-0">
+                                <MokaInputLabel
+                                    as="select"
+                                    name="parent"
+                                    className="mb-0"
+                                    labelWidth={87}
+                                    label="그룹 영역"
+                                    value={parent.areaSeq}
+                                    onChange={handleChangeValue}
+                                    disabled={parent.areaSeq ? true : false}
+                                >
+                                    {depth1List.map((area) => (
+                                        <option key={area.areaSeq} value={area.areaSeq} data-areanm={area.areaNm}>
+                                            {area.areaNm}
+                                        </option>
+                                    ))}
+                                </MokaInputLabel>
+                            </Col>
+                            <Col xs={5} className="p-0">
+                                <MokaInputLabel className="mb-0" labelWidth={87} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
+                            </Col>
+                        </Form.Row>
+                    )}
+
+                    {/* Depth2 리스트 */}
+                    {depth === 3 && (
+                        <Form.Row className="mb-2">
+                            <Col xs={7} className="p-0">
+                                <MokaInputLabel
+                                    as="select"
+                                    name="parent"
+                                    className="mb-0"
+                                    labelWidth={87}
+                                    label="중분류 영역"
+                                    value={parent.areaSeq}
+                                    onChange={handleChangeValue}
+                                    disabled={parent.areaSeq ? true : false}
+                                >
+                                    {depth2List.map((area) => (
+                                        <option key={area.areaSeq} value={area.areaSeq} data-areanm={area.areaNm}>
+                                            {area.areaNm}
+                                        </option>
+                                    ))}
+                                </MokaInputLabel>
+                            </Col>
+                            <Col xs={5} className="p-0">
+                                <MokaInputLabel className="mb-0" labelWidth={87} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
+                            </Col>
+                        </Form.Row>
+                    )}
+
                     {/* 도메인 */}
                     <MokaInputLabel
                         className="mb-2"
@@ -164,6 +210,7 @@ const AreaFormDepth2 = (props) => {
                             </option>
                         ))}
                     </MokaInputLabel>
+
                     {/* 영역명 */}
                     <MokaInputLabel className="mb-2" label="영역명" labelWidth={87} name="areaNm" value={temp.areaNm} onChange={handleChangeValue} required />
 

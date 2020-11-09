@@ -102,6 +102,7 @@ const DatsetListModal = (props) => {
      * 취소 버튼 클릭
      */
     const handleClickCancle = () => {
+        setSearch(initialState.search);
         if (onClickCancle) onClickCancle();
         handleHide();
     };
@@ -112,7 +113,7 @@ const DatsetListModal = (props) => {
     const handleSearch = (search) => {
         dispatch(
             getDatasetApiList({
-                search,
+                search: { ...search, apiCodeId: apiCodeId, size: 100, page: 0, exclude },
                 callback: responseCallback,
             }),
         );
@@ -155,7 +156,7 @@ const DatsetListModal = (props) => {
         <MokaModal
             show={show}
             onHide={handleHide}
-            title="자동 데이터셋 검색"
+            title="API 검색"
             size="md"
             buttons={[
                 { text: '등록', onClick: handleClickSave },
@@ -198,7 +199,9 @@ const DatsetListModal = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
-                            onSearch={handleSearch}
+                            onSearch={() => {
+                                handleSearch(search);
+                            }}
                         />
                     </Col>
                 </Form.Row>

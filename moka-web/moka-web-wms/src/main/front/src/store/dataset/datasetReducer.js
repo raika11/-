@@ -18,8 +18,8 @@ export const initialState = {
     },
     searchTypeList: [
         { id: 'all', name: '전체' },
-        { id: 'datasetSeq', name: '데이터셋ID' },
-        { id: 'datasetName', name: '데이터셋명' },
+        { id: 'idLike', name: 'API명' },
+        { id: 'description', name: 'API설명' },
     ],
     dataset: {},
     datasetError: null,

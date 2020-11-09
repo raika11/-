@@ -4,12 +4,12 @@
 <mapper namespace="jmnet.moka.core.tps.mvc.editform.mapper.EditFormPartMapper">
 
 
-  <select id="delete" parameterType="EditFormSearchDTO" resultType="int"
+  <delete id="delete" parameterType="EditFormSearchDTO"
     statementType="CALLABLE">
     {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_EDIT_FORM_DELETE(
     #{formSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{partSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
     )}
-  </select>
+  </delete>
 
 </mapper>

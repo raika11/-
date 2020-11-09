@@ -24,13 +24,13 @@ export const clearSearch = createAction(CLEAR_SEARCH);
  */
 export const [GET_GROUP_LIST, GET_GROUP_LIST_SUCCESS, GET_GROUP_LIST_FAILURE] = createRequestActionTypes('group/GET_GROUP_LIST');
 export const [GET_GROUP, GET_GROUP_SUCCESS, GET_GROUP_FAILURE] = createRequestActionTypes('group/GET_GROUP');
-export const getGroupList = createAction(GET_GROUP_LIST, (...actions) =>
-{   console.log("액션탓음 ::" + actions);
+export const getGroupList = createAction(GET_GROUP_LIST, (...actions) => {
+    console.log('액션탓음 ::' + actions);
     return actions;
 });
 
 {
-    console.log("getGroupList::" + getGroupList);
+    console.log('getGroupList::' + getGroupList);
 }
 
 export const getGroup = createAction(GET_GROUP, (groupCd) => groupCd);
@@ -50,7 +50,6 @@ export const CHANGE_GROUP = 'group/CHANGE_GROUP';
 export const CHANGE_INVALID_LIST = 'group/CHANGE_INVALID_LIST';
 export const changeGroup = createAction(CHANGE_GROUP, (group) => group);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
-
 
 /**
  * 저장

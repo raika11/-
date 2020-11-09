@@ -1,36 +1,35 @@
-import React, { forwardRef, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import PartEdit from './PartEdit';
 
 const propTypes = {
-    formData: PropTypes.any,
+    parts: PropTypes.any,
+    formId: PropTypes.string,
 };
 /**
  * 기본 input
  */
 const PartList = (props) => {
-    const { formData } = props;
-    const [editForm, setEditForm] = useState(formData);
+    const { formId, parts } = props;
+    const [editForm, setEditForm] = useState(parts);
 
     const renderFormData = () => {
         const formRows = [];
-        if (editForm != null && editForm !== '') {
-            if (formData && formData.parts) {
-                formData.parts.forEach((part, partIdx) => {
-                    formRows.push(<PartEdit part={part} channelId={editForm.id} />);
-                });
-            }
+        if (parts && parts.length > 0) {
+            parts.forEach((part, partIdx) => {
+                formRows.push(<PartEdit part={part} formId={formId} />);
+            });
         }
 
         return formRows;
     };
 
     useEffect(() => {
-        if (formData) {
-            setEditForm(formData);
+        if (parts) {
+            setEditForm(parts);
         }
-    }, [formData, setEditForm]);
+    }, [parts, setEditForm]);
 
     return <div>{renderFormData()}</div>;
 };

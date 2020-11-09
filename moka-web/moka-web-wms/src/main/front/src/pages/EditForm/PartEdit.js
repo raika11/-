@@ -1,25 +1,22 @@
-import React, { forwardRef, useCallback, useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import clsx from 'clsx';
-import InputMask from 'react-input-mask';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Form from 'react-bootstrap/Form';
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import PartField from './PartField';
 import { useDispatch } from 'react-redux';
 import toast from '@/utils/toastUtil';
-import { saveEditForm, changeEditForm } from '@/store/editForm';
+import { changeEditForm, saveEditForm } from '@/store/editForm';
 
 const propTypes = {
     part: PropTypes.any,
-    channelId: PropTypes.string,
+    formId: PropTypes.string,
 };
 /**
  * 기본 input
  */
 const PartEdit = (props) => {
-    const { part, channelId } = props;
+    const { part, formId } = props;
     const dispatch = useDispatch();
 
     const handleClickSave = (event) => {
@@ -30,7 +27,7 @@ const PartEdit = (props) => {
         dispatch(
             saveEditForm({
                 type: 'insert',
-                channelId: channelId,
+                formId: formId,
                 partId: part.id,
                 actions: [
                     changeEditForm({
@@ -50,7 +47,7 @@ const PartEdit = (props) => {
             <Card.Header>
                 <Card.Title>{part.title}</Card.Title>
             </Card.Header>
-            <Card.Body style={{ overflowY: 'scroll', height: 500 }}>
+            <Card.Body>
                 {part.fieldGroups.map((fieldGroup) => (
                     <Form key={'F' + fieldGroup.group}>
                         {fieldGroup.fields.map((field, idx) => (

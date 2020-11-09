@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -8,11 +8,11 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { notification } from '@utils/toastUtil';
-import { clearEditForm, getEditForm, saveEditForm, changeEditForm, duplicateCheck, changeInvalidList } from '@store/editForm';
+import { changeEditForm, changeInvalidList, clearEditForm, duplicateCheck, getEditForm, saveEditForm } from '@store/editForm';
 import { getApi, getLang } from '@store/codeMgt';
-import { MokaInput, MokaInputLabel } from '@components';
-import EditFormPart from './PartList';
+import { MokaCard, MokaInput, MokaInputLabel } from '@components';
 import PartList from './PartList';
+import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 /**
  * 편집폼 상세/수정/등록
@@ -38,9 +38,10 @@ const EditFormEdit = ({ history, onDelete }) => {
     const [serviceUrlError, setEditFormUrlError] = useState(false);
 
     // getter
-    const { editForm, langRows, apiRows, invalidList } = useSelector(
+    const { editForm, editFormParts, langRows, apiRows, invalidList } = useSelector(
         (store) => ({
             editForm: store.editForm.editForm,
+            editFormParts: store.editForm.editFormParts,
             invalidList: store.editForm.invalidList,
         }),
         shallowEqual,
@@ -149,7 +150,7 @@ const EditFormEdit = ({ history, onDelete }) => {
         setUseYn(editForm.usedYn || 'Y');
         setEditFormUrl(editForm.serviceUrl || '');
         setDescription(editForm.description || '');
-    }, [editForm]);
+    }, [editForm, editFormParts]);
 
     /**
      * 편집폼 수정
@@ -266,137 +267,162 @@ const EditFormEdit = ({ history, onDelete }) => {
     }, [invalidList]);
 
     return (
-        <div className="d-flex justify-content-center mb-20">
-            <Form style={{ width: 605 }}>
-                {/* 사용여부 */}
-                <Form.Row>
-                    <Col xs={3} className="pl-0 pr-0">
-                        <MokaInputLabel
-                            label="사용여부"
-                            as="switch"
-                            inputProps={{ label: '', checked: usedYn === 'Y' && true }}
-                            id="editForm-useYN"
-                            name="useYN"
-                            onChange={handleChangeValue}
-                            required
-                        />
-                    </Col>
-                </Form.Row>
+        <div className="flex-fill">
+            <Row>
+                <Col xs={6}>
+                    <MokaCard className="w-100" height={CARD_DEFAULT_HEIGHT - 90}>
+                        <Form>
+                            {/* 사용여부 */}
+                            <Form.Row>
+                                <Col xs={3} className="pl-0 pr-0">
+                                    <MokaInputLabel
+                                        label="사용여부"
+                                        as="switch"
+                                        inputProps={{
+                                            label: '',
+                                            checked: usedYn === 'Y' && true,
+                                        }}
+                                        id="editForm-useYN"
+                                        name="useYN"
+                                        onChange={handleChangeValue}
+                                        required
+                                    />
+                                </Col>
+                            </Form.Row>
 
-                {/* 편집폼ID */}
-                <Form.Row>
-                    <Col xs={4} className="pl-0 pr-0">
-                        <MokaInputLabel
-                            label="편집폼ID"
-                            placeholder="ID"
-                            onChange={handleChangeValue}
-                            value={formId}
-                            name="formId"
-                            disabled={editForm.formId && true}
-                            isInvalid={formIdError}
-                            required
-                        />
-                    </Col>
-                </Form.Row>
+                            {/* 편집폼ID */}
+                            <Form.Row>
+                                <Col xs={4} className="pl-0 pr-0">
+                                    <MokaInputLabel
+                                        label="편집폼ID"
+                                        placeholder="ID"
+                                        onChange={handleChangeValue}
+                                        value={formId}
+                                        name="formId"
+                                        disabled={editForm.formId && true}
+                                        isInvalid={formIdError}
+                                        required
+                                    />
+                                </Col>
+                            </Form.Row>
 
-                {/* 편집폼명 */}
-                <Form.Row>
-                    <Col xs={9} className="pl-0 pr-0">
-                        <MokaInputLabel
-                            label="편집폼명"
-                            placeholder="편집폼 명을 입력하세요"
-                            onChange={handleChangeValue}
-                            value={formName}
-                            name="formName"
-                            isInvalid={formNameError}
-                            required
-                        />
-                    </Col>
-                </Form.Row>
+                            {/* 편집폼명 */}
+                            <Form.Row>
+                                <Col xs={9} className="pl-0 pr-0">
+                                    <MokaInputLabel
+                                        label="편집폼명"
+                                        placeholder="편집폼 명을 입력하세요"
+                                        onChange={handleChangeValue}
+                                        value={formName}
+                                        name="formName"
+                                        isInvalid={formNameError}
+                                        required
+                                    />
+                                </Col>
+                            </Form.Row>
 
-                {/* 편집폼주소 */}
-                <Form.Row>
-                    <Col xs={9} className="pl-0 pr-0">
-                        <MokaInputLabel
-                            label="편집폼주소"
-                            placeholder="편집폼 주소에서 http(s)://를 빼고 입력하세요"
-                            onChange={handleChangeValue}
-                            value={serviceUrl}
-                            name="serviceUrl"
-                            isInvalid={serviceUrlError}
-                            required
-                        />
-                    </Col>
-                </Form.Row>
+                            {/* 편집폼주소 */}
+                            <Form.Row>
+                                <Col xs={9} className="pl-0 pr-0">
+                                    <MokaInputLabel
+                                        label="편집폼주소"
+                                        placeholder="편집폼 주소에서 http(s)://를 빼고 입력하세요"
+                                        onChange={handleChangeValue}
+                                        value={serviceUrl}
+                                        name="serviceUrl"
+                                        isInvalid={serviceUrlError}
+                                        required
+                                    />
+                                </Col>
+                            </Form.Row>
 
-                {/* 플랫폼 */}
-                <Form.Row>
-                    <Col xs={3} className="p-0">
-                        <MokaInputLabel
-                            label="플랫폼"
-                            as="radio"
-                            inputProps={{
-                                custom: true,
-                                label: 'PC',
-                                checked: servicePlatform === 'P' && true,
-                            }}
-                            id="editForm-pc"
-                            name="servicePlatform"
-                            onChange={handleChangeValue}
-                            value="P"
-                            className="mb-0 h-100"
-                            required
-                        />
-                    </Col>
-                    <Col xs={1} className="p-0 mr-10">
-                        <MokaInput
-                            inputProps={{ custom: true, label: 'Mobile', checked: servicePlatform === 'M' && true }}
-                            id="editForm-mobile"
-                            as="radio"
-                            value="M"
-                            name="servicePlatform"
-                            className="mb-0 h-100 align-items-center d-flex"
-                            onChange={handleChangeValue}
-                        />
-                    </Col>
-                </Form.Row>
+                            {/* 플랫폼 */}
+                            <Form.Row>
+                                <Col xs={3} className="p-0">
+                                    <MokaInputLabel
+                                        label="플랫폼"
+                                        as="radio"
+                                        inputProps={{
+                                            custom: true,
+                                            label: 'PC',
+                                            checked: servicePlatform === 'P' && true,
+                                        }}
+                                        id="editForm-pc"
+                                        name="servicePlatform"
+                                        onChange={handleChangeValue}
+                                        value="P"
+                                        className="mb-0 h-100"
+                                        required
+                                    />
+                                </Col>
+                                <Col xs={1} className="p-0 mr-10">
+                                    <MokaInput
+                                        inputProps={{
+                                            custom: true,
+                                            label: 'Mobile',
+                                            checked: servicePlatform === 'M' && true,
+                                        }}
+                                        id="editForm-mobile"
+                                        as="radio"
+                                        value="M"
+                                        name="servicePlatform"
+                                        className="mb-0 h-100 align-items-center d-flex"
+                                        onChange={handleChangeValue}
+                                    />
+                                </Col>
+                            </Form.Row>
 
-                {/* 언어 */}
-                <Form.Row>
-                    <Col xs={4} className="pl-0 ml-0 pr-0 pl-0">
-                        <MokaInputLabel as="select" label="언어" className="pt-1 mr-0 pr-0 pl-0" onChange={handleChangeValue} value={lang} name="lang" inputProps={{ ref: elLang }}>
-                            {langRows &&
-                                langRows.map((row) => (
-                                    <option key={row.id} value={row.dtlCd}>
-                                        {row.name}
-                                    </option>
-                                ))}
-                        </MokaInputLabel>
-                    </Col>
-                </Form.Row>
+                            {/* 언어 */}
+                            <Form.Row>
+                                <Col xs={4} className="pl-0 ml-0 pr-0 pl-0">
+                                    <MokaInputLabel
+                                        as="select"
+                                        label="언어"
+                                        className="pt-1 mr-0 pr-0 pl-0"
+                                        onChange={handleChangeValue}
+                                        value={lang}
+                                        name="lang"
+                                        inputProps={{ ref: elLang }}
+                                    >
+                                        {langRows &&
+                                            langRows.map((row) => (
+                                                <option key={row.id} value={row.dtlCd}>
+                                                    {row.name}
+                                                </option>
+                                            ))}
+                                    </MokaInputLabel>
+                                </Col>
+                            </Form.Row>
 
-                {/* 메모 */}
-                <Form.Row>
-                    <Col xs={9} className="pl-0 pr-0">
-                        <MokaInputLabel as="textarea" label="매모" inputProps={{ rows: 3 }} onChange={handleChangeValue} value={description} name="description" />
-                    </Col>
-                </Form.Row>
-                {/* 버튼 */}
-                <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                    <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
-                        저장
-                    </Button>
-                    <Button className="float-left mr-10 pr-20 pl-20" variant="gray150">
-                        취소
-                    </Button>
-                    {paramId && (
-                        <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleClickDelete}>
-                            삭제
-                        </Button>
-                    )}
-                </Form.Group>
-            </Form>
-            <PartList formData={editForm}></PartList>
+                            {/* 메모 */}
+                            <Form.Row>
+                                <Col xs={9} className="pl-0 pr-0">
+                                    <MokaInputLabel as="textarea" label="매모" inputProps={{ rows: 3 }} onChange={handleChangeValue} value={description} name="description" />
+                                </Col>
+                            </Form.Row>
+                            {/* 버튼 */}
+                            <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
+                                <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
+                                    저장
+                                </Button>
+                                <Button className="float-left mr-10 pr-20 pl-20" variant="gray150">
+                                    취소
+                                </Button>
+                                {paramId && (
+                                    <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleClickDelete}>
+                                        삭제
+                                    </Button>
+                                )}
+                            </Form.Group>
+                        </Form>
+                    </MokaCard>
+                </Col>
+                <Col xs={6}>
+                    <MokaCard className="w-100" height={CARD_DEFAULT_HEIGHT - 90}>
+                        <PartList parts={editFormParts} editForm={editForm && editForm.formSeq}></PartList>
+                    </MokaCard>
+                </Col>
+            </Row>
         </div>
     );
 };

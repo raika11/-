@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-import { MokaCard, MokaInputLabel } from '@components';
+import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
 import toast from '@utils/toastUtil';
 import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
@@ -15,8 +15,9 @@ import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, sav
 const ContainerEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { container, invalidList, latestDomainId, loading } = useSelector((store) => ({
+    const { container, inputTag, invalidList, latestDomainId, loading } = useSelector((store) => ({
         container: store.container.container,
+        inputTag: store.container.inputTag,
         invalidList: store.container.invalidList,
         latestDomainId: store.auth.latestDomainId,
         loading: store.loading[GET_CONTAINER] || store.loading[DELETE_CONTAINER] || store.loading[SAVE_CONTAINER],
@@ -206,6 +207,17 @@ const ContainerEdit = ({ onDelete }) => {
                     onChange={handleChangeValue}
                     isInvalid={containerNameError}
                     required
+                />
+                {/* 입력태그 */}
+                <MokaInputGroup
+                    label="입력태그"
+                    as="textarea"
+                    value={inputTag}
+                    inputClassName="resize-none"
+                    inputProps={{ rows: 2 }}
+                    className="mb-2"
+                    disabled
+                    append={<MokaCopyTextButton copyText={inputTag} />}
                 />
             </Form>
         </MokaCard>

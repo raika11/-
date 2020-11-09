@@ -23,7 +23,7 @@ export const initialState = {
         { id: 'all', name: '전체' },
         { id: 'containerSeq', name: '컨테이너ID' },
         { id: 'containerName', name: '컨테이너명' },
-        { id: 'templateBody', name: 'TEMS 소스' },
+        { id: 'containerBody', name: 'TEMS 소스' },
     ],
     lookup: {
         total: 0,
@@ -44,6 +44,7 @@ export const initialState = {
     containerBody: '',
     containerError: null,
     inputTag: '',
+    appendTag: null,
     invalidList: [],
 };
 
@@ -119,6 +120,9 @@ export default handleActions(
         },
         [act.GET_CONTAINER_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
+                draft.container = initialState.container;
+                draft.containerBody = initialState.containerBody;
+                draft.inputTag = initialState.inputTag;
                 draft.containerError = payload;
             });
         },
@@ -171,6 +175,7 @@ export default handleActions(
         [act.DELETE_CONTAINER_SUCCESS]: (state) => {
             return produce(state, (draft) => {
                 draft.container = initialState.container;
+                draft.templateBody = initialState.templateBody;
                 draft.inputTag = initialState.inputTag;
                 draft.containerError = initialState.containerError;
             });
@@ -180,7 +185,7 @@ export default handleActions(
          */
         [act.APPEND_TAG]: (state, { payload }) => ({
             ...state,
-            inputTag: payload,
+            appendTag: payload,
         }),
     },
     initialState,

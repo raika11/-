@@ -76,4 +76,4 @@ export const hasRelationList = createAction(HAS_RELATION_LIST, ({ containerSeq, 
  * 태그삽입
  */
 export const APPEND_TAG = 'page/APPEND_TAG';
-export const appendTag = createAction(APPEND_TAG, (inputTag) => inputTag);
+export const appendTag = createAction(APPEND_TAG, (tag) => tag);

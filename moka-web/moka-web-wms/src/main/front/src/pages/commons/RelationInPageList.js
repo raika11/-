@@ -70,11 +70,11 @@ const RelationInPageList = (props) => {
     };
 
     /**
-     * row의 프리뷰 버튼 클릭
-     * @param {object} data row 데이터
+     * preview 버튼 클릭
+     * @param {object} data row data
      */
     const handleClickPreview = (data) => {
-        // 프리뷰 버튼 클릭
+        window.open(`//${data.domain.domainUrl}${data.pageUrl}`);
     };
 
     /**

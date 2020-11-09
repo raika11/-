@@ -1,5 +1,5 @@
 import React from 'react';
-import { MokaTableLinkButton } from '@components';
+import { MokaTablePreviewButton, MokaTableLinkButton } from '@components';
 
 export default [
     {
@@ -10,12 +10,16 @@ export default [
     {
         headerName: '스킨명',
         field: 'skinName',
-        width: 158,
+        width: 240,
     },
     {
-        headerName: '스타일',
-        field: 'skinStyle',
-        width: 50,
+        headerName: '',
+        field: 'preview',
+        width: 36,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTablePreviewButton {...row} onClick={data.handleClickPreview} />;
+        },
     },
     {
         headerName: '',

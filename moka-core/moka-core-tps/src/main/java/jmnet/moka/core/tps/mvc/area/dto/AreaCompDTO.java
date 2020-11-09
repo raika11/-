@@ -63,7 +63,7 @@ public class AreaCompDTO implements Serializable {
      */
     @Pattern(regexp = "^(LEFT)|(RIGHT)|(NONE)|()$", message = "{tps.areaComp.error.pattern.compAlign}")
     @Builder.Default
-    private String compAlign = TpsConstants.AREA_ALIGN_LEFT;
+    private String compAlign = TpsConstants.AREA_COMP_ALIGN_LEFT;
 
     public void setArea(AreaDTO area) {
         if (area == null) {

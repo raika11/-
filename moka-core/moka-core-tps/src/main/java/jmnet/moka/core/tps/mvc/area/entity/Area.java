@@ -23,6 +23,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
@@ -106,6 +107,13 @@ public class Area extends BaseAudit {
     private String areaDiv = MokaConstants.ITEM_COMPONENT;
 
     /**
+     * 영역정렬:가로형H/세로형V
+     */
+    @Column(name = "AREA_ALIGN")
+    @Builder.Default
+    private String areaAlign = TpsConstants.AREA_ALIGN_V;
+
+    /**
      * 컨테이너
      */
     @ManyToOne(fetch = FetchType.EAGER)
@@ -141,6 +149,7 @@ public class Area extends BaseAudit {
         this.depth = this.depth == null ? 1 : this.depth;
         this.usedYn = this.usedYn == null ? MokaConstants.YES : MokaConstants.NO;
         this.areaDiv = this.areaDiv == null ? MokaConstants.ITEM_COMPONENT : this.areaDiv;
+        this.areaAlign = this.areaAlign == null ? TpsConstants.AREA_ALIGN_V : this.areaAlign;
         this.ordNo = this.ordNo == null ? 1 : this.ordNo;
     }
 

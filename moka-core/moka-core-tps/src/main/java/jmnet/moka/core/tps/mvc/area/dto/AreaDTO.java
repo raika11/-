@@ -16,6 +16,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import jmnet.moka.core.tps.mvc.page.dto.PageSimpleDTO;
@@ -88,6 +89,13 @@ public class AreaDTO implements Serializable {
     private String areaDiv = MokaConstants.ITEM_COMPONENT;
 
     /**
+     * 영역정렬:가로형H/세로형V
+     */
+    @Pattern(regexp = "[H|V]{1}$", message = "{tps.area.error.pattern.areaAlign}")
+    @Builder.Default
+    private String areaAlign = TpsConstants.AREA_ALIGN_V;
+
+    /**
      * 컨테이너
      */
     private ContainerDTO container;
@@ -116,7 +124,7 @@ public class AreaDTO implements Serializable {
      * 컴포넌트목록
      */
     private Set<AreaCompDTO> areaComps = new LinkedHashSet<AreaCompDTO>();
-    
+
     public void addAreaComp(AreaCompDTO areaComp) {
 
         if (areaComp.getArea() == null) {

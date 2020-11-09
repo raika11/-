@@ -469,7 +469,6 @@ const DatasetEdit = ({ onDelete }) => {
                                 placeholder="데이터를 선택해주세요"
                                 value={decodeURIComponent(dataApiUrl)}
                                 onSearch={() => setDatasetApiListModalShow(true)}
-                                disabled={true}
                                 isInvalid={invalid['dataApiUrl']}
                             />
                         )}

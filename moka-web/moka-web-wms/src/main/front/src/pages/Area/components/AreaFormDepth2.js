@@ -19,8 +19,9 @@ const AreaFormDepth2 = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const { domainList, depth1List, depth2List, areaDepth1, areaDepth2, areaDepth3, loading, selectedDepth } = useSelector((store) => ({
+    const { domainList, areaCompLoad, depth1List, depth2List, areaDepth1, areaDepth2, areaDepth3, loading, selectedDepth } = useSelector((store) => ({
         domainList: store.auth.domainList,
+        areaCompLoad: store.area.areaCompLoad,
         depth1List: store.area.depth1.list,
         depth2List: store.area.depth2.list,
         areaDepth1: store.area.depth1.area,
@@ -79,10 +80,10 @@ const AreaFormDepth2 = (props) => {
     const handleClickSave = () => {
         const save = {
             ...temp,
-            container: temp.container && Object.keys(temp.container).length > 0 ? temp.container : null,
             page,
             parent,
             domain,
+            container: temp.areaDiv === ITEM_CT ? temp.container : null,
             areaComps,
         };
 
@@ -138,9 +139,10 @@ const AreaFormDepth2 = (props) => {
     }, [temp, depth, areaDepth1, areaDepth2, setPage]);
 
     useEffect(() => {
-        if (areaComps.length > 0) {
+        if (temp.areaDiv === ITEM_CP && areaComps.length > 0) {
             setAreaComp(areaComps[0]);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [areaComps]);
 
     useEffect(() => {
@@ -187,6 +189,28 @@ const AreaFormDepth2 = (props) => {
             }
         }
     }, [dispatch, page, temp.areaDiv]);
+
+    useEffect(() => {
+        // 컨테이너 변경 시 컨테이너 안의 컴포넌트 리스트 조회
+        if (container.containerSeq) {
+            dispatch(
+                getComponentListModal({
+                    search: {
+                        ...componentState.search,
+                        usePaging: 'N',
+                        useArea: 'Y',
+                        searchType: ITEM_CT,
+                        keyword: container.containerSeq,
+                        domainId: page.domain.domainId,
+                    },
+                    callback: ({ body }) => {
+                        setCompInContList(body.list || []);
+                    },
+                }),
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [container.containerSeq]);
 
     useEffect(() => {
         // 폼이 변경되면 CT, CP 리스트 날림
@@ -347,6 +371,12 @@ const AreaFormDepth2 = (props) => {
                         </Col>
                     </Form.Row>
 
+                    {areaCompLoad.byContainer && (
+                        <Form.Row className="mb-2">
+                            <p className="mb-0 text-danger">{areaCompLoad.byContainerMessage}</p>
+                        </Form.Row>
+                    )}
+
                     {/* 컨테이너일 경우 하위 컴포넌트 나열 */}
                     {temp.areaDiv === ITEM_CT &&
                         compInContList.map((comp) => (
@@ -358,7 +388,7 @@ const AreaFormDepth2 = (props) => {
                                     <MokaInput value={comp.componentName} inputProps={{ readOnly: true }} />
                                 </Col>
                                 <Col xs={2} className="p-0">
-                                    <MokaInput as="select" name="compAlign" value={comp.compAlign} onChange={handleChangeValue}>
+                                    <MokaInput as="select" name="compAlign" value={comp.compAlign} onChange={handleChangeValue} disabled={areaCompLoad.byContainer}>
                                         <option value={AREA_COMP_ALIGN_LEFT}>Left 영역</option>
                                         <option value={AREA_COMP_ALIGN_RIGHT}>Right 영역</option>
                                     </MokaInput>

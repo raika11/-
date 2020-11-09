@@ -44,7 +44,7 @@ export const putArea = ({ area }) => {
 
 // 편집영역 삭제
 export const deleteArea = ({ areaSeq }) => {
-    return instance.put(`/api/areas/${areaSeq}`).catch((err) => {
+    return instance.delete(`/api/areas/${areaSeq}`).catch((err) => {
         throw err;
     });
 };

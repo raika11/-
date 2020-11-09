@@ -114,8 +114,11 @@ export function* deleteArea({ payload: { areaSeq, callback, depth } }) {
             // 목록 다시 검색
             if (depth === 1) {
                 yield put({ type: act.GET_AREA_LIST_DEPTH1 });
+                yield put({ type: act.CLEAR_LIST, payload: 2 });
+                yield put({ type: act.CLEAR_LIST, payload: 3 });
             } else if (depth === 2) {
                 yield put({ type: act.GET_AREA_LIST_DEPTH2 });
+                yield put({ type: act.CLEAR_LIST, payload: 3 });
             } else if (depth === 3) {
                 yield put({ type: act.GET_AREA_LIST_DEPTH3 });
             }

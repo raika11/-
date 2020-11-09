@@ -8,7 +8,7 @@ import Card from 'react-bootstrap/Card';
 
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { initialState, GET_AREA_DEPTH2, saveArea, changeArea, deleteArea } from '@store/area';
+import { initialState, GET_AREA_DEPTH2, saveArea, changeArea, deleteArea, clearArea } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
 import toast from '@utils/toastUtil';
@@ -94,7 +94,7 @@ const AreaFormDepth2 = (props) => {
     const handleClickSave = () => {
         const save = {
             ...temp,
-            page,
+            page: Object.keys(page).lenght > 0 ? page : null,
             parent,
             domain,
             container: temp.areaDiv === ITEM_CT ? container : null,
@@ -153,13 +153,35 @@ const AreaFormDepth2 = (props) => {
         }
     };
 
+    /**
+     * 삭제 콜백
+     */
+    const deleteCallback = ({ header, body }) => {
+        if (header.success && body) {
+            toast.success(header.message);
+            if (depth === 3) {
+                history.push(`/area/${areaDepth1.areaSeq}/${areaDepth2.areaSeq}`);
+                dispatch(clearArea(3));
+            } else if (depth === 2) {
+                history.push(`/area/${areaDepth1.areaSeq}`);
+                dispatch(clearArea(3));
+                dispatch(clearArea(2));
+            }
+        } else {
+            toast.warn(header.message);
+        }
+    };
+
+    /**
+     * 삭제 버튼
+     */
     const handleClickDelete = () => {
         if (depth === 3) {
             dispatch(
-                handleClickDelete({
+                deleteArea({
                     areaSeq: temp.areaSeq,
                     depth,
-                    callback: ({ header, body }) => {},
+                    callback: deleteCallback,
                 }),
             );
         }

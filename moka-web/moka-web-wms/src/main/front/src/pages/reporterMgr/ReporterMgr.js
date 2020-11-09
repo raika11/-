@@ -50,7 +50,7 @@ const ReporterMgr = () => {
                 height={CARD_DEFAULT_HEIGHT}
             >
                 <Suspense>
-                    <reporterMgrList />
+                    <ReporterMgrList />
                 </Suspense>
             </MokaCard>
 

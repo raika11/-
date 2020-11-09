@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaTable } from '@components';
-import { initialState, changeSelectedDepth, clearArea, getAreaListDepth3, changeSearchOptionDepth3, GET_AREA_LIST_DEPTH2 } from '@store/area';
+import { initialState, changeSelectedDepth, getAreaDepth2, clearArea, getAreaListDepth3, changeSearchOptionDepth3, GET_AREA_LIST_DEPTH2 } from '@store/area';
 import Depth3 from './AreaAgGridDepth3';
 import columnDefs from './AreaAgGridColums';
 
@@ -55,6 +55,8 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
                     }),
                 ),
             );
+            dispatch(getAreaDepth2({ areaSeq }));
+            dispatch(changeSelectedDepth(2));
         } else {
             dispatch(clearArea(2));
         }
@@ -86,7 +88,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
                 />
             </MokaCard>
 
-            <Route path={[`${match.url}/:areaSeq`, match.url]} strict component={Depth3} />
+            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth3 {...props} parentSeq={areaSeq} baseUrl={`${baseUrl}/${areaSeq}`} />} />
         </React.Fragment>
     );
 };

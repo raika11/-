@@ -39,6 +39,7 @@ import {
     faSave,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faThList as fasThList, faThLarge as fasThLarge, faAngleLeft as fasAngleLeft, faAngleRight as fasAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
+import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
 
 // 아이콘 등록 (fal)
@@ -75,6 +76,9 @@ library.add(falMoneyCheck);
 library.add(falCalculator);
 library.add(faPencil);
 library.add(faSave);
+
+// 아이콘 등록(far)
+library.add(farRedoAlt);
 
 // 아이콘 등록 (fas)
 library.add(fasThLarge);

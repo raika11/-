@@ -5,3 +5,4 @@ export { default as MokaTableLoadButton } from './MokaTableLoadButton';
 export { default as MokaTablePreviewButton } from './MokaTablePreviewButton';
 export { default as MokaCopyTextButton } from './MokaCopyTextButton';
 export { default as MokaTableTypeButton } from './MokaTableTypeButton';
+export { default as MokaOverlayTooltipButton } from './MokaOverlayTooltipButton';

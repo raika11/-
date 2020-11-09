@@ -147,7 +147,7 @@ const LookupContainerList = (props) => {
                 handleClickLink,
             })),
         );
-    }, [handleClickAppend, list]);
+    }, [handleClickAppend, handleClickLoad, list]);
 
     useEffect(() => {
         if (show) {
@@ -235,7 +235,7 @@ const LookupContainerList = (props) => {
             <ContainerHtmlModal
                 containerSeq={selected.containerSeq}
                 show={showModal}
-                containerSave={(seqType === ITEM_PG || seqType === ITEM_SK) ? true : false}
+                containerSave={seqType === ITEM_PG || seqType === ITEM_SK ? true : false}
                 onHide={() => {
                     setShowModal(false);
                     setSelected({});

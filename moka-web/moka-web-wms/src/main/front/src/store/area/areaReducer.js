@@ -48,6 +48,12 @@ export const initialState = {
             usedYn: 'N',
             areaAlign: AREA_ALIGN_V,
         },
+        areaCompLoad: {
+            byContainer: false,
+            byContainerMessage: null,
+            byPage: false,
+            byPageMessage: null,
+        },
     },
     depth3: {
         list: [],
@@ -70,12 +76,12 @@ export const initialState = {
             usedYn: 'N',
             areaAlign: AREA_ALIGN_V,
         },
-    },
-    areaCompLoad: {
-        byContainer: false,
-        byContainerMessage: null,
-        byPage: false,
-        byPageMessage: null,
+        areaCompLoad: {
+            byContainer: false,
+            byContainerMessage: null,
+            byPage: false,
+            byPageMessage: null,
+        },
     },
     areaError: null,
     invalidList: [],
@@ -189,7 +195,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 const { area, areaCompLoad } = body;
                 draft.depth1.area = area;
-                draft.areaCompLoad = areaCompLoad;
+                draft.depth1.areaCompLoad = areaCompLoad;
                 draft.areaError = initialState.areaError;
                 draft.invalidList = initialState.invalidList;
             });
@@ -203,7 +209,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 const { area, areaCompLoad } = body;
                 draft.depth2.area = area;
-                draft.areaCompLoad = areaCompLoad;
+                draft.depth2.areaCompLoad = areaCompLoad;
                 draft.areaError = initialState.areaError;
                 draft.invalidList = initialState.invalidList;
             });
@@ -217,7 +223,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 const { area, areaCompLoad } = body;
                 draft.depth3.area = area;
-                draft.areaCompLoad = areaCompLoad;
+                draft.depth3.areaCompLoad = areaCompLoad;
                 draft.areaError = initialState.areaError;
                 draft.invalidList = initialState.invalidList;
             });

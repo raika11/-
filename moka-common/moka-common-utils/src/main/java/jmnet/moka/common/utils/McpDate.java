@@ -388,7 +388,9 @@ public class McpDate {
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.setTime(date);
-        return cal.get(Calendar.YEAR) + String.format("%02d", (cal.get(Calendar.MONTH) + 1)) + String.format("%02d", cal.get(Calendar.DATE));
+        SimpleDateFormat format = new SimpleDateFormat();
+        format.applyLocalizedPattern(DATE_FORMAT);
+        return format.format(cal.getTime());
     }
 
     /**
@@ -402,8 +404,9 @@ public class McpDate {
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.setTime(date);
-        return String.format("%02d", (cal.get(Calendar.HOUR_OF_DAY))) + String.format("%02d", (cal.get(Calendar.MINUTE))) + String.format("%02d",
-                (cal.get(Calendar.SECOND)));
+        SimpleDateFormat format = new SimpleDateFormat();
+        format.applyLocalizedPattern(TIME_FORMAT);
+        return format.format(cal.getTime());
     }
 
 

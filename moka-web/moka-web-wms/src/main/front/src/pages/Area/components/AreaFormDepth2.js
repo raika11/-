@@ -8,7 +8,7 @@ import Card from 'react-bootstrap/Card';
 
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { initialState, GET_AREA_DEPTH2, saveArea, changeArea } from '@store/area';
+import { initialState, GET_AREA_DEPTH2, saveArea, changeArea, deleteArea } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
 import toast from '@utils/toastUtil';
@@ -41,8 +41,9 @@ const AreaFormDepth2 = (props) => {
     const [areaCompLoad, setAreaCompLoad] = useState({});
     const [reloaded, setReloaded] = useState(false); // reload 했는지 체크
 
-    const [containerList, setContainerList] = useState([]); // 컨테이너 리스트
-    const [componentList, setComponentList] = useState([]); // 컴포넌트 리스트
+    const [containerList, setContainerList] = useState([]); // select의 컨테이너 리스트
+    const [componentList, setComponentList] = useState([]); // select의 컴포넌트 리스트
+    const [error, setError] = useState({ container: false });
 
     /**
      * input 값 변경
@@ -72,7 +73,19 @@ const AreaFormDepth2 = (props) => {
             setTemp({ ...temp, areaAlign: value });
         } else if (name === 'container') {
             setContainer({ containerSeq: value });
+            setError({ ...error, container: false });
         }
+    };
+
+    const validate = (saveObj) => {
+        let isInvalid = false;
+
+        if (saveObj.areaDiv === ITEM_CT && !saveObj.container.containerSeq) {
+            setError({ ...error, container: true });
+            isInvalid = isInvalid || true;
+        }
+
+        return !isInvalid;
     };
 
     /**
@@ -88,22 +101,24 @@ const AreaFormDepth2 = (props) => {
             areaComps,
         };
 
-        dispatch(
-            saveArea({
-                depth,
-                actions: [changeArea({ area: save, depth })],
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        toast.success(header.message);
-                        if (depth === 2) {
-                            history.push(`/area/${body.parent.areaSeq}/${body.areaSeq}`);
+        if (validate(save)) {
+            dispatch(
+                saveArea({
+                    depth,
+                    actions: [changeArea({ area: save, depth })],
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                            if (depth === 2) {
+                                history.push(`/area/${body.parent.areaSeq}/${body.areaSeq}`);
+                            }
+                        } else {
+                            toast.warn(header.message);
                         }
-                    } else {
-                        toast.warn(header.message);
-                    }
-                },
-            }),
-        );
+                    },
+                }),
+            );
+        }
     };
 
     /**
@@ -133,6 +148,18 @@ const AreaFormDepth2 = (props) => {
                             setAreaCompLoad(initialState.depth2.areaCompLoad);
                         }
                     },
+                }),
+            );
+        }
+    };
+
+    const handleClickDelete = () => {
+        if (depth === 3) {
+            dispatch(
+                handleClickDelete({
+                    areaSeq: temp.areaSeq,
+                    depth,
+                    callback: ({ header, body }) => {},
                 }),
             );
         }
@@ -378,7 +405,7 @@ const AreaFormDepth2 = (props) => {
 
                         {temp.areaDiv === ITEM_CT && (
                             <Col xs={8} className="p-0 pl-2 pr-2">
-                                <MokaInput as="select" name="container" value={container.containerSeq} onChange={handleChangeValue}>
+                                <MokaInput as="select" name="container" value={container.containerSeq} onChange={handleChangeValue} isInvalid={error.container}>
                                     <option hidden>컨테이너를 선택하세요</option>
                                     {containerList.map((con) => (
                                         <option value={con.containerSeq} key={con.containerSeq}>
@@ -470,7 +497,7 @@ const AreaFormDepth2 = (props) => {
                         </Button>
                         <Button variant="gray150">취소</Button>
                         {temp.areaSeq && (
-                            <Button variant="danger" className="ml-10">
+                            <Button variant="danger" className="ml-10" onClick={handleClickDelete}>
                                 삭제
                             </Button>
                         )}

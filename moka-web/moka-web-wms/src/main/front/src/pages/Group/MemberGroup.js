@@ -5,7 +5,7 @@ import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import clsx from 'clsx';
 import { Route, Switch } from 'react-router-dom';
-import MemberGroupEdit from '@pages/reporterMgr/reporterMgrEdit';
+import MemberGroupEdit from '@pages/group/groupEdit';
 
 const MemberGroupList = React.lazy(() => import('./GroupList'));
 

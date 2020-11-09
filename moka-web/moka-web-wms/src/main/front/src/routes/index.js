@@ -23,7 +23,7 @@ const EditForm = React.lazy(() => import('@pages/EditForm'));
 const Area = React.lazy(() => import('@pages/Area'));
 const Menu = React.lazy(() => import('@pages/Menu'));
 const Group = React.lazy(() => import('@pages/Group'));
-const reporterMgr = React.lazy(() => import('@pages/reporterMgr'));
+//const reporterMgr = React.lazy(() => import('@pages/reporterMgr'));
 //const Special = React.lazy(() => import('@pages/Special'));
 
 const routes = [
@@ -206,6 +206,7 @@ const routes = [
         exact: false,
         strict: true,
     },
+    /*
     {
         path: '/reporterMgr',
         name: 'reporterMgr',
@@ -215,7 +216,7 @@ const routes = [
         nonResponsive: true,
         exact: false,
         strict: true,
-    },
+    },*/
     /*{
         path: '/special',
         name: 'Special',

@@ -470,6 +470,7 @@ const DatasetEdit = ({ onDelete }) => {
                                 value={decodeURIComponent(dataApiUrl)}
                                 onSearch={() => setDatasetApiListModalShow(true)}
                                 isInvalid={invalid['dataApiUrl']}
+                                inputProps={{ readOnly: true }}
                             />
                         )}
                     </Col>

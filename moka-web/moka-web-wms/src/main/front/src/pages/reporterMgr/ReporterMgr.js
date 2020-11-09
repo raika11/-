@@ -2,7 +2,6 @@ import React, { useState, Suspense } from 'react';
 import Helmet from 'react-helmet';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
-import Button from 'react-bootstrap/Button';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearStore } from '@store/group';
@@ -57,7 +56,7 @@ const ReporterMgr = () => {
             {/* 도메인 정보 */}
             <MokaCard
                 title="기자 정보"
-                width={820}
+                width={1100}
                 titleClassName="mb-0"
                 headerClassName="d-flex justify-content-between align-item-center"
                 height={CARD_DEFAULT_HEIGHT}

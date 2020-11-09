@@ -10,16 +10,7 @@ export default [
     {
         headerName: '컨테이너명',
         field: 'containerName',
-        width: 240,
-    },
-    {
-        headerName: '',
-        field: 'preview',
-        width: 36,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <MokaTablePreviewButton {...row} onClick={data.handleClickPreview} />;
-        },
+        width: 276,
     },
     {
         headerName: '',

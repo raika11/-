@@ -3,35 +3,35 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
 import qs from 'qs';
 
-import * as groupAPI from './groupApi';
-import * as groupAction from './groupAction';
+import * as reporterMgrAPI from './reporterMgrApi';
+import * as reporterMgrAction from './reporterMgrAction';
 
 /**
- * 그룹목록
+ * 기자관리 목록 조회
  */
-const getGroupList = callApiAfterActions(groupAction.GET_GROUP_LIST, groupAPI.getGroupList, (state) => {
-    console.log('aaaaaaaaa::' + state.group);
-    return state.group;
+const getReporterMgrList = callApiAfterActions(reporterMgrAction.getReporterMgrList(), reporterMgrAPI.getReporterMgrList, (state) => {
+    console.log('aaaaaaaaa::' + state.reporterMgr);
+    return state.reporterMgr;
 });
 
 /**
- * 그룹데이터 조회
+ * 기자관리 조회
  */
-const getGroup = createRequestSaga(groupAction.GET_GROUP, groupAPI.getGroup);
+const getReporterMgr = createRequestSaga(reporterMgrAction.getReporterMgr, reporterMgrAPI.getReporterMgr);
 
 /**
- * 그룹코드 중복 체크
- * @param {string} param0.payload.grpCd 그룹코드
+ * 기자관리 중복 체크
+ * @param {string} param0.payload.repSeq 기자일련번호
  * @param {func} param0.payload.callback 콜백
  */
-function* duplicateGroupCheck({ payload: { groupCd, callback } }) {
-    const ACTION = groupAction.duplicateGroupCheck;
+function* duplicateReporterMgrCheck({ payload: { repSeq, callback } }) {
+    const ACTION = reporterMgrAction.duplicateReporterMgrCheck;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(groupAPI.duplicateGroupCdCheck, groupCd);
+        const response = yield call(reporterMgrAPI.duplicateReporterMgrCheck, repSeq);
         callbackData = response.data;
     } catch (e) {
         callbackData = errorResponse(true);
@@ -50,8 +50,8 @@ function* duplicateGroupCheck({ payload: { groupCd, callback } }) {
  * @param {array} param0.payload.actions 선처리 액션들
  * @param {func} param0.payload.callback 콜백
  */
-function* saveGroup({ payload: { type, actions, callback } }) {
-    const ACTION = groupAction.SAVE_GROUP;
+function* saveReporterMgr({ payload: { type, actions, callback } }) {
+    const ACTION = reporterMgrAction.CHANGE_REPORTER_MGR;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
@@ -59,6 +59,7 @@ function* saveGroup({ payload: { type, actions, callback } }) {
 
     try {
         // actions 먼저 처리
+        /*
         if (actions && actions.length > 0) {
             for (let i = 0; i < actions.length; i++) {
                 const act = actions[i];
@@ -68,26 +69,33 @@ function* saveGroup({ payload: { type, actions, callback } }) {
                 });
             }
         }
+        */
+
+        const act = actions[0];
+        yield put({
+            type: act.type,
+            payload: act.payload,
+        });
 
         // 도메인 데이터
-        const group = yield select((store) => store.group.group);
-        const response = type === 'insert' ? yield call(groupAPI.postGroup, { group }) : yield call(groupAPI.putGroups, { group });
+        const reporterMgr = yield select((store) => store.reporterMgr.reporterMgr);
+        const response = type === 'insert' ? yield call(reporterMgrAPI.putReporterMgr, { reporterMgr }) : yield call(reporterMgrAPI.putReporterMgr, { reporterMgr });
         callbackData = response.data;
 
         if (response.data.header.success) {
             yield put({
-                type: groupAction.GET_GROUP_SUCCESS,
+                type: reporterMgrAction.GET_REPORTER_MGR_SUCCESS,
                 payload: response.data,
             });
 
             // 목록 다시 검색
-            yield put({ type: groupAction.GET_GROUP_LIST });
+            yield put({ type: reporterMgrAction.GET_REPORTER_MGR_LIST });
 
             // auth 도메인 목록 다시 조회
-            //yield put(getGroup(group.groupCd));
+            //yield put(getReporterMgr(reporterMgr.repSeq));
         } else {
             yield put({
-                type: groupAction.GET_GROUP_FAILURE,
+                type: reporterMgrAction.GET_REPORTER_MGR_FAILURE,
                 payload: response.data,
             });
         }
@@ -95,77 +103,7 @@ function* saveGroup({ payload: { type, actions, callback } }) {
         callbackData = errorResponse(e);
 
         yield put({
-            type: groupAction.GET_GROUP_FAILURE,
-            payload: callbackData,
-        });
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-
-    yield put(finishLoading(ACTION));
-}
-
-/**
- * 관련데이터 확인
- * @param {string} param0.payload.groupCd 그룹코드
- * @param {func} param0.payload.callback 콜백
- */
-function* hasRelationList({ payload: { groupCd, callback } }) {
-    const ACTION = groupAction.HAS_RELATION_LIST;
-    let callbackData = {};
-
-    yield put(startLoading(ACTION));
-
-    try {
-        const response = yield call(groupAPI.hasRelationList, { groupCd });
-        callbackData = response.data;
-    } catch (e) {
-        callbackData = errorResponse(e);
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData, groupCd);
-    }
-
-    yield put(finishLoading(ACTION));
-}
-
-/**
- * 삭제
- * @param {string} param0.payload.groupCd 그룹코드
- * @param {func} param0.payload.callback 콜백
- */
-function* deleteGroup({ payload: { groupCd, callback } }) {
-    const ACTION = groupAction.DELETE_GROUP;
-    let callbackData = {};
-
-    yield put(startLoading(ACTION));
-
-    try {
-        const response = yield call(groupAPI.deleteGroup, { groupCd });
-        callbackData = response.data;
-
-        if (response.data.header.success && response.data.body) {
-            yield put({ type: groupAction.DELETE_GROUP_SUCCESS });
-
-            // 목록 다시 검색
-            yield put({ type: groupAction.GET_GROUP_LIST });
-
-            // auth 도메인 목록 다시 조회
-            //yield put(getGroupList());
-        } else {
-            yield put({
-                type: groupAction.DELETE_GROUP_FAILURE,
-                payload: response.data,
-            });
-        }
-    } catch (e) {
-        callbackData = errorResponse(e);
-
-        yield put({
-            type: groupAction.DELETE_GROUP_FAILURE,
+            type: reporterMgrAction.GET_REPORTER_MGR_FAILURE,
             payload: callbackData,
         });
     }
@@ -178,10 +116,8 @@ function* deleteGroup({ payload: { groupCd, callback } }) {
 }
 
 export default function* reporterMgrSaga() {
-    yield takeLatest(groupAction.GET_GROUP_LIST, getGroupList);
-    yield takeLatest(groupAction.GET_GROUP, getGroup);
-    yield takeLatest(groupAction.DUPLICATE_GROUP_CHECK, duplicateGroupCheck);
-    yield takeLatest(groupAction.SAVE_GROUP, saveGroup);
-    yield takeLatest(groupAction.DELETE_GROUP, deleteGroup);
-    yield takeLatest(groupAction.HAS_RELATION_LIST, hasRelationList);
+    yield takeLatest(reporterMgrAction.GET_REPORTER_MGR_LIST, getReporterMgrList);
+    yield takeLatest(reporterMgrAction.getReporterMgr, getReporterMgr);
+    yield takeLatest(reporterMgrAction.DUPLICATE_REPORTER_MGR_CHECK, duplicateReporterMgrCheck);
+    yield takeLatest(reporterMgrAction.CHANGE_REPORTER_MGR, saveReporterMgr);
 }

@@ -62,11 +62,17 @@ public class ContainerSearchDTO extends SearchDTO {
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 
+    /**
+     * 페이징여부
+     */
+    private String usePaging;
+
     // 검색 조건의 기본값을 설정
     public ContainerSearchDTO() {
         super(ContainerVO.class, "containerSeq,desc");
         useTotal = MokaConstants.YES;
         searchType = TpsConstants.SEARCH_TYPE_ALL;
         returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        this.usePaging = MokaConstants.YES;
     }
 }

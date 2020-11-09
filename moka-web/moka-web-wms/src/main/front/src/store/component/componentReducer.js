@@ -18,6 +18,8 @@ export const initialState = {
         templateGroup: 'all',
         searchType: 'all',
         keyword: '',
+        usePaging: 'Y',
+        useArea: 'N',
     },
     searchTypeList: [
         { id: 'all', name: '전체' },

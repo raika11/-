@@ -27,10 +27,8 @@ const AreaEdit = () => {
         <React.Fragment>
             {/* 1뎁스 폼 */}
             {selectedDepth === 1 && <Form1 />}
-            {/* 2뎁스 폼 */}
-            {selectedDepth === 2 && <Form2 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} page={page} depth={2} />}
-            {/* 3뎁스 폼 */}
-            {selectedDepth === 3 && <Form2 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} page={page} depth={3} />}
+            {/* 2뎁스 & 3뎁스 폼 */}
+            {selectedDepth !== 1 && <Form2 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} page={page} setPage={setPage} depth={selectedDepth} />}
 
             {/* 페이지 검색 모달 */}
             <PageListModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={handleClickSave} domainId={modalDomainId} />

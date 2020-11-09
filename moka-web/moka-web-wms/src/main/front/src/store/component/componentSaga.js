@@ -11,6 +11,11 @@ import * as api from './componentApi';
 const getComponentList = callApiAfterActions(act.GET_COMPONENT_LIST, api.getComponentList, (store) => store.component);
 
 /**
+ * 컴포넌트 목록 조회(모달용 일시적인 데이터)
+ */
+const getComponentListModal = createRequestSaga(act.GET_COMPONENT_LIST_MODAL, api.getComponentList, true);
+
+/**
  * 컴포넌트 lookup 목록 조회
  */
 const getComponentLookupList = callApiAfterActions(act.GET_COMPONENT_LOOKUP_LIST, api.getComponentList, (store) => store.component.lookup);
@@ -166,4 +171,5 @@ export default function* saga() {
     yield takeLatest(act.DELETE_COMPONENT, deleteComponent);
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
     yield takeLatest(act.GET_COMPONENT_LOOKUP_LIST, getComponentLookupList);
+    yield takeLatest(act.GET_COMPONENT_LIST_MODAL, getComponentListModal);
 }

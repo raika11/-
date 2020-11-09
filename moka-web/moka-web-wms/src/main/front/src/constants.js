@@ -58,3 +58,10 @@ export const TEMS_PREFIX = 'tems';
 
 // 수동 데이터셋 api
 export const DESKING_API = 'desking?ids=';
+
+// 편집영역 컴포넌트 정렬 value
+export const AREA_ALIGN_H = 'H';
+export const AREA_ALIGN_V = 'V';
+export const AREA_COMP_ALIGN_LEFT = 'LEFT';
+export const AREA_COMP_ALIGN_RIGHT = 'RIGHT';
+export const AREA_COMP_ALIGN_NONE = 'NONE';

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

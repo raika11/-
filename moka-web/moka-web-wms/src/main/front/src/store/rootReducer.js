@@ -10,7 +10,6 @@ import template from '@store/template/templateReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
 import reserved from '@store/reserved/reservedReducer';
 import dataset from '@store/dataset/datasetReducer';
-import datasetRelationList from '@store/dataset/datasetRelationListReducer';
 import component from '@store/component/componentReducer';
 import container from '@store/container/containerReducer';
 import page from '@store/page/pageReducer';
@@ -21,6 +20,7 @@ import merge from '@store/merge/mergeReducer';
 import menu from '@store/menu/menuReducer';
 import group from '@store/group/groupReducer';
 import area from '@store/area/areaReducer';
+//import reporterMgr from '@store/reporterMgr/reporterMgrReducer';
 
 export default combineReducers({
     toastr,
@@ -33,7 +33,6 @@ export default combineReducers({
     codeMgt,
     reserved,
     dataset,
-    datasetRelationList,
     component,
     container,
     page,
@@ -44,4 +43,5 @@ export default combineReducers({
     merge,
     menu,
     group,
+    //    reporterMgr,
 });

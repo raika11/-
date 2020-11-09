@@ -74,13 +74,13 @@ public class AreaComp implements Serializable {
      */
     @Column(name = "COMP_ALIGN")
     @Builder.Default
-    private String compAlign = TpsConstants.AREA_ALIGN_LEFT;
+    private String compAlign = TpsConstants.AREA_COMP_ALIGN_LEFT;
 
     @PrePersist
     @PreUpdate
     public void prePersist() {
         this.ordNo = this.ordNo == null ? 1 : this.ordNo;
-        this.compAlign = this.compAlign == null ? TpsConstants.AREA_ALIGN_LEFT : this.compAlign;
+        this.compAlign = this.compAlign == null ? TpsConstants.AREA_COMP_ALIGN_LEFT : this.compAlign;
     }
 
     public void setArea(Area area) {

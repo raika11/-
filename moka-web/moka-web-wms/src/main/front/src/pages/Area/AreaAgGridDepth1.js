@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory, Route } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { MokaCard, MokaInput, MokaTable } from '@components';
-import { changeLatestDomainId } from '@store/auth';
+import { MokaCard, MokaTable } from '@components';
 import {
     initialState,
+    clearArea,
     getAreaListDepth1,
     getAreaListDepth2,
-    clearArea,
-    changeSearchOptionDepth1,
+    clearList,
     changeSearchOptionDepth2,
     changeSelectedDepth,
     getAreaDepth1,
@@ -28,34 +27,14 @@ const AreaAgGrid1D = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { areaSeq } = useParams();
-    const { domainList, latestDomainId, search: storeSearch, list, loading } = useSelector((store) => ({
-        domainList: store.auth.domainList,
-        latestDomainId: store.auth.latestDomainId,
-        search: store.area.depth1.search,
+    const { list, loading } = useSelector((store) => ({
         list: store.area.depth1.list,
         loading: store.loading[GET_AREA_LIST_DEPTH1],
     }));
 
-    // state
-    const [search, setSearch] = useState(initialState.depth1.search);
-
     useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
-    useEffect(() => {
-        // latestDomainId 변경 => search.domainId 변경하여 1뎁스 리스트 조회
-        if (latestDomainId && latestDomainId !== search.domainId) {
-            dispatch(
-                getAreaListDepth1(
-                    changeSearchOptionDepth1({
-                        ...search,
-                        domainId: latestDomainId,
-                    }),
-                ),
-            );
-        }
-    }, [dispatch, latestDomainId, search]);
+        dispatch(getAreaListDepth1());
+    }, [dispatch]);
 
     useEffect(() => {
         // areaSeq가 있으면 2뎁스 리스트 조회 + 상세 데이터 조회
@@ -64,17 +43,17 @@ const AreaAgGrid1D = ({ match }) => {
                 getAreaListDepth2(
                     changeSearchOptionDepth2({
                         ...initialState.depth2.search,
-                        domainId: latestDomainId,
                         parentAreaSeq: areaSeq,
                     }),
                 ),
             );
             dispatch(getAreaDepth1({ areaSeq }));
         } else {
-            dispatch(clearArea(1));
+            dispatch(clearList(2));
+            dispatch(clearList(3));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [areaSeq, latestDomainId]);
+    }, [areaSeq]);
 
     /**
      * 목록에서 Row클릭
@@ -89,6 +68,7 @@ const AreaAgGrid1D = ({ match }) => {
      */
     const handleClickAdd = () => {
         dispatch(changeSelectedDepth(1));
+        dispatch(clearArea(1));
         history.push('/area');
     };
 
@@ -96,23 +76,7 @@ const AreaAgGrid1D = ({ match }) => {
         <React.Fragment>
             <MokaCard header={false} width={280} className="mr-10">
                 <Form.Row className="mb-2">
-                    <Col xs={7} className="p-0">
-                        <MokaInput
-                            as="select"
-                            value={search.domainId}
-                            onChange={(e) => {
-                                dispatch(changeLatestDomainId(e.target.value));
-                                history.push('/area');
-                            }}
-                        >
-                            {domainList.map((domain) => (
-                                <option key={domain.domainId} value={domain.domainId}>
-                                    {domain.domainName}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </Col>
-                    <Col xs={5} className="p-0 d-flex justify-content-end">
+                    <Col xs={12} className="p-0 d-flex justify-content-end">
                         <Button variant="dark" onClick={handleClickAdd}>
                             추가
                         </Button>
@@ -132,7 +96,7 @@ const AreaAgGrid1D = ({ match }) => {
                     onRowClicked={handleRowClicked}
                 />
             </MokaCard>
-            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth2 {...props} parentSeq={areaSeq} baseUrl={`/area/${areaSeq}`} />} />
+            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth2 {...props} parentSeq={areaSeq} baseUrl="/area" />} />
         </React.Fragment>
     );
 };

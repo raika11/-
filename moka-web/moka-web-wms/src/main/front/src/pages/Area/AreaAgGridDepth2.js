@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaTable } from '@components';
-import { initialState, changeSelectedDepth, getAreaDepth2, clearArea, getAreaListDepth3, changeSearchOptionDepth3, GET_AREA_LIST_DEPTH2 } from '@store/area';
+import { initialState, clearList, clearArea, changeSelectedDepth, getAreaDepth2, getAreaListDepth3, changeSearchOptionDepth3, GET_AREA_LIST_DEPTH2 } from '@store/area';
 import Depth3 from './AreaAgGridDepth3';
 import columnDefs from './AreaAgGridColums';
 
@@ -17,9 +17,9 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { areaSeq } = useParams();
-    const { list, latestDomainId, loading } = useSelector((store) => ({
+    const { list, areaDepth1, loading } = useSelector((store) => ({
         list: store.area.depth2.list,
-        latestDomainId: store.auth.latestDomainId,
+        areaDepth1: store.area.depth1.area,
         loading: store.loading[GET_AREA_LIST_DEPTH2],
     }));
 
@@ -27,7 +27,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
      * 목록에서 Row클릭
      */
     const handleRowClicked = (data) => {
-        history.push(`${baseUrl}/${data.areaSeq}`);
+        history.push(`${baseUrl}/${areaDepth1.areaSeq}/${data.areaSeq}`);
         dispatch(changeSelectedDepth(2));
     };
 
@@ -36,8 +36,9 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
      */
     const handleClickAdd = () => {
         dispatch(changeSelectedDepth(2));
+        dispatch(clearArea(2));
         if (parentSeq) {
-            history.push(baseUrl);
+            history.push(`${baseUrl}/${parentSeq}`);
         } else {
             history.push('/area');
         }
@@ -50,7 +51,6 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
                 getAreaListDepth3(
                     changeSearchOptionDepth3({
                         ...initialState.depth3.search,
-                        domainId: latestDomainId,
                         parentAreaSeq: areaSeq,
                     }),
                 ),
@@ -58,10 +58,10 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
             dispatch(getAreaDepth2({ areaSeq }));
             dispatch(changeSelectedDepth(2));
         } else {
-            dispatch(clearArea(2));
+            dispatch(clearList(3));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [areaSeq, latestDomainId]);
+    }, [areaSeq]);
 
     return (
         <React.Fragment>
@@ -88,7 +88,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
                 />
             </MokaCard>
 
-            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth3 {...props} parentSeq={areaSeq} baseUrl={`${baseUrl}/${areaSeq}`} />} />
+            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth3 {...props} parentSeq={areaSeq} baseUrl={baseUrl} />} />
         </React.Fragment>
     );
 };

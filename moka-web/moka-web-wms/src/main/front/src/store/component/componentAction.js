@@ -35,6 +35,12 @@ export const [GET_COMPONENT_LOOKUP_LIST, GET_COMPONENT_LOOKUP_LIST_SUCCESS, GET_
 export const getComponentLookupList = createAction(GET_COMPONENT_LOOKUP_LIST, (...actions) => actions);
 
 /**
+ * 모달 데이터 조회
+ */
+export const GET_COMPONENT_LIST_MODAL = 'component/GET_COMPONENT_LIST_MODAL';
+export const getComponentListModal = createAction(GET_COMPONENT_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+
+/**
  * 데이터 변경
  */
 export const CHANGE_COMPONENT = 'component/CHANGE_COMPONENT';

@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './areaAction';
-import { ITEM_CP } from '@/constants';
+import { ITEM_CP, AREA_ALIGN_V } from '@/constants';
 
 /**
  * initialState
@@ -11,9 +11,7 @@ export const initialState = {
         list: [],
         total: 0,
         error: null,
-        search: {
-            domainId: null,
-        },
+        search: {},
         area: {
             areaComps: [],
             areaDiv: ITEM_CP,
@@ -26,6 +24,7 @@ export const initialState = {
             parent: {},
             previewRsrc: '',
             usedYn: 'N',
+            areaAlign: AREA_ALIGN_V,
         },
     },
     depth2: {
@@ -33,7 +32,6 @@ export const initialState = {
         total: 0,
         error: null,
         search: {
-            domainId: null,
             parentAreaSeq: null,
         },
         area: {
@@ -48,6 +46,7 @@ export const initialState = {
             parent: {},
             previewRsrc: '',
             usedYn: 'N',
+            areaAlign: AREA_ALIGN_V,
         },
     },
     depth3: {
@@ -55,7 +54,6 @@ export const initialState = {
         total: 0,
         error: null,
         search: {
-            domainId: null,
             parentAreaSeq: null,
         },
         area: {
@@ -70,6 +68,7 @@ export const initialState = {
             parent: {},
             previewRsrc: '',
             usedYn: 'N',
+            areaAlign: AREA_ALIGN_V,
         },
     },
     areaCompLoad: {
@@ -119,6 +118,23 @@ export default handleActions(
 
                 draft.areaError = initialState.areaError;
                 draft.invalidList = initialState.invalidList;
+            });
+        },
+        [act.CLEAR_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                if (payload === 1) {
+                    draft.depth1.list = initialState.depth1.list;
+                    draft.depth1.total = initialState.depth1.total;
+                    draft.depth1.error = initialState.depth1.error;
+                } else if (payload === 2) {
+                    draft.depth2.list = initialState.depth2.list;
+                    draft.depth2.total = initialState.depth2.total;
+                    draft.depth2.error = initialState.depth2.error;
+                } else if (payload === 3) {
+                    draft.depth3.list = initialState.depth3.list;
+                    draft.depth3.total = initialState.depth3.total;
+                    draft.depth3.error = initialState.depth3.error;
+                }
             });
         },
         /**

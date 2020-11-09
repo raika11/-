@@ -16,8 +16,10 @@ export const changeSearchOptionDepth3 = createAction(CHANGE_SEARCH_OPTION_DEPTH3
  */
 export const CLEAR_STORE = 'area/CLEAR_STORE';
 export const CLEAR_AREA = 'area/CLEAR_AREA';
+export const CLEAR_LIST = 'area/CLEAR_LIST';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearArea = createAction(CLEAR_AREA, (depth) => depth);
+export const clearList = createAction(CLEAR_LIST, (depth) => depth);
 
 /**
  * 데이터 조회

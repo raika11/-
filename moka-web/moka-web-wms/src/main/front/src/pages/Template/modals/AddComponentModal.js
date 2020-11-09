@@ -4,8 +4,10 @@ import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+
+import toast from '@utils/toastUtil';
 import { MokaModal, MokaInputLabel, MokaIcon } from '@components';
-import { saveComponentList } from '@store/component/componentAction';
+import { saveComponentList } from '@store/component';
 
 /**
  * 컴포넌트 생성 Modal
@@ -69,8 +71,13 @@ const AddComponentModal = (props) => {
             dispatch(
                 saveComponentList({
                     componentList,
-                    callback: () => {
-                        handleHide();
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                            handleHide();
+                        } else {
+                            toast.warn(header.message);
+                        }
                     },
                 }),
             );

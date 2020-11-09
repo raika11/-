@@ -77,11 +77,20 @@ const RelationInSkinList = (props) => {
         window.open(`/skin/${data.skinSeq}`);
     };
 
+    /**
+     * preview 버튼 클릭
+     * @param {object} data row data
+     */
+    const handleClickPreview = (data) => {
+        // window.open(`//${data.domain.domainUrl}${data.pageUrl}`);
+    };
+
     useEffect(() => {
         setRowData(
             list.map((l) => ({
                 ...l,
                 handleClickLink,
+                handleClickPreview,
             })),
         );
     }, [list]);

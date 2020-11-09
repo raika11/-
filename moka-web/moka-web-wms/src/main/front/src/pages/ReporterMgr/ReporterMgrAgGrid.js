@@ -1,28 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MokaTable } from '@components';
-import { columnDefs } from '@pages/reporterMgr/ReporterMgrAgGridColumns';
+import { columnDefs } from '@pages/ReporterMgr/ReporterMgrAgGridColumns';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { changeSearchOption, GET_GROUP_LIST, getGroupList, initialState } from '@store/group';
+import { changeSearchOption, GET_REPORTER_MGR_LIST, getReporterMgrList, initialState } from '@store/reporterMgr';
 
 /**
  * group AgGrid 목록
  */
 
-const GroupAgGrid = (props) => {
-    const { onDelete } = props;
+const GroupAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [search, setSearch] = useState(initialState);
-    const [groupRows, setGroupRows] = useState([]);
+    const [repoterMgrRows, setRepoterMgrRows] = useState([]);
 
-    const { group, list, total, search: storeSearch, loading } = useSelector(
+    const { reporterMgr, list, total, search: storeSearch, loading } = useSelector(
         (store) => ({
-            group: store.group.group,
-            list: store.group.list,
-            total: store.group.total,
-            search: store.group.search,
-            loading: store.loading[GET_GROUP_LIST],
+            reporterMgr: store.reporterMgr.reporterMgr,
+            list: store.reporterMgr.list,
+            total: store.reporterMgr.total,
+            search: store.reporterMgr.search,
+            loading: store.loading[GET_REPORTER_MGR_LIST],
         }),
         shallowEqual,
     );
@@ -37,7 +36,7 @@ const GroupAgGrid = (props) => {
             if (key !== 'page') {
                 temp['page'] = 0;
             }
-            dispatch(getGroupList(changeSearchOption(temp)));
+            dispatch(getReporterMgrList(changeSearchOption(temp)));
         },
         [dispatch, search],
     );
@@ -47,22 +46,20 @@ const GroupAgGrid = (props) => {
     }, [storeSearch]);
 
     useEffect(() => {
-        dispatch(getGroupList());
+        dispatch(getReporterMgrList());
     }, [dispatch]);
 
     useEffect(() => {
-        setGroupRows(
+        setRepoterMgrRows(
             list.map((row) => ({
                 id: String(row.groupCd),
                 groupCd: row.groupCd,
                 groupNm: row.groupNm,
                 groupKorNm: row.groupKorNm,
-                regId: row.regMember.memberNm,
                 regDt: row.regDt,
-                onDelete,
             })),
         );
-    }, [list, onDelete]);
+    }, [list]);
 
     /**
      * 목록에서 Row클릭
@@ -71,7 +68,7 @@ const GroupAgGrid = (props) => {
     const handleRowClicked = useCallback(
         (list) => {
             //console.log("list::" + this.list.id);
-            history.push(`/group/${list.id}`);
+            history.push(`/reporterMgr/${list.id}`);
         },
         [history],
     );
@@ -81,15 +78,15 @@ const GroupAgGrid = (props) => {
     return (
         <MokaTable
             columnDefs={columnDefs}
-            rowData={groupRows}
-            onRowNodeId={(rowData) => rowData.groupCd}
+            rowData={repoterMgrRows}
+            onRowNodeId={(rowData) => rowData.repSeq}
             agGridHeight={600}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}
             page={search.page}
             size={search.size}
-            selected={group.id}
+            selected={reporterMgr.id}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

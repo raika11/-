@@ -7,26 +7,28 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaTable } from '@components';
 import toast from '@utils/toastUtil';
-import { changeSelectedDepth, getAreaDepth3, clearArea, GET_AREA_LIST_DEPTH3 } from '@store/area';
+import { changeSelectedDepth, clearArea, getAreaDepth3, GET_AREA_LIST_DEPTH3 } from '@store/area';
 import columnDefs from './AreaAgGridColums';
 
 /**
  * 편집영역 > 세번째 리스트
  */
-const AreaAgGridDepth3 = ({ parentSeq, baseUrl }) => {
+const AreaAgGridDepth3 = ({ baseUrl }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { areaSeq, loading } = useParams();
-    const { list } = useSelector((store) => ({
+    const { areaSeq } = useParams();
+    const { list, loading, areaDepth1, areaDepth2 } = useSelector((store) => ({
         list: store.area.depth3.list,
         loading: store.loading[GET_AREA_LIST_DEPTH3],
+        areaDepth1: store.area.depth1.area,
+        areaDepth2: store.area.depth2.area,
     }));
 
     /**
      * 목록에서 Row클릭
      */
     const handleRowClicked = (data) => {
-        history.push(`${baseUrl}/${data.areaSeq}`);
+        history.push(`${baseUrl}/${areaDepth1.areaSeq}/${areaDepth2.areaSeq}/${data.areaSeq}`);
         dispatch(changeSelectedDepth(3));
     };
 
@@ -34,9 +36,14 @@ const AreaAgGridDepth3 = ({ parentSeq, baseUrl }) => {
      * 추가 버튼 클릭
      */
     const handleClickAdd = () => {
-        if (parentSeq) {
+        if (areaDepth1.areaSeq) {
             dispatch(changeSelectedDepth(3));
-            history.push(baseUrl);
+            dispatch(clearArea(3));
+            if (areaDepth2.areaSeq) {
+                history.push(`${baseUrl}/${areaDepth1.areaSeq}/${areaDepth2.areaSeq}`);
+            } else {
+                history.push(`${baseUrl}/${areaDepth1.areaSeq}`);
+            }
         } else {
             toast.warn('상위 편집영역을 선택해주세요');
         }
@@ -47,8 +54,6 @@ const AreaAgGridDepth3 = ({ parentSeq, baseUrl }) => {
         if (areaSeq) {
             dispatch(getAreaDepth3({ areaSeq }));
             dispatch(changeSelectedDepth(3));
-        } else {
-            dispatch(clearArea(3));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [areaSeq]);

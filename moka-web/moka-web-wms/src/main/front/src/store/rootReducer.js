@@ -10,7 +10,6 @@ import template from '@store/template/templateReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
 import reserved from '@store/reserved/reservedReducer';
 import dataset from '@store/dataset/datasetReducer';
-import datasetRelationList from '@store/dataset/datasetRelationListReducer';
 import component from '@store/component/componentReducer';
 import container from '@store/container/containerReducer';
 import page from '@store/page/pageReducer';
@@ -33,7 +32,6 @@ export default combineReducers({
     codeMgt,
     reserved,
     dataset,
-    datasetRelationList,
     component,
     container,
     page,

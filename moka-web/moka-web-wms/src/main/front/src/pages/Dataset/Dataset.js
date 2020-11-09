@@ -1,7 +1,9 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 
+import { ITEM_DS } from '@/constants';
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { useDispatch } from 'react-redux';
@@ -12,14 +14,19 @@ const DatasetEdit = React.lazy(() => import('./DatasetEdit'));
 const DatasetList = React.lazy(() => import('./DatasetList'));
 
 // relations
-const DatasetPageList = React.lazy(() => import('./relations/DatasetPageList'));
-const DatasetSkinList = React.lazy(() => import('./relations/DatasetSkinList'));
-const DatasetContainerList = React.lazy(() => import('./relations/DatasetContainerList'));
-const DatasetComponentList = React.lazy(() => import('./relations/DatasetComponentList'));
+const RelationInPageList = React.lazy(() => import('@pages/commons/RelationInPageList'));
+const RelationInSkinList = React.lazy(() => import('@pages/commons/RelationInSkinList'));
+const RelationInContainerList = React.lazy(() => import('@pages/commons/RelationInContainerList'));
+const RelationInComponentList = React.lazy(() => import('@pages/commons/RelationInComponentList'));
 
 const Dataset = () => {
     const dispatch = useDispatch();
     const history = useHistory();
+
+    const { dataset } = useSelector((store) => ({ dataset: store.dataset.dataset }));
+
+    // state
+    const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     const deleteCallback = (response) => {
         const { header, body, payload } = response;
@@ -92,26 +99,27 @@ const Dataset = () => {
                             <MokaIconTabs
                                 foldable={false}
                                 tabWidth={412}
+                                onSelectNav={(idx) => setActiveTabIdx(idx)}
                                 tabs={[
                                     <Suspense>
-                                        <DatasetPageList />
+                                        <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <DatasetSkinList />
+                                        <RelationInSkinList show={activeTabIdx === 1} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <DatasetContainerList />
+                                        <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <DatasetComponentList />
+                                        <RelationInComponentList show={activeTabIdx === 3} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}
                                 placement="left"
                                 tabNavs={[
-                                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '관련 뷰스킨', icon: <MokaIcon iconName="fal-box" /> },
-                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-ballot" /> },
+                                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
+                                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
                                 ]}
                             />

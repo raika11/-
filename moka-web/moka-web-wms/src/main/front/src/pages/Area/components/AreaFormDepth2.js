@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-import { ITEM_CP, ITEM_CT } from '@/constants';
+import { ITEM_CP, ITEM_CT, ITEM_PG } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
 import { GET_AREA_DEPTH2, saveArea, changeArea } from '@store/area';
+import { initialState as componentState, getComponentListModal } from '@store/component';
 import toast from '@utils/toastUtil';
 
 const AreaFormDepth2 = (props) => {
@@ -30,6 +32,12 @@ const AreaFormDepth2 = (props) => {
     const [temp, setTemp] = useState({});
     const [parent, setParent] = useState({});
     const [domain, setDomain] = useState({});
+    const [container, setContainer] = useState({});
+    const [areaComp, setAreaComp] = useState({}); // 파싱하기 위해 추가한 areaComp 1건
+    const [areaComps, setAreaComps] = useState([]); // DB에 저장되는 areaComp 리스트
+
+    const [containerList, setContainerList] = useState([]);
+    const [componentList, setComponentList] = useState([]);
 
     const handleChangeValue = (e) => {
         const { name, value, checked, selectedOptions } = e.target;
@@ -48,6 +56,14 @@ const AreaFormDepth2 = (props) => {
             setDomain({ domainId: e.target.value });
         } else if (name === 'areaDiv') {
             setTemp({ ...temp, areaDiv: value });
+        } else if (name === 'areaComp') {
+            // areaComps 의 데이터를 areaComp로 변경 (리스트의 첫번째 데이터로)
+            setAreaComps([
+                {
+                    componentSeq: value,
+                    componentName: selectedOptions[0].dataset.name,
+                },
+            ]);
         }
     };
 
@@ -71,12 +87,8 @@ const AreaFormDepth2 = (props) => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        // depth2 결과
                         if (depth === 2) {
                             history.push(`/area/${body.parent.areaSeq}/${body.areaSeq}`);
-                        }
-                        // depth3 결과 (아무행동 X)
-                        else {
                         }
                     } else {
                         toast.warn(header.message);
@@ -106,7 +118,19 @@ const AreaFormDepth2 = (props) => {
             setParent(areaDepth2);
             setDomain(areaDepth2.domain || {});
         }
+
+        // container 데이터 셋팅
+        setContainer(temp.container || {});
+
+        // areaComps 데이터 셋팅
+        setAreaComps(temp.areaComps || []);
     }, [temp, depth, areaDepth1, areaDepth2]);
+
+    useEffect(() => {
+        if (areaComps.length > 0) {
+            setAreaComp(areaComps[0]);
+        }
+    }, [areaComps]);
 
     useEffect(() => {
         // 도메인 변경 시 모달의 도메인 검색조건 변경
@@ -117,9 +141,24 @@ const AreaFormDepth2 = (props) => {
 
     useEffect(() => {
         // 모달한테 전달받은 page 변경 시 CP, CT 리스트 조회
-        // if (page.pageSeq) {
-        // }
-    }, [page]);
+        if (page.pageSeq) {
+            dispatch(
+                getComponentListModal({
+                    search: {
+                        ...componentState.search,
+                        usePaging: 'N',
+                        useArea: 'Y',
+                        searchType: ITEM_PG,
+                        keyword: page.pageSeq,
+                        domainId: page.domain.domainId,
+                    },
+                    callback: ({ body }) => {
+                        setComponentList(body.list || []);
+                    },
+                }),
+            );
+        }
+    }, [dispatch, page]);
 
     return (
         <MokaCard title={`편집영역 ${temp.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>
@@ -151,7 +190,7 @@ const AreaFormDepth2 = (props) => {
                                     label="그룹 영역"
                                     value={parent.areaSeq}
                                     onChange={handleChangeValue}
-                                    disabled={parent.areaSeq ? true : false}
+                                    disabled={areaDepth1.areaSeq ? true : false}
                                 >
                                     {depth1List.map((area) => (
                                         <option key={area.areaSeq} value={area.areaSeq} data-areanm={area.areaNm}>
@@ -178,7 +217,7 @@ const AreaFormDepth2 = (props) => {
                                     label="중분류 영역"
                                     value={parent.areaSeq}
                                     onChange={handleChangeValue}
-                                    disabled={parent.areaSeq ? true : false}
+                                    disabled={areaDepth2.areaSeq ? true : false}
                                 >
                                     {depth2List.map((area) => (
                                         <option key={area.areaSeq} value={area.areaSeq} data-areanm={area.areaNm}>
@@ -234,18 +273,37 @@ const AreaFormDepth2 = (props) => {
                     <Form.Row className="mb-2">
                         <Col xs={2} className="p-0">
                             <MokaInput as="select" name="areaDiv" value={temp.areaDiv} onChange={handleChangeValue}>
-                                <option key={ITEM_CP}>컴포넌트</option>
-                                <option key={ITEM_CT}>컨테이너</option>
+                                <option value={ITEM_CP}>컴포넌트</option>
+                                <option value={ITEM_CT}>컨테이너</option>
                             </MokaInput>
                         </Col>
-                        <Col xs={8} className="p-0 pl-2 pr-2">
-                            <MokaInput as="select">
-                                <option>선택</option>
-                            </MokaInput>
-                        </Col>
+
+                        {temp.areaDiv === ITEM_CP && (
+                            <Col xs={8} className="p-0 pl-2 pr-2">
+                                <MokaInput as="select" name="areaComp" value={areaComp.areaSeq} onChange={handleChangeValue}>
+                                    <option hidden>컴포넌트를 선택하세요</option>
+                                    {componentList.map((com) => (
+                                        <option value={com.componentSeq} key={com.componentSeq} data-name={com.componentName}>
+                                            {com.componentName}
+                                        </option>
+                                    ))}
+                                </MokaInput>
+                            </Col>
+                        )}
+
+                        {temp.areaDiv === ITEM_CT && (
+                            <Col xs={8} className="p-0 pl-2 pr-2">
+                                <MokaInput as="select" name="container" value={container.containerSeq}>
+                                    <option hidden>컨테이너를 선택하세요</option>
+                                    <option>선택</option>
+                                </MokaInput>
+                            </Col>
+                        )}
+
                         <Col xs={2} className="p-0">
                             <MokaInput as="select">
                                 <option>일반형</option>
+                                {temp.areaDiv === ITEM_CT && <option>세로형</option>}
                             </MokaInput>
                         </Col>
                     </Form.Row>

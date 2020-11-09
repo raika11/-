@@ -6,7 +6,7 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearStore } from '@store/group';
 import toast, { notification, toastr } from '@utils/toastUtil';
-import { GET_REPORTER_MGR, CHANGE_REPORTER_MGR } from '@store/ReporterMgr';
+import { GET_REPORTER_MGR, CHANGE_REPORTER_MGR } from '@store/reporterMgr';
 
 // relations
 const ReporterMgrList = React.lazy(() => import('./ReporterMgrList'));

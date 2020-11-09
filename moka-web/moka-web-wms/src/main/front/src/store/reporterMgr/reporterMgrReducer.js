@@ -14,12 +14,10 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        sort: 'groupCd,asc',
+        sort: 'repSeq,asc',
     },
-    group: {
-        aaaa : {}
-    },
-    groupError: {},
+    reporterMgr: {},
+    reporterMgrError: {},
     invalidList: [],
 };
 
@@ -27,7 +25,6 @@ export const initialState = {
  * reducer
  */
 export default handleActions(
-
     {
         /**
          * 검색조건 변경
@@ -40,9 +37,9 @@ export default handleActions(
         /**
          * 데이터 변경
          */
-        [act.CHANGE_GROUP]: (state, { payload }) => {
+        [act.CHANGE_REPORTER_MGR]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.group = payload;
+                draft.reporterMgr = payload;
             });
         },
         [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
@@ -54,13 +51,14 @@ export default handleActions(
          * 스토어 데이터 삭제
          */
         [act.CLEAR_STORE]: () => initialState,
-        [act.CLEAR_GROUP]: (state) => {
+        [act.CLEAR_REPORTER_MGR]: (state) => {
             return produce(state, (draft) => {
-                draft.group = initialState.group;
-                draft.groupError = initialState.groupError;
+                draft.reporterMgr = initialState.reporterMgr;
+                draft.reporterMgrError = initialState.reporterMgrError;
                 draft.invalidList = initialState.invalidList;
             });
         },
+
         [act.CLEAR_LIST]: (state) => {
             return produce(state, (draft) => {
                 draft.total = initialState.total;
@@ -76,16 +74,16 @@ export default handleActions(
         /**
          * 목록
          */
-        [act.GET_GROUP_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            console.log("성공듀서탓음::" + state);
+        [act.GET_REPORTER_MGR_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            console.log('성공듀서탓음::' + state);
             return produce(state, (draft) => {
                 draft.error = initialState.error;
                 draft.list = body.list;
                 draft.total = body.totalCnt;
             });
         },
-        [act.GET_GROUP_LIST_FAILURE]: (state, { payload }) => {
-            console.log("실패듀서탓음::" + decodeURIComponent(qs.stringify(payload)));
+        [act.GET_REPORTER_MGR_LIST_FAILURE]: (state, { payload }) => {
+            console.log('실패듀서탓음::' + decodeURIComponent(qs.stringify(payload)));
 
             return produce(state, (draft) => {
                 draft.error = payload;
@@ -96,34 +94,20 @@ export default handleActions(
         /**
          * 조회, 등록, 수정
          */
-        [act.GET_GROUP_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_REPORTER_MGR_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.group = body;
-                draft.groupError = initialState.groupError;
+                draft.reporterMgr = body;
+                draft.reporterMgrError = initialState.reporterMgrError;
                 draft.invalidList = initialState.invalidList;
             });
         },
-        [act.GET_GROUP_FAILURE]: (state, { payload }) => {
+        [act.GET_REPORTER_MGR_FAILURE]: (state, { payload }) => {
             const { body } = payload;
 
             return produce(state, (draft) => {
-                draft.group = initialState.group;
-                draft.groupError = payload;
+                draft.reporterMgr = initialState.reporterMgr;
+                draft.reporterMgrError = payload;
                 draft.invalidList = body;
-            });
-        },
-        /**
-         * 삭제
-         */
-        [act.DELETE_GROUP_SUCCESS]: (state) => {
-            return produce(state, (draft) => {
-                draft.group = initialState.group;
-                draft.groupError = initialState.groupError;
-            });
-        },
-        [act.DELETE_GROUP_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.groupError = payload;
             });
         },
     },

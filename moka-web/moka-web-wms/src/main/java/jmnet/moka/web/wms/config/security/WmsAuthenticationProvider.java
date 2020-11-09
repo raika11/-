@@ -14,7 +14,6 @@ import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.web.wms.config.security.exception.AccountStatusUnactiveException;
 import jmnet.moka.web.wms.config.security.exception.GroupwareUserNotFoundException;
 import jmnet.moka.web.wms.config.security.exception.LimitExcessBadCredentialsException;
-import jmnet.moka.web.wms.config.security.exception.LongTermUnconnectedException;
 import jmnet.moka.web.wms.config.security.exception.PasswordUnchangedException;
 import jmnet.moka.web.wms.config.security.exception.WmsBadCredentialsException;
 import jmnet.moka.web.wms.config.security.exception.WmsUsernameNotFoundException;
@@ -130,17 +129,30 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
 
             // 4. status 체크
             if (MemberStatusCode.Y != userDetails.getStatus()) {
-                throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.InsufficientAuthenticationException"));
+                if (MemberStatusCode.P != userDetails.getStatus()) {
+                    throw new PasswordUnchangedException(messageByLocale.get("wms.login.error.PasswordUnchangedException"));
+                } else if (MemberStatusCode.R != userDetails.getStatus()) {
+                    throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.BeforeUnlockApprovalException"));
+                } else if (MemberStatusCode.N != userDetails.getStatus()) {
+                    throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.BeforeNewApprovalException"));
+                } else if (MemberStatusCode.D != userDetails.getStatus()) {
+                    throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.StopUsingException"));
+                } else {
+                    throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.InsufficientAuthenticationException"));
+                }
             }
 
-            // 5. Expire Date 체크
+            // 5. 계정 만료일
             if (userDetails.getExpireDt() != null) {
                 if (McpDate.term(userDetails.getExpireDt()) < 0) {
+                    String errMsg = messageByLocale.get("wms.login.error.expire-date", McpDate.nowDateStr());
+                    memberService.updateMemberStatus(userId, MemberStatusCode.P, 0, errMsg);
                     throw new AccountExpiredException(messageByLocale.get("wms.login.error.AccountExpiredException"));
                 }
             }
 
             // 6. 장기 미접속자 처리
+            /*
             if (userDetails.getLastLoginDt() != null) {
                 if (McpDate.dayTerm(userDetails.getLastLoginDt()) < -(longTermUnconnectedDays)) {
                     String errMsg = messageByLocale.get("wms.login.error.long-term-unconnected", McpDate.nowDateStr());
@@ -148,7 +160,7 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                     throw new LongTermUnconnectedException(
                             messageByLocale.get("wms.login.error.LongTermUnconnectedException", longTermUnconnectedDays));
                 }
-            }
+            }*/
 
             // 7. 패스워드 변경 일자 확인
             if (userDetails.getPasswordModDt() != null) {

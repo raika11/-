@@ -9,6 +9,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSimpleDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
 import jmnet.moka.core.tps.mvc.reporter.service.ReporterService;
@@ -131,8 +132,12 @@ public class ReporterRestController {
         String infoMessage = messageByLocale.get("tps.reporter.error.no-data", request);
         Reporter newReporter = modelMapper.map(reporterDTO, Reporter.class);
 
-        // 오리진 데이터 조회
-        reporterService.findReporterMgrById(newReporter.getRepSeq()).orElseThrow(() -> new NoDataException(infoMessage));
+        Reporter orgDataset = reporterService.findReporterMgrById(newReporter.getRepSeq())
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             // update

@@ -156,6 +156,7 @@ public class Reporter extends BaseAudit {
     @Column(name = "JAM_COM_NM", updatable = false)
     private String jamComNm;
 
+    /*
     @DTODateTimeFormat
     @Column(name = "REG_DT", updatable = false)
     private Date regDt;
@@ -169,6 +170,7 @@ public class Reporter extends BaseAudit {
 
     @Column(name = "MOD_ID")
     private String modId;
+    */
 
     @Column(name = "REP_TALK", updatable = false)
     private String repTalk;

@@ -17,6 +17,7 @@ export const initialState = {
         domainId: null,
         searchType: 'all',
         keyword: '',
+        usePaging: 'Y',
     },
     searchTypeList: [
         { id: 'all', name: '전체' },

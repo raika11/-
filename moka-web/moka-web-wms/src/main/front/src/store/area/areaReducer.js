@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './areaAction';
-import { ITEM_CP } from '@/constants';
+import { ITEM_CP, AREA_ALIGN_V } from '@/constants';
 
 /**
  * initialState
@@ -24,6 +24,7 @@ export const initialState = {
             parent: {},
             previewRsrc: '',
             usedYn: 'N',
+            areaAlign: AREA_ALIGN_V,
         },
     },
     depth2: {
@@ -45,6 +46,7 @@ export const initialState = {
             parent: {},
             previewRsrc: '',
             usedYn: 'N',
+            areaAlign: AREA_ALIGN_V,
         },
     },
     depth3: {
@@ -66,6 +68,7 @@ export const initialState = {
             parent: {},
             previewRsrc: '',
             usedYn: 'N',
+            areaAlign: AREA_ALIGN_V,
         },
     },
     areaCompLoad: {

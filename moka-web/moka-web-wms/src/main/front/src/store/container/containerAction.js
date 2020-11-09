@@ -35,10 +35,13 @@ export const [GET_CONTAINER_LOOKUP_LIST, GET_CONTAINER_LOOKUP_LIST_SUCCESS, GET_
 export const [GET_CONTAINER_LOOKUP, GET_CONTAINER_LOOKUP_SUCCESS, GET_CONTAINER_LOOKUP_FAILURE] = createRequestActionTypes('container/GET_CONTAINER_LOOKUP');
 export const getContainerLookupList = createAction(GET_CONTAINER_LOOKUP_LIST, (...actions) => actions);
 export const getContainerLookup = createAction(GET_CONTAINER_LOOKUP, ({ containerSeq, callback }) => ({ containerSeq, callback }));
+
 /**
  * 모달 데이터(일시적인 데이터) 조회
  */
+export const GET_CONTAINER_LIST_MODAL = 'container/GET_CONTAINER_LIST_MODAL';
 export const GET_CONTAINER_MODAL = 'container/GET_CONTAINER_MODAL';
+export const getContainerListModal = createAction(GET_CONTAINER_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
 export const getContainerModal = createAction(GET_CONTAINER_MODAL, ({ containerSeq, callback }) => ({ containerSeq, callback }));
 
 /**

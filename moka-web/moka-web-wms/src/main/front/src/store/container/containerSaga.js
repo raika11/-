@@ -11,6 +11,11 @@ import * as api from './containerApi';
 const getContainerList = callApiAfterActions(act.GET_CONTAINER_LIST, api.getContainerList, (store) => store.container);
 
 /**
+ * 컨테이너 목록 조회(모달용 일시적인 데이터)
+ */
+const getContainerListModal = createRequestSaga(act.GET_CONTAINER_LIST_MODAL, api.getContainerList, true);
+
+/**
  * 컨테이너 lookup 목록 조회
  */
 const getContainerLookupList = callApiAfterActions(act.GET_CONTAINER_LOOKUP_LIST, api.getContainerList, (store) => store.container.lookup);
@@ -144,4 +149,5 @@ export default function* saga() {
     yield takeLatest(act.GET_CONTAINER_MODAL, getContainerModal);
     yield takeLatest(act.GET_CONTAINER_LOOKUP_LIST, getContainerLookupList);
     yield takeLatest(act.GET_CONTAINER_LOOKUP, getContainerLookup);
+    yield takeLatest(act.GET_CONTAINER_LIST_MODAL, getContainerListModal);
 }

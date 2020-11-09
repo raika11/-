@@ -53,3 +53,9 @@ export const changeSelectedDepth = createAction(CHANGE_SELECTED_DEPTH, (depth) =
  */
 export const [SAVE_AREA, SAVE_AREA_SUCCESS] = createRequestActionTypes('area/SAVE_AREA');
 export const saveArea = createAction(SAVE_AREA, ({ actions, callback, depth }) => ({ actions, callback, depth }));
+
+/**
+ * 삭제
+ */
+export const [DELETE_AREA, DELETE_AREA_SUCCESS] = createRequestActionTypes('area/DELETE_AREA');
+export const deleteArea = createAction(DELETE_AREA, ({ areaSeq, callback, depth }) => ({ areaSeq, callback, depth }));

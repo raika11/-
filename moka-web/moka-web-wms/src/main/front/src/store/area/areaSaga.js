@@ -66,7 +66,7 @@ export function* saveArea({ payload: { actions, callback, depth } }) {
                 yield put({ type: act.GET_AREA_LIST_DEPTH1 });
             } else if (depth === 2) {
                 yield put({ type: act.GET_AREA_LIST_DEPTH2 });
-            } else {
+            } else if (depth === 3) {
                 yield put({ type: act.GET_AREA_LIST_DEPTH3 });
             }
         } else {
@@ -95,29 +95,39 @@ export function* saveArea({ payload: { actions, callback, depth } }) {
  * 삭제
  * @param {string|number} param0.payload.areaSeq 편집영역ID (필수)
  * @param {func} param0.payload.callback 콜백
+ * @param {number} param0.payload.depth 삭제하는 areaSeq의 depth
  */
-export function* deleteArea({ payload: { areaSeq, callback } }) {
-    // const ACTION = act.DELETE_COMPONENT;
-    // let callbackData = {};
-    // yield put(startLoading(ACTION));
-    // try {
-    //     const response = yield call(api.deleteComponent, { componentSeq });
-    //     callbackData = response.data;
-    //     if (response.data.header.success && response.data.body) {
-    //         yield put({
-    //             type: act.GET_COMPONENT_SUCCESS,
-    //             payload: callbackData,
-    //         });
-    //         // 목록 다시 검색
-    //         yield put({ type: act.GET_COMPONENT_LIST });
-    //     }
-    // } catch (e) {
-    //     callbackData = errorResponse(e);
-    // }
-    // if (typeof callback === 'function') {
-    //     yield call(callback, callbackData, componentSeq);
-    // }
-    // yield put(finishLoading(ACTION));
+export function* deleteArea({ payload: { areaSeq, callback, depth } }) {
+    const ACTION = act.DELETE_AREA;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.deleteArea, { areaSeq });
+        callbackData = response.data;
+
+        if (response.data.header.success && response.data.body) {
+            yield put({
+                type: act.DELETE_AREA_SUCCESS,
+            });
+
+            // 목록 다시 검색
+            if (depth === 1) {
+                yield put({ type: act.GET_AREA_LIST_DEPTH1 });
+            } else if (depth === 2) {
+                yield put({ type: act.GET_AREA_LIST_DEPTH2 });
+            } else if (depth === 3) {
+                yield put({ type: act.GET_AREA_LIST_DEPTH3 });
+            }
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
 }
 
 /**
@@ -133,4 +143,5 @@ export default function* saga() {
     yield takeLatest(act.GET_AREA_DEPTH2, getAreaDepth2);
     yield takeLatest(act.GET_AREA_DEPTH3, getAreaDepth3);
     yield takeLatest(act.SAVE_AREA, saveArea);
+    yield takeLatest(act.DELETE_AREA, deleteArea);
 }

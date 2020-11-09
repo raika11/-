@@ -41,3 +41,10 @@ export const putArea = ({ area }) => {
             throw err;
         });
 };
+
+// 편집영역 삭제
+export const deleteArea = ({ areaSeq }) => {
+    return instance.put(`/api/areas/${areaSeq}`).catch((err) => {
+        throw err;
+    });
+};

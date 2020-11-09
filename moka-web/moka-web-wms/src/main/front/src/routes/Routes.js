@@ -4,7 +4,7 @@ import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 
 // routes
 import routes from './index';
-import { getUserMenuTree, getDomainList } from '@store/auth/authAction';
+import { getUserMenuTree, changeLatestMenuId, getDomainList } from '@store/auth/authAction';
 import { MokaLoader, ScrollToTop } from '@components';
 
 const Routes = () => {
@@ -25,8 +25,10 @@ const Routes = () => {
         if (menu.length === 0) {
             dispatch(getUserMenuTree({ pathName: pathName }));
         } else {
-            if (menu.menuPaths.indexOf(pathName) < 0) {
+            if (menu.menuPaths[pathName] === undefined) {
                 window.location.href = '/404';
+            } else {
+                dispatch(changeLatestMenuId(menu.menuPaths[pathName]));
             }
         }
     }, [dispatch, menu, pathName]);

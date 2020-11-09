@@ -2,6 +2,7 @@ import axios from './axios';
 import { setLocalItem, getLocalItem } from '@utils/storageUtil';
 import toast from '@utils/toastUtil';
 import { store } from '@store/store';
+//import { auth } from '@store/auth/index';
 
 const goToLogin = (message) => {
     setLocalItem({ key: 'Authorization', value: undefined });
@@ -23,7 +24,9 @@ const goToLogin = (message) => {
 const onRequest = (config) => {
     if (config.url !== '/loginJwt') {
         const token = getLocalItem({ key: 'Authorization' });
+        const menuId = store.getState().auth.latestMenuId;
         if (token) {
+            config.headers['x-menuid'] = menuId;
             config.headers['Authorization'] = token;
             return config;
         }

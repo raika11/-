@@ -12,6 +12,9 @@ export const logout = createAction(LOGOUT);
 // 메뉴 조회
 export const [GET_USER_MENU_TREE, GET_USER_MENU_TREE_SUCCESS, GET_USER_MENU_TREE_FAILURE] = createRequestActionTypes('auth/GET_USER_MENU_TREE');
 export const getUserMenuTree = createAction(GET_USER_MENU_TREE, (pathName) => pathName);
+// 메뉴 ID 저장
+export const CHANGE_LATEST_MENUID = 'auth/CHANGE_LATEST_MENUID';
+export const changeLatestMenuId = createAction(CHANGE_LATEST_MENUID, (menuId) => menuId);
 
 // 전체 도메인 조회
 export const [GET_DOMAIN_LIST, GET_DOMAIN_LIST_SUCCESS, GET_DOMAIN_LIST_FAILURE] = createRequestActionTypes('auth/GET_DOMAIN_LIST');

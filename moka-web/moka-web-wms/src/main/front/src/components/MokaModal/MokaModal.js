@@ -45,6 +45,10 @@ const propTypes = {
      */
     title: PropTypes.string,
     /**
+     * node 타입 Modal타이틀 (titleAs가 있으면 title이 노출되지 않는다)
+     */
+    titleAs: PropTypes.node,
+    /**
      * children (컨텐츠)
      */
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
@@ -84,7 +88,24 @@ const defaultProps = {
  * DraggableModal이지만, draggable이 false인 경우 핸들을 제거
  */
 const MokaModal = (props) => {
-    const { width, height, show, onHide, title, children, buttons, draggable, centered, className, headerClassName, bodyClassName, footerClassName, loading, ...rest } = props;
+    const {
+        width,
+        height,
+        show,
+        onHide,
+        title,
+        titleAs,
+        children,
+        buttons,
+        draggable,
+        centered,
+        className,
+        headerClassName,
+        bodyClassName,
+        footerClassName,
+        loading,
+        ...rest
+    } = props;
 
     /**
      * draggable 껍데기 컴포넌트 생성
@@ -109,7 +130,7 @@ const MokaModal = (props) => {
             {/* 타이틀 */}
             <Modal.Header className={headerClassName} id="draggable-modal-title" data-drag-on={draggable} closeButton>
                 {draggable && <div id="draggable-handle" />}
-                <Modal.Title>{title}</Modal.Title>
+                {titleAs ? titleAs : <Modal.Title>{title}</Modal.Title>}
             </Modal.Header>
 
             {/* 컨텐츠 */}

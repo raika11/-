@@ -104,6 +104,7 @@ const TemplateAgGrid = ({ onDelete }) => {
                     total={total}
                     page={search.page}
                     size={search.size}
+                    displayPageNum={3}
                     onChangeSearchOption={handleChangeSearchOption}
                     preventRowClickCell={['delete']}
                     selected={template.templateSeq}
@@ -117,6 +118,7 @@ const TemplateAgGrid = ({ onDelete }) => {
                     total={total}
                     page={search.page}
                     size={search.size}
+                    displayPageNum={3}
                     onChangeSearchOption={handleChangeSearchOption}
                     onClick={handleRowClicked}
                     selected={template.templateSeq}

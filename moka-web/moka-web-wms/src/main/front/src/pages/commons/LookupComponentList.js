@@ -228,6 +228,7 @@ const LookupComponentList = (props) => {
                     total={total}
                     page={search.page}
                     size={search.size}
+                    displayPageNum={3}
                     onchangeLookupSearchOption={handlechangeLookupSearchOption}
                     preventRowClickCell={['append', 'link']}
                     selected={selected.componentSeq}

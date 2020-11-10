@@ -223,13 +223,11 @@ const CodeMgtListAgGrid = () => {
                 page={search.page}
                 size={search.size}
                 total={total}
-                showTotalString={false}
                 displayPageNum={3}
                 pageSizes={false}
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={cdSearch.grpCd}
                 preventRowClickCell={['edit']}
-                paginationClassName="justify-content-center"
             />
             <CodeMgtListModal type="add" show={showAddModal} onHide={() => setShowAddModal(false)} onSave={onClickSave} onDelete={onClickDelete} data={selectedData} />
             <CodeMgtListModal type="edit" show={showEditModal} onHide={() => setShowEditModal(false)} onSave={onClickSave} onDelete={onClickDelete} data={selectedData} />

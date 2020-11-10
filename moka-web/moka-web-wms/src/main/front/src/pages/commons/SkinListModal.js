@@ -139,6 +139,7 @@ const SkinListModal = (props) => {
 
     return (
         <MokaModal
+            width={600}
             show={show}
             onHide={handleHide}
             title="뷰스킨 검색"

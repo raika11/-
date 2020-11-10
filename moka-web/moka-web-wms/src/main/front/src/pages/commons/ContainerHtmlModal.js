@@ -35,7 +35,7 @@ const ContainerHtmlModal = (props) => {
             dispatch(clearContainer());
         } else {
             setContainerModal({});
-        }        
+        }
         onHide();
     };
 
@@ -77,9 +77,7 @@ const ContainerHtmlModal = (props) => {
                                 <br />
                                 수정하시겠습니까?
                             </React.Fragment>,
-                            () => {
-                                submitContainer();
-                            },
+                            () => submitContainer(),
                             () => {},
                         );
                     }
@@ -90,7 +88,7 @@ const ContainerHtmlModal = (props) => {
         };
         dispatch(hasRelationList(options));
     };
-    
+
     /**
      * onBlur
      * @param {string} value 에디터 내용
@@ -109,7 +107,6 @@ const ContainerHtmlModal = (props) => {
                         containerSeq: containerSeq,
                     }),
                 );
-            
                 setButtons([
                     { text: '저장', variant: 'primary', onClick: handleClickSave },
                     { text: '닫기', variant: 'gray150', onClick: handleHide },
@@ -132,6 +129,7 @@ const ContainerHtmlModal = (props) => {
                 setButtons([{ text: '닫기', variant: 'gray150', onClick: handleHide }]);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [containerSeq, show, containerSave, dispatch]);
 
     useEffect(() => {
@@ -162,7 +160,7 @@ const ContainerHtmlModal = (props) => {
                 setError({});
             }
         }
-    }, [invalidList]);
+    }, [containerSave, invalidList]);
 
     return (
         <MokaModalEditor

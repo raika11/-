@@ -147,6 +147,7 @@ const RelationInComponentList = (props) => {
                 total={total}
                 page={search.page}
                 size={search.size}
+                displayPageNum={3}
                 onChangeSearchOption={handleChangeSearchOption}
                 preventRowClickCell={['link']}
             />

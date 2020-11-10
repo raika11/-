@@ -10,7 +10,7 @@ export const initialState = {
     // 코드 그룹 검색 조건
     grpSearch: {
         page: 0,
-        size: PAGESIZE_OPTIONS[0],
+        size: 25,
         sort: undefined,
     },
     // 코드 그룹의 리스트 검색 조건

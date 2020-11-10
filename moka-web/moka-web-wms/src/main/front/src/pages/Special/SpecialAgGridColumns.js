@@ -21,7 +21,7 @@ export const columnDefs = [
     {
         headerName: '제목',
         field: 'pageTitle',
-        width: 380,
+        width: 387,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'templateGroupName',
     },

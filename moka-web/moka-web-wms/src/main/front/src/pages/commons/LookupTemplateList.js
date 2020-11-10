@@ -286,6 +286,7 @@ const LookupTemplateList = (props) => {
                         total={total}
                         page={search.page}
                         size={search.size}
+                        displayPageNum={3}
                         onChangeSearchOption={handleChangeSearchOption}
                         preventRowClickCell={['append', 'link']}
                         selected={selected.templateSeq}
@@ -299,6 +300,7 @@ const LookupTemplateList = (props) => {
                         total={total}
                         page={search.page}
                         size={search.size}
+                        displayPageNum={3}
                         cardWidth={174}
                         onChangeSearchOption={handleChangeSearchOption}
                         onClick={handleRowClicked}

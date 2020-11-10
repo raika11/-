@@ -62,6 +62,7 @@ const ReservedAgGrid = () => {
                 total={total}
                 page={search.page}
                 size={search.size}
+                displayPageNum={3}
                 selected={reserved.reservedSeq}
                 onChangeSearchOption={handleChangeSearchOption}
                 preventRowClickCell={['delete']}

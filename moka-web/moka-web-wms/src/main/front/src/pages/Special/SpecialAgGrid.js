@@ -10,7 +10,7 @@ const SpecialAgGrid = () => {
 
     return (
         <MokaTable
-            agGridHeight={550}
+            agGridHeight={685}
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(special) => special.cdSeq}

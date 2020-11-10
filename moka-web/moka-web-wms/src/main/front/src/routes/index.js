@@ -50,7 +50,7 @@ const routes = [
         path: '/404',
         name: 'Page404',
         displayName: '404',
-        component: () => <Page404 defaultLink="/" />,
+        component: () => <Page404 defaultLink="/desking" />,
         layout: NoFrameLayout,
     },
     {

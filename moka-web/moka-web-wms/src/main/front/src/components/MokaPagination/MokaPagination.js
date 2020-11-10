@@ -129,7 +129,7 @@ const MokaPagination = (props) => {
                     <MokaIcon iconName="fas-angle-right" />
                 </Pagination.Next>
             </Pagination>
-            {showTotalString && <div>{`총: ${total} 건`}</div>}
+            {showTotalString && <div className="small">{`총: ${total} 건`}</div>}
         </div>
     );
 };

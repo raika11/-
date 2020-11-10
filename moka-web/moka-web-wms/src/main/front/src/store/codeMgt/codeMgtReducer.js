@@ -16,7 +16,7 @@ export const initialState = {
     // 코드 그룹의 리스트 검색 조건
     cdSearch: {
         page: 0,
-        size: PAGESIZE_OPTIONS[0],
+        size: 25,
         sort: undefined,
         grpCd: null,
         searchType: 'dtlCd',

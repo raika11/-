@@ -14,7 +14,7 @@ const Special = () => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            <MokaCard width={1585} className="mr-gutter" titleClassName="mb-0">
+            <MokaCard width={1585} className="mr-gutter" titleClassName="mb-0" header={false}>
                 <Suspense>
                     <SpecialList />
                 </Suspense>

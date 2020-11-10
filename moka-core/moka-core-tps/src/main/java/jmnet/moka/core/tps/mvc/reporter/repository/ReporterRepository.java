@@ -9,11 +9,11 @@ import org.springframework.stereotype.Repository;
 
 /**
  * <pre>
- * 도메인 Repository
- * 2020. 1. 8. ssc 최초생성
+ * 기자관리 Repository
+ * 2020. 11. 10. ssc 최초생성
  * </pre>
  * 
- * @since 2020. 1. 8. 오후 2:04:49
+ * 2020. 11. 10. 오후 2:04:49
  * @author ssc
  */
 @Repository

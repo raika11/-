@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 /**
- * The persistent class for the TB_WMS_DOMAIN database table.
+ * The persistent class for the TB_15RE_REPORTER table.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -155,22 +155,6 @@ public class Reporter extends BaseAudit {
 
     @Column(name = "JAM_COM_NM", updatable = false)
     private String jamComNm;
-
-    /*
-    @DTODateTimeFormat
-    @Column(name = "REG_DT", updatable = false)
-    private Date regDt;
-
-    @Column(name = "REG_ID", updatable = false)
-    private String regId;
-
-    @DTODateTimeFormat
-    @Column(name = "MOD_DT")
-    private Date modDt;
-
-    @Column(name = "MOD_ID")
-    private String modId;
-    */
 
     @Column(name = "REP_TALK", updatable = false)
     private String repTalk;

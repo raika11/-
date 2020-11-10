@@ -9,6 +9,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSimpleDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
@@ -65,8 +66,8 @@ public class ReporterRestController {
     /**
      * 기자관리목록조회
      *
-     * @param search 검색조건
-     * @return 도메인목록
+     * @param search 검색조건 : 기자이름
+     * @return 기자목록
      */
     @ApiOperation(value = "기자관리 목록 조회")
     @GetMapping
@@ -81,7 +82,8 @@ public class ReporterRestController {
         resultListMessage.setTotalCnt(returnValue.getTotalElements());
         resultListMessage.setList(reporterDTOList);
         ResultDTO<ResultListDTO<ReporterSimpleDTO>> resultDto = new ResultDTO<>(resultListMessage);
-        tpsLogger.success(ActionType.SELECT);
+        //tpsLogger.success(ActionType.SELECT);
+        tpsLogger.success(true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -96,17 +98,13 @@ public class ReporterRestController {
     @ApiOperation(value = "기자관리 조회")
     @GetMapping("/{repSeq}")
     public ResponseEntity<?> getReportMgr(HttpServletRequest request,
-            @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{reporter.error.pattern.repSeq}") String repSeq,
-            @RequestAttribute Long processStartTime)
+            @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{reporter.error.pattern.repSeq}") String repSeq)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.reporter.error.no-data", request);
         Reporter reporter = reporterService.findReporterMgrById(repSeq).orElseThrow(() -> new NoDataException(message));
-
         ReporterSimpleDTO dto = modelMapper.map(reporter, ReporterSimpleDTO.class);
-
-        tpsLogger.success(ActionType.SELECT);
-
+        tpsLogger.success(ActionType.SELECT, true);
         ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -125,16 +123,13 @@ public class ReporterRestController {
     public ResponseEntity<?> putDomain(HttpServletRequest request,
                                        @PathVariable("repSeq")
                                        @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporter.error.pattern.repSeq}") String repSeq,
-                                       @Valid ReporterSimpleDTO reporterDTO, @RequestAttribute Long processStartTime)
+                                       @Valid ReporterSimpleDTO reporterDTO)
             throws Exception {
 
-
-        String infoMessage = messageByLocale.get("tps.reporter.error.no-data", request);
         Reporter newReporter = modelMapper.map(reporterDTO, Reporter.class);
-
         Reporter orgDataset = reporterService.findReporterMgrById(newReporter.getRepSeq())
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = messageByLocale.get("tps.reporter.error.no-data");
                     tpsLogger.fail(ActionType.UPDATE, message, true);
                     return new NoDataException(message);
                 });
@@ -145,17 +140,17 @@ public class ReporterRestController {
 
             // 결과리턴
             ReporterSimpleDTO dto = modelMapper.map(returnValue, ReporterSimpleDTO.class);
-            ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<>(dto);
 
             // 액션 로그에 성공 로그 출력
+            String message = messageByLocale.get("tps.common.success.update");
+            ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<ReporterSimpleDTO>(dto, message);
             tpsLogger.success(ActionType.UPDATE);
-
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE REPORTER]", e);
+            log.error("[FAIL TO UPDATE REPORTER] seq: {} {}", reporterDTO.getRepSeq(),  e.getMessage());
             // 액션 로그에 에러 로그 출력
-            tpsLogger.error(ActionType.UPDATE, e);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE DATASET]", e, true);
             throw new Exception(messageByLocale.get("tps.reporter.error.save", request), e);
         }
     }

@@ -14,7 +14,6 @@ import java.util.Optional;
  * 도메인 서비스 2020. 1. 8. ssc 최초생성
  * 메소드 생성 규칙
  * 목록 조회 : find{Target}List
- * 목록 건수 조회 : find{Target}ListCount
  * ID로 상세 조회 : find{Target}ById
  * 여러 속성으로 상세 조회 : find{Target}
  * 수정 : update{Target}

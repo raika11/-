@@ -12,6 +12,7 @@ export const data = {
             areaNm: 'PC홈',
             parentAreaSeq: 0,
             ordNo: 1,
+            areaDiv: 'CP',
             nodes: [
                 {
                     areaSeq: 35,
@@ -19,6 +20,8 @@ export const data = {
                     parentAreaSeq: 24,
                     parentAreaNm: 'PC홈',
                     ordNo: 1,
+                    areaDiv: 'CT',
+                    areaAlign: 'V',
                     nodes: [
                         {
                             areaSeq: 43,
@@ -26,6 +29,8 @@ export const data = {
                             parentAreaSeq: 35,
                             parentAreaNm: '정치',
                             ordNo: 1,
+                            areaDiv: 'CT',
+                            areaAlign: 'V',
                         },
                     ],
                 },
@@ -35,6 +40,8 @@ export const data = {
                     parentAreaSeq: 24,
                     parentAreaNm: 'PC홈',
                     ordNo: 1,
+                    areaDiv: 'CP',
+                    areaAlign: 'V',
                 },
                 {
                     areaSeq: 44,
@@ -42,6 +49,8 @@ export const data = {
                     parentAreaSeq: 24,
                     parentAreaNm: 'PC홈',
                     ordNo: 1,
+                    areaDiv: 'CT',
+                    areaAlign: 'V',
                 },
             ],
         },
@@ -50,6 +59,7 @@ export const data = {
             areaNm: '사설',
             parentAreaSeq: 0,
             ordNo: 1,
+            areaDiv: 'CP',
             nodes: [
                 {
                     areaSeq: 29,
@@ -57,6 +67,8 @@ export const data = {
                     parentAreaSeq: 26,
                     parentAreaNm: '사설',
                     ordNo: 1,
+                    areaDiv: 'CT',
+                    areaAlign: 'V',
                 },
             ],
         },

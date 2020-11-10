@@ -6,6 +6,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import jmnet.moka.core.tps.common.code.MemberRequestCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,22 +32,40 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MemberSaveDTO extends MemberDTO {
+public class MemberRequestDTO extends MemberDTO {
 
-    public static final Type TYPE = new TypeReference<List<MemberSaveDTO>>() {
+    public static final Type TYPE = new TypeReference<List<MemberRequestDTO>>() {
     }.getType();
 
     /**
-     * 비밀번호
+     * 사용자ID
      */
     @NotEmpty(message = "{tps.member.error.pattern.password}")
     @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}")
     private String password;
 
     /**
-     * 확인 비밀번호
+     * 비밀번호
      */
     @NotEmpty(message = "{tps.member.error.pattern.password}")
     @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}")
-    private String confirmPassword;
+    private String conformPassword;
+
+    /**
+     * SMS인증문자
+     */
+    @Size(min = 4, max = 6, message = "{tps.member.error.pattern.smsAuth}")
+    private String smsAuth;
+
+    /**
+     * 요청사유
+     */
+    @NotEmpty(message = "{tps.member.error.notempty.requestReason}")
+    private String requestReason;
+
+    /**
+     * 해제사유
+     */
+    @NotEmpty(message = "{tps.member.error.notempty.requestType}")
+    private MemberRequestCode requestType;
 }

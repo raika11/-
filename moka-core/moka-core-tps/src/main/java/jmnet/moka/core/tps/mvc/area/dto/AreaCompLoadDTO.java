@@ -47,14 +47,25 @@ public class AreaCompLoadDTO implements Serializable {
     private String byPageMessage;
 
     /**
-     * 컨테이너에 컴포넌트가 없다면, true
+     * 페이지에 컨테이너가 없다면, true
      */
     @Builder.Default
     private Boolean byContainer = false;
 
     /**
-     * 컨테이너에 컴포넌트가 없다면, 메세지있음
+     * 페이지에 컨테이너가 없다면, 메세지있음
      */
     private String byContainerMessage;
+
+    /**
+     * 컨테이너에 컴포넌트가 없다면, true
+     */
+    @Builder.Default
+    private Boolean byContainerComp = false;
+
+    /**
+     * 컨테이너에 컴포넌트가 없다면, 메세지있음
+     */
+    private String byContainerCompMessage;
 
 }

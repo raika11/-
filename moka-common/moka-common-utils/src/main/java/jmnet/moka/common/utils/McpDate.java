@@ -245,7 +245,7 @@ public class McpDate {
      * @param plus
      * @return Date
      */
-    public static java.util.Date minutePlus(java.util.Date date, int type, int plus) {
+    public static java.util.Date minutePlus(java.util.Date date, int plus) {
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.setTime(date);

@@ -97,13 +97,17 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Long checkAreaComp(Area area) {
+    public Map<String, Object> checkAreaComp(Area area) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        Long success = (long) 0;
+        Long byPage = (long) 1;
+        Long byContainer = (long) 1;
+        Long byContainerComp = (long) 1;
         paramMap.put("areaSeq", area.getAreaSeq());
-        paramMap.put("success", success);   // 1: 성공, -1: 페이지에 없는 컴포넌트, -2: 컨테이너에 없는 컴포넌트
+        paramMap.put("byPage", byPage);                     // 1: 성공, -1: 페이지에 존재하지 않는 컴포넌트
+        paramMap.put("byContainer", byContainer);           // 1: 성공, -1: 페이지에 존재하지 않는 컨테이너
+        paramMap.put("byContainerComp", byContainerComp);   // 1: 성공, -1: 컨테이너에 존재하지 않는 컴포넌트
         areaMapper.checkAreaComp(paramMap);
-        return (long) paramMap.get("success");
+        return paramMap;
     }
 
     @Override

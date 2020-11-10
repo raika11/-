@@ -59,8 +59,8 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
     @Value("${login.long-term.connected-days.limit:30}")
     private int longTermUnconnectedDays;
 
-    @Value("${login.password.changed-days-noti-limit:30}")
-    private int passwordChangeNotiDays;
+    //@Value("${login.password.changed-days-noti-limit:30}")
+    //private int passwordChangeNotiDays;
 
     @Value("${login.password.changed-days-lock.limit:35}")
     private int passwordUnchangedLockDays;
@@ -129,13 +129,18 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
 
             // 4. status 체크
             if (MemberStatusCode.Y != userDetails.getStatus()) {
-                if (MemberStatusCode.P != userDetails.getStatus()) {
-                    throw new PasswordUnchangedException(messageByLocale.get("wms.login.error.PasswordUnchangedException"));
-                } else if (MemberStatusCode.R != userDetails.getStatus()) {
+                if (MemberStatusCode.P == userDetails.getStatus()) {
+                    if (userDetails.getErrorCnt() == passwordErrorLimit) {
+                        throw new LimitExcessBadCredentialsException(
+                                messageByLocale.get("wms.login.error.limit-excesss-bad-credentials-locked", passwordErrorLimit));
+                    } else {
+                        throw new PasswordUnchangedException(messageByLocale.get("wms.login.error.PasswordUnchangedException"));
+                    }
+                } else if (MemberStatusCode.R == userDetails.getStatus()) {
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.BeforeUnlockApprovalException"));
-                } else if (MemberStatusCode.N != userDetails.getStatus()) {
+                } else if (MemberStatusCode.N == userDetails.getStatus()) {
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.BeforeNewApprovalException"));
-                } else if (MemberStatusCode.D != userDetails.getStatus()) {
+                } else if (MemberStatusCode.D == userDetails.getStatus()) {
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.StopUsingException"));
                 } else {
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.InsufficientAuthenticationException"));
@@ -146,7 +151,7 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
             if (userDetails.getExpireDt() != null) {
                 if (McpDate.term(userDetails.getExpireDt()) < 0) {
                     String errMsg = messageByLocale.get("wms.login.error.expire-date", McpDate.nowDateStr());
-                    memberService.updateMemberStatus(userId, MemberStatusCode.P, 0, errMsg);
+                    memberService.updateMemberStatus(userId, MemberStatusCode.P, userDetails.getErrorCnt(), errMsg);
                     throw new AccountExpiredException(messageByLocale.get("wms.login.error.AccountExpiredException"));
                 }
             }
@@ -167,7 +172,8 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                 if (McpDate.dayTerm(userDetails.getPasswordModDt()) < -(passwordUnchangedLockDays)) {
                     String errMsg = messageByLocale.get("wms.login.error.password-unchanged-lock", McpDate.nowDateStr());
                     memberService.updateMemberStatus(userId, MemberStatusCode.P, userDetails.getErrorCnt(), errMsg);
-                    throw new PasswordUnchangedException(messageByLocale.get("wms.login.error.PasswordUnchangedException", passwordChangeNotiDays));
+                    throw new PasswordUnchangedException(
+                            messageByLocale.get("wms.login.error.PasswordUnchangedException", passwordUnchangedLockDays));
                 }
             }
 

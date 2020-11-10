@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
@@ -112,7 +113,7 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public AreaNode makeTree() {
-        List<Area> areaList = areaRepository.findAll();
+        List<Area> areaList = areaRepository.findByUsedYn(MokaConstants.YES);
         return areaList.isEmpty() ? null : makeTree(areaList);
     }
 
@@ -123,6 +124,12 @@ public class AreaServiceImpl implements AreaService {
         Iterator<Area> it = areaList.iterator();
         while (it.hasNext()) {
             Area area = it.next();
+
+            if (area.getUsedYn()
+                    .equals(MokaConstants.NO)) {
+                continue;
+            }
+
             if (area.getParent() == null || area.getParent()
                                                 .getAreaSeq() == 0) {
                 AreaNode areaNode = new AreaNode(area);

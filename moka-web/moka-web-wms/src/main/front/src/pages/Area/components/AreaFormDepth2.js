@@ -46,6 +46,7 @@ const AreaFormDepth2 = (props) => {
 
     const [contOptions, setContOptions] = useState([]); // 컨테이너 options
     const [compOptions, setCompOptions] = useState([]); // 컴포넌트 options
+    const [contCnt, setContCnt] = useState(0);
     const [error, setError] = useState({ container: false });
 
     /**
@@ -75,6 +76,7 @@ const AreaFormDepth2 = (props) => {
             setTemp({ ...temp, areaAlign: value });
         } else if (name === 'container') {
             setContainer({ containerSeq: value });
+            handleCompLoad({ containerSeq: value });
             setError({ ...error, container: false });
         }
     };
@@ -140,7 +142,7 @@ const AreaFormDepth2 = (props) => {
      * 컨테이너일 때 -> 컨테이너의 컴포넌트 목록 리로드
      */
     const handleCompLoad = useCallback(
-        (reload) => {
+        (cont) => {
             dispatch(
                 getComponentListModal({
                     search: {
@@ -148,7 +150,7 @@ const AreaFormDepth2 = (props) => {
                         usePaging: 'N',
                         useArea: 'Y',
                         searchType: 'containerSeq',
-                        keyword: container.containerSeq,
+                        keyword: cont.containerSeq,
                         domainId: page.domain.domainId,
                     },
                     callback: ({ body }) => {
@@ -158,15 +160,13 @@ const AreaFormDepth2 = (props) => {
                                 component: { ...b },
                             })),
                         );
-                        if (reload) {
-                            setReloaded(true);
-                            setAreaCompLoad(initialState.depth2.areaCompLoad);
-                        }
+                        setReloaded(true);
+                        setAreaCompLoad(initialState.depth2.areaCompLoad);
                     },
                 }),
             );
         },
-        [dispatch, container, page],
+        [dispatch, page],
     );
 
     /**
@@ -185,9 +185,7 @@ const AreaFormDepth2 = (props) => {
                 },
                 callback: ({ body }) => {
                     setCompOptions(body.list || []);
-                    if (body.list.length > 0) {
-                        setComponent(body.list[0]);
-                    }
+                    setComponent({});
                 },
             }),
         );
@@ -208,13 +206,12 @@ const AreaFormDepth2 = (props) => {
                 },
                 callback: ({ body }) => {
                     setContOptions(body.list || []);
-                    if (body.list.length > 0) {
-                        setContainer(body.list[0]);
-                    }
+                    setContainer(contCnt < 1 ? temp.container : {});
+                    setContCnt(contCnt + 1);
                 },
             }),
         );
-    }, [dispatch, page]);
+    }, [dispatch, page, contCnt, temp.container]);
 
     useEffect(() => {
         // depth에 따라 기본값 셋팅
@@ -247,10 +244,6 @@ const AreaFormDepth2 = (props) => {
             setParent(areaDepth2);
             setDomain(areaDepth2.domain || {});
         }
-
-        // container 데이터 셋팅
-        setContainer(temp.container || {});
-
         // areaComps 데이터 셋팅
         setAreaComps(temp.areaComps || []);
     }, [temp, depth, areaDepth1, areaDepth2]);
@@ -278,16 +271,8 @@ const AreaFormDepth2 = (props) => {
             if (temp.areaDiv === ITEM_CP) getCompOptions();
             else getContOptions();
         }
-    }, [getCompOptions, getContOptions, page, temp.areaDiv]);
-
-    useEffect(() => {
-        // 컨테이너 변경 시 컨테이너 안의 컴포넌트 리스트 조회
-        if (container.containerSeq) {
-            handleCompLoad(false);
-        } else {
-            setAreaComps([]);
-        }
-    }, [container.containerSeq, handleCompLoad]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page.pageSeq, temp.areaDiv]);
 
     useEffect(() => {
         // 폼이 변경되면 CT, CP 리스트 날림
@@ -456,7 +441,7 @@ const AreaFormDepth2 = (props) => {
                                 <p className="mb-0 text-danger" dangerouslySetInnerHTML={{ __html: areaCompLoad.byPageMessage.replace('\n', '<br/>') }} />
                             </Col>
                             <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
-                                <MokaOverlayTooltipButton variant="white" className="border" tooltipText="컴포넌트 리로드" onClick={() => handleCompLoad(true)}>
+                                <MokaOverlayTooltipButton variant="white" className="border" tooltipText="컴포넌트 리로드" onClick={() => handleCompLoad(container)}>
                                     <MokaIcon iconName="far-redo-alt" />
                                 </MokaOverlayTooltipButton>
                             </Col>

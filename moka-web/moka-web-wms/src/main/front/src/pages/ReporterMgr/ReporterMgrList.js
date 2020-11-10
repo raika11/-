@@ -1,15 +1,15 @@
 import React from 'react';
-import ReporterMgrAgGrid from './ReporterMgrAgGrid';
 import Search from './ReporterMgrSearch';
+import AgGrid from './ReporterMgrAgGrid';
 
 /**
- * 도메인 관리 리스트
+ * 기자 목록
  */
 const ReporterMgrList = () => {
     return (
         <>
             <Search />
-            <ReporterMgrAgGrid />
+            <AgGrid />
         </>
     );
 };

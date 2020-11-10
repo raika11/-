@@ -7,6 +7,7 @@ import ComponentDashboard from '@pages/Dashboard/ComponentDashboard';
 
 // page
 const Dashboard = React.lazy(() => import('@pages/Dashboard'));
+const Desking = React.lazy(() => import('@pages/Desking'));
 const TestBoard = React.lazy(() => import('@pages/TestBoard'));
 const Task = React.lazy(() => import('@pages/Task'));
 const EmbedVideo = React.lazy(() => import('@pages/EmbedVideo'));
@@ -28,13 +29,14 @@ const Special = React.lazy(() => import('@pages/Special'));
 
 const routes = [
     {
-        path: '/',
-        name: 'Default',
-        displayName: '홈',
-        component: Dashboard,
+        path: '/desking',
+        name: 'Desking',
+        displayName: '화면편집',
+        component: Desking,
         layout: SidebarCloseLayout,
         nonResponsive: false,
-        exact: true,
+        exact: false,
+        strict: true,
     },
     {
         path: '/dashboard',

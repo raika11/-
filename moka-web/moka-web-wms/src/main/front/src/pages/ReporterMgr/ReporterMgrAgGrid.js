@@ -15,16 +15,16 @@ const ReporterMgrAgGrid = () => {
     const [search, setSearch] = useState(initialState);
     const [repoterRows, setRepoterRows] = useState([]);
 
-    const { reporter, list, total, search: storeSearch, loading } = useSelector(
-        (store) => ({
+    const { reporter, list, total, search: storeSearch, loading } = useSelector((store) => {
+        console.log('reporterreporterreporterreporter::', store.reporter.list);
+        return {
             reporter: store.reporter.reporter,
             list: store.reporter.list,
             total: store.reporter.total,
             search: store.reporter.search,
             loading: store.loading[GET_REPORTER_LIST],
-        }),
-        shallowEqual,
-    );
+        };
+    }, shallowEqual);
 
     /**
      * 테이블에서 검색옵션 변경

@@ -25,6 +25,7 @@ export const clearSearch = createAction(CLEAR_SEARCH);
 export const [GET_REPORTER_LIST, GET_REPORTER_LIST_SUCCESS, GET_REPORTER_LIST_FAILURE] = createRequestActionTypes('reporter/GET_REPORTER_LIST');
 export const [GET_REPORTER, GET_REPORTER_SUCCESS, GET_REPORTER_FAILURE] = createRequestActionTypes('reporter/GET_REPORTER');
 export const getReporterList = createAction(GET_REPORTER_LIST, (...actions) => {
+    console.log('기자관리action::', actions);
     return actions;
 });
 

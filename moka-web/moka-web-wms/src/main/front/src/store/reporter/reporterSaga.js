@@ -9,15 +9,15 @@ import * as reporterAction from './reporterAction';
 /**
  * 기자관리 목록 조회
  */
-const getReporterList = callApiAfterActions(reporterAction.getReporterList(), reporterAPI.getReporterList, (state) => {
-    console.log('aaaaaaaaa::', state.reporter);
+const getReporterList = callApiAfterActions(reporterAction.GET_REPORTER_LIST, reporterAPI.getReporterList, (state) => {
+    console.log('사가탐', state);
     return state.reporter;
 });
 
 /**
  * 기자관리 조회
  */
-const getReporter = createRequestSaga(reporterAction.getReporter, reporterAPI.getReporter);
+const getReporter = createRequestSaga(reporterAction.GET_REPORTER, reporterAPI.getReporter);
 
 /**
  * 수정
@@ -54,7 +54,7 @@ function* saveReporter({ payload: { type, actions, callback } }) {
 
         // 도메인 데이터
         const reporter = yield select((store) => store.reporter.reporter);
-        const response = type === 'insert' ? yield call(reporterAPI.putReporter, { reporter }) : yield call(reporterAPI.putReporter, { reporter });
+        const response = yield call(reporterAPI.putReporter, { reporter });
         callbackData = response.data;
 
         if (response.data.header.success) {

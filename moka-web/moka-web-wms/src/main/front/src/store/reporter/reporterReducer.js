@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import * as act from '@store/reporterMgr/reporterMgrAction';
+import * as act from '@store/reporter/reporterAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 import qs from 'qs';
 
@@ -16,8 +16,8 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         sort: 'repSeq,asc',
     },
-    reporterMgr: {},
-    reporterMgrError: {},
+    reporter: {},
+    reporterError: {},
     invalidList: [],
 };
 
@@ -37,9 +37,9 @@ export default handleActions(
         /**
          * 데이터 변경
          */
-        [act.CHANGE_REPORTER_MGR]: (state, { payload }) => {
+        [act.CHANGE_REPORTER]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.reporterMgr = payload;
+                draft.reporter = payload;
             });
         },
         [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
@@ -51,10 +51,10 @@ export default handleActions(
          * 스토어 데이터 삭제
          */
         [act.CLEAR_STORE]: () => initialState,
-        [act.CLEAR_REPORTER_MGR]: (state) => {
+        [act.CLEAR_REPORTER]: (state) => {
             return produce(state, (draft) => {
-                draft.reporterMgr = initialState.reporterMgr;
-                draft.reporterMgrError = initialState.reporterMgrError;
+                draft.reporter = initialState.reporter;
+                draft.reporterError = initialState.reporterError;
                 draft.invalidList = initialState.invalidList;
             });
         },
@@ -74,7 +74,7 @@ export default handleActions(
         /**
          * 목록
          */
-        [act.GET_REPORTER_MGR_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_REPORTER_LIST_SUCCESS]: (state, { payload: { body } }) => {
             console.log('성공듀서탓음::' + state);
             return produce(state, (draft) => {
                 draft.error = initialState.error;
@@ -82,7 +82,7 @@ export default handleActions(
                 draft.total = body.totalCnt;
             });
         },
-        [act.GET_REPORTER_MGR_LIST_FAILURE]: (state, { payload }) => {
+        [act.GET_REPORTER_LIST_FAILURE]: (state, { payload }) => {
             console.log('실패듀서탓음::' + decodeURIComponent(qs.stringify(payload)));
 
             return produce(state, (draft) => {
@@ -94,19 +94,19 @@ export default handleActions(
         /**
          * 조회, 등록, 수정
          */
-        [act.GET_REPORTER_MGR_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_REPORTER_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.reporterMgr = body;
-                draft.reporterMgrError = initialState.reporterMgrError;
+                draft.reporter = body;
+                draft.reporterError = initialState.reporterError;
                 draft.invalidList = initialState.invalidList;
             });
         },
-        [act.GET_REPORTER_MGR_FAILURE]: (state, { payload }) => {
+        [act.GET_REPORTER_FAILURE]: (state, { payload }) => {
             const { body } = payload;
 
             return produce(state, (draft) => {
-                draft.reporterMgr = initialState.reporterMgr;
-                draft.reporterMgrError = payload;
+                draft.reporter = initialState.reporter;
+                draft.reporterError = payload;
                 draft.invalidList = body;
             });
         },

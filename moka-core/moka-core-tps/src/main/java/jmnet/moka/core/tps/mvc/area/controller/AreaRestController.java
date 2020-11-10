@@ -156,12 +156,23 @@ public class AreaRestController {
         // 데이터 유효성 검사
         validData(areaDTO, ActionType.INSERT);
 
+        // 빈 객체로 올 경우 null 처리
+        if (areaDTO.getContainer() != null && areaDTO.getContainer()
+                                                     .getContainerSeq() == null) {
+            areaDTO.setContainer(null);
+        }
         if (areaDTO.getAreaComps()
                    .size() > 0) {
 
             areaDTO.getAreaComps()
                    .stream()
-                   .forEach((comp) -> comp.setArea(areaDTO));
+                   .forEach((comp) -> {
+                       comp.setArea(areaDTO);
+                       if (comp.getComponent() != null && comp.getComponent()
+                                                              .getComponentSeq() == null) {
+                           comp.setComponent(null);
+                       }
+                   });
         }
 
         Area area = modelMapper.map(areaDTO, Area.class);
@@ -213,12 +224,23 @@ public class AreaRestController {
                                       return new NoDataException(message);
                                   });
 
+        // 빈 객체로 올 경우 null 처리
+        if (areaDTO.getContainer() != null && areaDTO.getContainer()
+                                                     .getContainerSeq() == null) {
+            areaDTO.setContainer(null);
+        }
         if (areaDTO.getAreaComps()
                    .size() > 0) {
 
             areaDTO.getAreaComps()
                    .stream()
-                   .forEach((comp) -> comp.setArea(areaDTO));
+                   .forEach((comp) -> {
+                       comp.setArea(areaDTO);
+                       if (comp.getComponent() != null && comp.getComponent()
+                                                              .getComponentSeq() == null) {
+                           comp.setComponent(null);
+                       }
+                   });
         }
 
         Area area = modelMapper.map(areaDTO, Area.class);

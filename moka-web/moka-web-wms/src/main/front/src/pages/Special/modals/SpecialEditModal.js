@@ -15,7 +15,18 @@ const SpecialEditModal = (props) => {
             size="xl"
             show={show}
             onHide={onHide}
-            title="특별페이지 정보"
+            titleAs={
+                <div className="w-100 d-flex justify-content-between align-content-end">
+                    <div className="d-flex">
+                        <p className="m-0">특별페이지 정보</p>
+                        <p className="m-0 pl-2">(등록 완료 후 스크립트 오류 체크 꼭 해주세요)</p>
+                    </div>
+                    <div className="d-flex">
+                        <p className="m-0">수정자: 김경수</p>
+                        <p className="m-0 pl-2">수정일시: 2020-09-01 오후 4:01:37</p>
+                    </div>
+                </div>
+            }
             width={970}
             buttons={[
                 {
@@ -36,8 +47,8 @@ const SpecialEditModal = (props) => {
             <Form>
                 <Form.Row>
                     <Col xs={4} className="p-0 pr-4">
-                        <MokaInputLabel label="이미지 등록" labelWidth={80} labelClassName="m-0 text-left" as="none" />
-                        <MokaImageInput width={262} />
+                        <MokaInputLabel label="이미지 등록" labelWidth={80} labelClassName="d-flex align-items-start" as="none" />
+                        <MokaImageInput width={262} height={234} />
                         <Form.Row className="d-flex justify-content-between pt-2">
                             <Button variant="dark" size="sm">
                                 파일 선택
@@ -48,19 +59,19 @@ const SpecialEditModal = (props) => {
                         </Form.Row>
                     </Col>
                     <Col xs={8} className="p-0">
-                        <Form.Row>
-                            <Col xs={1}>
+                        <Form.Row className="mb-3 d-flex align-items-center">
+                            <Col xs={2} className="p-0 d-flex">
                                 <MokaInput as="checkbox" />
+                                <MokaInputLabel label="사용여부" labelWidth={80} className="m-0" labelClassName="d-flex align-items-start" as="none" />
                             </Col>
-                            {/* <MokaInputLabel label="사용여부" labelWidth={100} className="m-0 text-left" as="none" /> */}
-                            <Col xs={1}>
+                            <Col xs={2} className="p-0 d-flex">
                                 <MokaInput as="checkbox" />
+                                <MokaInputLabel label="검색여부" labelWidth={80} className="m-0" labelClassName="d-flex align-items-start" as="none" />
                             </Col>
-                            {/* <MokaInputLabel label="검색여부" labelWidth={100} className="m-0 text-left" as="none" /> */}
-                            <Col xs={1}>
+                            <Col xs={2} className="p-0 d-flex">
                                 <MokaInput as="checkbox" />
+                                <MokaInputLabel label="리스트 노출" labelWidth={80} className="m-0" labelClassName=" d-flex align-items-start" as="none" />
                             </Col>
-                            {/* <MokaInputLabel label="리스트 노출" labelWidth={100} className="m-0 text-left" as="none" /> */}
                         </Form.Row>
                         <Form.Row>
                             <MokaInputLabel label="페이지 코드" labelWidth={100} as="none" />
@@ -109,7 +120,19 @@ const SpecialEditModal = (props) => {
                     value={null}
                     name="googleCode"
                 />
-                <MokaInputLabel label="페이지 설명" labelWidth={135} as="textarea" value={null} name="discription" />
+                <MokaInputLabel
+                    label={
+                        <>
+                            페이지 설명 <br /> *&#39;&quot;포함
+                            <br />
+                            특수문자 사용금지
+                        </>
+                    }
+                    labelWidth={135}
+                    as="textarea"
+                    value={null}
+                    name="discription"
+                />
                 <Form.Row className="mb-3">
                     <MokaInputLabel label="부서명" labelWidth={135} className="m-0" as="none" />
                     <Col xs={1} className="p-0">

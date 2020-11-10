@@ -8,13 +8,13 @@ import Card from 'react-bootstrap/Card';
 
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { initialState, GET_AREA_DEPTH2, saveArea, changeArea, deleteArea, clearArea } from '@store/area';
+import { initialState, GET_AREA_DEPTH2, saveArea, changeArea } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
 import toast from '@utils/toastUtil';
 
 const AreaFormDepth2 = (props) => {
-    const { onShowModal, page, setPage, onChangeModalDomainId, depth } = props;
+    const { onShowModal, page, setPage, onChangeModalDomainId, depth, onDelete } = props;
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -77,6 +77,10 @@ const AreaFormDepth2 = (props) => {
         }
     };
 
+    /**
+     * validate
+     * @param {object} saveObj area data
+     */
     const validate = (saveObj) => {
         let isInvalid = false;
 
@@ -94,7 +98,7 @@ const AreaFormDepth2 = (props) => {
     const handleClickSave = () => {
         const save = {
             ...temp,
-            page: Object.keys(page).lenght > 0 ? page : null,
+            page: Object.keys(page).length > 0 ? page : null,
             parent,
             domain,
             container: temp.areaDiv === ITEM_CT ? container : null,
@@ -111,6 +115,8 @@ const AreaFormDepth2 = (props) => {
                             toast.success(header.message);
                             if (depth === 2) {
                                 history.push(`/area/${body.parent.areaSeq}/${body.areaSeq}`);
+                            } else {
+                                history.push(`/area/${areaDepth1.areaSeq}/${body.parent.areaSeq}/${body.areaSeq}`);
                             }
                         } else {
                             toast.warn(header.message);
@@ -119,6 +125,13 @@ const AreaFormDepth2 = (props) => {
                 }),
             );
         }
+    };
+
+    /**
+     * 삭제 버튼
+     */
+    const handleClickDelete = () => {
+        onDelete(temp);
     };
 
     /**
@@ -148,40 +161,6 @@ const AreaFormDepth2 = (props) => {
                             setAreaCompLoad(initialState.depth2.areaCompLoad);
                         }
                     },
-                }),
-            );
-        }
-    };
-
-    /**
-     * 삭제 콜백
-     */
-    const deleteCallback = ({ header, body }) => {
-        if (header.success && body) {
-            toast.success(header.message);
-            if (depth === 3) {
-                history.push(`/area/${areaDepth1.areaSeq}/${areaDepth2.areaSeq}`);
-                dispatch(clearArea(3));
-            } else if (depth === 2) {
-                history.push(`/area/${areaDepth1.areaSeq}`);
-                dispatch(clearArea(3));
-                dispatch(clearArea(2));
-            }
-        } else {
-            toast.warn(header.message);
-        }
-    };
-
-    /**
-     * 삭제 버튼
-     */
-    const handleClickDelete = () => {
-        if (depth === 3) {
-            dispatch(
-                deleteArea({
-                    areaSeq: temp.areaSeq,
-                    depth,
-                    callback: deleteCallback,
                 }),
             );
         }
@@ -221,6 +200,8 @@ const AreaFormDepth2 = (props) => {
         // page 셋팅
         if (temp.page) {
             setPage(temp.page);
+        } else {
+            setPage({});
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [temp.areaSeq]);
@@ -292,7 +273,7 @@ const AreaFormDepth2 = (props) => {
         // 폼이 변경되면 CT, CP 리스트 날림
         setComponentList([]);
         setContainerList([]);
-    }, [selectedDepth]);
+    }, [selectedDepth, temp.areaSeq]);
 
     return (
         <MokaCard title={`편집영역 ${temp.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>
@@ -385,7 +366,7 @@ const AreaFormDepth2 = (props) => {
                     </MokaInputLabel>
 
                     {/* 영역명 */}
-                    <MokaInputLabel className="mb-2" label="영역명" labelWidth={87} name="areaNm" value={temp.areaNm} onChange={handleChangeValue} required />
+                    <MokaInputLabel className="mb-2" label="영역명" labelWidth={87} name="areaNm" value={temp.areaNm} onChange={handleChangeValue} />
 
                     <hr className="divider" />
 

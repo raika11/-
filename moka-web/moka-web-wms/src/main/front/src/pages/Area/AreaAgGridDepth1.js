@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory, Route } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
@@ -23,7 +23,7 @@ import columnDefs from './AreaAgGridColums';
 /**
  * 편집영역 > 첫번째 리스트
  */
-const AreaAgGrid1D = ({ match }) => {
+const AreaAgGrid1D = ({ match, onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { areaSeq } = useParams();
@@ -32,9 +32,21 @@ const AreaAgGrid1D = ({ match }) => {
         loading: store.loading[GET_AREA_LIST_DEPTH1],
     }));
 
+    // state
+    const [rowData, setRowData] = useState([]);
+
     useEffect(() => {
         dispatch(getAreaListDepth1());
     }, [dispatch]);
+
+    useEffect(() => {
+        setRowData(
+            list.map((l) => ({
+                ...l,
+                onDelete: onDelete,
+            })),
+        );
+    }, [list, onDelete]);
 
     useEffect(() => {
         // areaSeq가 있으면 2뎁스 리스트 조회 + 상세 데이터 조회
@@ -87,7 +99,7 @@ const AreaAgGrid1D = ({ match }) => {
                     agGridHeight={738}
                     columnDefs={columnDefs}
                     loading={loading}
-                    rowData={list}
+                    rowData={rowData}
                     selected={areaSeq}
                     header={false}
                     paging={false}
@@ -96,7 +108,7 @@ const AreaAgGrid1D = ({ match }) => {
                     onRowClicked={handleRowClicked}
                 />
             </MokaCard>
-            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth2 {...props} parentSeq={areaSeq} baseUrl="/area" />} />
+            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth2 {...props} parentSeq={areaSeq} baseUrl="/area" onDelete={onDelete} />} />
         </React.Fragment>
     );
 };

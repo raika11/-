@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
@@ -13,7 +13,7 @@ import columnDefs from './AreaAgGridColums';
 /**
  * 편집영역 > 세번째 리스트
  */
-const AreaAgGridDepth3 = ({ baseUrl }) => {
+const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { areaSeq } = useParams();
@@ -23,6 +23,18 @@ const AreaAgGridDepth3 = ({ baseUrl }) => {
         areaDepth1: store.area.depth1.area,
         areaDepth2: store.area.depth2.area,
     }));
+
+    // state
+    const [rowData, setRowData] = useState([]);
+
+    useEffect(() => {
+        setRowData(
+            list.map((l) => ({
+                ...l,
+                onDelete: onDelete,
+            })),
+        );
+    }, [list, onDelete]);
 
     /**
      * 목록에서 Row클릭
@@ -71,7 +83,7 @@ const AreaAgGridDepth3 = ({ baseUrl }) => {
             <MokaTable
                 agGridHeight={738}
                 selected={areaSeq}
-                rowData={list}
+                rowData={rowData}
                 columnDefs={columnDefs}
                 header={false}
                 paging={false}

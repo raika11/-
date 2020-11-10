@@ -5,7 +5,7 @@ import Form1 from './components/AreaFormDepth1';
 import Form2 from './components/AreaFormDepth2';
 import { PageListModal } from '@pages/commons';
 
-const AreaEdit = () => {
+const AreaEdit = ({ onDelete }) => {
     const { selectedDepth } = useSelector((store) => ({
         selectedDepth: store.area.selectedDepth,
     }));
@@ -26,9 +26,11 @@ const AreaEdit = () => {
     return (
         <React.Fragment>
             {/* 1뎁스 폼 */}
-            {selectedDepth === 1 && <Form1 />}
+            {selectedDepth === 1 && <Form1 onDelete={onDelete} />}
             {/* 2뎁스 & 3뎁스 폼 */}
-            {selectedDepth !== 1 && <Form2 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} page={page} setPage={setPage} depth={selectedDepth} />}
+            {selectedDepth !== 1 && (
+                <Form2 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} onDelete={onDelete} page={page} setPage={setPage} depth={selectedDepth} />
+            )}
 
             {/* 페이지 검색 모달 */}
             <PageListModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={handleClickSave} domainId={modalDomainId} />

@@ -10,7 +10,7 @@ import toast from '@utils/toastUtil';
 import { MokaInputLabel, MokaCard } from '@components';
 import { saveArea, changeArea, GET_AREA_DEPTH1 } from '@store/area';
 
-const AreaFormDepth1 = () => {
+const AreaFormDepth1 = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { domainList, area, loading } = useSelector((store) => ({
@@ -69,6 +69,13 @@ const AreaFormDepth1 = () => {
         );
     };
 
+    /**
+     * 삭제 버튼
+     */
+    const handleClickDelete = () => {
+        onDelete(temp);
+    };
+
     useEffect(() => {
         setTemp(area);
         setDomain(area.domain);
@@ -110,7 +117,6 @@ const AreaFormDepth1 = () => {
                                 value={temp.areaNm}
                                 name="areaNm"
                                 onChange={handleChangeValue}
-                                required
                             />
                         </Col>
                         <Col xs={4} className="p-0">
@@ -141,6 +147,11 @@ const AreaFormDepth1 = () => {
                             저장
                         </Button>
                         <Button variant="gray150">취소</Button>
+                        {temp.areaSeq && (
+                            <Button variant="danger" className="ml-10" onClick={handleClickDelete}>
+                                삭제
+                            </Button>
+                        )}
                     </Card.Footer>
                 </Col>
             </div>

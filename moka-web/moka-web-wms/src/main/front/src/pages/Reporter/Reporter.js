@@ -7,8 +7,8 @@ import { MokaCard } from '@components';
 import { GET_REPORTER, CHANGE_REPORTER } from '@store/reporter';
 
 // relations
-const ReporterMgrList = React.lazy(() => import('./ReporterMgrList'));
-const ReporterMgrEdit = React.lazy(() => import('./ReporterMgrEdit'));
+const ReporterList = React.lazy(() => import('./ReporterList'));
+const ReporterEdit = React.lazy(() => import('./ReporterEdit'));
 
 const ReporterMgr = () => {
     const { loading } = useSelector((store) => ({
@@ -26,19 +26,19 @@ const ReporterMgr = () => {
             {/* 기자 목록 */}
             <MokaCard title="기자 목록" width={830} className="mr-4" headerClassName="pb-0" titleClassName="mb-0">
                 <Suspense>
-                    <ReporterMgrList />
+                    <ReporterList />
                 </Suspense>
             </MokaCard>
 
             {/* 기자 정보 */}
             <Switch>
                 <Route
-                    path={['/reporterMgr', '/reporterMgr/:repSeq']}
+                    path={['/reporter', '/reporter/:repSeq']}
                     exact
                     render={() => (
                         <MokaCard title="기자 정보" width={730} headerClassName="pb-0" titleClassName="mb-0">
                             <Suspense>
-                                <ReporterMgrEdit />
+                                <ReporterEdit />
                             </Suspense>
                         </MokaCard>
                     )}

@@ -44,7 +44,7 @@ export const columnDefs = [
         width: 130,
         cellRendererFramework: (row) => {
             const { data } = row;
-            return <ReporterPageButton {...row} data={data} />;
+            return <ReporterPageButton {...row} onClick={data.repSeq} data={data} />;
         },
     },
 ];

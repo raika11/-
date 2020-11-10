@@ -9,7 +9,7 @@ import bg from '@assets/images/bg.jpeg';
 /**
  * 기자 정보 조회/수정
  */
-const ReporterMgrEdit = () => {
+const ReporterEdit = () => {
     return (
         <>
             <div className="mb-3 d-flex align-items-center">
@@ -74,4 +74,4 @@ const ReporterMgrEdit = () => {
     );
 };
 
-export default ReporterMgrEdit;
+export default ReporterEdit;

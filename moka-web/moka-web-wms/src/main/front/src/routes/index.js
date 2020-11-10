@@ -24,7 +24,7 @@ const EditForm = React.lazy(() => import('@pages/EditForm'));
 const Area = React.lazy(() => import('@pages/Area'));
 const Menu = React.lazy(() => import('@pages/Menu'));
 const Group = React.lazy(() => import('@pages/Group'));
-const ReporterMgr = React.lazy(() => import('@pages/ReporterMgr'));
+const Reporter = React.lazy(() => import('@pages/Reporter'));
 const Special = React.lazy(() => import('@pages/Special'));
 
 const routes = [
@@ -209,10 +209,10 @@ const routes = [
         strict: true,
     },
     {
-        path: '/reporterMgr',
-        name: 'reporterMgr',
+        path: '/reporter',
+        name: 'reporter',
         displayName: '기자관리',
-        component: ReporterMgr,
+        component: Reporter,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

@@ -14,36 +14,34 @@ const propTypes = {
 };
 const defaultProps = {
     data: null,
+    onClick: null,
 };
 
 /**
- * 디지털 스페셜 리스트 테이블의 URL 복사 버튼
+ * 기자관리 리스트 테이블의 새창열기 페이지
  */
 const ReporterPageButton = (props) => {
-    // const { data, onClick } = props;
-    const [showModal, setShowModal] = useState(false);
+    const { data, onClick } = props;
 
-    // const handleClick = useCallback(
-    //     (e) => {
-    //         e.stopPropagation();
-    //         e.preventDefault();
+    const handleClick = useCallback(
+        (e) => {
+            e.stopPropagation();
+            e.preventDefault();
 
-    //         if (onClick) {
-    //             onClick(data);
-    //             setShowModal(true);
-    //         }
-    //     },
-    //     [data, onClick],
-    // );
+            if (onClick) {
+                onClick(data);
+            }
+        },
+        [data, onClick],
+    );
 
     return (
         <>
             <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                <Button variant="gray150" size="sm" onClick={() => setShowModal(true)}>
+                <Button variant="gray150" size="sm" onClick={handleClick}>
                     기자 페이지
                 </Button>
             </div>
-            {/* <Modal show={showModal} onHide={() => setShowModal(false)} /> */}
         </>
     );
 };

@@ -3,8 +3,16 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { MokaTable } from '@components';
-import { columnDefs, rowData } from './ReporterMgrAgGridColumns';
+import { columnDefs, rowData } from './ReporterAgGridColumns';
 import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList, getReporter } from '@store/reporter';
+
+/**
+ * 링크 버튼 클릭
+ * @param {object} data row data
+ */
+const handleClickLink = (data) => {
+    window.open(`/page/${data.pageSeq}`);
+};
 
 /**
  * 기자 목록 AgGrid
@@ -13,7 +21,7 @@ const ReporterMgrAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [search, setSearch] = useState(initialState);
-    const [repoterRows, setRepoterRows] = useState([]);
+    const [reporterRows, setRepoterRows] = useState([]);
 
     const { reporter, list, total, search: storeSearch, loading } = useSelector((store) => {
         return {
@@ -51,14 +59,10 @@ const ReporterMgrAgGrid = () => {
     useEffect(() => {
         setRepoterRows(
             list.map((row) => ({
+                ...row,
                 id: String(row.repSeq),
-                repSeq: row.repSeq,
-                joinsId: row.joinsId,
-                repName: row.repName,
                 r2CdNm: row.r2CdNm + row.r3CdNm + row.r4CdNm,
-                repEmail1: row.repEmail1,
-                usedYn: row.usedYn,
-                joinsBlog: row.joinsBlog,
+                handleClickLink,
             })),
         );
     }, [list]);
@@ -69,7 +73,7 @@ const ReporterMgrAgGrid = () => {
 
     const handleRowClicked = useCallback(
         (list) => {
-            history.push(`/reporters/${list.id}`);
+            history.push(`/reporter/${list.id}`);
         },
         [history],
     );
@@ -77,7 +81,7 @@ const ReporterMgrAgGrid = () => {
     return (
         <MokaTable
             columnDefs={columnDefs}
-            rowData={repoterRows}
+            rowData={reporterRows}
             onRowNodeId={(reporter) => reporter.repSeq}
             agGridHeight={660}
             onRowClicked={handleRowClicked}

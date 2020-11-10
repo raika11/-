@@ -8,9 +8,7 @@ import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeRelArt;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeRelArtPK;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodKeyword;
-import jmnet.moka.core.tps.mvc.jpod.entity.JpodKeywordPK;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodMember;
-import jmnet.moka.core.tps.mvc.jpod.entity.JpodMemberPK;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodChannelRepository;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodEpisodeRelArtRepository;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodEpisodeRepository;
@@ -162,12 +160,9 @@ public class JpodTest {
         for (String keyword : keywords) {
             JpodKeyword jpodKeyword = JpodKeyword
                     .builder()
-                    .id(JpodKeywordPK
-                            .builder()
-                            .chnlSeq(chnlSeq)
-                            .epsdSeq(episodeSeq)
-                            .ordNo(++ordNo)
-                            .build())
+                    .chnlSeq(chnlSeq)
+                    .epsdSeq(episodeSeq)
+                    .ordNo(++ordNo)
                     .keyword(keyword)
                     .build();
             jpodKeywordRepository.save(jpodKeyword);
@@ -182,13 +177,10 @@ public class JpodTest {
 
         JpodMember jpodMember = JpodMember
                 .builder()
-                .id(JpodMemberPK
-                        .builder()
-                        .chnlSeq(chnlSeq)
-                        .epsdSeq(episodeSeq)
-                        .memDiv(JpodMemberTypeCode.EG)
-                        .memNm("이지성")
-                        .build())
+                .chnlSeq(chnlSeq)
+                .epsdSeq(episodeSeq)
+                .memDiv(JpodMemberTypeCode.EG)
+                .memNm("이지성")
                 .nickNm("이작가 (이지성 작가)")
                 .memMemo("작가")
                 .desc("2013년부터 인공지능 공부, 꿈꾸는 다락방 등 450만부 베스트셀러 저자, 차유람의 남편, 두 아이의 아빠.")

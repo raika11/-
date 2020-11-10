@@ -92,6 +92,6 @@ function* saveReporter({ payload: { type, actions, callback } }) {
 
 export default function* reporterSaga() {
     yield takeLatest(reporterAction.GET_REPORTER_LIST, getReporterList);
-    yield takeLatest(reporterAction.getReporter, getReporter);
-    yield takeLatest(reporterAction.CHANGE_REPORTER, saveReporter);
+    yield takeLatest(reporterAction.GET_REPORTER, getReporter);
+    yield takeLatest(reporterAction.SAVE_REPORTER, saveReporter);
 }

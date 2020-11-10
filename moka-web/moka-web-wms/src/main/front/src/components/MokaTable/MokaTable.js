@@ -6,6 +6,7 @@ import { MokaPagination } from '@components';
 import { propTypes as paginationPropTypes } from '@components/MokaPagination';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import Tooltip from './MokaTableTooltip';
+import RadioButton from './MokaTableRadioButton';
 
 const propTypes = {
     /**
@@ -209,7 +210,7 @@ const MokaTable = (props) => {
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     // defaultColDef={{ tooltipComponent: 'mokaTooltip' }}
-                    frameworkComponents={{ mokaTooltip: Tooltip }}
+                    frameworkComponents={{ mokaTooltip: Tooltip, radio: RadioButton }}
                     suppressRowClickSelection
                     getRowClass={getRowClass}
                 />

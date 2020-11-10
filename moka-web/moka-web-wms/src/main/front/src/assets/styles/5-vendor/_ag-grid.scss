@@ -100,6 +100,28 @@
             }
         }
     }
+
+    .ag-checkbox-input-wrapper {
+        border-radius: 50%;
+        font-size: 18px;
+        line-height: 17px;
+        width: 17px;
+        height: 17px;
+    }
+
+    .ag-checkbox-input-wrapper::after {
+        font-family: 'Font Awesome 5 Pro';
+        content: '\f111';
+    }
+
+    .ag-checkbox-input-wrapper.ag-checked::after {
+        content: '\f058';
+        font-weight: 900;
+    }
+
+    .ag-checkbox-input-wrapper:focus-within, .ag-checkbox-input-wrapper:active {
+        box-shadow: none;
+    }
 }
 
 /* -------------------------------------------------------------------

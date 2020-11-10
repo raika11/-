@@ -37,3 +37,9 @@ export const CHANGE_REPORTER = 'reporter/CHANGE_REPORTER';
 export const CHANGE_INVALID_LIST = 'reporter/CHANGE_INVALID_LIST';
 export const changeReporter = createAction(CHANGE_REPORTER, (reporter) => reporter);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
+
+/**
+ * 저장
+ */
+export const SAVE_REPORTER = 'reporter/SAVE_REPORTER';
+export const saveReporter = createAction(SAVE_REPORTER, ({ type, actions, callback }) => ({ type, actions, callback }));

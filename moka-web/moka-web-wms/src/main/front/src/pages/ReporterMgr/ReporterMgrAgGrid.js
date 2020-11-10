@@ -13,7 +13,7 @@ const ReporterMgrAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [search, setSearch] = useState(initialState);
-    const [repoterMgrRows, setRepoterMgrRows] = useState([]);
+    const [repoterRows, setRepoterRows] = useState([]);
 
     const { reporter, list, total, search: storeSearch, loading } = useSelector(
         (store) => ({
@@ -50,13 +50,17 @@ const ReporterMgrAgGrid = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        setRepoterMgrRows(
+        setRepoterRows(
             list.map((row) => ({
-                id: String(row.groupCd),
-                groupCd: row.groupCd,
-                groupNm: row.groupNm,
-                groupKorNm: row.groupKorNm,
-                regDt: row.regDt,
+                id: String(row.repSeq),
+                repSeq: row.repSeq,
+                joinsId: row.joinsId,
+                repName: row.repName,
+                //r2CdNm: row.r2CdNm, // row.r2CdNm + row.r3CdNm + row.r4CdNm
+                r2CdNm: row.r2CdNm + row.r3CdNm + row.r4CdNm,
+                repEmail1: row.repEmail1,
+                usedYn: row.usedYn,
+                joinsBlog: row.joinsBlog,
             })),
         );
     }, [list]);
@@ -67,7 +71,6 @@ const ReporterMgrAgGrid = () => {
 
     const handleRowClicked = useCallback(
         (list) => {
-            //console.log("list::" + this.list.id);
             history.push(`/reporter/${list.id}`);
         },
         [history],
@@ -78,7 +81,7 @@ const ReporterMgrAgGrid = () => {
     return (
         <MokaTable
             columnDefs={columnDefs}
-            rowData={repoterMgrRows}
+            rowData={repoterRows}
             onRowNodeId={(rowData) => rowData.repSeq}
             agGridHeight={600}
             onRowClicked={handleRowClicked}

@@ -1,6 +1,4 @@
 import React from 'react';
-import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 export const columnDefs = [
@@ -29,7 +27,7 @@ export const columnDefs = [
     },
     {
         headerName: '소속',
-        field: 'regId',
+        field: 'r2CdNm',
         width: 60,
     },
     {

@@ -5,7 +5,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.Date;
 

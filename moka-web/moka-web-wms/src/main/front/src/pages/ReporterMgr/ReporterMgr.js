@@ -20,11 +20,6 @@ const ReporterMgr = () => {
         loading: store.loading[GET_REPORTER] || store.loading[CHANGE_REPORTER],
     }));
 
-    // 마스터 그리드 클릭시 초기화 이벤트
-    const handleClickAddGroup = (e) => {
-        history.push('/reporterMgr');
-    };
-
     React.useEffect(() => {
         return () => {
             dispatch(clearStore());

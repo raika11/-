@@ -3,117 +3,81 @@ import { Col, Form, Button, Row } from 'react-bootstrap';
 import { MokaCard, MokaInput, MokaInputLabel } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import {
-    clearGroup,
-    getGroup,
-    saveGroup,
-    changeGroup,
-    duplicateGroupCheck,
-    changeInvalidList,
-    GET_GROUP,
-    SAVE_GROUP,
-    DELETE_GROUP,
-    deleteGroup,
-    hasRelationList,
-} from '@store/group';
+import { clearReporter, getReporter, changeReporter, changeInvalidList, GET_REPORTER, CHANGE_REPORTER, saveReporter } from '@store/reporter';
 import { notification } from '@utils/toastUtil';
-import { toastr } from 'react-redux-toastr';
 
 /**
- * 그룹 상세/수정/등록
+ * 기자관리 상세|수정
  * @param history rect-router-dom useHisotry
  */
 
-const GroupEdit = (onDelete) => {
-    console.log(typeof onDelete);
-
+const ReporterMgrEdit = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { groupCd: paramCd } = useParams();
+    const { repSeq: paramSeq } = useParams();
 
     // entity
-    const [groupCd, setGroupCd] = useState('');
-    const [groupNm, setGroupNm] = useState('');
-    const [groupKorNm, setGroupKorNm] = useState('');
-
-    const [regId, setRegId] = useState('');
-    const [regDt, setRegDt] = useState('');
+    const [repSeq, setRepSeq] = useState('');
+    const [usedYn, setUsedYn] = useState('');
+    const [talkYn, setTalkYn] = useState('');
+    const [repName, setRepName] = useState('');
+    const [repEmail1, setRepEmail1] = useState('');
+    const [repEmail2, setRepEmail2] = useState('');
+    const [repTitle, setRepTitle] = useState('');
+    const [repPhone, setRepPhone] = useState('');
+    const [joinsId, setJoinsId] = useState('');
+    const [jnetId, setJnetId] = useState('');
+    const [repPhoto, setRepPhoto] = useState('');
+    const [repImg, setRepImg] = useState('');
+    const [snsTw, setSnsTw] = useState('');
+    const [snsFb, setSnsFb] = useState('');
+    const [snsIn, setSnsIn] = useState('');
+    const [joinsBlog, setJoinsBlog] = useState('');
+    const [viewCnt, setViewCnt] = useState('');
+    const [artCnt, setArtCnt] = useState('');
+    const [scbCnt, setScbCnt] = useState('');
+    const [shrCnt, setShrCnt] = useState('');
+    const [replyCnt, setReplyCnt] = useState('');
+    const [jplusRepDiv, setJplusRepDiv] = useState('');
+    const [jplusJobInfo, setJplusJobInfo] = useState('');
+    const [jplusTitle, setJplusTitle] = useState('');
+    const [jplusMemo, setJplusMemo] = useState('');
+    const [jplusProfileYn, setJplusProfileYn] = useState('');
+    const [jplusRegDt, setJplusRegDt] = useState('');
+    const [jplusUsedYn, setJplusUsedYn] = useState('');
+    const [r1Cd, setR1Cd] = useState('');
+    const [r2Cd, setR2Cd] = useState('');
+    const [r3Cd, setR3Cd] = useState('');
+    const [r4Cd, setR4Cd] = useState('');
+    const [r5Cd, setR5Cd] = useState('');
+    const [r6Cd, setR6Cd] = useState('');
+    const [jamRepSeq, setJamRepSeq] = useState('');
+    const [jamDeptSeq, setJamDeptSeq] = useState('');
+    const [jamDeptNm, setJamDeptNm] = useState('');
+    const [repField, setRepField] = useState('');
+    const [jamComCd, setJamComCd] = useState('');
+    const [jamComNm, setJamComNm] = useState('');
+    const [repTalk, setRepTalk] = useState('');
+    const [userTalk, setUserTalk] = useState('');
 
     // error
-    const [groupCdError, setGroupCdError] = useState(false);
-    const [groupNmError, setGroupNmError] = useState(false);
-    const [groupNmKorError, setGroupKorNmError] = useState(false);
+    const [repSeqError, setRepSeqError] = useState(false);
+    const [usedYnError, setUsedYnError] = useState(false);
+    const [talkYnError, setTalkYnError] = useState(false);
 
     // getter
-    const { group, invalidList, memberNm } = useSelector(
+    const { reporter, invalidList } = useSelector(
         (store) => {
             return {
-                group: store.group.group,
+                reporter: store.reporter.reporter,
                 invalidList: store.group.invalidList,
-                memberNm: store.group.group.regMember && store.group.group.regMember.memberNm,
-                loading: store.loading[GET_GROUP] || store.loading[SAVE_GROUP] || store.loading[DELETE_GROUP],
+                loading: store.loading[GET_REPORTER] || store.loading[CHANGE_REPORTER],
             };
         },
 
         shallowEqual,
     );
 
-    /**
-     * 삭제 버튼
-     */
-    const handleClickDelete = () => {
-        const { groupCd } = group;
-        dispatch(
-            hasRelationList({
-                groupCd,
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        // 관련 아이템 없음
-                        if (!body) deleteCallback(group);
-                        // 관련 아이템 있음
-                        else notification('warning', '사용 중인 그룹은 삭제할 수 없습니다');
-                    } else {
-                        notification('warning', header.message);
-                    }
-                },
-            }),
-        );
-    };
-
-    /**
-     * 도메인 삭제
-     * @param {object} domain domain
-     */
-    const deleteCallback = (group) => {
-        toastr.confirm(`${group.groupCd}_${group.groupNm}을 정말 삭제하시겠습니까?`, {
-            onOk: () => {
-                dispatch(
-                    deleteGroup({
-                        groupCd: group.groupCd,
-                        callback: ({ header }) => {
-                            // 삭제 성공
-                            if (header.success) {
-                                notification('success', header.message);
-                                history.push('/group');
-                            }
-                            // 삭제 실패
-                            else {
-                                notification('warning', header.message);
-                            }
-                        },
-                    }),
-                );
-            },
-            onCancel: () => {},
-        });
-    };
-
-    const getByte = (str) => {
-        return str
-            .split('')
-            .map((s) => s.charCodeAt(0))
-            .reduce((prev, c) => prev + (c === 10 ? 2 : c >> 7 ? 2 : 1), 0); // 계산식에 관한 설명은 위 블로그에 있습니다.
-    };
     /**
      * 각 항목별 값 변경
      * @param target javascript event.target
@@ -122,147 +86,53 @@ const GroupEdit = (onDelete) => {
         const { name, value } = target;
 
         switch (name) {
-            case 'groupCd':
+            case 'repSeq':
                 const regex = /^[0-9\b]+$/;
-                if (value.length <= 3) {
-                    setGroupCdError(false);
-                    setGroupCd(value);
+                if (value.length <= 4) {
+                    setRepSeqError(false);
+                    setRepSeq(value);
                 }
                 break;
-            case 'groupNm':
-                if (getByte(value) <= 20) {
-                    setGroupNm(value);
-                    setGroupNmError(false);
-                }
+            case 'usedYn':
+                setUsedYn(value);
+                setUsedYnError(false);
                 break;
-            case 'groupKorNm':
-                if (getByte(value) <= 20) {
-                    setGroupKorNm(value);
-                    setGroupKorNmError(false);
-                }
+            case 'talkYn':
+                setTalkYn(value);
+                setTalkYnError(false);
                 break;
             default:
                 break;
         }
     };
 
-    /**
-     * 유효성 검사를 한다.
-     * @param domain 도메인 정보를 가진 객체
-     * @returns {boolean} 유효성 검사 결과
-     */
-
-    const validate = (group) => {
-        let isInvalid = false;
-        let errList = [];
-
-        // 그룹코드체크
-        if (!group.groupCd || group.groupCd === '') {
-            errList.push({
-                field: 'groupCd',
-                reason: '그룹코드를 입력해주세요.',
-            });
-            isInvalid = isInvalid | true;
-        } else if (group.groupCd !== '') {
-            const regExp = /^\d{2}$/;
-            const grpCd = group.groupCd.substr(1);
-            if (group.groupCd.substr(0, 1) !== 'G' || !regExp.test(grpCd)) {
-                errList.push({
-                    field: 'groupCd',
-                    reason: '그룹코드는 대문자G 숫자2자리입니다.',
-                });
-                isInvalid = isInvalid | true;
-            }
-        }
-
-        // 그룹 한글 체크
-        if (!/[^\s\t\n]+/.test(group.groupNm)) {
-            errList.push({
-                field: 'groupNm',
-                reason: '그룹명은 한글만 입력해주세요.',
-            });
-            isInvalid = isInvalid | true;
-        }
-
-        // 그룹 한글 명 체크
-        if (!/[^\s\t\n]+/.test(group.groupKorNm)) {
-            errList.push({
-                field: 'groupKorNm',
-                reason: '그룹 한글명을 입력해주세요.',
-            });
-            isInvalid = isInvalid | true;
-        }
-
-        dispatch(changeInvalidList(errList));
-        return !isInvalid;
-    };
-
     useEffect(() => {
-        if (paramCd) {
-            dispatch(getGroup(paramCd));
+        if (paramSeq) {
+            dispatch(getReporter(paramSeq));
         } else {
-            dispatch(clearGroup());
+            dispatch(clearReporter());
         }
-    }, [dispatch, paramCd]);
+    }, [dispatch, paramSeq]);
 
     /**
      * group 수정
      * @param {object} tmp 도메인
      */
 
-    const updateGroup = (tmp) => {
+    const updateReporter = (tmp) => {
         dispatch(
-            saveGroup({
+            saveReporter({
                 type: 'update',
                 actions: [
-                    changeGroup({
+                    changeReporter({
                         ...tmp,
                     }),
                 ],
                 callback: (response) => {
-                    // 만약 response.header.message로 서버 메세지를 전달해준다면, 그 메세지를 보여준다.
                     if (response.header.success) {
                         notification('success', '수정하였습니다.');
                     } else {
                         notification('warning', '실패하였습니다.');
-                    }
-                },
-            }),
-        );
-    };
-
-    /**
-     * group 등록
-     * @param {object} tmp 도메인
-     */
-    const insertGroup = (tmp) => {
-        dispatch(
-            duplicateGroupCheck({
-                groupCd,
-                callback: (response) => {
-                    const { body } = response;
-
-                    if (!body) {
-                        dispatch(
-                            saveGroup({
-                                type: 'insert',
-                                actions: [
-                                    changeGroup({
-                                        ...tmp,
-                                    }),
-                                ],
-                                callback: (response) => {
-                                    if (response.header.success) {
-                                        notification('success', '등록하였습니다.');
-                                        history.push(`/group/${groupCd}`);
-                                    } else {
-                                        notification('warning', '실패하였습니다.');
-                                    }
-                                },
-                            }),
-                        );
-                    } else {
-                        notification('warning', '중복된 도메인아이디가 존재합니다.');
                     }
                 },
             }),
@@ -278,26 +148,14 @@ const GroupEdit = (onDelete) => {
         e.preventDefault();
         e.stopPropagation();
 
-        /*
         const tmp = {
-            groupCd : group.groupCd,
-            groupNm : group.groupNm,
-            groupKorNm : group.groupKorNm,
-        };
-        */
-
-        const tmp = {
-            groupCd,
-            groupNm,
-            groupKorNm,
+            repSeq,
+            usedYn,
+            talkYn,
         };
 
-        if (validate(tmp)) {
-            if (paramCd) {
-                updateGroup(tmp);
-            } else {
-                insertGroup(tmp);
-            }
+        if (paramSeq) {
+            updateReporter(tmp);
         }
     };
 
@@ -305,14 +163,14 @@ const GroupEdit = (onDelete) => {
         // invalidList 처리
         if (invalidList.length > 0) {
             invalidList.forEach((i) => {
-                if (i.field === 'groupCd') {
-                    setGroupCdError(true);
+                if (i.field === 'repSeq') {
+                    setRepSeqError(true);
                 }
-                if (i.field === 'groupNm') {
-                    setGroupNmError(true);
+                if (i.field === 'usedYn') {
+                    setUsedYnError(true);
                 }
-                if (i.field === 'groupKorNm') {
-                    setGroupKorNmError(true);
+                if (i.field === 'talkYn') {
+                    setTalkYnError(true);
                 }
             });
         }
@@ -320,85 +178,117 @@ const GroupEdit = (onDelete) => {
 
     // setter 도메인 데이터 셋팅
     useEffect(() => {
-        setGroupCdError(false);
-        setGroupNmError(false);
-        setGroupKorNmError(false);
-        setGroupCd(group.groupCd || '');
-        setGroupNm(group.groupNm || '');
-        setGroupKorNm(group.groupKorNm || '');
-        setRegId(memberNm || '');
-        setRegDt(group.regDt || '');
-    }, [group, memberNm]);
+        setRepSeqError(false);
+        setUsedYnError(false);
+        setTalkYnError(false);
+
+        setRepSeq(repSeq || '');
+        setUsedYn(usedYn || '');
+        setTalkYn(talkYn || '');
+        setRepName(repName || '');
+        setRepEmail1(repEmail1 || '');
+        setRepEmail2(repEmail2 || '');
+        setRepTitle(repTitle || '');
+        setRepPhone(repPhone || '');
+        setJoinsId(joinsId || '');
+        setJnetId(jnetId || '');
+        setRepPhoto(repPhoto || '');
+        setRepImg(repImg || '');
+        setSnsTw(snsTw || '');
+        setSnsFb(snsFb || '');
+        setSnsIn(snsIn || '');
+        setJoinsBlog(joinsBlog || '');
+        setViewCnt(viewCnt || '');
+        setArtCnt(artCnt || '');
+        setScbCnt(scbCnt || '');
+        setShrCnt(shrCnt || '');
+        setReplyCnt(replyCnt || '');
+        setJplusRepDiv(jplusRepDiv || '');
+        setJplusJobInfo(jplusJobInfo || '');
+        setJplusTitle(jplusTitle || '');
+        setJplusMemo(jplusMemo || '');
+        setJplusProfileYn(jplusProfileYn || '');
+        setJplusRegDt(jplusRegDt || '');
+        setJplusUsedYn(jplusUsedYn || '');
+        setR1Cd(r1Cd || '');
+        setR2Cd(r2Cd || '');
+        setR3Cd(r3Cd || '');
+        setR4Cd(r4Cd || '');
+        setR5Cd(r5Cd || '');
+        setR6Cd(r6Cd || '');
+        setJamRepSeq(jamRepSeq || '');
+        setJamDeptSeq(jamDeptSeq || '');
+        setJamDeptNm(jamDeptNm || '');
+        setRepField(repField || '');
+        setJamComCd(jamComCd || '');
+        setJamComNm(jamComNm || '');
+        setRepTalk(repTalk || '');
+        setUserTalk(userTalk || '');
+    }, [
+        artCnt,
+        jamComCd,
+        jamComNm,
+        jamDeptNm,
+        jamDeptSeq,
+        jamRepSeq,
+        jnetId,
+        joinsBlog,
+        joinsId,
+        jplusJobInfo,
+        jplusMemo,
+        jplusProfileYn,
+        jplusRegDt,
+        jplusRepDiv,
+        jplusTitle,
+        jplusUsedYn,
+        r1Cd,
+        r2Cd,
+        r3Cd,
+        r4Cd,
+        r5Cd,
+        r6Cd,
+        repEmail1,
+        repEmail2,
+        repField,
+        repImg,
+        repName,
+        repPhone,
+        repPhoto,
+        repSeq,
+        repTalk,
+        repTitle,
+        replyCnt,
+        reporter.repSeq,
+        scbCnt,
+        shrCnt,
+        snsFb,
+        snsIn,
+        snsTw,
+        talkYn,
+        usedYn,
+        userTalk,
+        viewCnt,
+    ]);
+
     return (
-        <MokaCard title="그룹정보" width={1000}>
+        <MokaCard title="기자정보" width={1000}>
             <Form noValidate>
-                <Form.Row>
-                    <Col xs={6}>
-                        <MokaInputLabel
-                            label="그룹코드(G01, G02형식)"
-                            required
-                            labelWidth={160}
-                            name="groupCd"
-                            value={groupCd}
-                            onChange={handleChangeValue}
-                            placeholder="그룹코드를 입력해주세요."
-                            disabled={group.groupCd && true}
-                            isInvalid={groupCdError}
-                        />
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="p-0">
+                        <MokaInputLabel className="mb-0" label="컴포넌트ID" inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
-                    <Col xs={6}>* 한번입력하면 변경하실 수 없습니다. 신중히 입력하시기 바랍니다.</Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={6}>
-                        <MokaInputLabel
-                            label="그룹명"
-                            required
-                            labelWidth={160}
-                            name="groupNm"
-                            value={groupNm}
-                            onChange={handleChangeValue}
-                            placeholder="그룹명을 입력하세요."
-                            isInvalid={groupNmError}
-                        />
+                    <Col xs={6} className="p-0 d-flex justify-content-between">
+                        <div className="d-flex">
+                            <Button variant="primary" className="mr-2">
+                                저장
+                            </Button>
+                            <Button variant="danger">취소</Button>
+                        </div>
                     </Col>
                 </Form.Row>
-                <Form.Row>
-                    <Col xs={6}>
-                        <MokaInputLabel
-                            label="그룹 한글명"
-                            required
-                            labelWidth={160}
-                            name="groupKorNm"
-                            value={groupKorNm}
-                            onChange={handleChangeValue}
-                            placeholder="그룹 한글명을 입력하세요."
-                            isInvalid={groupNmKorError}
-                        />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={6}>
-                        <MokaInputLabel label="등록자" labelWidth={160} disabled={true} name={regId} value={regId} />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={6}>
-                        <MokaInputLabel label="등록일시" labelWidth={160} disabled={true} name={regDt} value={group.regDt} />
-                    </Col>
-                </Form.Row>
-                <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                    <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
-                        저장
-                    </Button>
-                    {groupCd && (
-                        <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleClickDelete}>
-                            삭제
-                        </Button>
-                    )}
-                </Form.Group>
             </Form>
         </MokaCard>
     );
 };
 
-export default GroupEdit;
+export default ReporterMgrEdit;

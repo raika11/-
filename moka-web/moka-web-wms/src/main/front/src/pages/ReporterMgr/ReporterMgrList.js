@@ -1,5 +1,5 @@
 import React from 'react';
-import MemberGroupAgGrid from './ReporterMgrAgGrid';
+import ReporterMgrAgGrid from './ReporterMgrAgGrid';
 import Search from './ReporterMgrSearch';
 
 /**
@@ -8,8 +8,8 @@ import Search from './ReporterMgrSearch';
 const ReporterMgrList = () => {
     return (
         <>
-            <Search />;
-            <MemberGroupAgGrid />;
+            <Search />
+            <ReporterMgrAgGrid />
         </>
     );
 };

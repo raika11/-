@@ -11,13 +11,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.util.ResponseUtil;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.web.wms.config.security.exception.AbstractAuthenticationException;
-import jmnet.moka.web.wms.config.security.exception.UnauthrizedErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -160,6 +158,7 @@ public class WmsJwtAuthenticationFilter extends AbstractAuthenticationProcessing
         response.addHeader(WmsJwtHelper.HEADER_STRING, WmsJwtHelper.TOKEN_PREFIX + token);
 
         UserDTO userDetails = (UserDTO) authResult.getDetails();
+        /*
         if (userDetails.getPasswordModDt() != null && McpDate.dayTerm(userDetails.getPasswordModDt()) < -(passwordChangeNotiDays)) {
             String message = messageByLocale.get("wms.login.change-password.noti");
 
@@ -170,6 +169,10 @@ public class WmsJwtAuthenticationFilter extends AbstractAuthenticationProcessing
             String message = messageByLocale.get("wms.login.success", userDetails.getUserName());
             ResponseUtil.ok(response, message, null);
         }
+        */
+        String message = messageByLocale.get("wms.login.success", userDetails.getUserName());
+        ResponseUtil.ok(response, message, null);
+
     }
 
 }

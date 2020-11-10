@@ -3,6 +3,7 @@ package jmnet.moka.web.wms.mvc.member.controller;
 import io.swagger.annotations.ApiOperation;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +20,14 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.code.MemberRequestCode;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
+import jmnet.moka.core.tps.mvc.member.dto.MemberRequestDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
@@ -32,6 +35,7 @@ import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
+import jmnet.moka.web.wms.config.security.exception.PasswordNotMatchedException;
 import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberBadCredentialsException;
 import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberExpiredException;
 import lombok.extern.slf4j.Slf4j;
@@ -175,8 +179,22 @@ public class MemberRestController {
 
         try {
 
+            String passwordSameMessage = messageByLocale.get("tps.member.error.same.password");
+
+            if (memberDTO
+                    .getPassword()
+                    .equals(memberDTO.getConfirmPassword())) {
+                throw new MokaException(passwordSameMessage);
+            }
+
             member.setPassword(passwordEncoder.encode(member.getPassword()));
 
+            // SMS 서버에 문자 발송 요청
+            String smsAuth = "";
+            Date smsExp = McpDate.minutePlus(McpDate.now(), 3);
+            member.setSmsAuth(smsAuth);
+            member.setSmsExp(smsExp);
+            
             // insert
             MemberInfo returnValue = memberService.insertMember(member);
             if (returnValue != null && memberDTO.getMemberGroups() != null) {
@@ -355,83 +373,120 @@ public class MemberRestController {
     }
 
     /**
-     * Member 잠금 해제 요청
+     * Member SMS 인증문자 요청
      *
-     * @param memberId MemberID
-     * @param smsAuth  문자 인증 번호
+     * @param memberId        MemberID
+     * @param memberUnlockDTO 잠금 해제 요청 정보
      * @return 사용자 정보
      * @throws NoDataException 데이터없음 예외처리
      */
-    @ApiOperation(value = "Member 잠금 해제 요청")
-    @GetMapping("/{memberId}/unlock-request")
-    public ResponseEntity<?> putUnlockRequest(
+    @ApiOperation(value = "Member SMS 인증문자 요청")
+    @GetMapping("/{memberId}/sms")
+    public ResponseEntity<?> putSmsRequest(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @RequestParam("smsAuth") @Size(min = 4, max = 6, message = "{tps.member.error.pattern.smsAuth}") String smsAuth)
-            throws NoDataException {
+            @Valid MemberRequestDTO memberUnlockDTO)
+            throws Exception {
 
         String noDataMsg = messageByLocale.get("tps.common.error.no-data");
 
         MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noDataMsg));
-        if (member
-                .getSmsAuth()
-                .equals(smsAuth)) {
-            member.setErrCnt(0);
-            member.setStatus(MemberStatusCode.Y);
-            member.setLastLoginDt(null);
-            member.setPasswordModDt(null);
-            memberService.updateMember(member);
+
+        // 비밀번호와 비밀번호 확인 비교
+        boolean same = memberUnlockDTO
+                .getPassword()
+                .equals(memberUnlockDTO.getConformPassword());
+        if (!same) {
+            throw new PasswordNotMatchedException(messageByLocale.get("wms.login.error.PasswordNotMatchedException"));
         }
+
+        same = passwordEncoder.matches(memberUnlockDTO.getPassword(), member.getPassword());
+        if (!same) {
+            throw new UserPrincipalNotFoundException(memberId);
+        }
+
+        // SMS 서버에 문자 발송 요청
+        String smsAuth = "";
+        Date smsExp = McpDate.minutePlus(McpDate.now(), 3);
+
+        member.setSmsAuth(smsAuth);
+        member.setSmsExp(smsExp);
+        memberService.updateMember(member);
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
+        String smsInfoMsg = messageByLocale.get("wms.login.info.sms-sand");
+
         // 결과리턴
-        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO);
+        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO, smsInfoMsg);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
-     * Member SMS 문자로 잠금 해제
+     * Member SMS 문자로 잠금 해제 요청
      *
-     * @param memberId MemberID
-     * @param smsAuth  문자 인증 번호
+     * @param memberId        MemberID
+     * @param memberUnlockDTO 잠김 해제 요청 정보
      * @return 사용자 정보
      * @throws NoDataException 데이터없음 예외처리
      */
     @ApiOperation(value = "Member 잠금 해제")
-    @GetMapping("/{memberId}/unlock")
+    @GetMapping("/{memberId}/unlock-request")
     public ResponseEntity<?> putUnlock(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @RequestParam("smsAuth") @Size(min = 4, max = 6, message = "{tps.member.error.pattern.smsAuth}") String smsAuth)
-            throws NoDataException {
+            @Valid MemberRequestDTO memberUnlockDTO)
+            throws Exception {
 
         String noDataMsg = messageByLocale.get("tps.common.error.no-data");
+        String successMsg = null;
 
         MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noDataMsg));
-        if (!member
-                .getSmsAuth()
-                .equals(smsAuth)) {
-            throw new SmsAuthNumberBadCredentialsException(messageByLocale.get("wms.login.error.unlock-sms-unmatched"));
+
+        // 비밀번호와 비밀번호 확인 비교
+        boolean same = memberUnlockDTO
+                .getPassword()
+                .equals(memberUnlockDTO.getConformPassword());
+        if (!same) {
+            throw new PasswordNotMatchedException(messageByLocale.get("wms.login.error.PasswordNotMatchedException"));
         }
 
-        if (McpDate.term(member.getSmsExp()) < 0) {
-            throw new SmsAuthNumberExpiredException(messageByLocale.get("wms.login.error.unlock-sms-expired"));
+        same = passwordEncoder.matches(memberUnlockDTO.getPassword(), member.getPassword());
+        if (!same) {
+            throw new UserPrincipalNotFoundException(memberId);
         }
 
-        member.setErrCnt(0);
-        member.setStatus(MemberStatusCode.Y);
-        member.setLastLoginDt(null);
-        member.setPasswordModDt(null);
-        memberService.updateMember(member);
+        if (memberUnlockDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS) {// SMS 인증문자로 잠김해제 요청
+            if (McpString.isEmpty(member.getSmsAuth())) {
+                throw new InvalidDataException(messageByLocale.get("wms.login.error.notempty.smsAuth"));
+            }
+            if (!member
+                    .getSmsAuth()
+                    .equals(memberUnlockDTO.getSmsAuth())) {
+                throw new SmsAuthNumberBadCredentialsException(messageByLocale.get("wms.login.error.sms-unmatched"));
+            }
 
+            if (McpDate.term(member.getSmsExp()) < 0) {
+                throw new SmsAuthNumberExpiredException(messageByLocale.get("wms.login.error.unlock-sms-expired"));
+            }
+            // 잠금 해제
+            member.setStatus(MemberStatusCode.Y);
+            member.setPasswordModDt(McpDate.now());
+            member.setErrCnt(0);
+            memberService.updateMember(member);
+            successMsg = messageByLocale.get("wms.login.success.unlock");
+        } else { // 잠금 해제 요청
+            member.setStatus(MemberStatusCode.R);
+            memberService.updateMember(member);
+            successMsg = messageByLocale.get("wms.login.success.unlock-request");
+        }
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
         // 결과리턴
-        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO);
+        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO, successMsg);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -455,8 +510,7 @@ public class MemberRestController {
                 .orElseThrow(() -> new NoDataException(noDataMsg));
         member.setErrCnt(0);
         member.setStatus(MemberStatusCode.Y);
-        member.setLastLoginDt(null);
-        member.setPasswordModDt(null);
+        member.setPasswordModDt(McpDate.now());
         memberService.updateMember(member);
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
@@ -488,8 +542,6 @@ public class MemberRestController {
         MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
-
-
 
         try {
             // 삭제

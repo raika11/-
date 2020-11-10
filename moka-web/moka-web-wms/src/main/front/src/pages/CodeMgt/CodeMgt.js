@@ -21,7 +21,7 @@ const CodeMgt = () => {
                 </Helmet>
 
                 {/* 기타코드 리스트 */}
-                <MokaCard width={260} className="mr-gutter" titleClassName="mb-0">
+                <MokaCard width={260} className="mr-gutter" titleClassName="mb-0" header={false}>
                     <Suspense>
                         <CodeMgtList />
                     </Suspense>
@@ -34,7 +34,7 @@ const CodeMgt = () => {
                         render={() => (
                             <>
                                 {/* 기타코드 편집 */}
-                                <MokaCard width={1300} titleClassName="mb-0">
+                                <MokaCard width={1300} titleClassName="mb-0" header={false}>
                                     <Suspense>
                                         <CodeMgtEdit />
                                     </Suspense>

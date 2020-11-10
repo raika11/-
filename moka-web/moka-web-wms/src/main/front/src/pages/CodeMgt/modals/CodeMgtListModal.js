@@ -126,71 +126,74 @@ const CodeMgtListModal = (props) => {
         }
     }, [codeGrp, onDelete, onHide]);
 
-    return (
-        <>
-            {type === 'add' && (
-                <MokaModal
-                    draggable
-                    show={show}
-                    onHide={onHide}
-                    title="그룹 추가"
-                    buttons={[
-                        {
-                            text: '등록',
-                            variant: 'primary',
-                            onClick: handleClickSave,
-                        },
-                        {
-                            text: '취소',
-                            variant: 'gray150',
-                            onClick: onHide,
-                        },
-                    ]}
-                    footerClassName="justify-content-center"
-                >
-                    <MokaInputLabel
-                        label="코드그룹"
-                        placeholder="코드 그룹 아이디(영문으로 작성하세요)"
-                        value={grpCd}
-                        name="grpCd"
-                        onChange={handleChangeValue}
-                        isInvalid={grpCdError}
-                        required
-                    />
-                    <MokaInputLabel label="코드그룹명" placeholder="코드그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} required />
-                </MokaModal>
-            )}
-            {type === 'edit' && (
-                <MokaModal
-                    draggable
-                    show={show}
-                    onHide={onHide}
-                    title="그룹 추가"
-                    buttons={[
-                        {
-                            text: '저장',
-                            variant: 'primary',
-                            onClick: handleClickSave,
-                        },
-                        {
-                            text: '취소',
-                            variant: 'gray150',
-                            onClick: onHide,
-                        },
-                        {
-                            text: '삭제',
-                            variant: 'gray150',
-                            onClick: handleClickDelete,
-                        },
-                    ]}
-                    footerClassName="justify-content-center"
-                >
-                    <MokaInputLabel label="코드그룹" placeholder="코드 그룹 아이디(영문으로 작성하세요)" value={grpCd} name="grpCd" onChange={handleChangeValue} disabled />
-                    <MokaInputLabel label="코드그룹명" placeholder="코드 그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} required />
-                </MokaModal>
-            )}
-        </>
-    );
+    if (type === 'add') {
+        return (
+            <MokaModal
+                width={600}
+                size="md"
+                draggable
+                show={show}
+                onHide={onHide}
+                title="그룹 추가"
+                buttons={[
+                    {
+                        text: '등록',
+                        variant: 'primary',
+                        onClick: handleClickSave,
+                    },
+                    {
+                        text: '취소',
+                        variant: 'gray150',
+                        onClick: onHide,
+                    },
+                ]}
+                footerClassName="justify-content-center"
+            >
+                <MokaInputLabel
+                    label="코드그룹"
+                    placeholder="코드 그룹 아이디(영문으로 작성하세요)"
+                    value={grpCd}
+                    name="grpCd"
+                    onChange={handleChangeValue}
+                    isInvalid={grpCdError}
+                    required
+                />
+                <MokaInputLabel label="코드그룹명" placeholder="코드그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} required />
+            </MokaModal>
+        );
+    } else if (type === 'edit') {
+        return (
+            <MokaModal
+                width={600}
+                size="md"
+                draggable
+                show={show}
+                onHide={onHide}
+                title="그룹 추가"
+                buttons={[
+                    {
+                        text: '저장',
+                        variant: 'primary',
+                        onClick: handleClickSave,
+                    },
+                    {
+                        text: '취소',
+                        variant: 'gray150',
+                        onClick: onHide,
+                    },
+                    {
+                        text: '삭제',
+                        variant: 'gray150',
+                        onClick: handleClickDelete,
+                    },
+                ]}
+                footerClassName="justify-content-center"
+            >
+                <MokaInputLabel label="코드그룹" placeholder="코드 그룹 아이디(영문으로 작성하세요)" value={grpCd} name="grpCd" onChange={handleChangeValue} disabled />
+                <MokaInputLabel label="코드그룹명" placeholder="코드 그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} required />
+            </MokaModal>
+        );
+    }
 };
 
 CodeMgtListModal.propTypes = propTypes;

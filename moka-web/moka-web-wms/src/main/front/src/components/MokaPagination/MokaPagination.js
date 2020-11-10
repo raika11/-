@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
 import Pagination from 'react-bootstrap/Pagination';
 import Form from 'react-bootstrap/Form';
@@ -7,11 +8,19 @@ import { MokaIcon } from '@components';
 
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
-const propTypes = {
+export const propTypes = {
+    /**
+     * className
+     */
+    className: PropTypes.string,
     /**
      * 총갯수
      */
     total: PropTypes.number,
+    /**
+     * 총갯수 텍스트 show/hide
+     */
+    showTotalString: PropTypes.bool,
     /**
      * 페이지번호( zero base )
      */
@@ -22,8 +31,9 @@ const propTypes = {
     size: PropTypes.number,
     /**
      * 데이타 건수 옵션 목록
+     * pageSizes == false이면 페이지사이즈 보이지 않음
      */
-    pageSizes: PropTypes.arrayOf(PropTypes.number),
+    pageSizes: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.bool]),
     /**
      * 그룹당 페이지 개수
      */
@@ -40,13 +50,15 @@ const defaultProps = {
     pageSizes: PAGESIZE_OPTIONS,
     displayPageNum: DISPLAY_PAGE_NUM,
     onChangeSearchOption: null,
+    showTotalString: true,
+    className: 'justify-content-between',
 };
 
 /**
  * 페이지네이션
  */
 const MokaPagination = (props) => {
-    const { total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
+    const { className, total, page, size, pageSizes, displayPageNum, showTotalString, onChangeSearchOption } = props;
 
     const handleChangeRowsPerPage = useCallback(
         (event) => {
@@ -94,14 +106,16 @@ const MokaPagination = (props) => {
     }
 
     return (
-        <div className="d-flex align-items-center justify-content-between">
-            <Form.Control as="select" style={{ width: 65, height: 29 }} onChange={handleChangeRowsPerPage} value={size} custom>
-                {pageSizes.map((value) => (
-                    <option key={value} value={value}>
-                        {value}
-                    </option>
-                ))}
-            </Form.Control>
+        <div className={clsx('d-flex', 'align-items-center', className)}>
+            {pageSizes && (
+                <Form.Control as="select" style={{ width: 65, height: 29 }} onChange={handleChangeRowsPerPage} value={size} custom>
+                    {pageSizes.map((value) => (
+                        <option key={value} value={value}>
+                            {value}
+                        </option>
+                    ))}
+                </Form.Control>
+            )}
             <Pagination className="mb-0">
                 <Pagination.Prev disabled={!prev} onClick={handleBackButtonClick}>
                     <MokaIcon iconName="fas-angle-left" />
@@ -115,7 +129,7 @@ const MokaPagination = (props) => {
                     <MokaIcon iconName="fas-angle-right" />
                 </Pagination.Next>
             </Pagination>
-            <div>{`총: ${total} 건`}</div>
+            {showTotalString && <div>{`총: ${total} 건`}</div>}
         </div>
     );
 };

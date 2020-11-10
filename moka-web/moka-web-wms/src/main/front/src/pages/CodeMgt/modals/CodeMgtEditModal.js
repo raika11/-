@@ -170,6 +170,8 @@ const CodeMgtListModal = (props) => {
         <>
             {type === 'add' && (
                 <MokaModal
+                    width={600}
+                    size="md"
                     draggable
                     show={show}
                     onHide={() => {
@@ -216,6 +218,8 @@ const CodeMgtListModal = (props) => {
             )}
             {type === 'edit' && (
                 <MokaModal
+                    width={600}
+                    size="md"
                     draggable
                     show={show}
                     onHide={() => {

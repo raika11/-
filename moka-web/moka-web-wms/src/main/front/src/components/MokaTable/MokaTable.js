@@ -3,10 +3,19 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaPagination } from '@components';
+import { propTypes as paginationPropTypes } from '@components/MokaPagination';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import Tooltip from './MokaTableTooltip';
 
 const propTypes = {
+    /**
+     * pagination props
+     */
+    ...paginationPropTypes,
+    /**
+     * pagination의 className
+     */
+    paginationClassName: PropTypes.string,
     /**
      * 목록 컬럼정의
      */
@@ -36,34 +45,6 @@ const propTypes = {
      */
     onRowClicked: PropTypes.func,
     /**
-     * 페이징여부
-     */
-    paging: PropTypes.bool,
-    /**
-     * 총갯수
-     */
-    total: PropTypes.number,
-    /**
-     * 페이지번호( zero base )
-     */
-    page: PropTypes.number,
-    /**
-     * 페이지당 데이타 건수
-     */
-    size: PropTypes.number,
-    /**
-     * 데이타 건수 옵션 목록
-     */
-    pageSizes: PropTypes.arrayOf(PropTypes.number),
-    /**
-     * 그룹당 페이지 개수
-     */
-    displayPageNum: PropTypes.number,
-    /**
-     * 검색조건 변경 ( 페이지, 데이타건수 변경 )
-     */
-    onChangeSearchOption: PropTypes.func,
-    /**
      * row click 이벤트 막는 cell의 필드 리스트
      */
     preventRowClickCell: PropTypes.arrayOf(PropTypes.string),
@@ -84,10 +65,13 @@ const propTypes = {
      */
     onRowDragMove: PropTypes.func,
 };
+
 const defaultProps = {
     localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
     loading: false,
     paging: true,
+    dragging: false,
+    header: true,
     total: 0,
     page: 0,
     size: PAGESIZE_OPTIONS[0],
@@ -95,17 +79,18 @@ const defaultProps = {
     displayPageNum: DISPLAY_PAGE_NUM,
     preventRowClickCell: [],
     rowSelection: 'single',
-    dragging: false,
-    header: true,
 };
 
+/**
+ * 공통 테이블 (ag-grid 사용)
+ */
 const MokaTable = (props) => {
     // table props
     const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection, selected, header } = props;
     const { dragging, onRowDragMove } = props;
 
     // paging props
-    const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
+    const { paginationClassName, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, showTotalString } = props;
     const [gridApi, setGridApi] = useState(null);
 
     /**
@@ -205,8 +190,8 @@ const MokaTable = (props) => {
     }, [handleSelected]);
 
     return (
-        <>
-            {/* 목록 */}
+        <React.Fragment>
+            {/* ag-grid */}
             <div className={clsx('ag-theme-moka-grid', { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }}>
                 <AgGridReact
                     columnDefs={columnDefs}
@@ -229,13 +214,23 @@ const MokaTable = (props) => {
                     getRowClass={getRowClass}
                 />
             </div>
-            {/* 페이징 */}
+
+            {/* 페이지네이션 */}
             {paging ? (
                 <div className="mt-3">
-                    <MokaPagination total={total} page={page} size={size} onChangeSearchOption={onChangeSearchOption} pageSizes={pageSizes} displayPageNum={displayPageNum} />
+                    <MokaPagination
+                        total={total}
+                        page={page}
+                        size={size}
+                        onChangeSearchOption={onChangeSearchOption}
+                        pageSizes={pageSizes}
+                        displayPageNum={displayPageNum}
+                        showTotalString={showTotalString}
+                        className={paginationClassName}
+                    />
                 </div>
             ) : null}
-        </>
+        </React.Fragment>
     );
 };
 

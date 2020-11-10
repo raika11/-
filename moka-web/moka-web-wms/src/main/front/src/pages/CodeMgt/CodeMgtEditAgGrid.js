@@ -74,7 +74,7 @@ const CodeMgtEditAgGrid = (props) => {
         <>
             {/* table */}
             <MokaTable
-                agGridHeight={650}
+                agGridHeight={693}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(cdList) => cdList.cdSeq}

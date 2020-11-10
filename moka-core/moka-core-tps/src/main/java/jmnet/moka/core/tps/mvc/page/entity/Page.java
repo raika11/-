@@ -176,7 +176,8 @@ public class Page extends BaseAudit {
      * 관련아이템
      */
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "page", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "page", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "page", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
     private Set<PageRel> pageRels = new LinkedHashSet<PageRel>();
 
     @PrePersist

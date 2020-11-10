@@ -7,6 +7,7 @@ package jmnet.moka.core.tps.mvc.area.controller;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -111,14 +112,18 @@ public class AreaRestController {
             // 컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
             // 페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.
             AreaCompLoadDTO areaCompLoadDTO = new AreaCompLoadDTO();
-            Long check = areaService.checkAreaComp(area);
-            if (check == -1 || check == -3) {
+            Map<String, Object> check = areaService.checkAreaComp(area);
+            if ((long) check.get("byPage") < 0) {
                 areaCompLoadDTO.setByPage(true);  // true이면 해당 컴포넌트 미존재
                 areaCompLoadDTO.setByPageMessage(messageByLocale.get("tps.areaComp.error.bypage"));
             }
-            if (check == -2 || check == -3) {
-                areaCompLoadDTO.setByContainer(true);  // true이면 해당 컴포넌트 미존재
+            if ((long) check.get("byContainer") < 0) {
+                areaCompLoadDTO.setByContainer(true);  // true이면 해당 컨테이너 미존재
                 areaCompLoadDTO.setByContainerMessage(messageByLocale.get("tps.areaComp.error.bycontainer"));
+            }
+            if ((long) check.get("byContainerComp") < 0) {
+                areaCompLoadDTO.setByContainerComp(true); // true이면 해당 컨테이너내에 컴포넌트 미존재
+                areaCompLoadDTO.setByContainerCompMessage(messageByLocale.get("tps.areaComp.error.bycontainer-comp"));
             }
 
             AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);

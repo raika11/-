@@ -4,6 +4,7 @@
 
 package jmnet.moka.core.tps.mvc.area.service;
 
+import java.util.Map;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
@@ -62,9 +63,10 @@ public interface AreaService {
      * 편집영역 컴포넌트가 페이지에 존재하는지 조사한다.
      *
      * @param area 편집영역
-     * @return 1: 성공(올바르게 존재하면), -1: 페이지에 없는 컴포넌트, -2: 컨테이너에 없는 컴포넌트
+     * @return
+     * @throws Exception
      */
-    Long checkAreaComp(Area area)
+    Map<String, Object> checkAreaComp(Area area)
             throws Exception;
 
     /**

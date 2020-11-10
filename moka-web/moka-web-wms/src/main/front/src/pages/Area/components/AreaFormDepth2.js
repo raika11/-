@@ -211,7 +211,7 @@ const AreaFormDepth2 = (props) => {
                             })),
                         );
                         setReloaded(true);
-                        setAreaCompLoad(initialState.depth2.areaCompLoad);
+                        setAreaCompLoad(initialState.depth3.areaCompLoad);
                     },
                 }),
             );
@@ -264,6 +264,8 @@ const AreaFormDepth2 = (props) => {
                     setContOptions(body.list || []);
                     setContainer(contCnt < 1 ? temp.container || {} : {});
                     setContCnt(contCnt + 1);
+                    setReloaded(true);
+                    setAreaCompLoad(initialState.depth3.areaCompLoad);
                 },
             }),
         );
@@ -288,7 +290,7 @@ const AreaFormDepth2 = (props) => {
             setComponent(origin.areaComps[0].component);
         }
         // areaComps 셋팅
-        if (Array.isArray(origin.areaComps) && origin.areaComps.length > 0) {
+        if (Array.isArray(origin.areaComps)) {
             setAreaComps(origin.areaComps);
         }
     }, [origin]);
@@ -510,6 +512,19 @@ const AreaFormDepth2 = (props) => {
                             </Col>
                             <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
                                 <MokaOverlayTooltipButton variant="white" className="border" tooltipText="컴포넌트 리로드" onClick={getCompOptions}>
+                                    <MokaIcon iconName="far-redo-alt" />
+                                </MokaOverlayTooltipButton>
+                            </Col>
+                        </Form.Row>
+                    )}
+                    {!reloaded && origin.areaDiv === ITEM_CT && areaCompLoad.byContainerComp && (
+                        <Form.Row className="mb-2">
+                            <Col xs={2} className="p-0"></Col>
+                            <Col xs={8} className="p-0 pl-2">
+                                <p className="mb-0 text-danger" dangerouslySetInnerHTML={{ __html: areaCompLoad.byContainerMessage.replace('\n', '<br/>') }} />
+                            </Col>
+                            <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
+                                <MokaOverlayTooltipButton variant="white" className="border" tooltipText="컨테이너 리로드" onClick={getContOptions}>
                                     <MokaIcon iconName="far-redo-alt" />
                                 </MokaOverlayTooltipButton>
                             </Col>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory, Route } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
@@ -13,7 +13,7 @@ import columnDefs from './AreaAgGridColums';
 /**
  * 편집영역 > 두번째 리스트
  */
-const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
+const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { areaSeq } = useParams();
@@ -22,6 +22,18 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
         areaDepth1: store.area.depth1.area,
         loading: store.loading[GET_AREA_LIST_DEPTH2],
     }));
+
+    // state
+    const [rowData, setRowData] = useState([]);
+
+    useEffect(() => {
+        setRowData(
+            list.map((l) => ({
+                ...l,
+                onDelete: onDelete,
+            })),
+        );
+    }, [list, onDelete]);
 
     /**
      * 목록에서 Row클릭
@@ -56,7 +68,9 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
                 ),
             );
             dispatch(getAreaDepth2({ areaSeq }));
-            dispatch(changeSelectedDepth(2));
+            if (history.location.pathname === match.url) {
+                dispatch(changeSelectedDepth(2));
+            }
         } else {
             dispatch(clearList(3));
         }
@@ -76,7 +90,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
 
                 <MokaTable
                     agGridHeight={738}
-                    rowData={list}
+                    rowData={rowData}
                     columnDefs={columnDefs}
                     selected={areaSeq}
                     header={false}
@@ -88,7 +102,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl }) => {
                 />
             </MokaCard>
 
-            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth3 {...props} parentSeq={areaSeq} baseUrl={baseUrl} />} />
+            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth3 {...props} parentSeq={areaSeq} baseUrl={baseUrl} onDelete={onDelete} />} />
         </React.Fragment>
     );
 };

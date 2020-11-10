@@ -13,6 +13,11 @@ const getAreaListDepth2 = callApiAfterActions(act.GET_AREA_LIST_DEPTH2, api.getA
 const getAreaListDepth3 = callApiAfterActions(act.GET_AREA_LIST_DEPTH3, api.getAreaList, (store) => store.area.depth3);
 
 /**
+ * 편집영역 목록 조회(모달용)
+ */
+const getAreaListModal = createRequestSaga(act.GET_AREA_LIST_MODAL, api.getAreaList, true);
+
+/**
  * 편집영역 조회
  */
 const getAreaDepth1 = createRequestSaga(act.GET_AREA_DEPTH1, api.getArea);
@@ -147,4 +152,5 @@ export default function* saga() {
     yield takeLatest(act.GET_AREA_DEPTH3, getAreaDepth3);
     yield takeLatest(act.SAVE_AREA, saveArea);
     yield takeLatest(act.DELETE_AREA, deleteArea);
+    yield takeLatest(act.GET_AREA_LIST_MODAL, getAreaListModal);
 }

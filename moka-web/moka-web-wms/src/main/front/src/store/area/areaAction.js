@@ -39,6 +39,12 @@ export const getAreaDepth3 = createAction(GET_AREA_DEPTH3, ({ areaSeq }) => ({ a
 export const GET_AREA_FAILURE = 'area/GET_AREA_FAILURE';
 
 /**
+ * 모달 데이터 조회
+ */
+export const [GET_AREA_LIST_MODAL] = createRequestActionTypes('area/GET_AREA_LIST_MODAL');
+export const getAreaListModal = createAction(GET_AREA_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+
+/**
  * 데이터 변경
  */
 export const CHANGE_AREA = 'area/CHANGE_AREA';

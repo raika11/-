@@ -42,6 +42,7 @@ const EditForm = () => {
     toast.confirm(`${editForm.formId}_${editForm.formName}을 정말 삭제하시겠습니까?`,
         (ok) => {
           if (ok) {
+            
             deleteEditForm({
               formId: editForm.formSeq,
               callback: (response) => {

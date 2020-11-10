@@ -104,12 +104,9 @@ public class JpodEpisodeServiceImpl implements JpodEpisodeService {
         for (String keyword : keywords) {
             JpodKeyword jpodKeyword = JpodKeyword
                     .builder()
-                    .id(JpodKeywordPK
-                            .builder()
-                            .chnlSeq(jpodEpisodeVO.getChnlSeq())
-                            .epsdSeq(jpodEpisodeVO.getEpsdSeq())
-                            .ordNo(++ordNo)
-                            .build())
+                    .chnlSeq(jpodEpisodeVO.getChnlSeq())
+                    .epsdSeq(jpodEpisodeVO.getEpsdSeq())
+                    .ordNo(++ordNo)
                     .keyword(keyword)
                     .build();
             jpodKeywordRepository.save(jpodKeyword);

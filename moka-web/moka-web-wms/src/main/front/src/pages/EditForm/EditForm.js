@@ -17,6 +17,7 @@ const EditFormList = React.lazy(() => import('./EditFormList'));
  */
 const EditForm = () => {
     const history = useHistory();
+
     const dispatch = useDispatch();
 
     const { loading } = useSelector((store) => ({

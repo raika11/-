@@ -17,7 +17,7 @@ export const columnDefs = [
     {
         headerName: '영문명',
         field: 'cdEngNm',
-        width: 130,
+        width: 132,
     },
     {
         headerName: '비고',

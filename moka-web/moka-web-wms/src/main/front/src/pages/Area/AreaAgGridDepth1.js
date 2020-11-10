@@ -106,6 +106,7 @@ const AreaAgGrid1D = ({ match, onDelete }) => {
                     dragging={false}
                     onRowNodeId={(data) => data.areaSeq}
                     onRowClicked={handleRowClicked}
+                    preventRowClickCell={['delete']}
                 />
             </MokaCard>
             <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth2 {...props} parentSeq={areaSeq} baseUrl="/area" onDelete={onDelete} />} />

@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import Form1 from './components/AreaFormDepth1';
 import Form2 from './components/AreaFormDepth2';
+import toast from '@utils/toastUtil';
 import { PageListModal } from '@pages/commons';
 
 const AreaEdit = ({ onDelete }) => {
-    const { selectedDepth } = useSelector((store) => ({
+    const { selectedDepth, areaError } = useSelector((store) => ({
         selectedDepth: store.area.selectedDepth,
+        areaError: store.area.areaError,
     }));
 
     // state
@@ -22,6 +24,12 @@ const AreaEdit = ({ onDelete }) => {
     const handleClickSave = (data) => {
         setPage(data);
     };
+
+    useEffect(() => {
+        if (areaError) {
+            toast.error(areaError.header.message);
+        }
+    }, [areaError]);
 
     return (
         <React.Fragment>

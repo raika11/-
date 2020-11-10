@@ -91,6 +91,7 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
                 onRowNodeId={(data) => data.areaSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}
+                preventRowClickCell={['delete']}
             />
         </MokaCard>
     );

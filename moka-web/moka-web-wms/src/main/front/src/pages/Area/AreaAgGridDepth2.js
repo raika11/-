@@ -30,7 +30,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
         setRowData(
             list.map((l) => ({
                 ...l,
-                onDelete: onDelete,
+                onDelete,
             })),
         );
     }, [list, onDelete]);
@@ -99,6 +99,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
                     onRowNodeId={(data) => data.areaSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
+                    preventRowClickCell={['delete']}
                 />
             </MokaCard>
 

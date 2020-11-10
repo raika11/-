@@ -8,15 +8,16 @@ import Card from 'react-bootstrap/Card';
 
 import toast from '@utils/toastUtil';
 import { MokaInputLabel, MokaCard } from '@components';
-import { saveArea, changeArea, GET_AREA_DEPTH1 } from '@store/area';
+import { saveArea, changeArea, GET_AREA_DEPTH1, DELETE_AREA, SAVE_AREA } from '@store/area';
 
 const AreaFormDepth1 = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { domainList, area, loading } = useSelector((store) => ({
+    const { domainList, area, loading, areaListDepth2 } = useSelector((store) => ({
         domainList: store.auth.domainList,
         area: store.area.depth1.area,
-        loading: store.loading[GET_AREA_DEPTH1],
+        areaListDepth2: store.area.depth2.list,
+        loading: store.loading[GET_AREA_DEPTH1] || store.loading[DELETE_AREA] || store.loading[SAVE_AREA],
     }));
 
     // state
@@ -43,19 +44,13 @@ const AreaFormDepth1 = ({ onDelete }) => {
     };
 
     /**
-     * 저장 버튼
+     * 저장
+     * @param {object} save area데이터
      */
-    const handleClickSave = () => {
-        const save = {
-            ...temp,
-            container: Object.keys(temp.container).length > 0 ? temp.container : null,
-            page: Object.keys(temp.page).length > 0 ? temp.page : null,
-            parent: Object.keys(temp.parent).length > 0 ? temp.parent : null,
-            domain,
-        };
-
+    const handleSave = (save) => {
         dispatch(
             saveArea({
+                depth: 1,
                 actions: [changeArea({ area: save, depth: 1 })],
                 callback: ({ header, body }) => {
                     if (header.success) {
@@ -67,6 +62,34 @@ const AreaFormDepth1 = ({ onDelete }) => {
                 },
             }),
         );
+    };
+
+    /**
+     * 저장 버튼
+     */
+    const handleClickSave = () => {
+        const save = {
+            ...temp,
+            container: null,
+            page: null,
+            parent: null,
+            areaComps: [],
+            domain,
+        };
+
+        if (areaListDepth2.length > 0 && save.usedYn === 'N') {
+            toast.confirm(
+                <React.Fragment>
+                    하위 뎁스 메뉴도 편집 영역에 노출되지 않습니다.
+                    <br />
+                    사용여부를 off 하시겠습니까?
+                </React.Fragment>,
+                () => handleSave(save),
+                () => {},
+            );
+        } else {
+            handleSave(save);
+        }
     };
 
     /**

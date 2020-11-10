@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -32,17 +32,20 @@ const AreaFormDepth2 = (props) => {
     }));
 
     // state
-    const [temp, setTemp] = useState({});
+    const [origin, setOrigin] = useState({}); // 원본 데이터
+    const [temp, setTemp] = useState({}); // 수정가능한 데이터
     const [parent, setParent] = useState({});
     const [domain, setDomain] = useState({});
+
     const [container, setContainer] = useState({});
-    const [areaComp, setAreaComp] = useState({}); // 파싱하기 위해 추가한 areaComp 1건
+    const [component, setComponent] = useState({});
+
     const [areaComps, setAreaComps] = useState([]); // DB에 저장되는 areaComp 리스트
     const [areaCompLoad, setAreaCompLoad] = useState({});
     const [reloaded, setReloaded] = useState(false); // reload 했는지 체크
 
-    const [containerList, setContainerList] = useState([]); // select의 컨테이너 리스트
-    const [componentList, setComponentList] = useState([]); // select의 컴포넌트 리스트
+    const [contOptions, setContOptions] = useState([]); // 컨테이너 options
+    const [compOptions, setCompOptions] = useState([]); // 컴포넌트 options
     const [error, setError] = useState({ container: false });
 
     /**
@@ -67,8 +70,7 @@ const AreaFormDepth2 = (props) => {
         } else if (name === 'areaDiv') {
             setTemp({ ...temp, areaDiv: value });
         } else if (name === 'areaComp') {
-            // areaComps 의 데이터를 areaComp로 변경 (리스트의 첫번째 데이터로)
-            setAreaComps([{ component: { componentSeq: Number(value) } }]);
+            setComponent({ componentSeq: value });
         } else if (name === 'areaAlign') {
             setTemp({ ...temp, areaAlign: value });
         } else if (name === 'container') {
@@ -102,7 +104,7 @@ const AreaFormDepth2 = (props) => {
             parent,
             domain,
             container: temp.areaDiv === ITEM_CT ? container : null,
-            areaComps,
+            areaComps: temp.areaDiv === ITEM_CP ? [{ component }] : areaComps,
         };
 
         if (validate(save)) {
@@ -135,10 +137,10 @@ const AreaFormDepth2 = (props) => {
     };
 
     /**
-     * 컴포넌트 목록 리로드
+     * 컨테이너일 때 -> 컨테이너의 컴포넌트 목록 리로드
      */
-    const handleCompLoad = (reload) => {
-        if (temp.areaDiv === ITEM_CT) {
+    const handleCompLoad = useCallback(
+        (reload) => {
             dispatch(
                 getComponentListModal({
                     search: {
@@ -163,18 +165,75 @@ const AreaFormDepth2 = (props) => {
                     },
                 }),
             );
-        }
-    };
+        },
+        [dispatch, container, page],
+    );
+
+    /**
+     * 컴포넌트 options 조회
+     */
+    const getCompOptions = useCallback(() => {
+        dispatch(
+            getComponentListModal({
+                search: {
+                    ...componentState.search,
+                    usePaging: 'N',
+                    useArea: 'Y',
+                    searchType: 'pageSeq',
+                    keyword: page.pageSeq,
+                    domainId: page.domain.domainId,
+                },
+                callback: ({ body }) => {
+                    setCompOptions(body.list || []);
+                    if (body.list.length > 0) {
+                        setComponent(body.list[0]);
+                    }
+                },
+            }),
+        );
+    }, [dispatch, page]);
+
+    /**
+     * 컨테이너 options 조회
+     */
+    const getContOptions = useCallback(() => {
+        dispatch(
+            getContainerListModal({
+                search: {
+                    ...containerState.search,
+                    usePaging: 'N',
+                    searchType: 'pageSeq',
+                    keyword: page.pageSeq,
+                    domainId: page.domain.domainId,
+                },
+                callback: ({ body }) => {
+                    setContOptions(body.list || []);
+                    if (body.list.length > 0) {
+                        setContainer(body.list[0]);
+                    }
+                },
+            }),
+        );
+    }, [dispatch, page]);
 
     useEffect(() => {
+        // depth에 따라 기본값 셋팅
         if (depth === 2) {
             setTemp(areaDepth2);
+            setOrigin(areaDepth2);
             setAreaCompLoad(areaCompLoadDepth2);
         } else {
             setTemp(areaDepth3);
+            setOrigin(areaDepth3);
             setAreaCompLoad(areaCompLoadDepth3);
         }
     }, [depth, areaDepth2, areaDepth3, areaCompLoadDepth2, areaCompLoadDepth3]);
+
+    useEffect(() => {
+        if (origin.areaDiv === ITEM_CP && origin.areaComps && origin.areaComps.length > 0) {
+            setComponent(origin.areaComps[0].component);
+        }
+    }, [origin]);
 
     useEffect(() => {
         // parent, domain 데이터 셋팅
@@ -207,12 +266,6 @@ const AreaFormDepth2 = (props) => {
     }, [temp.areaSeq]);
 
     useEffect(() => {
-        if (temp.areaDiv === ITEM_CP && areaComps.length > 0) {
-            setAreaComp(areaComps[0]);
-        }
-    }, [areaComps, temp.areaDiv]);
-
-    useEffect(() => {
         // 도메인 변경 시 모달의 도메인 검색조건 변경
         if (domain.domainId) {
             onChangeModalDomainId(domain.domainId);
@@ -222,57 +275,24 @@ const AreaFormDepth2 = (props) => {
     useEffect(() => {
         // 모달한테 전달받은 page 변경 시 CP, CT 리스트 조회
         if (page.pageSeq) {
-            if (temp.areaDiv === ITEM_CP) {
-                dispatch(
-                    getComponentListModal({
-                        search: {
-                            ...componentState.search,
-                            usePaging: 'N',
-                            useArea: 'Y',
-                            searchType: 'pageSeq',
-                            keyword: page.pageSeq,
-                            domainId: page.domain.domainId,
-                        },
-                        callback: ({ body }) => {
-                            setComponentList(body.list || []);
-                            if (body.list.length > 0) {
-                                setAreaComps([{ component: body.list[0] }]);
-                            }
-                        },
-                    }),
-                );
-            } else {
-                dispatch(
-                    getContainerListModal({
-                        search: {
-                            ...containerState.search,
-                            usePaging: 'N',
-                            searchType: 'pageSeq',
-                            keyword: page.pageSeq,
-                            domainId: page.domain.domainId,
-                        },
-                        callback: ({ body }) => {
-                            setContainerList(body.list || []);
-                        },
-                    }),
-                );
-                setAreaComps([]);
-            }
+            if (temp.areaDiv === ITEM_CP) getCompOptions();
+            else getContOptions();
         }
-    }, [dispatch, page, temp.areaDiv]);
+    }, [getCompOptions, getContOptions, page, temp.areaDiv]);
 
     useEffect(() => {
         // 컨테이너 변경 시 컨테이너 안의 컴포넌트 리스트 조회
         if (container.containerSeq) {
             handleCompLoad(false);
+        } else {
+            setAreaComps([]);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [container.containerSeq]);
+    }, [container.containerSeq, handleCompLoad]);
 
     useEffect(() => {
         // 폼이 변경되면 CT, CP 리스트 날림
-        setComponentList([]);
-        setContainerList([]);
+        setCompOptions([]);
+        setContOptions([]);
     }, [selectedDepth, temp.areaSeq]);
 
     return (
@@ -395,9 +415,9 @@ const AreaFormDepth2 = (props) => {
 
                         {temp.areaDiv === ITEM_CP && (
                             <Col xs={8} className="p-0 pl-2 pr-2">
-                                <MokaInput as="select" name="areaComp" value={areaComp.component ? areaComp.component.componentSeq : null} onChange={handleChangeValue}>
+                                <MokaInput as="select" name="areaComp" value={component.componentSeq} onChange={handleChangeValue} isInvalid={error.component}>
                                     <option hidden>컴포넌트를 선택하세요</option>
-                                    {componentList.map((com) => (
+                                    {compOptions.map((com) => (
                                         <option value={com.componentSeq} key={com.componentSeq}>
                                             {com.componentName}
                                         </option>
@@ -410,7 +430,7 @@ const AreaFormDepth2 = (props) => {
                             <Col xs={8} className="p-0 pl-2 pr-2">
                                 <MokaInput as="select" name="container" value={container.containerSeq} onChange={handleChangeValue} isInvalid={error.container}>
                                     <option hidden>컨테이너를 선택하세요</option>
-                                    {containerList.map((con) => (
+                                    {contOptions.map((con) => (
                                         <option value={con.containerSeq} key={con.containerSeq}>
                                             {con.containerName}
                                         </option>
@@ -429,7 +449,7 @@ const AreaFormDepth2 = (props) => {
                     </Form.Row>
 
                     {/* 리로드 문구 */}
-                    {!reloaded && temp.areaDiv === ITEM_CP && areaCompLoad.byPage && (
+                    {!reloaded && origin.areaDiv === ITEM_CP && areaCompLoad.byPage && (
                         <Form.Row className="mb-2">
                             <Col xs={2} className="p-0"></Col>
                             <Col xs={8} className="p-0 pl-2">
@@ -442,14 +462,14 @@ const AreaFormDepth2 = (props) => {
                             </Col>
                         </Form.Row>
                     )}
-                    {!reloaded && temp.areaDiv === ITEM_CT && areaCompLoad.byContainer && (
+                    {!reloaded && origin.areaDiv === ITEM_CT && areaCompLoad.byContainer && (
                         <Form.Row className="mb-2">
                             <Col xs={2} className="p-0"></Col>
                             <Col xs={8} className="p-0 pl-2">
                                 <p className="mb-0 text-danger" dangerouslySetInnerHTML={{ __html: areaCompLoad.byContainerMessage.replace('\n', '<br/>') }} />
                             </Col>
                             <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
-                                <MokaOverlayTooltipButton variant="white" className="border" tooltipText="컴포넌트 리로드" onClick={() => handleCompLoad(true)}>
+                                <MokaOverlayTooltipButton variant="white" className="border" tooltipText="컴포넌트 리로드" onClick={() => getCompOptions()}>
                                     <MokaIcon iconName="far-redo-alt" />
                                 </MokaOverlayTooltipButton>
                             </Col>

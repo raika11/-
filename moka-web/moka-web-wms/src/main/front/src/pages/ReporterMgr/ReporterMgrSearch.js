@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Row, Col } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
-import { initialState, getReporterMgrList, changeSearchOption } from '@store/reporterMgr';
+import { initialState, getReporterList, changeSearchOption } from '@store/reporter';
 
 //import { changeLatestDomainId } from '@store/auth';
 
@@ -13,11 +13,11 @@ import { initialState, getReporterMgrList, changeSearchOption } from '@store/rep
 const ReporterMgrSearch = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, domainList, search: storeSearch, searchTypeList } = useSelector((store) => ({
-        latestDomainId: store.auth.latestDomainId,
-        domainList: store.auth.domainList,
-        search: store.container.search,
-        searchTypeList: store.container.searchTypeList,
+    const { latestRepSeq, reporterList, search: storeSearch, searchTypeList } = useSelector((store) => ({
+        latestRepSeq: store.auth.latestRepSeq,
+        reporterList: store.auth.reporterList,
+        search: store.reporter.search,
+        searchTypeList: store.reporter.searchTypeList,
     }));
 
     const [search, setSearch] = useState(initialState.search);
@@ -31,25 +31,25 @@ const ReporterMgrSearch = () => {
      * latestDomainId를 컨테이너의 search.domainId로 변경
      */
     useEffect(() => {
-        if (latestDomainId && latestDomainId !== search.domainId) {
+        if (latestRepSeq && latestRepSeq !== search.repSeq) {
             dispatch(
-                getReporterMgrList(
+                getReporterList(
                     changeSearchOption({
                         ...search,
-                        domainId: latestDomainId,
+                        repSeq: latestRepSeq,
                         page: 0,
                     }),
                 ),
             );
         }
-    }, [dispatch, latestDomainId, search]);
+    }, [dispatch, latestRepSeq, search]);
 
     /**
      * 검색
      */
     const handleSearch = useCallback(() => {
         dispatch(
-            getReporterMgrList(
+            getReporterList(
                 changeSearchOption({
                     ...search,
                     page: 0,
@@ -63,20 +63,10 @@ const ReporterMgrSearch = () => {
      * @param {*} e 이벤트
      */
     const handleChangeSearchOption = (e) => {
-        if (e.target.name === 'domainId') {
-            //dispatch(changeLatestDomainId(e.target.value));
-            history.push('/container');
-        } else if (e.target.name === 'searchType') {
-            setSearch({
-                ...search,
-                searchType: e.target.value,
-            });
-        } else if (e.target.name === 'keyword') {
-            setSearch({
-                ...search,
-                keyword: e.target.value,
-            });
-        }
+        setSearch({
+            ...search,
+            keyword: e.target.value,
+        });
     };
 
     return (

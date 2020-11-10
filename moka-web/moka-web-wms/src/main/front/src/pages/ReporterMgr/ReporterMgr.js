@@ -5,7 +5,7 @@ import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import toast, { notification, toastr } from '@utils/toastUtil';
-import { clearStore, GET_REPORTER_MGR, CHANGE_REPORTER_MGR } from '@store/reporterMgr';
+import { clearStore, GET_REPORTER, CHANGE_REPORTER } from '@store/reporter';
 
 // relations
 const ReporterMgrList = React.lazy(() => import('./ReporterMgrList'));
@@ -17,7 +17,7 @@ const ReporterMgr = () => {
     const dispatch = useDispatch();
 
     const { loading } = useSelector((store) => ({
-        loading: store.loading[GET_REPORTER_MGR] || store.loading[CHANGE_REPORTER_MGR],
+        loading: store.loading[GET_REPORTER] || store.loading[CHANGE_REPORTER],
     }));
 
     // 마스터 그리드 클릭시 초기화 이벤트
@@ -63,7 +63,7 @@ const ReporterMgr = () => {
             >
                 <Suspense>
                     <Switch>
-                        <Route path={['/reporterMgr', '/reporterMgr/:repSeq']} exact render={() => <ReporterMgrEdit />} />
+                        <Route path={['/reporter', '/reporter/:repSeq']} exact render={() => <ReporterMgrEdit />} />
                     </Switch>
                 </Suspense>
             </MokaCard>

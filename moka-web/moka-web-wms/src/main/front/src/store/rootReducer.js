@@ -20,7 +20,7 @@ import merge from '@store/merge/mergeReducer';
 import menu from '@store/menu/menuReducer';
 import group from '@store/group/groupReducer';
 import area from '@store/area/areaReducer';
-import reporterMgr from '@store/reporterMgr/reporterMgrReducer';
+import reporter from '@store/reporter/reporterReducer';
 
 export default combineReducers({
     toastr,
@@ -43,5 +43,5 @@ export default combineReducers({
     merge,
     menu,
     group,
-    reporterMgr,
+    reporter,
 });

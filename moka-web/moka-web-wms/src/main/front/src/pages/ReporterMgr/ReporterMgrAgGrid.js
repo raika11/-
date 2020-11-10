@@ -3,7 +3,7 @@ import { MokaTable } from '@components';
 import { columnDefs } from './ReporterMgrAgGridColumns';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { changeSearchOption, GET_REPORTER_MGR_LIST, getReporterMgrList, initialState } from '@store/reporterMgr';
+import { changeSearchOption, GET_REPORTER_LIST, getReporterList, initialState } from '@store/reporter';
 
 /**
  * group AgGrid 목록
@@ -15,13 +15,13 @@ const ReporterMgrAgGrid = () => {
     const [search, setSearch] = useState(initialState);
     const [repoterMgrRows, setRepoterMgrRows] = useState([]);
 
-    const { reporterMgr, list, total, search: storeSearch, loading } = useSelector(
+    const { reporter, list, total, search: storeSearch, loading } = useSelector(
         (store) => ({
-            reporterMgr: store.reporterMgr.reporterMgr,
-            list: store.reporterMgr.list,
-            total: store.reporterMgr.total,
-            search: store.reporterMgr.search,
-            loading: store.loading[GET_REPORTER_MGR_LIST],
+            reporter: store.reporter.reporter,
+            list: store.reporter.list,
+            total: store.reporter.total,
+            search: store.reporter.search,
+            loading: store.loading[GET_REPORTER_LIST],
         }),
         shallowEqual,
     );
@@ -36,7 +36,7 @@ const ReporterMgrAgGrid = () => {
             if (key !== 'page') {
                 temp['page'] = 0;
             }
-            dispatch(getReporterMgrList(changeSearchOption(temp)));
+            dispatch(getReporterList(changeSearchOption(temp)));
         },
         [dispatch, search],
     );
@@ -46,7 +46,7 @@ const ReporterMgrAgGrid = () => {
     }, [storeSearch]);
 
     useEffect(() => {
-        dispatch(getReporterMgrList());
+        dispatch(getReporterList());
     }, [dispatch]);
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const ReporterMgrAgGrid = () => {
     const handleRowClicked = useCallback(
         (list) => {
             //console.log("list::" + this.list.id);
-            history.push(`/reporterMgr/${list.id}`);
+            history.push(`/reporter/${list.id}`);
         },
         [history],
     );
@@ -86,7 +86,7 @@ const ReporterMgrAgGrid = () => {
             total={total}
             page={search.page}
             size={search.size}
-            selected={reporterMgr.id}
+            selected={reporter.id}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

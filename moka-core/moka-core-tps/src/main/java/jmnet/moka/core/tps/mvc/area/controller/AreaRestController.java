@@ -347,7 +347,7 @@ public class AreaRestController {
 
         AreaNode areaNode = areaService.makeTree();
 
-        ResultDTO<AreaNode> resultDto = new ResultDTO<AreaNode>(areaNode);
+        ResultDTO<List<AreaNode>> resultDto = new ResultDTO<List<AreaNode>>(areaNode.getNodes());
 
         tpsLogger.success(true);
 

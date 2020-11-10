@@ -118,12 +118,15 @@ public class AreaServiceImpl implements AreaService {
 
     private AreaNode makeTree(List<Area> areaList) {
         AreaNode rootNode = new AreaNode();
+        rootNode.setAreaSeq((long) 0);
+
         Iterator<Area> it = areaList.iterator();
         while (it.hasNext()) {
             Area area = it.next();
             if (area.getParent() == null || area.getParent()
                                                 .getAreaSeq() == 0) {
-                rootNode = new AreaNode(area);
+                AreaNode areaNode = new AreaNode(area);
+                rootNode.addNode(areaNode);
                 //                rootNode.setMatch(getMatch(page, search) ? "Y" : "N");
             } else {
                 AreaNode parentNode = rootNode.findNode(area.getParent()

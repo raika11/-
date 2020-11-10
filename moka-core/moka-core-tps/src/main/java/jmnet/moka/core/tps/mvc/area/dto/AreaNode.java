@@ -17,6 +17,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -65,6 +67,16 @@ public class AreaNode implements Serializable {
     private Integer ordNo = 1;
 
     /**
+     * 영역구분(CP,CT)
+     */
+    private String areaDiv = MokaConstants.ITEM_COMPONENT;
+
+    /**
+     * 영역정렬:가로형H/세로형V
+     */
+    private String areaAlign = TpsConstants.AREA_ALIGN_V;
+
+    /**
      * 자식노드
      */
     private List<AreaNode> nodes;
@@ -87,6 +99,8 @@ public class AreaNode implements Serializable {
                       .getAreaNm();
         this.ordNo = area.getOrdNo()
                          .intValue();
+        this.areaDiv = area.getAreaDiv();
+        this.areaAlign = area.getAreaAlign();
         //        this.btnShow = false;
         //        this.usedYn = page.getUsedYn()
         //                          .equals("Y") ? "Y" : "N";

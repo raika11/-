@@ -4,6 +4,6 @@ import jmnet.moka.core.tps.mvc.jpod.entity.JpodMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface JpodMemberRepository extends JpaRepository<JpodMember, JpodMemberPK>, JpaSpecificationExecutor<JpodMember> {
+public interface JpodMemberRepository extends JpaRepository<JpodMember, Long>, JpaSpecificationExecutor<JpodMember> {
 
 }

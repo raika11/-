@@ -6,7 +6,6 @@ import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeRelArt;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodKeyword;
-import jmnet.moka.core.tps.mvc.jpod.entity.JpodKeywordPK;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodMember;
 import jmnet.moka.core.tps.mvc.jpod.mapper.JpodEpisodeMapper;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodEpisodeRelArtRepository;

@@ -65,3 +65,8 @@ export const AREA_ALIGN_V = 'V';
 export const AREA_COMP_ALIGN_LEFT = 'LEFT';
 export const AREA_COMP_ALIGN_RIGHT = 'RIGHT';
 export const AREA_COMP_ALIGN_NONE = 'NONE';
+
+// 인증 토큰 KEY
+export const AUTHORIZATION = 'Authorization';
+// 로그인 사용자 ID
+export const SIGNIN_MEMBER_ID = 'SIGNIN_MEMBER_ID';

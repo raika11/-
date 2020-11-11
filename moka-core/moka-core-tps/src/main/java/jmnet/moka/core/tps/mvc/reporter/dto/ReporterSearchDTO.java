@@ -8,8 +8,6 @@ import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.*;
-
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**

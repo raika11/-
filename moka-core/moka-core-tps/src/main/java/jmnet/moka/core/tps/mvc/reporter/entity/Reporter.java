@@ -28,8 +28,8 @@ public class Reporter extends BaseAudit {
      * 기자일련번호
      */
     @Id
-    @Column(name = "REP_SEQ", columnDefinition = "char", length = 4)
-    private String repSeq;
+    @Column(name = "REP_SEQ", length = 4)
+    private Long repSeq;
 
     /**
      * 사용여부(Y:사용,N:미사용)

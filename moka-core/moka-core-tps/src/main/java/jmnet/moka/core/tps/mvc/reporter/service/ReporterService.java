@@ -40,6 +40,15 @@ public interface ReporterService {
     public Optional<Reporter> findReporterMgrById(String repSeq);
 
     /**
+     * 기자 조회
+     *
+     * @param repSeq 기자일련번호
+     * @return 기자정보조회
+     */
+    public ReporterVO findBySeq(String repSeq);
+
+
+    /**
      * 도메인 수정
      *
      * @param reporter 수정할 기자정보

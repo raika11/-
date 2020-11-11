@@ -43,6 +43,11 @@ public class ReporterServiceImpl implements ReporterService {
     }
 
     @Override
+    public ReporterVO findBySeq(String repSeq) {
+        return reporterMapper.findBySeq(repSeq);
+    }
+
+    @Override
     public Reporter updateReporterMgr(Reporter reporter) {
         Reporter returnVal = reporterRepository.save(reporter);
         log.debug("[UPDATE DOMAIN] domainId : {}", returnVal.getRepSeq());

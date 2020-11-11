@@ -15,6 +15,7 @@ import jmnet.moka.core.tps.mvc.reporter.service.ReporterService;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -97,12 +98,22 @@ public class ReporterRestController {
             @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{reporter.error.pattern.repSeq}") String repSeq)
             throws NoDataException {
 
-        String message = messageByLocale.get("tps.reporter.error.no-data", request);
-        Reporter reporter = reporterService.findReporterMgrById(repSeq).orElseThrow(() -> new NoDataException(message));
-        ReporterSimpleDTO dto = modelMapper.map(reporter, ReporterSimpleDTO.class);
-        tpsLogger.success(ActionType.SELECT, true);
-        ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<>(dto);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+//        String message = messageByLocale.get("tps.reporter.error.no-data", request);
+//        Reporter reporter = reporterService.findReporterMgrById(repSeq).orElseThrow(() -> new NoDataException(message));
+//        ReporterSimpleDTO dto = modelMapper.map(reporter, ReporterSimpleDTO.class);
+//        tpsLogger.success(ActionType.SELECT, true);
+//        ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<>(dto);
+//        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        // 조회(mybatis)
+        //String message = messageByLocale.get("tps.reporter.error.no-data", request);
+        ReporterVO returnValue = reporterService.findBySeq(repSeq);
+
+        ResultDTO<ReporterVO> resultDTO = new ResultDTO<ReporterVO>(returnValue);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+
     }
 
     /**
@@ -116,7 +127,7 @@ public class ReporterRestController {
      */
     @ApiOperation(value = "기자정보 수정")
     @PutMapping("/{repSeq}")
-    public ResponseEntity<?> putDomain(HttpServletRequest request,
+    public ResponseEntity<?> putReporter(HttpServletRequest request,
                                        @PathVariable("repSeq")
                                        @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporter.error.pattern.repSeq}") String repSeq,
                                        @Valid ReporterSimpleDTO reporterDTO)

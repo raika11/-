@@ -3,6 +3,30 @@ import produce from 'immer';
 import * as act from './areaAction';
 import { ITEM_CP, AREA_ALIGN_V } from '@/constants';
 
+const area = {
+    areaComps: [],
+    areaDiv: ITEM_CP,
+    areaNm: '',
+    container: {},
+    depth: 1,
+    domain: {},
+    ordNo: 1,
+    page: {},
+    parent: {},
+    previewRsrc: '',
+    usedYn: 'N',
+    areaAlign: AREA_ALIGN_V,
+};
+
+export const areaCompLoad = {
+    byContainer: false,
+    byContainerMessage: null,
+    byPage: false,
+    byPageMessage: null,
+    byContainerComp: false,
+    byContainerCompMessage: null,
+};
+
 /**
  * initialState
  */
@@ -12,76 +36,24 @@ export const initialState = {
         total: 0,
         error: null,
         search: {},
-        area: {
-            areaComps: [],
-            areaDiv: ITEM_CP,
-            areaNm: '',
-            container: {},
-            depth: 1,
-            domain: {},
-            ordNo: 1,
-            page: {},
-            parent: {},
-            previewRsrc: '',
-            usedYn: 'N',
-            areaAlign: AREA_ALIGN_V,
-        },
+        area,
+        areaCompLoad,
     },
     depth2: {
         list: [],
         total: 0,
         error: null,
-        search: {
-            parentAreaSeq: null,
-        },
-        area: {
-            areaComps: [],
-            areaDiv: ITEM_CP,
-            areaNm: '',
-            container: {},
-            depth: 2,
-            domain: {},
-            ordNo: 1,
-            page: {},
-            parent: {},
-            previewRsrc: '',
-            usedYn: 'N',
-            areaAlign: AREA_ALIGN_V,
-        },
-        areaCompLoad: {
-            byContainer: false,
-            byContainerMessage: null,
-            byPage: false,
-            byPageMessage: null,
-        },
+        search: { parentAreaSeq: null },
+        area: { ...area, depth: 2 },
+        areaCompLoad,
     },
     depth3: {
         list: [],
         total: 0,
         error: null,
-        search: {
-            parentAreaSeq: null,
-        },
-        area: {
-            areaComps: [],
-            areaDiv: ITEM_CP,
-            areaNm: '',
-            container: {},
-            depth: 3,
-            domain: {},
-            ordNo: 1,
-            page: {},
-            parent: {},
-            previewRsrc: '',
-            usedYn: 'N',
-            areaAlign: AREA_ALIGN_V,
-        },
-        areaCompLoad: {
-            byContainer: false,
-            byContainerMessage: null,
-            byPage: false,
-            byPageMessage: null,
-        },
+        search: { parentAreaSeq: null },
+        area: { ...area, depth: 3 },
+        areaCompLoad,
     },
     areaError: null,
     invalidList: [],
@@ -151,6 +123,7 @@ export default handleActions(
                 draft.depth1.list = body.list;
                 draft.depth1.total = body.total;
                 draft.depth1.error = initialState.depth1.error;
+                draft.depth1.areaCompLoad = areaCompLoad;
             });
         },
         [act.GET_AREA_LIST_DEPTH1_FAILURE]: (state, { payload }) => {
@@ -165,6 +138,7 @@ export default handleActions(
                 draft.depth2.list = body.list;
                 draft.depth2.total = body.total;
                 draft.depth2.error = initialState.depth2.error;
+                draft.depth2.areaCompLoad = areaCompLoad;
             });
         },
         [act.GET_AREA_LIST_DEPTH2_FAILURE]: (state, { payload }) => {
@@ -179,6 +153,7 @@ export default handleActions(
                 draft.depth3.list = body.list;
                 draft.depth3.total = body.total;
                 draft.depth3.error = initialState.depth3.error;
+                draft.depth3.areaCompLoad = areaCompLoad;
             });
         },
         [act.GET_AREA_LIST_DEPTH3_FAILURE]: (state, { payload }) => {
@@ -264,15 +239,6 @@ export default handleActions(
                 draft.selectedDepth = payload;
             });
         },
-        /**
-         * 데이터 삭제
-         */
-        // [act.DELETE_COMPONENT_SUCCESS]: (state) => {
-        //     return produce(state, (draft) => {
-        //         draft.component = initialState.component;
-        //         draft.componentError = initialState.componentError;
-        //     });
-        // },
     },
     initialState,
 );

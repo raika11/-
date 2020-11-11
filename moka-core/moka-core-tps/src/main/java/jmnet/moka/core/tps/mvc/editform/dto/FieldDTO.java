@@ -33,6 +33,15 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 public class FieldDTO {
+
+
+    /**
+     * Field ID
+     */
+    @JacksonXmlProperty(isAttribute = true)
+    private String name;
+
+
     /**
      * Widget 유형 TEXT,IMAGE,LINK,CONTENT,SELECT,SEPERATOR
      */
@@ -55,7 +64,7 @@ public class FieldDTO {
      * 그룹 내 표시 순번 값 없을 경우 default는 Integer 최대값
      */
     @JacksonXmlProperty(isAttribute = true)
-    private Integer sequence = Integer.MAX_VALUE;
+    private Integer sequence = 1;
 
     /**
      * 추가 버튼 표시 여부 기본값은 no
@@ -89,6 +98,4 @@ public class FieldDTO {
      * type이 SELECT일때 값 목록
      */
     private Set<OptionDTO> options;
-
-
 }

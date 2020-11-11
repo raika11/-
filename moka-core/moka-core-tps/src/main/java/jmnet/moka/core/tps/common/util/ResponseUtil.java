@@ -36,11 +36,11 @@ public class ResponseUtil {
     public static void error(HttpServletResponse response, int resultCode, String message)
             throws IOException {
 
-        write(response, getErrorResultDTO(response, resultCode, message));
+        write(response, getHttpStatusResultDTO(response, resultCode, message));
     }
 
     /**
-     * Response에 에러메세지를 JSON으로 내려준다.
+     * Response에 에러메세지를 JSON으로 내려준다. 에러코드는 resultCode 전달하고, HttpStatus는 OK로 response한다.
      *
      * @param response   응답객체
      * @param resultCode 에러코드
@@ -60,11 +60,44 @@ public class ResponseUtil {
         return resultDTO;
     }
 
+    /**
+     * Response에 에러메세지를 JSON으로 내려준다.
+     *
+     * @param response   응답객체
+     * @param resultCode 에러코드
+     * @param message    에러메세지
+     * @throws IOException 예외
+     */
+    public static ResultDTO<String> getHttpStatusResultDTO(HttpServletResponse response, int resultCode, String message) {
+
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(TpsConstants.DEFAULT_CHARSET);
+        response.setStatus(resultCode);
+
+        ResultHeaderDTO header = new ResultHeaderDTO();
+        header.setSuccess(false);
+        header.setResultCode(resultCode);
+        header.setMessage(message);
+        ResultDTO<String> resultDTO = new ResultDTO<String>(header, "");
+
+        return resultDTO;
+    }
+
     public static <T> ResponseEntity<?> getErrorResponseEntity(HttpServletResponse response, int resultCode, String message) {
 
         return new ResponseEntity<>(getErrorResultDTO(response, resultCode, message), HttpStatus.OK);
     }
 
+    /**
+     * 실제 HttpStatus로 response한다.
+     *
+     * @param response   HttpServletResponse
+     * @param resultCode resultCode
+     * @param message    에러메세지
+     * @param body       본문
+     * @param <T>        T
+     * @return ResponseEntity
+     */
     public static <T> ResponseEntity<?> getErrorResponseEntity(HttpServletResponse response, int resultCode, String message, T body) {
 
         setDefault(response);

@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.exception.MokaException;
-import jmnet.moka.core.tps.common.code.EditFormStatusCode;
+import jmnet.moka.core.tps.mvc.editform.code.EditFormStatusCode;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.code.EditFormStatusCode;
+import jmnet.moka.core.tps.mvc.editform.code.EditFormStatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

@@ -2,16 +2,16 @@
  * msp-tps DomainServiceImpl.java 2020. 1. 8. 오후 2:07:40 ssc
  */
 package jmnet.moka.core.tps.mvc.reporter.service;
-
+import jmnet.moka.core.tps.mvc.reporter.Mapper.ReporterMapper;
+import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
 import jmnet.moka.core.tps.mvc.reporter.repository.ReporterRepository;
+import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,9 +27,13 @@ public class ReporterServiceImpl implements ReporterService {
     @Autowired
     private ReporterRepository reporterRepository;
 
+    @Autowired
+    private ReporterMapper reporterMapper;
+
+
     @Override
-    public Page<Reporter> findAllReporterMgr(ReporterSearchDTO search, Pageable pageable) {
-        return reporterRepository.findList(search, pageable);
+    public List<ReporterVO> findAllReporterMgr(ReporterSearchDTO search) {
+        return reporterMapper.findAll(search);
     }
 
     @Override

@@ -9,6 +9,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterDTO;
@@ -16,6 +17,7 @@ import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSimpleDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
 import jmnet.moka.core.tps.mvc.reporter.service.ReporterService;
+import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -74,23 +76,18 @@ public class ReporterRestController {
      */
     @ApiOperation(value = "기자관리 목록 조회")
     @GetMapping
-    public ResponseEntity<?> getReporterMgrList(@SearchParam ReporterSearchDTO search, @RequestAttribute Long processStartTime) {
+    public ResponseEntity<?> getReporterMgrList(@Valid @SearchParam ReporterSearchDTO search) {
 
-        // 페이징조건 설정
-        Pageable pageable = search.getPageable();
+        // 조회(mybatis)
+        List<ReporterVO> returnValue = reporterService.findAllReporterMgr(search);
 
-        // 조회
-        Page<Reporter> returnValue = reporterService.findAllReporterMgr(search, pageable);
+        ResultListDTO<ReporterVO> resultList = new ResultListDTO<ReporterVO>();
+        resultList.setList(returnValue);
+        resultList.setTotalCnt(search.getTotal());
 
-        // 리턴값 설정
-        ResultListDTO<ReporterDTO> resultListMessage = new ResultListDTO<>();
-        List<ReporterDTO> reporterDTOList = modelMapper.map(returnValue.getContent(), ReporterDTO.TYPE);
-        resultListMessage.setTotalCnt(returnValue.getTotalElements());
-        resultListMessage.setList(reporterDTOList);
-
-        ResultDTO<ResultListDTO<ReporterDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        ResultDTO<ResultListDTO<ReporterVO>> resultDTO = new ResultDTO<ResultListDTO<ReporterVO>>(resultList);
         tpsLogger.success(true);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**

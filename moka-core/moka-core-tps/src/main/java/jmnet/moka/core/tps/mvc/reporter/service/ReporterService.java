@@ -4,12 +4,15 @@
 package jmnet.moka.core.tps.mvc.reporter.service;
 
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
+import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import jmnet.moka.core.tps.mvc.reserved.entity.Reserved;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,7 +34,7 @@ public interface ReporterService {
      * @param search 검색조건
      * @return 기자관리 목록조회
      */
-    public Page<Reporter> findAllReporterMgr(ReporterSearchDTO search, Pageable pageable);
+    public List<ReporterVO> findAllReporterMgr(ReporterSearchDTO search);
 
     /**
      * 기자 조회

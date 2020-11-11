@@ -8,6 +8,8 @@ import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.*;
+import org.apache.ibatis.type.Alias;
+
 import javax.validation.constraints.Pattern;
 
 /**
@@ -23,6 +25,7 @@ import javax.validation.constraints.Pattern;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = true)
+@Alias("ReporterSearchDTO")
 public class ReporterSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1972229889422176779L;

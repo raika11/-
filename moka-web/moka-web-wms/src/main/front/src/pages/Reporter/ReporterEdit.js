@@ -194,19 +194,15 @@ const ReporterEdit = () => {
         setJoinsId(reporter.joinsId || '');
         setJnetId(reporter.jnetId || '');
 
-        if (reporter.repPhoto !== '' && reporter.repPhoto !== null) {
+        if (reporter.repPhoto !== '' && reporter.repPhoto !== null && reporter.repPhoto) {
             setRepPhoto(reporter.repPhoto);
         } else {
-            if (reporter.repImg !== '' && reporter.repImg !== null) {
+            if (reporter.repImg !== '' && reporter.repImg !== null && reporter.repImg) {
                 setRepPhoto(reporter.repImg);
-            } else {
-                setRepPhoto('');
             }
         }
 
-        console.log('repPhoto ::::' + reporter.repPhoto);
-
-        setRepImg(reporter.repImg || '');
+        setRepImg(reporter.repImg || bg);
         setSnsTw(reporter.snsTw || '');
         setSnsFb(reporter.snsFb || '');
         setSnsIn(reporter.snsIn || '');
@@ -242,7 +238,7 @@ const ReporterEdit = () => {
     return (
         <>
             <div className="mb-3 d-flex align-items-center">
-                <Image width="100" height="100" src={bg} roundedCircle />
+                <Image width="100" height="100" src={repImg} roundedCircle />
                 <div className="w-100">
                     <div className="pb-4 d-flex justify-content-center">
                         <div className="d-flex">

@@ -60,7 +60,6 @@ function* saveReporter({ payload: { type, actions, callback } }) {
         if (response.data.header.success) {
             yield put({
                 type: reporterAction.GET_REPORTER_SUCCESS,
-                payload: response.data,
             });
 
             // 목록 다시 검색

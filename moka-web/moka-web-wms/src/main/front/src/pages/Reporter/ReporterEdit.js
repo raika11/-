@@ -191,7 +191,19 @@ const ReporterEdit = () => {
         setRepPhone(reporter.repPhone || '');
         setJoinsId(reporter.joinsId || '');
         setJnetId(reporter.jnetId || '');
-        setRepPhoto(reporter.repPhoto || '');
+
+        if (reporter.repPhoto !== '' && reporter.repPhoto !== null) {
+            setRepPhoto(reporter.repPhoto);
+        } else {
+            if (reporter.repImg !== '' && reporter.repImg !== null) {
+                setRepPhoto(reporter.repImg);
+            } else {
+                setRepPhoto('');
+            }
+        }
+
+        console.log('repPhoto ::::' + reporter.repPhoto);
+
         setRepImg(reporter.repImg || '');
         setSnsTw(reporter.snsTw || '');
         setSnsFb(reporter.snsFb || '');
@@ -223,19 +235,15 @@ const ReporterEdit = () => {
         setJamComNm(reporter.jamComNm || '');
         setRepTalk(reporter.repTalk || '');
         setUserTalk(reporter.userTalk || '');
-    }, [reporter]);
+    }, [repPhoto, reporter]);
 
     return (
         <>
             <div className="mb-3 d-flex align-items-center">
-                <Image width="100" height="100" src={bg} roundedCircle />
+                <Image width="100" height="100" src={repPhoto} roundedCircle />
                 <div className="w-100">
                     <div className="pb-4 d-flex justify-content-center">
                         <div className="d-flex">
-                            {/*
-                            <MokaInput as="switch" id="usedYn" name="usedYn" />
-                            <MokaInputLabel as="none" label="노출 여부" className="m-0" name="usedYn" value={usedYn} />
-                            */}
                             <MokaInputLabel
                                 label="사용여부"
                                 className="mb-2"
@@ -248,10 +256,6 @@ const ReporterEdit = () => {
                             />
                         </div>
                         <div className="d-flex">
-                            {/*
-                            <MokaInput as="switch" id="talkYn" name="talkYn" value={talkYn} />
-                            <MokaInputLabel as="none" label="기자에게 한마디 사용여부" labelWidth={170} className="m-0" />
-                            */}
                             <MokaInputLabel
                                 label="기자에게 한마디 사용여부"
                                 className="mb-2"
@@ -266,7 +270,7 @@ const ReporterEdit = () => {
                         </div>
                     </div>
                     <div className="d-flex justify-content-center">
-                        <Button variant="primary" className="mr-05">
+                        <Button variant="primary" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>
                         <Button variant="gray150">취소</Button>

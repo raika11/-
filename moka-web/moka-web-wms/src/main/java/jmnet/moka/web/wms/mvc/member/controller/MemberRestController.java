@@ -190,11 +190,12 @@ public class MemberRestController {
             member.setPassword(passwordEncoder.encode(member.getPassword()));
 
             // SMS 서버에 문자 발송 요청
-            String smsAuth = "";
+            String smsAuth = "4885";
             Date smsExp = McpDate.minutePlus(McpDate.now(), 3);
             member.setSmsAuth(smsAuth);
             member.setSmsExp(smsExp);
-            
+            member.setStatus(MemberRequestCode.NEW_REQUEST.getNextStatus());
+
             // insert
             MemberInfo returnValue = memberService.insertMember(member);
             if (returnValue != null && memberDTO.getMemberGroups() != null) {
@@ -214,7 +215,7 @@ public class MemberRestController {
 
             // 결과리턴
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
-            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto);
+            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, messageByLocale.get(MemberRequestCode.NEW_REQUEST.getMessageKey()));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.INSERT);
@@ -228,6 +229,8 @@ public class MemberRestController {
             throw new Exception(messageByLocale.get("tps.member.error.save"), e);
         }
     }
+
+
 
     /**
      * 수정
@@ -375,8 +378,8 @@ public class MemberRestController {
     /**
      * Member SMS 인증문자 요청
      *
-     * @param memberId        MemberID
-     * @param memberUnlockDTO 잠금 해제 요청 정보
+     * @param memberId         MemberID
+     * @param memberRequestDTO 잠금 해제 요청 정보
      * @return 사용자 정보
      * @throws NoDataException 데이터없음 예외처리
      */
@@ -384,7 +387,7 @@ public class MemberRestController {
     @GetMapping("/{memberId}/sms")
     public ResponseEntity<?> putSmsRequest(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @Valid MemberRequestDTO memberUnlockDTO)
+            @Valid MemberRequestDTO memberRequestDTO)
             throws Exception {
 
         String noDataMsg = messageByLocale.get("tps.common.error.no-data");
@@ -394,20 +397,20 @@ public class MemberRestController {
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
         // 비밀번호와 비밀번호 확인 비교
-        boolean same = memberUnlockDTO
+        boolean same = memberRequestDTO
                 .getPassword()
-                .equals(memberUnlockDTO.getConformPassword());
+                .equals(memberRequestDTO.getConformPassword());
         if (!same) {
             throw new PasswordNotMatchedException(messageByLocale.get("wms.login.error.PasswordNotMatchedException"));
         }
 
-        same = passwordEncoder.matches(memberUnlockDTO.getPassword(), member.getPassword());
+        same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
         if (!same) {
             throw new UserPrincipalNotFoundException(memberId);
         }
 
         // SMS 서버에 문자 발송 요청
-        String smsAuth = "";
+        String smsAuth = "4885";
         Date smsExp = McpDate.minutePlus(McpDate.now(), 3);
 
         member.setSmsAuth(smsAuth);
@@ -424,20 +427,21 @@ public class MemberRestController {
     }
 
     /**
-     * Member SMS 문자로 잠금 해제 요청
+     * Member 잠금 해제 및 신규 등록 요청
      *
-     * @param memberId        MemberID
-     * @param memberUnlockDTO 잠김 해제 요청 정보
+     * @param memberId         MemberID
+     * @param memberRequestDTO 잠김 해제 요청 정보
      * @return 사용자 정보
      * @throws NoDataException 데이터없음 예외처리
      */
-    @ApiOperation(value = "Member 잠금 해제")
-    @GetMapping("/{memberId}/unlock-request")
-    public ResponseEntity<?> putUnlock(
+    @ApiOperation(value = "Member 잠금 해제 및 신규 등록 요청")
+    @GetMapping({"/{memberId}/approval-request", "/{memberId}/unlock-request"})
+    public ResponseEntity<?> putStatusChange(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @Valid MemberRequestDTO memberUnlockDTO)
+            @Valid MemberRequestDTO memberRequestDTO)
             throws Exception {
 
+        // 결과리턴
         String noDataMsg = messageByLocale.get("tps.common.error.no-data");
         String successMsg = null;
 
@@ -446,25 +450,26 @@ public class MemberRestController {
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
         // 비밀번호와 비밀번호 확인 비교
-        boolean same = memberUnlockDTO
+        boolean same = memberRequestDTO
                 .getPassword()
-                .equals(memberUnlockDTO.getConformPassword());
+                .equals(memberRequestDTO.getConformPassword());
         if (!same) {
             throw new PasswordNotMatchedException(messageByLocale.get("wms.login.error.PasswordNotMatchedException"));
         }
 
-        same = passwordEncoder.matches(memberUnlockDTO.getPassword(), member.getPassword());
+        same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
         if (!same) {
             throw new UserPrincipalNotFoundException(memberId);
         }
 
-        if (memberUnlockDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS) {// SMS 인증문자로 잠김해제 요청
+        if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS
+                || memberRequestDTO.getRequestType() == MemberRequestCode.NEW_SMS) {// SMS 인증문자로 잠김해제 요청 또는 신규 등록 신청
             if (McpString.isEmpty(member.getSmsAuth())) {
                 throw new InvalidDataException(messageByLocale.get("wms.login.error.notempty.smsAuth"));
             }
             if (!member
                     .getSmsAuth()
-                    .equals(memberUnlockDTO.getSmsAuth())) {
+                    .equals(memberRequestDTO.getSmsAuth())) {
                 throw new SmsAuthNumberBadCredentialsException(messageByLocale.get("wms.login.error.sms-unmatched"));
             }
 
@@ -472,23 +477,26 @@ public class MemberRestController {
                 throw new SmsAuthNumberExpiredException(messageByLocale.get("wms.login.error.unlock-sms-expired"));
             }
             // 잠금 해제
-            member.setStatus(MemberStatusCode.Y);
             member.setPasswordModDt(McpDate.now());
             member.setErrCnt(0);
-            memberService.updateMember(member);
-            successMsg = messageByLocale.get("wms.login.success.unlock");
-        } else { // 잠금 해제 요청
-            member.setStatus(MemberStatusCode.R);
-            memberService.updateMember(member);
-            successMsg = messageByLocale.get("wms.login.success.unlock-request");
         }
+
+        member.setStatus(memberRequestDTO
+                .getRequestType()
+                .getNextStatus());
+        memberService.updateMember(member);
+        successMsg = messageByLocale.get(memberRequestDTO
+                .getRequestType()
+                .getMessageKey());
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
         // 결과리턴
         ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO, successMsg);
+
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+
 
     /**
      * Member 상태 활성화

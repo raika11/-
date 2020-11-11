@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias;
 import javax.persistence.Column;
 import java.io.Serializable;
 
-@Alias("ComponentVO")
+@Alias("ReporterVO")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

@@ -2,8 +2,8 @@
  * msp-tps DomainServiceImpl.java 2020. 1. 8. 오후 2:07:40 ssc
  */
 package jmnet.moka.core.tps.mvc.reporter.service;
+
 import jmnet.moka.core.tps.mvc.reporter.Mapper.ReporterMapper;
-import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
 import jmnet.moka.core.tps.mvc.reporter.repository.ReporterRepository;
@@ -11,6 +11,7 @@ import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,7 @@ public class ReporterServiceImpl implements ReporterService {
     private ReporterRepository reporterRepository;
 
     @Autowired
-    private ReporterMapper reporterMapper;
+    private ReporterMapper reporterMapper123;
 
 
     @Override

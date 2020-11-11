@@ -1,7 +1,6 @@
 package jmnet.moka.core.tps.mvc.reporter.controller;
 
 import io.swagger.annotations.ApiOperation;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -9,10 +8,6 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
-import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
-import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
-import jmnet.moka.core.tps.mvc.reporter.dto.ReporterDTO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSimpleDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
@@ -20,8 +15,6 @@ import jmnet.moka.core.tps.mvc.reporter.service.ReporterService;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

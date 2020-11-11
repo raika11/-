@@ -7,9 +7,9 @@
     sourceCode="11"
     retryCount="3"
     intervalTime="10s">
-    <TaskInput dirInput="/box/cp_data/joind_news"
-      dirSuccess="/box/cp_data/joind_news/comp"
-      dirFailed="/box/cp_data/joind_news/error"
+    <TaskInput dirInput="/box/rcv/cp/joind_news"
+      dirSuccess="/box/rcv/cp/joind_news/comp"
+      dirFailed="/box/rcv/cp/joind_news/error"
       fileFilter="*.xml"
       fileWaitTime="3s"
       retryCount="3"/>

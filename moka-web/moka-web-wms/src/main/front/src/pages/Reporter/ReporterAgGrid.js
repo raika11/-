@@ -7,14 +7,6 @@ import { columnDefs, rowData } from './ReporterAgGridColumns';
 import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList, getReporter } from '@store/reporter';
 
 /**
- * 링크 버튼 클릭
- * @param {object} data row data
- */
-const handleClickLink = (data) => {
-    window.open(`/page/${data.pageSeq}`);
-};
-
-/**
  * 기자 목록 AgGrid
  */
 const ReporterMgrAgGrid = () => {
@@ -49,20 +41,11 @@ const ReporterMgrAgGrid = () => {
     );
 
     useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
-    useEffect(() => {
-        dispatch(getReporterList());
-    }, [dispatch]);
-
-    useEffect(() => {
         setRepoterRows(
             list.map((row) => ({
                 ...row,
                 id: String(row.repSeq),
                 belong: (row.r1Cd || '') + (row.r2C || '') + (row.r3Cd || '') + (row.r4Cd || ''),
-                handleClickLink,
             })),
         );
     }, [list]);

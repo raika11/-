@@ -38,6 +38,10 @@ public class ReporterRepositorySupportImpl extends QuerydslRepositorySupport imp
     public Page<Reporter> findList(ReporterSearchDTO search, Pageable pageable) {
         QReporter reporter = QReporter.reporter;
         QCodeMgt codeMgt = QCodeMgt.codeMgt;
+        String r1Cd = "R1";
+        String r2Cd = "R2";
+        String r3Cd = "R3";
+        String r4Cd = "R4";
 
         BooleanBuilder builder = new BooleanBuilder();
         String keyword = search.getKeyword();
@@ -45,14 +49,19 @@ public class ReporterRepositorySupportImpl extends QuerydslRepositorySupport imp
         // WHERE 조건
         if (!McpString.isEmpty(keyword)) {
             builder.and(reporter.repName.contains(keyword));
-                    //.or(codeMgt.reservedValue.contains(keyword)));
-                    //.or(codeMgt.reservedValue.contains(keyword)));
+//                    .and(reporter.r1Cd.contains(r1Cd))
+//                    .and(reporter.r2Cd.contains(r2Cd))
+//                    .and(reporter.r3Cd.contains(r3Cd))
+//                    .and(reporter.r4Cd.contains(r4Cd));
         }
 
         JPQLQuery<Reporter> query = queryFactory.selectFrom(reporter);
         query = getQuerydsl().applyPagination(pageable, query);
         //QueryResults<Reporter> list = query.innerJoin(reporter., domain).fetchJoin().where(builder).fetchResults();
         QueryResults<Reporter> list = query.where(builder).fetchResults();
+//        QueryResults<Reporter> list = query.where(builder).leftJoin(codeMgt)
+//                .leftJoin(codeMgt).leftJoin(codeMgt)
+//                .leftJoin(codeMgt).fetchResults();
 
         return new PageImpl<Reporter>(list.getResults(), pageable, list.getTotal());
     }

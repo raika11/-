@@ -4,10 +4,6 @@ import PropTypes from 'prop-types';
 
 const propTypes = {
     /**
-     * children
-     */
-    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
-    /**
      * 추가하는 className
      */
     className: PropTypes.string,

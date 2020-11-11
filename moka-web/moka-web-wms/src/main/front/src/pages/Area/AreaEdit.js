@@ -7,9 +7,12 @@ import toast from '@utils/toastUtil';
 import { PageListModal } from '@pages/commons';
 
 const AreaEdit = ({ onDelete }) => {
-    const { selectedDepth, areaError } = useSelector((store) => ({
+    const { selectedDepth, areaError, errorDepth1, errorDepth2, errorDepth3 } = useSelector((store) => ({
         selectedDepth: store.area.selectedDepth,
         areaError: store.area.areaError,
+        errorDepth1: store.area.depth1.error,
+        errorDepth2: store.area.depth2.error,
+        errorDepth3: store.area.depth3.error,
     }));
 
     // state
@@ -29,7 +32,16 @@ const AreaEdit = ({ onDelete }) => {
         if (areaError) {
             toast.error(areaError.header.message);
         }
-    }, [areaError]);
+        if (errorDepth1) {
+            toast.error(errorDepth1.header.message);
+        }
+        if (errorDepth2) {
+            toast.error(errorDepth2.header.message);
+        }
+        if (errorDepth3) {
+            toast.error(errorDepth3.header.message);
+        }
+    }, [areaError, errorDepth1, errorDepth2, errorDepth3]);
 
     return (
         <React.Fragment>

@@ -11,7 +11,7 @@ import { closeSidebar } from '@store/layout/layoutAction';
 
 /**
  * 사이드바가 닫혀있는 레이아웃
- * 화면 확장 시 사이드바가 자동으로 열리지 않음
+ * 화면 축소 시 사이드바가 자동으로 열리지 않음
  *
  * @param {Element} param0.children children
  * @param {boolean} param0.nonResponsive 반응형 여부
@@ -24,13 +24,13 @@ const SidebarCloseLayout = ({ children, nonResponsive }) => {
     }, [dispatch]);
 
     const layout = () => (
-        <>
+        <React.Fragment>
             <Sidebar nonResponsive={nonResponsive} />
             <Main>
                 <Navbar nonResponsive={nonResponsive} />
                 <Content>{children}</Content>
             </Main>
-        </>
+        </React.Fragment>
     );
 
     if (nonResponsive) {

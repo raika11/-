@@ -50,7 +50,7 @@ const AreaAgGrid1D = ({ match, onDelete }) => {
 
     useEffect(() => {
         // areaSeq가 있으면 2뎁스 리스트 조회 + 상세 데이터 조회
-        if (areaSeq) {
+        if (areaSeq && areaSeq !== 'undefined') {
             dispatch(
                 getAreaListDepth2(
                     changeSearchOptionDepth2({
@@ -60,6 +60,8 @@ const AreaAgGrid1D = ({ match, onDelete }) => {
                 ),
             );
             dispatch(getAreaDepth1({ areaSeq }));
+        } else if (areaSeq === 'undefined') {
+            history.push('/area');
         } else {
             dispatch(clearList(2));
             dispatch(clearList(3));

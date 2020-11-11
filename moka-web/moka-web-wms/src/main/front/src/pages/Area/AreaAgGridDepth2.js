@@ -58,7 +58,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
 
     useEffect(() => {
         // areaSeq가 있으면 3뎁스 리스트 조회
-        if (areaSeq) {
+        if (areaSeq && areaSeq !== 'undefined') {
             dispatch(
                 getAreaListDepth3(
                     changeSearchOptionDepth3({

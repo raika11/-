@@ -56,7 +56,7 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
         }
 
         this.sourceCode = xu.getString(node, "./@sourceCode", "");
-        if (McpString.isNotEmpty(this.sourceCode)) {
+        if (McpString.isNullOrEmpty(this.sourceCode)) {
             throw new RcvException("sourceCode 환경 값 설정이 잘못되었습니다.");
         }
     }

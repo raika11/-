@@ -2,39 +2,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.web.rcv.task.jamxml.mapper.JamXmlRcvMapper">
+  <select id="selectSectCodeByContCode" parameterType="JamArticleTotalVo" resultType="HashMap"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_JAM_MASTERCODE_SEL(
+      #{mainData.categoies[0].code, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+
+  <select id="selectIssueSeriesReporter" parameterType="HashMap" resultType="HashMap"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ISSUE_SERIES_REPORTER_SEL_BY_REPSEQ(
+      #{tmpRepList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{tmpKwdList, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+
   <insert id="insertReceiveJobStep" parameterType="JamArticleTotalVo" statementType="CALLABLE">
     <![CDATA[
     {
-        #{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} =
-            call UPA_JAM_RCV_ART_HIST_INS(
-              #{mainData.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
-              #{artHistoryStep, mode=IN, jdbcType=INTEGER, javaType=int},
-              #{sourceCode, mode=IN, jdbcType=INTEGER, javaType=int},
-              #{mainData.id.value, mode=IN, jdbcType=VARCHAR, javaType=string},
-              #{xmlFileNM, mode=IN, jdbcType=VARCHAR, javaType=string},
-              #{artHistoryId, mode=OUT, jdbcType=INTEGER, javaType=int}
-            )
-    }
-  ]]></insert>
+      #{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} =
+      call UPA_JAM_RCV_ART_HIST_INS(
+      #{mainData.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{artHistoryStep, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.id.value, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{xmlFileNM, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{artHistoryId, mode=OUT, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </insert>
 
-  <select id="selectSectCodeByContCode" parameterType="JamArticleTotalVo" resultType="HashMap" statementType="CALLABLE">
+  <insert id="updateReceiveJobStep" parameterType="JamArticleTotalVo" statementType="CALLABLE">
     <![CDATA[
     {
-        call UPA_JAM_MASTERCODE_SEL(
-              #{mainData.categoies[0].code, mode=IN, jdbcType=VARCHAR, javaType=string}
-            )
-    }
+      call UPA_JAM_RCV_ART_HIST_UPD(
+      #{mainData.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{artHistoryStep, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{artHistoryId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.id.value, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{xmlFileNM, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{artHistoryId, mode=OUT, jdbcType=INTEGER, javaType=int}
+      )
+      }
     ]]>
-  </select>
-
-  <select id="selectIssueSeriesReporter" parameterType="HashMap" resultType="HashMap" statementType="CALLABLE">
-    <![CDATA[
-    {
-        call UPA_ISSUE_SERIES_REPORTER_SEL_BY_REPSEQ(
-              #{tmpRepList, mode=IN, jdbcType=VARCHAR, javaType=string},
-              #{tmpKwdList, mode=IN, jdbcType=VARCHAR, javaType=string}
-            )
-    }
-    ]]>
-  </select>
+  </insert>
 </mapper>

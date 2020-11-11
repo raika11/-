@@ -25,4 +25,5 @@ public interface JamXmlRcvMapper {
     List<Map<String, String>> selectIssueSeriesReporter( Map<String, String> hashMap );
 
     void insertReceiveJobStep(JamArticleTotalVo jamArticle);
+    void updateReceiveJobStep(JamArticleTotalVo jamArticle);
 }

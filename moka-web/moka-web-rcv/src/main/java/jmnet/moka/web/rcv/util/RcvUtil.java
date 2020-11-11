@@ -32,6 +32,36 @@ public class RcvUtil {
         return 0;
     }
 
+    public static String cpReplaceInsertData(String input) {
+        if( input == null )
+            return null;
+        StringBuilder s = new StringBuilder(input.length());
+        for (int i = 0; i < input.length(); i++) {
+            switch (input.charAt(i)) {
+                case '\'':
+                    s.append("`");
+                    break;
+                case '[':
+                    s.append("&#91;");
+                    break;
+                case ']':
+                    s.append("&#93;");
+                    break;
+                case '\u001A':
+                case '\u2009':
+                    s.append(" ");
+                    break;
+                case '‧':
+                    s.append("&#8901;");
+                    break;
+                default:
+                    s.append(input.charAt(i));
+                    break;
+            }
+        }
+        return s.toString();
+    }
+
     public static String sendUrlGetRequest(String urlcall) {
         try {
             URL url = new URL(urlcall);

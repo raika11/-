@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.StringUtils;
 
 /**
@@ -80,5 +82,10 @@ public class MokaRcvConfiguration {
     @Bean
     TaskManager taskManager() {
         return new TaskManager(this);
+    }
+
+    @Bean
+    public PlatformTransactionManager rcvMybatisTransactionManager() {
+        return new DataSourceTransactionManager(this.rcvDataSource());
     }
 }

@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
+import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleListVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,10 +24,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JaxbObjectManager {
     private static JaxbObjectUnmarshaller<JamArticleVo> jamArticleVoUnmarshaller;
+    private static JaxbObjectUnmarshaller<CpArticleListVo> cpArticleListVoUnmarshaller;
 
     static {
         try {
             jamArticleVoUnmarshaller = new JaxbObjectUnmarshaller<>(JamArticleVo.class);
+            cpArticleListVoUnmarshaller = new JaxbObjectUnmarshaller<>(CpArticleListVo.class);
         } catch (JAXBException e) {
             log.error("jaxbContext create error", e);
         }
@@ -37,6 +40,10 @@ public class JaxbObjectManager {
         if (jamArticleVoUnmarshaller.getObjectType() == objectType) {
             return jamArticleVoUnmarshaller.getBasicVoFromXml(file);
         }
+        if( cpArticleListVoUnmarshaller.getObjectType() == objectType) {
+            return cpArticleListVoUnmarshaller.getBasicVoFromXml(file);
+        }
+        log.error ( "JaxbObjectManager :: Not Defined object Type ");
         return null;
     }
 }

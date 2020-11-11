@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <TaskGroup>
-
+  <Task class="jmnet.moka.web.rcv.task.cpxml.CpXmlRcvTask"
+    name="Join:D"
+    idx="163"
+    sourceCode="11"
+    retryCount="3"
+    intervalTime="10s">
+    <TaskInput dirInput="/box/cp_data/joind_news"
+      dirSuccess="/box/cp_data/joind_news/comp"
+      dirFailed="/box/cp_data/joind_news/error"
+      fileFilter="*.xml"
+      fileWaitTime="3s"
+      retryCount="3"/>
+  </Task>
 </TaskGroup>

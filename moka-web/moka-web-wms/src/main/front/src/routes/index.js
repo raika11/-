@@ -39,18 +39,19 @@ const routes = [
         strict: true,
     },
     {
-        path: '/dashboard',
+        path: '/',
         name: 'DashBoard',
         displayName: '대시보드',
         component: Dashboard,
         layout: SidebarOpenLayout,
         nonResponsive: true,
+        exact: true,
     },
     {
         path: '/404',
         name: 'Page404',
         displayName: '404',
-        component: () => <Page404 defaultLink="/desking" />,
+        component: () => <Page404 defaultLink="/" />,
         layout: NoFrameLayout,
     },
     {

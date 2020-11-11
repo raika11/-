@@ -22,11 +22,11 @@ const ArticleSearch = () => {
             </div>
 
             <div style={{ width: 138 }} className="mr-2">
-                <MokaInput as="dateTimePicker" className="ft-12" inputProps={{ timeFormat: null }} />
+                <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} />
             </div>
 
             <div style={{ width: 138 }} className="mr-2">
-                <MokaInput as="dateTimePicker" className="ft-12" inputProps={{ timeFormat: null }} />
+                <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} />
             </div>
 
             <div style={{ width: 325 }} className="d-flex">

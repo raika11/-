@@ -165,7 +165,7 @@ const Dashboard = () => {
                 <MokaCardTabs
                     className="mr-gutter"
                     tabs={[
-                        <Form>
+                        <Form className="p-3">
                             {/* Form 예제 */}
                             {/* text input */}
                             <Form.Group>
@@ -276,7 +276,7 @@ const Dashboard = () => {
                                 {/* <MokaSearchInput variant="warning" onSearch={() => toastr.success('테스트', '성공')} /> */}
                             </Form.Group>
                         </Form>,
-                        <React.Fragment>
+                        <div className="p-3">
                             {/* 점보트론 */}
                             <Form.Label>11) Jumbotron</Form.Label>
                             <Jumbotron>
@@ -286,8 +286,8 @@ const Dashboard = () => {
                                     <Button variant="primary">Learn more</Button>
                                 </p>
                             </Jumbotron>
-                        </React.Fragment>,
-                        <React.Fragment>
+                        </div>,
+                        <div className="p-3">
                             {/* 캐러셀 */}
                             <Form.Label>12) Carousel</Form.Label>
                             <Carousel>
@@ -306,7 +306,7 @@ const Dashboard = () => {
                                     </Carousel.Caption>
                                 </Carousel.Item>
                             </Carousel>
-                        </React.Fragment>,
+                        </div>,
                     ]}
                     tabNavs={['input 예제', '점보트론', '캐러셀']}
                 />

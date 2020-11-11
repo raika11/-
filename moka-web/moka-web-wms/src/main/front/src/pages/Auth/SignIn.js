@@ -3,10 +3,13 @@ import { loginJwt } from '@store/auth';
 import { Button, Card, Col, Container, Form, FormCheck, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import Main from '@/layout/components/Main';
+import { getLocalItem } from '@/utils/storageUtil';
+import { SIGNIN_MEMBER_ID } from '@/constants';
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    const [userId, setUserId] = useState('ssc01');
+
+    const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || 'ssc01');
     const [password, setPassword] = useState('sscMoka#2020');
 
     const handleSubmit = (e) => {

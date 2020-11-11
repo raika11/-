@@ -157,6 +157,22 @@ const TemplateListModal = (props) => {
         setSelected(template.templateSeq);
     }, []);
 
+    /**
+     * 체크박스 변경
+     */
+    const handleSelectionChanged = useCallback(
+        (selectedNodes) => {
+            if (selectedNodes.length > 0) {
+                const sd = selectedNodes[0].data;
+                if (sd.templateSeq !== selected) {
+                    setSelectedTemplate(sd);
+                    setSelected(sd.templateSeq);
+                }
+            }
+        },
+        [selected],
+    );
+
     useEffect(() => {
         // rowData 변경
         if (list.length > 0) {
@@ -335,6 +351,7 @@ const TemplateListModal = (props) => {
                     rowData={rowData}
                     onRowNodeId={(template) => template.templateSeq}
                     onRowClicked={handleRowClicked}
+                    onSelectionChanged={handleSelectionChanged}
                     loading={loading}
                     total={total}
                     page={search.page}

@@ -63,6 +63,10 @@
             }
         }
 
+        .ag-header-cell-text {
+            white-space: pre;
+        }
+
         .ag-cell {
             padding-left: 5px;
             padding-right: 5px;  
@@ -107,20 +111,20 @@
         line-height: 17px;
         width: 17px;
         height: 17px;
-    }
 
-    .ag-checkbox-input-wrapper::after {
-        font-family: 'Font Awesome 5 Pro';
-        content: '\f111';
-    }
+        &::after {
+            font-family: 'Font Awesome 5 Pro';
+            content: '\f111';
+        }
 
-    .ag-checkbox-input-wrapper.ag-checked::after {
-        content: '\f058';
-        font-weight: 900;
-    }
+        &:focus-within, &:active {
+            box-shadow: none;
+        }
 
-    .ag-checkbox-input-wrapper:focus-within, .ag-checkbox-input-wrapper:active {
-        box-shadow: none;
+        &.ag-checked::after {
+            content: '\f058';
+            font-weight: 900;
+        }
     }
 }
 

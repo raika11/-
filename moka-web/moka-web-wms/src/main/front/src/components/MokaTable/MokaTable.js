@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
@@ -38,6 +38,10 @@ const propTypes = {
      */
     header: PropTypes.bool,
     /**
+     * 테이블 헤더의 height
+     */
+    headerHeight: PropTypes.number,
+    /**
      * 로딩 텍스트
      */
     localeText: PropTypes.object,
@@ -45,6 +49,10 @@ const propTypes = {
      * row clicked
      */
     onRowClicked: PropTypes.func,
+    /**
+     * selection이 변경되었을 때(ex, selected 변경, 혹은 체크박스 클릭) 바인드 함수
+     */
+    onSelectionChanged: PropTypes.func,
     /**
      * row click 이벤트 막는 cell의 필드 리스트
      */
@@ -80,35 +88,46 @@ const defaultProps = {
     displayPageNum: DISPLAY_PAGE_NUM,
     preventRowClickCell: [],
     rowSelection: 'single',
+    headerHeight: 35,
 };
 
 /**
  * 공통 테이블 (ag-grid 사용)
  */
-const MokaTable = (props) => {
+const MokaTable = forwardRef((props, ref) => {
     // table props
-    const { columnDefs, rowData, onRowNodeId, agGridHeight, localeText, onRowClicked, loading, preventRowClickCell, rowSelection, selected, header } = props;
+    const {
+        columnDefs,
+        rowData,
+        onRowNodeId,
+        agGridHeight,
+        localeText,
+        onRowClicked,
+        onSelectionChanged,
+        loading,
+        preventRowClickCell,
+        rowSelection,
+        selected,
+        header,
+        headerHeight,
+    } = props;
     const { dragging, onRowDragMove } = props;
 
     // paging props
     const { paginationClassName, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, showTotalString } = props;
     const [gridApi, setGridApi] = useState(null);
 
-    /**
-     * 로딩중 메세지
-     */
-    useEffect(() => {
-        if (gridApi) {
-            if (loading) {
-                gridApi.showLoadingOverlay();
-            } else {
-                gridApi.hideOverlay();
-            }
-        }
-    }, [loading, gridApi]);
+    // return ref 설정
+    useImperativeHandle(
+        ref,
+        () => ({
+            gridApi: gridApi,
+        }),
+        [gridApi],
+    );
 
     /**
-     * agGrid 로딩전 인스턴스설정
+     * agGrid 로딩 전 인스턴스 설정
      * @param {object} params grid object
      */
     const onGridReady = (params) => {
@@ -117,8 +136,7 @@ const MokaTable = (props) => {
     };
 
     /**
-     * RowClick
-     * RowClick을 CellClick으로 받아서, cell별 설정에 따라서 RowClick를 호출한다.
+     * cell별 설정에 따라서 RowClick를 호출
      * @param {object} params grid object
      */
     const handleCellClicked = useCallback(
@@ -130,6 +148,10 @@ const MokaTable = (props) => {
         [onRowClicked, preventRowClickCell],
     );
 
+    /**
+     * row를 drag move했을 때 실행
+     * @param {object} event event
+     */
     const handleRowDragMove = (event) => {
         const movingNode = event.node;
         const overNode = event.overNode;
@@ -165,7 +187,7 @@ const MokaTable = (props) => {
     };
 
     /**
-     * ag-grid가 화면에 그릴 row data가 변경되었을 때 실행된다.
+     * ag-grid가 화면에 그릴 row data가 변경되었을 때 실행
      * (selected 값이 있을 때 select함)
      */
     const handleSelected = useCallback(() => {
@@ -180,6 +202,20 @@ const MokaTable = (props) => {
         }
     }, [selected, gridApi]);
 
+    /**
+     * selection 변경 시 실행
+     * @param {object} params grid
+     */
+    const handleSelectionChanged = (params) => {
+        if (onSelectionChanged) {
+            const selectedNodes = params.api.getSelectedNodes();
+            onSelectionChanged(selectedNodes, rowSelection);
+        }
+    };
+
+    /**
+     * row 데이터 업데이트 시 실행
+     */
     const handleRowDataUpdated = useCallback(() => {
         setTimeout(function () {
             handleSelected();
@@ -189,6 +225,17 @@ const MokaTable = (props) => {
     useEffect(() => {
         handleSelected();
     }, [handleSelected]);
+
+    useEffect(() => {
+        // 로딩 메세지 처리
+        if (gridApi) {
+            if (loading) {
+                gridApi.showLoadingOverlay();
+            } else {
+                gridApi.hideOverlay();
+            }
+        }
+    }, [loading, gridApi]);
 
     return (
         <React.Fragment>
@@ -202,6 +249,7 @@ const MokaTable = (props) => {
                     animateRows
                     localeText={localeText}
                     onCellClicked={handleCellClicked}
+                    onSelectionChanged={handleSelectionChanged}
                     onGridReady={onGridReady}
                     rowSelection={rowSelection}
                     rowDragManaged={dragging}
@@ -213,6 +261,7 @@ const MokaTable = (props) => {
                     frameworkComponents={{ mokaTooltip: Tooltip, radio: RadioButton }}
                     suppressRowClickSelection
                     getRowClass={getRowClass}
+                    headerHeight={headerHeight}
                 />
             </div>
 
@@ -233,7 +282,7 @@ const MokaTable = (props) => {
             ) : null}
         </React.Fragment>
     );
-};
+});
 
 MokaTable.propTypes = propTypes;
 MokaTable.defaultProps = defaultProps;

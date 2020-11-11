@@ -123,6 +123,22 @@ const SkinListModal = (props) => {
         setSelected(data.skinSeq);
     }, []);
 
+    /**
+     * 체크박스 변경
+     */
+    const handleSelectionChanged = useCallback(
+        (selectedNodes) => {
+            if (selectedNodes.length > 0) {
+                const sd = selectedNodes[0].data;
+                if (sd.skinSeq !== selected) {
+                    setSelectedSkin(sd);
+                    setSelected(sd.templateSeq);
+                }
+            }
+        },
+        [selected],
+    );
+
     useEffect(() => {
         if (show) {
             // dispatch(
@@ -203,6 +219,7 @@ const SkinListModal = (props) => {
                 rowData={list}
                 onRowNodeId={(dataset) => dataset.datasetSeq}
                 onRowClicked={handleRowClicked}
+                onSelectionChanged={handleSelectionChanged}
                 loading={loading}
                 total={total}
                 page={search.page}

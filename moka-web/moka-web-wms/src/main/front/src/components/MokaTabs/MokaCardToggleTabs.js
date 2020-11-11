@@ -66,8 +66,8 @@ const defaultProps = {
 };
 
 /**
- * 카드모양의 탭 (사용하지 않음!!!!!!)
- * 버튼 토글로 탭 변경
+ * ------------ 사용하지 않는 탭 ------------ *
+ * 카드모양의 탭, 버튼 토글로 탭을 변경한다
  */
 const MokaCardToggleTabs = forwardRef((props, ref) => {
     const { className, height, tabs, tabWidth, tabNavs, tabNavWidth, placement, expansion, onExpansion } = props;

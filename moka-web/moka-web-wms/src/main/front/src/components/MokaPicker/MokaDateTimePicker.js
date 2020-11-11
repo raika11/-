@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import clsx from 'clsx';
 import DateTime from 'react-datetime';
 import InputMask from 'react-input-mask';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -10,6 +11,10 @@ import moment from 'moment';
 moment.locale('ko');
 
 const propTypes = {
+    /**
+     * className
+     */
+    className: PropTypes.string,
     /**
      * width
      */
@@ -56,7 +61,7 @@ const defaultProps = {
  * TimePicker
  */
 const MokaDateTimePicker = forwardRef((props, ref) => {
-    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, ...rest } = props;
+    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, className, ...rest } = props;
 
     // 날짜시간 포맷
     const dateTimeFormat = (() => {
@@ -91,6 +96,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
                         e.preventDefault();
                         e.stopPropagation();
                     }}
+                    className={clsx(props.className, className)}
                     mask={dateTimeFormat.replace(/y|m|d|h/gi, '9')}
                     placeholder={placeholder}
                     disabled={disabled}

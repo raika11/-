@@ -16,6 +16,14 @@ const propTypes = {
      */
     fill: PropTypes.bool,
     /**
+     * 탭 컨텐츠 width
+     */
+    tabWidth: PropTypes.number,
+    /**
+     * 탭 컨텐츠의 className
+     */
+    tabContentClass: PropTypes.string,
+    /**
      * tab id
      */
     id: PropTypes.string,
@@ -37,10 +45,10 @@ const defaultProps = {
 };
 
 /**
- * 카드모양의 탭
+ * 카드모양 + 탭
  */
 const MokaCardTabs = (props) => {
-    const { className, fill, id, tabs, tabNavs, width, height } = props;
+    const { className, fill, id, tabs, tabNavs, width, height, tabWidth, tabContentClass } = props;
 
     return (
         <div className={clsx('tab', 'card-tab', 'flex-fill', className)} style={{ width, height }}>
@@ -57,7 +65,7 @@ const MokaCardTabs = (props) => {
                     </Nav>
                 </div>
                 <div className="d-flex custom-scroll">
-                    <Tab.Content>
+                    <Tab.Content className={clsx('p-0', tabContentClass)} style={{ width: tabWidth }}>
                         {tabs.map((tab, idx) => (
                             <Tab.Pane key={idx} eventKey={idx}>
                                 {tab}

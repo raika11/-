@@ -137,6 +137,22 @@ const DatsetListModal = (props) => {
         setSelected(data.datasetSeq);
     }, []);
 
+    /**
+     * 체크박스 변경
+     */
+    const handleSelectionChanged = useCallback(
+        (selectedNodes) => {
+            if (selectedNodes.length > 0) {
+                const sd = selectedNodes[0].data;
+                if (sd.datasetSeq !== selected) {
+                    setSelectedDataset(sd);
+                    setSelected(sd.datasetSeq);
+                }
+            }
+        },
+        [selected],
+    );
+
     useEffect(() => {
         if (show && cnt < 1) {
             handleSearch({
@@ -213,6 +229,7 @@ const DatsetListModal = (props) => {
                 rowData={rowData}
                 onRowNodeId={(dataset) => dataset.datasetSeq}
                 onRowClicked={handleRowClicked}
+                onSelectionChanged={handleSelectionChanged}
                 loading={loading}
                 total={total}
                 page={search.page}

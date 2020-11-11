@@ -8,7 +8,8 @@ public enum MemberStatusCode {
     Y("Y", "활성"),
     P("P", "잠김"),
     R("R", "잠기 해제 요청"),
-    D("D", "삭제");
+    D("D", "삭제"),
+    I("I", "신청중");
 
     private String code;
     private String name;

@@ -50,7 +50,7 @@ public class ReporterServiceImpl implements ReporterService {
     @Override
     public Reporter updateReporterMgr(Reporter reporter) {
         Reporter returnVal = reporterRepository.save(reporter);
-        log.debug("[UPDATE DOMAIN] domainId : {}", returnVal.getRepSeq());
+        log.debug("[UPDATE REP_SEQ] domainId : {}", returnVal.getRepSeq());
         return returnVal;
     }
 }

@@ -27,11 +27,11 @@ import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.dto.ParentAreaDTO;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
+import jmnet.moka.core.tps.mvc.area.entity.AreaSimple;
 import jmnet.moka.core.tps.mvc.area.service.AreaService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -76,17 +76,24 @@ public class AreaRestController {
      */
     @ApiOperation(value = "편집영역 목록조회(부모 편집영역별)")
     @GetMapping
-    public ResponseEntity<?> getAreaList(@Valid @SearchParam AreaSearchDTO search) {
+    public ResponseEntity<?> getAreaList(@Valid @SearchParam AreaSearchDTO search)
+            throws Exception {
 
-        Page<Area> returnValue = areaService.findAllArea(search);
-        List<AreaDTO> areaDtoList = modelMapper.map(returnValue.getContent(), AreaDTO.TYPE);
-        ResultListDTO<AreaDTO> resultList = new ResultListDTO<AreaDTO>();
-        resultList.setList(areaDtoList);
-        resultList.setTotalCnt(returnValue.getTotalElements());
+        try {
+            List<AreaSimple> returnValue = areaService.findAllArea(search);
+            List<AreaDTO> areaDtoList = modelMapper.map(returnValue, AreaDTO.TYPE);
+            ResultListDTO<AreaDTO> resultList = new ResultListDTO<AreaDTO>();
+            resultList.setList(areaDtoList);
+            resultList.setTotalCnt(returnValue.size());
 
-        ResultDTO<ResultListDTO<AreaDTO>> resultDTO = new ResultDTO<ResultListDTO<AreaDTO>>(resultList);
-        tpsLogger.success(true);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            ResultDTO<ResultListDTO<AreaDTO>> resultDTO = new ResultDTO<ResultListDTO<AreaDTO>>(resultList);
+            tpsLogger.success(true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD AREA LIST]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD AREA LIST]", e, true);
+            throw new Exception(messageByLocale.get("tps.area.error.select"), e);
+        }
     }
 
     /**

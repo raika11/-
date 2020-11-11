@@ -26,5 +26,10 @@ public interface JamXmlRcvService {
     void insertReceiveJobStep( JamArticleTotalVo jamArticle )
             throws RcvDataAccessException;
 
+    void updateReceiveJobStep(JamArticleTotalVo jamArticleTotalVo, int jobSeq, int jobStep)
+        throws RcvDataAccessException;
+
+    void doInsertUpdateArticleData(JamArticleTotalVo jamArticleTotalVo)
+        throws RcvDataAccessException;
 }
 

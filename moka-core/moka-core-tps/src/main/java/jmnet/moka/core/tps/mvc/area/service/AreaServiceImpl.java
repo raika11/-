@@ -14,12 +14,12 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
+import jmnet.moka.core.tps.mvc.area.entity.AreaSimple;
 import jmnet.moka.core.tps.mvc.area.mapper.AreaMapper;
 import jmnet.moka.core.tps.mvc.area.repository.AreaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +43,9 @@ public class AreaServiceImpl implements AreaService {
     private ModelMapper modelMapper;
 
     @Override
-    public Page<Area> findAllArea(AreaSearchDTO search) {
-        return areaRepository.findAllByParent_AreaSeq(search.getParentAreaSeq(), search.getPageable());
+    public List<AreaSimple> findAllArea(AreaSearchDTO search) {
+        //        return areaRepository.findByParent_AreaSeqOrderByOrdNo(search.getParentAreaSeq());
+        return areaRepository.findByParent(search.getParentAreaSeq());
     }
 
     @Override

@@ -4,12 +4,13 @@
 
 package jmnet.moka.core.tps.mvc.area.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
-import org.springframework.data.domain.Page;
+import jmnet.moka.core.tps.mvc.area.entity.AreaSimple;
 
 /**
  * Description: 편집영역 서비스
@@ -25,7 +26,7 @@ public interface AreaService {
      * @param search 검색조건
      * @return 편집영역목록
      */
-    Page<Area> findAllArea(AreaSearchDTO search);
+    List<AreaSimple> findAllArea(AreaSearchDTO search);
 
     /**
      * 편집영역조회(편집영역컴포넌트 포함)

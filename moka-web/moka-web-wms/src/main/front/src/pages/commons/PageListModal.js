@@ -140,6 +140,22 @@ const PageListModal = (props) => {
         setSelected(data.pageSeq);
     }, []);
 
+    /**
+     * 체크박스 변경
+     */
+    const handleSelectionChanged = useCallback(
+        (selectedNodes) => {
+            if (selectedNodes.length > 0) {
+                const sd = selectedNodes[0].data;
+                if (sd.pageSeq !== selected) {
+                    setSelectedPage(sd);
+                    setSelected(sd.templateSeq);
+                }
+            }
+        },
+        [selected],
+    );
+
     useEffect(() => {
         if (show && cnt < 1) {
             handleSearch({
@@ -213,6 +229,7 @@ const PageListModal = (props) => {
                 rowData={rowData}
                 onRowNodeId={(data) => data.pageSeq}
                 onRowClicked={handleRowClicked}
+                onSelectionChanged={handleSelectionChanged}
                 loading={loading}
                 total={total}
                 page={search.page}

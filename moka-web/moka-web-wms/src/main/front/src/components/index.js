@@ -4,7 +4,7 @@ export { default as MokaAutocomplete } from './MokaAutocomplete';
 export { default as MokaModal } from './MokaModal';
 export * from './MokaInput';
 export { default as MokaAlert, MokaAlertWithButtons } from './MokaAlert';
-export { MokaCardTabs, MokaCardToggleTabs, MokaIconTabs } from './MokaTabs';
+export * from './MokaTabs';
 export { MokaCardEditor, MokaModalEditor } from './MokaEditor';
 export { default as MokaCard, MokaTemplateThumbCard } from './MokaCard';
 export { default as MokaIcon } from './MokaIcon';

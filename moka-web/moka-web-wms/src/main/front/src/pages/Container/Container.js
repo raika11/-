@@ -221,7 +221,16 @@ const Container = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={412} headerClassName="pb-0" titleClassName="mb-0" title="컨테이너 검색" foldable expansion={expansionState[0]} onExpansion={handleListExpansion}>
+            <MokaCard
+                width={412}
+                className="mr-gutter"
+                headerClassName="pb-0"
+                titleClassName="mb-0"
+                title="컨테이너 검색"
+                foldable
+                expansion={expansionState[0]}
+                onExpansion={handleListExpansion}
+            >
                 <Suspense>
                     <ContainerList onDelete={handleClickDelete} />
                 </Suspense>

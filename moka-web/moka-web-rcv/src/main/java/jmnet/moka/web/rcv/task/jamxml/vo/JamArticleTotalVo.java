@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
 import jmnet.moka.web.rcv.common.vo.TotalVo;
+import jmnet.moka.web.rcv.task.jamxml.vo.sub.TotalBasicInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,6 +37,8 @@ public class JamArticleTotalVo extends TotalVo<JamArticleVo> {
 
     private int artHistoryId;
     private int artHistoryStep;
+
+    private TotalBasicInfo totalBasicInfo;
 
     public JamArticleTotalVo(JamArticleVo value) {
         super(value);

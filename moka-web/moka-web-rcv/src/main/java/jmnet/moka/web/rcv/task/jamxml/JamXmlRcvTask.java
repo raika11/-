@@ -120,6 +120,7 @@ public class JamXmlRcvTask extends Task<FileTaskInputData<JamArticleTotalVo, Jam
         jamArticleTotalVo.setServCode(map.get("SERVCODE"));
         jamArticleTotalVo.setSectCode(map.get("SECTCODE"));
 
+
         //스타기자 타입 (커버:Z, 와이드:Y, 인터뷰:X, 갤러리:W, 영상:V)이고, 스타기자인 경우 첫번째 이미지 썸네일을 생성하고 워터마크를 적용한다.
         if (("Z,Y,X,W,V").contains(jamArticleTotalVo
                 .getMainData()
@@ -155,26 +156,7 @@ public class JamXmlRcvTask extends Task<FileTaskInputData<JamArticleTotalVo, Jam
                         .replace("//www.instagram.com/tv/", "//www.instagram.com/p/"));
         //***************************************************************************************************
 
-
-        /*
-        //기사 저장 및 수정
-        if (oRcvArt.IUD.ToString().Trim() == "I" || oRcvArt.IUD.ToString().Trim() == "U")
-        {
-            strRcvResult = new Biz_Tx().SetReceiveArticleData(strSourceCode, oRcvArt);
-        }
-        else if (oRcvArt.IUD.ToString().Trim() == "D")
-        {
-            strRcvResult = new Biz_Tx().DelReceiveArticleData(strSourceCode, oRcvArt);
-        */
-
-
-
-        /*
-        if (!jamXmlRcvService.insertReceiveJobStep(jamArticleTotalVo)) {
-            return;
-        }
-
-         */
+        jamXmlRcvService.doInsertUpdateArticleData( jamArticleTotalVo );
 
         //taskInputData.setSuccess( true );
     }
@@ -263,9 +245,9 @@ public class JamXmlRcvTask extends Task<FileTaskInputData<JamArticleTotalVo, Jam
                     .getTaskInput()
                     .getDirFailed();
             final JamArticleTotalVo jamArticleTotalVo = taskInputData.getTotalData();
-
-//            jamXmlRcvService.updateReceiveJobStep( articleVo.getIud(), "0", "0", articleVo.getMediaCode().getValue(), articleVo.getId().getValue(), articleVo.get  );
-
+            if( jamArticleTotalVo != null ) {
+                jamXmlRcvService.updateReceiveJobStep(jamArticleTotalVo, 0, 0);
+            }
             getTaskManager().sendErrorSMS("[JamRecv] XML 처리 오류");
         }else{
             targetDir = taskInputData

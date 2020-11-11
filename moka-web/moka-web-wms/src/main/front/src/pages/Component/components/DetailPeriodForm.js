@@ -76,9 +76,13 @@ const DetailPeriodForm = (props) => {
                                 </Col>
                                 {/* 시작일 종료일 */}
                                 <Col xs={9} className="d-flex align-items-center p-0">
-                                    <MokaDateTimePicker className="flex-grow-0 mx-2" disabled={disabled} value={component.periodStartDt} onChange={handleStartDt} />
+                                    <div style={{ width: 185 }} className="mr-2">
+                                        <MokaDateTimePicker disabled={disabled} value={component.periodStartDt} onChange={handleStartDt} />
+                                    </div>
                                     ~
-                                    <MokaDateTimePicker className="flex-grow-0 mx-2" disabled={disabled} value={component.periodEndDt} onChange={handleEndDt} />
+                                    <div style={{ width: 185 }} className="ml-2">
+                                        <MokaDateTimePicker disabled={disabled} value={component.periodEndDt} onChange={handleEndDt} />
+                                    </div>
                                 </Col>
                             </Form.Row>
                         </Col>

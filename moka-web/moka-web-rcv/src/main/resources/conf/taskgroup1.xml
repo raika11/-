@@ -6,9 +6,9 @@
     sourceCode="1"
     retryCount="3"
     intervalTime="10s">
-    <TaskInput dirInput="/box/Joongang_Jopan"
-      dirSuccess="/box/Joongang_Jopan/comp"
-      dirFailed="/box/Joongang_Jopan/error"
+    <TaskInput dirInput="/box/rcv/jam/Joongang_Jopan"
+      dirSuccess="/box/rcv/jam/Joongang_Jopan/comp"
+      dirFailed="/box/rcv/jam/Joongang_Jopan/error"
       fileFilter="*.xml"
       fileWaitTime="3s"
       retryCount="3"/>
@@ -18,9 +18,9 @@
     sourceCode="3"
     retryCount="3"
     intervalTime="10s">
-    <TaskInput dirInput="/box/Joongang_Sokbo"
-      dirSuccess="/box/Joongang_Sokbo/comp"
-      dirFailed="/box/Joongang_Sokbo/error"
+    <TaskInput dirInput="/box/rcv/jam/Joongang_Sokbo"
+      dirSuccess="/box/rcv/jam/Joongang_Sokbo/comp"
+      dirFailed="/box/rcv/jam/Joongang_Sokbo/error"
       fileFilter="*.xml"
       fileWaitTime="3s"
       retryCount="3"/>

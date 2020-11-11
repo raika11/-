@@ -21,6 +21,10 @@ const propTypes = {
      */
     tabWidth: PropTypes.number,
     /**
+     * 탭 컨텐츠의 className
+     */
+    tabContentClass: PropTypes.string,
+    /**
      * tab 컨텐츠(array)
      */
     tabs: PropTypes.arrayOf(PropTypes.node),

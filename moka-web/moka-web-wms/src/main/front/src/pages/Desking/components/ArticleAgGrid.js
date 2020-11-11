@@ -6,7 +6,7 @@ const ArticleAgGrid = () => {
     return (
         <MokaTable
             headerHeight={50}
-            agGridHeight={667}
+            agGridHeight={663}
             columnDefs={columnDefs}
             rowData={[]}
             onRowNodeId={(article) => article.contentsId}

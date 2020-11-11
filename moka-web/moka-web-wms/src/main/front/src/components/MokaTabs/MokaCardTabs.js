@@ -54,7 +54,7 @@ const MokaCardTabs = (props) => {
         <div className={clsx('tab', 'card-tab', 'flex-fill', className)} style={{ width, height }}>
             <Tab.Container id={id} defaultActiveKey={0}>
                 <div className="d-flex">
-                    <Nav fill={fill} variant="tabs">
+                    <Nav fill={fill} variant="tabs" className="flex-row">
                         {tabNavs.map((nav, idx) => (
                             <Nav.Item key={idx}>
                                 <Nav.Link eventKey={idx} className="h5">

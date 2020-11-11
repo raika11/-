@@ -35,6 +35,7 @@ import {
     faClock as falClock,
     faMoneyCheck as falMoneyCheck, // 페이지탭 아이콘
     faCalculator as falCalculator, // 컨테이너탭 아이콘
+    faTv as falTv, // 페이지편집 > 미리보기
     faPencil,
     faSave,
 } from '@moka/fontawesome-pro-light-svg-icons';
@@ -74,6 +75,7 @@ library.add(falMinusCircle);
 library.add(falClock);
 library.add(falMoneyCheck);
 library.add(falCalculator);
+library.add(falTv);
 library.add(faPencil);
 library.add(faSave);
 

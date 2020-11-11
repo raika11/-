@@ -36,7 +36,7 @@ const ComponentEdit = ({ onDelete }) => {
         component: store.component.component,
         inputTag: store.component.inputTag,
         latestDomainId: store.auth.latestDomainId,
-        invalidList: store.template.invalidList,
+        invalidList: store.component.invalidList,
         MORE_COUNT: store.app.MORE_COUNT,
         DISP_PAGE_COUNT: store.app.DISP_PAGE_COUNT,
         PER_PAGE_COUNT: store.app.PER_PAGE_COUNT,
@@ -57,12 +57,12 @@ const ComponentEdit = ({ onDelete }) => {
         let errList = [];
 
         // 컴포넌트명 체크
-        if (!componentNameRegex.test(temp.componentName)) {
+        if (!temp.componentName || !componentNameRegex.test(temp.componentName)) {
             errList.push({
                 field: 'componentName',
                 reason: '',
             });
-            isInvalid = isInvalid | true;
+            isInvalid = isInvalid || true;
         }
         // 템플릿 체크
         if (!temp.template.templateSeq) {
@@ -70,7 +70,7 @@ const ComponentEdit = ({ onDelete }) => {
                 field: 'template',
                 reason: '',
             });
-            isInvalid = isInvalid | true;
+            isInvalid = isInvalid || true;
         }
 
         dispatch(changeInvalidList(errList));

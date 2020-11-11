@@ -22,7 +22,7 @@ export const columnDefs = [
     },
     {
         headerName: '소속',
-        field: 'jplusJobInfo',
+        field: 'belong',
         cellStyle: { fontSize: '12px' },
         width: 140,
     },

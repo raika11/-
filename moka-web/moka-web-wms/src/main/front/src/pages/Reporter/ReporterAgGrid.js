@@ -61,7 +61,7 @@ const ReporterMgrAgGrid = () => {
             list.map((row) => ({
                 ...row,
                 id: String(row.repSeq),
-                r2CdNm: row.r2CdNm + row.r3CdNm + row.r4CdNm,
+                belong: (row.r1Cd || '') + (row.r2C || '') + (row.r3Cd || '') + (row.r4Cd || ''),
                 handleClickLink,
             })),
         );

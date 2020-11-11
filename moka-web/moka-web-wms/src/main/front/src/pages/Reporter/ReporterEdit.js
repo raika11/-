@@ -305,15 +305,11 @@ const ReporterEdit = () => {
                 <Form.Row className="d-flex justify-content-between">
                     <div>
                         <MokaInputLabel label="JNET 이메일1" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repEmail1} name="repEmail1" />
-                        {/*
-                        <MokaInputLabel label="JNET 이메일3" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repName} name="" />
-                        */}
+                        <MokaInputLabel label="JNET 이메일3" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={'디비컬럼없음'} name="" />
                     </div>
                     <div>
                         <MokaInputLabel label="JNET 이메일2" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repEmail2} name="repEmail2" />
-                        {/*
-                        <MokaInputLabel label="JNET 이메일4" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repName} name="" />
-                        */}
+                        <MokaInputLabel label="JNET 이메일4" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={'디비컬럼없음'} name="" />
                     </div>
                 </Form.Row>
                 <MokaInputLabel label="기자 한마디" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repTalk} name="repTalk" />

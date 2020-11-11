@@ -49,7 +49,7 @@ public class MemberRequestDTO extends MemberDTO {
      */
     @NotEmpty(message = "{tps.member.error.pattern.password}")
     @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}")
-    private String conformPassword;
+    private String confirmPassword;
 
     /**
      * SMS인증문자

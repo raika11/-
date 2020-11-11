@@ -14,6 +14,8 @@ let prevWidth = 0;
 /**
  * window.innerWidth <= 1360px 일 때
  * 사이드바 자동 닫힘
+ * window.innerWidth > 1360px 일 때
+ * 사이드바 자동 열림
  *
  * @param {Element} param0.children children
  * @param {boolean} param0.nonResponsive 반응형 여부

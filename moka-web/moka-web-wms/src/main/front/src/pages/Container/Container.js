@@ -89,8 +89,9 @@ const Container = () => {
      */
     const deleteCallback = useCallback(
         (container) => {
-            toast.confirm(`${container.containerSeq}_${container.containerName}을 삭제하시겠습니까?`, {
-                onOk: () => {
+            toast.confirm(
+                `${container.containerSeq}_${container.containerName}을 삭제하시겠습니까?`,
+                () => {
                     dispatch(
                         deleteContainer({
                             containerSeq: container.containerSeq,
@@ -105,8 +106,8 @@ const Container = () => {
                         }),
                     );
                 },
-                onCancel: () => {},
-            });
+                () => {},
+            );
         },
         [dispatch, history],
     );

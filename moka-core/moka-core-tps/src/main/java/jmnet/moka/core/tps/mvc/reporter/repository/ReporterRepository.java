@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
  * @author ssc
  */
 @Repository
-public interface ReporterRepository extends JpaRepository<Reporter, Long>, ReporterRepositorySupport {
+public interface ReporterRepository extends JpaRepository<Reporter, String>, ReporterRepositorySupport {
     // 페이지목록. 페이징O
     public Page<Reporter> findList(ReporterSearchDTO search, Pageable pageable);
 

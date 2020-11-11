@@ -29,7 +29,7 @@ public class Reporter extends BaseAudit {
      */
     @Id
     @Column(name = "REP_SEQ", length = 4)
-    private Long repSeq;
+    private String repSeq;
 
     /**
      * 사용여부(Y:사용,N:미사용)

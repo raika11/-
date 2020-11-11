@@ -37,7 +37,7 @@ public class ReporterDTO implements Serializable {
      */
     @NotNull(message = "{tps.reporterMsg.error.notnull.repSeq}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporterMsg.error.pattern.repSeq}")
-    private long repSeq;
+    private String repSeq;
 
     /**
      * 아이디

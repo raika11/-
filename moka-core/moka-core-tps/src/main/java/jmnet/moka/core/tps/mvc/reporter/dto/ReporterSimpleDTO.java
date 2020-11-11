@@ -32,7 +32,7 @@ public class ReporterSimpleDTO implements Serializable {
     /**
      * 기자 일련번호 (1001부터 시작)
      */
-    private Long repSeq;
+    private String repSeq;
 
     /**
      * 사용여부(Y:사용,N:미사용)

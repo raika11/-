@@ -33,7 +33,7 @@ public class ReporterServiceImpl implements ReporterService {
     }
 
     @Override
-    public Optional<Reporter> findReporterMgrById(Long repSeq) {
+    public Optional<Reporter> findReporterMgrById(String repSeq) {
         return reporterRepository.findById(repSeq);
     }
 

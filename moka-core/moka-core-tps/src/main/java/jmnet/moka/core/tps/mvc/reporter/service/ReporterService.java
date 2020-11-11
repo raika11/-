@@ -39,7 +39,7 @@ public interface ReporterService {
      * @param repSeq 기자일련번호
      * @return 기자정보조회
      */
-    public Optional<Reporter> findReporterMgrById(Long repSeq);
+    public Optional<Reporter> findReporterMgrById(String repSeq);
 
     /**
      * 도메인 수정

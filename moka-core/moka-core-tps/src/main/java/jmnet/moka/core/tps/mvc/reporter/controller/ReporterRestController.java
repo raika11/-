@@ -104,7 +104,7 @@ public class ReporterRestController {
     @ApiOperation(value = "기자관리 조회")
     @GetMapping("/{repSeq}")
     public ResponseEntity<?> getReportMgr(HttpServletRequest request,
-            @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{reporter.error.pattern.repSeq}") Long repSeq)
+            @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{reporter.error.pattern.repSeq}") String repSeq)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.reporter.error.no-data", request);

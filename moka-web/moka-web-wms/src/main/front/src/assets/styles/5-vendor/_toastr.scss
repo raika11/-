@@ -9,3 +9,12 @@ body.toastr-confirm-active {
 .redux-toastr .toastr .close-toastr {
     margin-right: 7px;
 }
+
+.toastr {
+    .rrt-title {
+        display: none;
+    }
+    .rrt-text {
+        word-break: break-word;
+    }
+}

@@ -205,42 +205,43 @@ a.sidebar-link {
 
   // Workaround for IE bug, more info:
   // https://stackoverflow.com/a/25850649
-  @media (min-width: 1px) and (max-width: #{map-get($grid-breakpoints, 'lg') - .02px}) {
+  // 2020.11.11 사이드바 media query 제거 (state로 직접 제어)
+  // @media (min-width: 1px) and (max-width: #{map-get($grid-breakpoints, 'lg') - .02px}) {
 
-    // Sidebar default state (on mobile)
-    margin-left: -$sidebar-width;
+  //   // Sidebar default state (on mobile)
+  //   margin-left: -$sidebar-width;
 
-    .sidebar-content {
-      left: -$sidebar-width;
-    }
+  //   .sidebar-content {
+  //     left: -$sidebar-width;
+  //   }
 
-    // Sidebar toggled state (on mobile)
-    &.toggled {
-      margin-left: 0;
+  //   // Sidebar toggled state (on mobile)
+  //   &.toggled {
+  //     margin-left: 0;
 
-      .sidebar-content {
-        left: 0;
-      }
-    }
+  //     .sidebar-content {
+  //       left: 0;
+  //     }
+  //   }
 
-    // Sidebar collapsed state (on mobile)
-    // layouts-sidebar-collapsed.html
-    &-collapsed {
-      margin-left: 0;
+  //   // Sidebar collapsed state (on mobile)
+  //   // layouts-sidebar-collapsed.html
+  //   &-collapsed {
+  //     margin-left: 0;
 
-      .sidebar-content {
-        left: 0;
-      }
+  //     .sidebar-content {
+  //       left: 0;
+  //     }
 
-      &.toggled {
-        margin-left: -$sidebar-width;
+  //     &.toggled {
+  //       margin-left: -$sidebar-width;
 
-        .sidebar-content {
-          left: -$sidebar-width;
-        }
-      }
-    }
-  }
+  //       .sidebar-content {
+  //         left: -$sidebar-width;
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 // Sidebar header

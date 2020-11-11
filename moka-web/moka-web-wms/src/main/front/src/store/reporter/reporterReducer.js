@@ -15,6 +15,7 @@ export const initialState = {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
         sort: 'repSeq,asc',
+        keyword: '',
     },
     reporter: {},
     reporterError: {},

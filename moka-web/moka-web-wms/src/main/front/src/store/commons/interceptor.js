@@ -2,10 +2,11 @@ import axios from './axios';
 import { setLocalItem, getLocalItem } from '@utils/storageUtil';
 import toast from '@utils/toastUtil';
 import { store } from '@store/store';
+import { AUTHORIZATION } from '@/constants';
 //import { auth } from '@store/auth/index';
 
 const goToLogin = (message) => {
-    setLocalItem({ key: 'Authorization', value: undefined });
+    setLocalItem({ key: AUTHORIZATION, value: undefined });
     // store.dispatch(
     //     enqueueToast({
     //         key: 'loginAuthorization',
@@ -23,11 +24,11 @@ const goToLogin = (message) => {
 /** 요청 인터셉터 */
 const onRequest = (config) => {
     if (config.url !== '/loginJwt') {
-        const token = getLocalItem({ key: 'Authorization' });
+        const token = getLocalItem(AUTHORIZATION);
         const menuId = store.getState().auth.latestMenuId;
         if (token) {
             config.headers['x-menuid'] = menuId;
-            config.headers['Authorization'] = token;
+            config.headers[AUTHORIZATION] = token;
             return config;
         }
         goToLogin('로그인 정보가 없습니다.\n로그인 페이지로 이동합니다.');

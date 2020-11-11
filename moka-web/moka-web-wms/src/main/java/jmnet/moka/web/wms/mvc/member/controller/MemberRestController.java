@@ -6,7 +6,6 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -27,6 +26,7 @@ import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
+import jmnet.moka.core.tps.mvc.member.dto.MemberGroupSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberRequestDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
@@ -114,14 +114,13 @@ public class MemberRestController {
     /**
      * Member정보 조회
      *
-     * @param request  요청
      * @param memberId Member아이디 (필수)
      * @return Member정보
      * @throws NoDataException Member 정보가 없음
      */
     @ApiOperation(value = "Member 조회")
     @GetMapping("/{memberId}")
-    public ResponseEntity<?> getMember(HttpServletRequest request,
+    public ResponseEntity<?> getMember(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws NoDataException {
 
@@ -158,7 +157,6 @@ public class MemberRestController {
     /**
      * 등록
      *
-     * @param request   요청
      * @param memberDTO 등록할 Member정보
      * @return 등록된 Member정보
      * @throws InvalidDataException 데이타 유효성 오류
@@ -166,7 +164,7 @@ public class MemberRestController {
      */
     @ApiOperation(value = "Member 등록")
     @PostMapping
-    public ResponseEntity<?> postMember(HttpServletRequest request, @Valid MemberSaveDTO memberDTO)
+    public ResponseEntity<?> postMember(@Valid MemberSaveDTO memberDTO)
             throws InvalidDataException, Exception {
 
         // MemberDTO -> Member 변환
@@ -178,46 +176,10 @@ public class MemberRestController {
         }
 
         try {
+            MemberInfo returnValue = processUserSave(member, memberDTO.getMemberGroups(), MemberStatusCode.Y);
 
-            String passwordSameMessage = messageByLocale.get("tps.member.error.same.password");
-
-            if (memberDTO
-                    .getPassword()
-                    .equals(memberDTO.getConfirmPassword())) {
-                throw new MokaException(passwordSameMessage);
-            }
-
-            member.setPassword(passwordEncoder.encode(member.getPassword()));
-
-            // SMS 서버에 문자 발송 요청
-            String smsAuth = "";
-            Date smsExp = McpDate.minutePlus(McpDate.now(), 3);
-            member.setSmsAuth(smsAuth);
-            member.setSmsExp(smsExp);
-            
-            // insert
-            MemberInfo returnValue = memberService.insertMember(member);
-            if (returnValue != null && memberDTO.getMemberGroups() != null) {
-                memberDTO
-                        .getMemberGroups()
-                        .forEach(group -> {
-                            GroupMember groupMember = GroupMember
-                                    .builder()
-                                    .groupCd(group.getGroupCd())
-                                    .memberId(member.getMemberId())
-                                    .usedYn(group.getUsedYn())
-                                    .build();
-                            memberService.insertGroupMember(groupMember);
-                        });
-
-            }
-
-            // 결과리턴
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
-            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto);
-
-            // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.INSERT);
+            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, messageByLocale.get("tps.member.success.insert"));
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -229,10 +191,43 @@ public class MemberRestController {
         }
     }
 
+    private MemberInfo processUserSave(MemberInfo member, List<MemberGroupSaveDTO> groupSaveDTOs, MemberStatusCode statusCode) {
+
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+
+        // SMS 서버에 문자 발송 요청
+        String smsAuth = "4885";
+        Date smsExp = McpDate.minutePlus(McpDate.now(), 3);
+        member.setSmsAuth(smsAuth);
+        member.setSmsExp(smsExp);
+        member.setStatus(statusCode);
+
+        // insert
+        MemberInfo returnValue = memberService.insertMember(member);
+        if (returnValue != null && groupSaveDTOs != null) {
+            groupSaveDTOs.forEach(group -> {
+                GroupMember groupMember = GroupMember
+                        .builder()
+                        .groupCd(group.getGroupCd())
+                        .memberId(member.getMemberId())
+                        .usedYn(group.getUsedYn())
+                        .build();
+                memberService.insertGroupMember(groupMember);
+            });
+
+        }
+
+        // 액션 로그에 성공 로그 출력
+        tpsLogger.success(ActionType.INSERT);
+
+        return returnValue;
+    }
+
+
+
     /**
      * 수정
      *
-     * @param request   요청
      * @param memberId  Member아이디
      * @param memberDTO 수정할 Member정보
      * @return 수정된 Member정보
@@ -240,7 +235,7 @@ public class MemberRestController {
      */
     @ApiOperation(value = "Member 수정")
     @PutMapping("/{memberId}")
-    public ResponseEntity<?> putMember(HttpServletRequest request,
+    public ResponseEntity<?> putMember(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @Valid MemberSaveDTO memberDTO)
             throws Exception {
@@ -306,9 +301,79 @@ public class MemberRestController {
     }
 
     /**
+     * Member 상태 활성화
+     *
+     * @param memberId MemberID
+     * @return 사용자 정보
+     * @throws NoDataException 데이터없음 예외처리
+     */
+    @ApiOperation(value = "Member 상태 활성화")
+    @GetMapping("/{memberId}/activation")
+    public ResponseEntity<?> putFouceUnlock(
+            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
+            throws NoDataException {
+
+        String noDataMsg = messageByLocale.get("tps.common.error.no-data");
+
+        MemberInfo member = memberService
+                .findMemberById(memberId)
+                .orElseThrow(() -> new NoDataException(noDataMsg));
+        member.setErrCnt(0);
+        member.setStatus(MemberStatusCode.Y);
+        member.setPasswordModDt(McpDate.now());
+        memberService.updateMember(member);
+
+        MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
+
+        // 결과리턴
+        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 삭제
+     *
+     * @param memberId 삭제 할 Member아이디 (필수)
+     * @return 삭제성공여부
+     * @throws InvalidDataException 데이타유효성오류
+     * @throws NoDataException      삭제 할 Member 없음
+     * @throws Exception            그 외 에러처리
+     */
+    @ApiOperation(value = "Member 삭제")
+    @DeleteMapping("/{memberId}")
+    public ResponseEntity<?> deleteMember(
+            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
+            throws InvalidDataException, NoDataException, Exception {
+
+
+        // Member 데이터 조회
+        String noContentMessage = messageByLocale.get("tps.common.error.no-data");
+        MemberInfo member = memberService
+                .findMemberById(memberId)
+                .orElseThrow(() -> new NoDataException(noContentMessage));
+
+        try {
+            // 삭제
+            memberService.deleteMember(member);
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.DELETE);
+
+            // 결과리턴
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE MEMBER] memberId: {} {}", memberId, e.getMessage());
+            // 액션 로그에 실패 로그 출력
+            tpsLogger.error(ActionType.DELETE, e.toString());
+            throw new Exception(messageByLocale.get("tps.member.error.delete"), e);
+        }
+    }
+
+    /**
      * 비밀번호 변경
      *
-     * @param request     요청
      * @param memberId    Member아이디
      * @param password    현재 비밀번호
      * @param newPassword 수정할 비밀번호
@@ -317,7 +382,7 @@ public class MemberRestController {
      */
     @ApiOperation(value = "Member 수정")
     @PutMapping("/{memberId}/change-password")
-    public ResponseEntity<?> putChangePassword(HttpServletRequest request,
+    public ResponseEntity<?> putChangePassword(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @RequestParam("password")
             @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}") String password,
@@ -373,18 +438,64 @@ public class MemberRestController {
     }
 
     /**
+     * Member 신규 등록 요청
+     *
+     * @param memberDTO 등록할 Member정보
+     * @return 등록된 Member정보
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "Member 신규 등록 요청")
+    @PostMapping("/register-request")
+    public ResponseEntity<?> postRegisterRequest(@Valid MemberRequestDTO memberDTO)
+            throws InvalidDataException, Exception {
+
+        // MemberDTO -> Member 변환
+        MemberInfo member = modelMapper.map(memberDTO, MemberInfo.class);
+        if (McpString.isNotEmpty(member.getMemberId())) { // 자동 발번이 아닌 경우 중복 체크
+            if (memberService.isDuplicatedId(member.getMemberId())) {
+                throw new InvalidDataException(messageByLocale.get("tps.member.error.duplicated.memberId"));
+            }
+        }
+
+        try {
+
+            String passwordSameMessage = messageByLocale.get("tps.member.error.same.password");
+
+            if (memberDTO
+                    .getPassword()
+                    .equals(memberDTO.getConfirmPassword())) {
+                throw new MokaException(passwordSameMessage);
+            }
+
+            MemberInfo returnValue = processUserSave(member, memberDTO.getMemberGroups(), MemberRequestCode.NEW_REQUEST.getNextStatus());
+
+            MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
+            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, messageByLocale.get(MemberRequestCode.NEW_REQUEST.getMessageKey()));
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT MEMBER]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(messageByLocale.get("tps.member.error.save"), e);
+        }
+    }
+
+    /**
      * Member SMS 인증문자 요청
      *
-     * @param memberId        MemberID
-     * @param memberUnlockDTO 잠금 해제 요청 정보
+     * @param memberId         MemberID
+     * @param memberRequestDTO 잠금 해제 요청 정보
      * @return 사용자 정보
      * @throws NoDataException 데이터없음 예외처리
      */
     @ApiOperation(value = "Member SMS 인증문자 요청")
-    @GetMapping("/{memberId}/sms")
+    @GetMapping("/{memberId}/sms-request")
     public ResponseEntity<?> putSmsRequest(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @Valid MemberRequestDTO memberUnlockDTO)
+            @Valid MemberRequestDTO memberRequestDTO)
             throws Exception {
 
         String noDataMsg = messageByLocale.get("tps.common.error.no-data");
@@ -394,20 +505,20 @@ public class MemberRestController {
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
         // 비밀번호와 비밀번호 확인 비교
-        boolean same = memberUnlockDTO
+        boolean same = memberRequestDTO
                 .getPassword()
-                .equals(memberUnlockDTO.getConformPassword());
+                .equals(memberRequestDTO.getConfirmPassword());
         if (!same) {
             throw new PasswordNotMatchedException(messageByLocale.get("wms.login.error.PasswordNotMatchedException"));
         }
 
-        same = passwordEncoder.matches(memberUnlockDTO.getPassword(), member.getPassword());
+        same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
         if (!same) {
             throw new UserPrincipalNotFoundException(memberId);
         }
 
         // SMS 서버에 문자 발송 요청
-        String smsAuth = "";
+        String smsAuth = "4885";
         Date smsExp = McpDate.minutePlus(McpDate.now(), 3);
 
         member.setSmsAuth(smsAuth);
@@ -424,47 +535,38 @@ public class MemberRestController {
     }
 
     /**
-     * Member SMS 문자로 잠금 해제 요청
+     * Member 잠금 해제 및 신규 등록 요청
      *
-     * @param memberId        MemberID
-     * @param memberUnlockDTO 잠김 해제 요청 정보
+     * @param memberId         MemberID
+     * @param memberRequestDTO 잠김 해제 요청 정보
      * @return 사용자 정보
      * @throws NoDataException 데이터없음 예외처리
      */
-    @ApiOperation(value = "Member 잠금 해제")
-    @GetMapping("/{memberId}/unlock-request")
-    public ResponseEntity<?> putUnlock(
+    @ApiOperation(value = "Member 잠금 해제 및 신규 등록 요청")
+    @GetMapping({"/{memberId}/approval-request", "/{memberId}/unlock-request"})
+    public ResponseEntity<?> putStatusChange(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @Valid MemberRequestDTO memberUnlockDTO)
+            @Valid MemberRequestDTO memberRequestDTO)
             throws Exception {
 
+        // 결과리턴
         String noDataMsg = messageByLocale.get("tps.common.error.no-data");
-        String successMsg = null;
+        String successMsg;
 
         MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noDataMsg));
 
-        // 비밀번호와 비밀번호 확인 비교
-        boolean same = memberUnlockDTO
-                .getPassword()
-                .equals(memberUnlockDTO.getConformPassword());
-        if (!same) {
-            throw new PasswordNotMatchedException(messageByLocale.get("wms.login.error.PasswordNotMatchedException"));
-        }
+        throwPasswordCheck(memberRequestDTO.getPassword(), memberRequestDTO.getConfirmPassword(), member);
 
-        same = passwordEncoder.matches(memberUnlockDTO.getPassword(), member.getPassword());
-        if (!same) {
-            throw new UserPrincipalNotFoundException(memberId);
-        }
-
-        if (memberUnlockDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS) {// SMS 인증문자로 잠김해제 요청
+        if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS
+                || memberRequestDTO.getRequestType() == MemberRequestCode.NEW_SMS) {// SMS 인증문자로 잠김해제 요청 또는 신규 등록 신청
             if (McpString.isEmpty(member.getSmsAuth())) {
                 throw new InvalidDataException(messageByLocale.get("wms.login.error.notempty.smsAuth"));
             }
             if (!member
                     .getSmsAuth()
-                    .equals(memberUnlockDTO.getSmsAuth())) {
+                    .equals(memberRequestDTO.getSmsAuth())) {
                 throw new SmsAuthNumberBadCredentialsException(messageByLocale.get("wms.login.error.sms-unmatched"));
             }
 
@@ -472,93 +574,47 @@ public class MemberRestController {
                 throw new SmsAuthNumberExpiredException(messageByLocale.get("wms.login.error.unlock-sms-expired"));
             }
             // 잠금 해제
-            member.setStatus(MemberStatusCode.Y);
             member.setPasswordModDt(McpDate.now());
             member.setErrCnt(0);
-            memberService.updateMember(member);
-            successMsg = messageByLocale.get("wms.login.success.unlock");
-        } else { // 잠금 해제 요청
-            member.setStatus(MemberStatusCode.R);
-            memberService.updateMember(member);
-            successMsg = messageByLocale.get("wms.login.success.unlock-request");
         }
+
+        member.setStatus(memberRequestDTO
+                .getRequestType()
+                .getNextStatus());
+        memberService.updateMember(member);
+        successMsg = messageByLocale.get(memberRequestDTO
+                .getRequestType()
+                .getMessageKey());
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
         // 결과리턴
         ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO, successMsg);
+
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
-     * Member 상태 활성화
+     * 비밀번호 확인
      *
-     * @param memberId MemberID
-     * @return 사용자 정보
-     * @throws NoDataException 데이터없음 예외처리
+     * @param password        비밀번호 입력값
+     * @param confirmPassword 비밀번호 확인 입력값
+     * @param orgMember       기존 사용자 정보
+     * @throws PasswordNotMatchedException    비밀번호와 비밀번호 확인 불일치
+     * @throws UserPrincipalNotFoundException 비밀번호와 기존 비밀번호 불일치
      */
-    @ApiOperation(value = "Member 상태 활성화")
-    @GetMapping("/{memberId}/activation")
-    public ResponseEntity<?> putFouceUnlock(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
-            throws NoDataException {
+    private void throwPasswordCheck(String password, String confirmPassword, MemberInfo orgMember)
+            throws PasswordNotMatchedException, UserPrincipalNotFoundException {
 
-        String noDataMsg = messageByLocale.get("tps.common.error.no-data");
+        // 비밀번호와 비밀번호 확인 비교
+        boolean same = password.equals(confirmPassword);
+        if (!same) {
+            throw new PasswordNotMatchedException(messageByLocale.get("wms.login.error.PasswordNotMatchedException"));
+        }
 
-        MemberInfo member = memberService
-                .findMemberById(memberId)
-                .orElseThrow(() -> new NoDataException(noDataMsg));
-        member.setErrCnt(0);
-        member.setStatus(MemberStatusCode.Y);
-        member.setPasswordModDt(McpDate.now());
-        memberService.updateMember(member);
-
-        MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
-
-        // 결과리턴
-        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    }
-
-    /**
-     * 삭제
-     *
-     * @param request  요청
-     * @param memberId 삭제 할 Member아이디 (필수)
-     * @return 삭제성공여부
-     * @throws InvalidDataException 데이타유효성오류
-     * @throws NoDataException      삭제 할 Member 없음
-     * @throws Exception            그 외 에러처리
-     */
-    @ApiOperation(value = "Member 삭제")
-    @DeleteMapping("/{memberId}")
-    public ResponseEntity<?> deleteMember(HttpServletRequest request,
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
-            throws InvalidDataException, NoDataException, Exception {
-
-
-        // Member 데이터 조회
-        String noContentMessage = messageByLocale.get("tps.common.error.no-data");
-        MemberInfo member = memberService
-                .findMemberById(memberId)
-                .orElseThrow(() -> new NoDataException(noContentMessage));
-
-        try {
-            // 삭제
-            memberService.deleteMember(member);
-
-            // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.DELETE);
-
-            // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("[FAIL TO DELETE MEMBER] memberId: {} {}", memberId, e.getMessage());
-            // 액션 로그에 실패 로그 출력
-            tpsLogger.error(ActionType.DELETE, e.toString());
-            throw new Exception(messageByLocale.get("tps.member.error.delete"), e);
+        same = passwordEncoder.matches(password, orgMember.getPassword());
+        if (!same) {
+            throw new UserPrincipalNotFoundException(orgMember.getMemberId());
         }
     }
 

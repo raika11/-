@@ -13,7 +13,8 @@
         "start-stg": "cross-env NODE_ENV=development API_SERVER=http://stg-backoffice.joongang.co.kr npm-run-all -p build:css watch:*",
         "build": "npm-run-all -p build:*",
         "build-prod": "npm-run-all -p build:*",
-        "test": "node scripts/test.js"
+        "test": "node scripts/test.js",
+        "lint": "eslint src/**/*.js"
     },
     "eslintConfig": {
         "extends": "react-app"

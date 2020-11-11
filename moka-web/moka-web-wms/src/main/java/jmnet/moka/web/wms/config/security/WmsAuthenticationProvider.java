@@ -14,6 +14,7 @@ import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.web.wms.config.security.exception.AccountStatusUnactiveException;
 import jmnet.moka.web.wms.config.security.exception.GroupwareUserNotFoundException;
 import jmnet.moka.web.wms.config.security.exception.LimitExcessBadCredentialsException;
+import jmnet.moka.web.wms.config.security.exception.NewUserSmsAuthRequiredException;
 import jmnet.moka.web.wms.config.security.exception.PasswordUnchangedException;
 import jmnet.moka.web.wms.config.security.exception.WmsBadCredentialsException;
 import jmnet.moka.web.wms.config.security.exception.WmsUsernameNotFoundException;
@@ -129,20 +130,22 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
 
             // 4. status 체크
             if (MemberStatusCode.Y != userDetails.getStatus()) {
-                if (MemberStatusCode.P == userDetails.getStatus()) {
-                    if (userDetails.getErrorCnt() == passwordErrorLimit) {
+                if (MemberStatusCode.P == userDetails.getStatus()) { // 잠김 상태
+                    if (userDetails.getErrorCnt() == passwordErrorLimit) { // 비밀번호 입력 오류 잠김 상태
                         throw new LimitExcessBadCredentialsException(
                                 messageByLocale.get("wms.login.error.limit-excesss-bad-credentials-locked", passwordErrorLimit));
-                    } else {
+                    } else { // 비밀번호 갱신 만료일이 지나 잠김 상태
                         throw new PasswordUnchangedException(messageByLocale.get("wms.login.error.PasswordUnchangedException"));
                     }
-                } else if (MemberStatusCode.R == userDetails.getStatus()) {
-                    throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.BeforeUnlockApprovalException"));
-                } else if (MemberStatusCode.N == userDetails.getStatus()) {
+                } else if (MemberStatusCode.I == userDetails.getStatus()) {// 사용 신청 중인 상태 - 인증번호 인증 전
+                    throw new NewUserSmsAuthRequiredException(messageByLocale.get("wms.login.error.NewUserSmsAuthRequiredException"));
+                } else if (MemberStatusCode.N == userDetails.getStatus()) {// 사용 신청 상태
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.BeforeNewApprovalException"));
-                } else if (MemberStatusCode.D == userDetails.getStatus()) {
+                } else if (MemberStatusCode.R == userDetails.getStatus()) {// 잠김 해제 요청 상태
+                    throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.BeforeUnlockApprovalException"));
+                } else if (MemberStatusCode.D == userDetails.getStatus()) { // 사용 중지 상태
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.StopUsingException"));
-                } else {
+                } else { // 기타 계정 오류
                     throw new AccountStatusUnactiveException(messageByLocale.get("wms.login.error.InsufficientAuthenticationException"));
                 }
             }

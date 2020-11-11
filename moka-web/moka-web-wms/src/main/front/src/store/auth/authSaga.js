@@ -1,10 +1,11 @@
 import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { setLocalItem } from '@utils/storageUtil';
+import { setLocalItem, setLocalStorage } from '@utils/storageUtil';
 import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
 import toast from '@utils/toastUtil';
+import { AUTHORIZATION, SIGNIN_MEMBER_ID } from '@/constants';
 
 /**
  * 로그인
@@ -16,9 +17,12 @@ export function* loginJwtSaga({ payload }) {
         const { headers, data } = response;
 
         if (headers.authorization) {
-            yield call(setLocalItem, { key: 'Authorization', value: headers.authorization });
+            yield call(setLocalItem, { key: AUTHORIZATION, value: headers.authorization });
+            yield call(setLocalItem, { key: SIGNIN_MEMBER_ID, value: payload.userId });
+
             if (data.header.resultType === 0) {
                 toast.success(data.header.message.replace(/\\n/g, '<br/>'));
+
                 yield delay(1000);
                 yield call(window.location.reload());
             } else {
@@ -46,7 +50,7 @@ export function* logout() {
         const { data } = response;
 
         if (data.header.success) {
-            yield call(setLocalItem, { key: 'Authorization', value: undefined });
+            yield call(setLocalItem, { key: AUTHORIZATION, value: undefined });
             yield call(window.location.reload());
         }
     } catch (err) {}

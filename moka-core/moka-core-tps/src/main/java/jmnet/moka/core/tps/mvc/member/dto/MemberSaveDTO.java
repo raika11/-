@@ -42,10 +42,4 @@ public class MemberSaveDTO extends MemberDTO {
     @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}")
     private String password;
 
-    /**
-     * 확인 비밀번호
-     */
-    @NotEmpty(message = "{tps.member.error.pattern.password}")
-    @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}")
-    private String confirmPassword;
 }

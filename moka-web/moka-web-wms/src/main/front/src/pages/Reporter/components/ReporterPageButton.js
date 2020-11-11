@@ -41,17 +41,7 @@ const ReporterPageButton = (props) => {
             e.stopPropagation();
             e.preventDefault();
 
-            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa::', data.joinsBlog);
-
-            if (data.joinsBlog === null || data.joinsBlog === '') {
-                //window.open('', '_blank'); 빈페이지라도 열어줘야 하는지 모르겠음.
-            } else {
-                window.open(data.joinsBlog, '_blank');
-            }
-
-            // if (onClick) {
-            //     onClick(data);
-            // }
+            window.open('https://news.joins.com/reporter/' + data.repSeq, '_blank');
         },
         [data],
     );

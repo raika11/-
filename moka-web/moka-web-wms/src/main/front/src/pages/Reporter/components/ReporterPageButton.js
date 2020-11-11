@@ -42,12 +42,18 @@ const ReporterPageButton = (props) => {
             e.preventDefault();
 
             console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa::', data.joinsBlog);
-            if (onClick) {
-                //onClick(data);
+
+            if (data.joinsBlog === null || data.joinsBlog === '') {
+                //window.open('', '_blank'); 빈페이지라도 열어줘야 하는지 모르겠음.
+            } else {
                 window.open(data.joinsBlog, '_blank');
             }
+
+            // if (onClick) {
+            //     onClick(data);
+            // }
         },
-        [data, onClick],
+        [data],
     );
 
     return (

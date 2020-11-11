@@ -47,6 +47,7 @@ const PartEdit = (props) => {
             <Card.Header>
                 <Card.Title>{part.title}</Card.Title>
             </Card.Header>
+
             <Card.Body>
                 {part.fieldGroups.map((fieldGroup) => (
                     <Form key={'F' + fieldGroup.group}>

@@ -215,7 +215,7 @@ public class ContainerServiceImpl implements ContainerService {
         // 1. 기존 관련아이템은 삭제 후, 저장
         Map<String, Object> paramMap = new HashMap<String, Object>();
         Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
-        paramMap.put("pageSeq", container.getContainerSeq());
+        paramMap.put("containerSeq", container.getContainerSeq());
         paramMap.put("returnValue", returnValue);
         containerRelMapper.deleteByContainerSeq(paramMap);
         if ((int) paramMap.get("returnValue") < 0) {

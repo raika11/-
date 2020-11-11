@@ -7,13 +7,25 @@ import Form from 'react-bootstrap/Form';
 import { MokaImageInput, MokaAutocomplete, MokaDateTimePicker } from '@components';
 import { Controller } from 'react-hook-form';
 
-const propTypes = {
+export const propTypes = {
     /**
      * input의 className
      */
     className: PropTypes.string,
     /**
-     * input element의 타입(기본 input)
+     * ---------------------------------------------------------------------------------------------
+     * Input element의 타입 정의
+     *
+     * input -> react-bootstrap/Form.Control
+     * select -> react-bootstrap/Form.Control
+     * radio -> react-bootstrap/Form.Check
+     * switch -> react-bootstrap/Form.Check
+     * checkbox -> react-bootstrap/Form.Check
+     * textarea -> react-bootstrap/Form.Control
+     * imageFile -> MokaImageInput
+     * autocomplete -> MokaAutocomplete
+     * dateTimePicker -> MokaDateTimePicker
+     * ---------------------------------------------------------------------------------------------
      */
     as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'autocomplete', 'dateTimePicker']),
     /**

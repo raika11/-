@@ -59,9 +59,7 @@ public class ReporterRepositorySupportImpl extends QuerydslRepositorySupport imp
         query = getQuerydsl().applyPagination(pageable, query);
         //QueryResults<Reporter> list = query.innerJoin(reporter., domain).fetchJoin().where(builder).fetchResults();
         QueryResults<Reporter> list = query.where(builder).fetchResults();
-//        QueryResults<Reporter> list = query.where(builder).leftJoin(codeMgt)
-//                .leftJoin(codeMgt).leftJoin(codeMgt)
-//                .leftJoin(codeMgt).fetchResults();
+        //QueryResults<Reporter> list = query.where(builder).leftJoin(codeMgt).leftJoin(codeMgt).leftJoin(codeMgt).fetchResults();
 
         return new PageImpl<Reporter>(list.getResults(), pageable, list.getTotal());
     }

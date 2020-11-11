@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="jmnet.moka.core.tps.mvc.component.mapper.reporterMapper">
+<mapper namespace="jmnet.moka.core.tps.mvc.reporter.mapper.ReporterMapper">
 
   <select id="findAll" parameterType="ReporterSearchDTO" resultType="ReporterVO"
     statementType="CALLABLE">
     {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_REPORTER_LIST_SEL(
-    #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
     <choose>
       <when test="searchType == 'all' and keyword != null and keyword != ''">
         #{keyword},
@@ -26,7 +25,7 @@
     </choose>
 
     <choose>
-      <when test="searchType == 'repName' and keyword != null and keyword != ''">
+      <when test="keyword != null and keyword != ''">
         #{keyword},
       </when>
       <otherwise>

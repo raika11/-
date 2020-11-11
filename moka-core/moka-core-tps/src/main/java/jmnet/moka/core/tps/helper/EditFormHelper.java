@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.exception.MokaException;
-import jmnet.moka.core.tps.common.code.EditFieldTypeCode;
+import jmnet.moka.core.tps.mvc.editform.code.EditFieldTypeCode;
 import jmnet.moka.core.tps.mvc.editform.dto.ChannelFormatDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldGroupDTO;
@@ -128,8 +128,8 @@ public class EditFormHelper {
                     editFormItemDTO.setFields(null);
                     for (Entry<Integer, List<FieldDTO>> entry : groupMap.entrySet()) {
                         Integer group = entry.getKey();
-                        List<FieldDTO> fieldDTOS = entry.getValue();
-                        fieldDTOS.sort((o1, o2) -> {
+                        List<FieldDTO> fieldDTOs = entry.getValue();
+                        fieldDTOs.sort((o1, o2) -> {
                             if (!o1
                                     .getType()
                                     .equals(o2.getType())) {
@@ -137,11 +137,17 @@ public class EditFormHelper {
                             } else {
                                 return o1.getSequence() - o2.getSequence();
                             }
-
                         });
+
+                        fieldDTOs.forEach(fieldDTO -> {
+                            if (McpString.isEmpty(fieldDTO.getName())) {
+                                fieldDTO.setName(fieldDTO.getType() + fieldDTO.getSequence());
+                            }
+                        });
+
                         FieldGroupDTO fieldGroupDTO = FieldGroupDTO
                                 .builder()
-                                .fields(fieldDTOS)
+                                .fields(fieldDTOs)
                                 .group(group)
                                 .build();
                         editFormItemDTO
@@ -206,4 +212,6 @@ public class EditFormHelper {
             throws MokaException {
         return mapping(site, channelId);
     }
+
+
 }

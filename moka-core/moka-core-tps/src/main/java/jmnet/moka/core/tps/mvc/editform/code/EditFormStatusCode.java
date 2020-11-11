@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.common.code;
+package jmnet.moka.core.tps.mvc.editform.code;
 
 /**
  * 편집 폼 상태 코드

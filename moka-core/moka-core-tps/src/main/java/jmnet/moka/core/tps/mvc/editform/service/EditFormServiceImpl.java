@@ -7,7 +7,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
-import jmnet.moka.core.tps.common.code.EditFormStatusCode;
+import jmnet.moka.core.tps.mvc.editform.code.EditFormStatusCode;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;

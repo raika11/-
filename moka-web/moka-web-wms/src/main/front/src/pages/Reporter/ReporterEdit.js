@@ -58,6 +58,12 @@ const ReporterEdit = () => {
     const [r4Cd, setR4Cd] = useState('');
     const [r5Cd, setR5Cd] = useState('');
     const [r6Cd, setR6Cd] = useState('');
+
+    const [r1CdNm, setR1CdNm] = useState('');
+    const [r2CdNm, setR2CdNm] = useState('');
+    const [r3CdNm, setR3CdNm] = useState('');
+    const [r4CdNm, setR4CdNm] = useState('');
+
     const [jamRepSeq, setJamRepSeq] = useState('');
     const [jamDeptSeq, setJamDeptSeq] = useState('');
     const [jamDeptNm, setJamDeptNm] = useState('');
@@ -237,6 +243,12 @@ const ReporterEdit = () => {
         setR4Cd(reporter.r4Cd || '');
         setR5Cd(reporter.r5Cd || '');
         setR6Cd(reporter.r6Cd || '');
+
+        setR1CdNm(reporter.r1CdNm || '');
+        setR2CdNm(reporter.r2CdNm || '');
+        setR3CdNm(reporter.r3CdNm || '');
+        setR4CdNm(reporter.r4CdNm || '');
+
         setJamRepSeq(reporter.jamRepSeq || '');
         setJamDeptSeq(reporter.jamDeptSeq || '');
         setJamDeptNm(reporter.jamDeptNm || '');
@@ -294,8 +306,8 @@ const ReporterEdit = () => {
                 <Form.Row className="d-flex justify-content-between">
                     <div>
                         <MokaInputLabel label="이름" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repName} name="repName" />
-                        <MokaInputLabel label="소속 1" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={r1Cd} name="r1Cd" />
-                        <MokaInputLabel label="소속 3" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={r3Cd} name="r3Cd" />
+                        <MokaInputLabel label="소속 1" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={r1CdNm} name="r1Cd" />
+                        <MokaInputLabel label="소속 3" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={r3CdNm} name="r3Cd" />
                         <MokaInputLabel label="타입코드" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={jplusRepDiv} name="jplusRepDiv" />
                         <MokaInputLabel label="중앙 ID" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={joinsId} name="joinsId" />
                         <MokaInputLabel label="페이스북" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={snsFb} name="snsFb" />
@@ -303,8 +315,8 @@ const ReporterEdit = () => {
                     </div>
                     <div>
                         <MokaInputLabel label="표시 직책" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repTitle} name="repTitle" />
-                        <MokaInputLabel label="소속 2" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={r2Cd} name="r2Cd" />
-                        <MokaInputLabel label="소속 4" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={r4Cd} name="r4Cd" />
+                        <MokaInputLabel label="소속 2" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={r2CdNm} name="r2Cd" />
+                        <MokaInputLabel label="소속 4" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={r4CdNm} name="r4Cd" />
                         <MokaInputLabel label="집배신 이메일" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repEmail1} name="repEmail1" />
                         <MokaInputLabel label="분야" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repField} name="repField" />
                         <MokaInputLabel label="트위터" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={snsTw} name="snsTw" />

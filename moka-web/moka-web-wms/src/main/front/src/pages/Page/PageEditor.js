@@ -7,6 +7,7 @@ import { changePageBody } from '@store/page/pageAction';
 const PageEditor = (props) => {
     const { expansion, onExpansion } = props;
     const dispatch = useDispatch();
+
     const { pageBody, page, latestDomainId, invalidList, loading, inputTag } = useSelector(
         (store) => ({
             pageBody: store.page.pageBody,

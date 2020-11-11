@@ -24,6 +24,12 @@ const ReporterEdit = () => {
     const [repName, setRepName] = useState('');
     const [repEmail1, setRepEmail1] = useState('');
     const [repEmail2, setRepEmail2] = useState('');
+
+    const [rMail1, setRMail1] = useState('');
+    const [rMail2, setRMail2] = useState('');
+    const [rMail3, setRMail3] = useState('');
+    const [rMail4, setRMail4] = useState('');
+
     const [repTitle, setRepTitle] = useState('');
     const [repPhone, setRepPhone] = useState('');
     const [joinsId, setJoinsId] = useState('');
@@ -189,6 +195,12 @@ const ReporterEdit = () => {
         setRepName(reporter.repName || '');
         setRepEmail1(reporter.repEmail1 || '');
         setRepEmail2(reporter.repEmail2 || '');
+
+        setRMail1(repEmail2.split('|')[0] || '');
+        setRMail2(repEmail2.split('|')[1] || '');
+        setRMail3(repEmail2.split('|')[2] || '');
+        setRMail4(repEmail2.split('|')[3] || '');
+
         setRepTitle(reporter.repTitle || '');
         setRepPhone(reporter.repPhone || '');
         setJoinsId(reporter.joinsId || '');
@@ -233,7 +245,7 @@ const ReporterEdit = () => {
         setJamComNm(reporter.jamComNm || '');
         setRepTalk(reporter.repTalk || '');
         setUserTalk(reporter.userTalk || '');
-    }, [repPhoto, reporter]);
+    }, [rMail1, repEmail2, repPhoto, reporter]);
 
     return (
         <>
@@ -302,12 +314,12 @@ const ReporterEdit = () => {
                 <MokaInputLabel label="JNET ID" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={jnetId} name="jnetId" />
                 <Form.Row className="d-flex justify-content-between">
                     <div>
-                        <MokaInputLabel label="JNET 이메일1" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repEmail1} name="repEmail1" />
-                        <MokaInputLabel label="JNET 이메일3" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={'디비컬럼없음'} name="" />
+                        <MokaInputLabel label="JNET 이메일1" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={rMail1} name="repEmail1" />
+                        <MokaInputLabel label="JNET 이메일3" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={rMail3} name="" />
                     </div>
                     <div>
-                        <MokaInputLabel label="JNET 이메일2" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repEmail2} name="repEmail2" />
-                        <MokaInputLabel label="JNET 이메일4" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={'디비컬럼없음'} name="" />
+                        <MokaInputLabel label="JNET 이메일2" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={rMail2} name="repEmail2" />
+                        <MokaInputLabel label="JNET 이메일4" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={rMail4} name="" />
                     </div>
                 </Form.Row>
                 <MokaInputLabel label="기자 한마디" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repTalk} name="repTalk" />

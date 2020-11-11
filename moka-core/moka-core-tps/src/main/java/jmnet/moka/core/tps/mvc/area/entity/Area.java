@@ -116,7 +116,8 @@ public class Area extends BaseAudit {
     /**
      * 컨테이너
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTAINER_SEQ", referencedColumnName = "CONTAINER_SEQ")
     private Container container;
 

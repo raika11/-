@@ -24,6 +24,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * 편집영역컴포넌트
@@ -58,6 +60,7 @@ public class AreaComp implements Serializable {
     /**
      * 컴포넌트
      */
+    @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPONENT_SEQ", referencedColumnName = "COMPONENT_SEQ", nullable = false)
     private Component component;

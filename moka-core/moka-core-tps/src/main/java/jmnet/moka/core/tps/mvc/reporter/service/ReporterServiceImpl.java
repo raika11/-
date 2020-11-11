@@ -29,7 +29,7 @@ public class ReporterServiceImpl implements ReporterService {
     private ReporterRepository reporterRepository;
 
     @Autowired
-    private ReporterMapper reporterMapper123;
+    private ReporterMapper reporterMapper;
 
 
     @Override

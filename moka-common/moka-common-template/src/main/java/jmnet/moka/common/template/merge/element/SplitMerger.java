@@ -8,6 +8,7 @@ import static jmnet.moka.common.template.Constants.LOOP_INDEX;
 import static jmnet.moka.common.template.Constants.LOOP_START;
 import static jmnet.moka.common.template.Constants.SPLIT_TOKEN;
 import java.io.IOException;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.exception.TemplateMergeException;
@@ -49,7 +50,7 @@ public class SplitMerger extends AbstractElementMerger{
 
         String concated = "";
         if (token != null && token.length() > 0) {
-            concated = (String) context.get(token);
+            concated = this.getTokenValue(token,context);
             if ( concated == null || concated.length() == 0) {
                 return; 
             }
@@ -85,4 +86,22 @@ public class SplitMerger extends AbstractElementMerger{
         }
 		if (isDebug) debug("END  ", element, indent, sb);
 	}
+
+	private String getTokenValue(String token, MergeContext context) {
+        String[] list =  token.split("\\.");
+        if (list.length == 1) {
+            return (String)context.get(token);
+        } else {
+            try {
+                Map map = (Map) context.get(list[0]);
+                for (int i = 1; i < list.length-1; i++) {
+                    map = (Map) map.get(list[i]);
+                }
+                return (String)map.get(list[list.length-1]);
+            } catch (Exception e){
+                logger.warn("Can't find token = {}",token);
+            }
+        }
+        return "";
+    }
 }

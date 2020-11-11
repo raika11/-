@@ -15,6 +15,8 @@ const ReporterEdit = () => {
     const dispatch = useDispatch();
     const { repSeq: paramSeq } = useParams();
 
+    const metadata = new Map();
+
     // entity
     const [repSeq, setRepSeq] = useState('');
     const [usedYn, setUsedYn] = useState('N');
@@ -240,7 +242,7 @@ const ReporterEdit = () => {
     return (
         <>
             <div className="mb-3 d-flex align-items-center">
-                <Image width="100" height="100" src={repPhoto} roundedCircle />
+                <Image width="100" height="100" src={bg} roundedCircle />
                 <div className="w-100">
                     <div className="pb-4 d-flex justify-content-center">
                         <div className="d-flex">

@@ -257,7 +257,9 @@ const AreaFormDepth2 = (props) => {
                     callback: ({ body }) => {
                         setCompOptions(body.list || []);
 
-                        if (compCnt > 0) {
+                        if (compCnt < 1) {
+                            setComponent(component || {});
+                        } else {
                             setAreaCompLoad({
                                 ...areaCompLoad,
                                 byPage: false,
@@ -270,7 +272,8 @@ const AreaFormDepth2 = (props) => {
                 }),
             );
         }
-    }, [areaCompLoad, compCnt, dispatch, error, page]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [areaCompLoad, compCnt, error, page]);
 
     /**
      * 페이지의 컨테이너 options 조회
@@ -371,6 +374,9 @@ const AreaFormDepth2 = (props) => {
             setError({ ...error, page: false });
             if (temp.areaDiv === ITEM_CP) getCompOptions();
             else getContOptions();
+        } else {
+            setCompOptions([]);
+            setContOptions([]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page.pageSeq, temp.areaDiv]);
@@ -379,7 +385,7 @@ const AreaFormDepth2 = (props) => {
         // 폼이 변경되면 CT, CP 리스트 날림
         setCompOptions([]);
         setContOptions([]);
-    }, [selectedDepth, temp.areaSeq]);
+    }, [selectedDepth]);
 
     return (
         <MokaCard title={`편집영역 ${temp.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>

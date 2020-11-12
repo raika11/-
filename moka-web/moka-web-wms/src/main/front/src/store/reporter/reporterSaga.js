@@ -32,19 +32,6 @@ function* saveReporter({ payload: { type, actions, callback } }) {
     //yield put(startLoading(ACTION));
 
     try {
-        // actions 먼저 처리
-        /*
-        if (actions && actions.length > 0) {
-            for (let i = 0; i < actions.length; i++) {
-                const act = actions[i];
-                yield put({
-                    type: act.type,
-                    payload: act.payload,
-                });
-            }
-        }
-        */
-
         const act = actions[0];
         yield put({
             type: act.type,
@@ -59,6 +46,7 @@ function* saveReporter({ payload: { type, actions, callback } }) {
         if (response.data.header.success) {
             yield put({
                 type: reporterAction.GET_REPORTER_SUCCESS,
+                payload: response.data,
             });
 
             // 목록 다시 검색

@@ -14,8 +14,10 @@ const ReporterEdit = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { repSeq: paramSeq } = useParams();
-
     const metadata = new Map();
+
+    // use
+    const [inputDisabled, setInputDisabled] = useState(true);
 
     // entity
     const [repSeq, setRepSeq] = useState('');
@@ -122,8 +124,10 @@ const ReporterEdit = () => {
     useEffect(() => {
         if (paramSeq) {
             dispatch(getReporter(paramSeq));
+            setInputDisabled(false);
         } else {
             dispatch(clearReporter());
+            setInputDisabled(true);
         }
     }, [dispatch, paramSeq]);
 
@@ -274,6 +278,16 @@ const ReporterEdit = () => {
         setUserTalk(reporter.userTalk || '');
     }, [rMail1, repEmail2, repPhoto, reporter]);
 
+    /*
+    useEffect(() => {
+        if (data.usedYn == 'Y') {
+            setBtnDisabled(false);
+        } else {
+            setBtnDisabled(true);
+        }
+    }, [dispatch]);
+     */
+
     return (
         <>
             <div className="mb-3 d-flex align-items-center">
@@ -307,10 +321,10 @@ const ReporterEdit = () => {
                         </div>
                     </div>
                     <div className="d-flex justify-content-center">
-                        <Button variant="primary" className="mr-05" onClick={handleClickSave}>
+                        <Button variant="primary" className="mr-05" onClick={handleClickSave} disabled={inputDisabled}>
                             저장
                         </Button>
-                        <Button variant="gray150" onClick={handleClickCancle}>
+                        <Button variant="gray150" onClick={handleClickCancle} disabled={inputDisabled}>
                             취소
                         </Button>
                     </div>

@@ -41,11 +41,12 @@ const ReporterMgrAgGrid = () => {
     );
 
     useEffect(() => {
+        console.log('aaaaaaaaaaaaaaaaaaaa::', list);
         setRepoterRows(
             list.map((row) => ({
                 ...row,
                 id: String(row.repSeq),
-                belong: (row.r1Cd || '') + (row.r2C || '') + (row.r3Cd || '') + (row.r4Cd || ''),
+                belong: (row.r1CdNm || '') + (row.r2CdNm || '') + (row.r3CdNm || '') + (row.r4CdNm || ''),
             })),
         );
     }, [list]);

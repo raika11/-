@@ -2,19 +2,23 @@
     opacity: 0.9;
 }
 
-body.toastr-confirm-active {
-    // padding-right: 17px;
-}
-
-.redux-toastr .toastr .close-toastr {
-    margin-right: 7px;
-}
-
 .toastr {
+    > div {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        min-height: 70px;
+    }
+
     .rrt-title {
         display: none;
     }
+
     .rrt-text {
         word-break: break-word;
+    }
+
+    .close-toastr {
+        margin-right: 7px;
     }
 }

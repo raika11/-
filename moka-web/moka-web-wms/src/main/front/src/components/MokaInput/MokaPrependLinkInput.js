@@ -77,7 +77,7 @@ const MokaPrependLinkInput = forwardRef((props, ref) => {
      * @param {any} idx index
      */
     const createInput = (props, idx) => {
-        const { id, name, as, type, placeholder, value, onChange, isInvalid, disabled, className, style, mask, ...rest } = props;
+        const { id, name, as, type, placeholder, value, onChange, isInvalid, disabled, className, style, ...rest } = props;
 
         return (
             <MokaInput
@@ -89,13 +89,12 @@ const MokaPrependLinkInput = forwardRef((props, ref) => {
                 inputProps={rest}
                 id={id}
                 name={name}
-                value={value || undefined}
-                onChange={onChange || undefined}
+                value={value}
+                onChange={onChange}
                 isInvalid={isInvalid}
                 disabled={disabled}
                 type={type}
                 placeholder={placeholder}
-                mask={mask}
             />
         );
     };

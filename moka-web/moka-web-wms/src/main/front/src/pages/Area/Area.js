@@ -21,6 +21,11 @@ const Area = ({ match }) => {
         areaDepth2: store.area.depth2.area,
     }));
 
+    React.useEffect(() => {
+        console.log(areaDepth1);
+        console.log(areaDepth2);
+    }, [areaDepth1, areaDepth2]);
+
     /**
      * 삭제
      */

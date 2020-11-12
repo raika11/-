@@ -5,9 +5,14 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
-import MokaInput from './MokaInput';
+import MokaInput, { propTypes as inputPropTypes } from './MokaInput';
 
 const propTypes = {
+    ...inputPropTypes,
+    /**
+     * MokaInput의 className
+     */
+    inputClassName: PropTypes.string,
     /**
      * inputGroup의 추가 스타일
      */
@@ -28,50 +33,6 @@ const propTypes = {
      * 검색버튼의 추가 스타일
      */
     buttonClassName: PropTypes.string,
-    /**
-     * MokaInput의 placeholder
-     */
-    placeholder: PropTypes.string,
-    /**
-     * MokaInput의 value
-     */
-    value: PropTypes.any,
-    /**
-     * MokaInput의 isInvalid
-     */
-    isInvalid: PropTypes.bool,
-    /**
-     * MokaInput과 button의 disabled
-     */
-    disabled: PropTypes.bool,
-    /**
-     * MokaInput의 onChange
-     */
-    onChange: PropTypes.func,
-    /**
-     * MokaInput의 id
-     */
-    id: PropTypes.string,
-    /**
-     * MokaInput의 className
-     */
-    inputClassName: PropTypes.string,
-    /**
-     * MokaInput의 name
-     */
-    name: PropTypes.string,
-    /**
-     * 그 외 MokaInput의 props
-     * 자세한 설명은 MokaInput의 inputProps를 참고한다
-     */
-    inputProps: PropTypes.shape({
-        readOnly: PropTypes.bool,
-        plaintext: PropTypes.bool,
-    }),
-    /**
-     * MokaInput의 mask string
-     */
-    mask: PropTypes.string,
 };
 const defaultProps = {
     placeholder: '검색어를 입력하세요',
@@ -90,7 +51,7 @@ const MokaSearchInput = (props) => {
     const { buttonClassName, searchText, onSearch, variant } = props;
 
     // input props
-    const { placeholder, onChange, value, id, name, mask, inputProps, isInvalid, inputClassName, disabled } = props;
+    const { placeholder, onChange, value, id, name, inputProps, isInvalid, inputClassName, disabled } = props;
 
     /**
      * 키 입력
@@ -123,7 +84,6 @@ const MokaSearchInput = (props) => {
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
-                mask={mask}
             />
             <Button variant={variant} className={buttonClassName} style={{ minWidth: 53 }} onClick={onSearch} disabled={disabled}>
                 {searchText}

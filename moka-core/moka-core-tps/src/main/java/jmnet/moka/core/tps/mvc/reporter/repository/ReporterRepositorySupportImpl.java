@@ -37,11 +37,11 @@ public class ReporterRepositorySupportImpl extends QuerydslRepositorySupport imp
     @Override
     public Page<Reporter> findList(ReporterSearchDTO search, Pageable pageable) {
         QReporter reporter = QReporter.reporter;
-        QCodeMgt codeMgt = QCodeMgt.codeMgt;
-        String r1Cd = "R1";
-        String r2Cd = "R2";
-        String r3Cd = "R3";
-        String r4Cd = "R4";
+//        QCodeMgt codeMgt = QCodeMgt.codeMgt;
+//        String r1Cd = "R1";
+//        String r2Cd = "R2";
+//        String r3Cd = "R3";
+//        String r4Cd = "R4";
 
         BooleanBuilder builder = new BooleanBuilder();
         String keyword = search.getKeyword();

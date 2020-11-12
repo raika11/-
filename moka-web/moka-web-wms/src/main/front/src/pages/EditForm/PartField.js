@@ -1,6 +1,5 @@
-import React, { forwardRef, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import InputMask from 'react-input-mask';
 import PropTypes from 'prop-types';
 
 import Form from 'react-bootstrap/Form';
@@ -39,7 +38,7 @@ const PartField = (props) => {
             return <MokaInputLabel as="input" key={id} label={title} value={fieldValue} name={id} id={id} onChange={handleTextChange}></MokaInputLabel>;
         case 'SELECT':
             return (
-                <MokaInputLabel as="select" key={id} label={title}>
+                <MokaInputLabel as="select" key={id} label={title} defaultValue={fieldValue} onChange={handleTextChange}>
                     {options.map((option) => (
                         <option key={option.value} value={option.value}>
                             {option.text}

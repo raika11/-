@@ -60,24 +60,36 @@ export function* saveArea({ payload: { actions, callback, depth } }) {
         callbackData = response.data;
 
         if (response.data.header.success) {
-            yield put({
-                type: act.CHANGE_AREA,
-                payload: {
-                    depth,
-                    area: response.data.body,
-                },
-            });
             if (depth === 1) {
+                // 수정 시 데이터 다시 로드...
+                if (area.areaSeq) {
+                    yield put({
+                        type: act.GET_AREA_DEPTH1,
+                        payload: { areaSeq: area.areaSeq },
+                    });
+                }
                 yield put({ type: act.GET_AREA_LIST_DEPTH1 });
             } else if (depth === 2) {
+                if (area.areaSeq) {
+                    yield put({
+                        type: act.GET_AREA_DEPTH2,
+                        payload: { areaSeq: area.areaSeq },
+                    });
+                }
                 yield put({ type: act.GET_AREA_LIST_DEPTH2 });
             } else if (depth === 3) {
+                if (area.areaSeq) {
+                    yield put({
+                        type: act.GET_AREA_DEPTH3,
+                        payload: { areaSeq: area.areaSeq },
+                    });
+                }
                 yield put({ type: act.GET_AREA_LIST_DEPTH3 });
             }
         } else {
             yield put({
-                type: act.CHANGE_INVALID_LIST,
-                payload: response.data.body.list,
+                type: act.GET_AREA_FAILURE,
+                payload: response.data,
             });
         }
     } catch (e) {

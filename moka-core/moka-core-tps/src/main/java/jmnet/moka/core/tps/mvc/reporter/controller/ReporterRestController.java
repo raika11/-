@@ -1,7 +1,6 @@
 package jmnet.moka.core.tps.mvc.reporter.controller;
 
 import io.swagger.annotations.ApiOperation;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -9,17 +8,14 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
-import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
-import jmnet.moka.core.tps.mvc.reporter.dto.ReporterDTO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSimpleDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
 import jmnet.moka.core.tps.mvc.reporter.service.ReporterService;
+import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -74,23 +70,18 @@ public class ReporterRestController {
      */
     @ApiOperation(value = "기자관리 목록 조회")
     @GetMapping
-    public ResponseEntity<?> getReporterMgrList(@SearchParam ReporterSearchDTO search, @RequestAttribute Long processStartTime) {
+    public ResponseEntity<?> getReporterMgrList(@Valid @SearchParam ReporterSearchDTO search) {
 
-        // 페이징조건 설정
-        Pageable pageable = search.getPageable();
+        // 조회(mybatis)
+        List<ReporterVO> returnValue = reporterService.findAllReporterMgr(search);
 
-        // 조회
-        Page<Reporter> returnValue = reporterService.findAllReporterMgr(search, pageable);
+        ResultListDTO<ReporterVO> resultList = new ResultListDTO<ReporterVO>();
+        resultList.setList(returnValue);
+        resultList.setTotalCnt(search.getTotal());
 
-        // 리턴값 설정
-        ResultListDTO<ReporterDTO> resultListMessage = new ResultListDTO<>();
-        List<ReporterDTO> reporterDTOList = modelMapper.map(returnValue.getContent(), ReporterDTO.TYPE);
-        resultListMessage.setTotalCnt(returnValue.getTotalElements());
-        resultListMessage.setList(reporterDTOList);
-
-        ResultDTO<ResultListDTO<ReporterDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        ResultDTO<ResultListDTO<ReporterVO>> resultDTO = new ResultDTO<ResultListDTO<ReporterVO>>(resultList);
         tpsLogger.success(true);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**
@@ -107,12 +98,22 @@ public class ReporterRestController {
             @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{reporter.error.pattern.repSeq}") String repSeq)
             throws NoDataException {
 
-        String message = messageByLocale.get("tps.reporter.error.no-data", request);
-        Reporter reporter = reporterService.findReporterMgrById(repSeq).orElseThrow(() -> new NoDataException(message));
-        ReporterSimpleDTO dto = modelMapper.map(reporter, ReporterSimpleDTO.class);
-        tpsLogger.success(ActionType.SELECT, true);
-        ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<>(dto);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+//        String message = messageByLocale.get("tps.reporter.error.no-data", request);
+//        Reporter reporter = reporterService.findReporterMgrById(repSeq).orElseThrow(() -> new NoDataException(message));
+//        ReporterSimpleDTO dto = modelMapper.map(reporter, ReporterSimpleDTO.class);
+//        tpsLogger.success(ActionType.SELECT, true);
+//        ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<>(dto);
+//        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        // 조회(mybatis)
+        //String message = messageByLocale.get("tps.reporter.error.no-data", request);
+        ReporterVO returnValue = reporterService.findBySeq(repSeq);
+
+        ResultDTO<ReporterVO> resultDTO = new ResultDTO<ReporterVO>(returnValue);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+
     }
 
     /**
@@ -126,7 +127,7 @@ public class ReporterRestController {
      */
     @ApiOperation(value = "기자정보 수정")
     @PutMapping("/{repSeq}")
-    public ResponseEntity<?> putDomain(HttpServletRequest request,
+    public ResponseEntity<?> putReporter(HttpServletRequest request,
                                        @PathVariable("repSeq")
                                        @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporter.error.pattern.repSeq}") String repSeq,
                                        @Valid ReporterSimpleDTO reporterDTO)

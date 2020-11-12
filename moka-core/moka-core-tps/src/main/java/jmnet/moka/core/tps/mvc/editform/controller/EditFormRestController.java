@@ -578,7 +578,7 @@ public class EditFormRestController {
      * @throws Exception            그 외 에러처리
      */
     @ApiOperation(value = "편집 폼 삭제")
-    @DeleteMapping("/{formId}/exists")
+    @GetMapping("/{formId}/exists")
     public ResponseEntity<?> getExistFormId(
             @PathVariable("formId") @Size(min = 1, max = 30, message = "{tps.edit-form.error.size.formId}") String formId)
             throws InvalidDataException, NoDataException, Exception {

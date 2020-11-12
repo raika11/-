@@ -26,7 +26,52 @@
             AND A.CONTENTS_ID = C.CID
         </if>        
     </sql>
-    	
+
+  <!-- article basic -->
+  <select id="basic" parameterType="hashmap" resultType="map">
+    select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE from TB_ARTICLE_BASIC A, TB_ARTICLE_SOURCE B
+    where A.SOURCE_CODE = B.SOURCE_CODE AND A.TOTAL_ID=#{totalId}
+  </select>
+  <!-- article content -->
+  <select id="content" parameterType="hashmap" resultType="map">
+    select * FROM TB_ARTICLE_CONTENT
+    where TOTAL_ID=#{totalId}
+  </select>
+  <!-- article reporter -->
+  <select id="reporter" parameterType="hashmap" resultType="map">
+    select B.* from TB_15RE_ART_REPORTER A, TB_15RE_REPORTER B
+    where TOTAL_ID = #{totalId} AND A.REP_SEQ = B.REP_SEQ
+    ORDER BY A.ORD_NO ASC
+  </select>
+  <!-- article mastercode -->
+  <select id="mastercode" parameterType="hashmap" resultType="map">
+    select B.*
+    from TB_ARTICLE_CODELIST A, TB_MASTERCODE B
+    where TOTAL_ID =#{totalId} AND A.MASTER_CODE = B.MASTER_CODE
+    and A.SERVICE_FLAG='Y'
+    order by ORD_NO
+  </select>
+  <!-- article servicemap -->
+  <select id="servicemap" parameterType="hashmap" resultType="map">
+    select B.*
+    from TB_ARTICLE_CODELIST A, TB_SERVICE_MAP B
+    where TOTAL_ID = #{totalId} AND A.MASTER_CODE = b.MASTER_CODE
+    and A.SERVICE_CODE = B.SERVICE_CODE
+    and A.SERVICE_FLAG='Y'
+    order by ORD_NO
+  </select>
+  <!-- article keyword -->
+  <select id="keyword" parameterType="hashmap" resultType="map">
+  SELECT *
+  FROM TB_ARTICLE_KEYWORD
+  WHERE TOTAL_ID = #{totalId}
+  </select>
+  <!-- article multi -->
+  <select id="multi" parameterType="hashmap" resultType="map">
+  select * from TB_15RE_ARTICLE_MULTI
+where TOTAL_ID = #{totalId}
+  </select>
+
 	<!-- codelist -->
 	<select id="codelist" parameterType="hashmap" resultType="map">
 		SELECT CONTENTS_ID,TITLE,SUBTITLE,DIST_YMDT,CONTENTS_TEXT FROM WMS_ARTICLE B WHERE EXISTS (

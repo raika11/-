@@ -105,7 +105,7 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
      * @throws TemplateMergeException
      * @throws TemplateParseException
      */
-    private MokaTemplateMerger getTemplateMerger(String domainId)
+    public MokaTemplateMerger getTemplateMerger(String domainId)
             throws TemplateMergeException, TemplateParseException {
 
         MokaTemplateMerger tm = this.templateMergerMap.get(domainId);

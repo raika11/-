@@ -30,7 +30,7 @@
 
   <select id="deleteByPageSeq" parameterType="hashMap" resultType="java.lang.Long"
     statementType="CALLABLE">
-		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_PAGE_REL_DELETE(
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_PAGE_REL_DEL(
 			#{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }
   </select>

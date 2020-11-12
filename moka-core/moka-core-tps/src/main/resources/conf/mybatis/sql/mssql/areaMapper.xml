@@ -8,7 +8,7 @@
 <mapper namespace="jmnet.moka.core.tps.mvc.area.mapper.AreaMapper">
 
   <select id="findSubNodes" parameterType="hashMap" resultType="Long" statementType="CALLABLE">
-    {call UPA_WMS_AREA_TOPDOWN_LIST(
+    {call UPA_WMS_AREA_TOPDOWN_LIST_SEL(
     #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
     ) }
@@ -18,7 +18,7 @@
   <!-- 편집영역에 존재하는 컴포넌트가 페이지에 존재하는 조사한다. -->
   <select id="checkAreaComp" parameterType="hashMap" resultType="java.lang.Long"
     statementType="CALLABLE">
-		{call UPA_WMS_AREA_COMP_CHECK(
+		{call UPA_WMS_AREA_COMP_CHK(
 			#{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
 			#{byPage, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long},
 			#{byContainer, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long},
@@ -28,7 +28,7 @@
 
   <select id="deleteByAreaSeq" parameterType="hashMap" resultType="java.lang.Long"
     statementType="CALLABLE">
-		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_AREA_COMP_DELETE(
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_AREA_COMP_DEL(
 			#{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }
   </select>

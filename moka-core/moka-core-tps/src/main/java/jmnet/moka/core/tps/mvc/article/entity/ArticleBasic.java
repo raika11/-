@@ -12,14 +12,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.Data;
+import jmnet.moka.core.common.MokaConstants;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 /**
  * 기사정보
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
 @Entity
 @Table(name = "TB_ARTICLE_BASIC")
-@Data
 public class ArticleBasic implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,7 +40,7 @@ public class ArticleBasic implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TOTAL_ID", nullable = false)
-    private Integer totalId;
+    private Long totalId;
 
     /**
      * 출처
@@ -42,7 +52,7 @@ public class ArticleBasic implements Serializable {
      * 등록기사아이디
      */
     @Column(name = "AID", nullable = false)
-    private Integer AID;
+    private Long AID;
 
     /**
      * 서비스일시(VC)
@@ -83,32 +93,34 @@ public class ArticleBasic implements Serializable {
     /**
      * 기사기자
      */
-    @Column(name = "ARTICLE_REPORTER")
-    private String articleReporter;
+    @Nationalized
+    @Column(name = "ART_REPORTER")
+    private String artReporter;
 
     /**
      * 기사요약
      */
-    @Column(name = "ARTICLE_SUMMARY")
-    private String articleSummary;
+    @Nationalized
+    @Column(name = "ART_SUMMARY")
+    private String artSummary;
 
     /**
      * 기사썸네일
      */
-    @Column(name = "ARTICLE_THUMB")
-    private String articleThumb;
+    @Column(name = "ART_THUMB")
+    private String artThumb;
 
     /**
      * 등록일시
      */
-    @Column(name = "ARTICLE_REG_DT")
-    private Timestamp articleRegDt;
+    @Column(name = "ART_REG_DT")
+    private Timestamp artRegDt;
 
     /**
      * 수정일시
      */
-    @Column(name = "ARTICLE_MOD_DT")
-    private Timestamp articleModDt;
+    @Column(name = "ART_MOD_DT")
+    private Timestamp artModDt;
 
     /**
      * 원본기사ID(복제시)
@@ -119,26 +131,26 @@ public class ArticleBasic implements Serializable {
     /**
      * 기사타입
      */
-    @Column(name = "ART_TYPE")
+    @Column(name = "ART_TYPE", columnDefinition = "char")
     private String artType = "B";
 
     /**
      * 콘텐트타입
      */
-    @Column(name = "CONTENT_TYPE")
+    @Column(name = "CONTENT_TYPE", columnDefinition = "char")
     private String contentType;
 
     /**
      * 서비스여부
      */
-    @Column(name = "SERVICE_FLAG", nullable = false)
-    private String serviceFlag = "N";
+    @Column(name = "SERVICE_FLAG", columnDefinition = "char", nullable = false)
+    private String serviceFlag = MokaConstants.NO;
 
     /**
      * 연결댓글ID
      */
     @Column(name = "CMT_TOTALID", nullable = false)
-    private Integer cmtTotalid = 0;
+    private Long cmtTotalid = (long) 0;
 
     /**
      * 호
@@ -149,10 +161,15 @@ public class ArticleBasic implements Serializable {
     /**
      * 기사제목
      */
-    @Column(name = "ARTICLE_TITLE")
-    private String articleTitle;
+    @Nationalized
+    @Column(name = "ART_TITLE")
+    private String artTitle;
 
-    @Column(name = "ARTICLE_SUB_TITLE")
-    private String articleSubTitle;
+    /**
+     * 기사부제목
+     */
+    @Nationalized
+    @Column(name = "ART_SUB_TITLE")
+    private String artSubTitle;
 
 }

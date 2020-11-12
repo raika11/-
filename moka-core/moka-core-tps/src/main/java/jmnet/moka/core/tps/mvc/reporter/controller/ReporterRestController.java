@@ -16,7 +16,6 @@ import jmnet.moka.core.tps.mvc.reporter.service.ReporterService;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -99,23 +98,11 @@ public class ReporterRestController {
     public ResponseEntity<?> getReportMgr(HttpServletRequest request,
             @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{reporter.error.pattern.repSeq}") String repSeq)
             throws NoDataException {
-
-//        String message = messageByLocale.get("tps.reporter.error.no-data", request);
-//        Reporter reporter = reporterService.findReporterMgrById(repSeq).orElseThrow(() -> new NoDataException(message));
-//        ReporterSimpleDTO dto = modelMapper.map(reporter, ReporterSimpleDTO.class);
-//        tpsLogger.success(ActionType.SELECT, true);
-//        ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<>(dto);
-//        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-
         // 조회(mybatis)
-        //String message = messageByLocale.get("tps.reporter.error.no-data", request);
         ReporterVO returnValue = reporterService.findBySeq(repSeq);
-
         ResultDTO<ReporterVO> resultDTO = new ResultDTO<ReporterVO>(returnValue);
         tpsLogger.success(true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-
-
     }
 
     /**
@@ -123,7 +110,7 @@ public class ReporterRestController {
      *
      * @param request   요청
      * @param repSeq  기자일련번호
-     * @param reporterDTO 수정할 기자정보
+     * @param reporterSimpleDTO 수정할 기자정보
      * @return 수정된 기자정보
      * @throws Exception 그외 모든 에러
      */
@@ -132,12 +119,17 @@ public class ReporterRestController {
     public ResponseEntity<?> putReporter(HttpServletRequest request,
                                        @PathVariable("repSeq")
                                        @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporter.error.pattern.repSeq}") String repSeq,
-                                       @Valid ReporterSimpleDTO reporterDTO)
+                                       @Valid ReporterSimpleDTO reporterSimpleDTO)
             throws Exception {
 
         // GroupDTO -> Group 변환
         String infoMessage = messageByLocale.get("tps.group.error.no-data", request);
-        Reporter newReporter = modelMapper.map(reporterDTO, Reporter.class);
+        String cd1Nm = reporterSimpleDTO.getR1CdNm();
+        String cd2Nm = reporterSimpleDTO.getR2CdNm();
+        String cd3Nm = reporterSimpleDTO.getR3CdNm();
+        String cd4Nm = reporterSimpleDTO.getR4CdNm();
+
+        Reporter newReporter = modelMapper.map(reporterSimpleDTO, Reporter.class);
 
         reporterService
                 .findReporterMgrById(newReporter.getRepSeq())
@@ -149,8 +141,12 @@ public class ReporterRestController {
             Reporter returnValue = reporterService.updateReporterMgr(newReporter);
 
             // 결과리턴
-            ReporterDTO dto = modelMapper.map(returnValue, ReporterDTO.class);
-            ResultDTO<ReporterDTO> resultDto = new ResultDTO<ReporterDTO>(dto);
+            ReporterSimpleDTO dto = modelMapper.map(returnValue, ReporterSimpleDTO.class);
+            dto.setR1CdNm(cd1Nm);
+            dto.setR2CdNm(cd2Nm);
+            dto.setR3CdNm(cd3Nm);
+            dto.setR4CdNm(cd4Nm);
+            ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<ReporterSimpleDTO>(dto);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
@@ -158,7 +154,7 @@ public class ReporterRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE REPORTER] seq: {} {}", reporterDTO.getRepSeq(),  e.getMessage());
+            log.error("[FAIL TO UPDATE REPORTER] seq: {} {}", reporterSimpleDTO.getRepSeq(),  e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE DATASET]", e, true);
             throw new Exception(messageByLocale.get("tps.reporter.error.save", request), e);

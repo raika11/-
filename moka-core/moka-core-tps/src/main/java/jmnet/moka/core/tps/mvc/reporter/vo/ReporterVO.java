@@ -175,12 +175,6 @@ public class ReporterVO implements Serializable {
     private String jplusProfileYn;
 
     /**
-     * JPLUS 등록일
-     */
-    @Column(name = "JPLUS_REG_DT")
-    private String jplusRegDt;
-
-    /**
      * JPLUS사용여부
      */
     @Column(name = "JPLUS_USED_YN")
@@ -283,22 +277,10 @@ public class ReporterVO implements Serializable {
     private String jamComNm;
 
     /**
-     * 등록일시
-     */
-    @Column(name = "REG_DT")
-    private String regDt;
-
-    /**
      * 기등록자
      */
     @Column(name = "REG_ID")
     private String regId;
-
-    /**
-     * 수정일시
-     */
-    @Column(name = "MOD_DT")
-    private String modDt;
 
     /**
      * 수정자

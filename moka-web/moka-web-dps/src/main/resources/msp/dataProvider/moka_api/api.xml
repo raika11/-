@@ -1,70 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <apiConfig>
-	<api id="term.list">
-		<description>용어 목록을 반환한다.</description>
+	<api id="article_test">
+		<description>기사정보를 반환한다.</description>
 		<parameter>
-			<termName desc="검색할 용어">.{1,100}</termName>
+			<totalId desc="기사Id">[0-9]{1,9}</totalId>
 		</parameter>
-		<request>dps.term.term_list</request>
-		<request total="Y">dps.term.term_total</request>
+		<request>dps.article.info</request>
 		<keys>
-			termName
-			page
-			size
-		</keys>
-	</api>
-	<api id="scriptTest">
-		<description>script request를 테스트 한다.</description>
-		<request type="script">
-		var result = $arh.apiRequest("demo_api","term.list", new("java.util.HashMap"));
-		result.get("_DATA");
-		</request>
-	</api>
-	<api id="sqlmapEvalTest">
-		<description>db request의 sqlmap eval을 테스트 한다.</description>
-		<parameter>
-			<name default="a">.{1,100}</name>
-		</parameter>
-		<request eval="Y"><![CDATA[
-			if ($param.name=="a") "dps.term.term_list" else  "dps.item.domain.list" 
-		]]></request>
-		<keys>name</keys>
-	</api>
-	<api id="parameterEvalTest">
-		<description>parameter의 eval을 테스트한다.</description>
-		<parameter>
-			<page type="number" default="1">[1-9][0-9]*</page>
-			<count type="number" default="10">[1-9][0-9]*</count>
-			<start type="number" default="0" eval="((page le 0 ? 1 :page) - 1)*count"/>
-		</parameter>
-		<request type="module">jmnet.moka.core.dps.api.handler.module.ExampleModule</request>
-		<keys>
-			page
-			size
-		</keys>
-	</api>
-	<api id="moduletest">
-		<description>모듈을 테스트 한다.</description>
-		<parameter>
-			<name default="a">.{1,100}</name>
-			<value default="b">.{1,100}</value>
-		</parameter>
-		<request type="module">jmnet.moka.core.dps.api.handler.module.ExampleModule</request>
-		<request type="purge" apiId="evaltest2" keys="name" async="N"/>
-		<keys>
-			name
-			param1
-		</keys>
-	</api>
-	<api id="looptest" expire="0">
-		<description>기사-관련기사를 테스트 한다.</description>
-		<parameter>
-			<id desc="데이타셋 아이디" hints="id" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</id>
-		</parameter>
-		<request>dps.term.loop_parent</request>
-		<request resultName="REL">dps.term.loop_child</request>
-		<keys>
-			id
+			totalId
 		</keys>
 	</api>
 </apiConfig>

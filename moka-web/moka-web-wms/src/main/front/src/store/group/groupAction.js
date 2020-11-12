@@ -29,10 +29,6 @@ export const getGroupList = createAction(GET_GROUP_LIST, (...actions) => {
     return actions;
 });
 
-{
-    console.log('getGroupList::' + getGroupList);
-}
-
 export const getGroup = createAction(GET_GROUP, (groupCd) => groupCd);
 
 /**

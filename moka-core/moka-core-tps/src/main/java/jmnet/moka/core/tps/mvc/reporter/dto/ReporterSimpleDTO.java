@@ -174,20 +174,28 @@ public class ReporterSimpleDTO implements Serializable {
      */
     private String r1Cd;
 
+    private String r1CdNm;
+
     /**
      * 조직개편 부서 코드
      */
     private String r2Cd;
+
+    private String r2CdNm;
 
     /**
      * 조직개편 실/국 코드
      */
     private String r3Cd;
 
+    private String r3CdNm;
+
     /**
      * 조직개편 팀 코드
      */
     private String r4Cd;
+
+    private String r4CdNm;
 
     /**
      * 사용안함

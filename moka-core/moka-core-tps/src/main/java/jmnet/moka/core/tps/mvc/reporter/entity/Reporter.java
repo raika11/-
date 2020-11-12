@@ -2,11 +2,10 @@ package jmnet.moka.core.tps.mvc.reporter.entity;
 
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.*;
+
 import javax.persistence.*;
-import java.util.Date;
 
 
 /**
@@ -180,13 +179,6 @@ public class Reporter extends BaseAudit {
      */
     @Column(name = "JPLUS_PROFILE_YN", updatable = false)
     private String jplusProfileYn;
-
-    /**
-     * JPLUS 등록일
-     */
-    @Column(name = "JPLUS_REG_DT", updatable = false)
-    @DTODateTimeFormat
-    private Date jplusRegDt;
 
     /**
      * JPLUS사용여부

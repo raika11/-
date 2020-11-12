@@ -141,11 +141,13 @@ const ReporterEdit = () => {
         e.stopPropagation();
 
         const tmp = {
-            repSeq,
-            usedYn,
-            talkYn,
+            ...reporter,
+            //repSeq : repSeq,
+            usedYn: usedYn,
+            talkYn: talkYn,
         };
 
+        console.log('tmppppppppppppppppppppppparam:', tmp);
         if (paramSeq) {
             updateReporter(tmp);
         }
@@ -188,7 +190,6 @@ const ReporterEdit = () => {
         setRepSeqError(false);
         setUsedYnError(false);
         setTalkYnError(false);
-
         setRepSeq(reporter.repSeq || '');
         setUsedYn(reporter.usedYn || 'N');
         setTalkYn(reporter.talkYn || 'N');
@@ -202,7 +203,6 @@ const ReporterEdit = () => {
         setRepTitle(reporter.repTitle || '');
         setJoinsId(reporter.joinsId || '');
         setJnetId(reporter.jnetId || '');
-
         if (reporter.repPhoto !== '' && reporter.repPhoto !== null && reporter.repPhoto) {
             setRepPhoto(reporter.repPhoto);
         } else {
@@ -210,7 +210,6 @@ const ReporterEdit = () => {
                 setRepPhoto(reporter.repImg);
             }
         }
-
         setRepImg(reporter.repImg || bg);
         setSnsTw(reporter.snsTw || '');
         setSnsFb(reporter.snsFb || '');
@@ -225,16 +224,6 @@ const ReporterEdit = () => {
         setRepTalk(reporter.repTalk || '');
         setUserTalk(reporter.userTalk || '');
     }, [rMail1, repEmail2, repPhoto, reporter]);
-
-    /*
-    useEffect(() => {
-        if (data.usedYn == 'Y') {
-            setBtnDisabled(false);
-        } else {
-            setBtnDisabled(true);
-        }
-    }, [dispatch]);
-     */
 
     return (
         <>

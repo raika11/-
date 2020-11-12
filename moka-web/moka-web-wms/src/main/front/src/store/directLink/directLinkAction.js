@@ -28,6 +28,8 @@ export const getDirectLink = createAction(GET_DIRECT_LINK, ({ linkSeq, callback 
  */
 export const CHANGE_DIRECT_LINK = 'directLink/CHANGE_DIRECT_LINK';
 export const changeDirectLink = createAction(CHANGE_DIRECT_LINK, (directLink) => directLink);
+export const CHANGE_INVALID_LINK = 'directLink/CHANGE_INVALID_LINK';
+export const changeInvalidList = createAction(CHANGE_INVALID_LINK, (invalidList) => invalidList);
 
 /**
  * 저장

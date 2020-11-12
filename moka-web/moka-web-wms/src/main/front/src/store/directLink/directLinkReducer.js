@@ -62,6 +62,11 @@ export default handleActions(
                 draft.directLink = payload;
             });
         },
+        [act.CHANGE_INVALID_LINK]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
+            });
+        },
         /**
          * 데이터 조회
          */

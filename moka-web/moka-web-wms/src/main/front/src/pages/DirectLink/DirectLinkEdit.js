@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaCard, MokaInputLabel } from '@components';
-import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK } from '@store/directLink';
+import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, changeInvalidList } from '@store/directLink';
 
 /**
  * 사이트 바로 가기 등록/수정창
@@ -17,8 +17,9 @@ const DirectLinkEdit = () => {
     const { linkSeq } = useParams();
     const imgFileRef = useRef(null);
 
-    const { directLink, loading } = useSelector((store) => ({
+    const { directLink, invalidList, loading } = useSelector((store) => ({
         directLink: store.directLink.directLink,
+        invalidList: store.directLink.invalidList,
         loading: store.loading[GET_DIRECT_LINK] || store.loading[SAVE_DIRECT_LINK],
     }));
 
@@ -137,6 +138,21 @@ const DirectLinkEdit = () => {
         // 스토어에서 가져온 데이터 셋팅
         handleClickCancle();
     }, [handleClickCancle]);
+
+    useEffect(() => {
+        // invalidList 처리
+        if (invalidList.length > 0) {
+            setError(
+                invalidList.reduce(
+                    (all, c) => ({
+                        ...all,
+                        [c.field]: true,
+                    }),
+                    {},
+                ),
+            );
+        }
+    }, [invalidList]);
 
     return (
         <MokaCard width={535} title={`사이트 바로 가기 ${linkSeq ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>

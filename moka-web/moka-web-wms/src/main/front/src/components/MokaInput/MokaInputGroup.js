@@ -4,9 +4,14 @@ import PropTypes from 'prop-types';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import MokaPrependLinkInput from './MokaPrependLinkInput';
-import MokaInput from './MokaInput';
+import MokaInput, { propTypes as inputPropTypes } from './MokaInput';
 
 const propTypes = {
+    ...inputPropTypes,
+    /**
+     * MokaInput의 className
+     */
+    inputClassName: PropTypes.string,
     /**
      * FormGroup의 className
      */
@@ -48,57 +53,9 @@ const propTypes = {
      */
     isInvalid: PropTypes.bool,
     /**
-     * ---------------------------------------------------------------------------------------------
-     * input element의 타입(기본 input)
      * prependLink -> MokaPrependLinkInput
-     * ---------------------------------------------------------------------------------------------
      */
     as: PropTypes.oneOf(['input', 'textarea', 'prependLink']),
-    /**
-     * MokaInput의 className
-     */
-    inputClassName: PropTypes.string,
-    /**
-     * MokaInput의 type
-     */
-    type: PropTypes.string,
-    /**
-     * MokaInput의 placeholder
-     */
-    placeholder: PropTypes.string,
-    /**
-     * MokaInput의 value
-     */
-    value: PropTypes.any,
-    /**
-     * MokaInput의 disabled
-     */
-    disabled: PropTypes.bool,
-    /**
-     * MokaInput의 onChange
-     */
-    onChange: PropTypes.func,
-    /**
-     * MokaInput의 id
-     */
-    id: PropTypes.string,
-    /**
-     * MokaInput의 name
-     */
-    name: PropTypes.string,
-    /**
-     * 그 외 MokaInput의 props
-     * 자세한 설명은 MokaInput의 inputProps를 참고한다
-     */
-    inputProps: PropTypes.shape({
-        custom: PropTypes.bool,
-        readOnly: PropTypes.bool,
-        plaintext: PropTypes.bool,
-    }),
-    /**
-     * MokaInput의 mask string
-     */
-    mask: PropTypes.string,
 };
 const defaultProps = {
     label: null,
@@ -120,7 +77,7 @@ const MokaInputGroup = forwardRef((props, ref) => {
     const { inputGroupClassName, append, prepend, style, isInvalid } = props;
 
     // input props
-    const { inputClassName, as, type, placeholder, onChange, value, id, name, mask, inputProps, disabled } = props;
+    const { inputClassName, as, type, placeholder, onChange, value, id, name, inputProps, disabled } = props;
 
     /**
      * inputGroup 생성
@@ -142,7 +99,6 @@ const MokaInputGroup = forwardRef((props, ref) => {
                         onChange={onChange}
                         type={type}
                         placeholder={placeholder}
-                        mask={mask}
                     />
                     {append && <InputGroup.Append>{append}</InputGroup.Append>}
                 </InputGroup>

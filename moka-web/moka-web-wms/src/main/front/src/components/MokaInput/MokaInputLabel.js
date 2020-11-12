@@ -2,9 +2,14 @@ import React, { forwardRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
-import MokaInput from './MokaInput';
+import MokaInput, { propTypes as inputPropTypes } from './MokaInput';
 
 const propTypes = {
+    ...inputPropTypes,
+    /**
+     * MokaInput의 className
+     */
+    inputClassName: PropTypes.string,
     /**
      * FormGroup의 className
      */
@@ -26,64 +31,10 @@ const propTypes = {
      */
     required: PropTypes.bool,
     /**
-     * ---------------------------------------------------------------------------------------------
-     * input element의 타입(기본 input)
-     * imageFile -> MokaImageInput
-     * none -> label만 그림 (input 없음)
-     * autocomplete -> MokaAutocomplete
-     * dateTimePicker -> MokaDateTimePicker
-     * ---------------------------------------------------------------------------------------------
+     * none -> label만 그림 (input 없음),
+     * 나머지 타입은 MokaInput 확인
      */
     as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'none', 'autocomplete', 'dateTimePicker']),
-    /**
-     * MokaInput의 className
-     */
-    inputClassName: PropTypes.string,
-    /**
-     * MokaInput의 type
-     */
-    type: PropTypes.string,
-    /**
-     * MokaInput의 placeholder
-     */
-    placeholder: PropTypes.string,
-    /**
-     * MokaInput의 value
-     */
-    value: PropTypes.any,
-    /**
-     * MokaInput의 isInvalid
-     */
-    isInvalid: PropTypes.bool,
-    /**
-     * MokaInput의 disabled
-     */
-    disabled: PropTypes.bool,
-    /**
-     * MokaInput의 onChange
-     */
-    onChange: PropTypes.func,
-    /**
-     * MokaInput의 id
-     */
-    id: PropTypes.string,
-    /**
-     * MokaInput의 name
-     */
-    name: PropTypes.string,
-    /**
-     * 그 외 MokaInput의 props
-     * 자세한 설명은 MokaInput의 inputProps를 참고한다
-     */
-    inputProps: PropTypes.shape({
-        custom: PropTypes.bool,
-        readOnly: PropTypes.bool,
-        plaintext: PropTypes.bool,
-    }),
-    /**
-     * uncontrolled가 true이면 MokaInputHookForm 사용한다
-     */
-    uncontrolled: PropTypes.bool,
 };
 const defaultProps = {
     label: null,

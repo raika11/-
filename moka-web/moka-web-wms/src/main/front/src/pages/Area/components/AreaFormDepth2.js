@@ -59,6 +59,7 @@ const AreaFormDepth2 = (props) => {
     const [contOptions, setContOptions] = useState([]); // 컨테이너 options
     const [compOptions, setCompOptions] = useState([]); // 컴포넌트 options
     const [contCnt, setContCnt] = useState(0); // 컨테이너 load 카운트
+    const [compCnt, setCompCnt] = useState(0); // 컴포넌트 load 카운트
     const [error, setError] = useState({ page: false });
 
     /**
@@ -255,17 +256,24 @@ const AreaFormDepth2 = (props) => {
                     },
                     callback: ({ body }) => {
                         setCompOptions(body.list || []);
-                        setComponent({});
-                        setAreaCompLoad({
-                            ...areaCompLoad,
-                            byPage: false,
-                            byPageMessage: null,
-                        });
+
+                        if (compCnt < 1) {
+                            setComponent(component || {});
+                        } else {
+                            setAreaCompLoad({
+                                ...areaCompLoad,
+                                byPage: false,
+                                byPageMessage: null,
+                            });
+                            setComponent({});
+                        }
+                        setCompCnt(compCnt + 1);
                     },
                 }),
             );
         }
-    }, [areaCompLoad, dispatch, error, page]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [areaCompLoad, compCnt, error, page]);
 
     /**
      * 페이지의 컨테이너 options 조회
@@ -324,7 +332,20 @@ const AreaFormDepth2 = (props) => {
     }, [origin]);
 
     useEffect(() => {
-        // temp 변경 시 parent, domain 데이터 셋팅
+        /**
+         * areaSeq가 변경될 때 초기화!!!!
+         * 1) page, parent, domain 데이터 변경
+         * 2) cnt 0으로 셋팅
+         */
+        if (temp.page) {
+            setPage(temp.page);
+        } else {
+            setPage({});
+        }
+        if (!temp.areaSeq) {
+            setComponent({});
+            setContainer({});
+        }
         if (temp.parent && temp.parent.areaSeq) {
             setParent(temp.parent);
             setDomain(temp.domain);
@@ -335,25 +356,13 @@ const AreaFormDepth2 = (props) => {
             setParent(areaDepth2);
             setDomain(areaDepth2.domain || {});
         }
-    }, [temp, depth, areaDepth1, areaDepth2]);
-
-    useEffect(() => {
-        /**
-         * areaSeq가 변경될 때 초기화!!!!
-         * 1) page 데이터 변경
-         * 3) contCnt 0으로 셋팅
-         */
-        if (temp.page) {
-            setPage(temp.page);
-        } else {
-            setPage({});
-        }
         setContCnt(0);
+        setCompCnt(0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [temp.areaSeq]);
+    }, [temp.areaSeq, depth]);
 
     useEffect(() => {
-        // 도메인 변경 시 모달의 도메인 검색조건 변경
+        // 도메인 변경 시 페이지 변경 모달의 도메인 검색조건 변경
         if (domain.domainId) {
             onChangeModalDomainId(domain.domainId);
         }
@@ -365,6 +374,9 @@ const AreaFormDepth2 = (props) => {
             setError({ ...error, page: false });
             if (temp.areaDiv === ITEM_CP) getCompOptions();
             else getContOptions();
+        } else {
+            setCompOptions([]);
+            setContOptions([]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page.pageSeq, temp.areaDiv]);
@@ -373,7 +385,7 @@ const AreaFormDepth2 = (props) => {
         // 폼이 변경되면 CT, CP 리스트 날림
         setCompOptions([]);
         setContOptions([]);
-    }, [selectedDepth, temp.areaSeq]);
+    }, [selectedDepth]);
 
     return (
         <MokaCard title={`편집영역 ${temp.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>

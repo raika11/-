@@ -16,6 +16,10 @@ const propTypes = {
      */
     className: PropTypes.string,
     /**
+     * input의 ClassName
+     */
+    inputClassName: PropTypes.string,
+    /**
      * width
      */
     width: PropTypes.number,
@@ -61,7 +65,7 @@ const defaultProps = {
  * TimePicker
  */
 const MokaDateTimePicker = forwardRef((props, ref) => {
-    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, className, ...rest } = props;
+    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, className, inputClassName, ...rest } = props;
 
     // 날짜시간 포맷
     const dateTimeFormat = (() => {
@@ -96,7 +100,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
                         e.preventDefault();
                         e.stopPropagation();
                     }}
-                    className={clsx(props.className, className)}
+                    className={clsx(props.className, inputClassName)}
                     mask={dateTimeFormat.replace(/y|m|d|h/gi, '9')}
                     placeholder={placeholder}
                     disabled={disabled}
@@ -113,7 +117,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
     return (
         <DateTime
             ref={ref}
-            className="flex-fill"
+            className={clsx('flex-fill', className)}
             locale="ko"
             dateFormat={dateFormat}
             timeFormat={timeFormat}

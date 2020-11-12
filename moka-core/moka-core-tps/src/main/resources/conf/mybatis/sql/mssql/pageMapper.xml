@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.page.mapper.PageMapper">
-	
-	<select id="findSubNodes" parameterType="hashMap" resultType="Long" statementType="CALLABLE">
-		{call UPA_WMS_PAGE_TOPDOWN_LIST(
+
+  <select id="findSubNodes" parameterType="hashMap" resultType="Long" statementType="CALLABLE">
+		{call UPA_WMS_PAGE_TOPDOWN_LIST_SEL(
 			#{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{pageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
 		) }

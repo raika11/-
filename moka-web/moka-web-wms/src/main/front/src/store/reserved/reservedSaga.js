@@ -48,11 +48,15 @@ export function* saveReserved({ payload: { type, actions, callback } }) {
             // 목록 검색
             yield put({ type: reservedAction.GET_RESERVED_LIST });
         } else {
-            // 실패 액션 실행
-            yield put({
-                type: reservedAction.GET_RESERVED_FAILURE,
-                payload: response.data,
-            });
+            const { body } = response.data.body;
+
+            if (body && body.list && Array.isArray(body.list)) {
+                // invalidList 셋팅
+                yield put({
+                    type: reservedAction.CHANGE_INVALID_LIST,
+                    payload: response.data.body.list,
+                });
+            }
         }
     } catch (e) {
         callbackData = errorResponse(e);

@@ -11,6 +11,7 @@
     <request resultName="MASTERCODE">dps.article.mastercode</request>
     <request resultName="SERVICEMAP">dps.article.servicemap</request>
     <request resultName="KEYWORD">dps.article.keyword</request>
+    <request resultName="CLICKCNT">dps.article.clickcnt</request>
     <request resultName="MULTI">dps.article.multi</request>
     <keys>
       totalId

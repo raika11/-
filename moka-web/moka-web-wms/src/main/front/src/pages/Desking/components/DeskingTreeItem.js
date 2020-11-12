@@ -23,7 +23,7 @@ const propTypes = {
 const defaultProps = {};
 
 /**
- * Desking Tree 아이템 컴포넌트
+ * 데스킹 트리 아이템 컴포넌트
  */
 const DeskingTreeItem = (props) => {
     const { nodeId, selected, nodeData, onSelected } = props;

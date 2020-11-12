@@ -38,7 +38,7 @@ const defaultProps = {
 };
 
 /**
- * Desking Tree 카테고리 컴포넌트
+ * 데스킹 트리 카테고리 컴포넌트
  */
 const DeskingTreeCategory = (props) => {
     const { nodeId, nodeData, selected, children, expanded, onExpansion, onSelected } = props;
@@ -82,7 +82,7 @@ const DeskingTreeCategory = (props) => {
                 <Button size="sm" className="mr-1" onClick={handleExpanded}>
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />
                 </Button>
-                <DeskingTreeLabel nodeId={nodeId} nodeData={nodeData} />
+                <DeskingTreeLabel nodeId={nodeId} nodeData={nodeData} onClick={handleExpanded} />
             </div>
             <Collapse in={open} timeout={3000}>
                 <div id={controls}>

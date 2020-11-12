@@ -109,6 +109,7 @@ const TemplateListModal = (props) => {
             dispatch(
                 changeSearchOption({
                     ...search,
+                    templateWidth: e.target.value,
                     widthMin: null,
                     widthMax: null,
                 }),
@@ -120,6 +121,7 @@ const TemplateListModal = (props) => {
             dispatch(
                 changeSearchOption({
                     ...search,
+                    templateWidth: e.target.value,
                     widthMin: Number(widthmin),
                     widthMax: Number(widthmax),
                 }),
@@ -128,6 +130,7 @@ const TemplateListModal = (props) => {
             dispatch(
                 changeSearchOption({
                     ...search,
+                    templateWidth: e.target.value,
                     widthMin: null,
                     widthMax: null,
                 }),
@@ -225,11 +228,11 @@ const TemplateListModal = (props) => {
 
     return (
         <MokaModal
-            width={600}
+            width={680}
             show={show}
             onHide={handleHide}
             title="템플릿 검색"
-            size="md"
+            size="lg"
             buttons={[
                 { text: '등록', onClick: handleClickSave },
                 { text: '취소', variant: 'gray150', onClick: handleClickCancle },
@@ -286,8 +289,8 @@ const TemplateListModal = (props) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     {/* 템플릿 사이즈 */}
-                    <Col xs={2} className="p-0 pr-2">
-                        <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize}>
+                    <Col xs={3} className="p-0 pr-2">
+                        <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize} className="ft-12">
                             <option value="all">사이즈 전체</option>
                             {tpSizeRows.map((cd) => (
                                 <option key={cd.dtlCd} value={cd.dtlCd} data-widthmin={cd.cdNmEtc1} data-widthmax={cd.cdNmEtc2}>
@@ -301,6 +304,7 @@ const TemplateListModal = (props) => {
                         <MokaInput
                             as="select"
                             value={search.searchType || undefined}
+                            className="ft-12"
                             onChange={(e) => {
                                 dispatch(
                                     changeSearchOption({
@@ -317,7 +321,7 @@ const TemplateListModal = (props) => {
                             ))}
                         </MokaInput>
                     </Col>
-                    <Col xs={8} className="p-0 d-flex">
+                    <Col xs={7} className="p-0 d-flex">
                         {/* 키워드 */}
                         <MokaSearchInput
                             className="pr-2 flex-fill"
@@ -363,7 +367,8 @@ const TemplateListModal = (props) => {
             )}
             {listType === 'thumbnail' && (
                 <MokaThumbTable
-                    cardWidth={182}
+                    cardWidth={209}
+                    cardHeight={209}
                     tableHeight={501}
                     rowData={rowData}
                     loading={loading}

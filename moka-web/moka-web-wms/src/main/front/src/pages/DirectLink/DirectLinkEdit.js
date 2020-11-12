@@ -113,6 +113,10 @@ const DirectLinkEdit = () => {
             viewSDate: moment(directLink.viewSDate, DB_DATEFORMAT),
             viewEDate: moment(directLink.viewEDate, DB_DATEFORMAT),
         });
+
+        if (imgFileRef.current) {
+            imgFileRef.current.deleteFile();
+        }
     }, [directLink]);
 
     useEffect(() => {

@@ -22,7 +22,13 @@ export const initialState = {
         { id: 'linkContent', name: '내용' },
         { id: 'linkKeyword', name: '키워드' },
     ],
-    directLink: {},
+    directLink: {
+        viewSDate: null,
+        viewEDate: null,
+        usedYn: 'Y',
+        fixYn: 'Y',
+        linkType: 'N',
+    },
     directLinkError: null,
     invalidList: [],
 };

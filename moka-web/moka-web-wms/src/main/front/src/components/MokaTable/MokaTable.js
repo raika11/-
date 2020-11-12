@@ -5,8 +5,11 @@ import { AgGridReact } from 'ag-grid-react';
 import { MokaPagination } from '@components';
 import { propTypes as paginationPropTypes } from '@components/MokaPagination';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
+
+// cell renderer
 import Tooltip from './MokaTableTooltip';
 import RadioButton from './MokaTableRadioButton';
+import ImageRenderer from './MokaTableImageRenderer';
 
 const propTypes = {
     /**
@@ -41,6 +44,10 @@ const propTypes = {
      * 테이블 헤더의 height
      */
     headerHeight: PropTypes.number,
+    /**
+     * 테이블 row의 height
+     */
+    rowHeight: PropTypes.number,
     /**
      * 로딩 텍스트
      */
@@ -110,6 +117,7 @@ const MokaTable = forwardRef((props, ref) => {
         selected,
         header,
         headerHeight,
+        rowHeight,
     } = props;
     const { dragging, onRowDragMove } = props;
 
@@ -214,6 +222,22 @@ const MokaTable = forwardRef((props, ref) => {
     };
 
     /**
+     * When a column is resized, the grid re-calculates the row heights after the resize is finished
+     * @param {object} params grid
+     */
+    const onColumnResized = (params) => {
+        params.api.resetRowHeights();
+    };
+
+    /**
+     * When a column is shown or hidden, the grid re-calculates the row heights after the resize is finished
+     * @param {object} params grid
+     */
+    const onColumnVisible = (params) => {
+        params.api.resetRowHeights();
+    };
+
+    /**
      * row 데이터 업데이트 시 실행
      */
     const handleRowDataUpdated = useCallback(() => {
@@ -244,6 +268,7 @@ const MokaTable = forwardRef((props, ref) => {
                 <AgGridReact
                     columnDefs={columnDefs}
                     rowData={rowData}
+                    rowHeight={rowHeight}
                     getRowNodeId={onRowNodeId}
                     immutableData
                     animateRows
@@ -258,10 +283,12 @@ const MokaTable = forwardRef((props, ref) => {
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     // defaultColDef={{ tooltipComponent: 'mokaTooltip' }}
-                    frameworkComponents={{ mokaTooltip: Tooltip, radio: RadioButton }}
+                    frameworkComponents={{ mokaTooltip: Tooltip, radio: RadioButton, imageRenderer: ImageRenderer }}
                     suppressRowClickSelection
                     getRowClass={getRowClass}
                     headerHeight={headerHeight}
+                    onColumnResized={onColumnResized}
+                    onColumnVisible={onColumnVisible}
                 />
             </div>
 

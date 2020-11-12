@@ -34,9 +34,3 @@ export const changeDirectLink = createAction(CHANGE_DIRECT_LINK, (directLink) =>
  */
 export const SAVE_DIRECT_LINK = 'directLink/SAVE_DIRECT_LINK';
 export const saveDirectLink = createAction(SAVE_DIRECT_LINK, ({ type, actions, callback }) => ({ type, actions, callback }));
-
-/**
- * 삭제
- */
-export const [DELETE_DIRECT_LINK] = createRequestActionTypes('directLink/DELETE_DIRECT_LINK');
-export const deleteDirectLink = createAction(DELETE_DIRECT_LINK, ({ linkSeq, callback }) => ({ linkSeq, callback }));

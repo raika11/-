@@ -26,6 +26,7 @@ const Menu = React.lazy(() => import('@pages/Menu'));
 const Group = React.lazy(() => import('@pages/Group'));
 const Reporter = React.lazy(() => import('@pages/Reporter'));
 const Special = React.lazy(() => import('@pages/Special'));
+const DirectLink = React.lazy(() => import('@pages/DirectLink'));
 
 const routes = [
     {
@@ -234,6 +235,16 @@ const routes = [
         name: 'component-dashboard',
         displayName: '컴포넌트 테스트용 대시보드',
         component: ComponentDashboard,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/direct-link',
+        name: 'direct-link',
+        displayName: '사이트 바로 가기',
+        component: DirectLink,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

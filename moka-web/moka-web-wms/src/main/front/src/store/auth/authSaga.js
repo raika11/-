@@ -135,6 +135,7 @@ export function* getDomainList({ payload: domainId }) {
 
     try {
         const searchOption = yield select((store) => store.auth.domainSearch);
+        const latestDomainId = yield select((store) => store.auth.latestDomainId);
         const response = yield call(domainApi.getDomainList, { search: searchOption });
 
         if (response.data.header.success) {
@@ -159,10 +160,10 @@ export function* getDomainList({ payload: domainId }) {
                     payload: domainId,
                 });
             } else {
-                // 그 외의 경우 모두 첫번째 데이터로 셋팅한다
+                // 그 외의 경우 latestDomainId, 없으면 도메인 리스트의 첫번째 데이터로 셋팅한다
                 yield put({
                     type: authAction.CHANGE_LATEST_DOMAINID,
-                    payload: list[0].domainId,
+                    payload: latestDomainId || list[0].domainId,
                 });
             }
         } else {

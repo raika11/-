@@ -6,7 +6,7 @@
 
   <delete id="deleteAllKeyword" parameterType="JpodEpisodeVO"
     statementType="CALLABLE">
-    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_JPOD_KEYOWRD_DELETE(
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_JPOD_KEYOWRD_DEL(
     #{chnlSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{epsdSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
     )}
@@ -14,7 +14,7 @@
 
   <delete id="deleteAllMember" parameterType="JpodEpisodeVO"
     statementType="CALLABLE">
-    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_JPOD_MEMEBER_DELETE(
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_JPOD_MEMEBER_DEL(
     #{chnlSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{epsdSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
     )}
@@ -22,7 +22,7 @@
 
   <delete id="deleteAllArticle" parameterType="JpodEpisodeVO"
     statementType="CALLABLE">
-    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_JPOD_EPISODE_REL_ART_DELETE(
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_JPOD_EPISODE_REL_ART_DEL(
     #{chnlSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{epsdSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
     )}

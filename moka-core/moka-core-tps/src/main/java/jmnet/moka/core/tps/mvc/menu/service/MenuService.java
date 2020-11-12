@@ -40,7 +40,7 @@ public interface MenuService {
      *
      * @return 메뉴목록
      */
-    MenuNode findMenuTree();
+    MenuNode findMenuTree(MenuSearchDTO search);
 
     /**
      * 메뉴 목록 조회

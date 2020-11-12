@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,6 +34,8 @@ public class MenuVO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<MenuVO>>() {
     }.getType();
+
+    private Long seqNo;
 
     /**
      * 대메뉴코드
@@ -78,4 +81,16 @@ public class MenuVO implements Serializable {
      * 아이콘 명
      */
     private String iconNm;
+
+    /**
+     * 조회권한여부
+     */
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
+     * 편집권한여부
+     */
+    @Builder.Default
+    private String editYn = MokaConstants.NO;
 }

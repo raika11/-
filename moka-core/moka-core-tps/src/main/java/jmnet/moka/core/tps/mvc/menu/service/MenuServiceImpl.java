@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
-import jmnet.moka.core.tps.mvc.menu.dto.MenuDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
@@ -55,13 +54,13 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public MenuNode findServiceMenuTree(MenuSearchDTO searchDTO) {
         List<MenuVO> menuList = menuMapper.findAll(searchDTO);
-        return menuList.isEmpty() ? null : makeTree(modelMapper.map(menuList, MenuDTO.TYPE));
+        return menuList.isEmpty() ? null : makeTree(menuList);
     }
 
     @Override
-    public MenuNode findMenuTree() {
-        List<Menu> menuList = menuRepository.findAll(orderByIdAsc());
-        return menuList.isEmpty() ? null : makeTree(modelMapper.map(menuList, MenuDTO.TYPE));
+    public MenuNode findMenuTree(MenuSearchDTO searchDTO) {
+        List<MenuVO> menuList = menuMapper.findAllMenuAuth(searchDTO);
+        return menuList.isEmpty() ? null : makeTree(menuList);
     }
 
     /**
@@ -70,7 +69,7 @@ public class MenuServiceImpl implements MenuService {
      * @param menuList 메뉴 목록
      * @return 메뉴 Tree
      */
-    private MenuNode makeTree(List<MenuDTO> menuList) {
+    private MenuNode makeTree(List<MenuVO> menuList) {
         int maxDepth = menuList
                 .stream()
                 .max((o1, o2) -> o1.getDepth() - o2.getDepth())
@@ -81,7 +80,7 @@ public class MenuServiceImpl implements MenuService {
         rootNode.setMenuId(ROOT_MENU_ID);
         rootNode.setMenuNm("ROOT");
 
-        for (MenuDTO menu : menuList) {
+        for (MenuVO menu : menuList) {
             if (MenuService.ROOT_MENU_ID.equals(menu.getParentMenuId())) {
                 MenuNode menuNode = new MenuNode(menu);
                 rootNode.addNode(traceMenuNode(menuNode, menuList, maxDepth));
@@ -99,9 +98,9 @@ public class MenuServiceImpl implements MenuService {
      * @param maxDepth 전체 메뉴의 최대 깊이
      * @return MenuNode
      */
-    private MenuNode traceMenuNode(MenuNode menuNode, List<MenuDTO> menuList, int maxDepth) {
+    private MenuNode traceMenuNode(MenuNode menuNode, List<MenuVO> menuList, int maxDepth) {
         if (menuNode.getDepth() < maxDepth) {
-            for (MenuDTO menu : menuList) {
+            for (MenuVO menu : menuList) {
                 if (menu
                         .getParentMenuId()
                         .equals(menuNode.getMenuId())) {

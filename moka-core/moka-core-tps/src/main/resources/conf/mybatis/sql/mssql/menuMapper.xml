@@ -10,4 +10,12 @@
     )}
   </select>
 
+  <select id="findAllMenuAuth" parameterType="MenuSearchDTO" resultType="MenuVO"
+    statementType="CALLABLE">
+    {call UPA_CMS_MENU_AUTH_LIST_SEL(
+    #{grpMemId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{grpMemDiv, mode=IN, jdbcType=CHAR, javaType=string}
+    )}
+  </select>
+
 </mapper>

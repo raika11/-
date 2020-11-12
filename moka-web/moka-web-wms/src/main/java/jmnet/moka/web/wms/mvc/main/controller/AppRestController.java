@@ -8,6 +8,7 @@ import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -59,16 +60,18 @@ public class AppRestController {
     @GetMapping("/init")
     public ResponseEntity<?> getAppInitData(HttpServletRequest request) {
 
-        Map<String, Object> result = MapBuilder.getInstance()
-                                               .add("UPLOAD_PATH_URL", uploadPathUrl) // 파일 서비스 prefix
-                                               .add("PER_PAGE_COUNT", TpsConstants.PER_PAGE_COUNT) // 페이지당 건수
-                                               .add("MAX_PAGE_COUNT", TpsConstants.MAX_PAGE_COUNT) // 최대 페이지수
-                                               .add("DISP_PAGE_COUNT", TpsConstants.DISP_PAGE_COUNT) // 표출 페이지수
-                                               .add("MORE_COUNT", TpsConstants.MORE_COUNT) // 더보기 건수
-                                               .add("EXCLUDE_PAGE_SERVICE_NAME_LIST", excludePageServiceName)      // 페이지서비스명 제외명칭
-                                               .add("PAGE_TYPE_HTML", TpsConstants.PAGE_TYPE_HTML)      // 페이지 기본타입
-                                               .getMap();
+        Map<String, Object> result = MapBuilder
+                .getInstance()
+                .add("UPLOAD_PATH_URL", uploadPathUrl) // 파일 서비스 prefix
+                .add("PER_PAGE_COUNT", TpsConstants.PER_PAGE_COUNT) // 페이지당 건수
+                .add("MAX_PAGE_COUNT", TpsConstants.MAX_PAGE_COUNT) // 최대 페이지수
+                .add("DISP_PAGE_COUNT", TpsConstants.DISP_PAGE_COUNT) // 표출 페이지수
+                .add("MORE_COUNT", TpsConstants.MORE_COUNT) // 더보기 건수
+                .add("EXCLUDE_PAGE_SERVICE_NAME_LIST", excludePageServiceName)      // 페이지서비스명 제외명칭
+                .add("PAGE_TYPE_HTML", TpsConstants.PAGE_TYPE_HTML)      // 페이지 기본타입
+                .getMap();
 
+        result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());
 
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);

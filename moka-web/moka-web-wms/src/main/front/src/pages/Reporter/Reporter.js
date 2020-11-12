@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import { MokaCard } from '@components';
 import { GET_REPORTER, CHANGE_REPORTER } from '@store/reporter';
+import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 // relations
 const ReporterList = React.lazy(() => import('./ReporterList'));
@@ -31,19 +32,14 @@ const ReporterMgr = () => {
             </MokaCard>
 
             {/* 기자 정보 */}
-            <Switch>
-                <Route
-                    path={['/reporter', '/reporter/:repSeq']}
-                    exact
-                    render={() => (
-                        <MokaCard title="기자 정보" width={730} headerClassName="pb-0" titleClassName="mb-0">
-                            <Suspense>
-                                <ReporterEdit />
-                            </Suspense>
-                        </MokaCard>
-                    )}
-                />
-            </Switch>
+
+            <MokaCard title="기자 정보" width={730} headerClassName="pb-0" titleClassName="mb-0" loading={loading}>
+                <Suspense>
+                    <Switch>
+                        <Route path={['/reporter', '/reporter/:repSeq']} exact render={() => <ReporterEdit />} />
+                    </Switch>
+                </Suspense>
+            </MokaCard>
         </div>
     );
 };

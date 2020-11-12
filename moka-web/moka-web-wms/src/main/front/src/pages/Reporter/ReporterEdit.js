@@ -1,6 +1,6 @@
-import React, { useEffect, useState, state } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
-import { MokaCard, MokaInput, MokaInputLabel } from '@components';
+import { MokaInputLabel } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { clearReporter, getReporter, changeReporter, changeInvalidList, GET_REPORTER, CHANGE_REPORTER, saveReporter } from '@store/reporter';
@@ -33,7 +33,6 @@ const ReporterEdit = () => {
     const [rMail4, setRMail4] = useState('');
 
     const [repTitle, setRepTitle] = useState('');
-    const [repPhone, setRepPhone] = useState('');
     const [joinsId, setJoinsId] = useState('');
     const [jnetId, setJnetId] = useState('');
     const [repPhoto, setRepPhoto] = useState('');
@@ -42,36 +41,12 @@ const ReporterEdit = () => {
     const [snsFb, setSnsFb] = useState('');
     const [snsIn, setSnsIn] = useState('');
     const [joinsBlog, setJoinsBlog] = useState('');
-    const [viewCnt, setViewCnt] = useState('');
-    const [artCnt, setArtCnt] = useState('');
-    const [scbCnt, setScbCnt] = useState('');
-    const [shrCnt, setShrCnt] = useState('');
-    const [replyCnt, setReplyCnt] = useState('');
     const [jplusRepDiv, setJplusRepDiv] = useState('');
-    const [jplusJobInfo, setJplusJobInfo] = useState('');
-    const [jplusTitle, setJplusTitle] = useState('');
-    const [jplusMemo, setJplusMemo] = useState('');
-    const [jplusProfileYn, setJplusProfileYn] = useState('');
-    const [jplusRegDt, setJplusRegDt] = useState('');
-    const [jplusUsedYn, setJplusUsedYn] = useState('');
-    const [r1Cd, setR1Cd] = useState('');
-    const [r2Cd, setR2Cd] = useState('');
-    const [r3Cd, setR3Cd] = useState('');
-    const [r4Cd, setR4Cd] = useState('');
-    const [r5Cd, setR5Cd] = useState('');
-    const [r6Cd, setR6Cd] = useState('');
-
     const [r1CdNm, setR1CdNm] = useState('');
     const [r2CdNm, setR2CdNm] = useState('');
     const [r3CdNm, setR3CdNm] = useState('');
     const [r4CdNm, setR4CdNm] = useState('');
-
-    const [jamRepSeq, setJamRepSeq] = useState('');
-    const [jamDeptSeq, setJamDeptSeq] = useState('');
-    const [jamDeptNm, setJamDeptNm] = useState('');
     const [repField, setRepField] = useState('');
-    const [jamComCd, setJamComCd] = useState('');
-    const [jamComNm, setJamComNm] = useState('');
     const [repTalk, setRepTalk] = useState('');
     const [userTalk, setUserTalk] = useState('');
 
@@ -220,14 +195,11 @@ const ReporterEdit = () => {
         setRepName(reporter.repName || '');
         setRepEmail1(reporter.repEmail1 || '');
         setRepEmail2(reporter.repEmail2 || '');
-
         setRMail1(repEmail2.split('|')[0] || '');
         setRMail2(repEmail2.split('|')[1] || '');
         setRMail3(repEmail2.split('|')[2] || '');
         setRMail4(repEmail2.split('|')[3] || '');
-
         setRepTitle(reporter.repTitle || '');
-        setRepPhone(reporter.repPhone || '');
         setJoinsId(reporter.joinsId || '');
         setJnetId(reporter.jnetId || '');
 
@@ -244,36 +216,12 @@ const ReporterEdit = () => {
         setSnsFb(reporter.snsFb || '');
         setSnsIn(reporter.snsIn || '');
         setJoinsBlog(reporter.joinsBlog || '');
-        setViewCnt(reporter.viewCnt || '');
-        setArtCnt(reporter.artCnt || '');
-        setScbCnt(reporter.scbCnt || '');
-        setShrCnt(reporter.shrCnt || '');
-        setReplyCnt(reporter.replyCnt || '');
         setJplusRepDiv(reporter.jplusRepDiv || '');
-        setJplusJobInfo(reporter.jplusJobInfo || '');
-        setJplusTitle(reporter.jplusTitle || '');
-        setJplusMemo(reporter.jplusMemo || '');
-        setJplusProfileYn(reporter.jplusProfileYn || '');
-        setJplusRegDt(reporter.jplusRegDt || '');
-        setJplusUsedYn(reporter.jplusUsedYn || '');
-        setR1Cd(reporter.r1Cd || '');
-        setR2Cd(reporter.r2Cd || '');
-        setR3Cd(reporter.r3Cd || '');
-        setR4Cd(reporter.r4Cd || '');
-        setR5Cd(reporter.r5Cd || '');
-        setR6Cd(reporter.r6Cd || '');
-
         setR1CdNm(reporter.r1CdNm || '');
         setR2CdNm(reporter.r2CdNm || '');
         setR3CdNm(reporter.r3CdNm || '');
         setR4CdNm(reporter.r4CdNm || '');
-
-        setJamRepSeq(reporter.jamRepSeq || '');
-        setJamDeptSeq(reporter.jamDeptSeq || '');
-        setJamDeptNm(reporter.jamDeptNm || '');
         setRepField(reporter.repField || '');
-        setJamComCd(reporter.jamComCd || '');
-        setJamComNm(reporter.jamComNm || '');
         setRepTalk(reporter.repTalk || '');
         setUserTalk(reporter.userTalk || '');
     }, [rMail1, repEmail2, repPhoto, reporter]);

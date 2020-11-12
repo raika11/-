@@ -30,12 +30,14 @@ const MokaTableImageRenderer = (params) => {
                 rate = box.offsetWidth / box.offsetHeight;
             }
 
-            if (w / h > rate) {
-                imgRef.current.className = 'landscape';
-            } else {
-                imgRef.current.className = 'portrait';
+            if (imgRef.current) {
+                if (w / h > rate) {
+                    imgRef.current.className = 'landscape';
+                } else {
+                    imgRef.current.className = 'portrait';
+                }
+                imgRef.current.src = src;
             }
-            imgRef.current.src = src;
         };
     }, []);
 

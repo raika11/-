@@ -48,6 +48,8 @@ const DirectLinkEdit = () => {
             setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
         } else if (name === 'fixYn') {
             setTemp({ ...temp, fixYn: value });
+        } else if (name === 'linkType') {
+            setTemp({ ...temp, linkType: value });
         }
     };
 

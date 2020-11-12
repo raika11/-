@@ -72,30 +72,6 @@ public class ArticleHandler extends AbstractHandler {
         // 머지 옵션설정
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
 
-        if (request.getParameterMap()
-                   .containsKey(MokaConstants.PARAM_WRAP_ITEM)) {
-            mergeContext.getMergeOptions()
-                        .setWrapItem(true);
-        }
-
-        if (request.getParameterMap()
-                   .containsKey(MokaConstants.PARAM_MERGE_DEBUG)) {
-            mergeContext.getMergeOptions()
-                        .setDebug(true);
-        }
-
-        if (request.getParameter(MokaConstants.PARAM_SHOW_ITEM) != null) {
-            String showItem = request.getParameter(MokaConstants.PARAM_SHOW_ITEM);
-            if (showItem.length() > 2) {
-                mergeContext.getMergeOptions()
-                            .setShowItem(showItem.substring(0, 2));
-                mergeContext.getMergeOptions()
-                            .setShowItemId(showItem.substring(2));
-                mergeContext.getMergeOptions()
-                            .setWrapItem(true);
-            }
-        }
-
         // 도메인 정보를 설정한다.
         String domainId = (String) mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
         DomainItem domainItem = domainResolver.getDomainInfoById(domainId);
@@ -116,10 +92,5 @@ public class ArticleHandler extends AbstractHandler {
         model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
         return this.viewName;
     }
-
-    private void getArticle(MergeContext mergeContext, String articleId) {
-
-    }
-
 
 }

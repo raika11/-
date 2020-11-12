@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * @since 2019. 9. 4. 오후 4:17:48
  */
 public class LoopMerger extends AbstractElementMerger {
-
+    private final static String ATTR_VAR = "var";
     private static final Logger logger = LoggerFactory.getLogger(LoopMerger.class);
 
     public static class LoopState {
@@ -40,6 +40,7 @@ public class LoopMerger extends AbstractElementMerger {
         public MergeContext context;
         public String dataId;
         public String select;
+        public String var;
         public int step;
         public boolean fill;
         public String filter;
@@ -56,6 +57,8 @@ public class LoopMerger extends AbstractElementMerger {
 
             select = element.getAttribute(Constants.ATTR_SELECT);
             select = McpString.isEmpty(select) ? Constants.DEFAULT_LOOP_DATA_SELECT : select;
+
+            var = element.getAttribute(ATTR_VAR);
 
             String stepAttr = element.getAttribute(Constants.ATTR_STEP);
             step = McpString.isEmpty(stepAttr) ? 1 : Integer.parseInt(stepAttr);
@@ -84,7 +87,9 @@ public class LoopMerger extends AbstractElementMerger {
             this.dataSize = 0;
             Object dataListObj = null;
             List<?> dataList = null;
-            if (!dataId.equalsIgnoreCase(Constants.PARENT)) { //데이터셋 데이터를 가져오는 경우
+            if ( McpString.isNotEmpty(var)) {
+                dataListObj = templateMerger.getEvaluator().eval(var, context);
+            } else if (!dataId.equalsIgnoreCase(Constants.PARENT)) { //데이터셋 데이터를 가져오는 경우
                 JSONResult jsonResult = templateMerger.getData(context, this.dataId);
                 if (jsonResult != null) {
                     dataListObj = jsonResult.get(select);

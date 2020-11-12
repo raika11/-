@@ -26,10 +26,10 @@ const getReporter = createRequestSaga(reporterAction.GET_REPORTER, reporterAPI.g
  */
 function* saveReporter({ payload: { type, actions, callback } }) {
     const ACTION = reporterAction.CHANGE_REPORTER;
+    let response;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
-    //yield put(startLoading(ACTION));
 
     try {
         const act = actions[0];
@@ -40,7 +40,7 @@ function* saveReporter({ payload: { type, actions, callback } }) {
 
         // 도메인 데이터
         const reporter = yield select((store) => store.reporter.reporter);
-        const response = yield call(reporterAPI.putReporter, { reporter });
+        response = yield call(reporterAPI.putReporter, { reporter });
         callbackData = response.data;
 
         if (response.data.header.success) {
@@ -57,6 +57,7 @@ function* saveReporter({ payload: { type, actions, callback } }) {
         } else {
             yield put({
                 type: reporterAction.GET_REPORTER_FAILURE,
+                //payload: callbackData,
                 payload: response.data,
             });
         }

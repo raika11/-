@@ -13,6 +13,7 @@ import { getApi, getLang } from '@store/codeMgt';
 import { MokaCard, MokaInput, MokaInputLabel } from '@components';
 import PartList from './PartList';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { Card } from 'react-bootstrap';
 
 /**
  * 편집폼 상세/수정/등록
@@ -145,8 +146,6 @@ const EditFormEdit = ({ history, onDelete }) => {
         setEditFormUrlError(false);
         setFormId(editForm.formId || '');
         setEditFormName(editForm.formName || '');
-        setServicePlatform(editForm.servicePlatform || 'P');
-        setLang(editForm.lang || (elLang.current[0] ? elLang.current[0].value : ''));
         setUseYn(editForm.usedYn || 'Y');
         setEditFormUrl(editForm.serviceUrl || '');
         setDescription(editForm.description || '');
@@ -269,7 +268,7 @@ const EditFormEdit = ({ history, onDelete }) => {
     return (
         <div className="flex-fill">
             <Row>
-                <Col xs={6}>
+                <Col xs={5}>
                     <MokaCard className="w-100" height={CARD_DEFAULT_HEIGHT - 90}>
                         <Form>
                             {/* 사용여부 */}
@@ -292,7 +291,7 @@ const EditFormEdit = ({ history, onDelete }) => {
 
                             {/* 편집폼ID */}
                             <Form.Row>
-                                <Col xs={4} className="pl-0 pr-0">
+                                <Col xs={12} className="pl-0 pr-0">
                                     <MokaInputLabel
                                         label="편집폼ID"
                                         placeholder="ID"
@@ -308,7 +307,7 @@ const EditFormEdit = ({ history, onDelete }) => {
 
                             {/* 편집폼명 */}
                             <Form.Row>
-                                <Col xs={9} className="pl-0 pr-0">
+                                <Col xs={12} className="pl-0 pr-0">
                                     <MokaInputLabel
                                         label="편집폼명"
                                         placeholder="편집폼 명을 입력하세요"
@@ -323,9 +322,9 @@ const EditFormEdit = ({ history, onDelete }) => {
 
                             {/* 편집폼주소 */}
                             <Form.Row>
-                                <Col xs={9} className="pl-0 pr-0">
+                                <Col xs={12} className="pl-0 pr-0">
                                     <MokaInputLabel
-                                        label="편집폼주소"
+                                        label="서비스URL"
                                         placeholder="편집폼 주소에서 http(s)://를 빼고 입력하세요"
                                         onChange={handleChangeValue}
                                         value={serviceUrl}
@@ -336,70 +335,6 @@ const EditFormEdit = ({ history, onDelete }) => {
                                 </Col>
                             </Form.Row>
 
-                            {/* 플랫폼 */}
-                            <Form.Row>
-                                <Col xs={3} className="p-0">
-                                    <MokaInputLabel
-                                        label="플랫폼"
-                                        as="radio"
-                                        inputProps={{
-                                            custom: true,
-                                            label: 'PC',
-                                            checked: servicePlatform === 'P' && true,
-                                        }}
-                                        id="editForm-pc"
-                                        name="servicePlatform"
-                                        onChange={handleChangeValue}
-                                        value="P"
-                                        className="mb-0 h-100"
-                                        required
-                                    />
-                                </Col>
-                                <Col xs={1} className="p-0 mr-10">
-                                    <MokaInput
-                                        inputProps={{
-                                            custom: true,
-                                            label: 'Mobile',
-                                            checked: servicePlatform === 'M' && true,
-                                        }}
-                                        id="editForm-mobile"
-                                        as="radio"
-                                        value="M"
-                                        name="servicePlatform"
-                                        className="mb-0 h-100 align-items-center d-flex"
-                                        onChange={handleChangeValue}
-                                    />
-                                </Col>
-                            </Form.Row>
-
-                            {/* 언어 */}
-                            <Form.Row>
-                                <Col xs={4} className="pl-0 ml-0 pr-0 pl-0">
-                                    <MokaInputLabel
-                                        as="select"
-                                        label="언어"
-                                        className="pt-1 mr-0 pr-0 pl-0"
-                                        onChange={handleChangeValue}
-                                        value={lang}
-                                        name="lang"
-                                        inputProps={{ ref: elLang }}
-                                    >
-                                        {langRows &&
-                                            langRows.map((row) => (
-                                                <option key={row.id} value={row.dtlCd}>
-                                                    {row.name}
-                                                </option>
-                                            ))}
-                                    </MokaInputLabel>
-                                </Col>
-                            </Form.Row>
-
-                            {/* 메모 */}
-                            <Form.Row>
-                                <Col xs={9} className="pl-0 pr-0">
-                                    <MokaInputLabel as="textarea" label="매모" inputProps={{ rows: 3 }} onChange={handleChangeValue} value={description} name="description" />
-                                </Col>
-                            </Form.Row>
                             {/* 버튼 */}
                             <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
                                 <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
@@ -417,10 +352,12 @@ const EditFormEdit = ({ history, onDelete }) => {
                         </Form>
                     </MokaCard>
                 </Col>
-                <Col xs={6}>
-                    <MokaCard className="w-100" height={CARD_DEFAULT_HEIGHT - 90}>
-                        <PartList parts={editFormParts} editForm={editForm && editForm.formSeq}></PartList>
-                    </MokaCard>
+                <Col xs={7}>
+                    <Card className="w-100">
+                        <Card.Body style={{ overflowY: 'auto', height: CARD_DEFAULT_HEIGHT - 120 }}>
+                            <PartList parts={editFormParts} editForm={editForm && editForm.formSeq}></PartList>
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
         </div>

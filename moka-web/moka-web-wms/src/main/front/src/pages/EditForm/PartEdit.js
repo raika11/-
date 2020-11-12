@@ -45,7 +45,7 @@ const PartEdit = (props) => {
     return (
         <Card>
             <Card.Header>
-                <Card.Title>{part.title}</Card.Title>
+                <Card.Title>{part.partTitle}</Card.Title>
             </Card.Header>
 
             <Card.Body>

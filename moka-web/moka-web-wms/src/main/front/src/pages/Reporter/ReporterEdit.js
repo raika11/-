@@ -153,7 +153,7 @@ const ReporterEdit = () => {
     };
 
     /**
-     * group 저장 이벤트
+     * 기자관리 내용 저장 이벤트
      * @param event 이벤트 객체
      */
 
@@ -169,6 +169,21 @@ const ReporterEdit = () => {
 
         if (paramSeq) {
             updateReporter(tmp);
+        }
+    };
+
+    /**
+     * 기자관리 내용 취소 이벤트
+     * @param event 이벤트 객체
+     */
+
+    const handleClickCancle = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (paramSeq) {
+            setUsedYn(reporter.usedYn);
+            setTalkYn(reporter.talkYn);
         }
     };
 
@@ -295,7 +310,9 @@ const ReporterEdit = () => {
                         <Button variant="primary" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="gray150">취소</Button>
+                        <Button variant="gray150" onClick={handleClickCancle}>
+                            취소
+                        </Button>
                     </div>
                 </div>
             </div>

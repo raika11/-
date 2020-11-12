@@ -12,7 +12,6 @@ import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList, g
 const ReporterMgrAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    //const [search, setSearch] = useState(initialState);
     const [reporterRows, setRepoterRows] = useState([]);
 
     const { reporter, list, total, search, loading } = useSelector((store) => {

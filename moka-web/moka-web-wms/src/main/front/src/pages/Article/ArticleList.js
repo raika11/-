@@ -2,9 +2,9 @@ import React from 'react';
 import ArticleSearch from './ArticleSearch';
 import ArticleAgGrid from './ArticleAgGrid';
 
-const ArticleList = () => {
+const ArticleList = ({ className }) => {
     return (
-        <div className="px-3 pb-3 pt-2">
+        <div className={className}>
             <ArticleSearch />
             <ArticleAgGrid />
         </div>

@@ -144,7 +144,7 @@ const ContainerHtmlModal = (props) => {
             let isInvalid = false;
 
             // invalidList 처리
-            if (invalidList.length > 0) {
+            if (Array.isArray(invalidList) && invalidList.length > 0) {
                 invalidList.forEach((i) => {
                     if (i.field === 'containerBody') {
                         setError({

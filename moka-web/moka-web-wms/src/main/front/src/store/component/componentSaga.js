@@ -74,10 +74,15 @@ export function* saveComponent({ payload: { actions, callback } }) {
             // 목록 다시 검색
             yield put({ type: act.GET_COMPONENT_LIST });
         } else {
-            yield put({
-                type: act.GET_COMPONENT_FAILURE,
-                payload: response.data,
-            });
+            const { body } = response.data.body;
+
+            if (body && body.list && Array.isArray(body.list)) {
+                // invalidList 셋팅
+                yield put({
+                    type: act.CHANGE_INVALID_LIST,
+                    payload: response.data.body.list,
+                });
+            }
         }
     } catch (e) {
         callbackData = errorResponse(e);

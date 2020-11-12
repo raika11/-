@@ -123,7 +123,6 @@ export default handleActions(
                 draft.depth1.list = body.list;
                 draft.depth1.total = body.total;
                 draft.depth1.error = initialState.depth1.error;
-                draft.depth1.areaCompLoad = areaCompLoad;
             });
         },
         [act.GET_AREA_LIST_DEPTH1_FAILURE]: (state, { payload }) => {
@@ -138,7 +137,6 @@ export default handleActions(
                 draft.depth2.list = body.list;
                 draft.depth2.total = body.total;
                 draft.depth2.error = initialState.depth2.error;
-                draft.depth2.areaCompLoad = areaCompLoad;
             });
         },
         [act.GET_AREA_LIST_DEPTH2_FAILURE]: (state, { payload }) => {
@@ -153,7 +151,6 @@ export default handleActions(
                 draft.depth3.list = body.list;
                 draft.depth3.total = body.total;
                 draft.depth3.error = initialState.depth3.error;
-                draft.depth3.areaCompLoad = areaCompLoad;
             });
         },
         [act.GET_AREA_LIST_DEPTH3_FAILURE]: (state, { payload }) => {

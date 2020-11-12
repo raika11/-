@@ -2,8 +2,8 @@ import React, { useCallback, useRef, useEffect } from 'react';
 
 /**
  * ag-grid 셀에 이미지를 그리는 컴포넌트.
- * 이미지 url은 field로 넘어온 값을 data에서 찾아서 사용하며
- * 대체 텍스트는 data.imgAlt를 사용한다.
+ * 이미지 url은 field로 넘어온 값을 data에서 찾아서 사용하며 대체 텍스트는 data.imgAlt를 사용한다.
+ *
  * @param {object} params ag grid params
  */
 const MokaTableImageRenderer = (params) => {

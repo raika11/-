@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.mvc.menu.vo.MenuVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,6 +49,18 @@ public class MenuNode implements Serializable {
 
     private String iconName;
 
+    /**
+     * 조회권한여부
+     */
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
+     * 편집권한여부
+     */
+    @Builder.Default
+    private String editYn = MokaConstants.NO;
+
     List<MenuNode> children;
 
     /**
@@ -54,8 +68,8 @@ public class MenuNode implements Serializable {
      *
      * @param menu Menu Entity
      */
-    public MenuNode(MenuDTO menu) {
-        this.seq = menu.getMenuSeq();
+    public MenuNode(MenuVO menu) {
+        this.seq = menu.getSeqNo();
         this.menuId = menu.getMenuId();
         this.menuNm = menu.getMenuNm();
         this.menuDisplayNm = menu.getMenuDisplayNm();
@@ -65,6 +79,9 @@ public class MenuNode implements Serializable {
         this.useYn = menu.getUsedYn();
         this.parentMenuId = menu.getParentMenuId();
         this.iconName = menu.getIconNm();
+        this.useYn = menu.getUsedYn();
+        this.viewYn = menu.getViewYn();
+        this.editYn = menu.getEditYn();
     }
 
     /**

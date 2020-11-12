@@ -122,10 +122,10 @@ public class MenuRestController {
      */
     @ApiOperation(value = "메뉴 목록 트리 조회")
     @GetMapping("/tree")
-    public ResponseEntity<?> getMenuTree() {
+    public ResponseEntity<?> getMenuTree(@SearchParam MenuSearchDTO search) {
 
         // 조회
-        MenuNode menuNode = menuService.findMenuTree();
+        MenuNode menuNode = menuService.findMenuTree(search);
 
         // 리턴값 설정
         ResultDTO<MenuNode> resultDto = new ResultDTO<>(menuNode);

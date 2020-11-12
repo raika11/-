@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,6 +53,18 @@ public class MenuAuthDTO implements Serializable {
      * 메뉴코드 (TB_CMS_MENU.MENU_CD))
      */
     private String menuId;
+
+    /**
+     * 조회권한여부
+     */
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
+     * 편집권한여부
+     */
+    @Builder.Default
+    private String editYn = MokaConstants.NO;
 
     /**
      * 등록자

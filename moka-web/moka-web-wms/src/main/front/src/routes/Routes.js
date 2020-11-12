@@ -36,6 +36,11 @@ const Routes = () => {
     useEffect(() => {
         // 전체 도메인리스트 조회
         dispatch(getDomainList());
+
+        // 1분마다 도메인리스트 다시 조회
+        setInterval(function () {
+            dispatch(getDomainList());
+        }, 60000);
     }, [dispatch]);
 
     return (

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,7 +50,7 @@ public class MenuAuth extends BaseAudit {
      */
     @Column(name = "USED_YN")
     @Builder.Default
-    private String usedYn = "Y";
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 그룹코드 / 사용자 ID
@@ -62,6 +63,20 @@ public class MenuAuth extends BaseAudit {
      */
     @Column(name = "MENU_ID", nullable = false)
     private String menuId;
+
+    /**
+     * 조회권한여부(Y:사용, N:미사용)
+     */
+    @Column(name = "VIEW_YN")
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
+     * 편집권한여부(Y:사용, N:미사용)
+     */
+    @Column(name = "EDIT_YN")
+    @Builder.Default
+    private String editYn = MokaConstants.NO;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MENU_ID", nullable = false, insertable = false, updatable = false)

@@ -21,6 +21,7 @@ import menu from '@store/menu/menuReducer';
 import group from '@store/group/groupReducer';
 import area from '@store/area/areaReducer';
 import reporter from '@store/reporter/reporterReducer';
+import directLink from '@store/directLink/directLinkReducer';
 
 export default combineReducers({
     toastr,
@@ -44,4 +45,5 @@ export default combineReducers({
     menu,
     group,
     reporter,
+    directLink,
 });

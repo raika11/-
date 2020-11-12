@@ -27,6 +27,10 @@ public class MenuSearchDTO extends SearchDTO {
 
     private String memberId;
 
+    private String grpMemId;
+
+    private String grpMemDiv;
+
     private String menuId;
 
     private String menuNm;

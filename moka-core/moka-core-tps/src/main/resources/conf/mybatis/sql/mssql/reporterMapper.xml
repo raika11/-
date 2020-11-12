@@ -5,7 +5,7 @@
 
   <select id="findAll" parameterType="ReporterSearchDTO" resultType="ReporterVO"
                    statementType="CALLABLE">
-  {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_REPORTER_LIST_SEL(
+  {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_15RE_REPORTER_LIST_SEL(
   <choose>
     <when test="searchType == 'all' and keyword != null and keyword != ''">
       #{keyword},
@@ -40,35 +40,12 @@
   ) }
 </select>
 
-  <select id="findBySeq" parameterType="String" resultType="ReporterVO" >
+  <select id="findBySeq" parameterType="String" resultType="ReporterVO" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_15RE_REPORTER_SEL(#{repSeq, mode=IN, jdbcType=VARCHAR, javaType=string})
+      }
+    ]]>
 
-    SELECT  REPORTER.REP_SEQ, REPORTER.USED_YN, REPORTER.TALK_YN
-           , REPORTER.REP_NAME, REPORTER.REP_EMAIL1, REPORTER.REP_EMAIL2
-           , REPORTER.REP_TITLE, REPORTER.REP_PHONE, REPORTER.JOINS_ID
-           , REPORTER.JNET_ID, REPORTER.REP_PHOTO, REPORTER.REP_IMG
-           , REPORTER.SNS_TW, REPORTER.SNS_FB, REPORTER.SNS_IN
-           , REPORTER.JOINS_BLOG, REPORTER.VIEW_CNT, REPORTER.ART_CNT
-           , REPORTER.SCB_CNT, REPORTER.SHR_CNT, REPORTER.REPLY_CNT
-           , (CASE WHEN REPORTER.JPLUS_REP_DIV = 'J1' THEN '기자필진'
-                   WHEN REPORTER.JPLUS_REP_DIV = 'J2' THEN '외부필진'
-                   WHEN REPORTER.JPLUS_REP_DIV = 'J3' THEN '그룹필진'
-                   WHEN REPORTER.JPLUS_REP_DIV = 'J0' THEN '필진해지'
-                   ELSE '' END) AS JPLUS_REP_DIV
-           , REPORTER.JPLUS_JOB_INFO, REPORTER.JPLUS_TITLE
-           , REPORTER.JPLUS_MEMO, REPORTER.JPLUS_PROFILE_YN, REPORTER.JPLUS_REG_DT
-           , REPORTER.JPLUS_USED_YN, REPORTER.R1_CD, REPORTER.R2_CD
-           , REPORTER.R3_CD, REPORTER.R4_CD, REPORTER.R5_CD, REPORTER.R6_CD
-           , REPORTER.JAM_REP_SEQ, REPORTER.JAM_DEPT_SEQ, REPORTER.JAM_DEPT_NM
-           , REPORTER.REP_FIELD, REPORTER.JAM_COM_NM, REPORTER.REG_DT
-           , REPORTER.REG_ID, REPORTER.MOD_DT, REPORTER.MOD_ID
-           , REPORTER.REP_TALK, REPORTER.USER_TALK
-           , CODE1.CD_NM AS R1_CD_NM, CODE2.CD_NM AS R2_CD_NM
-           , CODE3.CD_NM AS R3_CD_NM, CODE4.CD_NM AS R4_CD_NM
-       FROM TB_15RE_REPORTER REPORTER
-                LEFT OUTER JOIN TB_15RE_CODE_MGT CODE1 ON REPORTER.R1_CD = CODE1.DTL_CD AND CODE1.GRP_CD = 'R1'
-                LEFT OUTER JOIN TB_15RE_CODE_MGT CODE2 ON REPORTER.R2_CD = CODE2.DTL_CD AND CODE2.GRP_CD = 'R2'
-                LEFT OUTER JOIN TB_15RE_CODE_MGT CODE3 ON REPORTER.R3_CD = CODE3.DTL_CD AND CODE3.GRP_CD = 'R3'
-                LEFT OUTER JOIN TB_15RE_CODE_MGT CODE4 ON REPORTER.R4_CD = CODE4.DTL_CD AND CODE4.GRP_CD = 'R4'
-       WHERE REPORTER.REP_SEQ = #{repSeq}
   </select>
 </mapper>

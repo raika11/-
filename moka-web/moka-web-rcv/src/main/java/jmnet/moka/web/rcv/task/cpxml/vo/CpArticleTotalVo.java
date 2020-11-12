@@ -1,6 +1,9 @@
 package jmnet.moka.web.rcv.task.cpxml.vo;
 
 import jmnet.moka.web.rcv.common.vo.TotalVo;
+import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpCategoryVo;
+import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpComponentVo;
+import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpReporterVo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +26,13 @@ public class CpArticleTotalVo extends TotalVo<CpArticleListVo> {
 
     private CpArticleVo curArticle;
     private String sourceCode;
+    private String editYn;
+
+    private int rid;
+    private CpComponentVo curComponent;
+    private CpReporterVo curReporter;
+    private CpCategoryVo curCategory;
+    private String curIndex;
 
     public CpArticleTotalVo(CpArticleListVo mainData) {
         super(mainData);

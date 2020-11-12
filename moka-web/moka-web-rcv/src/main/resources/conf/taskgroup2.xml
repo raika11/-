@@ -5,7 +5,10 @@
     name="Join:D"
     idx="163"
     sourceCode="11"
+    receiveImage="N"
     retryCount="3"
+    pdsUploadKeyTitle="joind_news"
+    editYn="N"
     intervalTime="10s">
     <TaskInput dirInput="/box/rcv/cp/joind_news"
       dirSuccess="/box/rcv/cp/joind_news/comp"

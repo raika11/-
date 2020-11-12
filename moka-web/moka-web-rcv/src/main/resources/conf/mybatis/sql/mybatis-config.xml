@@ -17,6 +17,7 @@
     <typeAliases>
         <package name="jmnet.moka.web.rcv" />
         <package name="jmnet.moka.web.rcv.task.jamxml.vo" />
+        <package name="jmnet.moka.web.rcv.task.cpxml.vo" />
     </typeAliases>
     <typeHandlers>
         <typeHandler javaType="java.lang.Character" jdbcType="VARCHAR"

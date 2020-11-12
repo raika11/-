@@ -40,8 +40,10 @@ import org.springframework.util.StringUtils;
 public class MokaRcvConfiguration {
     @Value("${rcv.taskmanager.envfile}")
     private String taskManagerEnvFile;
-    @Value("${rcv.imageResizerUrl}")
-    private String imageResizerUrl;
+    @Value("${rcv.imageResizerSvrUrl}")
+    private String imageResizerSvrUrl;
+    @Value("${rcv.ImageWebSvrUrl}")
+    private String ImageWebSvrUrl;
     @Value("${rcv.tempDir}")
     private String tempDir;
     @Value("${rcv.taskmanager.smsListEnvFile}")
@@ -50,6 +52,10 @@ public class MokaRcvConfiguration {
     @Bean
     @ConfigurationProperties(prefix = "rcv.pds.ftp")
     public FtpConfig getPdsFtpConfig() { return new FtpConfig(); }
+
+    @Bean
+    @ConfigurationProperties(prefix = "rcv.pdsback.ftp")
+    public FtpConfig getPdsBackFtpConfig() { return new FtpConfig(); }
 
     @Primary
     @Bean

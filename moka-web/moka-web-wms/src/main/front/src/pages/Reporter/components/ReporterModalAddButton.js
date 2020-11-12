@@ -17,7 +17,7 @@ const defaultProps = {
 };
 
 /**
- * 기자 검색 모달 AgGrid 등록 버튼
+ * 기자 검색 모달 AgGrid 조회 버튼
  */
 const ReporterModalAddButton = (props) => {
     // const { data, onClick } = props;

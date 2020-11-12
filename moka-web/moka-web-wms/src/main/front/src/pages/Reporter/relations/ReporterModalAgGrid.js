@@ -1,17 +1,42 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { MokaTable } from '@components';
-import { columnDefs, rowData } from './ReporterModalAgGridColumns';
+import { columnDefs } from './ReporterModalAgGridColumns';
 import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList, getReporter } from '@store/reporter';
+import PropTypes from 'prop-types';
+export const { searchTypeList } = initialState;
+
+const propTypes = {
+    show: PropTypes.bool,
+    onHide: PropTypes.func,
+    /**
+     * 선택 버튼 클릭
+     * @param {object} template 선택한 데이터셋데이터
+     */
+    onClickSave: PropTypes.func,
+    /**
+     * 취소 버튼 클릭
+     */
+    onClickCancle: PropTypes.func,
+    /**
+     * 선택된 데이터셋아이디
+     */
+    selected: PropTypes.number,
+    /**
+     * 제외 데이터셋아이디
+     */
+    exclude: PropTypes.any,
+};
+const defaultProps = {};
 
 /**
  * 기자 검색 모달 AgGrid
  */
-const ReporterModalAgGrid = () => {
-    const history = useHistory();
+const ReporterModalAgGrid = (props) => {
+    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
     const dispatch = useDispatch();
+
     // const { reporter, list, total, search, loading } = useSelector((store) => ({
     //     reporter: store.reporter.reporter,
     //     list: store.reporter.list,
@@ -65,7 +90,7 @@ const ReporterModalAgGrid = () => {
     return (
         <MokaTable
             columnDefs={columnDefs}
-            rowData={rowData}
+            //rowData={rowData}
             onRowNodeId={(reporter) => reporter.repSeq}
             agGridHeight={600}
             getRowHeight={40}

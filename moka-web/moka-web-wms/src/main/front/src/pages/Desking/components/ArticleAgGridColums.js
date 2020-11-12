@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default [
     {
         rowDrag: true,
@@ -19,31 +17,15 @@ export default [
         },
     },
     {
-        colId: 'checkbox',
-        width: 28,
-        checkboxSelection: true,
-        suppressMenu: true,
-        headerCheckboxSelection: true,
-        cellClass: 'checkbox',
+        headerName: '기사유형',
+        width: 80,
+        field: 'artType',
     },
     {
-        headerName: '등록일시\n수정일시',
-        field: 'cellDate',
-        width: 75,
-        cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            whiteSpace: 'pre-wrap',
-            lineHeight: '20px',
-            height: '50px',
-        },
-        sort: 'desc',
-        // sortable: true,
-        // unSortIcon: true,
-        // comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
-        //     return nodeA.data.distYmdt - nodeB.data.distYmdt;
-        // }
+        headerName: '사진',
+        width: 60,
+        field: 'artThumb',
+        cellRenderer: 'imageRenderer',
     },
     {
         headerName: '',
@@ -71,29 +53,24 @@ export default [
         },
     },
     {
-        headerName: '사진',
-        width: 60,
+        headerName: '면/판',
+        width: 90,
+    },
+    {
+        headerName: '출고시간\n수정시간',
+        width: 100,
+        field: 'cellDate',
         cellStyle: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-        },
-        cellRenderer: (params) => {
-            let tag = '';
-            if (params.data.thumbnailFileName) {
-                tag += '<span style="width: 60px; height: 48px; display: flex; align-items: center;">';
-                tag += `<img width="60" src="http://img.com/${params.data.thumbnailFileName}" />`;
-                tag += '</span>';
-            }
-            return tag;
+            whiteSpace: 'pre-wrap',
+            lineHeight: '20px',
+            height: '50px',
         },
     },
     {
-        headerName: '출처\n카테고리',
-        width: 100,
-    },
-    {
-        headerName: '배부시간\n배부채널',
+        headerName: '기자명',
         width: 90,
     },
 ];

@@ -4,6 +4,7 @@ import { initialState as templateInitialState } from '@store/template';
 import { initialState as datasetInitialState } from '@store/dataset';
 import { initialState as containerInitialState } from '@store/container';
 import { initialState as historyInitialState } from '@store/history';
+import { initialState as articleInitialState } from '@store/article';
 
 // 검색조건
 export const { searchTypeList: defaultPageSearchType } = pageInitialState;
@@ -12,6 +13,7 @@ export const { searchTypeList: defaultTemplateSearchType } = templateInitialStat
 export const { searchTypeList: defaultDatasetSearchType } = datasetInitialState;
 export const { searchTypeList: defaultContainerSearchType } = containerInitialState;
 export const { searchTypeList: defaultHistorySearchType } = historyInitialState;
+export const { searchTypeList: defaultArticleSearchType } = articleInitialState;
 
 // 공통 모달
 export { default as PageListModal } from './PageListModal';

@@ -8,6 +8,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.reporter.dto.ReporterDTO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSimpleDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
@@ -75,6 +76,7 @@ public class ReporterRestController {
         // 조회(mybatis)
         List<ReporterVO> returnValue = reporterService.findAllReporterMgr(search);
 
+        // 리턴값 설정
         ResultListDTO<ReporterVO> resultList = new ResultListDTO<ReporterVO>();
         resultList.setList(returnValue);
         resultList.setTotalCnt(search.getTotal());
@@ -133,25 +135,26 @@ public class ReporterRestController {
                                        @Valid ReporterSimpleDTO reporterDTO)
             throws Exception {
 
+        // GroupDTO -> Group 변환
+        String infoMessage = messageByLocale.get("tps.group.error.no-data", request);
         Reporter newReporter = modelMapper.map(reporterDTO, Reporter.class);
-        Reporter orgDataset = reporterService.findReporterMgrById(newReporter.getRepSeq())
-                .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.reporter.error.no-data");
-                    tpsLogger.fail(ActionType.UPDATE, message, true);
-                    return new NoDataException(message);
-                });
+
+        reporterService
+                .findReporterMgrById(newReporter.getRepSeq())
+                .orElseThrow(() -> new NoDataException(infoMessage));
+
 
         try {
             // update
             Reporter returnValue = reporterService.updateReporterMgr(newReporter);
 
             // 결과리턴
-            ReporterSimpleDTO dto = modelMapper.map(returnValue, ReporterSimpleDTO.class);
+            ReporterDTO dto = modelMapper.map(returnValue, ReporterDTO.class);
+            ResultDTO<ReporterDTO> resultDto = new ResultDTO<ReporterDTO>(dto);
 
             // 액션 로그에 성공 로그 출력
-            String message = messageByLocale.get("tps.common.success.update");
-            ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<ReporterSimpleDTO>(dto, message);
             tpsLogger.success(ActionType.UPDATE);
+
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {

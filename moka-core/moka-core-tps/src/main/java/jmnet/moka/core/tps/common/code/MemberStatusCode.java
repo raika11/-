@@ -1,5 +1,11 @@
 package jmnet.moka.core.tps.common.code;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import jmnet.moka.common.utils.MapBuilder;
+
 /**
  * 사용자 상태 코드
  */
@@ -27,7 +33,15 @@ public enum MemberStatusCode {
         return name;
     }
 
-    public static String getRegexp() {
-        return "[Y|N]{1}$";
+    public static List<Map<String, Object>> toList() {
+
+        return Arrays
+                .stream(MemberStatusCode.values())
+                .map(memberStatusCode -> MapBuilder
+                        .getInstance()
+                        .add("code", memberStatusCode.code)
+                        .add("name", memberStatusCode.name)
+                        .getMap())
+                .collect(Collectors.toList());
     }
 }

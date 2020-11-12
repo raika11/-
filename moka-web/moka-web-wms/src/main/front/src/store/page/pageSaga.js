@@ -81,9 +81,10 @@ function* savePage({ payload: { actions, callback } }) {
             callbackData = response.data;
 
             // invalidList 셋팅
+            debugger;
             yield put({
                 type: act.CHANGE_INVALID_LIST,
-                payload: response.data.body.list,
+                payload: response.data.body && response.data.body.list,
             });
 
             // 실패 액션 실행

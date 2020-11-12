@@ -181,19 +181,6 @@ public class Component extends BaseAudit {
     private Integer moreCount = TpsConstants.MORE_COUNT;
 
     /**
-     * 검색서비스유형(기타코드)
-     */
-    @Column(name = "SCH_SERVICE_TYPE")
-    private String schServiceType;
-
-    /**
-     * 검색언어(기타코드)
-     */
-    @Column(name = "SCH_LANG")
-    @Builder.Default
-    private String schLang = TpsConstants.DEFAULT_LANG;
-
-    /**
      * 검색코드ID
      */
     @Column(name = "SCH_CODE_ID")
@@ -230,7 +217,6 @@ public class Component extends BaseAudit {
         this.maxPageCount = this.maxPageCount == null ? TpsConstants.MAX_PAGE_COUNT : this.maxPageCount;
         this.dispPageCount = this.dispPageCount == null ? TpsConstants.DISP_PAGE_COUNT : this.dispPageCount;
         this.moreCount = this.moreCount == null ? TpsConstants.MORE_COUNT : this.moreCount;
-        this.schLang = McpString.defaultValue(this.schLang, TpsConstants.DEFAULT_LANG);
         this.snapshotYn = McpString.defaultValue(this.snapshotYn, MokaConstants.NO);
     }
 }

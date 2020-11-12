@@ -11,6 +11,7 @@ import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
@@ -18,6 +19,7 @@ import org.apache.ibatis.type.Alias;
  * 매체
  */
 @AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Builder

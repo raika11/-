@@ -7,11 +7,92 @@
   <select id="findAll" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
     statementType="CALLABLE">
     { call UPS_WMS_ARTICLE_BASIC_LIST_SEL(
-    #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+    <choose>
+      <when test="startServiceDay != null">
+        #{startServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="endServiceDay != null">
+        #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+
+    <choose>
+      <when test="searchType == 'all' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'title' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'reporterId' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'reporterName' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="masterCode != 'all' and masterCode != null and masterCode != ''">
+        #{masterCode},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
 
     <choose>
       <when test="sourceCode != 'all' and sourceCode != null and sourceCode != ''">
         #{sourceCode},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+
+    <choose>
+      <when test="pressMyun != 'all' and pressMyun != null and pressMyun != ''">
+        #{pressMyun},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="pressPan != 'all' and pressPan != null and pressPan != ''">
+        #{pressPan},
       </when>
       <otherwise>
         NULL,

@@ -4,22 +4,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
-import jmnet.moka.core.tps.common.TpsConstants;
-import org.apache.ibatis.type.Alias;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingRelWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.type.Alias;
 
 /**
  * Work 컴포넌트 정보 (편집기사 포함)
- * 
- * @author ohtah
  *
+ * @author ohtah
  */
 @Alias("DeskingComponentWorkVO")
 @NoArgsConstructor
@@ -95,8 +94,6 @@ public class DeskingComponentWorkVO implements Serializable {
         componentItem.put(ItemConstants.COMPONENT_DATASET_ID, this.getDatasetSeq());
         componentItem.put(ItemConstants.COMPONENT_NAME, this.componentName);
         componentItem.put(ItemConstants.COMPONENT_DATA_TYPE, this.dataType);
-        componentItem.put(ItemConstants.COMPONENT_SEARCH_SERVICE_TYPE, this.searchServiceType);
-        componentItem.put(ItemConstants.COMPONENT_SEARCH_LANG, this.searchLang);
         componentItem.put(ItemConstants.COMPONENT_SEARCH_CODE_ID, this.searchCodeId);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_YN, this.snapshotYn);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_BODY, this.snapshotBody);

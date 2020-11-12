@@ -164,19 +164,6 @@ public class ComponentDTO implements Serializable {
     private Integer moreCount = TpsConstants.MORE_COUNT;
 
     /**
-     * 검색서비스유형(기타코드)
-     */
-    @Length(max = 24, message = "{tps.component.error.length.schServiceType}")
-    private String schServiceType;
-
-    /**
-     * 검색언어(기타코드)
-     */
-    @Length(max = 24, message = "{tps.component.error.length.schLang}")
-    @Builder.Default
-    private String schLang = TpsConstants.DEFAULT_LANG;
-
-    /**
      * 검색코드ID
      */
     @Length(max = 24, message = "{tps.component.error.length.schCodeId}")
@@ -228,12 +215,10 @@ public class ComponentDTO implements Serializable {
         componentItem.put(ItemConstants.COMPONENT_MAX_PAGE_COUNT, this.maxPageCount);
         componentItem.put(ItemConstants.COMPONENT_DISP_PAGE_COUNT, this.dispPageCount);
         componentItem.put(ItemConstants.COMPONENT_MORE_COUNT, this.moreCount);
-        componentItem.put(ItemConstants.COMPONENT_SEARCH_SERVICE_TYPE, this.schServiceType);
-        componentItem.put(ItemConstants.COMPONENT_SEARCH_LANG, this.schLang);
         componentItem.put(ItemConstants.COMPONENT_SEARCH_CODE_ID, this.schCodeId);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_YN, this.snapshotYn);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_BODY, this.snapshotBody);
-        componentItem.put(ItemConstants.COMPONENT_SKIN_ID, this.skin.getSkinSeq());
+        //        componentItem.put(ItemConstants.COMPONENT_SKIN_ID, this.skin.getSkinSeq());
         return componentItem;
     }
 }

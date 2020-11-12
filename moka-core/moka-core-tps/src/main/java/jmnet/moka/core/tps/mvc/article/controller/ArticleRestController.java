@@ -1,14 +1,23 @@
 package jmnet.moka.core.tps.mvc.article.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import io.swagger.annotations.ApiOperation;
+import java.util.List;
 import javax.validation.Valid;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,36 +44,48 @@ public class ArticleRestController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping
-    public ResponseEntity<?> getArticleList(HttpServletRequest request, @Valid @SearchParam ArticleSearchDTO search) {
+    @Autowired
+    private TpsLogger tpsLogger;
 
-        //        // 조회(mybatis)
-        //        Long totalCount = articleService.findListCount(search);
-        //        List<ArticleVO> returnValue = articleService.findList(search);
-        //
-        //        ResultListDTO<ArticleVO> resultList = new ResultListDTO<ArticleVO>();
-        //        resultList.setList(returnValue);
-        //        resultList.setTotalCnt(totalCount);
-        //
-        //        ResultDTO<ResultListDTO<ArticleVO>> resultDTO =
-        //                new ResultDTO<ResultListDTO<ArticleVO>>(resultList);
-        //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-        return null;
+    /**
+     * 기사목록조회
+     *
+     * @param search 검색조건
+     * @return 기사목록
+     */
+    @ApiOperation(value = "기사 목록조회")
+    @GetMapping
+    public ResponseEntity<?> getArticleList(@Valid @SearchParam ArticleSearchDTO search) {
+
+        // 조회(mybatis)
+        List<ArticleBasicVO> returnValue = articleService.findAllArticleBasic(search);
+
+
+        // 리턴값 설정
+        ResultListDTO<ArticleBasicVO> resultListMessage = new ResultListDTO<>();
+        resultListMessage.setTotalCnt(search.getTotal());
+        resultListMessage.setList(returnValue);
+
+        ResultDTO<ResultListDTO<ArticleBasicVO>> resultDto = new ResultDTO<>(resultListMessage);
+        tpsLogger.success(ActionType.SELECT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{contentsId}")
-    public ResponseEntity<?> getArticle(HttpServletRequest request, @PathVariable("contentsId") String contentsId)
+    @ApiOperation(value = "기사 상세조회")
+    @GetMapping("/{totalId}")
+    public ResponseEntity<?> getArticle(@PathVariable("totalId") Long totalId)
             throws NoDataException {
 
-        //        String message = messageByLocale.get("tps.contents.article.error.noContent", request);
-        //
-        //        // 조회
-        //        Article article = articleService.findByContentsId(contentsId)
-        //                .orElseThrow(() -> new NoDataException(message));
-        //
-        //        ResultDTO<ArticleDTO> resutlDTO =
-        //                new ResultDTO<ArticleDTO>(modelMapper.map(article, ArticleDTO.class));
-        //        return new ResponseEntity<>(resutlDTO, HttpStatus.OK);
-        return null;
+        ArticleBasic articleBasic = articleService.findArticleBasicById(totalId)
+                                                  .orElseThrow(() -> {
+                                                      String message = messageByLocale.get("tps.common.error.no-data");
+                                                      tpsLogger.fail(message, true);
+                                                      return new NoDataException(message);
+                                                  });
+
+        ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
+        ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto);
+        tpsLogger.success(ActionType.SELECT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

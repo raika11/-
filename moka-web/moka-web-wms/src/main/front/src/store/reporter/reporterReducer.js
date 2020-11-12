@@ -76,7 +76,7 @@ export default handleActions(
          * 목록
          */
         [act.GET_REPORTER_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            console.log('성공듀서탓음::' + state);
+            //console.log('성공듀서탓음::', decodeURIComponent(qs.stringify(body)));
             return produce(state, (draft) => {
                 draft.error = initialState.error;
                 draft.list = body.list;
@@ -84,7 +84,7 @@ export default handleActions(
             });
         },
         [act.GET_REPORTER_LIST_FAILURE]: (state, { payload }) => {
-            console.log('실패듀서탓음::' + decodeURIComponent(qs.stringify(payload)));
+            //console.log('실패듀서탓음::' + decodeURIComponent(qs.stringify(payload)));
 
             return produce(state, (draft) => {
                 draft.error = payload;

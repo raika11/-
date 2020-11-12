@@ -12,10 +12,10 @@ import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList, g
 const ReporterMgrAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const [search, setSearch] = useState(initialState);
+    //const [search, setSearch] = useState(initialState);
     const [reporterRows, setRepoterRows] = useState([]);
 
-    const { reporter, list, total, search: storeSearch, loading } = useSelector((store) => {
+    const { reporter, list, total, search, loading } = useSelector((store) => {
         return {
             reporter: store.reporter.reporter,
             list: store.reporter.list,
@@ -41,7 +41,6 @@ const ReporterMgrAgGrid = () => {
     );
 
     useEffect(() => {
-        console.log('aaaaaaaaaaaaaaaaaaaa::', list);
         setRepoterRows(
             list.map((row) => ({
                 ...row,

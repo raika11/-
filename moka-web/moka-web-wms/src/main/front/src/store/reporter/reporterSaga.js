@@ -10,7 +10,6 @@ import * as reporterAction from './reporterAction';
  * 기자관리 목록 조회
  */
 const getReporterList = callApiAfterActions(reporterAction.GET_REPORTER_LIST, reporterAPI.getReporterList, (state) => {
-    console.log('사가탐', state);
     return state.reporter;
 });
 

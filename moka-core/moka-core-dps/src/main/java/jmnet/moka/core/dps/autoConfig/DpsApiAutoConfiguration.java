@@ -1,9 +1,14 @@
 package jmnet.moka.core.dps.autoConfig;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
+import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.dps.api.menu.model.MenuParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.servlet.HandlerMapping;
@@ -166,7 +173,14 @@ public class DpsApiAutoConfiguration {
         handlerMapping.setOrder(-1);
         return handlerMapping;
 	}
-	
+
+	@Bean(name="pcMenuParser")
+	public MenuParser pcMenuParser()
+			throws ParserConfigurationException, XPathExpressionException, IOException {
+		ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
+		Resource resource = patternResolver.getResource("classpath:/Menu.xml");
+		return new MenuParser(resource);
+	}
 			
 	@Bean(name = "periodicTaskScheduler")
 	public ThreadPoolTaskScheduler periodicScheduler() {

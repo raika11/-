@@ -68,6 +68,7 @@ const ReporterMgrSearchModal = (props) => {
                 body.list.map((data) => ({
                     ...data,
                     onClickSave,
+                    handleHide,
                     repImg: data.repImg || bg,
                 })),
             );
@@ -89,18 +90,6 @@ const ReporterMgrSearchModal = (props) => {
         setError(null);
         setCnt(0);
         onHide();
-    };
-
-    /**
-     * 등록 버튼 클릭
-     */
-    const handleClickSave = () => {
-        //if (onClickSave) onClickSave(selectedReporter, handleHide);
-
-        if (onClickSave) {
-        }
-
-        console.log();
     };
 
     /**

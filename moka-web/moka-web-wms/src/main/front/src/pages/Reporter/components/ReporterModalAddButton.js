@@ -4,7 +4,6 @@ import { Button } from 'react-bootstrap';
 
 const propTypes = {
     data: PropTypes.object,
-    onClickSave: PropTypes.func,
 };
 
 const defaultProps = {
@@ -19,7 +18,7 @@ const ReporterModalAddButton = (props) => {
 
     const handleClick = useCallback((data) => {
         if (data.onClickSave) {
-            data.onClickSave(data);
+            data.onClickSave(data, data.handleHide);
         }
     }, []);
 

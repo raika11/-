@@ -69,7 +69,7 @@ const ReporterMgrSearch = () => {
                 ...search,
                 keyword: data.repName,
             });
-            setDatasetApiListModalShow(false);
+            hideCallback();
         }
     };
 

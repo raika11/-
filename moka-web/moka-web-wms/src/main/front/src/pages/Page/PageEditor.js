@@ -67,15 +67,17 @@ const PageEditor = (props) => {
         let isInvalid = false;
 
         // invalidList 처리
-        invalidList.forEach((i) => {
-            if (i.field === 'pageBody') {
-                setError({
-                    line: Number(i.extra),
-                    message: i.reason,
-                });
-                isInvalid = isInvalid || true;
-            }
-        });
+        if (Array.isArray(invalidList) && invalidList.length > 0) {
+            invalidList.forEach((i) => {
+                if (i.field === 'pageBody') {
+                    setError({
+                        line: Number(i.extra),
+                        message: i.reason,
+                    });
+                    isInvalid = isInvalid || true;
+                }
+            });
+        }
 
         if (!isInvalid) {
             setError({});

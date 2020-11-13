@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MokaCardTabs, MokaIconTabs, MokaIcon } from '@components';
-import { ArticleList } from './components';
+import ArticleList from '@pages/Article/ArticleList';
 
 const DeskingTabs = () => {
     const [activeTabIdx, setActiveTabIdx] = useState(0);
@@ -11,7 +11,7 @@ const DeskingTabs = () => {
             onSelectNav={(idx) => setActiveTabIdx(idx)}
             tabWidth={840}
             className="flex-fill"
-            tabs={[<MokaCardTabs width={840} fill tabs={[<ArticleList />]} tabNavs={['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']} />]}
+            tabs={[<MokaCardTabs width={840} fill tabs={[<ArticleList className="px-3 pb-3 pt-2" />]} tabNavs={['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']} />]}
             tabNavWidth={48}
             tabNavPosition="right"
             tabNavs={[

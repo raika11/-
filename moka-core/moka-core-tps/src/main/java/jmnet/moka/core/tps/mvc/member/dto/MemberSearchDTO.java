@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,8 +41,7 @@ public class MemberSearchDTO extends SearchDTO {
     /**
      * 상태(유효/정지)
      */
-    @Builder.Default
-    private String status = "N";
+    private MemberStatusCode status;
 
     /**
      * 부서

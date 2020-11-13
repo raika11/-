@@ -12,6 +12,7 @@ import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
+import jmnet.moka.web.rcv.task.cpxml.CpXmlRcvService;
 import jmnet.moka.web.rcv.task.jamxml.JamXmlRcvService;
 import jmnet.moka.web.rcv.util.RcvUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
@@ -44,6 +45,9 @@ public class TaskManager {
 
     @Autowired
     JamXmlRcvService jamXmlRcvService;
+
+    @Autowired
+    CpXmlRcvService cpXmlRcvService;
 
     public TaskManager(MokaRcvConfiguration rcvConfiguration) {
         this.rcvConfiguration = rcvConfiguration;

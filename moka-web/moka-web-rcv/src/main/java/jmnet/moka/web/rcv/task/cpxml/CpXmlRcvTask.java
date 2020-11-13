@@ -1,9 +1,13 @@
 package jmnet.moka.web.rcv.task.cpxml;
 
+import java.nio.file.Path;
+import java.util.Date;
 import javax.xml.xpath.XPathExpressionException;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.task.Task;
 import jmnet.moka.web.rcv.common.taskinput.TaskInput;
+import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
 import jmnet.moka.web.rcv.exception.RcvException;
 import jmnet.moka.web.rcv.task.base.TaskGroup;
@@ -13,9 +17,12 @@ import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpComponentVo;
 import jmnet.moka.web.rcv.taskinput.FileTaskInput;
 import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
+import jmnet.moka.web.rcv.util.FtpUtil;
+import jmnet.moka.web.rcv.util.RcvImageUtil;
 import jmnet.moka.web.rcv.util.RcvUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Node;
 
 /**
@@ -32,8 +39,10 @@ import org.w3c.dom.Node;
  */
 @Slf4j
 public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticleListVo>> {
-    private int idx;
     private String sourceCode;
+    private String receiveImage;
+    private String pdsUploadKeyTitle;
+    private String editYn;
 
     public CpXmlRcvTask(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, RcvException {
@@ -50,14 +59,15 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
             throws XPathExpressionException, RcvException {
         super.load(node, xu);
 
-        this.idx = RcvUtil.ParseInt(xu.getString(node, "./@idx", ""));
-        if (this.idx == 0) {
-            throw new RcvException("idx 환경 값 설정이 잘못되었습니다.");
-        }
-
         this.sourceCode = xu.getString(node, "./@sourceCode", "");
         if (McpString.isNullOrEmpty(this.sourceCode)) {
             throw new RcvException("sourceCode 환경 값 설정이 잘못되었습니다.");
+        }
+        this.receiveImage = xu.getString(node, "./@receiveImage", "N");
+        this.editYn = xu.getString(node, "./@editYn", "N");
+        this.pdsUploadKeyTitle = xu.getString(node, "./@pdsUploadKeyTitle", "");
+        if (McpString.isNullOrEmpty(this.pdsUploadKeyTitle)) {
+            throw new RcvException("pdsUploadKeyTitle 환경 값 설정이 잘못되었습니다.");
         }
     }
 
@@ -92,105 +102,139 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
         final CpArticleTotalVo cpArticleTotalVo = taskInputData.getTotalData();
 
         cpArticleTotalVo.setSourceCode(this.sourceCode);
+        cpArticleTotalVo.setEditYn(this.editYn);
 
         final CpArticleListVo artcleList = cpArticleTotalVo.getMainData();
         for (CpArticleVo article : artcleList.getArticles()) {
             cpArticleTotalVo.setCurArticle(article);
-            article.doReplaceInsertData( this.sourceCode );
-            doProcessChild(taskInputData, cpArticleTotalVo);
+            article.doReplaceInsertData(this.sourceCode);
+
+            do {
+                try {
+                    doProcessChild(taskInputData, cpArticleTotalVo);
+                   } catch (Exception e) {
+                    cpArticleTotalVo.logError("기사 해석 에러 발생 반복 {}", e);
+                    if( isEnd() )
+                        break;
+                    sleep( false );
+                    continue;
+                }
+                break;
+            } while (true);
         }
     }
 
     private void doProcessChild(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData, CpArticleTotalVo cpArticleTotalVo)
             throws RcvDataAccessException {
-
         final CpArticleVo article = cpArticleTotalVo.getCurArticle();
+        final MokaRcvConfiguration rcvConfiguration = getTaskManager().getRcvConfiguration();
 
-        for(CpComponentVo componet : article.getComponents() ) {
-            if( componet.getType().compareTo("I") != 0 )
+        for (CpComponentVo componet : article.getComponents()) {
+            if (componet
+                    .getType()
+                    .compareTo("I") != 0) {
                 continue;
-            if( McpString.isNullOrEmpty( componet.getUrl()))
+            }
+            if (McpString.isNullOrEmpty(componet.getUrl())) {
                 continue;
+            }
+
+            String localFilePath;
+            String imageFileName;
+            if (this.receiveImage.compareTo("Y") == 0) {
+                // 로컬이미지 다운로드(FTP에 이미지파일도 함께 올려주는 경우)
+                imageFileName = Path
+                        .of(componet.getUrl())
+                        .getFileName()
+                        .toString();
+                localFilePath = Path
+                        .of(taskInputData
+                                .getTaskInput()
+                                .getDirScan()
+                                .getPath(), imageFileName)
+                        .toString();
+                log.info("local file {}, {}", imageFileName, localFilePath);
+            } else {
+                final int equalPos = componet
+                        .getUrl()
+                        .lastIndexOf("=", componet
+                                .getUrl()
+                                .length() - 2);
+                if (equalPos != -1) {
+                    // 맥심(maxim)같은 경우
+                    imageFileName = componet
+                            .getUrl()
+                            .substring(equalPos + 1);
+                    if (!imageFileName.contains(".")) {
+                        imageFileName = imageFileName.concat(".jpg");
+                    }
+                } else {
+                    imageFileName = FilenameUtils.getName(componet.getUrl());
+                }
+
+                // 외부 이미지 로컬에 저장
+                localFilePath = taskInputData.getTempFileName(rcvConfiguration.getTempDir());
+                if (!RcvImageUtil.downloadImage(componet.getUrl(), localFilePath)) {
+                    log.error("image download failed {}", componet.getUrl());
+                    localFilePath = "";
+                }
+            }
+            if (!McpString.isNullOrEmpty(localFilePath)) {
+                imageFileName = imageFileName
+                        .replace("\r", "")
+                        .replace("\n", "");
+
+                log.info("local file {}, {}", imageFileName, localFilePath);
+
+                final String uploadPath = "/news/component/"
+                        .concat(this.pdsUploadKeyTitle)
+                        .concat("/")
+                        .concat(McpDate.dateStr(new Date(), "yyyyMM/dd/"));
+
+                if (!FtpUtil.uploadFle(rcvConfiguration.getPdsBackFtpConfig(), localFilePath, uploadPath, imageFileName)) {
+                    log.error("PDS Back Image Upload Failed !! {} {}", uploadPath, imageFileName);
+                } else {
+                    log.info("PDS Back Image Upload Success !! {} {}", uploadPath, imageFileName);
+                }
+
+                if (!FtpUtil.uploadFle(rcvConfiguration.getPdsFtpConfig(), localFilePath, uploadPath, imageFileName)) {
+                    log.error("PDS Image Upload Failed !! {} {}", uploadPath, imageFileName);
+                } else {
+                    final String serviceImageUrl = rcvConfiguration
+                            .getImageWebSvrUrl()
+                            .concat(uploadPath)
+                            .concat(imageFileName);
+
+                    log.info("PDS  Image Upload Success !! {} {} {}", serviceImageUrl, uploadPath, imageFileName);
+
+                    // 본문에 이미지태그가 안들어오는 기사들은 상단에 가운데정렬 이미지로 추가한다.
+                    if (this.sourceCode.compareTo("j4") == 0) {
+                        String ImageTag = "<div><!--@img_tag_s@--><div class=\"html_photo_center\"><img src=\""
+                                .concat(serviceImageUrl)
+                                .concat("\" />");
+                        if (!McpString.isNullOrEmpty(componet.getDesc())) {
+                            ImageTag = ImageTag
+                                    .concat("<span class=\"rt\">")
+                                    .concat(componet.getDesc())
+                                    .concat("</span>");
+                        }
+                        ImageTag = ImageTag.concat("</div><!--@img_tag_e@--></div>");
+
+                        article.setContent(ImageTag
+                                .concat("\r\n")
+                                .concat(article.getContent()));
+                    } else {
+                        article.setContent(article
+                                .getContent()
+                                .replace(RcvUtil.cpReplaceInsertData(componet.getUrl()), serviceImageUrl));
+                    }
+                }
+                componet.setUrl(uploadPath.concat(imageFileName));
+            }
         }
 
-
-        // 외부 이미지 다운로드
-        //array(sComponentType, sComponentUrl, sComponentWidth, sComponentHeight, sComponentDesc, sComponentPlayTime, sComponentObjId))
-
-        /*
-        For nTmpIdx=1 To oComponent.Count
-        sTmpCompName = "Component_" & CStr(nTmpIdx)
-        If UCase(oComponent.Item(sTmpCompName)(0)) = "I" And Len(Trim(oComponent.Item(sTmpCompName)(1))) > 0 Then
-            bDownloadImage = False
-            If sReceiveImgYN = "Y" Then '로컬이미지 다운로드(FTP에 이미지파일도 함께 올려주는 경우)
-                sArticleImageTmpPath = sCpReceiveWebPath	'cp receive 폴더로 경로 설정
-                sDownImageName = Replace(oComponent.Item(sTmpCompName)(1), Left(oComponent.Item(sTmpCompName)(1), InStrRev(oComponent.Item(sTmpCompName)(1), "\")), "")
-                bDownloadImage = True
-            Else
-                sArticleImageTmpPath = sImageUploadTmpUrl & sTempVar & "/"	'다운로드해서 저장할 템프디렉토리 경로 설정
-                '맥심(maxim)같은 경우
-                If InStr(oComponent.Item(sTmpCompName)(1), "=") > 0 Then
-                    sDownImageName = Replace(oComponent.Item(sTmpCompName)(1), Left(oComponent.Item(sTmpCompName)(1), InStrRev(oComponent.Item(sTmpCompName)(1), "=")), "")
-                    If InStr(sDownImageName, ".") <= 0 Then
-                        sDownImageName = sDownImageName & ".jpg"
-                    End If
-                Else
-                    sDownImageName = Replace(oComponent.Item(sTmpCompName)(1), Left(oComponent.Item(sTmpCompName)(1), InStrRev(oComponent.Item(sTmpCompName)(1), "/")), "")
-                End If
-                bDownloadImage = fnDownloadImage(oComponent.Item(sTmpCompName)(1), Server.MapPath(sArticleImageTmpPath & sDownImageName))	'외부 이미지 로컬에 저장
-            End If
-
-            If bDownloadImage = True Then
-                sDownImageName = Replace(Replace(replace(Trim(sDownImageName), vbcrlf, ""), vblf, ""), vbcr, "")
-                'pds백업서버로 ftp전송
-                bTranResult_bak = fnFtpFileUploadNew(IMAGE_BAK_SVR_IP, IMAGE_BAK_SVR_FTP_PORT, IMAGE_BAK_SVR_FTP_ACCOUNT, IMAGE_BAK_SVR_FTP_PASSWORD, true, Server.MapPath(sArticleImageTmpPath & sDownImageName), sArticleImageSavePath & sDownImageName, false)
-                'pds서버로 ftp전송
-                bTranResult1 = fnFtpFileUploadNew(IMAGE_SVR_IP, IMAGE_SVR_FTP_PORT, IMAGE_SVR_FTP_ACCOUNT, IMAGE_SVR_FTP_PASSWORD, true, Server.MapPath(sArticleImageTmpPath & sDownImageName), sArticleImageSavePath & sDownImageName, true)
-
-                '업로드 오류 발생시 처리.
-                '1. 이미지가 올라가기전에 "0"아닌값이 리턴되어 아래 조건에 해당되지 않아서 이미지태그 누락되며, 컴포넌트에도 데이터가 잘못 들어가는 경우
-                '2. 실제 ftp업로드가 실패된경우
-                bUploadComp = False
-
-                If bTranResult1 = "0" Then
-                    bUploadComp = True
-                    FileAppend sLogFilePath, "이미지전송:" & nArticleImageServiceUrl & sDownImageName & " == " & bTranResult1 & vbCrLf
-                ElseIf Left(bTranResult1, 1) = "2" Then
-                    bExistsImage = ExistsWebFile(sImageSvrDomain & nArticleImageServiceUrl & sDownImageName)
-                    If bExistsImage = True Then
-                        bUploadComp = True
-                        FileAppend sLogFilePath, "이미지전송:이미 업로드된 이미지" & vbCrLf
-                    Else
-                        FileAppend sLogFilePath, "이미지전송:" & nArticleImageServiceUrl & sDownImageName & " == " & bTranResult1 & vbCrLf
-                    End If
-                Else
-                    FileAppend sLogFilePath, "이미지전송:" & bTranResult1 & vbCrLf
-                End If
-
-                If bUploadComp = True Then
-                    '본문에 이미지태그가 안들어오는 기사들은 상단에 가운데정렬 이미지로 추가한다.
-                    If sCpSourceCode = "j4" Then
-                        Dim strImageTag
-                        strImageTag = "<div><!--@img_tag_s@--><div class=""html_photo_center""><img src=""" & sImageSvrDomain & nArticleImageServiceUrl & sDownImageName & """ />"
-                        If Len(Trim(oComponent.Item(sTmpCompName)(4))) > 0 Then
-                            strImageTag = strImageTag & "<span class=""rt"">" & oComponent.Item(sTmpCompName)(4) & "</span>"
-                        End If
-                        strImageTag = strImageTag & "</div><!--@img_tag_e@--></div>"
-                        sContents = strImageTag & vbCrLf & sContents
-                    Else
-                        '본문의 외부 이미지 pds경로로 치환
-                        sContents = Replace(sContents, ReplaceInsertData(oComponent.Item(sTmpCompName)(1)), sImageSvrDomain & nArticleImageServiceUrl & sDownImageName)
-                    End If
-                    'pds경로로 변경
-                    aImgTmp = oComponent.Item(sTmpCompName)
-                    aImgTmp(1) = nArticleImageServiceUrl & sDownImageName
-                    oComponent.Item(sTmpCompName) = aImgTmp
-                End If 'If bUploadComp = True Then
-            End If 'If bDownloadImage = true Then
-        End If 'If UCase(oComponent.Item(sTmpCompName)(0)) = "I" And Len(Trim(oComponent.Item(sTmpCompName)(1))) > 0 Then
-    Next
-         */
-
+        final CpXmlRcvService cpXmlRcvService = getTaskManager().getCpXmlRcvService();
+        cpXmlRcvService.doInsertUpdateArticleData(cpArticleTotalVo);
     }
 
     @Override

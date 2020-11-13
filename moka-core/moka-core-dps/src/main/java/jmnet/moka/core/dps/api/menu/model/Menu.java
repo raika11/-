@@ -1,8 +1,6 @@
-package jmnet.moka.web.dps.mvc.menu.model;
+package jmnet.moka.core.dps.api.menu.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.xpath.XPathExpressionException;

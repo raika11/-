@@ -66,6 +66,12 @@
   FROM TB_ARTICLE_KEYWORD
   WHERE TOTAL_ID = #{totalId}
   </select>
+  <!-- article clickcnt -->
+  <select id="clickcnt" parameterType="hashmap" resultType="map">
+  SELECT *
+  FROM TB_15RE_ARTICLE_CLICKCNT
+  WHERE TOTAL_ID = #{totalId}
+  </select>
   <!-- article multi -->
   <select id="multi" parameterType="hashmap" resultType="map">
   select * from TB_15RE_ARTICLE_MULTI

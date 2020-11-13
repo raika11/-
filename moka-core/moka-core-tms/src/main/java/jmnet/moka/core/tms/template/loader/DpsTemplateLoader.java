@@ -49,7 +49,6 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
     public static final String PARAM_DOMAIN_ID = "domainId";
     public static final String PARAM_ITEM_ID = "id";
     public static final String PARAM_TBODY = "tBody";
-    public static final String DATA_SELECT_COMPONENT_AD = "COMPONENT_AD";
 
     protected static Map<String, String> itemApiMap = new HashMap<String, String>();
 

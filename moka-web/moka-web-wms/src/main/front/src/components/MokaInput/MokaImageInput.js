@@ -202,7 +202,11 @@ const MokaImageInput = forwardRef((props, ref) => {
                         </div>
 
                         {/* default text */}
-                        <span className="absolute-top w-100 h-100 d-flex align-items-center justify-content-center pointer-events-none" ref={defaultRef}>
+                        <span
+                            className="absolute-top w-100 h-100 d-flex align-items-center justify-content-center pointer-events-none p-3"
+                            ref={defaultRef}
+                            style={{ whiteSpace: 'pre-wrap' }}
+                        >
                             <MokaIcon iconName="fal-cloud-upload" className="mr-2" />
                             Drop files to attach, or browse
                         </span>

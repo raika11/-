@@ -3,17 +3,17 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
 
 import * as domainAPI from './domainApi';
-import * as domainAction from './domainAction';
+import * as act from './domainAction';
 
 /**
  * 목록
  */
-const getDomainList = callApiAfterActions(domainAction.GET_DOMAIN_LIST, domainAPI.getDomainList, (state) => state.domain);
+const getDomainList = callApiAfterActions(act.GET_DOMAIN_LIST, domainAPI.getDomainList, (state) => state.domain);
 
 /**
  * 데이터 조회
  */
-const getDomain = createRequestSaga(domainAction.GET_DOMAIN, domainAPI.getDomain);
+const getDomain = createRequestSaga(act.GET_DOMAIN, domainAPI.getDomain);
 
 /**
  * 도메인아이디 중복 체크
@@ -21,7 +21,7 @@ const getDomain = createRequestSaga(domainAction.GET_DOMAIN, domainAPI.getDomain
  * @param {func} param0.payload.callback 콜백
  */
 function* duplicateCheck({ payload: { domainId, callback } }) {
-    const ACTION = domainAction.DUPLICATE_CHECK;
+    const ACTION = act.DUPLICATE_CHECK;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
@@ -47,7 +47,7 @@ function* duplicateCheck({ payload: { domainId, callback } }) {
  * @param {func} param0.payload.callback 콜백
  */
 function* saveDomain({ payload: { type, actions, callback } }) {
-    const ACTION = domainAction.SAVE_DOMAIN;
+    const ACTION = act.SAVE_DOMAIN;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
@@ -71,26 +71,31 @@ function* saveDomain({ payload: { type, actions, callback } }) {
 
         if (response.data.header.success) {
             yield put({
-                type: domainAction.GET_DOMAIN_SUCCESS,
+                type: act.GET_DOMAIN_SUCCESS,
                 payload: response.data,
             });
 
             // 목록 다시 검색
-            yield put({ type: domainAction.GET_DOMAIN_LIST });
+            yield put({ type: act.GET_DOMAIN_LIST });
 
             // auth 도메인 목록 다시 조회
             //yield put(getDomains(domain.domainId));
         } else {
-            yield put({
-                type: domainAction.GET_DOMAIN_FAILURE,
-                payload: response.data,
-            });
+            const { body } = response.data.body;
+
+            if (body && body.list && Array.isArray(body.list)) {
+                // invalidList 셋팅
+                yield put({
+                    type: act.CHANGE_INVALID_LIST,
+                    payload: response.data.body.list,
+                });
+            }
         }
     } catch (e) {
         callbackData = errorResponse(e);
 
         yield put({
-            type: domainAction.GET_DOMAIN_FAILURE,
+            type: act.GET_DOMAIN_FAILURE,
             payload: callbackData,
         });
     }
@@ -108,7 +113,7 @@ function* saveDomain({ payload: { type, actions, callback } }) {
  * @param {func} param0.payload.callback 콜백
  */
 function* hasRelationList({ payload: { domainId, callback } }) {
-    const ACTION = domainAction.HAS_RELATION_LIST;
+    const ACTION = act.HAS_RELATION_LIST;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
@@ -133,7 +138,7 @@ function* hasRelationList({ payload: { domainId, callback } }) {
  * @param {func} param0.payload.callback 콜백
  */
 function* deleteDomain({ payload: { domainId, callback } }) {
-    const ACTION = domainAction.DELETE_DOMAIN;
+    const ACTION = act.DELETE_DOMAIN;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
@@ -143,16 +148,16 @@ function* deleteDomain({ payload: { domainId, callback } }) {
         callbackData = response.data;
 
         if (response.data.header.success && response.data.body) {
-            yield put({ type: domainAction.DELETE_DOMAIN_SUCCESS });
+            yield put({ type: act.DELETE_DOMAIN_SUCCESS });
 
             // 목록 다시 검색
-            yield put({ type: domainAction.GET_DOMAIN_LIST });
+            yield put({ type: act.GET_DOMAIN_LIST });
 
             // auth 도메인 목록 다시 조회
             //yield put(getDomainList());
         } else {
             yield put({
-                type: domainAction.DELETE_DOMAIN_FAILURE,
+                type: act.DELETE_DOMAIN_FAILURE,
                 payload: response.data,
             });
         }
@@ -160,7 +165,7 @@ function* deleteDomain({ payload: { domainId, callback } }) {
         callbackData = errorResponse(e);
 
         yield put({
-            type: domainAction.DELETE_DOMAIN_FAILURE,
+            type: act.DELETE_DOMAIN_FAILURE,
             payload: callbackData,
         });
     }
@@ -173,10 +178,10 @@ function* deleteDomain({ payload: { domainId, callback } }) {
 }
 
 export default function* domainSaga() {
-    yield takeLatest(domainAction.GET_DOMAIN_LIST, getDomainList);
-    yield takeLatest(domainAction.GET_DOMAIN, getDomain);
-    yield takeLatest(domainAction.DUPLICATE_CHECK, duplicateCheck);
-    yield takeLatest(domainAction.SAVE_DOMAIN, saveDomain);
-    yield takeLatest(domainAction.DELETE_DOMAIN, deleteDomain);
-    yield takeLatest(domainAction.HAS_RELATION_LIST, hasRelationList);
+    yield takeLatest(act.GET_DOMAIN_LIST, getDomainList);
+    yield takeLatest(act.GET_DOMAIN, getDomain);
+    yield takeLatest(act.DUPLICATE_CHECK, duplicateCheck);
+    yield takeLatest(act.SAVE_DOMAIN, saveDomain);
+    yield takeLatest(act.DELETE_DOMAIN, deleteDomain);
+    yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
 }

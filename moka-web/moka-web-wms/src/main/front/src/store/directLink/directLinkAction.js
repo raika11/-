@@ -28,15 +28,11 @@ export const getDirectLink = createAction(GET_DIRECT_LINK, ({ linkSeq, callback 
  */
 export const CHANGE_DIRECT_LINK = 'directLink/CHANGE_DIRECT_LINK';
 export const changeDirectLink = createAction(CHANGE_DIRECT_LINK, (directLink) => directLink);
+export const CHANGE_INVALID_LINK = 'directLink/CHANGE_INVALID_LINK';
+export const changeInvalidList = createAction(CHANGE_INVALID_LINK, (invalidList) => invalidList);
 
 /**
  * 저장
  */
 export const SAVE_DIRECT_LINK = 'directLink/SAVE_DIRECT_LINK';
 export const saveDirectLink = createAction(SAVE_DIRECT_LINK, ({ type, actions, callback }) => ({ type, actions, callback }));
-
-/**
- * 삭제
- */
-export const [DELETE_DIRECT_LINK] = createRequestActionTypes('directLink/DELETE_DIRECT_LINK');
-export const deleteDirectLink = createAction(DELETE_DIRECT_LINK, ({ linkSeq, callback }) => ({ linkSeq, callback }));

@@ -6,7 +6,6 @@ package jmnet.moka.core.tps.mvc.relation.service;
 
 import java.util.List;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
-import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.page.vo.PageVO;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
@@ -29,12 +28,12 @@ public interface RelationService {
      */
     List<PageVO> findAllPage(RelationSearchDTO search);
 
-    List<SkinVO> findAllSkin(RelationSearchDTO search);
+    //    List<SkinVO> findAllSkin(RelationSearchDTO search);
 
     Page<Container> findAllContainer(RelationSearchDTO search, Pageable pageable);
 
     Page<Component> findAllComponent(RelationSearchDTO search, Pageable pageable);
-//    List<ComponentVO> findAllComponent(RelationSearchDTO search);
+    //    List<ComponentVO> findAllComponent(RelationSearchDTO search);
 
     Boolean hasRelations(Long seq, String itemType);
 

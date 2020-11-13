@@ -89,5 +89,15 @@
       "name": "rcv.taskmanager.smsListEnvFile",
       "type": "java.lang.String",
       "description": "Description for rcv.taskmanager.smsListEnvFile."
+    },
+    {
+      "name": "rcv.pdsback.ftp.ip",
+      "type": "java.lang.String",
+      "description": "Description for rcv.pdsback.ftp.ip."
+    },
+    {
+      "name": "rcv.pdsback.ftp.user",
+      "type": "java.lang.String",
+      "description": "Description for rcv.pdsback.ftp.user."
     }
   ] }

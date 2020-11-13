@@ -196,7 +196,7 @@ public class JamXmlRcvTask extends Task<FileTaskInputData<JamArticleTotalVo, Jam
 
         final String imageUrl = vo.getUrl();
         // 외부 이미지
-        final String imageResizeUrl = getTaskManager().getRcvConfiguration().getImageResizerUrl();
+        final String imageResizeUrl = getTaskManager().getRcvConfiguration().getImageResizerSvrUrl();
         final String sourceImageUrl = imageResizeUrl + "/?t=k&w=600&h=314&u=" + imageUrl;
         final String watermarkUrl = map.get("LOGO_IMG_SHR");
         if (McpString.isNullOrEmpty(imageUrl)) {

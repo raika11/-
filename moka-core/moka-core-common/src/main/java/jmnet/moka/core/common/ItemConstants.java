@@ -73,8 +73,6 @@ public class ItemConstants {
     public static String COMPONENT_MAX_PAGE_COUNT = "maxPageCount"; // 최대 페이지수
     public static String COMPONENT_DISP_PAGE_COUNT = "dispPageCount"; // 표출 페이지수
     public static String COMPONENT_MORE_COUNT = "moreCount"; // 더보기 건수
-    public static String COMPONENT_SEARCH_SERVICE_TYPE = "searchServiceType"; // 검색서비스유형(기타코드)
-    public static String COMPONENT_SEARCH_LANG = "searchLang"; // 검색언어(기타코드)
     public static String COMPONENT_SEARCH_CODE_ID = "searchCodeId"; // 검색코드ID
     public static String COMPONENT_SNAPSHOT_YN = "snapshotYn";
     public static String COMPONENT_SNAPSHOT_BODY = "snapshotBody";
@@ -239,8 +237,6 @@ public class ItemConstants {
         public static String COMPONENT_MAX_PAGE_COUNT = "MAX_PAGE_COUNT"; // 최대 페이지수
         public static String COMPONENT_DISP_PAGE_COUNT = "DISP_PAGE_COUNT"; // 표출 페이지수
         public static String COMPONENT_MORE_COUNT = "MORE_COUNT"; // 더보기 건수
-        public static String COMPONENT_SEARCH_SERVICE_TYPE = "SCH_SERVICE_TYPE"; // 검색서비스유형(기타코드)
-        public static String COMPONENT_SEARCH_LANG = "SCH_LANG"; // 검색언어(기타코드)
         public static String COMPONENT_SEARCH_CODE_ID = "SCH_CODE_ID"; // 검색코드ID
         public static String COMPONENT_SNAPSHOT_YN = "SNAPSHOT_YN";
         public static String COMPONENT_SNAPSHOT_BODY = "SNAPSHOT_BODY";

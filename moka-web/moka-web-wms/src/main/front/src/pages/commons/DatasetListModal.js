@@ -109,10 +109,13 @@ const DatsetListModal = (props) => {
     /**
      * 검색
      */
-    const handleSearch = (search) => {
+    const handleSearch = () => {
         dispatch(
             getDatasetListModal({
-                search,
+                search: {
+                    ...search,
+                    page: 0,
+                },
                 callback: responseCallback,
             }),
         );
@@ -155,13 +158,20 @@ const DatsetListModal = (props) => {
 
     useEffect(() => {
         if (show && cnt < 1) {
-            handleSearch({
-                ...search,
+            const ns = {
+                ...initialState.search,
                 domainId: latestDomainId,
                 size: MODAL_PAGESIZE_OPTIONS[0],
                 page: 0,
                 exclude,
-            });
+            };
+            setSearch(ns);
+            dispatch(
+                getDatasetListModal({
+                    search: ns,
+                    callback: responseCallback,
+                }),
+            );
             setCnt(cnt + 1);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -22,7 +22,13 @@ export const initialState = {
         { id: 'linkContent', name: '내용' },
         { id: 'linkKeyword', name: '키워드' },
     ],
-    directLink: {},
+    directLink: {
+        viewSDate: null,
+        viewEDate: null,
+        usedYn: 'Y',
+        fixYn: 'Y',
+        linkType: 'N',
+    },
     directLinkError: null,
     invalidList: [],
 };
@@ -54,6 +60,11 @@ export default handleActions(
         [act.CHANGE_DIRECT_LINK]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.directLink = payload;
+            });
+        },
+        [act.CHANGE_INVALID_LINK]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
             });
         },
         /**

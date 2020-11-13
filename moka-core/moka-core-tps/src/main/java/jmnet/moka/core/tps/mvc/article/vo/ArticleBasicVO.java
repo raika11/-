@@ -37,22 +37,27 @@ public class ArticleBasicVO implements Serializable {
     /**
      * 출처
      */
-    private String sourceCode;
+    private String sourceName;
 
     /**
-     * 등록기사아이디
+     * 기사타입 코드
      */
-    private Long AID;
+    private String artType;
 
     /**
-     * 서비스일시(VC)
+     * 기사썸네일
      */
-    private String serviceDaytime;
+    private String artThumb;
 
     /**
-     * 출판일자
+     * 등록기사 편집그룹 숫자
      */
-    private String pressDate;
+    private Long artGroupNum;
+
+    /**
+     * 기사제목
+     */
+    private String artTitle;
 
     /**
      * 판
@@ -60,88 +65,29 @@ public class ArticleBasicVO implements Serializable {
     private String pressPan;
 
     /**
-     * 카테고리
-     */
-    private String pressCategory;
-
-    /**
      * 면
      */
     private String pressMyun;
 
     /**
-     * 번호
+     * 출고일시
      */
-    private String pressNumber;
-
-    /**
-     * 기사기자
-     */
-    private String articleReporter;
-
-    /**
-     * 기사요약
-     */
-    private String articleSummary;
-
-    /**
-     * 기사썸네일
-     */
-    private String articleThumb;
-
-    /**
-     * 등록일시
-     */
-    private Date articleRegDt;
+    private Date serviceDatytime;
 
     /**
      * 수정일시
      */
-    private Date articleModDt;
+    private Date artModDt;
 
     /**
-     * 원본기사ID(복제시)
+     * 페이지편집 여부(Y/N)
      */
     @Builder.Default
-    private Long orgId = (long) 0;
+    private String deskingYn = MokaConstants.NO;
 
     /**
-     * 기사타입
+     * 기자명
      */
-    @Builder.Default
-    private String artType = "B";
-
-    /**
-     * 콘텐트타입
-     */
-    private String contentType;
-
-    /**
-     * 서비스여부
-     */
-    @Builder.Default
-    private String serviceFlag = MokaConstants.NO;
-
-    /**
-     * 연결댓글ID
-     */
-    @Builder.Default
-    private Long cmtTotalid = (long) 0;
-
-    /**
-     * 호
-     */
-    @Builder.Default
-    private Integer HO = 0;
-
-    /**
-     * 기사제목
-     */
-    private String articleTitle;
-
-    /**
-     * 기사부제목
-     */
-    private String articleSubTitle;
+    private String repName;
 
 }

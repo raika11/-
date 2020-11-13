@@ -9,7 +9,7 @@ export default [
     {
         headerName: '템플릿명',
         field: 'templateName',
-        width: 253,
+        width: 333,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'templateName',
     },

@@ -66,9 +66,9 @@ function* savePage({ payload: { actions, callback } }) {
             response = yield call(api.postPage, { page: { ...pageData, pageBody } });
         }
 
-        if (response.data.header.success) {
-            callbackData = response.data;
+        callbackData = response.data;
 
+        if (response.data.header.success) {
             // 성공 액션 실행
             yield put({
                 type: act.GET_PAGE_SUCCESS,
@@ -78,19 +78,15 @@ function* savePage({ payload: { actions, callback } }) {
             // 목록 다시 검색
             yield put({ type: act.GET_PAGE_TREE });
         } else {
-            callbackData = response.data;
+            const { body } = response.data.body;
 
-            // invalidList 셋팅
-            yield put({
-                type: act.CHANGE_INVALID_LIST,
-                payload: response.data.body.list,
-            });
-
-            // 실패 액션 실행
-            // yield put({
-            //     type: act.GET_PAGE_FAILURE,
-            //     payload: response.data,
-            // });
+            if (body && body.list && Array.isArray(body.list)) {
+                // invalidList 셋팅
+                yield put({
+                    type: act.CHANGE_INVALID_LIST,
+                    payload: response.data.body.list,
+                });
+            }
         }
     } catch (e) {
         callbackData = errorResponse(e);

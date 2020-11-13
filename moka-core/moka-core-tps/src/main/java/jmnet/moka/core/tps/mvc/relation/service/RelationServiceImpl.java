@@ -4,22 +4,17 @@
 
 package jmnet.moka.core.tps.mvc.relation.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.ad.service.AdService;
-import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
-import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 import jmnet.moka.core.tps.mvc.page.vo.PageVO;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.reserved.service.ReservedService;
-import jmnet.moka.core.tps.mvc.skin.service.SkinService;
-import jmnet.moka.core.tps.mvc.skin.vo.SkinVO;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +34,8 @@ public class RelationServiceImpl implements RelationService {
     @Autowired
     PageService pageService;
 
-    @Autowired
-    SkinService skinService;
+    //    @Autowired
+    //    SkinService skinService;
 
     @Autowired
     ContainerService containerService;
@@ -64,10 +59,10 @@ public class RelationServiceImpl implements RelationService {
         return pageService.findAllPageRel(search);
     }
 
-    @Override
-    public List<SkinVO> findAllSkin(RelationSearchDTO search) {
-        return skinService.findRelList(search);
-    }
+    //    @Override
+    //    public List<SkinVO> findAllSkin(RelationSearchDTO search) {
+    //        return skinService.findRelList(search);
+    //    }
 
     @Override
     public Page<Container> findAllContainer(RelationSearchDTO search, Pageable pageable) {
@@ -78,39 +73,39 @@ public class RelationServiceImpl implements RelationService {
     public Page<Component> findAllComponent(RelationSearchDTO search, Pageable pageable) {
         return componentService.findAllComponentRel(search, pageable);
     }
-//    public List<ComponentVO> findAllComponent(RelationSearchDTO search) {
-//        String itemType = search.getRelSeqType();
-//        if (itemType.equals(MokaConstants.ITEM_TEMPLATE) || itemType.equals(MokaConstants.ITEM_DATASET)) {
-//            search.setDefaultSort("componentSeq,desc");
-//            Pageable pageable = search.getPageable();
-//            Page<Component> cpList = componentService.findAllComponentRel(search, pageable);
-//            List<ComponentVO> retList = new ArrayList<ComponentVO>();
-//            Integer relOrd = 0;
-//            for(Component cp: cpList) {
-//                ComponentVO vo = ComponentVO.builder()
-//                    .componentSeq(cp.getComponentSeq())
-//                    .componentName(cp.getComponentName())
-//                    .templateGroupName(cp.getTemplate().getTemplateGroupName())
-////                    .useYn(MokaConstants.YES)
-//                    .templateSeq(cp.getTemplate().getTemplateSeq())
-//                    .relOrd(relOrd)
-//                    .build();
-//                retList.add(vo);
-//            }
-//            search.setTotal((long) retList.size());
-//            return retList;
-//        } else {
-//            String searchType;
-//            switch (search.getRelSeqType()) {
-//                case MokaConstants.ITEM_PAGE: searchType = "pageSeq"; break;
-//                case MokaConstants.ITEM_CONTENT_SKIN: searchType = "skinSeq"; break;
-//                case MokaConstants.ITEM_CONTAINER: searchType = "containerSeq"; break;
-//                default: searchType = "pageSeq";
-//            }
-//            ComponentSearchDTO cpSearch = ComponentSearchDTO.builder().searchType(searchType).keyword(search.getRelSeq().toString()).build();
-//            return componentService.findAllComponent(cpSearch);
-//        }
-//    }
+    //    public List<ComponentVO> findAllComponent(RelationSearchDTO search) {
+    //        String itemType = search.getRelSeqType();
+    //        if (itemType.equals(MokaConstants.ITEM_TEMPLATE) || itemType.equals(MokaConstants.ITEM_DATASET)) {
+    //            search.setDefaultSort("componentSeq,desc");
+    //            Pageable pageable = search.getPageable();
+    //            Page<Component> cpList = componentService.findAllComponentRel(search, pageable);
+    //            List<ComponentVO> retList = new ArrayList<ComponentVO>();
+    //            Integer relOrd = 0;
+    //            for(Component cp: cpList) {
+    //                ComponentVO vo = ComponentVO.builder()
+    //                    .componentSeq(cp.getComponentSeq())
+    //                    .componentName(cp.getComponentName())
+    //                    .templateGroupName(cp.getTemplate().getTemplateGroupName())
+    ////                    .useYn(MokaConstants.YES)
+    //                    .templateSeq(cp.getTemplate().getTemplateSeq())
+    //                    .relOrd(relOrd)
+    //                    .build();
+    //                retList.add(vo);
+    //            }
+    //            search.setTotal((long) retList.size());
+    //            return retList;
+    //        } else {
+    //            String searchType;
+    //            switch (search.getRelSeqType()) {
+    //                case MokaConstants.ITEM_PAGE: searchType = "pageSeq"; break;
+    //                case MokaConstants.ITEM_CONTENT_SKIN: searchType = "skinSeq"; break;
+    //                case MokaConstants.ITEM_CONTAINER: searchType = "containerSeq"; break;
+    //                default: searchType = "pageSeq";
+    //            }
+    //            ComponentSearchDTO cpSearch = ComponentSearchDTO.builder().searchType(searchType).keyword(search.getRelSeq().toString()).build();
+    //            return componentService.findAllComponent(cpSearch);
+    //        }
+    //    }
 
     @Override
     public Boolean hasRelations(Long seq, String itemType) {
@@ -189,12 +184,12 @@ public class RelationServiceImpl implements RelationService {
         } else if (relType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
 
             // 콘텐츠스킨 목록 조회
-            search.setEntityClass(SkinVO.class);
-            search.setDefaultSort("skinSeq,desc");
-            Long totalCount = skinService.findRelCount(search);
-            if (totalCount > 0) {
-                return true;
-            }
+            //            search.setEntityClass(SkinVO.class);
+            //            search.setDefaultSort("skinSeq,desc");
+            //            Long totalCount = skinService.findRelCount(search);
+            //            if (totalCount > 0) {
+            //                return true;
+            //            }
 
         } else if (relType.equals(MokaConstants.ITEM_CONTAINER)) {
 
@@ -266,9 +261,9 @@ public class RelationServiceImpl implements RelationService {
         }
 
         // 콘텐츠스킨 체크
-        if (skinService.countByDomainId(domainId) > 0) {
-            return true;
-        }
+        //        if (skinService.countByDomainId(domainId) > 0) {
+        //            return true;
+        //        }
 
         // 광고 체크
         if (adService.countByDomainId(domainId) > 0) {

@@ -124,7 +124,7 @@ public class CpArticleVo implements Serializable {
             if(McpString.isNullOrEmpty(component.getType()))
                 component.setType("I");
             component.setUrl( component.getUrl().trim());
-            component.setDesc( RcvUtil.cpReplaceInsertData(component.getDesc()));
+            component.setDesc( RcvUtil.cpReplaceInsertData(component.getDesc()).trim());
             component.setEtc( RcvUtil.cpReplaceInsertData(component.getEtc()));
         }
 

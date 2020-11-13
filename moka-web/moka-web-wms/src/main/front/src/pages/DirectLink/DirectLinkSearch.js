@@ -64,15 +64,15 @@ const DirectLinkSearch = () => {
         <Form.Row className="mb-10">
             {/* 사용여부 */}
             <Col xs={2} className="p-0 pr-2">
-                <MokaInputLabel label="사용여부" as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue}>
+                <MokaInputLabel label="사용여부" labelWidth={56} as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue} className="mb-0">
                     <option value="Y">사용</option>
                     <option value="N">미사용</option>
                 </MokaInputLabel>
             </Col>
 
             {/* 노출고정 */}
-            <Col xs={2} className="p-0 pr-2">
-                <MokaInputLabel label="노출고정" as="select" name="fixYn" value={search.fixYn} onChange={handleChangeValue}>
+            <Col xs={3} className="p-0 pr-2">
+                <MokaInputLabel label="노출고정" as="select" name="fixYn" value={search.fixYn} onChange={handleChangeValue} className="mb-0">
                     <option value="Y">항상노출</option>
                     <option value="N">검색시만 노출</option>
                 </MokaInputLabel>

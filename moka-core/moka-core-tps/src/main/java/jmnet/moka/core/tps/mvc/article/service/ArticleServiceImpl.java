@@ -1,5 +1,14 @@
 package jmnet.moka.core.tps.mvc.article.service;
 
+import java.util.List;
+import java.util.Optional;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
+import jmnet.moka.core.tps.mvc.article.mapper.ArticleMapper;
+import jmnet.moka.core.tps.mvc.article.repository.ArticleBasicRepository;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -8,28 +17,23 @@ import org.springframework.stereotype.Service;
  * @author jeon0525
  */
 @Service
+@Slf4j
 public class ArticleServiceImpl implements ArticleService {
-    //    private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
-    //    @Autowired
-    //    private ArticleRepository articleRepository;
-    //
-    //    @Autowired
-    //    private ArticleMapper articleMapper;
-    //
-    //    @Override
-    //    public List<ArticleVO> findList(ArticleSearchDTO search) {
-    //        return articleMapper.findAll(search, getRowBounds(search.getPage(), search.getSize()));
-    //    }
-    //
-    //    @Override
-    //    public Long findListCount(ArticleSearchDTO search) {
-    //        return articleMapper.count(search);
-    //    }
-    //
-    //    @Override
-    //    public Optional<Article> findByContentsId(String contentsId) {
-    //        return articleRepository.findByContentsId(contentsId);
-    //    }
+    @Autowired
+    private ArticleBasicRepository articleBasicRepository;
+
+    @Autowired
+    private ArticleMapper articleMapper;
+
+    @Override
+    public List<ArticleBasicVO> findAllArticleBasic(ArticleSearchDTO search) {
+        return articleMapper.findAll(search);
+    }
+
+    @Override
+    public Optional<ArticleBasic> findArticleBasicById(Long totalId) {
+        return articleBasicRepository.findById(totalId);
+    }
 
 }

@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
 import { MokaInput, MokaInputLabel, MokaInputGroup, MokaIcon, MokaPrependLinkInput, MokaCopyTextButton } from '@components';
-import { TemplateListModal, DatasetListModal, SkinListModal } from '@pages/commons';
+import { TemplateListModal, DatasetListModal } from '@pages/commons';
 
 const DetailRelationForm = (props) => {
     const { component, setComponent, inputTag, invalidList } = props;
@@ -11,10 +11,8 @@ const DetailRelationForm = (props) => {
     // state
     const [templateModalShow, setTemplateModalShow] = useState(false);
     const [datasetModalShow, setDatasetModalShow] = useState(false);
-    const [skinModalShow, setSkinModalShow] = useState(false);
     const [templateError, setTemplateError] = useState(false);
 
-    const [skin, setSkin] = useState({});
     const [dataset, setDataset] = useState({});
     const [template, setTemplate] = useState({});
 
@@ -67,9 +65,6 @@ const DetailRelationForm = (props) => {
     };
 
     useEffect(() => {
-        if (component.skin) {
-            setSkin(component.skin);
-        }
         if (component.dataset) {
             setDataset(component.dataset);
         }
@@ -187,24 +182,6 @@ const DetailRelationForm = (props) => {
                 value={component.delWords}
                 onChange={handleChangeValue}
             />
-            {/* 기사타입 */}
-            <MokaInputGroup
-                className="mb-2"
-                label="기사타입"
-                as="prependLink"
-                inputProps={{
-                    to: skin.skinSeq ? `/skin/${skin.skinSeq}` : undefined,
-                    linkText: skin.skinSeq ? `ID: ${skin.skinSeq}` : 'ID',
-                    inputList: {
-                        value: skin.skinName || '',
-                        disabled: true,
-                        className: 'bg-white',
-                        placeholder: '기사타입을 선택하세요',
-                    },
-                    icon: <MokaIcon iconName="fal-search" />,
-                    onIconClick: () => setSkinModalShow(true),
-                }}
-            />
             {/* 영역 설정 */}
             <Form.Row className="mb-2">
                 <Col xs={4} className="p-0">
@@ -239,9 +216,6 @@ const DetailRelationForm = (props) => {
                 selected={dataset.datasetSeq}
                 exclude={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : undefined}
             />
-
-            {/* 스킨 선택 팝업 */}
-            <SkinListModal show={skinModalShow} onHide={() => setSkinModalShow(false)} onClickSave={(skin) => setComponent({ ...component, skin })} selected={skin.skinSeq} />
         </Form>
     );
 };

@@ -2,9 +2,9 @@ package jmnet.moka.core.tps.mvc.member.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
@@ -25,11 +25,9 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @since 2020-11-02 18:49
  */
 public class MemberRepositorySupportImpl extends QuerydslRepositorySupport implements MemberRepositorySupport {
-    private final JPAQueryFactory queryFactory;
 
-    public MemberRepositorySupportImpl(JPAQueryFactory queryFactory) {
+    public MemberRepositorySupportImpl() {
         super(MemberInfo.class);
-        this.queryFactory = queryFactory;
     }
 
     @Override
@@ -38,6 +36,26 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
         QMemberInfo qRegMember = new QMemberInfo("regMember");
 
         JPQLQuery<MemberInfo> query = from(qMember);
+        if (McpString.isNotEmpty(memberSearchDTO.getKeyword())) {
+            if (TpsConstants.SEARCH_TYPE_ALL.equals(memberSearchDTO.getSearchType())) {
+                query.where(qMember.memberId
+                        .contains(memberSearchDTO.getKeyword())
+                        .or(qMember.memberNm.contains(memberSearchDTO.getKeyword())));
+            } else {
+                if (qMember.memberId
+                        .getMetadata()
+                        .getName()
+                        .equals(memberSearchDTO.getSearchType())) {
+                    query.where(qMember.memberId.contains(memberSearchDTO.getKeyword()));
+                }
+                if (qMember.memberNm
+                        .getMetadata()
+                        .getName()
+                        .equals(memberSearchDTO.getSearchType())) {
+                    query.where(qMember.memberNm.contains(memberSearchDTO.getKeyword()));
+                }
+            }
+        }
 
         if (McpString.isNotEmpty(memberSearchDTO.getMemberId())) {
             query.where(qMember.memberId.eq(memberSearchDTO.getMemberId()));
@@ -46,13 +64,17 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
             query.where(qMember.memberNm.contains(memberSearchDTO.getMemberNm()));
         }
 
+        if (memberSearchDTO.getStatus() != null) {
+            query.where(qMember.status.eq(memberSearchDTO.getStatus()));
+        }
+
 
         QueryResults<MemberInfo> list = query
                 .leftJoin(qMember.regMember, qRegMember)
                 .fetchJoin()
                 .fetchResults();
 
-        return new PageImpl<MemberInfo>(list.getResults(), memberSearchDTO.getPageable(), list.getTotal());
+        return new PageImpl<>(list.getResults(), memberSearchDTO.getPageable(), list.getTotal());
     }
 
     @Override

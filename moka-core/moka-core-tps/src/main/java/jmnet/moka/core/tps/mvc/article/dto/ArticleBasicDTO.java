@@ -4,12 +4,16 @@
 
 package jmnet.moka.core.tps.mvc.article.dto;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
-import java.util.Date;
+import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
@@ -17,6 +21,7 @@ import org.apache.ibatis.type.Alias;
  * 기사정보
  */
 @AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Builder
@@ -24,6 +29,9 @@ import org.apache.ibatis.type.Alias;
 public class ArticleBasicDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public static final Type TYPE = new TypeReference<List<ArticleBasicDTO>>() {
+    }.getType();
 
     /**
      * 서비스기사아이디
@@ -88,18 +96,18 @@ public class ArticleBasicDTO implements Serializable {
     /**
      * 등록일시
      */
-    private Date articleRegDt;
+    private Timestamp articleRegDt;
 
     /**
      * 수정일시
      */
-    private Date articleModDt;
+    private Timestamp articleModDt;
 
     /**
      * 원본기사ID(복제시)
      */
     @Builder.Default
-    private Long orgId = (long) 0;
+    private Integer orgId = 0;
 
     /**
      * 기사타입
@@ -127,7 +135,6 @@ public class ArticleBasicDTO implements Serializable {
     /**
      * 호
      */
-    @Builder.Default
     private Integer HO = 0;
 
     /**
@@ -139,5 +146,4 @@ public class ArticleBasicDTO implements Serializable {
      * 기사부제목
      */
     private String articleSubTitle;
-
 }

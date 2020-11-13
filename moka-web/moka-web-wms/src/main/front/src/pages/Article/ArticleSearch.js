@@ -87,8 +87,8 @@ const ArticleSearch = () => {
             getArticleList(
                 changeSearchOption({
                     ...storeSearch,
-                    startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
-                    endServiceDay: moment(date).format(DB_DATEFORMAT),
+                    startServiceDay: moment(date).add(-3, 'month').add(-24, 'hours').format(DB_DATEFORMAT),
+                    endServiceDay: moment(date).add(-2, 'month').format(DB_DATEFORMAT),
                     page: 0,
                 }),
             ),

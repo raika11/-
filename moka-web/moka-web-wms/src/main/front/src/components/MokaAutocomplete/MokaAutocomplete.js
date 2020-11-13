@@ -30,7 +30,11 @@ const propTypes = {
     /**
      * value
      */
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+    value: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]),
+    /**
+     * defaultValue
+     */
+    defaultValue: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]),
     /**
      * onChange (value, event) => {}
      */
@@ -58,7 +62,6 @@ const defaultProps = {
     isMulti: false,
     closeMenuOnSelect: true,
     placeholder: '선택한 값이 없습니다.',
-    value: undefined,
     onChange: undefined,
     searchIcon: false,
     onClickSearchIcon: undefined,
@@ -70,7 +73,7 @@ const defaultProps = {
  * https://react-select.com/home
  */
 const MokaAutocomplete = forwardRef((props, ref) => {
-    const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, value, onChange, className, isInvalid, ...rest } = props;
+    const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, defaultValue, value, onChange, className, isInvalid, ...rest } = props;
 
     // 검색 아이콘
     const IndicatorsContainer = (props) => {
@@ -110,6 +113,7 @@ const MokaAutocomplete = forwardRef((props, ref) => {
             hideSelectedOptions={false}
             placeholder={placeholder}
             options={options}
+            defaultValue={defaultValue}
             value={value}
             onChange={onChange}
             components={searchIcon ? { IndicatorsContainer } : undefined}

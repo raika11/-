@@ -62,11 +62,12 @@ const ReporterMgrSearch = () => {
                     <MokaSearchInput value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" name="keyword" />
                     <MokaSearchInput
                         className="w-100"
-                        placeholder="기자 이름을 검색해주세요."
+                        placeholder="(모달팝업)기자 이름을 검색해주세요."
                         onChange={handleChangeSearchOption}
                         value={decodeURIComponent(search.keyword)}
                         onSearch={() => setDatasetApiListModalShow(true)}
                         //inputProps={{ readOnly: true }}
+                        name="keyword"
                     />
                 </Col>
             </Form.Row>

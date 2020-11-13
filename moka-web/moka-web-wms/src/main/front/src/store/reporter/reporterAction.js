@@ -27,8 +27,13 @@ export const [GET_REPORTER, GET_REPORTER_SUCCESS, GET_REPORTER_FAILURE] = create
 export const getReporterList = createAction(GET_REPORTER_LIST, (...actions) => {
     return actions;
 });
-
 export const getReporter = createAction(GET_REPORTER, (reporter) => reporter);
+
+/**
+ * 모달 데이터 조회
+ */
+export const GET_REPORTER_LIST_MODAL = 'dataset/GET_REPORTER_LIST_MODAL';
+export const getReporterListModal = createAction(GET_REPORTER_LIST_MODAL, ({ search, callback, type }) => ({ search, callback, type }));
 
 /**
  * 데이터 변경

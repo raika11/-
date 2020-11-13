@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Col } from 'react-bootstrap';
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList } from '@store/reporter';
+import { initialState, changeSearchOption, GET_REPORTER_LIST_MODAL, getReporterListModal } from '@store/reporter';
 import { columnDefs } from './ReporterModalAgGridColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import Button from 'react-bootstrap/Button';
@@ -40,7 +40,7 @@ const ReporterMgrSearchModal = (props) => {
     const dispatch = useDispatch();
     const { keyword, loading } = useSelector((store) => ({
         keyword: store.reporter.search.keyword,
-        loading: store.loading[GET_REPORTER_LIST],
+        loading: store.loading[GET_REPORTER_LIST_MODAL],
     }));
 
     // state
@@ -109,7 +109,7 @@ const ReporterMgrSearchModal = (props) => {
      */
     const handleSearch = (search) => {
         dispatch(
-            getReporterList({
+            getReporterListModal({
                 search: { ...search, keyword: keyword, size: 100, page: 0, exclude },
                 callback: responseCallback,
             }),

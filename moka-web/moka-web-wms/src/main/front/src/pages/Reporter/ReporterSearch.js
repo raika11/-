@@ -6,7 +6,8 @@ import { MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
 import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList, getReporter } from '@store/reporter';
 import { Button } from 'react-bootstrap';
-import ReporterListModal from '@pages/Reporter/modals/ReporterListModal'; // 내가 참조해서 만든거
+import ReporterListModal from '@pages/Reporter/modals/ReporterListModal';
+import toast from '@utils/toastUtil'; // 내가 참조해서 만든거
 
 /**
  * 기자 목록 검색 컴포넌트
@@ -55,6 +56,20 @@ const ReporterMgrSearch = () => {
         });
     };
 
+    /**
+     * dataApiListPopup 저장 이벤트 핸들러
+     * @param {Object} selectApi 선택한 API
+     * @param {function} hideCallback 숨김 함수
+     */
+    const handleClicktListModalSave = (data, hideCallback) => {
+        if (data) {
+            console.log('부모창 팝업에서 내려옴 값::', data);
+            //hideCallback();
+        } else {
+            //toast.warn('하나 이상의 자동 데이타셋을 선택해 주세요.');
+        }
+    };
+
     return (
         <Form>
             <Form.Row>
@@ -71,7 +86,7 @@ const ReporterMgrSearch = () => {
                     />
                 </Col>
             </Form.Row>
-            <ReporterListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} />
+            <ReporterListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} onClickSave={handleClicktListModalSave} />
         </Form>
     );
 };

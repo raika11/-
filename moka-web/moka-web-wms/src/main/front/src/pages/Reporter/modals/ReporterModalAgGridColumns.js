@@ -3,6 +3,7 @@ import Image from 'react-bootstrap/Image';
 import ReporterModalAddButton from '../components/ReporterModalAddButton';
 
 import bg from '@assets/images/bg.jpeg';
+import PropTypes from 'prop-types';
 
 export const columnDefs = [
     {
@@ -11,7 +12,7 @@ export const columnDefs = [
         width: 70,
         cellRendererFramework: (row) => {
             const { data } = row;
-            return <ReporterModalAddButton {...row} data={data} />;
+            return <ReporterModalAddButton {...row} onClick={data.onClickSave} data={data} />;
         },
     },
     {

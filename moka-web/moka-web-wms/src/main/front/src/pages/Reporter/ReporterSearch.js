@@ -65,8 +65,11 @@ const ReporterMgrSearch = () => {
         if (data) {
             console.log('부모창 팝업에서 내려옴 값::', data);
             //hideCallback();
-        } else {
-            //toast.warn('하나 이상의 자동 데이타셋을 선택해 주세요.');
+            setSearch({
+                ...search,
+                keyword: data.repName,
+            });
+            setDatasetApiListModalShow(false);
         }
     };
 

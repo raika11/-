@@ -45,8 +45,6 @@ const ReporterMgrSearchModal = (props) => {
         loading: store.loading[GET_REPORTER_LIST_MODAL],
     }));
 
-    //console.log('sssssssssssssssselected', data);
-
     // state
     const [search, setSearch] = useState(initialState.search);
     const [total, setTotal] = useState(initialState.total);
@@ -110,10 +108,6 @@ const ReporterMgrSearchModal = (props) => {
      */
     const handleClickCancle = () => {
         setSearch(initialState.search);
-
-        // if (onClickSave) {
-        //     onClickSave(selectedReporter);
-        // }
     };
 
     /**

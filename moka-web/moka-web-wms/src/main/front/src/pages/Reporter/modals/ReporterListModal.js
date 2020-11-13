@@ -45,8 +45,6 @@ const ReporterMgrSearchModal = (props) => {
         loading: store.loading[GET_REPORTER_LIST_MODAL],
     }));
 
-    //console.log('sssssssssssssssselected', data);
-
     // state
     const [search, setSearch] = useState(initialState.search);
     const [total, setTotal] = useState(initialState.total);
@@ -70,6 +68,7 @@ const ReporterMgrSearchModal = (props) => {
                 body.list.map((data) => ({
                     ...data,
                     onClickSave,
+                    handleHide,
                     repImg: data.repImg || bg,
                 })),
             );
@@ -94,26 +93,10 @@ const ReporterMgrSearchModal = (props) => {
     };
 
     /**
-     * 등록 버튼 클릭
-     */
-    const handleClickSave = () => {
-        //if (onClickSave) onClickSave(selectedReporter, handleHide);
-
-        if (onClickSave) {
-        }
-
-        console.log();
-    };
-
-    /**
      * 취소 버튼 클릭
      */
     const handleClickCancle = () => {
         setSearch(initialState.search);
-
-        // if (onClickSave) {
-        //     onClickSave(selectedReporter);
-        // }
     };
 
     /**

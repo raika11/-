@@ -5,8 +5,6 @@ import qs from 'qs';
 
 import * as reporterAPI from './reporterApi';
 import * as reporterAction from './reporterAction';
-import * as datasetAction from '@store/dataset/datasetAction';
-import * as datasetAPI from '@store/dataset/datasetApi';
 
 /**
  * 기자관리 목록 조회
@@ -23,9 +21,7 @@ const getReporter = createRequestSaga(reporterAction.GET_REPORTER, reporterAPI.g
 /**
  * 데이터셋 리스트 조회(모달에서 사용하는 리스트)
  */
-const getReporterListModal = createRequestSaga(reporterAction.GET_REPORTER_LIST_MODAL, reporterAPI.getReporterList, (state) => {
-    return state.reporter;
-});
+const getReporterListModal = createRequestSaga(reporterAction.GET_REPORTER_LIST_MODAL, reporterAPI.getReporterList, true);
 
 /**
  * 수정

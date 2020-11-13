@@ -1,9 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'react-bootstrap/Image';
 import ReporterModalAddButton from '../components/ReporterModalAddButton';
-
-import bg from '@assets/images/bg.jpeg';
-
 export const columnDefs = [
     {
         headerName: '',
@@ -11,7 +8,7 @@ export const columnDefs = [
         width: 70,
         cellRendererFramework: (row) => {
             const { data } = row;
-            return <ReporterModalAddButton {...row} data={data} />;
+            return <ReporterModalAddButton {...row} onClick={data.onClickSave} data={data} />;
         },
     },
     {
@@ -32,7 +29,7 @@ export const columnDefs = [
         width: 100,
         cellRendererFramework: (row) => {
             const { data } = row;
-            return <Image {...row} width="35" height="35" src={bg} data={data} roundedCircle />;
+            return <Image width="35" height="35" src={data.repImg} data={data} roundedCircle />;
         },
     },
     {

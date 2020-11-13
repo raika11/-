@@ -7,6 +7,7 @@ import { initialState, changeSearchOption, GET_REPORTER_LIST_MODAL, getReporterL
 import { columnDefs } from './ReporterModalAgGridColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import Button from 'react-bootstrap/Button';
+import bg from '@assets/images/bg.jpeg';
 export const { searchTypeList } = initialState;
 
 const propTypes = {
@@ -29,6 +30,7 @@ const propTypes = {
      * 제외 데이터셋아이디
      */
     exclude: PropTypes.any,
+    onClick: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -42,6 +44,8 @@ const ReporterMgrSearchModal = (props) => {
         keyword: store.reporter.search.keyword,
         loading: store.loading[GET_REPORTER_LIST_MODAL],
     }));
+
+    //console.log('sssssssssssssssselected', data);
 
     // state
     const [search, setSearch] = useState(initialState.search);
@@ -65,7 +69,8 @@ const ReporterMgrSearchModal = (props) => {
             setRowData(
                 body.list.map((data) => ({
                     ...data,
-                    //autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '수동형',
+                    onClickSave,
+                    repImg: data.repImg || bg,
                 })),
             );
             setTotal(body.totalCnt);
@@ -92,7 +97,12 @@ const ReporterMgrSearchModal = (props) => {
      * 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        if (onClickSave) onClickSave(selectedReporter, handleHide);
+        //if (onClickSave) onClickSave(selectedReporter, handleHide);
+
+        if (onClickSave) {
+        }
+
+        console.log();
     };
 
     /**
@@ -100,9 +110,18 @@ const ReporterMgrSearchModal = (props) => {
      */
     const handleClickCancle = () => {
         setSearch(initialState.search);
-        if (onClickCancle) onClickCancle();
-        handleHide();
+
+        // if (onClickSave) {
+        //     onClickSave(selectedReporter);
+        // }
     };
+
+    /**
+     * 목록에서 Row클릭
+     */
+    const handleRowClicked = useCallback((data) => {
+        setSelectedReporter(data);
+    }, []);
 
     /**
      * 검색
@@ -126,14 +145,6 @@ const ReporterMgrSearchModal = (props) => {
         }
         setSearch(temp);
     };
-
-    /**
-     * 목록에서 Row클릭
-     */
-    const handleRowClicked = useCallback((data) => {
-        setSelectedReporter(data);
-        setSelected(data.id);
-    }, []);
 
     useEffect(() => {
         if (show && cnt < 1) {
@@ -169,7 +180,14 @@ const ReporterMgrSearchModal = (props) => {
                         />
                     </Col>
                     <Col xs={1}>
-                        <Button variant="gray150">초기화</Button>
+                        <Button
+                            variant="gray150"
+                            onClick={() => {
+                                handleClickCancle();
+                            }}
+                        >
+                            초기화
+                        </Button>
                     </Col>
                 </Form.Row>
             </Form>

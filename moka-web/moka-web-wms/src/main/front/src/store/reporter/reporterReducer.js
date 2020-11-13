@@ -13,6 +13,7 @@ export const initialState = {
     error: null,
     search: {
         page: 0,
+        searchType: 'all',
         size: PAGESIZE_OPTIONS[0],
         sort: 'repSeq,asc',
         keyword: '',

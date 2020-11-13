@@ -8,6 +8,8 @@ import { columnDefs } from './ReporterModalAgGridColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import Button from 'react-bootstrap/Button';
 import bg from '@assets/images/bg.jpeg';
+import { getTemplateList } from '@store/template';
+import { getDatasetListModal } from '@store/dataset';
 export const { searchTypeList } = initialState;
 
 const propTypes = {
@@ -50,14 +52,8 @@ const ReporterMgrSearchModal = (props) => {
     const [total, setTotal] = useState(initialState.total);
     const [error, setError] = useState(initialState.error);
     const [selected, setSelected] = useState('');
-    const [selectedReporter, setSelectedReporter] = useState({});
     const [rowData, setRowData] = useState([]);
     const [cnt, setCnt] = useState(0);
-
-    useEffect(() => {
-        // 선택된 값 셋팅
-        setSelected(defaultSelected);
-    }, [defaultSelected]);
 
     /**
      * 리스트 조회 콜백
@@ -67,6 +63,7 @@ const ReporterMgrSearchModal = (props) => {
             setRowData(
                 body.list.map((data) => ({
                     ...data,
+                    belong: (data.r1CdNm || '') + (data.r2CdNm || '') + (data.r3CdNm || '') + (data.r4CdNm || ''),
                     onClickSave,
                     handleHide,
                     repImg: data.repImg || bg,
@@ -102,17 +99,19 @@ const ReporterMgrSearchModal = (props) => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((data) => {
-        setSelectedReporter(data);
-    }, []);
+    const handleRowClicked = useCallback((data) => {}, []);
 
     /**
      * 검색
      */
-    const handleSearch = (search) => {
+
+    const handleSearch = () => {
         dispatch(
             getReporterListModal({
-                search: { ...search, keyword: keyword, size: 100, page: 0, exclude },
+                search: {
+                    ...search,
+                    page: 0,
+                },
                 callback: responseCallback,
             }),
         );
@@ -126,7 +125,8 @@ const ReporterMgrSearchModal = (props) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        setSearch(temp);
+
+        dispatch(getReporterListModal(changeSearchOption(temp)));
     };
 
     useEffect(() => {
@@ -134,7 +134,7 @@ const ReporterMgrSearchModal = (props) => {
             handleSearch({
                 ...search,
                 keyword: keyword,
-                size: 100,
+                size: MODAL_PAGESIZE_OPTIONS[0],
                 page: 0,
                 exclude,
             });
@@ -157,9 +157,7 @@ const ReporterMgrSearchModal = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
-                            onSearch={() => {
-                                handleSearch(search);
-                            }}
+                            onSearch={handleSearch}
                         />
                     </Col>
                     <Col xs={1}>

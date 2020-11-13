@@ -126,7 +126,6 @@ export default handleActions(
             });
         },
         [act.GET_PAGE_SUCCESS]: (state, { payload: { body } }) => {
-            debugger;
             return produce(state, (draft) => {
                 draft.page = body;
                 draft.pageBody = body.pageBody;
@@ -136,7 +135,6 @@ export default handleActions(
             });
         },
         [act.GET_PAGE_FAILURE]: (state, { payload }) => {
-            debugger;
             return produce(state, (draft) => {
                 draft.page = initialState.page;
                 draft.pageBody = initialState.pageBody;

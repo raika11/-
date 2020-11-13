@@ -141,8 +141,8 @@ public class ArticleSource extends BaseAudit {
     /**
      * 내용편집 필요여부
      */
-    @Column(name = "ARTICLE_EDIT_YN", columnDefinition = "char")
-    private String articleEditYn = MokaConstants.NO;
+    @Column(name = "ART_EDIT_YN", columnDefinition = "char")
+    private String artEditYn = MokaConstants.NO;
 
     /**
      * 조인스XML형식

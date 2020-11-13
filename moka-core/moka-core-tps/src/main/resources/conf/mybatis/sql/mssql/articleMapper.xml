@@ -7,6 +7,15 @@
   <select id="findAll" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
     statementType="CALLABLE">
     { call UPS_WMS_ARTICLE_BASIC_LIST_SEL(
+    <choose>
+      <when test="deskingSourceList != null and deskingSourceList != ''">
+        #{deskingSourceList},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
     #{startServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 

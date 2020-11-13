@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.article.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
@@ -67,6 +68,12 @@ public class ArticleSearchDTO extends SearchDTO {
     @NotNull(message = "{tps.article.error.notnull.endServiceDay}")
     @DTODateTimeFormat
     private Date endServiceDay;
+
+    /**
+     * 기본 매체목록(구분자 ,)
+     */
+    @JsonIgnore
+    private String deskingSourceList;
 
     public ArticleSearchDTO() {
         super(ArticleBasicVO.class, "totalId,desc");

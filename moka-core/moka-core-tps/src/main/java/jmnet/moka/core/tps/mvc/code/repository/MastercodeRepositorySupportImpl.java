@@ -14,7 +14,6 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
 import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
 import jmnet.moka.core.tps.mvc.code.entity.QMastercode;
@@ -27,8 +26,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ohtah
  * @since 2020. 11. 8.
  */
-public class MastercodeRepositorySupportImpl extends QuerydslRepositorySupport implements
-    MastercodeRepositorySupport {
+public class MastercodeRepositorySupportImpl extends QuerydslRepositorySupport implements MastercodeRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     public MastercodeRepositorySupportImpl(JPAQueryFactory queryFactory) {
@@ -45,35 +43,39 @@ public class MastercodeRepositorySupportImpl extends QuerydslRepositorySupport i
 
         BooleanBuilder builder = new BooleanBuilder();
 
-        if(usedYn.equals(McpString.YES) || usedYn.equals(McpString.NO)) {
+        if (usedYn.equals(McpString.YES) || usedYn.equals(McpString.NO)) {
             builder.and(master.usedYn.eq(usedYn));
         }
 
-        if(searchType.equals("korname")) {
+        if (searchType.equals("korname")) {
             // 코드명 검색
-            builder
-                .or(master.serviceKorname.contains(keyword))
-                .or(master.sectionEngname.contains(keyword))
-                .or(master.contentKorname.contains(keyword));
-        } else if(searchType.equals("parentCode")) {
+            builder.or(master.serviceKorname.contains(keyword))
+                   .or(master.sectionEngname.contains(keyword))
+                   .or(master.contentKorname.contains(keyword));
+        } else if (searchType.equals("parentCode")) {
             int len = keyword.length();
-            if (len == 0){
+            if (len == 0) {
                 // service code 검색
-                builder.and(master.masterCode.length().eq(2));
+                builder.and(master.masterCode.endsWith("00000"))
+                       .and(master.masterCode.ne("0000000"));
             } else if (len == 2) {
                 // section code 검색
-                builder.and(master.masterCode.length().eq(4)).and(master.masterCode.startsWith(keyword));
+                builder.and(master.masterCode.startsWith(keyword))
+                       .and(master.masterCode.endsWith("000"))
+                       .and(master.masterCode.ne(keyword + "00000"));
             } else {
                 // content code 검색
-                builder.and(master.masterCode.length().gt(4)).and(master.masterCode.startsWith(keyword));
+                builder.and(master.masterCode.startsWith(keyword))
+                       .and(master.masterCode.ne(keyword + "000"));
             }
         }
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "codeOrd");
+        Sort sort = Sort.by(Sort.Direction.ASC, "codeOrd");
         JPQLQuery<Mastercode> query = queryFactory.selectFrom(master)
-                                                .where(builder);
+                                                  .where(builder);
         query = getQuerydsl().applySorting(sort, query);
         QueryResults<Mastercode> list = query.fetchResults();
-        return query.fetchResults().getResults();
+        return query.fetchResults()
+                    .getResults();
     }
 }

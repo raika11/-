@@ -4,12 +4,12 @@ import { MokaTableLinkButton } from '@components';
 export const columnDefs = [
     {
         headerName: 'ID',
-        field: 'containerSeq',
+        field: 'articlePageSeq',
         width: 50,
         cellStyle: { fontSize: '12px' },
     },
     {
-        headerName: '기사타입명',
+        headerName: '기사페이지명',
         field: 'skinName',
         width: 276,
         cellStyle: { fontSize: '12px' },

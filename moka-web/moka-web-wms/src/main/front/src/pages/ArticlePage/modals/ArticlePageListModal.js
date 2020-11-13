@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 // import { GET_DATASET_LIST, clearStore, getDatasetList, changeSearchOption } from '@store/dataset';
-import columnDefs from './SkinListModalColums';
+import columnDefs from './ArticlePageListModalColums';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
 export const defaultSkinSearchType = [
@@ -35,9 +35,9 @@ const propTypes = {
 const defaultProps = {};
 
 /**
- * 스킨 리스트 공통 모달
+ * 기사페이지 리스트 공통 모달
  */
-const SkinListModal = (props) => {
+const ArticlePageListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected } = props;
     const dispatch = useDispatch();
 
@@ -232,7 +232,7 @@ const SkinListModal = (props) => {
     );
 };
 
-SkinListModal.propTypes = propTypes;
-SkinListModal.defaultProps = defaultProps;
+ArticlePageListModal.propTypes = propTypes;
+ArticlePageListModal.defaultProps = defaultProps;
 
-export default SkinListModal;
+export default ArticlePageListModal;

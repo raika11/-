@@ -11,7 +11,7 @@ import { defaultTemplateSearchType } from '@pages/commons';
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { getTemplateLookupList, changeLookupSearchOption, initialState, clearLookup, GET_TEMPLATE_LOOKUP_LIST } from '@store/template';
 import columnDefs from './LookupTemplateListColums';
-import TemplateHtmlModal from './TemplateHtmlModal';
+import { TemplateHtmlModal } from '@pages/Template/modals';
 
 const propTypes = {
     /**
@@ -239,7 +239,7 @@ const LookupTemplateList = (props) => {
                                 }}
                             >
                                 {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {seqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
+                                {seqType === ITEM_SK && <option value="skinSeq">기사페이지ID</option>}
                                 {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
                                 {defaultTemplateSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>

@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG } from '@/constants';
-import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
-import { initialState, getPageLookupList, changeLookupSearchOption, clearLookup, getPageLookup, GET_PAGE_LOOKUP_LIST } from '@store/page';
-import columnDefs from './LookupPageListColumns';
-import { defaultPageSearchType, LookupAgGridHeight, LookupAgGridMineHeight } from '@pages/commons';
-import PageHtmlModal from './PageHtmlModal';
+import { ITEM_SK } from '@/constants';
+import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
+import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
+import columnDefs from './LookupArticlePageListColumns';
+import { defaultContainerSearchType, LookupAgGridHeight } from '@pages/commons';
+// import ContainerHtmlModal from './ContainerHtmlModal';
 
 const propTypes = {
     /**
      * seq의 타입
      */
-    seqType: PropTypes.oneOf([ITEM_PG]),
+    seqType: PropTypes.oneOf([ITEM_SK]),
     /**
      * seq
      */
@@ -25,27 +25,23 @@ const propTypes = {
      * show === true이면 리스트를 조회한다
      */
     show: PropTypes.bool,
-    /**
-     * row의 load 버튼 클릭 이벤트
-     */
-    onLoad: PropTypes.func,
 };
 const defaultProps = {
     show: true,
 };
 
 /**
- * seq, seqType을 검색조건으로 사용하는 Lookup 페이지 리스트
+ * seq, seqType을 검색조건으로 사용하는 Lookup 기사페이지 리스트
  */
-const LookupPageList = (props) => {
-    const { seq, seqType, show, onLoad } = props;
+const LookupArticlePageList = (props) => {
+    const { seq, seqType, show } = props;
     const dispatch = useDispatch();
 
     const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
-        list: store.page.lookup.list,
-        search: store.page.lookup.search,
-        total: store.page.lookup.total,
-        loading: store.loading[GET_PAGE_LOOKUP_LIST],
+        list: store.container.lookup.list,
+        search: store.container.lookup.search,
+        total: store.container.lookup.total,
+        loading: store.loading[GET_CONTAINER_LOOKUP_LIST],
         latestDomainId: store.auth.latestDomainId,
     }));
 
@@ -67,7 +63,7 @@ const LookupPageList = (props) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(getPageLookupList(changeLookupSearchOption(temp)));
+        dispatch(getContainerLookupList(changeLookupSearchOption(temp)));
     };
 
     /**
@@ -87,39 +83,11 @@ const LookupPageList = (props) => {
     };
 
     /**
-     * 로드 버튼 클릭
-     * @param {object} data row data
-     */
-    const handleClickLoad = useCallback(
-        (data) => {
-            if (onLoad) {
-                // 상세 데이터를 조회한다
-                const option = {
-                    pageSeq: data.pageSeq,
-                    callback: (response) => {
-                        onLoad(response);
-                    },
-                };
-                dispatch(getPageLookup(option));
-            }
-        },
-        [dispatch, onLoad],
-    );
-
-    /**
-     * preview 버튼 클릭
-     * @param {object} data row data
-     */
-    const handleClickPreview = (data) => {
-        window.open(`//${data.domain.domainUrl}${data.pageUrl}`);
-    };
-
-    /**
      * 링크 버튼 클릭
      * @param {object} data row data
      */
     const handleClickLink = (data) => {
-        window.open(`/page/${data.pageSeq}`);
+        window.open(`/skin/${data.skinSeq}`);
     };
 
     useEffect(() => {
@@ -133,21 +101,19 @@ const LookupPageList = (props) => {
         setRowData(
             list.map((data) => ({
                 ...data,
-                handleClickLoad,
                 handleClickLink,
-                handleClickPreview,
             })),
         );
-    }, [handleClickLoad, list]);
+    }, [list]);
 
     useEffect(() => {
         if (show) {
             dispatch(
-                getPageLookupList(
+                getContainerLookupList(
                     changeLookupSearchOption({
                         ...initialState.lookup.search,
                         keyword: seq,
-                        searchType: seqType === ITEM_PG ? 'pageSeq' : '',
+                        searchType: seqType === ITEM_SK ? 'skinSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -156,13 +122,15 @@ const LookupPageList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <>
-            <MokaCard titleClassName="mb-0" title="관련 페이지">
+        <React.Fragment>
+            <MokaCard titleClassName="mb-0" title="관련 기사페이지">
                 <Form className="mb-2">
                     {/* 검색조건, 키워드 */}
                     <Form.Row>
-                        <Col xs={4} className="p-0 pr-2">
-                            <MokaInput
+                        <Col xs={5} className="p-0 pr-2">
+                            <MokaInputLabel
+                                label="구분"
+                                labelWidth={28}
                                 className="mb-0"
                                 as="select"
                                 value={search.searchType}
@@ -173,14 +141,15 @@ const LookupPageList = (props) => {
                                     });
                                 }}
                             >
-                                {defaultPageSearchType.map((type) => (
+                                {seqType === ITEM_SK && <option value="skinSeq">기사페이지ID</option>}
+                                {defaultContainerSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.name}
                                     </option>
                                 ))}
-                            </MokaInput>
+                            </MokaInputLabel>
                         </Col>
-                        <Col xs={8} className="p-0">
+                        <Col xs={7} className="p-0">
                             <MokaSearchInput
                                 value={search.keyword}
                                 onChange={(e) => {
@@ -196,20 +165,18 @@ const LookupPageList = (props) => {
                 </Form>
 
                 {/* 버튼 그룹 */}
-                {seqType !== ITEM_PG && (
-                    <div className="d-flex mb-10 justify-content-end">
-                        <Button variant="dark" onClick={() => window.open('/page')}>
-                            페이지 추가
-                        </Button>
-                    </div>
-                )}
+                <div className="d-flex mb-10 justify-content-end">
+                    <Button variant="dark" onClick={() => window.open('/skin')}>
+                        기사페이지 추가
+                    </Button>
+                </div>
 
                 {/* ag-grid table */}
                 <MokaTable
-                    agGridHeight={seqType === ITEM_PG ? LookupAgGridMineHeight : LookupAgGridHeight}
+                    agGridHeight={LookupAgGridHeight}
                     columnDefs={columnDefs}
                     rowData={rowData}
-                    onRowNodeId={(data) => data.pageSeq}
+                    onRowNodeId={(data) => data.skinSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
                     total={total}
@@ -217,23 +184,23 @@ const LookupPageList = (props) => {
                     size={search.size}
                     displayPageNum={3}
                     onChangeSearchOption={handleChangeSearchOption}
-                    preventRowClickCell={['load', 'preview', 'link']}
-                    selected={selected.pageSeq}
+                    preventRowClickCell={['link']}
+                    selected={selected.skinSeq}
                 />
             </MokaCard>
-            <PageHtmlModal
-                pageSeq={selected.pageSeq}
+            {/* <ContainerHtmlModal
+                containerSeq={selected.skinSeq}
                 show={showModal}
                 onHide={() => {
                     setShowModal(false);
                     setSelected({});
                 }}
-            />
-        </>
+            /> */}
+        </React.Fragment>
     );
 };
 
-LookupPageList.propTypes = propTypes;
-LookupPageList.defaultProps = defaultProps;
+LookupArticlePageList.propTypes = propTypes;
+LookupArticlePageList.defaultProps = defaultProps;
 
-export default LookupPageList;
+export default LookupArticlePageList;

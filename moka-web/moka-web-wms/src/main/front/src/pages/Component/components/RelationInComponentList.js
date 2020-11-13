@@ -7,15 +7,15 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
-import columnDefs from './RelationInPageListColums';
-import { ITEM_TP, ITEM_CP, ITEM_CT, ITEM_DS } from '@/constants';
-import { relationAgGridHeight, relationDSAgGridHeight } from './index';
+import columnDefs from './RelationInComponentListColums';
+import { ITEM_TP, ITEM_DS, ITEM_CP } from '@/constants';
+import { relationAgGridHeight, relationDSAgGridHeight } from '@pages/commons';
 
 const propTypes = {
     /**
      * relSeq의 타입
      */
-    relSeqType: PropTypes.oneOf([ITEM_TP, ITEM_CP, ITEM_CT, ITEM_DS]),
+    relSeqType: PropTypes.oneOf([ITEM_TP, ITEM_DS]),
     /**
      * relSeq
      */
@@ -31,11 +31,11 @@ const defaultProps = {
 
 /**
  * 오른쪽 탭에 들어가는
- * 관련된 상위(부모의) 기사타입 리스트
+ * 관련된 상위(부모의) 컴포넌트 리스트
  *
  * 데이터셋 관리 => 도메인 select 추가
  */
-const RelationInSkinList = (props) => {
+const RelationInComponentList = (props) => {
     const { show, relSeqType, relSeq } = props;
     const history = useHistory();
     const dispatch = useDispatch();
@@ -71,18 +71,10 @@ const RelationInSkinList = (props) => {
 
     /**
      * row의 링크 버튼 클릭
-     * @param {object} data row 데이터
+     * @param {object} data 로우 데이터
      */
     const handleClickLink = (data) => {
-        window.open(`/skin/${data.skinSeq}`);
-    };
-
-    /**
-     * preview 버튼 클릭
-     * @param {object} data row data
-     */
-    const handleClickPreview = (data) => {
-        // window.open(`//${data.domain.domainUrl}${data.pageUrl}`);
+        window.open(`/component/${data.componentSeq}`);
     };
 
     useEffect(() => {
@@ -90,7 +82,6 @@ const RelationInSkinList = (props) => {
             list.map((l) => ({
                 ...l,
                 handleClickLink,
-                handleClickPreview,
             })),
         );
     }, [list]);
@@ -109,7 +100,7 @@ const RelationInSkinList = (props) => {
                         ...initialState.search,
                         relSeq,
                         relSeqType,
-                        relType: 'SK',
+                        relType: ITEM_CP,
                         domainId: latestDomainId,
                     }),
                 ),
@@ -118,7 +109,7 @@ const RelationInSkinList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 기사타입">
+        <MokaCard titleClassName="mb-0" title="관련 컴포넌트">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-2">
@@ -139,8 +130,8 @@ const RelationInSkinList = (props) => {
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="dark" onClick={() => history.push('/skin')}>
-                    기사타입 추가
+                <Button variant="dark" onClick={() => history.push('/component')}>
+                    컴포넌트 추가
                 </Button>
             </div>
 
@@ -149,7 +140,7 @@ const RelationInSkinList = (props) => {
                 agGridHeight={relSeqType === ITEM_DS ? relationDSAgGridHeight : relationAgGridHeight}
                 columnDefs={columnDefs}
                 rowData={rowData}
-                onRowNodeId={(data) => data.skinSeq}
+                onRowNodeId={(data) => data.componentSeq}
                 onRowClicked={() => {}}
                 loading={loading}
                 error={error}
@@ -158,13 +149,13 @@ const RelationInSkinList = (props) => {
                 size={search.size}
                 displayPageNum={3}
                 onChangeSearchOption={handleChangeSearchOption}
-                preventRowClickCell={['preview', 'link']}
+                preventRowClickCell={['link']}
             />
         </MokaCard>
     );
 };
 
-RelationInSkinList.propTypes = propTypes;
-RelationInSkinList.defaultProps = defaultProps;
+RelationInComponentList.propTypes = propTypes;
+RelationInComponentList.defaultProps = defaultProps;
 
-export default RelationInSkinList;
+export default RelationInComponentList;

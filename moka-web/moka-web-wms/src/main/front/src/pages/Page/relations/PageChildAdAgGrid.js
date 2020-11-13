@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import columnDefs from '@/pages/commons/LookupContainerListColumns';
+import columnDefs from '@pages/Container/components/LookupContainerListColumns';
 import { MokaTable } from '@components';
 
 /**

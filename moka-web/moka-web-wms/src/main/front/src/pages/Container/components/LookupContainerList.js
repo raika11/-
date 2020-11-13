@@ -10,7 +10,7 @@ import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, getContainerLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
 import columnDefs, { ctColumnDefs } from './LookupContainerListColumns';
 import { defaultContainerSearchType, LookupAgGridHeight, LookupAgGridMineHeight } from '@pages/commons';
-import ContainerHtmlModal from './ContainerHtmlModal';
+import { ContainerHtmlModal } from '@pages/Container/modals';
 
 const propTypes = {
     /**
@@ -184,7 +184,7 @@ const LookupContainerList = (props) => {
                             >
                                 {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
                                 {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {seqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
+                                {seqType === ITEM_SK && <option value="skinSeq">기사페이지ID</option>}
                                 {defaultContainerSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.name}

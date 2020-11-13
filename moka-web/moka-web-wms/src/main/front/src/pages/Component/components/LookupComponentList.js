@@ -11,7 +11,7 @@ import { getComponentLookupList, changeLookupSearchOption, initialState, clearLo
 import { getTpZone } from '@store/codeMgt';
 import columnDefs from './LookupComponentListColums';
 import { defaultComponentSearchType } from '@pages/commons';
-import TemplateHtmlModal from './TemplateHtmlModal';
+import { TemplateHtmlModal } from '@pages/Template/modals';
 
 const propTypes = {
     /**
@@ -186,7 +186,7 @@ const LookupComponentList = (props) => {
                                 }}
                             >
                                 {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {seqType === ITEM_SK && <option value="skinSeq">기사타입ID</option>}
+                                {seqType === ITEM_SK && <option value="skinSeq">기사페이지ID</option>}
                                 {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
                                 {defaultComponentSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>

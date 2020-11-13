@@ -18,10 +18,10 @@ const PageList = React.lazy(() => import('./PageList'));
 const PageEdit = React.lazy(() => import('./PageEdit'));
 
 // relations
-const LookupPageList = React.lazy(() => import('@pages/commons/LookupPageList'));
-const LookupContainerList = React.lazy(() => import('@pages/commons/LookupContainerList'));
-const LookupComponentList = React.lazy(() => import('@/pages/commons/LookupComponentList'));
-const LookupTemplateList = React.lazy(() => import('@/pages/commons/LookupTemplateList'));
+const LookupPageList = React.lazy(() => import('@pages/Page/components/LookupPageList'));
+const LookupContainerList = React.lazy(() => import('@pages/Container/components/LookupContainerList'));
+const LookupComponentList = React.lazy(() => import('@pages/Component/components/LookupComponentList'));
+const LookupTemplateList = React.lazy(() => import('@pages/Template/components/LookupTemplateList'));
 const PageChildAdList = React.lazy(() => import('./relations/PageChildAdList'));
 const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 

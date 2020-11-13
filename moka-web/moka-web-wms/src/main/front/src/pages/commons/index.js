@@ -16,28 +16,15 @@ export const { searchTypeList: defaultHistorySearchType } = historyInitialState;
 export const { searchTypeList: defaultArticleSearchType } = articleInitialState;
 
 // 공통 모달
-export { default as PageListModal } from './PageListModal';
-export { default as TemplateListModal } from './TemplateListModal';
-export { default as DatasetListModal } from './DatasetListModal';
-export { default as SkinListModal, defaultSkinSearchType } from './SkinListModal';
 export { default as DefaultInputModal } from './DefaultInputModal';
 
 // 관련 아이템 (하위 => 상위)
 export const relationAgGridHeight = 649;
 export const relationDSAgGridHeight = 602;
-export { default as RelationInPageList } from './RelationInPageList';
-export { default as RelationInSKinList } from './RelationInSkinList';
-export { default as RelationInContainerList } from './RelationInContainerList';
-export { default as RelationInComponentList } from './RelationInComponentList';
 
 // Lookup 아이템 (상위 => 하위)
 export const LookupAgGridMineHeight = 648;
 export const LookupAgGridHeight = 608;
-export { default as LookupTemplateList } from './LookupTemplateList';
-export { default as LookupComponentList } from './LookupComponentList';
-export { default as LookupContainerList } from './LookupContainerList';
-export { default as LookupPageList } from './LookupPageList';
-export { default as LookupSkinList } from './LookupSkinList';
 
 // 우측 히스토리 리스트
 export { default as HistoryList } from './HistoryList';

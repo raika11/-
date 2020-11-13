@@ -9,7 +9,7 @@ import { MokaModal, MokaInput, MokaSearchInput, MokaTable, MokaThumbTable, MokaT
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { initialState, GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
-import { defaultTemplateSearchType } from './index';
+import { defaultTemplateSearchType } from '@pages/commons';
 
 const propTypes = {
     show: PropTypes.bool,

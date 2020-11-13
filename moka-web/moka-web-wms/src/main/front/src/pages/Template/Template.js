@@ -16,10 +16,10 @@ const TemplateList = React.lazy(() => import('./TemplateList'));
 const TemplateEdit = React.lazy(() => import('./TemplateEdit'));
 
 // relations
-const RelationInPageList = React.lazy(() => import('@pages/commons/RelationInPageList'));
-const RelationInSkinList = React.lazy(() => import('@pages/commons/RelationInSkinList'));
-const RelationInContainerList = React.lazy(() => import('@pages/commons/RelationInContainerList'));
-const RelationInComponentList = React.lazy(() => import('@pages/commons/RelationInComponentList'));
+const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
+const RelationInArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/RelationInArticlePageList'));
+const RelationInContainerList = React.lazy(() => import('@pages/Container/components/RelationInContainerList'));
+const RelationInComponentList = React.lazy(() => import('@pages/Component/components/RelationInComponentList'));
 const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 
 /**
@@ -207,7 +207,7 @@ const Template = ({ match }) => {
                         <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
-                        <RelationInSkinList show={activeTabIdx === 2} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
+                        <RelationInArticlePageList show={activeTabIdx === 2} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                     </Suspense>,
                     <Suspense>
                         <RelationInContainerList show={activeTabIdx === 3} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
@@ -224,7 +224,7 @@ const Template = ({ match }) => {
                 tabNavs={[
                     { title: '템플릿 정보', text: 'Info' },
                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
+                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
                     { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },

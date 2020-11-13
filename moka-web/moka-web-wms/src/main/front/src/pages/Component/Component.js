@@ -14,9 +14,9 @@ const ComponentList = React.lazy(() => import('./ComponentList'));
 const ComponentEdit = React.lazy(() => import('./ComponentEdit'));
 
 // relations
-const RelationInPageList = React.lazy(() => import('@pages/commons/RelationInPageList'));
-const RelationInSkinList = React.lazy(() => import('@pages/commons/RelationInSkinList'));
-const RelationInContainerList = React.lazy(() => import('@pages/commons/RelationInContainerList'));
+const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
+const RelationInArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/RelationInArticlePageList'));
+const RelationInContainerList = React.lazy(() => import('@pages/Container/components/RelationInContainerList'));
 
 /**
  * 컴포넌트 관리
@@ -134,7 +134,7 @@ const Component = ({ match }) => {
                         <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
                     </Suspense>,
                     <Suspense>
-                        <RelationInSkinList show={activeTabIdx === 1} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
+                        <RelationInArticlePageList show={activeTabIdx === 1} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
                     </Suspense>,
                     <Suspense>
                         <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
@@ -144,7 +144,7 @@ const Component = ({ match }) => {
                 tabNavPosition="right"
                 tabNavs={[
                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
+                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                 ]}
             />

@@ -4,19 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
-import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@components';
-import { initialState, getPageListModal, GET_PAGE_LIST_MODAL } from '@store/page';
-import columnDefs from './PageListModalColums';
+import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
+import { initialState, getDatasetListModal, GET_DATASET_LIST_MODAL } from '@store/dataset';
+import columnDefs from './DatasetListModalColums';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
-import { defaultPageSearchType } from './index';
+import { defaultDatasetSearchType } from '@pages/commons';
 
 const propTypes = {
     show: PropTypes.bool,
     onHide: PropTypes.func,
-    /**
-     * 모달 타이틀
-     */
-    title: PropTypes.string,
     /**
      * 등록 버튼 클릭
      * @param {object} template 선택한 데이터셋데이터
@@ -31,24 +27,22 @@ const propTypes = {
      */
     selected: PropTypes.number,
     /**
-     * 전달받은 domainId가 없으면 latestDomainId로 검색한다
+     * 제외 데이터셋아이디
      */
-    domainId: PropTypes.string,
+    exclude: PropTypes.any,
 };
-const defaultProps = {
-    title: '페이지 검색',
-};
+const defaultProps = {};
 
 /**
- * 페이지 리스트 공통 모달
+ * 데이터셋 리스트 공통 모달
  */
-const PageListModal = (props) => {
-    const { show, onHide, title, onClickSave, onClickCancle, selected: defaultSelected, domainId } = props;
+const DatsetListModal = (props) => {
+    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
     const dispatch = useDispatch();
 
     const { latestDomainId, loading } = useSelector((store) => ({
         latestDomainId: store.auth.latestDomainId,
-        loading: store.loading[GET_PAGE_LIST_MODAL],
+        loading: store.loading[GET_DATASET_LIST_MODAL],
     }));
 
     // state
@@ -56,7 +50,7 @@ const PageListModal = (props) => {
     const [total, setTotal] = useState(initialState.total);
     const [error, setError] = useState(initialState.error);
     const [selected, setSelected] = useState('');
-    const [selectedPage, setSelectedPage] = useState({});
+    const [selectedDataset, setSelectedDataset] = useState({});
     const [rowData, setRowData] = useState([]);
     const [cnt, setCnt] = useState(0);
 
@@ -70,7 +64,12 @@ const PageListModal = (props) => {
      */
     const responseCallback = ({ header, body }) => {
         if (header.success) {
-            setRowData(body.list);
+            setRowData(
+                body.list.map((data) => ({
+                    ...data,
+                    autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '수동형',
+                })),
+            );
             setTotal(body.totalCnt);
             setError(initialState.error);
         } else {
@@ -86,8 +85,6 @@ const PageListModal = (props) => {
     const handleHide = () => {
         setRowData([]);
         setTotal(initialState.total);
-        setSelected('');
-        setSelected({});
         setError(null);
         setCnt(0);
         onHide();
@@ -97,7 +94,7 @@ const PageListModal = (props) => {
      * 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        if (onClickSave) onClickSave(selectedPage);
+        if (onClickSave) onClickSave(selectedDataset);
         handleHide();
     };
 
@@ -114,7 +111,7 @@ const PageListModal = (props) => {
      */
     const handleSearch = () => {
         dispatch(
-            getPageListModal({
+            getDatasetListModal({
                 search: {
                     ...search,
                     page: 0,
@@ -139,8 +136,8 @@ const PageListModal = (props) => {
      * 목록에서 Row클릭
      */
     const handleRowClicked = useCallback((data) => {
-        setSelectedPage(data);
-        setSelected(data.pageSeq);
+        setSelectedDataset(data);
+        setSelected(data.datasetSeq);
     }, []);
 
     /**
@@ -150,9 +147,9 @@ const PageListModal = (props) => {
         (selectedNodes) => {
             if (selectedNodes.length > 0) {
                 const sd = selectedNodes[0].data;
-                if (sd.pageSeq !== selected) {
-                    setSelectedPage(sd);
-                    setSelected(sd.templateSeq);
+                if (sd.datasetSeq !== selected) {
+                    setSelectedDataset(sd);
+                    setSelected(sd.datasetSeq);
                 }
             }
         },
@@ -163,13 +160,14 @@ const PageListModal = (props) => {
         if (show && cnt < 1) {
             const ns = {
                 ...initialState.search,
-                domainId: !domainId ? latestDomainId : domainId,
+                domainId: latestDomainId,
                 size: MODAL_PAGESIZE_OPTIONS[0],
                 page: 0,
+                exclude,
             };
             setSearch(ns);
             dispatch(
-                getPageListModal({
+                getDatasetListModal({
                     search: ns,
                     callback: responseCallback,
                 }),
@@ -177,14 +175,14 @@ const PageListModal = (props) => {
             setCnt(cnt + 1);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [latestDomainId, domainId, show, cnt]);
+    }, [latestDomainId, show, exclude, cnt]);
 
     return (
         <MokaModal
             width={600}
             show={show}
             onHide={handleHide}
-            title={title}
+            title="데이터셋 검색"
             size="md"
             buttons={[
                 { text: '등록', onClick: handleClickSave },
@@ -197,7 +195,9 @@ const PageListModal = (props) => {
                 <Form.Row className="mb-2">
                     {/* 검색 조건 */}
                     <Col xs={4} className="p-0 pr-2">
-                        <MokaInput
+                        <MokaInputLabel
+                            label="구분"
+                            labelWidth={45}
                             as="select"
                             className="mb-0"
                             value={search.searchType}
@@ -208,12 +208,12 @@ const PageListModal = (props) => {
                                 });
                             }}
                         >
-                            {defaultPageSearchType.map((type) => (
+                            {defaultDatasetSearchType.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>
                             ))}
-                        </MokaInput>
+                        </MokaInputLabel>
                     </Col>
                     {/* 키워드 */}
                     <Col xs={8} className="p-0">
@@ -237,7 +237,7 @@ const PageListModal = (props) => {
                 error={error}
                 columnDefs={columnDefs}
                 rowData={rowData}
-                onRowNodeId={(data) => data.pageSeq}
+                onRowNodeId={(dataset) => dataset.datasetSeq}
                 onRowClicked={handleRowClicked}
                 onSelectionChanged={handleSelectionChanged}
                 loading={loading}
@@ -252,7 +252,7 @@ const PageListModal = (props) => {
     );
 };
 
-PageListModal.propTypes = propTypes;
-PageListModal.defaultProps = defaultProps;
+DatsetListModal.propTypes = propTypes;
+DatsetListModal.defaultProps = defaultProps;
 
-export default PageListModal;
+export default DatsetListModal;

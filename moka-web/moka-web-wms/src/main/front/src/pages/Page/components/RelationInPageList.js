@@ -7,15 +7,15 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
-import columnDefs from './RelationInContainerListColums';
-import { ITEM_DS, ITEM_TP, ITEM_CP, ITEM_CT } from '@/constants';
-import { relationAgGridHeight, relationDSAgGridHeight } from './index';
+import columnDefs from './RelationInPageListColums';
+import { ITEM_TP, ITEM_CP, ITEM_CT, ITEM_SK, ITEM_DS, ITEM_PG } from '@/constants';
+import { relationAgGridHeight, relationDSAgGridHeight } from '@pages/commons';
 
 const propTypes = {
     /**
      * relSeq의 타입
      */
-    relSeqType: PropTypes.oneOf([ITEM_TP, ITEM_CP, ITEM_DS]),
+    relSeqType: PropTypes.oneOf([ITEM_TP, ITEM_CP, ITEM_CT, ITEM_SK, ITEM_DS]),
     /**
      * relSeq
      */
@@ -31,11 +31,11 @@ const defaultProps = {
 
 /**
  * 오른쪽 탭에 들어가는
- * 관련된 상위(부모의) 컨테이너 리스트
+ * 관련된 상위(부모의) 페이지 리스트
  *
  * 데이터셋 관리 => 도메인 select 추가
  */
-const RelationInContainerList = (props) => {
+const RelationInPageList = (props) => {
     const { show, relSeqType, relSeq } = props;
     const history = useHistory();
     const dispatch = useDispatch();
@@ -70,17 +70,26 @@ const RelationInContainerList = (props) => {
     };
 
     /**
+     * preview 버튼 클릭
+     * @param {object} data row data
+     */
+    const handleClickPreview = (data) => {
+        window.open(`//${data.domain.domainUrl}${data.pageUrl}`);
+    };
+
+    /**
      * row의 링크 버튼 클릭
-     * @param {object} data 로우 데이터
+     * @param {object} data row 데이터
      */
     const handleClickLink = (data) => {
-        window.open(`/container/${data.containerSeq}`);
+        window.open(`/page/${data.pageSeq}`);
     };
 
     useEffect(() => {
         setRowData(
             list.map((l) => ({
                 ...l,
+                handleClickPreview,
                 handleClickLink,
             })),
         );
@@ -100,7 +109,7 @@ const RelationInContainerList = (props) => {
                         ...initialState.search,
                         relSeq,
                         relSeqType,
-                        relType: ITEM_CT,
+                        relType: ITEM_PG,
                         domainId: latestDomainId,
                     }),
                 ),
@@ -109,7 +118,7 @@ const RelationInContainerList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 컨테이너">
+        <MokaCard titleClassName="mb-0" title="관련 페이지">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-2">
@@ -130,8 +139,8 @@ const RelationInContainerList = (props) => {
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="dark" onClick={() => history.push('/container')}>
-                    컨테이너 추가
+                <Button variant="dark" onClick={() => history.push('/page')}>
+                    페이지 추가
                 </Button>
             </div>
 
@@ -140,7 +149,7 @@ const RelationInContainerList = (props) => {
                 agGridHeight={relSeqType === ITEM_DS ? relationDSAgGridHeight : relationAgGridHeight}
                 columnDefs={columnDefs}
                 rowData={rowData}
-                onRowNodeId={(data) => data.containerSeq}
+                onRowNodeId={(page) => page.pageSeq}
                 onRowClicked={() => {}}
                 loading={loading}
                 error={error}
@@ -149,13 +158,13 @@ const RelationInContainerList = (props) => {
                 size={search.size}
                 displayPageNum={3}
                 onChangeSearchOption={handleChangeSearchOption}
-                preventRowClickCell={['link']}
+                preventRowClickCell={['preview', 'link']}
             />
         </MokaCard>
     );
 };
 
-RelationInContainerList.propTypes = propTypes;
-RelationInContainerList.defaultProps = defaultProps;
+RelationInPageList.propTypes = propTypes;
+RelationInPageList.defaultProps = defaultProps;
 
-export default RelationInContainerList;
+export default RelationInPageList;

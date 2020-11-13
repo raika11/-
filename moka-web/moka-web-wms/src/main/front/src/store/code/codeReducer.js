@@ -10,7 +10,9 @@ export const initialState = {
     service: {
         error: null,
         list: [],
-        search: {},
+        search: {
+            usedYn: 'Y',
+        },
     },
     // 중분류
     section: {
@@ -19,6 +21,7 @@ export const initialState = {
         search: {
             searchType: 'parentCode',
             keyword: '',
+            usedYn: 'Y',
         },
     },
     // 소분류
@@ -28,6 +31,7 @@ export const initialState = {
         search: {
             searchType: 'parentCode',
             keyword: '',
+            usedYn: 'Y',
         },
     },
     // korname으로 검색한 결과를 받는 store
@@ -37,6 +41,7 @@ export const initialState = {
         search: {
             searchType: 'korname',
             keyword: '',
+            usedYn: 'Y',
         },
     },
 };

@@ -167,7 +167,6 @@ const MokaInput = forwardRef((props, ref) => {
     else if (as === 'switch') {
         Type = Form.Check;
         inputObject = { ...inputObject, type: as, label: inputProps.label || '' };
-        console.log(inputObject);
         /*return (
             <Form.Check
                 ref={ref}
@@ -208,13 +207,14 @@ const MokaInput = forwardRef((props, ref) => {
     // 드롭가능한 이미지 파일
     else if (as === 'imageFile') {
         Type = MokaImageInput;
-        inputObject = { ...inputProps, ref };
+        inputObject = { ...inputProps, ref, onChange, value };
 
         /*return <MokaImageInput ref={ref} {...inputProps} />;*/
     }
     // auto complete
     else if (as === 'autocomplete') {
         Type = MokaAutocomplete;
+
         /*if (uncontrolled) {
             inputObject = {
                 ...inputObject,

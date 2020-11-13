@@ -6,7 +6,7 @@
 
   <delete id="delete" parameterType="EditFormSearchDTO"
     statementType="CALLABLE">
-    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_EDIT_FORM_DELETE(
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_EDIT_FORM_DEL(
     #{formSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{partSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
     )}

@@ -26,7 +26,6 @@ const ComponentAgGrid = ({ onDelete }) => {
     const [rowData, setRowData] = useState([]);
 
     useEffect(() => {
-        console.log(onDelete);
         setRowData(
             list.map((data) => ({
                 ...data,

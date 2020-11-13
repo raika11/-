@@ -116,25 +116,16 @@ public class ArticleView extends AbstractView {
 
     private Map<String,Object> rebuildInfo(JSONResult jsonResult) {
         Map<String,Object> article = new HashMap<>();
-        Object obj = jsonResult.get("BASIC");
-        article.put("basic",getData(jsonResult.get("BASIC")).get(0));
-        article.put("content",getData(jsonResult.get("CONTENT")));
-        article.put("reporter",getData(jsonResult.get("REPORTER")));
-        article.put("meta",getData(jsonResult.get("META")));
-        article.put("mastercode",getData(jsonResult.get("MASTERCODE")));
-        article.put("servicemap",getData(jsonResult.get("SERVICEMAP")));
-        article.put("keyword",getData(jsonResult.get("KEYWORD")));
-        article.put("clickcnt",getData(jsonResult.get("CLICKCNT")));
-        article.put("multi",getData(jsonResult.get("MULTI")));
+        article.put("basic",jsonResult.getData("BASIC"));
+        article.put("content",jsonResult.getDataList("CONTENT"));
+        article.put("reporter",jsonResult.getDataList("REPORTER"));
+        article.put("meta",jsonResult.getDataList("META"));
+        article.put("mastercode",jsonResult.getDataList("MASTERCODE"));
+        article.put("servicemap",jsonResult.getDataList("SERVICEMAP"));
+        article.put("keyword",jsonResult.getDataList("KEYWORD"));
+        article.put("clickcnt",jsonResult.getDataList("CLICKCNT"));
+        article.put("multi",jsonResult.getDataList("MULTI"));
         return article;
-    }
-
-    private List getData(Object obj) {
-        try {
-            return ((List) ((Map) obj).get("_DATA"));
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     private String getArticlePage(Map<String,Object> articleInfo) {

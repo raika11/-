@@ -137,4 +137,10 @@ public class MemberDTO {
      * 그룹 코드 목록
      */
     private List<MemberGroupSaveDTO> memberGroups;
+
+    /**
+     * 등록일시
+     */
+    @DTODateTimeFormat
+    private Date regDt;
 }

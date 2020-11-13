@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.menu.model;
+package jmnet.moka.core.dps.api.menu;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,14 +15,9 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import jmnet.moka.common.ApiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -153,7 +148,7 @@ public class MenuParser {
         try {
             this.document = documentBuilder.parse(resource.getInputStream());
         } catch (Exception e) {
-            logger.error("Api parsing error: {} {}", resource.getFile().getAbsolutePath(),
+            logger.error("Menu parsing error: {} {}", resource.getFile().getAbsolutePath(),
                     e.getMessage());
         }
     }

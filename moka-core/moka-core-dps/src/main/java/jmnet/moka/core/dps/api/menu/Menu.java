@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.menu.model;
+package jmnet.moka.core.dps.api.menu;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;

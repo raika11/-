@@ -45,13 +45,13 @@ public class PartDTO {
      * Form Item ID
      */
     @JacksonXmlProperty(localName = "id")
-    private String itemId;
+    private String partId;
 
     /**
      * Form Item Title
      */
     @JacksonXmlProperty(localName = "title")
-    private String itemTitle;
+    private String partTitle;
 
     /**
      * 사용 여부

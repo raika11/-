@@ -8,6 +8,7 @@ import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -92,6 +93,7 @@ public class MemberDTO {
     /**
      * 문자인증만료일시
      */
+    @DTODateTimeFormat
     private Date smsExp;
 
     /**
@@ -103,6 +105,7 @@ public class MemberDTO {
     /**
      * 마지막로그인일시
      */
+    @DTODateTimeFormat
     private Date lastLoginDt;
 
     /**
@@ -121,6 +124,7 @@ public class MemberDTO {
     /**
      * 계정만료일
      */
+    @DTODateTimeFormat
     private Date expireDt;
 
     /**
@@ -133,4 +137,10 @@ public class MemberDTO {
      * 그룹 코드 목록
      */
     private List<MemberGroupSaveDTO> memberGroups;
+
+    /**
+     * 등록일시
+     */
+    @DTODateTimeFormat
+    private Date regDt;
 }

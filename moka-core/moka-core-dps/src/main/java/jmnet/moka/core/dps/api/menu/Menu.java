@@ -1,5 +1,6 @@
 package jmnet.moka.core.dps.api.menu;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,8 +85,15 @@ public class Menu {
     @JsonProperty("IconHtml")
     private String iconHtml;
 
-    public Menu(Node menuNode, MenuParser menuParser)
+    @JsonProperty("CategoryKeys")
+    private String categoryKeys;
+
+    @JsonIgnore
+    private Menu parentMenu;
+
+    public Menu(Menu parentMenu, Node menuNode, MenuParser menuParser)
             throws XPathExpressionException {
+        this.parentMenu = parentMenu;
         Element menuEl = (Element)menuNode;
 
         // Key
@@ -124,7 +132,12 @@ public class Menu {
             this.setIsDisplayTitle(false);
         // IconHtml
             this.setIconHtml("");
+        // CategoryKeys
+        this.setCategoryKeys(getCategoryKey(menuEl, menuParser));
+    }
 
+    public boolean hasChildren() {
+        return this.children.size() > 0;
     }
 
     public Url getUrl(Element menuNode,MenuParser menuParser)
@@ -153,6 +166,19 @@ public class Menu {
                 String url = URL_PREFIX + uri;
                 return new Url(url,url);
             }
+        }
+        return null;
+    }
+
+    public String getCategoryKey(Element menuNode,MenuParser menuParser)
+            throws XPathExpressionException {
+        Node categoryNode = menuParser.getNode(menuNode,"Section/CategoryKeys/string");
+        if ( categoryNode != null) {
+            return categoryNode.getTextContent();
+        }
+        Node listNode = menuParser.getNode(menuNode,"List");
+        if ( listNode != null) {
+            return ((Element)listNode).getAttribute("CategoryKey");
         }
         return null;
     }

@@ -5,7 +5,6 @@ import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -15,7 +14,6 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
@@ -30,6 +28,7 @@ import jmnet.moka.core.tps.mvc.member.dto.MemberGroupSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberRequestDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
+import jmnet.moka.core.tps.mvc.member.dto.MemberUpdateDTO;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
@@ -237,7 +236,7 @@ public class MemberRestController {
     @PutMapping("/{memberId}")
     public ResponseEntity<?> putMember(
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @Valid MemberSaveDTO memberDTO)
+            @Valid MemberUpdateDTO memberDTO)
             throws Exception {
 
         // MemberDTO -> Member 변환
@@ -252,36 +251,13 @@ public class MemberRestController {
 
 
         try {
-            // 사용자 정보 수정시에는 패스워드 변경을 하지 않는다.
-            newMember.setPassword(orgMember.getPassword());
+            orgMember.setStatus(memberDTO.getStatus());
+            orgMember.setExpireDt(memberDTO.getExpireDt());
+            orgMember.setRemark(memberDTO.getRemark());
+
             // update
             MemberInfo returnValue = memberService.updateMember(newMember);
 
-            if (returnValue != null && memberDTO.getMemberGroups() != null) {
-                memberDTO
-                        .getMemberGroups()
-                        .forEach(group -> {
-                            Optional<GroupMember> orgGroupMember = returnValue
-                                    .getGroupMembers()
-                                    .stream()
-                                    .filter(groupMember -> group
-                                            .getGroupCd()
-                                            .equals(groupMember.getGroupCd()))
-                                    .findFirst();
-                            orgGroupMember.ifPresentOrElse(groupMember -> {
-                                groupMember.setUsedYn(group.getUsedYn());
-                                memberService.updateGroupMember(groupMember);
-                            }, () -> {
-                                GroupMember groupMember = GroupMember
-                                        .builder()
-                                        .groupCd(group.getGroupCd())
-                                        .memberId(newMember.getMemberId())
-                                        .usedYn(MokaConstants.YES)
-                                        .build();
-                                memberService.insertGroupMember(groupMember);
-                            });
-                        });
-            }
 
             // 결과리턴
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);

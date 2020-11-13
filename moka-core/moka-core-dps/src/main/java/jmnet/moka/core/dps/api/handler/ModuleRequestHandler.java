@@ -41,9 +41,11 @@ public class ModuleRequestHandler implements RequestHandler {
             long endTime = System.currentTimeMillis();
             return ApiResult.createApiResult(startTime, endTime, result, true, null);
         } catch (Exception e) {
+            logger.error("Module invoke Failed:",e);
             return ApiResult.createApiErrorResult(
                     String.format("Module invoke Failed: %s", moduleRequest.getClass().getName()),
                     e);
+
         }
     }
 

@@ -2,7 +2,6 @@ package jmnet.moka.core.tps.mvc.code.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +12,8 @@ import org.apache.ibatis.type.Alias;
 
 /**
  * 코드 검색 DTO
- * 
- * @author jeon
  *
+ * @author jeon
  */
 @AllArgsConstructor
 @Setter
@@ -33,13 +31,9 @@ public class CodeSearchDTO extends SearchDTO {
      */
     private String usedYn;
 
-//    @JsonIgnore
-//    private String delimiter;
-
     // 검색 조건의 기본값을 설정
     public CodeSearchDTO() {
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
-        this.usedYn = MokaConstants.YES;
-//        this.delimiter = " > ";
+        //        this.usedYn = MokaConstants.YES;
     }
 }

@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.article.controller;
 
 import io.swagger.annotations.ApiOperation;
+import java.util.Arrays;
 import java.util.List;
 import javax.validation.Valid;
 import jmnet.moka.common.data.support.SearchParam;
@@ -13,11 +14,14 @@ import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleSourceDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +45,9 @@ public class ArticleRestController {
 
     @Autowired
     private MessageByLocale messageByLocale;
+
+    @Value("${tps.desking.article.source.list}")
+    private String[] deskingSourceList;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -73,6 +80,14 @@ public class ArticleRestController {
             }
         }
 
+        // 편집기사 기본매체조건 추가
+        if (deskingSourceList.length > 0) {
+            String paramSList = Arrays.stream(deskingSourceList)
+                                      .reduce((a, b) -> a + "," + b)
+                                      .get();
+            search.setDeskingSourceList(paramSList);
+        }
+
         // 조회(mybatis)
         List<ArticleBasicVO> returnValue = articleService.findAllArticleBasic(search);
 
@@ -100,6 +115,24 @@ public class ArticleRestController {
 
         ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
         ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto);
+        tpsLogger.success(ActionType.SELECT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "매체 목록조회")
+    @GetMapping("/sources")
+    public ResponseEntity<?> getSourceList() {
+
+        // 조회
+        List<ArticleSource> returnValue = articleService.findAllArticleSource(deskingSourceList);
+
+        // 리턴값 설정
+        ResultListDTO<ArticleSourceDTO> resultListMessage = new ResultListDTO<>();
+        List<ArticleSourceDTO> dtoList = modelMapper.map(returnValue, ArticleSourceDTO.TYPE);
+        resultListMessage.setTotalCnt(returnValue.size());
+        resultListMessage.setList(dtoList);
+
+        ResultDTO<ResultListDTO<ArticleSourceDTO>> resultDto = new ResultDTO<>(resultListMessage);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.mapper.ArticleMapper;
 import jmnet.moka.core.tps.mvc.article.repository.ArticleBasicRepository;
+import jmnet.moka.core.tps.mvc.article.repository.ArticleSourceRepository;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleBasicRepository articleBasicRepository;
 
     @Autowired
+    private ArticleSourceRepository articleSourceRepository;
+
+    @Autowired
     private ArticleMapper articleMapper;
 
     @Override
@@ -34,6 +39,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Optional<ArticleBasic> findArticleBasicById(Long totalId) {
         return articleBasicRepository.findById(totalId);
+    }
+
+    @Override
+    public List<ArticleSource> findAllArticleSource(String[] deskingSourceList) {
+        return articleSourceRepository.findAllSourceByDesking(deskingSourceList);
     }
 
 }

@@ -18,6 +18,10 @@ const DetailSchForm = (props) => {
         }
     };
 
+    const handleChangeValue = (value) => {
+        setComponent({ ...component, schCodeId: value });
+    };
+
     useEffect(() => {
         setOpen(available);
     }, [available]);
@@ -39,22 +43,7 @@ const DetailSchForm = (props) => {
                                 </Col>
                                 {/* 코드타입 */}
                                 <Col xs={10} className="p-0">
-                                    <CodeAutocomplete
-                                        label="분류"
-                                        labelWidth={45}
-                                        className="mb-0"
-                                        value={component.schCodeId}
-                                        onChange={(value) => setComponent({ ...component, schCodeId: value })}
-                                    />
-                                    {/* <MokaInputLabel
-                                        label="분류"
-                                        labelWidth={45}
-                                        className="mb-0"
-                                        as="autocomplete"
-                                        value={component.schCodeId}
-                                        onChange={(value) => setComponent({ ...component, schCodeId: value })}
-                                        inputProps={{ options: [] }}
-                                    /> */}
+                                    <CodeAutocomplete label="분류" labelWidth={45} className="mb-0" value={component.schCodeId} onChange={handleChangeValue} />
                                 </Col>
                             </Form.Row>
                         </Col>

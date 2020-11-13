@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
-import { defaultArticleSearchType } from '@pages/commons';
+import { defaultArticleSearchType, CodeAutocomplete } from '@pages/commons';
 import { initialState, getArticleList, changeSearchOption } from '@store/article';
 
 /**
@@ -61,10 +61,10 @@ const ArticleSearch = () => {
 
     /**
      * 분류 변경
-     * @param {object} data data
+     * @param {string} value value
      */
-    const handleChangeMasterCode = (data) => {
-        console.log(data);
+    const handleChangeMasterCode = (value) => {
+        setSearch({ ...search, masterCode: value });
     };
 
     useEffect(() => {
@@ -127,29 +127,22 @@ const ArticleSearch = () => {
             <Form.Row className="d-flex mb-2 justify-content-between">
                 <div className="d-flex">
                     {/* 분류 */}
-                    <div style={{ width: 186 }} className="mr-2">
-                        <MokaInput
-                            as="autocomplete"
-                            name="masterCode"
-                            value={search.masterCode}
-                            onChange={handleChangeMasterCode}
-                            placeholder="분류 선택"
-                            inputProps={{ options: [] }}
-                        />
+                    <div style={{ width: 380 }} className="mr-2">
+                        <CodeAutocomplete name="masterCode" className="mb-0" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
                     </div>
 
                     {/* 매체 */}
-                    <div style={{ width: 186 }} className="mr-2">
+                    <div style={{ width: 130 }} className="mr-2">
                         <MokaInput as="select" name="sourceCode" value={search.sourceCode} onChange={handleChangeValue}>
                             <option hidden>매체 전체</option>
                         </MokaInput>
                     </div>
 
                     {/* 면 */}
-                    <div style={{ width: 120 }} className="mr-2">
+                    <div style={{ width: 80 }} className="mr-2">
                         <MokaInputLabel
                             label="면"
-                            labelWidth={45}
+                            labelWidth={25}
                             className="mb-0"
                             name="pressMyun"
                             value={search.pressMyun}
@@ -159,10 +152,10 @@ const ArticleSearch = () => {
                     </div>
 
                     {/* 판 */}
-                    <div style={{ width: 120 }} className="mr-2">
+                    <div style={{ width: 80 }} className="mr-2">
                         <MokaInputLabel
                             label="판"
-                            labelWidth={45}
+                            labelWidth={25}
                             className="mb-0"
                             name="pressPan"
                             value={search.pressPan}

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
-
-import codeList from './code_data.json';
-import MokaModal from './MokaModal';
+import { MokaModal } from '@components';
+import { getCodeServiceList, getCodeSectionList, getCodeContentList } from '@store/code';
 
 const propTypes = {
     /**
@@ -44,56 +44,58 @@ const defaultProps = {
 };
 
 /**
- * 대/중/소 코드 선택 모달
+ * 기사 분류 코드 선택 모달
  */
-const MokaCodeListModal = (props) => {
+const CodeListModal = (props) => {
     const { show, onHide, title, buttons, onOk, onCancel, ...rest } = props;
 
-    // 대중소 분류 코드 리스트
-    const [lCodeList, setLCodeList] = useState([]);
-    const [mCodeList, setMCodeList] = useState([]);
-    const [sCodeList, setSCodeList] = useState([]);
+    const dispatch = useDispatch();
+    const { serviceList, sectionList, contentList } = useSelector((store) => ({
+        serviceList: store.code.service.list,
+        sectionList: store.code.section.list,
+        contentList: store.code.content.list,
+    }));
 
     // 선택한 코드
-    const [selectedLCode, setSelectedLCode] = useState(null);
-    const [selectedMCode, setSelectedMCode] = useState(null);
-    const [selectedSCode, setSelectedSCode] = useState(null);
+    const [selectedService, setSelectedService] = useState(null);
+    const [selectedSection, setSelectedSection] = useState(null);
+    const [selectedContent, setSelectedContent] = useState(null);
 
     // 대분류 리스트 조회
     useEffect(() => {
-        setLCodeList(codeList.resultInfo.body.list.list.filter((code) => code.middleCodeId === '00'));
-    }, []);
+        dispatch(getCodeServiceList());
+    }, [dispatch]);
 
     // 중분류 리스트 조회
-    useEffect(() => {
-        setSCodeList([]);
-        setSelectedSCode(null);
+    // useEffect(() => {
+    //     setSCodeList([]);
+    //     setSelectedContent(null);
 
-        if (selectedLCode) {
-            const regex = new RegExp(`(${selectedLCode.largeCodeId})\\d{2}(000)`);
-            setMCodeList(codeList.resultInfo.body.list.list.filter((code) => regex.test(code.codeId) && code.middleCodeId !== '00'));
-        } else {
-            setMCodeList([]);
-            setSelectedMCode(null);
-        }
-    }, [selectedLCode]);
+    //     if (selectedService) {
+    //         const regex = new RegExp(`(${selectedService.largeCodeId})\\d{2}(000)`);
+    //         setMCodeList(codeList.resultInfo.body.list.list.filter((code) => regex.test(code.codeId) && code.middleCodeId !== '00'));
+    //     } else {
+    //         setMCodeList([]);
+    //         setSelectedSection(null);
+    //     }
+    // }, [selectedService]);
 
-    // 소분류 리스트 조회
-    useEffect(() => {
-        if (selectedMCode) {
-            const regex = new RegExp(`(${selectedMCode.largeCodeId})${selectedMCode.middleCodeId}\\d{3}`);
-            setSCodeList(codeList.resultInfo.body.list.list.filter((code) => regex.test(code.codeId) && code.codeId.slice(-3) !== '000'));
-        } else {
-            setSCodeList([]);
-            setSelectedSCode(null);
-        }
-    }, [selectedMCode]);
+    // // 소분류 리스트 조회
+    // useEffect(() => {
+    //     if (selectedSection) {
+    //         const regex = new RegExp(`(${selectedSection.largeCodeId})${selectedSection.middleCodeId}\\d{3}`);
+    //         setSCodeList(codeList.resultInfo.body.list.list.filter((code) => regex.test(code.codeId) && code.codeId.slice(-3) !== '000'));
+    //     } else {
+    //         setSCodeList([]);
+    //         setSelectedContent(null);
+    //     }
+    // }, [selectedSection]);
 
     /**
      * 대분류 변경 시
      */
     const selectLCode = useCallback((codeData, e) => {
-        setSelectedLCode(codeData);
+        setSelectedService(codeData);
     }, []);
 
     /**
@@ -101,15 +103,15 @@ const MokaCodeListModal = (props) => {
      */
     const selectMCode = useCallback(
         (codeData, e) => {
-            if (!selectedMCode || selectedMCode.codeId !== codeData.codeId) {
-                setSelectedMCode(codeData);
+            if (!selectedSection || selectedSection.codeId !== codeData.codeId) {
+                setSelectedSection(codeData);
             } else {
-                setSelectedMCode(null);
-                setSelectedSCode(null);
+                setSelectedSection(null);
+                setSelectedContent(null);
                 e.target.checked = false;
             }
         },
-        [selectedMCode],
+        [selectedSection],
     );
 
     /**
@@ -117,14 +119,14 @@ const MokaCodeListModal = (props) => {
      */
     const selectSCode = useCallback(
         (codeData, e) => {
-            if (!selectedSCode || selectedSCode.codeId !== codeData.codeId) {
-                setSelectedSCode(codeData);
+            if (!selectedContent || selectedContent.codeId !== codeData.codeId) {
+                setSelectedContent(codeData);
             } else {
-                setSelectedSCode(null);
+                setSelectedContent(null);
                 e.target.checked = false;
             }
         },
-        [selectedSCode],
+        [selectedContent],
     );
 
     /**
@@ -134,15 +136,15 @@ const MokaCodeListModal = (props) => {
         if (typeof onOk !== 'function') {
             return;
         }
-        if (selectedSCode) {
-            onOk(selectedSCode);
-        } else if (selectedMCode) {
-            onOk(selectedMCode);
+        if (selectedContent) {
+            onOk(selectedContent);
+        } else if (selectedSection) {
+            onOk(selectedSection);
         } else {
-            onOk(selectedLCode);
+            onOk(selectedService);
         }
         onHide();
-    }, [selectedLCode, selectedMCode, selectedSCode, onOk, onHide]);
+    }, [selectedService, selectedSection, selectedContent, onOk, onHide]);
 
     return (
         <MokaModal
@@ -167,9 +169,9 @@ const MokaCodeListModal = (props) => {
                 <div>
                     <p className="h5">대분류</p>
                     <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
-                        {lCodeList.map((code) => (
+                        {serviceList.map((code) => (
                             <ListGroup.Item key={code.codeId}>
-                                <Form.Check custom type="radio" name="lcode" id={`radio-${code.codeId}`} label={code.codeName} onClick={(e) => selectLCode(code, e)} />
+                                <Form.Check custom type="radio" name="lcode" id={`radio-${code.masterCode}`} label={code.serviceKorname} onClick={(e) => selectLCode(code, e)} />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -179,9 +181,9 @@ const MokaCodeListModal = (props) => {
                 <div>
                     <p className="h5">중분류</p>
                     <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
-                        {mCodeList.map((code) => (
+                        {sectionList.map((code) => (
                             <ListGroup.Item key={code.codeId}>
-                                <Form.Check custom type="radio" name="mcode" id={`radio-${code.codeId}`} label={code.codeName} onClick={(e) => selectMCode(code, e)} />
+                                <Form.Check custom type="radio" name="mcode" id={`radio-${code.masterCode}`} label={code.sectionKorname} onClick={(e) => selectMCode(code, e)} />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -191,9 +193,9 @@ const MokaCodeListModal = (props) => {
                 <div>
                     <p className="h5">소분류</p>
                     <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
-                        {sCodeList.map((code) => (
+                        {contentList.map((code) => (
                             <ListGroup.Item key={code.codeId}>
-                                <Form.Check custom type="radio" name="scode" id={`radio-${code.codeId}`} label={code.codeName} onClick={(e) => selectSCode(code, e)} />
+                                <Form.Check custom type="radio" name="scode" id={`radio-${code.masterCode}`} label={code.contentKorname} onClick={(e) => selectSCode(code, e)} />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -203,7 +205,7 @@ const MokaCodeListModal = (props) => {
     );
 };
 
-MokaCodeListModal.propTypes = propTypes;
-MokaCodeListModal.defaultProps = defaultProps;
+CodeListModal.propTypes = propTypes;
+CodeListModal.defaultProps = defaultProps;
 
-export default MokaCodeListModal;
+export default CodeListModal;

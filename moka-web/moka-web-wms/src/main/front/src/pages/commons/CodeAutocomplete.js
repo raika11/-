@@ -29,6 +29,10 @@ const propTypes = {
      * isMulti 체크
      */
     isMulti: PropTypes.bool,
+    /**
+     * placeholder
+     */
+    placeholder: PropTypes.string,
 };
 const defaultProps = {
     isMulti: false,
@@ -38,7 +42,7 @@ const defaultProps = {
  * 기사 분류 데이터를 가져오는 자동완성
  */
 const CodeAutocomplete = forwardRef((props, ref) => {
-    const { label, labelWidth, className, value, onChange, isMulti } = props;
+    const { label, labelWidth, className, value, onChange, isMulti, placeholder } = props;
     const dispatch = useDispatch();
 
     const { storeSearch, list, loading } = useSelector((store) => ({
@@ -120,6 +124,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
             labelWidth={labelWidth}
             className={className}
             value={defaultValue}
+            placeholder={placeholder}
             onChange={handleChangeValue}
             inputProps={{ options, isMulti, isLoading: loading }}
         />

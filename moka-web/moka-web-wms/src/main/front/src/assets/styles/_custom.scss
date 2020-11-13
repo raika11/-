@@ -116,6 +116,7 @@ body {
 
     .nav-item .nav-link {
         border-bottom: 2px solid $gray-300;
+        border-radius: 0;
 
         &.active {
             border-color: $orange;

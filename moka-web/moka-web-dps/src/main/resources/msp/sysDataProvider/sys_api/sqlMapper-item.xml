@@ -116,12 +116,10 @@
       ,[MAX_PAGE_COUNT]
       ,[DISP_PAGE_COUNT]
       ,[MORE_COUNT]
-      ,[SCH_SERVICE_TYPE]
-      ,[SCH_LANG]
       ,[SCH_CODE_ID]
       ,[SNAPSHOT_YN]
       ,[SNAPSHOT_BODY]
-      ,[SKIN_SEQ]
+      ,[ART_PAGE_SEQ]
       ,[REG_DT]
       ,[REG_ID]
       ,[MOD_DT]
@@ -162,15 +160,6 @@
 	LEFT OUTER JOIN WMS_COMPONENT_WORK w 
 	  ON c.COMPONENT_SEQ = w.COMPONENT_SEQ AND w.CREATOR = #{creator}
 	WHERE  c.COMPONENT_SEQ = #{id}
-  </select>
-
-  <select id="component_ad_list" parameterType="hashmap" resultType="map">
-    SELECT [SEQ]
-      ,[COMPONENT_SEQ]
-      ,[AD_SEQ]
-      ,[LIST_PARAGRAPH] FROM TB_WMS_COMPONENT_AD
-	WHERE COMPONENT_SEQ = #{id}
-	ORDER BY LIST_PARAGRAPH
   </select>
 
   <select id="template" parameterType="hashmap" resultType="map">

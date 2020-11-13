@@ -94,7 +94,7 @@ public class ArticleView extends AbstractView {
             StringBuilder sb;
             try {
                 writer = response.getWriter();
-                sb = templateMerger.merge("PG",this.getSkin(articleInfo),mergeContext);
+                sb = templateMerger.merge("PG",this.getArticlePage(articleInfo),mergeContext);
                 writer.write(sb.toString());
             } catch (Exception e) {
                 logger.error("Request:{}, Exception: {}", request.getRequestURI(), e.toString());
@@ -124,6 +124,7 @@ public class ArticleView extends AbstractView {
         article.put("mastercode",getData(jsonResult.get("MASTERCODE")));
         article.put("servicemap",getData(jsonResult.get("SERVICEMAP")));
         article.put("keyword",getData(jsonResult.get("KEYWORD")));
+        article.put("clickcnt",getData(jsonResult.get("CLICKCNT")));
         article.put("multi",getData(jsonResult.get("MULTI")));
         return article;
     }
@@ -136,7 +137,7 @@ public class ArticleView extends AbstractView {
         }
     }
 
-    private String getSkin(Map<String,Object> articleInfo) {
+    private String getArticlePage(Map<String,Object> articleInfo) {
         Map<String,Object> basic = (Map<String,Object>)articleInfo.get("basic");
         String articleType = (String)basic.get("ART_TYPE");
         if ( articleType.equalsIgnoreCase("B")) {
@@ -145,18 +146,6 @@ public class ArticleView extends AbstractView {
             return "70";
         }
         return "70";
-    }
-
-    private String setCoverImage(Map<String,Object> articleInfo) {
-        Map<String,Object> multi = (Map<String,Object>)articleInfo.get("multi");
-        List<Map<String,Object>> dataList = getData(multi);
-        for ( Map multiMap : dataList) {
-            String multiType = (String)multiMap.get("MC");
-            if ( multiType.equals("MC")) {
-                return (String)multiMap.get("MULTI_LINK");
-            }
-        }
-        return null;
     }
 
 }

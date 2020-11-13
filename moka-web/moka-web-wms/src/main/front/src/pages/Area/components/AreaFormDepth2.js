@@ -258,7 +258,7 @@ const AreaFormDepth2 = (props) => {
                         setCompOptions(body.list || []);
 
                         if (compCnt < 1) {
-                            setComponent(component || {});
+                            setComponent(origin.areaComps.length > 0 ? origin.areaComps[0].component : component || {});
                         } else {
                             setAreaCompLoad({
                                 ...areaCompLoad,
@@ -292,7 +292,7 @@ const AreaFormDepth2 = (props) => {
                     setContOptions(body.list || []);
 
                     if (contCnt < 1) {
-                        setContainer(temp.container || {});
+                        setContainer(origin.container || {});
                     } else {
                         setAreaCompLoad({
                             ...areaCompLoad,
@@ -300,12 +300,14 @@ const AreaFormDepth2 = (props) => {
                             byContainerMessage: null,
                         });
                         setContainer({});
+                        setAreaComps([]);
                     }
                     setContCnt(contCnt + 1);
                 },
             }),
         );
-    }, [dispatch, page, contCnt, temp.container, areaCompLoad]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [areaCompLoad, contCnt, page]);
 
     useEffect(() => {
         // depth에 따라 기본값 셋팅

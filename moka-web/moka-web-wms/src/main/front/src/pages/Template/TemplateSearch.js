@@ -57,6 +57,7 @@ const TemplateSearch = () => {
         if (e.target.value === 'all') {
             setSearch({
                 ...search,
+                templateWidth: e.target.value,
                 widthMin: null,
                 widthMax: null,
             });
@@ -66,12 +67,14 @@ const TemplateSearch = () => {
             const { widthmin, widthmax } = e.target.selectedOptions[0].dataset;
             setSearch({
                 ...search,
+                templateWidth: e.target.value,
                 widthMin: Number(widthmin),
                 widthMax: Number(widthmax),
             });
         } catch (err) {
             setSearch({
                 ...search,
+                templateWidth: e.target.value,
                 widthMin: null,
                 widthMax: null,
             });

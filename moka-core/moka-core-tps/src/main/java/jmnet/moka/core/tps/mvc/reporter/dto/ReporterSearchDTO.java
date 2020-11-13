@@ -42,6 +42,11 @@ public class ReporterSearchDTO extends SearchDTO {
     private String useTotal;
 
     /**
+     * 조회타입
+     */    
+    private String searchType;
+
+    /**
      * 총갯수
      */
     private Long total;

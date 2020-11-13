@@ -147,7 +147,6 @@ const ReporterEdit = () => {
             talkYn: talkYn,
         };
 
-        console.log('tmppppppppppppppppppppppparam:', tmp);
         if (paramSeq) {
             updateReporter(tmp);
         }

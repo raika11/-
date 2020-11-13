@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
@@ -32,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Validated
-@RequestMapping("/api/contents/articles")
+@RequestMapping("/api/articles")
 public class ArticleRestController {
 
     @Autowired
@@ -57,9 +58,23 @@ public class ArticleRestController {
     @GetMapping
     public ResponseEntity<?> getArticleList(@Valid @SearchParam ArticleSearchDTO search) {
 
+        //분류코드 검색설정
+        if (search.getMasterCode() != null && McpString.isNotEmpty(search.getMasterCode())) {
+            String masterCode = search.getMasterCode();
+
+            if (masterCode.length() > 2 && masterCode.substring(2)
+                                                     .equals("00000")) {
+                // 대분류검색
+                search.setMasterCode(masterCode.substring(0, 1));
+            } else if (masterCode.length() > 4 && masterCode.substring(4)
+                                                            .equals("000")) {
+                // 중분류검색
+                search.setMasterCode(masterCode.substring(0, 1));
+            }
+        }
+
         // 조회(mybatis)
         List<ArticleBasicVO> returnValue = articleService.findAllArticleBasic(search);
-
 
         // 리턴값 설정
         ResultListDTO<ArticleBasicVO> resultListMessage = new ResultListDTO<>();

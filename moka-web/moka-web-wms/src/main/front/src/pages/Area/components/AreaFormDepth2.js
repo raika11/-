@@ -63,6 +63,21 @@ const AreaFormDepth2 = (props) => {
     const [error, setError] = useState({ page: false });
 
     /**
+     * depth에 따라 기본값 셋팅
+     */
+    const setInit = useCallback(() => {
+        if (depth === 2) {
+            setTemp(areaDepth2);
+            setOrigin(areaDepth2);
+            setAreaCompLoad(areaCompLoadDepth2);
+        } else {
+            setTemp(areaDepth3);
+            setOrigin(areaDepth3);
+            setAreaCompLoad(areaCompLoadDepth3);
+        }
+    }, [areaCompLoadDepth2, areaCompLoadDepth3, areaDepth2, areaDepth3, depth]);
+
+    /**
      * input 값 변경
      * @param {object} e 이벤트객체
      * @param {number} index
@@ -257,7 +272,7 @@ const AreaFormDepth2 = (props) => {
                     callback: ({ body }) => {
                         setCompOptions(body.list || []);
 
-                        if (compCnt < 1) {
+                        if (origin.areaDiv === ITEM_CP && compCnt < 1) {
                             setComponent(origin.areaComps.length > 0 ? origin.areaComps[0].component : component || {});
                         } else {
                             setAreaCompLoad({
@@ -310,17 +325,8 @@ const AreaFormDepth2 = (props) => {
     }, [areaCompLoad, contCnt, page]);
 
     useEffect(() => {
-        // depth에 따라 기본값 셋팅
-        if (depth === 2) {
-            setTemp(areaDepth2);
-            setOrigin(areaDepth2);
-            setAreaCompLoad(areaCompLoadDepth2);
-        } else {
-            setTemp(areaDepth3);
-            setOrigin(areaDepth3);
-            setAreaCompLoad(areaCompLoadDepth3);
-        }
-    }, [depth, areaDepth2, areaDepth3, areaCompLoadDepth2, areaCompLoadDepth3]);
+        setInit();
+    }, [setInit]);
 
     useEffect(() => {
         // origin 데이터 가져오는 부분
@@ -631,10 +637,7 @@ const AreaFormDepth2 = (props) => {
 
                     {/* 버튼 그룹 */}
                     <Card.Footer className="d-flex justify-content-center">
-                        <Button className="mr-10" onClick={handleClickSave}>
-                            저장
-                        </Button>
-                        <Button variant="gray150">취소</Button>
+                        <Button onClick={handleClickSave}>저장</Button>
                         {temp.areaSeq && (
                             <Button variant="danger" className="ml-10" onClick={handleClickDelete}>
                                 삭제

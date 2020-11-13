@@ -7,24 +7,8 @@
   <select id="findAll" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
     statementType="CALLABLE">
     { call UPS_WMS_ARTICLE_BASIC_LIST_SEL(
-    <choose>
-      <when test="startServiceDay != null">
-        #{startServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
-      </when>
-      <otherwise>
-        NULL,
-      </otherwise>
-    </choose>
-
-    <choose>
-      <when test="endServiceDay != null">
-        #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
-      </when>
-      <otherwise>
-        NULL,
-      </otherwise>
-    </choose>
-
+    #{startServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
       <when test="searchType == 'all' and keyword != null and keyword != ''">

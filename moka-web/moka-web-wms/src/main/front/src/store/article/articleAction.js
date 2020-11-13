@@ -12,6 +12,10 @@ export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) =>
  */
 export const CLEAR_STORE = 'article/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
+export const CLEAR_LIST = 'article/CLEAR_LIST';
+export const clearList = createAction(CLEAR_LIST);
+export const CLEAR_SEARCH = 'article/CLEAR_SEARCH';
+export const clearSearch = createAction(CLEAR_SEARCH);
 
 /**
  * 데이터 조회

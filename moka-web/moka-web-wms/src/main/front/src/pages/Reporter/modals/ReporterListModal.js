@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-
+import { Form, Col } from 'react-bootstrap';
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { initialState, getDatasetListModal, GET_DATASET_LIST_MODAL } from '@store/dataset';
-import columnDefs from './DatasetListModalColums';
+import { initialState, changeSearchOption, GET_REPORTER_LIST_MODAL, getReporterListModal } from '@store/reporter';
+import { columnDefs } from './ReporterModalAgGridColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
-import { defaultDatasetSearchType } from './index';
+import Button from 'react-bootstrap/Button';
+export const { searchTypeList } = initialState;
 
 const propTypes = {
     show: PropTypes.bool,
@@ -36,13 +35,12 @@ const defaultProps = {};
 /**
  * 데이터셋 리스트 공통 모달
  */
-const DatsetListModal = (props) => {
+const ReporterMgrSearchModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
     const dispatch = useDispatch();
-
-    const { latestDomainId, loading } = useSelector((store) => ({
-        latestDomainId: store.auth.latestDomainId,
-        loading: store.loading[GET_DATASET_LIST_MODAL],
+    const { keyword, loading } = useSelector((store) => ({
+        keyword: store.reporter.search.keyword,
+        loading: store.loading[GET_REPORTER_LIST_MODAL],
     }));
 
     // state
@@ -50,7 +48,7 @@ const DatsetListModal = (props) => {
     const [total, setTotal] = useState(initialState.total);
     const [error, setError] = useState(initialState.error);
     const [selected, setSelected] = useState('');
-    const [selectedDataset, setSelectedDataset] = useState({});
+    const [selectedReporter, setSelectedReporter] = useState({});
     const [rowData, setRowData] = useState([]);
     const [cnt, setCnt] = useState(0);
 
@@ -67,7 +65,7 @@ const DatsetListModal = (props) => {
             setRowData(
                 body.list.map((data) => ({
                     ...data,
-                    autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '수동형',
+                    //autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '수동형',
                 })),
             );
             setTotal(body.totalCnt);
@@ -94,14 +92,14 @@ const DatsetListModal = (props) => {
      * 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        if (onClickSave) onClickSave(selectedDataset);
-        handleHide();
+        if (onClickSave) onClickSave(selectedReporter, handleHide);
     };
 
     /**
      * 취소 버튼 클릭
      */
     const handleClickCancle = () => {
+        setSearch(initialState.search);
         if (onClickCancle) onClickCancle();
         handleHide();
     };
@@ -109,13 +107,10 @@ const DatsetListModal = (props) => {
     /**
      * 검색
      */
-    const handleSearch = () => {
+    const handleSearch = (search) => {
         dispatch(
-            getDatasetListModal({
-                search: {
-                    ...search,
-                    page: 0,
-                },
+            getReporterListModal({
+                search: { ...search, keyword: keyword, size: 100, page: 0, exclude },
                 callback: responseCallback,
             }),
         );
@@ -136,87 +131,30 @@ const DatsetListModal = (props) => {
      * 목록에서 Row클릭
      */
     const handleRowClicked = useCallback((data) => {
-        setSelectedDataset(data);
-        setSelected(data.datasetSeq);
+        setSelectedReporter(data);
+        setSelected(data.id);
     }, []);
-
-    /**
-     * 체크박스 변경
-     */
-    const handleSelectionChanged = useCallback(
-        (selectedNodes) => {
-            if (selectedNodes.length > 0) {
-                const sd = selectedNodes[0].data;
-                if (sd.datasetSeq !== selected) {
-                    setSelectedDataset(sd);
-                    setSelected(sd.datasetSeq);
-                }
-            }
-        },
-        [selected],
-    );
 
     useEffect(() => {
         if (show && cnt < 1) {
-            const ns = {
-                ...initialState.search,
-                domainId: latestDomainId,
-                size: MODAL_PAGESIZE_OPTIONS[0],
+            handleSearch({
+                ...search,
+                keyword: keyword,
+                size: 100,
                 page: 0,
                 exclude,
-            };
-            setSearch(ns);
-            dispatch(
-                getDatasetListModal({
-                    search: ns,
-                    callback: responseCallback,
-                }),
-            );
+            });
             setCnt(cnt + 1);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [latestDomainId, show, exclude, cnt]);
+    }, [keyword, show, exclude, cnt]);
 
     return (
-        <MokaModal
-            width={600}
-            show={show}
-            onHide={handleHide}
-            title="데이터셋 검색"
-            size="md"
-            buttons={[
-                { text: '등록', onClick: handleClickSave },
-                { text: '취소', variant: 'gray150', onClick: handleClickCancle },
-            ]}
-            footerClassName="justify-content-center"
-            draggable
-        >
+        <MokaModal show={show} onHide={handleHide} title="기자 검색" size="xl" footerClassName="justify-content-center" width={970} draggable>
             <Form>
-                <Form.Row className="mb-2">
-                    {/* 검색 조건 */}
-                    <Col xs={4} className="p-0 pr-2">
-                        <MokaInputLabel
-                            label="구분"
-                            labelWidth={45}
-                            as="select"
-                            className="mb-0"
-                            value={search.searchType}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    searchType: e.target.value,
-                                });
-                            }}
-                        >
-                            {defaultDatasetSearchType.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
-                        </MokaInputLabel>
-                    </Col>
+                <Form.Row>
                     {/* 키워드 */}
-                    <Col xs={8} className="p-0">
+                    <Col xs={5} className="p-0 mb-2">
                         <MokaSearchInput
                             value={search.keyword}
                             onChange={(e) => {
@@ -225,21 +163,26 @@ const DatsetListModal = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
-                            onSearch={handleSearch}
+                            onSearch={() => {
+                                handleSearch(search);
+                            }}
                         />
+                    </Col>
+                    <Col xs={1}>
+                        <Button variant="gray150">초기화</Button>
                     </Col>
                 </Form.Row>
             </Form>
 
             {/* ag-grid table */}
             <MokaTable
-                agGridHeight={501}
+                agGridHeight={600}
+                getRowHeight={40}
                 error={error}
                 columnDefs={columnDefs}
                 rowData={rowData}
-                onRowNodeId={(dataset) => dataset.datasetSeq}
+                onRowNodeId={(reporter) => reporter.id}
                 onRowClicked={handleRowClicked}
-                onSelectionChanged={handleSelectionChanged}
                 loading={loading}
                 total={total}
                 page={search.page}
@@ -252,7 +195,7 @@ const DatsetListModal = (props) => {
     );
 };
 
-DatsetListModal.propTypes = propTypes;
-DatsetListModal.defaultProps = defaultProps;
+ReporterMgrSearchModal.propTypes = propTypes;
+ReporterMgrSearchModal.defaultProps = defaultProps;
 
-export default DatsetListModal;
+export default ReporterMgrSearchModal;

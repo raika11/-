@@ -112,10 +112,13 @@ const PageListModal = (props) => {
     /**
      * 검색
      */
-    const handleSearch = (search) => {
+    const handleSearch = () => {
         dispatch(
             getPageListModal({
-                search,
+                search: {
+                    ...search,
+                    page: 0,
+                },
                 callback: responseCallback,
             }),
         );
@@ -158,12 +161,19 @@ const PageListModal = (props) => {
 
     useEffect(() => {
         if (show && cnt < 1) {
-            handleSearch({
+            const ns = {
                 ...initialState.search,
                 domainId: !domainId ? latestDomainId : domainId,
                 size: MODAL_PAGESIZE_OPTIONS[0],
                 page: 0,
-            });
+            };
+            setSearch(ns);
+            dispatch(
+                getPageListModal({
+                    search: ns,
+                    callback: responseCallback,
+                }),
+            );
             setCnt(cnt + 1);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

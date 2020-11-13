@@ -5,6 +5,7 @@ import app from '@store/app/appReducer';
 import loading from '@store/loading/loadingReducer';
 import layout from '@store/layout/layoutReducer';
 import auth from '@store/auth/authReducer';
+import article from '@store/article/articleReducer';
 import domain from '@store/domain/domainReducer';
 import template from '@store/template/templateReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
@@ -29,6 +30,7 @@ export default combineReducers({
     loading,
     layout,
     auth,
+    article,
     domain,
     template,
     codeMgt,

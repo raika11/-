@@ -10,9 +10,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
 import jmnet.moka.core.tps.mvc.code.dto.MastercodeDTO;
-import jmnet.moka.core.tps.mvc.code.dto.ServiceMapDTO;
 import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
-import jmnet.moka.core.tps.mvc.code.entity.ServiceMap;
 import jmnet.moka.core.tps.mvc.code.service.CodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -57,22 +55,22 @@ public class CodeRestController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "서비스맵 목록조회")
-    @GetMapping("/service-maps")
-    public ResponseEntity<?> getServiceMapList(@Valid @SearchParam CodeSearchDTO search) {
-
-        // 조회
-        List<ServiceMap> returnValue = codeService.findAllServiceMap(search);
-
-        // 리턴값 설정
-        ResultListDTO<ServiceMapDTO> resultListMessage = new ResultListDTO<>();
-        List<ServiceMapDTO> dtoList = modelMapper.map(returnValue, ServiceMapDTO.TYPE);
-        resultListMessage.setTotalCnt(returnValue.size());
-        resultListMessage.setList(dtoList);
-
-        ResultDTO<ResultListDTO<ServiceMapDTO>> resultDto = new ResultDTO<>(resultListMessage);
-        tpsLogger.success(ActionType.SELECT, true);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    }
+    //    @ApiOperation(value = "서비스맵 목록조회")
+    //    @GetMapping("/service-maps")
+    //    public ResponseEntity<?> getServiceMapList(@Valid @SearchParam CodeSearchDTO search) {
+    //
+    //        // 조회
+    //        List<ServiceMap> returnValue = codeService.findAllServiceMap(search);
+    //
+    //        // 리턴값 설정
+    //        ResultListDTO<ServiceMapDTO> resultListMessage = new ResultListDTO<>();
+    //        List<ServiceMapDTO> dtoList = modelMapper.map(returnValue, ServiceMapDTO.TYPE);
+    //        resultListMessage.setTotalCnt(returnValue.size());
+    //        resultListMessage.setList(dtoList);
+    //
+    //        ResultDTO<ResultListDTO<ServiceMapDTO>> resultDto = new ResultDTO<>(resultListMessage);
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    //    }
 
 }

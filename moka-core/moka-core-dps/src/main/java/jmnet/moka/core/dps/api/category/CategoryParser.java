@@ -2,6 +2,7 @@ package jmnet.moka.core.dps.api.category;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -76,6 +77,7 @@ public class CategoryParser {
                 categoryList.add(category);
             }
         }
+        Collections.reverse(categoryList); // 하위 섹션을 선택하도록 역순으로 보낸다.
         return categoryList;
     }
 

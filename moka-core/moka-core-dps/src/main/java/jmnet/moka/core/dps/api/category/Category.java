@@ -1,5 +1,6 @@
 package jmnet.moka.core.dps.api.category;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.xpath.XPathExpressionException;
@@ -29,9 +30,13 @@ import org.w3c.dom.NodeList;
 @Data
 @Builder
 public class Category {
+    @JsonIgnore
     private List<String> masterCodeList;
+    @JsonIgnore
     private List<String> serviceCodeList;
+    @JsonIgnore
     private List<String> sourceCodeList;
+    @JsonIgnore
     private List<String> exceptSourceCodeList;
     private String key;
     private String usageType;

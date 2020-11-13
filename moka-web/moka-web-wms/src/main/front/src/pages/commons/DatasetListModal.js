@@ -158,15 +158,17 @@ const DatsetListModal = (props) => {
 
     useEffect(() => {
         if (show && cnt < 1) {
+            const ns = {
+                ...initialState.search,
+                domainId: latestDomainId,
+                size: MODAL_PAGESIZE_OPTIONS[0],
+                page: 0,
+                exclude,
+            };
+            setSearch(ns);
             dispatch(
                 getDatasetListModal({
-                    search: {
-                        ...search,
-                        domainId: latestDomainId,
-                        size: MODAL_PAGESIZE_OPTIONS[0],
-                        page: 0,
-                        exclude,
-                    },
+                    search: ns,
                     callback: responseCallback,
                 }),
             );

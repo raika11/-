@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -107,21 +107,6 @@ const DirectLinkEdit = () => {
         // 저장
     };
 
-    /**
-     * 취소 버튼 클릭 => store의 데이터로 초기화
-     */
-    const handleClickCancle = useCallback(() => {
-        setTemp({
-            ...directLink,
-            viewSDate: moment(directLink.viewSDate, DB_DATEFORMAT),
-            viewEDate: moment(directLink.viewEDate, DB_DATEFORMAT),
-        });
-
-        if (imgFileRef.current) {
-            imgFileRef.current.deleteFile();
-        }
-    }, [directLink]);
-
     useEffect(() => {
         if (linkSeq) {
             dispatch(
@@ -136,8 +121,16 @@ const DirectLinkEdit = () => {
 
     useEffect(() => {
         // 스토어에서 가져온 데이터 셋팅
-        handleClickCancle();
-    }, [handleClickCancle]);
+        setTemp({
+            ...directLink,
+            viewSDate: moment(directLink.viewSDate, DB_DATEFORMAT),
+            viewEDate: moment(directLink.viewEDate, DB_DATEFORMAT),
+        });
+
+        if (imgFileRef.current) {
+            imgFileRef.current.deleteFile();
+        }
+    }, [directLink]);
 
     useEffect(() => {
         // invalidList 처리
@@ -283,13 +276,8 @@ const DirectLinkEdit = () => {
                 </Form.Row>
             </Form>
 
-            <div className="d-flex justify-content-center">
-                <Button className="mr-3" onClick={handleClickSave}>
-                    저장
-                </Button>
-                <Button variant="dark" onClick={handleClickCancle}>
-                    취소
-                </Button>
+            <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
+                <Button onClick={handleClickSave}>저장</Button>
             </div>
         </MokaCard>
     );

@@ -8,7 +8,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.core.dps.api.menu.model.MenuParser;
+import jmnet.moka.core.dps.api.category.CategoryParser;
+import jmnet.moka.core.dps.api.menu.MenuParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,7 +182,15 @@ public class DpsApiAutoConfiguration {
 		Resource resource = patternResolver.getResource("classpath:/Menu.xml");
 		return new MenuParser(resource);
 	}
-			
+
+	@Bean(name="pcCategoryParser")
+	public CategoryParser pcCategoryParser()
+			throws ParserConfigurationException, XPathExpressionException, IOException {
+		ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
+		Resource resource = patternResolver.getResource("classpath:/CategoryDefinition.xml");
+		return new CategoryParser(resource);
+	}
+
 	@Bean(name = "periodicTaskScheduler")
 	public ThreadPoolTaskScheduler periodicScheduler() {
 		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();

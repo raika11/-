@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Validated
-@RequestMapping("/api/contents/articles")
+@RequestMapping("/api/articles")
 public class ArticleRestController {
 
     @Autowired
@@ -57,9 +57,23 @@ public class ArticleRestController {
     @GetMapping
     public ResponseEntity<?> getArticleList(@Valid @SearchParam ArticleSearchDTO search) {
 
+        //분류코드 검색설정
+        if (search.getMasterCode() != null) {
+            String masterCode = search.getMasterCode();
+
+            if (masterCode.substring(2)
+                          .equals("00000")) {
+                // 대분류검색
+                search.setMasterCode(masterCode.substring(0, 1));
+            } else if (masterCode.substring(4)
+                                 .equals("000")) {
+                // 중분류검색
+                search.setMasterCode(masterCode.substring(0, 1));
+            }
+        }
+
         // 조회(mybatis)
         List<ArticleBasicVO> returnValue = articleService.findAllArticleBasic(search);
-
 
         // 리턴값 설정
         ResultListDTO<ArticleBasicVO> resultListMessage = new ResultListDTO<>();

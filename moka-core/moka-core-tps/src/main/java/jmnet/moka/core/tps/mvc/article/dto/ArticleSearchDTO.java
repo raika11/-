@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.article.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
@@ -14,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
+import org.hibernate.validator.constraints.Length;
 
 @AllArgsConstructor
 @Setter
@@ -30,22 +33,38 @@ public class ArticleSearchDTO extends SearchDTO {
     /**
      * 매체
      */
+    @Length(max = 2, message = "{tps.article.error.length.sourceCode}")
     private String sourceCode;
 
     /**
      * 분류
      */
+    @Length(max = 8, message = "{tps.article.error.length.masterCode}")
     private String masterCode;
+
+    /**
+     * 판
+     */
+    @Pattern(regexp = "[0-9]*$", message = "{tps.article.error.pattern.pressPan}")
+    private String pressPan;
+
+    /**
+     * 면
+     */
+    @Pattern(regexp = "[0-9]*$", message = "{tps.article.error.pattern.pressMyun}")
+    private String pressMyun;
 
     /**
      * 서비스 시작일자
      */
+    @NotNull(message = "{tps.article.error.notnull.startServiceDay}")
     @DTODateTimeFormat
     private Date startServiceDay;
 
     /**
      * 서비스 종료일자
      */
+    @NotNull(message = "{tps.article.error.notnull.endServiceDay}")
     @DTODateTimeFormat
     private Date endServiceDay;
 
@@ -54,8 +73,8 @@ public class ArticleSearchDTO extends SearchDTO {
         super.setUseTotal(MokaConstants.YES);
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
-        this.sourceCode = TpsConstants.SEARCH_TYPE_ALL;
-        this.masterCode = TpsConstants.SEARCH_TYPE_ALL;
+        //        this.sourceCode = TpsConstants.SEARCH_TYPE_ALL;
+        //        this.masterCode = TpsConstants.SEARCH_TYPE_ALL;
     }
 
     /**

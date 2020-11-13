@@ -1,0 +1,1348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CategoryConditionConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CategoryConditions>
+    <!-- 정치 -->
+    <CategoryCondition Key="Politics" Term="15">
+      <MasterCodes>
+        <string>1004001</string>
+        <string>1001001</string>
+        <string>1003001</string>
+        <string>1006004</string>
+        <string>1006001</string>
+        <string>1006005</string>
+        <string>1005001</string>
+        <string>1005004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="NationalAssemblyParty" Term="15">
+      <MasterCodes>
+        <string>1003001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="CheongWaDae" Term="15">
+      <MasterCodes>
+        <string>1005001</string>
+        <string>1005004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Diplomacy" Term="15">
+      <MasterCodes>
+        <string>1006001</string>
+        <string>1006005</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="NationalDefense" Term="15">
+      <MasterCodes>
+        <string>1004001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="NorthKorea" Term="15">
+      <MasterCodes>
+        <string>1006004</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- 경제 -->
+    <CategoryCondition Key="Money" Term="15">
+      <MasterCodes>
+        <string>1508001</string>
+        <string>1601001</string>
+        <string>1603001</string>
+        <string>1101001</string>
+        <string>1102001</string>
+        <string>1105001</string>
+        <string>1105002</string>
+        <string>1105003</string>
+        <string>1105004</string>
+        <string>1105005</string>
+        <string>1105006</string>
+        <string>1105007</string>
+        <string>1106001</string>
+        <string>1107002</string>
+        <string>1108001</string>
+        <string>1109001</string>
+        <string>1103013</string>
+        <string>1104001</string>
+        <string>9902001</string>
+        <string>9902002</string>
+        <string>9902003</string>
+        <string>9902004</string>
+      </MasterCodes>
+    </CategoryCondition>
+		<CategoryCondition Key="Finance" Term="15">
+      <MasterCodes>
+        <string>1103013</string>
+				<string>1104001</string>
+      </MasterCodes>
+    </CategoryCondition>
+		<CategoryCondition Key="Labor" Term="15">
+      <MasterCodes>
+        <string>1203001</string>
+      </MasterCodes>
+    </CategoryCondition>
+		<CategoryCondition Key="Science" Term="15">
+      <MasterCodes>
+        <string>1603001</string>
+      </MasterCodes>
+    </CategoryCondition>
+		<CategoryCondition Key="GlobalEconomy" Term="15">
+      <MasterCodes>
+        <string>1102001</string>
+      </MasterCodes>
+    </CategoryCondition>
+		<CategoryCondition Key="Indusrty" Term="15">
+      <MasterCodes>
+				<string>1206012</string>
+				<string>1107002</string>
+				<string>1108001</string>
+				<string>1109001</string>
+				<string>1601001</string>
+				<string>1508001</string>
+      </MasterCodes>
+    </CategoryCondition>
+		<CategoryCondition Key="EconomicPolicy">
+			<SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+		</CategoryCondition>
+		
+    <!-- 사회 -->
+    <CategoryCondition Key="Society" Term="15">
+      <MasterCodes>
+        <string>1207002</string>
+        <string>1205006</string>
+        <string>1202001</string>
+        <string>1202007</string>
+        <string>1202014</string>
+        <string>1202015</string>
+        <string>1202016</string>
+        <string>1206002</string>
+        <string>1204001</string>
+        <string>1205001</string>
+        <string>1210007</string>
+        <string>1206004</string>
+        <string>1004003</string>
+        <string>1201001</string>
+        <string>1201006</string>
+        <string>1206003</string>
+        <string>1206005</string>
+        <string>1206012</string>
+        <string>1206020</string>
+        <string>2100001</string>
+        <string>2100002</string>
+        <string>2100004</string>
+        <string>2100005</string>
+        <string>2100006</string>
+        <string>2100007</string>
+        <string>2100011</string>
+        <string>2100012</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ProsecutionAndCourt" Term="15">
+      <MasterCodes>
+        <string>1205006</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Education" Term="15">
+      <MasterCodes>
+        <string>1202001</string>
+        <string>1202007</string>
+        <string>1202014</string>
+        <string>1202015</string>
+        <string>1202016</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Accident" Term="15">
+      <MasterCodes>
+        <string>1205001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="WelfareLabor" Term="15">
+      <MasterCodes>
+        <string>1204001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Traffic" Term="15">
+      <MasterCodes>
+        <string>1206002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Environment" Term="15">
+      <MasterCodes>
+        <string>1206004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Health" Term="15">
+      <MasterCodes>
+        <string>1207002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RegionalGroups" Term="15">
+      <MasterCodes>
+        <string>1210007</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- 국제 -->
+    <CategoryCondition Key="World" Term="180">
+      <MasterCodes>
+        <string>1301004</string>
+        <string>1301005</string>
+        <string>1301007</string>
+        <string>1301008</string>
+        <string>1301009</string>
+        <string>1301001</string>
+        <string>1301006</string>
+        <string>1301002</string>
+        <string>1301003</string>
+        <string>1313001</string>
+        <string>1302001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="America" Term="180">
+      <MasterCodes>
+        <string>1301001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="China" Term="180">
+      <MasterCodes>
+        <string>1301003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Japan" Term="180">
+      <MasterCodes>
+        <string>1301002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Europe" Term="180">
+      <MasterCodes>
+        <string>1301006</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="UsaJoongang" Term="180" UsageType="UsaJoongang"></CategoryCondition>
+    <CategoryCondition Key="WorldEtc" Term="180">
+      <MasterCodes>
+        <string>1301004</string>
+        <string>1301005</string>
+        <string>1301007</string>
+        <string>1301008</string>
+        <string>1301009</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="TopicWorld" Term="180">
+      <MasterCodes>
+        <string>1313001</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- 문화 -->
+    <CategoryCondition Key="Culture" Term="90">
+      <MasterCodes>
+        <string>1504001</string>
+        <string>1507003</string>
+        <string>1503001</string>
+        <string>1506002</string>
+        <string>1507007</string>
+        <string>1208001</string>
+        <string>1501001</string>
+        <string>2901013</string>
+        <string>3410015</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Book" Term="90">
+      <MasterCodes>
+        <string>1506002</string>
+        <string>3410015</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Perfomance" Term="90">
+      <MasterCodes>
+        <string>1507003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Art" Term="90">
+      <MasterCodes>
+        <string>1507006</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Classic" Term="90">
+      <MasterCodes>
+        <string>1507007</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Song" Term="90">
+      <MasterCodes>
+        <string>1504001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Broadcast" Term="90">
+      <MasterCodes>
+        <string>1503001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Movie" Term="90">
+      <MasterCodes>
+        <string>1502001</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- 오피니언 -->
+    <CategoryCondition Key="Opinion" Term="15">
+      <MasterCodes>
+        <string>2000000</string>
+        <string>2901002</string>
+        <string>2000002</string>
+        <string>2000001</string>
+        <string>2000005</string>
+        <string>2000007</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="EditorialColumn" Term="15" UsageType="OnlyJoongang">
+      <MasterCodes>
+        <string>2000002</string>
+        <string>2000001</string>
+        <string>2000005</string>
+        <string>2000007</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="eTextCenter">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+
+    <!-- 스포츠 -->
+    <CategoryCondition Key="Sports" Term="15">
+      <MasterCodes>
+        <string>1403001</string>
+        <string>1403002</string>
+        <string>1403003</string>
+        <string>1404001</string>
+        <string>1401001</string>
+        <string>1401003</string>
+        <string>1402001</string>
+        <string>1402002</string>
+        <string>1402009</string>
+        <string>1401004</string>
+        <string>1401005</string>
+        <string>1402006</string>
+        <string>1400000</string>
+        <string>1405001</string>
+        <string>1405002</string>
+        <string>1405005</string>
+        <string>1405006</string>
+        <string>1407001</string>
+        <string>1409004</string>
+        <string>1901002</string>
+        <string>1901022</string>
+      </MasterCodes>
+      <ExceptSourceCodes>
+        <string>d5</string>
+      </ExceptSourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Baseball" Term="15">
+      <MasterCodes>
+        <string>1401001</string>
+        <string>1401003</string>
+      </MasterCodes>
+      <ExceptSourceCodes>
+        <string>d5</string>
+      </ExceptSourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="OverseasBaseball" Term="15">
+      <MasterCodes>
+        <string>1401004</string>
+        <string>1401005</string>
+      </MasterCodes>
+      <ExceptSourceCodes>
+        <string>d5</string>
+      </ExceptSourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Soccer" Term="15">
+      <MasterCodes>
+        <string>1402001</string>
+        <string>1402002</string>
+        <string>1402009</string>
+      </MasterCodes>
+      <ExceptSourceCodes>
+        <string>d5</string>
+      </ExceptSourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="OverseasSoccer" Term="15">
+      <MasterCodes>
+        <string>1402006</string>
+      </MasterCodes>
+      <ExceptSourceCodes>
+        <string>d5</string>
+      </ExceptSourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="BasketballAndVolleyball" Term="15">
+      <MasterCodes>
+        <string>1403001</string>
+        <string>1403002</string>
+        <string>1403003</string>
+        <string>1404001</string>
+      </MasterCodes>
+      <ExceptSourceCodes>
+        <string>d5</string>
+      </ExceptSourceCodes>
+    </CategoryCondition>
+
+    <!-- 연예 -->
+    <CategoryCondition Key="Star" Term="15">
+      <ServiceCodes>
+        <string>15</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="StarNewly" Term="15">
+      <MasterCodes>
+        <string>1503001</string>
+        <string>1502001</string>
+        <string>1503001</string>
+        <string>1504001</string>
+        <string>1503005</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- Week&+ -->
+    <CategoryCondition Key="Travel">
+      <MasterCodes>
+        <string>2705001</string>
+        <string>2704001</string>
+        <string>2701031</string>
+        <string>2703001</string>
+        <string>2702001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="TravelDomestic">
+      <MasterCodes>
+        <string>2701031</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="TravelOverseas">
+      <MasterCodes>
+        <string>2702001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="TravelNews">
+      <MasterCodes>
+        <string>2703001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="WeekEnd">
+      <MasterCodes>
+        <string>2704001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="TravelJ">
+      <MasterCodes>
+        <string>2705001</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- 평양& 통일무지개 -->
+    <CategoryCondition Key="Nk" Term="365">
+      <MasterCodes>
+        <string>1009002</string>
+        <string>1009003</string>
+        <string>1009005</string>
+        <string>1009004</string>
+        <string>1009001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="PyongyangOdyssey" Term="365">
+      <MasterCodes>
+        <string>1009001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="NewUnifiedWealthofNations" Term="365">
+      <MasterCodes>
+        <string>1009002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="NkIng" Term="365">
+      <MasterCodes>
+        <string>1009003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="NkBook" Term="365">
+      <MasterCodes>
+        <string>1009004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="NkPhoto" Term="180">
+      <ContentTypes>
+        <string>Photo</string>
+      </ContentTypes>
+      <MasterCodes>
+        <string>1009005</string>
+				<string>1006005</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- 더오래 -->
+    <CategoryCondition Key="Retirement" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111005</string>
+        <string>1111003</string>
+        <string>1111006</string>
+        <string>1111001</string>
+        <string>1111004</string>
+        <string>1111007</string>
+        <string>1111002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RetirementCate" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111005</string>
+        <string>1111003</string>
+        <string>1111006</string>
+        <string>1111001</string>
+        <string>1111004</string>
+        <string>1111007</string>
+        <string>1111002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RetirementCommon" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RetirementColumn" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RetirementInvestment" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RetirementHealthAndLife" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RetirementCareerRemodeling" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111005</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RetirementCountryHealing" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111006</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RetirementReturnFarm" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111007</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+
+    <CategoryCondition Key="RetirementNews" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111005</string>
+        <string>1111003</string>
+        <string>1111006</string>
+        <string>1111001</string>
+        <string>1111004</string>
+        <string>1111007</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="RetirementPhoto" Term="180" UsageType="Retirement">
+      <MasterCodes>
+        <string>1111006</string>
+        <string>1111007</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- 김민석의 Mr.밀리터리 -->
+    <CategoryCondition Key="Mm" Term="30" UsageType="Joongang">
+      <MasterCodes>
+        <string>1004007</string>
+        <string>1004008</string>
+        <string>1004009</string>
+        <string>1004011</string>
+        <string>1004010</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MmFocusinside" Term="30" UsageType="Joongang">
+      <MasterCodes>
+        <string>1004007</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MmHotnews" Term="30" UsageType="Joongang">
+      <MasterCodes>
+        <string>1004008</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MmWatchcon" Term="30" UsageType="Joongang">
+      <MasterCodes>
+        <string>1004009</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MmWeaponstory" Term="30" UsageType="Joongang">
+      <MasterCodes>
+        <string>1004010</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MmInterview" Term="30" UsageType="Joongang">
+      <MasterCodes>
+        <string>1004011</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- 카툰 -->
+    <CategoryCondition Key="Cartoon">
+      <MasterCodes>
+        <string>2901001</string>
+        <string>2901002</string>
+        <string>2901003</string>
+        <string>2901004</string>
+        <string>2901005</string>
+        <string>2901006</string>
+        <string>2901007</string>
+        <string>2901008</string>
+        <string>2901009</string>
+        <string>2901010</string>
+        <string>2901011</string>
+        <string>2901013</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Parkyongseok">
+      <MasterCodes>
+        <string>2901002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="CartoonDiary">
+      <MasterCodes>
+        <string>2901007</string>
+        <string>2901008</string>
+        <string>2901009</string>
+        <string>2901010</string>
+        <string>2901011</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="LivingThing">
+      <MasterCodes>
+        <string>2901008</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="LookLaugh">
+      <MasterCodes>
+        <string>2901007</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="LoveIs">
+      <MasterCodes>
+        <string>2901010</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="OneCommas">
+      <MasterCodes>
+        <string>2901011</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="WhatIthink">
+      <MasterCodes>
+        <string>2901009</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="CodingWorld">
+      <MasterCodes>
+        <string>2901006</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Huhyoungman">
+      <MasterCodes>
+        <string>2901001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Kimjaehoon">
+      <MasterCodes>
+        <string>2901004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Schooled">
+      <MasterCodes>
+        <string>2901005</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Sexpia">
+      <MasterCodes>
+        <string>2901012</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="WitchesDiary">
+      <MasterCodes>
+        <string>2901003</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!--보도자료-->
+    <CategoryCondition Key="ReportMeterial" UsageType="Joongang">
+      <ServiceCodes>
+        <string>2300</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialBook" UsageType="Joongang">
+      <MasterCodes>
+        <string>2307002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialEducation" UsageType="Joongang">
+      <MasterCodes>
+        <string>2301001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialRealEstate" UsageType="Joongang">
+      <MasterCodes>
+        <string>2302002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialHealth" UsageType="Joongang">
+      <MasterCodes>
+        <string>2304001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialIt" UsageType="Joongang">
+      <MasterCodes>
+        <string>2305001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialMarket" UsageType="Joongang">
+      <MasterCodes>
+        <string>2306001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialCulture" UsageType="Joongang">
+      <MasterCodes>
+        <string>2309001</string>
+        <string>2309002</string>
+        <string>2309003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialLifeTrend" UsageType="Joongang">
+      <MasterCodes>
+        <string>2303003</string>
+        <string>2308001</string>
+        <string>2308002</string>
+        <string>2308003</string>
+        <string>2308004</string>
+        <string>2308005</string>
+        <string>2308006</string>
+        <string>2308007</string>
+        <string>2308008</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialStock" UsageType="Joongang">
+      <MasterCodes>
+        <string>2302004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ReportMeterialDisplay" UsageType="Joongang">
+      <MasterCodes>
+        <string>2309004</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!--J플러스-->
+    <CategoryCondition Key="JPlus">
+      <ServiceCodes>
+        <string>32</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="JPlusCurentEvents">
+      <ServiceCodes>
+        <string>3210</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="JPlusLife">
+      <ServiceCodes>
+        <string>3220</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="JPlusBlogNews">
+      <ServiceCodes>
+        <string>3230</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="JPlusPersonal">
+      <ServiceCodes>
+        <string>3240</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <!-- 대학평가 -->
+    <CategoryCondition Key="University">
+      <MasterCodes>
+        <string>1202007</string>
+        <string>1202015</string>
+        <string>1202016</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="UniNews">
+      <MasterCodes>
+        <string>1202007</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Evaluation">
+      <MasterCodes>
+        <string>1202015</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Exam">
+      <MasterCodes>
+        <string>1202016</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <!-- //대학평가 -->
+    <!-- 매거진M -->
+    <CategoryCondition Key="MagazineM">
+      <MasterCodes>
+        <string>1510004</string>
+        <string>1502001</string>
+        <string>1510003</string>
+        <string>1510002</string>
+        <string>1510001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MagazineMNews">
+      <MasterCodes>
+        <string>1502001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MagazineMTheater">
+      <MasterCodes>
+        <string>1510001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MagazineMInterview">
+      <MasterCodes>
+        <string>1510002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MagazineMSpecialM">
+      <MasterCodes>
+        <string>1510003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="MagazineMReading">
+      <MasterCodes>
+        <string>1510004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <!-- //매거진M -->
+    
+    <!-- Sunday -->
+    <CategoryCondition Key="Sunday" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <ServiceCodes>
+        <string>34</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayNews" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <ServiceCodes>
+        <string>3410</string>
+        <string>2300</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundaySubNews" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410001</string>
+        <string>2301001</string>
+        <string>2306001</string>
+        <string>2308001</string>
+        <string>2308002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayHealth" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410002</string>
+        <string>2308003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundaySports" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayInterview" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayPeople" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410005</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayWideShot" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410006</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayFocus" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410007</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SpecialReport" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410008</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayLeisure" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410009</string>
+        <string>2304001</string>
+        <string>2308004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayFoodTravel" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410010</string>
+        <string>3410011</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayLife" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410012</string>
+        <string>2303003</string>
+        <string>2305001</string>
+        <string>2308005</string>
+        <string>2308007</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayCulture" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410013</string>
+        <string>2308006</string>
+        <string>2308008</string>
+        <string>2309001</string>
+        <string>2309002</string>
+        <string>2309003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayScience" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410014</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayBooks" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3410015</string>
+        <string>2307002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayMoney" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3420001</string>
+        <string>2302002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayOpinion" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <ServiceCodes>
+        <string>3430</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayViewOpinion" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3430001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayColumn" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3430002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ForeignCartoon" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <MasterCodes>
+        <string>3430003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayMagazine" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <ServiceCodes>
+        <string>3440</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="SundayVolume" UsageType="OnlySunday">
+      <SourceCodes>
+        <string>61</string>
+      </SourceCodes>
+      <ServiceCodes>
+        <string>34</string>
+      </ServiceCodes>
+    </CategoryCondition>
+    <!-- //Sunday -->
+
+    <!-- 아워히스토리 -->
+    <CategoryCondition Key="OurHistory">
+      <MasterCodes>
+        <string>3301001</string>
+        <string>3302001</string>
+        <string>3303001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="CardNews">
+      <MasterCodes>
+        <string>3303001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <!-- //아워히스토리 -->
+
+    <!-- 리셋코리아 -->
+    <CategoryCondition Key="ResetKorea">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaNews">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaEconomy">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaEducation">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaDefense">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaRevolution">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaCulture">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaWelfare">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaSecurity">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaTrade">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaPolitics">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaCorporate">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaCivil">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaLabor">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaUnification">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaEnvironment">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaInvestigation">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="ResetKoreaAmendment">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <!-- //리셋코리아 -->
+    <!-- 경선 2017 -->
+    <CategoryCondition Key="PreElection2017 ">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="TheMinjoo">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="LibertyKorea">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="People21">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Bareun">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <!-- //경선 2017 -->
+    <!-- 대선 2017 -->
+    <CategoryCondition Key="Election2017">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <!-- //대선 2017 -->
+
+    <!-- 피플 -->
+    <CategoryCondition Key="TodayPeople">
+      <MasterCodes>
+        <string>1209004</string>
+        <string>1209002</string>
+        <string>1209003</string>
+        <string>1209001</string>
+        <string>1209005</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="TodayPeopleRoom">
+      <MasterCodes>
+        <string>1209002</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="TodayPeoplePersonnel">
+      <MasterCodes>
+        <string>1209003</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="TodayPeopleDeath">
+      <MasterCodes>
+        <string>1209004</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <!-- //피플 -->
+
+    <!-- 라이프스타일 -->
+    <CategoryCondition Key="LifeStyle" UsageType="OnlyJoongang">
+      <MasterCodes>
+        <string>3502001</string>
+        <string>3501001</string>
+        <string>3503001</string>
+        <string>3505001</string>
+        <string>3504001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Fashion" UsageType="OnlyJoongang">
+      <MasterCodes>
+        <string>3501001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Taste" UsageType="OnlyJoongang">
+      <MasterCodes>
+        <string>3502001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Luxury" UsageType="OnlyJoongang">
+      <MasterCodes>
+        <string>3503001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Beauty" UsageType="OnlyJoongang">
+      <MasterCodes>
+        <string>3504001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <CategoryCondition Key="Living" UsageType="OnlyJoongang">
+      <MasterCodes>
+        <string>3505001</string>
+      </MasterCodes>
+    </CategoryCondition>
+
+    <!-- 퓨쳐앤잡 -->
+    <CategoryCondition Key="FutureJob">
+      <SourceCodes>
+        <string>1</string>
+        <string>3</string>
+        <string>61</string>
+      </SourceCodes>
+    </CategoryCondition>
+    <!-- //퓨쳐앤잡 -->
+    <!-- 글로벌 -->
+    <CategoryCondition Key="Voomvoom">
+      <MasterCodes>
+        <string>3601001</string>
+      </MasterCodes>
+    </CategoryCondition>
+    <!-- //글로벌 -->
+		<!-- 중앙 글로벌 머니 -->
+		<CategoryCondition Key="Gmoney" UsageType="Joongang">
+			<MasterCodes>
+				<string>9902001</string>
+				<string>9902002</string>
+				<string>9902003</string>
+				<string>9902004</string>
+			</MasterCodes>
+		</CategoryCondition>
+		<CategoryCondition Key="GmoneyMoneyNews" UsageType="Joongang">
+			<MasterCodes>
+				<string>9902001</string>
+			</MasterCodes>
+		</CategoryCondition>
+		<CategoryCondition Key="GmoneyBusiness" UsageType="Joongang">
+			<MasterCodes>
+				<string>9902002</string>
+			</MasterCodes>
+		</CategoryCondition>
+		<CategoryCondition Key="GmoneyInterview" UsageType="Joongang">
+			<MasterCodes>
+				<string>9902003</string>
+			</MasterCodes>
+		</CategoryCondition>
+		<CategoryCondition Key="GmoneyBriefing" UsageType="Joongang">
+			<MasterCodes>
+				<string>9902004</string>
+			</MasterCodes>
+		</CategoryCondition>
+		<!-- //중앙 글로벌 머니 -->
+  </CategoryConditions>
+</CategoryConditionConfig>

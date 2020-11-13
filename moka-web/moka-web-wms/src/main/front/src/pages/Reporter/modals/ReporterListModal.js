@@ -7,6 +7,7 @@ import { initialState, changeSearchOption, GET_REPORTER_LIST_MODAL, getReporterL
 import { columnDefs } from './ReporterModalAgGridColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import Button from 'react-bootstrap/Button';
+import bg from '@assets/images/bg.jpeg';
 export const { searchTypeList } = initialState;
 
 const propTypes = {
@@ -69,7 +70,7 @@ const ReporterMgrSearchModal = (props) => {
                 body.list.map((data) => ({
                     ...data,
                     onClickSave,
-                    //autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '수동형',
+                    repImg: data.repImg || bg,
                 })),
             );
             setTotal(body.totalCnt);

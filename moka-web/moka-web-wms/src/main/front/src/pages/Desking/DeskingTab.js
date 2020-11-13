@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { MokaCardTabs, MokaIconTabs, MokaIcon } from '@components';
 import ArticleList from '@pages/Article/ArticleList';
 
 const DeskingTabs = () => {
     const [activeTabIdx, setActiveTabIdx] = useState(0);
+
+    const articleRef = useRef(null);
 
     // 순서 반대로
     return (
@@ -11,7 +13,20 @@ const DeskingTabs = () => {
             onSelectNav={(idx) => setActiveTabIdx(idx)}
             tabWidth={840}
             className="flex-fill"
-            tabs={[<MokaCardTabs width={840} fill tabs={[<ArticleList className="px-3 pb-3 pt-2" />]} tabNavs={['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']} />]}
+            tabs={[
+                // 기사보기
+                <MokaCardTabs
+                    width={840}
+                    fill
+                    tabs={[
+                        // 기사 조회 컴포넌트
+                        <ArticleList className="px-3 pb-3 pt-2" ref={articleRef} />,
+                        // 영상 기사 조회 컴포넌트
+                        // <ArticleList className="px-3 pb-3 pt-2" />,
+                    ]}
+                    tabNavs={['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']}
+                />,
+            ]}
             tabNavWidth={48}
             tabNavPosition="right"
             tabNavs={[

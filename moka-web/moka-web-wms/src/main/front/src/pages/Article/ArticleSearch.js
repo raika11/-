@@ -1,29 +1,118 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import moment from 'moment';
+import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultArticleSearchType } from '@pages/commons';
+import { initialState, getArticleList, changeSearchOption } from '@store/article';
 
 /**
  * 기사 검색
  */
 const ArticleSearch = () => {
+    const dispatch = useDispatch();
+    const { storeSearch } = useSelector((store) => ({
+        storeSearch: store.article.search,
+    }));
+
+    // state
+    const [search, setSearch] = useState(initialState.search);
+    const [searchDisabled, setSearchDisabled] = useState(false);
+
+    /**
+     * 입력값 변경
+     * @param {object} e Event
+     */
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
+
+        if (name === 'searchType') {
+            setSearch({ ...search, searchType: value });
+        } else if (name === 'keyword') {
+            setSearch({ ...search, keyword: value });
+        } else if (name === 'pressMyun') {
+            setSearch({ ...search, pressMyun: value });
+        } else if (name === 'pressPan') {
+            setSearch({ ...search, pressPan: value });
+        }
+    };
+
+    /**
+     * 시작일 변경
+     * @param {object} date moment object
+     */
+    const handleChangeSDate = (date) => {
+        if (typeof date === 'object') {
+            setSearch({ ...search, startServiceDay: date });
+        }
+    };
+
+    /**
+     * 종료일 변경
+     * @param {object} date moment object
+     */
+    const handleChangeEDate = (date) => {
+        if (typeof date === 'object') {
+            setSearch({ ...search, endServiceDay: date });
+        }
+    };
+
+    /**
+     * 분류 변경
+     * @param {object} data data
+     */
+    const handleChangeMasterCode = (data) => {
+        console.log(data);
+    };
+
+    useEffect(() => {
+        setSearch({
+            ...storeSearch,
+            startServiceDay: moment(storeSearch.startServiceDay, DB_DATEFORMAT),
+            endServiceDay: moment(storeSearch.endServiceDay, DB_DATEFORMAT),
+        });
+    }, [storeSearch]);
+
+    useEffect(() => {
+        /**
+         * 마운트 시 기사목록 최초 로딩
+         *
+         * 시작일 : 현재 시간(시분초o)
+         * 종료일 : 현재 시간(시분초o) - 24시간
+         */
+        const date = new Date();
+        dispatch(
+            getArticleList(
+                changeSearchOption({
+                    ...storeSearch,
+                    startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
+                    endServiceDay: moment(date).format(DB_DATEFORMAT),
+                    page: 0,
+                }),
+            ),
+        );
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
+
     return (
         <Form>
             <Form.Row className="d-flex mb-2">
                 {/* 시작일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} />
+                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startServiceDay} />
                 </div>
 
                 {/* 종료일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} />
+                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endServiceDay} />
                 </div>
 
                 {/* 검색 조건 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="select" disabled>
+                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         {defaultArticleSearchType.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
                                 {searchType.name}
@@ -33,28 +122,53 @@ const ArticleSearch = () => {
                 </div>
 
                 {/* 키워드 */}
-                <MokaSearchInput variant="dark" className="flex-fill" disabled />
+                <MokaSearchInput variant="dark" className="flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} />
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-between">
                 <div className="d-flex">
+                    {/* 분류 */}
                     <div style={{ width: 186 }} className="mr-2">
-                        <MokaInput as="select" disabled>
-                            <option hidden>분류 전체</option>
-                        </MokaInput>
+                        <MokaInput
+                            as="autocomplete"
+                            name="masterCode"
+                            value={search.masterCode}
+                            onChange={handleChangeMasterCode}
+                            placeholder="분류 선택"
+                            inputProps={{ options: [] }}
+                        />
                     </div>
 
+                    {/* 매체 */}
                     <div style={{ width: 186 }} className="mr-2">
-                        <MokaInput as="select" disabled>
+                        <MokaInput as="select" name="sourceCode" value={search.sourceCode} onChange={handleChangeValue}>
                             <option hidden>매체 전체</option>
                         </MokaInput>
                     </div>
 
+                    {/* 면 */}
                     <div style={{ width: 120 }} className="mr-2">
-                        <MokaInputLabel label="면" labelWidth={45} className="mb-0" disabled />
+                        <MokaInputLabel
+                            label="면"
+                            labelWidth={45}
+                            className="mb-0"
+                            name="pressMyun"
+                            value={search.pressMyun}
+                            onChange={handleChangeValue}
+                            disabled={searchDisabled}
+                        />
                     </div>
 
+                    {/* 판 */}
                     <div style={{ width: 120 }} className="mr-2">
-                        <MokaInputLabel label="판" labelWidth={45} className="mb-0" disabled />
+                        <MokaInputLabel
+                            label="판"
+                            labelWidth={45}
+                            className="mb-0"
+                            name="pressPan"
+                            value={search.pressPan}
+                            onChange={handleChangeValue}
+                            disabled={searchDisabled}
+                        />
                     </div>
                 </div>
 

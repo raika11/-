@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel } from '@components';
+import { CodeAutocomplete } from '@pages/commons';
 
 const DetailSchForm = (props) => {
     const { component, setComponent, available } = props;
@@ -38,7 +39,14 @@ const DetailSchForm = (props) => {
                                 </Col>
                                 {/* 코드타입 */}
                                 <Col xs={10} className="p-0">
-                                    <MokaInputLabel
+                                    <CodeAutocomplete
+                                        label="분류"
+                                        labelWidth={45}
+                                        className="mb-0"
+                                        value={component.schCodeId}
+                                        onChange={(value) => setComponent({ ...component, schCodeId: value })}
+                                    />
+                                    {/* <MokaInputLabel
                                         label="분류"
                                         labelWidth={45}
                                         className="mb-0"
@@ -46,7 +54,7 @@ const DetailSchForm = (props) => {
                                         value={component.schCodeId}
                                         onChange={(value) => setComponent({ ...component, schCodeId: value })}
                                         inputProps={{ options: [] }}
-                                    />
+                                    /> */}
                                 </Col>
                             </Form.Row>
                         </Col>

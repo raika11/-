@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
-import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
+import { MODAL_PAGESIZE_OPTIONS, API_BASE_URL } from '@/constants';
 import { MokaModal, MokaInput, MokaSearchInput, MokaTable, MokaThumbTable, MokaTableTypeButton } from '@components';
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { initialState, GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
@@ -38,7 +38,7 @@ const TemplateListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected } = props;
     const dispatch = useDispatch();
 
-    const { latestDomainId, domainList, tpZoneRows, tpSizeRows, search, total, list, error, loading } = useSelector((store) => ({
+    const { latestDomainId, domainList, tpZoneRows, tpSizeRows, search, total, list, error, loading, UPLOAD_PATH_URL } = useSelector((store) => ({
         latestDomainId: store.auth.latestDomainId,
         domainList: store.auth.domainList,
         tpZoneRows: store.codeMgt.tpZoneRows,
@@ -48,6 +48,7 @@ const TemplateListModal = (props) => {
         list: store.template.list,
         error: store.template.error,
         loading: store.loading[GET_TEMPLATE_LIST],
+        UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
     }));
 
     // state
@@ -180,17 +181,23 @@ const TemplateListModal = (props) => {
         // rowData 변경
         if (list.length > 0) {
             setRowData(
-                list.map((data) => ({
-                    ...data,
-                    id: data.templateSeq,
-                    name: data.templateName,
-                    thumb: data.templateThumb,
-                })),
+                list.map((data) => {
+                    let thumb = data.templateThumb;
+                    if (thumb && thumb !== '') {
+                        thumb = `${API_BASE_URL}${UPLOAD_PATH_URL}/${thumb}`;
+                    }
+                    return {
+                        ...data,
+                        id: data.templateSeq,
+                        name: data.templateName,
+                        thumb,
+                    };
+                }),
             );
         } else {
             setRowData([]);
         }
-    }, [list]);
+    }, [UPLOAD_PATH_URL, list]);
 
     useEffect(() => {
         if (show) {

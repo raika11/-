@@ -1,24 +1,14 @@
 import React, { Suspense, useEffect, useCallback, forwardRef, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import defaultOptions from './options';
-const MonacoEditor = React.lazy(() => import('./MonacoEditor'));
+import { propTypes as editorPropTypes } from './MonacoEditor';
 
+const MonacoEditor = React.lazy(() => import('./MonacoEditor'));
 let errorDecoId = 0;
 
-const propTypes = {
-    /**
-     * language
-     */
-    language: PropTypes.oneOf(['html', 'javascript', 'css', 'json', 'xml']),
-    /**
-     * 에디터 생성 시에 기본값으로 들어가는 value
-     * => defaultValue가 변경되면 에디터가 다시 create된다!
-     */
-    defaultValue: PropTypes.string,
-    /**
-     * 에디터가 create된 상태에서, 단순히 에디터의 내용만 바꿈
-     */
-    value: PropTypes.string,
+export const propTypes = {
+    ...editorPropTypes,
+    editorDidMount: undefined,
     /**
      * 에러표시 객체
      */
@@ -53,7 +43,12 @@ const defaultProps = {
  * - tag 삽입 처리
  */
 const MokaEditorCore = forwardRef((props, ref) => {
-    const { defaultValue, value, language, options, onBlur, error, tag } = props;
+    // editor props
+    const { defaultValue, value, language, options, theme } = props;
+
+    // etc
+    const { onBlur, error, tag } = props;
+
     const editorRef = useRef(null);
     useImperativeHandle(ref, () => editorRef.current);
 
@@ -160,6 +155,7 @@ const MokaEditorCore = forwardRef((props, ref) => {
                 ref={editorRef}
                 defaultValue={defaultValue}
                 value={value}
+                theme={theme}
                 language={language}
                 options={{ ...defaultOptions, ...options, glyphMargin: error.line }}
                 editorDidMount={editorDidMount}

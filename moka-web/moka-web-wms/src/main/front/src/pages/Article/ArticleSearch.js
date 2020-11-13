@@ -139,11 +139,12 @@ const ArticleSearch = () => {
                     </div>
 
                     {/* 면 */}
-                    <div style={{ width: 80 }} className="mr-2">
+                    <div style={{ width: 85 }} className="mr-2">
                         <MokaInputLabel
                             label="면"
                             labelWidth={25}
                             className="mb-0"
+                            inputClassName="ft-12"
                             name="pressMyun"
                             value={search.pressMyun}
                             onChange={handleChangeValue}
@@ -152,11 +153,12 @@ const ArticleSearch = () => {
                     </div>
 
                     {/* 판 */}
-                    <div style={{ width: 80 }} className="mr-2">
+                    <div style={{ width: 85 }} className="mr-2">
                         <MokaInputLabel
                             label="판"
                             labelWidth={25}
                             className="mb-0"
+                            inputClassName="ft-12"
                             name="pressPan"
                             value={search.pressPan}
                             onChange={handleChangeValue}

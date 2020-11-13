@@ -80,7 +80,6 @@ const DirectLinkAgGrid = () => {
 
             <MokaTable
                 agGridHeight={650}
-                // rowHeight={50}
                 columnDefs={columnDefs}
                 // rowData={rowData}
                 // 예제 데이터이므로 실제 데이터 연결 시 아래는 삭제하시고, 윗 줄 주석 제거하여 사용하세요

@@ -110,7 +110,7 @@ body {
     @include border-radius($card-border-radius);
 
     .nav-tabs {
-        padding: 0 $card-spacer-x;
+        padding: 0 map-get($spacers, 3);
         width: 100%;
     }
 

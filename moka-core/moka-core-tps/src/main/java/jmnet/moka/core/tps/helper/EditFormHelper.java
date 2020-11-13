@@ -195,7 +195,7 @@ public class EditFormHelper {
                 .getParts()
                 .stream()
                 .filter(part -> part
-                        .getItemId()
+                        .getPartId()
                         .equals(partId))
                 .findFirst()
                 .orElseThrow(() -> new MokaException(EditFormHelper.class.getName()));

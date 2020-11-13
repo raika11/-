@@ -1,6 +1,6 @@
 .react-select-container {
     .react-select__control {
-        min-height: auto;
+        min-height: 31px;
 
         &--is-focused,
         &--is-menu-open,
@@ -13,12 +13,22 @@
     }
 
     .react-select__value-container {
-        padding: $input-padding-y $input-padding-x;
+        // padding: $input-padding-y $input-padding-x;
+        padding: 3px $input-padding-x 1px $input-padding-x;
+
+        .react-select__placeholder {
+            margin: 0px;
+        }
 
         > div {
             padding-top: 0;
             padding-bottom: 0;
-            margin: 1px;
+            margin: 0;
+        }
+
+        .react-select__multi-value {
+            margin-right: 2px;
+            margin-bottom: 2px;
         }
     }
 

@@ -2,8 +2,10 @@ import { all } from 'redux-saga/effects';
 
 import appSaga from '@store/app/appSaga';
 import authSaga from '@store/auth/authSaga';
+import articleSaga from '@store/article/articleSaga';
 import domainSaga from '@store/domain/domainSaga';
 import templateSaga from '@store/template/templateSaga';
+import codeSaga from '@store/code/codeSaga';
 import codeMgtSaga from '@store/codeMgt/codeMgtSaga';
 import reservedSaga from '@store/reserved/reservedSaga';
 import datasetdSaga from '@store/dataset/datasetSaga';
@@ -23,8 +25,10 @@ export default function* rootSaga() {
     yield all([
         appSaga(),
         authSaga(),
+        articleSaga(),
         domainSaga(),
         templateSaga(),
+        codeSaga(),
         codeMgtSaga(),
         reservedSaga(),
         datasetdSaga(),

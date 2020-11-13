@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
@@ -81,6 +82,7 @@ public class EditForm extends BaseAudit implements Serializable {
      */
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "editForm", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OrderBy("partSeq")
     private Set<EditFormPart> editFormParts = new LinkedHashSet<EditFormPart>();
 
 }

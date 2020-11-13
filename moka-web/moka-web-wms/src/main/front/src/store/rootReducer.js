@@ -5,8 +5,10 @@ import app from '@store/app/appReducer';
 import loading from '@store/loading/loadingReducer';
 import layout from '@store/layout/layoutReducer';
 import auth from '@store/auth/authReducer';
+import article from '@store/article/articleReducer';
 import domain from '@store/domain/domainReducer';
 import template from '@store/template/templateReducer';
+import code from '@store/code/codeReducer';
 import codeMgt from '@store/codeMgt/codeMgtReducer';
 import reserved from '@store/reserved/reservedReducer';
 import dataset from '@store/dataset/datasetReducer';
@@ -29,8 +31,10 @@ export default combineReducers({
     loading,
     layout,
     auth,
+    article,
     domain,
     template,
+    code,
     codeMgt,
     reserved,
     dataset,

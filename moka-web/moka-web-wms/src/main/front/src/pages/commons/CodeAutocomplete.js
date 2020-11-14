@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MokaInputLabel } from '@components';
 import { initialState, getCodeKornameList, changeKornameSearchOption, GET_CODE_KORNAME_LIST } from '@store/code';
+import CodeListModal from './CodeListModal';
 
 const propTypes = {
     /**
@@ -36,13 +37,14 @@ const propTypes = {
 };
 const defaultProps = {
     isMulti: false,
+    searchIcon: true,
 };
 
 /**
  * 기사 분류 데이터를 가져오는 자동완성
  */
 const CodeAutocomplete = forwardRef((props, ref) => {
-    const { label, labelWidth, className, value, onChange, isMulti, placeholder } = props;
+    const { label, labelWidth, className, value, onChange, isMulti, placeholder, searchIcon } = props;
     const dispatch = useDispatch();
 
     const { storeSearch, list, loading } = useSelector((store) => ({
@@ -51,9 +53,11 @@ const CodeAutocomplete = forwardRef((props, ref) => {
         loading: store.loading[GET_CODE_KORNAME_LIST],
     }));
 
+    // state
     const [search, setSearch] = useState(initialState.korname.search);
     const [defaultValue, setDefaultValue] = useState(null);
     const [options, setOptions] = useState([]);
+    const [modalShow, setModalShow] = useState(false);
 
     const handleChangeValue = (value) => {
         if (onChange) {
@@ -62,6 +66,22 @@ const CodeAutocomplete = forwardRef((props, ref) => {
             } else {
                 onChange(value.value);
             }
+        }
+    };
+
+    const handleClickSearchIcon = () => {
+        setModalShow(!modalShow);
+    };
+
+    /**
+     * 코드목록 모달에서 등록 버튼 클릭
+     */
+    const handleClickSave = (code) => {
+        const findOp = options.find((op) => String(op.value) === String(code.masterCode));
+        if (findOp) {
+            setDefaultValue(findOp);
+        } else {
+            setDefaultValue(null);
         }
     };
 
@@ -116,18 +136,21 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     }, [isMulti, options, value]);
 
     return (
-        <MokaInputLabel
-            ref={ref}
-            label={label}
-            as="autocomplete"
-            id="code-auto-complete"
-            labelWidth={labelWidth}
-            className={className}
-            value={defaultValue}
-            placeholder={placeholder}
-            onChange={handleChangeValue}
-            inputProps={{ options, isMulti, isLoading: loading }}
-        />
+        <React.Fragment>
+            <MokaInputLabel
+                ref={ref}
+                label={label}
+                as="autocomplete"
+                id="code-auto-complete"
+                labelWidth={labelWidth}
+                className={className}
+                value={defaultValue}
+                placeholder={placeholder}
+                onChange={handleChangeValue}
+                inputProps={{ options, isMulti, isLoading: loading, searchIcon: searchIcon, onClickSearchIcon: handleClickSearchIcon }}
+            />
+            <CodeListModal show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} />
+        </React.Fragment>
     );
 });
 

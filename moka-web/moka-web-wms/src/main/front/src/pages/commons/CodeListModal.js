@@ -5,7 +5,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import { MokaModal } from '@components';
-import { getCodeServiceList, getCodeSectionList, getCodeContentList } from '@store/code';
+import {
+    initialState,
+    getCodeServiceList,
+    getCodeSectionList,
+    changeSectionSearchOption,
+    getCodeContentList,
+    changeContentSearchOption,
+    clearServiceList,
+    clearSectionList,
+    clearContentList,
+} from '@store/code';
 
 const propTypes = {
     /**
@@ -33,21 +43,21 @@ const propTypes = {
     /**
      * 적용 버튼 클릭이벤트
      */
-    onOk: PropTypes.func,
+    onSave: PropTypes.func,
     /**
      * 취소 버튼 클릭이벤트
      */
     onCancel: PropTypes.func,
 };
 const defaultProps = {
-    title: '',
+    title: '기사분류 선택',
 };
 
 /**
  * 기사 분류 코드 선택 모달
  */
 const CodeListModal = (props) => {
-    const { show, onHide, title, buttons, onOk, onCancel, ...rest } = props;
+    const { show, onHide, title, buttons, onSave, onCancel, ...rest } = props;
 
     const dispatch = useDispatch();
     const { serviceList, sectionList, contentList } = useSelector((store) => ({
@@ -61,36 +71,6 @@ const CodeListModal = (props) => {
     const [selectedSection, setSelectedSection] = useState(null);
     const [selectedContent, setSelectedContent] = useState(null);
 
-    // 대분류 리스트 조회
-    useEffect(() => {
-        dispatch(getCodeServiceList());
-    }, [dispatch]);
-
-    // 중분류 리스트 조회
-    // useEffect(() => {
-    //     setSCodeList([]);
-    //     setSelectedContent(null);
-
-    //     if (selectedService) {
-    //         const regex = new RegExp(`(${selectedService.largeCodeId})\\d{2}(000)`);
-    //         setMCodeList(codeList.resultInfo.body.list.list.filter((code) => regex.test(code.codeId) && code.middleCodeId !== '00'));
-    //     } else {
-    //         setMCodeList([]);
-    //         setSelectedSection(null);
-    //     }
-    // }, [selectedService]);
-
-    // // 소분류 리스트 조회
-    // useEffect(() => {
-    //     if (selectedSection) {
-    //         const regex = new RegExp(`(${selectedSection.largeCodeId})${selectedSection.middleCodeId}\\d{3}`);
-    //         setSCodeList(codeList.resultInfo.body.list.list.filter((code) => regex.test(code.codeId) && code.codeId.slice(-3) !== '000'));
-    //     } else {
-    //         setSCodeList([]);
-    //         setSelectedContent(null);
-    //     }
-    // }, [selectedSection]);
-
     /**
      * 대분류 변경 시
      */
@@ -103,7 +83,7 @@ const CodeListModal = (props) => {
      */
     const selectMCode = useCallback(
         (codeData, e) => {
-            if (!selectedSection || selectedSection.codeId !== codeData.codeId) {
+            if (!selectedSection || selectedSection.masterCode !== codeData.masterCode) {
                 setSelectedSection(codeData);
             } else {
                 setSelectedSection(null);
@@ -119,7 +99,7 @@ const CodeListModal = (props) => {
      */
     const selectSCode = useCallback(
         (codeData, e) => {
-            if (!selectedContent || selectedContent.codeId !== codeData.codeId) {
+            if (!selectedContent || selectedContent.masterCode !== codeData.masterCode) {
                 setSelectedContent(codeData);
             } else {
                 setSelectedContent(null);
@@ -130,47 +110,117 @@ const CodeListModal = (props) => {
     );
 
     /**
+     *  닫기
+     */
+    const handleHide = useCallback(() => {
+        dispatch(clearServiceList());
+        dispatch(clearSectionList());
+        dispatch(clearContentList());
+
+        if (onHide) {
+            onHide();
+        }
+    }, [dispatch, onHide]);
+
+    /**
      * 적용버튼 클릭
      */
     const handleOkTrigger = useCallback(() => {
-        if (typeof onOk !== 'function') {
+        if (typeof onSave !== 'function') {
             return;
         }
         if (selectedContent) {
-            onOk(selectedContent);
+            onSave(selectedContent);
         } else if (selectedSection) {
-            onOk(selectedSection);
+            onSave(selectedSection);
         } else {
-            onOk(selectedService);
+            onSave(selectedService);
         }
-        onHide();
-    }, [selectedService, selectedSection, selectedContent, onOk, onHide]);
+
+        handleHide();
+    }, [selectedService, selectedSection, selectedContent, onSave, handleHide]);
+
+    useEffect(() => {
+        // 대분류 리스트 조회
+        if (show) {
+            dispatch(getCodeServiceList());
+        }
+    }, [dispatch, show]);
+
+    useEffect(() => {
+        // 중분류 리스트 조회
+        setSelectedSection(null);
+        setSelectedContent(null);
+        dispatch(clearContentList());
+
+        if (selectedService) {
+            dispatch(
+                getCodeSectionList(
+                    changeSectionSearchOption({
+                        ...initialState.section.search,
+                        keyword: selectedService.masterCode.slice(0, 2),
+                    }),
+                ),
+            );
+        } else {
+            dispatch(clearSectionList());
+        }
+    }, [dispatch, selectedService]);
+
+    useEffect(() => {
+        // 소분류 리스트 조회
+        setSelectedContent(null);
+
+        if (selectedSection) {
+            dispatch(
+                getCodeContentList(
+                    changeContentSearchOption({
+                        ...initialState.content.search,
+                        keyword: selectedSection.masterCode.slice(0, 4),
+                    }),
+                ),
+            );
+        } else {
+            dispatch(clearContentList());
+        }
+    }, [dispatch, selectedSection]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearServiceList());
+            dispatch(clearSectionList());
+            dispatch(clearContentList());
+        };
+    }, [dispatch]);
 
     return (
         <MokaModal
             width={600}
             {...rest}
             show={show}
-            onHide={onHide}
+            onHide={handleHide}
             title={title}
             size="lg"
             draggable
             className="code-modal"
+            footerClassName="d-flex justify-content-center"
             buttons={
                 buttons || [
                     { variant: 'primary', text: '적용', onClick: handleOkTrigger },
-                    { variant: 'warning', text: '취소', onClick: onHide },
+                    { variant: 'gray150', text: '취소', onClick: handleHide },
                 ]
             }
             centered
         >
             <div className="d-flex align-items-center justify-content-around">
                 {/* 대분류 */}
-                <div>
-                    <p className="h5">대분류</p>
+                <div className="border mr-2" style={{ width: 200 }}>
+                    <div className="p-3 d-flex align-items-center justify-content-center border-bottom">
+                        <p className="mb-0 h5">대분류</p>
+                    </div>
                     <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
                         {serviceList.map((code) => (
-                            <ListGroup.Item key={code.codeId}>
+                            <ListGroup.Item key={code.masterCode}>
                                 <Form.Check custom type="radio" name="lcode" id={`radio-${code.masterCode}`} label={code.serviceKorname} onClick={(e) => selectLCode(code, e)} />
                             </ListGroup.Item>
                         ))}
@@ -178,11 +228,13 @@ const CodeListModal = (props) => {
                 </div>
 
                 {/* 중분류 */}
-                <div>
-                    <p className="h5">중분류</p>
+                <div className="border mr-2" style={{ width: 200 }}>
+                    <div className="p-3 d-flex align-items-center justify-content-center border-bottom">
+                        <p className="mb-0 h5">중분류</p>
+                    </div>
                     <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
                         {sectionList.map((code) => (
-                            <ListGroup.Item key={code.codeId}>
+                            <ListGroup.Item key={code.masterCode}>
                                 <Form.Check custom type="radio" name="mcode" id={`radio-${code.masterCode}`} label={code.sectionKorname} onClick={(e) => selectMCode(code, e)} />
                             </ListGroup.Item>
                         ))}
@@ -190,11 +242,13 @@ const CodeListModal = (props) => {
                 </div>
 
                 {/* 소분류 */}
-                <div>
-                    <p className="h5">소분류</p>
+                <div className="border" style={{ width: 200 }}>
+                    <div className="p-3 d-flex align-items-center justify-content-center border-bottom">
+                        <p className="mb-0 h5">소분류</p>
+                    </div>
                     <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
                         {contentList.map((code) => (
-                            <ListGroup.Item key={code.codeId}>
+                            <ListGroup.Item key={code.masterCode}>
                                 <Form.Check custom type="radio" name="scode" id={`radio-${code.masterCode}`} label={code.contentKorname} onClick={(e) => selectSCode(code, e)} />
                             </ListGroup.Item>
                         ))}

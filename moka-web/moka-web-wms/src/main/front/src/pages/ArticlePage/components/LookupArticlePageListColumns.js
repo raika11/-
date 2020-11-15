@@ -4,7 +4,7 @@ import { MokaTableLinkButton } from '@components';
 export const columnDefs = [
     {
         headerName: 'ID',
-        field: 'articlePageSeq',
+        field: 'artPageSeq',
         width: 50,
         cellStyle: { fontSize: '12px' },
     },

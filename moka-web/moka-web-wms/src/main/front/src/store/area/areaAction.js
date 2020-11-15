@@ -17,9 +17,11 @@ export const changeSearchOptionDepth3 = createAction(CHANGE_SEARCH_OPTION_DEPTH3
 export const CLEAR_STORE = 'area/CLEAR_STORE';
 export const CLEAR_AREA = 'area/CLEAR_AREA';
 export const CLEAR_LIST = 'area/CLEAR_LIST';
+export const CLEAR_TREE = 'area/CLEAR_TREE';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearArea = createAction(CLEAR_AREA, (depth) => depth);
 export const clearList = createAction(CLEAR_LIST, (depth) => depth);
+export const clearTree = createAction(CLEAR_TREE);
 
 /**
  * 데이터 조회
@@ -37,6 +39,12 @@ export const getAreaDepth1 = createAction(GET_AREA_DEPTH1, ({ areaSeq }) => ({ a
 export const getAreaDepth2 = createAction(GET_AREA_DEPTH2, ({ areaSeq }) => ({ areaSeq }));
 export const getAreaDepth3 = createAction(GET_AREA_DEPTH3, ({ areaSeq }) => ({ areaSeq }));
 export const GET_AREA_FAILURE = 'area/GET_AREA_FAILURE';
+
+/**
+ * 편집영역 트리 조회(페이지편집용)
+ */
+export const [GET_AREA_TREE, GET_AREA_TREE_SUCCESS, GET_AREA_TREE_FAILURE] = createRequestActionTypes('area/GET_AREA_TREE');
+export const getAreaTree = createAction(GET_AREA_TREE, ({ search, callback }) => ({ search, callback }));
 
 /**
  * 모달 데이터 조회

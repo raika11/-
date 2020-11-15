@@ -24,6 +24,7 @@ import group from '@store/group/groupReducer';
 import area from '@store/area/areaReducer';
 import reporter from '@store/reporter/reporterReducer';
 import directLink from '@store/directLink/directLinkReducer';
+import desking from '@store/desking/deskingReducer';
 
 export default combineReducers({
     toastr,
@@ -50,4 +51,5 @@ export default combineReducers({
     group,
     reporter,
     directLink,
+    desking,
 });

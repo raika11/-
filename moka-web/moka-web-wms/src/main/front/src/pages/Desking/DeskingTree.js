@@ -1,18 +1,42 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 
+import { getComponentWorkList, changeArea, clearList } from '@store/desking/deskingAction';
+import { GET_AREA_TREE, getAreaTree, clearTree } from '@store/area/areaAction';
+
 import DeskingTreeView from './components/DeskingTreeView';
-import { data } from './area_json';
 
 /**
  * Desking Tree 컴포넌트
  */
 const DeskingTree = () => {
-    const { body } = data;
+    const { areaSeq: paramAreaSeq } = useParams();
+    const history = useHistory();
+    const dispatch = useDispatch();
 
     //state
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState([]);
+
+    const { tree, loading, latestDomainId, area } = useSelector((store) => ({
+        tree: store.area.tree,
+        loading: store.loading[GET_AREA_TREE],
+        area: store.desking.area,
+    }));
+
+    useEffect(() => {
+        if (!tree) {
+            dispatch(getAreaTree({ search: null, callback: null }));
+        }
+        return () => {
+            // unmount
+            dispatch(clearTree());
+            dispatch(clearList());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // 부모노드 찾기(재귀함수)
     // 리턴: {findSeq: page.areaSeq,node: null,path: [String(DeskingTree.areaSeq)]};
@@ -37,25 +61,47 @@ const DeskingTree = () => {
         return null;
     }, []);
 
+    /**
+     * 트리 클릭. 편집영역 로드
+     * @param {*} item
+     */
+    const handleClick = useCallback(
+        (item) => {
+            const option = {
+                areaSeq: item.areaSeq,
+                callback: (result) => {
+                    if (result.header.success) {
+                        setSelected(String(item.areaSeq));
+                        history.push(`/desking/${item.areaSeq}`);
+                    }
+                },
+            };
+            dispatch(getComponentWorkList(option));
+            dispatch(changeArea(item));
+        },
+        [dispatch, history],
+    );
+
     return (
         <DeskingTreeView
             height={817}
-            data={body}
+            data={tree}
+            loading={loading}
             expanded={expanded}
             onExpansion={(tree) => {
                 setExpanded(
                     produce(expanded, (draft) => {
-                        if (expanded.indexOf(String(body.areaSeq)) > -1) {
-                            const idx = expanded.indexOf(String(body.areaSeq));
+                        if (expanded.indexOf(String(tree.areaSeq)) > -1) {
+                            const idx = expanded.indexOf(String(tree.areaSeq));
                             draft.splice(idx, 1);
                         } else {
-                            draft.push(String(body.areaSeq));
+                            draft.push(String(tree.areaSeq));
                         }
                     }),
                 );
             }}
             selected={selected}
-            // onSelected={handleClick}
+            onSelected={handleClick}
         />
     );
 };

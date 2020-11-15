@@ -44,7 +44,7 @@ const DeskingWorkAgGrid = () => {
                 }
             }
         } else {
-            if (movingData.parentSeq === overData.parentSeq) {
+            if (movingData.parentTotalId === overData.parentTotalId) {
                 return 'FamillyChildToChild'; // 관련기사 -> 관련기사(형제) : drag, sort
             } else {
                 return 'ChildToChild'; // 관련기사 -> 타 관련기사 : rollback
@@ -123,7 +123,7 @@ const DeskingWorkAgGrid = () => {
 
     // row height제어. 관련기사는 height가 작다.
     const getRowHeight = (params) => {
-        return params.data.rowHeight ? params.data.rowHeight : 53;
+        return params.data.rel ? 42 : 53;
     };
 
     return (

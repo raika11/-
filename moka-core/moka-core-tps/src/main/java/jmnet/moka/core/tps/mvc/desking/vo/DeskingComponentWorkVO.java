@@ -8,6 +8,7 @@
 
 package jmnet.moka.core.tps.mvc.desking.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,9 @@ import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 /**
@@ -28,11 +31,13 @@ import org.apache.ibatis.type.Alias;
  *
  * @author ohtah
  */
-@Alias("DeskingComponentWorkVO")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Alias("DeskingComponentWorkVO")
 public class DeskingComponentWorkVO implements Serializable {
 
     private static final long serialVersionUID = 2885110989383287296L;
@@ -78,8 +83,6 @@ public class DeskingComponentWorkVO implements Serializable {
 
     @Column(name = "ART_PAGE_SEQ")
     private Long artPageSeq;
-
-    private boolean stateChanged;
 
     @Builder.Default
     private List<DeskingWorkVO> deskingWorks = new ArrayList<DeskingWorkVO>();

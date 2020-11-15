@@ -1,7 +1,10 @@
 package jmnet.moka.core.tps.mvc.desking.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -15,10 +18,12 @@ import lombok.NoArgsConstructor;
  * @author jeon0525
  *
  */
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DeskingWorkDTO implements Serializable {
 
     private static final long serialVersionUID = -6709195199525259062L;

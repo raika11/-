@@ -71,14 +71,14 @@ public class DeskingRestController {
             search.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
 
             // work초기화
-            deskingService.importComponentWork(search);
-            if (search.getReturnValue().intValue() < 0) {
-                log.debug("FAIL TO IMPORT COMPONENT WORK : returnCode:{} ", search.getReturnValue() );
-                throw new Exception("FAIL TO IMPORT COMPONENT WORK: " + search.getReturnValue() );
-            }
+//            deskingService.importComponentWork(search);
+//            if (search.getReturnValue().intValue() < 0) {
+//                log.debug("FAIL TO IMPORT COMPONENT WORK : returnCode:{} ", search.getReturnValue() );
+//                throw new Exception("FAIL TO IMPORT COMPONENT WORK: " + search.getReturnValue() );
+//            }
 
-            // work조회 : 임시저장(deskingWork)과 전송(deskingHist) 중 최종 저장된것을 조회
-            List<DeskingComponentWorkVO> returnValue = deskingService.findAllComponentWork(areaSeq, principal.getName());
+            // work조회 : 임시저장(deskingWork)된 것을 조회
+            List<DeskingComponentWorkVO> returnValue = deskingService.findAllComponentWork(search);
 
             // area
             Area area = areaService.findAreaBySeq(areaSeq)

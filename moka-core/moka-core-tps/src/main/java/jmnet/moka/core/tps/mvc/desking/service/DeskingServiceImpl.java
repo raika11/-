@@ -3,9 +3,12 @@
  */
 package jmnet.moka.core.tps.mvc.desking.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
@@ -15,6 +18,8 @@ import jmnet.moka.core.tps.mvc.desking.repository.DeskingHistRepository;
 import jmnet.moka.core.tps.mvc.desking.repository.DeskingRepository;
 import jmnet.moka.core.tps.mvc.desking.repository.DeskingWorkRepository;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.DeskingRelWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -92,20 +97,19 @@ public class DeskingServiceImpl implements DeskingService {
         return false;
     }
 
-    @Override
-    @Transactional
-    public void importComponentWork(DeskingWorkSearchDTO search) {
-        // 1. 기존의 작업용 데이타(componentWork,deskingWork) 삭제
-        // 2. 편집영역의 수동컴포넌트를 작업자용 컴포넌트로 일괄 등록
-        // 3. 편집영역의 편집기사를 작업자용 편집기사로 일괄 등록
-        componentWorkMapper.importComponentWork(search);
-    }
+//    @Override
+//    public void importComponentWork(DeskingWorkSearchDTO search) {
+//        // 1. 기존의 작업용 데이타(componentWork,deskingWork) 삭제
+//        // 2. 편집영역의 수동컴포넌트를 작업자용 컴포넌트로 일괄 등록
+//        // 3. 편집영역의 편집기사를 작업자용 편집기사로 일괄 등록
+//        componentWorkMapper.importComponentWork(search);
+//    }
 
-    public List<DeskingComponentWorkVO> findAllComponentWork(Long areaSeq, String regId) {
+    public List<DeskingComponentWorkVO> findAllComponentWork(DeskingWorkSearchDTO search) {
 
-//        WorkSearchDTO search = WorkSearchDTO.builder().pageSeq(pageSeq).creator(creator)
-//                .editionSeq(editionSeq).build();
-//
+        List<List<Object>> listMap = componentWorkMapper.findAllComponentWork(search);
+
+        return null;
 //        List<DeskingComponentWorkVO> componentList =
 //                componentWorkMapper.findComponentsWorkAll(search);
 //
@@ -148,8 +152,6 @@ public class DeskingServiceImpl implements DeskingService {
 //        }
 //
 //        return componentList;
-        return null;
-
     }
 //
 //    @Override

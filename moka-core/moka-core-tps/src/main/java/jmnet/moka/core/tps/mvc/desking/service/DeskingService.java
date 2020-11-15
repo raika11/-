@@ -27,25 +27,24 @@ public interface DeskingService {
      */
     public boolean usedByDatasetSeq(Long datasetSeq);
 
-    /**
-     * <pre>
-      * Work컴포넌트 초기화(사용자의 work 모두삭제)
-     * </pre>
-     * 
-     * @param search 검색조건
-     */
-    public void importComponentWork(DeskingWorkSearchDTO search);
+//    /**
+//     * <pre>
+//      * Work컴포넌트 초기화(사용자의 work 모두삭제)
+//     * </pre>
+//     *
+//     * @param search 검색조건
+//     */
+//    public void importComponentWork(DeskingWorkSearchDTO search);
 
     /**
      * <pre>
      * Work컴포넌트와 컴포넌트의 편집데이타 조회(페이지 내의 모든 컴포넌트)
      * </pre>
      * 
-     * @param areaSeq 편집영역순번
-     * @param regId 작업자
+     * @param search 검색조건
      * @return 편집컴포넌트 목록
      */
-    public List<DeskingComponentWorkVO> findAllComponentWork(Long areaSeq, String regId);
+    public List<DeskingComponentWorkVO> findAllComponentWork(DeskingWorkSearchDTO search);
 //
 //    /**
 //     * <pre>

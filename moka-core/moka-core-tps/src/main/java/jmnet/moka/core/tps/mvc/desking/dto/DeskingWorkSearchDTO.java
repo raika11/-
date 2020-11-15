@@ -10,6 +10,8 @@ package jmnet.moka.core.tps.mvc.desking.dto;
 
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,10 +30,10 @@ import lombok.EqualsAndHashCode;
  *
  */
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 @Alias("DeskingWorkSearchDTO")
 public class DeskingWorkSearchDTO extends SearchDTO {

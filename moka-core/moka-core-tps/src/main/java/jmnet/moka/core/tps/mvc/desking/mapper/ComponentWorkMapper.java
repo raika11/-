@@ -13,9 +13,8 @@ package jmnet.moka.core.tps.mvc.desking.mapper;
 
 import java.util.List;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
-import jmnet.moka.core.tps.common.dto.WorkSearchDTO;
+import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
-import jmnet.moka.core.tps.mvc.desking.vo.EditionVO;
 
 /**
  * <pre>
@@ -26,49 +25,35 @@ import jmnet.moka.core.tps.mvc.desking.vo.EditionVO;
  * @since 2020. 7. 29. 오후 4:07:10
  * @author ssc
  */
-public interface ComponentWorkMapper extends BaseMapper<DeskingComponentWorkVO, WorkSearchDTO> {
+public interface ComponentWorkMapper extends BaseMapper<DeskingComponentWorkVO, DeskingWorkSearchDTO> {
 
     /**
-     * <pre>
-     * 기존의 작업용 수동컴포넌트 삭제
-     * </pre>
-     * 
-     * @param creator 작업
-     * @return
+     * 기존의 작업용 수동컴포넌트 삭제 및 import
+     * @param search
      */
-    int deleteByCreator(String creator);
+    void importComponentWork(DeskingWorkSearchDTO search);
 
-    /**
-     * <pre>
-     * 페이지의 수동컴포넌트를 작업자용 컴포넌트로 일괄 등록
-     * </pre>
-     * 
-     * @param param
-     * @return
-     */
-    int bulkInsert(WorkSearchDTO param);
-
-    /**
-     * <pre>
-     * 페이지에서 수동컴포넌트인 것 모두 조회
-     * </pre>
-     * 
-     * @param param
-     * @return
-     */
-    List<DeskingComponentWorkVO> findComponentsWorkAll(WorkSearchDTO search);
+//    /**
+//     * <pre>
+//     * 페이지에서 수동컴포넌트인 것 모두 조회
+//     * </pre>
+//     *
+//     * @param param
+//     * @return
+//     */
+//    List<DeskingComponentWorkVO> findComponentsWorkAll(DeskingWorkSearchDTO search);
 
     /**
      * <pre>
      * 수동컴포넌트 조회
      * </pre>
-     * 
+     *
      * @param seq work컴포넌트 순번
      * @return
      */
     DeskingComponentWorkVO findComponentsWorkBySeq(Long seq);
-    
 
-    
-    List<EditionVO> findEditionAll(Long pageSeq);
+
+
+//    List<EditionVO> findEditionAll(Long pageSeq);
 }

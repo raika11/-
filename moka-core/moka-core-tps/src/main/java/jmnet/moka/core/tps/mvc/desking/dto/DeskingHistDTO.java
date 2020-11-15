@@ -8,7 +8,6 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
-import jmnet.moka.core.tps.mvc.desking.entity.DeskingRelHist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -83,7 +82,4 @@ public class DeskingHistDTO implements Serializable {
     private String createYmdt;
 
     private String creator;
-
-    @Builder.Default
-    private Set<DeskingRelHist> deskingRelHists = new LinkedHashSet<DeskingRelHist>();
 }

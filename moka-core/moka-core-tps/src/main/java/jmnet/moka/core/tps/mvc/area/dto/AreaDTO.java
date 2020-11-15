@@ -5,6 +5,7 @@
 package jmnet.moka.core.tps.mvc.area.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
@@ -36,7 +37,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @Getter
 @Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "areaSeq")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "areaSeq", scope = AreaDTO.class)
 public class AreaDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;

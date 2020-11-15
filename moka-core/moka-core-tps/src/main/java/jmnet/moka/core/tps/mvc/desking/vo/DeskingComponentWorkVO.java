@@ -46,11 +46,8 @@ public class DeskingComponentWorkVO implements Serializable {
     @Column(name = "COMPONENT_NAME")
     private String componentName;
 
-    @Column(name = "CREATOR")
-    private String creator;
-
-    @Column(name = "EDITION_SEQ")
-    private Long editionSeq;
+    @Column(name = "REG_ID")
+    private String regId;
 
     @Column(name = "TEMPLATE_SEQ")
     private Long templateSeq;
@@ -73,18 +70,14 @@ public class DeskingComponentWorkVO implements Serializable {
     @Column(name = "SNAPSHOT_BODY")
     private String snapshotBody;
 
-    @Column(name = "COMPONENT_ORDER")
-    private Long componentOrder;
+    @Column(name = "COMPONENT_ORD")
+    private Long componentOrd;
 
     @Column(name = "SEARCH_CODE_ID")
     private String searchCodeId;
 
-    @Column(name = "SEARCH_LANG")
-    @Builder.Default
-    private String searchLang = TpsConstants.DEFAULT_LANG;
-
-    @Column(name = "SEARCH_SERVICE_TYPE")
-    private String searchServiceType;
+    @Column(name = "ART_PAGE_SEQ")
+    private Long artPageSeq;
 
     private boolean stateChanged;
 

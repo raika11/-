@@ -283,7 +283,7 @@ public class PreviewController {
             // merger
             MokaPreviewTemplateMerger dtm =
                     (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(),
-                                                                   componentVO.getEditionSeq(), componentIdList);
+                                                                   0, componentIdList);
 
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, componentItem, false);

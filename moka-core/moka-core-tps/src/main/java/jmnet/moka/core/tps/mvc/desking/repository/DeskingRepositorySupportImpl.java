@@ -3,6 +3,7 @@
  */
 package jmnet.moka.core.tps.mvc.desking.repository;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import com.querydsl.core.BooleanBuilder;
@@ -32,19 +33,19 @@ public class DeskingRepositorySupportImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public List<Desking> findByOtherCreator(Long datasetSeq, String createYmdt, String creator) {
+    public List<Desking> findByOtherCreator(Long datasetSeq, Date regDt, String regId) {
         QDesking desking = QDesking.desking;
         QDataset dataset = QDataset.dataset;
 
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.and(desking.dataset.datasetSeq.eq(datasetSeq));
-        builder.and(desking.createYmdt.gt(createYmdt));
-        builder.and(desking.creator.ne(creator));
+        builder.and(desking.regDt.gt(regDt));
+        builder.and(desking.regId.ne(regId));
 
         JPQLQuery<Desking> query =
                 queryFactory.selectFrom(desking).innerJoin(desking.dataset, dataset).fetchJoin()
-                        .where(builder).orderBy(desking.createYmdt.desc());
+                        .where(builder).orderBy(desking.regDt.desc());
 
         return query.fetch();
     }

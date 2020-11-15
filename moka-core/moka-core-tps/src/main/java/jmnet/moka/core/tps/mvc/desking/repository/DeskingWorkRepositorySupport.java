@@ -13,5 +13,5 @@ package jmnet.moka.core.tps.mvc.desking.repository;
  * @author ssc
  */
 public interface DeskingWorkRepositorySupport {
-    public void deleteByDatasetSeq(Long datasetSeq, String creator);
+    public void deleteByDatasetSeq(Long datasetSeq, String regId);
 }

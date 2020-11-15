@@ -8,6 +8,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
@@ -22,7 +23,6 @@ import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
-import jmnet.moka.core.tps.mvc.skin.service.SkinService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,7 +62,7 @@ public class ComponentServiceImpl implements ComponentService {
     private PageService pageService;
 
     @Autowired
-    private SkinService skinService;
+    private ArticlePageService articlePageService;
 
     @Autowired
     private MessageByLocale messageByLocale;
@@ -216,7 +216,7 @@ public class ComponentServiceImpl implements ComponentService {
         // 컨테이너의 관련아이템 업데이트(페이지,스킨,컨테이너)
         containerService.updateRelItems(newComponent, orgComponent);
         pageService.updatePageRelItems(newComponent, orgComponent);
-        skinService.updateRelItems(newComponent, orgComponent);
+        articlePageService.updateArticlePageRelItems(newComponent, orgComponent);
 
         return component;
     }

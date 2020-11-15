@@ -18,7 +18,8 @@ public interface HistoryService {
     HistDTO findPageHist(Long histSeq)
             throws NoDataException;
 
-    HistDTO findSkinHist(Long histSeq);
+    HistDTO findArticlePageHist(Long histSeq)
+        throws NoDataException;
 
     HistDTO findContainerHist(Long histSeq)
             throws NoDataException;

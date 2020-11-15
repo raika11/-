@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.articlepage.mapper.ArticlePageRelMapper">
+
+  <resultMap type="ArticlePageVO" id="ArticlePageMap">
+    <id property="artPageSeq" column="ART_PAGE_SEQ"/>
+    <result property="artPageName" column="ART_PAGE_NAME"/>
+    <result property="artTypeName" column="ART_TYPE_NAME"/>
+    <association property="domain" javaType="jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO">
+      <result property="domainId" column="DOMAIN_ID"/>
+      <result property="domainName" column="DOMAIN_NAME"/>
+      <result property="domainUrl" column="DOMAIN_URL"/>
+      <result property="servicePlatform" column="SERVICE_PLATFORM"/>
+    </association>
+  </resultMap>
+
+  <select id="findAll" parameterType="RelationSearchDTO" resultMap="ArticlePageMap"
+    statementType="CALLABLE">
+    {call UPA_WMS_ARTICLE_PAGE_REL_LIST_SEL(
+    #{relSeqType, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{relSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
+  <select id="deleteBySeq" parameterType="hashMap" resultType="java.lang.Long"
+    statementType="CALLABLE">
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_ARTICLE_PAGE_REL_DEL(
+			#{artPageSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+  </select>
+
+
+</mapper>

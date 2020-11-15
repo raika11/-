@@ -21,7 +21,7 @@ import jmnet.moka.core.tps.common.dto.WorkSearchDTO;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
-import jmnet.moka.core.tps.mvc.component.vo.DeskingComponentWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingHistSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingRelWorkDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkDTO;

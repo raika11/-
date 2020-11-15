@@ -8,6 +8,6 @@ import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePageHist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface ArticlePageHistRepository extends JpaRepository<ArticlePageHist, Integer>, JpaSpecificationExecutor<ArticlePageHist> {
+public interface ArticlePageHistRepository extends JpaRepository<ArticlePageHist, Long>, JpaSpecificationExecutor<ArticlePageHist> {
 
 }

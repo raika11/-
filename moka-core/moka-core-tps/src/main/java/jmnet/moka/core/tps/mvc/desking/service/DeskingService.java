@@ -10,7 +10,7 @@ import jmnet.moka.core.tps.common.dto.WorkSearchDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentWork;
-import jmnet.moka.core.tps.mvc.component.vo.DeskingComponentWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingHistSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.Desking;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingRelWork;

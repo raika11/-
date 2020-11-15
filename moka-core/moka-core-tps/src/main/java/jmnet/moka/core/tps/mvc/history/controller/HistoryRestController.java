@@ -110,7 +110,7 @@ public class HistoryRestController {
 
             } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
                 // 스킨 히스토리 조회
-                hist = historyService.findSkinHist(histSeq);
+                hist = historyService.findArticlePageHist(histSeq);
 
             } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
                 // 컨테이너 히스토리 조회

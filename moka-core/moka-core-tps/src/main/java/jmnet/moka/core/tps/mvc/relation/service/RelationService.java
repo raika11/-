@@ -5,11 +5,11 @@
 package jmnet.moka.core.tps.mvc.relation.service;
 
 import java.util.List;
+import jmnet.moka.core.tps.mvc.articlepage.vo.ArticlePageVO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.page.vo.PageVO;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
-import jmnet.moka.core.tps.mvc.skin.vo.SkinVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,7 +28,7 @@ public interface RelationService {
      */
     List<PageVO> findAllPage(RelationSearchDTO search);
 
-    //    List<SkinVO> findAllSkin(RelationSearchDTO search);
+    List<ArticlePageVO> findAllArticlePage(RelationSearchDTO search);
 
     Page<Container> findAllContainer(RelationSearchDTO search, Pageable pageable);
 

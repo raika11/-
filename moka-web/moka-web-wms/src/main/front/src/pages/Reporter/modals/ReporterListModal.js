@@ -55,7 +55,6 @@ const ReporterMgrSearchModal = (props) => {
      */
     const responseCallback = useCallback(({ header, body }) => {
         if (header.success) {
-            console.log('bbbbbbbbbbbbb::', body.list);
             setRowData([]);
             setRowData(
                 body.list.map((data) => ({

@@ -19,6 +19,7 @@ import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Validated
+@Slf4j
 @RequestMapping("/api/articles")
 public class ArticleRestController {
 
@@ -63,7 +65,8 @@ public class ArticleRestController {
      */
     @ApiOperation(value = "기사 목록조회")
     @GetMapping
-    public ResponseEntity<?> getArticleList(@Valid @SearchParam ArticleSearchDTO search) {
+    public ResponseEntity<?> getArticleList(@Valid @SearchParam ArticleSearchDTO search)
+            throws Exception {
 
         //분류코드 검색설정
         if (search.getMasterCode() != null && McpString.isNotEmpty(search.getMasterCode())) {
@@ -88,17 +91,23 @@ public class ArticleRestController {
             search.setDeskingSourceList(paramSList);
         }
 
-        // 조회(mybatis)
-        List<ArticleBasicVO> returnValue = articleService.findAllArticleBasic(search);
+        try {
+            // 조회(mybatis)
+            List<ArticleBasicVO> returnValue = articleService.findAllArticleBasic(search);
 
-        // 리턴값 설정
-        ResultListDTO<ArticleBasicVO> resultListMessage = new ResultListDTO<>();
-        resultListMessage.setTotalCnt(search.getTotal());
-        resultListMessage.setList(returnValue);
+            // 리턴값 설정
+            ResultListDTO<ArticleBasicVO> resultListMessage = new ResultListDTO<>();
+            resultListMessage.setTotalCnt(search.getTotal());
+            resultListMessage.setList(returnValue);
 
-        ResultDTO<ResultListDTO<ArticleBasicVO>> resultDto = new ResultDTO<>(resultListMessage);
-        tpsLogger.success(ActionType.SELECT);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            ResultDTO<ResultListDTO<ArticleBasicVO>> resultDto = new ResultDTO<>(resultListMessage);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD ARTICLE BASIC]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD ARTICLE BASIC]", e, true);
+            throw new Exception(messageByLocale.get("tps.common.error.select"), e);
+        }
     }
 
     @ApiOperation(value = "기사 상세조회")

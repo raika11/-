@@ -44,13 +44,13 @@ public class HistDTO implements Serializable {
     /**
      * 히스토리 일련번호
      */
-    @NotNull(message = "{tps.common.error.invalid.seq}")
+    @NotNull(message = "{tps.common.error.notnull.seq}")
     private Long seq;
 
     /**
      * 도메인
      */
-    @NotNull(message = "{tps.common.error.invalid.domainId}")
+    @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
     /**

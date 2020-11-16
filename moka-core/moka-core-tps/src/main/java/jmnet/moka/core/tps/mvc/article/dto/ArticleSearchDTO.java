@@ -70,6 +70,12 @@ public class ArticleSearchDTO extends SearchDTO {
     private Date endServiceDay;
 
     /**
+     * 콘텐트타입
+     */
+    @Length(max = 1, message = "{tps.article.error.length.contentType}")
+    private String contentType;
+
+    /**
      * 기본 매체목록(구분자 ,)
      */
     @JsonIgnore

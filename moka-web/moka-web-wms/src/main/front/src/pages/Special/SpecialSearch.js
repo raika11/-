@@ -34,7 +34,7 @@ const SpecialSearch = () => {
                 </Col>
                 <Col xs={6} className="p-0 pr-4 d-flex justify-content-end">
                     <Button variant="dark" onClick={handleClickAdd}>
-                        페이지 추가
+                        페이지 등록
                     </Button>
                 </Col>
             </Form.Row>

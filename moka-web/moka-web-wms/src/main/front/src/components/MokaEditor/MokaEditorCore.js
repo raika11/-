@@ -8,7 +8,6 @@ let errorDecoId = 0;
 
 export const propTypes = {
     ...editorPropTypes,
-    editorDidMount: undefined,
     /**
      * 에러표시 객체
      */

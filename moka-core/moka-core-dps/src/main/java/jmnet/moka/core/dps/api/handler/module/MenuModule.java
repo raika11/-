@@ -24,20 +24,20 @@ public class MenuModule implements ModuleInterface {
             throws Exception {
         Map<String,Object> parameterMap = apiContext.getCheckedParamMap();
         String type = (String)parameterMap.get("type");
-        String key = (String)parameterMap.get("key");
-        if ( type.equals("main")) {
-            return getMainSection();
+        String menuKey = (String)parameterMap.get("menuKey");
+        if ( type.equals("top")) {
+            return getTop();
         } else if ( type.equals("mega")) {
-            return this.menuMega();
-        } else if ( type.equals("svc")) {
-            return this.getServiceMain(key);
+            return getMega();
+        } else if ( type.equals("header")) {
+            return this.getHeader(menuKey);
         }  else if ( type.equals("all")) {
             return this.menuParser.getRootMenu();
         }
         return null;
     }
 
-    private Object getMainSection() {
+    private Object getTop() {
         List<Map<String,Object>> resultList = new ArrayList<>();
         for ( Menu menu:this.getChildrenMenu("NewsGroup")) {
             if ( menu.isIsShowTopMenu()) {
@@ -47,25 +47,25 @@ public class MenuModule implements ModuleInterface {
         return resultList;
     }
 
-    private Object getServiceMain(String key) {
-        Menu foundMenu = findMenu(this.menuParser.getRootMenu(),key);
+    private Object getHeader(String menuKey) {
+        Menu foundMenu = findMenu(this.menuParser.getRootMenu(),menuKey);
         if ( foundMenu == null ) return MenuParser.EMPTY_CHILDREN;
-        Menu parentMenu = null;
+        Menu sectionMenu = null;
         Menu highlightMenu = null;
         List<Menu> childrenMenu;
         if ( foundMenu.hasChildren()) { // 상위 메뉴인 경우
-            parentMenu = foundMenu;
+            sectionMenu = foundMenu;
             childrenMenu = foundMenu.getChildren();
         } else { // 하위 메뉴 인경우
-            parentMenu = foundMenu.getParentMenu();
-            childrenMenu = parentMenu.getChildren();
+            sectionMenu = foundMenu.getParentMenu();
+            childrenMenu = sectionMenu.getChildren();
             highlightMenu = foundMenu;
         }
         Map<String,Object> resultMap = new HashMap<String,Object>();
-        resultMap.put("parent",convert(parentMenu));
+        resultMap.put("section",convert(sectionMenu));
         resultMap.put("highlight",highlightMenu == null?"":highlightMenu.getKey());
         List<Map<String,Object>> resultList = new ArrayList<>();
-        for ( Menu menu : parentMenu.getChildren()) {
+        for ( Menu menu : sectionMenu.getChildren()) {
             if ( menu.isIsShowTopMenu()) {
                 resultList.add(convert(menu));
             }
@@ -74,7 +74,7 @@ public class MenuModule implements ModuleInterface {
         return resultMap;
     }
 
-    public Object menuMega(){
+    public Object getMega(){
         List<List<Map<String,Object>>> list = new ArrayList<>();
         for ( String[] group : megaMenuKeys ) {
             List<Map<String,Object>> goupList = new ArrayList<>();

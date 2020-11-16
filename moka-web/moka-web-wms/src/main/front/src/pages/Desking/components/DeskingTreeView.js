@@ -62,7 +62,7 @@ const defaultProps = {
 };
 
 /**
- * Desking Tree View 컴포넌트
+ * 데스킹 트리 조회 컴포넌트
  */
 const DeskingTreeView = (props) => {
     const { data, height, loading } = props;
@@ -84,7 +84,7 @@ const DeskingTreeView = (props) => {
     };
 
     return (
-        <div className="border custom-scroll treeview mr-2" style={{ height, width: '200px', backgroundColor: 'white' }}>
+        <div className="mr-gutter border custom-scroll treeview" style={{ height, width: '200px', backgroundColor: 'white' }}>
             <ul className="list-unstyled tree-list">
                 {loading && <MokaLoader />}
                 {!loading &&

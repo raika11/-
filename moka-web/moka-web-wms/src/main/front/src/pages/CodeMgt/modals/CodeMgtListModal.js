@@ -134,7 +134,7 @@ const CodeMgtListModal = (props) => {
                 draggable
                 show={show}
                 onHide={onHide}
-                title="그룹 추가"
+                title="그룹 등록"
                 buttons={[
                     {
                         text: '등록',
@@ -169,7 +169,7 @@ const CodeMgtListModal = (props) => {
                 draggable
                 show={show}
                 onHide={onHide}
-                title="그룹 추가"
+                title="그룹 등록"
                 buttons={[
                     {
                         text: '저장',

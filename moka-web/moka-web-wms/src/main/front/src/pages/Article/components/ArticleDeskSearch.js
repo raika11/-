@@ -11,7 +11,8 @@ import { initialState, getArticleList, changeSearchOption } from '@store/article
 /**
  * 기사 검색
  */
-const ArticleSearch = () => {
+const ArticleDeskSearch = (props) => {
+    const { video } = props;
     const dispatch = useDispatch();
     const { storeSearch } = useSelector((store) => ({
         storeSearch: store.article.search,
@@ -37,6 +38,22 @@ const ArticleSearch = () => {
         } else if (name === 'pressPan') {
             setSearch({ ...search, pressPan: value });
         }
+    };
+
+    /**
+     * 검색
+     */
+    const handleSearch = () => {
+        dispatch(
+            getArticleList(
+                changeSearchOption({
+                    ...search,
+                    startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
+                    endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
+                    page: 0,
+                }),
+            ),
+        );
     };
 
     /**
@@ -76,6 +93,10 @@ const ArticleSearch = () => {
     }, [storeSearch]);
 
     useEffect(() => {
+        if (video) setSearchDisabled(true);
+    }, [video]);
+
+    useEffect(() => {
         /**
          * 마운트 시 기사목록 최초 로딩
          *
@@ -87,8 +108,10 @@ const ArticleSearch = () => {
             getArticleList(
                 changeSearchOption({
                     ...storeSearch,
-                    startServiceDay: moment(date).add(-3, 'month').add(-24, 'hours').format(DB_DATEFORMAT),
-                    endServiceDay: moment(date).add(-2, 'month').format(DB_DATEFORMAT),
+                    startServiceDay: moment('2020-08-21 00:00').format(DB_DATEFORMAT),
+                    endServiceDay: moment('2020-08-22 00:00').format(DB_DATEFORMAT),
+                    // startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
+                    // endServiceDay: moment(date).add(-2, 'month').format(DB_DATEFORMAT),
                     page: 0,
                 }),
             ),
@@ -111,7 +134,7 @@ const ArticleSearch = () => {
                 </div>
 
                 {/* 검색 조건 */}
-                <div style={{ width: 138 }} className="mr-2">
+                <div style={{ width: 110 }} className="mr-2">
                     <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         {defaultArticleSearchType.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
@@ -122,12 +145,17 @@ const ArticleSearch = () => {
                 </div>
 
                 {/* 키워드 */}
-                <MokaSearchInput variant="dark" className="flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} />
+                <MokaSearchInput variant="dark" className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+
+                {/* 초기화 */}
+                <Button variant="dark" className="ft-12">
+                    초기화
+                </Button>
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-between">
                 <div className="d-flex">
                     {/* 분류 */}
-                    <div style={{ width: 380 }} className="mr-2">
+                    <div style={{ width: 340 }} className="mr-2">
                         <CodeAutocomplete name="masterCode" className="mb-0" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
                     </div>
 
@@ -166,13 +194,12 @@ const ArticleSearch = () => {
                         />
                     </div>
                 </div>
-
                 <Button variant="dark" className="ft-12">
-                    초기화
+                    그룹지정
                 </Button>
             </Form.Row>
         </Form>
     );
 };
 
-export default ArticleSearch;
+export default ArticleDeskSearch;

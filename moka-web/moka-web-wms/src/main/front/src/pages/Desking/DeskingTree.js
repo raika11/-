@@ -3,8 +3,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 
-import { getComponentWorkList, changeArea, clearList } from '@store/desking/deskingAction';
 import { GET_AREA_TREE, getAreaTree, clearTree } from '@store/area/areaAction';
+import { getComponentWorkList, changeArea, clearList } from '@store/desking/deskingAction';
 
 import DeskingTreeView from './components/DeskingTreeView';
 
@@ -20,10 +20,10 @@ const DeskingTree = () => {
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState([]);
 
-    const { tree, loading, latestDomainId, area } = useSelector((store) => ({
+    const { tree, area, loading } = useSelector((store) => ({
         tree: store.area.tree,
-        loading: store.loading[GET_AREA_TREE],
         area: store.desking.area,
+        loading: store.loading[GET_AREA_TREE],
     }));
 
     useEffect(() => {

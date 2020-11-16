@@ -24,7 +24,7 @@ const Domain = () => {
     }));
 
     /**
-     * 도메인 추가
+     * 도메인 등록
      */
     const handleAddClickDomain = () => {
         history.push('/domain');
@@ -106,7 +106,7 @@ const Domain = () => {
             >
                 <div className="mb-2 d-flex justify-content-end">
                     <Button variant="dark" className={clsx('p-0', 'mr-05')} onClick={handleAddClickDomain} style={{ width: '100px', height: '32px' }}>
-                        도메인 추가
+                        도메인 등록
                     </Button>
                 </div>
                 <Suspense>
@@ -116,7 +116,7 @@ const Domain = () => {
 
             {/* 도메인 정보 */}
             <MokaCard
-                title="도메인 추가"
+                title="도메인 등록"
                 width={820}
                 titleClassName="mb-0"
                 headerClassName="d-flex justify-content-between align-item-center"

@@ -211,7 +211,7 @@ const LookupContainerList = (props) => {
                 {seqType !== ITEM_CT && (
                     <div className="d-flex mb-10 justify-content-end">
                         <Button variant="dark" onClick={() => window.open('/container')}>
-                            컨테이너 추가
+                            컨테이너 등록
                         </Button>
                     </div>
                 )}

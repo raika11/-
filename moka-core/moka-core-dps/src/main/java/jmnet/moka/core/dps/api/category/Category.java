@@ -54,9 +54,9 @@ public class Category {
         this.exceptSourceCodeList = getCodeList(categoryEl, categoryParser, "ExceptSourceCodes/string");
     }
 
-    public boolean isMatch(String masterCode, String serviceCode, String sourceCode) {
+    public boolean isMatch(String[] inputMasterCodes, String[] inputServiceCodes, String sourceCode) {
         if ( this.masterCodeList.size()>0) {
-            if (this.masterCodeList.contains(masterCode)) { // 마스터코드와 일치하면
+            if (isMatchMasterCode(inputMasterCodes)) { // 마스터코드와 일치하면
                 //소스코드 포함조건
                 if ( this.sourceCodeList.size() > 0) {
                     if ( this.sourceCodeList.contains(sourceCode)) {
@@ -74,7 +74,27 @@ public class Category {
                 return true;
             }
         } else if (this.serviceCodeList.size()>0){
-            if (McpString.isNotEmpty(serviceCode) && this.serviceCodeList.contains(serviceCode)) {
+            if (isMatchServiceCode(inputServiceCodes)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isMatchMasterCode(String[] inputMasterCodes) {
+        if ( inputMasterCodes == null ) return false;
+        for ( String input : inputMasterCodes) {
+            if (this.masterCodeList.contains(input)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isMatchServiceCode(String[] inputServiceCodes) {
+        if ( inputServiceCodes == null ) return false;
+        for ( String input : inputServiceCodes) {
+            if (this.serviceCodeList.contains(input)) {
                 return true;
             }
         }

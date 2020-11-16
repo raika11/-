@@ -11,6 +11,9 @@ export const initialState = {
     error: null,
 };
 
+/**
+ * reducer
+ */
 export default handleActions(
     {
         /**

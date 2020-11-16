@@ -269,7 +269,7 @@ const LookupTemplateList = (props) => {
                     <MokaTableTypeButton onSelect={(selectedKey) => setListType(selectedKey)} />
                     <div className="pt-0">
                         <Button variant="dark" onClick={() => window.open('/template')}>
-                            템플릿 추가
+                            템플릿 등록
                         </Button>
                     </div>
                 </div>

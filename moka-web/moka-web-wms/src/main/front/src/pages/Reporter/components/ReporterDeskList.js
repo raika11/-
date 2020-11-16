@@ -1,10 +1,14 @@
 import React, { useEffect, forwardRef } from 'react';
 import { useDispatch } from 'react-redux';
-import ArticleSearch from './ArticleSearch';
-import ArticleAgGrid from './ArticleAgGrid';
+import ReporterDeskSearch from './ReporterDeskSearch';
+import ReporterDeskAgGrid from './ReporterDeskAgGrid';
 import { clearList, clearSearch } from '@store/article';
 
-const ArticleList = forwardRef(({ className }, ref) => {
+/**
+ * 페이지편집 > 기자 리스트 (추후작업)
+ */
+const ReporterDeskList = forwardRef((props, ref) => {
+    const { className } = props;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -17,10 +21,10 @@ const ArticleList = forwardRef(({ className }, ref) => {
 
     return (
         <div className={className}>
-            <ArticleSearch />
-            <ArticleAgGrid ref={ref} />
+            <ReporterDeskSearch />
+            <ReporterDeskAgGrid ref={ref} />
         </div>
     );
 });
 
-export default ArticleList;
+export default ReporterDeskList;

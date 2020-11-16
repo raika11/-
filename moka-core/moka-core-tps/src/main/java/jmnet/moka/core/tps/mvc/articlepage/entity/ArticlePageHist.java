@@ -4,8 +4,6 @@
 
 package jmnet.moka.core.tps.mvc.articlepage.entity;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,10 +19,8 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.entity.RegAudit;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
-import jmnet.moka.core.tps.mvc.template.entity.Template;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

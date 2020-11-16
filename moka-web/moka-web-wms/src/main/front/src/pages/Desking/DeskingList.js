@@ -1,15 +1,13 @@
 import React from 'react';
 import Tree from './DeskingTree';
-import List from './deskingWork/DeskingWorkList';
 
 /**
- * 화면편집 Tree 컴포넌트
+ * 데스킹 트리 컴포넌트
  */
 const DeskingList = () => {
     return (
         <>
             <Tree />
-            <List />
         </>
     );
 };

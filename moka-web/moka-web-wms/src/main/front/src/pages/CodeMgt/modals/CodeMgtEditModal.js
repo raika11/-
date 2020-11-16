@@ -178,7 +178,7 @@ const CodeMgtListModal = (props) => {
                         setStateObj({});
                         onHide();
                     }}
-                    title="코드 추가"
+                    title="코드 등록"
                     buttons={[
                         {
                             text: '등록',

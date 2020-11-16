@@ -9,6 +9,10 @@ const propTypes = {
         areaNm: PropTypes.string,
     }).isRequired,
     /**
+     * 라벨 클릭 이벤트
+     */
+    onClick: PropTypes.func,
+    /**
      * 트리라벨에 마우스 hover할 때 나오는 버튼 리스트
      */
     labelHoverButtons: PropTypes.array,
@@ -18,13 +22,13 @@ const defaultProps = {
 };
 
 /**
- * Desking Tree 라벨 컴포넌트
+ * 데스킹 트리 라벨 컴포넌트
  */
 const DeskingTreeLabel = (props) => {
-    const { nodeData } = props;
+    const { nodeData, onClick } = props;
     const { areaNm } = nodeData;
 
-    return <span>{areaNm}</span>;
+    return <span onClick={onClick}>{areaNm}</span>;
 };
 
 DeskingTreeLabel.propTypes = propTypes;

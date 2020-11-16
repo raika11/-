@@ -1,10 +1,13 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
+import { DB_DATEFORMAT } from '@/constants';
 import { MokaTable } from '@components';
+import { unescapeHtml } from '@utils/convertUtil';
 import { GET_ARTICLE_LIST, getArticleList, changeSearchOption } from '@store/article';
-import columnDefs from './ArticleAgGridColums';
+import columnDefs from './ArticleDeskAgGridColums';
 
-const ArticleAgGrid = forwardRef((props, ref) => {
+const ArticleDeskAgGrid = forwardRef((props, ref) => {
     const { onRowDragMove } = props;
 
     const dispatch = useDispatch();
@@ -17,7 +20,7 @@ const ArticleAgGrid = forwardRef((props, ref) => {
     }));
 
     // state
-    const [rowDate, setRowData] = useState([]);
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 목록에서 Row클릭
@@ -46,9 +49,34 @@ const ArticleAgGrid = forwardRef((props, ref) => {
 
     useEffect(() => {
         setRowData(
-            list.map((art) => ({
-                ...art,
-            })),
+            list.map((art) => {
+                // 기자명 replace
+                let reportersText = art.artReporter;
+                const reporters = art.artReporter.split('.');
+                if (reporters.length > 1) reportersText = `${reporters[0]} 외 ${reporters.length - 1}명`;
+
+                // 제목 replace
+                let escapeTitle = art.artTitle;
+                if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
+
+                // 면판 replace
+                let myunPan = '';
+                if (art.pressMyun && art.pressMyun.replace(/\s/g, '') !== '') myunPan = `${art.pressMyun}/${art.pressPan}`;
+
+                // 출고시간/수정시간 replace
+                let articleDt = moment(art.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm');
+                if (art.artModDt) {
+                    articleDt = `${articleDt}\n${moment(art.artModDt, DB_DATEFORMAT).format('MM-DD HH:mm')}`;
+                }
+
+                return {
+                    ...art,
+                    escapeTitle,
+                    myunPan,
+                    articleDt,
+                    reportersText,
+                };
+            }),
         );
     }, [list]);
 
@@ -58,7 +86,7 @@ const ArticleAgGrid = forwardRef((props, ref) => {
             headerHeight={50}
             agGridHeight={623}
             columnDefs={columnDefs}
-            rowData={[rowDate]}
+            rowData={rowData}
             onRowNodeId={(article) => article.totalId}
             onRowClicked={handleRowClicked}
             loading={loading}
@@ -73,4 +101,4 @@ const ArticleAgGrid = forwardRef((props, ref) => {
     );
 });
 
-export default ArticleAgGrid;
+export default ArticleDeskAgGrid;

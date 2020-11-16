@@ -85,7 +85,7 @@ const AddComponentModal = (props) => {
     }, [componentList, dispatch, handleHide]);
 
     /**
-     * 컴포넌트 추가
+     * 컴포넌트 등록
      */
     const addComponent = (e) => {
         e.preventDefault();

@@ -43,7 +43,7 @@ const CodeMgtEditSearch = (props) => {
     };
 
     /**
-     * 코드 추가 버튼
+     * 코드 등록 버튼
      */
     const handleAdd = () => {
         if (grpCd) {
@@ -107,7 +107,7 @@ const CodeMgtEditSearch = (props) => {
             </Col>
             <Col xs={1} className="p-0">
                 <Button variant="dark" onClick={handleAdd}>
-                    코드 추가
+                    코드 등록
                 </Button>
             </Col>
             <CodeMgtEditModal type="add" show={showAddModal} onHide={() => setShowAddModal(false)} onSave={onSave} onDelete={onDelete} />

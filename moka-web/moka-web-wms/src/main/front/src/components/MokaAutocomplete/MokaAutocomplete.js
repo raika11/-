@@ -75,6 +75,21 @@ const defaultProps = {
 const MokaAutocomplete = forwardRef((props, ref) => {
     const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, defaultValue, value, onChange, className, isInvalid, ...rest } = props;
 
+    const customStyles = {
+        option: (provided, state) => ({
+            ...provided,
+            fontSize: '12px',
+        }),
+        control: (provided, state) => ({
+            ...provided,
+            fontSize: '12px',
+        }),
+        singleValue: (provided, state) => ({
+            ...provided,
+            fontSize: '12px',
+        }),
+    };
+
     // 검색 아이콘
     const IndicatorsContainer = (props) => {
         const { children, ...rest } = props;
@@ -117,6 +132,7 @@ const MokaAutocomplete = forwardRef((props, ref) => {
             value={value}
             onChange={onChange}
             components={searchIcon ? { IndicatorsContainer } : undefined}
+            styles={customStyles}
             {...rest}
         />
     );

@@ -6,14 +6,14 @@ const DeskingWorkList = React.lazy(() => import('./DeskingWorkList'));
 const DeskingTab = React.lazy(() => import('./DeskingTab'));
 
 /**
- * 화면편집
+ * 페이지편집
  */
 const Desking = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>화면편집</title>
-                <meta name="description" content="화면편집페이지입니다." />
+                <title>페이지편집</title>
+                <meta name="description" content="페이지편집 페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
@@ -28,7 +28,9 @@ const Desking = ({ match }) => {
             </Suspense>
 
             {/* 데스킹 탭 */}
-            <DeskingTab />
+            <Suspense>
+                <DeskingTab />
+            </Suspense>
         </div>
     );
 };

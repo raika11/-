@@ -3,9 +3,13 @@ import { MokaCardTabs, MokaIconTabs, MokaIcon } from '@components';
 import { ArticleDeskList } from '@/pages/Article/components';
 
 const DeskingTabs = () => {
+    // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
+    const [tabNavs, setTabNav] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
 
+    // ref
     const articleRef = useRef(null);
+    const videoRef = useRef(null);
 
     // 순서 반대로
     return (
@@ -25,9 +29,9 @@ const DeskingTabs = () => {
                         <ArticleDeskList className="px-3 pb-3 pt-2" ref={articleRef} />,
 
                         // 영상 기사 조회 컴포넌트
-                        <ArticleDeskList className="px-3 pb-3 pt-2" video />,
+                        <ArticleDeskList className="px-3 pb-3 pt-2" ref={videoRef} video />,
                     ]}
-                    tabNavs={['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']}
+                    tabNavs={tabNavs}
                 />,
             ]}
             tabNavWidth={48}

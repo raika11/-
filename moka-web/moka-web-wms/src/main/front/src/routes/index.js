@@ -32,7 +32,7 @@ const routes = [
     {
         path: '/desking',
         name: 'Desking',
-        displayName: '화면편집',
+        displayName: '페이지편집',
         component: Desking,
         layout: SidebarCloseLayout,
         nonResponsive: false,

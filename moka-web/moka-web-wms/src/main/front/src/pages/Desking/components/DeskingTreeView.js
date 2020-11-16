@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import DeskingTreeCategory from './DeskingTreeCategory';
 import DeskingTreeItem from './DeskingTreeItem';
-import { MokaLoader } from '@components';
+import { MokaLoader, MokaCard } from '@components';
 
 const propTypes = {
     /**
@@ -41,16 +41,6 @@ const propTypes = {
      */
     onSelected: PropTypes.func,
     /**
-     * 트리라벨에 마우스 hover할 때 나오는 버튼 리스트
-     */
-    labelHoverButtons: PropTypes.arrayOf(
-        PropTypes.shape({
-            text: PropTypes.string,
-            icon: PropTypes.node,
-            onClick: PropTypes.func,
-        }),
-    ),
-    /**
      * 로딩중 여부
      */
     loading: PropTypes.bool,
@@ -84,7 +74,7 @@ const DeskingTreeView = (props) => {
     };
 
     return (
-        <div className="mr-gutter border custom-scroll treeview" style={{ height, width: '200px', backgroundColor: 'white' }}>
+        <MokaCard className="mr-gutter treeview" bodyClassName="p-1" width={200} header={false}>
             <ul className="list-unstyled tree-list">
                 {loading && <MokaLoader />}
                 {!loading &&
@@ -93,7 +83,7 @@ const DeskingTreeView = (props) => {
                         return createTreeItem(nodes, idx);
                     })}
             </ul>
-        </div>
+        </MokaCard>
     );
 };
 

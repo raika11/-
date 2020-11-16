@@ -44,9 +44,9 @@ export default handleActions(
         /**
          * 데이터 변경
          */
-        [act.CHANGE_AREA]: (state, { payload: { body } }) => {
+        [act.CHANGE_AREA]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.area = body.area;
+                draft.area = payload;
             });
         },
     },

@@ -127,6 +127,7 @@ const Component = ({ match }) => {
 
             {/* 탭 */}
             <MokaIconTabs
+                foldable={false}
                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                 tabWidth={412}
                 tabs={[

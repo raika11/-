@@ -1,6 +1,3 @@
-import React from 'react';
-import GroupNumberRenderer from './GroupNumberRenderer';
-
 export default [
     {
         rowDrag: true,
@@ -45,7 +42,7 @@ export default [
         headerName: '',
         width: 24,
         // 편집 그룹 + 동영상(OVP/YOUTUBE/둘다)
-        cellRendererFramework: (params) => <GroupNumberRenderer {...params} />,
+        cellRenderer: 'GroupNumberRenderer',
     },
     {
         headerName: '제 목',

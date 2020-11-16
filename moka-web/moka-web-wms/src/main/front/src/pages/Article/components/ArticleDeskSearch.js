@@ -6,13 +6,14 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultArticleSearchType, CodeAutocomplete } from '@pages/commons';
+import { ChangeArtGroupModal } from '@pages/Article/modals';
 import { initialState, getArticleList, changeSearchOption } from '@store/article';
 
 /**
  * 기사 검색
  */
 const ArticleDeskSearch = (props) => {
-    const { video } = props;
+    const { media, component } = props;
     const dispatch = useDispatch();
     const { storeSearch } = useSelector((store) => ({
         storeSearch: store.article.search,
@@ -21,6 +22,7 @@ const ArticleDeskSearch = (props) => {
     // state
     const [search, setSearch] = useState(initialState.search);
     const [searchDisabled, setSearchDisabled] = useState(false);
+    const [modalShow, setModalShow] = useState(false);
 
     /**
      * 입력값 변경
@@ -84,17 +86,35 @@ const ArticleDeskSearch = (props) => {
         setSearch({ ...search, masterCode: value });
     };
 
+    /**
+     * 초기화 버튼
+     * @param {object} e event
+     */
+    const handleClickReset = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        setSearch({
+            ...initialState.search,
+            masterCode: component.masterCode || null,
+            startServiceDay: moment('2020-08-21 00:00').format(DB_DATEFORMAT),
+            endServiceDay: moment('2020-08-22 00:00').format(DB_DATEFORMAT),
+            page: 0,
+        });
+    };
+
     useEffect(() => {
         setSearch({
             ...storeSearch,
+            masterCode: component.masterCode || null,
             startServiceDay: moment(storeSearch.startServiceDay, DB_DATEFORMAT),
             endServiceDay: moment(storeSearch.endServiceDay, DB_DATEFORMAT),
         });
-    }, [storeSearch]);
+    }, [component.masterCode, storeSearch]);
 
     useEffect(() => {
-        if (video) setSearchDisabled(true);
-    }, [video]);
+        if (media) setSearchDisabled(true);
+    }, [media]);
 
     useEffect(() => {
         /**
@@ -108,6 +128,7 @@ const ArticleDeskSearch = (props) => {
             getArticleList(
                 changeSearchOption({
                     ...storeSearch,
+                    masterCode: component.masterCode || null,
                     startServiceDay: moment('2020-08-21 00:00').format(DB_DATEFORMAT),
                     endServiceDay: moment('2020-08-22 00:00').format(DB_DATEFORMAT),
                     // startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
@@ -118,7 +139,7 @@ const ArticleDeskSearch = (props) => {
         );
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch]);
+    }, [dispatch, component.masterCode]);
 
     return (
         <Form>
@@ -148,7 +169,7 @@ const ArticleDeskSearch = (props) => {
                 <MokaSearchInput variant="dark" className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
                 {/* 초기화 */}
-                <Button variant="dark" className="ft-12">
+                <Button variant="dark" className="ft-12" onClick={handleClickReset}>
                     초기화
                 </Button>
             </Form.Row>
@@ -194,10 +215,12 @@ const ArticleDeskSearch = (props) => {
                         />
                     </div>
                 </div>
-                <Button variant="dark" className="ft-12">
+                <Button variant="dark" className="ft-12" onClick={() => setModalShow(true)}>
                     그룹지정
                 </Button>
             </Form.Row>
+
+            <ChangeArtGroupModal show={modalShow} onHide={() => setModalShow(false)} />
         </Form>
     );
 };

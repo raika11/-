@@ -6,6 +6,7 @@ import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
 import { GET_ARTICLE_LIST, getArticleList, changeSearchOption } from '@store/article';
 import columnDefs from './ArticleDeskAgGridColums';
+import GroupNumberRenderer from './GroupNumberRenderer';
 
 const ArticleDeskAgGrid = forwardRef((props, ref) => {
     const { onRowDragMove } = props;
@@ -80,6 +81,12 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
         );
     }, [list]);
 
+    useEffect(() => {
+        if (ref.current && ref.current.gridApi) {
+            ref.current.gridApi.redrawRows();
+        }
+    }, [rowData, ref]);
+
     return (
         <MokaTable
             ref={ref}
@@ -97,6 +104,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
             error={error}
             onChangeSearchOption={handleChangeSearchOption}
             onRowDragMove={handleRowDragMove}
+            frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
         />
     );
 });

@@ -80,6 +80,10 @@ const propTypes = {
      * 드래그 함수
      */
     onRowDragMove: PropTypes.func,
+    /**
+     * 추가적인 framework components
+     */
+    frameworkComponents: PropTypes.object,
 };
 
 const defaultProps = {
@@ -118,6 +122,7 @@ const MokaTable = forwardRef((props, ref) => {
         header,
         headerHeight,
         rowHeight,
+        frameworkComponents,
     } = props;
     const { dragging, onRowDragMove } = props;
 
@@ -283,7 +288,7 @@ const MokaTable = forwardRef((props, ref) => {
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     // defaultColDef={{ tooltipComponent: 'mokaTooltip' }}
-                    frameworkComponents={{ mokaTooltip: Tooltip, radio: RadioButton, imageRenderer: ImageRenderer }}
+                    frameworkComponents={{ mokaTooltip: Tooltip, radio: RadioButton, imageRenderer: ImageRenderer, ...frameworkComponents }}
                     suppressRowClickSelection
                     getRowClass={getRowClass}
                     headerHeight={headerHeight}

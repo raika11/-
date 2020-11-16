@@ -24,13 +24,13 @@ public class MenuModule implements ModuleInterface {
             throws Exception {
         Map<String,Object> parameterMap = apiContext.getCheckedParamMap();
         String type = (String)parameterMap.get("type");
-        String menuKey = (String)parameterMap.get("menuKey");
+        String categoryKey = (String)parameterMap.get("category");
         if ( type.equals("top")) {
             return getTop();
         } else if ( type.equals("mega")) {
             return getMega();
         } else if ( type.equals("header")) {
-            return this.getHeader(menuKey);
+            return this.getHeader(categoryKey);
         }  else if ( type.equals("all")) {
             return this.menuParser.getRootMenu();
         }
@@ -47,8 +47,8 @@ public class MenuModule implements ModuleInterface {
         return resultList;
     }
 
-    private Object getHeader(String menuKey) {
-        Menu foundMenu = findMenu(this.menuParser.getRootMenu(),menuKey);
+    private Object getHeader(String categoryKey) {
+        Menu foundMenu = findMenuByCategory(this.menuParser.getRootMenu(),categoryKey);
         if ( foundMenu == null ) return MenuParser.EMPTY_CHILDREN;
         Menu sectionMenu = null;
         Menu highlightMenu = null;
@@ -147,12 +147,34 @@ public class MenuModule implements ModuleInterface {
             if (menu.getKey().equalsIgnoreCase(key)) {
                 return menu;
             }
+        }
+        for (Menu menu : parentMenu.getChildren()) {
+            foundMenu = findMenu(menu, key);
             if (foundMenu != null) {
                 break;
             }
         }
+        return foundMenu;
+    }
+
+    public Menu findMenuByCategory(Menu parentMenu, String categoryKey) {
+        if (!parentMenu
+                .hasChildren()) {
+            return null;
+        }
+        Menu foundMenu = null;
+        // 상위레벨부터 조회하도록 루프를 두번 수행한다.
         for (Menu menu : parentMenu.getChildren()) {
-            foundMenu = findMenu(menu, key);
+            if ( menu.getCategoryKey() != null) {
+                if (menu
+                        .getCategoryKey()
+                        .equalsIgnoreCase(categoryKey)) {
+                    return menu;
+                }
+            }
+        }
+        for (Menu menu : parentMenu.getChildren()) {
+            foundMenu = findMenuByCategory(menu, categoryKey);
             if (foundMenu != null) {
                 break;
             }

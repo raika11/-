@@ -85,8 +85,8 @@ public class Menu {
     @JsonProperty("IconHtml")
     private String iconHtml;
 
-    @JsonProperty("CategoryKeys")
-    private String categoryKeys;
+    @JsonProperty("CategoryKey")
+    private String categoryKey;
 
     @JsonIgnore
     private Menu parentMenu;
@@ -133,7 +133,7 @@ public class Menu {
         // IconHtml
             this.setIconHtml("");
         // CategoryKeys
-        this.setCategoryKeys(getCategoryKey(menuEl, menuParser));
+        this.setCategoryKey(getCategoryKey(menuEl, menuParser));
     }
 
     public boolean hasChildren() {

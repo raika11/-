@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <apiConfig>
-  <api id="menu" expire="1m">
+  <api id="menu" expire="5s">
     <description>메뉴를 정보를 반환한다.</description>
     <parameter>
       <type default="all" desc="구분(top|mega|header|all)">(top|mega|header|all)</type>
-      <menuKey desc="메뉴키">.{1,20}</menuKey>
+      <category desc="카테고리키">.{1,20}</category>
     </parameter>
     <request type="module">jmnet.moka.core.dps.api.handler.module.MenuModule</request>
     <keys>
       type
-      menuKey
+      category
     </keys>
   </api>
-  <api id="category" expire="1m">
+  <api id="category" expire="5s">
     <description>Category정보를 반환한다.</description>
     <parameter>
       <master desc="마스터코드">([0-9]{7}(\,)?){1,10}</master>

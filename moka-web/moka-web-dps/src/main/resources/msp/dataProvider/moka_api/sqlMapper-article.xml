@@ -39,7 +39,7 @@
   </select>
   <!-- article reporter -->
   <select id="reporter" parameterType="hashmap" resultType="map">
-    select B.* from TB_15RE_ART_REPORTER A, TB_15RE_REPORTER B
+    select B.* from TB_15RE_ARTICLE_REPORTER A, TB_15RE_REPORTER B
     where TOTAL_ID = #{totalId} AND A.REP_SEQ = B.REP_SEQ
     ORDER BY A.ORD_NO ASC
   </select>

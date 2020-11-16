@@ -1,0 +1,91 @@
+package jmnet.moka.core.tps.mvc.directlink.entity;
+
+import jmnet.moka.core.tps.common.entity.BaseAudit;
+import lombok.*;
+
+import javax.persistence.*;
+
+
+/**
+ * The persistent class for the TB_15RE_DIRECT_LINK table.
+ */
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
+@Entity
+@Table(name = "TB_15RE_DIRECT_LINK")
+@NamedQuery(name = "DirectLink.findAll", query = "SELECT d FROM DirectLink d")
+public class DirectLink extends BaseAudit {
+
+    private static final long serialVersionUID = -6113879324816610973L;
+
+
+    /**
+     * 링크일련번호
+     */
+    @Id
+    @Column(name = "LINK_SEQ", length = 4)
+    private String linkSeq;
+
+    /**
+     * 사용여부(Y:사용,N:미사용)
+     */
+    @Column(name = "USED_YN", nullable = false, length = 1)
+    private String usedYn;
+
+    /**
+     * 노출고정(y:항상노출n:검색시만노출)
+     */
+    @Column(name = "FIX_YN", nullable = false)
+    private String fixYn;
+
+    /**
+     * 링크타입(s:본창n:새창)
+     */
+    @Column(name = "LINK_TYPE", nullable = false)
+    private String linkType;
+
+    /**
+     * 노출시작일
+     */
+    @Column(name = "VIEW_SDATE", nullable = false)
+    private String viewSdate;
+
+    /**
+     * 노출종료일
+     */
+    @Column(name = "VIEW_EDATE", nullable = false)
+    private String viewEdate;
+
+    /**
+     * 서비스제목
+     */
+    @Column(name = "LINK_TITLE", nullable = false)
+    private String linkTitle;
+
+    /**
+     * 대표이미지
+     */
+    @Column(name = "IMG_URL", nullable = false)
+    private String imgUrl;
+
+    /**
+     * 링크url
+     */
+    @Column(name = "LINK_URL", nullable = false)
+    private String linkUrl;
+
+    /**
+     * 내용
+     */
+    @Column(name = "LINK_CONTENT", nullable = false)
+    private String linkContent;
+
+    /**
+     * 링크키워드
+     */
+    @Column(name = "LINK_KWD", nullable = false)
+    private String linkKwd;
+}

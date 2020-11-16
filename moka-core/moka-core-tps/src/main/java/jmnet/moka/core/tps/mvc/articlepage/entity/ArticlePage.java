@@ -6,8 +6,6 @@ package jmnet.moka.core.tps.mvc.articlepage.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -25,13 +23,10 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
-import jmnet.moka.core.tps.mvc.page.entity.PageRel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -83,6 +78,12 @@ public class ArticlePage extends BaseAudit {
     private String artType;
 
     /**
+     * 카테고리
+     */
+    @Column(name = "CATEGORY")
+    private String category;
+
+    /**
      * 기사페이지본문
      */
     @Nationalized
@@ -129,24 +130,24 @@ public class ArticlePage extends BaseAudit {
      */
     public boolean isEqualRel(ArticlePageRel rel) {
         Optional<ArticlePageRel> find = articlePageRels.stream()
-            .filter(r -> {
-                if (r.getRelType()
-                    .equals(rel.getRelType()) && r.getRelSeq()
-                    .equals(rel.getRelSeq())) {
-                    if (r.getRelParentSeq() == null && rel.getRelParentSeq() == null) {
-                        return true;
-                    } else if (r.getRelParentSeq() == null && rel.getRelParentSeq() != null) {
-                        return false;
-                    } else if (r.getRelParentSeq() != null && rel.getRelParentSeq() == null) {
-                        return false;
-                    } else if (r.getRelParentSeq()
-                        .equals(rel.getRelParentSeq())) {
-                        return true;
-                    }
-                }
-                return false;
-            })
-            .findFirst();
+                                                       .filter(r -> {
+                                                           if (r.getRelType()
+                                                                .equals(rel.getRelType()) && r.getRelSeq()
+                                                                                              .equals(rel.getRelSeq())) {
+                                                               if (r.getRelParentSeq() == null && rel.getRelParentSeq() == null) {
+                                                                   return true;
+                                                               } else if (r.getRelParentSeq() == null && rel.getRelParentSeq() != null) {
+                                                                   return false;
+                                                               } else if (r.getRelParentSeq() != null && rel.getRelParentSeq() == null) {
+                                                                   return false;
+                                                               } else if (r.getRelParentSeq()
+                                                                           .equals(rel.getRelParentSeq())) {
+                                                                   return true;
+                                                               }
+                                                           }
+                                                           return false;
+                                                       })
+                                                       .findFirst();
         if (find.isPresent()) {
             return true;
         }

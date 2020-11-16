@@ -13,7 +13,6 @@
     }
 
     .react-select__value-container {
-        // padding: $input-padding-y $input-padding-x;
         padding: 3px $input-padding-x 1px $input-padding-x;
 
         .react-select__placeholder {
@@ -49,6 +48,7 @@
     }
 
     .react-select__search-indicator:hover {
+        padding: 3px;
         background: transparent;
         color: hsl(0, 0%, 60%) !important;
         cursor: pointer;

@@ -55,7 +55,6 @@ const ReporterMgrSearchModal = (props) => {
      */
     const responseCallback = useCallback(({ header, body }) => {
         if (header.success) {
-            console.log('bbbbbbbbbbbbb::', body.list);
             setRowData([]);
             setRowData(
                 body.list.map((data) => ({
@@ -128,7 +127,7 @@ const ReporterMgrSearchModal = (props) => {
     };
 
     /**
-     * 테이블 검색옵션 변경
+     * 테이블 검색옵션 변경1
      */
 
     const handleChangeSearchOption = ({ key, value }) => {
@@ -136,8 +135,40 @@ const ReporterMgrSearchModal = (props) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-
         setSearch(temp);
+        dispatch(
+            getReporterListModal({
+                search: {
+                    ...temp,
+                    page: 0,
+                },
+                callback: responseCallback,
+            }),
+        );
+    };
+
+    /**
+     * 테이블 검색옵션 변경1
+     */
+
+    const handleChangeSearchOptions = ({ key, value }) => {
+        let temp = { ...search, [key]: value };
+        if (key !== 'page') {
+            temp['page'] = 0;
+        }
+        setSearch(temp);
+
+        const ns = {
+            ...temp,
+            keyword: keyword,
+        };
+
+        dispatch(
+            getReporterListModal({
+                search: ns,
+                callback: responseCallback,
+            }),
+        );
     };
 
     useEffect(() => {
@@ -202,7 +233,7 @@ const ReporterMgrSearchModal = (props) => {
                 total={total}
                 page={search.page}
                 size={search.size}
-                onChangeSearchOption={handleChangeSearchOption}
+                onChangeSearchOption={handleChangeSearchOptions}
                 selected={selected}
                 pageSizes={MODAL_PAGESIZE_OPTIONS}
             />

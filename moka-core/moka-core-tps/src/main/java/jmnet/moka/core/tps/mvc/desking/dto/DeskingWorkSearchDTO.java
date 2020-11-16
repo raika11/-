@@ -8,26 +8,22 @@
 
 package jmnet.moka.core.tps.mvc.desking.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.ibatis.type.Alias;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 
 /**
  * 컴포넌트 검색 DTO
- * 
- * @author jeon
  *
+ * @author jeon
  */
 @AllArgsConstructor
 @Setter
@@ -50,14 +46,14 @@ public class DeskingWorkSearchDTO extends SearchDTO {
      */
     private String regId;
 
-//    private String createYmdt;
+    //    private String createYmdt;
 
     /**
      * 작업 컴포넌트 SEQ
      */
-//    private Long componentSeq;
-//
-//    private Long datasetSeq;
+    //    private Long componentSeq;
+
+    private Long datasetSeq;
 
     // 검색 조건의 기본값을 설정
     public DeskingWorkSearchDTO() {

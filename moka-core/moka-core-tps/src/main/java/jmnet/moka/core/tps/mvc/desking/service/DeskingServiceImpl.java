@@ -160,33 +160,31 @@ public class DeskingServiceImpl implements DeskingService {
         return componentList;
     }
 
-    //    @Override
-    //    public DeskingComponentWorkVO getComponentWork(Long seq) {
-    //        return this.getComponentWork(seq, true);
-    //    }
-    //
-    //    @Override
-    //    public DeskingComponentWorkVO getComponentWork(Long seq, boolean flag) {
-    //        DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentsWorkBySeq(seq);
-    //
-    //        if (componentVO != null && flag == true) {
-    //            WorkSearchDTO search = WorkSearchDTO.builder().datasetSeq(componentVO.getDatasetSeq())
-    //                    .editionSeq(componentVO.getEditionSeq()).creator(componentVO.getCreator())
-    //                    .build();
-    //
-    //            List<DeskingWorkVO> deskingList = deskingWorkMapper.findDeskingWork(search);
-    //            Long componentSeq = componentVO.getComponentSeq();
-    //            for (int idx = 0; idx < deskingList.size(); idx++) {
-    //                deskingList.get(idx).setComponentSeq(componentSeq);
-    //            }
-    //            List<DeskingRelWorkVO> deskingRelList = deskingWorkMapper.findDeskingRelWork(search);
-    //            componentVO.setDeskingWorks(deskingList);
-    //            componentVO.setDeskingRelWorks(deskingRelList);
-    //        }
-    //
-    //        return componentVO;
-    //    }
-    //
+    @Override
+    public DeskingComponentWorkVO findComponentWorkBySeq(Long seq, boolean includeDesking) {
+        //        DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentsWorkBySeq(seq);
+        //
+        //        if (componentVO != null && includeDesking == true) {
+        //            DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
+        //                                                              .datasetSeq(componentVO.getDatasetSeq())
+        //                                                              .regId(componentVO.getRegId())
+        //                                                              .build();
+        //
+        //            List<DeskingWorkVO> deskingList = deskingWorkMapper.findDeskingWork(search);
+        //            Long componentSeq = componentVO.getComponentSeq();
+        //            for (int idx = 0; idx < deskingList.size(); idx++) {
+        //                deskingList.get(idx)
+        //                           .setComponentSeq(componentSeq);
+        //            }
+        //            List<DeskingRelWorkVO> deskingRelList = deskingWorkMapper.findDeskingRelWork(search);
+        //            componentVO.setDeskingWorks(deskingList);
+        //            componentVO.setDeskingRelWorks(deskingRelList);
+        //        }
+        //
+        //        return componentVO;
+        return null;
+    }
+
     //    @Override
     //    @Transactional
     //    public void updateDesking(Component component, List<DeskingWorkVO> deskingWorks,

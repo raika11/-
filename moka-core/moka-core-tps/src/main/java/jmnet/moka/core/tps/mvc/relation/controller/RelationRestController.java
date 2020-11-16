@@ -90,7 +90,7 @@ public class RelationRestController {
                 tpsLogger.success(ActionType.SELECT, true);
                 return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
-            } else if (relType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
+            } else if (relType.equals(MokaConstants.ITEM_ARTICLE_PAGE)) {
                 // 콘텐츠 스킨 목록 조회
                 search.setEntityClass(ArticlePageVO.class);
                 search.setDefaultSort("artPageSeq,desc");

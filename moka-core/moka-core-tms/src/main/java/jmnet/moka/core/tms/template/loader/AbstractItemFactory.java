@@ -19,7 +19,7 @@ import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.item.AdItem;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.ContainerItem;
-import jmnet.moka.core.tms.merge.item.ContentSkinItem;
+import jmnet.moka.core.tms.merge.item.ArticlePageItem;
 import jmnet.moka.core.tms.merge.item.DatasetItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -48,7 +48,7 @@ public abstract class AbstractItemFactory {
     protected static final List<String> TEMPLATE_LIST = makeConstantArray("TEMPLATE_");
     protected static final List<String> DATASET_LIST = makeConstantArray("DATASET_");
     protected static final List<String> AD_LIST = makeConstantArray("AD_");
-    protected static final List<String> SKIN_LIST = makeConstantArray("SKIN_");
+    protected static final List<String> ARTICLE_PAGE_LIST = makeConstantArray("ARTICLE_PAGE_");
     //    protected static TypeReference<Map<String, Object>> ITEM_TYPE_REFERENCE =
     //            new TypeReference<Map<String, Object>>() {
     //            };
@@ -113,8 +113,8 @@ public abstract class AbstractItemFactory {
                     .convertValue(jsonObject, ResourceMapper.TYPEREF_MAP_OBJECT);
             if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                 return getPageItem(valueMap);
-            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
-                return getContentSkinItem(valueMap);
+            } else if (itemType.equals(MokaConstants.ITEM_ARTICLE_PAGE)) {
+                return getArticlePageItem(valueMap);
             } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
                 return getContainerItem(valueMap);
             } else if (itemType.equals(MokaConstants.ITEM_COMPONENT)) {
@@ -139,8 +139,8 @@ public abstract class AbstractItemFactory {
                     .convertValue(jsonObject, ResourceMapper.TYPEREF_MAP_OBJECT);
             if (itemType.equals(MokaConstants.ITEM_PAGE)) {
                 return getPageItem(valueMap);
-            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
-                return getContentSkinItem(valueMap);
+            } else if (itemType.equals(MokaConstants.ITEM_ARTICLE_PAGE)) {
+                return getArticlePageItem(valueMap);
             } else if (itemType.equals(MokaConstants.ITEM_CONTAINER)) {
                 return getContainerItem(valueMap);
             } else if (itemType.equals(MokaConstants.ITEM_COMPONENT)) {
@@ -165,11 +165,11 @@ public abstract class AbstractItemFactory {
         return pageItem;
     }
 
-    public ContentSkinItem getContentSkinItem(Map<String, Object> valueMap)
+    public ArticlePageItem getArticlePageItem(Map<String, Object> valueMap)
             throws IllegalArgumentException, ParseException {
-        ContentSkinItem skinItem = new ContentSkinItem();
-        setEntry(skinItem, valueMap, SKIN_LIST);
-        return skinItem;
+        ArticlePageItem articlePageItem = new ArticlePageItem();
+        setEntry(articlePageItem, valueMap, ARTICLE_PAGE_LIST);
+        return articlePageItem;
     }
 
     public ContainerItem getContainerItem(Map<String, Object> valueMap)

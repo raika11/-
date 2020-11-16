@@ -86,9 +86,6 @@ public class DefaultView extends AbstractView {
             case MokaConstants.ITEM_PAGE:
                 cacheKey = KeyResolver.makePgItemCacheKey(domainId, itemId, httpParamMap);
                 break;
-            case MokaConstants.ITEM_CONTENT_SKIN:
-                cacheKey = "";
-                break;
             case MokaConstants.ITEM_COMPONENT:
                 cacheKey = KeyResolver.makeCpItemCacheKey(domainId, itemId, null, cid, httpParamMap);
                 break;

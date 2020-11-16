@@ -219,8 +219,6 @@ public class ArticlePageController {
      * 기사페이지 수정
      *
      * @param artPageSeq   페이지번호
-     * @param pageDTO   수정할 페이지정보
-     * @param principal 로그인 사용자 세션
      * @return 수정된 페이지정보
      * @throws InvalidDataException 데이타 유효성오류
      * @throws NoDataException      데이타 없음
@@ -249,7 +247,7 @@ public class ArticlePageController {
 
             // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
             purgeHelper.purgeTms(returnValue.getDomain()
-                .getDomainId(), MokaConstants.ITEM_CONTENT_SKIN, returnValue.getArtPageSeq());
+                .getDomainId(), MokaConstants.ITEM_ARTICLE_PAGE, returnValue.getArtPageSeq());
 
             // 결과리턴
             ArticlePageDTO dto = modelMapper.map(returnValue, ArticlePageDTO.class);

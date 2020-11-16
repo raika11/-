@@ -18,6 +18,8 @@ import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.tms.merge.item.ArticlePageItem;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -75,14 +77,13 @@ public class ArticlePageDTO implements Serializable {
     @Builder.Default
     private String artPageBody = "";
 
-    //    public ArticlePageItem toArticlePageItem() {
-    //        ArticlePageItem item = new ArticlePageItem();
-    //        item.put(ItemConstants.PAGE_ID, this.pageSeq);
-    //        item.put(ItemConstants.PAGE_DOMAIN_ID, this.domain.getDomainId());
-    //        item.put(ItemConstants.PAGE_NAME, this.pageName);
-    //        item.put(ItemConstants.PAGE_SERVICE_NAME, this.pageServiceName);
-    //        item.put(ItemConstants.PAGE_DISPLAY_NAME, this.pageDisplayName);
-    //        item.put(ItemConstants.PAGE_PARENT_ID, this.parent != null ? this.parent.getPageSeq() : null);
-    //        return item;
-    //    }
+    public ArticlePageItem toArticlePageItem() {
+        ArticlePageItem item = new ArticlePageItem();
+        item.put(ItemConstants.ATICLE_PAGE_ID, this.artPageSeq);
+        item.put(ItemConstants.ATICLE_PAGE_DOMAIN_ID, this.domain.getDomainId());
+        item.put(ItemConstants.ATICLE_PAGE_TYPE, this.artType);
+        item.put(ItemConstants.ATICLE_PAGE_NAME, this.artPageName);
+        item.put(ItemConstants.ARTICLE_PAGE_BODY, this.artPageBody);
+        return item;
+    }
 }

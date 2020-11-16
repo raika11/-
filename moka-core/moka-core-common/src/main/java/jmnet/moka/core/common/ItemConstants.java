@@ -145,18 +145,16 @@ public class ItemConstants {
     public static String AD_MODIFIED_YMDT = ITEM_MODIFIED;
     public static String AD_MODIFIER = "modifier";
 
-    /* Skin Item */
-    public static String SKIN_ID = "id";
-    public static String SKIN_DOMAIN_ID = "domainId";
-    public static String SKIN_NAME = "name";
-    public static String SKIN_SERVICE_NAME = "serviceName";
-    public static String SKIN_SERVICE_TYPE = "serviceType";
-    public static String SKIN_DEFAULT_YN = "defaultYn";
-    public static String SKIN_BODY = "body";
-    public static String SKIN_CREATE_YMDT = "create";
-    public static String SKIN_CREATOR = "creator";
-    public static String SKIN_MODIFIED_YMDT = ITEM_MODIFIED;
-    public static String SKIN_MODIFIER = "modifier";
+    /* Article Page Item */
+    public static String ATICLE_PAGE_ID = "id";
+    public static String ATICLE_PAGE_DOMAIN_ID = "domainId";
+    public static String ATICLE_PAGE_TYPE = "type";
+    public static String ATICLE_PAGE_NAME = "name";
+    public static String ARTICLE_PAGE_BODY = "body";
+    public static String ARTICLE_PAGE_CREATE_YMDT = "create";
+    public static String ARTICLE_PAGE_CREATOR = "creator";
+    public static String ARTICLE_PAGE_MODIFIED_YMDT = ITEM_MODIFIED;
+    public static String ARTICLE_PAGE_MODIFIER = "modifier";
 
 
     public static class DpsItemConstants {
@@ -298,18 +296,16 @@ public class ItemConstants {
         public static String AD_MODIFIED_YMDT = "MOD_DT";
         public static String AD_MODIFIER = "MOD_ID";
 
-        /* Skin Item */
-        public static String SKIN_ID = "SKIN_SEQ";
-        public static String SKIN_DOMAIN_ID = "DOMAIN_ID";
-        public static String SKIN_NAME = "SKIN_NAME";
-        public static String SKIN_SERVICE_NAME = "SKIN_SERVICE_NAME";
-        public static String SKIN_SERVICE_TYPE = "SERVICE_TYPE";
-        public static String SKIN_DEFAULT_YN = "DEFAULT_YN";
-        public static String SKIN_BODY = "SKIN_BODY";
-        public static String SKIN_CREATE_YMDT = "REG_DT";
-        public static String SKIN_CREATOR = "REG_ID";
-        public static String SKIN_MODIFIED_YMDT = "MOD_DT";
-        public static String SKIN_MODIFIER = "MOD_ID";
+        /* Article Page Item */
+        public static String ATICLE_PAGE_ID = "ART_PAGE_SEQ";
+        public static String ATICLE_PAGE_DOMAIN_ID = "DOMAIN_ID";
+        public static String ATICLE_PAGE_TYPE = "ART_TYPE";
+        public static String ATICLE_PAGE_NAME = "ART_PAGE_NAME";
+        public static String ARTICLE_PAGE_BODY = "ART_PAGE_BODY";
+        public static String ARTICLE_PAGE_CREATE_YMDT = "REG_DT";
+        public static String ARTICLE_PAGE_CREATOR = "REG_ID";
+        public static String ARTICLE_PAGE_MODIFIED_YMDT = "MOD_DT";
+        public static String ARTICLE_PAGE_MODIFIER = "MOD_ID";
 
     }
 

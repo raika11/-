@@ -50,7 +50,7 @@ public class MokaConstants {
     public final static String ITEM_TEMPLATE = "TP";    // 템플릿
     public final static String ITEM_CONTAINER = "CT";    // 컨테이너
     public final static String ITEM_AD = "AD";            // 광고
-    public final static String ITEM_CONTENT_SKIN = "CS";// 콘텐트(기사본문)스킨
+    public final static String ITEM_ARTICLE_PAGE = "AP"; // 기사페이지
     public final static String ITEM_UNKNOWN = "UNKNOWN";// 알수 없음
     public final static String ITEM_DATASET = "DS";        // 데이타셋
     public final static String ITEM_RESERVED = "RS";    // 예약어

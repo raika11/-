@@ -63,8 +63,6 @@ const ReporterMgrSearch = () => {
      */
     const handleClicktListModalSave = (data, hideCallback) => {
         if (data) {
-            console.log('부모창 팝업에서 내려옴 값::', data);
-            //hideCallback();
             setSearch({
                 ...search,
                 keyword: data.repName,

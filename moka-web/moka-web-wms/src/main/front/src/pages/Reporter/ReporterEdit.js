@@ -5,7 +5,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { clearReporter, getReporter, changeReporter, changeInvalidList, GET_REPORTER, CHANGE_REPORTER, saveReporter } from '@store/reporter';
 import { notification } from '@utils/toastUtil';
-import bg from '@assets/images/bg.jpeg';
+import bg from '@assets/images/v_noimg.jpg';
 
 /**
  * 기자 정보 조회/수정

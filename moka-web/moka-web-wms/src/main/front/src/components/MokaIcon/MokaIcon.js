@@ -37,6 +37,12 @@ import {
     faTv as falTv, // 페이지편집 > 미리보기
     faPencil as falPencil,
     faSave as falSave,
+    // faFileCode, // 데스킹 버튼 그룹
+    // faExpandWide, // 데스킹 버튼 그룹
+    // faExchange, // 데스킹 버튼 그룹
+    // faPlusSquare, // 데스킹 버튼 그룹
+    // faShareSquare, // 데스킹 버튼 그룹
+    // faTrash, // 데스킹 버튼 그룹
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faThList as fasThList, faThLarge as fasThLarge, faAngleLeft as fasAngleLeft, faAngleRight as fasAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';

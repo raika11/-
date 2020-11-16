@@ -5,7 +5,6 @@ import authSaga from '@store/auth/authSaga';
 import articleSaga from '@store/article/articleSaga';
 import domainSaga from '@store/domain/domainSaga';
 import templateSaga from '@store/template/templateSaga';
-import codeSaga from '@store/code/codeSaga';
 import codeMgtSaga from '@store/codeMgt/codeMgtSaga';
 import reservedSaga from '@store/reserved/reservedSaga';
 import datasetdSaga from '@store/dataset/datasetSaga';
@@ -20,7 +19,8 @@ import mergeSaga from '@store/merge/mergeSaga';
 import areaSaga from '@store/area/areaSaga';
 import groupSaga from '@store/group/groupSaga';
 import reporterSaga from '@store/reporter/reporterSaga';
-import deskingSaga from '@store/desking/deskingSaga';
+// import deskingSaga from '@store/desking/deskingSaga';
+// import gridSaga from '@store/desking/gridSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -29,7 +29,6 @@ export default function* rootSaga() {
         articleSaga(),
         domainSaga(),
         templateSaga(),
-        codeSaga(),
         codeMgtSaga(),
         reservedSaga(),
         datasetdSaga(),
@@ -44,6 +43,7 @@ export default function* rootSaga() {
         menuSaga(),
         groupSaga(),
         reporterSaga(),
-        deskingSaga(),
+        // deskingSaga(),
+        // gridSaga(),
     ]);
 }

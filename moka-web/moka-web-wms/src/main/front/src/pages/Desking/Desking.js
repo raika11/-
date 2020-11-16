@@ -1,9 +1,8 @@
 import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
-import DeskingList from './DeskingList';
 
-import { MokaCard } from '@components';
-
+const DeskingList = React.lazy(() => import('./DeskingList'));
+const DeskingWorkList = React.lazy(() => import('./DeskingWorkList'));
 const DeskingTab = React.lazy(() => import('./DeskingTab'));
 
 /**
@@ -18,11 +17,17 @@ const Desking = ({ match }) => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            {/* 리스트 */}
+            {/* 데스킹 트리 */}
             <Suspense>
                 <DeskingList />
             </Suspense>
 
+            {/* 데스킹 워크 */}
+            <Suspense>
+                <DeskingWorkList />
+            </Suspense>
+
+            {/* 데스킹 탭 */}
             <DeskingTab />
         </div>
     );

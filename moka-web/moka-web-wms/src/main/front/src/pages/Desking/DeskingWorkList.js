@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 
 import { MokaInputLabel, MokaLoader } from '@components';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
-import DeskingWorkComponent from './DeskingWorkComponent';
+import DeskingWorkComponent from './components/DeskingWorkComponent';
 
 const component = {
     componentSeq: 1,

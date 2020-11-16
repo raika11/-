@@ -25,19 +25,19 @@ public class MenuModule implements ModuleInterface {
         Map<String,Object> parameterMap = apiContext.getCheckedParamMap();
         String type = (String)parameterMap.get("type");
         String key = (String)parameterMap.get("key");
-        if ( type.equals("main")) {
-            return getMainSection();
+        if ( type.equals("top")) {
+            return getTop();
         } else if ( type.equals("mega")) {
-            return this.menuMega();
-        } else if ( type.equals("svc")) {
-            return this.getServiceMain(key);
+            return getMega();
+        } else if ( type.equals("header")) {
+            return this.getHeader(key);
         }  else if ( type.equals("all")) {
             return this.menuParser.getRootMenu();
         }
         return null;
     }
 
-    private Object getMainSection() {
+    private Object getTop() {
         List<Map<String,Object>> resultList = new ArrayList<>();
         for ( Menu menu:this.getChildrenMenu("NewsGroup")) {
             if ( menu.isIsShowTopMenu()) {
@@ -47,7 +47,7 @@ public class MenuModule implements ModuleInterface {
         return resultList;
     }
 
-    private Object getServiceMain(String key) {
+    private Object getHeader(String key) {
         Menu foundMenu = findMenu(this.menuParser.getRootMenu(),key);
         if ( foundMenu == null ) return MenuParser.EMPTY_CHILDREN;
         Menu parentMenu = null;
@@ -74,7 +74,7 @@ public class MenuModule implements ModuleInterface {
         return resultMap;
     }
 
-    public Object menuMega(){
+    public Object getMega(){
         List<List<Map<String,Object>>> list = new ArrayList<>();
         for ( String[] group : megaMenuKeys ) {
             List<Map<String,Object>> goupList = new ArrayList<>();

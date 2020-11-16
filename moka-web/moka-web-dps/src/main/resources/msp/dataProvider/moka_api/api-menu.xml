@@ -3,8 +3,8 @@
   <api id="menu" expire="1m">
     <description>메뉴를 정보를 반환한다.</description>
     <parameter>
-      <type default="all" desc="구분(main|mega|svc|all)">(main|mega|svc|all)</type>
-      <key desc="키(메뉴 or category)">.{1,20}</key>
+      <type default="all" desc="구분(top|mega|header|all)">(top|mega|header|all)</type>
+      <key desc="메뉴키">.{1,20}</key>
     </parameter>
     <request type="module">jmnet.moka.core.dps.api.handler.module.MenuModule</request>
     <keys>

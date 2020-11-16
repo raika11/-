@@ -75,13 +75,13 @@ public class MenuModule implements ModuleInterface {
     }
 
     public Object getMega(){
-        List<List<Map<String,Object>>> list = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         for ( String[] group : megaMenuKeys ) {
-            List<Map<String,Object>> goupList = new ArrayList<>();
+            List<Map<String,Object>> groupList = new ArrayList<>();
             for ( String menuKey : group) {
-                collectMegaMap(goupList,menuKey);
+                collectMegaMap(groupList,menuKey);
             }
-            list.add(goupList);
+            list.add(groupList);
         }
         return list;
     }

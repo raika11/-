@@ -1,14 +1,9 @@
 package jmnet.moka.core.tms.merge;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.template.merge.Functions;
-import jmnet.moka.common.template.merge.MergeContext;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 

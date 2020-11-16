@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.common.ApiResult;
 import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.template.Constants;
@@ -153,6 +154,12 @@ public class ArticleView extends AbstractView {
         }
         paramMap.put("category",category);
 
+        // 메뉴..
+        Map<String,Object> tempMap = new HashMap<>();
+        tempMap.put("type","header");
+        tempMap.put("category",category);
+        jsonResult = loader.getJSONResult("menu",tempMap,true);
+        mergeContext.set("menu",jsonResult.get(ApiResult.MAIN_DATA));
     }
 
     private String getArticlePage(Map<String,Object> articleInfo) {

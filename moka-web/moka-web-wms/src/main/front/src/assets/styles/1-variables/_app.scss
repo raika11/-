@@ -119,6 +119,20 @@ $social-colors: (
 	"bitbucket": #0052cc
 ) !default;
 
+
+// 페이지편집 group-color
+$group-colors: (
+	"1": #FFA7A7,
+	"2": #CEF279,
+	"3": #D1B2FF,
+	"4": #D1B2FF,
+	"5": #D1B2FF,
+	"6": #D1B2FF,
+	"7": #D1B2FF,
+	"8": #D1B2FF,
+) !default;
+$ovp: #09A5FC !default;
+
 // Body
 $body-bg: #F5F9FC !default;
 $body-color: $gray-700 !default;

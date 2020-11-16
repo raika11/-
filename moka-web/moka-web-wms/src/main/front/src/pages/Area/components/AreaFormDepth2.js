@@ -171,8 +171,8 @@ const AreaFormDepth2 = (props) => {
 
         let save = {
             ...temp,
-            page: Object.keys(page).length > 0 ? page : null,
-            parent,
+            page: Object.keys(page).length > 0 ? { pageSeq: page.pageSeq } : null,
+            parent: Object.keys(parent).length > 0 ? { areaSeq: parent.areaSeq } : null,
             domain,
         };
 

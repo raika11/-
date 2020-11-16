@@ -19,3 +19,18 @@ export const objectToFormData = (obj) => {
 
     return form_data;
 };
+
+/**
+ * unescape html special chars
+ * @param {string} str 문자열
+ */
+export const unescapeHtml = (str) => {
+    return str
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&#39;/g, "'")
+        .replace(/&quot;/g, '"')
+        .replace(/&#91;/g, '[')
+        .replace(/&#93;/g, ']');
+};

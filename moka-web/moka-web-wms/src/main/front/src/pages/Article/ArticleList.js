@@ -4,7 +4,8 @@ import ArticleSearch from './ArticleSearch';
 import ArticleAgGrid from './ArticleAgGrid';
 import { clearList, clearSearch } from '@store/article';
 
-const ArticleList = forwardRef(({ className }, ref) => {
+const ArticleList = forwardRef((props, ref) => {
+    const { className, video } = props;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -17,7 +18,7 @@ const ArticleList = forwardRef(({ className }, ref) => {
 
     return (
         <div className={className}>
-            <ArticleSearch />
+            <ArticleSearch video={video} />
             <ArticleAgGrid ref={ref} />
         </div>
     );

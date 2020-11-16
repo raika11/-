@@ -408,3 +408,38 @@ body {
     padding: 0px 4px;
     font-size: 13px;
 }
+
+/* -----------------------
+* 페이지편집
+* ---------------------- */
+.article-group-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+
+    @each $number, $color in $group-colors {
+        &[data-group-number="#{$number}"] {
+            background-color: $color;
+        }
+    }
+}
+
+.article-video {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: rgba($black, 0.54);
+
+    &.ovp {
+        color: $ovp;
+    }
+
+    &.youtube {
+        color: $orange;
+    }
+}

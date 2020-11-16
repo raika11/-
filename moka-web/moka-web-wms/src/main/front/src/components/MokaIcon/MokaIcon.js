@@ -44,7 +44,13 @@ import {
     // faShareSquare, // 데스킹 버튼 그룹
     // faTrash, // 데스킹 버튼 그룹
 } from '@moka/fontawesome-pro-light-svg-icons';
-import { faThList as fasThList, faThLarge as fasThLarge, faAngleLeft as fasAngleLeft, faAngleRight as fasAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
+import {
+    faThList as fasThList,
+    faThLarge as fasThLarge,
+    faAngleLeft as fasAngleLeft,
+    faAngleRight as fasAngleRight,
+    faPlayCircle as fasPlayCircle,
+} from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
 
@@ -92,6 +98,7 @@ library.add(fasThLarge);
 library.add(fasThList);
 library.add(fasAngleLeft);
 library.add(fasAngleRight);
+library.add(fasPlayCircle);
 
 // 아이콘 등록 (fad)
 library.add(fadImage);
@@ -102,6 +109,10 @@ const propTypes = {
      * string으로 들어오는 경우 fal-coffee => ['fal','coffee'] 로 변환함
      */
     iconName: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+    /**
+     * className
+     */
+    className: PropTypes.string,
 };
 const defaultProps = {};
 
@@ -109,7 +120,7 @@ const defaultProps = {};
  * fontawesome 아이콘 라이브러리
  */
 const MokaIcon = (props) => {
-    const { iconName, ...rest } = props;
+    const { iconName, className, ...rest } = props;
 
     if (typeof iconName === 'string') {
         const prefix = iconName.slice(0, 4);
@@ -128,7 +139,7 @@ const MokaIcon = (props) => {
             iconArray = ['fad', rIconName];
         }
 
-        return <FontAwesomeIcon icon={iconArray} {...rest} />;
+        return <FontAwesomeIcon icon={iconArray} className={className} {...rest} />;
     } else if (Array.isArray(iconName)) {
         return <FontAwesomeIcon icon={iconName} {...rest} />;
     }

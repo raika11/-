@@ -24,9 +24,9 @@ export const initialState = {
     },
     searchTypeList: [
         { id: 'all', name: '전체' },
-        { id: 'title', name: '제목' },
-        { id: 'reporterId', name: '기자ID' },
-        { id: 'reporterName', name: '기자명' },
+        { id: 'artTitle', name: '제목' },
+        { id: 'totalId', name: '기사ID' },
+        { id: 'artReporter', name: '기자명' },
     ],
     invalidList: [],
 };
@@ -62,7 +62,7 @@ export default handleActions(
          */
         [act.GET_ARTICLE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.total = body.total;
+                draft.total = body.totalCnt;
                 draft.list = body.list;
                 draft.error = initialState.error;
             });

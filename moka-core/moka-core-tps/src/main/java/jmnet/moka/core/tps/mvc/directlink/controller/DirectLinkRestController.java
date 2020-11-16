@@ -165,15 +165,15 @@ public class DirectLinkRestController {
      * 수정
      *
      * @param request   요청
-     * @param linkSeq  기자일련번호
-     * @param directLinkDTO 수정할 기자정보
-     * @return 수정된 기자정보
+     * @param linkSeq  링크일련번호
+     * @param directLinkDTO 수정할 사이트
+     * @return 수정된 사이트정보
      * @throws Exception 그외 모든 에러
      */
-    @ApiOperation(value = "기자정보 수정")
-    @PutMapping("/{repSeq}")
+    @ApiOperation(value = "사이트정보 수정")
+    @PutMapping("/{linkSeq}")
     public ResponseEntity<?> putDirectLink(HttpServletRequest request,
-                                       @PathVariable("repSeq")
+                                       @PathVariable("linkSeq")
                                        @Pattern(regexp = "[0-9]{4}$", message = "{tps.common.error.pattern.linkSeq}") String linkSeq,
                                        @Valid DirectLinkDTO directLinkDTO)
             throws Exception {

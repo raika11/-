@@ -56,7 +56,7 @@ const ArticleAgGrid = forwardRef((props, ref) => {
         <MokaTable
             ref={ref}
             headerHeight={50}
-            agGridHeight={624}
+            agGridHeight={623}
             columnDefs={columnDefs}
             rowData={[rowDate]}
             onRowNodeId={(article) => article.totalId}

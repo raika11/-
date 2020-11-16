@@ -15,11 +15,11 @@ const ContainerList = React.lazy(() => import('./ContainerList'));
 const ContainerEdit = React.lazy(() => import('./ContainerEdit'));
 
 // relations
-const RelationInPageList = React.lazy(() => import('@pages/commons/RelationInPageList'));
-const RelationInSkinList = React.lazy(() => import('@pages/commons/RelationInSkinList'));
-const LookupContainerList = React.lazy(() => import('@pages/commons/LookupContainerList'));
-const LookupComponentList = React.lazy(() => import('@pages/commons/LookupComponentList'));
-const LookupTemplateList = React.lazy(() => import('@pages/commons/LookupTemplateList'));
+const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
+const RelationInArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/RelationInArticlePageList'));
+const LookupContainerList = React.lazy(() => import('@pages/Container/components/LookupContainerList'));
+const LookupComponentList = React.lazy(() => import('@pages/Component/components/LookupComponentList'));
+const LookupTemplateList = React.lazy(() => import('@pages/Template/components/LookupTemplateList'));
 const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 
 /**
@@ -259,7 +259,7 @@ const Container = () => {
                                         <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <RelationInSkinList show={activeTabIdx === 2} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
+                                        <RelationInArticlePageList show={activeTabIdx === 2} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
                                     </Suspense>,
                                     <Suspense>
                                         <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickContainerLoad} />
@@ -279,7 +279,7 @@ const Container = () => {
                                 tabNavs={[
                                     { title: '컨테이너 정보', text: 'Info' },
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
                                     { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },

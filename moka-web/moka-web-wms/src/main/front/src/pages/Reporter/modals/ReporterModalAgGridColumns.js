@@ -40,7 +40,7 @@ export const columnDefs = [
     },
     {
         headerName: '소속',
-        field: 'jamDeptNm',
+        field: 'belong',
         cellStyle: { fontSize: '12px' },
         width: 130,
     },

@@ -16,87 +16,147 @@ public class MenuModule implements ModuleInterface {
     @Autowired
     @Qualifier("pcMenuParser")
     private MenuParser menuParser;
-
+    private String[][] megaMenuKeys = {{"NewsGroup"},{"SectionGroup"},{"NewsLetter","NewsDigest","Issue",
+                                     "Trend","Reporter"},{"User"}};
     @Override
     public Object invoke(ApiContext apiContext, ApiRequestHandler apiRequestHandler,
             ApiRequestHelper apiRequestHelper)
             throws Exception {
         Map<String,Object> parameterMap = apiContext.getCheckedParamMap();
-        String division = (String)parameterMap.get("division");
+        String type = (String)parameterMap.get("type");
         String key = (String)parameterMap.get("key");
-        if ( division.equals("top")) {
-            return getTopMenu();
-        } else if ( division.equals("all")) {
-            return this.menuParser.getAllMenu();
-        } else if ( division.equals("mega")) {
+        if ( type.equals("main")) {
+            return getMainSection();
+        } else if ( type.equals("mega")) {
             return this.menuMega();
-        } else if ( division.equals("sub")) {
-            return this.getSubMenu(key);
+        } else if ( type.equals("svc")) {
+            return this.getServiceMain(key);
+        }  else if ( type.equals("all")) {
+            return this.menuParser.getRootMenu();
         }
         return null;
     }
 
-    private Object getTopMenu() {
+    private Object getMainSection() {
         List<Map<String,Object>> resultList = new ArrayList<>();
-        for ( Menu menu:this.menuParser.getChildrenMenu("NewsGroup")) {
+        for ( Menu menu:this.getChildrenMenu("NewsGroup")) {
             if ( menu.isIsShowTopMenu()) {
-                Map<String,Object> map = new HashMap<>();
-                map.put("Key",menu.getKey());
-                map.put("Display",menu.getDisplay());
-                map.put("Url", menu.getUrl().getPath());
-                resultList.add(map);
+                resultList.add(convert(menu));
             }
         }
         return resultList;
     }
 
-    private Object getSubMenu(String key) {
+    private Object getServiceMain(String key) {
+        Menu foundMenu = findMenu(this.menuParser.getRootMenu(),key);
+        if ( foundMenu == null ) return MenuParser.EMPTY_CHILDREN;
+        Menu parentMenu = null;
+        Menu highlightMenu = null;
+        List<Menu> childrenMenu;
+        if ( foundMenu.hasChildren()) { // 상위 메뉴인 경우
+            parentMenu = foundMenu;
+            childrenMenu = foundMenu.getChildren();
+        } else { // 하위 메뉴 인경우
+            parentMenu = foundMenu.getParentMenu();
+            childrenMenu = parentMenu.getChildren();
+            highlightMenu = foundMenu;
+        }
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("parent",convert(parentMenu));
+        resultMap.put("highlight",highlightMenu == null?"":highlightMenu.getKey());
         List<Map<String,Object>> resultList = new ArrayList<>();
-        for ( Menu menu:this.menuParser.getChildrenMenu(key)) {
+        for ( Menu menu : parentMenu.getChildren()) {
             if ( menu.isIsShowTopMenu()) {
-                Map<String,Object> map = new HashMap<>();
-                map.put("Key",menu.getKey());
-                map.put("Display",menu.getDisplay());
-                map.put("Url", menu.getUrl().getPath());
-                resultList.add(map);
+                resultList.add(convert(menu));
             }
         }
-        return resultList;
+        resultMap.put("children",resultList);
+        return resultMap;
     }
 
     public Object menuMega(){
-        List<Map<String,Object>> resultList = new ArrayList<>();
-        collectMegaMap(resultList,"NewsGroup");
-        collectMegaMap(resultList,"SectionGroup");
-        collectMegaMap(resultList,"NewsLetter");
-        collectMegaMap(resultList,"NewsDigest");
-        collectMegaMap(resultList,"Issue");
-        collectMegaMap(resultList,"Trend");
-        collectMegaMap(resultList,"Reporter");
-        collectMegaMap(resultList,"User");
-        return resultList;
+        List<List<Map<String,Object>>> list = new ArrayList<>();
+        for ( String[] group : megaMenuKeys ) {
+            List<Map<String,Object>> goupList = new ArrayList<>();
+            for ( String menuKey : group) {
+                collectMegaMap(goupList,menuKey);
+            }
+            list.add(goupList);
+        }
+        return list;
     }
 
     private void collectMegaMap(List<Map<String,Object>> resultList, String key) {
-        for ( Menu menu:this.menuParser.getChildrenMenu(key)) {
-            if ( menu.isIsShowMegaMenu()) {
-                Map<String,Object> map = new HashMap<>();
-                map.put("Key",menu.getKey());
-                map.put("Display",menu.getDisplay());
-                map.put("Url", menu.getUrl().getPath());
-                List<Map<String,Object>> subMenu = new ArrayList<>();
-                for ( Menu childMenu : menu.getChildren()) {
-                    if ( childMenu.isIsShowMegaMenu()) {
-                        Map<String,Object> subMap = new HashMap<>();
-                        subMap.put("Key",childMenu.getKey());
-                        subMap.put("Display",childMenu.getDisplay());
-                        subMap.put("Url", childMenu.getUrl().getPath());
-                        subMenu.add(subMap);
+        Menu rootMenu = this.menuParser.getRootMenu();
+        Menu foundMenu = findMenu(rootMenu, key);
+        if ( foundMenu == null ) return ;
+        if ( foundMenu.isDummy() ) { // dummy 일경우
+            for (Menu menu : this.getChildrenMenu(key)) {
+                if (menu.isIsShowMegaMenu()) {
+                    Map<String, Object> map = convert(menu);
+                    List<Map<String, Object>> subMenu = new ArrayList<>();
+                    for (Menu childMenu : menu.getChildren()) {
+                        if (childMenu.isIsShowMegaMenu()) {
+                            subMenu.add(convert(childMenu));
+                        }
+                    }
+                    map.put("Children", subMenu);
+                    resultList.add(map);
+                }
+            }
+        } else { // dummy가 아닐 경우
+            if (foundMenu.isIsShowMegaMenu()) {
+                Map<String, Object> map = convert(foundMenu);
+                List<Map<String, Object>> subMenu = new ArrayList<>();
+                for (Menu childMenu : foundMenu.getChildren()) {
+                    if (childMenu.isIsShowMegaMenu()) {
+                        subMenu.add(convert(childMenu));
                     }
                 }
                 map.put("Children", subMenu);
                 resultList.add(map);
             }
         }
+    }
+
+    private Map<String,Object> convert(Menu menu) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("Key",menu.getKey());
+        map.put("Display",menu.getDisplay());
+        map.put("Url", menu.getUrl().getPath());
+        return map;
+    }
+
+    public List<Menu> getChildrenMenu(String parentKey) {
+        Menu rootMenu = this.menuParser.getRootMenu();
+        Menu foundMenu = findMenu(rootMenu, parentKey);
+        if (foundMenu != null) {
+            return foundMenu.getChildren();
+        }
+        return MenuParser.EMPTY_CHILDREN;
+    }
+
+    public Menu findMenu(Menu parentMenu, String key) {
+          if (!parentMenu
+                .hasChildren()) {
+            return null;
+        }
+        Menu foundMenu = null;
+          // 상위레벨부터 조회하도록 루프를 두번 수행한다.
+        for (Menu menu : parentMenu.getChildren()) {
+            if (menu.getKey().equalsIgnoreCase(key)) {
+                return menu;
+            }
+            if (foundMenu != null) {
+                break;
+            }
+        }
+        for (Menu menu : parentMenu.getChildren()) {
+            foundMenu = findMenu(menu, key);
+            if (foundMenu != null) {
+                break;
+            }
+        }
+        return foundMenu;
     }
 }

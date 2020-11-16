@@ -200,13 +200,6 @@ public class Component extends BaseAudit {
     @Column(name = "SNAPSHOT_BODY")
     private String snapshotBody;
 
-    //    /**
-    //     * 스킨SEQ
-    //     */
-    //    @ManyToOne(fetch = FetchType.EAGER)
-    //    @JoinColumn(name = "SKIN_SEQ", referencedColumnName = "SKIN_SEQ")
-    //    private Skin skin;
-
     @PrePersist
     @PreUpdate
     public void prePersist() {

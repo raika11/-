@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Form1 from './components/AreaFormDepth1';
 import Form2 from './components/AreaFormDepth2';
 import toast from '@utils/toastUtil';
-import { PageListModal } from '@pages/commons';
+import { PageListModal } from '@pages/Page/modals';
 
 const AreaEdit = ({ onDelete }) => {
     const { selectedDepth, areaError, errorDepth1, errorDepth2, errorDepth3 } = useSelector((store) => ({

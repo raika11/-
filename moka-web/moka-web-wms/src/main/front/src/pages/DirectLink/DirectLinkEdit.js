@@ -90,7 +90,7 @@ const DirectLinkEdit = () => {
             ...temp,
             viewSDate: null,
             viewEDate: null,
-            imageFile: fileValue, // multipart 받는 dto의 필드값으로 변경하세요
+            imageFile: fileValue, // multipart 받는 dto의 필드명으로 변경하세요
         };
 
         let sdt = moment(temp.periodStartDt).format(DB_DATEFORMAT);

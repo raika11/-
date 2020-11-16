@@ -14,7 +14,6 @@ export const initialState = {
     search: {
         page: 0,
         searchType: 'all',
-        size: PAGESIZE_OPTIONS[0],
         sort: 'repSeq,asc',
         keyword: '',
     },
@@ -47,6 +46,13 @@ export default handleActions(
         [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.invalidList = payload;
+            });
+        },
+        [act.CLEAR_REPORTER]: (state) => {
+            return produce(state, (draft) => {
+                draft.reporter = initialState.reporter;
+                draft.reporterError = initialState.reporterError;
+                draft.invalidList = initialState.invalidList;
             });
         },
         /**

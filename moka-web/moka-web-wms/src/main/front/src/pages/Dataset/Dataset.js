@@ -14,10 +14,10 @@ const DatasetEdit = React.lazy(() => import('./DatasetEdit'));
 const DatasetList = React.lazy(() => import('./DatasetList'));
 
 // relations
-const RelationInPageList = React.lazy(() => import('@pages/commons/RelationInPageList'));
-const RelationInSkinList = React.lazy(() => import('@pages/commons/RelationInSkinList'));
-const RelationInContainerList = React.lazy(() => import('@pages/commons/RelationInContainerList'));
-const RelationInComponentList = React.lazy(() => import('@pages/commons/RelationInComponentList'));
+const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
+const RelationInArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/RelationInArticlePageList'));
+const RelationInContainerList = React.lazy(() => import('@pages/Container/components/RelationInContainerList'));
+const RelationInComponentList = React.lazy(() => import('@pages/Component/components/RelationInComponentList'));
 
 const Dataset = () => {
     const dispatch = useDispatch();
@@ -105,7 +105,7 @@ const Dataset = () => {
                                         <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
                                     </Suspense>,
                                     <Suspense>
-                                        <RelationInSkinList show={activeTabIdx === 1} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
+                                        <RelationInArticlePageList show={activeTabIdx === 1} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
                                     </Suspense>,
                                     <Suspense>
                                         <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
@@ -118,7 +118,7 @@ const Dataset = () => {
                                 placement="left"
                                 tabNavs={[
                                     { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                                    { title: '관련 기사타입', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
                                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
                                 ]}

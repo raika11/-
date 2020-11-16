@@ -12,7 +12,7 @@ import { previewPage, w3cPage } from '@store/merge';
 import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
 import { notification } from '@utils/toastUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
-import { PageListModal } from '@pages/commons';
+import { PageListModal } from '@pages/Page/modals';
 
 const PageEdit = ({ onDelete }) => {
     const { pageSeq: paramPageSeq } = useParams();
@@ -245,7 +245,7 @@ const PageEdit = ({ onDelete }) => {
             dispatch(changeInvalidList(errList));
             return !isInvalid;
         },
-        [dispatch],
+        [EXCLUDE_PAGE_SERVICE_NAME_LIST, dispatch],
     );
 
     /**

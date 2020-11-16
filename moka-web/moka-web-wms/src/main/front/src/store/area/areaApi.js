@@ -48,3 +48,11 @@ export const deleteArea = ({ areaSeq }) => {
         throw err;
     });
 };
+
+// 편집영역트리 조회 (페이지편집용)
+export const getAreaTree = ({ search }) => {
+    const queryString = qs.stringify(search);
+    return instance.get(`/api/areas/tree?${queryString}`).catch((err) => {
+        throw err;
+    });
+};

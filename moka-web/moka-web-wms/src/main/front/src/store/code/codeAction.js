@@ -6,6 +6,12 @@ import { createRequestActionTypes } from '@store/commons/saga';
  */
 export const CLEAR_STORE = 'code/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
+export const CLEAR_SERVICE_LIST = 'code/CLEAR_SERVICE_LIST';
+export const CLEAR_SECTION_LIST = 'code/CLEAR_SECTION_LIST';
+export const CLEAR_CONTENT_LIST = 'code/CLEAR_CONTENT_LIST';
+export const clearServiceList = createAction(CLEAR_SERVICE_LIST);
+export const clearSectionList = createAction(CLEAR_SECTION_LIST);
+export const clearContentList = createAction(CLEAR_CONTENT_LIST);
 
 /**
  * 서비스코드(대분류) 리스트 조회

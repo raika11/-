@@ -155,6 +155,11 @@ export function* deleteArea({ payload: { areaSeq, callback, depth } }) {
  */
 // const hasRelationList = createRequestSaga(act.HAS_RELATION_LIST, api.hasRelationList, true);
 
+/**
+ * 편집영역 트리 조회(페이지편집용)
+ */
+const getAreaTree = createRequestSaga(act.GET_AREA_TREE, api.getAreaTree);
+
 export default function* saga() {
     yield takeLatest(act.GET_AREA_LIST_DEPTH1, getAreaListDepth1);
     yield takeLatest(act.GET_AREA_LIST_DEPTH2, getAreaListDepth2);
@@ -165,4 +170,5 @@ export default function* saga() {
     yield takeLatest(act.SAVE_AREA, saveArea);
     yield takeLatest(act.DELETE_AREA, deleteArea);
     yield takeLatest(act.GET_AREA_LIST_MODAL, getAreaListModal);
+    yield takeLatest(act.GET_AREA_TREE, getAreaTree);
 }

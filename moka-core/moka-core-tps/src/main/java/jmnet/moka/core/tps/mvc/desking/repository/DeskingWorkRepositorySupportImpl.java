@@ -28,12 +28,12 @@ public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport
 
     @Override
     @Transactional
-    public void deleteByDatasetSeq(Long datasetSeq, String creator) {
+    public void deleteByDatasetSeq(Long datasetSeq, String regId) {
         QDeskingWork deskingWork = QDeskingWork.deskingWork;
         BooleanBuilder builder = new BooleanBuilder();
 
-        builder.and(deskingWork.datasetSeq.eq(datasetSeq));
-        builder.and(deskingWork.creator.eq(creator));
+        builder.and(deskingWork.dataset.datasetSeq.eq(datasetSeq));
+        builder.and(deskingWork.regId.eq(regId));
 
         // 삭제
         queryFactory.delete(deskingWork).where(builder).execute();

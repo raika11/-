@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,7 +65,7 @@ public class ArticleBasicVO implements Serializable {
      * 등록기사 편집그룹 숫자
      */
     @Column(name = "ART_GROUP_NUM")
-    private Long artGroupNum;
+    private String artGroupNum;
 
     /**
      * 기사제목
@@ -87,8 +88,9 @@ public class ArticleBasicVO implements Serializable {
     /**
      * 출고일시
      */
+    @DTODateTimeFormat
     @Column(name = "SERVICE_DAYTIME")
-    private Date serviceDatytime;
+    private Date serviceDaytime;
 
     /**
      * 수정일시

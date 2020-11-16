@@ -29,32 +29,6 @@ public class PageSearchDTO extends SearchDTO {
     private static final long serialVersionUID = 3122658693342650030L;
 
     /**
-     * 검색타입
-     */
-    private String searchType;
-
-    /**
-     * 검색어
-     */
-    private String keyword;
-
-    /**
-     * 총갯수 사용여부
-     */
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.useTotal}")
-    private String useTotal;
-
-    /**
-     * 총갯수
-     */
-    private Long total;
-
-    /**
-     * 검색결과 성공여부
-     */
-    private Integer returnValue;
-
-    /**
      * 도메인
      */
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
@@ -64,9 +38,9 @@ public class PageSearchDTO extends SearchDTO {
     // 검색 조건의 기본값을 설정
     public PageSearchDTO() {
         super("pageName,asc");
-        useTotal = MokaConstants.YES;
-        searchType = TpsConstants.SEARCH_TYPE_ALL;
-        returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        this.setUseTotal(MokaConstants.YES);
+        this.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
+        this.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
     }
 
 }

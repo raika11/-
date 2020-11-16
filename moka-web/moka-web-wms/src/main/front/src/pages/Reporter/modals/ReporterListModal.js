@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Col } from 'react-bootstrap';
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { initialState, changeSearchOption, GET_REPORTER_LIST_MODAL, getReporterListModal } from '@store/reporter';
+import { initialState, changeSearchOption, GET_REPORTER_LIST_MODAL, getReporterListModal, getReporterList } from '@store/reporter';
 import { columnDefs } from './ReporterModalAgGridColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import Button from 'react-bootstrap/Button';
 import bg from '@assets/images/bg.jpeg';
-export const { searchTypeList } = initialState;
+import { clearStore } from '@store/dataset';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -26,10 +26,7 @@ const propTypes = {
      * 선택된 데이터셋아이디
      */
     selected: PropTypes.number,
-    /**
-     * 제외 데이터셋아이디
-     */
-    exclude: PropTypes.any,
+
     onClick: PropTypes.func,
 };
 const defaultProps = {};
@@ -38,7 +35,7 @@ const defaultProps = {};
  * 데이터셋 리스트 공통 모달
  */
 const ReporterMgrSearchModal = (props) => {
-    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
+    const { show, onHide, onClickSave } = props;
     const dispatch = useDispatch();
     const { keyword, loading } = useSelector((store) => ({
         keyword: store.reporter.search.keyword,
@@ -50,23 +47,20 @@ const ReporterMgrSearchModal = (props) => {
     const [total, setTotal] = useState(initialState.total);
     const [error, setError] = useState(initialState.error);
     const [selected, setSelected] = useState('');
-    const [selectedReporter, setSelectedReporter] = useState({});
     const [rowData, setRowData] = useState([]);
     const [cnt, setCnt] = useState(0);
-
-    useEffect(() => {
-        // 선택된 값 셋팅
-        setSelected(defaultSelected);
-    }, [defaultSelected]);
 
     /**
      * 리스트 조회 콜백
      */
-    const responseCallback = ({ header, body }) => {
+    const responseCallback = useCallback(({ header, body }) => {
         if (header.success) {
+            console.log('bbbbbbbbbbbbb::', body.list);
+            setRowData([]);
             setRowData(
                 body.list.map((data) => ({
                     ...data,
+                    belong: (data.r1CdNm || '') + (data.r2CdNm || '') + (data.r3CdNm || '') + (data.r4CdNm || ''),
                     onClickSave,
                     handleHide,
                     repImg: data.repImg || bg,
@@ -79,7 +73,7 @@ const ReporterMgrSearchModal = (props) => {
             setTotal(initialState.total);
             setError(body);
         }
-    };
+    });
 
     /**
      * 모달 닫기
@@ -96,23 +90,38 @@ const ReporterMgrSearchModal = (props) => {
      * 취소 버튼 클릭
      */
     const handleClickCancle = () => {
+        setRowData([]);
+        setTotal(initialState.total);
+        setError(null);
+        setCnt(0);
         setSearch(initialState.search);
+
+        dispatch(
+            getReporterListModal({
+                search: {
+                    ...search,
+                    page: 0,
+                },
+                callback: responseCallback,
+            }),
+        );
     };
 
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((data) => {
-        setSelectedReporter(data);
-    }, []);
+    const handleRowClicked = useCallback((data) => {}, []);
 
     /**
      * 검색
      */
-    const handleSearch = (search) => {
+    const handleSearch = () => {
         dispatch(
             getReporterListModal({
-                search: { ...search, keyword: keyword, size: 100, page: 0, exclude },
+                search: {
+                    ...search,
+                    page: 0,
+                },
                 callback: responseCallback,
             }),
         );
@@ -121,27 +130,34 @@ const ReporterMgrSearchModal = (props) => {
     /**
      * 테이블 검색옵션 변경
      */
+
     const handleChangeSearchOption = ({ key, value }) => {
         let temp = { ...search, [key]: value };
         if (key !== 'page') {
             temp['page'] = 0;
         }
+
         setSearch(temp);
     };
 
     useEffect(() => {
         if (show && cnt < 1) {
-            handleSearch({
+            const ns = {
                 ...search,
                 keyword: keyword,
-                size: 100,
+                size: MODAL_PAGESIZE_OPTIONS[0],
                 page: 0,
-                exclude,
-            });
+            };
+            setSearch(ns);
+            dispatch(
+                getReporterListModal({
+                    search: ns,
+                    callback: responseCallback,
+                }),
+            );
             setCnt(cnt + 1);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [keyword, show, exclude, cnt]);
+    }, [keyword, show, cnt, search, dispatch, responseCallback]);
 
     return (
         <MokaModal show={show} onHide={handleHide} title="기자 검색" size="xl" footerClassName="justify-content-center" width={970} draggable>
@@ -157,9 +173,7 @@ const ReporterMgrSearchModal = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
-                            onSearch={() => {
-                                handleSearch(search);
-                            }}
+                            onSearch={handleSearch}
                         />
                     </Col>
                     <Col xs={1}>

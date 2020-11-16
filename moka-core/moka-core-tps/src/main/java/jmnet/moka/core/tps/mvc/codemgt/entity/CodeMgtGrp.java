@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 
 /**
@@ -57,6 +58,7 @@ public class CodeMgtGrp extends BaseAudit {
     /**
      * 코드명
      */
+    @Nationalized
     @Column(name = "CD_NM", nullable = false)
     private String cdNm;
 
@@ -69,6 +71,7 @@ public class CodeMgtGrp extends BaseAudit {
     /**
      * 코드코멘트
      */
+    @Nationalized
     @Column(name = "CD_COMMENT")
     private String cdComment;
 

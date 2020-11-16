@@ -164,28 +164,12 @@ const ReporterMgrSearchModal = (props) => {
             keyword: keyword,
         };
 
-        console.log('nsnsnsnsnsnsns::', ns);
-
         dispatch(
             getReporterListModal({
                 search: ns,
                 callback: responseCallback,
             }),
         );
-
-        {
-            /*
-        dispatch(
-            getReporterListModal({
-                search: {
-                    ...temp,
-                    page: 0,
-                },
-                callback: responseCallback,
-            }),
-        );
-        */
-        }
     };
 
     useEffect(() => {

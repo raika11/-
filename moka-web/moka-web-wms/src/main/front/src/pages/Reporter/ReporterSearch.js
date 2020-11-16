@@ -77,9 +77,9 @@ const ReporterMgrSearch = () => {
         <Form>
             <Form.Row>
                 <Col xs={7} className="p-0 mb-2">
-                    {/*
                     <MokaSearchInput value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" name="keyword" />
-                    */}
+
+                    {/* 팝업 모달 테스트를 위한 부분 추후 1주일 안에 삭제할 예정임.
                     <MokaSearchInput
                         className="w-100"
                         placeholder="(모달팝업)기자 이름을 검색해주세요."
@@ -89,6 +89,7 @@ const ReporterMgrSearch = () => {
                         inputProps={{ readOnly: true }}
                         name="keyword"
                     />
+                    */}
                 </Col>
             </Form.Row>
             <ReporterListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} onClickSave={handleClicktListModalSave} />

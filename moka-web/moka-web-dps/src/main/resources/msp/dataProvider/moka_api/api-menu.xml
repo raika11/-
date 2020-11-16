@@ -4,20 +4,20 @@
     <description>메뉴를 정보를 반환한다.</description>
     <parameter>
       <type default="all" desc="구분(top|mega|header|all)">(top|mega|header|all)</type>
-      <key desc="메뉴키">.{1,20}</key>
+      <menuKey desc="메뉴키">.{1,20}</menuKey>
     </parameter>
     <request type="module">jmnet.moka.core.dps.api.handler.module.MenuModule</request>
     <keys>
       type
-      key
+      menuKey
     </keys>
   </api>
   <api id="category" expire="1m">
     <description>Category정보를 반환한다.</description>
     <parameter>
-      <master desc="마스터코드">[0-9]{7}</master>
-      <service desc="서비스코드">[0-9]{4,6}</service>
-      <source desc="출처코드">[0-9]{1,3}</source>
+      <master desc="마스터코드">([0-9]{7}(\,)?){1,10}</master>
+      <service desc="서비스코드">([0-9]{4,6}(\,)?){1,10}</service>
+      <source desc="출처코드">[0-9]{1,10}</source>
     </parameter>
     <request type="module">jmnet.moka.core.dps.api.handler.module.CategoryModule</request>
     <keys>

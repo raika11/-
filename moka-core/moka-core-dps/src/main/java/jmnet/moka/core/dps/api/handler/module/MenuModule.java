@@ -24,13 +24,13 @@ public class MenuModule implements ModuleInterface {
             throws Exception {
         Map<String,Object> parameterMap = apiContext.getCheckedParamMap();
         String type = (String)parameterMap.get("type");
-        String key = (String)parameterMap.get("key");
+        String menuKey = (String)parameterMap.get("menuKey");
         if ( type.equals("top")) {
             return getTop();
         } else if ( type.equals("mega")) {
             return getMega();
         } else if ( type.equals("header")) {
-            return this.getHeader(key);
+            return this.getHeader(menuKey);
         }  else if ( type.equals("all")) {
             return this.menuParser.getRootMenu();
         }
@@ -47,25 +47,25 @@ public class MenuModule implements ModuleInterface {
         return resultList;
     }
 
-    private Object getHeader(String key) {
-        Menu foundMenu = findMenu(this.menuParser.getRootMenu(),key);
+    private Object getHeader(String menuKey) {
+        Menu foundMenu = findMenu(this.menuParser.getRootMenu(),menuKey);
         if ( foundMenu == null ) return MenuParser.EMPTY_CHILDREN;
-        Menu parentMenu = null;
+        Menu sectionMenu = null;
         Menu highlightMenu = null;
         List<Menu> childrenMenu;
         if ( foundMenu.hasChildren()) { // 상위 메뉴인 경우
-            parentMenu = foundMenu;
+            sectionMenu = foundMenu;
             childrenMenu = foundMenu.getChildren();
         } else { // 하위 메뉴 인경우
-            parentMenu = foundMenu.getParentMenu();
-            childrenMenu = parentMenu.getChildren();
+            sectionMenu = foundMenu.getParentMenu();
+            childrenMenu = sectionMenu.getChildren();
             highlightMenu = foundMenu;
         }
         Map<String,Object> resultMap = new HashMap<String,Object>();
-        resultMap.put("parent",convert(parentMenu));
+        resultMap.put("section",convert(sectionMenu));
         resultMap.put("highlight",highlightMenu == null?"":highlightMenu.getKey());
         List<Map<String,Object>> resultList = new ArrayList<>();
-        for ( Menu menu : parentMenu.getChildren()) {
+        for ( Menu menu : sectionMenu.getChildren()) {
             if ( menu.isIsShowTopMenu()) {
                 resultList.add(convert(menu));
             }

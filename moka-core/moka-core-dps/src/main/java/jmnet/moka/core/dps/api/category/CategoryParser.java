@@ -71,9 +71,11 @@ public class CategoryParser {
     }
 
     public List<Category> getCategoryKeyList(String masterCode, String serviceCode, String sourceCode) {
+        String[] masterCodes = (masterCode == null)?null:masterCode.split(",");
+        String[] serviceCodes = (masterCode == null)?null:serviceCode.split(",");
         List<Category> categoryList = new ArrayList<>();
         for ( Category category : this.categoryList) {
-            if ( category.isMatch(masterCode,serviceCode,sourceCode)) {
+            if ( category.isMatch(masterCodes,serviceCodes,sourceCode)) {
                 categoryList.add(category);
             }
         }

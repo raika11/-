@@ -22,7 +22,7 @@ const DeskingTabs = () => {
                         // 기사 조회 컴포넌트
                         <ArticleList className="px-3 pb-3 pt-2" ref={articleRef} />,
                         // 영상 기사 조회 컴포넌트
-                        // <ArticleList className="px-3 pb-3 pt-2" />,
+                        <ArticleList className="px-3 pb-3 pt-2" video />,
                     ]}
                     tabNavs={['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']}
                 />,

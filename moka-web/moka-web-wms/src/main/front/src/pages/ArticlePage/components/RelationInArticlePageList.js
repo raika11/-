@@ -140,7 +140,7 @@ const RelationInArticlePageList = (props) => {
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
                 <Button variant="dark" onClick={() => history.push('/skin')}>
-                    기사페이지 추가
+                    기사페이지 등록
                 </Button>
             </div>
 

@@ -130,7 +130,7 @@ const DatasetSearch = () => {
             </Form.Row>
             <div className="d-flex justify-content-end mb-2">
                 <Button variant="dark" onClick={handleClickAddDataSet}>
-                    데이터셋 추가
+                    데이터셋 등록
                 </Button>
             </div>
         </Form>

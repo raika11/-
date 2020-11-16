@@ -199,7 +199,7 @@ const LookupPageList = (props) => {
                 {seqType !== ITEM_PG && (
                     <div className="d-flex mb-10 justify-content-end">
                         <Button variant="dark" onClick={() => window.open('/page')}>
-                            페이지 추가
+                            페이지 등록
                         </Button>
                     </div>
                 )}

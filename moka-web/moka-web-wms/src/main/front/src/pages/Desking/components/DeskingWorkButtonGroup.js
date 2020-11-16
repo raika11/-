@@ -18,7 +18,7 @@ const DeskingWorkButtonGroup = (props) => {
         { title: '템플릿', iconName: 'fal-minus-circle' },
         { title: '히스토리', iconName: 'fal-minus-circle' },
         { title: '기사 이동', iconName: 'fal-minus-circle' },
-        { title: '더미기사 추가', iconName: 'fal-minus-circle' },
+        { title: '더미기사 등록', iconName: 'fal-minus-circle' },
         { title: '전송', iconName: 'fal-minus-circle' },
         { title: '삭제', iconName: 'fal-minus-circle' },
     ];

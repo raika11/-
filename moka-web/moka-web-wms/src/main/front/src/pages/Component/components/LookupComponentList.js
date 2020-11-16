@@ -213,7 +213,7 @@ const LookupComponentList = (props) => {
                 {/* 버튼 그룹 */}
                 <div className="d-flex mb-10 justify-content-end">
                     <Button variant="dark" onClick={() => window.open('/component')}>
-                        컴포넌트 추가
+                        컴포넌트 등록
                     </Button>
                 </div>
 

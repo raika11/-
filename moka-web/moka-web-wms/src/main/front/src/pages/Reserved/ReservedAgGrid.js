@@ -40,7 +40,7 @@ const ReservedAgGrid = () => {
     const handleRowClick = useCallback((reserved) => history.push(`/reserved/${reserved.reservedSeq}`), [history]);
 
     /**
-     * 예약어 추가 버튼 클릭
+     * 예약어 등록 버튼 클릭
      */
     const handleAddClick = useCallback(() => history.push('/reserved'), [history]);
 

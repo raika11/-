@@ -22,7 +22,7 @@ const ContainerAgGrid = ({ onDelete }) => {
     const [rowData, setRowData] = useState([]);
 
     /**
-     * 컨테이너 추가 버튼 클릭
+     * 컨테이너 등록 버튼 클릭
      */
     const handleAddClick = useCallback(() => history.push('/container'), [history]);
 
@@ -62,7 +62,7 @@ const ContainerAgGrid = ({ onDelete }) => {
         <>
             <div className="d-flex justify-content-end mb-2">
                 <Button variant="dark" onClick={handleAddClick}>
-                    컨테이너 추가
+                    컨테이너 등록
                 </Button>
             </div>
             {/* table */}

@@ -198,6 +198,7 @@ $input-bg: $white !default;
 $input-disabled-bg: $gray-200 !default;
 $input-color: $gray-700 !default;
 $input-placeholder-color: rgba($black, 0.5) !default;
+$input-padding-x: 0.55rem;
 $input-btn-border-width: $border-width !default;
 $input-btn-line-height: $line-height-base !default;
 $input-btn-line-height-sm:    $line-height-sm !default;
@@ -232,6 +233,7 @@ $input-group-validation-states: (
 );
 
 // Custom controls
+$custom-select-padding-x: 0.55rem;
 $custom-control-indicator-bg: $gray-300 !default;
 $custom-control-indicator-disabled-bg: $gray-200 !default;
 

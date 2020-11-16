@@ -11,7 +11,7 @@ import { initialState, getArticleList, changeSearchOption } from '@store/article
 /**
  * 기사 검색
  */
-const ArticleSearch = (props) => {
+const ArticleDeskSearch = (props) => {
     const { video } = props;
     const dispatch = useDispatch();
     const { storeSearch } = useSelector((store) => ({
@@ -202,4 +202,4 @@ const ArticleSearch = (props) => {
     );
 };
 
-export default ArticleSearch;
+export default ArticleDeskSearch;

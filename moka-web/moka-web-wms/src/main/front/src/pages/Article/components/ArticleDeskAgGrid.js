@@ -5,9 +5,9 @@ import { DB_DATEFORMAT } from '@/constants';
 import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
 import { GET_ARTICLE_LIST, getArticleList, changeSearchOption } from '@store/article';
-import columnDefs from './ArticleAgGridColums';
+import columnDefs from './ArticleDeskAgGridColums';
 
-const ArticleAgGrid = forwardRef((props, ref) => {
+const ArticleDeskAgGrid = forwardRef((props, ref) => {
     const { onRowDragMove } = props;
 
     const dispatch = useDispatch();
@@ -101,4 +101,4 @@ const ArticleAgGrid = forwardRef((props, ref) => {
     );
 });
 
-export default ArticleAgGrid;
+export default ArticleDeskAgGrid;

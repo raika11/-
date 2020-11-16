@@ -1,5 +1,5 @@
 import React from 'react';
-import { GroupNumberRenderer } from './components';
+import GroupNumberRenderer from './GroupNumberRenderer';
 
 export default [
     {

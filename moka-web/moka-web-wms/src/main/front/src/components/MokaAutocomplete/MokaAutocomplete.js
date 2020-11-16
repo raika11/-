@@ -108,7 +108,7 @@ const MokaAutocomplete = forwardRef((props, ref) => {
             classNamePrefix="react-select"
             closeMenuOnSelect={closeMenuOnSelect}
             isSearchable
-            isClearable={!searchIcon}
+            isClearable={true}
             isMulti={isMulti}
             hideSelectedOptions={false}
             placeholder={placeholder}

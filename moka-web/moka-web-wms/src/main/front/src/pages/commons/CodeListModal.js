@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ListGroup from 'react-bootstrap/ListGroup';
-import Form from 'react-bootstrap/Form';
-import { MokaModal } from '@components';
+import { MokaModal, MokaInput } from '@components';
 import {
     initialState,
     getCodeServiceList,
@@ -74,14 +73,14 @@ const CodeListModal = (props) => {
     /**
      * 대분류 변경 시
      */
-    const selectLCode = useCallback((codeData, e) => {
+    const selectServiceCode = useCallback((codeData, e) => {
         setSelectedService(codeData);
     }, []);
 
     /**
      * 중분류 변경 시
      */
-    const selectMCode = useCallback(
+    const selectSectionCode = useCallback(
         (codeData, e) => {
             if (!selectedSection || selectedSection.masterCode !== codeData.masterCode) {
                 setSelectedSection(codeData);
@@ -97,7 +96,7 @@ const CodeListModal = (props) => {
     /**
      * 소분류 변경 시
      */
-    const selectSCode = useCallback(
+    const selectContentCode = useCallback(
         (codeData, e) => {
             if (!selectedContent || selectedContent.masterCode !== codeData.masterCode) {
                 setSelectedContent(codeData);
@@ -113,14 +112,14 @@ const CodeListModal = (props) => {
      *  닫기
      */
     const handleHide = useCallback(() => {
-        dispatch(clearServiceList());
-        dispatch(clearSectionList());
-        dispatch(clearContentList());
+        // dispatch(clearServiceList());
+        // dispatch(clearSectionList());
+        // dispatch(clearContentList());
 
         if (onHide) {
             onHide();
         }
-    }, [dispatch, onHide]);
+    }, [onHide]);
 
     /**
      * 적용버튼 클릭
@@ -221,7 +220,13 @@ const CodeListModal = (props) => {
                     <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
                         {serviceList.map((code) => (
                             <ListGroup.Item key={code.masterCode}>
-                                <Form.Check custom type="radio" name="lcode" id={`radio-${code.masterCode}`} label={code.serviceKorname} onClick={(e) => selectLCode(code, e)} />
+                                <MokaInput
+                                    as="radio"
+                                    name="lcode"
+                                    id={`radio-${code.masterCode}`}
+                                    inputProps={{ label: code.serviceKorname, custom: true }}
+                                    onClick={(e) => selectServiceCode(code, e)}
+                                />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -235,7 +240,13 @@ const CodeListModal = (props) => {
                     <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
                         {sectionList.map((code) => (
                             <ListGroup.Item key={code.masterCode}>
-                                <Form.Check custom type="radio" name="mcode" id={`radio-${code.masterCode}`} label={code.sectionKorname} onClick={(e) => selectMCode(code, e)} />
+                                <MokaInput
+                                    as="radio"
+                                    name="mcode"
+                                    id={`radio-${code.sectionKorname}`}
+                                    inputProps={{ label: code.sectionKorname, custom: true }}
+                                    onClick={(e) => selectSectionCode(code, e)}
+                                />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -249,7 +260,13 @@ const CodeListModal = (props) => {
                     <ListGroup variant="flush" className="custom-scroll" style={{ height: 360 }}>
                         {contentList.map((code) => (
                             <ListGroup.Item key={code.masterCode}>
-                                <Form.Check custom type="radio" name="scode" id={`radio-${code.masterCode}`} label={code.contentKorname} onClick={(e) => selectSCode(code, e)} />
+                                <MokaInput
+                                    as="radio"
+                                    name="scode"
+                                    id={`radio-${code.contentKorname}`}
+                                    inputProps={{ label: code.contentKorname, custom: true }}
+                                    onClick={(e) => selectContentCode(code, e)}
+                                />
                             </ListGroup.Item>
                         ))}
                     </ListGroup>

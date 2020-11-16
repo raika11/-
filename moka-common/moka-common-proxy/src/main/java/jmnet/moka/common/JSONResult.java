@@ -173,48 +173,39 @@ public class JSONResult implements Map {
         return getDataList(ApiResult.MAIN_DATA);
     }
 
-
     public List<Map<String, Object>> getDataList(String dataKey) {
-        if (this.containsKey(dataKey)) {
+        if ( dataKey.equals(ApiResult.MAIN_DATA)) {
+            Object dataObject = this.get(ApiResult.MAIN_DATA);
+            if (dataObject != null && dataObject instanceof List){
+                return (List<Map<String, Object>>) dataObject;
+            }
+        } else if (this.containsKey(dataKey)) {
             Object dataObject = this.get(dataKey);
-            if (dataObject != null && dataObject instanceof List
-                    && ((List<?>) dataObject).size() > 0) {
-                List<Map<String, Object>> dataList = (List<Map<String, Object>>) dataObject;
-                return dataList;
+            if ( dataObject instanceof Map) {
+                if ( ((Map)dataObject).containsKey(ApiResult.MAIN_DATA)) {
+                   return (List)(((Map)dataObject).get(ApiResult.MAIN_DATA));
+                }
             }
         }
         return null;
     }
 
-    public Map<String, Object> getDataMap() {
-        return getDataMap(ApiResult.MAIN_DATA);
-    }
-
-    public Map<String, Object> getDataMap(String dataKey) {
-        List<Map<String, Object>> dataList = getDataList(dataKey);
-        if (dataList != null && dataList.size() > 0) {
+    public Map<String, Object> getData() {
+        List<Map<String, Object>> dataList = getDataList(ApiResult.MAIN_DATA);
+        if ( dataList != null) {
             return dataList.get(0);
         }
         return null;
     }
 
-    public Object getData() {
-        return getDataMap(ApiResult.MAIN_DATA);
-    }
-
-    public Object getData(String dataKey) {
-        if (this.containsKey(dataKey)) {
-            Object dataObject = this.get(dataKey);
-            if (dataObject != null && dataObject instanceof List
-                    && ((List<?>) dataObject).size() > 0) {
-                List<?> dataList = (List<?>) dataObject;
-                return dataList.get(0);
-            } else {
-                return dataObject;
-            }
+    public Map<String, Object> getData(String dataKey) {
+        List<Map<String, Object>> dataList = getDataList(dataKey);
+        if ( dataList != null && dataList instanceof List) {
+            return dataList.get(0);
         }
         return null;
     }
+
 
     @Override
     public boolean isEmpty() {

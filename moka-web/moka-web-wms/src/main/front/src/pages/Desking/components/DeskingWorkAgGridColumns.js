@@ -13,7 +13,7 @@ export const rowClassRules = {
 export const columnDefs = [
     {
         rowDrag: true,
-        width: 22,
+        width: 16,
         suppressMenu: true,
         cellClassRules: cellClassRules,
     },
@@ -24,10 +24,11 @@ export const columnDefs = [
             return params.data.rel ? 2 : 1;
         },
         cellClassRules: cellClassRules,
+        cellStyle: { fontSize: '12px' },
     },
     {
         colId: 'checkbox',
-        width: 25,
+        width: 16,
         checkboxSelection: true,
         suppressMenu: true,
         headerCheckboxSelection: true,
@@ -41,11 +42,13 @@ export const columnDefs = [
         },
         editable: true,
         cellClassRules: cellClassRules,
+        cellStyle: { fontSize: '12px' },
     },
     {
-        width: 23,
+        width: 20,
         field: 'contentOrd',
         cellClassRules: cellClassRules,
+        cellStyle: { fontSize: '12px' },
     },
     {
         width: 50,
@@ -54,7 +57,7 @@ export const columnDefs = [
         cellClassRules: cellClassRules,
     },
     {
-        width: 300,
+        width: 220,
         field: 'title',
         flex: 1,
         autoHeight: true,
@@ -62,7 +65,7 @@ export const columnDefs = [
             boxSizing: 'border-box',
             whiteSpace: 'normal',
             lineHeight: '20px',
-            fontSize: '14px',
+            fontSize: '12px',
             height: '50px',
             display: '-webkit-box',
             paddingTop: '5px',
@@ -77,7 +80,7 @@ export const columnDefs = [
     },
     {
         field: 'editButton',
-        width: 35,
+        width: 36,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableEditButton {...row} onClick={data.onDelete} />;
@@ -94,7 +97,7 @@ export const columnDefs = [
     },
     {
         field: 'deleteButton',
-        width: 35,
+        width: 36,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;

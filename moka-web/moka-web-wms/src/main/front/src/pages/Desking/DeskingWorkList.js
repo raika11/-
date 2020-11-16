@@ -1,7 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 
 import { MokaInputLabel, MokaLoader } from '@components';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
@@ -9,7 +11,7 @@ import DeskingWorkComponent from './components/DeskingWorkComponent';
 
 const component = {
     componentSeq: 1,
-    componentName: '우측',
+    componentName: '좌측',
     perPageCount: 10,
 };
 
@@ -35,38 +37,37 @@ const DeskingWorkList = () => {
     };
 
     return (
-        <Form>
-            <Form.Row className="d-flex mb-2 justify-content-between">
-                {/* 버튼 */}
-                <div style={{ width: 200 }} className="mr-2">
-                    <MokaInputLabel
-                        label="기사 갯수"
-                        labelWidth={70}
-                        className="mb-0"
-                        inputClassName="ft-12"
-                        name="perPageCount"
-                        value={component.perPageCount}
-                        onChange={handleChangeValue}
-                    />
-                </div>
-                <Button variant="dark" className="ft-12 mr-2" onClick={handlePreviewClicked}>
-                    페이지 미리보기
-                </Button>
-            </Form.Row>
-            <Form.Row className="d-flex mb-2">
-                <div style={{ width: 420 }} className="mr-2">
-                    {/* 로딩 */}
-                    {/* {loading && <MokaLoader />} */}
-                    {/* 데스킹 컴포넌트 */}
-                    {/* {!loading &&
+        <div className="p-2 mr-gutter border d-flex flex-column" style={{ backgroundColor: 'white' }}>
+            <Container fluid className="mb-2">
+                <Row className="d-flex justify-content-between">
+                    <Col xs={5} className="p-0">
+                        <MokaInputLabel
+                            label="기사 갯수"
+                            labelClassName="d-flex justify-content-start"
+                            className="mb-0"
+                            inputClassName="ft-12"
+                            name="perPageCount"
+                            value={component.perPageCount}
+                            onChange={handleChangeValue}
+                        />
+                    </Col>
+                    <Button variant="dark" className="ft-12" onClick={handlePreviewClicked}>
+                        페이지 미리보기
+                    </Button>
+                </Row>
+            </Container>
+            <div>
+                {/* 로딩 */}
+                {/* {loading && <MokaLoader />} */}
+                {/* 데스킹 컴포넌트 */}
+                {/* {!loading &&
                         list && */}
-                    {/* {list.map((component, index) => {
+                {/* {list.map((component, index) => {
                             return <DeskingComponent key={`${areaSeq}-${component.seq}`} component={component} agGridIndex={index} onRowClicked={handleRowClicked} />;
                         })} */}
-                    <DeskingWorkComponent key={`1-1`} component={component} agGridIndex="1" />
-                </div>
-            </Form.Row>
-        </Form>
+                <DeskingWorkComponent key={`1-1`} component={component} agGridIndex="1" />
+            </div>
+        </div>
     );
 };
 

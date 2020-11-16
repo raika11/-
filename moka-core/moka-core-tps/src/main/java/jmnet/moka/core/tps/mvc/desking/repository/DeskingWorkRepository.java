@@ -17,5 +17,5 @@ import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
  */
 public interface DeskingWorkRepository extends JpaRepository<DeskingWork, Long>, DeskingWorkRepositorySupport {
 
-    public Long countByDatasetSeq(Long datasetSeq);
+    public Long countByDataset_DatasetSeq(Long datasetSeq);
 }

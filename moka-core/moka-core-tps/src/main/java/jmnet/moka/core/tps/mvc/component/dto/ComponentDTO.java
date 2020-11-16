@@ -16,7 +16,6 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
-import jmnet.moka.core.tps.mvc.skin.entity.Skin;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -182,11 +181,6 @@ public class ComponentDTO implements Serializable {
     private String snapshotBody;
 
     /**
-     * 연결 본문
-     */
-    private Skin skin;
-
-    /**
      * 이전 자동데이타셋 : 디비에 없는 필드
      */
     private DatasetDTO prevAutoDataset;
@@ -218,7 +212,6 @@ public class ComponentDTO implements Serializable {
         componentItem.put(ItemConstants.COMPONENT_SEARCH_CODE_ID, this.schCodeId);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_YN, this.snapshotYn);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_BODY, this.snapshotBody);
-        //        componentItem.put(ItemConstants.COMPONENT_SKIN_ID, this.skin.getSkinSeq());
         return componentItem;
     }
 }

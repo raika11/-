@@ -14,6 +14,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.mvc.articlepage.vo.ArticlePageVO;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
@@ -91,19 +92,19 @@ public class RelationRestController {
 
             } else if (relType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
                 // 콘텐츠 스킨 목록 조회
-                //                search.setEntityClass(SkinVO.class);
-                //                search.setDefaultSort("skinSeq,desc");
-                //
-                //                // 조회(mybatis)
-                //                List<SkinVO> returnValue = relationService.findAllSkin(search);
-                //
-                //                ResultListDTO<SkinVO> resultList = new ResultListDTO<SkinVO>();
-                //                resultList.setList(returnValue);
-                //                resultList.setTotalCnt(search.getTotal());
-                //
-                //                ResultDTO<ResultListDTO<SkinVO>> resultDTO = new ResultDTO<ResultListDTO<SkinVO>>(resultList);
-                //                tpsLogger.success(ActionType.SELECT, true);
-                //                return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+                search.setEntityClass(ArticlePageVO.class);
+                search.setDefaultSort("artPageSeq,desc");
+
+                // 조회(mybatis)
+                List<ArticlePageVO> returnValue = relationService.findAllArticlePage(search);
+
+                ResultListDTO<ArticlePageVO> resultList = new ResultListDTO<ArticlePageVO>();
+                resultList.setList(returnValue);
+                resultList.setTotalCnt(search.getTotal());
+
+                ResultDTO<ResultListDTO<ArticlePageVO>> resultDTO = new ResultDTO<ResultListDTO<ArticlePageVO>>(resultList);
+                tpsLogger.success(ActionType.SELECT, true);
+                return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
             } else if (relType.equals(MokaConstants.ITEM_CONTAINER)) {
 

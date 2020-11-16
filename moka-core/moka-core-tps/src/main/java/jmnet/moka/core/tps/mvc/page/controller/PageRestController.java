@@ -144,6 +144,7 @@ public class PageRestController {
      *
      * @param pageSeq 페이지 순번. 0이면 등록일때 유효성 검사
      * @param pageDTO 페이지정보
+     * @param actionType 동작유형
      * @throws InvalidDataException 유효성예외
      * @throws Exception            기타예외
      */
@@ -209,14 +210,13 @@ public class PageRestController {
      * 페이지 등록
      *
      * @param pageDTO   등록할 페이지정보
-     * @param principal 로그인 사용자 세션
      * @return 등록된 페이지정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            기타예외
      */
     @ApiOperation(value = "페이지 등록")
     @PostMapping(headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postPage(@RequestBody @Valid PageDTO pageDTO, Principal principal)
+    public ResponseEntity<?> postPage(@RequestBody @Valid PageDTO pageDTO)
             throws InvalidDataException, Exception {
 
         if (McpString.isEmpty(pageDTO.getPageBody())) {
@@ -257,7 +257,6 @@ public class PageRestController {
      *
      * @param pageSeq   페이지번호
      * @param pageDTO   수정할 페이지정보
-     * @param principal 로그인 사용자 세션
      * @return 수정된 페이지정보
      * @throws InvalidDataException 데이타 유효성오류
      * @throws NoDataException      데이타 없음
@@ -266,7 +265,7 @@ public class PageRestController {
     @ApiOperation(value = "페이지 수정")
     @PutMapping(value = "/{pageSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putPage(@PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
-            @RequestBody @Valid PageDTO pageDTO, Principal principal)
+            @RequestBody @Valid PageDTO pageDTO)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이타유효성검사.
@@ -274,12 +273,12 @@ public class PageRestController {
 
         // 수정
         Page newPage = modelMapper.map(pageDTO, Page.class);
-        Page orgPage = pageService.findPageBySeq(pageSeq)
-                                  .orElseThrow(() -> {
-                                      String message = messageByLocale.get("tps.common.error.no-data");
-                                      tpsLogger.fail(ActionType.UPDATE, message, true);
-                                      return new NoDataException(message);
-                                  });
+        pageService.findPageBySeq(pageSeq)
+              .orElseThrow(() -> {
+                  String message = messageByLocale.get("tps.common.error.no-data");
+                  tpsLogger.fail(ActionType.UPDATE, message, true);
+                  return new NoDataException(message);
+              });
 
         try {
             Page returnValue = pageService.updatePage(newPage);
@@ -300,7 +299,7 @@ public class PageRestController {
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE PAGE] seq: {} {}", pageDTO.getPageSeq(), e.getMessage());
+            log.error("[FAIL TO UPDATE PAGE] seq: {} {}", pageSeq, e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE PAGE]", e, true);
             throw new Exception(messageByLocale.get("tps.common.error.update"), e);
         }
@@ -444,8 +443,7 @@ public class PageRestController {
      */
     @ApiOperation(value = "페이지 목록조회(목록용)")
     @GetMapping
-    public ResponseEntity<?> getPagList(@Valid @SearchParam PageSearchDTO search)
-            throws NoDataException {
+    public ResponseEntity<?> getPagList(@Valid @SearchParam PageSearchDTO search) {
         // 페이징조건 설정
         Pageable pageable = search.getPageable();
 

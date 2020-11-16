@@ -7,6 +7,8 @@ package jmnet.moka.core.tps.mvc.relation.service;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.ad.service.AdService;
+import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
+import jmnet.moka.core.tps.mvc.articlepage.vo.ArticlePageVO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
@@ -34,8 +36,8 @@ public class RelationServiceImpl implements RelationService {
     @Autowired
     PageService pageService;
 
-    //    @Autowired
-    //    SkinService skinService;
+    @Autowired
+    ArticlePageService articlePageService;
 
     @Autowired
     ContainerService containerService;
@@ -53,16 +55,15 @@ public class RelationServiceImpl implements RelationService {
     ReservedService reservedService;
 
 
-
     @Override
     public List<PageVO> findAllPage(RelationSearchDTO search) {
         return pageService.findAllPageRel(search);
     }
 
-    //    @Override
-    //    public List<SkinVO> findAllSkin(RelationSearchDTO search) {
-    //        return skinService.findRelList(search);
-    //    }
+    @Override
+    public List<ArticlePageVO> findAllArticlePage(RelationSearchDTO search) {
+        return articlePageService.findAllArticlePageRel(search);
+    }
 
     @Override
     public Page<Container> findAllContainer(RelationSearchDTO search, Pageable pageable) {
@@ -184,12 +185,12 @@ public class RelationServiceImpl implements RelationService {
         } else if (relType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
 
             // 콘텐츠스킨 목록 조회
-            //            search.setEntityClass(SkinVO.class);
-            //            search.setDefaultSort("skinSeq,desc");
-            //            Long totalCount = skinService.findRelCount(search);
-            //            if (totalCount > 0) {
-            //                return true;
-            //            }
+            search.setEntityClass(ArticlePageVO.class);
+            search.setDefaultSort("artPageSeq,desc");
+            Long totalCount = articlePageService.countArticlePageRel(search);
+            if (totalCount > 0) {
+                return true;
+            }
 
         } else if (relType.equals(MokaConstants.ITEM_CONTAINER)) {
 
@@ -261,9 +262,9 @@ public class RelationServiceImpl implements RelationService {
         }
 
         // 콘텐츠스킨 체크
-        //        if (skinService.countByDomainId(domainId) > 0) {
-        //            return true;
-        //        }
+        if (articlePageService.countArticlePageByDomainId(domainId) > 0) {
+            return true;
+        }
 
         // 광고 체크
         if (adService.countByDomainId(domainId) > 0) {

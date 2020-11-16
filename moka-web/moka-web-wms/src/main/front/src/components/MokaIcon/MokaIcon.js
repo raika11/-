@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
@@ -36,8 +35,8 @@ import {
     faMoneyCheck as falMoneyCheck, // 페이지탭 아이콘
     faCalculator as falCalculator, // 컨테이너탭 아이콘
     faTv as falTv, // 페이지편집 > 미리보기
-    faPencil,
-    faSave,
+    faPencil as falPencil,
+    faSave as falSave,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import { faThList as fasThList, faThLarge as fasThLarge, faAngleLeft as fasAngleLeft, faAngleRight as fasAngleRight } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
@@ -76,8 +75,8 @@ library.add(falClock);
 library.add(falMoneyCheck);
 library.add(falCalculator);
 library.add(falTv);
-library.add(faPencil);
-library.add(faSave);
+library.add(falPencil);
+library.add(falSave);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

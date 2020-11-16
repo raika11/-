@@ -20,6 +20,7 @@ import mergeSaga from '@store/merge/mergeSaga';
 import areaSaga from '@store/area/areaSaga';
 import groupSaga from '@store/group/groupSaga';
 import reporterSaga from '@store/reporter/reporterSaga';
+import deskingSaga from '@store/desking/deskingSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -43,5 +44,6 @@ export default function* rootSaga() {
         menuSaga(),
         groupSaga(),
         reporterSaga(),
+        deskingSaga(),
     ]);
 }

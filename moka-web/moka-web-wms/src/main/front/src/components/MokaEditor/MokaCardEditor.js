@@ -2,9 +2,10 @@ import React, { Suspense, forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MokaIcon, MokaCard } from '@components';
 import defaultOptions from './options';
-import MokaEditor from './MokaEditorCore';
+import MokaEditor, { propTypes as editorPropTypes } from './MokaEditorCore';
 
 const propTypes = {
+    ...editorPropTypes,
     /**
      * card의 width
      */
@@ -33,54 +34,17 @@ const propTypes = {
      * 로딩 여부
      */
     loading: PropTypes.bool,
-    /**
-     * ---------------------------------------------------------
-     * 에디터가 사용하는 props
-     * language
-     */
-    language: PropTypes.oneOf(['html', 'javascript', 'css', 'json', 'xml']),
-    /**
-     * 에디터 생성 시에 기본값으로 들어가는 value
-     * => defaultValue가 변경되면 에디터가 다시 create된다!
-     */
-    defaultValue: PropTypes.string,
-    /**
-     * 에디터가 create된 상태에서, 단순히 에디터의 내용만 바꿈
-     */
-    value: PropTypes.string,
-    /**
-     * Blur 이벤트 콜백
-     * @param {string} value
-     */
-    onBlur: PropTypes.func,
-    /**
-     * 에러표시 객체
-     */
-    error: PropTypes.shape({
-        /**
-         * 에러 line 몇번째 줄인지
-         */
-        line: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-        /**
-         * 노출할 에러 문구
-         */
-        message: PropTypes.string,
-    }),
-    /**
-     * 삽입 태그
-     */
-    tag: PropTypes.string,
 };
 const defaultProps = {
-    // card props
-    title: '에디터',
-    expansion: false,
-    onExpansion: null,
     // editor props
     language: 'html',
     defaultValue: '',
     onBlur: null,
     error: {},
+    // card props
+    title: '에디터',
+    expansion: false,
+    onExpansion: null,
 };
 
 /**

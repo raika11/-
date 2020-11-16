@@ -58,6 +58,8 @@ export const initialState = {
     areaError: null,
     invalidList: [],
     selectedDepth: 1,
+    treeError: null,
+    tree: null,
 };
 
 export default handleActions(
@@ -113,6 +115,12 @@ export default handleActions(
                     draft.depth3.total = initialState.depth3.total;
                     draft.depth3.error = initialState.depth3.error;
                 }
+            });
+        },
+        [act.CLEAR_TREE]: (state) => {
+            return produce(state, (draft) => {
+                draft.tree = initialState.tree;
+                draft.treeError = initialState.treeError;
             });
         },
         /**
@@ -207,6 +215,21 @@ export default handleActions(
         },
         [act.GET_AREA_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
+                draft.areaError = payload;
+            });
+        },
+        /**
+         * 편집영역 트리 조회(페이지편집용)
+         */
+        [act.GET_AREA_TREE_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.tree = body;
+                draft.areaError = initialState.areaError;
+            });
+        },
+        [act.GET_AREA_TREE_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.tree = initialState.tree;
                 draft.areaError = payload;
             });
         },

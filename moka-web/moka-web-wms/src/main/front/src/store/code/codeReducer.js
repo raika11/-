@@ -11,6 +11,7 @@ export const initialState = {
         error: null,
         list: [],
         search: {
+            searchType: 'parentCode',
             usedYn: 'Y',
         },
     },
@@ -70,6 +71,21 @@ export default handleActions(
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
+        [act.CLEAR_SERVICE_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.service = initialState.service;
+            });
+        },
+        [act.CLEAR_SECTION_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.section = initialState.section;
+            });
+        },
+        [act.CLEAR_CONTENT_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.content = initialState.content;
+            });
+        },
         /**
          * 데이터 조회
          */

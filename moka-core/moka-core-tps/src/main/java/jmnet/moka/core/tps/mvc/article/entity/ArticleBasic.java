@@ -5,7 +5,7 @@
 package jmnet.moka.core.tps.mvc.article.entity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,13 +52,13 @@ public class ArticleBasic implements Serializable {
      * 등록기사아이디
      */
     @Column(name = "AID", nullable = false)
-    private Long AID;
+    private Long aid;
 
     /**
      * 서비스일시(VC)
      */
     @Column(name = "SERVICE_DAYTIME", nullable = false)
-    private String serviceDaytime;
+    private Date serviceDaytime;
 
     /**
      * 출판일자
@@ -114,13 +114,13 @@ public class ArticleBasic implements Serializable {
      * 등록일시
      */
     @Column(name = "ART_REG_DT")
-    private Timestamp artRegDt;
+    private Date artRegDt;
 
     /**
      * 수정일시
      */
     @Column(name = "ART_MOD_DT")
-    private Timestamp artModDt;
+    private Date artModDt;
 
     /**
      * 원본기사ID(복제시)
@@ -151,12 +151,6 @@ public class ArticleBasic implements Serializable {
      */
     @Column(name = "CMT_TOTALID", nullable = false)
     private Long cmtTotalid = (long) 0;
-
-    /**
-     * 호
-     */
-    @Column(name = "HO", nullable = false)
-    private Integer HO = 0;
 
     /**
      * 기사제목

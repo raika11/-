@@ -95,6 +95,7 @@ public class ArticleBasicVO implements Serializable {
     /**
      * 수정일시
      */
+    @DTODateTimeFormat
     @Column(name = "ART_MOD_DT")
     private Date artModDt;
 

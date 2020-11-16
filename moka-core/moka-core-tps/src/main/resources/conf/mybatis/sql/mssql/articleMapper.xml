@@ -6,7 +6,7 @@
   <!-- 목록 조회 -->
   <select id="findAll" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
     statementType="CALLABLE">
-    { call UPS_WMS_ARTICLE_BASIC_LIST_SEL(
+    { call UPS_ARTICLE_BASIC_LIST_SEL(
     <choose>
       <when test="deskingSourceList != null and deskingSourceList != ''">
         #{deskingSourceList},
@@ -29,7 +29,7 @@
     </choose>
 
     <choose>
-      <when test="searchType == 'title' and keyword != null and keyword != ''">
+      <when test="searchType == 'totalId' and keyword != null and keyword != ''">
         #{keyword},
       </when>
       <otherwise>
@@ -38,7 +38,7 @@
     </choose>
 
     <choose>
-      <when test="searchType == 'reporterId' and keyword != null and keyword != ''">
+      <when test="searchType == 'title' and keyword != null and keyword != ''">
         #{keyword},
       </when>
       <otherwise>

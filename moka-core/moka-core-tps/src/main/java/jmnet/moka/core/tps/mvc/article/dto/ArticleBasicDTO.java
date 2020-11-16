@@ -7,9 +7,10 @@ package jmnet.moka.core.tps.mvc.article.dto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,12 +47,13 @@ public class ArticleBasicDTO implements Serializable {
     /**
      * 등록기사아이디
      */
-    private Long AID;
+    private Long aid;
 
     /**
      * 서비스일시(VC)
      */
-    private String serviceDaytime;
+    @DTODateTimeFormat
+    private Date serviceDaytime;
 
     /**
      * 출판일자
@@ -96,12 +98,14 @@ public class ArticleBasicDTO implements Serializable {
     /**
      * 등록일시
      */
-    private Timestamp articleRegDt;
+    @DTODateTimeFormat
+    private Date articleRegDt;
 
     /**
      * 수정일시
      */
-    private Timestamp articleModDt;
+    @DTODateTimeFormat
+    private Date articleModDt;
 
     /**
      * 원본기사ID(복제시)
@@ -131,11 +135,6 @@ public class ArticleBasicDTO implements Serializable {
      */
     @Builder.Default
     private Long cmtTotalid = (long) 0;
-
-    /**
-     * 호
-     */
-    private Integer HO = 0;
 
     /**
      * 기사제목

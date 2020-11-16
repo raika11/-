@@ -91,7 +91,7 @@ public class ArticleSearchDTO extends SearchDTO {
      */
     public String getEndServiceDay() {
         if (this.endServiceDay != null) {
-            return McpDate.dateStr(this.endServiceDay, MokaConstants.JSON_SERVICE_DT_FORMAT);
+            return McpDate.dateStr(this.endServiceDay, MokaConstants.JSON_DATE_FORMAT);
         }
         return null;
     }
@@ -103,7 +103,7 @@ public class ArticleSearchDTO extends SearchDTO {
      */
     public String getStartServiceDay() {
         if (this.startServiceDay != null) {
-            return McpDate.dateStr(this.startServiceDay, MokaConstants.JSON_SERVICE_DT_FORMAT);
+            return McpDate.dateStr(this.startServiceDay, MokaConstants.JSON_DATE_FORMAT);
         }
         return null;
     }

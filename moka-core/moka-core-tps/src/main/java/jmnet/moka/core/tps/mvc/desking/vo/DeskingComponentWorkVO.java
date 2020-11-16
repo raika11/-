@@ -9,18 +9,16 @@
 package jmnet.moka.core.tps.mvc.desking.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
-import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.mvc.desking.vo.DeskingRelWorkVO;
-import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,6 +39,9 @@ import org.apache.ibatis.type.Alias;
 public class DeskingComponentWorkVO implements Serializable {
 
     private static final long serialVersionUID = 2885110989383287296L;
+
+    public static final Type TYPE = new TypeReference<List<DeskingComponentWorkVO>>() {
+    }.getType();
 
     @Column(name = "SEQ")
     private Long seq;
@@ -69,6 +70,12 @@ public class DeskingComponentWorkVO implements Serializable {
     @Column(name = "DATA_TYPE")
     private String dataType;
 
+    @Column(name = "ZONE")
+    private String zone;
+
+    @Column(name = "MATCH_ZONE")
+    private String matchZone;
+
     @Column(name = "SNAPSHOT_YN")
     private String snapshotYn;
 
@@ -78,17 +85,14 @@ public class DeskingComponentWorkVO implements Serializable {
     @Column(name = "COMPONENT_ORD")
     private Long componentOrd;
 
-    @Column(name = "SEARCH_CODE_ID")
-    private String searchCodeId;
+    @Column(name = "SCH_CODE_ID")
+    private String schCodeId;
 
     @Column(name = "ART_PAGE_SEQ")
     private Long artPageSeq;
 
     @Builder.Default
     private List<DeskingWorkVO> deskingWorks = new ArrayList<DeskingWorkVO>();
-
-    @Builder.Default
-    private List<DeskingRelWorkVO> deskingRelWorks = new ArrayList<DeskingRelWorkVO>();
 
     public ComponentItem toComponentItem() {
         ComponentItem componentItem = new ComponentItem();
@@ -98,7 +102,7 @@ public class DeskingComponentWorkVO implements Serializable {
         componentItem.put(ItemConstants.COMPONENT_DATASET_ID, this.getDatasetSeq());
         componentItem.put(ItemConstants.COMPONENT_NAME, this.componentName);
         componentItem.put(ItemConstants.COMPONENT_DATA_TYPE, this.dataType);
-        componentItem.put(ItemConstants.COMPONENT_SEARCH_CODE_ID, this.searchCodeId);
+        componentItem.put(ItemConstants.COMPONENT_SEARCH_CODE_ID, this.schCodeId);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_YN, this.snapshotYn);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_BODY, this.snapshotBody);
         return componentItem;

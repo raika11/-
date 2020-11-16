@@ -78,12 +78,6 @@ public class ArticlePage extends BaseAudit {
     private String artType;
 
     /**
-     * 카테고리
-     */
-    @Column(name = "CATEGORY")
-    private String category;
-
-    /**
      * 기사페이지본문
      */
     @Nationalized

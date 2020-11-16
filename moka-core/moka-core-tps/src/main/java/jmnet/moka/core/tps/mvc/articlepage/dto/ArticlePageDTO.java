@@ -70,11 +70,6 @@ public class ArticlePageDTO implements Serializable {
     private String artType;
 
     /**
-     * 카테고리
-     */
-    private String category;
-
-    /**
      * 기사페이지본문
      */
     @Builder.Default

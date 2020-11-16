@@ -65,12 +65,6 @@ public class ArticlePageHist extends RegAudit {
     private Domain domain;
 
     /**
-     * 카테고리
-     */
-    @Column(name = "CATEGORY")
-    private String category;
-    
-    /**
      * 스킨본문
      */
     @Nationalized

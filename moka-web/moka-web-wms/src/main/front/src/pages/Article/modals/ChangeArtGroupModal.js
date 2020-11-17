@@ -3,7 +3,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { MAX_GROUP_NUMBER, CODETYPE_ART_GROUP_NAME, CODETYPE_ART_GROUP } from '@/constants';
 import { MokaModal, MokaInputLabel } from '@components';
 import toast from '@utils/toastUtil';
-import { getCodeMgtGrp, getArtGroup, getCodeMgt, saveCodeMgt, changeCd, GET_CODE_MGT, GET_CODE_MGT_GRP, SAVE_CODE_MGT } from '@store/codeMgt';
+import { getCodeMgtGrp, getArtGroup, getCodeMgt, saveCodeMgt, changeCd, GET_CODE_MGT, GET_CODE_MGT_GRP, SAVE_CODE_MGT, GET_ART_GROUP } from '@store/codeMgt';
 import { getArticleList } from '@store/article';
 
 /**
@@ -16,7 +16,7 @@ const ChangeArtGroupModal = (props) => {
         (store) => ({
             artGroupRows: store.codeMgt.artGroupRows,
             cd: store.codeMgt.cd,
-            loading: store.loading[GET_CODE_MGT_GRP] || store.loading[GET_CODE_MGT] || store.loading[SAVE_CODE_MGT],
+            loading: store.loading[GET_CODE_MGT_GRP] || store.loading[GET_CODE_MGT] || store.loading[SAVE_CODE_MGT] || store.loading[GET_ART_GROUP],
         }),
         shallowEqual,
     );

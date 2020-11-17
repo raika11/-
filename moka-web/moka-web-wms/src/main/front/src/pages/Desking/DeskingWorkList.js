@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import produce from 'immer';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -18,7 +19,7 @@ const component = {
 /**
  * 데스킹 편집화면
  */
-const DeskingWorkList = () => {
+const DeskingWorkList = (props) => {
     const { area, list, loading } = useSelector((store) => ({
         area: store.desking.area,
         list: store.desking.list,
@@ -62,10 +63,7 @@ const DeskingWorkList = () => {
                 {/* 데스킹 컴포넌트 */}
                 {/* {!loading &&
                         list && */}
-                {/* {list.map((component, index) => {
-                            return <DeskingComponent key={`${areaSeq}-${component.seq}`} component={component} agGridIndex={index} onRowClicked={handleRowClicked} />;
-                        })} */}
-                <DeskingWorkComponent key={`1-1`} component={component} agGridIndex="1" />
+                <DeskingWorkComponent key={`1-1`} component={component} agGridIndex={0} {...props} />
             </div>
         </div>
     );

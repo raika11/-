@@ -6,9 +6,9 @@ import Tree from './DeskingTree';
  */
 const DeskingList = () => {
     return (
-        <>
+        <React.Fragment>
             <Tree />
-        </>
+        </React.Fragment>
     );
 };
 

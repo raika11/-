@@ -73,24 +73,36 @@ const propTypes = {
      */
     selected: PropTypes.any,
     /**
-     * 드래그여부
+     * 드래그 기능을 직접 구현하는지 (false시 ag-grid의 unmanaged drag 기능이 동작)
      */
-    dragging: PropTypes.bool,
+    dragManaged: PropTypes.bool,
     /**
-     * 드래그 함수
+     * row를 드래그할 때 실행하는 함수
      */
     onRowDragMove: PropTypes.func,
+    /**
+     * row의 드래그가 멈췄을 때 실행하는 함수
+     */
+    onRowDragEnd: PropTypes.func,
     /**
      * 추가적인 framework components
      */
     frameworkComponents: PropTypes.object,
+    /**
+     * drag가능한 ag-grid에서 rows 이동 시 애니메이션 효과를 줄지 말지 결정
+     */
+    animateRows: PropTypes.bool,
+    /**
+     * 쓰는 곳에서 gridApi를 state로 관리할 때, gridReady시 state 변경
+     */
+    setGridApi: PropTypes.func,
 };
 
 const defaultProps = {
     localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
     loading: false,
     paging: true,
-    dragging: false,
+    dragManaged: false,
     header: true,
     total: 0,
     page: 0,
@@ -100,6 +112,7 @@ const defaultProps = {
     preventRowClickCell: [],
     rowSelection: 'single',
     headerHeight: 35,
+    animateRows: true,
 };
 
 /**
@@ -123,11 +136,17 @@ const MokaTable = forwardRef((props, ref) => {
         headerHeight,
         rowHeight,
         frameworkComponents,
+        animateRows,
+        setGridApi: setParentGridApi,
     } = props;
-    const { dragging, onRowDragMove } = props;
+
+    // drag props
+    const { dragManaged, onRowDragMove, onRowDragEnd } = props;
 
     // paging props
     const { paginationClassName, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, showTotalString } = props;
+
+    // gridApi state
     const [gridApi, setGridApi] = useState(null);
 
     // return ref 설정
@@ -145,7 +164,9 @@ const MokaTable = forwardRef((props, ref) => {
      */
     const onGridReady = (params) => {
         setGridApi(params.api);
-        params.api.hideOverlay(); // 조회결과 없음(No Rows..)메세지 표시 안함.
+        if (setParentGridApi) {
+            setParentGridApi(params.api);
+        }
     };
 
     /**
@@ -160,33 +181,6 @@ const MokaTable = forwardRef((props, ref) => {
         },
         [onRowClicked, preventRowClickCell],
     );
-
-    /**
-     * row를 drag move했을 때 실행
-     * @param {object} event event
-     */
-    const handleRowDragMove = (event) => {
-        const movingNode = event.node;
-        const overNode = event.overNode;
-        const rowNeedsToMove = movingNode !== overNode;
-        if (rowNeedsToMove) {
-            const movingData = movingNode.data;
-            const overData = overNode.data;
-            const fromIndex = rowData.indexOf(movingData);
-            const toIndex = rowData.indexOf(overData);
-            const newStore = rowData.slice();
-            moveInArray(newStore, fromIndex, toIndex);
-            // rowData = newStore;
-            gridApi.setRowData(newStore);
-            gridApi.clearFocusedCell();
-            onRowDragMove(event, newStore);
-        }
-        function moveInArray(arr, fromIndex, toIndex) {
-            const element = arr[fromIndex];
-            arr.splice(fromIndex, 1);
-            arr.splice(toIndex, 0, element);
-        }
-    };
 
     /**
      * usedYn에 따른 row 색상 처리
@@ -230,17 +224,13 @@ const MokaTable = forwardRef((props, ref) => {
      * When a column is resized, the grid re-calculates the row heights after the resize is finished
      * @param {object} params grid
      */
-    const onColumnResized = (params) => {
-        params.api.resetRowHeights();
-    };
+    const onColumnResized = (params) => params.api.resetRowHeights();
 
     /**
      * When a column is shown or hidden, the grid re-calculates the row heights after the resize is finished
      * @param {object} params grid
      */
-    const onColumnVisible = (params) => {
-        params.api.resetRowHeights();
-    };
+    const onColumnVisible = (params) => params.api.resetRowHeights();
 
     /**
      * row 데이터 업데이트 시 실행
@@ -256,13 +246,9 @@ const MokaTable = forwardRef((props, ref) => {
     }, [handleSelected]);
 
     useEffect(() => {
-        // 로딩 메세지 처리
         if (gridApi) {
-            if (loading) {
-                gridApi.showLoadingOverlay();
-            } else {
-                gridApi.hideOverlay();
-            }
+            if (loading) gridApi.showLoadingOverlay();
+            else gridApi.hideOverlay();
         }
     }, [loading, gridApi]);
 
@@ -271,27 +257,27 @@ const MokaTable = forwardRef((props, ref) => {
             {/* ag-grid */}
             <div className={clsx('ag-theme-moka-grid', { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }}>
                 <AgGridReact
+                    immutableData
                     columnDefs={columnDefs}
                     rowData={rowData}
+                    headerHeight={headerHeight}
                     rowHeight={rowHeight}
                     getRowNodeId={onRowNodeId}
-                    immutableData
-                    animateRows
+                    animateRows={animateRows}
                     localeText={localeText}
                     onCellClicked={handleCellClicked}
                     onSelectionChanged={handleSelectionChanged}
                     onGridReady={onGridReady}
                     rowSelection={rowSelection}
-                    rowDragManaged={dragging}
-                    suppressMoveWhenRowDragging={dragging}
-                    onRowDragMove={handleRowDragMove}
+                    rowDragManaged={dragManaged}
+                    suppressMoveWhenRowDragging={dragManaged}
+                    onRowDragMove={onRowDragMove}
+                    onRowDragEnd={onRowDragEnd}
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
-                    // defaultColDef={{ tooltipComponent: 'mokaTooltip' }}
                     frameworkComponents={{ mokaTooltip: Tooltip, radio: RadioButton, imageRenderer: ImageRenderer, ...frameworkComponents }}
                     suppressRowClickSelection
                     getRowClass={getRowClass}
-                    headerHeight={headerHeight}
                     onColumnResized={onColumnResized}
                     onColumnVisible={onColumnVisible}
                 />

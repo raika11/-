@@ -18,6 +18,10 @@ const propTypes = {
      * 선택한 컴포넌트의 데이터
      */
     component: PropTypes.object,
+    /**
+     * drag&drop 타겟 ag-grid
+     */
+    dropTargetAgGrid: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 const defaultProps = {
     component: {},
@@ -27,7 +31,7 @@ const defaultProps = {
  * 페이지편집 > 기사리스트
  */
 const ArticleDeskList = forwardRef((props, ref) => {
-    const { className, media, component } = props;
+    const { className, media, component, dropTargetAgGrid } = props;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -41,7 +45,7 @@ const ArticleDeskList = forwardRef((props, ref) => {
     return (
         <div className={className}>
             <ArticleDeskSearch media={media} component={component} />
-            <ArticleDeskAgGrid ref={ref} />
+            <ArticleDeskAgGrid ref={ref} dropTargetAgGrid={dropTargetAgGrid} />
         </div>
     );
 });

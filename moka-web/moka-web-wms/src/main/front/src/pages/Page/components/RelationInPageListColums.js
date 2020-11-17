@@ -6,11 +6,13 @@ export default [
         headerName: 'ID',
         field: 'pageSeq',
         width: 50,
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '페이지명',
         field: 'pageName',
         width: 240,
+        cellStyle: { fontSize: '12px' },
         tooltipField: 'pageName',
     },
     {

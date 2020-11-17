@@ -589,6 +589,16 @@ const PageEdit = ({ onDelete }) => {
                     placeholder="파라미터명을 입력하세요"
                     isInvalid={error.urlParam}
                 />
+                {/* 카테고리 */}
+                <MokaInputLabel
+                    className="mb-2"
+                    label="카테고리"
+                    value={temp.category}
+                    name="category"
+                    onChange={handleChangeValue}
+                    placeholder="카테고리를 입력하세요"
+                    isInvalid={error.category}
+                />
             </Form>
 
             <PageListModal title="이동페이지 검색" show={moveModalShow} onHide={() => setMoveModalShow(false)} onClickSave={handleClickMoveSave} />

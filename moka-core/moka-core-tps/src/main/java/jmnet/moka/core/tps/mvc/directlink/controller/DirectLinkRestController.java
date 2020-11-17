@@ -48,7 +48,7 @@ import java.util.List;
 @RestController
 @Validated
 @Slf4j
-@RequestMapping("/api/directlink")
+@RequestMapping("/api/directlinks")
 public class DirectLinkRestController {
 
     private final DirectLinkService directLinkService;
@@ -82,7 +82,7 @@ public class DirectLinkRestController {
         Page<DirectLink> returnValue = directLinkService.findAllDirectLink(search);
 
         // 리턴값 설정
-        List<DirectLinkDTO> directLinkList = modelMapper.map(returnValue, DirectLinkDTO.TYPE);
+        List<DirectLinkDTO> directLinkList = modelMapper.map(returnValue.getContent(), DirectLinkDTO.TYPE);
         resultListMessage.setTotalCnt(returnValue.getTotalElements());
         resultListMessage.setList(directLinkList);
 
@@ -103,7 +103,7 @@ public class DirectLinkRestController {
     @ApiOperation(value = "사이트관리 조회")
     @GetMapping("/{linkSeq}")
     public ResponseEntity<?> getDirectLink(HttpServletRequest request
-            , @PathVariable("linkSeq") @Pattern(regexp = "[0-9]{4}$"
+            , @PathVariable("linkSeq") @Pattern(regexp = "[0-9]{3}$"
                     , message = "{tps.common.error.pattern.linkSeq}") String linkSeq)
             throws NoDataException {
 

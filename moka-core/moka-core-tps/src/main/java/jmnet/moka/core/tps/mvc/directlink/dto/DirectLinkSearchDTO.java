@@ -31,6 +31,11 @@ public class DirectLinkSearchDTO extends SearchDTO {
     private static final long serialVersionUID = 1972229889422176779L;
 
     /**
+     * 링크일련번호
+     */
+    private String linkSeq;
+
+    /**
      * 사용여부
      */
     private String usedYn;

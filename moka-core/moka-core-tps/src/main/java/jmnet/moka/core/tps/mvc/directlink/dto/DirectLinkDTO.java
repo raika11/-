@@ -36,7 +36,7 @@ public class DirectLinkDTO implements Serializable {
      * 링크일련번호
      */
     @NotNull(message = "{tps.DirectLinkMsg.error.notnull.linkSeq}")
-    @Pattern(regexp = "[0-9]{4}$", message = "{tps.DirectLinkMsg.error.pattern.linkSeq}")
+    @Pattern(regexp = "[0-9]{3}$", message = "{tps.DirectLinkMsg.error.pattern.linkSeq}")
     private String linkSeq;
 
     /**

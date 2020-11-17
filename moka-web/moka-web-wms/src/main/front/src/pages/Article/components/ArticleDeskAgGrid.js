@@ -78,7 +78,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
          */
         if (gridApi) {
             if (Array.isArray(dropTargetAgGrid)) {
-                dropTargetAgGrid.forEach((grid) => {
+                dropTargetAgGrid.forEach((grid, agGridIndex) => {
                     const dropZone = {
                         getContainer: () => {
                             //  .ag-body-viewport dom을 return한다
@@ -86,7 +86,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                         },
                         onDragStop: (target) => {
                             if (onDragStop) {
-                                onDragStop(gridApi, target);
+                                onDragStop(gridApi, target, agGridIndex);
                             }
                         },
                     };

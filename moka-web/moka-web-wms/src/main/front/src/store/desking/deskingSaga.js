@@ -16,10 +16,10 @@ const getComponentWorkList = createRequestSaga(act.GET_COMPONENT_WORK_LIST, api.
 const makeRowNode = (data, overIndex, component) => {
     if (!data || data.totalId === null) return;
 
-    // const existRow = component.deskingWorks.filter((desking) => desking.totalId === data.totalId);
-    // if (existRow && existRow.length > 0) return;
+    const existRow = component.deskingWorks.filter((desking) => desking.totalId === data.totalId);
+    if (existRow && existRow.length > 0) return;
 
-    // const contentsOrder = overIndex < 0 ? 1 : overIndex + 1;
+    const contentOrd = overIndex < 0 ? 1 : overIndex + 1;
     let appendData = null;
 
     if (data.gridType === 'ARTICLE') {
@@ -28,7 +28,7 @@ const makeRowNode = (data, overIndex, component) => {
             totalId: data.totalId,
             parentTotalId: null,
             contentType: data.artType,
-            contentOrd: data.contentOrd,
+            contentOrd: contentOrd,
             lang: data.lang,
             title: data.artTitle,
             mobTitle: data.artTitle,
@@ -57,7 +57,7 @@ const makeRowNode = (data, overIndex, component) => {
  * 데스킹 ag-grid row drag stop
  */
 const deskingDragStop = ({ payload }) => {
-    const { api, target, component } = payload;
+    const { target, component } = payload;
 
     let overIndex = -1;
     if (target.overIndex) {
@@ -85,6 +85,8 @@ const deskingDragStop = ({ payload }) => {
             appendNodes.push(rowNodeData);
         }
     }
+
+    // TODO 데스킹워크 추가/저장하는 액션과 연결해야함
 };
 
 /** saga */

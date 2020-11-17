@@ -6,7 +6,7 @@ import { getRowIndex } from '@utils/agGridUtil';
 import { deskingDragStop } from '@store/desking';
 
 const DeskingArticleTab = (props) => {
-    const { component, componentAgGridInstances } = props;
+    const { componentList, componentAgGridInstances } = props;
 
     const dispatch = useDispatch();
 
@@ -17,8 +17,8 @@ const DeskingArticleTab = (props) => {
     const articleRef = useRef(null);
     const mediaRef = useRef(null);
 
-    const handleArticleDragStop = (api, target) => {
-        dispatch(deskingDragStop({ api, target, component }));
+    const handleArticleDragStop = (api, target, agGridIndex) => {
+        dispatch(deskingDragStop({ api, target, component: componentList[agGridIndex] }));
     };
 
     return (

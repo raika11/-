@@ -22,15 +22,14 @@ const DeskingWorkAgGrid = ({ agGridIndex, componentAgGridInstances, setComponent
     // 드래그 시작
     const onRowDragEnter = (params) => {
         const data = params.node.data;
-        let fromIndex = rowData.indexOf(data);
+        
 
         // 관련기사 삭제
         if (data.relSeqs && data.relSeqs.length > 0) {
-            setMoveRows(rowData.slice(fromIndex + 1, fromIndex + 1 + data.relSeqs.length));
-            let newRowData = rowData.filter((node) => !data.relSeqs.includes(node.seq));
+           
             params.api.setRowData(newRowData);
             // } else {
-            //     setMoveRows(rowData.slice(fromIndex, fromIndex));
+ 
         }
     };
 
@@ -67,7 +66,7 @@ const DeskingWorkAgGrid = ({ agGridIndex, componentAgGridInstances, setComponent
 
     // rollback
     const rollbackRows = (api) => {
-        api.setRowData(rowData);
+        
     };
 
     // 관련기사 추가

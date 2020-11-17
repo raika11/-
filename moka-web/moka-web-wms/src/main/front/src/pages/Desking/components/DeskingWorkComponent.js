@@ -7,7 +7,7 @@ const propTypes = {
     /**
      * 컴포넌트 데이터
      */
-    component: PropTypes.array,
+    component: PropTypes.object,
     /**
      * 해당 컴포넌트의 인덱스 (데스킹 AgGrid의 index)
      */
@@ -18,7 +18,7 @@ const propTypes = {
     onRowClicked: PropTypes.func,
 };
 const defaultProps = {
-    component: [],
+    component: {},
     agGridIndex: 0,
 };
 

@@ -1,5 +1,6 @@
 import React, { Suspense, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { Switch, Route } from 'react-router-dom';
 
 const DeskingList = React.lazy(() => import('./DeskingList'));
 const DeskingWorkList = React.lazy(() => import('./DeskingWorkList'));
@@ -25,10 +26,20 @@ const Desking = ({ match }) => {
                 <DeskingList />
             </Suspense>
 
-            {/* 데스킹 워크 */}
-            <Suspense>
-                <DeskingWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
-            </Suspense>
+            <Switch>
+                <Route
+                    path={['/desking', '/desking/:areaSeq']}
+                    exact
+                    render={() => (
+                        <>
+                            {/* 데스킹 워크 */}
+                            <Suspense>
+                                <DeskingWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
+                            </Suspense>
+                        </>
+                    )}
+                />
+            </Switch>
 
             {/* 데스킹 탭 */}
             <Suspense>

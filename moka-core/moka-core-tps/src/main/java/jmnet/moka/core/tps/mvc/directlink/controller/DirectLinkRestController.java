@@ -107,8 +107,7 @@ public class DirectLinkRestController {
     @ApiOperation(value = "사이트관리 조회")
     @GetMapping("/{linkSeq}")
     public ResponseEntity<?> getDirectLink(HttpServletRequest request
-            , @PathVariable("linkSeq") @Pattern(regexp = "[0-9]{5}$"
-                    , message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
+            , @PathVariable("linkSeq") @Size(min = 1, max = 5,message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.direct-link.error.no-data", request);

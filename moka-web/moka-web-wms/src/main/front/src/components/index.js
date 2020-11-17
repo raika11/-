@@ -6,7 +6,7 @@ export * from './MokaInput';
 export { default as MokaAlert, MokaAlertWithButtons } from './MokaAlert';
 export * from './MokaTabs';
 export { MokaCardEditor, MokaModalEditor } from './MokaEditor';
-export { default as MokaCard, MokaTemplateThumbCard } from './MokaCard';
+export * from './MokaCard';
 export { default as MokaIcon } from './MokaIcon';
 export { default as MokaPagination } from './MokaPagination';
 export { default as MokaTable, MokaThumbTable } from './MokaTable';

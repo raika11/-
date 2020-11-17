@@ -24,15 +24,20 @@ const makeRowNode = (data, overIndex, component) => {
 
     if (data.gridType === 'ARTICLE') {
         appendData = {
+            seq: null,
+            deskingSeq: null,
+            componentSeq: component.componentSeq,
             datasetSeq: component.datasetSeq,
             totalId: data.totalId,
             parentTotalId: null,
-            contentType: data.artType,
+            contentType: data.contentType,
+            artType: data.artType,
             contentOrd: contentOrd,
+            sourceCode: data.sourceCode,
             lang: data.lang,
             title: data.artTitle,
             mobTitle: data.artTitle,
-            subTitle: '',
+            subTitle: data.subTitle,
             nameplate: null,
             titlePrefix: null,
             bodyHead: data.bodyHead,
@@ -40,13 +45,9 @@ const makeRowNode = (data, overIndex, component) => {
             linkTarget: null,
             moreUrl: null,
             moreTarget: null,
-            thumbFileName: data.thumbFileName,
-            thumbSize: 0,
-            thumbWidth: 0,
-            thumbHeight: 0,
+            thumbFileName: data.artThumb,
             rel: false,
             relSeqs: null,
-            componentSeq: component.componentSeq,
         };
     }
 
@@ -57,7 +58,7 @@ const makeRowNode = (data, overIndex, component) => {
  * 데스킹 ag-grid row drag stop
  */
 const deskingDragStop = ({ payload }) => {
-    const { target, component } = payload;
+    const { source, target, component } = payload;
 
     let overIndex = -1;
     if (target.overIndex) {

@@ -19,12 +19,12 @@ const DeskingArticleTab = (props) => {
 
     /**
      * 기사 드래그 끝났을 때 액션
-     * @param {object} api 드래그 row의 본체? ag-grid의 gridApi
+     * @param {object} source 드래그 row의 본체? ag-grid의 gridApi
      * @param {object} target 드래그 stop되는 타겟 ag-grid의 dragStop 이벤트
      * @param {number} agGridIndex agGridIndex
      */
-    const handleArticleDragStop = (api, target, agGridIndex) => {
-        dispatch(deskingDragStop({ api, target, component: componentList[agGridIndex] }));
+    const handleArticleDragStop = (source, target, agGridIndex) => {
+        dispatch(deskingDragStop({ target, component: componentList[agGridIndex] }));
     };
 
     const createTabs = () => {

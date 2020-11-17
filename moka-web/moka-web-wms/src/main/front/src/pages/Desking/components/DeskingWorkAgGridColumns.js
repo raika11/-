@@ -15,6 +15,13 @@ export const columnDefs = [
         rowDrag: true,
         width: 16,
         suppressMenu: true,
+        rowDragText: (params, dragItemCount) => {
+            if (dragItemCount > 1) {
+                const message = params.rowNodes ? params.rowNodes.reduce((prev, next) => `${prev.data.title},${next.data.title}`) : params.rowNode.data.title;
+                return `${message}외 [${dragItemCount - 1}건]`;
+            }
+            return params.rowNode.data.title;
+        },
         cellClassRules: cellClassRules,
     },
     {

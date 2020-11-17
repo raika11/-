@@ -76,3 +76,6 @@ export const SIGNIN_MEMBER_ID = 'SIGNIN_MEMBER_ID';
 
 // 페이지편집 기사 편집 그룹의 최대 개수
 export const MAX_GROUP_NUMBER = 8;
+
+// 편집기사 기본언어
+export const DEFAULT_LANG = 'KR';

@@ -61,7 +61,7 @@ const DeskingWorkList = (props) => {
 
                         return (
                             <DeskingWorkComponent
-                                key={`${area.areaSeq}-${areaComp.component.seq}`}
+                                key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
                                 component={list[targetIndex]}
                                 agGridIndex={targetIndex}
                                 // onRowClicked={handleRowClicked}
@@ -87,7 +87,7 @@ const DeskingWorkList = (props) => {
 
                             return (
                                 <DeskingWorkComponent
-                                    key={`${area.areaSeq}-${areaComp.component.seq}`}
+                                    key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
                                     component={list[targetIndex]}
                                     agGridIndex={targetIndex}
                                     // onRowClicked={handleRowClicked}

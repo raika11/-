@@ -38,11 +38,11 @@ export const putDeskingWorkPriority = createAction(PUT_DESKING_WORK_PRIORITY, ({
  * 데스킹 워크 등록
  */
 export const POST_DESKING_WORK = 'desking/POST_DESKING_WORK';
-export const postDeskingWork = createAction(POST_DESKING_WORK, ({ componentWorkSeq, datasetSeq, deskingWork, success }) => ({
+export const postDeskingWork = createAction(POST_DESKING_WORK, ({ componentWorkSeq, datasetSeq, deskingWork, callback }) => ({
     componentWorkSeq,
     datasetSeq,
     deskingWork,
-    success,
+    callback,
 }));
 /**
  * 데스킹 워크 목록 이동
@@ -83,7 +83,13 @@ export const changeArea = createAction(CHANGE_AREA, (area) => area);
  * 데스킹 드래그스탑
  */
 export const DESKING_DRAG_STOP = 'desking/DESKING_DRAG_STOP';
-export const deskingDragStop = createAction(DESKING_DRAG_STOP, ({ source, target, component }) => ({ source, target, component }));
+export const deskingDragStop = createAction(DESKING_DRAG_STOP, ({ source, target, srcComponent, tgtComponent, callback }) => ({
+    source,
+    target,
+    srcComponent,
+    tgtComponent,
+    callback,
+}));
 
 /**
  * 데스킹워크 정렬

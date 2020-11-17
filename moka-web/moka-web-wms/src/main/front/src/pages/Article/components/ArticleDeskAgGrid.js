@@ -12,7 +12,7 @@ import GroupNumberRenderer from './GroupNumberRenderer';
  * 기사관리 ag-grid 컴포넌트 (페이지편집)
  */
 const ArticleDeskAgGrid = forwardRef((props, ref) => {
-    const { onDragStop, dropTargetAgGrid } = props;
+    const { onDragStop, dropTargetAgGrid, dropTargetComponent } = props;
 
     const dispatch = useDispatch();
     const { search, list, total, error, loading } = useSelector((store) => ({
@@ -73,50 +73,82 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
     }, [list]);
 
     useEffect(() => {
-        /**
-         * 드롭 타겟 ag-grid에 drop-zone 설정
-         */
         if (gridApi) {
-            // 타겟이 리스트인 경우
-            if (Array.isArray(dropTargetAgGrid)) {
-                dropTargetAgGrid.forEach((grid, agGridIndex) => {
+            if (Array.isArray(dropTargetAgGrid) && Array.isArray(dropTargetComponent)) {
+                dropTargetComponent.forEach((comp, index) => {
+                    const compGrid = document.querySelector(`#agGrid-${comp.seq}`);
+                    const targetIndex = index;
+
                     const dropZone = {
                         getContainer: () => {
+                            return compGrid;
                             //  .ag-body-viewport dom을 return한다
-                            return grid.gridOptionsWrapper.layoutElements[2];
+                            // return grid.gridOptionsWrapper.layoutElements[2];
                         },
-                        onDragStop: (target) => {
-                            if (onDragStop) {
-                                onDragStop(gridApi, target, agGridIndex);
+                        onDragStop: (p) => {
+                            if (dropTargetAgGrid[targetIndex]) {
+                                if (onDragStop) {
+                                    onDragStop(p, dropTargetAgGrid[targetIndex], null, comp);
+                                }
                             }
                         },
                     };
 
+                    if (!gridApi) {
+                        console.warn('AgGrid GridOptions Not Existing');
+                        return;
+                    }
+
+                    // 동일한 드롭존이 존재할 수 있으므로 삭제 후 다시 추가한다
                     gridApi.removeRowDropZone(dropZone);
                     gridApi.addRowDropZone(dropZone);
                 });
             }
-            // 타겟이 오브젝트인 경우
-            else {
-                const dropZone = {
-                    getContainer: () => {
-                        //  .ag-body-viewport dom을 return한다
-                        return dropTargetAgGrid.gridOptionsWrapper.layoutElements[2];
-                    },
-                    onDragStop: (target) => {
-                        if (onDragStop) {
-                            onDragStop(gridApi, target);
-                        }
-                    },
-                };
-
-                gridApi.removeRowDropZone(dropZone);
-                gridApi.addRowDropZone(dropZone);
-            }
         }
+        /**
+         * 드롭 타겟 ag-grid에 drop-zone 설정
+         */
+        // if (gridApi) {
+        //     // 타겟이 리스트인 경우
+        //     if (Array.isArray(dropTargetAgGrid)) {
+        //         dropTargetAgGrid.forEach((grid, agGridIndex) => {
+        //             const dropZone = {
+        //                 getContainer: () => {
+        //                     //  .ag-body-viewport dom을 return한다
+        //                     return grid.gridOptionsWrapper.layoutElements[2];
+        //                 },
+        //                 onDragStop: (target) => {
+        //                     if (onDragStop) {
+        //                         onDragStop(gridApi, target, agGridIndex);
+        //                     }
+        //                 },
+        //             };
+
+        //             gridApi.removeRowDropZone(dropZone);
+        //             gridApi.addRowDropZone(dropZone);
+        //         });
+        //     }
+        //     // 타겟이 오브젝트인 경우
+        //     else {
+        //         const dropZone = {
+        //             getContainer: () => {
+        //                 //  .ag-body-viewport dom을 return한다
+        //                 return dropTargetAgGrid.gridOptionsWrapper.layoutElements[2];
+        //             },
+        //             onDragStop: (target) => {
+        //                 if (onDragStop) {
+        //                     onDragStop(gridApi, target);
+        //                 }
+        //             },
+        //         };
+
+        //         gridApi.removeRowDropZone(dropZone);
+        //         gridApi.addRowDropZone(dropZone);
+        //     }
+        // }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dropTargetAgGrid, gridApi]);
+    }, [dropTargetAgGrid, dropTargetComponent, gridApi]);
 
     useEffect(() => {
         if (gridApi) {

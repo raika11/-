@@ -6,7 +6,7 @@ import { unescapeHtml } from '@utils/convertUtil';
 import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
 import { toastr } from 'react-redux-toastr';
-import ReadyGrid from './ReadyGrid';
+import { DeskingReadyGrid } from '@pages/commons';
 
 const propTypes = {
     /**
@@ -67,7 +67,8 @@ const DeskingWorkAgGrid = (props) => {
     const handleGridReady = (params) => {
         setComponentAgGridInstances(
             produce(componentAgGridInstances, (draft) => {
-                draft[agGridIndex] = params.api;
+                // draft[agGridIndex] = params.api;
+                draft[agGridIndex] = params;
             }),
         );
     };
@@ -215,7 +216,7 @@ const DeskingWorkAgGrid = (props) => {
                 getRowHeight={getRowHeight}
                 frameworkComponents={{ imageRenderer: MokaTableImageRenderer }}
             />
-            {componentAgGridInstances && <ReadyGrid componentAgGridInstances={componentAgGridInstances} grid={componentAgGridInstances[agGridIndex]} component={component} />}
+            {componentAgGridInstances[agGridIndex] && <DeskingReadyGrid componentAgGridInstances={componentAgGridInstances} agGridIndex={agGridIndex} component={component} />}
         </div>
     );
 };

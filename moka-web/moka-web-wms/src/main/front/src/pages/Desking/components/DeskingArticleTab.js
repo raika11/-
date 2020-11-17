@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import { ArticleDeskList } from '@/pages/Article/components';
 import { deskingDragStop } from '@store/desking';
+import toast from '@utils/toastUtil';
 
 const DeskingArticleTab = (props) => {
     const { componentList, componentAgGridInstances } = props;
@@ -23,8 +24,19 @@ const DeskingArticleTab = (props) => {
      * @param {object} target 드래그 stop되는 타겟 ag-grid의 dragStop 이벤트
      * @param {number} agGridIndex agGridIndex
      */
-    const handleArticleDragStop = (source, target, agGridIndex) => {
-        dispatch(deskingDragStop({ source, target, srcComponent: componentList[agGridIndex] }));
+    const handleArticleDragStop = (source, target, srcComponent, tgtComponent) => {
+        const option = {
+            source,
+            target,
+            srcComponent,
+            tgtComponent,
+            callback: ({ header }) => {
+                if (!header.success) {
+                    toast.warn(header.message);
+                }
+            },
+        };
+        dispatch(deskingDragStop(option));
     };
 
     const createTabs = () => {
@@ -37,6 +49,7 @@ const DeskingArticleTab = (props) => {
                         ref={articleRef}
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
+                        dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx}
                     />
@@ -50,6 +63,7 @@ const DeskingArticleTab = (props) => {
                         ref={mediaRef}
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
+                        dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx}
                         media

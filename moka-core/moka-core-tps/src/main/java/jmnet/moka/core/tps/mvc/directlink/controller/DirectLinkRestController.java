@@ -105,7 +105,7 @@ public class DirectLinkRestController {
     @ApiOperation(value = "사이트관리 조회")
     @GetMapping("/{linkSeq}")
     public ResponseEntity<?> getDirectLink(HttpServletRequest request
-            , @PathVariable("linkSeq") @Pattern(regexp = "[0-9]{3}$"
+            , @PathVariable("linkSeq") @Pattern(regexp = "[0-9]{5}$"
                     , message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
             throws NoDataException {
 
@@ -145,7 +145,6 @@ public class DirectLinkRestController {
             // insert
             DirectLink returnValue = directLinkService.insertDirectLink(directLink);
 
-
             // 결과리턴
             DirectLinkDTO dto = modelMapper.map(returnValue, DirectLinkDTO.class);
             ResultDTO<DirectLinkDTO> resultDto = new ResultDTO<>(dto);
@@ -176,7 +175,7 @@ public class DirectLinkRestController {
     @PutMapping("/{linkSeq}")
     public ResponseEntity<?> putDirectLink(HttpServletRequest request,
                                        @PathVariable("linkSeq")
-                                       @Pattern(regexp = "[0-9]{3}$", message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq,
+                                       @Pattern(regexp = "[0-9]{5}$", message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq,
                                        @Valid DirectLinkDTO directLinkDTO)
             throws Exception {
 
@@ -222,7 +221,7 @@ public class DirectLinkRestController {
     @GetMapping("/{linkSeq}/has-members")
     public ResponseEntity<?> hasMembers(HttpServletRequest request,
                                         @PathVariable("linkSeq")
-                                        @Size(min = 1, max = 3,
+                                        @Size(min = 1, max = 5,
                                                 message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
             throws NoDataException {
 
@@ -248,7 +247,7 @@ public class DirectLinkRestController {
     @DeleteMapping("/{linkSeq}")
     public ResponseEntity<?> deleteDirectLink(HttpServletRequest request,
                                          @PathVariable("linkSeq")
-                                         @Size(min = 1, max = 3,
+                                         @Size(min = 1, max = 5,
                                          message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -257,13 +256,6 @@ public class DirectLinkRestController {
         String noContentMessage = messageByLocale.get("tps.direct-link.error.no-data", request);
         DirectLink member = directLinkService.findById(linkSeq)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
-
-        // 관련 데이터 조회
-//        if (directLinkService.hasMembers(linkSeq)) {
-//            // 액션 로그에 실패 로그 출력
-//            tpsLogger.fail(ActionType.DELETE, messageByLocale.get("tps.group.error.delete.exist-member", request));
-//            throw new InvalidDataException(messageByLocale.get("tps.group.error.delete.exist-member", request));
-//        }
 
         try {
             // 삭제

@@ -41,17 +41,22 @@ public class DirectLinkRepositorySupportImpl extends QuerydslRepositorySupport i
         JPQLQuery<DirectLink> query = from(qDirectLink);
         // 사용여부
         if (McpString.isNotEmpty(searchDTO.getUsedYn())) {
-            query.where(qDirectLink.usedYn.toUpperCase().contains(searchDTO.getUsedYn().toUpperCase()));
+            query.where(qDirectLink.usedYn.toUpperCase().eq(searchDTO.getUsedYn().toUpperCase()));
         }
 
         // 노출여부
         if (McpString.isNotEmpty(searchDTO.getFixYn())) {
-            query.where(qDirectLink.fixYn.toUpperCase().contains(searchDTO.getFixYn().toUpperCase()));
+            query.where(qDirectLink.fixYn.toUpperCase().eq(searchDTO.getFixYn().toUpperCase()));
         }
 
         // 유형
         if (McpString.isNotEmpty(searchDTO.getLinkType())) {
-            query.where(qDirectLink.linkType.toUpperCase().contains(searchDTO.getLinkType().toUpperCase()));
+            query.where(qDirectLink.linkType.toUpperCase().eq(searchDTO.getLinkType().toUpperCase()));
+        }
+
+        // 키워드
+        if (McpString.isNotEmpty(searchDTO.getLinkKwd())) {
+            query.where(qDirectLink.linkKwd.contains(searchDTO.getLinkKwd()));
         }
 
 

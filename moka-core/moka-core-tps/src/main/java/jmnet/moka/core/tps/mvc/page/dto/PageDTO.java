@@ -140,6 +140,12 @@ public class PageDTO implements Serializable {
     private String kwd;
 
     /**
+     * 카테고리
+     */
+    @Length(max = 256, message = "{tps.page.error.len.category}")
+    private String category;
+
+    /**
      * 상세정보
      */
     @Length(max = 4000, message = "{tps.page.error.len.description}")
@@ -192,6 +198,7 @@ public class PageDTO implements Serializable {
         pageItem.put(ItemConstants.PAGE_USE_YN, this.usedYn);
         pageItem.put(ItemConstants.PAGE_FILE_YN, this.fileYn);
         pageItem.put(ItemConstants.PAGE_KEYWORD, this.kwd);
+        pageItem.put(ItemConstants.PAGE_CATEGORY, this.category);
         pageItem.put(ItemConstants.PAGE_DESCRIPTION, this.description);
         pageItem.put(ItemConstants.PAGE_MOVE_YN, this.moveYn);
         pageItem.put(ItemConstants.PAGE_MOVE_URL, this.moveUrl);

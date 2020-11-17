@@ -35,6 +35,7 @@ public class ItemConstants {
     public static String PAGE_USE_YN = "usedYn";
     public static String PAGE_FILE_YN = "fileYn";
     public static String PAGE_KEYWORD = "keyword";
+    public static String PAGE_CATEGORY = "category";
     public static String PAGE_DESCRIPTION = "desc";
     public static String PAGE_MOVE_YN = "moveYn";
     public static String PAGE_MOVE_URL = "moveUrl";
@@ -67,6 +68,7 @@ public class ItemConstants {
     public static String COMPONENT_DEL_WORDS = "delWords"; // 제목삭제단어-단어구분은 개행
     public static String COMPONENT_ZONE = "zone"; // 위치가능 Zone
     public static String COMPONENT_MATCH_ZONE = "matchZone"; // 선택된 zone
+    public static String COMPONENT_VIEW_YN = "viewYn";
     public static String COMPONENT_PAGING_YN = "pagingYn";
     public static String COMPONENT_PAGING_TYPE = "pagingType"; // 페이징유형:N:이전/다음, M:더보기
     public static String COMPONENT_PER_PAGE_COUNT = "perPageCount"; // 페이지당 건수
@@ -197,6 +199,7 @@ public class ItemConstants {
         public static String PAGE_USE_YN = "USED_YN";
         public static String PAGE_FILE_YN = "FILE_YN";
         public static String PAGE_KEYWORD = "KWD";
+        public static String PAGE_CATEGORY = "category";
         public static String PAGE_DESCRIPTION = "DESCRIPTION";
         public static String PAGE_MOVE_YN = "MOVE_YN";
         public static String PAGE_MOVE_URL = "MOVE_URL";
@@ -229,6 +232,7 @@ public class ItemConstants {
         public static String COMPONENT_DEL_WORDS = "DEL_WORDS"; // 제목삭제단어-단어구분은 개행
         public static String COMPONENT_ZONE = "ZONE"; // 위치가능 Zone
         public static String COMPONENT_MATCH_ZONE = "MATCH_ZONE"; // 선택된 zone
+        public static String COMPONENT_VIEW_YN = "VIEW_YN";
         public static String COMPONENT_PAGING_YN = "PAGING_YN";
         public static String COMPONENT_PAGING_TYPE = "PAGING_TYPE"; // 페이징유형:N:이전/다음, M:더보기
         public static String COMPONENT_PER_PAGE_COUNT = "PER_PAGE_COUNT"; // 페이지당 건수

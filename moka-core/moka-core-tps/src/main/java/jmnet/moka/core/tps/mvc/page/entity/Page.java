@@ -153,6 +153,12 @@ public class Page extends BaseAudit {
     private String kwd;
 
     /**
+     * 카테고리
+     */
+    @Column(name = "CATEGORY")
+    private String category;
+
+    /**
      * 상세정보
      */
     @Nationalized

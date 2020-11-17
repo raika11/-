@@ -17,6 +17,35 @@
       totalId
     </keys>
   </api>
+  <api id="articleList">
+    <description>기사 목록을 반환한다.</description>
+    <parameter>
+      <pageIndex default="1" type="number">[0-9]{1,9}</pageIndex>
+      <pageSize default="20" type="number">[0-9]{1,9}</pageSize>
+      <serviceCodeList default="" >.{1,100}</serviceCodeList>
+      <masterCodeList default="" >.{1,100}</masterCodeList>
+      <keywordList default="" >.{1,100}</keywordList>
+      <usageType default="" >.{1,100}</usageType>
+      <contentTypeList default="" >.{1,100}</contentTypeList>
+      <startSearchDate default="2020-08-21 00:00:00">.{1,100}</startSearchDate>
+      <endSearchDate default="2020-09-01 23:59:59">.{1,100}</endSearchDate>
+      <startTotalId default="0" type="number">.{1,100}</startTotalId>
+      <exceptTotalIdList default="">.{1,100}</exceptTotalIdList>
+      <exceptMasterCodeList default="">.{1,100}</exceptMasterCodeList>
+      <exceptSourceCodeList default="">.{1,100}</exceptSourceCodeList>
+      <isExistThumbnail default="N">.{1,100}</isExistThumbnail>
+      <usedTotalCount default="Y">.{1,100}</usedTotalCount>
+      <totalCount default="0" type="number">.{1,100}</totalCount>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA,SOURCES">dps.article.list</request>
+    <keys>
+      pageIndex
+      pageSize
+      serviceCodeList
+      masterCodeList
+      keywordList
+    </keys>
+  </api>
   <api id="codelist" expire="1m">
     <description>분류별 기사 목록을 반환한다.</description>
     <parameter>

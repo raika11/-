@@ -151,6 +151,8 @@ const PageEdit = ({ onDelete }) => {
                 setTemp({ ...temp, description: value });
             } else if (name === 'urlParam') {
                 setTemp({ ...temp, urlParam: value });
+            } else if (name === 'category') {
+                setTemp({ ...temp, category: value });
             }
         },
         [error, temp],

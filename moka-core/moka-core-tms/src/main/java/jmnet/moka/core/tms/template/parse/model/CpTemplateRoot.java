@@ -222,6 +222,9 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             if (resultObject != null) {
                 if (resultObject instanceof List && ((List<?>) resultObject).size() > 0) {
                     childContext.set(Constants.LOOP_DATA_ROW, ((List<?>) resultObject).get(0));
+                } else {
+                    // 리스트 형태가 아닐 경우 _DATA로 넣어준다.
+                    context.set(Constants.DEFAULT_LOOP_DATA_SELECT, resultObject);
                 }
             }
             // TOTAL 처리

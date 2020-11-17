@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.desking.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -88,6 +90,7 @@ public class DeskingWorkVO implements Serializable {
     /**
      * 임시저장여부
      */
+    @JsonIgnore
     @Column(name = "SAVE_YN")
     private String saveYn = MokaConstants.NO;
 
@@ -100,6 +103,7 @@ public class DeskingWorkVO implements Serializable {
     /**
      * 배부일시
      */
+    @DTODateTimeFormat
     @Column(name = "DIST_DT")
     private Date distDt;
 
@@ -190,12 +194,14 @@ public class DeskingWorkVO implements Serializable {
     /**
      * 생성일시
      */
+    @JsonIgnore
     @Column(name = "REG_DT")
     private Date regDt;
 
     /**
      * 생성자
      */
+    @JsonIgnore
     @Column(name = "REG_ID")
     private String regId;
 

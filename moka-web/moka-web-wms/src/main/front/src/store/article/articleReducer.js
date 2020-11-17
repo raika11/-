@@ -21,6 +21,7 @@ export const initialState = {
         masterCode: null, // 분류
         startServiceDay: null, // 시작일
         endServiceDay: null, // 종료일
+        contentType: null, // 기사타입
     },
     searchTypeList: [
         { id: 'all', name: '전체' },

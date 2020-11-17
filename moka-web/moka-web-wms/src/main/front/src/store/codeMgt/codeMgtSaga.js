@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { CODETYPE_LANG, CODETYPE_SERVICE_TYPE, CODETYPE_PAGE_TYPE, CODETYPE_TP_SIZE, CODETYPE_TP_ZONE, CODETYPE_API } from '@/constants';
+import { CODETYPE_LANG, CODETYPE_SERVICE_TYPE, CODETYPE_PAGE_TYPE, CODETYPE_TP_SIZE, CODETYPE_TP_ZONE, CODETYPE_API, CODETYPE_ART_GROUP } from '@/constants';
 
 import * as api from './codeMgtApi';
 import * as act from './codeMgtAction';
@@ -265,6 +265,7 @@ export const getLang = createReadOnlySaga(act.GET_LANG, 'langRows', CODETYPE_LAN
 export const getServiceType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'serviceTypeRows', CODETYPE_SERVICE_TYPE);
 export const getPageType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'pageTypeRows', CODETYPE_PAGE_TYPE);
 export const getApi = createReadOnlySaga(act.GET_API, 'apiRows', CODETYPE_API);
+export const getArtGroup = createReadOnlySaga(act.GET_ART_GROUP, 'artGroupRows', CODETYPE_ART_GROUP);
 
 /** saga */
 export default function* codeMgt() {
@@ -283,4 +284,5 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_SERVICE_TYPE, getServiceType);
     yield takeLatest(act.GET_PAGE_TYPE, getPageType);
     yield takeLatest(act.GET_API, getApi);
+    yield takeLatest(act.GET_ART_GROUP, getArtGroup);
 }

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { MokaCardTabs, MokaIconTabs, MokaIcon } from '@components';
 import { ArticleDeskList } from '@/pages/Article/components';
+import { DeskingHistoryList } from './components';
 
 const DeskingTabs = () => {
     // state
@@ -9,17 +10,20 @@ const DeskingTabs = () => {
 
     // ref
     const articleRef = useRef(null);
-    const videoRef = useRef(null);
+    const mediaRef = useRef(null);
 
     // 순서 반대로
     return (
         <MokaIconTabs
+            foldable={false}
             onSelectNav={(idx) => setActiveTabIdx(idx)}
             tabWidth={840}
             className="flex-fill"
             tabContentClass="flex-fill"
             tabs={[
-                // 기사보기
+                /**
+                 * 기사보기
+                 */
                 <MokaCardTabs
                     width={840}
                     className="w-100"
@@ -29,10 +33,18 @@ const DeskingTabs = () => {
                         <ArticleDeskList className="px-3 pb-3 pt-2" ref={articleRef} />,
 
                         // 영상 기사 조회 컴포넌트
-                        <ArticleDeskList className="px-3 pb-3 pt-2" ref={videoRef} video />,
+                        <ArticleDeskList className="px-3 pb-3 pt-2" ref={mediaRef} media />,
                     ]}
                     tabNavs={tabNavs}
                 />,
+                /**
+                 * 미리보기
+                 */
+                <div>미리보기</div>,
+                /**
+                 * 히스토리
+                 */
+                <DeskingHistoryList />,
             ]}
             tabNavWidth={48}
             tabNavPosition="right"

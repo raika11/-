@@ -20,6 +20,15 @@
     #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
+      <when test="contentType != 'all' and contentType != null and contentType != ''">
+        #{contentType},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
       <when test="searchType == 'all' and keyword != null and keyword != ''">
         #{keyword},
       </when>

@@ -94,16 +94,12 @@ public class DeskingServiceImpl implements DeskingService {
         return false;
     }
 
-    //    @Override
-    //    public void importComponentWork(DeskingWorkSearchDTO search) {
-    //        // 1. 기존의 작업용 데이타(componentWork,deskingWork) 삭제
-    //        // 2. 편집영역의 수동컴포넌트를 작업자용 컴포넌트로 일괄 등록
-    //        // 3. 편집영역의 편집기사를 작업자용 편집기사로 일괄 등록
-    //        componentWorkMapper.importComponentWork(search);
-    //    }
-
     public List<DeskingComponentWorkVO> findAllComponentWork(DeskingWorkSearchDTO search) {
 
+        // 1. 기존의 작업용 데이타(componentWork,deskingWork) 삭제
+        // 2. 편집영역의 수동컴포넌트를 작업자용 컴포넌트로 일괄 등록
+        // 3. 편집영역의 편집기사를 작업자용 편집기사로 일괄
+        // 4. 조회
         List<List<Object>> listMap = componentWorkMapper.findAllComponentWork(search);
 
         List<DeskingComponentWorkVO> componentList = modelMapper.map(listMap.get(0), DeskingComponentWorkVO.TYPE);
@@ -163,34 +159,32 @@ public class DeskingServiceImpl implements DeskingService {
 
         return componentList;
     }
-    
-    //    @Override
-    //    public DeskingComponentWorkVO getComponentWork(Long seq) {
-    //        return this.getComponentWork(seq, true);
-    //    }
-    //
-    //    @Override
-    //    public DeskingComponentWorkVO getComponentWork(Long seq, boolean flag) {
-    //        DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentsWorkBySeq(seq);
-    //
-    //        if (componentVO != null && flag == true) {
-    //            WorkSearchDTO search = WorkSearchDTO.builder().datasetSeq(componentVO.getDatasetSeq())
-    //                    .editionSeq(componentVO.getEditionSeq()).creator(componentVO.getCreator())
-    //                    .build();
-    //
-    //            List<DeskingWorkVO> deskingList = deskingWorkMapper.findDeskingWork(search);
-    //            Long componentSeq = componentVO.getComponentSeq();
-    //            for (int idx = 0; idx < deskingList.size(); idx++) {
-    //                deskingList.get(idx).setComponentSeq(componentSeq);
-    //            }
-    //            List<DeskingRelWorkVO> deskingRelList = deskingWorkMapper.findDeskingRelWork(search);
-    //            componentVO.setDeskingWorks(deskingList);
-    //            componentVO.setDeskingRelWorks(deskingRelList);
-    //        }
-    //
-    //        return componentVO;
-    //    }
-    //
+
+    @Override
+    public DeskingComponentWorkVO findComponentWorkBySeq(Long seq, boolean includeDesking) {
+        //        DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentsWorkBySeq(seq);
+        //
+        //        if (componentVO != null && includeDesking == true) {
+        //            DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
+        //                                                              .datasetSeq(componentVO.getDatasetSeq())
+        //                                                              .regId(componentVO.getRegId())
+        //                                                              .build();
+        //
+        //            List<DeskingWorkVO> deskingList = deskingWorkMapper.findDeskingWork(search);
+        //            Long componentSeq = componentVO.getComponentSeq();
+        //            for (int idx = 0; idx < deskingList.size(); idx++) {
+        //                deskingList.get(idx)
+        //                           .setComponentSeq(componentSeq);
+        //            }
+        //            List<DeskingRelWorkVO> deskingRelList = deskingWorkMapper.findDeskingRelWork(search);
+        //            componentVO.setDeskingWorks(deskingList);
+        //            componentVO.setDeskingRelWorks(deskingRelList);
+        //        }
+        //
+        //        return componentVO;
+        return null;
+    }
+
     //    @Override
     //    @Transactional
     //    public void updateDesking(Component component, List<DeskingWorkVO> deskingWorks,

@@ -39,6 +39,9 @@ export const CODETYPE_TP_ZONE = 'TP_ZONE';
 export const CODETYPE_LANG = 'LANG';
 // 공통코드 : 서비스타입
 export const CODETYPE_SERVICE_TYPE = 'SERVICE_TYPE';
+// 공통코드 : 등록기사그룹
+export const CODETYPE_ART_GROUP = 'ART_GROUP';
+export const CODETYPE_ART_GROUP_NAME = 'ART_GROUP_NUM';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';
@@ -70,3 +73,6 @@ export const AREA_COMP_ALIGN_NONE = 'NONE';
 export const AUTHORIZATION = 'Authorization';
 // 로그인 사용자 ID
 export const SIGNIN_MEMBER_ID = 'SIGNIN_MEMBER_ID';
+
+// 페이지편집 기사 편집 그룹의 최대 개수
+export const MAX_GROUP_NUMBER = 8;

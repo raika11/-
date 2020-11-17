@@ -119,7 +119,7 @@ public class LoopMerger extends AbstractElementMerger {
                         count = dataSize;
                     } //  지정된 count 사용
                 }
-                if (dataSize > 0) { // 빈 행을 위해 emptyRow를 생성해 둔다.
+                if (dataSize > 0 && dataList.get(0) instanceof Map) { // 빈 행을 위해 emptyRow를 생성해 둔다.
                     for (String key : ((Map<String, Object>) dataList.get(0)).keySet()) {
                         emptyRow.put(key, "");
                     }

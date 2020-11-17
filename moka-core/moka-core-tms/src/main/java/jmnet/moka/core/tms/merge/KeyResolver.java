@@ -86,9 +86,9 @@ public class KeyResolver {
                 makeParamKey(httpParamMap));
     }
 
-    public static String makeSkinItemCacheKey(String domainId, String itemId, String cid,
+    public static String makeApItemCacheKey(String domainId, String itemId, String cid,
             HttpParamMap httpParamMap) {
-        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_CONTENT_SKIN, itemId, cid,
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_ARTICLE_PAGE, itemId, cid,
                 makeParamKey(httpParamMap));
     }
 

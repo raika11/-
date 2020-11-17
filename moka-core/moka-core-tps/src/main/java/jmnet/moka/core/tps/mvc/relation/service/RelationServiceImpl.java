@@ -145,7 +145,7 @@ public class RelationServiceImpl implements RelationService {
             RelationSearchDTO search = RelationSearchDTO.builder()
                                                         .relSeq(seq)
                                                         .relSeqType(itemType)
-                                                        .relType(MokaConstants.ITEM_CONTENT_SKIN)
+                                                        .relType(MokaConstants.ITEM_ARTICLE_PAGE)
                                                         .build();
             if (this.isRelated(search)) {
                 return true;
@@ -182,7 +182,7 @@ public class RelationServiceImpl implements RelationService {
                 return true;
             }
 
-        } else if (relType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
+        } else if (relType.equals(MokaConstants.ITEM_ARTICLE_PAGE)) {
 
             // 콘텐츠스킨 목록 조회
             search.setEntityClass(ArticlePageVO.class);

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { MokaIcon } from '@components';
 
 const GroupNumberRenderer = (params) => {
-    const { data } = params;
+    const { data, api } = params;
     const { artGroupNum, ovpYn, youtubeYn } = data;
 
     return (
@@ -13,7 +13,7 @@ const GroupNumberRenderer = (params) => {
             </div>
             {(youtubeYn === 'Y' || ovpYn === 'Y') && (
                 <div
-                    className={clsx('article-video', {
+                    className={clsx('article-media', {
                         orange: youtubeYn === 'Y' && ovpYn !== 'Y',
                         ovp: youtubeYn !== 'Y' && ovpYn === 'Y',
                     })}

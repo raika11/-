@@ -1,6 +1,6 @@
 export default [
     {
-        headerName: 'NO',
+        headerName: 'No',
         field: 'linkSeq',
         width: 50,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },

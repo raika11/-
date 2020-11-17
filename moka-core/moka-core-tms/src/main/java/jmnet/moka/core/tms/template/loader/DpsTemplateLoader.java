@@ -1,7 +1,6 @@
 package jmnet.moka.core.tms.template.loader;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,13 +11,11 @@ import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
-import jmnet.moka.common.template.loader.TemplateLoader;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
-import jmnet.moka.core.tms.merge.item.ComponentAd;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import org.json.simple.JSONArray;
@@ -45,7 +42,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
     public static final String ITEM_API_TEMPLATE = "template";
     public static final String ITEM_API_DATASET = "dataset";
     public static final String ITEM_API_AD = "ad";
-    public static final String ITEM_API_SKIN = "skin";
+    public static final String ITEM_API_ARTICLE_PAGE = "articlePage";
     public static final String PARAM_DOMAIN_ID = "domainId";
     public static final String PARAM_ITEM_ID = "id";
     public static final String PARAM_TBODY = "tBody";
@@ -60,7 +57,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         itemApiMap.put(MokaConstants.ITEM_TEMPLATE, ITEM_API_TEMPLATE);
         itemApiMap.put(MokaConstants.ITEM_DATASET, ITEM_API_DATASET);
         itemApiMap.put(MokaConstants.ITEM_AD, ITEM_API_AD);
-        itemApiMap.put(MokaConstants.ITEM_CONTENT_SKIN, ITEM_API_SKIN);
+        itemApiMap.put(MokaConstants.ITEM_ARTICLE_PAGE, ITEM_API_ARTICLE_PAGE);
     }
 
     protected HttpProxyDataLoader httpProxyDataLoader;

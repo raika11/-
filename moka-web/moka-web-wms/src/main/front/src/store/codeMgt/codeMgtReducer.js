@@ -37,6 +37,7 @@ export const initialState = {
     serviceTypeRows: [],
     pageTypeRows: [],
     apiRows: [],
+    artGroupRows: [],
 };
 
 export default handleActions(

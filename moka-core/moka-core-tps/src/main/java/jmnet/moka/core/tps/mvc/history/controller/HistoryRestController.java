@@ -108,7 +108,7 @@ public class HistoryRestController {
                 // 페이지 히스토리 조회
                 hist = historyService.findPageHist(histSeq);
 
-            } else if (itemType.equals(MokaConstants.ITEM_CONTENT_SKIN)) {
+            } else if (itemType.equals(MokaConstants.ITEM_ARTICLE_PAGE)) {
                 // 스킨 히스토리 조회
                 hist = historyService.findArticlePageHist(histSeq);
 

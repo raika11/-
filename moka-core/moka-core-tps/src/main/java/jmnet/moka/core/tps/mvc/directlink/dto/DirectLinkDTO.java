@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -35,8 +36,7 @@ public class DirectLinkDTO implements Serializable {
     /**
      * 링크일련번호
      */
-    @NotNull(message = "{tps.DirectLinkMsg.error.notnull.linkSeq}")
-    @Pattern(regexp = "[0-9]{3}$", message = "{tps.DirectLinkMsg.error.pattern.linkSeq}")
+    @Size(min = 1, max = 5, message = "{tps.direct-link.error.pattern.linkSeq}")
     private String linkSeq;
 
     /**

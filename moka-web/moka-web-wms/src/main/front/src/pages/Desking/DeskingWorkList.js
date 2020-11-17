@@ -5,8 +5,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { MokaInputLabel, MokaLoader } from '@components';
-import { ITEM_CP, ITEM_CT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
+import { MokaInputLabel } from '@components';
+import { AREA_ALIGN_H, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
 import DeskingWorkComponent from './components/DeskingWorkComponent';
 
@@ -32,49 +32,82 @@ const DeskingWorkList = (props) => {
     };
 
     return (
-        <div className="p-2 mr-gutter border d-flex flex-column" style={{ backgroundColor: 'white' }}>
-            <Container fluid className="mb-2">
-                <Row className="d-flex justify-content-between">
-                    <Col xs={5} className="p-0">
-                        <MokaInputLabel
-                            label="기사 갯수"
-                            labelClassName="d-flex justify-content-start"
-                            className="mb-0"
-                            inputClassName="ft-12"
-                            name="perPageCount"
-                            // value={}
-                            onChange={handleChangeValue}
-                        />
-                    </Col>
-                    <Button variant="dark" className="ft-12" onClick={handlePreviewClicked}>
-                        페이지 미리보기
-                    </Button>
-                </Row>
-            </Container>
-            <div>
-                {/* 로딩 */}
-                {/* {loading && <MokaLoader />} */}
-                {/* 데스킹 컴포넌트 */}
-                {!loading &&
-                    list &&
-                    list.map((component, index) => {
-                        return (
-                            <DeskingWorkComponent
-                                key={`${area.areaSeq}-${component.seq}`}
-                                component={component}
-                                agGridIndex={index}
-                                // onRowClicked={handleRowClicked}
-                                {...props}
+        <div className="d-flex">
+            <div className="p-2 mr-gutter border d-flex flex-column" style={{ backgroundColor: 'white' }}>
+                <Container fluid className="mb-2">
+                    <Row className="d-flex justify-content-between">
+                        <Col xs={5} className="p-0">
+                            <MokaInputLabel
+                                label="기사 갯수"
+                                labelClassName="d-flex justify-content-start"
+                                className="mb-0"
+                                inputClassName="ft-12"
+                                name="perPageCount"
+                                // value={}
+                                onChange={handleChangeValue}
                             />
-                        );
-                    })}
-                {/* {area.areaAlign === AREA_ALIGN_H && (
-                    <div className="d-flex">
-                        <DeskingWorkComponent key={`1-1`} component={component} agGridIndex="1" />
-                        <DeskingWorkComponent key={`1-1`} component={component} agGridIndex="1" />
-                    </div>
-                )} */}
+                        </Col>
+                        <Button variant="dark" className="ft-12" onClick={handlePreviewClicked}>
+                            페이지 미리보기
+                        </Button>
+                    </Row>
+                </Container>
+                <div>
+                    {!loading &&
+                        area.areaComps.map((areaComp) => {
+                            if (areaComp.compAlign !== AREA_COMP_ALIGN_LEFT) return null;
+                            const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
+                            return (
+                                <DeskingWorkComponent
+                                    key={`${area.areaSeq}-${areaComp.component.seq}`}
+                                    component={list[targetIndex]}
+                                    agGridIndex={targetIndex}
+                                    // onRowClicked={handleRowClicked}
+                                    {...props}
+                                />
+                            );
+                        })}
+                </div>
             </div>
+
+            {area.areaAlign === AREA_ALIGN_H && (
+                <div className="p-2 mr-gutter border d-flex flex-column" style={{ backgroundColor: 'white' }}>
+                    <Container fluid className="mb-2">
+                        <Row className="d-flex justify-content-between">
+                            <Col xs={5} className="p-0">
+                                <MokaInputLabel
+                                    label="기사 갯수"
+                                    labelClassName="d-flex justify-content-start"
+                                    className="mb-0"
+                                    inputClassName="ft-12"
+                                    name="perPageCount"
+                                    // value={}
+                                    onChange={handleChangeValue}
+                                />
+                            </Col>
+                            <Button variant="dark" className="ft-12" onClick={handlePreviewClicked}>
+                                페이지 미리보기
+                            </Button>
+                        </Row>
+                    </Container>
+                    <div>
+                        {!loading &&
+                            area.areaComps.map((areaComp) => {
+                                if (areaComp.compAlign !== AREA_COMP_ALIGN_RIGHT) return null;
+                                const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
+                                return (
+                                    <DeskingWorkComponent
+                                        key={`${area.areaSeq}-${areaComp.component.seq}`}
+                                        component={list[targetIndex]}
+                                        agGridIndex={targetIndex}
+                                        // onRowClicked={handleRowClicked}
+                                        {...props}
+                                    />
+                                );
+                            })}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

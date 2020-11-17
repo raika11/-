@@ -6,11 +6,13 @@ import * as act from './deskingAction';
  * initialState
  */
 export const initialState = {
-    area: null,
+    area: {
+        areaComps: [],
+    },
     list: [],
     total: 0,
     error: null,
-    agGridCount: 0,
+    selectedComponent: {},
 };
 
 /**

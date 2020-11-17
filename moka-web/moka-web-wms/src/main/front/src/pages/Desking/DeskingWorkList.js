@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -31,9 +32,13 @@ const DeskingWorkList = (props) => {
         const { name, value } = e.target;
     };
 
+    const mrGutter = {
+        'mr-gutter': area.areaAlign === AREA_ALIGN_H ? false : true,
+    };
+
     return (
         <div className="d-flex">
-            <div className="p-2 mr-gutter border d-flex flex-column" style={{ backgroundColor: 'white' }}>
+            <div className={clsx('p-2', mrGutter, 'border', 'd-flex', 'flex-column')} style={{ backgroundColor: 'white' }}>
                 <Container fluid className="mb-2">
                     <Row className="d-flex justify-content-between">
                         <Col xs={5} className="p-0">

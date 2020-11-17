@@ -130,8 +130,8 @@ public class DirectLinkRestController {
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "사이트 등록")
-//    @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
-//    , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
+    , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO
 //            ,@RequestPart(value = "http://localhost:8100/swagger-ui.html", required = false)
 //            MultipartFile directLinkThumbnailFile
@@ -373,4 +373,6 @@ public class DirectLinkRestController {
 //            throw new InvalidDataException(invalidList, validMessage);
 //        }
 //    }
+
+
 }

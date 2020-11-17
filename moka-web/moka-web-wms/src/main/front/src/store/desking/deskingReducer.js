@@ -10,6 +10,7 @@ export const initialState = {
     list: [],
     total: 0,
     error: null,
+    agGridCount: 0,
 };
 
 /**

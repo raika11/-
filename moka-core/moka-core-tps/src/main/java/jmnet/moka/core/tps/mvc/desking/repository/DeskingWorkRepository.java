@@ -3,19 +3,22 @@
  */
 package jmnet.moka.core.tps.mvc.desking.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * <pre>
- * 
+ *
  * 2020. 5. 13. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 5. 13. 오후 1:29:21
+ *
  * @author ssc
+ * @since 2020. 5. 13. 오후 1:29:21
  */
 public interface DeskingWorkRepository extends JpaRepository<DeskingWork, Long>, DeskingWorkRepositorySupport {
 
-    public Long countByDataset_DatasetSeq(Long datasetSeq);
+    Long countByDatasetSeq(Long datasetSeq);
+
+    List<DeskingWork> findByDatasetSeqAndRegId(Long datasetSeq, String regId);
 }

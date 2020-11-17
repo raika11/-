@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandl
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
-import { MokaPagination } from '@components';
+import { MokaPagination, MokaLoader } from '@components';
 import { propTypes as paginationPropTypes } from '@components/MokaPagination';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
@@ -245,17 +245,11 @@ const MokaTable = forwardRef((props, ref) => {
         handleSelected();
     }, [handleSelected]);
 
-    useEffect(() => {
-        if (gridApi) {
-            if (loading) gridApi.showLoadingOverlay();
-            else gridApi.hideOverlay();
-        }
-    }, [loading, gridApi]);
-
     return (
         <React.Fragment>
             {/* ag-grid */}
-            <div className={clsx('ag-theme-moka-grid', { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }}>
+            <div className={clsx('ag-theme-moka-grid', 'position-relative', { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }}>
+                {loading && <MokaLoader />}
                 <AgGridReact
                     immutableData
                     columnDefs={columnDefs}

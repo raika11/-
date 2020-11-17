@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { MokaIconTabs, MokaIcon } from '@components';
 import { DeskingHistoryList, DeskingArticleTab } from './components';
 
 const DeskingTabs = ({ componentAgGridInstances }) => {
+    const { componentList } = useSelector((store) => ({
+        componentList: store.desking.list,
+    }));
+
     // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
-    const component = {};
 
     // 순서 반대로
     return (
@@ -19,7 +23,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                 /**
                  * 기사보기
                  */
-                <DeskingArticleTab componentAgGridInstances={componentAgGridInstances} component={component} />,
+                <DeskingArticleTab componentAgGridInstances={componentAgGridInstances} componentList={componentList} />,
                 /**
                  * 미리보기
                  */

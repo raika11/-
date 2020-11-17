@@ -91,6 +91,9 @@ public class DeskingComponentWorkVO implements Serializable {
     @Column(name = "ART_PAGE_SEQ")
     private Long artPageSeq;
 
+    @Column(name = "VIEW_YN")
+    private String viewYn;
+
     @Builder.Default
     private List<DeskingWorkVO> deskingWorks = new ArrayList<DeskingWorkVO>();
 
@@ -105,6 +108,7 @@ public class DeskingComponentWorkVO implements Serializable {
         componentItem.put(ItemConstants.COMPONENT_SEARCH_CODE_ID, this.schCodeId);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_YN, this.snapshotYn);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_BODY, this.snapshotBody);
+        componentItem.put(ItemConstants.COMPONENT_VIEW_YN, this.viewYn);
         return componentItem;
     }
 }

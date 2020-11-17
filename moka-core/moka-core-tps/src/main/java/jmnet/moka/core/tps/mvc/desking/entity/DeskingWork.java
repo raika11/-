@@ -4,25 +4,22 @@
 
 package jmnet.moka.core.tps.mvc.desking.entity;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,6 +38,9 @@ public class DeskingWork implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final Type TYPE = new TypeReference<List<DeskingWork>>() {
+    }.getType();
+
     /**
      * 일련번호
      */
@@ -52,14 +52,13 @@ public class DeskingWork implements Serializable {
      * 화면편집SEQ
      */
     @Column(name = "DESKING_SEQ")
-    private Integer deskingSeq;
+    private Long deskingSeq;
 
     /**
-     * 데이터셋
+     * 데이터셋SEQ
      */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DATASET_SEQ", nullable = false, referencedColumnName = "DATASET_SEQ")
-    private Dataset dataset;
+    @Column(name = "DATASET_SEQ", nullable = false)
+    private Long datasetSeq;
 
     /**
      * 서비스기사아이디
@@ -78,6 +77,18 @@ public class DeskingWork implements Serializable {
      */
     @Column(name = "CONTENT_TYPE", columnDefinition = "char")
     private String contentType;
+
+    /**
+     * 기사타입
+     */
+    @Column(name = "ART_TYPE", columnDefinition = "char")
+    private String artType;
+
+    /**
+     * 출처
+     */
+    @Column(name = "SOURCE_CODE")
+    private String sourceCode;
 
     /**
      * 콘텐트순서
@@ -217,4 +228,11 @@ public class DeskingWork implements Serializable {
         this.thumbHeight = this.thumbHeight == null ? 0 : this.thumbHeight;
         this.regDt = McpDate.defaultValue(this.regDt);
     }
+
+    @Override
+    public Object clone()
+            throws CloneNotSupportedException {
+        return super.clone();
+    }
+
 }

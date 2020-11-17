@@ -122,6 +122,13 @@ public class ComponentDTO implements Serializable {
     private String matchZone;
 
     /**
+     * 노출여부
+     */
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.component.error.pattern.viewYn}")
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
      * 페이징여부
      */
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.component.error.pattern.pagingYn}")
@@ -203,6 +210,7 @@ public class ComponentDTO implements Serializable {
         componentItem.put(ItemConstants.COMPONENT_PERIOD_END_YMDT, this.periodEndDt);
         componentItem.put(ItemConstants.COMPONENT_DATA_TYPE, this.dataType);
         componentItem.put(ItemConstants.COMPONENT_DEL_WORDS, this.delWords);
+        componentItem.put(ItemConstants.COMPONENT_VIEW_YN, this.viewYn);
         componentItem.put(ItemConstants.COMPONENT_PAGING_YN, this.pagingYn);
         componentItem.put(ItemConstants.COMPONENT_PAGING_TYPE, this.pagingType);
         componentItem.put(ItemConstants.COMPONENT_PER_PAGE_COUNT, this.perPageCount);

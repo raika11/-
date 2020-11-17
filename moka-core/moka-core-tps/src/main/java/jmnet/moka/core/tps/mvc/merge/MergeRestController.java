@@ -124,19 +124,21 @@ public class MergeRestController {
             throws Exception {
 
         // 도메인
-        Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
+        Domain domainInfo = domainService.findDomainById(pageDto.getDomain()
+                                                                .getDomainId())
                                          .orElseThrow(() -> {
                                              String message = messageByLocale.get("tps.common.error.no-data", request);
                                              tpsLogger.fail(ActionType.SELECT, message, true);
                                              return new NoDataException(message);
-                                        });
+                                         });
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
         DomainItem domainItem = domainDto.toDomainItem();
 
         // 페이지
         PageItem pageItem = pageDto.toPageItem();
         DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
-        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
+        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                               .format(df));
 
 
         try {
@@ -149,7 +151,7 @@ public class MergeRestController {
             StringBuilder sb = dtm.merge(pageItem, null, true);
 
             String content = sb.toString();
-            ResultDTO<String>  resultDto = new ResultDTO<String>(HttpStatus.OK, content);
+            ResultDTO<String> resultDto = new ResultDTO<String>(HttpStatus.OK, content);
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
@@ -162,11 +164,11 @@ public class MergeRestController {
     /**
      * 컴포넌트 미리보기
      *
-     * @param request 요청
-     * @param pageSeq 페이지SEQ
+     * @param request          요청
+     * @param pageSeq          페이지SEQ
      * @param componentWorkSeq 작업중인 컴포넌트SEQ
-     * @param principal 작업자
-     * @param resourceYn 미리보기 리소스 포함여부
+     * @param principal        작업자
+     * @param resourceYn       미리보기 리소스 포함여부
      * @return 컴포넌트 랜더링된 HTML소스
      * @throws Exception 예외
      */
@@ -179,45 +181,48 @@ public class MergeRestController {
 
         // 페이지
         Page pageInfo = pageService.findPageBySeq(pageSeq)
-            .orElseThrow(() -> {
-                String message = messageByLocale.get("tps.common.error.no-data", request);
-                tpsLogger.fail(ActionType.SELECT, message, true);
-                return new NoDataException(message);
-            });
+                                   .orElseThrow(() -> {
+                                       String message = messageByLocale.get("tps.common.error.no-data", request);
+                                       tpsLogger.fail(ActionType.SELECT, message, true);
+                                       return new NoDataException(message);
+                                   });
 
         PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
         PageItem pageItem = pageDto.toPageItem();
-        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
+        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                               .format(df));
 
         // 도메인
-        Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
-            .orElseThrow(() -> {
-                String message = messageByLocale.get("tps.common.error.no-data", request);
-                tpsLogger.fail(ActionType.SELECT, message, true);
-                return new NoDataException(message);
-            });
+        Domain domainInfo = domainService.findDomainById(pageDto.getDomain()
+                                                                .getDomainId())
+                                         .orElseThrow(() -> {
+                                             String message = messageByLocale.get("tps.common.error.no-data", request);
+                                             tpsLogger.fail(ActionType.SELECT, message, true);
+                                             return new NoDataException(message);
+                                         });
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
         DomainItem domainItem = domainDto.toDomainItem();
 
 
         try {
             // 컴포넌트 : work 컴포넌트정보를 모두 보내지는 않는다.
-            DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentsWorkBySeq(componentWorkSeq);
+            DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentWorkBySeq(componentWorkSeq);
             if (componentVO == null) {
                 String message = messageByLocale.get("tps.common.error.no-data", request);
                 tpsLogger.fail(ActionType.SELECT, message, true);
                 throw new NoDataException(message);
             }
             ComponentItem componentItem = componentVO.toComponentItem();
-            componentItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
+            componentItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                                        .format(df));
 
             List<String> componentIdList = new ArrayList<String>(1);
-            componentIdList.add(componentVO.getComponentSeq().toString());
+            componentIdList.add(componentVO.getComponentSeq()
+                                           .toString());
 
             // merger
             MokaPreviewTemplateMerger dtm =
-                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(),
-                                                                   0, componentIdList);
+                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(), 0, componentIdList);
 
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, componentItem, false, resourceYn.equals("Y"), false, false);

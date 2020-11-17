@@ -26,3 +26,9 @@ export const changeArea = createAction(CHANGE_AREA, (area) => area);
  */
 export const DESKING_DRAG_STOP = 'desking/DESKING_DRAG_STOP';
 export const deskingDragStop = createAction(DESKING_DRAG_STOP, ({ api, target, component }) => ({ api, target, component }));
+
+/**
+ * 데스킹워크 정렬
+ */
+export const DESKING_SORT_GRID = 'desking/DESKING_SORT_GRID';
+export const deskingSortGrid = createAction(DESKING_SORT_GRID, ({ grid, component }) => ({ grid, component }));

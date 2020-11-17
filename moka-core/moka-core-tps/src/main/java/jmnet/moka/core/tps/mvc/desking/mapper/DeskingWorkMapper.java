@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.desking.mapper;
 
+import java.util.List;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
@@ -27,18 +28,18 @@ public interface DeskingWorkMapper extends BaseMapper<DeskingWorkVO, DeskingWork
     //     * @return 페이지의 모든 관련편집기사목록
     //     */
     //    List<DeskingRelWorkVO> findDeskingRelWorkAll(DeskingWorkSearchDTO search);
-    //
-    //    /**
-    //     * <pre>
-    //     * Work 편집데이타 조회(단수)
-    //     *
-    //     * <pre>
-    //     *
-    //     * @param search 검색조건
-    //     * @return 페이지의 편집기사목록
-    //     */
-    //    List<DeskingWorkVO> findDeskingWork(DeskingWorkSearchDTO search);
-    //
+
+    /**
+     * <pre>
+     * Work 편집데이타 조회(단수)
+     *
+     * <pre>
+     *
+     * @param search 검색조건
+     * @return 페이지의 편집기사목록
+     */
+    List<DeskingWorkVO> findDeskingWork(DeskingWorkSearchDTO search);
+
     //    /**
     //     * <pre>
     //     * Work 관련편집데이타 조회(단수)

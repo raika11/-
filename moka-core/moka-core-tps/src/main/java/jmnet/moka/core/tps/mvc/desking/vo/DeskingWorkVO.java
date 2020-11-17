@@ -49,7 +49,7 @@ public class DeskingWorkVO implements Serializable {
      * 화면편집SEQ
      */
     @Column(name = "DESKING_SEQ")
-    private Integer deskingSeq;
+    private Long deskingSeq;
 
     /**
      * 데이터셋SEQ
@@ -74,6 +74,18 @@ public class DeskingWorkVO implements Serializable {
      */
     @Column(name = "CONTENT_TYPE")
     private String contentType;
+
+    /**
+     * 기사타입
+     */
+    @Column(name = "ART_TYPE", columnDefinition = "char")
+    private String artType;
+
+    /**
+     * 출처
+     */
+    @Column(name = "SOURCE_CODE")
+    private String sourceCode;
 
     /**
      * 콘텐트순서

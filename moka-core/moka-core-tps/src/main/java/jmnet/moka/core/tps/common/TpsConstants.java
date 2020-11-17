@@ -154,6 +154,12 @@ public class TpsConstants {
     public static final String TEMPLATE_BUSINESS = "template";
 
     /**
+     * 파일관리 업무별 구분
+     */
+    public static final String DIRECT_LINK_BUSINESS = "directlink";
+
+
+    /**
      * request header의 메뉴 ID key
      */
     public static final String HEADER_MENU_ID = "x-menuid";

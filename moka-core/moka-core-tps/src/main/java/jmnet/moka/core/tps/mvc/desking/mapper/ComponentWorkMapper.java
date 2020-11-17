@@ -46,13 +46,13 @@ public interface ComponentWorkMapper extends BaseMapper<DeskingComponentWorkVO, 
 
     /**
      * <pre>
-     * 수동컴포넌트 조회
+     * 컴포넌트 조회
      * </pre>
      *
-     * @param seq work컴포넌트 순번
+     * @param seq 컴포넌트work 순번
      * @return
      */
-    DeskingComponentWorkVO findComponentsWorkBySeq(Long seq);
+    DeskingComponentWorkVO findComponentWorkBySeq(Long seq);
 
 
 

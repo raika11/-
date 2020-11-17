@@ -140,6 +140,13 @@ public class Component extends BaseAudit {
     private String matchZone;
 
     /**
+     * 노출여부
+     */
+    @Column(name = "VIEW_YN", columnDefinition = "char")
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
      * 페이징여부
      */
     @Column(name = "PAGING_YN", columnDefinition = "char")
@@ -205,6 +212,7 @@ public class Component extends BaseAudit {
     public void prePersist() {
         this.periodYn = McpString.defaultValue(this.periodYn, MokaConstants.NO);
         this.dataType = McpString.defaultValue(this.dataType, TpsConstants.DATATYPE_NONE);
+        this.viewYn = McpString.defaultValue(this.viewYn, MokaConstants.YES);
         this.pagingYn = McpString.defaultValue(this.pagingYn, MokaConstants.NO);
         this.perPageCount = this.perPageCount == null ? TpsConstants.PER_PAGE_COUNT : this.perPageCount;
         this.maxPageCount = this.maxPageCount == null ? TpsConstants.MAX_PAGE_COUNT : this.maxPageCount;

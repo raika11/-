@@ -77,8 +77,9 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
          * 드롭 타겟 ag-grid에 drop-zone 설정
          */
         if (gridApi) {
+            // 타겟이 리스트인 경우
             if (Array.isArray(dropTargetAgGrid)) {
-                dropTargetAgGrid.forEach((grid) => {
+                dropTargetAgGrid.forEach((grid, agGridIndex) => {
                     const dropZone = {
                         getContainer: () => {
                             //  .ag-body-viewport dom을 return한다
@@ -86,7 +87,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                         },
                         onDragStop: (target) => {
                             if (onDragStop) {
-                                onDragStop(gridApi, target);
+                                onDragStop(gridApi, target, agGridIndex);
                             }
                         },
                     };
@@ -94,6 +95,23 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                     gridApi.removeRowDropZone(dropZone);
                     gridApi.addRowDropZone(dropZone);
                 });
+            }
+            // 타겟이 오브젝트인 경우
+            else {
+                const dropZone = {
+                    getContainer: () => {
+                        //  .ag-body-viewport dom을 return한다
+                        return dropTargetAgGrid.gridOptionsWrapper.layoutElements[2];
+                    },
+                    onDragStop: (target) => {
+                        if (onDragStop) {
+                            onDragStop(gridApi, target);
+                        }
+                    },
+                };
+
+                gridApi.removeRowDropZone(dropZone);
+                gridApi.addRowDropZone(dropZone);
             }
         }
 

@@ -60,7 +60,7 @@ const DeskingTreeCategory = (props) => {
         setOpen(!open);
 
         if (onExpansion) {
-            onExpansion(e);
+            onExpansion(nodeData);
         }
     };
 
@@ -74,8 +74,10 @@ const DeskingTreeCategory = (props) => {
         if (onSelected) {
             onSelected(nodeData);
         }
-        if (onExpansion) {
-            onExpansion(nodeData);
+        if (!open) {
+            if (onExpansion) {
+                onExpansion(nodeData);
+            }
         }
     };
 

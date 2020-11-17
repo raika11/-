@@ -17,7 +17,7 @@ const propTypes = {
     /**
      * 선택한 컴포넌트의 데이터
      */
-    component: PropTypes.object,
+    selectedComponent: PropTypes.object,
     /**
      * drag&drop 타겟 ag-grid
      */
@@ -26,16 +26,21 @@ const propTypes = {
      * row를 drop하였을 때 실행하는 함수
      */
     onDragStop: PropTypes.func,
+    /**
+     * show 일 때만 데이터를 로드한다
+     */
+    show: PropTypes.bool,
 };
 const defaultProps = {
-    component: {},
+    selectedComponent: {},
+    show: true,
 };
 
 /**
  * 페이지편집 > 기사리스트
  */
 const ArticleDeskList = forwardRef((props, ref) => {
-    const { className, media, component, dropTargetAgGrid, onDragStop } = props;
+    const { className, media, selectedComponent, dropTargetAgGrid, onDragStop, show } = props;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -48,7 +53,7 @@ const ArticleDeskList = forwardRef((props, ref) => {
 
     return (
         <div className={className}>
-            <ArticleDeskSearch media={media} component={component} />
+            <ArticleDeskSearch media={media} selectedComponent={selectedComponent} show={show} />
             <ArticleDeskAgGrid ref={ref} dropTargetAgGrid={dropTargetAgGrid} onDragStop={onDragStop} />
         </div>
     );

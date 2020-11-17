@@ -7,13 +7,13 @@ import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultArticleSearchType, CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
-import { initialState, getArticleList, changeSearchOption } from '@store/article';
+import { initialState, getArticleList, changeSearchOption, clearList } from '@store/article';
 
 /**
  * 기사 검색
  */
 const ArticleDeskSearch = (props) => {
-    const { media, component } = props;
+    const { media, selectedComponent, show } = props;
     const dispatch = useDispatch();
     const { storeSearch } = useSelector((store) => ({
         storeSearch: store.article.search,
@@ -94,11 +94,13 @@ const ArticleDeskSearch = (props) => {
         e.preventDefault();
         e.stopPropagation();
 
+        const date = new Date();
+
         setSearch({
             ...initialState.search,
-            masterCode: component.masterCode || null,
-            startServiceDay: moment('2020-08-21 00:00').format(DB_DATEFORMAT),
-            endServiceDay: moment('2020-08-22 00:00').format(DB_DATEFORMAT),
+            masterCode: selectedComponent.masterCode || null,
+            startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
+            endServiceDay: moment(date).format(DB_DATEFORMAT),
             page: 0,
         });
     };
@@ -106,11 +108,11 @@ const ArticleDeskSearch = (props) => {
     useEffect(() => {
         setSearch({
             ...storeSearch,
-            masterCode: component.masterCode || null,
+            masterCode: selectedComponent.masterCode || null,
             startServiceDay: moment(storeSearch.startServiceDay, DB_DATEFORMAT),
             endServiceDay: moment(storeSearch.endServiceDay, DB_DATEFORMAT),
         });
-    }, [component.masterCode, storeSearch]);
+    }, [selectedComponent.masterCode, storeSearch]);
 
     useEffect(() => {
         if (media) setSearchDisabled(true);
@@ -123,23 +125,32 @@ const ArticleDeskSearch = (props) => {
          * 시작일 : 현재 시간(시분초o)
          * 종료일 : 현재 시간(시분초o) - 24시간
          */
-        const date = new Date();
-        dispatch(
-            getArticleList(
-                changeSearchOption({
-                    ...storeSearch,
-                    masterCode: component.masterCode || null,
-                    startServiceDay: moment('2020-08-21 00:00').format(DB_DATEFORMAT),
-                    endServiceDay: moment('2020-08-22 00:00').format(DB_DATEFORMAT),
-                    // startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
-                    // endServiceDay: moment(date).add(-2, 'month').format(DB_DATEFORMAT),
-                    page: 0,
-                }),
-            ),
-        );
+
+        if (show) {
+            // const date = new Date();
+            // const startServiceDay = storeSearch.startServiceDay || moment(date).add(-24, 'hours');
+            // const endServiceDay = storeSearch.endServiceDay || moment(date);
+            const startServiceDay = storeSearch.startServiceDay || '2020-08-21 00:00:00';
+            const endServiceDay = storeSearch.endServiceDay || '2020-08-22 00:00:00';
+
+            dispatch(
+                getArticleList(
+                    changeSearchOption({
+                        ...storeSearch,
+                        masterCode: selectedComponent.masterCode || null,
+                        startServiceDay,
+                        endServiceDay,
+                        contentType: media ? 'M' : null,
+                        page: 0,
+                    }),
+                ),
+            );
+        } else {
+            dispatch(clearList());
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, component.masterCode]);
+    }, [selectedComponent.masterCode, show]);
 
     return (
         <Form>

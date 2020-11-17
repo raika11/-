@@ -6,11 +6,13 @@ export default [
         headerName: 'ID',
         field: 'componentSeq',
         width: 50,
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '컴포넌트명',
         field: 'componentName',
         width: 276,
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '',

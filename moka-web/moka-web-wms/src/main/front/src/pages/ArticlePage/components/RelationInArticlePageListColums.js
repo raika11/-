@@ -6,11 +6,13 @@ export default [
         headerName: 'ID',
         field: 'skinSeq',
         width: 50,
+        cellStyle: { fontSize: '12px' },
     },
     {
-        headerName: '스킨명',
+        headerName: '기사타입명',
         field: 'skinName',
         width: 240,
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '',

@@ -96,7 +96,7 @@ public class ReporterRestController {
     @ApiOperation(value = "기자관리 조회")
     @GetMapping("/{repSeq}")
     public ResponseEntity<?> getReportMgr(HttpServletRequest request,
-            @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{reporter.error.pattern.repSeq}") String repSeq)
+            @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporter.error.pattern.repSeq}") String repSeq)
             throws NoDataException {
         // 조회(mybatis)
         ReporterVO returnValue = reporterService.findBySeq(repSeq);
@@ -123,7 +123,7 @@ public class ReporterRestController {
             throws Exception {
 
         // GroupDTO -> Group 변환
-        String infoMessage = messageByLocale.get("tps.group.error.no-data", request);
+        String infoMessage = messageByLocale.get("tps.reporter.error.no-data", request);
         String cd1Nm = reporterSimpleDTO.getR1CdNm();
         String cd2Nm = reporterSimpleDTO.getR2CdNm();
         String cd3Nm = reporterSimpleDTO.getR3CdNm();

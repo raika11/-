@@ -36,6 +36,7 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     @Override
     public Optional<DirectLink> findById(String linkSeq) {
         return directLinkRepository.findById(linkSeq);
+
     }
 
     @Override

@@ -72,7 +72,10 @@ const DeskingTreeCategory = (props) => {
         e.stopPropagation();
 
         if (onSelected) {
-            onSelected(e);
+            onSelected(nodeData);
+        }
+        if (onExpansion) {
+            onExpansion(nodeData);
         }
     };
 

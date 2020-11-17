@@ -3,15 +3,20 @@
  */
 package jmnet.moka.core.tps.mvc.directlink.service;
 
+import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import jmnet.moka.core.tps.mvc.directlink.repository.DirectLinkRepository;
 import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
+import jmnet.moka.core.tps.mvc.template.entity.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -27,6 +32,9 @@ public class DirectLinkServiceImpl implements DirectLinkService {
 
     @Autowired
     private DirectLinkRepository directLinkRepository;
+
+    @Autowired
+    private UploadFileHelper uploadFileHelper;
 
     @Override
     public Page<DirectLink> findAllDirectLink(DirectLinkSearchDTO search) {
@@ -73,4 +81,30 @@ public class DirectLinkServiceImpl implements DirectLinkService {
         String newId = String.format("%s%02d", "DIRECT_LINK_PREFIX", count + 1);
         return newId;
     }
+
+    @Override
+    public String saveImage(DirectLink directLink, MultipartFile thumbnail)
+            throws Exception {
+        String extension = McpFile.getExtension(thumbnail.getOriginalFilename())
+                .toLowerCase();
+        String newFilename = String.valueOf(directLink.getLinkSeq()) + "." + extension;
+        // 이미지를 저장할 실제 경로 생성
+        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
+
+        if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
+            String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
+            return uri;
+        } else {
+            return "";
+        }
+    }
+
+    @Override
+    public boolean deleteImage(DirectLink directLink)
+            throws Exception {
+        // 이미지 실제 경로 생성
+        String imageRealPath = uploadFileHelper.getRealPathByDB(directLink.getImgUrl());
+        return uploadFileHelper.deleteFile(imageRealPath);
+    }
+
 }

@@ -26,7 +26,7 @@ public class DirectLink extends BaseAudit {
      * 링크일련번호
      */
     @Id
-    @Column(name = "LINK_SEQ", length = 4)
+    @Column(name = "LINK_SEQ",nullable = false)
     private String linkSeq;
 
     /**
@@ -38,25 +38,25 @@ public class DirectLink extends BaseAudit {
     /**
      * 노출고정(y:항상노출n:검색시만노출)
      */
-    @Column(name = "FIX_YN", nullable = false)
+    @Column(name = "FIX_YN", nullable = false, length = 1)
     private String fixYn;
 
     /**
      * 링크타입(s:본창n:새창)
      */
-    @Column(name = "LINK_TYPE", nullable = false)
+    @Column(name = "LINK_TYPE", nullable = false, length = 1)
     private String linkType;
 
     /**
      * 노출시작일
      */
-    @Column(name = "VIEW_SDATE", nullable = false)
+    @Column(name = "VIEW_SDATE", length = 10)
     private String viewSdate;
 
     /**
      * 노출종료일
      */
-    @Column(name = "VIEW_EDATE", nullable = false)
+    @Column(name = "VIEW_EDATE", length = 10)
     private String viewEdate;
 
     /**

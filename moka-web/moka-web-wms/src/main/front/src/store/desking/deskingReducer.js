@@ -8,7 +8,9 @@ import * as act from './deskingAction';
 export const initialState = {
     area: null,
     list: [],
+    total: 0,
     error: null,
+    agGridCount: 0,
 };
 
 /**

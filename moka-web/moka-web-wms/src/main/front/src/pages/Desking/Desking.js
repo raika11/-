@@ -1,12 +1,13 @@
 import React, { Suspense, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { Switch, Route } from 'react-router-dom';
 
 const DeskingList = React.lazy(() => import('./DeskingList'));
 const DeskingWorkList = React.lazy(() => import('./DeskingWorkList'));
 const DeskingTab = React.lazy(() => import('./DeskingTab'));
 
 /**
- * 페이지편집
+ * 페이지 편집
  */
 const Desking = ({ match }) => {
     // 컴포넌트 ag-grid 인스턴스 리스트를 state로 관리
@@ -26,9 +27,17 @@ const Desking = ({ match }) => {
             </Suspense>
 
             {/* 데스킹 워크 */}
-            <Suspense>
-                <DeskingWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
-            </Suspense>
+            <Switch>
+                <Route
+                    path={[match.url, `${match.url}/:areaSeq`]}
+                    exact
+                    render={() => (
+                        <Suspense>
+                            <DeskingWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
+                        </Suspense>
+                    )}
+                />
+            </Switch>
 
             {/* 데스킹 탭 */}
             <Suspense>

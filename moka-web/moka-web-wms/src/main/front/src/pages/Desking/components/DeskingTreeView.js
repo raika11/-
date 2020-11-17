@@ -74,7 +74,7 @@ const DeskingTreeView = (props) => {
     };
 
     return (
-        <MokaCard className="mr-gutter treeview" bodyClassName="p-1" width={200} header={false}>
+        <MokaCard className="mr-gutter treeview" bodyClassName="p-2" width={200} header={false}>
             <ul className="list-unstyled tree-list">
                 {loading && <MokaLoader />}
                 {!loading &&

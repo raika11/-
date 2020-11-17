@@ -13,10 +13,22 @@ export const clearList = createAction(CLEAR_LIST);
  * 데이터 조회
  */
 export const [GET_COMPONENT_WORK_LIST, GET_COMPONENT_WORK_LIST_SUCCESS, GET_COMPONENT_WORK_LIST_FAILURE] = createRequestActionTypes('desking/GET_COMPONENT_WORK_LIST');
-export const getComponentWorkList = createAction(GET_COMPONENT_WORK_LIST, (...actions) => actions);
+export const getComponentWorkList = createAction(GET_COMPONENT_WORK_LIST, ({ areaSeq, callback }) => ({ areaSeq, callback }));
 
 /**
  * 데이터 변경
  */
 export const CHANGE_AREA = 'desking/CHANGE_AREA';
 export const changeArea = createAction(CHANGE_AREA, (area) => area);
+
+/**
+ * 데스킹 드래그스탑
+ */
+export const DESKING_DRAG_STOP = 'desking/DESKING_DRAG_STOP';
+export const deskingDragStop = createAction(DESKING_DRAG_STOP, ({ api, target, component }) => ({ api, target, component }));
+
+/**
+ * 데스킹워크 정렬
+ */
+export const DESKING_SORT_GRID = 'desking/DESKING_SORT_GRID';
+export const deskingSortGrid = createAction(DESKING_SORT_GRID, ({ grid, component }) => ({ grid, component }));

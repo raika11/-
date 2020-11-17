@@ -66,6 +66,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                     myunPan,
                     articleDt,
                     reportersText,
+                    gridType: 'ARTICLE',
                 };
             }),
         );
@@ -77,7 +78,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
          */
         if (gridApi) {
             if (Array.isArray(dropTargetAgGrid)) {
-                dropTargetAgGrid.forEach((grid) => {
+                dropTargetAgGrid.forEach((grid, agGridIndex) => {
                     const dropZone = {
                         getContainer: () => {
                             //  .ag-body-viewport dom을 return한다
@@ -85,7 +86,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                         },
                         onDragStop: (target) => {
                             if (onDragStop) {
-                                onDragStop(gridApi, target);
+                                onDragStop(gridApi, target, agGridIndex);
                             }
                         },
                     };
@@ -100,10 +101,12 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
     }, [dropTargetAgGrid, gridApi]);
 
     useEffect(() => {
-        if (ref.current && ref.current.gridApi) {
-            ref.current.gridApi.redrawRows();
+        if (gridApi) {
+            gridApi.redrawRows();
         }
-    }, [rowData, ref]);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rowData]);
 
     return (
         <MokaTable
@@ -114,6 +117,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(article) => article.totalId}
+            onRowClicked={() => {}}
             loading={loading}
             total={total}
             page={search.page}

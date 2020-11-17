@@ -6,7 +6,9 @@ package jmnet.moka.core.tps.mvc.directlink.service;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
+import jmnet.moka.core.tps.mvc.template.entity.Template;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -77,5 +79,23 @@ public interface DirectLinkService {
      * @param directLink 그룹 정보
      */
     void deleteDirectLink(DirectLink directLink);
+
+    /**
+     * 썸네일 이미지 저장
+     * @param directLink 템플릿
+     * @param thumbnail 썸네일 이미지(Multipart)
+     * @return 이미지 uri
+     * @throws Exception 예외처리
+     */
+    String saveImage(DirectLink directLink, MultipartFile thumbnail) throws Exception;
+
+    /**
+     * 썸네일 이미지 삭제
+     * @param directLink 템플릿
+     * @return 삭제 결과
+     * @throws Exception 예외처리
+     */
+    boolean deleteImage(DirectLink directLink) throws Exception;
+
 
 }

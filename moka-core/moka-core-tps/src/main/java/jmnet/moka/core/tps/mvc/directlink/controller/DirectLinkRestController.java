@@ -14,6 +14,7 @@ import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkDTO;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import jmnet.moka.core.tps.mvc.directlink.service.DirectLinkService;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,7 @@ import java.util.List;
  * 조회 : get{Target}, HttpMethod = GET
  * 저장  : post{Target}, HttpMethod = POST
  * 수정  : put{Target}, HttpMethod = PUT
+ * 삭제  : delete{Target}, HttpMethod = DELETE
  * 사이트내멤버조회 : get{Target}, HttpMethod = GET
  * </pre>
  *
@@ -48,7 +50,7 @@ import java.util.List;
 @RestController
 @Validated
 @Slf4j
-@RequestMapping("/api/directlinks")
+@RequestMapping("/api/direct-links")
 public class DirectLinkRestController {
 
     private final DirectLinkService directLinkService;
@@ -104,10 +106,10 @@ public class DirectLinkRestController {
     @GetMapping("/{linkSeq}")
     public ResponseEntity<?> getDirectLink(HttpServletRequest request
             , @PathVariable("linkSeq") @Pattern(regexp = "[0-9]{3}$"
-                    , message = "{tps.common.error.pattern.linkSeq}") String linkSeq)
+                    , message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
             throws NoDataException {
 
-        String message = messageByLocale.get("tps.common.error.no-data", request);
+        String message = messageByLocale.get("tps.direct-link.error.no-data", request);
         DirectLink directLink = directLinkService.findById(linkSeq).orElseThrow(() -> new NoDataException(message));
         DirectLinkDTO dto = modelMapper.map(directLink, DirectLinkDTO.class);
         tpsLogger.success(ActionType.SELECT);
@@ -135,7 +137,7 @@ public class DirectLinkRestController {
         DirectLink directLink = modelMapper.map(directLinkDTO, DirectLink.class);
         if (McpString.isNotEmpty(directLink.getLinkSeq())) { // 자동 발번이 아닌 경우 중복 체크
             if (directLinkService.isDuplicatedId(directLink.getLinkSeq())) {
-                throw new InvalidDataException(messageByLocale.get("tps.common.error.duplicated.linkSeq", request));
+                throw new InvalidDataException(messageByLocale.get("tps.direct-link.error.duplicate.linkSeq", request));
             }
         }
 
@@ -157,7 +159,7 @@ public class DirectLinkRestController {
             log.error("[FAIL TO INSERT SITE]", e);
             // 액션 로그에 오류 내용 출력
             tpsLogger.error(ActionType.INSERT, e);
-            throw new Exception(messageByLocale.get("tps.common.error.save", request), e);
+            throw new Exception(messageByLocale.get("tps.direct-link.error.save", request), e);
         }
     }
 
@@ -174,12 +176,12 @@ public class DirectLinkRestController {
     @PutMapping("/{linkSeq}")
     public ResponseEntity<?> putDirectLink(HttpServletRequest request,
                                        @PathVariable("linkSeq")
-                                       @Pattern(regexp = "[0-9]{4}$", message = "{tps.common.error.pattern.linkSeq}") String linkSeq,
+                                       @Pattern(regexp = "[0-9]{3}$", message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq,
                                        @Valid DirectLinkDTO directLinkDTO)
             throws Exception {
 
         // DirectLinkDTO -> DirectLink 변환
-        String infoMessage = messageByLocale.get("tps.common.error.no-data", request);
+        String infoMessage = messageByLocale.get("tps.direct-link.error.no-data", request);
         DirectLink newDirectLink = modelMapper.map(directLinkDTO, DirectLink.class);
 
         directLinkService
@@ -204,7 +206,7 @@ public class DirectLinkRestController {
             log.error("[FAIL TO UPDATE DirectLink] seq: {} {}", directLinkDTO.getLinkSeq(),  e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE DirectLink]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.save", request), e);
+            throw new Exception(messageByLocale.get("tps.direct-link.error.save", request), e);
         }
     }
 
@@ -220,8 +222,8 @@ public class DirectLinkRestController {
     @GetMapping("/{linkSeq}/has-members")
     public ResponseEntity<?> hasMembers(HttpServletRequest request,
                                         @PathVariable("linkSeq")
-                                        @Size(min = 1, max = 4,
-                                                message = "{tps.common.error.pattern.linkSeq}") String linkSeq)
+                                        @Size(min = 1, max = 3,
+                                                message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
             throws NoDataException {
 
         boolean exists = directLinkService.hasMembers(linkSeq);
@@ -230,5 +232,55 @@ public class DirectLinkRestController {
         // 결과리턴
         ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, message);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 삭제
+     *
+     * @param request 요청
+     * @param linkSeq 삭제 할 링크일련번호 (필수)
+     * @return 삭제성공여부
+     * @throws InvalidDataException 데이타유효성오류
+     * @throws NoDataException      삭제 할 사이트정보 없음
+     * @throws Exception            그 외 에러처리
+     */
+    @ApiOperation(value = "그룹 삭제")
+    @DeleteMapping("/{linkSeq}")
+    public ResponseEntity<?> deleteDirectLink(HttpServletRequest request,
+                                         @PathVariable("linkSeq")
+                                         @Size(min = 1, max = 3,
+                                         message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
+            throws InvalidDataException, NoDataException, Exception {
+
+
+        // 그룹 데이터 조회
+        String noContentMessage = messageByLocale.get("tps.direct-link.error.no-data", request);
+        DirectLink member = directLinkService.findById(linkSeq)
+                .orElseThrow(() -> new NoDataException(noContentMessage));
+
+        // 관련 데이터 조회
+//        if (directLinkService.hasMembers(linkSeq)) {
+//            // 액션 로그에 실패 로그 출력
+//            tpsLogger.fail(ActionType.DELETE, messageByLocale.get("tps.group.error.delete.exist-member", request));
+//            throw new InvalidDataException(messageByLocale.get("tps.group.error.delete.exist-member", request));
+//        }
+
+        try {
+            // 삭제
+            directLinkService.deleteDirectLink(member);
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.DELETE);
+
+            // 결과리턴
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE DIRECT_LINK] linkSeq: {} {}", linkSeq, e.getMessage());
+            // 액션 로그에 실패 로그 출력
+            tpsLogger.error(ActionType.DELETE, e.toString());
+            throw new Exception(messageByLocale.get("tps.direct-link.error.delete", request), e);
+        }
     }
 }

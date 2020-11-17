@@ -5,6 +5,7 @@ package jmnet.moka.core.tps.mvc.directlink.service;
 
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
@@ -69,5 +70,12 @@ public interface DirectLinkService {
      * @return 존재 여부
      */
     boolean hasMembers(String linkSeq);
+
+    /**
+     * 그룹 삭제
+     *
+     * @param directLink 그룹 정보
+     */
+    void deleteDirectLink(DirectLink directLink);
 
 }

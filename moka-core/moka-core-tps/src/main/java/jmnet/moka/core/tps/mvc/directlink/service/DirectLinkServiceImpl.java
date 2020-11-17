@@ -7,6 +7,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import jmnet.moka.core.tps.mvc.directlink.repository.DirectLinkRepository;
+import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,6 +60,11 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     @Override
     public boolean hasMembers(String linkSeq) {
         return directLinkRepository.countByLinkSeq(linkSeq) > 0 ? true : false;
+    }
+
+    @Override
+    public void deleteDirectLink(DirectLink directLink) {
+        directLinkRepository.delete(directLink);
     }
 
     private String getNewDirectLinkSeq() {

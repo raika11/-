@@ -12,7 +12,25 @@ export const initialState = {
     list: [],
     total: 0,
     error: null,
-    selectedComponent: {},
+    selectedComponent: {
+        seq: 0,
+        componentSeq: 0,
+        componentName: '',
+        regId: '',
+        templateSeq: 0,
+        templateName: '',
+        templateWidth: 0,
+        datasetSeq: 0,
+        dataType: '',
+        zone: null,
+        matchZone: null,
+        snapshotYn: 'N',
+        snapshotBody: null,
+        componentOrd: 0,
+        schCodeId: '',
+        artPageSeq: null,
+        viewYn: 'N',
+    },
 };
 
 /**

@@ -57,7 +57,7 @@ export const columnDefs = [
         cellClassRules: cellClassRules,
     },
     {
-        width: 220,
+        width: 100,
         field: 'title',
         flex: 1,
         autoHeight: true,
@@ -80,47 +80,20 @@ export const columnDefs = [
     },
     {
         field: 'editButton',
-        width: 30,
+        width: 25,
         cellRendererFramework: (row) => {
             const { data } = row;
-            return <MokaTableEditButton {...row} onClick={data.onDelete} />;
-        },
-        cellRendererParams: (params) => {
-            return {
-                api: params.api,
-                rowIndex: params.rowIndex,
-                colKey: 'title',
-                char: params.data.title,
-            };
+            return <MokaTableEditButton {...row} onClick={data.onEdit} />;
         },
         cellClassRules: cellClassRules,
     },
     {
         field: 'deleteButton',
-        width: 30,
+        width: 25,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;
         },
-        cellRendererParams: (params) => {
-            return {
-                name: 'delete',
-                params,
-            };
-        },
         cellClassRules: cellClassRules,
     },
 ];
-
-// export const getOverIndex = (event, tgt) => {
-//     debugger;
-//     const elements = document.elementsFromPoint(event.clientX, event.clientY);
-//     const agGridRow = elements.find((r) => r.classList.contains('ag-row'));
-//     if (agGridRow) {
-//         const idOfRow = agGridRow.getAttribute('row-id');
-//         const rowNode = tgt.api.getRowNode(idOfRow);
-//         console.log('idOfRow:'+idOfRow+',rowIndex:'+rowNode.rowIndex);
-//         return rowNode.rowIndex;
-//     }
-//     return -1;
-// };

@@ -36,7 +36,7 @@ const propTypes = {
 };
 const defaultProps = {
     placeholder: '검색어를 입력하세요',
-    variant: 'primary',
+    variant: 'searching',
     searchText: '검색',
 };
 

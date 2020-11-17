@@ -87,7 +87,7 @@ const DeskingTreeCategory = (props) => {
                 <Button size="sm" className="mr-1" onClick={handleExpanded}>
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />
                 </Button>
-                <DeskingTreeLabel nodeId={nodeId} nodeData={nodeData} onClick={handleExpanded} />
+                <DeskingTreeLabel nodeId={nodeId} nodeData={nodeData} onClick={handleSelected} />
             </div>
             <Collapse in={open} timeout={3000}>
                 <div id={controls}>

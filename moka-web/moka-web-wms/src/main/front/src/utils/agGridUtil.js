@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { DB_DATE_FORMAT } from '~/constants';
+import { DB_DATEFORMAT } from '@/constants';
 
 export function agGrids() {}
 agGrids.prototype.grids = [];
@@ -25,7 +25,7 @@ agGrids.prototype.change = function (idx, instance, etc) {
  */
 export const makeTitleEx = (title, distYmdt, relCount, pvCount, uvCount) => {
     let titleStr = title;
-    const distYmdtStr = `배부 ${moment(distYmdt, DB_DATE_FORMAT).format('YYYYMMDD hh:mm')}`;
+    const distYmdtStr = `배부 ${moment(distYmdt, DB_DATEFORMAT).format('YYYYMMDD hh:mm')}`;
     const relCountStr = relCount && relCount > 0 ? ` 관련기사: ${relCount}건` : '';
     const pvUvCountStr = ` PV(${pvCount}) UV(${uvCount})`;
     const strArr = [
@@ -43,17 +43,15 @@ export const makeTitleEx = (title, distYmdt, relCount, pvCount, uvCount) => {
 };
 
 /**
- * 드래그위치의 rowIndex찾기
- * @param {object} event 드래그이벤트
- * @param {object} tgt 드래그멈춘 위치의 grid인스턴스
+ * 마우스 위치에 따른 row index 찾는 함수
+ * @param {object} event 드래그 이벤트
  */
-export const getAgGridNodeBeingDraggedOver = (event, tgt) => {
+export const getRowIndex = (event) => {
     const elements = document.elementsFromPoint(event.clientX, event.clientY);
     const agGridRow = elements.find((r) => r.classList.contains('ag-row'));
     if (agGridRow) {
-        const idOfRow = agGridRow.getAttribute('row-id');
-        const rowNode = tgt.api.getRowNode(idOfRow);
-        return rowNode.rowIndex;
+        const index = agGridRow.getAttribute('row-index');
+        return Number(index);
     }
     return -1;
 };

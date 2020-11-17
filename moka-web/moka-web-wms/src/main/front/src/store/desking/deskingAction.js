@@ -20,3 +20,9 @@ export const getComponentWorkList = createAction(GET_COMPONENT_WORK_LIST, ({ are
  */
 export const CHANGE_AREA = 'desking/CHANGE_AREA';
 export const changeArea = createAction(CHANGE_AREA, (area) => area);
+
+/**
+ * 데스킹 드래그스탑
+ */
+export const DESKING_DRAG_STOP = 'desking/DESKING_DRAG_STOP';
+export const deskingDragStop = createAction(DESKING_DRAG_STOP, ({ api, target, component }) => ({ api, target, component }));

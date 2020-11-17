@@ -124,17 +124,17 @@ public class DirectLinkRestController {
      * 사이트등록
      *
      * @param directLinkDTO 등록할 사이트정보
-     * @param directLinkThumbnailFile 등록할 사이트바로가기 이미지
+     *  directLinkThumbnailFile 등록할 사이트바로가기 이미지
      * @return 등록된 사이트정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "사이트 등록")
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
-    , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+//    @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
+//    , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO
-            ,@RequestPart(value = "http://localhost:8100/swagger-ui.html", required = false)
-            MultipartFile directLinkThumbnailFile
+//            ,@RequestPart(value = "http://localhost:8100/swagger-ui.html", required = false)
+//            MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
 
         // 데이터 유효성 검사
@@ -183,21 +183,22 @@ public class DirectLinkRestController {
      *
      * @param linkSeq  링크일련번호
      * @param directLinkDTO 수정할 사이트
-     * @param directLinkThumbnailFile 등록할 사이트바로가기 이미지
+     *  directLinkThumbnailFile 등록할 사이트바로가기 이미지
      * @return 수정된 사이트정보
      * @throws Exception 그외 모든 에러
      */
     @ApiOperation(value = "사이트정보 수정")
     @PutMapping(value = "/{linkSeq}"
             //, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
-    , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}
+    //, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}
             //,MediaType.APPLICATION_JSON_UTF8_VALUE}
             )
     public ResponseEntity<?> putDirectLink(@PathVariable("linkSeq") @Size(min = 1, max = 5, message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq,
-                                       @Valid DirectLinkDTO directLinkDTO,
-                                       @ApiParam(value = "directLinkThumbnailFile")
-                                       @RequestPart(value = "directLinkThumbnailFile", required = false)
-                                                       MultipartFile directLinkThumbnailFile)
+                                       @Valid DirectLinkDTO directLinkDTO
+                                       //,@ApiParam(value = "directLinkThumbnailFile")
+//                                       @RequestPart(value = "directLinkThumbnailFile", required = false)
+//                                                       MultipartFile directLinkThumbnailFile
+    )
             throws Exception {
 
         // DirectLinkDTO -> DirectLink 변환
@@ -215,7 +216,6 @@ public class DirectLinkRestController {
             /*
              * 이미지 파일 저장 새로운 파일이 있으면 기존 파일이 있으면 삭제하고 새 파일을 저장한다.
              */
-            System.out.println("debug::" + directLinkThumbnailFile);
 
 
 //            if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {

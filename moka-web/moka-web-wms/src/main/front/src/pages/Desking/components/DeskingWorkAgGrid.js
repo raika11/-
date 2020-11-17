@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
+import produce from 'immer';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs, rowData, rowClassRules } from './DeskingWorkAgGridColumns';
 import { toastr } from 'react-redux-toastr';
 
-const DeskingWorkAgGrid = () => {
+const DeskingWorkAgGrid = ({ agGridIndex, componentAgGridInstances, setComponentAgGridInstances }) => {
     const [moveRows, setMoveRows] = useState([]);
+
+    /**
+     * ag-grid onGridReady
+     * @param {object} params onReadyReady params
+     */
+    const handleGridReady = (params) => {
+        setComponentAgGridInstances(
+            produce(componentAgGridInstances, (draft) => {
+                draft[agGridIndex] = params.api;
+            }),
+        );
+    };
 
     // 드래그 시작
     const onRowDragEnter = (params) => {
@@ -129,6 +142,7 @@ const DeskingWorkAgGrid = () => {
     return (
         <div className="ag-theme-moka-desking-grid">
             <AgGridReact
+                onGridReady={handleGridReady}
                 rowData={rowData}
                 getRowNodeId={(params) => params.totalId}
                 columnDefs={columnDefs}

@@ -3,7 +3,7 @@ import { MokaCardTabs, MokaIconTabs, MokaIcon } from '@components';
 import { ArticleDeskList } from '@/pages/Article/components';
 import { DeskingHistoryList } from './components';
 
-const DeskingTabs = () => {
+const DeskingTabs = ({ componentAgGridInstances }) => {
     // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
     const [tabNavs, setTabNav] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
@@ -30,10 +30,10 @@ const DeskingTabs = () => {
                     fill
                     tabs={[
                         // 기사 조회 컴포넌트
-                        <ArticleDeskList className="px-3 pb-3 pt-2" ref={articleRef} />,
+                        <ArticleDeskList className="px-3 pb-3 pt-2" ref={articleRef} dropTargetAgGrid={componentAgGridInstances} />,
 
                         // 영상 기사 조회 컴포넌트
-                        <ArticleDeskList className="px-3 pb-3 pt-2" ref={mediaRef} media />,
+                        <ArticleDeskList className="px-3 pb-3 pt-2" ref={mediaRef} dropTargetAgGrid={componentAgGridInstances} media />,
                     ]}
                     tabNavs={tabNavs}
                 />,

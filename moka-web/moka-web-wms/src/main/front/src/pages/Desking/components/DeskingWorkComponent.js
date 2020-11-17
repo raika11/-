@@ -23,12 +23,12 @@ const defaultProps = {
 };
 
 const DeskingWorkComponent = (props) => {
-    const { component, agGridIndex } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
 
     return (
         <div id={`agGrid-${component.seq}`}>
             <ButtonGroup component={component} agGridIndex={agGridIndex} />
-            <AgGrid component={component} agGridIndex={agGridIndex} />
+            <AgGrid component={component} agGridIndex={agGridIndex} componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
         </div>
     );
 };

@@ -42,15 +42,15 @@ const BasicForm = (props) => {
                 </Col>
                 <Col xs={6} className="p-0 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button variant="dark" className="mr-2" onClick={() => setCopyModalShow(true)} disabled={btnDisabled}>
+                        <Button variant="outline-neutral" className="mr-2" onClick={() => setCopyModalShow(true)} disabled={btnDisabled}>
                             설정복사
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="primary" className="mr-2" onClick={onClickSave}>
+                        <Button variant="positive" className="mr-2" onClick={onClickSave}>
                             저장
                         </Button>
-                        <Button variant="danger" onClick={onClickDelete} disabled={btnDisabled}>
+                        <Button variant="negative" onClick={onClickDelete} disabled={btnDisabled}>
                             삭제
                         </Button>
                     </div>

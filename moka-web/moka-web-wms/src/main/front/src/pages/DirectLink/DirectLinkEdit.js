@@ -178,7 +178,7 @@ const DirectLinkEdit = () => {
                         <MokaInputLabel label="LINK" className="mb-0" name="linkUrl" value={temp.linkUrl} onChange={handleChangeValue} isInvalid={error.linkUrl} />
                     </Col>
                     <Col xs={3} className="pl-2">
-                        <Button variant="dark" onClick={validateLink}>
+                        <Button variant="outline-neutral" onClick={validateLink}>
                             유효성 검사
                         </Button>
                     </Col>
@@ -229,6 +229,7 @@ const DirectLinkEdit = () => {
                             <Button
                                 className="mt-1"
                                 size="sm"
+                                variant="negative"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -277,7 +278,9 @@ const DirectLinkEdit = () => {
             </Form>
 
             <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
-                <Button onClick={handleClickSave}>저장</Button>
+                <Button variant="positive" onClick={handleClickSave}>
+                    저장
+                </Button>
             </div>
         </MokaCard>
     );

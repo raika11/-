@@ -166,15 +166,12 @@ const AreaFormDepth1 = ({ onDelete }) => {
 
                     {/* 버튼 그룹 */}
                     <Card.Footer className="d-flex justify-content-center">
-                        <Button className="mr-10" onClick={handleClickSave}>
+                        <Button className="mr-10" variant="positive" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="gray150">취소</Button>
-                        {temp.areaSeq && (
-                            <Button variant="danger" className="ml-10" onClick={handleClickDelete}>
-                                삭제
-                            </Button>
-                        )}
+                        <Button variant="negative" className="ml-10" onClick={handleClickDelete} disabled={!temp.areaSeq}>
+                            삭제
+                        </Button>
                     </Card.Footer>
                 </Col>
             </div>

@@ -31,12 +31,12 @@ const SpecialEditModal = (props) => {
             buttons={[
                 {
                     text: '저장',
-                    variant: 'primary',
+                    variant: 'positive',
                     onClick: onHide,
                 },
                 {
                     text: '삭제',
-                    variant: 'gray150',
+                    variant: 'negative',
                     onClick: onHide,
                 },
             ]}
@@ -50,10 +50,10 @@ const SpecialEditModal = (props) => {
                         <MokaInputLabel label="이미지 등록" labelWidth={80} labelClassName="d-flex align-items-start" as="none" />
                         <MokaImageInput width={262} height={234} />
                         <Form.Row className="d-flex justify-content-between pt-2">
-                            <Button variant="dark" size="sm">
+                            <Button variant="outline-neutral" size="sm">
                                 파일 선택
                             </Button>
-                            <Button variant="dark" size="sm">
+                            <Button variant="outline-neutral" size="sm">
                                 이미지 편집
                             </Button>
                         </Form.Row>

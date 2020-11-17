@@ -61,13 +61,13 @@ const ContainerAgGrid = ({ onDelete }) => {
     return (
         <>
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="dark" onClick={handleAddClick}>
+                <Button variant="positive" onClick={handleAddClick}>
                     컨테이너 등록
                 </Button>
             </div>
             {/* table */}
             <MokaTable
-                agGridHeight={568}
+                agGridHeight={570}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(container) => container.containerSeq}

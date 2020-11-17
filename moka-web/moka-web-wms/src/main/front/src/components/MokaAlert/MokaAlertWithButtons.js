@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
@@ -52,7 +52,7 @@ const propTypes = {
 };
 const defaultProps = {
     show: true,
-    variant: 'primary',
+    variant: 'outline-neutral',
     buttons: [],
     outline: true,
     dismissible: false,

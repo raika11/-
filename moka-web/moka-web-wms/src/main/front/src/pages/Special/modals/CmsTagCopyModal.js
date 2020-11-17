@@ -13,12 +13,7 @@ const CmsTagCopyModal = (props) => {
             buttons={[
                 {
                     text: '확인',
-                    variant: 'primary',
-                    onClick: onHide,
-                },
-                {
-                    text: '취소',
-                    variant: 'gray150',
+                    variant: 'positive',
                     onClick: onHide,
                 },
             ]}

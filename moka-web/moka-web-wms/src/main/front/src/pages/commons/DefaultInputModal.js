@@ -54,8 +54,8 @@ const DefaultInputModal = (props) => {
             title={title}
             size="md"
             buttons={[
-                { text: '저장', variant: 'primary', onClick: handleClickSave },
-                { text: '취소', variant: 'gray150', onClick: handleClickHide },
+                { text: '저장', variant: 'positive', onClick: handleClickSave },
+                { text: '취소', variant: 'negative', onClick: handleClickHide },
             ]}
             footerClassName="justify-content-center"
             draggable

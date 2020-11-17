@@ -1,6 +1,5 @@
 import React from 'react';
 import { BeatLoader } from 'react-spinners';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 const MokaLoader = (props) => {

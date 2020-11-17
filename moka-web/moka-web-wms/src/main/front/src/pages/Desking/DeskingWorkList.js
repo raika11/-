@@ -49,7 +49,7 @@ const DeskingWorkList = (props) => {
                                 onChange={handleChangeValue}
                             />
                         </Col> */}
-                    <Button variant="dark" className="ft-12" onClick={handlePreviewClicked}>
+                    <Button variant="outline-neutral" className="ft-12" onClick={handlePreviewClicked}>
                         페이지 미리보기
                     </Button>
                 </div>
@@ -75,7 +75,7 @@ const DeskingWorkList = (props) => {
             {area.areaAlign === AREA_ALIGN_H && (
                 <MokaCard loading={loading} header={false} width={363} className="p-0 mr-gutter" bodyClassName="p-0">
                     <div className="d-flex justify-content-end p-2 border-bottom">
-                        <Button variant="dark" className="ft-12" onClick={handlePreviewClicked}>
+                        <Button variant="outline-neutral" className="ft-12" onClick={handlePreviewClicked}>
                             페이지 미리보기
                         </Button>
                     </div>

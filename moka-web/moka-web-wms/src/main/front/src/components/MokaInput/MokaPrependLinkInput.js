@@ -105,7 +105,7 @@ const MokaPrependLinkInput = forwardRef((props, ref) => {
             {Array.isArray(inputList) ? inputList.map((obj, idx) => createInput(obj, idx)) : createInput(inputList)}
             {icon && (
                 <InputGroup.Append>
-                    <Button variant="dark" onClick={onIconClick}>
+                    <Button variant="searching" onClick={onIconClick}>
                         {icon}
                     </Button>
                 </InputGroup.Append>

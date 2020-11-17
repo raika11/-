@@ -106,7 +106,7 @@ const CodeMgtEditSearch = (props) => {
                 />
             </Col>
             <Col xs={1} className="p-0">
-                <Button variant="dark" onClick={handleAdd}>
+                <Button variant="positive" onClick={handleAdd}>
                     코드 등록
                 </Button>
             </Col>
@@ -115,15 +115,18 @@ const CodeMgtEditSearch = (props) => {
                 draggable
                 show={showAlertModal}
                 onHide={() => setShowAlertModal(false)}
+                size="md"
+                width={600}
                 title="코드그룹 미선택"
                 buttons={[
                     {
                         text: '확인',
-                        variant: 'primary',
+                        variant: 'positive',
                         onClick: () => setShowAlertModal(false),
                     },
                 ]}
                 footerClassName="justify-content-center"
+                centered
             >
                 <div>코드그룹을 선택하세요</div>
             </MokaModal>

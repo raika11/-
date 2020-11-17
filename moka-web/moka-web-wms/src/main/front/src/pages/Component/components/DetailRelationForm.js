@@ -169,11 +169,11 @@ const DetailRelationForm = (props) => {
             {/* 삭제 단어 */}
             <MokaInputLabel
                 label={
-                    <>
+                    <React.Fragment>
                         삭제 단어
                         <br />
                         (제목)
-                    </>
+                    </React.Fragment>
                 }
                 as="textarea"
                 className="mb-2"

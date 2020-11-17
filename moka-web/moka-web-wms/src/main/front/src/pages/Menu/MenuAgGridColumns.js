@@ -22,9 +22,9 @@ export const columnDefs = [
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (params) => {
             const usedYn = params.data.usedYn;
-            let clazz = 'color-gray150';
+            let clazz = 'color-negative';
             if (usedYn === 'Y') {
-                clazz = 'color-primary';
+                clazz = 'color-positive';
             }
             return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
         },

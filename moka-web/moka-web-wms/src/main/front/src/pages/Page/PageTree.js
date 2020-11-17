@@ -156,12 +156,12 @@ const PageTree = ({ onDelete }) => {
                 {
                     icon: <MokaIcon iconName="fal-plus" />,
                     onClick: handleInsertSub,
-                    variant: 'warning',
+                    variant: 'searching',
                 },
                 {
                     icon: <MokaIcon iconName="fal-minus" />,
                     onClick: onDelete,
-                    variant: 'warning',
+                    variant: 'searching',
                 },
             ]}
         />

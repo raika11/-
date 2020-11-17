@@ -265,7 +265,7 @@ body {
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: $primary;
+                background: $gray-500;
             }
 
             &:hover {
@@ -282,7 +282,7 @@ body {
             }
 
             &[data-match='Y'] {
-                color: rgba($orange, 0.5)
+                color: rgba($gray-500, 0.5)
             }
         }
 
@@ -293,8 +293,8 @@ body {
         }
 
         .selected {
-            background: rgba($black, 0.2);
-            color: $white;
+            background: $gray-400;
+            color: $black;
         }
 
         /*2뎁스 padding*/

@@ -1,11 +1,5 @@
-.color-primary {
-  color: $primary
-}
-
-.color-dark {
-  color: $dark
-}
-
-.color-gray150 {
-  color: $gray-150
+@each $color-name, $color in $theme-colors {
+  .color-#{$color-name} {
+    color: $color;
+  }
 }

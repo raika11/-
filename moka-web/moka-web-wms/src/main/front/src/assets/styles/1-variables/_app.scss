@@ -107,10 +107,7 @@ $theme-colors: (
 	"neutral": $neutral,
 	"negative": $negative,
 	"searching": $searching,
-	// 색상별 테마
 	"white": $white,
-    "orange": $orange,
-	"gray150": $gray-150
 ) !default;
 
 // Social colors
@@ -148,6 +145,9 @@ $body-color: $gray-700 !default;
 
 // Common
 $border-width: 1px !default;
+
+// Component active bg
+$component-active-bg: $searching !default;
 
 // Fonts
 $line-height-base: 1.5 !default;
@@ -264,6 +264,10 @@ $card-title-color: $gray-700 !default;
 
 // Tables
 $table-accent-bg: $gray-100 !default;
+
+// Pagination
+$pagination-active-bg: $searching !default;
+$pagination-active-border-color: $searching !default;
 
 // Sidebar general
 $sidebar-width: 260px !default;

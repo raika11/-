@@ -6,7 +6,6 @@ import { MokaSearchInput, MokaInput } from '@components';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getApi } from '@store/codeMgt';
 import { changeSearchOption, getDatasetList, initialState } from '@store/dataset';
-import { getTemplateList } from '@store/template';
 import { useHistory } from 'react-router-dom';
 
 const defaultAutoCreateYn = [
@@ -129,7 +128,7 @@ const DatasetSearch = () => {
                 </Col>
             </Form.Row>
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="dark" onClick={handleClickAddDataSet}>
+                <Button variant="positive" onClick={handleClickAddDataSet}>
                     데이터셋 등록
                 </Button>
             </div>

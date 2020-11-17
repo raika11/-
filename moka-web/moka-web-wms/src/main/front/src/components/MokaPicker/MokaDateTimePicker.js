@@ -106,7 +106,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
                     disabled={disabled}
                 />
                 <InputGroup.Append>
-                    <Button disabled={disabled} onClick={openCalendar}>
+                    <Button variant="searching" disabled={disabled} onClick={openCalendar}>
                         <MokaIcon iconName={dateFormat ? 'fal-calendar-alt' : timeFormat ? 'fal-clock' : 'fal-calendar-alt'} />
                     </Button>
                 </InputGroup.Append>

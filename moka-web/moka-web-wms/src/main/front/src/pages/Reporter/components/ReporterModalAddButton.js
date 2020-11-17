@@ -25,7 +25,7 @@ const ReporterModalAddButton = (props) => {
     return (
         <>
             <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                <Button variant="dark" size="sm" onClick={() => handleClick(data)}>
+                <Button variant="positive" size="sm" onClick={() => handleClick(data)}>
                     등록
                 </Button>
             </div>

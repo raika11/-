@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { MokaIcon } from '@components';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';

@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { initialState, getDatasetListModal, GET_DATASET_LIST_MODAL, getDatasetApiList } from '@store/dataset';
+import { initialState, GET_DATASET_LIST_MODAL, getDatasetApiList } from '@store/dataset';
 import columnDefs from './DatasetApiListModalColums';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
@@ -158,9 +158,10 @@ const DatsetListModal = (props) => {
             onHide={handleHide}
             title="API 검색"
             size="md"
+            width={600}
             buttons={[
-                { text: '등록', onClick: handleClickSave },
-                { text: '취소', variant: 'gray150', onClick: handleClickCancle },
+                { text: '등록', variant: 'positive', onClick: handleClickSave },
+                { text: '취소', variant: 'negative', onClick: handleClickCancle },
             ]}
             footerClassName="justify-content-center"
             draggable

@@ -208,7 +208,7 @@ const CodeMgtListAgGrid = () => {
     return (
         <>
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="dark" onClick={handleAddClick}>
+                <Button variant="positive" onClick={handleAddClick}>
                     그룹 등록
                 </Button>
             </div>

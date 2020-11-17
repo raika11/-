@@ -24,7 +24,7 @@ const MokaCopyTextButton = (props) => {
 
     return (
         <Button
-            variant="dark"
+            variant="searching"
             disabled={copyText === ''}
             onClick={() => {
                 copy(copyText);

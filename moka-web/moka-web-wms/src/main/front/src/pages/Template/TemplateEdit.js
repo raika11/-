@@ -302,18 +302,18 @@ const TemplateEdit = ({ onDelete }) => {
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button variant="dark" className="mr-05" disabled={btnDisabled} onClick={() => setAddComponentModalShow(true)}>
+                        <Button variant="outline-neutral" className="mr-05" disabled={btnDisabled} onClick={() => setAddComponentModalShow(true)}>
                             컴포넌트 생성
                         </Button>
-                        <Button variant="dark" disabled={btnDisabled} onClick={() => setCopyModalShow(true)}>
+                        <Button variant="outline-neutral" disabled={btnDisabled} onClick={() => setCopyModalShow(true)}>
                             복사
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="primary" className="mr-05" onClick={handleClickSave}>
+                        <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="danger" disabled={btnDisabled} onClick={handleClickDelete}>
+                        <Button variant="negative" disabled={btnDisabled} onClick={handleClickDelete}>
                             삭제
                         </Button>
                     </div>
@@ -382,6 +382,7 @@ const TemplateEdit = ({ onDelete }) => {
                             <Button
                                 className="mt-1"
                                 size="sm"
+                                variant="negative"
                                 style={{ width: 68 }}
                                 onClick={(e) => {
                                     e.preventDefault();

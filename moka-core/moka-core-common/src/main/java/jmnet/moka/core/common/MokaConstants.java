@@ -72,6 +72,7 @@ public class MokaConstants {
     public static String MERGE_CONTEXT_RESERVED = "reserved";
     public static String MERGE_CONTEXT_PAGE = "page";
     public static String MERGE_CONTEXT_PARAM = Constants.PARAM;
+    public static String MERGE_CONTEXT_CATEGORY = "category";
     public static String MERGE_CONTEXT_HEADER = "header";
     public static String MERGE_CONTEXT_COOKIE = "cookie";
     public static String MERGE_CONTEXT_CONTAINER = "container";

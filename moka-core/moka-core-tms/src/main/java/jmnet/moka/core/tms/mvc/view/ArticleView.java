@@ -152,7 +152,7 @@ public class ArticleView extends AbstractView {
         if ( paramMap == null) {
             paramMap = new HashMap();
         }
-        paramMap.put("category",category);
+        paramMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY,category);
 
         // 메뉴..
         Map<String,Object> tempMap = new HashMap<>();

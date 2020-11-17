@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import produce from 'immer';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
-import { columnDefs, rowData, rowClassRules } from './DeskingWorkAgGridColumns';
+import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
 import { toastr } from 'react-redux-toastr';
 
 const propTypes = {
@@ -38,10 +38,17 @@ const DeskingWorkAgGrid = (props) => {
     useEffect(() => {
         if (deskingWorks) {
             setRowData(
-                deskingWorks.map((desking) => ({
-                    ...desking,
-                    relTitle: desking.title,
-                })),
+                deskingWorks.map((desking) => {
+                    let relTitle;
+
+                    if (desking.rel) {
+                        relTitle = desking.title;
+                    }
+                    return {
+                        ...desking,
+                        relTitle,
+                    };
+                }),
             );
         }
     }, [deskingWorks]);
@@ -106,7 +113,7 @@ const DeskingWorkAgGrid = (props) => {
 
     // rollback
     const rollbackRows = (api) => {
-        api.setRowData(deskingWorks);
+        api.setRowData(rowData);
     };
 
     // 관련기사 추가

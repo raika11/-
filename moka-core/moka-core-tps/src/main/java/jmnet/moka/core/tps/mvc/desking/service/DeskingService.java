@@ -4,8 +4,15 @@
 package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.List;
+import java.util.Optional;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
+import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
+import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -45,79 +52,74 @@ public interface DeskingService {
      * @param includeDesking 컴포넌트의 편집데이터를 조회할지 말지 플래그 받음
      * @return 편집컴포넌트
      */
-    public DeskingComponentWorkVO findComponentWorkBySeq(Long seq, boolean includeDesking);
+    DeskingComponentWorkVO findComponentWorkBySeq(Long seq, boolean includeDesking);
 
-    //    /**
-    //     * 데스킹 워크를 조회한다
-    //     *
-    //     * @param seq 데스킹워크 아이디
-    //     * @return 데스킹 워크
-    //     */
-    //    public Optional<DeskingWork> getDeskingWork(Long seq);
-    //
-    //    /**
-    //     * <pre>
-    //      * Work컴포넌트의 편집데이타 등록(전송시 사용)
-    //      *   : 기존데이타 삭제->새로운데이타 편집데이타로 등록 -> 편집데이타 히스토리등록
-    //     * </pre>
-    //     *
-    //     * @param component 컴포넌트
-    //     * @param deskingWorks 편집기사목록
-    //     * @param deskingRelWorks 관련편집기사목록
-    //     * @param creator 작업자
-    //     * @return
-    //     */
-    //    public void updateDesking(Component component, List<DeskingWorkVO> deskingWorks,
-    //            List<DeskingRelWorkVO> deskingRelWorks, String creator);
-    //
-    //    /**
-    //     * 데스킹 워크 수정
-    //     *
-    //     * @param deskingWork 수정할 데스킹워크
-    //     * @return 결과
-    //     */
-    //    public DeskingWork updateDeskingWork(DeskingWork deskingWork);
-    //
-    //
-    //    /**
-    //     * work 컴포넌트의 정렬순서 변경
-    //     *
-    //     * @param datasetSeq 데이타셋순
-    //     * @param deskingWorks 편집기사목록
-    //     * @param creator 작업자
-    //     * @param search 편집기사목록 조회용 검색조건
-    //     * @return Work편집기사목록
-    //     */
-    //    public List<DeskingWorkVO> updateDeskingWorkPriority(Long datasetSeq,
-    //            List<DeskingWorkVO> deskingWorks, String creator, WorkSearchDTO search);
-    //
-    //    /**
-    //     * <pre>
-    //     * work 편집기사 추가 및 편집기사목록 정렬
-    //     * </pre>
-    //     *
-    //     * @param deskingWork 추가할 편집기사
-    //     * @param datasetSeq 데이타셋순번
-    //     * @param editionSeq 예약순번
-    //     * @param creator 작업자
-    //     */
-    //    public void insertDeskingWork(DeskingWork deskingWork, Long datasetSeq, Long editionSeq,
-    //            String creator);
-    //
-    //    /**
-    //     * <pre>
-    //     * work 편집기사 이동
-    //     * </pre>
-    //     *
-    //     * @param deskingWork 추가할 편집기사
-    //     * @param tgtDatasetSeq target 데이타셋순번
-    //     * @param srcDatasetSeq source 데이타셋순번
-    //     * @param editionSeq 예약순번
-    //     * @param creator 작업자
-    //     */
-    //    public void moveDeskingWork(DeskingWork deskingWork, Long tgtDatasetSeq, Long srcDatasetSeq, Long editionSeq,
-    //                                  String creator);
-    //
+    /**
+     * 데스킹 워크를 조회한다
+     *
+     * @param seq 데스킹워크 아이디
+     * @return 데스킹 워크
+     */
+    public Optional<DeskingWork> findDeskingWorkBySeq(Long seq);
+
+    /**
+     * <pre>
+     * Work컴포넌트의 편집데이타 등록(전송시 사용)
+     *   : 기존데이타 삭제->새로운데이타 편집데이타로 등록 -> 편집데이타 히스토리등록
+     * </pre>
+     *
+     * @param component    컴포넌트
+     * @param deskingWorks 편집기사목록
+     * @param regId        작업자
+     * @return
+     */
+    public void updateDesking(Component component, List<DeskingWorkVO> deskingWorks, String regId);
+
+    /**
+     * 데스킹 워크 수정
+     *
+     * @param deskingWork 수정할 데스킹워크
+     * @return 결과
+     */
+    public DeskingWork updateDeskingWork(DeskingWork deskingWork);
+
+    /**
+     * work 컴포넌트의 정렬순서 변경
+     *
+     * @param datasetSeq   데이타셋순
+     * @param deskingWorks 편집기사목록
+     * @param creator      작업자
+     * @param search       편집기사목록 조회용 검색조건
+     * @return Work편집기사목록
+     */
+    public List<DeskingWorkVO> updateDeskingWorkPriority(Long datasetSeq, List<DeskingWorkVO> deskingWorks, String creator,
+            DeskingWorkSearchDTO search);
+
+    /**
+     * <pre>
+     * work 편집기사 추가 및 편집기사목록 정렬
+     * </pre>
+     *
+     * @param deskingWork 추가할 편집기사
+     * @param datasetSeq  데이타셋순번
+     * @param editionSeq  예약순번
+     * @param creator     작업자
+     */
+    public void insertDeskingWork(DeskingWork deskingWork, Long datasetSeq, Long editionSeq, String creator);
+
+    /**
+     * <pre>
+     * work 편집기사 이동
+     * </pre>
+     *
+     * @param deskingWork   추가할 편집기사
+     * @param tgtDatasetSeq target 데이타셋순번
+     * @param srcDatasetSeq source 데이타셋순번
+     * @param editionSeq    예약순번
+     * @param creator       작업자
+     */
+    public void moveDeskingWork(DeskingWork deskingWork, Long tgtDatasetSeq, Long srcDatasetSeq, Long editionSeq, String creator);
+
     //    /**
     //     * 저장간격내에 저장한 사람을 조회
     //     *
@@ -127,57 +129,57 @@ public interface DeskingService {
     //     * @return 작업된 데스킹목록
     //     */
     //    public List<Desking> hasOtherSaved(Long datasetSeq, int interval, String creator);
-    //
-    //    /**
-    //     * 편집 컴포넌트 수정
-    //     *
-    //     * @param workVO work컴포넌트정보
-    //     * @param creator 작업자
-    //     * @return 수정된 컴포넌트
-    //     * @throws NoDataException 데이터없음 예외
-    //     * @throws Exception 기타예외
-    //     */
-    //    public Component updateComponent(DeskingComponentWorkVO workVO, String creator)
-    //            throws NoDataException, Exception;
-    //
-    //    /**
-    //     * 컴포넌트 저장(전송)
-    //     *
-    //     * @param workVO work컴포넌트정보
-    //     * @param creator 작업자
-    //     * @throws NoDataException 데이터없음 예외
-    //     * @throws Exception 기타예외
-    //     */
-    //    public void sendComponent(DeskingComponentWorkVO workVO, String creator)
-    //            throws NoDataException, Exception;
-    //
-    //    /**
-    //     * work 컴포넌트워크 스냅샷 수정
-    //     *
-    //     * @param componentWorkSeq work컴포넌트순번
-    //     * @param snapshotYn 스냅샷여부
-    //     * @param snapshotBody 스냅샷HTML
-    //     * @param creator 작업자
-    //     * @return work컴포넌트
-    //     * @throws NoDataException
-    //     * @throws Exception
-    //     */
-    //    public ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn,
-    //            String snapshotBody, String creator) throws NoDataException, Exception;
-    //
-    //    /**
-    //     * work 컴포넌트워크 템플릿 수정
-    //     *
-    //     * @param componentWorkSeq work컴포넌트순번
-    //     * @param templateSeq 변경할 템플릿순번
-    //     * @param creator 작업자
-    //     * @return work컴포넌트
-    //     * @throws NoDataException
-    //     * @throws Exception
-    //     */
-    //    public ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq,
-    //            String creator) throws NoDataException, Exception;
-    //
+
+    /**
+     * 편집 컴포넌트 수정
+     *
+     * @param workVO work컴포넌트정보
+     * @param regId  작업자
+     * @return 수정된 컴포넌트
+     * @throws NoDataException 데이터없음 예외
+     * @throws Exception       기타예외
+     */
+    public Component updateComponent(DeskingComponentWorkVO workVO, String regId)
+            throws NoDataException, Exception;
+
+    /**
+     * 컴포넌트 저장(전송)
+     *
+     * @param workVO work컴포넌트정보
+     * @param regId  작업자
+     * @throws NoDataException 데이터없음 예외
+     * @throws Exception       기타예외
+     */
+    public void send(DeskingComponentWorkVO workVO, String regId)
+            throws NoDataException, Exception;
+
+    /**
+     * work 컴포넌트워크 스냅샷 수정
+     *
+     * @param componentWorkSeq work컴포넌트순번
+     * @param snapshotYn       스냅샷여부
+     * @param snapshotBody     스냅샷HTML
+     * @param creator          작업자
+     * @return work컴포넌트
+     * @throws NoDataException
+     * @throws Exception
+     */
+    public ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn, String snapshotBody, String creator)
+            throws NoDataException, Exception;
+
+    /**
+     * work 컴포넌트워크 템플릿 수정
+     *
+     * @param componentWorkSeq work컴포넌트순번
+     * @param templateSeq      변경할 템플릿순번
+     * @param creator          작업자
+     * @return work컴포넌트
+     * @throws NoDataException
+     * @throws Exception
+     */
+    public ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String creator)
+            throws NoDataException, Exception;
+
     //    /**
     //     * work 편집기사 삭제(VO로 삭제. 관련기사도 삭제)
     //     *
@@ -188,18 +190,17 @@ public interface DeskingService {
     //     */
     //    public void deleteDeskingWorkList(List<DeskingWorkVO> deskingWorkVOList, Long datasetSeq,
     //            Long editionSeq, String creator);
-    //
-    //    /**
-    //     * work 편집기사 삭제 전 정렬
-    //     *
-    //     * @param deskingWorkSeqList 삭제할 work편집기사 Seq 목록
-    //     * @param datasetSeq 데이타셋순번
-    //     * @param editionSeq 예약순번
-    //     * @param creator 작업자
-    //     */
-    //    public void sortBeforeDeleteDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq,
-    //                                      Long editionSeq, String creator);
-    //
+
+    /**
+     * work 편집기사 삭제 전 정렬
+     *
+     * @param deskingWorkSeqList 삭제할 work편집기사 Seq 목록
+     * @param datasetSeq         데이타셋순번
+     * @param editionSeq         예약순번
+     * @param creator            작업자
+     */
+    public void sortBeforeDeleteDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq, Long editionSeq, String creator);
+
     //    /**
     //     * 데스킹 릴레이션 워크 목록 저장
     //     *
@@ -225,17 +226,17 @@ public interface DeskingService {
     //     * @param deskingRelWork deskingRelWork
     //     */
     //    public void deleteDeskingRelWork(DeskingRelWork deskingRelWork);
-    //
-    //    /**
-    //     * 데스킹 워크 썸네일 사진 저장
-    //     *
-    //     * @param deskingWork 데스킹워크
-    //     * @param thumbnail 멀티파트파일
-    //     * @return 이미지 uri
-    //     * @throws Exception 에러
-    //     */
-    //    public String saveDeskingWorkImage(DeskingWork deskingWork, MultipartFile thumbnail)
-    //            throws Exception;
+
+    /**
+     * 데스킹 워크 썸네일 사진 저장
+     *
+     * @param deskingWork 데스킹워크
+     * @param thumbnail   멀티파트파일
+     * @return 이미지 uri
+     * @throws Exception 에러
+     */
+    public String saveDeskingWorkImage(DeskingWork deskingWork, MultipartFile thumbnail)
+            throws Exception;
     //
     //    /**
     //     * 데스킹 히스토리 그룹 목록 조회

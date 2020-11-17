@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.desking.mapper.ComponentWorkMapper">
 
-	<resultMap id="ComponentMap" type="DeskingComponentWorkVO"/>
-	<resultMap id="DeskingMap" type="DeskingWorkVO"/>
+  <resultMap id="ComponentMap" type="DeskingComponentWorkVO"/>
+  <resultMap id="DeskingMap" type="DeskingWorkVO"/>
 
-	<!-- 기존의 작업용 편집컴포넌트(DESK,FORM)+편집기사 초기화 및 import -->
-	<select id="findAllComponentWork" parameterType="jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO"
-		resultMap="ComponentMap, DeskingMap" statementType="CALLABLE">
+  <!-- 기존의 작업용 편집컴포넌트(DESK,FORM)+편집기사 초기화 및 import -->
+  <select id="findAllComponentWork"
+    parameterType="jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO"
+    resultMap="ComponentMap, DeskingMap" statementType="CALLABLE">
 		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_DESKING_WORK_LIST_SEL_WITH_IMPORT(
 			#{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
 			#{regId, mode=IN, jdbcType=VARCHAR, javaType=string}
 		) }
   	</select>
-	
+
+  <select id="findComponentWorkBySeq" parameterType="Long"
+    resultType="DeskingComponentWorkVO" statementType="CALLABLE">
+		{call UPA_WMS_COMPONENT_WORK_SEL(
+			#{seq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+  	</select>
+
 </mapper>

@@ -1,22 +1,30 @@
+/*
+ * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+ */
+
 package jmnet.moka.core.tps.mvc.desking.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serializable;
-import javax.persistence.Column;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.Date;
+import java.util.List;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 데스킹워크DTO
- * 
- * @author jeon0525
+ * Description: 설명
  *
+ * @author ssc
+ * @since 2020-11-17
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,67 +34,164 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DeskingWorkDTO implements Serializable {
 
-    private static final long serialVersionUID = -6709195199525259062L;
+    private static final long serialVersionUID = 1L;
 
+    public static final Type TYPE = new TypeReference<List<DeskingWorkDTO>>() {
+    }.getType();
+
+    /**
+     * 일련번호
+     */
     private Long seq;
 
-    private Long deskingSeq;
+    /**
+     * 화면편집SEQ
+     */
+    private Integer deskingSeq;
 
-    private String creator;
-
+    /**
+     * 데이터셋SEQ
+     */
     private Long datasetSeq;
 
-    private Long editionSeq;
+    /**
+     * 서비스기사아이디
+     */
+    private Long totalId;
 
-    private String contentsId;
+    /**
+     * 부모 서비스기사아이디
+     */
+    private Long parentTotalId;
 
-    private String contentsAttr;
+    /**
+     * 콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상
+     */
+    private String contentType;
 
-    private String lang;
+    /**
+     * 기사타입
+     */
+    private String artType;
 
-    private String distYmdt;
+    /**
+     * 출처
+     */
+    private String sourceCode;
 
-    private Integer contentsOrder;
+    /**
+     * 콘텐트순서
+     */
+    private Integer contentOrd = 1;
 
-    @Column(name = "TITLE")
+    /**
+     * 관련순서
+     */
+    private Integer relOrd = 1;
+
+    /**
+     * 임시저장여부
+     */
+    private String saveYn = MokaConstants.NO;
+
+    /**
+     * 언어(기타코드)
+     */
+    private String lang = TpsConstants.DEFAULT_LANG;
+
+    /**
+     * 배부일시
+     */
+    private Date distDt;
+
+    /**
+     * 제목
+     */
     private String title;
 
-    private String mobileTitle;
+    /**
+     * 모바일제목
+     */
+    private String mobTitle;
 
-    private String subtitle;
+    /**
+     * 부제목
+     */
+    private String subTitle;
 
+    /**
+     * 어깨제목
+     */
     private String nameplate;
 
+    /**
+     * 말머리
+     */
     private String titlePrefix;
 
+    /**
+     * 발췌문
+     */
     private String bodyHead;
 
+    /**
+     * 링크URL
+     */
     private String linkUrl;
 
+    /**
+     * 링크TARGET
+     */
     private String linkTarget;
 
+    /**
+     * 더보기URL
+     */
     private String moreUrl;
 
+    /**
+     * 더보기TARGET
+     */
     private String moreTarget;
 
-    private String thumbnailFileName;
+    /**
+     * 썸네일파일명
+     */
+    private String thumbFileName;
 
-    private Integer thumbnailSize;
+    /**
+     * 썸네일용량
+     */
+    private Integer thumbSize = 0;
 
-    private Integer thumbnailWidth;
+    /**
+     * 썸네일가로
+     */
+    private Integer thumbWidth = 0;
 
-    private Integer thumbnailHeight;
+    /**
+     * 썸네일세로
+     */
+    private Integer thumbHeight = 0;
 
-    private String createYmdt;
+    /**
+     * 생성일시
+     */
+    private Date regDt;
 
-    private Integer pvCount;
+    /**
+     * 생성자
+     */
+    private String regId;
 
-    private Integer uvCount;
-
+    /**
+     * 이미지파일
+     */
     @JsonIgnore
     private MultipartFile thumbnailFile;
 
+    /**
+     * 컴포넌트SEQ
+     */
     private Long componentSeq;
-
-    //    private Set<DeskingRelWorkDTO> deskingRelWorkDTO;
 }

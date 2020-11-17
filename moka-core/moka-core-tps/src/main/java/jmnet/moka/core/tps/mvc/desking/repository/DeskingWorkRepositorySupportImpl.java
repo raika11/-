@@ -2,22 +2,21 @@ package jmnet.moka.core.tps.mvc.desking.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jmnet.moka.core.tps.mvc.desking.entity.QDeskingWork;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
+import jmnet.moka.core.tps.mvc.desking.entity.QDeskingWork;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <pre>
- * 
+ *
  * 2020. 8. 11. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 8. 11. 오전 10:43:25
+ *
  * @author ssc
+ * @since 2020. 8. 11. 오전 10:43:25
  */
-public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport
-        implements DeskingWorkRepositorySupport {
+public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport implements DeskingWorkRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
@@ -32,10 +31,12 @@ public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport
         QDeskingWork deskingWork = QDeskingWork.deskingWork;
         BooleanBuilder builder = new BooleanBuilder();
 
-        builder.and(deskingWork.dataset.datasetSeq.eq(datasetSeq));
+        builder.and(deskingWork.datasetSeq.eq(datasetSeq));
         builder.and(deskingWork.regId.eq(regId));
 
         // 삭제
-        queryFactory.delete(deskingWork).where(builder).execute();
+        queryFactory.delete(deskingWork)
+                    .where(builder)
+                    .execute();
     }
 }

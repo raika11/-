@@ -46,12 +46,10 @@ public class DeskingWorkSearchDTO extends SearchDTO {
      */
     private String regId;
 
-    //    private String createYmdt;
-
     /**
      * 작업 컴포넌트 SEQ
      */
-    //    private Long componentSeq;
+    private Long componentSeq;
 
     private Long datasetSeq;
 

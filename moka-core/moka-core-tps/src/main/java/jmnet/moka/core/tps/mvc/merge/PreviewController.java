@@ -73,25 +73,25 @@ public class PreviewController {
     @Autowired
     private TpsLogger tpsLogger;
 
-//    @GetMapping("/preview")
-//    public ResponseEntity<?> perview(HttpServletRequest request)
-//            throws Exception {
-//
-//        DomainItem domainItem = new DomainItem("1000", "news.msp.com", "http://localhost:8081", "demo_api");
-//        try {
-//            // MspPreviewTemplateMerger dtm =
-//            // appContext.getBean(MspPreviewTemplateMerger.class, domainItem);
-//            MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
-//
-//            PageItem pageItem = (PageItem) dtm.getItem(MokaConstants.ITEM_PAGE, "4");
-//            StringBuilder sb = dtm.merge(pageItem, null, true);
-//
-//            return new ResponseEntity<>(sb.toString(), HttpStatus.OK);
-//        } catch (Exception e) {
-//            logger.error("Fail to Merge : 4", e);
-//            throw new Exception(messageByLocale.get("tps.common.error.merge", request), e);
-//        }
-//    }
+    //    @GetMapping("/preview")
+    //    public ResponseEntity<?> perview(HttpServletRequest request)
+    //            throws Exception {
+    //
+    //        DomainItem domainItem = new DomainItem("1000", "news.msp.com", "http://localhost:8081", "demo_api");
+    //        try {
+    //            // MspPreviewTemplateMerger dtm =
+    //            // appContext.getBean(MspPreviewTemplateMerger.class, domainItem);
+    //            MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+    //
+    //            PageItem pageItem = (PageItem) dtm.getItem(MokaConstants.ITEM_PAGE, "4");
+    //            StringBuilder sb = dtm.merge(pageItem, null, true);
+    //
+    //            return new ResponseEntity<>(sb.toString(), HttpStatus.OK);
+    //        } catch (Exception e) {
+    //            logger.error("Fail to Merge : 4", e);
+    //            throw new Exception(messageByLocale.get("tps.common.error.merge", request), e);
+    //        }
+    //    }
 
     /**
      * 페이지 미리보기
@@ -99,14 +99,14 @@ public class PreviewController {
      * @param request 요청
      * @param pageDto 페이지
      * @return 페이지 미리보기
-     * @throws InvalidDataException 페이지정보오류
-     * @throws NoDataException 도메인,페이지 정보 없음 오류
-     * @throws IOException 입출력오류
-     * @throws Exception 기타오류
-     * @throws TemplateMergeException tems 머징오류
+     * @throws InvalidDataException         페이지정보오류
+     * @throws NoDataException              도메인,페이지 정보 없음 오류
+     * @throws IOException                  입출력오류
+     * @throws Exception                    기타오류
+     * @throws TemplateMergeException       tems 머징오류
      * @throws UnsupportedEncodingException 인코딩오류
-     * @throws TemplateParseException tems 문법오류
-     * @throws TemplateLoadException tems 로딩오류
+     * @throws TemplateParseException       tems 문법오류
+     * @throws TemplateLoadException        tems 로딩오류
      */
     @PostMapping("/preview/page")
     public void perviewPage(HttpServletRequest request, HttpServletResponse response, @Valid PageDTO pageDto)
@@ -114,7 +114,8 @@ public class PreviewController {
             TemplateParseException, TemplateLoadException {
 
         // 도메인
-        Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
+        Domain domainInfo = domainService.findDomainById(pageDto.getDomain()
+                                                                .getDomainId())
                                          .orElseThrow(() -> {
                                              String message = messageByLocale.get("tps.domain.error.no-data", request);
                                              tpsLogger.fail(ActionType.SELECT, message, true);
@@ -126,7 +127,8 @@ public class PreviewController {
         // 페이지
         PageItem pageItem = pageDto.toPageItem();
         DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
-        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
+        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                               .format(df));
 
         try {
             // merger
@@ -184,22 +186,24 @@ public class PreviewController {
 
         // 페이지
         Page pageInfo = pageService.findPageBySeq(pageSeq)
-            .orElseThrow(() -> {
-                String message = messageByLocale.get("tps.common.error.no-data", request);
-                tpsLogger.fail(ActionType.SELECT, message, true);
-                return new NoDataException(message);
-            });
+                                   .orElseThrow(() -> {
+                                       String message = messageByLocale.get("tps.common.error.no-data", request);
+                                       tpsLogger.fail(ActionType.SELECT, message, true);
+                                       return new NoDataException(message);
+                                   });
         PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
         PageItem pageItem = pageDto.toPageItem();
-        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
+        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                               .format(df));
 
         // 도메인
-        Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
-            .orElseThrow(() -> {
-                String message = messageByLocale.get("tps.common.error.no-data", request);
-                tpsLogger.fail(ActionType.SELECT, message, true);
-                return new NoDataException(message);
-            });
+        Domain domainInfo = domainService.findDomainById(pageDto.getDomain()
+                                                                .getDomainId())
+                                         .orElseThrow(() -> {
+                                             String message = messageByLocale.get("tps.common.error.no-data", request);
+                                             tpsLogger.fail(ActionType.SELECT, message, true);
+                                             return new NoDataException(message);
+                                         });
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
         DomainItem domainItem = domainDto.toDomainItem();
 
@@ -247,43 +251,46 @@ public class PreviewController {
 
         // 페이지
         Page pageInfo = pageService.findPageBySeq(pageSeq)
-            .orElseThrow(() -> {
-                String message = messageByLocale.get("tps.common.error.no-data", request);
-                tpsLogger.fail(ActionType.SELECT, message, true);
-                return new NoDataException(message);
-            });
+                                   .orElseThrow(() -> {
+                                       String message = messageByLocale.get("tps.common.error.no-data", request);
+                                       tpsLogger.fail(ActionType.SELECT, message, true);
+                                       return new NoDataException(message);
+                                   });
         PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
         PageItem pageItem = pageDto.toPageItem();
-        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
+        pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                               .format(df));
 
         // 도메인
-        Domain domainInfo = domainService.findDomainById(pageDto.getDomain().getDomainId())
-            .orElseThrow(() -> {
-                String message = messageByLocale.get("tps.common.error.no-data", request);
-                tpsLogger.fail(ActionType.SELECT, message, true);
-                return new NoDataException(message);
-            });
+        Domain domainInfo = domainService.findDomainById(pageDto.getDomain()
+                                                                .getDomainId())
+                                         .orElseThrow(() -> {
+                                             String message = messageByLocale.get("tps.common.error.no-data", request);
+                                             tpsLogger.fail(ActionType.SELECT, message, true);
+                                             return new NoDataException(message);
+                                         });
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
         DomainItem domainItem = domainDto.toDomainItem();
 
         try {
             // 컴포넌트 : work 컴포넌트정보를 모두 보내지는 않는다.
-            DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentsWorkBySeq(componentWorkSeq);
+            DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentWorkBySeq(componentWorkSeq);
             if (componentVO == null) {
                 String message = messageByLocale.get("tps.common.error.no-data", request);
                 tpsLogger.fail(ActionType.SELECT, message, true);
                 throw new NoDataException(message);
             }
             ComponentItem componentItem = componentVO.toComponentItem();
-            componentItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now().format(df));
+            componentItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                                        .format(df));
 
             List<String> componentIdList = new ArrayList<String>(1);
-            componentIdList.add(componentVO.getComponentSeq().toString());
+            componentIdList.add(componentVO.getComponentSeq()
+                                           .toString());
 
             // merger
             MokaPreviewTemplateMerger dtm =
-                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(),
-                                                                   0, componentIdList);
+                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(), 0, componentIdList);
 
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, componentItem, false);

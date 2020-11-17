@@ -95,6 +95,13 @@ public class ComponentWork extends RegAudit {
     private String matchZone;
 
     /**
+     * 노출여부
+     */
+    @Column(name = "VIEW_YN", columnDefinition = "char")
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
      * 스냅샷여부
      */
     @Column(name = "SNAPSHOT_YN", columnDefinition = "char")
@@ -119,6 +126,7 @@ public class ComponentWork extends RegAudit {
     @PreUpdate
     public void prePersist() {
         this.dataType = this.dataType == null ? TpsConstants.DATATYPE_NONE : this.dataType;
+        this.viewYn = McpString.defaultValue(this.viewYn, MokaConstants.YES);
         this.snapshotYn = McpString.defaultValue(this.snapshotYn, MokaConstants.NO);
         this.componentOrd = this.componentOrd == null ? 1 : this.componentOrd;
     }

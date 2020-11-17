@@ -7,7 +7,7 @@ const DeskingWorkList = React.lazy(() => import('./DeskingWorkList'));
 const DeskingTab = React.lazy(() => import('./DeskingTab'));
 
 /**
- * 페이지편집
+ * 페이지 편집
  */
 const Desking = ({ match }) => {
     // 컴포넌트 ag-grid 인스턴스 리스트를 state로 관리

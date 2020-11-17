@@ -1,11 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import produce from 'immer';
+import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs, rowData, rowClassRules } from './DeskingWorkAgGridColumns';
 import { toastr } from 'react-redux-toastr';
 
-const DeskingWorkAgGrid = ({ agGridIndex, componentAgGridInstances, setComponentAgGridInstances }) => {
+const propTypes = {
+    /**
+     * 컴포넌트 데이터
+     */
+    component: PropTypes.object,
+    /**
+     * 해당 컴포넌트의 인덱스 (데스킹 AgGrid의 index)
+     */
+    agGridIndex: PropTypes.number,
+    /**
+     * 컴포넌트 클릭 콜백
+     */
+    onRowClicked: PropTypes.func,
+};
+const defaultProps = {
+    component: {},
+    agGridIndex: 0,
+};
+
+/**
+ * 데스킹 AgGrid
+ */
+const DeskingWorkAgGrid = (props) => {
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
+    const { deskingWorks } = component;
     const [moveRows, setMoveRows] = useState([]);
+
+    // local state
+    const [rowData, setRowData] = useState([]);
+
+    useEffect(() => {
+        if (deskingWorks) {
+            setRowData(
+                deskingWorks.map((desking) => ({
+                    ...desking,
+                    relTitle: desking.title,
+                })),
+            );
+        }
+    }, [deskingWorks]);
 
     /**
      * ag-grid onGridReady
@@ -22,14 +61,15 @@ const DeskingWorkAgGrid = ({ agGridIndex, componentAgGridInstances, setComponent
     // 드래그 시작
     const onRowDragEnter = (params) => {
         const data = params.node.data;
-        
+        let fromIndex = deskingWorks.indexOf(data);
 
         // 관련기사 삭제
         if (data.relSeqs && data.relSeqs.length > 0) {
-           
+            setMoveRows(deskingWorks.slice(fromIndex + 1, fromIndex + 1 + data.relSeqs.length));
+            let newRowData = deskingWorks.filter((node) => !data.relSeqs.includes(node.seq));
             params.api.setRowData(newRowData);
             // } else {
- 
+            //     setMoveRows(deskingWorks.slice(fromIndex, fromIndex));
         }
     };
 
@@ -66,7 +106,7 @@ const DeskingWorkAgGrid = ({ agGridIndex, componentAgGridInstances, setComponent
 
     // rollback
     const rollbackRows = (api) => {
-        
+        api.setRowData(deskingWorks);
     };
 
     // 관련기사 추가
@@ -163,5 +203,8 @@ const DeskingWorkAgGrid = ({ agGridIndex, componentAgGridInstances, setComponent
         </div>
     );
 };
+
+DeskingWorkAgGrid.propTypes = propTypes;
+DeskingWorkAgGrid.defaultProps = defaultProps;
 
 export default DeskingWorkAgGrid;

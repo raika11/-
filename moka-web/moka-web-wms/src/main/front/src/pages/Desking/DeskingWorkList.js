@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import produce from 'immer';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -10,12 +9,6 @@ import { MokaInputLabel, MokaLoader } from '@components';
 import { ITEM_CP, ITEM_CT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
 import DeskingWorkComponent from './components/DeskingWorkComponent';
-
-const component = {
-    componentSeq: 1,
-    componentName: '좌측',
-    perPageCount: 10,
-};
 
 /**
  * 데스킹 편집화면
@@ -49,7 +42,7 @@ const DeskingWorkList = (props) => {
                             className="mb-0"
                             inputClassName="ft-12"
                             name="perPageCount"
-                            value={component.perPageCount}
+                            // value={}
                             onChange={handleChangeValue}
                         />
                     </Col>
@@ -70,8 +63,8 @@ const DeskingWorkList = (props) => {
                                 key={`${area.areaSeq}-${component.seq}`}
                                 component={component}
                                 agGridIndex={index}
-                                {...props}
                                 // onRowClicked={handleRowClicked}
+                                {...props}
                             />
                         );
                     })}

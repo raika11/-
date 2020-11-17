@@ -13,7 +13,7 @@ export const clearList = createAction(CLEAR_LIST);
  * 데이터 조회
  */
 export const [GET_COMPONENT_WORK_LIST, GET_COMPONENT_WORK_LIST_SUCCESS, GET_COMPONENT_WORK_LIST_FAILURE] = createRequestActionTypes('desking/GET_COMPONENT_WORK_LIST');
-export const getComponentWorkList = createAction(GET_COMPONENT_WORK_LIST, (...actions) => actions);
+export const getComponentWorkList = createAction(GET_COMPONENT_WORK_LIST, ({ areaSeq, callback }) => ({ areaSeq, callback }));
 
 /**
  * 데이터 변경

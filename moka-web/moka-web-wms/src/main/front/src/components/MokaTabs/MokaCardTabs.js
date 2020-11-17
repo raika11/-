@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -35,6 +35,10 @@ const propTypes = {
      * tab 컨텐츠의 Nav(array), tab과 갯수가 동일해야한다
      */
     tabNavs: PropTypes.arrayOf(PropTypes.string),
+    /**
+     * nav 클릭 콜백
+     */
+    onSelectNav: PropTypes.func,
 };
 const defaultProps = {
     width: 410,
@@ -48,13 +52,26 @@ const defaultProps = {
  * 카드모양 + 탭
  */
 const MokaCardTabs = (props) => {
-    const { className, fill, id, tabs, tabNavs, width, height, tabContentClass } = props;
+    const { className, fill, id, tabs, tabNavs, width, height, tabContentClass, onSelectNav } = props;
+    const [activeKey, setActiveKey] = useState(0);
+
+    /**
+     * Nav 선택 콜백
+     * @param {any} eventKey 이벤트키
+     */
+    const handleSelect = (eventKey, e) => {
+        setActiveKey(eventKey);
+        if (onSelectNav) {
+            onSelectNav(Number(eventKey));
+        }
+        e.currentTarget.blur();
+    };
 
     return (
         <div className={clsx('tab', 'card-tab', 'flex-fill', className)} style={{ width, height }}>
             <Tab.Container id={id} defaultActiveKey={0}>
                 <div className="d-flex">
-                    <Nav fill={fill} variant="tabs" className="flex-row">
+                    <Nav fill={fill} activeKey={activeKey} variant="tabs" className="flex-row" onSelect={handleSelect}>
                         {tabNavs.map((nav, idx) => (
                             <Nav.Item key={idx}>
                                 <Nav.Link eventKey={idx} className="h5">

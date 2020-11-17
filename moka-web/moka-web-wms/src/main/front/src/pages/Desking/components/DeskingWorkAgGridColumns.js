@@ -18,7 +18,7 @@ export const columnDefs = [
         cellClassRules: cellClassRules,
     },
     {
-        field: 'relOrd',
+        field: 'relOrdEx',
         width: 0,
         colSpan: (params) => {
             return params.data.rel ? 2 : 1;
@@ -46,7 +46,7 @@ export const columnDefs = [
     },
     {
         width: 20,
-        field: 'contentOrd',
+        field: 'contentOrdEx',
         cellClassRules: cellClassRules,
         cellStyle: { fontSize: '12px' },
     },

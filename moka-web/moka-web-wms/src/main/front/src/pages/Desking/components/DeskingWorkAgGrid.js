@@ -5,6 +5,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { unescapeHtml } from '@utils/convertUtil';
 import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
 import { toastr } from 'react-redux-toastr';
+import ReadyGrid from './ReadyGrid';
 
 const propTypes = {
     /**
@@ -47,15 +48,16 @@ const DeskingWorkAgGrid = (props) => {
                     return {
                         ...desking,
                         gridType: 'DESKING',
+                        componentWorkSeq: component.seq,
                         title: desking.rel ? '' : escapeTitle,
                         relTitle: desking.rel ? escapeTitle : '',
-                        contentOrd: desking.rel ? '' : `00${desking.contentOrd}`.substr(-2),
-                        relOrd: desking.rel ? `00${desking.relOrd}`.substr(-2) : '',
+                        contentOrdEx: desking.rel ? '' : `00${desking.contentOrd}`.substr(-2),
+                        relOrdEx: desking.rel ? `00${desking.relOrd}`.substr(-2) : '',
                     };
                 }),
             );
         }
-    }, [deskingWorks]);
+    }, [component.seq, deskingWorks]);
 
     /**
      * ag-grid onGridReady
@@ -211,6 +213,7 @@ const DeskingWorkAgGrid = (props) => {
                 undoRedoCellEditing
                 getRowHeight={getRowHeight}
             />
+            {componentAgGridInstances && <ReadyGrid componentAgGridInstances={componentAgGridInstances} grid={componentAgGridInstances[agGridIndex]} component={component} />}
         </div>
     );
 };

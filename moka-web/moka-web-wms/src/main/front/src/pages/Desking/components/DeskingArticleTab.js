@@ -24,7 +24,7 @@ const DeskingArticleTab = (props) => {
      * @param {number} agGridIndex agGridIndex
      */
     const handleArticleDragStop = (source, target, agGridIndex) => {
-        dispatch(deskingDragStop({ target, component: componentList[agGridIndex] }));
+        dispatch(deskingDragStop({ source, target, srcComponent: componentList[agGridIndex] }));
     };
 
     const createTabs = () => {

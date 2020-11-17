@@ -26,6 +26,52 @@ export const postDeskingWorkList = createAction(POST_DESKING_WORK_LIST, ({ compo
     list,
     callback,
 }));
+/**
+ * Work컴포넌트 순번수정
+ */
+export const PUT_DESKING_WORK_PRIORITY = 'desking/PUT_DESKING_WORK_PRIORITY';
+export const putDeskingWorkPriority = createAction(PUT_DESKING_WORK_PRIORITY, ({ component, callback }) => ({
+    component,
+    callback,
+}));
+/**
+ * 데스킹 워크 등록
+ */
+export const POST_DESKING_WORK = 'desking/POST_DESKING_WORK';
+export const postDeskingWork = createAction(POST_DESKING_WORK, ({ componentWorkSeq, datasetSeq, deskingWork, success }) => ({
+    componentWorkSeq,
+    datasetSeq,
+    deskingWork,
+    success,
+}));
+/**
+ * 데스킹 워크 목록 이동
+ */
+export const MOVE_DESKING_WORK_LIST = 'desking/MOVE_DESKING_WORK_LIST';
+export const moveDeskingWorkList = createAction(MOVE_DESKING_WORK_LIST, ({ componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list, callback }) => ({
+    componentWorkSeq,
+    datasetSeq,
+    srcComponentWorkSeq,
+    srcDatasetSeq,
+    list,
+    callback,
+}));
+/**
+ * 데스킹 워크 수정
+ */
+export const PUT_DESKING_WORK = 'desking/PUT_DESKING_WORK';
+export const putDeskingWork = createAction(PUT_DESKING_WORK, (payload) => payload);
+/**
+ *  work편집기사 삭제
+ */
+export const DELETE_DESKING_WORK_LIST = 'desking/DELETE_DESKING_WORK_LIST';
+export const deleteDeskingWorkList = createAction(DELETE_DESKING_WORK_LIST, ({ componentWorkSeq, datasetSeq, list, noMessage, callback }) => ({
+    componentWorkSeq,
+    datasetSeq,
+    list,
+    noMessage,
+    callback,
+}));
 
 /**
  * 편집영역 데이터 변경
@@ -44,3 +90,6 @@ export const deskingDragStop = createAction(DESKING_DRAG_STOP, ({ source, target
  */
 export const DESKING_SORT_GRID = 'desking/DESKING_SORT_GRID';
 export const deskingSortGrid = createAction(DESKING_SORT_GRID, ({ grid, component }) => ({ grid, component }));
+
+export const COMPONENT_WORK_SUCCESS = 'desking/COMPONENT_WORK_SUCCESS';
+export const COMPONENT_WORK_FAILURE = 'desking/COMPONENT_WORK_FAILURE';

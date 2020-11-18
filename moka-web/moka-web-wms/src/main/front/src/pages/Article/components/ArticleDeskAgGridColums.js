@@ -1,8 +1,8 @@
 export default [
     {
         rowDrag: true,
-        width: 22,
-        supressMenu: true,
+        width: 28,
+        suppressMenu: true,
         rowDragText: (params, dragItemCount) => {
             if (dragItemCount > 1) {
                 const message = params.rowNodes ? params.rowNodes.reduce((prev, next) => `${prev.data.escapeTitle},${next.data.escapeTitle}`) : params.rowNode.data.escapeTitle;
@@ -10,6 +10,15 @@ export default [
             }
             return params.rowNode.data.escapeTitle;
         },
+        cellStyle: { width: '28px' },
+    },
+    {
+        colId: 'checkbox',
+        width: 28,
+        checkboxSelection: true,
+        suppressMenu: true,
+        headerCheckboxSelection: true,
+        cellStyle: { width: '28px' },
     },
     {
         headerName: '매체',
@@ -40,14 +49,15 @@ export default [
     },
     {
         headerName: '',
-        width: 24,
+        width: 36,
         // 편집 그룹 + 동영상(OVP/YOUTUBE/둘다)
         cellRenderer: 'GroupNumberRenderer',
+        cellStyle: { width: '36px' },
     },
     {
         headerName: '제 목',
         field: 'escapeTitle',
-        width: 200,
+        width: 186,
         flex: 1,
         autoHeight: true,
         tooltipField: 'escapeTitle',

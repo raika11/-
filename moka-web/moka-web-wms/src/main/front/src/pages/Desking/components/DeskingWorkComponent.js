@@ -16,6 +16,14 @@ const propTypes = {
      * 컴포넌트 클릭 콜백
      */
     onRowClicked: PropTypes.func,
+    /**
+     * 컴포넌트 ag-grid 인스턴스 리스트
+     */
+    componentAgGridInstances: PropTypes.arrayOf(PropTypes.object),
+    /**
+     * 컴포넌트 ag-grid 인스턴스 리스트 변경
+     */
+    setComponentAgGridInstances: PropTypes.func,
 };
 const defaultProps = {
     component: {},

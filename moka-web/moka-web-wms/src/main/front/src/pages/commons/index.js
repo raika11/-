@@ -32,6 +32,3 @@ export { default as HistoryList } from './HistoryList';
 // 기사코드 Autocomplete
 export { default as CodeAutocomplete } from './CodeAutocomplete';
 export { default as CodeListModal } from './CodeListModal';
-
-// 드랙드랍용
-export { default as DeskingReadyGrid } from './DeskingReadyGrid';

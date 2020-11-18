@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/desking';
 
 const DeskingList = React.lazy(() => import('./DeskingList'));
-const DeskingWorkList = React.lazy(() => import('./DeskingWorkList'));
+const ComponentWorkList = React.lazy(() => import('./ComponentWorkList'));
 const DeskingTab = React.lazy(() => import('./DeskingTab'));
 
 /**
@@ -36,14 +36,14 @@ const Desking = ({ match }) => {
                 <DeskingList />
             </Suspense>
 
-            {/* 데스킹 워크 */}
+            {/* 워크 */}
             <Switch>
                 <Route
                     path={[match.url, `${match.url}/:areaSeq`]}
                     exact
                     render={() => (
                         <Suspense>
-                            <DeskingWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
+                            <ComponentWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
                         </Suspense>
                     )}
                 />

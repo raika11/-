@@ -181,9 +181,9 @@ public class JSONResult implements Map {
         return null;
     }
 
-    public Map<String, Object> getFirstData() { return getFirstData(ApiResult.MAIN_DATA); }
+    public Map<String, Object> getDataListFirst() { return getDataListFirst(ApiResult.MAIN_DATA); }
 
-    public Map<String, Object> getFirstData(String dataKey) {
+    public Map<String, Object> getDataListFirst(String dataKey) {
         List<Map<String, Object>> dataList = getDataList(dataKey);
         if ( dataList != null && dataList.size()>0) {
             return dataList.get(0);

@@ -12,6 +12,7 @@ public interface RequestHandler{
     public final static JexlEngine jexl = jexlb.create();
 
     public static final String CONTEXT_ARH = "$arh";
+    public static final String CONTEXT_API_CONTEXT = "$ac";
     public static final String CONTEXT_PARAM = "$param";
 
 	public ApiResult processRequest(ApiContext apiContext);

@@ -22,9 +22,9 @@
     <parameter>
       <pageIndex default="1" type="number" desc="페이지번호">[0-9]{1,9}</pageIndex>
       <pageSize default="20" type="number" desc="기사갯수">[0-9]{1,9}</pageSize>
-      <serviceCodeList default="" desc="서비스코드">.{1,100}</serviceCodeList>
-      <masterCodeList default="" desc="마스터코드">.{1,100}</masterCodeList>
-      <keywordList default="" desc="키워드">.{1,100}</keywordList>
+      <serviceCodeList default="" desc="서비스코드">.{1,500}</serviceCodeList>
+      <masterCodeList default="" desc="마스터코드">.{1,500}</masterCodeList>
+      <keywordList default="" desc="키워드">.{1,500}</keywordList>
       <usageType default="" desc="사용형태">.{1,100}</usageType>
       <contentTypeList default="" desc="컨텐트타입">.{1,100}</contentTypeList>
       <startSearchDate default="2020-08-21 00:00:00" desc="시작일">.{1,100}</startSearchDate>
@@ -37,7 +37,11 @@
       <usedTotalCount default="Y" desc="총건수사용">.{1,100}</usedTotalCount>
       <totalCount default="0" type="number" desc="총건수(OUT)">.{1,100}</totalCount>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,SOURCES">dps.article.list</request>
+    <request dmlType="sp" setNames="_DATA,SOURCES" >dps.article.list</request>
+    <request type="script" resultName="_TOTAL">
+      var result = $ac.getAllResult();
+      result.get("PARAM_MAP").get("totalCount");
+    </request>
     <keys>
       pageIndex
       pageSize

@@ -136,4 +136,8 @@ public class MokaFunctions extends Functions {
 		}
 		return whenEmpty;
 	}
+
+	public String t2p(String imagePath) {
+		return imagePath.replace(".tn_120.jpg","");
+	}
 }

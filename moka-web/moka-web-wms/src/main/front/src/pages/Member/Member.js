@@ -33,7 +33,7 @@ const Member = () => {
 
             {/* 리스트 */}
             <MokaCard
-                className="mb-0 mr-gutter"
+                className="mb-0 mr-gutter flex-fill"
                 height={CARD_DEFAULT_HEIGHT}
                 headerClassName="d-flex justify-content-between align-item-center"
                 title="사용자 관리"
@@ -53,9 +53,8 @@ const Member = () => {
                         <>
                             {/* 탭 */}
                             <MokaIconTabs
-                                className="flex-fill"
-                                tabContentClass="w-100"
                                 height={CARD_DEFAULT_HEIGHT}
+                                tabWidth={520}
                                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                                 tabs={[
                                     <Suspense>

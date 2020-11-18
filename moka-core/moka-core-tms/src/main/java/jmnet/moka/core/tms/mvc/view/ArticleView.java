@@ -124,7 +124,7 @@ public class ArticleView extends AbstractView {
 
     private Map<String,Object> rebuildInfo(JSONResult jsonResult) {
         Map<String,Object> article = new HashMap<>();
-        article.put("basic",jsonResult.getData("BASIC"));
+        article.put("basic",jsonResult.getDataListFirst("BASIC"));
         article.put("content",jsonResult.getDataList("CONTENT"));
         article.put("reporter",jsonResult.getDataList("REPORTER"));
         article.put("meta",jsonResult.getDataList("META"));
@@ -146,7 +146,7 @@ public class ArticleView extends AbstractView {
         menuParam.put(MokaConstants.SERVICE_CODE_LIST, serviceCode);
         menuParam.put(MokaConstants.SOURCE_CODE_LIST, sourceCode);
         JSONResult jsonResult = loader.getJSONResult("category",menuParam,true);
-        Map<String, Object> map = jsonResult.getData();
+        Map<String, Object> map = jsonResult.getDataListFirst();
         String category = (String)map.get("key");
         Map paramMap = (Map)mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
         if ( paramMap == null) {

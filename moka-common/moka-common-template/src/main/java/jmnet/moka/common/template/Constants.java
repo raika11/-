@@ -142,7 +142,9 @@ public class Constants {
     public final static int PARAM_COUNT_DEFAULT = 10;
 	public final static String PAGE_NO_TOKEN_NAME = "pageNo";
 	public final static String COUNT_TOKEN_NAME = "pageCount";
-	
+	public final static String NO_PREV_TOKEN_NAME = "noPrev";
+	public final static String NO_NEXT_TOKEN_NAME = "noNext";
+
 	public final static String WRAP_ITEM_TYPE = "itemType";
 	public final static String WRAP_ITEM_ID = "itemId";
 	public final static String WRAP_ITEM_START = "<div data-mte-type=\"${"+WRAP_ITEM_TYPE+"}\" data-mte-id=\"${"+WRAP_ITEM_ID+"}\">";

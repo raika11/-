@@ -124,13 +124,15 @@ public class PagingMerger extends MokaAbstractElementMerger {
         if (totalPage > maxPageCount) {
             totalPage = maxPageCount;
         }
-
         int currentGroup = (int) Math.ceil(currentPage / (groupSize * 1.0));
+        int lastGroup = (int) Math.ceil(totalPage / (groupSize * 1.0));
 
         int startPage = (currentGroup - 1) * groupSize + 1;
         int endPage = currentGroup * groupSize > totalPage ? totalPage : currentGroup * groupSize;
         int prevPage = startPage - 1 == 0 ? 1 : startPage - 1;
         int nextPage = endPage + 1 > totalPage ? totalPage : endPage + 1;
+        context.set(Constants.NO_PREV_TOKEN_NAME, currentGroup == 1);
+        context.set(Constants.NO_NEXT_TOKEN_NAME, currentGroup == lastGroup);
 
         Map<String, StringBuilder> pagingMergeMap = new HashMap<String, StringBuilder>(8);
         for (TemplateNode node : element.childNodes()) {

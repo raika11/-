@@ -99,7 +99,7 @@ public class DirectLinkDTO implements Serializable {
      * 링크url
      */
     @NotNull(message = "{tps.direct-link.error.notnull.linkUrl}")
-    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.direct-link.error.pattern.linkUrl}")
+    @Pattern(regexp = MokaConstants.DIRECT_LINK_SERVICE_NAME_PATTERN, message = "{tps.direct-link.error.pattern.linkUrl}")
     @Length(min = 1, max = 200, message = "{tps.direct-link.error.length.linkUrl}")
     private String linkUrl;
 

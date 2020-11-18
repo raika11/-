@@ -161,4 +161,9 @@ public class MokaConstants {
     public static final String SOURCE_CODE_LIST = "srcCodes";
     public static final String EXCEPT_SOURCE_CODE_LIST = "exSrcCodes";
     public static final String PARAM_CATEGORY = "category";
+
+    /* page service name regx */
+    public static final String DIRECT_LINK_SERVICE_NAME_PATTERN = "/(http(s)?:\\/\\/)([a-z0-9\\w]+\\.*)+[a-z0-9]{2,4}/gi";
+
+
 }

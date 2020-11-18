@@ -9,9 +9,14 @@ import * as act from './deskingAction';
 import { DEFAULT_LANG } from '@/constants';
 
 /**
- * 편집영역 클릭시, Work 컴포넌트 목록 조회
+ * 편집영역 클릭시, 컴포넌트 워크 목록 조회
  */
 const getComponentWorkList = createRequestSaga(act.GET_COMPONENT_WORK_LIST, api.getComponentWorkList);
+
+/**
+ * 컴포넌트 워크 1개 조회
+ */
+const getComponentWork = createRequestSaga(act.GET_COMPONENT_WORK, api.getComponentWork);
 
 /**
  * rowNode 생성
@@ -191,7 +196,7 @@ function* postPreComponentWork(action) {
 }
 
 /**
- * 편집기사추가
+ * 컴포넌트 워크에 편집기사 리스트 등록 => 성공 결과) 컴포넌트 워크 데이터가 리턴됨
  */
 function* postDeskingWorkList({ payload }) {
     const { componentWorkSeq, datasetSeq, deskingWorkList, callback } = payload;
@@ -216,11 +221,10 @@ function* postDeskingWorkList({ payload }) {
                 payload: response.data,
             });
         } else {
-            // yield put({
-            //     type: deskingStore.COMPONENT_WORK_FAILURE,
-            //     payload: response.data,
-            //     error: true
-            // });
+            yield put({
+                type: act.COMPONENT_WORK_FAILURE,
+                payload: response.data,
+            });
         }
     } catch (e) {
         callbackData = errorResponse(e);
@@ -239,7 +243,7 @@ function* postDeskingWorkList({ payload }) {
 }
 
 /**
- * 컴포넌트워크 간의 데스킹기사 이동
+ * 컴포넌트워크 간의 데스킹기사 이동 => 성공 결과 ???
  */
 function* moveDeskingWorkList({ payload }) {
     const { componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list, callback } = payload;
@@ -248,12 +252,29 @@ function* moveDeskingWorkList({ payload }) {
 
     yield put(startLoading(ACTION));
     try {
+        // 데스킹기사 이동 api콜
         response = yield call(api.moveDeskingWorkList, { componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list });
+        callbackData = response.data;
 
-        if (response.header.success) {
-            console.log(response.header.body);
+        if (response.data.header.success) {
+            // 컴포넌트 워크 조회 => 이해가 안됨. 컴포넌트 워크가 2개가 바꼈으니까 리스트를 다시 조회해야하는게 아닌지????
+            yield put({
+                type: act.GET_COMPONENT_WORK,
+                payload: { componentWorkSeq: srcComponentWorkSeq },
+            });
+        } else {
+            yield put({
+                type: act.COMPONENT_WORK_FAILURE,
+                payload: response.data,
+            });
         }
-    } catch (e) {}
+    } catch (e) {
+        callbackData = errorResponse(e);
+        yield put({
+            type: act.COMPONENT_WORK_FAILURE,
+            payload: callbackData,
+        });
+    }
 
     if (typeof callback === 'function') {
         yield call(callback, callbackData);
@@ -264,8 +285,8 @@ function* moveDeskingWorkList({ payload }) {
 /** saga */
 export default function* saga() {
     yield takeLatest(act.GET_COMPONENT_WORK_LIST, getComponentWorkList);
+    yield takeLatest(act.GET_COMPONENT_WORK, getComponentWork);
 
-    // yield takeLatest(act.GET_COMPONENT_WORK, getComponentWorkSaga);
     // yield takeLatest(act.POST_COMPONENT_WORK, postComponentWorkSaga);
     yield takeLatest(act.POST_PRE_COMPONENT_WORK, postPreComponentWork);
     // yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWorkSaga);

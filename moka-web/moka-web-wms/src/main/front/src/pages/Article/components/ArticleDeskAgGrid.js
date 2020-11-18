@@ -12,7 +12,7 @@ import GroupNumberRenderer from './GroupNumberRenderer';
  * 기사관리 ag-grid 컴포넌트 (페이지편집)
  */
 const ArticleDeskAgGrid = forwardRef((props, ref) => {
-    const { onDragStop, dropTargetAgGrid, dropTargetComponent } = props;
+    const { onDragStop, dropTargetAgGrid } = props;
 
     const dispatch = useDispatch();
     const { search, list, total, error, loading } = useSelector((store) => ({
@@ -25,7 +25,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
 
     // state
     const [rowData, setRowData] = useState([]);
-    const [gridApi, setGridApi] = useState(null);
+    const [gridInstance, setGridInstance] = useState(null);
 
     /**
      * 테이블 검색옵션 변경
@@ -76,7 +76,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
         /**
          * 드롭 타겟 ag-grid에 drop-zone 설정
          */
-        if (gridApi) {
+        if (gridInstance) {
             // 타겟이 리스트인 경우
             if (Array.isArray(dropTargetAgGrid)) {
                 dropTargetAgGrid.forEach((grid, agGridIndex) => {
@@ -87,13 +87,13 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                         },
                         onDragStop: (target) => {
                             if (onDragStop) {
-                                onDragStop(gridApi, target, agGridIndex);
+                                onDragStop(gridInstance, target, agGridIndex);
                             }
                         },
                     };
 
-                    gridApi.removeRowDropZone(dropZone);
-                    gridApi.addRowDropZone(dropZone);
+                    gridInstance.api.removeRowDropZone(dropZone);
+                    gridInstance.api.addRowDropZone(dropZone);
                 });
             }
             // 타겟이 오브젝트인 경우
@@ -105,22 +105,22 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                     },
                     onDragStop: (target) => {
                         if (onDragStop) {
-                            onDragStop(gridApi, target);
+                            onDragStop(gridInstance, target);
                         }
                     },
                 };
 
-                gridApi.removeRowDropZone(dropZone);
-                gridApi.addRowDropZone(dropZone);
+                gridInstance.api.removeRowDropZone(dropZone);
+                gridInstance.api.addRowDropZone(dropZone);
             }
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dropTargetAgGrid, dropTargetComponent, gridApi]);
+    }, [dropTargetAgGrid, gridInstance]);
 
     useEffect(() => {
-        if (gridApi) {
-            gridApi.redrawRows();
+        if (gridInstance) {
+            gridInstance.api.redrawRows();
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,7 +129,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
     return (
         <MokaTable
             ref={ref}
-            setGridApi={setGridApi}
+            setGridInstance={setGridInstance}
             headerHeight={50}
             agGridHeight={623}
             columnDefs={columnDefs}

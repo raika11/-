@@ -20,7 +20,7 @@ const DeskingArticleTab = (props) => {
 
     /**
      * 기사 드래그 끝났을 때 액션
-     * @param {object} source 드래그 row의 본체? ag-grid의 gridApi
+     * @param {object} source 드래그 row의 본체? ag-grid instance
      * @param {object} target 드래그 stop되는 타겟 ag-grid의 dragStop 이벤트
      * @param {number} agGridIndex agGridIndex
      */
@@ -48,7 +48,6 @@ const DeskingArticleTab = (props) => {
                         ref={articleRef}
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
-                        dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx}
                     />

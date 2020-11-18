@@ -76,7 +76,7 @@ public class DirectLinkDTO implements Serializable {
     /**
      * 대표이미지
      */
-    private String imgUrl;
+    private String imgUrl = "https://pds.joins.com/news/search_direct_link/001.jpg";
 
     /**
      * 링크url

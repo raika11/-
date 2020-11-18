@@ -10,7 +10,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -99,7 +98,7 @@ public class DirectLinkDTO implements Serializable {
      * 링크url
      */
     @NotNull(message = "{tps.direct-link.error.notnull.linkUrl}")
-    @Pattern(regexp = MokaConstants.DIRECT_LINK_SERVICE_NAME_PATTERN, message = "{tps.direct-link.error.pattern.linkUrl}")
+    //@Pattern(regexp = MokaConstants.DIRECT_LINK_SERVICE_NAME_PATTERN, message = "{tps.direct-link.error.pattern.linkUrl}")
     @Length(min = 1, max = 200, message = "{tps.direct-link.error.length.linkUrl}")
     private String linkUrl;
 

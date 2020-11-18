@@ -133,7 +133,7 @@ public class DirectLinkRestController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
     , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO
-            , @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
+            , @RequestParam(value="directLinkThumbnailFile") MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
 
         System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa::" + directLinkThumbnailFile);
@@ -193,7 +193,7 @@ public class DirectLinkRestController {
     public ResponseEntity<?> putDirectLink(
             @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq,
             @Valid DirectLinkDTO directLinkDTO,
-            @RequestParam(value="directLinkThumbnailFile" , required = false) MultipartFile directLinkThumbnailFile
+            @RequestParam(value="directLinkThumbnailFile") MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
 
         // DirectLinkDTO -> DirectLink 변환

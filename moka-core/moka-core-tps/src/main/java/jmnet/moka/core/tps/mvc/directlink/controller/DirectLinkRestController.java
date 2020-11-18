@@ -193,7 +193,7 @@ public class DirectLinkRestController {
     public ResponseEntity<?> putDirectLink(
             @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq,
             @Valid DirectLinkDTO directLinkDTO,
-            @RequestParam(value="directLinkThumbnailFile") MultipartFile directLinkThumbnailFile
+            @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
 
         // DirectLinkDTO -> DirectLink 변환

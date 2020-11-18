@@ -27,6 +27,7 @@ const Group = React.lazy(() => import('@pages/Group'));
 const Reporter = React.lazy(() => import('@pages/Reporter'));
 const Special = React.lazy(() => import('@pages/Special'));
 const DirectLink = React.lazy(() => import('@pages/DirectLink'));
+const Member = React.lazy(() => import('@pages/Member'));
 
 const routes = [
     {
@@ -245,6 +246,16 @@ const routes = [
         name: 'direct-link',
         displayName: '사이트 바로 가기',
         component: DirectLink,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/member',
+        name: 'member',
+        displayName: '사용자 관리',
+        component: Member,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

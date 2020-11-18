@@ -24,11 +24,7 @@ export const clearSearch = createAction(CLEAR_SEARCH);
  */
 export const [GET_GROUP_LIST, GET_GROUP_LIST_SUCCESS, GET_GROUP_LIST_FAILURE] = createRequestActionTypes('group/GET_GROUP_LIST');
 export const [GET_GROUP, GET_GROUP_SUCCESS, GET_GROUP_FAILURE] = createRequestActionTypes('group/GET_GROUP');
-export const getGroupList = createAction(GET_GROUP_LIST, (...actions) => {
-    console.log('액션탓음 ::' + actions);
-    return actions;
-});
-
+export const getGroupList = createAction(GET_GROUP_LIST, (...actions) => actions);
 export const getGroup = createAction(GET_GROUP, (groupCd) => groupCd);
 
 /**
@@ -58,3 +54,12 @@ export const saveGroup = createAction(SAVE_GROUP, ({ type, actions, callback }) 
  */
 export const [DELETE_GROUP, DELETE_GROUP_SUCCESS, DELETE_GROUP_FAILURE] = createRequestActionTypes('group/DELETE_GROUP');
 export const deleteGroup = createAction(DELETE_GROUP, ({ groupCd, callback }) => ({ groupCd, callback }));
+
+/**
+ * 그룹 메뉴 권한 가져오기
+ */
+export const [GET_GROUP_MENU_LIST, GET_GROUP_MENU_SUCCESS, GET_GROUP_MENU_FAILURE] = createRequestActionTypes('group/GET_GROUP_MENU_LIST');
+export const getGroupMenuList = createAction(GET_GROUP_MENU_LIST, (groupCd) => groupCd);
+
+export const CHANGE_GROUP_MENU = 'group/CHANGE_GROUP_MENU_AUTH_EDIT';
+export const changeGroupMenu = createAction(CHANGE_GROUP_MENU, (groupCd) => groupCd);

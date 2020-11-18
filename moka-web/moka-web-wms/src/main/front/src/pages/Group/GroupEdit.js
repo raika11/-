@@ -15,6 +15,7 @@ import {
     DELETE_GROUP,
     deleteGroup,
     hasRelationList,
+    getGroupMenuList,
 } from '@store/group';
 import { notification } from '@utils/toastUtil';
 import { toastr } from 'react-redux-toastr';
@@ -24,8 +25,6 @@ import { toastr } from 'react-redux-toastr';
  * @param history rect-router-dom useHisotry
  */
 const GroupEdit = (onDelete) => {
-    console.log(typeof onDelete);
-
     const history = useHistory();
     const dispatch = useDispatch();
     const { groupCd: paramCd } = useParams();
@@ -48,6 +47,7 @@ const GroupEdit = (onDelete) => {
         (store) => {
             return {
                 group: store.group.group,
+                menus: store.group.menus,
                 invalidList: store.group.invalidList,
                 memberNm: store.group.group.regMember && store.group.group.regMember.memberNm,
                 loading: store.loading[GET_GROUP] || store.loading[SAVE_GROUP] || store.loading[DELETE_GROUP],
@@ -199,6 +199,7 @@ const GroupEdit = (onDelete) => {
     useEffect(() => {
         if (paramCd) {
             dispatch(getGroup(paramCd));
+            dispatch(getGroupMenuList(paramCd));
         } else {
             dispatch(clearGroup());
         }

@@ -5,19 +5,90 @@ import qs from 'qs';
 
 import * as groupAPI from './groupApi';
 import * as groupAction from './groupAction';
+import * as menuAPI from '@store/menu/menuApi';
+
+const toGroupMenuTree = (menus) => {
+    const treeInfo = { list: [], used: [], edited: [] };
+    if (menus && menus.length > 0) {
+        menus.map((menu) => {
+            const isMenuEdit = menu.editYn === 'Y';
+            const isMenuUsed = menu.useYn === 'Y';
+            const treeMenu = { key: menu.menuId, title: menu.menuDisplayNm, selectable: false };
+
+            if (isMenuUsed) {
+                treeInfo.used.push(menu.menuId);
+            }
+
+            if (isMenuEdit) {
+                treeInfo.edited.push(menu.menuId);
+            }
+
+            if (menu.children) {
+                const treeChildrens = [];
+                menu.children.map((children) => {
+                    const isChildrenUsed = children.usedYn === 'Y' || isMenuUsed;
+                    const isChildrenEdit = children.editYn === 'Y' || isMenuEdit;
+
+                    if (isChildrenUsed) {
+                        treeInfo.used.push(children.menuId);
+                    }
+
+                    if (isChildrenEdit) {
+                        treeInfo.edited.push(children.menuId);
+                    }
+
+                    treeChildrens.push({
+                        key: children.menuId,
+                        title: children.menuDisplayNm,
+                        selectable: false,
+                    });
+                });
+                treeMenu.children = treeChildrens;
+            }
+            treeInfo.list.push(treeMenu);
+        });
+    }
+
+    return treeInfo;
+};
 
 /**
  * 그룹목록
  */
-const getGroupList = callApiAfterActions(groupAction.GET_GROUP_LIST, groupAPI.getGroupList, (state) => {
-    console.log('aaaaaaaaa::' + state.group);
-    return state.group;
-});
+const getGroupList = callApiAfterActions(groupAction.GET_GROUP_LIST, groupAPI.getGroupList, (state) => state.group);
 
 /**
  * 그룹데이터 조회
  */
 const getGroup = createRequestSaga(groupAction.GET_GROUP, groupAPI.getGroup);
+
+function* getGroupMenuList(payload) {
+    const ACTION = payload.type;
+    let callbackData;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(menuAPI.getMenuTree, { grpMemId: payload.payload, grpMemDiv: 'G' });
+        const data = toGroupMenuTree(response.data.body.children);
+
+        if (response.data.header.success) {
+            yield put({
+                type: `${ACTION}_SUCCESS`,
+                payload: data,
+            });
+        } else {
+            yield put({
+                type: `${ACTION}_FAILURE`,
+                payload: [],
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    yield put(finishLoading(ACTION));
+}
 
 /**
  * 그룹코드 중복 체크
@@ -184,4 +255,5 @@ export default function* groupSaga() {
     yield takeLatest(groupAction.SAVE_GROUP, saveGroup);
     yield takeLatest(groupAction.DELETE_GROUP, deleteGroup);
     yield takeLatest(groupAction.HAS_RELATION_LIST, hasRelationList);
+    yield takeLatest(groupAction.getGroupMenuList, getGroupMenuList);
 }

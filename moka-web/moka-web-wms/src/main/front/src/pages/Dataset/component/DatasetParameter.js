@@ -19,9 +19,9 @@ const DatasetParameter = (props) => {
         const { value } = event.target;
         const { type } = fieldInfos[name];
         let regex = /./;
-        if (type === 'number') {
+        /*if (type === 'number') {
             regex = /^[0-9\b]+$/;
-        }
+        }*/
 
         let tmp = dataApiParam;
         onChangeValid({ ...isInvalid, [name]: false });

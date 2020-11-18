@@ -5,22 +5,20 @@ import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
 import Button from 'react-bootstrap/Button';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { clearStore} from "@store/group";
-import toast, {notification, toastr} from "@utils/toastUtil";
+import { clearStore } from '@store/group';
+import GroupChildGroupMenuTree from '@pages/Group/relations/GroupChildGroupMenuTree';
 // relations
 
 const MemberGroupList = React.lazy(() => import('./GroupList'));
 const GroupEdit = React.lazy(() => import('./GroupEdit'));
 const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));
 
-
-
 const Group = () => {
-// 히스토리셋팅
+    // 히스토리셋팅
     const history = useHistory();
     const dispatch = useDispatch();
 
-// 마스터 그리드 클릭시 초기화 이벤트
+    // 마스터 그리드 클릭시 초기화 이벤트
     const handleClickAddGroup = (e) => {
         history.push('/group');
     };
@@ -59,7 +57,8 @@ const Group = () => {
             <Switch>
                 <Route
                     path={['/group', '/group/:groupCd']}
-                    exact render={() => (
+                    exact
+                    render={() => (
                         <>
                             <MokaIconTabs
                                 //expansion={expansionState[2]}
@@ -68,20 +67,17 @@ const Group = () => {
                                 height={CARD_DEFAULT_HEIGHT}
                                 tabs={[
                                     <Suspense>
-                                        <GroupEdit/>
-                                    </Suspense>
-                                    ,
+                                        <GroupEdit />
+                                    </Suspense>,
                                     <Suspense>
                                         <GroupChildGroupMemberEdit />
-                                    </Suspense>
-                                    /*
-                                    ,
+                                    </Suspense>,
+
                                     <Suspense>
                                         <MokaCard title="메뉴 권한">
-                                            <MemberGroupList />
+                                            <GroupChildGroupMenuTree />
                                         </MokaCard>
                                     </Suspense>,
-                                     */
                                 ]}
                                 tabNavWidth={48}
                                 tabNavPosition="right"
@@ -91,13 +87,10 @@ const Group = () => {
                                     { title: '콘텐츠 스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
                                 ]}
                             />
-
                         </>
                     )}
                 />
             </Switch>
-
-
         </div>
     );
 };

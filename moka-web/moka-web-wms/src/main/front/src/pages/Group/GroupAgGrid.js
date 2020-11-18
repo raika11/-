@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { MokaTable } from '@components';
 import { columnDefs } from '@pages/Group/GroupAgGridColumns';
 import { useHistory } from 'react-router-dom';
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {changeSearchOption, GET_GROUP_LIST, getGroupList, initialState} from '@store/group';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { changeSearchOption, GET_GROUP_LIST, getGroupList, initialState } from '@store/group';
 
 /**
  * group AgGrid 목록
@@ -66,10 +66,13 @@ const GroupAgGrid = (props) => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((list) =>{
-        //console.log("list::" + this.list.id);
-        history.push(`/group/${list.id}`);
-    } , [history]);
+    const handleRowClicked = useCallback(
+        (list) => {
+            //console.log("list::" + this.list.id);
+            history.push(`/group/${list.id}`);
+        },
+        [history],
+    );
 
     let count = 0;
 
@@ -84,7 +87,7 @@ const GroupAgGrid = (props) => {
             total={total}
             page={search.page}
             size={search.size}
-            selected={group.id}
+            selected={group.groupCd}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

@@ -17,6 +17,12 @@ export const initialState = {
         sort: 'groupCd,asc',
     },
     group: {},
+    menuAuthInfo: {
+        list: [],
+        edited: [],
+        used: [],
+        halfCheckedKeys: [],
+    },
     groupError: {},
     invalidList: [],
 };
@@ -121,6 +127,23 @@ export default handleActions(
         [act.DELETE_GROUP_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.groupError = payload;
+            });
+        },
+
+        /**
+         * 메뉴정보
+         */
+        [act.GET_GROUP_MENU_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.menuAuthInfo = { ...state.menuAuthInfo, ...payload };
+            });
+        },
+        /**
+         * 메뉴 수정 권한 삭제
+         */
+        [act.CHANGE_GROUP_MENU]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.menuAuthInfo = payload;
             });
         },
     },

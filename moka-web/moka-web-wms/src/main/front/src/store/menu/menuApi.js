@@ -15,6 +15,12 @@ export const getMenu = (menuSeq) => {
     });
 };
 
+export const getMenuTree = (search) => {
+    return instance.get(`/api/menus/tree?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 메뉴ID 중복 체크
 export const duplicateCheckId = (menuId) => {
     return instance.get(`/api/menus/${menuId}/exists`).catch((err) => {

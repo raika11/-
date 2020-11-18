@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard } from '@components';
-import { AREA_ALIGN_H, AREA_ALIGN_V, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
+import { AREA_ALIGN_H, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
 import { DeskingWorkComponent } from './components';
 
@@ -56,7 +56,7 @@ const DeskingWorkList = (props) => {
 
                 <div>
                     {area.areaComps.map((areaComp) => {
-                        if (area.areaDiv === AREA_ALIGN_H && areaComp.compAlign !== AREA_COMP_ALIGN_LEFT) return null;
+                        if (area.areaDiv === ITEM_CT && area.areaAlign === AREA_ALIGN_H && areaComp.compAlign === AREA_COMP_ALIGN_RIGHT) return null;
                         const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
 
                         return (
@@ -82,7 +82,7 @@ const DeskingWorkList = (props) => {
 
                     <div>
                         {area.areaComps.map((areaComp) => {
-                            if (areaComp.compAlign !== AREA_COMP_ALIGN_RIGHT) return null;
+                            if (areaComp.compAlign === AREA_COMP_ALIGN_LEFT) return null;
                             const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
 
                             return (

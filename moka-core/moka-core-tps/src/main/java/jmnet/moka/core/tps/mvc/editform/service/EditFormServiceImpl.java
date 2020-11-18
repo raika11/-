@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.mvc.editform.code.EditFormStatusCode;
@@ -203,15 +202,14 @@ public class EditFormServiceImpl implements EditFormService {
                 } else {
                     //PUBLISH 상태이지만, 예약일시가 도래하지 않은 정보는 part의 formData를 null로 처리하고 useYn을 N으로 처리한다.
                     isReserved = true;
+                    editFormPart.setUsedYn(MokaConstants.NO);
                 }
             } else {
                 // 예약 발송 아님
                 approvalYn = MokaConstants.YES;
             }
         }
-        if (!isReserved && McpString.isYes(approvalYn)) {
-            editFormPart = editFormPartRepository.save(editFormPart);
-        }
+        editFormPart = editFormPartRepository.save(editFormPart);
 
         EditFormPartHist partHist = editFormPartHistRepository.save(EditFormPartHist
                 .builder()

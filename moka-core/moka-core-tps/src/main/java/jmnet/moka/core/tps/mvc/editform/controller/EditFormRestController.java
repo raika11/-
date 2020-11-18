@@ -162,10 +162,10 @@ public class EditFormRestController {
         if (editForm.getEditFormParts() != null) {
             editForm
                     .getEditFormParts()
-                    .forEach(item -> {
+                    .forEach(part -> {
                         try {
-                            EditFormPartExtDTO editFormPartExtDTO = modelMapper.map(item, EditFormPartExtDTO.class);
-                            editFormPartExtDTO.setFieldGroups(objectMapper.readValue(item.getFormData(), collectionType));
+                            EditFormPartExtDTO editFormPartExtDTO = modelMapper.map(part, EditFormPartExtDTO.class);
+                            editFormPartExtDTO.setFieldGroups(objectMapper.readValue(part.getFormData(), collectionType));
                             editFormPartExtDTO.setFormData(null);
                             editFormPartExtDTOS.add(editFormPartExtDTO);
                         } catch (IOException e) {
@@ -183,19 +183,19 @@ public class EditFormRestController {
      * 편집 폼 아이템 조회
      *
      * @param formSeq 편집 폼 일련번호
-     * @param itemSeq 아이템 일련번호
+     * @param partSeq 아이템 일련번호
      * @return 편집 폼 아이템 정보
      * @throws NoDataException 데이터 없음 에러 처리
      * @throws IOException     json 처리 오류
      */
     @ApiOperation(value = "Edit Form 데이터 조회")
-    @GetMapping("/{formSeq}/items/{itemSeq}")
+    @GetMapping("/{formSeq}/parts/{partSeq}")
     public ResponseEntity<?> getEditFormPart(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
-            @PathVariable("itemSeq") @Min(value = 0, message = "{tps.edit-form.error.min.itemSeq}") Long itemSeq)
+            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq)
             throws NoDataException, IOException {
 
         EditFormPart editFormPart = editFormService
-                .findEditFormPartBySeq(itemSeq)
+                .findEditFormPartBySeq(partSeq)
                 .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
 
         EditFormPartExtDTO editFormPartExtDTO = modelMapper.map(editFormPart, EditFormPartExtDTO.class);
@@ -207,7 +207,7 @@ public class EditFormRestController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 /*
-    private ResponseEntity<?> getResponseEditFormDTO(String site, String formId, @RequestParam(value = "itemId", required = false) String itemId)
+    private ResponseEntity<?> getResponseEditFormDTO(String site, String formId, @RequestParam(value = "partId", required = false) String partId)
             throws MokaException {
         ResultDTO<?> resultDTO;
 
@@ -215,8 +215,8 @@ public class EditFormRestController {
                 .builder()
                 .formId(formId)
                 .build();
-        if (McpString.isNotEmpty(itemId)) {
-            PartDTO partDTO = editFormHelper.getPart(site, formId, itemId);
+        if (McpString.isNotEmpty(partId)) {
+            PartDTO partDTO = editFormHelper.getPart(site, formId, partId);
             editFormService.findEditForm(editForm);
             resultDTO = new ResultDTO<>(partDTO);
         } else {
@@ -302,15 +302,15 @@ public class EditFormRestController {
             if (editFormService.isDuplicatedId(editForm)) {
                 throw new DuplicateIdException(messageByLocale.get("tps.common.error.duplicated.id"));
             }
-            Set<String> itemIdSet = new HashSet<>();
+            Set<String> partIdSet = new HashSet<>();
             List<EditFormPartDTO> editFormPartDTOS = new ArrayList<>();
             EditForm newEditForm = editFormService.insertEditForm(editForm);
             if (editFormParts != null && editFormParts.size() > 0) {
                 for (EditFormPartDTO editFormPartDTO : editFormParts) {
-                    if (itemIdSet.contains(editFormPartDTO.getPartId())) {
-                        throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.itemId"));
+                    if (partIdSet.contains(editFormPartDTO.getPartId())) {
+                        throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.partId"));
                     }
-                    itemIdSet.add(editFormPartDTO.getPartId());
+                    partIdSet.add(editFormPartDTO.getPartId());
                 }
                 for (EditFormPartDTO editFormPartDTO : editFormParts) {
                     objectMapper.readValue(editFormPartDTO.getFormData(), collectionType);
@@ -340,8 +340,8 @@ public class EditFormRestController {
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
-    @ApiOperation(value = "Edit form item 저장")
-    @PostMapping("/{formSeq}/items")
+    @ApiOperation(value = "Edit form part 저장")
+    @PostMapping("/{formSeq}/parts")
     public ResponseEntity<?> postEditFormPart(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @Valid EditFormPartDTO editFormPartDTO)
             throws MokaException {
@@ -351,7 +351,7 @@ public class EditFormRestController {
             EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
 
             if (editFormService.isDuplicatedId(editFormPart)) {
-                throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.itemId"));
+                throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.partId"));
             }
             editFormPart.setFormSeq(editFormPartDTO.getFormSeq());
             editFormPart = editFormService.insertEditFormPart(editFormPart, editFormPartDTO.getStatus(), editFormPartDTO.getReserveDt());
@@ -388,17 +388,17 @@ public class EditFormRestController {
             if (editFormService.isDuplicatedId(editForm)) {
                 throw new DuplicateIdException(messageByLocale.get("tps.common.error.duplicated.id"));
             }
-            Set<String> itemIdSet = new HashSet<>();
+            Set<String> partIdSet = new HashSet<>();
             List<EditFormPartDTO> editFormPartDTOS = new ArrayList<>();
             editForm.setFormSeq(orgEditForm.getFormSeq());
             editForm = editFormService.updateEditForm(editForm);
 
             if (editFormParts != null && editFormParts.size() > 0) {
                 for (EditFormPartDTO editFormPartDTO : editFormParts) {
-                    if (itemIdSet.contains(editFormPartDTO.getPartId())) {
-                        throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.itemId"));
+                    if (partIdSet.contains(editFormPartDTO.getPartId())) {
+                        throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.partId"));
                     }
-                    itemIdSet.add(editFormPartDTO.getPartId());
+                    partIdSet.add(editFormPartDTO.getPartId());
                 }
                 for (EditFormPartDTO editFormPartDTO : editFormParts) {
                     objectMapper.readValue(editFormPartDTO.getFormData(), collectionType);
@@ -434,20 +434,20 @@ public class EditFormRestController {
      * 편집 폼 아이템 수정
      *
      * @param formSeq         편집 폼 일련번호
-     * @param itemSeq         아이템 일련번호
+     * @param partSeq         아이템 일련번호
      * @param editFormPartDTO 편집 폼 아이템 정보
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
-    @ApiOperation(value = "Edit form item 수정")
-    @PostMapping("/{formSeq}/items/{itemSeq}")
+    @ApiOperation(value = "Edit form part 수정")
+    @PutMapping("/{formSeq}/parts/{partSeq}")
     public ResponseEntity<?> putEditFormPart(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
-            @PathVariable("itemSeq") @Min(value = 0, message = "{tps.edit-form.error.min.itemSeq}") Long itemSeq,
+            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
             @Valid EditFormPartDTO editFormPartDTO)
             throws MokaException {
 
         try {
-            objectMapper.readValue(editFormPartDTO.getFormData(), collectionType);
+            objectMapper.readValue(editFormPartDTO.getFormData(), EditFormPart.class);
             EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
 
             editFormService
@@ -455,7 +455,7 @@ public class EditFormRestController {
                     .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
 
             editFormPart.setFormSeq(formSeq);
-            editFormPart.setPartSeq(itemSeq);
+            editFormPart.setPartSeq(partSeq);
 
             editFormPart = editFormService.updateEditFormPart(editFormPart, editFormPartDTO.getStatus(), editFormPartDTO.getReserveDt());
 
@@ -528,10 +528,10 @@ public class EditFormRestController {
      * @throws Exception            그 외 에러처리
      */
     @ApiOperation(value = "편집 폼 삭제")
-    @DeleteMapping("/{formSeq}/items/{itemSeq}")
+    @DeleteMapping("/{formSeq}/parts/{partSeq}")
     public ResponseEntity<?> deleteEditFormPart(HttpServletRequest request,
             @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
-            @PathVariable("itemSeq") @Min(value = 0, message = "{tps.edit-form.error.min.itemSeq}") Long itemSeq)
+            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq)
             throws InvalidDataException, NoDataException, Exception {
 
 
@@ -541,11 +541,11 @@ public class EditFormRestController {
         try {
 
             // 삭제
-            if (editFormService.deleteEditFormPart(formSeq, itemSeq) > 0) {
+            if (editFormService.deleteEditFormPart(formSeq, partSeq) > 0) {
                 success = true;
-                message = messageByLocale.get("tps.edit-form-item.success.delete", request);
+                message = messageByLocale.get("tps.edit-form-part.success.delete", request);
             } else {
-                message = messageByLocale.get("tps.edit-form-item.error.delete", request);
+                message = messageByLocale.get("tps.edit-form-part.error.delete", request);
             }
 
             if (success) {

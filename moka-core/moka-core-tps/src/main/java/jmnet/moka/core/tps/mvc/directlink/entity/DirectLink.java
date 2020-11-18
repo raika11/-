@@ -29,7 +29,7 @@ public class DirectLink extends BaseAudit {
      * 링크일련번호
      */
     @Id
-    @Column(name = "LINK_SEQ",nullable = false)
+    @Column(name = "LINK_SEQ",nullable = false, insertable = false, updatable = false)
     private String linkSeq;
 
     /**

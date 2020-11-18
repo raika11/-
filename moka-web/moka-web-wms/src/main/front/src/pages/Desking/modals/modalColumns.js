@@ -1,12 +1,8 @@
 // 기사 이동 모달
 export const registerColumns = [
     {
-        id: 'name',
-        format: '',
-        sort: false,
-        disablePadding: true,
-        label: '',
+        field: 'name',
         width: 240,
-        align: 'left',
+        cellStyle: { textAlign: 'left' },
     },
 ];

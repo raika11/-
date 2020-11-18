@@ -4,13 +4,13 @@ import produce from 'immer';
 import { MokaModal, MokaTable } from '@components';
 import { registerColumns } from './modalColumns';
 import { GET_COMPONENT_WORK_LIST, deskingDragStop } from '@store/desking';
-import { agGrids } from '@utils/agGridUtil';
+import toast from '@utils/toastUtil';
 
 /**
  * 기사 이동 모달 컴포넌트
  */
 const RegisterModal = (props) => {
-    const { show, onHide, component, moveRows, agGridIndex } = props;
+    const { show, onHide, component, agGridIndex, componentAgGridInstances } = props;
     const dispatch = useDispatch();
     const { list, error, loading } = useSelector((store) => ({
         list: store.desking.list,
@@ -41,30 +41,45 @@ const RegisterModal = (props) => {
     const handleRowClicked = useCallback(
         (row) => {
             let targetIndex = null;
-            let targetComponent = null;
-            list.forEach((c, index) => {
-                if (c.seq === row.seq) {
-                    targetIndex = index;
-                    targetComponent = produce(c, (draft) => draft);
-                }
-            });
-            if (targetIndex !== null && targetComponent !== null) {
+            let tgtComponent = null;
+
+            const tgt = list.findIndex((c) => c.seq === row.seq);
+            targetIndex = tgt ? tgt : null;
+            tgtComponent = tgt ? list[tgt] : null;
+
+            if (targetIndex !== null && tgtComponent !== null) {
                 const option = {
-                    srcGrid: agGrids.prototype.grids[agGridIndex],
-                    tgtGrid: agGrids.prototype.grids[targetIndex],
+                    source: componentAgGridInstances[agGridIndex],
+                    target: componentAgGridInstances[targetIndex],
                     srcComponent: component,
-                    targetComponent,
-                    nodes: moveRows,
+                    tgtComponent,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            toast.warn(header.message);
+                        }
+                    },
                 };
                 dispatch(deskingDragStop(option));
             }
         },
-        [agGridIndex, component, dispatch, list, moveRows],
+        [agGridIndex, component, componentAgGridInstances, dispatch, list],
     );
 
     return (
         <MokaModal title="기사 이동" show={show} onHide={onHide} size="sm" width={280} draggable>
-            <MokaTable columnDefs={registerColumns} rowData={listRows} header={false} paging={false} dragging={false} onRowClicked={handleRowClicked} loading={loading} />
+            <MokaTable
+                agGridHeight={413}
+                columnDefs={registerColumns}
+                rowData={listRows}
+                onRowNodeId={(comp) => comp.id}
+                header={false}
+                paging={false}
+                dragging={false}
+                onRowClicked={handleRowClicked}
+                // selected={}
+                loading={loading}
+                error={error}
+            />
         </MokaModal>
     );
 };

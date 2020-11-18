@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { toastr } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { postPreComponentWork } from '@store/desking';
 
 const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
@@ -46,7 +46,7 @@ const DeskingWorkButtonGroup = (props) => {
 
         // const { api } = agGrids.prototype.grids[agGridIndex];
         if (api.getSelectedRows().length < 1) {
-            toastr.warning('', '기사를 선택해주세요');
+            toast.warn('기사를 선택해주세요');
         } else {
             setSelectedRows(api.getSelectedRows());
             setRegisterModal(true);
@@ -61,7 +61,7 @@ const DeskingWorkButtonGroup = (props) => {
             componentWorkSeq: component.seq,
             callback: ({ header }) => {
                 if (!header.success) {
-                    toastr.warning(header.message);
+                    toast.warn(header.message);
                 }
             },
         };
@@ -104,7 +104,13 @@ const DeskingWorkButtonGroup = (props) => {
 
             {/* 기사 이동 */}
             <Suspense>
-                <RegisterModal show={registerModal} onHide={() => setRegisterModal(false)} agGridIndex={agGridIndex} component={component} moveRows={selectedRows} />
+                <RegisterModal
+                    show={registerModal}
+                    onHide={() => setRegisterModal(false)}
+                    agGridIndex={agGridIndex}
+                    component={component}
+                    componentAgGridInstances={componentAgGridInstances}
+                />
             </Suspense>
         </React.Fragment>
     );

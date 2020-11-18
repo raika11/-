@@ -10,6 +10,7 @@ const MenuEditContainer = (props) => {
         <>
             {/* 탭 */}
             <MokaIconTabs
+                foldable={false}
                 className="flex-fill"
                 tabContentClass="w-100"
                 height={CARD_DEFAULT_HEIGHT}

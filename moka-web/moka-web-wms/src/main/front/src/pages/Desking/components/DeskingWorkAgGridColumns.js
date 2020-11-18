@@ -84,6 +84,7 @@ export const columnDefs = [
         editable: true,
         wrapText: true,
         cellClassRules: cellClassRules,
+        tooltipField: 'title',
     },
     {
         field: 'editButton',

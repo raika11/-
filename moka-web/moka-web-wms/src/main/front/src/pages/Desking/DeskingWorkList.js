@@ -36,7 +36,7 @@ const DeskingWorkList = (props) => {
     return (
         <React.Fragment>
             {/* 왼쪽 기본 카드 1건 */}
-            <MokaCard loading={loading} header={false} width={363} className={clsx('p-0', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H })} bodyClassName="p-0">
+            <MokaCard loading={loading} header={false} width={363} className={clsx('p-0', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H })} bodyClassName="p-0 overflow-hidden">
                 <div className="d-flex justify-content-end p-2 border-bottom">
                     {/* <Col xs={5} className="p-0">
                             <MokaInputLabel
@@ -54,7 +54,7 @@ const DeskingWorkList = (props) => {
                     </Button>
                 </div>
 
-                <div>
+                <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
                     {area.areaComps.map((areaComp) => {
                         if (area.areaDiv === ITEM_CT && area.areaAlign === AREA_ALIGN_H && areaComp.compAlign === AREA_COMP_ALIGN_RIGHT) return null;
                         const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
@@ -73,14 +73,14 @@ const DeskingWorkList = (props) => {
             </MokaCard>
 
             {area.areaAlign === AREA_ALIGN_H && (
-                <MokaCard loading={loading} header={false} width={363} className="p-0 mr-gutter" bodyClassName="p-0">
+                <MokaCard loading={loading} header={false} width={363} className="p-0 mr-gutter" bodyClassName="p-0 overflow-hidden">
                     <div className="d-flex justify-content-end p-2 border-bottom">
                         <Button variant="outline-neutral" className="ft-12" onClick={handlePreviewClicked}>
                             페이지 미리보기
                         </Button>
                     </div>
 
-                    <div>
+                    <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
                         {area.areaComps.map((areaComp) => {
                             if (areaComp.compAlign === AREA_COMP_ALIGN_LEFT) return null;
                             const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);

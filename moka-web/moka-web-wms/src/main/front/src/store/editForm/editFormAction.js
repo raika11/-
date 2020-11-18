@@ -25,8 +25,11 @@ export const getEditForm = createAction(GET_EDIT_FORM, (partId) => partId);
  * 데이터 변경
  */
 export const CHANGE_EDIT_FORM = 'editForm/CHANGE_EDIT_FORM';
+export const CHANGE_EDIT_FORM_PART = 'editForm/CHANGE_EDIT_FORM_PART';
+export const CHANGE_FIELD_GROUP = 'editForm/CHANGE_FIELD_GROUP';
 export const CHANGE_INVALID_LIST = 'editForm/CHANGE_INVALID_LIST';
 export const changeEditForm = createAction(CHANGE_EDIT_FORM, (editForm) => editForm);
+export const changeFieldGroup = createAction(CHANGE_FIELD_GROUP, (fieldGroup, index, field) => ({ fieldGroup, index, field }));
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 /**

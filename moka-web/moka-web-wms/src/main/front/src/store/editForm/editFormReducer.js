@@ -16,6 +16,7 @@ export const initialState = {
         sort: 'formId,asc',
     },
     editForm: {},
+    fieldGroup: {},
     editFormError: {},
     invalidList: [],
 };
@@ -31,6 +32,17 @@ export default handleActions(
         [act.CHANGE_EDIT_FORM]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.editForm = payload;
+            });
+        },
+        /**
+         * 데이터 변경
+         */
+        [act.CHANGE_FIELD_GROUP]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                const fields = payload.fieldGroup.fields.map((i) => ({ ...i, name: payload.field.name, value: payload.field.value }));
+                const fieldGroup = payload.fieldGroup;
+
+                draft.fieldGroup = { ...fieldGroup, fields: fields };
             });
         },
         [act.CHANGE_INVALID_LIST]: (state, { payload }) => {

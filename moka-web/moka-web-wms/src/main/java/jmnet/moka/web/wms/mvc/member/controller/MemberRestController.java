@@ -5,10 +5,12 @@ import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
@@ -23,12 +25,14 @@ import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
+import jmnet.moka.core.tps.mvc.member.dto.LoginLogDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberGroupSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberRequestDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSaveDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.dto.MemberUpdateDTO;
+import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
@@ -104,6 +108,40 @@ public class MemberRestController {
 
 
         ResultDTO<ResultListDTO<MemberDTO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * Member 로그인 이력 목록 조회
+     *
+     * @param search 검색조건
+     * @return Member목록
+     */
+    @ApiOperation(value = "Member 로그인 이력 목록 조회")
+    @GetMapping("/{memberId}/login-historys")
+    public ResponseEntity<?> getMemberLoginHistoryList(
+            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @SearchParam SearchDTO search) {
+
+        ResultListDTO<LoginLogDTO> resultListMessage = new ResultListDTO<>();
+
+        // 조회
+        Page<LoginLog> returnValue = memberService.findAllLoginLog(memberId, search);
+
+        // 리턴값 설정
+        List<LoginLogDTO> loginLogDtoList = modelMapper.map(returnValue.getContent(), LoginLogDTO.TYPE);
+        AtomicLong index = new AtomicLong(1);
+        loginLogDtoList.forEach(loginLogDTO -> {
+            loginLogDTO.setSeqNo(index.getAndAdd(1));
+        });
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
+        resultListMessage.setList(loginLogDtoList);
+
+
+        ResultDTO<ResultListDTO<LoginLogDTO>> resultDto = new ResultDTO<>(resultListMessage);
 
         tpsLogger.success(ActionType.SELECT);
 
@@ -242,7 +280,7 @@ public class MemberRestController {
         // MemberDTO -> Member 변환
         String infoMessage = messageByLocale.get("tps.common.error.no-data");
         MemberInfo newMember = modelMapper.map(memberDTO, MemberInfo.class);
-
+        newMember.setMemberId(memberId);
         // 오리진 데이터 조회
         MemberInfo orgMember = memberService
                 .findMemberById(newMember.getMemberId())
@@ -256,7 +294,7 @@ public class MemberRestController {
             orgMember.setRemark(memberDTO.getRemark());
 
             // update
-            MemberInfo returnValue = memberService.updateMember(newMember);
+            MemberInfo returnValue = memberService.updateMember(orgMember);
 
 
             // 결과리턴

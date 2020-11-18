@@ -23,15 +23,15 @@ export const duplicateCheck = (formId) => {
 };
 
 // Edit Form 저장
-export const postEditForm = ({ formSeq, itemSeq, formData }) => {
-    return instance.post(`/api/edit-forms/${formSeq}/items/${itemSeq}`, qs.stringify(formData)).catch((err) => {
+export const postEditForm = ({ formSeq, partSeq, partJson }) => {
+    return instance.post(`/api/edit-forms/${formSeq}/parts/${partSeq}`, qs.stringify(partJson)).catch((err) => {
         throw err;
     });
 };
 
 // Edit Form 수정
-export const putEditForm = ({ formSeq, itemSeq, formData }) => {
-    return instance.put(`/api/edit-forms/${formSeq}/items/${itemSeq}`, qs.stringify(formData)).catch((err) => {
+export const putEditForm = ({ formSeq, partSeq, partJson }) => {
+    return instance.put(`/api/edit-forms/${formSeq}/parts/${partSeq}`, qs.stringify(partJson)).catch((err) => {
         throw err;
     });
 };

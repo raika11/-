@@ -16,7 +16,6 @@ export const initialState = {
         sort: 'formId,asc',
     },
     editForm: {},
-    fieldGroup: {},
     editFormError: {},
     invalidList: [],
 };
@@ -37,12 +36,9 @@ export default handleActions(
         /**
          * 데이터 변경
          */
-        [act.CHANGE_FIELD_GROUP]: (state, { payload }) => {
+        [act.CHANGE_FIELD]: (state, { payload }) => {
             return produce(state, (draft) => {
-                const fields = payload.fieldGroup.fields.map((i) => ({ ...i, name: payload.field.name, value: payload.field.value }));
-                const fieldGroup = payload.fieldGroup;
-
-                draft.fieldGroup = { ...fieldGroup, fields: fields };
+                draft.editFormParts[payload.partIdx].fieldGroups[payload.groupIdx].fields[payload.fieldIdx] = payload.field;
             });
         },
         [act.CHANGE_INVALID_LIST]: (state, { payload }) => {

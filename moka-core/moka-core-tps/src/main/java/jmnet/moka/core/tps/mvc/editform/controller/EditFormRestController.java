@@ -447,7 +447,7 @@ public class EditFormRestController {
             throws MokaException {
 
         try {
-            objectMapper.readValue(editFormPartDTO.getFormData(), EditFormPart.class);
+            objectMapper.readValue(editFormPartDTO.getFormData(), collectionType);
             EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
 
             editFormService

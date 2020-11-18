@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
@@ -19,8 +19,6 @@ import { Card } from 'react-bootstrap';
  * 편집폼 상세/수정/등록
  * @param history rect-router-dom useHisotry
  */
-
-export const EditFormPartsContext = createContext();
 
 const EditFormEdit = ({ history, onDelete }) => {
     const { formId: paramId } = useParams();
@@ -242,7 +240,7 @@ const EditFormEdit = ({ history, onDelete }) => {
 
     useEffect(() => {
         // invalidList 처리
-        if (invalidList.length > 0) {
+        if (invalidList && invalidList.length > 0) {
             invalidList.forEach((i) => {
                 if (i.field === 'formId') {
                     setFormIdError(true);
@@ -329,14 +327,14 @@ const EditFormEdit = ({ history, onDelete }) => {
 
                             {/* 버튼 */}
                             <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                                <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
+                                <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
                                     저장
                                 </Button>
-                                <Button className="float-left mr-10 pr-20 pl-20" variant="gray150">
+                                <Button className="float-left mr-10 pr-20 pl-20" variant="negative">
                                     취소
                                 </Button>
                                 {paramId && (
-                                    <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleClickDelete}>
+                                    <Button className="float-left mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete}>
                                         삭제
                                     </Button>
                                 )}
@@ -347,9 +345,7 @@ const EditFormEdit = ({ history, onDelete }) => {
                 <Col xs={7}>
                     <Card className="w-100">
                         <Card.Body style={{ overflowY: 'auto', height: CARD_DEFAULT_HEIGHT - 120 }}>
-                            <EditFormPartsContext.Provider value={editFormParts}>
-                                <PartList parts={editFormParts} editForm={editForm && editForm.formSeq}></PartList>
-                            </EditFormPartsContext.Provider>
+                            <PartList parts={editFormParts} editForm={editForm && editForm.formSeq}></PartList>
                         </Card.Body>
                     </Card>
                 </Col>

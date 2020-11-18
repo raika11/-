@@ -64,6 +64,7 @@ public class ApiParser {
 	private static final String ATTR_REQUIRE = "require";
 	private static final String ATTR_RESULTNAME = "resultName";
 	private static final String ATTR_SETNAMES = "setNames";
+	private static final String ATTR_METHOD_NAME = "methodName";
 	private static final String ATTR_SELECTOR = "selector";
 	private static final String ATTR_TOTAL = "total";
 	private static final String ATTR_DML_TYPE = "dmlType";
@@ -293,6 +294,7 @@ public class ApiParser {
 			boolean async = false;
 			String resultName = requestEl.getAttribute(ATTR_RESULTNAME);
 			String setNames = requestEl.getAttribute(ATTR_SETNAMES);
+			String methodName = requestEl.getAttribute(ATTR_METHOD_NAME);
 			String selector = requestEl.getAttribute(ATTR_SELECTOR);
 			if ( type == null || type.length() == 0 ) {
 				type = Request.TYPE_DB;
@@ -329,7 +331,7 @@ public class ApiParser {
                 if (McpString.isNullOrEmpty(textContent) == false) {
                     textContent = textContent.trim();
                 }
-                api.addRequest(new ModuleRequest(type, textContent, async, resultName));
+                api.addRequest(new ModuleRequest(type, textContent, methodName, async, resultName));
 			} else if ( type.equals(Request.TYPE_SAMPLE)) {
 				api.addRequest(new SampleRequest(type, async, resultName, textContent));
 			} else {

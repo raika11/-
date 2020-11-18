@@ -502,9 +502,7 @@ public class DeskingRestController {
             @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
             @RequestBody @Valid ValidList<DeskingWorkDTO> validList, Principal principal)
             throws Exception {
-
         try {
-            // valid deskingWorkDTO
 
             List<DeskingWorkDTO> deskingWorkDTOList = validList.getList();
 

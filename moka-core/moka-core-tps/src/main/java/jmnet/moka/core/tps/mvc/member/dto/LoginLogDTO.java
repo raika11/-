@@ -1,11 +1,12 @@
 package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.lang.reflect.Type;
 import java.util.Date;
-import jmnet.moka.core.tps.common.code.MemberStatusCode;
+import java.util.List;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,12 +17,12 @@ import lombok.experimental.SuperBuilder;
  *
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.member.dto
- * ClassName : MemberDTO
- * Created : 2020-10-22 ince
+ * ClassName : LoginLogDTO
+ * Created : 2020-11-18 ince
  * </pre>
  *
  * @author ince
- * @since 2020-10-22 16:08
+ * @since 2020-11-18 11:45
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,25 +30,26 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MemberUpdateDTO {
+public class LoginLogDTO {
+
+    public static final Type TYPE = new TypeReference<List<LoginLogDTO>>() {
+    }.getType();
+
+    private Long seqNo;
 
     /**
-     * 상태(유효/정지)
+     * IP주소
      */
-    @Builder.Default
-    //@Pattern(regexp = "[N|Y|P|R|D]{1}$", message = "{tps.member.error.pattern.status}")
-    private MemberStatusCode status = MemberStatusCode.D;
+    private String ip;
 
     /**
-     * 계정만료일
+     * 성공여부
+     */
+    private String successYn;
+
+    /**
+     * 등록일시
      */
     @DTODateTimeFormat
-    private Date expireDt;
-
-    /**
-     * 비고
-     */
-    @Builder.Default
-    private String remark = "";
-
+    protected Date regDt;
 }

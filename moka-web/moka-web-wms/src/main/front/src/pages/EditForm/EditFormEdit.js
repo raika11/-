@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
@@ -7,10 +7,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { changeEditForm, changeInvalidList, clearEditForm, duplicateCheck, getEditForm, saveEditForm } from '@store/editForm';
 import { getApi, getLang } from '@store/codeMgt';
-import { MokaCard, MokaInput, MokaInputLabel } from '@components';
+import { MokaCard, MokaInputLabel } from '@components';
 import PartList from './PartList';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { Card } from 'react-bootstrap';
@@ -19,6 +19,9 @@ import { Card } from 'react-bootstrap';
  * 편집폼 상세/수정/등록
  * @param history rect-router-dom useHisotry
  */
+
+export const EditFormPartsContext = createContext();
+
 const EditFormEdit = ({ history, onDelete }) => {
     const { formId: paramId } = useParams();
     const elLang = useRef();
@@ -166,12 +169,7 @@ const EditFormEdit = ({ history, onDelete }) => {
                     }),
                 ],
                 callback: (response) => {
-                    // 만약 response.header.message로 서버 메세지를 전달해준다면, 그 메세지를 보여준다.
-                    if (response.header.success) {
-                        notification('success', '수정하였습니다.');
-                    } else {
-                        notification('warning', '실패하였습니다.');
-                    }
+                    toast.result(response);
                 },
             }),
         );
@@ -199,18 +197,12 @@ const EditFormEdit = ({ history, onDelete }) => {
                                     }),
                                 ],
                                 callback: (response) => {
-                                    if (response.header.success) {
-                                        notification('success', '등록하였습니다.');
-                                        history.push(`/editForm/${formId}`);
-                                    } else {
-                                        notification('warning', '실패하였습니다.');
-                                    }
+                                    toast.result(response);
                                 },
                             }),
                         );
                     } else {
-                        console.log('hh');
-                        notification('warning', '중복된 편집폼아이디가 존재합니다.');
+                        toast.warn('중복된 편집폼아이디가 존재합니다.');
                     }
                 },
             }),
@@ -355,7 +347,9 @@ const EditFormEdit = ({ history, onDelete }) => {
                 <Col xs={7}>
                     <Card className="w-100">
                         <Card.Body style={{ overflowY: 'auto', height: CARD_DEFAULT_HEIGHT - 120 }}>
-                            <PartList parts={editFormParts} editForm={editForm && editForm.formSeq}></PartList>
+                            <EditFormPartsContext.Provider value={editFormParts}>
+                                <PartList parts={editFormParts} editForm={editForm && editForm.formSeq}></PartList>
+                            </EditFormPartsContext.Provider>
                         </Card.Body>
                     </Card>
                 </Col>

@@ -207,6 +207,7 @@ public class DeskingWorkVO implements Serializable {
      * 생성일시
      */
     @JsonIgnore
+    @DTODateTimeFormat
     @Column(name = "REG_DT")
     private Date regDt;
 

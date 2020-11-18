@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.member.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
@@ -226,7 +227,28 @@ public interface MemberService {
      */
     void deleteGroupMember(Long seqNo);
 
+    /**
+     * 로그인 이력 저장
+     *
+     * @param log 로그 정보
+     * @return 저장 결과
+     */
     LoginLog insertLoginLog(LoginLog log);
 
+    /**
+     * 로그인 이력 목록 조회
+     *
+     * @param memberId 멤버 ID
+     * @return 로그인 이력 목록
+     */
     List<LoginLog> findAllLoginLog(String memberId);
+
+    /**
+     * 로그인 이력 목록 조회
+     *
+     * @param memberId        멤버 ID
+     * @param memberSearchDTO 검색 조건
+     * @return 로그인 이력 목록
+     */
+    public Page<LoginLog> findAllLoginLog(String memberId, SearchDTO memberSearchDTO);
 }

@@ -149,75 +149,61 @@ $padding-height: 10px;
     );
 }
 
-// .ag-icon-grip {
-//     transform: rotate(90deg);
-// }
+.ag-theme-moka-desking-grid {
+    .ag-root-wrapper-body {
+        overflow: hidden;
+        height: unset !important;
+        min-height: unset !important;
+    }
 
-// .ag-drag-handle {
-//     height: auto;
-// }
+    .ag-react-container > button {
+        padding: 0;
+    }
 
-.ag-theme-moka-desking-grid .ag-header-group-cell-label,
-.ag-theme-moka-desking-grid .ag-header-cell-label {
-    justify-content: center;
-}
+    .ag-header-group-cell-label,
+    .ag-header-cell-label {
+        justify-content: center;
+    }
 
-.ag-theme-moka-desking-grid .ag-header-icon {
-    cursor: pointer;
-}
+    .ag-header-icon {
+        cursor: pointer;
+    }
 
-.ag-theme-moka-desking-grid .ag-cell,
-.ag-theme-moka-desking-grid .ag-header-cell {
-    padding-left: 3px;
-    padding-right: 3px;
-    // height: $row-height;
-    // line-height: $row-height;
-    display: flex;
-    align-items: center;    
-}
+    .ag-row {
+        border-top: 3px solid $white;
+        border-bottom: 3px solid $white;
+        border-radius: 8px;
+        background-color: #f4f7f9;
+    }
 
-//관련 편집기사 cell
-.ag-theme-moka-desking-grid .ag-rel-cell {
-    height: 36px !important;
-    line-height: 36px !important;
-}
+    .ag-rel-row {
+        background-color: #ededed;
+    }
 
-.ag-theme-moka-desking-grid .ag-row {
-    border: $padding-height/2 solid $white;
-    border-radius: 8px 8px 8px 8px;
-    background-color: #f4f7f9;
-    // height: $row-height + $padding-height;
-    // line-height: $row-height + $padding-height;    
-}
+    .ag-cell,
+    .ag-header-cell {
+        padding-left: 3px !important;
+        padding-right: 3px !important;
+        display: flex;
+        align-items: center;  
+    }
 
-//관련 편집기사 row
-.ag-theme-moka-desking-grid .ag-rel-row {
-    background-color: #ededed !important;
-    // height: 36px + $padding-height !important;
-    // line-height: 36px + $padding-height !important;
-}
+    .ag-rel-cell {
+        height: 36px !important;
+        line-height: 36px !important;
+    }
 
-.ag-theme-moka-desking-grid .ag-header-cell-text {
-    white-space: pre;
-    text-align: center;
-}
+    .ag-edit-cell {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 
-.ag-theme-moka-desking-grid .ag-root-wrapper-body {
-    overflow: hidden;
-    height: unset !important;
-    min-height: unset !important;
-}
-.ag-theme-moka-desking-grid .ag-react-container > button {
-    padding: 0;
-}
+    .ag-header-cell-text {
+        white-space: pre;
+        text-align: center;
+    }
 
-//데이터 없을 때 
-.ag-theme-moka-desking-grid.ag-center-cols-clipper {
-    min-height: 32px;
-}
-
-//편집기사 editBox 필드
-.ag-theme-moka-desking-grid .ag-edit-cell {
-    padding-left: 0px;
-    padding-right: 0px;
+    &.ag-center-cols-clipper {
+        min-height: 32px;
+    }
 }

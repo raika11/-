@@ -77,6 +77,8 @@ public class Constants {
 	public final static char TOKEN_1 = '$';
 	public final static char TOKEN_2 = '{';
 	public final static char TOKEN_3 = '}';
+	public final static String TOKEN_START = Character.toString(TOKEN_1) + Character.toString(TOKEN_2);
+	public final static String TOKEN_END = Character.toString(TOKEN_3);
 	public final static String START_PREFIX = "<" + PREFIX;
 	public final static String END_PREFIX = "</" + PREFIX;
 	public final static int START_PREFIX_LENGTH = START_PREFIX.length();

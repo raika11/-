@@ -1,7 +1,6 @@
 package jmnet.moka.core.tps.mvc.directlink.controller;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -27,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -373,5 +371,39 @@ public class DirectLinkRestController {
 //        }
 //    }
 
+    /**
+     * 사이트등록
+     *
+     *  @file 등록할 사이트바로가기 이미지
+     * @return 등록된 사이트정보
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "파일 업로드")
+    @PostMapping(value = "/uploadImg", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public String uploadImg(@RequestParam("file") MultipartFile file)throws Exception {
 
+        try {
+
+            System.out.println("getOriginalFilename:::::" + file.getOriginalFilename());
+
+            // 등록(이미지 등록에 seq가 필요해서 먼저 저장)
+            //DirectLink returnValue = directLinkService.insertDirectLink(directLink);
+
+            // 결과리턴
+            //DirectLinkDTO dto = modelMapper.map(returnValue, DirectLinkDTO.class);
+            ResultDTO<DirectLinkDTO> resultDto = new ResultDTO<>(new DirectLinkDTO());
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.INSERT);
+
+            return "redirect:/form";
+
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT SITE]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(messageByLocale.get("tps.direct-link.error.save"), e);
+        }
+    }
 }

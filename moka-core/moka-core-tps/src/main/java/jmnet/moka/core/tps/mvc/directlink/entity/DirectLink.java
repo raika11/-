@@ -1,9 +1,12 @@
 package jmnet.moka.core.tps.mvc.directlink.entity;
 
+import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -88,4 +91,36 @@ public class DirectLink extends BaseAudit {
      */
     @Column(name = "LINK_KWD", nullable = false)
     private String linkKwd;
+
+    /**
+     * 등록일자
+     */
+    @Column(name = "REG_DT")
+    private Date regDt;
+
+    /**
+     * 등록자아이디
+     */
+    @Column(name = "REG_ID")
+    private String regId;
+
+    /**
+     * 수정일자
+     */
+    @Column(name = "MOD_DT")
+    private Date modDt;
+
+    /**
+     * 수정자아이디
+     */
+    @Column(name = "MOD_ID")
+    private String modId;
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.usedYn = this.usedYn == null ? "N" : this.usedYn;
+        this.fixYn = this.fixYn == null ? "N" : this.fixYn;
+        this.linkType = this.linkType == null ? "N" : this.linkType;
+    }
 }

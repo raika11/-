@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.directlink.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,4 +90,29 @@ public class DirectLinkDTO implements Serializable {
      * 링크키워드
      */
     private String linkKwd;
+
+
+    /**
+     * 등록일자
+     */
+    @DTODateTimeFormat
+    private Date regDt;
+
+    /**
+     * 등록자아이디
+     */
+    private String regId;
+
+    /**
+     * 수정일자
+     */
+    @DTODateTimeFormat
+    private Date modDt;
+
+    /**
+     * 수정자아이디
+     */
+    private String modId;
+            
+    
 }

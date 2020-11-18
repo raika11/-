@@ -33,7 +33,7 @@ public class DirectLinkSearchDTO extends SearchDTO {
     /**
      * 링크일련번호
      */
-    private String linkSeq;
+    private Long linkSeq;
 
     /**
      * 사용여부

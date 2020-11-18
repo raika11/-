@@ -21,9 +21,9 @@ import org.springframework.stereotype.Repository;
  * @author ssc
  */
 @Repository
-public interface DirectLinkRepository extends JpaRepository<DirectLink, String>, JpaSpecificationExecutor<DirectLink>, DirectLinkRepositorySupport {
+public interface DirectLinkRepository extends JpaRepository<DirectLink, Long>, JpaSpecificationExecutor<DirectLink>, DirectLinkRepositorySupport {
 
-    public Long countByLinkSeq(String linkSeq);
+    public Long countByLinkSeq(Long linkSeq);
 
     Page<DirectLink> findAllDirectLink(DirectLinkSearchDTO search);
 }

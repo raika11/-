@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.*;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -38,8 +39,9 @@ public class DirectLinkDTO implements Serializable {
     /**
      * 링크일련번호
      */
-    @Size(min = 1, max = 5, message = "{tps.direct-link.error.pattern.linkSeq}")
-    private String linkSeq;
+    //@Size(min = 1, max = 5, message = "{tps.direct-link.error.pattern.linkSeq}")
+    @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}")
+    private Long linkSeq;
 
     /**
      * 사용여부(Y:사용,N:미사용)

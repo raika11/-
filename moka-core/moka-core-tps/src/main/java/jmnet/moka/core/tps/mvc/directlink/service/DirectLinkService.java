@@ -39,7 +39,7 @@ public interface DirectLinkService {
      * @param linkSeq 링크일련번호
      * @return 사이트정보조회
      */
-    Optional<DirectLink> findById(String linkSeq);
+    Optional<DirectLink> findById(Long linkSeq);
 
     /**
      * 링크관리 수정
@@ -63,7 +63,7 @@ public interface DirectLinkService {
      * @param linkSeq 링크일련번호
      * @return 존재 여부
      */
-    boolean isDuplicatedId(String linkSeq);
+    boolean isDuplicatedId(Long linkSeq);
 
     /**
      * 그룹에 속한 멤버 존재 여부 조회
@@ -71,7 +71,7 @@ public interface DirectLinkService {
      * @param linkSeq 링크일련번호
      * @return 존재 여부
      */
-    boolean hasMembers(String linkSeq);
+    boolean hasMembers(Long linkSeq);
 
     /**
      * 그룹 삭제

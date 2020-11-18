@@ -18,7 +18,7 @@ const PartList = (props) => {
         const formRows = [];
         if (parts && parts.length > 0) {
             parts.forEach((part, partIdx) => {
-                formRows.push(<PartEdit key={`part${partIdx}`} part={part} formId={formId} />);
+                formRows.push(<PartEdit key={`part${partIdx}`} partIdx={partIdx} formId={formId} />);
             });
         }
 

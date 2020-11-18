@@ -142,9 +142,9 @@ public class ArticleView extends AbstractView {
         String serviceCode = functions.joinColumn((List<Map<String, Object>>)articleInfo.get("servicemap"),"SERVICE_CODE");
         String sourceCode = (String)((Map<String,Object>)articleInfo.get("basic")).get("SOURCE_CODE");
         Map<String,Object> menuParam = new HashMap<>();
-        menuParam.put("master", masterCode);
-        menuParam.put("service", serviceCode);
-        menuParam.put("source", sourceCode);
+        menuParam.put(MokaConstants.MASTER_CODE_LIST, masterCode);
+        menuParam.put(MokaConstants.SERVICE_CODE_LIST, serviceCode);
+        menuParam.put(MokaConstants.SOURCE_CODE_LIST, sourceCode);
         JSONResult jsonResult = loader.getJSONResult("category",menuParam,true);
         Map<String, Object> map = jsonResult.getData();
         String category = (String)map.get("key");

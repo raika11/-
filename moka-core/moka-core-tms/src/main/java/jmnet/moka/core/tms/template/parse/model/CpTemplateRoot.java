@@ -3,14 +3,6 @@ package jmnet.moka.core.tms.template.parse.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.MokaTemplateMerger;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import jmnet.moka.common.ApiResult;
 import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.template.Constants;
@@ -23,21 +15,27 @@ import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DatasetItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * 
  * <pre>
  * 파싱된 템플릿 정보의 최상위 노드, DOM의 Root와 동일 개념
  * 2019. 9. 4. kspark 최초생성
  * </pre>
- * 
- * @since 2019. 9. 4. 오후 6:20:25
+ *
  * @author kspark
+ * @since 2019. 9. 4. 오후 6:20:25
  */
 public class CpTemplateRoot extends MokaTemplateRoot {
     private static final Logger logger = LoggerFactory.getLogger(CpTemplateRoot.class);
@@ -98,11 +96,9 @@ public class CpTemplateRoot extends MokaTemplateRoot {
     private TpTemplateRoot getTpTemplateRoot() {
         TpTemplateRoot tpTemplateRoot = null;
         try {
-            tpTemplateRoot = (TpTemplateRoot) templateLoader
-                    .getParsedTemplate(MokaConstants.ITEM_TEMPLATE, templateId);
+            tpTemplateRoot = (TpTemplateRoot) templateLoader.getParsedTemplate(MokaConstants.ITEM_TEMPLATE, templateId);
         } catch (TemplateParseException | TemplateLoadException e) {
-            logger.error("Component's Template Load Fail:{} {}",
-                    this.item.get(ItemConstants.COMPONENT_ID),
+            logger.error("Component's Template Load Fail:{} {}", this.item.get(ItemConstants.COMPONENT_ID),
                     this.item.get(ItemConstants.COMPONENT_TEMPLATE_ID), e);
         }
         return tpTemplateRoot;
@@ -111,17 +107,14 @@ public class CpTemplateRoot extends MokaTemplateRoot {
 
     @SuppressWarnings("unchecked")
     public JSONResult loadData(TemplateMerger<?> merger, MergeContext context)
-            throws DataLoadException, ParseException, TemplateParseException,
-            TemplateLoadException {
+            throws DataLoadException, ParseException, TemplateParseException, TemplateLoadException {
         logger.trace("Merge entered : {} {}", this.item.getItemType(), this.item.getItemId());
         String componentDataType = this.item.getString(ItemConstants.COMPONENT_DATA_TYPE);
-        if (componentDataType != null
-                && componentDataType.equals(ItemConstants.CP_DATA_TYPE_NONE) == false) {
+        if (componentDataType != null && componentDataType.equals(ItemConstants.CP_DATA_TYPE_NONE) == false) {
             // 컴포넌트에 설정된 파라미터를 가져온다.
-            DatasetItem datasetItem = (DatasetItem) merger.getItem(MokaConstants.ITEM_DATASET,
-                    this.item.getString(ItemConstants.COMPONENT_DATASET_ID));
-            boolean datasetAutoCreateYn =
-                    datasetItem.getBoolYN(ItemConstants.DATASET_AUTO_CREATE_YN);
+            DatasetItem datasetItem =
+                    (DatasetItem) merger.getItem(MokaConstants.ITEM_DATASET, this.item.getString(ItemConstants.COMPONENT_DATASET_ID));
+            boolean datasetAutoCreateYn = datasetItem.getBoolYN(ItemConstants.DATASET_AUTO_CREATE_YN);
             HttpParamMap httpParamMap = (HttpParamMap) context.get(Constants.PARAM);
             Map<String, Object> datasetParam = new HashMap<String, Object>(4);
             if (datasetAutoCreateYn) {
@@ -129,6 +122,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 if (McpString.isNotEmpty(paramString)) {
                     JSONParser jsonParser = new JSONParser();
                     JSONObject paramJson = (JSONObject) jsonParser.parse(paramString);
+                    this.convertToken(merger, context, paramJson);
                     datasetParam.putAll(paramJson);
                 }
                 // 파라미터 정보를 주입한다.
@@ -137,38 +131,48 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 String datasetApi = datasetItem.getString(ItemConstants.DATASET_API);
                 if (datasetApi != null && datasetApi.length() > 1) {
                     DataLoader loader = merger.getDataLoader();
-                    JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, null),
-                            datasetParam, false);
-                    ((MokaTemplateMerger) merger).setData(context,
-                            KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
+                    JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, null), datasetParam, false);
+                    ((MokaTemplateMerger) merger).setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
                     return jsonResult;
                 }
             } else {
                 // SNAPSHOT_YN=Y일때 다른 용도로 사용할 수 있으므로 가져오도록 한다.
                 this.setDataRange(datasetParam, httpParamMap);
-                datasetParam.put(ItemConstants.CP_DATA_TYPE_DESK_PARAM,
-                        this.item.getString(ItemConstants.COMPONENT_DATASET_ID));
+                datasetParam.put(ItemConstants.CP_DATA_TYPE_DESK_PARAM, this.item.getString(ItemConstants.COMPONENT_DATASET_ID));
 
                 // Preview 모드 && WorkerId가 있을 경우 desking.work api를 호출한다.
-                boolean isDeskingWork = context.getMergeOptions().isPreview()
-                        && context.has(MokaConstants.MERGE_CONTEXT_WORKER_ID);
-                String apiName = isDeskingWork ? ItemConstants.CP_DATA_TYPE_DESK_WORK_API
-                        : ItemConstants.CP_DATA_TYPE_DESK_API;
+                boolean isDeskingWork = context
+                        .getMergeOptions()
+                        .isPreview() && context.has(MokaConstants.MERGE_CONTEXT_WORKER_ID);
+                String apiName = isDeskingWork ? ItemConstants.CP_DATA_TYPE_DESK_WORK_API : ItemConstants.CP_DATA_TYPE_DESK_API;
                 if (isDeskingWork) {
-                    datasetParam.put(MokaConstants.PARAM_WORKER_ID,
-                            context.get(MokaConstants.MERGE_CONTEXT_WORKER_ID));
-                    datasetParam.put(MokaConstants.PARAM_EDITION_SEQ,
-                            context.get(MokaConstants.MERGE_CONTEXT_EDITION_SEQ));
+                    datasetParam.put(MokaConstants.PARAM_WORKER_ID, context.get(MokaConstants.MERGE_CONTEXT_WORKER_ID));
+                    datasetParam.put(MokaConstants.PARAM_EDITION_SEQ, context.get(MokaConstants.MERGE_CONTEXT_EDITION_SEQ));
                 }
                 DataLoader loader = merger.getDataLoader();
-                JSONResult jsonResult =
-                        loader.getJSONResult(getDataUri(datasetItem, apiName), datasetParam, false);
-                ((MokaTemplateMerger) merger).setData(context,
-                        KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
+                JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, apiName), datasetParam, false);
+                ((MokaTemplateMerger) merger).setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
                 return jsonResult;
             }
         }
         return null;
+    }
+
+    private void convertToken(TemplateMerger<?> merger, MergeContext context, JSONObject jsonObject) {
+        for (Object key : jsonObject.keySet()) {
+            Object valueObj = jsonObject.get(key);
+            if (valueObj != null) {
+                String value = valueObj
+                        .toString()
+                        .trim();
+                if (value.startsWith(Constants.TOKEN_START) && value.endsWith(Constants.TOKEN_END)) {
+                    Object evalValue = merger
+                            .getEvaluator()
+                            .eval(value.substring(2, value.length() - 1), context);
+                    jsonObject.put(key, evalValue);
+                }
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -185,18 +189,16 @@ public class CpTemplateRoot extends MokaTemplateRoot {
         }
 
         // 미리보기 일 경우 preview resource 추가
-//        if (context.getMergeOptions().isPreviewResource()) {
-//            this.setPreviewResource(merger, context, sb);
-//        }
+        //        if (context.getMergeOptions().isPreviewResource()) {
+        //            this.setPreviewResource(merger, context, sb);
+        //        }
         MergeContext childContext = context.createRowDataChild();
         childContext.set(MokaConstants.MERGE_CONTEXT_COMPONENT, this.item);
 
         String componentDataType = this.item.getString(ItemConstants.COMPONENT_DATA_TYPE);
         // dataType이 NONE이 아닐 경우만 데이터 처리
-        if (componentDataType != null
-                && componentDataType.equals(ItemConstants.CP_DATA_TYPE_NONE) == false) {
-            HashMap<String, JSONResult> dataMap =
-                    (HashMap<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
+        if (componentDataType != null && componentDataType.equals(ItemConstants.CP_DATA_TYPE_NONE) == false) {
+            HashMap<String, JSONResult> dataMap = (HashMap<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
 
             JSONResult jsonResult = null;
             if (dataMap != null) {
@@ -205,17 +207,14 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             if (jsonResult == null) {
                 try {
                     jsonResult = this.loadData(merger, childContext);
-                } catch (DataLoadException | ParseException | TemplateParseException
-                        | TemplateLoadException e) {
-                    logger.warn("DataLoad Fail: {} - component : {} {} {}",
-                            ((MokaTemplateMerger) merger).getDomainId(), templateRoot.getItemType(),
+                } catch (DataLoadException | ParseException | TemplateParseException | TemplateLoadException e) {
+                    logger.warn("DataLoad Fail: {} - component : {} {} {}", ((MokaTemplateMerger) merger).getDomainId(), templateRoot.getItemType(),
                             templateRoot.getId(), e.getMessage());
                     return;
                 }
             }
 
-            childContext.set(Constants.CURRENT_DATA_ID,
-                    this.item.getItemType() + this.item.getItemId());
+            childContext.set(Constants.CURRENT_DATA_ID, this.item.getItemType() + this.item.getItemId());
             // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에
             childContext.set(Constants.LOOP_INDEX, 0);
             Object resultObject = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
@@ -241,7 +240,9 @@ public class CpTemplateRoot extends MokaTemplateRoot {
         if (tpTemplateRoot != null) {
             tpTemplateRoot.merge(merger, childContext, sb);
         } else {
-            if (context.getMergeOptions().isDebug()) {
+            if (context
+                    .getMergeOptions()
+                    .isDebug()) {
                 sb.append("\n ERROR!! Template Load Fail \n");
             }
         }
@@ -250,39 +251,45 @@ public class CpTemplateRoot extends MokaTemplateRoot {
     }
 
     private void wrapItemStart(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
-        if (context.getMergeOptions().isWrapItem()) {
-            sb.append(context.getCurrentIndent())
+        if (context
+                .getMergeOptions()
+                .isWrapItem()) {
+            sb
+                    .append(context.getCurrentIndent())
                     .append(merger.getWrapItemStart(MokaConstants.ITEM_TEMPLATE, this.templateId))
                     .append(System.lineSeparator());
         }
     }
 
     private void wrapItemEnd(TemplateMerger<?> merger, MergeContext context, StringBuilder sb) {
-        if (context.getMergeOptions().isWrapItem()) {
-            sb.append(context.getCurrentIndent())
+        if (context
+                .getMergeOptions()
+                .isWrapItem()) {
+            sb
+                    .append(context.getCurrentIndent())
                     .append(merger.getWrapItemEnd(MokaConstants.ITEM_TEMPLATE, this.templateId))
                     .append(System.lineSeparator());
         }
     }
 
-//    private void setPreviewResource(TemplateMerger<?> merger, MergeContext context,
-//            StringBuilder sb) {
-//        String resource = this.item.getString(ItemConstants.COMPONENT_PREVIEW_RESOURCE);
-//        if (McpString.isEmpty(resource))
-//            return;
-//        TemplateRoot templateRoot = null;
-//        try {
-//            templateRoot = TemplateParser.parse(resource);
-//        } catch (TemplateParseException e) {
-//            logger.error("Preview Resource Parsing Fail: {} - component : {} {} {}",
-//                    ((MokaTemplateMerger) merger).getDomainId(), this.getItemType(), this.getId(),
-//                    e.getMessage());
-//            return;
-//        }
-//        sb.append(System.lineSeparator());
-//        templateRoot.merge(merger, context, sb);
-//        sb.append(System.lineSeparator());
-//    }
+    //    private void setPreviewResource(TemplateMerger<?> merger, MergeContext context,
+    //            StringBuilder sb) {
+    //        String resource = this.item.getString(ItemConstants.COMPONENT_PREVIEW_RESOURCE);
+    //        if (McpString.isEmpty(resource))
+    //            return;
+    //        TemplateRoot templateRoot = null;
+    //        try {
+    //            templateRoot = TemplateParser.parse(resource);
+    //        } catch (TemplateParseException e) {
+    //            logger.error("Preview Resource Parsing Fail: {} - component : {} {} {}",
+    //                    ((MokaTemplateMerger) merger).getDomainId(), this.getItemType(), this.getId(),
+    //                    e.getMessage());
+    //            return;
+    //        }
+    //        sb.append(System.lineSeparator());
+    //        templateRoot.merge(merger, context, sb);
+    //        sb.append(System.lineSeparator());
+    //    }
 
     private void setDataRange(Map<String, Object> datasetParam, HttpParamMap httpParamMap) {
         String page = httpParamMap.get(MokaConstants.PARAM_PAGE);
@@ -290,22 +297,27 @@ public class CpTemplateRoot extends MokaTemplateRoot {
         String start = null;
         // 컴포넌트에서 페이징 정보를 주입한다.
         if (this.isComponentPaging()) {
-            if (this.getPagingType().equals(MokaConstants.COMPONENT_PAGING_TYPE_NUMBER)) {
+            if (this
+                    .getPagingType()
+                    .equals(MokaConstants.COMPONENT_PAGING_TYPE_NUMBER)) {
                 count = Integer.toString(this.getPerPageCount());
-            } else if (this.getPagingType().equals(MokaConstants.COMPONENT_PAGING_TYPE_MORE)) {
+            } else if (this
+                    .getPagingType()
+                    .equals(MokaConstants.COMPONENT_PAGING_TYPE_MORE)) {
                 if (page.equals("1")) {
                     count = Integer.toString(this.getPerPageCount());
                 } else {
                     count = Integer.toString(this.getMoreCount());
-                    start = Integer.toString(this.getPerPageCount()
-                            + (Integer.parseInt(page) - 2) * this.getMoreCount());
+                    start = Integer.toString(this.getPerPageCount() + (Integer.parseInt(page) - 2) * this.getMoreCount());
                 }
             }
         }
-        if (count != null)
+        if (count != null) {
             datasetParam.put(MokaConstants.PARAM_COUNT, count);
-        if (start != null)
+        }
+        if (start != null) {
             datasetParam.put(MokaConstants.PARAM_START, start);
+        }
     }
 
     public boolean isComponentPaging() {

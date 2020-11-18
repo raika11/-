@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 /**
@@ -105,7 +105,7 @@ public class DirectLinkRestController {
     @ApiOperation(value = "사이트관리 조회")
     @GetMapping("/{linkSeq}")
     public ResponseEntity<?> getDirectLink(HttpServletRequest request
-            , @PathVariable("linkSeq") @Size(min = 1, max = 5,message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
+            , @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.direct-link.error.no-data", request);
@@ -121,7 +121,7 @@ public class DirectLinkRestController {
      * 사이트등록
      *
      * @param directLinkDTO 등록할 사이트정보
-     *  directLinkThumbnailFile 등록할 사이트바로가기 이미지
+     * @param directLinkThumbnailFile 등록할 사이트바로가기 이미지
      * @return 등록된 사이트정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
@@ -130,10 +130,10 @@ public class DirectLinkRestController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
     , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO
-//            ,@RequestPart(value = "http://localhost:8100/swagger-ui.html", required = false)
-//            MultipartFile directLinkThumbnailFile
+            , @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
 
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa::" + directLinkThumbnailFile);
         // 데이터 유효성 검사
         //validData(directLinkDTO, directLinkThumbnailFile, ActionType.INSERT);
 
@@ -149,14 +149,14 @@ public class DirectLinkRestController {
             // 등록(이미지 등록에 seq가 필요해서 먼저 저장)
             DirectLink returnValue = directLinkService.insertDirectLink(directLink);
 
-//            if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
-//                // 이미지파일 저장(multipartFile)
-//                String imgPath = directLinkService.saveImage(returnValue, directLinkThumbnailFile);
-//                tpsLogger.success(ActionType.UPLOAD, true);
-//
-//                directLinkDTO.setImgUrl(imgPath);
-//                returnValue = directLinkService.updateDirectLink(directLink);
-//            }
+            if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
+                // 이미지파일 저장(multipartFile)
+                String imgPath = directLinkService.saveImage(returnValue, directLinkThumbnailFile);
+                tpsLogger.success(ActionType.UPLOAD, true);
+
+                directLinkDTO.setImgUrl(imgPath);
+                returnValue = directLinkService.updateDirectLink(directLink);
+            }
 
             // 결과리턴
             DirectLinkDTO dto = modelMapper.map(returnValue, DirectLinkDTO.class);
@@ -180,23 +180,18 @@ public class DirectLinkRestController {
      *
      * @param linkSeq  링크일련번호
      * @param directLinkDTO 수정할 사이트
-     *  directLinkThumbnailFile 등록할 사이트바로가기 이미지
+     * @param directLinkThumbnailFile 등록할 사이트바로가기 이미지
      * @return 수정된 사이트정보
      * @throws Exception 그외 모든 에러
      */
     @ApiOperation(value = "사이트정보 수정")
-    @PutMapping(value = "/{linkSeq}"
-            //, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
-    //, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}
-            //,MediaType.APPLICATION_JSON_UTF8_VALUE}
-            )
-    public ResponseEntity<?> putDirectLink(@PathVariable("linkSeq") @Size(min = 1, max = 5, message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq,
-                                       @Valid DirectLinkDTO directLinkDTO
-                                       //,@ApiParam(value = "directLinkThumbnailFile")
-//                                       @RequestPart(value = "directLinkThumbnailFile", required = false)
-//                                                       MultipartFile directLinkThumbnailFile
-    )
-            throws Exception {
+    @PutMapping(value = "/{linkSeq}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
+            , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> putDirectLink(
+            @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq,
+            @Valid DirectLinkDTO directLinkDTO,
+            @RequestParam(value="directLinkThumbnailFile" , required = false) MultipartFile directLinkThumbnailFile
+    )throws InvalidDataException, Exception {
 
         // DirectLinkDTO -> DirectLink 변환
         DirectLink newDirectLink = modelMapper.map(directLinkDTO, DirectLink.class);
@@ -215,20 +210,20 @@ public class DirectLinkRestController {
              */
 
 
-//            if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
-//
-//                // 기존이미지 삭제
-//                if (McpString.isNotEmpty(orgDirectLink.getImgUrl())) {
-//                    directLinkService.deleteImage(orgDirectLink);
-//                    tpsLogger.success(ActionType.FILE_DELETE, true);
-//                }
-//                // 새로운 이미지 저장
-//                String imgPath = directLinkService.saveImage(newDirectLink, directLinkThumbnailFile);
-//                tpsLogger.success(ActionType.UPLOAD, true);
-//
-//                // 이미지 파일명 수정
-//                newDirectLink.setImgUrl(imgPath);
-//            }
+            if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
+
+                // 기존이미지 삭제
+                if (McpString.isNotEmpty(orgDirectLink.getImgUrl())) {
+                    directLinkService.deleteImage(orgDirectLink);
+                    tpsLogger.success(ActionType.FILE_DELETE, true);
+                }
+                // 새로운 이미지 저장
+                String imgPath = directLinkService.saveImage(newDirectLink, directLinkThumbnailFile);
+                tpsLogger.success(ActionType.UPLOAD, true);
+
+                // 이미지 파일명 수정
+                newDirectLink.setImgUrl(imgPath);
+            }
 
             // update
             DirectLink returnValue = directLinkService.updateDirectLink(newDirectLink);
@@ -263,8 +258,8 @@ public class DirectLinkRestController {
     @GetMapping("/{linkSeq}/has-members")
     public ResponseEntity<?> hasMembers(HttpServletRequest request,
                                         @PathVariable("linkSeq")
-                                        @Size(min = 1, max = 5,
-                                                message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
+                                        @Min(value=0,
+                                                message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
         boolean exists = directLinkService.hasMembers(linkSeq);
@@ -289,8 +284,8 @@ public class DirectLinkRestController {
     @DeleteMapping("/{linkSeq}")
     public ResponseEntity<?> deleteDirectLink(HttpServletRequest request,
                                          @PathVariable("linkSeq")
-                                         @Size(min = 1, max = 5,
-                                         message = "{tps.direct-link.error.pattern.linkSeq}") String linkSeq)
+                                         @Min(value=0,
+                                         message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws InvalidDataException, NoDataException, Exception {
 
 

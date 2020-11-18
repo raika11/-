@@ -2,7 +2,7 @@ export default [
     {
         rowDrag: true,
         width: 22,
-        supressMenu: true,
+        suppressMenu: true,
         rowDragText: (params, dragItemCount) => {
             // if (dragItemCount > 1) {
             //     const message = params.rowNodes ? params.rowNodes.reduce((prev, next) => `${prev.data.escapeTitle},${next.data.escapeTitle}`) : params.rowNode.data.escapeTitle;

@@ -1,12 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-
-import Form from 'react-bootstrap/Form';
 import { Button, Card } from 'react-bootstrap';
-import PartField from './PartField';
 import { useDispatch } from 'react-redux';
-import toast from '@/utils/toastUtil';
-import { changeEditForm, saveEditForm } from '@/store/editForm';
+import FieldGroup from './FieldGroup';
+import { EditFormPartsContext } from './EditFormEdit';
 
 const propTypes = {
     part: PropTypes.any,
@@ -16,14 +13,20 @@ const propTypes = {
  * 기본 input
  */
 const PartEdit = (props) => {
-    const { part, formId } = props;
+    const { partIdx, formId } = props;
     const dispatch = useDispatch();
 
+    const editFormPartsContext = useContext(EditFormPartsContext);
+    const part = editFormPartsContext[partIdx];
+
     const handleClickSave = (event) => {
+        console.log(part);
         insertEditFormPart({ partJson: JSON.stringify(part) });
     };
 
     const insertEditFormPart = (tmp) => {
+        console.log(JSON.stringify(part));
+        /*
         dispatch(
             saveEditForm({
                 type: 'insert',
@@ -40,21 +43,18 @@ const PartEdit = (props) => {
                 },
             }),
         );
+        */
     };
 
     return (
-        <Card>
+        <Card className="mb-2">
             <Card.Header>
                 <Card.Title>{part.partTitle}</Card.Title>
             </Card.Header>
 
             <Card.Body>
-                {part.fieldGroups.map((fieldGroup) => (
-                    <Form key={'F' + fieldGroup.group}>
-                        {fieldGroup.fields.map((field, idx) => (
-                            <PartField field={field} key={`${field.group}_${idx}`} id={`${field.group}_${idx}`} name={`${field.group}_${idx}`}></PartField>
-                        ))}
-                    </Form>
+                {part.fieldGroups.map((fieldGroup, groupIdx) => (
+                    <FieldGroup key={'F' + fieldGroup.group} partIdx={partIdx} groupIdx={groupIdx}></FieldGroup>
                 ))}
             </Card.Body>
             <Card.Footer>

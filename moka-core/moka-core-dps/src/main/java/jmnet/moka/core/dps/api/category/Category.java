@@ -48,10 +48,10 @@ public class Category {
         Element categoryEl = (Element) CategoryNode;
         this.key = categoryEl.getAttribute("Key");
         this.term = categoryEl.getAttribute("Term");
-        this.masterCodeList = getCodeList(categoryEl, categoryParser, "MasterCodes/string");
-        this.serviceCodeList = getCodeList(categoryEl, categoryParser, "ServiceCodes/string");
-        this.sourceCodeList = getCodeList(categoryEl, categoryParser, "SourceCodes/string");
-        this.exceptSourceCodeList = getCodeList(categoryEl, categoryParser, "ExceptSourceCodes/string");
+        this.masterCodeList = buildCodeList(categoryEl, categoryParser, "MasterCodes/string");
+        this.serviceCodeList = buildCodeList(categoryEl, categoryParser, "ServiceCodes/string");
+        this.sourceCodeList = buildCodeList(categoryEl, categoryParser, "SourceCodes/string");
+        this.exceptSourceCodeList = buildCodeList(categoryEl, categoryParser, "ExceptSourceCodes/string");
     }
 
     public boolean isMatch(String[] inputMasterCodes, String[] inputServiceCodes, String sourceCode) {
@@ -101,7 +101,7 @@ public class Category {
         return false;
     }
 
-    public List<String> getCodeList(Element categoryEl, CategoryParser categoryParser, String xPath)
+    public List<String> buildCodeList(Element categoryEl, CategoryParser categoryParser, String xPath)
             throws XPathExpressionException {
         NodeList codeElList = categoryParser.getNodeList(categoryEl, xPath);
         if (codeElList.getLength() > 0) {

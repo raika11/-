@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import clsx from 'clsx';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
-import Form from 'react-bootstrap/Form';
-import { Moka, MokaImageInput, MokaInputLabel } from '@components';
+import { Moka } from '@components';
 import { Button, Col, Row } from 'react-bootstrap';
+
+import { useDispatch } from 'react-redux';
+import { changeFieldGroup } from '@/store/editForm';
+import { EditFormPartsContext } from './EditFormEdit';
 
 const propTypes = {
     field: PropTypes.any,
@@ -12,20 +13,39 @@ const propTypes = {
 /**
  * 기본 input
  */
-const PartField = (props) => {
-    const { field, id, name } = props;
+const Field = (props) => {
+    const { id, name, partIdx, groupIdx, index, fieldIdx, onFieldChange } = props;
+
+    const editFormPartsContext = useContext(EditFormPartsContext);
+    const part = editFormPartsContext[partIdx];
+    const fieldGroup = part.fieldGroups[groupIdx];
+    const field = fieldGroup.fields[fieldIdx];
+
+    const dispatch = useDispatch();
 
     const [fieldValue, setFieldValue] = useState('');
     const [title, setTitle] = useState('');
     const [options, setOptions] = useState('');
     const [type, setType] = useState('');
     const [fieldName, setFieldName] = useState('');
-    const [formField, setFormField] = useState('');
 
-    const handleChangeValue = (event) => {
-        setFieldValue(event.target.value, () => {
-            formField.value = fieldValue;
-        });
+    const handleChangeValue = async (event) => {
+        const { name, value } = event.target;
+        const updatedField = { ...field, value: value };
+        console.log(updatedField);
+        fieldGroup.fields.splice(fieldIdx, 0, updatedField);
+        editFormPartsContext[partIdx].fieldGroups[groupIdx].fields.splice(fieldIdx, 0, updatedField);
+        // memberStore.setMember(updatedMember);
+    };
+
+    const handleChangeName = (event) => {
+        setFieldValue(event.target.value);
+    };
+
+    const handleBlur = () => {
+        dispatch(changeFieldGroup(fieldGroup, index, { ...field, name: fieldName, value: fieldValue }));
+        console.log(fieldGroup);
+        //onFieldChange(index, { ...field, name: fieldName, value: fieldValue });
     };
 
     useEffect(() => {
@@ -34,21 +54,21 @@ const PartField = (props) => {
         setFieldName(field.name);
         setOptions(field.options);
         setType(field.type);
-        setFormField(field);
     }, [field]);
 
     switch (type) {
         case 'TEXT':
+        case 'LINK':
             return (
                 <Row>
                     <Col md={3}>
                         <Moka.Label label={title}></Moka.Label>
                     </Col>
                     <Col md={3}>
-                        <Moka.Input name={`${fieldName}`} value={fieldName} onChange={handleChangeValue}></Moka.Input>
+                        <Moka.Input name={`${fieldName}`} value={field?.name} onChange={handleChangeName} onBlur={handleBlur}></Moka.Input>
                     </Col>
                     <Col md={6}>
-                        <Moka.Input name={fieldName} value={fieldValue} onChange={handleChangeValue}></Moka.Input>
+                        <Moka.Input name={fieldName} value={field?.value} onChange={handleChangeValue} onBlur={handleBlur}></Moka.Input>
                     </Col>
                 </Row>
             );
@@ -59,10 +79,10 @@ const PartField = (props) => {
                         <Moka.Label label={title}></Moka.Label>
                     </Col>
                     <Col md={3}>
-                        <Moka.Input name={`${fieldName}`} value={fieldName} onChange={handleChangeValue}></Moka.Input>
+                        <Moka.Input name={`${fieldName}`} value={field?.name} onChange={handleChangeName} onBlur={handleBlur}></Moka.Input>
                     </Col>
                     <Col md={6}>
-                        <Moka.Select name={fieldName} value={fieldValue} onChange={handleChangeValue}>
+                        <Moka.Select name={fieldName} value={field?.value} onChange={handleChangeValue} onBlur={handleBlur}>
                             {options.map((option) => (
                                 <option key={option.value} value={option.value}>
                                     {option.text}
@@ -79,10 +99,10 @@ const PartField = (props) => {
                         <Moka.Label label={title}></Moka.Label>
                     </Col>
                     <Col md={3}>
-                        <Moka.Input name={`${fieldName}`} value={fieldName} onChange={handleChangeValue}></Moka.Input>
+                        <Moka.Input name={`${fieldName}`} value={field?.name} onChange={handleChangeName} onBlur={handleBlur}></Moka.Input>
                     </Col>
                     <Col md={6}>
-                        <Moka.Input as="textarea" name={fieldName} value={fieldValue} onChange={handleChangeValue}></Moka.Input>
+                        <Moka.Input as="textarea" name={fieldName} value={fieldValue} onChange={handleChangeValue} onBlur={handleBlur}></Moka.Input>
                     </Col>
                 </Row>
             );
@@ -93,10 +113,10 @@ const PartField = (props) => {
                         <Moka.Label>{title}</Moka.Label>
                     </Col>
                     <Col md={3}>
-                        <Moka.Input name={`${fieldName}`} value={fieldName} onChange={handleChangeValue}></Moka.Input>
+                        <Moka.Input name={`${fieldName}`} value={fieldName} onChange={handleChangeName} onBlur={handleBlur}></Moka.Input>
                     </Col>
                     <Col md={4}>
-                        <Moka.Input name={fieldName} value={fieldValue} onChange={handleChangeValue}></Moka.Input>
+                        <Moka.Input name={fieldName} value={fieldValue} onChange={handleChangeValue} onBlur={handleBlur}></Moka.Input>
                     </Col>
                     <Col md={2}>
                         <Button variant="primary">편집</Button>
@@ -112,6 +132,6 @@ const PartField = (props) => {
     }
 };
 
-PartField.prototype = propTypes;
+Field.prototype = propTypes;
 
-export default PartField;
+export default Field;

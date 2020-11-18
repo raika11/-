@@ -42,7 +42,7 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     }
 
     @Override
-    public Optional<DirectLink> findById(String linkSeq) {
+    public Optional<DirectLink> findById(Long linkSeq) {
         return directLinkRepository.findById(linkSeq);
 
     }
@@ -61,13 +61,13 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     }
 
     @Override
-    public boolean isDuplicatedId(String linkSeq) {
+    public boolean isDuplicatedId(Long linkSeq) {
         Optional<DirectLink> existingDirectLink = this.findById(linkSeq);
         return existingDirectLink.isPresent();
     }
 
     @Override
-    public boolean hasMembers(String linkSeq) {
+    public boolean hasMembers(Long linkSeq) {
         return directLinkRepository.countByLinkSeq(linkSeq) > 0 ? true : false;
     }
 
@@ -76,9 +76,9 @@ public class DirectLinkServiceImpl implements DirectLinkService {
         directLinkRepository.delete(directLink);
     }
 
-    private String getNewDirectLinkSeq() {
+    private Long getNewDirectLinkSeq() {
         long count = directLinkRepository.count();
-        String newId = String.format("%s%02d", "DIRECT_LINK_PREFIX", count + 1);
+        Long newId = count + 1;
         return newId;
     }
 

@@ -1,31 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import produce from 'immer';
-import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { unescapeHtml } from '@utils/convertUtil';
 import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
-import { toastr } from 'react-redux-toastr';
-import { DeskingReadyGrid } from '@pages/commons';
-
-const propTypes = {
-    /**
-     * 컴포넌트 데이터
-     */
-    component: PropTypes.object,
-    /**
-     * 해당 컴포넌트의 인덱스 (데스킹 AgGrid의 index)
-     */
-    agGridIndex: PropTypes.number,
-    /**
-     * 컴포넌트 클릭 콜백
-     */
-    onRowClicked: PropTypes.func,
-};
-const defaultProps = {
-    component: {},
-    agGridIndex: 0,
-};
+import DeskingReadyGrid from './DeskingReadyGrid';
 
 /**
  * 데스킹 AgGrid
@@ -36,6 +15,7 @@ const DeskingWorkAgGrid = (props) => {
     // const [moveRows, setMoveRows] = useState([]);
 
     // local state
+    const [gridInstance, setGridInstance] = useState(null);
     const [rowData, setRowData] = useState([]);
 
     useEffect(() => {
@@ -52,8 +32,8 @@ const DeskingWorkAgGrid = (props) => {
                         componentWorkSeq: component.seq,
                         title: desking.rel ? '' : escapeTitle,
                         relTitle: desking.rel ? escapeTitle : '',
-                        contentOrdEx: desking.rel ? '' : `00${desking.contentOrd}`.substr(-2),
-                        relOrdEx: desking.rel ? `00${desking.relOrd}`.substr(-2) : '',
+                        contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
+                        relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
                     };
                 }),
             );
@@ -62,15 +42,15 @@ const DeskingWorkAgGrid = (props) => {
 
     /**
      * ag-grid onGridReady
-     * @param {object} params onReadyReady params
+     * @param {object} params onGridReady params
      */
     const handleGridReady = (params) => {
         setComponentAgGridInstances(
             produce(componentAgGridInstances, (draft) => {
-                // draft[agGridIndex] = params.api;
                 draft[agGridIndex] = params;
             }),
         );
+        setGridInstance(params);
     };
 
     // // 드래그 시작
@@ -188,7 +168,10 @@ const DeskingWorkAgGrid = (props) => {
     //     }
     // };
 
-    // row height제어. 관련기사는 height가 작다.
+    /**
+     * row height 제어 (관련기사는 height가 작음)
+     * @param {object} params ag-grid instance
+     */
     const getRowHeight = (params) => {
         return params.data.rel ? 42 : 53;
     };
@@ -196,6 +179,7 @@ const DeskingWorkAgGrid = (props) => {
     return (
         <div className="ag-theme-moka-desking-grid px-1">
             <AgGridReact
+                immutableData
                 onGridReady={handleGridReady}
                 rowData={rowData}
                 getRowNodeId={(params) => params.totalId}
@@ -208,7 +192,6 @@ const DeskingWorkAgGrid = (props) => {
                 enableMultiRowDragging
                 suppressRowClickSelection
                 suppressMoveWhenRowDragging
-                immutableData
                 headerHeight={0}
                 rowClassRules={rowClassRules}
                 stopEditingWhenGridLosesFocus
@@ -220,8 +203,5 @@ const DeskingWorkAgGrid = (props) => {
         </div>
     );
 };
-
-DeskingWorkAgGrid.propTypes = propTypes;
-DeskingWorkAgGrid.defaultProps = defaultProps;
 
 export default DeskingWorkAgGrid;

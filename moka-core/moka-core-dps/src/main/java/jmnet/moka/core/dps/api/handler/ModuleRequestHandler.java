@@ -1,6 +1,8 @@
 package jmnet.moka.core.dps.api.handler;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import jmnet.moka.common.utils.McpString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import jmnet.moka.core.dps.api.model.ModuleRequest;
 
 public class ModuleRequestHandler implements RequestHandler {
     public final static Logger logger = LoggerFactory.getLogger(ModuleRequestHandler.class);
-
+    public final static String INVOKE_METHOD = "invoke";
     @Autowired
     private ApiRequestHandler apiRequestHandler;
 
@@ -37,7 +39,7 @@ public class ModuleRequestHandler implements RequestHandler {
         ModuleRequest moduleRequest = (ModuleRequest) apiContext.getCurrentRequest();
         try {
             ModuleInterface module = getModule(moduleRequest);
-            Object result = module.invoke(apiContext, apiRequestHandler, apiRequestHelper);
+            Object result = callMethod(module, moduleRequest, apiContext);
             long endTime = System.currentTimeMillis();
             return ApiResult.createApiResult(startTime, endTime, result, true, null);
         } catch (Exception e) {
@@ -46,6 +48,17 @@ public class ModuleRequestHandler implements RequestHandler {
                     String.format("Module invoke Failed: %s", moduleRequest.getClass().getName()),
                     e);
 
+        }
+    }
+
+    private Object callMethod(ModuleInterface module, ModuleRequest moduleRequest, ApiContext apiContext)
+            throws Exception {
+        String methodName = moduleRequest.getMethodName();
+        if (McpString.isEmpty(methodName) || methodName.equals(INVOKE_METHOD)) {
+            return module.invoke(apiContext, apiRequestHandler, apiRequestHelper);
+        } else {
+            Method method = module.getClass().getMethod(methodName,ApiContext.class,ApiRequestHandler.class,ApiRequestHelper.class);
+            return method.invoke(module, apiContext,apiRequestHandler,apiRequestHelper);
         }
     }
 
@@ -60,12 +73,19 @@ public class ModuleRequestHandler implements RequestHandler {
         if (this.moduleMap.containsKey(className)) {
             return this.moduleMap.get(className);
         }
-        Class<?> moduleClass = Class.forName(moduleRequest.getClassName());
-        appContext.registerBean(moduleClass.getName(), moduleClass, (beanDefinition) -> {
-            beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON);
-        });
-        ModuleInterface module = (ModuleInterface) appContext.getBean(moduleClass);
-        this.moduleMap.put(className, module);
+        ModuleInterface module = null;
+        synchronized (this) {
+            // 선행 thread에 의해서 생성된 경우 생성된 module을 반환한다.
+            if (this.moduleMap.containsKey(className)) {
+                return this.moduleMap.get(className);
+            }
+            Class<?> moduleClass = Class.forName(moduleRequest.getClassName());
+            appContext.registerBean(moduleClass.getName(), moduleClass, (beanDefinition) -> {
+                beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON);
+            });
+            module = (ModuleInterface) appContext.getBean(moduleClass);
+            this.moduleMap.put(className, module);
+        }
         return module;
     }
 }

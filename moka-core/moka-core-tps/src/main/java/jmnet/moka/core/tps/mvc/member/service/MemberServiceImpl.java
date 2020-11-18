@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
@@ -220,5 +221,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<LoginLog> findAllLoginLog(String memberId) {
         return loginLogRepository.findAllByMemId(memberId);
+    }
+
+    @Override
+    public Page<LoginLog> findAllLoginLog(String memberId, SearchDTO memberSearchDTO) {
+        return loginLogRepository.findAllByMemIdOrderBySeqNoDesc(memberId, memberSearchDTO.getPageable());
     }
 }

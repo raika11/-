@@ -29,8 +29,9 @@ public class DirectLink extends BaseAudit {
      * 링크일련번호
      */
     @Id
-    @Column(name = "LINK_SEQ",nullable = false, insertable = false, updatable = false)
-    private String linkSeq;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "LINK_SEQ")
+    private Long linkSeq;
 
     /**
      * 사용여부(Y:사용,N:미사용)
@@ -71,7 +72,7 @@ public class DirectLink extends BaseAudit {
     /**
      * 대표이미지
      */
-    @Column(name = "IMG_URL", nullable = false)
+    @Column(name = "IMG_URL")
     private String imgUrl;
 
     /**
@@ -92,29 +93,6 @@ public class DirectLink extends BaseAudit {
     @Column(name = "LINK_KWD", nullable = false)
     private String linkKwd;
 
-    /**
-     * 등록일자
-     */
-    @Column(name = "REG_DT")
-    private Date regDt;
-
-    /**
-     * 등록자아이디
-     */
-    @Column(name = "REG_ID")
-    private String regId;
-
-    /**
-     * 수정일자
-     */
-    @Column(name = "MOD_DT")
-    private Date modDt;
-
-    /**
-     * 수정자아이디
-     */
-    @Column(name = "MOD_ID")
-    private String modId;
 
     @PrePersist
     @PreUpdate

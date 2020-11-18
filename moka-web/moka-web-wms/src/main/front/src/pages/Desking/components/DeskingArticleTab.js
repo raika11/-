@@ -24,19 +24,18 @@ const DeskingArticleTab = (props) => {
      * @param {object} target 드래그 stop되는 타겟 ag-grid의 dragStop 이벤트
      * @param {number} agGridIndex agGridIndex
      */
-    const handleArticleDragStop = (source, target, srcComponent, tgtComponent) => {
-        const option = {
+    const handleArticleDragStop = (source, target, agGridIndex) => {
+        const payload = {
             source,
             target,
-            srcComponent,
-            tgtComponent,
+            tgtComponent: componentList[agGridIndex],
             callback: ({ header }) => {
                 if (!header.success) {
                     toast.warn(header.message);
                 }
             },
         };
-        dispatch(deskingDragStop(option));
+        dispatch(deskingDragStop(payload));
     };
 
     const createTabs = () => {

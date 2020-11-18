@@ -7,7 +7,9 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkDTO;
@@ -27,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -135,7 +138,7 @@ public class DirectLinkRestController {
 
         System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa::" + directLinkThumbnailFile);
         // 데이터 유효성 검사
-        //validData(directLinkDTO, directLinkThumbnailFile, ActionType.INSERT);
+        validData(directLinkThumbnailFile, ActionType.INSERT);
 
         // DirectLinkDTO -> directlink 변환
         DirectLink directLink = modelMapper.map(directLinkDTO, DirectLink.class);
@@ -323,46 +326,29 @@ public class DirectLinkRestController {
     /**
      * 템플릿 데이터 유효성 검사
      *
-     * @param template              템플릿정보
-     * @param templateThumbnailFile 템플릿썸네일파일
+     * @param file                  템플릿썸네일파일
      * @param actionType            작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성 오류
      * @throws Exception            예외
      */
-//    private void validData(DirectLink directLink, MultipartFile templateThumbnailFile, ActionType actionType)
-//            throws InvalidDataException, Exception {
-//        List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
-//
-//        if (directLink != null) {
-//            // 문법검사
-//            try {
-//                if (McpString.isNotEmpty(template.getTemplateBody())) {
-//                    TemplateParserHelper.checkSyntax(template.getTemplateBody());
-//                }
-//            } catch (TemplateParseException e) {
-//                String message = e.getMessage();
-//                String extra = Integer.toString(e.getLineNumber());
-//                invalidList.add(new InvalidDataDTO("templateBody", message, extra));
-//                tpsLogger.fail(actionType, message, true);
-//            } catch (Exception e) {
-//                String message = e.getMessage();
-//                invalidList.add(new InvalidDataDTO("templateBody", message));
-//                tpsLogger.fail(actionType, message, true);
-//            }
-//            // 등록한 파일이 이미지 파일인지 체크
-//            if (templateThumbnailFile != null && !templateThumbnailFile.isEmpty()) {
-//                boolean isImage = ImageUtil.isImage(templateThumbnailFile);
-//                if (!isImage) {
-//                    String message = messageByLocale.get("tps.template.error.onlyimage.thumbnail");
-//                    invalidList.add(new InvalidDataDTO("thumbnail", message));
-//                    tpsLogger.fail(actionType, message, true);
-//                }
-//            }
-//        }
-//
-//        if (invalidList.size() > 0) {
-//            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
-//            throw new InvalidDataException(invalidList, validMessage);
-//        }
-//    }
+    private void validData(MultipartFile file, ActionType actionType)
+            throws InvalidDataException, Exception {
+        List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+
+        // 문법검사
+        // 등록한 파일이 이미지 파일인지 체크
+        if (file != null && !file.isEmpty()) {
+            boolean isImage = ImageUtil.isImage(file);
+            if (!isImage) {
+                String message = messageByLocale.get("tps.template.error.onlyimage.thumbnail");
+                invalidList.add(new InvalidDataDTO("thumbnail", message));
+                tpsLogger.fail(actionType, message, true);
+            }
+        }
+
+        if (invalidList.size() > 0) {
+            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
+            throw new InvalidDataException(invalidList, validMessage);
+        }
+    }
 }

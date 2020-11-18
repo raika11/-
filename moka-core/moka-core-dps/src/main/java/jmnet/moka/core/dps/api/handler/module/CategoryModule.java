@@ -25,8 +25,8 @@ public class CategoryModule implements ModuleInterface {
             ApiRequestHelper apiRequestHelper)
             throws Exception {
         Map<String, Object> paramMap = apiContext.getCheckedParamMap();
-        return categoryParser.getCategoryKeyList((String)paramMap.get("master"),
-                (String)paramMap.get("service"),(String)paramMap.get("source") );
+        return categoryParser.getCategoryKeyList((String)paramMap.get(MokaConstants.MASTER_CODE_LIST),
+                (String)paramMap.get(MokaConstants.SERVICE_CODE_LIST),(String)paramMap.get(MokaConstants.SOURCE_CODE_LIST) );
     }
 
     public Object getCodes(ApiContext apiContext, ApiRequestHandler apiRequestHandler,

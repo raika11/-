@@ -45,6 +45,7 @@ public class CategoryParser {
     private List<Category> categoryList;
     private Map<String, Category> categoryMap;
 
+    private static final String DEFAULT_CATEGORY = "Society";
     private static final String USAGE_TYPE_RETIREMENT="Retirement";
     private static final String USAGE_TYPE_USAJOONGANG="UsaJoongang";
     private static final String USAGE_TYPE_ONLYJOONGANG="OnlyJoongang";
@@ -86,6 +87,9 @@ public class CategoryParser {
             }
         }
         Collections.reverse(categoryList); // 하위 섹션을 선택하도록 역순으로 보낸다.
+        if ( categoryList.size() == 0) {
+            categoryList.add(getCategory(DEFAULT_CATEGORY));
+        }
         return categoryList;
     }
 

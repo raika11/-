@@ -25,6 +25,7 @@ public class EvalRequestHandler implements RequestHandler {
 
         MapContext context = new MapContext();
         context.set(CONTEXT_ARH, apiRequestHandler);
+        context.set(CONTEXT_API_CONTEXT, apiContext);
         context.set(CONTEXT_PARAM, apiContext.getCheckedParamMap());
 
         String jsKey = makeRequestKey(apiContext);

@@ -99,6 +99,7 @@
         "postcss-safe-parser": "4.0.1",
         "prop-types": "^15.7.2",
         "qs": "^6.9.4",
+        "rc-tree": "^4.0.0-beta.2",
         "react": "^16.13.1",
         "react-app-polyfill": "^1.0.6",
         "react-beautiful-dnd": "^13.0.0",

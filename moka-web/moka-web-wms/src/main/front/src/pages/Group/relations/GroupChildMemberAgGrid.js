@@ -10,7 +10,7 @@ const defaultProps = {
 
 const GroupChildMemberAgGrid = (props) => {
     const { list } = props;
-    return <MokaTable columnDefs={columnDefs} rowData={list}></MokaTable>;
+    return <MokaTable onRowNodeId={(rowData) => rowData.id} columnDefs={columnDefs} rowData={list}></MokaTable>;
 };
 
 GroupChildMemberAgGrid.prototype = propTypes;

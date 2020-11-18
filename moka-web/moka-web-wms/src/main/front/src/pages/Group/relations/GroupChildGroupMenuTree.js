@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Tree } from '@components/Tree';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { changeGroupMenu, DELETE_GROUP, GET_GROUP, removeGroupMenuEditAuth, SAVE_GROUP } from '@store/group';
 import clsx from 'clsx';

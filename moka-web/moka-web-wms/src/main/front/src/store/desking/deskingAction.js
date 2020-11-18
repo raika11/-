@@ -37,7 +37,6 @@ export const postDeskingWorkList = createAction(POST_DESKING_WORK_LIST, ({ compo
 }));
 
 /**
-/**
  * Work컴포넌트 순번수정
  */
 export const PUT_DESKING_WORK_PRIORITY = 'desking/PUT_DESKING_WORK_PRIORITY';
@@ -45,6 +44,7 @@ export const putDeskingWorkPriority = createAction(PUT_DESKING_WORK_PRIORITY, ({
     component,
     callback,
 }));
+
 /**
  * 데스킹 워크 등록
  */
@@ -55,6 +55,7 @@ export const postDeskingWork = createAction(POST_DESKING_WORK, ({ componentWorkS
     deskingWork,
     callback,
 }));
+
 /**
  * 데스킹 워크 목록 이동
  */
@@ -67,11 +68,13 @@ export const moveDeskingWorkList = createAction(MOVE_DESKING_WORK_LIST, ({ compo
     list,
     callback,
 }));
+
 /**
  * 데스킹 워크 수정
  */
 export const PUT_DESKING_WORK = 'desking/PUT_DESKING_WORK';
 export const putDeskingWork = createAction(PUT_DESKING_WORK, (payload) => payload);
+
 /**
  *  work편집기사 삭제
  */

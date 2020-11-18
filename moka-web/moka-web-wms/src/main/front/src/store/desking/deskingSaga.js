@@ -66,6 +66,7 @@ const makeRowNode = (data, overIndex, component) => {
         // 편집 컴포넌트영역 -> 편집컴포넌트 이동
         appendData = {
             ...data,
+            regDt: undefined,
             componentWorkSeq: component.seq,
             componentSeq: component.componentSeq,
             datasetSeq: component.datasetSeq,
@@ -78,7 +79,7 @@ const makeRowNode = (data, overIndex, component) => {
 };
 
 /**
- * 데스킹 ag-grid row drag stop
+ * 컴포넌트워크의 ag-grid row drag stop
  */
 function* deskingDragStop({ payload }) {
     const { source, target, srcComponent, tgtComponent, callback } = payload;
@@ -93,24 +94,8 @@ function* deskingDragStop({ payload }) {
     let appendNodes = [],
         rowNodeData = null;
 
-    // if (target.nodes) {
-    //     // 기사 여러개
-    //     target.nodes.forEach((node) => {
-    //         rowNodeData = makeRowNode(node.data, overIndex, component);
-    //         if (rowNodeData) {
-    //             overIndex++;
-    //             appendNodes.push(rowNodeData);
-    //         }
-    //     });
-    // } else if (target.node) {
-    //     // 기사 1건
-    //     rowNodeData = makeRowNode(target.node.data, overIndex, component);
-    //     if (rowNodeData) {
-    //         appendNodes.push(rowNodeData);
-    //     }
-    // }
     if (source.nodes) {
-        // 복수 기사 이동
+        // 기사 여러개 이동
         for (let i = 0; i < source.nodes.length; i++) {
             const node = source.nodes[i];
             rowNodeData = makeRowNode(node.data, overIndex, tgtComponent);
@@ -120,21 +105,11 @@ function* deskingDragStop({ payload }) {
             }
         }
     } else if (source.node) {
-        // 단일 기사 이동
+        // 기사 1개 이동
         rowNodeData = makeRowNode(source.node.data, overIndex, tgtComponent);
         if (rowNodeData) {
             appendNodes.push(rowNodeData);
         }
-        // } else if (nodes) {
-        //     for (let i = 0; i < nodes.length; i++) {
-        //         const node = nodes[i];
-        //         rowNodeData = makeRowNode(node, overIndex, tgtComponent);
-        //         if (rowNodeData) {
-        //             overIndex++;
-        //             // deleteNodes.push(node);
-        //             appendNodes.push(rowNodeData);
-        //         }
-        //     }
     }
 
     // 컴포넌트간의 이동여부 : 기사목록에서 편집컴포넌트로 드래그드롭됐을때, 기사목록의 체크박스 제거
@@ -149,6 +124,7 @@ function* deskingDragStop({ payload }) {
                 srcComponentWorkSeq: srcComponent.seq,
                 srcDatasetSeq: srcComponent.datasetSeq,
                 list: appendNodes,
+                callback,
             };
             yield put({
                 type: act.MOVE_DESKING_WORK_LIST,
@@ -159,7 +135,7 @@ function* deskingDragStop({ payload }) {
             const option = {
                 componentWorkSeq: tgtComponent.seq,
                 datasetSeq: tgtComponent.datasetSeq,
-                deskingWork: appendNodes,
+                deskingWorkList: appendNodes,
                 callback,
             };
             yield put({
@@ -217,17 +193,18 @@ function* postPreComponentWork(action) {
 /**
  * 편집기사추가
  */
-function* postDeskingWorkList(action) {
+function* postDeskingWorkList({ payload }) {
+    const { componentWorkSeq, datasetSeq, deskingWorkList, callback } = payload;
     const ACTION = act.POST_DESKING_WORK_LIST;
     let response, callbackData;
-    const { componentWorkSeq, datasetSeq, deskingWork, callback } = action.payload;
 
     yield put(startLoading(ACTION));
+
     try {
         response = yield call(api.postDeskingWorkList, {
             componentWorkSeq,
             datasetSeq,
-            deskingWork,
+            deskingWorkList,
         });
 
         callbackData = response.data;
@@ -261,6 +238,29 @@ function* postDeskingWorkList(action) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 컴포넌트워크 간의 데스킹기사 이동
+ */
+function* moveDeskingWorkList({ payload }) {
+    const { componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list, callback } = payload;
+    const ACTION = act.MOVE_DESKING_WORK_LIST;
+    let response, callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        response = yield call(api.moveDeskingWorkList, { componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list });
+
+        if (response.header.success) {
+            console.log(response.header.body);
+        }
+    } catch (e) {}
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
 /** saga */
 export default function* saga() {
     yield takeLatest(act.GET_COMPONENT_WORK_LIST, getComponentWorkList);
@@ -273,7 +273,7 @@ export default function* saga() {
     // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPrioritySaga);
     // yield takeLatest(act.POST_DESKING_WORK, postDeskingWorkSaga);
     yield takeLatest(act.POST_DESKING_WORK_LIST, postDeskingWorkList);
-    // yield takeLatest(act.MOVE_DESKING_WORK_LIST, moveDeskingWorkListSaga);
+    yield takeLatest(act.MOVE_DESKING_WORK_LIST, moveDeskingWorkList);
     // yield takeLatest(act.PUT_DESKING_WORK, putDeskingWorkSaga);
     // yield takeLatest(act.PUT_DESKING_REL_WORKS, putDeskingRelWorksSaga);
     // yield takeLatest(act.DELETE_DESKING_WORK_LIST, deleteDeskingWorkListSaga);

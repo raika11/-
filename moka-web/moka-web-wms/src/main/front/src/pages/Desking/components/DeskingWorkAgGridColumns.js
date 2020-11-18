@@ -17,8 +17,11 @@ export const columnDefs = [
         suppressMenu: true,
         rowDragText: (params, dragItemCount) => {
             if (dragItemCount > 1) {
-                const message = params.rowNodes ? params.rowNodes.reduce((prev, next) => `${prev.data.title},${next.data.title}`) : params.rowNode.data.title;
-                return `${message}외 [${dragItemCount - 1}건]`;
+                const message = params.rowNodes ? params.rowNodes[0].data.title : params.rowNode.data.title;
+                return `${message} 외 [${dragItemCount - 1}건]`;
+            }
+            if (params.rowNode.data.rel) {
+                return params.rowNode.data.relTitle;
             }
             return params.rowNode.data.title;
         },
@@ -48,6 +51,10 @@ export const columnDefs = [
             return params.data.rel ? 4 : 1;
         },
         editable: true,
+        cellEditor: 'agLargeTextCellEditor',
+        cellEditorParams: {
+            rows: '2',
+        },
         cellClassRules: cellClassRules,
         cellStyle: { fontSize: '12px' },
     },
@@ -82,13 +89,10 @@ export const columnDefs = [
             overflow: 'hidden',
             cursor: 'pointer',
         },
-        // wrapText: true,
         editable: true,
         cellEditor: 'agLargeTextCellEditor',
         cellEditorParams: {
-            maxLength: '300', // override the editor defaults
-            cols: '50',
-            rows: '6',
+            rows: '2',
         },
         cellClassRules: cellClassRules,
         tooltipField: 'title',

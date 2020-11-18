@@ -29,7 +29,7 @@ const DeskingReadyGrid = (props) => {
             const dropZone = {
                 getContainer: () => target.api.gridOptionsWrapper.layoutElements[2],
                 onDragStop: (source) => {
-                    const option = {
+                    const payload = {
                         source,
                         target,
                         srcComponent: component,
@@ -41,7 +41,7 @@ const DeskingReadyGrid = (props) => {
                         },
                     };
 
-                    dispatch(deskingDragStop(option));
+                    dispatch(deskingDragStop(payload));
                 },
             };
 

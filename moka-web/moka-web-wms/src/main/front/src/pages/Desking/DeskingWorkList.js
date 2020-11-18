@@ -36,7 +36,7 @@ const DeskingWorkList = (props) => {
     return (
         <React.Fragment>
             {/* 왼쪽 기본 카드 1건 */}
-            <MokaCard loading={loading} header={false} width={363} className={clsx('p-0', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_V })} bodyClassName="p-0">
+            <MokaCard loading={loading} header={false} width={363} className={clsx('p-0', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H })} bodyClassName="p-0">
                 <div className="d-flex justify-content-end p-2 border-bottom">
                     {/* <Col xs={5} className="p-0">
                             <MokaInputLabel

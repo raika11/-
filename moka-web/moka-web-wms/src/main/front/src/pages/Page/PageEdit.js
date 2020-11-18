@@ -419,7 +419,7 @@ const PageEdit = ({ onDelete }) => {
     };
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" title="페이지 정보" loading={loading}>
+        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`페이지 ${page.pageSeq ? '정보' : '등록'}`} loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">

@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -102,6 +103,7 @@ public class DeskingWorkDTO implements Serializable {
     /**
      * 배부일시
      */
+    @DTODateTimeFormat
     private Date distDt;
 
     /**
@@ -177,6 +179,7 @@ public class DeskingWorkDTO implements Serializable {
     /**
      * 생성일시
      */
+    @DTODateTimeFormat
     private Date regDt;
 
     /**

@@ -9,9 +9,9 @@ export const getComponentWorkList = ({ areaSeq }) => {
 };
 
 // work편집기사목록 추가 (파일업로드 안됨)
-export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
+export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, deskingWork }) => {
     return instance
-        .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}/list`, list, {
+        .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}/list`, deskingWork, {
             headers: {
                 'Content-Type': 'application/json',
             },

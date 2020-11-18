@@ -286,14 +286,14 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     @Transactional
-    public void insertDeskingWork(DeskingWork appendDeskingWork, Long datasetSeq, Long editionSeq, String creator) {
+    public void insertDeskingWork(DeskingWork appendDeskingWork, Long datasetSeq, Long editionSeq, String regId) {
         // 추가된 순번
         int appendContentsOrder = appendDeskingWork.getContentOrd();
 
         // work편집기사 추가
         //        appendDeskingWork.setEditionSeq(editionSeq);
         appendDeskingWork.setDatasetSeq(datasetSeq);
-        appendDeskingWork.setRegId(creator);
+        appendDeskingWork.setRegId(regId);
         appendDeskingWork.setRegDt(McpDate.now());
         DeskingWork saved = deskingWorkRepository.save(appendDeskingWork);
         Long appendSeq = saved.getSeq();  // seq -> deskingSeq로 등록
@@ -304,20 +304,23 @@ public class DeskingServiceImpl implements DeskingService {
         logger.debug("append: {}", appendDeskingWork.getContentOrd(), appendDeskingWork.getTitle());
 
         // work편집기사목록 정렬변경
-        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
-                                                          .datasetSeq(datasetSeq)
-                                                          //                                                          .editionSeq(editionSeq)
-                                                          .regId(creator)
-                                                          .build();
-        List<DeskingWorkVO> deskingWorks = deskingWorkMapper.findDeskingWork(search);
+        //        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
+        //                                                          .datasetSeq(datasetSeq)
+        //                                                          //                                                          .editionSeq(editionSeq)
+        //                                                          .regId(regId)
+        //                                                          .build();
+        //        List<DeskingWorkVO> deskingWorks = deskingWorkMapper.findDeskingWork(search);
 
-        for (DeskingWorkVO deskingWorkVO : deskingWorks) {
+        List<DeskingWork> deskingList = deskingWorkRepository.findByDatasetSeqAndRegId(datasetSeq, regId);
+        List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE);
+
+        for (DeskingWorkVO deskingWorkVO : deskingVOList) {
             DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
             int contentsOrder = deskingWork.getContentOrd();
             if (contentsOrder >= appendContentsOrder && !appendSeq.equals(deskingWork.getSeq())) {
                 deskingWork.setContentOrd(contentsOrder + 1);
                 deskingWork.setRegDt(McpDate.now());
-                deskingWork.setRegId(creator);
+                deskingWork.setRegId(regId);
                 deskingWorkRepository.save(deskingWork);
                 logger.debug("resort: {}", deskingWork.getContentOrd(), deskingWork.getTitle());
             }

@@ -9,9 +9,9 @@ import { GET_COMPONENT_WORK_LIST } from '@store/desking';
 import { DeskingWorkComponent } from './components';
 
 /**
- * 데스킹 편집화면
+ * 컴포넌트의 워크 리스트
  */
-const DeskingWorkList = (props) => {
+const ComponentWorkList = (props) => {
     const { area, list, loading } = useSelector((store) => ({
         area: store.desking.area,
         list: store.desking.list,
@@ -25,18 +25,16 @@ const DeskingWorkList = (props) => {
         // );
     };
 
-    React.useEffect(() => {
-        console.log(area);
-    }, [area]);
-
-    const handleChangeValue = (e) => {
-        const { name, value } = e.target;
-    };
-
     return (
         <React.Fragment>
             {/* 왼쪽 기본 카드 1건 */}
-            <MokaCard loading={loading} header={false} width={363} className={clsx('p-0', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H })} bodyClassName="p-0 overflow-hidden">
+            <MokaCard
+                loading={loading}
+                header={false}
+                width={363}
+                className={clsx('p-0', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H, 'mr-1': area.areaAlign === AREA_ALIGN_H })}
+                bodyClassName="p-0 overflow-hidden"
+            >
                 <div className="d-flex justify-content-end p-2 border-bottom">
                     {/* <Col xs={5} className="p-0">
                             <MokaInputLabel
@@ -102,4 +100,4 @@ const DeskingWorkList = (props) => {
     );
 };
 
-export default DeskingWorkList;
+export default ComponentWorkList;

@@ -129,6 +129,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
     return (
         <MokaTable
             ref={ref}
+            className="article-list"
             setGridInstance={setGridInstance}
             headerHeight={50}
             agGridHeight={623}
@@ -146,6 +147,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
             frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
             dragManaged={false}
             animateRows={false}
+            rowSelection="multiple"
         />
     );
 });

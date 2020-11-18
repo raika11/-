@@ -198,10 +198,8 @@ const MokaTable = forwardRef((props, ref) => {
      * (selected 값이 있을 때 select함)
      */
     const handleSelected = useCallback(() => {
-        if (gridApi) {
-            gridApi.deselectAll();
-        }
         if (selected && gridApi) {
+            gridApi.deselectAll();
             const selectedNode = gridApi.getRowNode(selected);
             if (selectedNode) {
                 selectedNode.selectThisNode(true);

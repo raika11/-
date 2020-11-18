@@ -1,11 +1,10 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { MokaIcon } from '@components';
+import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 
 /**
  * 데스킹 워크 버튼 그룹 컴포넌트
@@ -27,24 +26,20 @@ const DeskingWorkButtonGroup = (props) => {
     ];
 
     return (
-        <Container fluid className="p-0">
-            <Row className="m-0 mb-2 d-flex align-items-center justify-content-between">
-                <Col className="p-0 text-center" xs={6}>
-                    <div>{title}</div>
+        <div className="px-2 pt-1">
+            <Row className="m-0 d-flex align-items-center justify-content-between">
+                <Col className="p-0" xs={6}>
+                    <p className="ft-12 mb-0">{title}</p>
                 </Col>
                 <Col className="p-0 d-flex align-items-center justify-content-between" xs={6}>
                     {iconName.map((icon, idx) => (
-                        <div key={idx}>
-                            <OverlayTrigger overlay={<Tooltip id="tooltip-table-del-button">{icon.title}</Tooltip>}>
-                                <Button variant="negative" className="border-0 p-0 moka-table-button bg-transparent">
-                                    <MokaIcon iconName={icon.iconName} />
-                                </Button>
-                            </OverlayTrigger>
-                        </div>
+                        <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="p-0">
+                            <MokaIcon iconName={icon.iconName} />
+                        </MokaOverlayTooltipButton>
                     ))}
                 </Col>
             </Row>
-        </Container>
+        </div>
     );
 };
 

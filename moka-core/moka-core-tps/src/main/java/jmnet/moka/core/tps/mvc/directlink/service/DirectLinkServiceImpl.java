@@ -85,8 +85,7 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     @Override
     public String saveImage(DirectLink directLink, MultipartFile thumbnail)
             throws Exception {
-        String extension = McpFile.getExtension(thumbnail.getOriginalFilename())
-                .toLowerCase();
+        String extension = McpFile.getExtension(thumbnail.getOriginalFilename()).toLowerCase();
         String newFilename = String.valueOf(directLink.getLinkSeq()) + "." + extension;
         // 이미지를 저장할 실제 경로 생성
         String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);

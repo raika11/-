@@ -154,4 +154,11 @@ public class MokaConstants {
 
     public static final String YES = McpString.YES;
     public static final String NO = McpString.NO;
+
+    /* codes for service & parameter */
+    public static final String MASTER_CODE_LIST = "mstCodes";
+    public static final String SERVICE_CODE_LIST = "svcCodes";
+    public static final String SOURCE_CODE_LIST = "srcCodes";
+    public static final String EXCEPT_SOURCE_CODE_LIST = "exSrcCodes";
+    public static final String PARAM_CATEGORY = "category";
 }

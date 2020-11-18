@@ -174,34 +174,43 @@ public class JSONResult implements Map {
     }
 
     public List<Map<String, Object>> getDataList(String dataKey) {
-        if ( dataKey.equals(ApiResult.MAIN_DATA)) {
-            Object dataObject = this.get(ApiResult.MAIN_DATA);
-            if (dataObject != null && dataObject instanceof List){
-                return (List<Map<String, Object>>) dataObject;
-            }
-        } else if (this.containsKey(dataKey)) {
-            Object dataObject = this.get(dataKey);
-            if ( dataObject instanceof Map) {
-                if ( ((Map)dataObject).containsKey(ApiResult.MAIN_DATA)) {
-                   return (List)(((Map)dataObject).get(ApiResult.MAIN_DATA));
+        Object dataObject = unwrap(dataKey);
+        if ( dataObject instanceof List) {
+            return (List<Map<String, Object>>)dataObject;
+        }
+        return null;
+    }
+
+    public Map<String, Object> getFirstData() { return getFirstData(ApiResult.MAIN_DATA); }
+
+    public Map<String, Object> getFirstData(String dataKey) {
+        List<Map<String, Object>> dataList = getDataList(dataKey);
+        if ( dataList != null && dataList.size()>0) {
+            return dataList.get(0);
+        }
+        return null;
+    }
+
+    public Map<String,Object> getData() {return getData(ApiResult.MAIN_DATA);}
+
+    public Map<String,Object> getData(String dataKey) {
+        Object dataObject = unwrap(dataKey);
+        if ( dataObject instanceof Map) {
+            return (Map<String,Object>)dataObject;
+        }
+        return null;
+    }
+
+    private Object unwrap(String dataKey) {
+        if ( this.containsKey(dataKey)) {
+            if ( dataKey.equals(ApiResult.MAIN_DATA)) {
+                return this.get(ApiResult.MAIN_DATA);
+            } else {
+                Object dataObject =  this.get(dataKey);
+                if ( dataObject instanceof Map) {
+                    return ((Map)dataObject).get(ApiResult.MAIN_DATA);
                 }
             }
-        }
-        return null;
-    }
-
-    public Map<String, Object> getData() {
-        List<Map<String, Object>> dataList = getDataList(ApiResult.MAIN_DATA);
-        if ( dataList != null) {
-            return dataList.get(0);
-        }
-        return null;
-    }
-
-    public Map<String, Object> getData(String dataKey) {
-        List<Map<String, Object>> dataList = getDataList(dataKey);
-        if ( dataList != null && dataList instanceof List) {
-            return dataList.get(0);
         }
         return null;
     }

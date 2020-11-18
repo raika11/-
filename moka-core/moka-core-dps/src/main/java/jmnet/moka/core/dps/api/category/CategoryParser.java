@@ -3,7 +3,9 @@ package jmnet.moka.core.dps.api.category;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,13 +37,13 @@ import org.w3c.dom.NodeList;
  */
 public class CategoryParser {
     public static final Logger logger = LoggerFactory.getLogger(CategoryParser.class);
-    private static List<Menu> EMPTY_CHILDREN = new ArrayList<>(0);
     private static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     private static XPathFactory xPathFactory = XPathFactory.newInstance();
     private XPath xpath;
     private Document document;
     private Resource resource;
     private List<Category> categoryList;
+    private Map<String, Category> categoryMap;
 
     private static final String USAGE_TYPE_RETIREMENT="Retirement";
     private static final String USAGE_TYPE_USAJOONGANG="UsaJoongang";
@@ -62,11 +64,15 @@ public class CategoryParser {
         NodeList categoryNodeList = this.getNodeList(document.getDocumentElement(),"//CategoryCondition");
         if ( categoryNodeList.getLength()>0) {
             this.categoryList = new ArrayList<>(64);
+            this.categoryMap = new HashMap<>(64);
             for ( int i=0; i < categoryNodeList.getLength(); i++) {
-                this.categoryList.add(new Category(categoryNodeList.item(i), this));
+                Category category = new Category(categoryNodeList.item(i), this);
+                this.categoryList.add(category);
+                this.categoryMap.put(category.getKey(), category);
             }
         } else {
             this.categoryList = new ArrayList<>(0);
+            this.categoryMap = new HashMap<>(0);
         }
     }
 
@@ -81,6 +87,10 @@ public class CategoryParser {
         }
         Collections.reverse(categoryList); // 하위 섹션을 선택하도록 역순으로 보낸다.
         return categoryList;
+    }
+
+    public Category getCategory(String key) {
+        return this.categoryMap.get(key);
     }
 
     private void parseDocument() throws ParserConfigurationException, IOException {

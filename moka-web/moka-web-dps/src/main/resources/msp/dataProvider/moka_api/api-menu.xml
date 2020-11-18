@@ -15,15 +15,25 @@
   <api id="category" expire="5s">
     <description>Category정보를 반환한다.</description>
     <parameter>
-      <master desc="마스터코드">([0-9]{7}(\,)?){1,10}</master>
-      <service desc="서비스코드">([0-9]{4,6}(\,)?){1,10}</service>
-      <source desc="출처코드">[0-9]{1,10}</source>
+      <mstCodes desc="마스터코드">([0-9]{7}(\,)?){1,10}</mstCodes>
+      <svcCodes desc="서비스코드">([0-9]{4,6}(\,)?){1,10}</svcCodes>
+      <srcCodes desc="출처코드">[0-9]{1,10}</srcCodes>
     </parameter>
     <request type="module">jmnet.moka.core.dps.api.handler.module.CategoryModule</request>
     <keys>
-      master
-      service
-      source
+      mstCodes
+      svcCodes
+      srcCodes
+    </keys>
+  </api>
+  <api id="category.codes" expire="5s">
+    <description>Category의 코드정보를 반환한다.</description>
+    <parameter>
+      <category desc="카테고리">.{1,20}</category>
+    </parameter>
+    <request type="module" methodName="getCodes">jmnet.moka.core.dps.api.handler.module.CategoryModule</request>
+    <keys>
+      category
     </keys>
   </api>
 </apiConfig>

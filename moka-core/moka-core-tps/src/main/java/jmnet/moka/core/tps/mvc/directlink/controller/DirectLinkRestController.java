@@ -10,7 +10,6 @@ import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkDTO;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
@@ -28,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -107,7 +105,7 @@ public class DirectLinkRestController {
     @ApiOperation(value = "사이트관리 조회")
     @GetMapping("/{linkSeq}")
     public ResponseEntity<?> getDirectLink(HttpServletRequest request
-            , @PathVariable("linkSeq") @Size(min = 1, max = 5,message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
+            , @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.direct-link.error.no-data", request);
@@ -260,7 +258,7 @@ public class DirectLinkRestController {
     @GetMapping("/{linkSeq}/has-members")
     public ResponseEntity<?> hasMembers(HttpServletRequest request,
                                         @PathVariable("linkSeq")
-                                        @Size(min = 1, max = 5,
+                                        @Min(value=0,
                                                 message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
@@ -286,7 +284,7 @@ public class DirectLinkRestController {
     @DeleteMapping("/{linkSeq}")
     public ResponseEntity<?> deleteDirectLink(HttpServletRequest request,
                                          @PathVariable("linkSeq")
-                                         @Size(min = 1, max = 5,
+                                         @Min(value=0,
                                          message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws InvalidDataException, NoDataException, Exception {
 

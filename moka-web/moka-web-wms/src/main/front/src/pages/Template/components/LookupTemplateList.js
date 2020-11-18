@@ -268,7 +268,7 @@ const LookupTemplateList = (props) => {
                 <div className="d-flex mb-10">
                     <MokaTableTypeButton onSelect={(selectedKey) => setListType(selectedKey)} />
                     <div className="pt-0">
-                        <Button variant="dark" onClick={() => window.open('/template')}>
+                        <Button variant="positive" onClick={() => window.open('/template')}>
                             템플릿 등록
                         </Button>
                     </div>

@@ -18,15 +18,17 @@ const AutoDatasetListModal = (props) => {
             show={show}
             onHide={onHide}
             title="자동 데이터셋 검색"
+            size="md"
+            width={600}
             buttons={[
                 {
                     text: '등록',
-                    variant: 'primary',
+                    variant: 'positive',
                     onClick: onHide,
                 },
                 {
                     text: '취소',
-                    variant: 'gray150',
+                    variant: 'negative',
                     onClick: onHide,
                 },
             ]}

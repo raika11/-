@@ -257,10 +257,10 @@ const ReporterEdit = () => {
                         </div>
                     </div>
                     <div className="d-flex justify-content-center">
-                        <Button variant="primary" className="mr-05" onClick={handleClickSave} disabled={inputDisabled}>
+                        <Button variant="positive" className="mr-05" onClick={handleClickSave} disabled={inputDisabled}>
                             저장
                         </Button>
-                        <Button variant="gray150" onClick={handleClickCancle} disabled={inputDisabled}>
+                        <Button variant="negative" onClick={handleClickCancle} disabled={inputDisabled}>
                             취소
                         </Button>
                     </div>

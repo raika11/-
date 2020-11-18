@@ -15,10 +15,17 @@ export const columnDefs = [
         rowDrag: true,
         width: 16,
         suppressMenu: true,
+        rowDragText: (params, dragItemCount) => {
+            if (dragItemCount > 1) {
+                const message = params.rowNodes ? params.rowNodes.reduce((prev, next) => `${prev.data.title},${next.data.title}`) : params.rowNode.data.title;
+                return `${message}외 [${dragItemCount - 1}건]`;
+            }
+            return params.rowNode.data.title;
+        },
         cellClassRules: cellClassRules,
     },
     {
-        field: 'relOrd',
+        field: 'relOrdEx',
         width: 0,
         colSpan: (params) => {
             return params.data.rel ? 2 : 1;
@@ -46,7 +53,7 @@ export const columnDefs = [
     },
     {
         width: 20,
-        field: 'contentOrd',
+        field: 'contentOrdEx',
         cellClassRules: cellClassRules,
         cellStyle: { fontSize: '12px' },
     },
@@ -57,7 +64,7 @@ export const columnDefs = [
         cellClassRules: cellClassRules,
     },
     {
-        width: 220,
+        width: 100,
         field: 'title',
         flex: 1,
         autoHeight: true,
@@ -80,47 +87,20 @@ export const columnDefs = [
     },
     {
         field: 'editButton',
-        width: 30,
+        width: 25,
         cellRendererFramework: (row) => {
             const { data } = row;
-            return <MokaTableEditButton {...row} onClick={data.onDelete} />;
-        },
-        cellRendererParams: (params) => {
-            return {
-                api: params.api,
-                rowIndex: params.rowIndex,
-                colKey: 'title',
-                char: params.data.title,
-            };
+            return <MokaTableEditButton {...row} onClick={data.onEdit} />;
         },
         cellClassRules: cellClassRules,
     },
     {
         field: 'deleteButton',
-        width: 30,
+        width: 25,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;
         },
-        cellRendererParams: (params) => {
-            return {
-                name: 'delete',
-                params,
-            };
-        },
         cellClassRules: cellClassRules,
     },
 ];
-
-// export const getOverIndex = (event, tgt) => {
-//     debugger;
-//     const elements = document.elementsFromPoint(event.clientX, event.clientY);
-//     const agGridRow = elements.find((r) => r.classList.contains('ag-row'));
-//     if (agGridRow) {
-//         const idOfRow = agGridRow.getAttribute('row-id');
-//         const rowNode = tgt.api.getRowNode(idOfRow);
-//         console.log('idOfRow:'+idOfRow+',rowIndex:'+rowNode.rowIndex);
-//         return rowNode.rowIndex;
-//     }
-//     return -1;
-// };

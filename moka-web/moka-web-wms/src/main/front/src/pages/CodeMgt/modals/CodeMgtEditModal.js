@@ -182,19 +182,12 @@ const CodeMgtListModal = (props) => {
                     buttons={[
                         {
                             text: '등록',
-                            variant: 'primary',
+                            variant: 'positive',
                             onClick: handleClickSave,
-                        },
-                        {
-                            text: '취소',
-                            variant: 'gray150',
-                            onClick: () => {
-                                setStateObj({});
-                                onHide();
-                            },
                         },
                     ]}
                     footerClassName="justify-content-center"
+                    centered
                 >
                     <MokaInputLabel label="코드그룹" value={grpCd} name="grpCd" onChange={handleChangeValue} isInvalid={grpCdError} disabled />
                     <MokaInputLabel label="코드" value={stateObj.dtlCd} name="dtlCd" onChange={handleChangeValue} />
@@ -231,25 +224,17 @@ const CodeMgtListModal = (props) => {
                     buttons={[
                         {
                             text: '저장',
-                            variant: 'primary',
+                            variant: 'positive',
                             onClick: handleClickSave,
                         },
                         {
-                            text: '취소',
-                            variant: 'gray150',
-                            onClick: () => {
-                                onHide();
-                                history.push(`/codeMgt/${grpCd}`);
-                                dispatch(clearCd());
-                            },
-                        },
-                        {
                             text: '삭제',
-                            variant: 'gray150',
+                            variant: 'negative',
                             onClick: handleClickDelete,
                         },
                     ]}
                     footerClassName="justify-content-center"
+                    centered
                 >
                     <MokaInputLabel label="코드그룹" value={grpCd} name="grpCd" onChange={handleChangeValue} isInvalid={grpCdError} disabled />
                     <MokaInputLabel label="코드" value={stateObj.dtlCd} name="dtlCd" onChange={handleChangeValue} disabled />

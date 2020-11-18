@@ -55,7 +55,7 @@ const defaultProps = {
  * 데스킹 트리 조회 컴포넌트
  */
 const DeskingTreeView = (props) => {
-    const { data, height, loading } = props;
+    const { data, loading } = props;
 
     /**
      * 트리아이템 생성 함수

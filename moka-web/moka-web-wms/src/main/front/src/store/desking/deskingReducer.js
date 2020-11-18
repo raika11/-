@@ -29,7 +29,7 @@ export const initialState = {
         componentOrd: 0,
         schCodeId: '',
         artPageSeq: null,
-        viewYn: 'N',
+        viewYn: 'Y',
     },
 };
 
@@ -53,14 +53,18 @@ export default handleActions(
          */
         [act.GET_COMPONENT_WORK_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.list = body.desking;
-                draft.area = body.area;
+                const { area, desking } = body;
+                draft.list = desking;
+                draft.area = area;
+                if (!area.areaComps && !Array.isArray(area.areaComps)) {
+                    draft.area.areaComps = [];
+                }
                 draft.error = initialState.error;
             });
         },
         [act.GET_COMPONENT_WORK_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.error.error = payload;
+                draft.error = payload;
             });
         },
         /**
@@ -71,6 +75,20 @@ export default handleActions(
                 draft.area = payload;
             });
         },
+        // 컴포넌트 work 조회 성공
+        [act.COMPONENT_WORK_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                let idx = draft.list.findIndex((l) => l.seq === body.seq);
+                draft.list[idx] = body;
+                draft.selectedComponent = body;
+                // draft.componentError = initialState.componentError;
+            });
+        },
+        // 컴포넌트 work 조회 실패
+        // [act.COMPONENT_WORK_FAILURE]: (state, { payload: componentError }) => ({
+        //     ...state,
+        //     componentError
+        // }),
     },
     initialState,
 );

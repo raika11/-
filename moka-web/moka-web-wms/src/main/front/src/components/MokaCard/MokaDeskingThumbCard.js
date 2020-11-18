@@ -101,7 +101,7 @@ const MokaDeskingThumbCard = forwardRef((props, ref) => {
                             {img && <BSImage src={img} alt={alt} ref={imgRef} style={{ visibility: 'hidden' }} />}
                             {!img && (
                                 <div className="w-100 d-flex align-items-center justify-content-center bg-light">
-                                    <MokaIcon iconName="fad-image" size="2x" className="color-gray150" />
+                                    <MokaIcon iconName="fad-image" size="2x" className="color-gray200" />
                                 </div>
                             )}
                         </div>

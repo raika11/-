@@ -83,10 +83,10 @@ const ReporterDeskSearch = () => {
         <Form>
             <Form.Row className="d-flex mb-2">
                 {/* 기자 검색 */}
-                <MokaSearchInput variant="dark" className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
                 {/* 초기화 */}
-                <Button variant="dark" className="ft-12">
+                <Button variant="outline-neutral" className="ft-12">
                     초기화
                 </Button>
             </Form.Row>

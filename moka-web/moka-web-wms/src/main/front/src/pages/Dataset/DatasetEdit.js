@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -12,7 +12,7 @@ import { changeDataset, clearDataset, copyDataset, GET_DATASET, getDataset, getD
 import DatasetParameter from '@pages/Dataset/component/DatasetParameter';
 import DatasetApiListModal from '@pages/Dataset/modals/DatasetApiListModal';
 import qs from 'qs';
-import toast, { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_CODE_ID, API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID, DESKING_API } from '@/constants';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 
@@ -403,19 +403,19 @@ const DatasetEdit = ({ onDelete }) => {
                     </Col>
                     <Col xs={6} className="p-0 d-flex justify-content-between">
                         <div className="d-flex">
-                            <Button variant="dark" className="mr-2" disabled={!datasetSeq && true} onClick={handleClickOpenDataView}>
+                            <Button variant="outline-neutral" className="mr-2" disabled={!datasetSeq && true} onClick={handleClickOpenDataView}>
                                 데이터 보기
                             </Button>
-                            <Button variant="dark" disabled={!datasetSeq && true} onClick={handleClickCopy}>
+                            <Button variant="outline-neutral" disabled={!datasetSeq && true} onClick={handleClickCopy}>
                                 복사
                             </Button>
                         </div>
                         <div className="d-flex">
-                            <Button variant="primary" className="mr-2" onClick={handleClickSave}>
+                            <Button variant="positive" className="mr-2" onClick={handleClickSave}>
                                 저장
                             </Button>
                             {datasetSeq && (
-                                <Button variant="danger" onClick={handleClickDelete}>
+                                <Button variant="negative" onClick={handleClickDelete}>
                                     삭제
                                 </Button>
                             )}

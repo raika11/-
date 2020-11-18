@@ -83,7 +83,7 @@ const ContainerSearch = () => {
     };
 
     return (
-        <Form className="mb-10">
+        <Form className="mb-2">
             <MokaInput as="select" className="m-0 mb-2" value={search.domainId || undefined} onChange={handleChangeSearchOption} name="domainId">
                 {domainList.map((domain) => (
                     <option key={domain.domainId} value={domain.domainId}>

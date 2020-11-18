@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import produce from 'immer';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { unescapeHtml } from '@utils/convertUtil';
+import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
 import { toastr } from 'react-redux-toastr';
+import { DeskingReadyGrid } from '@pages/commons';
 
 const propTypes = {
     /**
@@ -47,15 +49,16 @@ const DeskingWorkAgGrid = (props) => {
                     return {
                         ...desking,
                         gridType: 'DESKING',
+                        componentWorkSeq: component.seq,
                         title: desking.rel ? '' : escapeTitle,
                         relTitle: desking.rel ? escapeTitle : '',
-                        contentOrd: desking.rel ? '' : `00${desking.contentOrd}`.substr(-2),
-                        relOrd: desking.rel ? `00${desking.relOrd}`.substr(-2) : '',
+                        contentOrdEx: desking.rel ? '' : `00${desking.contentOrd}`.substr(-2),
+                        relOrdEx: desking.rel ? `00${desking.relOrd}`.substr(-2) : '',
                     };
                 }),
             );
         }
-    }, [deskingWorks]);
+    }, [component.seq, deskingWorks]);
 
     /**
      * ag-grid onGridReady
@@ -64,7 +67,8 @@ const DeskingWorkAgGrid = (props) => {
     const handleGridReady = (params) => {
         setComponentAgGridInstances(
             produce(componentAgGridInstances, (draft) => {
-                draft[agGridIndex] = params.api;
+                // draft[agGridIndex] = params.api;
+                draft[agGridIndex] = params;
             }),
         );
     };
@@ -190,7 +194,7 @@ const DeskingWorkAgGrid = (props) => {
     };
 
     return (
-        <div className="ag-theme-moka-desking-grid">
+        <div className="ag-theme-moka-desking-grid px-1">
             <AgGridReact
                 onGridReady={handleGridReady}
                 rowData={rowData}
@@ -210,7 +214,9 @@ const DeskingWorkAgGrid = (props) => {
                 stopEditingWhenGridLosesFocus
                 undoRedoCellEditing
                 getRowHeight={getRowHeight}
+                frameworkComponents={{ imageRenderer: MokaTableImageRenderer }}
             />
+            {componentAgGridInstances[agGridIndex] && <DeskingReadyGrid componentAgGridInstances={componentAgGridInstances} agGridIndex={agGridIndex} component={component} />}
         </div>
     );
 };

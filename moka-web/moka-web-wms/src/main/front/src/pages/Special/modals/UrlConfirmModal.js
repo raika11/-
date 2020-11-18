@@ -13,7 +13,7 @@ const UrlConfirmModal = (props) => {
             buttons={[
                 {
                     text: '닫기',
-                    variant: 'gray150',
+                    variant: 'negative',
                     onClick: onHide,
                 },
             ]}

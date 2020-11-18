@@ -86,17 +86,23 @@ a.sidebar-link {
   }
 }
 
-.sidebar-item.active > .sidebar-link,
-.sidebar-item.active .sidebar-link:hover {
-  color: $sidebar-link-active-color;
-  background: $sidebar-link-active-bg;
-
-  i,
-  svg {
-    color: $sidebar-link-icon-active-color;
-    opacity: .5;
-  }
+.sidebar-item.active > .sidebar-link.active {
+  color: $sidebar-link-child-active-color;
+  background: $sidebar-link-child-active-bg;
+  font-weight: $sidebar-link-active-font-weight;
 }
+
+// .sidebar-item.active > .sidebar-link,
+// .sidebar-item.active .sidebar-link:hover {
+//   color: $sidebar-link-active-color;
+//   background: $sidebar-link-active-bg;
+
+//   i,
+//   svg {
+//     color: $sidebar-link-icon-active-color;
+//     opacity: .5;
+//   }
+// }
 
 // Children
 .sidebar-dropdown .sidebar-link {

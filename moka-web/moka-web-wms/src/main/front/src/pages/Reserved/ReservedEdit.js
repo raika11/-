@@ -242,10 +242,10 @@ const ReservedEdit = () => {
                 />
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-0 d-flex align-items-center">
-                    <Button variant="primary" className="mr-05" onClick={handleClickSave}>
+                    <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                         저장
                     </Button>
-                    <Button variant="danger" onClick={handleClickDelete}>
+                    <Button variant="negative" onClick={handleClickDelete}>
                         삭제
                     </Button>
                 </Form.Group>

@@ -199,7 +199,7 @@ public class ItemConstants {
         public static String PAGE_USE_YN = "USED_YN";
         public static String PAGE_FILE_YN = "FILE_YN";
         public static String PAGE_KEYWORD = "KWD";
-        public static String PAGE_CATEGORY = "category";
+        public static String PAGE_CATEGORY = "CATEGORY";
         public static String PAGE_DESCRIPTION = "DESCRIPTION";
         public static String PAGE_MOVE_YN = "MOVE_YN";
         public static String PAGE_MOVE_URL = "MOVE_URL";

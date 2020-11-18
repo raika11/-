@@ -63,6 +63,7 @@ public class ApiParser {
     private static final String ATTR_HINTS = "hints";
 	private static final String ATTR_REQUIRE = "require";
 	private static final String ATTR_RESULTNAME = "resultName";
+	private static final String ATTR_SETNAMES = "setNames";
 	private static final String ATTR_SELECTOR = "selector";
 	private static final String ATTR_TOTAL = "total";
 	private static final String ATTR_DML_TYPE = "dmlType";
@@ -291,6 +292,7 @@ public class ApiParser {
 			boolean total = false;
 			boolean async = false;
 			String resultName = requestEl.getAttribute(ATTR_RESULTNAME);
+			String setNames = requestEl.getAttribute(ATTR_SETNAMES);
 			String selector = requestEl.getAttribute(ATTR_SELECTOR);
 			if ( type == null || type.length() == 0 ) {
 				type = Request.TYPE_DB;
@@ -311,7 +313,7 @@ public class ApiParser {
 			if ( type.equals(Request.TYPE_DB)) {
 				String dmlType = requestEl.getAttribute(ATTR_DML_TYPE);
                 api.addRequest(
-                        new DbRequest(type, eval, async, resultName, textContent, total, dmlType));
+                        new DbRequest(type, eval, async, resultName, setNames, textContent, total, dmlType));
 			} else if ( type.equals(Request.TYPE_URL)) {
 				String include = requestEl.getAttribute(ATTR_INCLUDE);
 				String exclude = requestEl.getAttribute(ATTR_EXCLUDE);

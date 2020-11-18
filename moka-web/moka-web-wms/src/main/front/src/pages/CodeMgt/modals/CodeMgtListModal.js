@@ -138,16 +138,12 @@ const CodeMgtListModal = (props) => {
                 buttons={[
                     {
                         text: '등록',
-                        variant: 'primary',
+                        variant: 'positive',
                         onClick: handleClickSave,
-                    },
-                    {
-                        text: '취소',
-                        variant: 'gray150',
-                        onClick: onHide,
                     },
                 ]}
                 footerClassName="justify-content-center"
+                centered
             >
                 <MokaInputLabel
                     label="코드그룹"
@@ -169,25 +165,21 @@ const CodeMgtListModal = (props) => {
                 draggable
                 show={show}
                 onHide={onHide}
-                title="그룹 등록"
+                title="그룹 수정"
                 buttons={[
                     {
                         text: '저장',
-                        variant: 'primary',
+                        variant: 'positive',
                         onClick: handleClickSave,
                     },
                     {
-                        text: '취소',
-                        variant: 'gray150',
-                        onClick: onHide,
-                    },
-                    {
                         text: '삭제',
-                        variant: 'gray150',
+                        variant: 'negative',
                         onClick: handleClickDelete,
                     },
                 ]}
                 footerClassName="justify-content-center"
+                centered
             >
                 <MokaInputLabel label="코드그룹" placeholder="코드 그룹 아이디(영문으로 작성하세요)" value={grpCd} name="grpCd" onChange={handleChangeValue} disabled />
                 <MokaInputLabel label="코드그룹명" placeholder="코드 그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} required />

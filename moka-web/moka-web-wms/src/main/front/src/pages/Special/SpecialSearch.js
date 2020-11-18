@@ -32,8 +32,8 @@ const SpecialSearch = () => {
                 <Col xs={3} className="p-0">
                     <MokaSearchInput className="m-0" placeholder="검색어를 입력하세요" onSearch={handleSearch} />
                 </Col>
-                <Col xs={6} className="p-0 pr-4 d-flex justify-content-end">
-                    <Button variant="dark" onClick={handleClickAdd}>
+                <Col xs={6} className="p-0 d-flex justify-content-end">
+                    <Button variant="positive" onClick={handleClickAdd}>
                         페이지 등록
                     </Button>
                 </Col>

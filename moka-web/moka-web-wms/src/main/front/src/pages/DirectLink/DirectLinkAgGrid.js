@@ -72,7 +72,7 @@ const DirectLinkAgGrid = () => {
             {/* 버튼 그룹 */}
             <div className="d-flex justify-content-end mb-10">
                 <div className="pt-0">
-                    <Button variant="dark" onClick={() => history.push('/direct-link')}>
+                    <Button variant="positive" onClick={() => history.push('/direct-link')}>
                         사이트 바로 가기 추가
                     </Button>
                 </div>

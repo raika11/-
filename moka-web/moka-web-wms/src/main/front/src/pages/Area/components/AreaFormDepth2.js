@@ -543,7 +543,7 @@ const AreaFormDepth2 = (props) => {
 
                         {/* 세로형/가로형 선택 */}
                         <Col xs={2} className="p-0">
-                            <MokaInput as="select" name="areaAlign" value={temp.areaAlign} onChange={handleChangeValue}>
+                            <MokaInput as="select" name="areaAlign" value={temp.areaAlign} onChange={handleChangeValue} className="ft-12">
                                 <option value={AREA_ALIGN_V}>세로형</option>
                                 {temp.areaDiv === ITEM_CT && <option value={AREA_ALIGN_H}>가로형</option>}
                             </MokaInput>
@@ -558,7 +558,7 @@ const AreaFormDepth2 = (props) => {
                                 <p className="mb-0 text-danger" dangerouslySetInnerHTML={{ __html: areaCompLoad.byContainerMessage.replace('\n', '<br/>') }} />
                             </Col>
                             <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
-                                <MokaOverlayTooltipButton variant="white" className="border" tooltipText="컨테이너 리로드" onClick={getContOptions}>
+                                <MokaOverlayTooltipButton variant="outline-neutral" className="border" tooltipText="컨테이너 리로드" onClick={getContOptions}>
                                     <MokaIcon iconName="far-redo-alt" />
                                 </MokaOverlayTooltipButton>
                             </Col>
@@ -572,7 +572,7 @@ const AreaFormDepth2 = (props) => {
                                 <p className="mb-0 text-danger" dangerouslySetInnerHTML={{ __html: areaCompLoad.byPageMessage.replace('\n', '<br/>') }} />
                             </Col>
                             <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
-                                <MokaOverlayTooltipButton variant="white" className="border" tooltipText="컴포넌트 리로드" onClick={getCompOptions}>
+                                <MokaOverlayTooltipButton variant="outline-neutral" className="border" tooltipText="컴포넌트 리로드" onClick={getCompOptions}>
                                     <MokaIcon iconName="far-redo-alt" />
                                 </MokaOverlayTooltipButton>
                             </Col>
@@ -585,7 +585,7 @@ const AreaFormDepth2 = (props) => {
                                 <p className="mb-0 text-danger" dangerouslySetInnerHTML={{ __html: areaCompLoad.byContainerCompMessage.replace('\n', '<br/>') }} />
                             </Col>
                             <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
-                                <MokaOverlayTooltipButton variant="white" className="border" tooltipText="컴포넌트 리로드" onClick={() => handleCompLoad(container)}>
+                                <MokaOverlayTooltipButton variant="outline-neutral" className="border" tooltipText="컴포넌트 리로드" onClick={() => handleCompLoad(container)}>
                                     <MokaIcon iconName="far-redo-alt" />
                                 </MokaOverlayTooltipButton>
                             </Col>
@@ -608,6 +608,7 @@ const AreaFormDepth2 = (props) => {
                                         name="compAlign"
                                         value={comp.compAlign}
                                         onChange={(e) => handleChangeValue(e, idx)}
+                                        className="ft-12"
                                         disabled={areaCompLoad.byContainer || areaCompLoad.byContainerComp || temp.areaAlign === AREA_ALIGN_V}
                                     >
                                         <option value={AREA_COMP_ALIGN_LEFT}>Left 영역</option>
@@ -637,12 +638,12 @@ const AreaFormDepth2 = (props) => {
 
                     {/* 버튼 그룹 */}
                     <Card.Footer className="d-flex justify-content-center">
-                        <Button onClick={handleClickSave}>저장</Button>
-                        {temp.areaSeq && (
-                            <Button variant="danger" className="ml-10" onClick={handleClickDelete}>
-                                삭제
-                            </Button>
-                        )}
+                        <Button variant="positive" onClick={handleClickSave}>
+                            저장
+                        </Button>
+                        <Button variant="negative" className="ml-10" onClick={handleClickDelete} disabled={!temp.areaSeq}>
+                            삭제
+                        </Button>
                     </Card.Footer>
                 </Col>
             </div>

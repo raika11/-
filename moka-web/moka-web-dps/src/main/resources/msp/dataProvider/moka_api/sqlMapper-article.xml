@@ -78,6 +78,29 @@
 where TOTAL_ID = #{totalId}
   </select>
 
+  <resultMap id="map" type="hashmap"/>
+  <!-- article list -->
+  <select id="list" parameterType="map" resultType="map" resultMap="map,map"
+     statementType="CALLABLE">
+		 {call UPU_15RE_ARTICLE_LIST_SEL(
+			#{pageIndex, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+			#{pageSize, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+			#{serviceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{masterCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{keywordList, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{usageType, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{contentTypeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{startSearchDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{endSearchDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{startTotalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+			#{exceptTotalIdList, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{exceptMasterCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{exceptSourceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{isExistThumbnail, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{usedTotalCount, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{totalCount, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+		) }
+  	</select>
 	<!-- codelist -->
 	<select id="codelist" parameterType="hashmap" resultType="map">
 		SELECT CONTENTS_ID,TITLE,SUBTITLE,DIST_YMDT,CONTENTS_TEXT FROM WMS_ARTICLE B WHERE EXISTS (

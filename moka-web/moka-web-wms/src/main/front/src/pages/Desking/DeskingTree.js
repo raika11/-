@@ -63,21 +63,21 @@ const DeskingTree = () => {
 
     /**
      * 트리 클릭. 편집영역 로드
-     * @param {*} item
+     * @param {object} item nodeData
      */
     const handleClick = useCallback(
         (item) => {
             const option = {
                 areaSeq: item.areaSeq,
-                callback: (result) => {
-                    if (result.header.success) {
+                callback: ({ header, body }) => {
+                    if (header.success) {
                         setSelected(String(item.areaSeq));
                         history.push(`/desking/${item.areaSeq}`);
+                        dispatch(changeArea(body.area));
                     }
                 },
             };
             dispatch(getComponentWorkList(option));
-            dispatch(changeArea(item));
         },
         [dispatch, history],
     );

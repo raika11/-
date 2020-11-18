@@ -93,9 +93,9 @@ const propTypes = {
      */
     animateRows: PropTypes.bool,
     /**
-     * 쓰는 곳에서 gridApi를 state로 관리할 때, gridReady시 state 변경
+     * 쓰는 곳에서 grid Instnace를 state로 관리할 때, gridReady시 state 변경
      */
-    setGridApi: PropTypes.func,
+    setGridInstance: PropTypes.func,
 };
 
 const defaultProps = {
@@ -137,7 +137,7 @@ const MokaTable = forwardRef((props, ref) => {
         rowHeight,
         frameworkComponents,
         animateRows,
-        setGridApi: setParentGridApi,
+        setGridInstance: setParentGridInstance,
     } = props;
 
     // drag props
@@ -164,8 +164,8 @@ const MokaTable = forwardRef((props, ref) => {
      */
     const onGridReady = (params) => {
         setGridApi(params.api);
-        if (setParentGridApi) {
-            setParentGridApi(params.api);
+        if (setParentGridInstance) {
+            setParentGridInstance(params);
         }
     };
 
@@ -198,10 +198,8 @@ const MokaTable = forwardRef((props, ref) => {
      * (selected 값이 있을 때 select함)
      */
     const handleSelected = useCallback(() => {
-        if (gridApi) {
-            gridApi.deselectAll();
-        }
         if (selected && gridApi) {
+            gridApi.deselectAll();
             const selectedNode = gridApi.getRowNode(selected);
             if (selectedNode) {
                 selectedNode.selectThisNode(true);

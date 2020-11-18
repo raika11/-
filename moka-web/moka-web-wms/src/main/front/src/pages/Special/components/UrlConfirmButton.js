@@ -40,7 +40,7 @@ const UrlConfirmButton = (props) => {
     return (
         <>
             <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                <Button variant="gray150" size="sm" onClick={() => setShowModal(true)}>
+                <Button variant="outline-neutral" size="sm" onClick={() => setShowModal(true)}>
                     URL 확인
                 </Button>
             </div>

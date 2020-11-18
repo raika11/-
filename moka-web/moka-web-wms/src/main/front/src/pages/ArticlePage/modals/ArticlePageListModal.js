@@ -161,8 +161,8 @@ const ArticlePageListModal = (props) => {
             title="뷰스킨 검색"
             size="md"
             buttons={[
-                { text: '등록', onClick: handleClickSave },
-                { text: '취소', variant: 'gray150', onClick: handleClickCancle },
+                { text: '등록', variant: 'positive', onClick: handleClickSave },
+                { text: '취소', variant: 'negative', onClick: handleClickCancle },
             ]}
             footerClassName="justify-content-center"
             draggable

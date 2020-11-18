@@ -1,20 +1,12 @@
 package jmnet.moka.core.tms.merge;
 
-import java.io.IOException;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-
-import jmnet.moka.core.common.MokaConstants;
-import org.apache.commons.jexl3.MapContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.support.GenericApplicationContext;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
-import jmnet.moka.common.template.loader.TemplateLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -23,15 +15,19 @@ import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.ReservedMap;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
+import org.apache.commons.jexl3.MapContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.support.GenericApplicationContext;
 
 /**
  * <pre>
  * TPS에서 사용할 미리보기를 위한 템플릿머저를 생성한다.
  * 2019. 9. 4. kspark 최초생성
  * </pre>
- * 
- * @since 2019. 9. 4. 오후 5:59:52
+ *
  * @author kspark
+ * @since 2019. 9. 4. 오후 5:59:52
  */
 public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
@@ -42,16 +38,13 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     private String workerId;
     private Long editionSeq;
 
-    public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem,
-                                     DomainResolver domainResolver, AbstractTemplateLoader templateLoader,
-                                     DataLoader dataLoader) {
-        this(appContext, domainItem, domainResolver, templateLoader, dataLoader,null, null);
+    public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem, DomainResolver domainResolver,
+            AbstractTemplateLoader templateLoader, DataLoader dataLoader) {
+        this(appContext, domainItem, domainResolver, templateLoader, dataLoader, null, null);
     }
 
-    public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem,
-                                     DomainResolver domainResolver, AbstractTemplateLoader templateLoader,
-                                     DataLoader dataLoader,
-                                     String workerId, Long editionSeq)  {
+    public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem, DomainResolver domainResolver,
+            AbstractTemplateLoader templateLoader, DataLoader dataLoader, String workerId, Long editionSeq) {
         super(appContext, domainItem.getItemId(), templateLoader, dataLoader);
         this.domainResolver = domainResolver;
         this.domainItem = domainItem;
@@ -63,7 +56,9 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         DomainItem domainItem = (DomainItem) context.get(MokaConstants.MERGE_CONTEXT_DOMAIN);
         PageItem pageItem = (PageItem) context.get(MokaConstants.MERGE_CONTEXT_PAGE);
         // html인 경우만 baseTag 처리
-        if (!pageItem.get(ItemConstants.PAGE_TYPE).equals("text/html")) {
+        if (!pageItem
+                .get(ItemConstants.PAGE_TYPE)
+                .equals("text/html")) {
             return;
         }
         String domainUrl = "http://" + domainItem.get(ItemConstants.DOMAIN_URL) + "/" + pagePath;
@@ -90,14 +85,16 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage)
             throws TemplateMergeException, TemplateParseException {
-    	return this.merge(pageItem, wrapItem, mergePage, true, false, true);	// 컴포넌트 미리보기 리소스 추가, 하이라이트 스크립트 제거, html wrap소스 추가
+        return this.merge(pageItem, wrapItem, mergePage, true, false, true);    // 컴포넌트 미리보기 리소스 추가, 하이라이트 스크립트 제거, html wrap소스 추가
     }
-            
+
     public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage, boolean resource, boolean highlight, boolean htmlWrap)
             throws TemplateMergeException, TemplateParseException {
         MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
         // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
-        mergeContext.getMergeOptions().setPreview(true);
+        mergeContext
+                .getMergeOptions()
+                .setPreview(true);
         if (this.workerId != null) {
             mergeContext.set(MokaConstants.MERGE_CONTEXT_WORKER_ID, this.workerId);
             mergeContext.set(MokaConstants.MERGE_CONTEXT_EDITION_SEQ, this.editionSeq);
@@ -113,7 +110,11 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         }
 
         // Htttp 파라미터 설정
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, new HttpParamMap());
+        HttpParamMap httpParamMap = new HttpParamMap();
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
+        // 카테고리 설정
+        httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, pageItem.getString(ItemConstants.PAGE_CATEGORY));
+
         String itemType = pageItem.getItemType();
         String itemId = pageItem.getItemId();
 
@@ -122,16 +123,24 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
         if (wrapItem != null) {
             if (mergePage) { // page를 머지하고, wrapItem을 highlight
-                mergeContext.getMergeOptions().setWrapItem(true);
-                mergeContext.getMergeOptions().setShowItem(wrapItem.getItemType());
-                mergeContext.getMergeOptions().setShowItemId(wrapItem.getItemId());
+                mergeContext
+                        .getMergeOptions()
+                        .setWrapItem(true);
+                mergeContext
+                        .getMergeOptions()
+                        .setShowItem(wrapItem.getItemType());
+                mergeContext
+                        .getMergeOptions()
+                        .setShowItemId(wrapItem.getItemId());
                 this.setItem(wrapItem.getItemType(), wrapItem.getItemId(), wrapItem);
             } else { // wrapItem을 머지
                 itemType = wrapItem.getItemType();
                 itemId = wrapItem.getItemId();
                 this.setItem(itemType, itemId, wrapItem);
                 if (wrapItem instanceof ComponentItem) { // 미리보기 리소스 추가
-                    mergeContext.getMergeOptions().setPreviewResource(resource);
+                    mergeContext
+                            .getMergeOptions()
+                            .setPreviewResource(resource);
                 }
             }
         } else {
@@ -146,15 +155,17 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         StringBuilder sb = super.merge(itemType, itemId, mergeContext);
 
         // 시스템 기본 (tms.merge.highlight.only 프로퍼티)
-        if(highlight) {
-        	addShowItemStyle(sb, mergeContext);
+        if (highlight) {
+            addShowItemStyle(sb, mergeContext);
         }
-        
+
         // 강제로 설정
         // addShowItemStyle(sb, mergeContext, true);
 
         // 편집컴포넌트 미리보기일 경우 html 태그를 감싸준다.
-        if (mergeContext.getMergeOptions().isPreview() && this.workerId != null && htmlWrap) {
+        if (mergeContext
+                .getMergeOptions()
+                .isPreview() && this.workerId != null && htmlWrap) {
             sb = setHtmlWrap(itemType, itemId, sb);
         }
 

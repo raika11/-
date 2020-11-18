@@ -121,11 +121,11 @@ const Dashboard = () => {
                         variant="light"
                         buttons={[
                             {
-                                variant: 'primary',
+                                variant: 'searching',
                                 text: '버튼1',
                             },
                             {
-                                variant: 'warning',
+                                variant: 'info',
                                 text: '버튼2',
                             },
                         ]}
@@ -135,12 +135,12 @@ const Dashboard = () => {
 
                     <MokaAlert outline>테스트</MokaAlert>
 
-                    <MokaAlert variant="primary">
+                    <MokaAlert variant="info">
                         <MokaAlert.Heading>Alert Heading 영역</MokaAlert.Heading>
                         텍스트 영역
                         <MokaAlert.Link href="#">링크</MokaAlert.Link>입니다.
                     </MokaAlert>
-                    <MokaAlert variant="primary" outline dismissible>
+                    <MokaAlert variant="info" outline dismissible>
                         <MokaAlert.Heading>Alert Heading 영역</MokaAlert.Heading>
                         outline, dismissible 상태
                         <MokaAlert.Link href="#">링크</MokaAlert.Link>입니다.
@@ -283,7 +283,7 @@ const Dashboard = () => {
                                 <h1>TEST</h1>
                                 <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
                                 <p>
-                                    <Button variant="primary">Learn more</Button>
+                                    <Button variant="searching">Learn more</Button>
                                 </p>
                             </Jumbotron>
                         </div>,
@@ -336,14 +336,16 @@ const Dashboard = () => {
                                         control={control}
                                         className="mb-2"
                                     />
-                                    <Button type="submit">submit</Button>
+                                    <Button type="submit" variant="outline-neutral">
+                                        submit
+                                    </Button>
                                     <div className="my-2">{JSON.stringify(hookData)}</div>
                                 </Form>
 
-                                <Button className="mr-2" onClick={() => setShowD(true)}>
+                                <Button variant="outline-neutral" className="mr-2" onClick={() => setShowD(true)}>
                                     드래그 모달
                                 </Button>
-                                <MokaModal draggable show={showD} onHide={() => setShowD(false)} title="드래그가능한 모달">
+                                <MokaModal variant="outline-neutral" draggable show={showD} onHide={() => setShowD(false)} title="드래그가능한 모달">
                                     <h1>드래그 가능한 모달</h1>
                                     <Button
                                         onClick={() => {
@@ -362,6 +364,7 @@ const Dashboard = () => {
 
                                 {/* toastr test */}
                                 <Button
+                                    variant="outline-neutral"
                                     className="mr-2"
                                     onClick={() => {
                                         toastr.confirm('확인창', {
@@ -374,7 +377,7 @@ const Dashboard = () => {
                                 </Button>
 
                                 {/* 대중소 모달 */}
-                                <Button className="mr-2" onClick={() => setShowLMS(true)}>
+                                <Button variant="outline-neutral" className="mr-2" onClick={() => setShowLMS(true)}>
                                     대중소 모달
                                 </Button>
                                 {/* <MokaCodeListModal

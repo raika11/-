@@ -144,8 +144,8 @@ const AddComponentModal = (props) => {
             title="컴포넌트 생성"
             size="md"
             buttons={[
-                { text: '저장', variant: 'primary', onClick: handleSave },
-                { text: '취소', variant: 'gray150', onClick: handleHide },
+                { text: '저장', variant: 'positive', onClick: handleSave },
+                { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
             footerClassName="justify-content-center"
             draggable
@@ -165,11 +165,11 @@ const AddComponentModal = (props) => {
                         </Col>
                         <Col xs={1} className="p-0 pl-2">
                             {idx === 0 ? (
-                                <Button variant="gray150" onClick={addComponent}>
+                                <Button variant="outline-neutral" onClick={addComponent}>
                                     <MokaIcon iconName="fal-plus" />
                                 </Button>
                             ) : (
-                                <Button variant="gray150" onClick={(e) => removeComponent(e, idx)}>
+                                <Button variant="outline-neutral" onClick={(e) => removeComponent(e, idx)}>
                                     <MokaIcon iconName="fal-minus" />
                                 </Button>
                             )}

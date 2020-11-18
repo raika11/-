@@ -1,16 +1,18 @@
 import React from 'react';
-import { MokaTablePreviewButton, MokaTableLinkButton } from '@components';
+import { MokaTableLinkButton } from '@components';
 
 export default [
     {
         headerName: 'ID',
         field: 'containerSeq',
         width: 50,
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '컨테이너명',
         field: 'containerName',
         width: 276,
+        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '',

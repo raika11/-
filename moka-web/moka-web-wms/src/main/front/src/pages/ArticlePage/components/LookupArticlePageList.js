@@ -166,7 +166,7 @@ const LookupArticlePageList = (props) => {
 
                 {/* 버튼 그룹 */}
                 <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="dark" onClick={() => window.open('/skin')}>
+                    <Button variant="positive" onClick={() => window.open('/skin')}>
                         기사페이지 등록
                     </Button>
                 </div>

@@ -26,17 +26,12 @@ const propTypes = {
      */
     onSearch: PropTypes.func,
     /**
-     * 검색버튼 variant
-     */
-    variant: PropTypes.string,
-    /**
      * 검색버튼의 추가 스타일
      */
     buttonClassName: PropTypes.string,
 };
 const defaultProps = {
     placeholder: '검색어를 입력하세요',
-    variant: 'primary',
     searchText: '검색',
 };
 
@@ -48,7 +43,7 @@ const MokaSearchInput = (props) => {
     const { className } = props;
 
     // 검색버튼 props
-    const { buttonClassName, searchText, onSearch, variant } = props;
+    const { buttonClassName, searchText, onSearch } = props;
 
     // input props
     const { placeholder, onChange, value, id, name, inputProps, isInvalid, inputClassName, disabled } = props;
@@ -85,7 +80,7 @@ const MokaSearchInput = (props) => {
                 onChange={onChange}
                 placeholder={placeholder}
             />
-            <Button variant={variant} className={buttonClassName} style={{ minWidth: 53 }} onClick={onSearch} disabled={disabled}>
+            <Button variant="searching" className={buttonClassName} style={{ minWidth: 53 }} onClick={onSearch} disabled={disabled}>
                 {searchText}
             </Button>
         </Form.Group>

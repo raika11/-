@@ -7,24 +7,27 @@ import jmnet.moka.core.dps.api.handler.DbRequestHandler;
 public class DbRequest implements Request {
 
 	public final static String DML_TYPE_SELECT = "select";
+	public final static String DML_TYPE_PROCEDURE = "sp";
 	public final static String DML_TYPE_INSERT = "insert";
 	public final static String DML_TYPE_UPDATE = "update";
 	public final static String DML_TYPE_DELETE = "delete";
-	private final static String[] DML_TYPES = {DML_TYPE_SELECT, DML_TYPE_INSERT, DML_TYPE_UPDATE, DML_TYPE_DELETE };
+	private final static String[] DML_TYPES = {DML_TYPE_SELECT, DML_TYPE_PROCEDURE, DML_TYPE_INSERT, DML_TYPE_UPDATE, DML_TYPE_DELETE };
 	private String type;
     private boolean eval;
 	private boolean async;
 	private String resultName;
+	private String setNames;
 	private String mapperId;
 	private boolean total;
 	private String dmlType;
 	
-    public DbRequest(String type, boolean eval, boolean async, String resultName, String mapperId,
+    public DbRequest(String type, boolean eval, boolean async, String resultName, String setNames, String mapperId,
             boolean total, String dmlType) {
 		this.type = type;
         this.eval = eval;
 		this.async = async;
 		this.resultName = resultName;
+		this.setNames = setNames;
 		this.mapperId = mapperId;
 		this.total = total;
 		if ( dmlType == null || dmlType.length()==0) {
@@ -51,6 +54,8 @@ public class DbRequest implements Request {
 	public String getDmlType() {
 		return this.dmlType;
 	}
+
+	public String getSetNames() { return this.setNames; }
 	
 	public String getResultName() {
 		if ( this.total) {

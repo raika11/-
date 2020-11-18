@@ -24,15 +24,8 @@ export const columnDefs = [
         width: 50,
         cellStyle: { textAlign: 'center' },
         cellRendererFramework: (row) => {
-            /*const useYn = params.data.useYn;
-            let clazz = 'color-gray150';
-            if (useYn === 'Y') {
-                clazz = 'color-primary';
-            }
-            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;*/
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;
         },
-        //preventRowClick: true,
     },
 ];

@@ -87,6 +87,7 @@ const ChangeArtGroupModal = (props) => {
             buttons={[
                 {
                     text: '저장',
+                    variant: 'positive',
                     onClick: handleClickSave,
                 },
             ]}

@@ -17,6 +17,35 @@
       totalId
     </keys>
   </api>
+  <api id="articleList">
+    <description>기사 목록을 반환한다.</description>
+    <parameter>
+      <pageIndex default="1" type="number" desc="페이지번호">[0-9]{1,9}</pageIndex>
+      <pageSize default="20" type="number" desc="기사갯수">[0-9]{1,9}</pageSize>
+      <serviceCodeList default="" desc="서비스코드">.{1,100}</serviceCodeList>
+      <masterCodeList default="" desc="마스터코드">.{1,100}</masterCodeList>
+      <keywordList default="" desc="키워드">.{1,100}</keywordList>
+      <usageType default="" desc="사용형태">.{1,100}</usageType>
+      <contentTypeList default="" desc="컨텐트타입">.{1,100}</contentTypeList>
+      <startSearchDate default="2020-08-21 00:00:00" desc="시작일">.{1,100}</startSearchDate>
+      <endSearchDate default="2020-09-01 23:59:59" desc="종료일">.{1,100}</endSearchDate>
+      <startTotalId default="0" type="number" desc="TOTALID시작">.{1,100}</startTotalId>
+      <exceptTotalIdList default="" desc="TOTALID제외">.{1,100}</exceptTotalIdList>
+      <exceptMasterCodeList default="" desc="마스터코드제외">.{1,100}</exceptMasterCodeList>
+      <exceptSourceCodeList default="" desc="소스코드제외">.{1,100}</exceptSourceCodeList>
+      <isExistThumbnail default="N" desc="썸네일존재">.{1,100}</isExistThumbnail>
+      <usedTotalCount default="Y" desc="총건수사용">.{1,100}</usedTotalCount>
+      <totalCount default="0" type="number" desc="총건수(OUT)">.{1,100}</totalCount>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA,SOURCES">dps.article.list</request>
+    <keys>
+      pageIndex
+      pageSize
+      serviceCodeList
+      masterCodeList
+      keywordList
+    </keys>
+  </api>
   <api id="codelist" expire="1m">
     <description>분류별 기사 목록을 반환한다.</description>
     <parameter>

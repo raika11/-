@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import { ArticleDeskList } from '@/pages/Article/components';
 import { deskingDragStop } from '@store/desking';
+import toast from '@utils/toastUtil';
 
 const DeskingArticleTab = (props) => {
     const { componentList, componentAgGridInstances } = props;
@@ -19,12 +20,22 @@ const DeskingArticleTab = (props) => {
 
     /**
      * 기사 드래그 끝났을 때 액션
-     * @param {object} source 드래그 row의 본체? ag-grid의 gridApi
+     * @param {object} source 드래그 row의 본체? ag-grid instance
      * @param {object} target 드래그 stop되는 타겟 ag-grid의 dragStop 이벤트
      * @param {number} agGridIndex agGridIndex
      */
     const handleArticleDragStop = (source, target, agGridIndex) => {
-        dispatch(deskingDragStop({ target, component: componentList[agGridIndex] }));
+        const payload = {
+            source,
+            target,
+            tgtComponent: componentList[agGridIndex],
+            callback: ({ header }) => {
+                if (!header.success) {
+                    toast.warn(header.message);
+                }
+            },
+        };
+        dispatch(deskingDragStop(payload));
     };
 
     const createTabs = () => {
@@ -50,6 +61,7 @@ const DeskingArticleTab = (props) => {
                         ref={mediaRef}
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
+                        dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx}
                         media

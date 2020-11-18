@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.common.utils.McpString;
 import org.apache.commons.jexl3.JexlScript;
 import org.apache.commons.jexl3.MapContext;
 import org.apache.ibatis.session.SqlSession;
@@ -18,7 +19,7 @@ import jmnet.moka.core.dps.db.session.DpsSqlSessionFactory;
 
 public class DbRequestHandler implements RequestHandler {
 	public final static Logger logger = LoggerFactory.getLogger(DbRequestHandler.class);
-	
+	private final static String PARAM_MAP = "PARAM_MAP";
 	@Autowired
 	private DpsSqlSessionFactory sessionFactory;
 	
@@ -34,6 +35,8 @@ public class DbRequestHandler implements RequestHandler {
 		List<Map<String,Object>> result = null;
 		if ( dbRequest.getDmlType().equals(DbRequest.DML_TYPE_SELECT)) {
             result = select(apiContext.getSqlSession(), mapperId, apiContext.getCheckedParamMap());
+		} else if ( dbRequest.getDmlType().equals(DbRequest.DML_TYPE_PROCEDURE)) {
+			return processProcedure(apiContext, dbRequest, mapperId, startTime);
 		} else if ( dbRequest.getDmlType().equals(DbRequest.DML_TYPE_INSERT)) {
             result = insert(apiContext.getSqlSession(), mapperId, apiContext.getCheckedParamMap());
 		} else if ( dbRequest.getDmlType().equals(DbRequest.DML_TYPE_UPDATE)) {
@@ -44,7 +47,35 @@ public class DbRequestHandler implements RequestHandler {
 		long endTime = System.currentTimeMillis();
 		return ApiResult.createApiResult(startTime, endTime, result, true, null);
 	}
-	
+
+	private ApiResult processProcedure(ApiContext apiContext, DbRequest dbRequest, String mapperId, long startTime) {
+		try {
+			Map<String, Object> parameterMap = apiContext.getCheckedParamMap();
+			ApiResult apiResult = null;
+			List<Object> resultList = call(apiContext.getSqlSession(), mapperId, parameterMap);
+			long endTime = System.currentTimeMillis();
+			String setNames = dbRequest.getSetNames();
+			if (McpString.isNotEmpty(setNames)) {
+				String[] setNamesArray = setNames.split(",");
+				for (int i = 0; i < setNamesArray.length; i++) {
+					if (apiResult == null) {
+						apiResult = ApiResult.createApiResult(startTime, endTime, resultList.get(i), true, null);
+					} else {
+						apiResult.addApiResult(setNamesArray[i], ApiResult.createApiResult(startTime, endTime, resultList.get(i), true, null));
+					}
+				}
+				apiResult.put(PARAM_MAP,parameterMap);
+				return apiResult;
+			} else {
+				apiResult = ApiResult.createApiResult(startTime, endTime, resultList.get(0), true, null);
+				apiResult.put(PARAM_MAP,parameterMap);
+				return apiResult;
+			}
+		} catch ( Exception e) {
+			return ApiResult.createApiErrorResult("Procedure Call Error",e);
+		}
+	}
+
     private String getMapperId(DbRequest dbRequest, ApiContext apiContext) {
         String mapperId = dbRequest.getMapperId();
         if (dbRequest.getEval()) {
@@ -95,6 +126,11 @@ public class DbRequestHandler implements RequestHandler {
 	private List<Map<String,Object>> select(SqlSession sqlSession, String mapperId, Map<String, Object> parameterMap) {
 		List<Map<String,Object>> result = sqlSession.selectList(mapperId, parameterMap);
 		return result;
+	}
+
+	private List<Object> call(SqlSession sqlSession, String mapperId, Map<String, Object> parameterMap) {
+		List<Object> resultList = sqlSession.selectList(mapperId, parameterMap);
+		return resultList;
 	}
 	
 	private List<Map<String,Object>> insert(SqlSession sqlSession, String mapperId, Map<String, Object> parameterMap) {

@@ -341,17 +341,12 @@ const DomainEditTest = ({ history, onDelete }) => {
 
                 {/* 버튼 */}
                 <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                    <Button type="submit" variant="primary" className="float-left mr-10 pr-20 pl-20">
+                    <Button type="submit" variant="positive" className="float-left mr-10 pr-20 pl-20">
                         저장
                     </Button>
-                    <Button className="float-left mr-10 pr-20 pl-20" variant="gray150">
-                        취소
+                    <Button className="float-left mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete} disabled={!paramId}>
+                        삭제
                     </Button>
-                    {paramId && (
-                        <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleClickDelete}>
-                            삭제
-                        </Button>
-                    )}
                 </Form.Group>
             </Form>
         </div>

@@ -36,7 +36,7 @@ const DeskingWorkButtonGroup = (props) => {
                     {iconName.map((icon, idx) => (
                         <div key={idx}>
                             <OverlayTrigger overlay={<Tooltip id="tooltip-table-del-button">{icon.title}</Tooltip>}>
-                                <Button variant="white" className="border-0 p-0 moka-table-button bg-transparent">
+                                <Button variant="negative" className="border-0 p-0 moka-table-button bg-transparent">
                                     <MokaIcon iconName={icon.iconName} />
                                 </Button>
                             </OverlayTrigger>

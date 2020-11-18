@@ -85,7 +85,7 @@ const MokaTreeCategory = (props) => {
     return (
         <li className="tree-category" key={nodeId} onClick={handleSelected} data-depth={depth} data-usedyn={usedYn}>
             <div className={clsx('tree-label', { selected: nodeId === selected })} aria-controls={controls} aria-expanded={open} data-toggle="collapse" data-match={match}>
-                <Button size="sm" className="mr-1" onClick={handleExpanded}>
+                <Button size="sm" variant="searching" className="mr-1" onClick={handleExpanded}>
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />
                 </Button>
                 <MokaTreeLabel nodeId={nodeId} nodeData={nodeData} labelHoverButtons={labelHoverButtons} />

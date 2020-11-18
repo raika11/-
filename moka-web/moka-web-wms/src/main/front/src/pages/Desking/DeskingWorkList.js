@@ -1,15 +1,12 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { MokaInputLabel } from '@components';
-import { AREA_ALIGN_H, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
+import { MokaCard } from '@components';
+import { AREA_ALIGN_H, AREA_ALIGN_V, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
-import DeskingWorkComponent from './components/DeskingWorkComponent';
+import { DeskingWorkComponent } from './components';
 
 /**
  * 데스킹 편집화면
@@ -28,20 +25,20 @@ const DeskingWorkList = (props) => {
         // );
     };
 
+    React.useEffect(() => {
+        console.log(area);
+    }, [area]);
+
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
     };
 
-    const mrGutter = {
-        'mr-gutter': area.areaAlign === AREA_ALIGN_H ? false : true,
-    };
-
     return (
-        <div className="d-flex">
-            <div className={clsx('p-2', mrGutter, 'border', 'd-flex', 'flex-column')} style={{ backgroundColor: 'white' }}>
-                <Container fluid className="mb-2">
-                    <Row className="d-flex justify-content-between">
-                        <Col xs={5} className="p-0">
+        <React.Fragment>
+            {/* 왼쪽 기본 카드 1건 */}
+            <MokaCard loading={loading} header={false} width={363} className={clsx('p-0', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H })} bodyClassName="p-0">
+                <div className="d-flex justify-content-end p-2 border-bottom">
+                    {/* <Col xs={5} className="p-0">
                             <MokaInputLabel
                                 label="기사 갯수"
                                 labelClassName="d-flex justify-content-start"
@@ -51,20 +48,46 @@ const DeskingWorkList = (props) => {
                                 // value={}
                                 onChange={handleChangeValue}
                             />
-                        </Col>
-                        <Button variant="dark" className="ft-12" onClick={handlePreviewClicked}>
+                        </Col> */}
+                    <Button variant="outline-neutral" className="ft-12" onClick={handlePreviewClicked}>
+                        페이지 미리보기
+                    </Button>
+                </div>
+
+                <div>
+                    {area.areaComps.map((areaComp) => {
+                        if (area.areaDiv === AREA_ALIGN_H && areaComp.compAlign !== AREA_COMP_ALIGN_LEFT) return null;
+                        const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
+
+                        return (
+                            <DeskingWorkComponent
+                                key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
+                                component={list[targetIndex]}
+                                agGridIndex={targetIndex}
+                                // onRowClicked={handleRowClicked}
+                                {...props}
+                            />
+                        );
+                    })}
+                </div>
+            </MokaCard>
+
+            {area.areaAlign === AREA_ALIGN_H && (
+                <MokaCard loading={loading} header={false} width={363} className="p-0 mr-gutter" bodyClassName="p-0">
+                    <div className="d-flex justify-content-end p-2 border-bottom">
+                        <Button variant="outline-neutral" className="ft-12" onClick={handlePreviewClicked}>
                             페이지 미리보기
                         </Button>
-                    </Row>
-                </Container>
-                <div>
-                    {!loading &&
-                        area.areaComps.map((areaComp) => {
-                            if (areaComp.compAlign !== AREA_COMP_ALIGN_LEFT) return null;
+                    </div>
+
+                    <div>
+                        {area.areaComps.map((areaComp) => {
+                            if (areaComp.compAlign !== AREA_COMP_ALIGN_RIGHT) return null;
                             const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
+
                             return (
                                 <DeskingWorkComponent
-                                    key={`${area.areaSeq}-${areaComp.component.seq}`}
+                                    key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
                                     component={list[targetIndex]}
                                     agGridIndex={targetIndex}
                                     // onRowClicked={handleRowClicked}
@@ -72,48 +95,10 @@ const DeskingWorkList = (props) => {
                                 />
                             );
                         })}
-                </div>
-            </div>
-
-            {area.areaAlign === AREA_ALIGN_H && (
-                <div className="p-2 mr-gutter border d-flex flex-column" style={{ backgroundColor: 'white' }}>
-                    <Container fluid className="mb-2">
-                        <Row className="d-flex justify-content-between">
-                            <Col xs={5} className="p-0">
-                                <MokaInputLabel
-                                    label="기사 갯수"
-                                    labelClassName="d-flex justify-content-start"
-                                    className="mb-0"
-                                    inputClassName="ft-12"
-                                    name="perPageCount"
-                                    // value={}
-                                    onChange={handleChangeValue}
-                                />
-                            </Col>
-                            <Button variant="dark" className="ft-12" onClick={handlePreviewClicked}>
-                                페이지 미리보기
-                            </Button>
-                        </Row>
-                    </Container>
-                    <div>
-                        {!loading &&
-                            area.areaComps.map((areaComp) => {
-                                if (areaComp.compAlign !== AREA_COMP_ALIGN_RIGHT) return null;
-                                const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
-                                return (
-                                    <DeskingWorkComponent
-                                        key={`${area.areaSeq}-${areaComp.component.seq}`}
-                                        component={list[targetIndex]}
-                                        agGridIndex={targetIndex}
-                                        // onRowClicked={handleRowClicked}
-                                        {...props}
-                                    />
-                                );
-                            })}
                     </div>
-                </div>
+                </MokaCard>
             )}
-        </div>
+        </React.Fragment>
     );
 };
 

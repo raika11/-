@@ -53,7 +53,7 @@ const MokaTreeItem = (props) => {
     return (
         <li className="tree-item" onClick={handleSelected} key={nodeId} data-depth={depth} data-usedyn={usedYn}>
             <div className={clsx('tree-label', { selected: selected === nodeId })} data-match={match}>
-                <Button variant="gray150" size="sm" className="mr-1" disabled>
+                <Button variant="searching" size="sm" className="mr-1" disabled>
                     <MokaIcon iconName="fal-minus" />
                 </Button>
                 <MokaTreeLabel nodeId={nodeId} nodeData={nodeData} labelHoverButtons={labelHoverButtons} />

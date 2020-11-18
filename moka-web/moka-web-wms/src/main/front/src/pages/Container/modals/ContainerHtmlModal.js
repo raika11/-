@@ -108,8 +108,8 @@ const ContainerHtmlModal = (props) => {
                     }),
                 );
                 setButtons([
-                    { text: '저장', variant: 'primary', onClick: handleClickSave },
-                    { text: '닫기', variant: 'gray150', onClick: handleHide },
+                    { text: '저장', variant: 'positive', onClick: handleClickSave },
+                    { text: '닫기', variant: 'negative', onClick: handleHide },
                 ]);
             } else {
                 setLoadingModal(true);
@@ -126,7 +126,7 @@ const ContainerHtmlModal = (props) => {
                         },
                     }),
                 );
-                setButtons([{ text: '닫기', variant: 'gray150', onClick: handleHide }]);
+                setButtons([{ text: '닫기', variant: 'negative', onClick: handleHide }]);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

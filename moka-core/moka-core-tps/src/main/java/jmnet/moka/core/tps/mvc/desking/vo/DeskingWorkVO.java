@@ -102,7 +102,6 @@ public class DeskingWorkVO implements Serializable {
     /**
      * 임시저장여부
      */
-    @JsonIgnore
     @Column(name = "SAVE_YN")
     private String saveYn = MokaConstants.NO;
 

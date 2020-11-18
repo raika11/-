@@ -123,4 +123,16 @@ public class ArticleBasicVO implements Serializable {
      */
     @Column(name = "YOUTUBE_YN")
     private String youtubeYn;
+
+    /**
+     * 편집된 기사제목
+     */
+    @Column(name = "ART_EDIT_TITLE")
+    private String artEditTitle;
+
+    /**
+     * 편집된 모바일 기사제목
+     */
+    @Column(name = "ART_EDIT_MOB_TITLE")
+    private String artEditMobTitle;
 }

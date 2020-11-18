@@ -1,7 +1,10 @@
 package jmnet.moka.core.tps.mvc.desking.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.entity.QDeskingWork;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -38,5 +41,21 @@ public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport 
         queryFactory.delete(deskingWork)
                     .where(builder)
                     .execute();
+    }
+
+    @Override
+    public List<DeskingWork> findAllDeskingWork(DeskingWorkSearchDTO search) {
+        QDeskingWork deskingWork = QDeskingWork.deskingWork;
+        BooleanBuilder builder = new BooleanBuilder();
+
+        builder.and(deskingWork.datasetSeq.eq(search.getDatasetSeq()));
+        builder.and(deskingWork.regId.eq(search.getRegId()));
+        builder.and(deskingWork.saveYn.eq(search.getSaveYn()));
+
+        JPQLQuery<DeskingWork> query = queryFactory.selectFrom(deskingWork)
+                                                   .where(builder)
+                                                   .orderBy(deskingWork.contentOrd.asc(), deskingWork.relOrd.asc());
+
+        return query.fetch();
     }
 }

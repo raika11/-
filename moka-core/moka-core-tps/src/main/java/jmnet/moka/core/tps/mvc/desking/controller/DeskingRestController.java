@@ -169,6 +169,37 @@ public class DeskingRestController {
     }
 
     /**
+     * 편집 컴포넌트 전송(work를 임시저장)
+     *
+     * @param componentWorkSeq 워크아이디
+     * @param principal        로그인사용자 세션
+     * @return 등록된 편집 컴포넌트정보
+     * @throws Exception
+     */
+    @ApiOperation(value = "컴포넌트 임시저장")
+    @PostMapping("/components/pre/{componentWorkSeq}")
+    public ResponseEntity<?> postPreComponentWork(
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            Principal principal)
+            throws Exception {
+
+        try {
+            // work 컴포넌트 조회(편집기사,관련편집기사포함)
+            DeskingComponentWorkVO workVO = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+
+            // 컴포넌트 저장, 편집기사 저장
+            deskingService.preSend(workVO, principal.getName());
+
+            // 결과리턴
+            ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw new Exception(messageByLocale.get("tps.common.error.preinsert"), e);
+        }
+    }
+
+    /**
      * 컴포넌트워크 수정
      *
      * @param componentWorkSeq 컴포넌트워크 순번

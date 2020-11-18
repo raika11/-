@@ -143,6 +143,18 @@ public interface DeskingService {
             throws NoDataException, Exception;
 
     /**
+     * 편집 컴포넌트Work 수정
+     *
+     * @param workVO work컴포넌트정보
+     * @param regId  작업자
+     * @return 수정된 컴포넌트
+     * @throws NoDataException 데이터없음 예외
+     * @throws Exception       기타예외
+     */
+    public ComponentWork updateComponentWork(DeskingComponentWorkVO workVO, String regId)
+            throws NoDataException, Exception;
+
+    /**
      * 컴포넌트 저장(전송)
      *
      * @param workVO work컴포넌트정보
@@ -151,6 +163,17 @@ public interface DeskingService {
      * @throws Exception       기타예외
      */
     public void send(DeskingComponentWorkVO workVO, String regId)
+            throws NoDataException, Exception;
+
+    /**
+     * 컴포넌트 저장(전송)
+     *
+     * @param workVO work컴포넌트정보
+     * @param regId  작업자
+     * @throws NoDataException 데이터없음 예외
+     * @throws Exception       기타예외
+     */
+    public void preSend(DeskingComponentWorkVO workVO, String regId)
             throws NoDataException, Exception;
 
     /**

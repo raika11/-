@@ -21,6 +21,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.code.MemberRequestCode;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
@@ -61,17 +62,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/members")
-public class MemberRestController {
+public class MemberRestController extends AbstractCommonController {
 
     private final MenuService menuService;
 
     private final MemberService memberService;
-
-    private final ModelMapper modelMapper;
-
-    private final MessageByLocale messageByLocale;
-
-    private final TpsLogger tpsLogger;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -161,7 +156,7 @@ public class MemberRestController {
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws NoDataException {
 
-        String message = messageByLocale.get("tps.common.error.no-data");
+        String message = msg("tps.common.error.no-data");
         MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(message));
@@ -208,7 +203,7 @@ public class MemberRestController {
         MemberInfo member = modelMapper.map(memberDTO, MemberInfo.class);
         if (McpString.isNotEmpty(member.getMemberId())) { // 자동 발번이 아닌 경우 중복 체크
             if (memberService.isDuplicatedId(member.getMemberId())) {
-                throw new InvalidDataException(messageByLocale.get("tps.member.error.duplicated.memberId"));
+                throw new InvalidDataException(msg("tps.member.error.duplicated.memberId"));
             }
         }
 
@@ -216,7 +211,7 @@ public class MemberRestController {
             MemberInfo returnValue = processUserSave(member, memberDTO.getMemberGroups(), MemberStatusCode.Y);
 
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
-            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, messageByLocale.get("tps.member.success.insert"));
+            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, msg("tps.member.success.insert"));
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -224,7 +219,7 @@ public class MemberRestController {
             log.error("[FAIL TO INSERT MEMBER]", e);
             // 액션 로그에 오류 내용 출력
             tpsLogger.error(ActionType.INSERT, e);
-            throw new Exception(messageByLocale.get("tps.member.error.save"), e);
+            throw new Exception(msg("tps.member.error.save"), e);
         }
     }
 
@@ -278,7 +273,7 @@ public class MemberRestController {
             throws Exception {
 
         // MemberDTO -> Member 변환
-        String infoMessage = messageByLocale.get("tps.common.error.no-data");
+        String infoMessage = msg("tps.common.error.no-data");
         MemberInfo newMember = modelMapper.map(memberDTO, MemberInfo.class);
         newMember.setMemberId(memberId);
         // 오리진 데이터 조회
@@ -299,7 +294,7 @@ public class MemberRestController {
 
             // 결과리턴
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
-            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto);
+            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, msg("tps.member.success.update"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
@@ -310,7 +305,7 @@ public class MemberRestController {
             log.error("[FAIL TO UPDATE MEMBER]", e);
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, e);
-            throw new Exception(messageByLocale.get("tps.member.error.update"), e);
+            throw new Exception(msg("tps.member.error.update"), e);
         }
     }
 
@@ -327,7 +322,7 @@ public class MemberRestController {
             @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws NoDataException {
 
-        String noDataMsg = messageByLocale.get("tps.common.error.no-data");
+        String noDataMsg = msg("tps.common.error.no-data");
 
         MemberInfo member = memberService
                 .findMemberById(memberId)
@@ -340,7 +335,7 @@ public class MemberRestController {
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
         // 결과리턴
-        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO);
+        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO, msg("tps.member.success.activation"));
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -361,7 +356,7 @@ public class MemberRestController {
 
 
         // Member 데이터 조회
-        String noContentMessage = messageByLocale.get("tps.common.error.no-data");
+        String noContentMessage = msg("tps.common.error.no-data");
         MemberInfo member = memberService
                 .findMemberById(memberId)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
@@ -374,14 +369,14 @@ public class MemberRestController {
             tpsLogger.success(ActionType.DELETE);
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.member.success.delete"));
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO DELETE MEMBER] memberId: {} {}", memberId, e.getMessage());
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
-            throw new Exception(messageByLocale.get("tps.member.error.delete"), e);
+            throw new Exception(msg("tps.member.error.delete"), e);
         }
     }
 
@@ -404,8 +399,8 @@ public class MemberRestController {
             @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}") String newPassword)
             throws Exception {
 
-        String infoMessage = messageByLocale.get("tps.common.error.no-data");
-        String passwordSameMessage = messageByLocale.get("tps.member.error.same.password");
+        String infoMessage = msg("tps.common.error.no-data");
+        String passwordSameMessage = msg("tps.member.error.same.password");
 
         // 오리진 데이터 조회
         MemberInfo orgMember = memberService
@@ -436,7 +431,7 @@ public class MemberRestController {
 
             // 결과리턴
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
-            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto);
+            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, msg("tps.member.success.change-password"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
@@ -468,13 +463,13 @@ public class MemberRestController {
         MemberInfo member = modelMapper.map(memberDTO, MemberInfo.class);
         if (McpString.isNotEmpty(member.getMemberId())) { // 자동 발번이 아닌 경우 중복 체크
             if (memberService.isDuplicatedId(member.getMemberId())) {
-                throw new InvalidDataException(messageByLocale.get("tps.member.error.duplicated.memberId"));
+                throw new InvalidDataException(msg("tps.member.error.duplicated.memberId"));
             }
         }
 
         try {
 
-            String passwordSameMessage = messageByLocale.get("tps.member.error.same.password");
+            String passwordSameMessage = msg("tps.member.error.same.password");
 
             if (memberDTO
                     .getPassword()
@@ -485,7 +480,7 @@ public class MemberRestController {
             MemberInfo returnValue = processUserSave(member, memberDTO.getMemberGroups(), MemberRequestCode.NEW_REQUEST.getNextStatus());
 
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
-            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, messageByLocale.get(MemberRequestCode.NEW_REQUEST.getMessageKey()));
+            ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto, msg(MemberRequestCode.NEW_REQUEST.getMessageKey()));
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -493,7 +488,7 @@ public class MemberRestController {
             log.error("[FAIL TO INSERT MEMBER]", e);
             // 액션 로그에 오류 내용 출력
             tpsLogger.error(ActionType.INSERT, e);
-            throw new Exception(messageByLocale.get("tps.member.error.save"), e);
+            throw new Exception(msg("tps.member.error.save"), e);
         }
     }
 
@@ -512,7 +507,7 @@ public class MemberRestController {
             @Valid MemberRequestDTO memberRequestDTO)
             throws Exception {
 
-        String noDataMsg = messageByLocale.get("tps.common.error.no-data");
+        String noDataMsg = msg("tps.common.error.no-data");
 
         MemberInfo member = memberService
                 .findMemberById(memberId)
@@ -523,7 +518,7 @@ public class MemberRestController {
                 .getPassword()
                 .equals(memberRequestDTO.getConfirmPassword());
         if (!same) {
-            throw new PasswordNotMatchedException(messageByLocale.get("wms.login.error.PasswordNotMatchedException"));
+            throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
         }
 
         same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
@@ -541,7 +536,7 @@ public class MemberRestController {
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
-        String smsInfoMsg = messageByLocale.get("wms.login.info.sms-sand");
+        String smsInfoMsg = msg("wms.login.info.sms-sand");
 
         // 결과리턴
         ResultDTO<MemberDTO> resultDto = new ResultDTO<>(memberDTO, smsInfoMsg);
@@ -564,7 +559,7 @@ public class MemberRestController {
             throws Exception {
 
         // 결과리턴
-        String noDataMsg = messageByLocale.get("tps.common.error.no-data");
+        String noDataMsg = msg("tps.common.error.no-data");
         String successMsg;
 
         MemberInfo member = memberService
@@ -576,16 +571,16 @@ public class MemberRestController {
         if (memberRequestDTO.getRequestType() == MemberRequestCode.UNLOCK_SMS
                 || memberRequestDTO.getRequestType() == MemberRequestCode.NEW_SMS) {// SMS 인증문자로 잠김해제 요청 또는 신규 등록 신청
             if (McpString.isEmpty(member.getSmsAuth())) {
-                throw new InvalidDataException(messageByLocale.get("wms.login.error.notempty.smsAuth"));
+                throw new InvalidDataException(msg("wms.login.error.notempty.smsAuth"));
             }
             if (!member
                     .getSmsAuth()
                     .equals(memberRequestDTO.getSmsAuth())) {
-                throw new SmsAuthNumberBadCredentialsException(messageByLocale.get("wms.login.error.sms-unmatched"));
+                throw new SmsAuthNumberBadCredentialsException(msg("wms.login.error.sms-unmatched"));
             }
 
             if (McpDate.term(member.getSmsExp()) < 0) {
-                throw new SmsAuthNumberExpiredException(messageByLocale.get("wms.login.error.unlock-sms-expired"));
+                throw new SmsAuthNumberExpiredException(msg("wms.login.error.unlock-sms-expired"));
             }
             // 잠금 해제
             member.setPasswordModDt(McpDate.now());
@@ -596,7 +591,7 @@ public class MemberRestController {
                 .getRequestType()
                 .getNextStatus());
         memberService.updateMember(member);
-        successMsg = messageByLocale.get(memberRequestDTO
+        successMsg = msg(memberRequestDTO
                 .getRequestType()
                 .getMessageKey());
 
@@ -623,7 +618,7 @@ public class MemberRestController {
         // 비밀번호와 비밀번호 확인 비교
         boolean same = password.equals(confirmPassword);
         if (!same) {
-            throw new PasswordNotMatchedException(messageByLocale.get("wms.login.error.PasswordNotMatchedException"));
+            throw new PasswordNotMatchedException(msg("wms.login.error.PasswordNotMatchedException"));
         }
 
         same = passwordEncoder.matches(password, orgMember.getPassword());

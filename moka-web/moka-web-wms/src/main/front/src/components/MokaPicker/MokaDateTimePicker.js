@@ -101,7 +101,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
                         e.stopPropagation();
                     }}
                     className={clsx(props.className, inputClassName)}
-                    mask={dateTimeFormat.replace(/y|m|d|h/gi, '9')}
+                    mask={dateTimeFormat.replace(/y|m|d|h|s/gi, '9')}
                     placeholder={placeholder}
                     disabled={disabled}
                 />

@@ -35,7 +35,12 @@ const DeskingWorkComponent = (props) => {
 
     return (
         <div id={`agGrid-${component.seq}`}>
-            <ButtonGroup component={component} agGridIndex={agGridIndex} />
+            <ButtonGroup
+                component={component}
+                agGridIndex={agGridIndex}
+                componentAgGridInstances={componentAgGridInstances}
+                setComponentAgGridInstances={setComponentAgGridInstances}
+            />
             <AgGrid component={component} agGridIndex={agGridIndex} componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
         </div>
     );

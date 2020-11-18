@@ -41,10 +41,11 @@ const makeRowNode = (data, overIndex, component) => {
             sourceCode: data.sourceCode,
             contentOrd: contentOrd,
             relOrd: null,
+            saveYn: 'N',
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
-            title: data.artTitle,
-            mobTitle: data.artTitle,
+            title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,
+            mobTitle: data.artEditMobTitle == null ? data.artTitle : data.artEditTitle,
             subTitle: data.artSubTitle,
             nameplate: null,
             titlePrefix: null,
@@ -171,9 +172,52 @@ function* deskingDragStop({ payload }) {
 }
 
 /**
+ * Work컴포넌트 임시저장
+ */
+function* postPreComponentWork(action) {
+    const ACTION = act.POST_PRE_COMPONENT_WORK;
+    let response, callbackData;
+    const { callback } = action.payload;
+
+    yield put(startLoading(ACTION));
+    try {
+        response = yield call(api.postDeskingWorkList, action.payload);
+
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 성공 액션 실행
+            yield put({
+                type: act.COMPONENT_WORK_SUCCESS,
+                payload: response.data,
+            });
+        } else {
+            // yield put({
+            //     type: deskingStore.COMPONENT_WORK_FAILURE,
+            //     payload: response.data,
+            //     error: true
+            // });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+
+        // 실패 액션 실행
+        yield put({
+            type: act.COMPONENT_WORK_FAILURE,
+            payload: callbackData,
+        });
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
+/**
  * 편집기사추가
  */
-function* postDeskingWorkListSaga(action) {
+function* postDeskingWorkList(action) {
     const ACTION = act.POST_DESKING_WORK_LIST;
     let response, callbackData;
     const { componentWorkSeq, datasetSeq, deskingWork, callback } = action.payload;
@@ -223,11 +267,12 @@ export default function* saga() {
 
     // yield takeLatest(act.GET_COMPONENT_WORK, getComponentWorkSaga);
     // yield takeLatest(act.POST_COMPONENT_WORK, postComponentWorkSaga);
+    yield takeLatest(act.POST_PRE_COMPONENT_WORK, postPreComponentWork);
     // yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWorkSaga);
     // yield takeLatest(act.HAS_OTHER_SAVED, hasOtherSavedSaga);
     // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPrioritySaga);
     // yield takeLatest(act.POST_DESKING_WORK, postDeskingWorkSaga);
-    yield takeLatest(act.POST_DESKING_WORK_LIST, postDeskingWorkListSaga);
+    yield takeLatest(act.POST_DESKING_WORK_LIST, postDeskingWorkList);
     // yield takeLatest(act.MOVE_DESKING_WORK_LIST, moveDeskingWorkListSaga);
     // yield takeLatest(act.PUT_DESKING_WORK, putDeskingWorkSaga);
     // yield takeLatest(act.PUT_DESKING_REL_WORKS, putDeskingRelWorksSaga);

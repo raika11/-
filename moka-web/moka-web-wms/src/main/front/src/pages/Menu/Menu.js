@@ -152,8 +152,8 @@ const Menu = () => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>메뉴관리</title>
-                <meta name="description" content="메뉴관리페이지입니다." />
+                <title>메뉴 관리</title>
+                <meta name="description" content="메뉴 관리 페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
             {/* 리스트 */}

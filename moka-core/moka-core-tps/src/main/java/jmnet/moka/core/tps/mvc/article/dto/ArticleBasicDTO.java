@@ -145,4 +145,5 @@ public class ArticleBasicDTO implements Serializable {
      * 기사부제목
      */
     private String articleSubTitle;
+    
 }

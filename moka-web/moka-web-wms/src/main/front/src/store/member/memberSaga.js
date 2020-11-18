@@ -1,0 +1,113 @@
+import { takeLatest, put, call, select } from 'redux-saga/effects';
+import { startLoading, finishLoading } from '@store/loading/loadingAction';
+import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
+
+import * as memberAPI from './memberApi';
+import * as memberAction from './memberAction';
+
+/**
+ * 목록
+ */
+const getMemberList = callApiAfterActions(memberAction.GET_MEMBER_LIST, memberAPI.getMemberList, (state) => state.member);
+
+/**
+ * 데이터 조회
+ */
+const getMember = createRequestSaga(memberAction.GET_MEMBER, memberAPI.getMember);
+
+/**
+ * 사용자아이디 중복 체크
+ * @param {string} param0.payload.memberId 사용자아이디
+ * @param {func} param0.payload.callback 콜백
+ */
+function* duplicateCheck({ payload: { memberId, callback } }) {
+    const ACTION = memberAction.DUPLICATE_CHECK;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(memberAPI.duplicateCheck, memberId);
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(true);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 등록/수정
+ * @param {string} param0.payload.type insert|update
+ * @param {array} param0.payload.actions 선처리 액션들
+ * @param {func} param0.payload.callback 콜백
+ */
+function* saveMember({ payload: { type, actions, callback } }) {
+    const ACTION = memberAction.SAVE_MEMBER;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        // actions 먼저 처리
+        if (actions && actions.length > 0) {
+            for (let i = 0; i < actions.length; i++) {
+                const act = actions[i];
+                yield put({
+                    type: act.type,
+                    payload: act.payload,
+                });
+            }
+        }
+
+        // 사용자 데이터
+        const member = yield select((store) => store.member.member);
+        const response = type === 'insert' ? yield call(memberAPI.postMember, { member }) : yield call(memberAPI.putMember, { member });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: memberAction.GET_MEMBER_SUCCESS,
+                payload: response.data,
+            });
+
+            // 목록 다시 검색
+            yield put({ type: memberAction.GET_MEMBER_LIST });
+        } else {
+            yield put({
+                type: memberAction.GET_MEMBER_FAILURE,
+                payload: response.data,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+
+        yield put({
+            type: memberAction.GET_MEMBER_FAILURE,
+            payload: callbackData,
+        });
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 로그인 이력 조회
+ */
+const getLoginHistoryList = callApiAfterActions(memberAction.GET_LOGIN_HISTORY_LIST, memberAPI.getLoginHistoryList, (state) => state.member);
+
+export default function* memberSaga() {
+    yield takeLatest(memberAction.GET_MEMBER_LIST, getMemberList);
+    yield takeLatest(memberAction.GET_MEMBER, getMember);
+    yield takeLatest(memberAction.DUPLICATE_CHECK, duplicateCheck);
+    yield takeLatest(memberAction.SAVE_MEMBER, saveMember);
+    yield takeLatest(memberAction.GET_LOGIN_HISTORY_LIST, getLoginHistoryList);
+}

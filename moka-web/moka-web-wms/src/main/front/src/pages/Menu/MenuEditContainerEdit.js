@@ -431,11 +431,11 @@ const MenuEditContainerEdit = (props) => {
                     ''
                 )}
                 <Form.Group className="d-flex pt-20 justify-content-center">
-                    <Button type="submit" className="float-left mr-10 pr-20 pl-20" variant="primary" onClick={handleClickSave}>
+                    <Button type="submit" className="float-left mr-10 pr-20 pl-20" variant="positive" onClick={handleClickSave}>
                         저장
                     </Button>
                     {menuSeq ? (
-                        <Button className="float-left mr-0 pr-20 pl-20" variant="warning" onClick={handleClickDelete}>
+                        <Button className="float-left mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete}>
                             삭제
                         </Button>
                     ) : (

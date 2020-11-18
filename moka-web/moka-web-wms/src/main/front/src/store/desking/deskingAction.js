@@ -16,6 +16,15 @@ export const [GET_COMPONENT_WORK_LIST, GET_COMPONENT_WORK_LIST_SUCCESS, GET_COMP
 export const getComponentWorkList = createAction(GET_COMPONENT_WORK_LIST, ({ areaSeq, callback }) => ({ areaSeq, callback }));
 
 /**
+ * Work컴포넌트 임시저장
+ */
+export const POST_PRE_COMPONENT_WORK = 'desking/POST_PRE_COMPONENT_WORK';
+export const postPreComponentWork = createAction(POST_PRE_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({
+    componentWorkSeq,
+    callback,
+}));
+
+/**
  * deskingWorkList 저장
  * (워크의 기사리스트)
  */
@@ -26,6 +35,8 @@ export const postDeskingWorkList = createAction(POST_DESKING_WORK_LIST, ({ compo
     list,
     callback,
 }));
+
+/**
 /**
  * Work컴포넌트 순번수정
  */

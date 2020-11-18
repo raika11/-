@@ -20,3 +20,17 @@ export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, deskingWork 
             throw err;
         });
 };
+
+// work편집기사목록 임시저장
+export const postPreComponentWork = ({ componentWorkSeq }) => {
+    return instance.post(`/api/desking/pre/components/${componentWorkSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// Work컴포넌트 전송
+export const postComponentWork = ({ componentWorkSeq }) => {
+    return instance.post(`/api/desking/components/${componentWorkSeq}`).catch((err) => {
+        throw err;
+    });
+};

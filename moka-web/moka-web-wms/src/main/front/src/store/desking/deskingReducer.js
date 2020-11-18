@@ -30,6 +30,7 @@ export const initialState = {
         schCodeId: '',
         artPageSeq: null,
         viewYn: 'Y',
+        deskingWorks: [],
     },
 };
 

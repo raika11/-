@@ -3,7 +3,6 @@
  */
 package jmnet.moka.core.tps.mvc.desking.repository;
 
-import java.util.List;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -20,5 +19,5 @@ public interface DeskingWorkRepository extends JpaRepository<DeskingWork, Long>,
 
     Long countByDatasetSeq(Long datasetSeq);
 
-    List<DeskingWork> findByDatasetSeqAndRegId(Long datasetSeq, String regId);
+    //    List<DeskingWork> findByDatasetSeqAndRegId(Long datasetSeq, String regId);
 }

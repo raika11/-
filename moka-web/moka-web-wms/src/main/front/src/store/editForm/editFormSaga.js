@@ -1,5 +1,5 @@
-import { takeLatest, put, call, select } from 'redux-saga/effects';
-import { startLoading, finishLoading } from '@store/loading/loadingAction';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { finishLoading, startLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
 
 import * as editFormApi from './editFormApi';
@@ -21,7 +21,7 @@ const getEditForm = createRequestSaga(editFormAction.GET_EDIT_FORM, editFormApi.
  * @param {array} param0.payload.actions 선처리 액션들
  * @param {func} param0.payload.callback 콜백
  */
-function* saveEditForm({ payload: { type, channelId, partId, actions, callback } }) {
+function* saveEditForm({ payload: { type, formSeq, partSeq, actions, callback } }) {
     const ACTION = editFormAction.SAVE_EDIT_FORM;
     let callbackData = {};
 
@@ -41,7 +41,8 @@ function* saveEditForm({ payload: { type, channelId, partId, actions, callback }
 
         // 도메인 데이터
         const editForm = yield select((store) => store.editForm.editForm);
-        const response = type === 'insert' ? yield call(editFormApi.postEditForm, { channelId, partId, editForm }) : yield call(editFormApi.putEditForm, { editForm });
+        const response =
+            type === 'insert' ? yield call(editFormApi.postEditForm, { formSeq, partSeq, editForm }) : yield call(editFormApi.putEditForm, { formSeq, partSeq, editForm });
         callbackData = response.data;
 
         if (response.data.header.success) {
@@ -68,6 +69,33 @@ function* saveEditForm({ payload: { type, channelId, partId, actions, callback }
             type: editFormAction.GET_EDIT_FORM_FAILURE,
             payload: callbackData,
         });
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 등록/수정
+ * @param {string} param0.payload.type insert|update
+ * @param {array} param0.payload.actions 선처리 액션들
+ * @param {func} param0.payload.callback 콜백
+ */
+function* saveEditFormPart({ payload: { type, formSeq, partSeq, partJson, callback } }) {
+    const ACTION = editFormAction.SAVE_EDIT_FORM;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response =
+            type === 'insert' ? yield call(editFormApi.postEditForm, { formSeq, partSeq, partJson }) : yield call(editFormApi.putEditForm, { formSeq, partSeq, partJson });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(e);
     }
 
     if (typeof callback === 'function') {
@@ -126,5 +154,6 @@ export default function* editSaga() {
     yield takeLatest(editFormAction.GET_EDIT_FORM_LIST, getEditFormList);
     yield takeLatest(editFormAction.GET_EDIT_FORM, getEditForm);
     yield takeLatest(editFormAction.SAVE_EDIT_FORM, saveEditForm);
+    yield takeLatest(editFormAction.SAVE_EDIT_FORM_PART, saveEditFormPart);
     yield takeLatest(editFormAction.DELETE_EDIT_FORM, deleteEditForm);
 }

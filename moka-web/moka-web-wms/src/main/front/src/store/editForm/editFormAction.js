@@ -26,17 +26,19 @@ export const getEditForm = createAction(GET_EDIT_FORM, (partId) => partId);
  */
 export const CHANGE_EDIT_FORM = 'editForm/CHANGE_EDIT_FORM';
 export const CHANGE_EDIT_FORM_PART = 'editForm/CHANGE_EDIT_FORM_PART';
-export const CHANGE_FIELD_GROUP = 'editForm/CHANGE_FIELD_GROUP';
+export const CHANGE_FIELD = 'editForm/CHANGE_FIELD';
 export const CHANGE_INVALID_LIST = 'editForm/CHANGE_INVALID_LIST';
 export const changeEditForm = createAction(CHANGE_EDIT_FORM, (editForm) => editForm);
-export const changeFieldGroup = createAction(CHANGE_FIELD_GROUP, (fieldGroup, index, field) => ({ fieldGroup, index, field }));
+export const changeField = createAction(CHANGE_FIELD, (partIdx, groupIdx, fieldIdx, field) => ({ partIdx, groupIdx, fieldIdx, field }));
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 /**
  * 저장
  */
 export const SAVE_EDIT_FORM = 'editForm/SAVE_EDIT_FORM';
-export const saveEditForm = createAction(SAVE_EDIT_FORM, ({ type, channelId, partId, actions, callback }) => ({ type, channelId, partId, actions, callback }));
+export const saveEditForm = createAction(SAVE_EDIT_FORM, ({ type, formSeq, partSeq, actions, callback }) => ({ type, formSeq, partSeq, actions, callback }));
+export const SAVE_EDIT_FORM_PART = 'editForm/SAVE_EDIT_FORM_PART';
+export const saveEditFormPart = createAction(SAVE_EDIT_FORM_PART, ({ type, formSeq, partSeq, partJson, callback }) => ({ type, formSeq, partSeq, partJson, callback }));
 
 /**
  * 삭제

@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Form from 'react-bootstrap/Form';
 import Field from './Field';
-import { EditFormPartsContext } from './EditFormEdit';
+import { useSelector } from 'react-redux';
 
 const propTypes = {
     field: PropTypes.any,
@@ -14,8 +14,11 @@ const propTypes = {
 const FieldGroup = (props) => {
     const { groupIdx, partIdx, onFieldChange } = props;
 
-    const editFormPartsContext = useContext(EditFormPartsContext);
-    const part = editFormPartsContext[partIdx];
+    const { editFormParts } = useSelector((store) => ({
+        editFormParts: store.editForm.editFormParts,
+    }));
+
+    const part = editFormParts[partIdx];
     const fieldGroup = part.fieldGroups[groupIdx];
 
     return (

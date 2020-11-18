@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FieldGroup from './FieldGroup';
-import { EditFormPartsContext } from './EditFormEdit';
+import { saveEditFormPart } from '@/store/editForm';
+import toast from '@/utils/toastUtil';
 
 const propTypes = {
     part: PropTypes.any,
@@ -16,34 +17,35 @@ const PartEdit = (props) => {
     const { partIdx, formId } = props;
     const dispatch = useDispatch();
 
-    const editFormPartsContext = useContext(EditFormPartsContext);
-    const part = editFormPartsContext[partIdx];
+    const { editFormParts } = useSelector((store) => ({
+        editFormParts: store.editForm.editFormParts,
+    }));
+
+    const part = editFormParts[partIdx];
 
     const handleClickSave = (event) => {
-        console.log(part);
         insertEditFormPart({ partJson: JSON.stringify(part) });
     };
 
     const insertEditFormPart = (tmp) => {
-        console.log(JSON.stringify(part));
-        /*
+        console.log(part);
         dispatch(
-            saveEditForm({
-                type: 'insert',
-                formId: formId,
-                partId: part.id,
-                actions: [
-                    changeEditForm({
-                        ...{ partJson: JSON.stringify(part) },
-                        ...tmp,
-                    }),
-                ],
+            saveEditFormPart({
+                type: 'update',
+                formSeq: part.formSeq,
+                partSeq: part.partSeq,
+                partJson: {
+                    partId: part.partId,
+                    partTitle: part.partTitle,
+                    usedYn: part.useYn,
+                    status: 'SAVE',
+                    formData: JSON.stringify(part.fieldGroups),
+                },
                 callback: (response) => {
                     toast.result(response);
                 },
             }),
         );
-        */
     };
 
     return (
@@ -58,7 +60,7 @@ const PartEdit = (props) => {
                 ))}
             </Card.Body>
             <Card.Footer>
-                <Button variant="primary" onClick={handleClickSave}>
+                <Button variant="positive" onClick={handleClickSave}>
                     저장
                 </Button>
             </Card.Footer>

@@ -1,18 +1,15 @@
 package jmnet.moka.web.rcv.common.vo;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.util.RcvStringUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.codehaus.commons.compiler.util.StringUtil;
 
 /**
  * <pre>
@@ -35,14 +32,10 @@ public class TotalVo <T> extends BasicVo {
     private static final long serialVersionUID = -496382951869605085L;
     protected final T mainData;
     protected List<String> errorMessage = new ArrayList<>();
+    protected List<String> infoMessage = new ArrayList<>();
 
     public TotalVo(T mainData) {
         this.mainData = mainData;
-    }
-
-    public void logError( String errorMessage ) {
-        log.error(errorMessage);
-        this.errorMessage.add(errorMessage);
     }
 
     public String getErrorMessage(){
@@ -55,7 +48,20 @@ public class TotalVo <T> extends BasicVo {
         return ret;
     }
 
+    public void logError( String errorMessage ) {
+        log.error(errorMessage);
+        this.errorMessage.add(errorMessage);
+    }
+
     public void logError(String s, Object...message) {
         logError(RcvStringUtil.format(s, message));
+    }
+
+    public void logInfo( String infoMessage ) {
+        log.info(infoMessage);
+        this.infoMessage.add( infoMessage );
+    }
+    public void logInfo(String s, Object...message) {
+        logInfo(RcvStringUtil.format(s, message));
     }
 }

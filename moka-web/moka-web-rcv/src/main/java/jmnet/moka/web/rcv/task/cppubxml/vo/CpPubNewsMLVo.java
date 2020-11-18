@@ -1,16 +1,16 @@
-package jmnet.moka.web.rcv.task.cpxml.vo;
+package jmnet.moka.web.rcv.task.cppubxml.vo;
 
-import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import jmnet.moka.web.rcv.common.object.JaxbObjectManager;
 import jmnet.moka.web.rcv.common.object.JaxbObjectUnmarshallerImpl;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
-import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
+import jmnet.moka.web.rcv.task.cppubxml.vo.sub.CpPubNewsEnvelope;
+import jmnet.moka.web.rcv.task.cppubxml.vo.sub.CpPubNewsItem;
+import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleListVo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,11 +28,14 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@XmlRootElement(name = "article_list")
+@XmlRootElement(name = "NewsML")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CpArticleListVo extends BasicVo {
-    private static final long serialVersionUID = 1976143109201412553L;
+public class CpPubNewsMLVo extends BasicVo {
+    private static final long serialVersionUID = -7352195509963411996L;
 
-    @XmlElement(name = "article")
-    private List<CpArticleVo> articles;
+    @XmlElement(name = "NewsEnvelope")
+    private CpPubNewsEnvelope newsEnvelope;
+
+    @XmlElement(name = "NewsItem")
+    private CpPubNewsItem newsItem;
 }

@@ -1,12 +1,19 @@
 package jmnet.moka.web.rcv.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
@@ -25,6 +32,48 @@ import jmnet.moka.web.rcv.exception.RcvException;
  * @since 2020-11-05 005 오전 10:49
  */
 public class RcvFileUtil {
+    public static String readFile( Path path, Charset encoding)
+            throws IOException {
+        byte [] encoded = Files.readAllBytes(path);
+        return new String( encoded, encoding);
+    }
+
+    public static Charset getFromXml( File file ) {
+        XMLStreamReader xmlStreamReader = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(file);
+            xmlStreamReader = XMLInputFactory
+                    .newInstance()
+                    .createXMLStreamReader(fr);
+
+            return Charset.forName(xmlStreamReader.getCharacterEncodingScheme());
+        } catch (Exception ignore) {
+        }
+        finally {
+            if( xmlStreamReader != null ) {
+                try {
+                    xmlStreamReader.close();
+                } catch (XMLStreamException e) {
+                    e.printStackTrace();
+                }
+            }
+            if( fr != null ) {
+                try {
+                    fr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return StandardCharsets.UTF_8;
+    }
+
+    public static String readFromXml( File file )
+            throws IOException {
+        return RcvFileUtil.readFile(file.toPath(), getFromXml( file) );
+    }
+
     public static boolean createDirectories(String dir) {
         try {
             if (!McpString.isNullOrEmpty(dir)) {

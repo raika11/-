@@ -2,9 +2,12 @@ package jmnet.moka.web.rcv.common.object;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
+import jmnet.moka.web.rcv.task.cppubxml.vo.CpPubNewsMLVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleListVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import lombok.extern.slf4j.Slf4j;
@@ -23,26 +26,33 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class JaxbObjectManager {
-    private static JaxbObjectUnmarshaller<JamArticleVo> jamArticleVoUnmarshaller;
-    private static JaxbObjectUnmarshaller<CpArticleListVo> cpArticleListVoUnmarshaller;
+    static List<JaxbObjectUnmarshaller> listUnmarshallerlist = new ArrayList<>();
 
     static {
         try {
-            jamArticleVoUnmarshaller = new JaxbObjectUnmarshaller<>(JamArticleVo.class);
-            cpArticleListVoUnmarshaller = new JaxbObjectUnmarshaller<>(CpArticleListVo.class);
-        } catch (JAXBException e) {
-            log.error("jaxbContext create error", e);
+            listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(JamArticleVo.class) );
+            listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(CpArticleListVo.class) );
+            listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(CpPubNewsMLVo.class) );
+        } catch (JAXBException ignore) {
         }
     }
 
     public static BasicVo getBasicVoFromXml(File file, Type objectType)
             throws XMLStreamException, JAXBException {
-        if (jamArticleVoUnmarshaller.getObjectType() == objectType) {
-            return jamArticleVoUnmarshaller.getBasicVoFromXml(file);
-        }
-        if( cpArticleListVoUnmarshaller.getObjectType() == objectType) {
-            return cpArticleListVoUnmarshaller.getBasicVoFromXml(file);
-        }
+        for( JaxbObjectUnmarshaller unmarshaller : listUnmarshallerlist )
+            if( unmarshaller.getObjectType() == objectType )
+                return unmarshaller.getBasicVoFromXml(file);
+
+        log.error ( "JaxbObjectManager :: Not Defined object Type ");
+        return null;
+    }
+
+    public static BasicVo getBasicVoFromString(String string, Type objectType)
+            throws XMLStreamException, JAXBException {
+        for( JaxbObjectUnmarshaller unmarshaller : listUnmarshallerlist )
+            if( unmarshaller.getObjectType() == objectType )
+                return unmarshaller.getBasicVoFromString( string );
+
         log.error ( "JaxbObjectManager :: Not Defined object Type ");
         return null;
     }

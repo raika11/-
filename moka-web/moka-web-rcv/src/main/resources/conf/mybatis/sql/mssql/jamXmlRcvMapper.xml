@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.web.rcv.task.jamxml.mapper.JamXmlRcvMapper">
-  <select id="selectSectCodeByContCode" parameterType="JamArticleTotalVo" resultType="HashMap"
+  <select id="callUpaJamMasterCodeSel" parameterType="JamArticleTotalVo" resultType="HashMap"
     statementType="CALLABLE">
     <![CDATA[
     {
@@ -13,7 +13,7 @@
     ]]>
   </select>
 
-  <select id="selectIssueSeriesReporter" parameterType="HashMap" resultType="HashMap"
+  <select id="callUpaIssueSeriesReporterSelByRepseq" parameterType="HashMap" resultType="HashMap"
     statementType="CALLABLE">
     <![CDATA[
     {
@@ -25,7 +25,7 @@
     ]]>
   </select>
 
-  <insert id="insertReceiveJobStep" parameterType="JamArticleTotalVo" statementType="CALLABLE">
+  <insert id="callUpaJamRcvArtHistIns" parameterType="JamArticleTotalVo" statementType="CALLABLE">
     <![CDATA[
     {
       #{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} =
@@ -41,7 +41,7 @@
     ]]>
   </insert>
 
-  <insert id="updateReceiveJobStep" parameterType="JamArticleTotalVo" statementType="CALLABLE">
+  <insert id="callUpaJamRcvArtHistUpd" parameterType="JamArticleTotalVo" statementType="CALLABLE">
     <![CDATA[
     {
       call UPA_JAM_RCV_ART_HIST_UPD(

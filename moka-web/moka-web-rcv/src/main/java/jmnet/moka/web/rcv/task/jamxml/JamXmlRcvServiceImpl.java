@@ -3,14 +3,11 @@ package jmnet.moka.web.rcv.task.jamxml;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
 import jmnet.moka.web.rcv.task.jamxml.mapper.JamXmlRcvMapper;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
-import jmnet.moka.web.rcv.task.jamxml.vo.sub.ReporterVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.TotalBasicInfo;
-import jmnet.moka.web.rcv.util.RcvUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -41,7 +38,7 @@ public class JamXmlRcvServiceImpl implements JamXmlRcvService {
     public Map<String, String> selectSectCodeByContCode(JamArticleTotalVo jamArticle)
             throws RcvDataAccessException {
         try {
-            return jamXmlRcvMapper.selectSectCodeByContCode(jamArticle);
+            return jamXmlRcvMapper.callUpaJamMasterCodeSel(jamArticle);
         } catch (DataAccessException e) {
             throw new RcvDataAccessException(e.getCause());
         }
@@ -54,7 +51,7 @@ public class JamXmlRcvServiceImpl implements JamXmlRcvService {
             Map<String, String> map = new HashMap<>();
             map.put("tmpRepList", tmpRepList);
             map.put("tmpKwdList", tmpKwdList);
-            return jamXmlRcvMapper.selectIssueSeriesReporter(map);
+            return jamXmlRcvMapper.callUpaIssueSeriesReporterSelByRepseq(map);
         } catch (DataAccessException e) {
             throw new RcvDataAccessException(e.getCause());
         }
@@ -65,7 +62,7 @@ public class JamXmlRcvServiceImpl implements JamXmlRcvService {
             throws RcvDataAccessException {
         try {
             jamArticle.setArtHistoryStep(0);
-            this.jamXmlRcvMapper.insertReceiveJobStep(jamArticle);
+            this.jamXmlRcvMapper.callUpaJamRcvArtHistIns(jamArticle);
         } catch (DataAccessException e) {
             throw new RcvDataAccessException(e.getCause());
         }
@@ -77,7 +74,7 @@ public class JamXmlRcvServiceImpl implements JamXmlRcvService {
         try {
             jamArticle.setArtHistoryId(jobSeq);
             jamArticle.setArtHistoryStep(jobStep);
-            this.jamXmlRcvMapper.updateReceiveJobStep(jamArticle);
+            this.jamXmlRcvMapper.callUpaJamRcvArtHistUpd(jamArticle);
         } catch (DataAccessException e) {
             throw new RcvDataAccessException(e.getCause());
         }
@@ -109,7 +106,7 @@ public class JamXmlRcvServiceImpl implements JamXmlRcvService {
                     //***************************************************************************************************
                     // 히스토리 정보 입력
                     jamArticleTotalVo.setArtHistoryStep(1);
-                    jamXmlRcvMapper.insertReceiveJobStep(jamArticleTotalVo);
+                    jamXmlRcvMapper.callUpaJamRcvArtHistIns(jamArticleTotalVo);
 
                     doInsertArticleData(jamArticleTotalVo);
                     break;

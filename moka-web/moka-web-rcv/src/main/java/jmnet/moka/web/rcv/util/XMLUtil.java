@@ -53,7 +53,13 @@ public class XMLUtil {
         return xpath;
     }
 
-    public NodeList getNoteList(Document doc, String xpath)
+    public NodeList getNodeList(Document doc, String xpath)
+            throws XPathExpressionException {
+        XPathExpression exp = getXPath().compile(xpath);
+        return (NodeList) exp.evaluate(doc, XPathConstants.NODESET);
+    }
+
+    public NodeList getNodeList(Node doc, String xpath)
             throws XPathExpressionException {
         XPathExpression exp = getXPath().compile(xpath);
         return (NodeList) exp.evaluate(doc, XPathConstants.NODESET);

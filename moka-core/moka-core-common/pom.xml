@@ -1,93 +1,99 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>jmnet.moka</groupId>
-		<artifactId>moka-springboot-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
-	</parent>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>jmnet.moka</groupId>
+    <artifactId>moka-springboot-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
 
-	<groupId>jmnet.moka.core</groupId>
-	<artifactId>moka-core-common</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+  <groupId>jmnet.moka.core</groupId>
+  <artifactId>moka-core-common</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-	<name>moka-core-common</name>
-	<url>https://pri-nexus.joongang.co.kr</url>
-	
-	<properties>
-		<spring-boot.repackage.skip>true</spring-boot.repackage.skip>
-		<tests.skip>true</tests.skip>
-		<skipTests>true</skipTests>
-	</properties>
+  <name>moka-core-common</name>
+  <url>https://pri-nexus.joongang.co.kr</url>
 
-	<dependencies>
-	
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+  <properties>
+    <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+    <tests.skip>true</tests.skip>
+    <skipTests>true</skipTests>
+  </properties>
 
-		<dependency>
-			<groupId>jmnet.moka.common</groupId>
-			<artifactId>moka-common-utils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+  <dependencies>
 
-		<dependency>
-			<groupId>jmnet.moka.common</groupId>
-			<artifactId>moka-common-template</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>jmnet.moka.common</groupId>
+      <artifactId>moka-common-utils</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
 
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>jmnet.moka.common</groupId>
+      <artifactId>moka-common-template</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
 
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjtools</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>com.github.ulisesbocchio</groupId>
-			<artifactId>jasypt-spring-boot</artifactId>
-			<version>3.0.3</version>
-		</dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjtools</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>org.apache.sshd</groupId>
-			<artifactId>sshd-scp</artifactId>
-			<version>2.5.1</version>
-		</dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>org.codehaus.janino</groupId>
-			<artifactId>janino</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>com.github.ulisesbocchio</groupId>
+      <artifactId>jasypt-spring-boot</artifactId>
+      <version>3.0.3</version>
+    </dependency>
 
-	</dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sshd</groupId>
+      <artifactId>sshd-scp</artifactId>
+      <version>2.5.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>3.7.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.janino</groupId>
+      <artifactId>janino</artifactId>
+    </dependency>
+
+  </dependencies>
 </project>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
-import { getLoginHistoryList, GET_LOGIN_HISTORY_LIST, initialState, changeHistorySearchOption } from '@store/member';
+import { getLoginHistoryList, GET_LOGIN_HISTORY_LIST, initialState, changeHistorySearchOption, clearHistoryList } from '@store/member';
 import { historyColumnDefs } from '../MemberAgGridColumns';
 
 /**
@@ -22,6 +22,7 @@ const MemberChildLoginHistoryAgGrid = () => {
 
     useEffect(() => {
         if (paramId) {
+            dispatch(clearHistoryList());
             dispatch(
                 getLoginHistoryList(
                     changeHistorySearchOption({
@@ -30,6 +31,13 @@ const MemberChildLoginHistoryAgGrid = () => {
                     }),
                 ),
             );
+        } else {
+            dispatch(clearHistoryList());
+        }
+    }, [dispatch, paramId]);
+
+    useEffect(() => {
+        if (paramId) {
         }
     }, [dispatch, paramId]);
 

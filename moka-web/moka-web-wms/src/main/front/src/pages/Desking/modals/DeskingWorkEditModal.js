@@ -156,8 +156,8 @@ const DeskingWorkEditModal = (props) => {
                     </Form.Row>
                     <MokaInputLabel label="부제" inputClassName="ft-12" name="subtitle" value={subtitle} onChange={handleChangeValue} />
                     <MokaInputLabel label="리드문" inputClassName="ft-12" name="bodyHead" as="textarea" inputProps={{ rows: 5 }} value={bodyHead} onChange={handleChangeValue} />
-                    <Form.Row>
-                        <MokaInputLabel label="영상" onChange={handleChangeValue} as="none" />
+                    <Form.Row className="d-flex align-items-center">
+                        <MokaInputLabel label="영상" className="m-0" onChange={handleChangeValue} as="none" />
                         <div className="w-100">
                             <MokaSearchInput placeholder="url 입력해주세요" />
                         </div>

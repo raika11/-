@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Builder
 @Entity
-@Table(name = "TB_15RE_DIRECT_LINK")
+@Table(name = "TB_COLUMNIST")
 @NamedQuery(name = "Columnist.findAll", query = "SELECT d FROM Columnist d")
 public class Columnist extends BaseAudit {
 

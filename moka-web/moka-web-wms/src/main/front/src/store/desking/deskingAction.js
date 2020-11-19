@@ -79,7 +79,7 @@ export const moveDeskingWorkList = createAction(MOVE_DESKING_WORK_LIST, ({ compo
  * 데스킹 워크 수정
  */
 export const PUT_DESKING_WORK = 'desking/PUT_DESKING_WORK';
-export const putDeskingWork = createAction(PUT_DESKING_WORK, (payload) => payload);
+export const putDeskingWork = createAction(PUT_DESKING_WORK, ({ componentWorkSeq, deskingWork, callback }) => ({ componentWorkSeq, deskingWork, callback }));
 
 /**
  *  work편집기사 삭제

@@ -41,7 +41,7 @@ const MokaTableDeleteButton = (props) => {
     return (
         <div className="w-100 h-100 d-flex align-items-center justify-content-center">
             <OverlayTrigger overlay={<Tooltip id="tooltip-table-del-button">삭제</Tooltip>}>
-                <Button variant="white" className="border-0 p-0 moka-table-button bg-transparent" onClick={handleClick}>
+                <Button variant="white" className="border-0 p-0 moka-table-button bg-transparent shadow-none" onClick={handleClick}>
                     <MokaIcon iconName="fal-minus-circle" />
                 </Button>
             </OverlayTrigger>

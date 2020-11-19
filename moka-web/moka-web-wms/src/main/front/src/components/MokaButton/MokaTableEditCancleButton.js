@@ -18,27 +18,27 @@ const defaultProps = {
 };
 
 /**
- * 테이블에 들어가는 edit 버튼
+ * 테이블에 들어가는 edit 취소 + 삭제 버튼
  */
-const MokaTableEditButton = (props) => {
+const MokaTableEditCancleButton = (props) => {
     const { editing, onClick } = props;
 
     return (
         <div className="w-100 h-100 d-flex align-items-center justify-content-center">
             <MokaOverlayTooltipButton
-                tooltipId="tooltip-table-edit-button"
-                tooltipText={editing ? '저장' : '제목수정'}
+                tooltipId="tooltip-table-editc-button"
+                tooltipText={editing ? '취소' : '삭제'}
                 variant="white"
                 className="border-0 p-0 moka-table-button bg-transparent shadow-none"
                 onClick={onClick}
             >
-                <MokaIcon iconName={editing ? 'fas-check' : 'fas-pencil'} />
+                <MokaIcon iconName={editing ? 'fas-times' : 'fas-minus-circle'} />
             </MokaOverlayTooltipButton>
         </div>
     );
 };
 
-MokaTableEditButton.propTypes = propTypes;
-MokaTableEditButton.defaultProps = defaultProps;
+MokaTableEditCancleButton.propTypes = propTypes;
+MokaTableEditCancleButton.defaultProps = defaultProps;
 
-export default MokaTableEditButton;
+export default MokaTableEditCancleButton;

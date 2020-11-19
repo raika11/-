@@ -196,6 +196,10 @@ $padding-height: 10px;
         align-items: center;  
     }
 
+    svg {
+        color: $gray-600;
+    }
+
     /* 주기사(기본) left 조정 */
     .ag-cell[col-id="relOrdEx"] {
         display: none !important;
@@ -254,20 +258,6 @@ $padding-height: 10px;
     .ag-center-cols-clipper {
         min-height: 32px;
     }
-    
-    // .ag-popup-editor.ag-popup-child {
-    //     left: 1px !important;
-    //     max-width: 300px;
-
-    //     .ag-text-area {
-    //         padding: 4px;
-    //     }
-
-    //     .ag-text-area-input {
-    //         resize: none;
-    //         @include custom-scroll;
-    //     }
-    // }
 
     .ag-body-horizontal-scroll {
         display: none;

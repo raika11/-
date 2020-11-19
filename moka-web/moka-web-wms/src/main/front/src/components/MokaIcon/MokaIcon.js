@@ -35,8 +35,6 @@ import {
     faMoneyCheck as falMoneyCheck, // 페이지탭 아이콘
     faCalculator as falCalculator, // 컨테이너탭 아이콘
     faTv as falTv, // 페이지편집 > 미리보기
-    faPencil as falPencil,
-    faSave as falSave,
     // faFileCode, // 데스킹 버튼 그룹
     // faExpandWide, // 데스킹 버튼 그룹
     // faExchange, // 데스킹 버튼 그룹
@@ -50,6 +48,10 @@ import {
     faAngleLeft as fasAngleLeft,
     faAngleRight as fasAngleRight,
     faPlayCircle as fasPlayCircle,
+    faMinusCircle as fasMinusCircle,
+    faPencil as fasPencil,
+    faCheck as fasCheck,
+    faTimes as fasTimes,
 } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
@@ -87,8 +89,6 @@ library.add(falClock);
 library.add(falMoneyCheck);
 library.add(falCalculator);
 library.add(falTv);
-library.add(falPencil);
-library.add(falSave);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);
@@ -99,6 +99,10 @@ library.add(fasThList);
 library.add(fasAngleLeft);
 library.add(fasAngleRight);
 library.add(fasPlayCircle);
+library.add(fasMinusCircle);
+library.add(fasPencil);
+library.add(fasCheck);
+library.add(fasTimes);
 
 // 아이콘 등록 (fad)
 library.add(fadImage);

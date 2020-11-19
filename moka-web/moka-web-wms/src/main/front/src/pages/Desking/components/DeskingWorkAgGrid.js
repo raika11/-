@@ -11,7 +11,7 @@ import DeskingReadyGrid from './DeskingReadyGrid';
  * 데스킹 AgGrid
  */
 const DeskingWorkAgGrid = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave } = props;
     const { deskingWorks } = component;
     const [relRows, setRelRows] = useState([]);
 
@@ -35,11 +35,12 @@ const DeskingWorkAgGrid = (props) => {
                         contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
                         relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
                         onRowClicked,
+                        onSave,
                     };
                 }),
             );
         }
-    }, [component.seq, deskingWorks, onRowClicked]);
+    }, [component.seq, deskingWorks, onRowClicked, onSave]);
 
     /**
      * ag-grid onGridReady
@@ -59,7 +60,7 @@ const DeskingWorkAgGrid = (props) => {
      */
     const handleCellClicked = useCallback(
         (params) => {
-            if (params.column.field === 'title' || params.column.field === 'relTitle') return;
+            if (params.colDef.field === 'title' || params.colDef.field === 'relTitle') return;
             onRowClicked(params.node.data, params);
         },
         [onRowClicked],

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ButtonGroup from './DeskingWorkButtonGroup';
 import AgGrid from './DeskingWorkAgGrid';
+import DeskingWorkEditModal from '../modals/DeskingWorkEditModal';
 
 const propTypes = {
     /**
@@ -33,16 +34,39 @@ const defaultProps = {
 const DeskingWorkComponent = (props) => {
     const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
 
+    // state
+    const [rowdata, setRowData] = useState({});
+    const [showDeskingWorkEditModal, setShowDeskingWorkEditModal] = useState(false);
+
+    /**
+     * 목록에서 Row클릭
+     */
+    const handleRowClicked = useCallback((desking) => {
+        // history.push(`/desking/${desking.Seq}`);
+        console.log(desking);
+        setRowData(desking);
+        setShowDeskingWorkEditModal(true);
+    }, []);
+
     return (
-        <div id={`agGrid-${component.seq}`}>
-            <ButtonGroup
-                component={component}
-                agGridIndex={agGridIndex}
-                componentAgGridInstances={componentAgGridInstances}
-                setComponentAgGridInstances={setComponentAgGridInstances}
-            />
-            <AgGrid component={component} agGridIndex={agGridIndex} componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
-        </div>
+        <React.Fragment>
+            <div id={`agGrid-${component.seq}`}>
+                <ButtonGroup
+                    component={component}
+                    agGridIndex={agGridIndex}
+                    componentAgGridInstances={componentAgGridInstances}
+                    setComponentAgGridInstances={setComponentAgGridInstances}
+                />
+                <AgGrid
+                    component={component}
+                    agGridIndex={agGridIndex}
+                    componentAgGridInstances={componentAgGridInstances}
+                    setComponentAgGridInstances={setComponentAgGridInstances}
+                    onRowClicked={handleRowClicked}
+                />
+            </div>
+            <DeskingWorkEditModal show={showDeskingWorkEditModal} onHide={() => setShowDeskingWorkEditModal(false)} data={rowdata} />
+        </React.Fragment>
     );
 };
 

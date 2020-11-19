@@ -24,6 +24,7 @@ const toGroupMenuTree = (menus) => {
             }
 
             if (menu.children) {
+                const parentKey = menu.menuId;
                 const treeChildrens = [];
                 menu.children.map((children) => {
                     const isChildrenUsed = children.usedYn === 'Y' || isMenuUsed;
@@ -41,6 +42,7 @@ const toGroupMenuTree = (menus) => {
                         key: children.menuId,
                         title: children.menuDisplayNm,
                         selectable: false,
+                        parentKey,
                     });
                 });
                 treeMenu.children = treeChildrens;

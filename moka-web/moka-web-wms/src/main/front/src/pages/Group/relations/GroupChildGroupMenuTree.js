@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { changeGroupMenu, DELETE_GROUP, GET_GROUP, removeGroupMenuEditAuth, SAVE_GROUP } from '@store/group';
+import { changeGroupMenuAuthInfo } from '@store/group';
 import clsx from 'clsx';
 import { MokaRCTree } from '@components/MokaTree';
+import { MokaIcon } from '@components';
+import { TreeNode } from 'rc-tree';
+import Button from 'react-bootstrap/Button';
 
 const GroupChildGroupMenuTree = () => {
     const { menuAuthInfo } = useSelector(
@@ -18,12 +21,38 @@ const GroupChildGroupMenuTree = () => {
     const [customMenus, setCustomMenus] = useState([]);
     const dispatch = useDispatch();
 
-    const handleClickChange = (classList, menuId) => {
+    const checkEditedChildes = (key, edited, list) => {
+        let hasEditedChild = false;
+        list.map((menu) => {
+            if (menu.key === key) {
+                let length = menu.children.length;
+                menu.children.map((child) => {
+                    hasEditedChild = hasEditedChild || edited.includes(child.key);
+                    if (edited.includes(child.key)) {
+                        length--;
+                    }
+                });
+                console.log(length);
+            }
+        });
+
+        if (hasEditedChild) {
+            edited = [...edited, key];
+        } else {
+            edited = edited.filter((id) => id !== key);
+        }
+
+        return edited;
+    };
+
+    const handleClickChange = (classList, info) => {
+        const { key: menuId, parentKey } = info;
         const menuIds = [menuId];
         let edited = menuAuthInfo.edited;
         const used = menuAuthInfo.used;
+        const list = menuAuthInfo.list;
         if (used.includes(menuId)) {
-            menuAuthInfo.list.map((menu) => {
+            list.map((menu) => {
                 if (menu.key === menuId) {
                     if (menu.children) {
                         menu.children.map((child) => {
@@ -32,6 +61,7 @@ const GroupChildGroupMenuTree = () => {
                     }
                 }
             });
+
             if (!edited.includes(menuId)) {
                 edited = [...edited, ...menuIds];
             } else {
@@ -40,72 +70,64 @@ const GroupChildGroupMenuTree = () => {
                 });
             }
 
-            dispatch(changeGroupMenu({ ...menuAuthInfo, edited }));
+            if (parentKey) {
+                edited = checkEditedChildes(parentKey, edited, list);
+            }
+            dispatch(changeGroupMenuAuthInfo({ name: 'edited', value: edited }));
         }
     };
 
-    const customLabel = (title, isUsed, isEdit, menuId, isNotWholeChildEdit) => {
+    const customLabel = (info, isUsed, isEdited) => {
+        const { title } = info;
         return (
             <div className="cus-label">
                 <span>{title}</span>
                 <span
-                    className={clsx(
-                        'rc-tree-checkbox',
-                        isEdit && 'rc-tree-checkbox-checked',
-                        !isUsed && 'rc-tree-checkbox-disabled',
-                        isNotWholeChildEdit && isUsed && 'rc-tree-checkbox-indeterminate',
-                    )}
+                    className={clsx('rc-tree-checkbox', isEdited && 'rc-tree-checkbox-checked', !isUsed && 'rc-tree-checkbox-disabled')}
                     onClick={(e) => {
                         e.stopPropagation();
                         const {
                             target: { classList },
                         } = e;
-                        handleClickChange(classList, menuId);
+                        handleClickChange(classList, info);
                     }}
                 />
             </div>
         );
     };
 
-    const makeCustomLabelMenu = () => {
-        const customParentData = [];
-        menuAuthInfo.list.map((parent) => {
-            const isParentEdit = menuAuthInfo.edited.includes(parent.key);
-            const isParentUsed = menuAuthInfo.used.includes(parent.key) || menuAuthInfo.halfCheckedKeys.includes(parent.key);
+    const makeCustomLabelMenu = (list) => {
+        //console.log('make', menuAuthInfo);
+        const data = [];
+        list.map((item) => {
+            const key = item.key;
+            const isEdited = menuAuthInfo.edited.includes(key);
+            let isUsed = menuAuthInfo.used.includes(key) || menuAuthInfo.halfCheckedKeys.includes(key);
+            const title = customLabel(item, isUsed, isEdited);
+
             let children = null;
-            let childrenLength = 0;
-            if (parent.children) {
-                childrenLength = parent.children.length;
-                children = parent.children.map((child) => {
-                    const isChildUsed = menuAuthInfo.used.includes(child.key);
-                    const isChildEdit = menuAuthInfo.edited.includes(child.key);
-                    if (isChildEdit) {
-                        childrenLength--;
-                    }
-                    const childTitle = customLabel(child.title, isChildUsed, isChildEdit, child.key);
-                    return { ...child, title: childTitle };
-                });
+            if (item.children) {
+                children = makeCustomLabelMenu(item.children);
             }
-            let isNotWholeChildEdit = childrenLength > 0;
-            const parentTitle = customLabel(parent.title, isParentUsed, isParentEdit, parent.key, isNotWholeChildEdit);
-            customParentData.push({ ...parent, title: parentTitle, children });
+
+            data.push({
+                ...item,
+                title: title,
+                children,
+                /*switcherIcon: item.children && <MokaIcon iconName="fal-minus-circle" />,
+                icon: <MokaIcon iconName="fal-minus-circle" />,*/
+            });
         });
 
-        setCustomMenus(customParentData);
+        return data;
     };
-
-    useEffect(() => {
-        if (menuAuthInfo.list) {
-            console.log(menuAuthInfo);
-            makeCustomLabelMenu();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [menuAuthInfo]);
 
     const hanldeTreeCheck = (checkMenus, info) => {
         const halfCheckedKeys = info.halfCheckedKeys;
+        const list = menuAuthInfo.list;
         const oldEdited = menuAuthInfo.edited;
         let edited = [];
+
         checkMenus.map((menuId) => {
             const filterMenuId = oldEdited.filter((id) => id === menuId);
             if (filterMenuId) {
@@ -113,15 +135,42 @@ const GroupChildGroupMenuTree = () => {
             }
         });
 
-        /*info.halfCheckedKeys.map((halfCheckedKey) => {
-            if (!edited.includes(halfCheckedKey)) {
+        info.halfCheckedKeys.map((halfCheckedKey) => {
+            /*if (!edited.includes(halfCheckedKey)) {
                 edited = [...edited, halfCheckedKey];
-            }
-        });*/
-        dispatch(changeGroupMenu({ ...menuAuthInfo, used: checkMenus, edited, halfCheckedKeys }));
+            }*/
+            edited = checkEditedChildes(halfCheckedKey, edited, list);
+        });
+
+        dispatch(changeGroupMenuAuthInfo({ name: 'used', value: checkMenus }));
+        dispatch(changeGroupMenuAuthInfo({ name: 'edited', value: edited }));
+        dispatch(changeGroupMenuAuthInfo({ name: 'halfCheckedKeys', value: halfCheckedKeys }));
     };
 
-    return <MokaRCTree treeData={customMenus} checkedKeys={customMenus.length > 0 && menuAuthInfo.used} onCheck={hanldeTreeCheck}></MokaRCTree>;
+    const handleClickSave = () => {
+        const edited = menuAuthInfo.edited;
+        const used = [...menuAuthInfo.used, ...menuAuthInfo.halfCheckedKeys];
+
+        console.log('edited', edited);
+        console.log('used', used);
+    };
+
+    useEffect(() => {
+        if (menuAuthInfo.list) {
+            const menu = makeCustomLabelMenu(menuAuthInfo.list);
+            setCustomMenus(menu);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [menuAuthInfo]);
+
+    return (
+        <>
+            <MokaRCTree treeData={customMenus} checkedKeys={customMenus.length > 0 && menuAuthInfo.used} onCheck={hanldeTreeCheck} />
+            <Button variant="positive" className="mr-2" onClick={handleClickSave}>
+                저장
+            </Button>
+        </>
+    );
 };
 
 export default GroupChildGroupMenuTree;

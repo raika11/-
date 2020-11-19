@@ -61,5 +61,5 @@ export const deleteGroup = createAction(DELETE_GROUP, ({ groupCd, callback }) =>
 export const [GET_GROUP_MENU_LIST, GET_GROUP_MENU_SUCCESS, GET_GROUP_MENU_FAILURE] = createRequestActionTypes('group/GET_GROUP_MENU_LIST');
 export const getGroupMenuList = createAction(GET_GROUP_MENU_LIST, (groupCd) => groupCd);
 
-export const CHANGE_GROUP_MENU = 'group/CHANGE_GROUP_MENU_AUTH_EDIT';
-export const changeGroupMenu = createAction(CHANGE_GROUP_MENU, (groupCd) => groupCd);
+export const CHANGE_GROUP_MENU_AUTH_INFO = 'group/CHANGE_GROUP_MENU_AUTH_INFO';
+export const changeGroupMenuAuthInfo = createAction(CHANGE_GROUP_MENU_AUTH_INFO, (groupCd) => groupCd);

@@ -158,6 +158,8 @@ public class DirectLinkRestController {
                 tpsLogger.success(ActionType.UPLOAD, true);
 
                 directLink.setImgUrl(imgPath);
+                System.out.println("returnValue.getLinkSeqreturnValue.getLinkSeq::" + returnValue.getLinkSeq());
+                directLink.setLinkSeq(returnValue.getLinkSeq());
                 returnValue = directLinkService.updateDirectLink(directLink);
             }
 

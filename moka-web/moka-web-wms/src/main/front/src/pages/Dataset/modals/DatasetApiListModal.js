@@ -138,6 +138,20 @@ const DatsetListModal = (props) => {
         setSelected(data.id);
     }, []);
 
+    const handleSelectionChanged = useCallback(
+        (selectedNodes) => {
+            console.log(selectedNodes.length);
+            if (selectedNodes.length > 0) {
+                const sd = selectedNodes[0].data;
+                if (sd.id !== selected) {
+                    setSelectedDataset(sd);
+                    setSelected(sd.id);
+                }
+            }
+        },
+        [selected],
+    );
+
     useEffect(() => {
         if (show && cnt < 1) {
             handleSearch({
@@ -216,6 +230,7 @@ const DatsetListModal = (props) => {
                 rowData={rowData}
                 onRowNodeId={(dataset) => dataset.id}
                 onRowClicked={handleRowClicked}
+                onSelectionChanged={handleSelectionChanged}
                 loading={loading}
                 total={total}
                 page={search.page}

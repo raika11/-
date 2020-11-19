@@ -181,7 +181,7 @@ const MokaTable = forwardRef((props, ref) => {
     const handleCellClicked = useCallback(
         (params) => {
             if (onRowClicked && !preventRowClickCell.includes(params.colDef.field)) {
-                onRowClicked(params.node.data);
+                onRowClicked(params.node.data, params);
             }
         },
         [onRowClicked, preventRowClickCell],

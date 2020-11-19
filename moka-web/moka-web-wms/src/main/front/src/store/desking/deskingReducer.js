@@ -13,7 +13,7 @@ export const initialState = {
     total: 0,
     error: null,
     selectedComponent: {
-        seq: 0,
+        seq: null,
         componentSeq: 0,
         componentName: '',
         regId: '',
@@ -69,14 +69,8 @@ export default handleActions(
             });
         },
         /**
-         * 데이터 변경
+         * 컴포넌트 워크 조회
          */
-        [act.CHANGE_AREA]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.area = payload;
-            });
-        },
-        // 컴포넌트 work 조회 성공
         [act.COMPONENT_WORK_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 let idx = draft.list.findIndex((l) => l.seq === body.seq);
@@ -85,11 +79,24 @@ export default handleActions(
                 // draft.componentError = initialState.componentError;
             });
         },
-        // 컴포넌트 work 조회 실패
-        // [act.COMPONENT_WORK_FAILURE]: (state, { payload: componentError }) => ({
-        //     ...state,
-        //     componentError
-        // }),
+        [act.COMPONENT_WORK_FAILURE]: (state, { payload: componentError }) => {
+            return produce(state, (draft) => {
+                if (draft.selectedComponent.seq) {
+                    let idx = draft.list.findIndex((l) => l.seq === draft.selectedComponent.seq);
+                    draft.list[idx] = initialState.selectedComponent;
+                }
+                draft.selectedComponent = initialState.selectedComponent;
+                // draft.componentError = initialState.componentError;
+            });
+        },
+        /**
+         * 편집영역 변경
+         */
+        [act.CHANGE_AREA]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.area = payload;
+            });
+        },
     },
     initialState,
 );

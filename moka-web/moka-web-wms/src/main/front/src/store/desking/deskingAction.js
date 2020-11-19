@@ -10,10 +10,16 @@ export const clearStore = createAction(CLEAR_STORE);
 export const clearList = createAction(CLEAR_LIST);
 
 /**
- * componentWorkList 데이터 조회
+ * 컴포넌트 워크 목록 조회
  */
 export const [GET_COMPONENT_WORK_LIST, GET_COMPONENT_WORK_LIST_SUCCESS, GET_COMPONENT_WORK_LIST_FAILURE] = createRequestActionTypes('desking/GET_COMPONENT_WORK_LIST');
 export const getComponentWorkList = createAction(GET_COMPONENT_WORK_LIST, ({ areaSeq, callback }) => ({ areaSeq, callback }));
+
+/**
+ * 컴포넌트 워크 조회
+ */
+export const GET_COMPONENT_WORK = 'desking/GET_COMPONENT_WORK';
+export const getComponentWork = createAction(GET_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({ componentWorkSeq, callback }));
 
 /**
  * Work컴포넌트 임시저장
@@ -25,7 +31,7 @@ export const postPreComponentWork = createAction(POST_PRE_COMPONENT_WORK, ({ com
 }));
 
 /**
- * deskingWorkList 저장
+ * 컴포넌트 워크의 편집기사 리스트 저장
  * (워크의 기사리스트)
  */
 export const [POST_DESKING_WORK_LIST, POST_DESKING_WORK_LIST_SUCCESS, POST_DESKING_WORK_LIST_FAILURE] = createRequestActionTypes('desking/POST_DESKING_WORK_LIST');

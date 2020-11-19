@@ -1,7 +1,8 @@
 package jmnet.moka.web.rcv.taskinput;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.xpath.XPathExpressionException;
@@ -10,6 +11,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.object.JaxbObjectManager;
 import jmnet.moka.web.rcv.common.taskinput.TaskInput;
 import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
+import jmnet.moka.web.rcv.common.taskinput.inputfilter.InputFilter;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
 import jmnet.moka.web.rcv.exception.RcvException;
 import jmnet.moka.web.rcv.util.RcvFileUtil;
@@ -17,8 +19,9 @@ import jmnet.moka.web.rcv.util.RcvUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * <pre>
@@ -44,11 +47,21 @@ public class FileTaskInput<P, C> extends TaskInput {
     private int retryCount;
     private final Class<P> parentObjectType;
     private final Class<C> objectType;
+    private FileTaskInputFilePreProcess filePreProcess;
+    private String sourceBuffer;
+    private final List<InputFilter> inputFilters = new ArrayList<>();
 
-    public FileTaskInput(Class<P> parentObjectType, Class<C> objectType)
-    {
+    public FileTaskInput(Class<P> parentObjectType, Class<C> objectType) {
         this.parentObjectType = parentObjectType;
         this.objectType = objectType;
+    }
+
+    public void setSourceBuffer(String sourceBuffer) {
+        this.sourceBuffer = sourceBuffer;
+    }
+
+    public void setFilePreProcess(FileTaskInputFilePreProcess filePreProcess) {
+        this.filePreProcess = filePreProcess;
     }
 
     @Override
@@ -71,42 +84,75 @@ public class FileTaskInput<P, C> extends TaskInput {
         fileWaitTime = TimeHumanizer.parse(xu.getString(node, "./@fileWaitTime", "3s"), 3000);
         dirScan = new File(dirInput);
         retryCount = RcvUtil.ParseInt(xu.getString(node, "./@retryCount", "3"));
+
+        NodeList nl = xu.getNodeList(node, "//inputFilter");
+        if (nl == null) {
+            return;
+        }
+        for (int i = 0; i < nl.getLength(); i++) {
+            String cls = "";
+            try {
+                cls = xu.getString(nl.item(i), "./@class", "");
+                if (McpString.isNullOrEmpty(cls)) {
+                    continue;
+                }
+                this.inputFilters.add((InputFilter) Class
+                        .forName(cls)
+                        .getDeclaredConstructor(Node.class, XMLUtil.class)
+                        .newInstance(nl.item(i), xu));
+            } catch (Exception e) {
+                log.error("Can't load inputFilter [{}] {}", cls, e);
+            }
+        }
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public TaskInputData getTaskInputData() {
-        File[] files = dirScan.listFiles((FilenameFilter) new WildcardFileFilter(fileFilter) {
-            private static final long serialVersionUID = -3664961240348292860L;
-            boolean first = true;
+        final File[] fileList = this.dirScan.listFiles();
+        if (fileList == null || fileList.length <= 0) {
+            return null;
+        }
 
-            public boolean accept(File dir, String name) {
-                if (!first) {
-                    return false;
-                }
-                if (!super.accept(dir, name)) {
-                    return false;
-                }
-                first = false;
-                return true;
+        File file = null;
+        for (File f : fileList) {
+            if (!f.isFile()) {
+                continue;
             }
-        });
+            if (FilenameUtils.wildcardMatch(f.getName(), fileFilter)) {
+                if (System.currentTimeMillis() - f.lastModified() < this.fileWaitTime) {
+                    continue;
+                }
 
-        if (files == null || files.length <= 0) {
-            return null;
+                if (this.filePreProcess != null) {
+                    if (!filePreProcess.preProcess(f)) {
+                        continue;
+                    }
+                }
+
+                file = f;
+                break;
+            } else {
+                for (InputFilter inputFilter : inputFilters) {
+                    if (inputFilter.doProcess(f)) {
+                        break;
+                    }
+                }
+            }
         }
 
-        final File file = files[0];
-        if (System.currentTimeMillis() - file.lastModified() < this.fileWaitTime) {
+        if( file == null )
             return null;
-        }
 
         BasicVo objectData = null;
-
         int retryCount = this.retryCount;
         do {
             try {
-                objectData = JaxbObjectManager.getBasicVoFromXml(file, objectType);
+                if (McpString.isNullOrEmpty(this.sourceBuffer)) {
+                    objectData = JaxbObjectManager.getBasicVoFromXml(file, objectType);
+                } else {
+                    objectData = JaxbObjectManager.getBasicVoFromString(this.sourceBuffer, objectType);
+                }
                 break;
             } catch (XMLStreamException | JAXBException e) {
                 log.info("FIle [{}] can't make object retry[{}] ", file, this.retryCount - retryCount + 1);

@@ -12,6 +12,7 @@ import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
+import jmnet.moka.web.rcv.task.cppubxml.CpPubXmlRcvService;
 import jmnet.moka.web.rcv.task.cpxml.CpXmlRcvService;
 import jmnet.moka.web.rcv.task.jamxml.JamXmlRcvService;
 import jmnet.moka.web.rcv.util.RcvUtil;
@@ -49,6 +50,9 @@ public class TaskManager {
     @Autowired
     CpXmlRcvService cpXmlRcvService;
 
+    @Autowired
+    CpPubXmlRcvService cpPubXmlRcvService;
+
     public TaskManager(MokaRcvConfiguration rcvConfiguration) {
         this.rcvConfiguration = rcvConfiguration;
     }
@@ -72,7 +76,7 @@ public class TaskManager {
 
     private boolean load(Document doc, XMLUtil xu)
             throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
-        NodeList nl = xu.getNoteList(doc, "//TaskGroup");
+        NodeList nl = xu.getNodeList(doc, "//TaskGroup");
 
         this.taskGroups = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
@@ -113,7 +117,7 @@ public class TaskManager {
                 return;
 
             final String sendMsg = message + "\n로그 : https://joongang.co.kr/8nep";
-            NodeList nl = xu.getNoteList(doc, "//User");
+            NodeList nl = xu.getNodeList(doc, "//User");
             for (int i = 0; i < nl.getLength(); i++) {
                 if( xu.getString(nl.item(i), "./@sendYn", "N" ).compareTo("Y") != 0 )
                     continue;

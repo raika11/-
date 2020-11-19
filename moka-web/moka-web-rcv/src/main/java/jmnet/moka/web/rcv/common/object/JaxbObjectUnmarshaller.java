@@ -1,49 +1,28 @@
 package jmnet.moka.web.rcv.common.object;
 
 import java.io.File;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
+import java.lang.reflect.Type;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.transform.stream.StreamSource;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import jmnet.moka.web.rcv.common.vo.BasicVo;
 
 /**
  * <pre>
  *
  * Project : moka-springboot-parent
- * Package : jmnet.moka.web.rcv.task.input.base
+ * Package : jmnet.moka.web.rcv.common.object
  * ClassName : JaxbObjectUnmarshaller
- * Created : 2020-10-29 029 sapark
+ * Created : 2020-11-17 017 sapark
  * </pre>
  *
  * @author sapark
- * @since 2020-10-29 029 오후 2:10
+ * @since 2020-11-17 017 오전 11:31
  */
-@Getter
-@Slf4j
-public class JaxbObjectUnmarshaller<T> {
-    private final JAXBContext jaxbContext;
-    private final Class<T> objectType;
+public interface JaxbObjectUnmarshaller {
+    BasicVo getBasicVoFromXml(File file)
+            throws XMLStreamException, JAXBException;
+     BasicVo getBasicVoFromString(String string)
+             throws XMLStreamException, JAXBException;
 
-    public JaxbObjectUnmarshaller(Class<T> objectType)
-            throws JAXBException {
-        this.objectType = objectType;
-        jaxbContext = JAXBContext.newInstance(objectType);
-    }
-
-    public T getBasicVoFromXml(File file)
-            throws XMLStreamException, JAXBException {
-        XMLInputFactory xif = XMLInputFactory.newFactory();
-        XMLStreamReader xsr = xif.createXMLStreamReader(new StreamSource(file));
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        JAXBElement<T> jb = unmarshaller.unmarshal(xsr, this.objectType);
-        T vo = jb.getValue();
-        xsr.close();
-        return vo;
-    }
+    Type getObjectType();
 }

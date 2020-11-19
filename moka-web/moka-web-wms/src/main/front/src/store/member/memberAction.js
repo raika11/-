@@ -13,11 +13,15 @@ export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) =>
 export const CLEAR_STORE = 'member/CLEAR__ALL';
 export const CLEAR_MEMBER = 'member/CLEAR_MEMBER';
 export const CLEAR_LIST = 'member/CLEAR_LIST';
+export const CLEAR_LOGIN_HISTORY_LIST = 'member/CLEAR_LOGIN_HISTORY_LIST';
 export const CLEAR_SEARCH = 'member/CLEAR_SEARCH';
+export const CLEAR_LOGIN_HISTORY_SEARCH = 'member/CLEAR_LOGIN_HISTORY_SEARCH';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearMember = createAction(CLEAR_MEMBER);
 export const clearList = createAction(CLEAR_LIST);
+export const clearHistoryList = createAction(CLEAR_LOGIN_HISTORY_LIST);
 export const clearSearch = createAction(CLEAR_SEARCH);
+export const clearLoginHistorySearch = createAction(CLEAR_LOGIN_HISTORY_SEARCH);
 
 /**
  * 사용자 목록 조회

@@ -6,7 +6,7 @@ import java.util.Optional;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
-import jmnet.moka.core.tps.mvc.editform.code.EditFormStatusCode;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
@@ -108,7 +108,7 @@ public class EditFormServiceImpl implements EditFormService {
                     .builder()
                     .partSeq(editFormPart.getPartSeq())
                     .formData(editFormPart.getFormData())
-                    .status(EditFormStatusCode.PUBLISH)
+                    .status(EditStatusCode.PUBLISH)
                     .approvalYn(MokaConstants.YES)
                     .build());
         }
@@ -116,12 +116,12 @@ public class EditFormServiceImpl implements EditFormService {
     }
 
     @Override
-    public EditFormPart insertEditFormPart(EditFormPart editFormPart, EditFormStatusCode status, Date reserveDt)
+    public EditFormPart insertEditFormPart(EditFormPart editFormPart, EditStatusCode status, Date reserveDt)
             throws MokaException {
         // 예약 여부 체크
         boolean isReserved = false;
         String approvalYn = MokaConstants.NO;
-        if (status == EditFormStatusCode.PUBLISH) {
+        if (status == EditStatusCode.PUBLISH) {
             if (reserveDt != null) {
                 if (McpDate
                         .now()
@@ -187,13 +187,13 @@ public class EditFormServiceImpl implements EditFormService {
         return editFormPart;
     }
 
-    public EditFormPart updateEditFormPart(EditFormPart editFormPart, EditFormStatusCode status, Date reserveDt)
+    public EditFormPart updateEditFormPart(EditFormPart editFormPart, EditStatusCode status, Date reserveDt)
             throws MokaException {
         String formData = editFormPart.getFormData();
         // 예약 여부 체크
         boolean isReserved = false;
         String approvalYn = MokaConstants.NO;
-        if (status == EditFormStatusCode.PUBLISH) {
+        if (status == EditStatusCode.PUBLISH) {
             if (reserveDt != null) {
                 if (McpDate
                         .now()

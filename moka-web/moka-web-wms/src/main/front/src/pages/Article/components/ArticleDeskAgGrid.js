@@ -7,6 +7,7 @@ import { unescapeHtml } from '@utils/convertUtil';
 import { GET_ARTICLE_LIST, getArticleList, changeSearchOption } from '@store/article';
 import columnDefs from './ArticleDeskAgGridColums';
 import GroupNumberRenderer from './GroupNumberRenderer';
+import ChangeArtTitleModal from '../modals/ChangeArtTitleModal';
 
 /**
  * 기사관리 ag-grid 컴포넌트 (페이지편집)
@@ -26,6 +27,20 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
     // state
     const [rowData, setRowData] = useState([]);
     const [gridInstance, setGridInstance] = useState(null);
+    const [modalShow, setModalShow] = useState(false);
+    const [selected, setSelected] = useState({});
+
+    /**
+     * row 클릭
+     * @param {object} data data
+     * @param {object} params 클릭시 aggrid에서 넘겨주는 데이터
+     */
+    const handleRowClicked = (data, params) => {
+        if (params.column.colId === 'escapeTitle') {
+            setSelected(data);
+            setModalShow(true);
+        }
+    };
 
     /**
      * 테이블 검색옵션 변경
@@ -127,28 +142,31 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
     }, [rowData]);
 
     return (
-        <MokaTable
-            ref={ref}
-            className="article-list"
-            setGridInstance={setGridInstance}
-            headerHeight={50}
-            agGridHeight={623}
-            columnDefs={columnDefs}
-            rowData={rowData}
-            onRowNodeId={(article) => article.totalId}
-            onRowClicked={() => {}}
-            loading={loading}
-            total={total}
-            page={search.page}
-            size={search.size}
-            showTotalString={false}
-            error={error}
-            onChangeSearchOption={handleChangeSearchOption}
-            frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
-            dragManaged={false}
-            animateRows={false}
-            rowSelection="multiple"
-        />
+        <React.Fragment>
+            <MokaTable
+                ref={ref}
+                className="article-list"
+                setGridInstance={setGridInstance}
+                headerHeight={50}
+                agGridHeight={623}
+                columnDefs={columnDefs}
+                rowData={rowData}
+                onRowNodeId={(article) => article.totalId}
+                onRowClicked={handleRowClicked}
+                loading={loading}
+                total={total}
+                page={search.page}
+                size={search.size}
+                showTotalString={false}
+                error={error}
+                onChangeSearchOption={handleChangeSearchOption}
+                frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
+                dragManaged={false}
+                animateRows={false}
+                rowSelection="multiple"
+            />
+            <ChangeArtTitleModal show={modalShow} onHide={() => setModalShow(false)} artData={selected} />
+        </React.Fragment>
     );
 });
 

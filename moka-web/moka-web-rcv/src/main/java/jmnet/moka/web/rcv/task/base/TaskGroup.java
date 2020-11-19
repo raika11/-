@@ -63,7 +63,7 @@ public class TaskGroup {
 
         NodeList nl;
         try {
-            nl = xu.getNoteList(doc, "//Task");
+            nl = xu.getNodeList(doc, "//Task");
         } catch (XPathExpressionException ignore) {
             return;
         }

@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.exception.MokaException;
-import jmnet.moka.core.tps.mvc.editform.code.EditFormStatusCode;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
@@ -114,7 +114,7 @@ public interface EditFormService {
      * @return 등록된 편집 폼
      * @throws Exception 예외처리
      */
-    public EditFormPart insertEditFormPart(EditFormPart editFormPart, EditFormStatusCode status, Date reserveDt)
+    public EditFormPart insertEditFormPart(EditFormPart editFormPart, EditStatusCode status, Date reserveDt)
             throws MokaException;
 
     /**
@@ -141,7 +141,7 @@ public interface EditFormService {
      * @param reserveDt    예약 일시
      * @return 수정된 편집폼정보
      */
-    public EditFormPart updateEditFormPart(EditFormPart editFormPart, EditFormStatusCode status, Date reserveDt)
+    public EditFormPart updateEditFormPart(EditFormPart editFormPart, EditStatusCode status, Date reserveDt)
             throws Exception;
 
     /**

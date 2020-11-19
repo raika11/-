@@ -21,9 +21,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface JamXmlRcvMapper {
-    Map<String, String> selectSectCodeByContCode( JamArticleTotalVo jamArticle);
-    List<Map<String, String>> selectIssueSeriesReporter( Map<String, String> hashMap );
+    Map<String, String> callUpaJamMasterCodeSel( JamArticleTotalVo jamArticle);
+    List<Map<String, String>> callUpaIssueSeriesReporterSelByRepseq( Map<String, String> hashMap );
 
-    void insertReceiveJobStep(JamArticleTotalVo jamArticle);
-    void updateReceiveJobStep(JamArticleTotalVo jamArticle);
+    void callUpaJamRcvArtHistIns(JamArticleTotalVo jamArticle);
+    void callUpaJamRcvArtHistUpd(JamArticleTotalVo jamArticle);
 }

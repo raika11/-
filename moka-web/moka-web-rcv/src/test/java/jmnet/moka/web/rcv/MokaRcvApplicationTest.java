@@ -1,12 +1,20 @@
 package jmnet.moka.web.rcv;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import jmnet.moka.web.rcv.common.object.JaxbObjectManager;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleListVo;
 import jmnet.moka.web.rcv.util.RcvImageUtil;
 import jmnet.moka.web.rcv.util.RcvUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;
 
 /**
@@ -21,7 +29,37 @@ import org.junit.Test;
  * @author sapark
  * @since 2020-10-26 026 오후 2:40
  */
+@Slf4j
 public class MokaRcvApplicationTest {
+    @Test
+    public void patternFile() {
+        String sInput = "C:\\중앙일보\\수신서버 소스\\cp_list.xml";
+        String sWildcard = "*.xml";
+
+        if (FilenameUtils.wildcardMatch(sInput, sWildcard)) {
+            log.info("arrived !!");
+        }
+    }
+    /*
+    @Test
+    public void patternText() {
+        String sInput = "<![CDATA[>> 5면 <EC37>뉴딜<0038>펀드<EC38>로 계속,<3800> <ec38>관계기사 ●면]]>";
+
+        Pattern pattern = Pattern.compile("(<[0-9A-Fa-f]{4}>)");
+        Set<String> list = new HashSet<>();
+        Matcher m = pattern.matcher(sInput);
+        while (m.find()) {
+            list.add(m.group());
+        }
+
+        for (String s : list) {
+            final String replace = String.format("&#%d", Integer.parseInt(s.substring(1, 5), 16));
+            log.debug("change Hexa Code  {} ->  {}", s, replace);
+            sInput = sInput.replace(s, replace);
+        }
+        log.debug("{}", sInput);
+    }
+    /*
     @Test
     public void removeLastReturn() {
         String text = " \n\r\n";

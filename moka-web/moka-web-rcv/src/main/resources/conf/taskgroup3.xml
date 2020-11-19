@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <TaskGroup>
-
+  <Task class="jmnet.moka.web.rcv.task.cppubxml.CpPubXmlRcvTask"
+    name="중앙일보 조판"
+    idx="1"
+    sourceCode="1"
+    intervalTime="10s">
+    <TaskInput dirInput="/box/rcv/cppub/jajopan"
+      dirSuccess="/box/rcv/cppub/jajopan/comp"
+      dirFailed="/box/rcv/cppub/jajopan/error"
+      fileFilter="D001*.xml"
+      fileWaitTime="3s"
+      retryCount="3">
+      <inputFilter class="jmnet.moka.web.rcv.taskinput.inputfilter.FileCopyFilter"
+        dirSuccess="/box/rcv/cppub/jajopan/pdf"
+        fileFilter="*.pdf"/>
+      <inputFilter class="jmnet.moka.web.rcv.taskinput.inputfilter.FileCopyFilter"
+        dirSuccess="/box/rcv/cppub/jajopan/jpg"
+        fileFilter="*.jpg"/>
+    </TaskInput>
+  </Task>
+  <Task class="jmnet.moka.web.rcv.task.cppubxml.CpPubXmlRcvTask"
+    name="중앙일보_선데이"
+    idx="11"
+    sourceCode="60"
+    intervalTime="10s">
+    <TaskInput dirInput="/box/rcv/cppub/jajopan"
+      dirSuccess="/box/rcv/cppub/jajopan/comp"
+      dirFailed="/box/rcv/cppub/jajopan/error"
+      fileFilter="W005*.xml"
+      fileWaitTime="3s"
+      retryCount="3">
+    </TaskInput>
+  </Task>
 </TaskGroup>

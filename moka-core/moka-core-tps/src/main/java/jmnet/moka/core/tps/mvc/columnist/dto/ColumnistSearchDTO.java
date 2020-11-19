@@ -68,7 +68,7 @@ public class ColumnistSearchDTO extends SearchDTO {
 
     // 검색 조건의 기본값을 설정
     public ColumnistSearchDTO() {
-        super("reqNo,desc");
+        super("seqNo,desc");
         useTotal = MokaConstants.YES;
         returnValue = TpsConstants.PROCEDURE_SUCCESS;
     }

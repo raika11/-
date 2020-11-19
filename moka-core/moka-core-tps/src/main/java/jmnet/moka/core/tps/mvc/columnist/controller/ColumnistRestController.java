@@ -53,7 +53,7 @@ import java.util.List;
 @RestController
 @Validated
 @Slf4j
-@RequestMapping("/api/columnist")
+@RequestMapping("/api/columnists")
 public class ColumnistRestController {
 
     private final ColumnistService columnistService;

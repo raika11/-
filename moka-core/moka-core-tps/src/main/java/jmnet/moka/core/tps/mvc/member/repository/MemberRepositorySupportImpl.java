@@ -10,6 +10,7 @@ import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
@@ -68,13 +69,18 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
             query.where(qMember.status.eq(memberSearchDTO.getStatus()));
         }
 
+        Pageable pageable = memberSearchDTO.getPageable();
+        if (McpString.isYes(memberSearchDTO.getUseTotal())) {
+            query = getQuerydsl().applyPagination(pageable, query);
+        }
+
 
         QueryResults<MemberInfo> list = query
                 .leftJoin(qMember.regMember, qRegMember)
                 .fetchJoin()
                 .fetchResults();
 
-        return new PageImpl<>(list.getResults(), memberSearchDTO.getPageable(), list.getTotal());
+        return new PageImpl<>(list.getResults(), pageable, list.getTotal());
     }
 
     @Override

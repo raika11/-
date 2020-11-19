@@ -302,10 +302,10 @@ public class DirectLinkRestController {
             directLinkService.deleteDirectLink(member);
 
             // 이미지 있으면 이미지도
-//            if (McpString.isNotEmpty(member.getImgUrl())) {
-//                directLinkService.deleteImage(member);
-//                tpsLogger.success(ActionType.FILE_DELETE, true);
-//            }
+            if (McpString.isNotEmpty(member.getImgUrl())) {
+                directLinkService.deleteImage(member);
+                tpsLogger.success(ActionType.FILE_DELETE, true);
+            }
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaTable } from '@components';
-import { registerColumns } from './modalColumns';
+import registerColumns from './RegisterModalAgGridColumns';
 import { GET_COMPONENT_WORK_LIST, deskingDragStop } from '@store/desking';
 import toast from '@utils/toastUtil';
 

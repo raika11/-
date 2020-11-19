@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaImageInput, MokaInput, MokaInputLabel, MokaModal, MokaSearchInput } from '@components';
+import toast from '@utils/toastUtil';
 
 /**
  * 데스킹 기사정보 편집 모달 컴포넌트
  */
 const DeskingWorkEditModal = (props) => {
-    const { show, onHide, data } = props;
+    const { show, onHide, data, onSave } = props;
 
     // 데스킹 정보
     const [thumbFileName, setThumbFileName] = useState('');
@@ -53,6 +52,26 @@ const DeskingWorkEditModal = (props) => {
         }
     };
 
+    const handleSaveDeskingWork = () => {
+        const deskingWork = {
+            ...data,
+            thumbFileName,
+            title,
+            nameplate,
+            titlePrefix,
+            subtitle,
+            bodyHead,
+        };
+        const callback = (response) => {
+            if (response.header) {
+                toast.success(response.header.message);
+            } else {
+                toast.warn(response.header.message);
+            }
+        };
+        onSave(deskingWork, callback);
+    };
+
     return (
         <MokaModal
             titleAs={
@@ -74,70 +93,77 @@ const DeskingWorkEditModal = (props) => {
             show={show}
             onHide={onHide}
             buttons={[
-                { variant: 'positive', text: '저장' },
-                { variant: 'negative', text: '취소' },
+                { variant: 'positive', text: '저장', onClick: handleSaveDeskingWork },
+                { variant: 'negative', text: '취소', onClick: onHide },
                 { variant: 'outline-neutral', text: '리로드' },
             ]}
+            footerClassName="d-flex justify-content-center"
         >
-            <Container fluid>
-                <Row>
-                    <Col xs={4}>
-                        <div className="mb-5">약물 「」·“”※↑↓★●</div>
-                        <div>
-                            <MokaImageInput width={175} img={thumbFileName} alt="기사 사진" name="thumbFileName" />
-                            <div className="mt-2 px-1 d-flex justify-content-between">
-                                <Button variant="outline-neutral">편집</Button>
-                                <Button variant="outline-neutral">대표사진변경</Button>
-                            </div>
+            <div className="d-flex justify-content-between">
+                <div style={{ width: '150px' }}>
+                    <div className="mb-5">약물 「」·“”※↑↓★●</div>
+                    <div>
+                        <MokaImageInput width={150} height={150} img={thumbFileName} alt="기사 사진" name="thumbFileName" />
+                        <div className="mt-2 px-1 d-flex justify-content-between">
+                            <Button variant="outline-neutral" size="sm">
+                                편집
+                            </Button>
+                            <Button variant="outline-neutral" size="sm">
+                                대표사진변경
+                            </Button>
                         </div>
-                    </Col>
-                    <Col xs={8}>
-                        <Form>
-                            <MokaInputLabel label="어깨제목" inputClassName="ft-12" name="nameplate" value={nameplate} onChange={handleChangeValue} />
-                            <Form.Row>
-                                <Col>
-                                    <MokaInputLabel label="말머리" inputClassName="ft-12" name="titlePrefix" value={titlePrefix} onChange={handleChangeValue} />
-                                    <MokaInput />
-                                </Col>
-                                <Col>
-                                    <MokaInputLabel
-                                        label="제목/부제위치"
-                                        inputClassName="ft-12"
-                                        // name=""
-                                        // value={}
-                                        // onChange={handleChangeValue}
-                                    />
-                                </Col>
-                            </Form.Row>
-                            <Form.Row>
-                                <Col>
-                                    <MokaInputLabel
-                                        label={
-                                            <React.Fragment>
-                                                Web제목 <br />
-                                                <MokaInput />
-                                            </React.Fragment>
-                                        }
-                                        inputClassName="ft-12"
-                                        name="title"
-                                        value={title}
-                                        onChange={handleChangeValue}
-                                    />
-                                </Col>
-                                <Col>
-                                    <div>42byte</div>
-                                </Col>
-                            </Form.Row>
-                            <MokaInputLabel label="부제" inputClassName="ft-12" name="subtitle" value={subtitle} onChange={handleChangeValue} />
-                            <MokaInputLabel label="리드문" inputClassName="ft-12" name="bodyHead" value={bodyHead} onChange={handleChangeValue} />
-                            <Form.Row>
-                                <MokaInputLabel label="영상" onChange={handleChangeValue} as="none" />
-                                <MokaSearchInput placeholder="url 입력해주세요" />
-                            </Form.Row>
-                        </Form>
-                    </Col>
-                </Row>
-            </Container>
+                    </div>
+                </div>
+                <Form style={{ width: '453px' }}>
+                    <MokaInputLabel label="어깨제목" inputClassName="ft-12" name="nameplate" value={nameplate} onChange={handleChangeValue} />
+                    <Form.Row>
+                        <MokaInputLabel label="말머리" as="none" />
+                        <Col xs={4} className="p-0 d-flex align-items-center justify-content-between">
+                            <MokaInput className="mb-3 mr-2" as="select" name="titlePrefix" value={titlePrefix} onChange={handleChangeValue} />
+                            <MokaInput className="mb-3" as="select" />
+                        </Col>
+                        <div className="w-100">
+                            <MokaInputLabel
+                                label="제목/부제위치"
+                                labelWidth={100}
+                                as="select"
+                                // name=""
+                                // value={}
+                                // onChange={handleChangeValue}
+                            />
+                        </div>
+                    </Form.Row>
+                    <Form.Row>
+                        <Col xs={11} className="p-0">
+                            <MokaInputLabel
+                                label={
+                                    <React.Fragment>
+                                        Web제목 <br />
+                                        <MokaInput as="select" size="sm" />
+                                    </React.Fragment>
+                                }
+                                inputClassName="ft-12"
+                                name="title"
+                                value={title}
+                                as="textarea"
+                                inputProps={{ rows: 3 }}
+                                onChange={handleChangeValue}
+                            />
+                        </Col>
+                        <Col xs={1} className="p-0 d-flex align-items-end">
+                            <div className="mb-3 ft-12">42byte</div>
+                        </Col>
+                    </Form.Row>
+                    <MokaInputLabel label="부제" inputClassName="ft-12" name="subtitle" value={subtitle} onChange={handleChangeValue} />
+                    <MokaInputLabel label="리드문" inputClassName="ft-12" name="bodyHead" as="textarea" inputProps={{ rows: 5 }} value={bodyHead} onChange={handleChangeValue} />
+                    <Form.Row>
+                        <MokaInputLabel label="영상" onChange={handleChangeValue} as="none" />
+                        <div className="w-100">
+                            <MokaSearchInput placeholder="url 입력해주세요" />
+                        </div>
+                    </Form.Row>
+                </Form>
+            </div>
         </MokaModal>
     );
 };

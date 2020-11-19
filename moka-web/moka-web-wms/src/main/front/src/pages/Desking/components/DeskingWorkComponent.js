@@ -84,7 +84,7 @@ const DeskingWorkComponent = (props) => {
                     onSave={handleClickSave}
                 />
             </div>
-            <DeskingWorkEditModal show={showDeskingWorkEditModal} onHide={() => setShowDeskingWorkEditModal(false)} data={rowdata} />
+            <DeskingWorkEditModal show={showDeskingWorkEditModal} onHide={() => setShowDeskingWorkEditModal(false)} data={rowdata} onSave={handleClickSave} />
         </React.Fragment>
     );
 };

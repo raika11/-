@@ -97,7 +97,7 @@ public class DirectLinkServiceImpl implements DirectLinkService {
             String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
             return uri;
         } else {
-            return "";
+            return "https://pds.joins.com/news/search_direct_link/";
         }
     }
 

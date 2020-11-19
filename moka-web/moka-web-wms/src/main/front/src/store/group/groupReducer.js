@@ -141,9 +141,11 @@ export default handleActions(
         /**
          * 메뉴 수정 권한 삭제
          */
-        [act.CHANGE_GROUP_MENU]: (state, { payload }) => {
+        [act.CHANGE_GROUP_MENU_AUTH_INFO]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.menuAuthInfo = payload;
+                const name = payload.name;
+                const value = payload.value;
+                draft.menuAuthInfo[name] = value;
             });
         },
     },

@@ -138,7 +138,7 @@
 
 /* -------------------------------------------------------------------
  * ag-theme-moka-desking-grid (include ag-theme-aplpine)
- * 페이지편집
+ * only 페이지편집
  * ------------------------------------------------------------------ */
 $padding-height: 10px;
 
@@ -196,9 +196,41 @@ $padding-height: 10px;
         align-items: center;  
     }
 
+    /* 주기사(기본) left 조정 */
+    .ag-cell[col-id="relOrdEx"] {
+        display: none !important;
+    }
+    .ag-cell[col-id="checkbox"] {
+        left: 24px !important;
+    }
+    .ag-cell[col-id="relTitle"] {
+        display: none !important;
+    }
+    .ag-cell[col-id="contentOrdEx"] {
+        left: 48px !important;
+    }
+    .ag-cell[col-id="thumbFileName"] {
+        left: 72px !important;
+    }
+    .ag-cell[col-id="title"] {
+        width: 231px !important;
+        left: 122px !important;
+    }
+
+    /* 관련기사 left 조정 */
     .ag-rel-cell {
         height: 36px !important;
         line-height: 36px !important;
+
+        &[col-id="relOrdEx"] {
+            display: flex !important;
+            width: 24px !important;
+        }
+        &[col-id="relTitle"] {
+            display: flex !important;
+            left: 48px !important;
+            width: 305px !important;
+        }
     }
 
     .ag-edit-cell {
@@ -223,7 +255,49 @@ $padding-height: 10px;
         min-height: 32px;
     }
     
-    .ag-text-area {
-        padding: 4px;
+    // .ag-popup-editor.ag-popup-child {
+    //     left: 1px !important;
+    //     max-width: 300px;
+
+    //     .ag-text-area {
+    //         padding: 4px;
+    //     }
+
+    //     .ag-text-area-input {
+    //         resize: none;
+    //         @include custom-scroll;
+    //     }
+    // }
+
+    .ag-body-horizontal-scroll {
+        display: none;
+    }
+}
+
+.desking-ag-grid-editor {
+    .title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+        box-sizing: border-box;
+        line-height: 20px;
+        overflow: hidden;
+
+        &.rel {
+            -webkit-line-clamp: 1;
+        }
+    }
+
+    .edit {
+        position: fixed;
+        top: 2px;
+        left: 2px;
+        right: 52px;
+
+        textarea {
+            height: 43px;
+            @include custom-scroll;
+        }
     }
 }

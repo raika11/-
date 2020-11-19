@@ -211,8 +211,6 @@ const DeskingWorkAgGrid = (props) => {
                 suppressMoveWhenRowDragging
                 headerHeight={0}
                 rowClassRules={rowClassRules}
-                stopEditingWhenGridLosesFocus
-                undoRedoCellEditing
                 getRowHeight={getRowHeight}
                 frameworkComponents={{ imageRenderer: MokaTableImageRenderer }}
             />

@@ -33,11 +33,11 @@ const MokaTableEditButton = (props) => {
             e.preventDefault();
 
             if (onStartEditing) {
-                onStartEditing(data);
+                onStartEditing(props);
                 setEditing(true);
             }
         },
-        [data, onStartEditing],
+        [onStartEditing, props],
     );
 
     const handleStopEditing = useCallback(
@@ -46,11 +46,11 @@ const MokaTableEditButton = (props) => {
             e.preventDefault();
 
             if (onEndEditing) {
-                onEndEditing(data);
+                onEndEditing(props);
                 setEditing(false);
             }
         },
-        [data, onEndEditing],
+        [onEndEditing, props],
     );
 
     return (

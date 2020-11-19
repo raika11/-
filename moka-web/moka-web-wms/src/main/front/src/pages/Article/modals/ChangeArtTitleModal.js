@@ -78,7 +78,6 @@ const ChangeArtGroupModal = (props) => {
                     onClick: handleHide,
                 },
             ]}
-            draggable
             centered
         >
             <MokaInputLabel label="웹제목" className="mb-2" value={webTitle} onChange={(e) => setWebTitle(e.target.value)} />

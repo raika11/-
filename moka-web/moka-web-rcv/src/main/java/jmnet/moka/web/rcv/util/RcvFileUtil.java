@@ -1,7 +1,6 @@
 package jmnet.moka.web.rcv.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -115,7 +114,7 @@ public class RcvFileUtil {
             Files.move(sourcePath, targetFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             file.delete();
-            throw new RcvException(String.format("파일 이동 중에 에러가 발생하였습니다. [%s]->[%s]", sourcePath, targetFile));
+            throw new RcvException(String.format("파일 이동 중에 에러가 발생하였습니다. [%s]->[%s] %s", sourcePath, targetFile, e.getMessage()));
         }
     }
 

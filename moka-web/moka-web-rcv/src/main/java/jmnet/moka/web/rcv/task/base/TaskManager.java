@@ -74,6 +74,7 @@ public class TaskManager {
         return false;
     }
 
+    @SuppressWarnings("SameReturnValue")
     private boolean load(Document doc, XMLUtil xu)
             throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
         NodeList nl = xu.getNodeList(doc, "//TaskGroup");
@@ -129,7 +130,7 @@ public class TaskManager {
                 final String strSmsCall = "https://app.joins.com/SMS/?callback=02-2031-1805&phone=" + phoneNumber + "&ap=&uh=&msg=" + URLEncoder.encode(sendMsg,
                         StandardCharsets.UTF_8);
                 if( RcvUtil.sendUrlGetRequest(strSmsCall) == null )
-                    log.error("SMS faild {}", strSmsCall);
+                    log.error("SMS failed {}", strSmsCall);
                 else
                     log.info("SMS success {}", strSmsCall);
             }

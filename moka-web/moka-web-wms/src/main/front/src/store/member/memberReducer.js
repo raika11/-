@@ -28,6 +28,8 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
     },
     historyList: [],
+    historyTotal: 0,
+    historyError: {},
 };
 
 /**
@@ -67,6 +69,13 @@ export default handleActions(
                 draft.invalidList = initialState.invalidList;
             });
         },
+        [act.CLEAR_LOGIN_HISTORY_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.hisTorytotal = initialState.hisTorytotal;
+                draft.historyList = initialState.historyList;
+                draft.historyError = initialState.historyError;
+            });
+        },
         [act.CLEAR_LIST]: (state) => {
             return produce(state, (draft) => {
                 draft.total = initialState.total;
@@ -77,6 +86,11 @@ export default handleActions(
         [act.CLEAR_SEARCH]: (state) => {
             return produce(state, (draft) => {
                 draft.search = initialState.search;
+            });
+        },
+        [act.CLEAR_LOGIN_HISTORY_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.historySearch = initialState.historySearch;
             });
         },
         /**
@@ -125,14 +139,16 @@ export default handleActions(
          */
         [act.GET_LOGIN_HISTORY_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.error = initialState.error;
+                draft.historyError = initialState.historyError;
                 draft.historyList = body.list;
+                draft.historyTotal = body.totalCnt;
             });
         },
         [act.GET_LOGIN_HISTORY_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.error = payload;
+                draft.historyError = payload;
                 draft.historyList = initialState.list;
+                draft.historyTotal = initialState.historyTotal;
             });
         },
     },

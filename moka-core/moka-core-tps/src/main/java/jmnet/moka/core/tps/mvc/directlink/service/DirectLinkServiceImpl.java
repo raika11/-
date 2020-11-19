@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
@@ -48,15 +49,17 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     }
 
     @Override
+    @Transactional
     public DirectLink updateDirectLink(DirectLink directLink) {
         return directLinkRepository.save(directLink);
     }
 
     @Override
+    @Transactional
     public DirectLink insertDirectLink(DirectLink directLink) {
-        if (McpString.isEmpty(directLink.getLinkSeq())) {
-            directLink.setLinkSeq(getNewDirectLinkSeq());
-        }
+//        if (McpString.isEmpty(directLink.getLinkSeq())) {
+//            directLink.setLinkSeq(getNewDirectLinkSeq());
+//        }
         return directLinkRepository.save(directLink);
     }
 
@@ -76,11 +79,11 @@ public class DirectLinkServiceImpl implements DirectLinkService {
         directLinkRepository.delete(directLink);
     }
 
-    private Long getNewDirectLinkSeq() {
-        long count = directLinkRepository.count();
-        Long newId = count + 1;
-        return newId;
-    }
+//    private Long getNewDirectLinkSeq() {
+//        long count = directLinkRepository.count();
+//        Long newId = count + 1;
+//        return newId;
+//    }
 
     @Override
     public String saveImage(DirectLink directLink, MultipartFile thumbnail)

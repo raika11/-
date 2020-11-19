@@ -2,7 +2,6 @@ package jmnet.moka.web.rcv.common.taskinput.inputfilter;
 
 import java.io.File;
 import javax.xml.xpath.XPathExpressionException;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.exception.RcvException;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.Getter;

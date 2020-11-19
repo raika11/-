@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.mvc.editform.code.EditFormStatusCode;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -71,7 +71,7 @@ public class EditFormPartDTO {
     /**
      * 상태
      */
-    private EditFormStatusCode status;
+    private EditStatusCode status;
     /**
      * 필드 그룹 목록
      */

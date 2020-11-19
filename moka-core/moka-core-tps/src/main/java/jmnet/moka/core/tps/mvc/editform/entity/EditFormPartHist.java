@@ -13,8 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
-import jmnet.moka.core.tps.mvc.editform.code.EditFormStatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,7 +61,7 @@ public class EditFormPartHist extends BaseAudit {
      */
     @Column(name = "STATUS", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private EditFormStatusCode status;
+    private EditStatusCode status;
     /**
      * 편집 폼 아이템 정보
      */

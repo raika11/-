@@ -90,9 +90,10 @@ public class DirectLinkDTO implements Serializable {
     /**
      * 대표이미지
      */
-//    @NotNull(message = "{tps.page.error.notnull.linkUrl}") // 일시적으로 막음. 수정할때만 필요하다.
+    //@NotNull(message = "{tps.page.error.notnull.linkUrl}") // 일시적으로 막음. 수정할때만 필요하다.
 //    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.linkUrl}")
-    private String imgUrl = "https://pds.joins.com/news/search_direct_link/001.jpg";
+    //private String imgUrl = "https://pds.joins.com/news/search_direct_link/001.jpg";
+    private String imgUrl;
 
     /**
      * 링크url

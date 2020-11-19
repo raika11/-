@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author sapark
  * @since 2020-11-05 005 오후 4:21
  */
+
 @Slf4j
 @Getter
 @Setter
@@ -38,6 +39,7 @@ public class TotalVo <T> extends BasicVo {
         this.mainData = mainData;
     }
 
+    @SuppressWarnings("unused")
     public String getErrorMessage(){
         String ret = "";
         for( String s : this.errorMessage ) {

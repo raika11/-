@@ -27,12 +27,12 @@ import org.apache.commons.net.ftp.FTPClient;
 
 @Slf4j
 public class FtpUtil {
-    public static boolean uploadFle(FtpConfig pdsFtpConfig, String sourceFile, String uploadPath, String uploadFileName) {
-        return uploadFle(pdsFtpConfig, Collections.singletonList(sourceFile), Collections.singletonList(uploadPath),
+    public static boolean uploadFle(FtpConfig ftpConfig, String sourceFile, String uploadPath, String uploadFileName) {
+        return uploadFle(ftpConfig, Collections.singletonList(sourceFile), Collections.singletonList(uploadPath),
                 Collections.singletonList(uploadFileName));
     }
 
-    public static boolean uploadFle(FtpConfig pdsFtpConfig, List<String> sourceFileList, List<String> uploadPathList,
+    public static boolean uploadFle(FtpConfig ftpConfig, List<String> sourceFileList, List<String> uploadPathList,
             List<String> uploadFileNameList) {
         final int count = Math.min(sourceFileList.size(), Math.min(uploadPathList.size(), uploadFileNameList.size()));
         if (count == 0) {
@@ -42,27 +42,27 @@ public class FtpUtil {
         FTPClient ftp = new FTPClient();
         try {
             ftp.setControlEncoding("UTF-8");
-            ftp.connect(pdsFtpConfig.getIp(), pdsFtpConfig.getPort());
-            if (!ftp.login(pdsFtpConfig.getUser(), pdsFtpConfig.getPassword())) {
-                log.error("ftp 로그인 실패 {}:{} id={}", pdsFtpConfig.getIp(), pdsFtpConfig.getPort(), pdsFtpConfig.getUser());
+            ftp.connect(ftpConfig.getIp(), ftpConfig.getPort());
+            if (!ftp.login(ftpConfig.getUser(), ftpConfig.getPassword())) {
+                log.error("ftp 로그인 실패 {}:{} id={}", ftpConfig.getIp(), ftpConfig.getPort(), ftpConfig.getUser());
                 return false;
             }
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
             ftp.setFileTransferMode(FTP.BINARY_FILE_TYPE);
-            if (pdsFtpConfig.getPassive() > 0) {
+            if (ftpConfig.getPassive() > 0) {
                 ftp.enterLocalPassiveMode();
             }
 
             for (int i = 0; i < count; i++) {
                 if (!changeAndMakeDirecotry(ftp, Paths
-                        .get(pdsFtpConfig.getRootDir(), uploadPathList.get(i))
+                        .get(ftpConfig.getRootDir(), uploadPathList.get(i))
                         .toString()
                         .replace('\\', '/'))) {
                     return false;
                 }
 
                 InputStream inputStream = null;
-                boolean success = false;
+                boolean success;
                 final String tmpFileName = uploadFileNameList
                         .get(i)
                         .concat(".tmp");
@@ -77,6 +77,7 @@ public class FtpUtil {
                     }
                 } catch (Exception e) {
                     log.error("ftp upload file [{}] 실패 {} ", uploadFileNameList.get(i), e);
+                    return false;
                 } finally {
                     try {
                         if (inputStream != null) {

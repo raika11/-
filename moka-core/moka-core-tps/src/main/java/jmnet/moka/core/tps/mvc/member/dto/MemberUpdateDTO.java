@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
+import jmnet.moka.common.data.support.EnumValid;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ public class MemberUpdateDTO {
      * 상태(유효/정지)
      */
     @Builder.Default
-    //@Pattern(regexp = "[N|Y|P|R|D]{1}$", message = "{tps.member.error.pattern.status}")
+    @EnumValid(enumClass = MemberStatusCode.class, message = "{tps.member.error.pattern.status}")
     private MemberStatusCode status = MemberStatusCode.D;
 
     /**

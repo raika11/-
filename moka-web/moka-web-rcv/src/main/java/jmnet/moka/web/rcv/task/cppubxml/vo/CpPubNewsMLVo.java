@@ -1,16 +1,12 @@
 package jmnet.moka.web.rcv.task.cppubxml.vo;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import jmnet.moka.web.rcv.common.object.JaxbObjectManager;
-import jmnet.moka.web.rcv.common.object.JaxbObjectUnmarshallerImpl;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
 import jmnet.moka.web.rcv.task.cppubxml.vo.sub.CpPubNewsEnvelope;
 import jmnet.moka.web.rcv.task.cppubxml.vo.sub.CpPubNewsItem;
-import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleListVo;
 import lombok.Getter;
 import lombok.Setter;
 

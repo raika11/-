@@ -83,13 +83,16 @@ public class FileTaskInput<P, C> extends TaskInput {
         fileFilter = xu.getString(node, "./@fileFilter", "*.*");
         fileWaitTime = TimeHumanizer.parse(xu.getString(node, "./@fileWaitTime", "3s"), 3000);
         dirScan = new File(dirInput);
-        retryCount = RcvUtil.ParseInt(xu.getString(node, "./@retryCount", "3"));
+        retryCount = RcvUtil.parseInt(xu.getString(node, "./@retryCount", "3"));
 
-        NodeList nl = xu.getNodeList(node, "//inputFilter");
+        NodeList nl = node.getChildNodes();
         if (nl == null) {
             return;
         }
         for (int i = 0; i < nl.getLength(); i++) {
+            if( nl.item(i).getNodeName().compareTo("inputFilter") != 0 )
+                continue;
+
             String cls = "";
             try {
                 cls = xu.getString(nl.item(i), "./@class", "");
@@ -104,6 +107,7 @@ public class FileTaskInput<P, C> extends TaskInput {
                 log.error("Can't load inputFilter [{}] {}", cls, e);
             }
         }
+        log.debug( "FileTaskInput : InputFilter count : {} Load ", this.inputFilters.size());
     }
 
     @Override
@@ -125,7 +129,7 @@ public class FileTaskInput<P, C> extends TaskInput {
                 }
 
                 if (this.filePreProcess != null) {
-                    if (!filePreProcess.preProcess(f)) {
+                    if (filePreProcess.preProcess(f)) {
                         continue;
                     }
                 }

@@ -150,14 +150,18 @@ public class DirectLinkRestController {
 
         try {
             // 등록(이미지 등록에 seq가 필요해서 먼저 저장)
+            directLink.setImgUrl(""); // 빈값이라도 넣어줘야한다.
             DirectLink returnValue = directLinkService.insertDirectLink(directLink);
 
             if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
                 // 이미지파일 저장(multipartFile)
                 String imgPath = directLinkService.saveImage(returnValue, directLinkThumbnailFile);
                 tpsLogger.success(ActionType.UPLOAD, true);
-
+                directLink.setLinkSeq(returnValue.getLinkSeq());
+                System.out.println("imgPathimgPathimgPath::" + imgPath);
                 directLink.setImgUrl(imgPath);
+                System.out.println("returnValue.getLinkSeqreturnValue.getLinkSeq::" + returnValue.getLinkSeq());
+
                 returnValue = directLinkService.updateDirectLink(directLink);
             }
 
@@ -302,10 +306,10 @@ public class DirectLinkRestController {
             directLinkService.deleteDirectLink(member);
 
             // 이미지 있으면 이미지도
-//            if (McpString.isNotEmpty(member.getImgUrl())) {
-//                directLinkService.deleteImage(member);
-//                tpsLogger.success(ActionType.FILE_DELETE, true);
-//            }
+            if (McpString.isNotEmpty(member.getImgUrl())) {
+                directLinkService.deleteImage(member);
+                tpsLogger.success(ActionType.FILE_DELETE, true);
+            }
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);
@@ -340,7 +344,7 @@ public class DirectLinkRestController {
         if (file != null && !file.isEmpty()) {
             boolean isImage = ImageUtil.isImage(file);
             if (!isImage) {
-                String message = messageByLocale.get("tps.template.error.onlyimage.thumbnail");
+                String message = messageByLocale.get("tps.direct-link.error.onlyimage.thumbnail");
                 invalidList.add(new InvalidDataDTO("thumbnail", message));
                 tpsLogger.fail(actionType, message, true);
             }

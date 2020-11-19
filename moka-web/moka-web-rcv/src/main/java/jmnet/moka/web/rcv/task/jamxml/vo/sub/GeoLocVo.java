@@ -5,7 +5,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -19,7 +20,10 @@ import lombok.Data;
  * @author sapark
  * @since 2020-10-28 028 오후 2:09
  */
-@Data
+
+@SuppressWarnings("unused")
+@Getter
+@Setter
 @XmlRootElement(name = "geo_loc")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GeoLocVo implements Serializable {

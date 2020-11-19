@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
@@ -42,13 +43,17 @@ public class MenuServiceImpl implements MenuService {
 
     final ModelMapper modelMapper;
 
+    private final TpsLogger tpsLogger;
 
 
-    public MenuServiceImpl(MenuRepository menuRepository, MenuAuthRepository menuAuthRepository, MenuMapper menuMapper, ModelMapper modelMapper) {
+
+    public MenuServiceImpl(MenuRepository menuRepository, MenuAuthRepository menuAuthRepository, MenuMapper menuMapper, ModelMapper modelMapper,
+            TpsLogger tpsLogger) {
         this.menuRepository = menuRepository;
         this.menuAuthRepository = menuAuthRepository;
         this.menuMapper = menuMapper;
         this.modelMapper = modelMapper;
+        this.tpsLogger = tpsLogger;
     }
 
     @Override
@@ -305,6 +310,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public List<MenuAuth> findMenuAuthList(String groupMemberId, String groupMemberDiv) {
+        return menuAuthRepository.findAllByGroupMemberIdAndGroupMemberDiv(groupMemberId, groupMemberDiv);
+    }
+
+    @Override
     public Set<String> findAllMenuUrl() {
         List<Menu> menuList = menuRepository.findByUsedYn(MokaConstants.YES);
 
@@ -319,6 +329,48 @@ public class MenuServiceImpl implements MenuService {
                             .trim();
                 })
                 .collect(Collectors.toSet());
+    }
+
+
+    @Override
+    public void saveMenuAuth(String menuId, MenuAuthTypeCode menuAuthType, MenuAuth menuAuth) {
+
+        menuAuth.setMenuId(menuId);
+        menuAuth.setGroupMemberDiv(menuAuthType != null ? menuAuthType.getCode() : menuAuth.getGroupMemberDiv());
+        MenuAuth orgMenu = findMenuAuth(menuAuth);
+        if (orgMenu != null) {
+            menuAuth.setSeqNo(orgMenu.getSeqNo());
+            menuAuth.setUsedYn(orgMenu.getUsedYn());
+            updateMenuAuth(menuAuth);
+        } else {
+            insertMenuAuth(menuAuth);
+        }
+    }
+
+
+    @Override
+    public void saveMenuAuth(String groupMemberId, MenuAuthTypeCode menuAuthType, List<MenuAuth> menuAuths) {
+
+        findMenuAuthList(groupMemberId, menuAuthType.getCode())
+                .stream()
+                .forEach(menuAuth -> {
+                    menuAuth.setUsedYn(MokaConstants.NO);
+                    menuAuth.setEditYn(MokaConstants.NO);
+                    menuAuth.setViewYn(MokaConstants.NO);
+                    updateMenuAuth(menuAuth);
+                });
+        menuAuths.forEach(menuAuth -> {
+            try {
+                // 조회 여부는 useYn이 Y이 이면 자동으로 Y
+                menuAuth.setViewYn(McpString.isYes(menuAuth.getUsedYn()) ? MokaConstants.YES : MokaConstants.NO);
+                // 편집 여부는 useYn이 N이 이면 자동으로 N
+                menuAuth.setEditYn(McpString.isYes(menuAuth.getUsedYn()) ? menuAuth.getEditYn() : MokaConstants.NO);
+                menuAuth.setGroupMemberId(groupMemberId);
+                saveMenuAuth(menuAuth.getMenuId(), menuAuthType, menuAuth);
+            } catch (Exception ex) {
+                tpsLogger.skip(ex.toString());
+            }
+        });
     }
 
 }

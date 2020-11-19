@@ -1,5 +1,5 @@
 import React from 'react';
-import EditorCell from './EditorCell';
+import DeskingEditorRenderer from './DeskingEditorRenderer';
 
 const cellClassRules = {
     'ag-rel-cell': (params) => params.data.rel === true,
@@ -52,7 +52,7 @@ export const columnDefs = [
         colSpan: (params) => {
             return params.data.rel ? 4 : 0;
         },
-        cellRendererFramework: (params) => <EditorCell {...params} />,
+        cellRendererFramework: (params) => <DeskingEditorRenderer {...params} />,
         cellClassRules: cellClassRules,
         cellStyle: { fontSize: '12px' },
         suppressKeyboardEvent: suppressKeyboardEvent,
@@ -75,7 +75,7 @@ export const columnDefs = [
         field: 'title',
         flex: 1,
         autoHeight: true,
-        cellRendererFramework: (params) => <EditorCell {...params} />,
+        cellRendererFramework: (params) => <DeskingEditorRenderer {...params} />,
         cellClassRules: cellClassRules,
         suppressKeyboardEvent: suppressKeyboardEvent,
     },

@@ -1,5 +1,7 @@
 import React, { useState, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { putDeskingWork } from '@store/desking';
 import ButtonGroup from './DeskingWorkButtonGroup';
 import AgGrid from './DeskingWorkAgGrid';
 import DeskingWorkEditModal from '../modals/DeskingWorkEditModal';
@@ -33,6 +35,7 @@ const defaultProps = {
 
 const DeskingWorkComponent = (props) => {
     const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
+    const dispatch = useDispatch();
 
     // state
     const [rowdata, setRowData] = useState({});
@@ -47,6 +50,21 @@ const DeskingWorkComponent = (props) => {
         setRowData(desking);
         setShowDeskingWorkEditModal(true);
     }, []);
+
+    /**
+     * 데스킹워크 저장 (put)
+     * @param {object} deskingWork 저장할 데스킹워크 데이터
+     * @param {func} callback 저장 후 실행
+     */
+    const handleClickSave = (deskingWork, callback) => {
+        dispatch(
+            putDeskingWork({
+                componentWorkSeq: component.seq,
+                deskingWork,
+                callback,
+            }),
+        );
+    };
 
     return (
         <React.Fragment>
@@ -63,6 +81,7 @@ const DeskingWorkComponent = (props) => {
                     componentAgGridInstances={componentAgGridInstances}
                     setComponentAgGridInstances={setComponentAgGridInstances}
                     onRowClicked={handleRowClicked}
+                    onSave={handleClickSave}
                 />
             </div>
             <DeskingWorkEditModal show={showDeskingWorkEditModal} onHide={() => setShowDeskingWorkEditModal(false)} data={rowdata} />

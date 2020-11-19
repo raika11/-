@@ -282,8 +282,38 @@ function* moveDeskingWorkList({ payload }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 컴포넌트워크의 편집기사 1개 수정 => 결과로 컴포넌트워크가 리턴됨
+ */
+function* putDeskingWork({ payload }) {
+    const { componentWorkSeq, deskingWork, callback } = payload;
+    const ACTION = act.PUT_DESKING_WORK;
+    let response, callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        response = yield call(api.putDeskingWork, { componentWorkSeq, deskingWork });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.COMPONENT_WORK_SUCCESS,
+                payload: response.data,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
 /** saga */
 export default function* saga() {
+    // 컴포넌트 워크
     yield takeLatest(act.GET_COMPONENT_WORK_LIST, getComponentWorkList);
     yield takeLatest(act.GET_COMPONENT_WORK, getComponentWork);
 
@@ -291,11 +321,14 @@ export default function* saga() {
     yield takeLatest(act.POST_PRE_COMPONENT_WORK, postPreComponentWork);
     // yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWorkSaga);
     // yield takeLatest(act.HAS_OTHER_SAVED, hasOtherSavedSaga);
-    // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPrioritySaga);
-    // yield takeLatest(act.POST_DESKING_WORK, postDeskingWorkSaga);
+
+    // 컴포넌트 워크의 데스킹 (편집기사)
+    yield takeLatest(act.PUT_DESKING_WORK, putDeskingWork);
     yield takeLatest(act.POST_DESKING_WORK_LIST, postDeskingWorkList);
     yield takeLatest(act.MOVE_DESKING_WORK_LIST, moveDeskingWorkList);
-    // yield takeLatest(act.PUT_DESKING_WORK, putDeskingWorkSaga);
+
+    // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPrioritySaga);
+    // yield takeLatest(act.POST_DESKING_WORK, postDeskingWorkSaga);
     // yield takeLatest(act.PUT_DESKING_REL_WORKS, putDeskingRelWorksSaga);
     // yield takeLatest(act.DELETE_DESKING_WORK_LIST, deleteDeskingWorkListSaga);
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import produce from 'immer';
 import { MokaModal, MokaTable } from '@components';
 import { registerColumns } from './modalColumns';
 import { GET_COMPONENT_WORK_LIST, deskingDragStop } from '@store/desking';

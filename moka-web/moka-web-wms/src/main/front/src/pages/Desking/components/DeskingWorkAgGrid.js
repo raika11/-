@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import produce from 'immer';
 import { AgGridReact } from 'ag-grid-react';
 import { unescapeHtml } from '@utils/convertUtil';
@@ -11,7 +11,7 @@ import DeskingReadyGrid from './DeskingReadyGrid';
  * 데스킹 AgGrid
  */
 const DeskingWorkAgGrid = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked } = props;
     const { deskingWorks } = component;
     const [relRows, setRelRows] = useState([]);
 
@@ -34,11 +34,12 @@ const DeskingWorkAgGrid = (props) => {
                         relTitle: desking.rel ? escapeTitle : '',
                         contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
                         relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
+                        onRowClicked,
                     };
                 }),
             );
         }
-    }, [component.seq, deskingWorks]);
+    }, [component.seq, deskingWorks, onRowClicked]);
 
     /**
      * ag-grid onGridReady
@@ -51,6 +52,18 @@ const DeskingWorkAgGrid = (props) => {
             }),
         );
     };
+
+    /**
+     * cell별 설정에 따라서 RowClick 호출
+     * @param {object} params ag-grid data
+     */
+    const handleCellClicked = useCallback(
+        (params) => {
+            if (params.column.field === 'title' || params.column.field === 'relTitle') return;
+            onRowClicked(params.node.data, params);
+        },
+        [onRowClicked],
+    );
 
     /**
      * row 드래그 시작
@@ -209,6 +222,7 @@ const DeskingWorkAgGrid = (props) => {
                 enableMultiRowDragging
                 suppressRowClickSelection
                 suppressMoveWhenRowDragging
+                onCellClicked={handleCellClicked}
                 headerHeight={0}
                 rowClassRules={rowClassRules}
                 getRowHeight={getRowHeight}

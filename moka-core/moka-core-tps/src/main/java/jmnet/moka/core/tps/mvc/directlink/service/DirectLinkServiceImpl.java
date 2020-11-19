@@ -54,9 +54,9 @@ public class DirectLinkServiceImpl implements DirectLinkService {
 
     @Override
     public DirectLink insertDirectLink(DirectLink directLink) {
-        if (McpString.isEmpty(directLink.getLinkSeq())) {
-            directLink.setLinkSeq(getNewDirectLinkSeq());
-        }
+//        if (McpString.isEmpty(directLink.getLinkSeq())) {
+//            directLink.setLinkSeq(getNewDirectLinkSeq());
+//        }
         return directLinkRepository.save(directLink);
     }
 
@@ -76,11 +76,11 @@ public class DirectLinkServiceImpl implements DirectLinkService {
         directLinkRepository.delete(directLink);
     }
 
-    private Long getNewDirectLinkSeq() {
-        long count = directLinkRepository.count();
-        Long newId = count + 1;
-        return newId;
-    }
+//    private Long getNewDirectLinkSeq() {
+//        long count = directLinkRepository.count();
+//        Long newId = count + 1;
+//        return newId;
+//    }
 
     @Override
     public String saveImage(DirectLink directLink, MultipartFile thumbnail)

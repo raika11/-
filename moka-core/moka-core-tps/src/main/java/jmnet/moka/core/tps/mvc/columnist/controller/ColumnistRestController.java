@@ -150,6 +150,7 @@ public class ColumnistRestController {
 
         try {
             // 등록(이미지 등록에 seq가 필요해서 먼저 저장)
+            columnist.setProfilePhoto(""); // 빈값이라도 넣어줘야한다.
             Columnist returnValue = columnistService.insertColumnist(columnist);
 
             if (columnistFile != null && !columnistFile.isEmpty()) {
@@ -157,6 +158,8 @@ public class ColumnistRestController {
                 String imgPath = columnistService.saveImage(returnValue, columnistFile);
                 tpsLogger.success(ActionType.UPLOAD, true);
 
+                columnist.setProfilePhoto(imgPath);
+                columnist.setSeqNo(returnValue.getSeqNo());
                 columnist.setProfilePhoto(imgPath);
                 returnValue = columnistService.updateColumnist(columnist);
             }

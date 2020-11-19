@@ -3,15 +3,9 @@ package jmnet.moka.web.rcv.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * <pre>
@@ -26,7 +20,7 @@ import java.nio.file.Path;
  * @since 2020-10-29 029 오후 3:46
  */
 public class RcvUtil {
-    public static int ParseInt(String s) {
+    public static int parseInt(String s) {
         try {
             return Integer.parseInt(s);
         } catch (Exception e) {
@@ -65,9 +59,9 @@ public class RcvUtil {
         return s.toString();
     }
 
-    public static String sendUrlGetRequest(String urlcall) {
+    public static String sendUrlGetRequest(String urlAddress) {
         try {
-            URL url = new URL(urlcall);
+            URL url = new URL(urlAddress);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setConnectTimeout(1000);
             con.setReadTimeout(1000);

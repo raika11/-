@@ -12,6 +12,7 @@ package jmnet.moka.web.rcv.exception;
  * @author sapark
  * @since 2020-10-27 027 오후 5:24
  */
+
 public class RcvException extends Exception {
     private static final long serialVersionUID = -2277479172868094106L;
 
@@ -19,6 +20,7 @@ public class RcvException extends Exception {
         super(message);
     }
 
+    @SuppressWarnings("unused")
     public RcvException(String message, Throwable cause) {
         super(message, cause);
     }

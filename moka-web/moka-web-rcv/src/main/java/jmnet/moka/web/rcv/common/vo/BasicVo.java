@@ -4,7 +4,8 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -18,7 +19,8 @@ import lombok.Data;
  * @author sapark
  * @since 2020-10-29 029 오후 2:33
  */
-@Data
+@Getter
+@Setter
 @XmlRootElement(name="basic")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BasicVo implements Serializable {

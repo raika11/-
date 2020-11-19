@@ -14,6 +14,9 @@ import java.io.File;
  * @author sapark
  * @since 2020-11-17 017 오전 9:32
  */
+@SuppressWarnings("SameReturnValue")
 public interface FileTaskInputFilePreProcess {
-    boolean preProcess( File file );
+    default boolean preProcess(File file) {
+        return true;
+    }
 }

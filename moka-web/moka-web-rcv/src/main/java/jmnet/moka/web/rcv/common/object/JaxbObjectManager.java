@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class JaxbObjectManager {
-    static List<JaxbObjectUnmarshaller> listUnmarshallerlist = new ArrayList<>();
+    static final List<JaxbObjectUnmarshaller> listUnmarshallerlist = new ArrayList<>();
 
     static {
         try {

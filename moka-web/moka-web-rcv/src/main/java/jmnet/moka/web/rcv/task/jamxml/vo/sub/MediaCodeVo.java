@@ -6,7 +6,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -20,7 +21,10 @@ import lombok.Data;
  * @author sapark
  * @since 2020-10-28 028 오전 11:58
  */
-@Data
+
+@SuppressWarnings("unused")
+@Getter
+@Setter
 @XmlRootElement(name = "media_code")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MediaCodeVo implements Serializable {

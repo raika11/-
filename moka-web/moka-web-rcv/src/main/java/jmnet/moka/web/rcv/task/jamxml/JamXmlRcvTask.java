@@ -56,7 +56,7 @@ public class JamXmlRcvTask extends Task<FileTaskInputData<JamArticleTotalVo, Jam
     protected void load(Node node, XMLUtil xu)
             throws XPathExpressionException, RcvException {
         super.load(node, xu);
-        this.sourceCode = RcvUtil.ParseInt(xu.getString(node, "./@sourceCode", ""));
+        this.sourceCode = RcvUtil.parseInt(xu.getString(node, "./@sourceCode", ""));
         if (this.sourceCode == 0) {
             throw new RcvException("sourceCode 환경 값 설정이 잘못되었습니다.");
         }
@@ -325,7 +325,7 @@ public class JamXmlRcvTask extends Task<FileTaskInputData<JamArticleTotalVo, Jam
                 break;
             }
             case "NN": {
-                //네이버 영상 embed url이 변경됐다. 이전 경로일 경우 변경
+                //네이버 영상 embed url 이 변경됐다. 이전 경로일 경우 변경
                 item.setUrl(item
                         .getUrl()
                         .replace("//tv.naver.com/v/", "//tv.naver.com/embed/"));

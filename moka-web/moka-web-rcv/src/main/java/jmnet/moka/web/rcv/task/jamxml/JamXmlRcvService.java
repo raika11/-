@@ -17,6 +17,7 @@ import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
  * @author sapark
  * @since 2020-11-02 002 오후 2:28
  */
+
 public interface JamXmlRcvService {
     Map<String, String> selectSectCodeByContCode( JamArticleTotalVo jamArticle)
             throws RcvDataAccessException;

@@ -3,7 +3,6 @@ package jmnet.moka.web.rcv.task.jamxml.vo;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import jmnet.moka.web.rcv.common.vo.BasicVo;
 import jmnet.moka.web.rcv.common.vo.TotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.TotalBasicInfo;
 import lombok.Getter;

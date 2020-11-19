@@ -1,8 +1,6 @@
 package jmnet.moka.web.rcv.task.cpxml.mapper;
 
-import java.util.Map;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleTotalVo;
-import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

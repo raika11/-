@@ -21,7 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter(AccessLevel.PACKAGE)
-public class FTPInfo {
+public class FtpInfo {
     private String host;
     private int port;
     private String user;
@@ -29,8 +29,8 @@ public class FTPInfo {
     private boolean passive;
     private String encoding;
     private String remotePath;
-    private int connectTimeout = FTPSender.UNASSIGNED;
-    private int readTimeout = FTPSender.UNASSIGNED;
+    private int connectTimeout = FtpSender.UNASSIGNED;
+    private int readTimeout = FtpSender.UNASSIGNED;
 
 
 
@@ -55,7 +55,7 @@ public class FTPInfo {
      * @param url ftp 접속 url
      * @throws MokaException 예외
      */
-    public FTPInfo(String url, boolean isPassive)
+    public FtpInfo(String url, boolean isPassive)
             throws MokaException {
         int index = url.indexOf("ftp://");
         if (index != 0) {

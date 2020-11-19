@@ -24,7 +24,7 @@ import org.apache.commons.net.ftp.FTPReply;
  * @since 2019. 1. 28. 오후 2:41:09
  */
 @Slf4j
-public class FTPSender {
+public class FtpSender {
     public static final int UNASSIGNED = -1;
     private FTPClient ftp = null;
     private ByteArrayOutputStream bao = null;
@@ -47,7 +47,7 @@ public class FTPSender {
      * @param passwd  패스워드
      * @param passive 패시부여부
      */
-    public FTPSender(String host, int port, String user, String passwd, boolean passive) {
+    public FtpSender(String host, int port, String user, String passwd, boolean passive) {
         this(host, port, user, passwd, passive, UNASSIGNED, UNASSIGNED, null);
     }
 
@@ -63,7 +63,7 @@ public class FTPSender {
      * @param readTimeout    read Timeout
      * @param encoding       인코딩
      */
-    public FTPSender(String host, int port, String user, String passwd, boolean passive, int connectTimeout, int readTimeout, String encoding) {
+    public FtpSender(String host, int port, String user, String passwd, boolean passive, int connectTimeout, int readTimeout, String encoding) {
         this.host = host;
         this.port = port;
         this.user = user;
@@ -81,7 +81,7 @@ public class FTPSender {
      * @param ftpInfo ftp정보
      * @throws MokaException 예외
      */
-    public FTPSender(FTPInfo ftpInfo)
+    public FtpSender(FtpInfo ftpInfo)
             throws MokaException {
         this.host = ftpInfo.getHost();
         this.port = ftpInfo.getPort();

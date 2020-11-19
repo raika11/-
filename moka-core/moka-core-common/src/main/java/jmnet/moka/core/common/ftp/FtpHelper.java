@@ -8,6 +8,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -27,59 +28,43 @@ import org.springframework.core.io.Resource;
 public class FtpHelper {
     public static FtpHelper ftpHelper;
 
-    private Map<String, FTPInfo> ftpInfoMap;
+    private Map<String, FtpInfo> ftpInfoMap;
+    private final StringEncryptor stringEncryptor;
 
-    public static FtpHelper getInstance() {
-
-        synchronized (FtpHelper.class) {
-            if (ftpHelper == null) {
-                ftpHelper = new FtpHelper();
-            }
-        }
-        return ftpHelper;
-    }
-
-    public static FtpHelper getInstance(StringEncryptor stringEncryptor) {
-
-        synchronized (FtpHelper.class) {
-            if (ftpHelper == null) {
-                ftpHelper = new FtpHelper(stringEncryptor);
-            }
-        }
-        return ftpHelper;
-    }
-
-    private FtpHelper() {
-    }
-
-    private FtpHelper(StringEncryptor stringEncryptor) {
-        init(stringEncryptor);
+    public FtpHelper(StringEncryptor stringEncryptor) {
+        this.stringEncryptor = stringEncryptor;
+        init();
     }
 
     /**
      * ftp_info.json에서 ftp 서버 접속 정보를 로드한다.
      */
-    private void init(StringEncryptor stringEncryptor) {
+    private void init() {
         Resource resource = new ClassPathResource("ftp_info.json");
         try {
 
             File file = resource.getFile();
 
-            TypeReference<Map<String, FTPInfo>> typeRef = new TypeReference<>() {
+            TypeReference<Map<String, FtpInfo>> typeRef = new TypeReference<>() {
             };
 
             ftpInfoMap = ResourceMapper
                     .getDefaultObjectMapper()
                     .readValue(file, typeRef);
-
-            ftpInfoMap
-                    .keySet()
-                    .forEach(key -> {
-                        FTPInfo fi = ftpInfoMap.get(key);
-                        if (McpString.isNotEmpty(fi.getUser())) {
-                            fi.setUser(stringEncryptor.decrypt(fi.getUser()));
-                        }
-                    });
+            if (this.stringEncryptor != null) {
+                ftpInfoMap
+                        .keySet()
+                        .forEach(key -> {
+                            FtpInfo fi = ftpInfoMap.get(key);
+                            try {
+                                if (McpString.isNotEmpty(fi.getUser())) {
+                                    fi.setUser(stringEncryptor.decrypt(fi.getUser()));
+                                }
+                            } catch (EncryptionOperationNotPossibleException ex) {
+                                log.error("FtpHelper error => exception : {}", ex.toString());
+                            }
+                        });
+            }
 
         } catch (IOException io) {
             log.error("FtpHelper error => exception : {}", io.getMessage());
@@ -92,7 +77,7 @@ public class FtpHelper {
      * @param alias ftp 서버 별칭
      * @return FTPInfo
      */
-    public FTPInfo getFtpInfo(String alias) {
+    public FtpInfo getFtpInfo(String alias) {
         return ftpInfoMap.get(alias);
     }
 }

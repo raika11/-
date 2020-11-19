@@ -32,13 +32,13 @@ public class Columnist extends BaseAudit {
     /**
      * char	1   ('O')   NO	내외부구분(I내부,O외부)
      */
-    @Column(name = "INOUT", nullable = false, length = 1)
+    @Column(name = "INOUT", length = 1)
     private String inout;
 
     /**
      * char	1   ('N')	NO	상태(유효/정지)
      */
-    @Column(name = "STATUS", nullable = false, length = 1)
+    @Column(name = "STATUS", length = 1)
     private String status;
 
     /**

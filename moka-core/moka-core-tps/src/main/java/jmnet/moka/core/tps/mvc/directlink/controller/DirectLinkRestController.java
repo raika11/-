@@ -150,16 +150,18 @@ public class DirectLinkRestController {
 
         try {
             // 등록(이미지 등록에 seq가 필요해서 먼저 저장)
+            directLink.setImgUrl(""); // 빈값이라도 넣어줘야한다.
             DirectLink returnValue = directLinkService.insertDirectLink(directLink);
 
             if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
                 // 이미지파일 저장(multipartFile)
                 String imgPath = directLinkService.saveImage(returnValue, directLinkThumbnailFile);
                 tpsLogger.success(ActionType.UPLOAD, true);
-
+                directLink.setLinkSeq(returnValue.getLinkSeq());
+                System.out.println("imgPathimgPathimgPath::" + imgPath);
                 directLink.setImgUrl(imgPath);
                 System.out.println("returnValue.getLinkSeqreturnValue.getLinkSeq::" + returnValue.getLinkSeq());
-                directLink.setLinkSeq(returnValue.getLinkSeq());
+
                 returnValue = directLinkService.updateDirectLink(directLink);
             }
 

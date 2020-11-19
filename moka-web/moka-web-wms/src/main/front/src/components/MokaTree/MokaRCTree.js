@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import 'rc-tree/assets/index.css';
 import { default as RCTree, TreeNode } from 'rc-tree';
 import PropTypes from 'prop-types';
 import { MokaIcon } from '@components';
@@ -82,8 +81,9 @@ export const MokaRCTree = (props) => {
             onCheck={handleCheck}
             onActiveChange={(key) => console.log('Active:', key)}
             checkedKeys={checkedKeys}
+            treeData={treeData}
         >
-            {makeTreeNode(treeData)}
+            {/*{makeTreeNode(treeData)}*/}
         </RCTree>
     );
 };

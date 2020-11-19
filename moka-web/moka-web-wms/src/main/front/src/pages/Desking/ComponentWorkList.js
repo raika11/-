@@ -52,7 +52,7 @@ const ComponentWorkList = (props) => {
                     </Button>
                 </div>
 
-                <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
+                <div className="custom-scroll overflow-y-scroll" style={{ height: 'calc(100% - 45px)' }}>
                     {area.areaComps.map((areaComp) => {
                         if (area.areaDiv === ITEM_CT && area.areaAlign === AREA_ALIGN_H && areaComp.compAlign === AREA_COMP_ALIGN_RIGHT) return null;
                         const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
@@ -78,7 +78,7 @@ const ComponentWorkList = (props) => {
                         </Button>
                     </div>
 
-                    <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
+                    <div className="custom-scroll overflow-y-scroll" style={{ height: 'calc(100% - 45px)' }}>
                         {area.areaComps.map((areaComp) => {
                             if (areaComp.compAlign === AREA_COMP_ALIGN_LEFT) return null;
                             const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);

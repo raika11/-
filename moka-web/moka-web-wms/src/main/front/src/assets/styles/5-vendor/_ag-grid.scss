@@ -217,7 +217,7 @@ $padding-height: 10px;
         left: 72px !important;
     }
     .ag-cell[col-id="title"] {
-        width: 231px !important;
+        width: 225px !important;
         left: 122px !important;
     }
 
@@ -233,7 +233,7 @@ $padding-height: 10px;
         &[col-id="relTitle"] {
             display: flex !important;
             left: 48px !important;
-            width: 305px !important;
+            width: 299px !important;
         }
     }
 
@@ -282,8 +282,8 @@ $padding-height: 10px;
     .edit {
         position: fixed;
         top: 2px;
-        left: 2px;
-        right: 52px;
+        left: 3px;
+        right: 49px;
 
         textarea {
             height: 43px;

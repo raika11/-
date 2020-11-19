@@ -27,7 +27,7 @@ const MokaTableEditButton = (props) => {
         <div className="w-100 h-100 d-flex align-items-center justify-content-center">
             <MokaOverlayTooltipButton
                 tooltipId="tooltip-table-edit-button"
-                tooltipText={editing ? '저장' : '제목수정'}
+                tooltipText={editing ? '저장' : '제목 수정'}
                 variant="white"
                 className="border-0 p-0 moka-table-button bg-transparent shadow-none"
                 onClick={onClick}

@@ -108,7 +108,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
                 }
             }}
             variant="white"
-            className="btn-pill"
+            className="border-0 p-0 moka-table-button bg-transparent shadow-none"
         >
             {children}
             <MokaIcon iconName="fal-ellipsis-v" />

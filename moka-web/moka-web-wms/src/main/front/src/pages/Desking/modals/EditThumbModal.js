@@ -21,26 +21,17 @@ const EditThumbModal = (props) => {
             draggable
         >
             <DragDropContext>
-                <MokaCardTabs
-                    className="shadow-none"
-                    tabs={[
-                        <React.Fragment>
-                            <div>
-                                <Droppable droppableId="droppable-1" type="GIF">
-                                    {(provided, snapshot) => (
-                                        <div ref={provided.innerRef} style={{ backgroundColor: snapshot.isDraggingOver ? 'blue' : 'grey' }} {...provided.droppableProps}>
-                                            <h2>I am a droppable!</h2>
-                                            {provided.placeholder}
-                                        </div>
-                                    )}
-                                </Droppable>
+                <MokaCardTabs height={300} className="shadow-none w-100" tabs={[<EditThumbTable />]} tabNavs={['아카이브', '본문 소재 리스트']} fill />
+                <div className="mt-gutter">
+                    <Droppable droppableId="droppable-1" type="GIF">
+                        {(provided, snapshot) => (
+                            <div ref={provided.innerRef} style={{ backgroundColor: snapshot.isDraggingOver ? 'blue' : 'grey' }} {...provided.droppableProps}>
+                                <h2>I am a droppable!</h2>
+                                {provided.placeholder}
                             </div>
-                            <EditThumbTable />
-                        </React.Fragment>,
-                    ]}
-                    tabNavs={['아카이브', '본문 소재 리스트']}
-                    fill
-                />
+                        )}
+                    </Droppable>
+                </div>
             </DragDropContext>
         </MokaModal>
     );

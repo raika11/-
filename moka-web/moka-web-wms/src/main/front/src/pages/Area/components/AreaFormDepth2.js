@@ -179,11 +179,14 @@ const AreaFormDepth2 = (props) => {
         if (temp.areaDiv === ITEM_CP) {
             save.container = null;
             if (component.componentSeq) {
-                save.areaComps = [{ component }];
+                save.areaComps = [{ ...component, ordNo: 1 }];
             }
         } else {
             save.container = container;
-            save.areaComps = areaComps;
+            save.areaComps = areaComps.map((comp) => ({
+                ...areaComps,
+                ordNo: comp.relOrd,
+            }));
         }
 
         if (validate(save)) {

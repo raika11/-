@@ -8,7 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.mvc.editform.code.EditFormStatusCode;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -63,7 +63,7 @@ public class PartDTO {
      * 상태
      */
     @JacksonXmlProperty(isAttribute = true)
-    private EditFormStatusCode status;
+    private EditStatusCode status;
 
     /**
      * 작성자

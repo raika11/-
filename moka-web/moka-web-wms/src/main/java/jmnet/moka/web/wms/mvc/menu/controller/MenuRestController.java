@@ -358,7 +358,7 @@ public class MenuRestController {
                     .getMenuIds()
                     .forEach(menuId -> {
                         try {
-                            saveMenuAuth(menuId, MenuAuthTypeCode.GROUP, menuAuthBatchDTO.getMenuAuthSimpleDTOs());
+                            saveMenuAuth(menuId, MenuAuthTypeCode.GROUP, menuAuthBatchDTO.getMenuAuths());
                         } catch (Exception ex) {
                             tpsLogger.skip(ex.toString());
                         }
@@ -379,6 +379,7 @@ public class MenuRestController {
         }
     }
 
+
     /**
      * 여러 메뉴의 사용자 권한 수정
      *
@@ -397,7 +398,7 @@ public class MenuRestController {
                     .getMenuIds()
                     .forEach(menuId -> {
                         try {
-                            saveMenuAuth(menuId, MenuAuthTypeCode.MEMBER, menuAuthBatchDTO.getMenuAuthSimpleDTOs());
+                            saveMenuAuth(menuId, MenuAuthTypeCode.MEMBER, menuAuthBatchDTO.getMenuAuths());
                         } catch (Exception ex) {
                             tpsLogger.skip(ex.toString());
                         }
@@ -467,21 +468,12 @@ public class MenuRestController {
     public int saveMenuAuth(String menuId, MenuAuthTypeCode menuAuthType, List<MenuAuthSimpleDTO> menuAuthSimpleDTOs) {
         AtomicInteger successCount = new AtomicInteger(0);
         menuAuthSimpleDTOs.forEach(menuAuthSimpleDTO -> {
-            MenuAuth menuAuth = modelMapper.map(menuAuthSimpleDTO, MenuAuth.class);
-            menuAuth.setMenuId(menuId);
-            menuAuth.setGroupMemberDiv(menuAuthType != null ? menuAuthType.getCode() : menuAuth.getGroupMemberDiv());
-            MenuAuth orgMenu = menuService.findMenuAuth(menuAuth);
-            if (orgMenu != null) {
-                menuAuth.setSeqNo(orgMenu.getSeqNo());
-                menuAuth.setUsedYn(orgMenu.getUsedYn());
-                menuService.updateMenuAuth(menuAuth);
-            } else {
-                menuService.insertMenuAuth(menuAuth);
-            }
+            menuService.saveMenuAuth(menuId, menuAuthType, modelMapper.map(menuAuthSimpleDTO, MenuAuth.class));
             successCount.addAndGet(1);
         });
         return successCount.get();
     }
+
 
     /**
      * 메뉴 권한 존재 여부

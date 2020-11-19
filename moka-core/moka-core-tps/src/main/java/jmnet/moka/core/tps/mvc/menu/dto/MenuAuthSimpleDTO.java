@@ -44,6 +44,12 @@ public class MenuAuthSimpleDTO implements Serializable {
     /**
      * 그룹코드 / 사용자 ID
      */
+    @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.invalid.menuId}")
+    private String menuId;
+
+    /**
+     * 그룹코드 / 사용자 ID
+     */
     @Size(min = 2, max = 30, message = "{tps.menu.auth.error.size.groupMemberId}")
     private String groupMemberId;
 

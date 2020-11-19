@@ -26,8 +26,9 @@ public interface MenuAuthRepository extends JpaRepository<MenuAuth, Long>, JpaSp
     /**
      * 그룹멤버 ID로 메뉴권한 목록 조회
      *
-     * @param groupMemberId 그룹멤버 ID
+     * @param groupMemberId  그룹멤버 ID
+     * @param groupMemberDiv 그룹멤버 구분
      * @return 메뉴권한 목록
      */
-    public List<MenuAuth> findAllByGroupMemberId(String groupMemberId);
+    public List<MenuAuth> findAllByGroupMemberIdAndGroupMemberDiv(String groupMemberId, String groupMemberDiv);
 }

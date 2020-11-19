@@ -30,7 +30,7 @@ public class MenuAuthBatchDTO implements Serializable {
      * 메뉴 권한 목록
      */
     @NotEmpty(message = "{tps.menu.error.notempty.menuAuthDTOS}")
-    private List<@Valid MenuAuthSimpleDTO> menuAuthSimpleDTOs;
+    private List<@Valid MenuAuthSimpleDTO> menuAuths;
 
 
 

@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.group.controller;
 
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -11,17 +12,18 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.helper.ApiCodeHelper;
-import jmnet.moka.core.tps.helper.PurgeHelper;
-import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.group.dto.GroupDTO;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.service.GroupService;
-import jmnet.moka.core.tps.mvc.relation.service.RelationService;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthSimpleDTO;
+import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
+import jmnet.moka.core.tps.mvc.menu.service.MenuService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,36 +53,18 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/groups")
-public class GroupRestController {
+public class GroupRestController extends AbstractCommonController {
 
     private final GroupService groupService;
 
-    private final ModelMapper modelMapper;
+    private final MenuService menuService;
 
-    private final MessageByLocale messageByLocale;
-
-    private final CodeMgtService codeMgtService;
-
-    private final RelationService relationService;
-
-    private final ApiCodeHelper apiCodeHelper;
-
-    //    @Autowired
-    //    private ApplicationContext applicationContext;
-
-    private final PurgeHelper purgeHelper;
-
-    private final TpsLogger tpsLogger;
-
-    public GroupRestController(GroupService groupService, ModelMapper modelMapper, MessageByLocale messageByLocale, CodeMgtService codeMgtService,
-            RelationService relationService, ApiCodeHelper apiCodeHelper, PurgeHelper purgeHelper, TpsLogger tpsLogger) {
+    public GroupRestController(GroupService groupService, ModelMapper modelMapper, MessageByLocale messageByLocale, MenuService menuService,
+            TpsLogger tpsLogger) {
         this.groupService = groupService;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
-        this.codeMgtService = codeMgtService;
-        this.relationService = relationService;
-        this.apiCodeHelper = apiCodeHelper;
-        this.purgeHelper = purgeHelper;
+        this.menuService = menuService;
         this.tpsLogger = tpsLogger;
     }
 
@@ -249,16 +234,13 @@ public class GroupRestController {
     /**
      * 그룹 내 속한 멤버 존재 여부
      *
-     * @param request HTTP요청
      * @param groupCd 그룹ID
      * @return 관련아이템 존재 여부
-     * @throws NoDataException 데이터없음 예외처리
      */
     @ApiOperation(value = "그룹 내 속한 멤버 존재 여부")
     @GetMapping("/{groupCd}/has-members")
-    public ResponseEntity<?> hasMembers(HttpServletRequest request,
-            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd)
-            throws NoDataException {
+    public ResponseEntity<?> hasMembers(
+            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd) {
 
         boolean exists = groupService.hasMembers(groupCd);
         String message = exists ? messageByLocale.get("tps.group.success.select.exist-member") : "";
@@ -287,7 +269,7 @@ public class GroupRestController {
 
         // 그룹 데이터 조회
         String noContentMessage = messageByLocale.get("tps.group.error.no-data", request);
-        GroupInfo member = groupService
+        GroupInfo groupInfo = groupService
                 .findGroupById(groupCd)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 
@@ -300,7 +282,7 @@ public class GroupRestController {
 
         try {
             // 삭제
-            groupService.deleteGroup(member);
+            groupService.deleteGroup(groupInfo);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);
@@ -314,6 +296,42 @@ public class GroupRestController {
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
             throw new Exception(messageByLocale.get("tps.group.error.delete", request), e);
+        }
+    }
+
+    /**
+     * 여러 메뉴의 그룹 권한 수정
+     *
+     * @param request   요청
+     * @param menuAuths 메뉴권한목록
+     * @return 수정된 메뉴정보
+     * @throws Exception 그외 모든 에러
+     */
+    @ApiOperation(value = "여러 메뉴의 그룹 권한 수정")
+    @PutMapping("/{groupCd}/menu-auths")
+    public ResponseEntity<?> putGroupMenuAuth(HttpServletRequest request,
+            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd,
+            @RequestBody List<@Valid MenuAuthSimpleDTO> menuAuths)
+            throws Exception {
+
+        try {
+            menuService.saveMenuAuth(groupCd, MenuAuthTypeCode.GROUP, menuAuths
+                    .stream()
+                    .map(menuAuthSimpleDTO -> modelMapper.map(menuAuthSimpleDTO, MenuAuth.class))
+                    .collect(Collectors.toList()));
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.group.success.update.menu-auth"));
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success();
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE MENU AUTH]", e);
+            // 액션 로그에 에러 로그 출력
+            tpsLogger.error(e);
+            throw new Exception(messageByLocale.get("tps.menu.auth.error.save", request), e);
         }
     }
 }

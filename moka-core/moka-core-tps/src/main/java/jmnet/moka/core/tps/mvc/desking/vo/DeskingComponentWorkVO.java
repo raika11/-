@@ -13,10 +13,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
+import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,11 +52,11 @@ public class DeskingComponentWorkVO implements Serializable {
     @Column(name = "COMPONENT_SEQ")
     private Long componentSeq;
 
-    @Column(name = "COMPONENT_NAME")
-    private String componentName;
-
     @Column(name = "REG_ID")
     private String regId;
+
+    @Column(name = "COMPONENT_NAME")
+    private String componentName;
 
     @Column(name = "TEMPLATE_SEQ")
     private Long templateSeq;
@@ -76,11 +79,18 @@ public class DeskingComponentWorkVO implements Serializable {
     @Column(name = "MATCH_ZONE")
     private String matchZone;
 
+    @Column(name = "VIEW_YN")
+    private String viewYn;
+
     @Column(name = "SNAPSHOT_YN")
     private String snapshotYn;
 
     @Column(name = "SNAPSHOT_BODY")
     private String snapshotBody;
+
+    @Column(name = "PER_PAGE_COUNT")
+    @Builder.Default
+    private Integer perPageCount = TpsConstants.PER_PAGE_COUNT;
 
     @Column(name = "COMPONENT_ORD")
     private Long componentOrd;
@@ -91,8 +101,9 @@ public class DeskingComponentWorkVO implements Serializable {
     @Column(name = "ART_PAGE_SEQ")
     private Long artPageSeq;
 
-    @Column(name = "VIEW_YN")
-    private String viewYn;
+    @DTODateTimeFormat
+    @Column(name = "RESERVE_DT")
+    private Date reserveDt;
 
     @Builder.Default
     private List<DeskingWorkVO> deskingWorks = new ArrayList<DeskingWorkVO>();
@@ -103,12 +114,15 @@ public class DeskingComponentWorkVO implements Serializable {
         // componentItem.put(ItemConstants.COMPONENT_DOMAIN_ID, this.domain.getDomainId());
         componentItem.put(ItemConstants.COMPONENT_TEMPLATE_ID, this.getTemplateSeq());
         componentItem.put(ItemConstants.COMPONENT_DATASET_ID, this.getDatasetSeq());
-        componentItem.put(ItemConstants.COMPONENT_NAME, this.componentName);
         componentItem.put(ItemConstants.COMPONENT_DATA_TYPE, this.dataType);
+        componentItem.put(ItemConstants.COMPONENT_NAME, this.componentName);
+        componentItem.put(ItemConstants.COMPONENT_ZONE, this.zone);
+        componentItem.put(ItemConstants.COMPONENT_MATCH_ZONE, this.matchZone);
+        componentItem.put(ItemConstants.COMPONENT_VIEW_YN, this.viewYn);
+        componentItem.put(ItemConstants.COMPONENT_PER_PAGE_COUNT, this.perPageCount);
         componentItem.put(ItemConstants.COMPONENT_SEARCH_CODE_ID, this.schCodeId);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_YN, this.snapshotYn);
         componentItem.put(ItemConstants.COMPONENT_SNAPSHOT_BODY, this.snapshotBody);
-        //componentItem.put(ItemConstants.COMPONENT_VIEW_YN, this.viewYn);
         return componentItem;
     }
 }

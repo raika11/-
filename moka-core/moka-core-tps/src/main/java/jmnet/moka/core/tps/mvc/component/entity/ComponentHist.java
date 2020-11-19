@@ -2,9 +2,12 @@ package jmnet.moka.core.tps.mvc.component.entity;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +17,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.entity.RegAudit;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
@@ -85,23 +90,80 @@ public class ComponentHist extends RegAudit {
     private String dataType = TpsConstants.DATATYPE_NONE;
 
     /**
-     * 스냅샷본문
-     */
-    @Nationalized
-    @Column(name = "SNAPSHOT_BODY")
-    private String snapshotBody;
-
-    /**
      * 작업유형
      */
     @Column(name = "WORK_TYPE", columnDefinition = "char")
     @Builder.Default
     private String workType = TpsConstants.WORKTYPE_UPDATE;
 
+    /**
+     * 상태 - SAVE(임시) / PUBLISH(전송)
+     */
+    @Column(name = "STATUS", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private EditStatusCode status;
+
+    /**
+     * 예약일시
+     */
+    @Column(name = "RESERVE_DT", updatable = false)
+    protected Date reserveDt;
+
+    /**
+     * 승인여부 예약일시가 설정되어 있을 경우 예약된 작업이 완료되면 Y로 처리
+     */
+    @Column(name = "APPROVAL_YN")
+    @Builder.Default
+    protected String approvalYn = MokaConstants.NO;
+
+    /**
+     * 매칭영역 목록
+     */
+    @Column(name = "ZONE")
+    private String zone;
+
+    /**
+     * 매칭영역
+     */
+    @Column(name = "MATCH_ZONE")
+    private String matchZone;
+
+    /**
+     * 노출여부
+     */
+    @Column(name = "VIEW_YN", columnDefinition = "char")
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
+     * 페이지당 건수
+     */
+    @Column(name = "PER_PAGE_COUNT", nullable = false)
+    @Builder.Default
+    private Integer perPageCount = TpsConstants.PER_PAGE_COUNT;
+
+    /**
+     * 스냅샷여부
+     */
+    @Column(name = "SNAPSHOT_YN", columnDefinition = "char")
+    @Builder.Default
+    private String snapshotYn = MokaConstants.NO;
+
+    /**
+     * 스냅샷본문
+     */
+    @Nationalized
+    @Column(name = "SNAPSHOT_BODY")
+    private String snapshotBody;
+
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.workType = McpString.defaultValue(this.workType, TpsConstants.WORKTYPE_UPDATE);
         this.dataType = McpString.defaultValue(this.dataType, TpsConstants.DATATYPE_NONE);
+        this.workType = McpString.defaultValue(this.workType, TpsConstants.WORKTYPE_UPDATE);
+        this.status = this.status == null ? EditStatusCode.PUBLISH : this.status;
+        this.approvalYn = McpString.defaultValue(this.approvalYn, MokaConstants.NO);
+        this.viewYn = McpString.defaultValue(this.viewYn, MokaConstants.YES);
+        this.perPageCount = this.perPageCount == null ? TpsConstants.PER_PAGE_COUNT : this.perPageCount;
     }
 }

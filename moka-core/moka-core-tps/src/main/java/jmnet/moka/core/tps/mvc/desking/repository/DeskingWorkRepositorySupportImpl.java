@@ -50,7 +50,6 @@ public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport 
 
         builder.and(deskingWork.datasetSeq.eq(search.getDatasetSeq()));
         builder.and(deskingWork.regId.eq(search.getRegId()));
-        builder.and(deskingWork.saveYn.eq(search.getSaveYn()));
 
         JPQLQuery<DeskingWork> query = queryFactory.selectFrom(deskingWork)
                                                    .where(builder)

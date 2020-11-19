@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.exception.NoDataException;
@@ -190,7 +189,6 @@ public class DeskingServiceImpl implements DeskingService {
             DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
                                                               .datasetSeq(componentVO.getDatasetSeq())
                                                               .regId(componentVO.getRegId())
-                                                              .saveYn(MokaConstants.NO)
                                                               .build();
 
             //            Long componentSeq = componentVO.getComponentSeq();
@@ -292,7 +290,6 @@ public class DeskingServiceImpl implements DeskingService {
         appendDeskingWork.setDatasetSeq(datasetSeq);
         appendDeskingWork.setRegId(regId);
         appendDeskingWork.setRegDt(McpDate.now());
-        appendDeskingWork.setSaveYn(MokaConstants.NO);
         DeskingWork saved = deskingWorkRepository.save(appendDeskingWork);
         Long appendSeq = saved.getSeq();  // seq -> deskingSeq로 등록
         if (saved.getDeskingSeq() == null) {
@@ -308,7 +305,6 @@ public class DeskingServiceImpl implements DeskingService {
                                                           .datasetSeq(datasetSeq)
                                                           //.editionSeq(editionSeq)
                                                           .regId(regId)
-                                                          .saveYn(MokaConstants.NO)
                                                           .build();
         List<DeskingWork> deskingList = deskingWorkRepository.findAllDeskingWork(search);
         List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE);
@@ -368,6 +364,10 @@ public class DeskingServiceImpl implements DeskingService {
         component.setSnapshotYn(workVO.getSnapshotYn());
         component.setSnapshotBody(workVO.getSnapshotBody());
         component.setTemplate(template);
+        component.setPerPageCount(workVO.getPerPageCount());
+        component.setViewYn(workVO.getViewYn());
+        //        component.setZone(workVO.getZone());
+        component.setMatchZone(workVO.getMatchZone());
         component.setModDt(McpDate.now());
         component.setModId(regId);
 
@@ -389,7 +389,10 @@ public class DeskingServiceImpl implements DeskingService {
         componentWork.setSnapshotYn(workVO.getSnapshotYn());
         componentWork.setSnapshotBody(workVO.getSnapshotBody());
         componentWork.setTemplate(template);
-        //        componentWork.setSaveYn(MokaConstants.NO);
+        componentWork.setZone(workVO.getZone());
+        componentWork.setMatchZone(workVO.getMatchZone());
+        componentWork.setViewYn(workVO.getViewYn());
+        componentWork.setPerPageCount(workVO.getPerPageCount());
 
         return componentWorkService.updateComponentWork(componentWork);
 
@@ -413,15 +416,14 @@ public class DeskingServiceImpl implements DeskingService {
     public void preSend(DeskingComponentWorkVO workVO, String regId)
             throws Exception {
 
-        // 컴포넌트 수정
-        ComponentWork componentWork = updateComponentWork(workVO, regId);
-
-        // 편집데이타 등록
-        for (DeskingWorkVO deskingWorkVO : workVO.getDeskingWorks()) {
-            DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
-            deskingWork.setSaveYn(MokaConstants.NO);
-            updateDeskingWork(deskingWork);
-        }
+        //        // 컴포넌트 수정
+        //        ComponentHist componentHist = updateComponentHist(workVO, regId);
+        //
+        //        // 편집데이타 등록
+        //        for (DeskingWorkVO deskingWorkVO : workVO.getDeskingWorks()) {
+        //            DeskingHist deskingHist = modelMapper.map(deskingWorkVO, DeskingHist.class);
+        //            updateDeskingHist(deskingHist);
+        //        }
     }
 
 
@@ -558,6 +560,15 @@ public class DeskingServiceImpl implements DeskingService {
         entityManager.flush();
         return result;
     }
+
+    @Override
+    @Transactional
+    public DeskingHist updateDeskingHist(DeskingHist deskingHist) {
+        DeskingHist result = deskingHistRepository.save(deskingHist);
+        entityManager.flush();
+        return result;
+    }
+
 
     @Override
     public Optional<DeskingWork> findDeskingWorkBySeq(Long seq) {

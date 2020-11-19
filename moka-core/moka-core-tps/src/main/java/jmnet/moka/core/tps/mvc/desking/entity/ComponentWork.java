@@ -102,6 +102,13 @@ public class ComponentWork extends RegAudit {
     private String viewYn = MokaConstants.YES;
 
     /**
+     * 페이지당 건수
+     */
+    @Column(name = "PER_PAGE_COUNT", nullable = false)
+    @Builder.Default
+    private Integer perPageCount = TpsConstants.PER_PAGE_COUNT;
+
+    /**
      * 스냅샷여부
      */
     @Column(name = "SNAPSHOT_YN", columnDefinition = "char")
@@ -127,6 +134,7 @@ public class ComponentWork extends RegAudit {
     public void prePersist() {
         this.dataType = this.dataType == null ? TpsConstants.DATATYPE_NONE : this.dataType;
         this.viewYn = McpString.defaultValue(this.viewYn, MokaConstants.YES);
+        this.perPageCount = this.perPageCount == null ? TpsConstants.PER_PAGE_COUNT : this.perPageCount;
         this.snapshotYn = McpString.defaultValue(this.snapshotYn, MokaConstants.NO);
         this.componentOrd = this.componentOrd == null ? 1 : this.componentOrd;
     }

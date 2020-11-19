@@ -9,6 +9,7 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
+import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
@@ -82,6 +83,14 @@ public interface DeskingService {
      * @return 결과
      */
     public DeskingWork updateDeskingWork(DeskingWork deskingWork);
+
+    /**
+     * 데스킹 Hist 수정
+     *
+     * @param deskingHist 수정할 데스킹Hist
+     * @return 결과
+     */
+    public DeskingHist updateDeskingHist(DeskingHist deskingHist);
 
     /**
      * work 컴포넌트의 정렬순서 변경

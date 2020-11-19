@@ -138,7 +138,7 @@ public class DeskingRestController {
     }
 
     /**
-     * 편집 컴포넌트 전송(work를 저장)
+     * 컴포넌트 전송(work를 저장)
      *
      * @param componentWorkSeq 워크아이디
      * @param principal        로그인사용자 세션

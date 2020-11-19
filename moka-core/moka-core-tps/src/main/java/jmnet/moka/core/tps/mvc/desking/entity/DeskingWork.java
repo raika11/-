@@ -18,7 +18,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -106,12 +105,6 @@ public class DeskingWork implements Serializable {
     private Integer relOrd = 1;
 
     /**
-     * 임시저장여부
-     */
-    @Column(name = "SAVE_YN", nullable = false)
-    private String saveYn = MokaConstants.NO;
-
-    /**
      * 언어(기타코드)
      */
     @Column(name = "LANG", nullable = false)
@@ -128,12 +121,6 @@ public class DeskingWork implements Serializable {
      */
     @Column(name = "TITLE")
     private String title;
-
-    /**
-     * 모바일제목
-     */
-    @Column(name = "MOB_TITLE")
-    private String mobTitle;
 
     /**
      * 부제목
@@ -222,7 +209,6 @@ public class DeskingWork implements Serializable {
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.saveYn = this.saveYn == null ? MokaConstants.NO : this.saveYn;
         this.contentOrd = this.contentOrd == null ? 1 : this.contentOrd;
         this.relOrd = this.relOrd == null ? 1 : this.relOrd;
         this.lang = this.lang == null ? TpsConstants.DEFAULT_LANG : this.lang;

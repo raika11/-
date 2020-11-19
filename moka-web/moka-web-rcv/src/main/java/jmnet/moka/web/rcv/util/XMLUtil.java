@@ -59,12 +59,6 @@ public class XMLUtil {
         return (NodeList) exp.evaluate(doc, XPathConstants.NODESET);
     }
 
-    public NodeList getNodeList(Node doc, String xpath)
-            throws XPathExpressionException {
-        XPathExpression exp = getXPath().compile(xpath);
-        return (NodeList) exp.evaluate(doc, XPathConstants.NODESET);
-    }
-
     public String getString(Node doc, String xpath, String val)
             throws XPathExpressionException {
         if (doc == null) {

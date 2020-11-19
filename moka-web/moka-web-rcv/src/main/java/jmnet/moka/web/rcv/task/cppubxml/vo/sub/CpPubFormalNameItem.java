@@ -5,7 +5,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -19,7 +20,10 @@ import lombok.Data;
  * @author sapark
  * @since 2020-11-16 016 오후 5:03
  */
-@Data
+
+@SuppressWarnings("unused")
+@Getter
+@Setter
 @XmlRootElement(name = "NewsItemType")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CpPubFormalNameItem implements Serializable {

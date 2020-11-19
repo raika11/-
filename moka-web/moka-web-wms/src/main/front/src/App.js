@@ -9,19 +9,10 @@ import Routes from './routes/Routes';
 import SignIn from '@pages/Auth/SignIn';
 import { init } from '@store/app';
 
-// https://www.npmjs.com/package/react-redux-toastr
-const toastrOptions = {
-    okText: '확인',
-    cancelText: '취소',
-    component: (props) => {
-        console.log(props);
-    },
-};
-
 const WithToastr = ({ children }) => (
     <React.Fragment>
         {children}
-        <ReduxToastr timeOut={5000} newestOnTop={true} position="top-right" transitionIn="fadeIn" transitionOut="fadeOut" progressBar closeOnToastrClick options={toastrOptions} />
+        <ReduxToastr timeOut={5000} newestOnTop={true} position="top-right" transitionIn="fadeIn" transitionOut="fadeOut" progressBar closeOnToastrClick />
     </React.Fragment>
 );
 

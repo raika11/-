@@ -104,7 +104,7 @@ public class CpPubXmlCodeConverter {
         for (String s : list) {
             try{
                 final String replace = String.format("&#%d", Integer.parseInt(s.substring(1, 5), 16));
-                log.debug("change Hexa Code  {} ->  {}", s, replace);
+                log.debug("change hexa Code  {} ->  {}", s, replace);
                 text = text.replace(s, replace);
             }catch (Exception e){
                 log.debug("convText Exception error ->  {}", e.getMessage());

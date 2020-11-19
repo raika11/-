@@ -4,7 +4,8 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -18,7 +19,8 @@ import lombok.Data;
  * @author sapark
  * @since 2020-11-17 017 오후 2:14
  */
-@Data
+@Getter
+@Setter
 @XmlRootElement(name = "Characteristics")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CpPubXmlFileName implements Serializable {
@@ -90,6 +92,7 @@ public class CpPubXmlFileName implements Serializable {
         return false;
     }
 
+    @SuppressWarnings("SameReturnValue")
     private boolean doFilenameParseJoongangSunday() {
         // 중앙선데이만 처리한다. 이외것들은 로그남기고 완료폴더로 이동한다.
         if (media.compareTo("W005") != 0) {
@@ -142,6 +145,7 @@ public class CpPubXmlFileName implements Serializable {
         return true;
     }
 
+    @SuppressWarnings("SameReturnValue")
     private boolean doFilenameParseJoongangJopan() {
         // 중앙일보 조판이면서, 제주기사가 아닌것만 처리한다. 이외것들은 로그남기고 완료폴더로 이동한다.
         // If sArticleMetaMedia = "D001" And sArticleMetaLocal <> "D1018" And sArticleMetaPan <> "05" Then

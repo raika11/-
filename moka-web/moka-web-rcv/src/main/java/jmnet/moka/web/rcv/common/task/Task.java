@@ -62,7 +62,7 @@ public abstract class Task<T> extends TaskBase {
             throw new RcvException("InitTaskInput init Error");
         }
         taskInput.load(xu.getChildNode(node, "TaskInput"), xu);
-        retryCount = RcvUtil.ParseInt(xu.getString(node, "./@retryCount", "3"));
+        retryCount = RcvUtil.parseInt(xu.getString(node, "./@retryCount", "3"));
     }
 
     @Override

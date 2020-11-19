@@ -1,7 +1,6 @@
 package jmnet.moka.web.rcv.task.jamxml.vo;
 
 import java.util.List;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -9,8 +8,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.web.rcv.common.object.JaxbObjectManager;
-import jmnet.moka.web.rcv.common.object.JaxbObjectUnmarshallerImpl;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ArticleIdVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ArticlePropVo;

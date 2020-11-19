@@ -14,6 +14,7 @@ import java.lang.reflect.Array;
  * @author sapark
  * @since 2020-11-05 005 오후 5:42
  */
+
 public class RcvStringUtil {
 
     public static boolean isNumber(String str, int start, int end) {
@@ -143,6 +144,7 @@ public class RcvStringUtil {
         return minus ? -result : result;
     }
 
+    @SuppressWarnings("unused")
     public static int indexOfIgnoreScope(String text, String s, char openChar, char closeChar, int start, int end) {
         if (text == null || text.length() == 0 || s == null || s.length() == 0) {
             return -1;

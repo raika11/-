@@ -79,17 +79,17 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
             return false;
         }
 
-        final CpArticleListVo artcleList = cpArticleTotalVo.getMainData();
+        final CpArticleListVo articleList = cpArticleTotalVo.getMainData();
 
-        if (artcleList == null) {
+        if (articleList == null) {
             cpArticleTotalVo.logError("정상적인 XML 파일이 아닙니다. {}", taskInputData.getFile());
             return false;
         }
 
-        if (artcleList.getArticles() == null || artcleList
+        if (articleList.getArticles() == null || articleList
                 .getArticles()
                 .size() == 0) {
-            cpArticleTotalVo.logError("처리할 Article이 없는 XML 파일입니다. {}", taskInputData.getFile());
+            cpArticleTotalVo.logError("처리할 article 이 없는 XML 파일입니다. {}", taskInputData.getFile());
             return false;
         }
 
@@ -104,23 +104,12 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
         cpArticleTotalVo.setSourceCode(this.sourceCode);
         cpArticleTotalVo.setEditYn(this.editYn);
 
-        final CpArticleListVo artcleList = cpArticleTotalVo.getMainData();
-        for (CpArticleVo article : artcleList.getArticles()) {
+        final CpArticleListVo articleList = cpArticleTotalVo.getMainData();
+        for (CpArticleVo article : articleList.getArticles()) {
             cpArticleTotalVo.setCurArticle(article);
             article.doReplaceInsertData(this.sourceCode);
 
-            do {
-                try {
-                    doProcessChild(taskInputData, cpArticleTotalVo);
-                   } catch (Exception e) {
-                    cpArticleTotalVo.logError("기사 해석 에러 발생 반복 {}", e);
-                    if( isEnd() )
-                        break;
-                    sleep( false );
-                    continue;
-                }
-                break;
-            } while (true);
+            doProcessChild(taskInputData, cpArticleTotalVo);
         }
     }
 
@@ -129,22 +118,22 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
         final CpArticleVo article = cpArticleTotalVo.getCurArticle();
         final MokaRcvConfiguration rcvConfiguration = getTaskManager().getRcvConfiguration();
 
-        for (CpComponentVo componet : article.getComponents()) {
-            if (componet
+        for (CpComponentVo component : article.getComponents()) {
+            if (component
                     .getType()
                     .compareTo("I") != 0) {
                 continue;
             }
-            if (McpString.isNullOrEmpty(componet.getUrl())) {
+            if (McpString.isNullOrEmpty(component.getUrl())) {
                 continue;
             }
 
             String localFilePath;
             String imageFileName;
             if (this.receiveImage.compareTo("Y") == 0) {
-                // 로컬이미지 다운로드(FTP에 이미지파일도 함께 올려주는 경우)
+                // 로컬이미지 다운로드(FTP 에 이미지파일도 함께 올려주는 경우)
                 imageFileName = Path
-                        .of(componet.getUrl())
+                        .of(component.getUrl())
                         .getFileName()
                         .toString();
                 localFilePath = Path
@@ -155,27 +144,27 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
                         .toString();
                 log.info("local file {}, {}", imageFileName, localFilePath);
             } else {
-                final int equalPos = componet
+                final int equalPos = component
                         .getUrl()
-                        .lastIndexOf("=", componet
+                        .lastIndexOf("=", component
                                 .getUrl()
                                 .length() - 2);
                 if (equalPos != -1) {
                     // 맥심(maxim)같은 경우
-                    imageFileName = componet
+                    imageFileName = component
                             .getUrl()
                             .substring(equalPos + 1);
                     if (!imageFileName.contains(".")) {
                         imageFileName = imageFileName.concat(".jpg");
                     }
                 } else {
-                    imageFileName = FilenameUtils.getName(componet.getUrl());
+                    imageFileName = FilenameUtils.getName(component.getUrl());
                 }
 
                 // 외부 이미지 로컬에 저장
                 localFilePath = taskInputData.getTempFileName(rcvConfiguration.getTempDir());
-                if (!RcvImageUtil.downloadImage(componet.getUrl(), localFilePath)) {
-                    log.error("image download failed {}", componet.getUrl());
+                if (!RcvImageUtil.downloadImage(component.getUrl(), localFilePath)) {
+                    log.error("image download failed {}", component.getUrl());
                     localFilePath = "";
                 }
             }
@@ -212,10 +201,10 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
                         String ImageTag = "<div><!--@img_tag_s@--><div class=\"html_photo_center\"><img src=\""
                                 .concat(serviceImageUrl)
                                 .concat("\" />");
-                        if (!McpString.isNullOrEmpty(componet.getDesc())) {
+                        if (!McpString.isNullOrEmpty(component.getDesc())) {
                             ImageTag = ImageTag
                                     .concat("<span class=\"rt\">")
-                                    .concat(componet.getDesc())
+                                    .concat(component.getDesc())
                                     .concat("</span>");
                         }
                         ImageTag = ImageTag.concat("</div><!--@img_tag_e@--></div>");
@@ -226,10 +215,10 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
                     } else {
                         article.setContent(article
                                 .getContent()
-                                .replace(RcvUtil.cpReplaceInsertData(componet.getUrl()), serviceImageUrl));
+                                .replace(RcvUtil.cpReplaceInsertData(component.getUrl()), serviceImageUrl));
                     }
                 }
-                componet.setUrl(uploadPath.concat(imageFileName));
+                component.setUrl(uploadPath.concat(imageFileName));
             }
         }
 
@@ -241,5 +230,7 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
     protected void doAfterProcess(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData)
             throws RcvDataAccessException {
         super.doAfterProcess(taskInputData);
+
+        taskInputData.doAfterProcess();
     }
 }

@@ -1,18 +1,5 @@
 package jmnet.moka.web.rcv;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
-import jmnet.moka.web.rcv.common.object.JaxbObjectManager;
-import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleListVo;
-import jmnet.moka.web.rcv.util.RcvImageUtil;
-import jmnet.moka.web.rcv.util.RcvUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;

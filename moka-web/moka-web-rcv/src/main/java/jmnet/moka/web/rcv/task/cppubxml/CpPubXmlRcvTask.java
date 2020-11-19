@@ -1,13 +1,8 @@
 package jmnet.moka.web.rcv.task.cppubxml;
 
-import java.io.FileReader;
-import java.nio.charset.Charset;
-import java.util.Date;
+import java.io.File;
 import java.util.Map;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.xpath.XPathExpressionException;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.task.Task;
 import jmnet.moka.web.rcv.common.taskinput.TaskInput;
@@ -16,9 +11,9 @@ import jmnet.moka.web.rcv.exception.RcvException;
 import jmnet.moka.web.rcv.task.base.TaskGroup;
 import jmnet.moka.web.rcv.task.cppubxml.vo.CpPubNewsMLTotalVo;
 import jmnet.moka.web.rcv.task.cppubxml.vo.CpPubNewsMLVo;
-import jmnet.moka.web.rcv.task.cpxml.CpXmlRcvService;
 import jmnet.moka.web.rcv.taskinput.FileTaskInput;
 import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
+import jmnet.moka.web.rcv.taskinput.FileTaskInputFilePreProcess;
 import jmnet.moka.web.rcv.util.RcvFileUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -49,17 +44,20 @@ public class CpPubXmlRcvTask extends Task<FileTaskInputData<CpPubNewsMLTotalVo, 
     @Override
     protected TaskInput initTaskInput() {
         FileTaskInput<CpPubNewsMLTotalVo, CpPubNewsMLVo> taskInput = new FileTaskInput<>(CpPubNewsMLTotalVo.class, CpPubNewsMLVo.class);
-        taskInput.setFilePreProcess(file -> {
-            try {
-                final String dumpText = RcvFileUtil.readFromXml(file);
-                if (!McpString.isNullOrEmpty(dumpText)) {
-                    taskInput.setSourceBuffer(CpPubXmlCodeConverter.convText(dumpText));
-                    return true;
+        taskInput.setFilePreProcess(new FileTaskInputFilePreProcess() {
+            @Override
+            public boolean preProcess(File file) {
+                try {
+                    final String dumpText = RcvFileUtil.readFromXml(file);
+                    if (!McpString.isNullOrEmpty(dumpText)) {
+                        taskInput.setSourceBuffer(CpPubXmlCodeConverter.convText(dumpText));
+                        return true;
+                    }
+                } catch (Exception e) {
+                    log.error("File preprocess error {}", file);
                 }
-            } catch (Exception e) {
-                log.error("File preprocess error {}", file);
+                return false;
             }
-            return false;
         });
         return taskInput;
     }
@@ -97,21 +95,42 @@ public class CpPubXmlRcvTask extends Task<FileTaskInputData<CpPubNewsMLTotalVo, 
             return false;
         }
 
-        newsMLTotal.setArticleItemId( newsML.getNewsItem().getIdentification().getNewsIdentifier().getNewsItemId() );
-        if( newsMLTotal.getArticleItemId().length() > 7 ){
-            newsMLTotal.setArticleItemId( newsMLTotal.getArticleItemId().substring(newsMLTotal.getArticleItemId().length() - 7 ));
+        newsMLTotal.setArticleItemId(newsML
+                .getNewsItem()
+                .getIdentification()
+                .getNewsIdentifier()
+                .getNewsItemId());
+        if (newsMLTotal
+                .getArticleItemId()
+                .length() > 7) {
+            newsMLTotal.setArticleItemId(newsMLTotal
+                    .getArticleItemId()
+                    .substring(newsMLTotal
+                            .getArticleItemId()
+                            .length() - 7));
         }
 
-        String[] split = newsML.getNewsItem().getIdentification().getNewsIdentifier().getPublicIdentifier().split(":");
-        if( split.length > 0 )
-            newsMLTotal.setArticleIssue( split[0]);
+        String[] split = newsML
+                .getNewsItem()
+                .getIdentification()
+                .getNewsIdentifier()
+                .getPublicIdentifier()
+                .split(":");
+        if (split.length > 0) {
+            newsMLTotal.setArticleIssue(split[0]);
+        }
 
-        if( newsML.getNewsItem().getNewsComponents().getEquivalentsList().length() == 0 ) {
+        if (newsML
+                .getNewsItem()
+                .getNewsComponents()
+                .getEquivalentsList()
+                .length() == 0) {
             newsMLTotal
                     .getXmlFileName()
                     .setPassProcess(true);
             newsMLTotal
-                    .getXmlFileName().setPassReason("NewsComponet가 하나도 없는 데이터이다.");
+                    .getXmlFileName()
+                    .setPassReason("NewsComponent 가 하나도 없는 데이터이다.");
         }
 
         return true;
@@ -121,27 +140,33 @@ public class CpPubXmlRcvTask extends Task<FileTaskInputData<CpPubNewsMLTotalVo, 
     protected void doProcess(FileTaskInputData<CpPubNewsMLTotalVo, CpPubNewsMLVo> taskInputData)
             throws RcvDataAccessException {
         final CpPubNewsMLTotalVo newsMLTotal = taskInputData.getTotalData();
-        if( newsMLTotal.getXmlFileName().isPassProcess() ) {
-            newsMLTotal.logInfo( "해당 파일은 처리 대상 xml이 아닙니다. {} {}", taskInputData.getFile(), newsMLTotal.getXmlFileName().getPassReason());
+        if (newsMLTotal
+                .getXmlFileName()
+                .isPassProcess()) {
+            newsMLTotal.logInfo("해당 파일은 처리 대상 xml 이 아닙니다. {} {}", taskInputData.getFile(), newsMLTotal
+                    .getXmlFileName()
+                    .getPassReason());
             taskInputData.setSuccess(true);
             return;
         }
         newsMLTotal.setSourceCode(this.sourceCode);
-        newsMLTotal.setXmlBody( taskInputData.getTaskInput().getSourceBuffer());
+        newsMLTotal.setXmlBody(taskInputData
+                .getTaskInput()
+                .getSourceBuffer());
 
         final CpPubXmlRcvService cpPubXmlRcvService = getTaskManager().getCpPubXmlRcvService();
         Map<String, String> ret = cpPubXmlRcvService.doInsertUpdateArticleData(newsMLTotal);
 
         String retValue = "";
-        if( ret != null )
+        if (ret != null) {
             retValue = ret.get("RET_VALUE");
-
-        if( McpString.isNullOrEmpty(retValue) || retValue.compareTo("SU") != 0) {
-            newsMLTotal.logError("Xml Datatase Insert/Update Error [{}] {}", retValue, taskInputData.getFile() );
         }
-        else {
+
+        if (McpString.isNullOrEmpty(retValue) || retValue.compareTo("SU") != 0) {
+            newsMLTotal.logError("Xml Database Insert/Update Error [{}] {}", retValue, taskInputData.getFile());
+        } else {
             taskInputData.setSuccess(true);
-            newsMLTotal.logInfo("Xml Datatase Insert/Update Success !! [{}] {}", retValue, taskInputData.getFile());
+            newsMLTotal.logInfo("Xml Database Insert/Update Success !! [{}] {}", retValue, taskInputData.getFile());
         }
     }
 
@@ -150,21 +175,6 @@ public class CpPubXmlRcvTask extends Task<FileTaskInputData<CpPubNewsMLTotalVo, 
             throws RcvDataAccessException {
         super.doAfterProcess(taskInputData);
 
-        String targetDir;
-        if( !taskInputData.isSuccess() ){
-            targetDir = taskInputData
-                    .getTaskInput()
-                    .getDirFailed();
-        }else{
-            targetDir = taskInputData
-                    .getTaskInput()
-                    .getDirSuccess();
-        }
-
-        try {
-            RcvFileUtil.moveFileToDateDir(taskInputData.getFile(), targetDir, McpDate.dateStr(new Date(), "yyyyMM/dd"));
-        } catch (RcvException e) {
-            log.error(e.getMessage());
-        }
+        taskInputData.doAfterProcess();
     }
 }

@@ -184,8 +184,8 @@ const AreaFormDepth2 = (props) => {
         } else {
             save.container = container;
             save.areaComps = areaComps.map((comp) => ({
-                ...areaComps,
-                ordNo: comp.relOrd,
+                ...comp,
+                ordNo: comp.component.relOrd + 1,
             }));
         }
 

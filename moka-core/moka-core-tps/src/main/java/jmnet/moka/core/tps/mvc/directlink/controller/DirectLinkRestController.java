@@ -135,6 +135,14 @@ public class DirectLinkRestController {
     public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO
             , @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
+
+        System.out.println("directLinkDTO.getImgUrl()::" + directLinkDTO.getImgUrl());
+
+        // 널이면 강제로 셋팅
+        if(directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == ""){
+            directLinkDTO.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
+        }
+
         // 데이터 유효성 검사
         validData(directLinkThumbnailFile, ActionType.INSERT);
 

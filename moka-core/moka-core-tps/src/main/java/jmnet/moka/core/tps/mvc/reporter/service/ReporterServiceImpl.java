@@ -33,12 +33,12 @@ public class ReporterServiceImpl implements ReporterService {
 
 
     @Override
-    public List<ReporterVO> findAllReporterMgr(ReporterSearchDTO search) {
+    public List<ReporterVO> findAllReporter(ReporterSearchDTO search) {
         return reporterMapper.findAll(search);
     }
 
     @Override
-    public Optional<Reporter> findReporterMgrById(String repSeq) {
+    public Optional<Reporter> findReporterById(String repSeq) {
         return reporterRepository.findById(repSeq);
     }
 
@@ -48,9 +48,9 @@ public class ReporterServiceImpl implements ReporterService {
     }
 
     @Override
-    public Reporter updateReporterMgr(Reporter reporter) {
+    public Reporter updateReporter(Reporter reporter) {
         Reporter returnVal = reporterRepository.save(reporter);
-        log.debug("[UPDATE REP_SEQ] domainId : {}", returnVal.getRepSeq());
+        log.debug("[UPDATE REP_SEQ] repSeq : {}", returnVal.getRepSeq());
         return returnVal;
     }
 }

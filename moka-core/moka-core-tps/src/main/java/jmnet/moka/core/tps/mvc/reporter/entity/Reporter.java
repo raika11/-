@@ -18,7 +18,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "TB_15RE_REPORTER")
-@NamedQuery(name = "ReporterMgr.findAll", query = "SELECT d FROM Reporter d")
+@NamedQuery(name = "Reporter.findAll", query = "SELECT d FROM Reporter d")
 public class Reporter extends BaseAudit {
 
     private static final long serialVersionUID = -6113879324816610973L;

@@ -29,7 +29,7 @@ public interface ReporterService {
      * @param search 검색조건
      * @return 기자관리 목록조회
      */
-    public List<ReporterVO> findAllReporterMgr(ReporterSearchDTO search);
+    public List<ReporterVO> findAllReporter(ReporterSearchDTO search);
 
     /**
      * 기자 조회
@@ -37,7 +37,7 @@ public interface ReporterService {
      * @param repSeq 기자일련번호
      * @return 기자정보조회
      */
-    public Optional<Reporter> findReporterMgrById(String repSeq);
+    public Optional<Reporter> findReporterById(String repSeq);
 
     /**
      * 기자 조회
@@ -54,6 +54,6 @@ public interface ReporterService {
      * @param reporter 수정할 기자정보
      * @return 수정된 기자정보
      */
-    public Reporter updateReporterMgr(Reporter reporter);
+    public Reporter updateReporter(Reporter reporter);
 
 }

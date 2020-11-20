@@ -70,10 +70,10 @@ public class ReporterRestController {
      */
     @ApiOperation(value = "기자관리 목록 조회")
     @GetMapping
-    public ResponseEntity<?> getReporterMgrList(@Valid @SearchParam ReporterSearchDTO search) {
+    public ResponseEntity<?> getReporterList(@Valid @SearchParam ReporterSearchDTO search) {
 
         // 조회(mybatis)
-        List<ReporterVO> returnValue = reporterService.findAllReporterMgr(search);
+        List<ReporterVO> returnValue = reporterService.findAllReporter(search);
 
         // 리턴값 설정
         ResultListDTO<ReporterVO> resultList = new ResultListDTO<ReporterVO>();
@@ -132,13 +132,13 @@ public class ReporterRestController {
         Reporter newReporter = modelMapper.map(reporterSimpleDTO, Reporter.class);
 
         reporterService
-                .findReporterMgrById(newReporter.getRepSeq())
+                .findReporterById(newReporter.getRepSeq())
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
 
         try {
             // update
-            Reporter returnValue = reporterService.updateReporterMgr(newReporter);
+            Reporter returnValue = reporterService.updateReporter(newReporter);
 
             // 결과리턴
             ReporterSimpleDTO dto = modelMapper.map(returnValue, ReporterSimpleDTO.class);

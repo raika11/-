@@ -11,7 +11,7 @@ const toGroupMenuTree = (menus) => {
     const treeInfo = { list: [], used: [], edited: [] };
     if (menus && menus.length > 0) {
         menus.map((menu) => {
-            const isMenuUsed = menu.useYn === 'Y';
+            const isMenuUsed = menu.usedYn === 'Y';
             const isMenuEdit = isMenuUsed && menu.editYn === 'Y';
 
             const treeMenu = { key: menu.menuId, title: menu.menuDisplayNm, selectable: false };

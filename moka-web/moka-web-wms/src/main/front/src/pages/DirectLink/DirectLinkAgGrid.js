@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import columnDefs from './DirectLinkAgGridColumns';
-import { API_BASE_URL } from '@/constants';
 import { MokaTable } from '@components';
 import { GET_DIRECT_LINK_LIST, getDirectLinkList, changeSearchOption } from '@store/directLink';
 
@@ -50,14 +49,22 @@ const DirectLinkAgGrid = () => {
         [history],
     );
 
+    /**
+     * 목록 리스트
+     */
     useEffect(() => {
         setRowData(
             list.map((data) => {
                 let imgUrl = data.imgUrl;
-                if (imgUrl && imgUrl !== '') {
-                    imgUrl = `${API_BASE_URL}${UPLOAD_PATH_URL}/${imgUrl}`;
-                }
+                // Full URL 이어서 주석처리.
+                // if (imgUrl && imgUrl !== '') {
+                //     imgUrl = `${API_BASE_URL}${UPLOAD_PATH_URL}/${imgUrl}`;
+                // }
 
+                // 이미지가 없으면 빈값으로 출력 되기 떄문에 기본 이미지 설정.
+                if (imgUrl === '' || imgUrl === 'https://joongang.joins.com/') {
+                    imgUrl = 'http://pds.joins.com/news/search_direct_link/000.jpg';
+                }
                 return {
                     ...data,
                     imgUrl,
@@ -81,19 +88,7 @@ const DirectLinkAgGrid = () => {
             <MokaTable
                 agGridHeight={650}
                 columnDefs={columnDefs}
-                // rowData={rowData}
-                // 예제 데이터이므로 실제 데이터 연결 시 아래는 삭제하시고, 윗 줄 주석 제거하여 사용하세요
-                rowData={[
-                    {
-                        linkTitle: '테스트 데이터',
-                        linkUrl: 'http://jtbc.joins.com/',
-                        linkContent: 'jtbc 설명입니다\n jtbc 설명입니다',
-                        usedYn: 'Y',
-                        usedYnText: '게재 중',
-                        imgUrl:
-                            'https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F011%2F2019%2F01%2F17%2F0003488095_001_20190117132108003.png&type=b400',
-                    },
-                ]}
+                rowData={rowData}
                 onRowNodeId={(data) => data.linkSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}

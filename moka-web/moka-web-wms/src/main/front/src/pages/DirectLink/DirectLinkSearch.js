@@ -38,16 +38,16 @@ const DirectLinkSearch = () => {
     /**
      * 검색
      */
-    const handleSearch = useCallback(() => {
-        dispatch(
-            getDirectLinkList(
-                changeSearchOption({
-                    ...search,
-                    page: 0,
-                }),
-            ),
-        );
-    }, [dispatch, search]);
+    const handleSearch = useCallback(
+        ({ key, value }) => {
+            let temp = { ...search, [key]: value };
+            if (key !== 'page') {
+                temp['page'] = 0;
+            }
+            dispatch(getDirectLinkList(changeSearchOption(temp)));
+        },
+        [dispatch, search],
+    );
 
     useEffect(() => {
         // 스토어의 search 객체 변경 시 로컬 state에 셋팅
@@ -56,7 +56,7 @@ const DirectLinkSearch = () => {
 
     useEffect(() => {
         // 첫화면 로딩 시 리스트 조회
-        handleSearch();
+        dispatch(getDirectLinkList());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

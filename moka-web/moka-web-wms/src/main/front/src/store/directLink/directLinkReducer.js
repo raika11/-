@@ -10,7 +10,6 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        sort: 'linkSeq,desc',
         usedYn: 'Y',
         fixYn: 'Y',
         searchType: 'all',
@@ -20,7 +19,7 @@ export const initialState = {
         { id: 'all', name: '전체' },
         { id: 'linkTitle', name: '제목' },
         { id: 'linkContent', name: '내용' },
-        { id: 'linkKeyword', name: '키워드' },
+        { id: 'linkKwd', name: '키워드' },
     ],
     directLink: {
         viewSDate: null,
@@ -79,9 +78,9 @@ export default handleActions(
         },
         [act.GET_DIRECT_LINK_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
+                draft.error = payload;
                 draft.list = initialState.list;
                 draft.total = initialState.total;
-                draft.error = payload;
             });
         },
         [act.GET_DIRECT_LINK_SUCCESS]: (state, { payload: { body } }) => {
@@ -91,6 +90,20 @@ export default handleActions(
             });
         },
         [act.GET_DIRECT_LINK_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.directLinkError = payload;
+            });
+        },
+        /**
+         * 삭제
+         */
+        [act.DELETE_DIRECT_LINK_SUCCESS]: (state) => {
+            return produce(state, (draft) => {
+                draft.directLink = initialState.directLink;
+                draft.directLinkError = initialState.directLinkError;
+            });
+        },
+        [act.DELETE_DIRECT_LINK_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.directLinkError = payload;
             });

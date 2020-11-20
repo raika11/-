@@ -38,6 +38,11 @@ const propTypes = {
      * 이미지 alt
      */
     alt: PropTypes.string,
+
+    /**
+     * 업로드 가능 이미지 타입
+     */
+    selectAccept: PropTypes.array,
 };
 const defaultProps = {
     width: 171,
@@ -49,6 +54,7 @@ const defaultProps = {
         body: '이미지파일만 등록할 수 있습니다',
     },
     alt: '이미지',
+    selectAccept: [],
 };
 
 /**
@@ -56,7 +62,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt } = props;
+    const { width, height, alertProps, img, setFileValue, alt, selectAccept } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -79,6 +85,14 @@ const MokaImageInput = forwardRef((props, ref) => {
         imgRef.current.classList.remove('d-none');
         defaultRef.current.classList.add('d-none');
         defaultRef.current.classList.remove('d-flex');
+    };
+
+    // 기본 얼럿 메시지 유지를 위해.
+    const handleEtcAlert = (message) => {
+        alertProps.body = message;
+        setAlert(true);
+        imageHide();
+        alertProps.body = '이미지파일만 등록할 수 있습니다';
     };
 
     /**
@@ -141,6 +155,11 @@ const MokaImageInput = forwardRef((props, ref) => {
     const onDrop = (acceptedFiles) => {
         wrapRef.current.classList.remove('dropzone-dragover');
         if (ACCEPTED_IMAGE_TYPES.includes(acceptedFiles[0].type)) {
+            // 업로드 가능 확장자 체크
+            if (selectAccept.length > 0 && selectAccept.includes(acceptedFiles[0].type) === false) {
+                handleEtcAlert(`업로드 이미지는 (${selectAccept.map((n) => n.split('/')[1]).join(', ')})만 가능합니다.`);
+                return;
+            }
             setAlert(false);
             const fileReader = new FileReader();
             fileReader.readAsDataURL(acceptedFiles[0]);

@@ -22,6 +22,7 @@ import groupSaga from '@store/group/groupSaga';
 import reporterSaga from '@store/reporter/reporterSaga';
 import deskingSaga from '@store/desking/deskingSaga';
 import memberSaga from '@store/member/memberSaga';
+import directLinkSaga from '@store/directLink/directLinkSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -47,5 +48,6 @@ export default function* rootSaga() {
         reporterSaga(),
         deskingSaga(),
         memberSaga(),
+        directLinkSaga(),
     ]);
 }

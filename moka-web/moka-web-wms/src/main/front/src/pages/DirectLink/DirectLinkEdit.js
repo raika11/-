@@ -4,18 +4,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import toast from '@utils/toastUtil';
+import { notification } from '@utils/toastUtil';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaCard, MokaInputLabel } from '@components';
-import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, changeInvalidList } from '@store/directLink';
+import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList, deleteDirectLink } from '@store/directLink';
 
 /**
  * 사이트 바로 가기 등록/수정창
  */
-const DirectLinkEdit = () => {
+const DirectLinkEdit = ({ history }) => {
     const dispatch = useDispatch();
     const { linkSeq } = useParams();
     const imgFileRef = useRef(null);
+    const [dateFixYn, setDateFixYn] = useState('N'); // 계속노출 서정.
+    const [dateDisabled, setDateDisabled] = useState(true); // 계속 노출시 datePiker disable
 
     const { directLink, invalidList, loading } = useSelector((store) => ({
         directLink: store.directLink.directLink,
@@ -43,20 +47,21 @@ const DirectLinkEdit = () => {
             setTemp({ ...temp, linkContent: value });
         } else if (name === 'linkUrl') {
             setTemp({ ...temp, linkUrl: value });
-        } else if (name === 'linkKeyword') {
-            setTemp({ ...temp, linkKeyword: value });
+        } else if (name === 'linkKwd') {
+            setTemp({ ...temp, linkKwd: value });
         } else if (name === 'usedYn') {
             setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
         } else if (name === 'fixYn') {
             setTemp({ ...temp, fixYn: value });
         } else if (name === 'linkType') {
             setTemp({ ...temp, linkType: value });
+        } else if (name === 'dateFixYn') {
+            setDateFixYn(checked ? 'Y' : 'N'); // 계속 노출 체크 여부
         }
     };
 
     /**
-     * 시작일 변경
-     * @param {object} date moment object
+     * 계속노출 설정
      */
     const handleSDate = (date) => {
         if (typeof date === 'object') {
@@ -75,10 +80,69 @@ const DirectLinkEdit = () => {
     };
 
     /**
+     * 유효성 검사를 한다.
+     */
+    const validate = (directLink) => {
+        let isInvalid = false;
+        let errList = [];
+
+        // 제목
+        if (!directLink.linkTitle) {
+            errList.push({
+                field: 'linkTitle',
+                reason: '제목을 입력해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 내용
+        if (!directLink.linkContent) {
+            errList.push({
+                field: 'linkContent',
+                reason: '내용을 입력해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 링크
+        if (!directLink.linkUrl) {
+            errList.push({
+                field: 'linkUrl',
+                reason: '링크를 입력해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 키워드
+        if (!directLink.linkKwd) {
+            errList.push({
+                field: 'linkKwd',
+                reason: '키워드를 입력해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        dispatch(changeInvalidList(errList));
+        return !isInvalid;
+    };
+
+    /**
      * 링크 유효성 검사
      */
     const validateLink = () => {
-        setError({ ...error, linkUrl: true });
+        if (temp.linkUrl === undefined || temp.linkUrl.length === 0) {
+            setError({ ...error, linkUrl: false });
+            return;
+        }
+        //var res = temp.linkUrl.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+        var expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+        var regex = new RegExp(expression);
+
+        if (temp.linkUrl.match(regex)) {
+            setError({ ...error, linkUrl: false });
+        } else {
+            setError({ ...error, linkUrl: true });
+        }
     };
 
     /**
@@ -88,25 +152,107 @@ const DirectLinkEdit = () => {
         let saveData = {
             ...directLink,
             ...temp,
-            viewSDate: null,
-            viewEDate: null,
-            imageFile: fileValue, // multipart 받는 dto의 필드명으로 변경하세요
+            directLinkThumbnailFile: fileValue, // multipart 받는 dto의 필드명으로 변경하세요
         };
 
-        let sdt = moment(temp.periodStartDt).format(DB_DATEFORMAT);
-        let edt = moment(temp.periodEndDt).format(DB_DATEFORMAT);
+        let sdt = moment(temp.periodStartDt).format('YYYY-MM-DD');
+        let edt = moment(temp.periodEndDt).format('YYYY-MM-DD');
 
-        if (sdt !== 'Invalid date') {
-            saveData.viewSDate = sdt;
-        }
-        if (edt !== 'Invalid date') {
-            saveData.viewEDate = edt;
+        // if (sdt !== 'Invalid date') {
+        // saveData.viewSdate = sdt;
+        // }
+        // if (edt !== 'Invalid date') {
+        // saveData.viewEdate = edt;
+        // }
+
+        // 계속 노출시 날짜 초기화
+        if (dateFixYn === 'Y') {
+            saveData.viewSdate = null;
+            saveData.viewEdate = null;
+        } else {
+            saveData.viewSdate = sdt;
+            saveData.viewEdate = edt;
         }
 
-        // validate
-        // 저장
+        if (validate(saveData)) {
+            if (linkSeq) {
+                updateDirectLink(saveData); // 업데이트
+            } else {
+                insertDirectLink(saveData); // 저장
+            }
+        }
     };
 
+    // 임시 삭제 기능.
+    const handleClickDelete = () => {
+        if (linkSeq) {
+            dispatch(
+                deleteDirectLink({
+                    linkSeq: linkSeq,
+                    callback: ({ header }) => {
+                        // 삭제 성공
+                        if (header.success) {
+                            notification('success', '삭제 되었습니다.');
+                            history.push('/direct-link');
+                        }
+                        // 삭제 실패
+                        else {
+                            notification('warning', header.message);
+                        }
+                    },
+                }),
+            );
+        }
+    };
+
+    // 업데이트 처리.
+    const updateDirectLink = (tmp) => {
+        dispatch(
+            saveDirectLink({
+                type: 'update',
+                actions: [
+                    changeDirectLink({
+                        ...tmp,
+                    }),
+                ],
+                callback: (response) => {
+                    if (response.header.success) {
+                        notification('success', '수정하였습니다.');
+                    } else {
+                        notification('warning', '실패하였습니다.');
+                    }
+                },
+            }),
+        );
+    };
+
+    // 등록 처리.
+    const insertDirectLink = (tmp) => {
+        dispatch(
+            saveDirectLink({
+                type: 'insert',
+                actions: [
+                    changeDirectLink({
+                        ...tmp,
+                    }),
+                ],
+                callback: (response) => {
+                    if (response.header.success) {
+                        notification('success', '등록하였습니다.');
+                        // TODO 저장 완료후 어떻게 해야 할지?
+                        // history.push(`direct-link/${directLink.linkSeq}`);
+                        dispatch(clearDirectLink());
+                        history.push('/direct-link');
+                        setTemp({});
+                    } else {
+                        notification('warning', '실패하였습니다.');
+                    }
+                },
+            }),
+        );
+    };
+
+    // 정보 조회.
     useEffect(() => {
         if (linkSeq) {
             dispatch(
@@ -123,10 +269,13 @@ const DirectLinkEdit = () => {
         // 스토어에서 가져온 데이터 셋팅
         setTemp({
             ...directLink,
-            viewSDate: moment(directLink.viewSDate, DB_DATEFORMAT),
-            viewEDate: moment(directLink.viewEDate, DB_DATEFORMAT),
+            viewSDate: moment(directLink.viewSdate, DB_DATEFORMAT),
+            viewEDate: moment(directLink.viewEdate, DB_DATEFORMAT),
         });
 
+        if (directLink.viewEdate === '' || directLink.viewSdate === '') {
+            setDateFixYn('Y');
+        }
         if (imgFileRef.current) {
             imgFileRef.current.deleteFile();
         }
@@ -147,13 +296,22 @@ const DirectLinkEdit = () => {
         }
     }, [invalidList]);
 
+    // 계속 노출 처리.
+    useEffect(() => {
+        if (dateFixYn === 'Y') {
+            setDateDisabled(true);
+        } else {
+            setDateDisabled(false);
+        }
+    }, [dateFixYn, temp]);
+
     return (
         <MokaCard width={535} title={`사이트 바로 가기 ${linkSeq ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
             <Form className="mb-gutter">
                 {/* 제목 */}
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">
-                        <MokaInputLabel label="제목" className="mb-0" name="linkTitle" value={temp.linkTitle} onChange={handleChangeValue} />
+                        <MokaInputLabel label="제목" className="mb-0" name="linkTitle" value={temp.linkTitle} onChange={handleChangeValue} isInvalid={error.linkTitle} />
                     </Col>
                 </Form.Row>
 
@@ -168,6 +326,7 @@ const DirectLinkEdit = () => {
                             name="linkContent"
                             value={temp.linkContent}
                             onChange={handleChangeValue}
+                            isInvalid={error.linkContent}
                         />
                     </Col>
                 </Form.Row>
@@ -187,32 +346,45 @@ const DirectLinkEdit = () => {
                 {/* 키워드 */}
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">
-                        <MokaInputLabel label="키워드" className="mb-0" name="linkKeyword" value={temp.linkKeyword} onChange={handleChangeValue} />
+                        <MokaInputLabel label="키워드" className="mb-0" name="linkKwd" value={temp.linkKwd} onChange={handleChangeValue} isInvalid={error.linkKwd} />
                     </Col>
                 </Form.Row>
 
                 {/* 시작일/종료일 */}
                 <Form.Row className="mb-2">
-                    <Col xs={6} className="p-0">
+                    <Col xs={2} className="p-0">
+                        <MokaInputLabel
+                            as="switch"
+                            className="mb-0 h-100"
+                            id="dateFixYn"
+                            name="dateFixYn"
+                            label="계속노출"
+                            inputProps={{ checked: dateFixYn === 'Y' }}
+                            onChange={handleChangeValue}
+                        />
+                    </Col>
+                    <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label="시작일"
                             as="dateTimePicker"
                             className="mb-0"
                             name="viewSDate"
-                            value={temp.viewSDate}
+                            value={temp.viewSdate}
                             onChange={handleSDate}
                             inputProps={{ timeFormat: null }}
+                            disabled={dateDisabled}
                         />
                     </Col>
-                    <Col xs={6} className="p-0">
+                    <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label="종료일"
                             as="dateTimePicker"
                             className="mb-0"
                             name="viewEDate"
-                            value={temp.viewEDate}
+                            value={temp.viewEdate}
                             onChange={handleEDate}
                             inputProps={{ timeFormat: null }}
+                            disabled={dateDisabled}
                         />
                     </Col>
                 </Form.Row>
@@ -241,7 +413,13 @@ const DirectLinkEdit = () => {
                         </React.Fragment>
                     }
                     ref={imgFileRef}
-                    inputProps={{ width: 195, img: temp.imgUrl, setFileValue }}
+                    inputProps={{
+                        // width: 50,
+                        height: 60,
+                        img: temp.imgUrl,
+                        selectAccept: ['image/jpeg', 'image/aaa', 'image/bbb'], // 이미지중 업로드 가능한 타입 설정.
+                        setFileValue,
+                    }}
                     labelClassName="justify-content-end mr-3"
                 />
 
@@ -281,6 +459,11 @@ const DirectLinkEdit = () => {
                 <Button variant="positive" onClick={handleClickSave}>
                     저장
                 </Button>
+                {/* 임시 삭제 버튼  */}
+                <Button variant="positive" onClick={handleClickDelete}>
+                    임시 삭제 버튼
+                </Button>
+                {/* 임시 삭제 버튼  */}
             </div>
         </MokaCard>
     );

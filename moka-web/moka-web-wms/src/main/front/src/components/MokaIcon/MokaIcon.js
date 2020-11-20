@@ -32,6 +32,7 @@ import {
     faCalendarAlt as falCalendarAlt,
     faMinusCircle as falMinusCircle,
     faClock as falClock,
+    faSave as falSave,
     faMoneyCheck as falMoneyCheck, // 페이지탭 아이콘
     faCalculator as falCalculator, // 컨테이너탭 아이콘
     faTv as falTv, // 페이지편집 > 미리보기
@@ -89,6 +90,7 @@ library.add(falClock);
 library.add(falMoneyCheck);
 library.add(falCalculator);
 library.add(falTv);
+library.add(falSave);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

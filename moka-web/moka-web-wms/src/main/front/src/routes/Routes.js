@@ -4,7 +4,7 @@ import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 
 // routes
 import routes from './index';
-import { getUserMenuTree, changeLatestMenuId, getDomainList } from '@store/auth/authAction';
+import { getUserMenuTree, changeLatestMenuId } from '@store/auth/authAction';
 import { MokaLoader, ScrollToTop } from '@components';
 
 const Routes = () => {
@@ -32,16 +32,6 @@ const Routes = () => {
             }
         }
     }, [dispatch, menu, pathName]);
-
-    useEffect(() => {
-        // 전체 도메인리스트 조회
-        dispatch(getDomainList());
-
-        // 1분마다 도메인리스트 다시 조회
-        setInterval(function () {
-            dispatch(getDomainList());
-        }, 60000);
-    }, [dispatch]);
 
     return (
         <ScrollToTop>

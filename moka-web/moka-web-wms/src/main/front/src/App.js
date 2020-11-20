@@ -8,6 +8,7 @@ import ReduxToastr from 'react-redux-toastr';
 import Routes from './routes/Routes';
 import SignIn from '@pages/Auth/SignIn';
 import { init } from '@store/app';
+import { getDomainList } from '@store/auth';
 
 const WithToastr = ({ children }) => (
     <React.Fragment>
@@ -25,7 +26,16 @@ const App = () => {
     }));
 
     React.useEffect(() => {
+        // App Init
         dispatch(init());
+
+        // 전체 도메인리스트 조회
+        dispatch(getDomainList());
+
+        // 1분마다 도메인리스트 다시 조회
+        setInterval(function () {
+            dispatch(getDomainList());
+        }, 60000);
     }, [dispatch]);
 
     if (!APP_LOADING && !APP_ERROR) {

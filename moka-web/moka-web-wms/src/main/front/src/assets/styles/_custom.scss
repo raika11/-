@@ -114,12 +114,19 @@ body {
         width: 100%;
     }
 
+    .card-header-tabs {
+        margin-right: 0;
+        margin-bottom: 1px;
+        margin-left: 0;
+    }
+
     .nav-item .nav-link {
         border-bottom: 2px solid $gray-300;
         border-radius: 0;
+        margin-bottom: 0;
 
         &.active {
-            border-color: $orange;
+            border-color: $primary;
         }
     }
 

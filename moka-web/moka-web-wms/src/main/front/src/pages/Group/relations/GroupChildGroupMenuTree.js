@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { changeGroupMenuAuthInfo } from '@store/group';
+import { changeGroupMenuAuthInfo, updateGroupMenuAuth } from '@store/group';
 import clsx from 'clsx';
 import { MokaRCTree } from '@components/MokaTree';
-import { MokaIcon } from '@components';
-import { TreeNode } from 'rc-tree';
 import Button from 'react-bootstrap/Button';
 
 const GroupChildGroupMenuTree = () => {
-    const { menuAuthInfo } = useSelector(
+    const { menuAuthInfo, groupCd } = useSelector(
         (store) => {
             return {
                 menuAuthInfo: store.group.menuAuthInfo,
+                groupCd: store.group.group.groupCd,
             };
         },
 
@@ -32,7 +31,6 @@ const GroupChildGroupMenuTree = () => {
                         length--;
                     }
                 });
-                console.log(length);
             }
         });
 
@@ -148,11 +146,23 @@ const GroupChildGroupMenuTree = () => {
     };
 
     const handleClickSave = () => {
+        let changeMenuAuthList = [];
         const edited = menuAuthInfo.edited;
         const used = [...menuAuthInfo.used, ...menuAuthInfo.halfCheckedKeys];
 
+        used.map((menuId) => {
+            const usedYn = 'Y';
+            const editYn = edited.includes(menuId) ? 'Y' : 'N';
+            const vidwYn = 'Y';
+
+            changeMenuAuthList = [...changeMenuAuthList, { menuId, usedYn, editYn, vidwYn }];
+        });
+
+        /*const payload = { groupCd, useMenuAuthList };*/
+        dispatch(updateGroupMenuAuth({ groupCd, changeMenuAuthList }));
+        /*console.log('used', used);
         console.log('edited', edited);
-        console.log('used', used);
+        console.log(payload);*/
     };
 
     useEffect(() => {

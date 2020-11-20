@@ -1,0 +1,24 @@
+{
+  "media": {
+    "host": "ftp.media.joins.com",
+    "port": "",
+    "user": "naverdaum",
+    "passwd": "",
+    "passive": false,
+    "encoding": "",
+    "remotePath": "",
+    "connectTimeout": -1,
+    "readTimeout": -1
+  },
+  "home": {
+    "host": "ftp.www.joins.com",
+    "port": "",
+    "user": "naverdaum",
+    "passwd": "",
+    "passive": false,
+    "encoding": "",
+    "remotePath": "",
+    "connectTimeout": -1,
+    "readTimeout": -1
+  }
+}

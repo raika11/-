@@ -3,8 +3,6 @@ package jmnet.moka.core.tps.mvc.component.controller;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchDTO;
@@ -109,7 +107,8 @@ public class ComponentRestController {
      */
     @ApiOperation(value = "컴포넌트 상세조회")
     @GetMapping("/{componentSeq}")
-    public ResponseEntity<?> getComponent(@PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+    public ResponseEntity<?> getComponent(
+            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws Exception {
 
         Component component = componentService.findComponentBySeq(componentSeq)
@@ -234,7 +233,8 @@ public class ComponentRestController {
      */
     @ApiOperation(value = "컴포넌트 수정")
     @PutMapping("/{componentSeq}")
-    public ResponseEntity<?> putComponent(@PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
+    public ResponseEntity<?> putComponent(
+            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
             @Valid @RequestBody ComponentDTO componentDTO)
             throws NoDataException, InvalidDataException, Exception {
 
@@ -264,7 +264,7 @@ public class ComponentRestController {
 
             // purge 날림!!!!
             purgeHelper.purgeTms(returnVal.getDomain()
-                                                   .getDomainId(), MokaConstants.ITEM_COMPONENT, returnVal.getComponentSeq());
+                                          .getDomainId(), MokaConstants.ITEM_COMPONENT, returnVal.getComponentSeq());
 
             // 리턴
             String message = messageByLocale.get("tps.common.success.update");
@@ -290,7 +290,8 @@ public class ComponentRestController {
      */
     @ApiOperation(value = "컴포넌트 복사")
     @PostMapping("/{componentSeq}/copy")
-    public ResponseEntity<?> copyComponent(@PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq, String componentName)
+    public ResponseEntity<?> copyComponent(
+            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq, String componentName)
             throws InvalidDataException, Exception {
 
         // 조회
@@ -324,10 +325,9 @@ public class ComponentRestController {
 
         // 히스토리에서 데스크 데이터셋 찾아서 셋팅
         try {
-            Optional<ComponentHist> deskHistory =
-                    componentHistService.findComponentHistByComponentSeqAndDataType(componentSeq, TpsConstants.DATATYPE_DESK);
-            if (deskHistory.isPresent()) {
-                Dataset deskDataset = deskHistory.get()
+            List<ComponentHist> deskHistory = componentHistService.findLastHist(componentSeq, TpsConstants.DATATYPE_DESK);
+            if (deskHistory.size() > 0) {
+                Dataset deskDataset = deskHistory.get(0)
                                                  .getDataset();
                 if (deskDataset != null) {
                     componentDTO.setPrevDeskDataset(modelMapper.map(deskDataset, DatasetDTO.class));
@@ -339,10 +339,9 @@ public class ComponentRestController {
 
         // 히스토리에서 자동 데이터셋 찾아서 셋팅
         try {
-            Optional<ComponentHist> autoHistory =
-                    componentHistService.findComponentHistByComponentSeqAndDataType(componentSeq, TpsConstants.DATATYPE_AUTO);
-            if (autoHistory.isPresent()) {
-                Dataset autoDataset = autoHistory.get()
+            List<ComponentHist> autoHistory = componentHistService.findLastHist(componentSeq, TpsConstants.DATATYPE_AUTO);
+            if (autoHistory.size() > 0) {
+                Dataset autoDataset = autoHistory.get(0)
                                                  .getDataset();
                 if (autoDataset != null) {
                     componentDTO.setPrevAutoDataset(modelMapper.map(autoDataset, DatasetDTO.class));
@@ -365,7 +364,8 @@ public class ComponentRestController {
      */
     @ApiOperation(value = "컴포넌트 삭제")
     @DeleteMapping("/{componentSeq}")
-    public ResponseEntity<?> deleteComponent(@PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+    public ResponseEntity<?> deleteComponent(
+            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws NoDataException, Exception {
 
         // 데이타 확인
@@ -443,7 +443,8 @@ public class ComponentRestController {
      */
     @ApiOperation(value = "관련 아이템 존재여부")
     @GetMapping("/{componentSeq}/has-relations")
-    public ResponseEntity<?> hasRelationList(@PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+    public ResponseEntity<?> hasRelationList(
+            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws Exception {
 
         // 컴포넌트 확인
@@ -458,8 +459,9 @@ public class ComponentRestController {
             Boolean chkRels = relationService.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
 
             String message = "";
-            if(chkRels)
+            if (chkRels) {
                 message = messageByLocale.get("tps.common.success.has-relations");
+            }
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels, message);
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -470,6 +472,7 @@ public class ComponentRestController {
             throw new Exception(messageByLocale.get("tps.common.error.has-relation"), e);
         }
     }
+
     /**
      * 컴포넌트 데이터 유효성 검사
      *

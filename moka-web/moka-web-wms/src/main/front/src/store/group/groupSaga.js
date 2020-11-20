@@ -11,8 +11,9 @@ const toGroupMenuTree = (menus) => {
     const treeInfo = { list: [], used: [], edited: [] };
     if (menus && menus.length > 0) {
         menus.map((menu) => {
-            const isMenuEdit = menu.editYn === 'Y';
             const isMenuUsed = menu.useYn === 'Y';
+            const isMenuEdit = isMenuUsed && menu.editYn === 'Y';
+
             const treeMenu = { key: menu.menuId, title: menu.menuDisplayNm, selectable: false };
 
             if (isMenuUsed) {
@@ -28,7 +29,7 @@ const toGroupMenuTree = (menus) => {
                 const treeChildrens = [];
                 menu.children.map((children) => {
                     const isChildrenUsed = children.usedYn === 'Y' || isMenuUsed;
-                    const isChildrenEdit = children.editYn === 'Y' || isMenuEdit;
+                    const isChildrenEdit = isChildrenUsed && (children.editYn === 'Y' || isMenuEdit);
 
                     if (isChildrenUsed) {
                         treeInfo.used.push(children.menuId);
@@ -250,6 +251,16 @@ function* deleteGroup({ payload: { groupCd, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+function* updateMenuAuth({ payload: { groupCd, changeMenuAuthList } }) {
+    console.log('groupCd', groupCd);
+    console.log('useMenuAuthList', changeMenuAuthList);
+
+    const response = yield call(groupAPI.updateGroupMenuAuth, groupCd, changeMenuAuthList);
+
+    console.log(response);
+    console.log('aaa');
+}
+
 export default function* groupSaga() {
     yield takeLatest(groupAction.GET_GROUP_LIST, getGroupList);
     yield takeLatest(groupAction.GET_GROUP, getGroup);
@@ -258,4 +269,5 @@ export default function* groupSaga() {
     yield takeLatest(groupAction.DELETE_GROUP, deleteGroup);
     yield takeLatest(groupAction.HAS_RELATION_LIST, hasRelationList);
     yield takeLatest(groupAction.getGroupMenuList, getGroupMenuList);
+    yield takeLatest(groupAction.updateGroupMenuAuth, updateMenuAuth);
 }

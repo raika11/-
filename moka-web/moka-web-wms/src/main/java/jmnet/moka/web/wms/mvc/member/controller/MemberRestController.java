@@ -6,6 +6,8 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -21,6 +23,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.code.MemberRequestCode;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
+import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -36,8 +39,10 @@ import jmnet.moka.core.tps.mvc.member.dto.MemberUpdateDTO;
 import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
-import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthSimpleDTO;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuNodeDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
+import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
 import jmnet.moka.web.wms.config.security.exception.PasswordNotMatchedException;
 import jmnet.moka.web.wms.config.security.exception.SmsAuthNumberBadCredentialsException;
@@ -54,6 +59,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -640,14 +646,50 @@ public class MemberRestController extends AbstractCommonController {
                 .builder()
                 .memberId(principal.getName())
                 .build();
-        MenuNode menuNode = menuService.findServiceMenuTree(searchDTO);
+        MenuNodeDTO menuNodeDTO = menuService.findServiceMenuTree(searchDTO);
 
         // 리턴값 설정
-        ResultDTO<MenuNode> resultDto = new ResultDTO<>(menuNode);
+        ResultDTO<MenuNodeDTO> resultDto = new ResultDTO<>(menuNodeDTO);
 
         tpsLogger.success(ActionType.SELECT);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 여러 메뉴의 그룹 권한 수정
+     *
+     * @param request   요청
+     * @param menuAuths 메뉴권한목록
+     * @return 수정된 메뉴정보
+     * @throws Exception 그외 모든 에러
+     */
+    @ApiOperation(value = "여러 메뉴의 그룹 권한 수정")
+    @PutMapping("/{memberId}/menu-auths")
+    public ResponseEntity<?> putMemberMenuAuth(HttpServletRequest request,
+            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @RequestBody List<@Valid MenuAuthSimpleDTO> menuAuths)
+            throws Exception {
+
+        try {
+            menuService.saveMenuAuth(memberId, MenuAuthTypeCode.MEMBER, menuAuths
+                    .stream()
+                    .map(menuAuthSimpleDTO -> modelMapper.map(menuAuthSimpleDTO, MenuAuth.class))
+                    .collect(Collectors.toList()));
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.member.success.update.menu-auth"));
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success();
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE MENU AUTH]", e);
+            // 액션 로그에 에러 로그 출력
+            tpsLogger.error(e);
+            throw new Exception(messageByLocale.get("tps.menu.auth.error.save", request), e);
+        }
     }
 
 

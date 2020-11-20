@@ -56,19 +56,12 @@ public class DeskingWorkSearchDTO extends SearchDTO {
      */
     private Long datasetSeq;
 
-    /**
-     * 임시저장여부
-     */
-    @Builder.Default
-    private String saveYn = MokaConstants.NO;
-
     // 검색 조건의 기본값을 설정
     public DeskingWorkSearchDTO() {
         super(DeskingComponentWorkVO.class, "componentOrd,asc");
         this.setUseTotal(MokaConstants.YES);
         this.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         this.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
-        this.saveYn = MokaConstants.NO;
     }
 
 }

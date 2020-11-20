@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Id;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -100,12 +99,6 @@ public class DeskingWorkVO implements Serializable {
     private Integer relOrd = 1;
 
     /**
-     * 임시저장여부
-     */
-    @Column(name = "SAVE_YN")
-    private String saveYn = MokaConstants.NO;
-
-    /**
      * 언어(기타코드)
      */
     @Column(name = "LANG")
@@ -123,12 +116,6 @@ public class DeskingWorkVO implements Serializable {
      */
     @Column(name = "TITLE")
     private String title;
-
-    /**
-     * 모바일제목
-     */
-    @Column(name = "MOB_TITLE")
-    private String mobTitle;
 
     /**
      * 부제목

@@ -113,13 +113,6 @@ public class Desking implements Serializable {
     private String title;
 
     /**
-     * 모바일제목
-     */
-    @Nationalized
-    @Column(name = "MOB_TITLE")
-    private String mobTitle;
-
-    /**
      * 부제목
      */
     @Nationalized

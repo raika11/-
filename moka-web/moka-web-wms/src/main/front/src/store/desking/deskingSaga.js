@@ -46,11 +46,10 @@ const makeRowNode = (data, overIndex, component) => {
             sourceCode: data.sourceCode,
             contentOrd: contentOrd,
             relOrd: null,
-            saveYn: 'N',
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
             title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,
-            mobTitle: data.artEditMobTitle == null ? data.artTitle : data.artEditTitle,
+            // mobTitle: data.artEditMobTitle == null ? data.artTitle : data.artEditTitle,
             subTitle: data.artSubTitle,
             nameplate: null,
             titlePrefix: null,
@@ -300,9 +299,21 @@ function* putDeskingWork({ payload }) {
                 type: act.COMPONENT_WORK_SUCCESS,
                 payload: response.data,
             });
+        } else {
+            // 실패 시 컴포넌트 워크 다시 조회
+            yield put({
+                type: act.GET_COMPONENT_WORK,
+                payload: { componentWorkSeq },
+            });
         }
     } catch (e) {
         callbackData = errorResponse(e);
+
+        // 에러 시 컴포넌트 워크 다시 조회
+        yield put({
+            type: act.GET_COMPONENT_WORK,
+            payload: { componentWorkSeq },
+        });
     }
 
     if (typeof callback === 'function') {

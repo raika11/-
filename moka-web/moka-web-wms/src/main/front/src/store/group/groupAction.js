@@ -63,3 +63,6 @@ export const getGroupMenuList = createAction(GET_GROUP_MENU_LIST, (groupCd) => g
 
 export const CHANGE_GROUP_MENU_AUTH_INFO = 'group/CHANGE_GROUP_MENU_AUTH_INFO';
 export const changeGroupMenuAuthInfo = createAction(CHANGE_GROUP_MENU_AUTH_INFO, (groupCd) => groupCd);
+
+export const UPDATE_GROUP_MENU_AUTH = 'group/SAVE_GROUP_MENU_AUTH';
+export const updateGroupMenuAuth = createAction(UPDATE_GROUP_MENU_AUTH, ({ groupCd, changeMenuAuthList }) => ({ groupCd, changeMenuAuthList }));

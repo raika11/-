@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
-import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuNodeDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
@@ -31,7 +31,7 @@ public interface MenuService {
      *
      * @return 메뉴목록
      */
-    MenuNode findServiceMenuTree(MenuSearchDTO search);
+    MenuNodeDTO findServiceMenuTree(MenuSearchDTO search);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface MenuService {
      *
      * @return 메뉴목록
      */
-    MenuNode findMenuTree(MenuSearchDTO search);
+    MenuNodeDTO findMenuTree(MenuSearchDTO search);
 
     /**
      * 메뉴 목록 조회
@@ -258,9 +258,36 @@ public interface MenuService {
     List<MenuAuth> findMenuAuthList(String menuId);
 
     /**
+     * 그룹멤버ID와 그룹멤버구분으로 메뉴 권한 목록 조회
+     *
+     * @param groupMemberId  그룹멤버ID
+     * @param groupMemberDiv 그룹멤버구분
+     * @return 메뉴 권한 목록
+     */
+    List<MenuAuth> findMenuAuthList(String groupMemberId, String groupMemberDiv);
+
+    /**
      * 전체 메뉴 path 정보를 불러온다.
      *
      * @return 메뉴 path
      */
     Set<String> findAllMenuUrl();
+
+    /**
+     * 메뉴 권한 저장
+     *
+     * @param menuId       아아디
+     * @param menuAuthType 권한 구분
+     * @param menuAuth     권한 정보
+     */
+    void saveMenuAuth(String menuId, MenuAuthTypeCode menuAuthType, MenuAuth menuAuth);
+
+    /**
+     * 메뉴 권한 저장
+     *
+     * @param groupMemberId 그룹멤버ID
+     * @param menuAuthType  권한 구분
+     * @param menuAuths     권한 정보 목록
+     */
+    void saveMenuAuth(String groupMemberId, MenuAuthTypeCode menuAuthType, List<MenuAuth> menuAuths);
 }

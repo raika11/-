@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -89,11 +88,6 @@ public class DeskingWorkDTO implements Serializable {
      * 관련순서
      */
     private Integer relOrd = 1;
-
-    /**
-     * 임시저장여부
-     */
-    private String saveYn = MokaConstants.NO;
 
     /**
      * 언어(기타코드)

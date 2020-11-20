@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +17,10 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -120,13 +125,6 @@ public class DeskingHist implements Serializable {
     private String title;
 
     /**
-     * 모바일제목
-     */
-    @Nationalized
-    @Column(name = "MOB_TITLE")
-    private String mobTitle;
-
-    /**
      * 부제목
      */
     @Nationalized
@@ -220,6 +218,26 @@ public class DeskingHist implements Serializable {
     @Column(name = "REG_DT")
     private Date regDt;
 
+    /**
+     * 상태 - SAVE(임시) / PUBLISH(전송)
+     */
+    @Column(name = "STATUS", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private EditStatusCode status;
+
+    /**
+     * 예약일시
+     */
+    @Column(name = "RESERVE_DT", updatable = false)
+    protected Date reserveDt;
+
+    /**
+     * 승인여부 예약일시가 설정되어 있을 경우 예약된 작업이 완료되면 Y로 처리
+     */
+    @Column(name = "APPROVAL_YN", updatable = false)
+    @Builder.Default
+    protected String approvalYn = MokaConstants.NO;
+
     @PrePersist
     @PreUpdate
     public void prePersist() {
@@ -230,5 +248,7 @@ public class DeskingHist implements Serializable {
         this.thumbWidth = this.thumbWidth == null ? 0 : this.thumbWidth;
         this.thumbHeight = this.thumbHeight == null ? 0 : this.thumbHeight;
         this.regDt = McpDate.defaultValue(this.regDt);
+        this.status = this.status == null ? EditStatusCode.PUBLISH : this.status;
+        this.approvalYn = McpString.defaultValue(this.approvalYn, MokaConstants.NO);
     }
 }

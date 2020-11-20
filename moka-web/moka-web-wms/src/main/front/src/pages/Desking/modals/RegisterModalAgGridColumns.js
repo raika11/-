@@ -1,5 +1,5 @@
 // 기사 이동 모달
-export const registerColumns = [
+export default [
     {
         field: 'name',
         width: 240,

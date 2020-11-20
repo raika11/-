@@ -3,6 +3,9 @@ import clsx from 'clsx';
 import { MokaTableEditButton, MokaInput, MokaTableEditCancleButton } from '@components';
 import toast from '@utils/toastUtil';
 
+/**
+ * 데스킹 워크의 타이틀 노출 + 에디터 + 제목 수정 + 삭제 기능이 모여있는 컴포넌트
+ */
 const DeskingEditorRenderer = (params) => {
     const { data } = params;
 
@@ -54,6 +57,19 @@ const DeskingEditorRenderer = (params) => {
         }
     };
 
+    /**
+     * row 클릭
+     * @param {object} e event
+     */
+    const handleClickRow = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (data.onRowClicked) {
+            data.onRowClicked(data);
+        }
+    };
+
     useEffect(() => {
         setEditValue(data.rel ? data.relTitle : data.title);
     }, [data]);
@@ -62,7 +78,9 @@ const DeskingEditorRenderer = (params) => {
 
     return (
         <div className="d-flex h-100 align-items-center desking-ag-grid-editor">
-            <div className={clsx('title', { rel: data.rel })}>{data.rel ? data.relTitle : data.title}</div>
+            <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow}>
+                {data.rel ? data.relTitle : data.title}
+            </div>
             {editMode && (
                 <div className="edit">
                     <MokaInput as={data.rel ? 'input' : 'textarea'} className="resize-none" value={editValue} onChange={(e) => setEditValue(e.target.value)} />

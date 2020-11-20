@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
-import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuNodeDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
@@ -42,23 +43,27 @@ public class MenuServiceImpl implements MenuService {
 
     final ModelMapper modelMapper;
 
+    private final TpsLogger tpsLogger;
 
 
-    public MenuServiceImpl(MenuRepository menuRepository, MenuAuthRepository menuAuthRepository, MenuMapper menuMapper, ModelMapper modelMapper) {
+
+    public MenuServiceImpl(MenuRepository menuRepository, MenuAuthRepository menuAuthRepository, MenuMapper menuMapper, ModelMapper modelMapper,
+            TpsLogger tpsLogger) {
         this.menuRepository = menuRepository;
         this.menuAuthRepository = menuAuthRepository;
         this.menuMapper = menuMapper;
         this.modelMapper = modelMapper;
+        this.tpsLogger = tpsLogger;
     }
 
     @Override
-    public MenuNode findServiceMenuTree(MenuSearchDTO searchDTO) {
+    public MenuNodeDTO findServiceMenuTree(MenuSearchDTO searchDTO) {
         List<MenuVO> menuList = menuMapper.findAll(searchDTO);
         return menuList.isEmpty() ? null : makeTree(menuList);
     }
 
     @Override
-    public MenuNode findMenuTree(MenuSearchDTO searchDTO) {
+    public MenuNodeDTO findMenuTree(MenuSearchDTO searchDTO) {
         List<MenuVO> menuList = menuMapper.findAllMenuAuth(searchDTO);
         return menuList.isEmpty() ? null : makeTree(menuList);
     }
@@ -69,21 +74,21 @@ public class MenuServiceImpl implements MenuService {
      * @param menuList 메뉴 목록
      * @return 메뉴 Tree
      */
-    private MenuNode makeTree(List<MenuVO> menuList) {
+    private MenuNodeDTO makeTree(List<MenuVO> menuList) {
         int maxDepth = menuList
                 .stream()
                 .max((o1, o2) -> o1.getDepth() - o2.getDepth())
                 .get()
                 .getDepth();
-        MenuNode rootNode = new MenuNode();
+        MenuNodeDTO rootNode = new MenuNodeDTO();
         rootNode.setSeq((long) 0);
         rootNode.setMenuId(ROOT_MENU_ID);
         rootNode.setMenuNm("ROOT");
 
         for (MenuVO menu : menuList) {
             if (MenuService.ROOT_MENU_ID.equals(menu.getParentMenuId())) {
-                MenuNode menuNode = new MenuNode(menu);
-                rootNode.addNode(traceMenuNode(menuNode, menuList, maxDepth));
+                MenuNodeDTO menuNodeDTO = new MenuNodeDTO(menu);
+                rootNode.addNode(traceMenuNode(menuNodeDTO, menuList, maxDepth));
             }
         }
         rootNode.sort();
@@ -93,23 +98,23 @@ public class MenuServiceImpl implements MenuService {
     /**
      * 전 메뉴를 순회하며 자신의 하위 메뉴를 찾는다.
      *
-     * @param menuNode 메뉴 노드
-     * @param menuList 메뉴 목록
-     * @param maxDepth 전체 메뉴의 최대 깊이
+     * @param menuNodeDTO 메뉴 노드
+     * @param menuList    메뉴 목록
+     * @param maxDepth    전체 메뉴의 최대 깊이
      * @return MenuNode
      */
-    private MenuNode traceMenuNode(MenuNode menuNode, List<MenuVO> menuList, int maxDepth) {
-        if (menuNode.getDepth() < maxDepth) {
+    private MenuNodeDTO traceMenuNode(MenuNodeDTO menuNodeDTO, List<MenuVO> menuList, int maxDepth) {
+        if (menuNodeDTO.getDepth() < maxDepth) {
             for (MenuVO menu : menuList) {
                 if (menu
                         .getParentMenuId()
-                        .equals(menuNode.getMenuId())) {
-                    MenuNode child = new MenuNode(menu);
-                    menuNode.addNode(traceMenuNode(child, menuList, maxDepth));
+                        .equals(menuNodeDTO.getMenuId())) {
+                    MenuNodeDTO child = new MenuNodeDTO(menu);
+                    menuNodeDTO.addNode(traceMenuNode(child, menuList, maxDepth));
                 }
             }
         }
-        return menuNode;
+        return menuNodeDTO;
     }
 
     private Sort orderByIdAsc() {
@@ -305,6 +310,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public List<MenuAuth> findMenuAuthList(String groupMemberId, String groupMemberDiv) {
+        return menuAuthRepository.findAllByGroupMemberIdAndGroupMemberDiv(groupMemberId, groupMemberDiv);
+    }
+
+    @Override
     public Set<String> findAllMenuUrl() {
         List<Menu> menuList = menuRepository.findByUsedYn(MokaConstants.YES);
 
@@ -319,6 +329,48 @@ public class MenuServiceImpl implements MenuService {
                             .trim();
                 })
                 .collect(Collectors.toSet());
+    }
+
+
+    @Override
+    public void saveMenuAuth(String menuId, MenuAuthTypeCode menuAuthType, MenuAuth menuAuth) {
+
+        menuAuth.setMenuId(menuId);
+        menuAuth.setGroupMemberDiv(menuAuthType != null ? menuAuthType.getCode() : menuAuth.getGroupMemberDiv());
+        MenuAuth orgMenu = findMenuAuth(menuAuth);
+        if (orgMenu != null) {
+            menuAuth.setSeqNo(orgMenu.getSeqNo());
+            menuAuth.setUsedYn(orgMenu.getUsedYn());
+            updateMenuAuth(menuAuth);
+        } else {
+            insertMenuAuth(menuAuth);
+        }
+    }
+
+
+    @Override
+    public void saveMenuAuth(String groupMemberId, MenuAuthTypeCode menuAuthType, List<MenuAuth> menuAuths) {
+
+        findMenuAuthList(groupMemberId, menuAuthType.getCode())
+                .stream()
+                .forEach(menuAuth -> {
+                    menuAuth.setUsedYn(MokaConstants.NO);
+                    menuAuth.setEditYn(MokaConstants.NO);
+                    menuAuth.setViewYn(MokaConstants.NO);
+                    updateMenuAuth(menuAuth);
+                });
+        menuAuths.forEach(menuAuth -> {
+            try {
+                // 조회 여부는 useYn이 Y이 이면 자동으로 Y
+                menuAuth.setViewYn(McpString.isYes(menuAuth.getUsedYn()) ? MokaConstants.YES : MokaConstants.NO);
+                // 편집 여부는 useYn이 N이 이면 자동으로 N
+                menuAuth.setEditYn(McpString.isYes(menuAuth.getUsedYn()) ? menuAuth.getEditYn() : MokaConstants.NO);
+                menuAuth.setGroupMemberId(groupMemberId);
+                saveMenuAuth(menuAuth.getMenuId(), menuAuthType, menuAuth);
+            } catch (Exception ex) {
+                tpsLogger.skip(ex.toString());
+            }
+        });
     }
 
 }

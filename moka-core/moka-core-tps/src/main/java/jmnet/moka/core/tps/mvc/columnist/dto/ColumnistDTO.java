@@ -47,7 +47,7 @@ public class ColumnistDTO implements Serializable {
      * char	1   ('O')   NO	내외부구분(I내부,O외부)
      */
     @NotNull(message = "{tps.columnist.error.notnull.inout}")
-    @Pattern(regexp = "[I|O]{1}$", message = "{tps.columnist.notnull.inout}")
+    @Pattern(regexp = "[I|O]{1}$", message = "{tps.columnist.error.pattern.inout}")
     @Builder.Default
     private String inout = "O";
 
@@ -55,7 +55,7 @@ public class ColumnistDTO implements Serializable {
      * char	1   ('N')	NO	상태(유효/정지)
      */
     @NotNull(message = "{tps.columnist.error.notnull.status}")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.columnist.notnull.status}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.columnist.error.pattern.status}")
     @Builder.Default
     private String status = MokaConstants.YES;
 
@@ -69,36 +69,32 @@ public class ColumnistDTO implements Serializable {
      * nvarchar	30		NO	칼럼니스트이름
      */
     @NotNull(message = "{tps.columnist.error.notnull.columnistNm}")
-    @Length(max = 30, message = "{tps.columnist.error.columnistNm}")
+    @Length(max = 30, message = "{tps.columnist.error.length.columnistNm}")
     private String columnistNm;
 
     /**
      * varchar	512		YES	이메일
      */
-    @Length(max = 512, message = "{tps.columnist.error.email}")
+    @Length(max = 512, message = "{tps.columnist.error.length.email}")
     private String email;
 
     /**
      * nvarchar	200			YES	직책
      */
-    @NotNull(message = "{tps.columnist.error.notnull.position}")
     @Length(max = 200, message = "{tps.columnist.error.length.position}")
     private String position;
 
     /**
      * varchar	200			YES	프로필사진
      */
-    //@NotNull(message = "{tps.page.error.notnull.linkUrl}") // 일시적으로 막음. 수정할때만 필요하다.
-//    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.linkUrl}")
-    //private String imgUrl = "https://pds.joins.com/news/search_direct_link/001.jpg";
+    @Length(max = 200, message = "{tps.columnist.error.length.profilePhoto}")
     private String profilePhoto;
 
     /**
      * nvarchar	500			YES	프로필
      */
-    @NotNull(message = "{tps.columnist.error.notnull.linkContent}")
-    @Length(min = 1, max = 500, message = "{tps.columnist.error.length.linkContent}")
-    private String linkContent;
+    @Length( max = 500, message = "{tps.columnist.error.length.profile}")
+    private String profile;
 
     /**
      * 등록일자

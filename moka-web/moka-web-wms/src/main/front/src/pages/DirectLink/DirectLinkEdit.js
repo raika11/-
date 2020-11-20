@@ -459,11 +459,6 @@ const DirectLinkEdit = ({ history }) => {
                 <Button variant="positive" onClick={handleClickSave}>
                     저장
                 </Button>
-                {/* 임시 삭제 버튼  */}
-                <Button variant="positive" onClick={handleClickDelete}>
-                    임시 삭제 버튼
-                </Button>
-                {/* 임시 삭제 버튼  */}
             </div>
         </MokaCard>
     );

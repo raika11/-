@@ -36,7 +36,7 @@ export const columnDefs = [
     },
     {
         headerName: '상태',
-        field: 'status',
+        field: 'statusNm',
         width: 108,
     },
     {

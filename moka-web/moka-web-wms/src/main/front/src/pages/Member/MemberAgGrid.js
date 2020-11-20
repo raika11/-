@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
@@ -11,8 +11,7 @@ import { columnDefs } from './MemberAgGridColumns';
 const MemberAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const [memberRows, setMemberRows] = useState([]);
-    const { member, list, total, search, loading, statusList } = useSelector(
+    const { member, list, total, search, loading } = useSelector(
         (store) => ({
             member: store.member.member,
             list: store.member.list,
@@ -43,38 +42,10 @@ const MemberAgGrid = () => {
         [dispatch, search],
     );
 
-    const getStatusName = useCallback(
-        (code) => {
-            let statusName = '';
-            for (let i = 0; i < statusList.length; i++) {
-                const status = statusList[i];
-                if (status.code === code) {
-                    statusName = status.name;
-                }
-            }
-            return statusName;
-        },
-        [statusList],
-    );
-
-    useEffect(() => {
-        setMemberRows(
-            list.map((row) => ({
-                memberId: row.memberId,
-                memberNm: row.memberNm,
-                email: row.email,
-                status: getStatusName(row.status),
-                dept: row.dept,
-                mobilePhone: row.mobilePhone,
-                remark: row.remark,
-            })),
-        );
-    }, [getStatusName, list]);
-
     return (
         <MokaTable
             columnDefs={columnDefs}
-            rowData={memberRows}
+            rowData={list}
             onRowNodeId={(rowData) => rowData.memberId}
             agGridHeight={639}
             onRowClicked={handleRowClicked}

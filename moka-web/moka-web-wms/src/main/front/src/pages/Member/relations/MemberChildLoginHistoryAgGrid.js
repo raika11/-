@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
@@ -22,9 +22,9 @@ const MemberChildLoginHistoryAgGrid = () => {
 
     useEffect(() => {
         if (paramId) {
-            dispatch(clearHistoryList());
             dispatch(
                 getLoginHistoryList(
+                    clearHistoryList(),
                     changeHistorySearchOption({
                         ...initialState.historySearch,
                         memberId: paramId,

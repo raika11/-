@@ -8,7 +8,67 @@ import * as memberAction from './memberAction';
 /**
  * 목록
  */
-const getMemberList = callApiAfterActions(memberAction.GET_MEMBER_LIST, memberAPI.getMemberList, (state) => state.member);
+//const getMemberList = callApiAfterActions(memberAction.GET_MEMBER_LIST, memberAPI.getMemberList, (state) => state.member);
+
+/**
+ * 사용 목록 조회
+ */
+function* getMemberList() {
+    const ACTION = memberAction.GET_MEMBER_LIST;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const search = yield select((store) => store.member.search);
+        const statusList = yield select((store) => store.app.MEMBER_STATUS_CODE);
+        const response = yield call(memberAPI.getMemberList, { search });
+
+        if (response.data.header.success) {
+            callbackData = response.data;
+            response.data.body.list = response.data.body.list.map((member) => {
+                //상태 코드명 추가
+                const statusNm = getStatusName(statusList, member.status);
+                return {
+                    ...member,
+                    statusNm,
+                };
+            });
+
+            yield put({
+                type: memberAction.GET_MEMBER_LIST_SUCCESS,
+                payload: response.data,
+                meta: response,
+            });
+        } else {
+            yield put({
+                type: memberAction.GET_MEMBER_LIST_FAILURE,
+                payload: response.data,
+                error: true,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+
+        yield put({
+            type: memberAction.GET_MEMBER_LIST_FAILURE,
+            payload: callbackData,
+        });
+    }
+    yield put(finishLoading(ACTION));
+}
+
+function getStatusName(statusList, statusCode) {
+    let statusName = '';
+    for (let i = 0; i < statusList.length; i++) {
+        const status = statusList[i];
+        if (status.code === statusCode) {
+            statusName = status.name;
+            return statusName;
+        }
+    }
+    return statusName;
+}
 
 /**
  * 데이터 조회

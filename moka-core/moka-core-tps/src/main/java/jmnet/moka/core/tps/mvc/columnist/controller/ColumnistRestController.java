@@ -131,7 +131,7 @@ public class ColumnistRestController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
     , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postColumnist(@Valid ColumnistDTO columnistDTO
-            , @RequestParam(value="columnistFile") MultipartFile columnistFile
+            , @RequestParam(value="columnistFile", required = false) MultipartFile columnistFile
     )throws InvalidDataException, Exception {
 
         // 데이터 유효성 검사

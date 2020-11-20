@@ -273,10 +273,10 @@ const DirectLinkEdit = ({ history }) => {
                     if (response.header.success) {
                         notification('success', '등록하였습니다.');
                         // TODO 저장 완료후 어떻게 해야 할지?
-                        // history.push(`direct-link/${directLink.linkSeq}`);
-                        dispatch(clearDirectLink());
-                        history.push('/direct-link');
-                        setTemp({});
+                        history.push(`direct-link/${response.body.linkSeq}`);
+                        // dispatch(clearDirectLink());
+                        // history.push('/direct-link');
+                        // setTemp({});
                     } else {
                         notification('warning', '실패하였습니다.');
                     }

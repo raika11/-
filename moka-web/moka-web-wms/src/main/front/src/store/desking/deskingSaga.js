@@ -16,7 +16,70 @@ const getComponentWorkList = createRequestSaga(act.GET_COMPONENT_WORK_LIST, api.
 /**
  * 컴포넌트 워크 1개 조회
  */
-const getComponentWork = createRequestSaga(act.GET_COMPONENT_WORK, api.getComponentWork);
+function* getComponentWork({ payload }) {
+    const ACTION = act.GET_COMPONENT_WORK;
+    const { componentWorkSeq, callback } = payload;
+    let response, callbackData;
+
+    yield startLoading(ACTION);
+    try {
+        response = yield call(api.getComponentWork, { componentWorkSeq });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.COMPONENT_WORK_SUCCESS,
+                payload: response.data,
+            });
+        } else {
+            yield put({
+                type: act.COMPONENT_WORK_FAILURE,
+                payload: response.data,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 컴포넌트 워크 수정
+ */
+function* putComponentWork({ payload }) {
+    const ACTION = act.PUT_COMPONENT_WORK;
+    const { componentWorkSeq, snapshotYn, snapshotBody, templateSeq, callback } = payload;
+    let response, callbackData;
+
+    yield startLoading(ACTION);
+    try {
+        response = yield call(api.getComponentWork, { componentWorkSeq, snapshotYn, snapshotBody, templateSeq });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.COMPONENT_WORK_SUCCESS,
+                payload: response.data,
+            });
+        } else {
+            yield put({
+                type: act.COMPONENT_WORK_FAILURE,
+                payload: response.data,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
 
 /**
  * rowNode 생성
@@ -327,10 +390,10 @@ export default function* saga() {
     // 컴포넌트 워크
     yield takeLatest(act.GET_COMPONENT_WORK_LIST, getComponentWorkList);
     yield takeLatest(act.GET_COMPONENT_WORK, getComponentWork);
+    yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWork);
 
     // yield takeLatest(act.POST_COMPONENT_WORK, postComponentWorkSaga);
     yield takeLatest(act.POST_PRE_COMPONENT_WORK, postPreComponentWork);
-    // yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWorkSaga);
     // yield takeLatest(act.HAS_OTHER_SAVED, hasOtherSavedSaga);
 
     // 컴포넌트 워크의 데스킹 (편집기사)

@@ -22,6 +22,18 @@ export const GET_COMPONENT_WORK = 'desking/GET_COMPONENT_WORK';
 export const getComponentWork = createAction(GET_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({ componentWorkSeq, callback }));
 
 /**
+ * 컴포넌트 워크 수정
+ */
+export const PUT_COMPONENT_WORK = 'desking/PUT_COMPONENT_WORK';
+export const putComponentWork = createAction(PUT_COMPONENT_WORK, ({ componentWorkSeq, snapshotYn, snapshotBody, templateSeq, callback }) => ({
+    componentWorkSeq,
+    snapshotYn,
+    snapshotBody,
+    templateSeq,
+    callback,
+}));
+
+/**
  * Work컴포넌트 임시저장
  */
 export const POST_PRE_COMPONENT_WORK = 'desking/POST_PRE_COMPONENT_WORK';

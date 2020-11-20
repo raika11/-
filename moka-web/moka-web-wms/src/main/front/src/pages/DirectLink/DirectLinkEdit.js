@@ -9,20 +9,28 @@ import { notification } from '@utils/toastUtil';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaCard, MokaInputLabel } from '@components';
-import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList, deleteDirectLink } from '@store/directLink';
-import { useLocation } from 'react-router-dom';
+import {
+    clearDirectLink,
+    getDirectLink,
+    GET_DIRECT_LINK,
+    SAVE_DIRECT_LINK,
+    saveDirectLink,
+    changeDirectLink,
+    changeInvalidList,
+    deleteDirectLink,
+    changeDirectLinkEditMode,
+} from '@store/directLink';
 
 /**
  * 사이트 바로 가기 등록/수정창
  */
 const DirectLinkEdit = ({ history }) => {
-    const location = useLocation();
     const dispatch = useDispatch();
     const { linkSeq } = useParams();
     const imgFileRef = useRef(null);
     const [dateFixYn, setDateFixYn] = useState('Y'); // 계속노출 서정.
     const [dateDisabled, setDateDisabled] = useState(true); // 계속 노출시 datePiker disable
-    const [inputBoxDisabled, setInputBoxDisabled] = useState(false);
+    const [inputBoxDisabled, setInputBoxDisabled] = useState(true);
 
     const { directLink, invalidList, loading, editmode } = useSelector((store) => ({
         directLink: store.directLink.directLink,
@@ -136,13 +144,13 @@ const DirectLinkEdit = ({ history }) => {
         }
 
         // 이미지 체크
-        // if (linkSeq && directLink.directLinkThumbnailFile === null && directLink.imgUrl === '') {
-        //     errList.push({
-        //         field: 'directLinkThumbnailFile',
-        //         reason: '이미지를 선택해 주세요.',
-        //     });
-        //     isInvalid = isInvalid || true;
-        // }
+        if (linkSeq && directLink.directLinkThumbnailFile === null && directLink.imgUrl === '') {
+            errList.push({
+                field: 'directLinkThumbnailFile',
+                reason: '이미지를 선택해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
 
         dispatch(changeInvalidList(errList));
         return !isInvalid;
@@ -280,6 +288,9 @@ const DirectLinkEdit = ({ history }) => {
     // 정보 조회.
     useEffect(() => {
         if (linkSeq) {
+            if (editmode === false) {
+                dispatch(changeDirectLinkEditMode({ editmode: true }));
+            }
             dispatch(
                 getDirectLink({
                     linkSeq: linkSeq,
@@ -288,7 +299,7 @@ const DirectLinkEdit = ({ history }) => {
         } else {
             dispatch(clearDirectLink());
         }
-    }, [dispatch, linkSeq]);
+    }, [dispatch, editmode, linkSeq]);
 
     useEffect(() => {
         // 스토어에서 가져온 데이터 셋팅
@@ -304,7 +315,7 @@ const DirectLinkEdit = ({ history }) => {
         if (imgFileRef.current) {
             imgFileRef.current.deleteFile();
         }
-    }, [directLink]);
+    }, [directLink, dispatch, editmode]);
 
     useEffect(() => {
         // invalidList 처리
@@ -337,8 +348,9 @@ const DirectLinkEdit = ({ history }) => {
     }, [inputBoxDisabled]);
 
     useEffect(() => {
-        // setInputBoxDisabled(editmode);
-        console.log(editmode);
+        if (editmode === true) {
+            setInputBoxDisabled(false);
+        }
     }, [editmode]);
 
     return (

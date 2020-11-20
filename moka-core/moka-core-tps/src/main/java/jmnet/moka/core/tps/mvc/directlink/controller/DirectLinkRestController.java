@@ -202,8 +202,6 @@ public class DirectLinkRestController {
 
         // DirectLinkDTO -> DirectLink 변환
         DirectLink newDirectLink = modelMapper.map(directLinkDTO, DirectLink.class);
-
-
         DirectLink orgDirectLink = directLinkService.findById(newDirectLink.getLinkSeq()).orElseThrow(() -> {
             String message = messageByLocale.get("tps.direct-link.error.no-data");
             tpsLogger.fail(ActionType.UPDATE, message, true);
@@ -229,8 +227,6 @@ public class DirectLinkRestController {
                 // 이미지 파일명 수정
                 newDirectLink.setImgUrl(imgPath);
             }
-
-            System.out.println("이미지 변경시 오류 나서 입셉션!!");
             // update
             DirectLink returnValue = directLinkService.updateDirectLink(newDirectLink);
 
@@ -241,7 +237,6 @@ public class DirectLinkRestController {
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
-
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {

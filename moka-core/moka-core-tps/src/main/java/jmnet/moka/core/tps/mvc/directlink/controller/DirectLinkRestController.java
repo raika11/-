@@ -223,6 +223,9 @@ public class DirectLinkRestController {
 
                 // 이미지 파일명 수정
                 newDirectLink.setImgUrl(imgPath);
+            }else{
+                // 널이면 강제로 셋팅
+                newDirectLink.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
             }
 
             // update

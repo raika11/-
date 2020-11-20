@@ -23,7 +23,7 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthBatchDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthSimpleDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuDTO;
-import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuNodeDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuOrderDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
@@ -125,10 +125,10 @@ public class MenuRestController {
     public ResponseEntity<?> getMenuTree(@SearchParam MenuSearchDTO search) {
 
         // 조회
-        MenuNode menuNode = menuService.findMenuTree(search);
+        MenuNodeDTO menuNodeDTO = menuService.findMenuTree(search);
 
         // 리턴값 설정
-        ResultDTO<MenuNode> resultDto = new ResultDTO<>(menuNode);
+        ResultDTO<MenuNodeDTO> resultDto = new ResultDTO<>(menuNodeDTO);
 
         tpsLogger.success();
 

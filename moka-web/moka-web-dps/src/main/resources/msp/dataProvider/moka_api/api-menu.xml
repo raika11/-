@@ -13,7 +13,7 @@
     <parameter>
       <masterCode desc="마스터코드">([0-9]{7}(\,)?){1,10}</masterCode>
       <serviceCode desc="서비스코드">([0-9]{4,6}(\,)?){1,10}</serviceCode>
-      <sourceCode desc="출처코드">[0-9]{1,10}</sourceCode>
+      <sourceCode desc="출처코드">[0-9a-zA-Z]{1,10}</sourceCode>
     </parameter>
     <request type="module" methodName="getMenuByCodes">jmnet.moka.core.dps.api.handler.module.MenuModule</request>
     <keys/>

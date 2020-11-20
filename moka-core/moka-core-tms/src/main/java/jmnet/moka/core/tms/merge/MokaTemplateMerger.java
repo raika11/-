@@ -81,11 +81,12 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     protected String highlightCssPath;
     protected boolean onlyHighlight;
     protected boolean esiEnabled;
+    protected boolean defaultApiHostPathUse;
 
     private static final Logger logger = LoggerFactory.getLogger(MokaTemplateMerger.class);
 
     public MokaTemplateMerger(GenericApplicationContext appContext, String domainId,
-                              AbstractTemplateLoader templateLoader, DataLoader dataLoader) {
+                              AbstractTemplateLoader templateLoader, DataLoader dataLoader, boolean defaultApiHostPathUse) {
         this.appContext = appContext;
         try {
             this.cacheManager = this.appContext.getBean(CacheManager.class);
@@ -94,6 +95,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         }
         this.domainId = domainId;
         this.templateLoader = templateLoader;
+        this.defaultApiHostPathUse = defaultApiHostPathUse;
         this.elementMergerMap = new HashMap<String, ElementMerger>(16);
         this.evaluator = new Evaluator();
         this.dataLoader = dataLoader;
@@ -433,4 +435,6 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     public boolean isEsiEnabled() {
         return this.esiEnabled;
     }
+
+    public boolean isDefaultApiHostPathUse() { return this.defaultApiHostPathUse; };
 }

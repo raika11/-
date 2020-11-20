@@ -39,7 +39,7 @@ public class CtMerger extends MokaAbstractElementMerger {
         String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
 
         return KeyResolver.makeCtItemCacheKey(domainId, element.getAttribute("id"),
-                templateRoot.getPageIdForCache(context), templateRoot.getCidForCache(context),
+                templateRoot.getPageIdForCache(context), templateRoot.getTotalIdForCache(context),
                 templateRoot.getParamForCache(context, false));
     }
 

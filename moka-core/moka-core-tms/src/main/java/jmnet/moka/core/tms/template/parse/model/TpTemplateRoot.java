@@ -25,7 +25,7 @@ public class TpTemplateRoot extends MokaTemplateRoot {
     public TpTemplateRoot(TemplateItem item)
             throws TemplateParseException {
         super(item, ItemConstants.TEMPLATE_BODY);
-        this.setHasBodyToken();
+        this.setHasArticleToken();
         this.setHasPageToken();
         this.setHasPagingElement();
         this.setHasParamToken();

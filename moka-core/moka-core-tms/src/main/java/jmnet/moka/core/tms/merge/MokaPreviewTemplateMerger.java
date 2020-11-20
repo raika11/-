@@ -45,7 +45,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem, DomainResolver domainResolver,
             AbstractTemplateLoader templateLoader, DataLoader dataLoader, String workerId, Long editionSeq) {
-        super(appContext, domainItem.getItemId(), templateLoader, dataLoader);
+        super(appContext, domainItem.getItemId(), templateLoader, dataLoader,false);
         this.domainResolver = domainResolver;
         this.domainItem = domainItem;
         this.workerId = workerId;

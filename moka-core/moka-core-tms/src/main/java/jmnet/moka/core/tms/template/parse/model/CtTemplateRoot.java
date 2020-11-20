@@ -25,7 +25,7 @@ public class CtTemplateRoot extends MokaTemplateRoot {
     public CtTemplateRoot(ContainerItem item)
             throws TemplateParseException {
         super(item, ItemConstants.CONTAINER_BODY);
-        this.setHasBodyToken();
+        this.setHasArticleToken();
         this.setHasPageToken();
         this.setHasParamToken();
     }

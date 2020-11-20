@@ -34,6 +34,7 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
     private HashMap<String, MokaTemplateMerger> templateMergerMap;
     private DataLoader dataLoader;
     private GenericApplicationContext appContext;
+    private boolean defaultApiHostPathUse;
 
 
     /**
@@ -44,11 +45,12 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
      * @param defaultApiPath api경로
      */
     public MokaDomainTemplateMerger(GenericApplicationContext appContext,
-                                    String defaultApiHost, String defaultApiPath) {
+                                    String defaultApiHost, String defaultApiPath, boolean defaultApiHostPathUse) {
         this.appContext = appContext;
         this.templateMergerMap = new HashMap<String, MokaTemplateMerger>(16);
         this.dataLoader =
                 appContext.getBean(HttpProxyDataLoader.class, defaultApiHost, defaultApiPath);
+        this.defaultApiHostPathUse = defaultApiHostPathUse;
         logger.debug("HttpProxyDataLoader Created: {} {}", defaultApiHost, defaultApiPath);
     }
 
@@ -115,7 +117,7 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
                     AbstractTemplateLoader templateLoader =
                             this.appContext.getBean(AbstractTemplateLoader.class, domainId);
                     tm = new MokaTemplateMerger(this.appContext, domainId, templateLoader,
-                            this.dataLoader);
+                            this.dataLoader, defaultApiHostPathUse);
                     this.templateMergerMap.put(domainId, tm);
                     logger.debug("Domain Template Merger Created : {}", domainId);
                 } else {

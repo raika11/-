@@ -29,7 +29,7 @@ import jmnet.moka.core.tms.mvc.HttpParamMap;
 public abstract class MokaTemplateRoot extends TemplateRoot {
     private static final Logger logger = LoggerFactory.getLogger(MokaTemplateRoot.class);
     protected MergeItem item;
-    protected boolean hasBodyToken = true;
+    protected boolean hasArticleToken = true;
     protected boolean hasParamToken = true;
     protected boolean hasSectionMenuToken = true;
     protected boolean hasPageToken = true;
@@ -56,7 +56,7 @@ public abstract class MokaTemplateRoot extends TemplateRoot {
         for (TemplateNode node : this.templateRoot.childNodes()) {
             if (node.getNodeType() == Constants.TYPE_TOKEN) {
                 TemplateToken token = (TemplateToken) node;
-                if (token.getText().startsWith(prefix + ".")) {
+                if (token.getText().contains(prefix + ".")) {
                     return true;
                 }
             }
@@ -82,8 +82,8 @@ public abstract class MokaTemplateRoot extends TemplateRoot {
         return this.item;
     }
 
-    public void setHasBodyToken() {
-        this.hasBodyToken = hasToken(MokaConstants.MERGE_CONTEXT_BODY);
+    public void setHasArticleToken() {
+        this.hasArticleToken = hasToken(MokaConstants.MERGE_CONTEXT_ARTICLE);
     }
 
     public void setHasParamToken() {
@@ -96,8 +96,8 @@ public abstract class MokaTemplateRoot extends TemplateRoot {
 
     public void setHashSectionMenuToken() { this.hasSectionMenuToken = hasToken(MokaConstants.MERGE_CONTEXT_SECTION_MENU);}
 
-    public boolean hasBodyToken() {
-        return this.hasBodyToken;
+    public boolean hasArticleToken() {
+        return this.hasArticleToken;
     }
 
     public boolean hasParamToken() {
@@ -112,8 +112,8 @@ public abstract class MokaTemplateRoot extends TemplateRoot {
         return this.hasPageToken;
     }
 
-    public String getCidForCache(MergeContext context) {
-        if (hasBodyToken()) {
+    public String getTotalIdForCache(MergeContext context) {
+        if (hasArticleToken()) {
             return (String) context.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
         } else {
             return null;

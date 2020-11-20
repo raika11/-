@@ -40,7 +40,7 @@ import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuAuthSimpleDTO;
-import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuNodeDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
@@ -646,10 +646,10 @@ public class MemberRestController extends AbstractCommonController {
                 .builder()
                 .memberId(principal.getName())
                 .build();
-        MenuNode menuNode = menuService.findServiceMenuTree(searchDTO);
+        MenuNodeDTO menuNodeDTO = menuService.findServiceMenuTree(searchDTO);
 
         // 리턴값 설정
-        ResultDTO<MenuNode> resultDto = new ResultDTO<>(menuNode);
+        ResultDTO<MenuNodeDTO> resultDto = new ResultDTO<>(menuNodeDTO);
 
         tpsLogger.success(ActionType.SELECT);
 

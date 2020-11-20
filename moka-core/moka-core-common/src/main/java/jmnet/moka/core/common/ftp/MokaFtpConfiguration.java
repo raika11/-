@@ -1,8 +1,8 @@
 package jmnet.moka.core.common.ftp;
 
-import org.jasypt.encryption.StringEncryptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
@@ -19,13 +19,8 @@ import org.springframework.context.annotation.DependsOn;
  * @since 2020-11-19 15:57
  */
 @Configuration
+@ComponentScan(basePackages = "jmnet.moka.core.common.ftp")
 public class MokaFtpConfiguration {
-
-    public final StringEncryptor mokaEncryptor;
-
-    public MokaFtpConfiguration(StringEncryptor mokaEncryptor) {
-        this.mokaEncryptor = mokaEncryptor;
-    }
 
     /**
      * <pre>
@@ -38,6 +33,6 @@ public class MokaFtpConfiguration {
     @DependsOn(value = {"mokaEncryptor"})
     @ConditionalOnProperty(name = "moka.ftp-helper.enable", havingValue = "true")
     public FtpHelper ftpHelper() {
-        return new FtpHelper(mokaEncryptor);
+        return new FtpHelper();
     }
 }

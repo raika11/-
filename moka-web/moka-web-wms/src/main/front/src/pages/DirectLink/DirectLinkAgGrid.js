@@ -49,11 +49,6 @@ const DirectLinkAgGrid = () => {
         [history],
     );
 
-    const handleEditNewMode = () => {
-        dispatch(changeDirectLinkEditMode({ editmode: false }));
-        history.push({ pathname: '/direct-link' });
-    };
-
     /**
      * 목록 리스트
      */
@@ -78,6 +73,18 @@ const DirectLinkAgGrid = () => {
             }),
         );
     }, [UPLOAD_PATH_URL, list]);
+
+    // 싸이트 바로 가기 버튼 클릭시 input disabled 변경.
+    const handleEditNewMode = () => {
+        dispatch(
+            changeDirectLinkEditMode({
+                editmode: true,
+                callback: () => {
+                    history.push({ pathname: '/direct-link' });
+                },
+            }),
+        );
+    };
 
     return (
         <React.Fragment>

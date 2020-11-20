@@ -106,8 +106,11 @@ function* deleteDirectLink({ payload: { linkSeq, callback } }) {
 /**
  * 에디트 모드 처리.
  */
-function* chengEditModeToggle({ payload: { editmode } }) {
+function* chengEditModeToggle({ payload: { editmode, callback } }) {
     yield put({ type: act.CHANGE_DIRECT_LINK_EDIT_MODE_SUCCESS, payload: editmode });
+    if (typeof callback === 'function') {
+        yield call(callback);
+    }
 }
 
 export default function* directSaga() {

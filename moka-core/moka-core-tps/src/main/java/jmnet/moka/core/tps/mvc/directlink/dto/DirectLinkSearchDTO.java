@@ -51,9 +51,14 @@ public class DirectLinkSearchDTO extends SearchDTO {
     private String linkType;
 
     /**
-     * 키워드
+     * 링크 키워드
      */
     private String linkKwd;
+
+    /**
+     * 검색 키워드
+     */
+    private String keyword;
 
 
     /**

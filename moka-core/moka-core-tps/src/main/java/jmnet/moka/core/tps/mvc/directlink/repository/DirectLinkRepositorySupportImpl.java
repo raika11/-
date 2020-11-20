@@ -4,6 +4,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import jmnet.moka.core.tps.mvc.directlink.entity.QDirectLink;
@@ -49,16 +50,25 @@ public class DirectLinkRepositorySupportImpl extends QuerydslRepositorySupport i
             query.where(qDirectLink.fixYn.toUpperCase().eq(searchDTO.getFixYn().toUpperCase()));
         }
 
-        // 유형
-        if (McpString.isNotEmpty(searchDTO.getLinkType())) {
-            query.where(qDirectLink.linkType.toUpperCase().eq(searchDTO.getLinkType().toUpperCase()));
-        }
+        //전체 : all, 제목 : title, 내용:content, 키워드 : keyword
+        String searchType = searchDTO.getSearchType();
+        String keyword = searchDTO.getKeyword();
 
-        // 키워드
-        if (McpString.isNotEmpty(searchDTO.getLinkKwd())) {
-            query.where(qDirectLink.linkKwd.contains(searchDTO.getLinkKwd()));
+        // WHERE 조건
+        if (!McpString.isEmpty(searchType) && !McpString.isEmpty(keyword)) {
+            if (searchType.equals("title")) {
+                query.where(qDirectLink.linkTitle.contains(keyword));
+            } else if (searchType.equals("content")) {
+                query.where(qDirectLink.linkContent.contains(keyword));
+            } else if (searchType.equals("keyword")) {
+                query.where(qDirectLink.linkKwd.contains(keyword));
+            } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
+                query.where(qDirectLink.linkTitle.contains(keyword)
+                     .or(qDirectLink.linkContent.contains(keyword))
+                        .or(qDirectLink.linkKwd.contains(keyword))
+                );
+            }
         }
-
 
         Pageable pageable = searchDTO.getPageable();
         if (McpString.isYes(searchDTO.getUseTotal())) {

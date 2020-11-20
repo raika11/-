@@ -11,4 +11,13 @@ public interface AuthService {
     List<GrantedAuthority> getAuthorities(Set<GroupMember> groupMembers);
 
     List<GrantedAuthority> getAuthorities(String position);
+
+    /**
+     * 사용자 아이디와 메뉴 아이디로 메뉴 권한 목록 조회
+     *
+     * @param memberId 사용자 아이디
+     * @param menuId   메뉴 ID
+     * @return 메뉴 권한 일련번호
+     */
+    boolean hasMenuAuth(String memberId, String menuId);
 }

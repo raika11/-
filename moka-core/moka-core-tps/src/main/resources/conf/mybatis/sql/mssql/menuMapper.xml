@@ -18,4 +18,12 @@
     )}
   </select>
 
+  <select id="findMenuAuthSeq" parameterType="MenuSearchDTO" resultType="java.lang.Long"
+    statementType="CALLABLE">
+    {call UPA_CMS_MEMBER_MENU_AUTH_SEL(
+    #{grpMemId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{menuId, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </select>
+
 </mapper>

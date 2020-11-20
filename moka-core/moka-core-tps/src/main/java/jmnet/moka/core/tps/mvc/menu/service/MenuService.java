@@ -250,6 +250,14 @@ public interface MenuService {
     MenuAuth findMenuAuth(MenuAuth menuAuth);
 
     /**
+     * 사용자 아이디와 메뉴 아이디로 메뉴 권한 목록 조회
+     *
+     * @param searchDTO 검색 조건
+     * @return 메뉴 권한 일련번호
+     */
+    Long findMenuAuthSeq(MenuSearchDTO searchDTO);
+
+    /**
      * 메뉴 아이디로 메뉴 권한 목록 조회
      *
      * @param menuId 메뉴 ID

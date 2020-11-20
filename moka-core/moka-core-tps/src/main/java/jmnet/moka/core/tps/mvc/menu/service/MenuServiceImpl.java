@@ -305,6 +305,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public Long findMenuAuthSeq(MenuSearchDTO searchDTO) {
+        return menuMapper.findMenuAuthSeq(searchDTO);
+    }
+
+    @Override
     public List<MenuAuth> findMenuAuthList(String menuId) {
         return menuAuthRepository.findAllByMenuId(menuId);
     }

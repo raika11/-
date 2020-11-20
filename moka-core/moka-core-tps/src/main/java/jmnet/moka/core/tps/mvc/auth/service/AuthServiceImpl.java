@@ -8,7 +8,9 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
-import jmnet.moka.core.tps.mvc.member.repository.MemberRepository;
+import jmnet.moka.core.tps.mvc.member.service.MemberService;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
+import jmnet.moka.core.tps.mvc.menu.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,8 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthServiceImpl implements AuthService, UserDetailsService {
 
+
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberService memberService;
+
+    @Autowired
+    private MenuService menuService;
 
     // @Override
     // public Optional<UserInfo> findByUserIdAndUserPassword(String userId, String userPassword) {
@@ -33,7 +39,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        Optional<MemberInfo> opt = memberRepository.findByMemberId(username);
+        Optional<MemberInfo> opt = memberService.findMemberById(username);
 
 
         return opt.isPresent() ? UserDTO.create(opt.get(), getAuthorities(opt
@@ -70,5 +76,15 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             return Arrays.asList(new SimpleGrantedAuthority(TpsConstants.ROLE_USER));
         }
         return null;
+    }
+
+    @Override
+    public boolean hasMenuAuth(String memberId, String menuId) {
+        Long menuSeq = menuService.findMenuAuthSeq(MenuSearchDTO
+                .builder()
+                .grpMemId(memberId)
+                .menuId(menuId)
+                .build());
+        return menuSeq > 0 ? true : false;
     }
 }

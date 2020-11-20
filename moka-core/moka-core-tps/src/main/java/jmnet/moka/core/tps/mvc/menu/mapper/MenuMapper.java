@@ -15,4 +15,14 @@ public interface MenuMapper extends BaseMapper<MenuVO, MenuSearchDTO> {
      */
     List<MenuVO> findAllMenuAuth(MenuSearchDTO param)
             throws RuntimeException;
+
+    /**
+     * 메뉴 권한 일련번호를 반환한다.
+     *
+     * @param param 검색 파라미터
+     * @return 메뉴 권한 일련번호
+     * @throws RuntimeException 에러 처리
+     */
+    Long findMenuAuthSeq(MenuSearchDTO param)
+            throws RuntimeException;
 }

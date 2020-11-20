@@ -76,14 +76,8 @@ const DirectLinkAgGrid = () => {
 
     // 싸이트 바로 가기 버튼 클릭시 input disabled 변경.
     const handleEditNewMode = () => {
-        dispatch(
-            changeDirectLinkEditMode({
-                editmode: true,
-                callback: () => {
-                    history.push({ pathname: '/direct-link' });
-                },
-            }),
-        );
+        dispatch(changeDirectLinkEditMode({ editmode: true }));
+        history.push({ pathname: '/direct-link' });
     };
 
     return (

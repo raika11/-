@@ -97,20 +97,20 @@ public class DirectLinkServiceImpl implements DirectLinkService {
         String extension = McpFile.getExtension(thumbnail.getOriginalFilename()).toLowerCase();
         String newFilename = String.valueOf(directLink.getLinkSeq()) + "." + extension;
         // 이미지를 저장할 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
+        //String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
+        String uri = "https://pds.joins.com/news/search_direct_link/";
 
         try {
-            if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
-                String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
-                return uri;
-            } else {
-                return "https://pds.joins.com/news/search_direct_link/" + newFilename;
-            }
+            if (uploadFileHelper.saveImage("c:/msp/wms/", thumbnail.getBytes())) {
+                //String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
+                uri= uri + newFilename;
 
+            }
         } catch (Exception e) {
             return "https://pds.joins.com/news/search_direct_link/" + newFilename;
         }
 
+        return uri;
     }
 
     @Override

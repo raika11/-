@@ -3,6 +3,8 @@
  */
 package jmnet.moka.core.tps.mvc.directlink.service;
 
+import jmnet.moka.common.ApiResult;
+import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -13,12 +15,15 @@ import jmnet.moka.core.tps.mvc.directlink.repository.DirectLinkRepository;
 import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 /**
@@ -51,6 +56,7 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     @Override
     @Transactional
     public DirectLink updateDirectLink(DirectLink directLink) {
+        System.out.println("iiiiiiiiiiimpl::" + directLink.getImgUrl());
         return directLinkRepository.save(directLink);
     }
 
@@ -93,12 +99,18 @@ public class DirectLinkServiceImpl implements DirectLinkService {
         // 이미지를 저장할 실제 경로 생성
         String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
 
-        if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
-            String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
-            return uri;
-        } else {
+        try {
+            if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
+                String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
+                return uri;
+            } else {
+                return "https://pds.joins.com/news/search_direct_link/" + newFilename;
+            }
+
+        } catch (Exception e) {
             return "https://pds.joins.com/news/search_direct_link/" + newFilename;
         }
+
     }
 
     @Override

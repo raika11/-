@@ -34,6 +34,12 @@ public class DirectLink extends BaseAudit {
     private Long linkSeq;
 
     /**
+     * 대표이미지
+     */
+    @Column(name = "IMG_URL", nullable = false)
+    private String imgUrl;
+
+    /**
      * 사용여부(Y:사용,N:미사용)
      */
     @Column(name = "USED_YN", nullable = false, length = 1)
@@ -68,12 +74,6 @@ public class DirectLink extends BaseAudit {
      */
     @Column(name = "LINK_TITLE", nullable = false)
     private String linkTitle;
-
-    /**
-     * 대표이미지
-     */
-    @Column(name = "IMG_URL")
-    private String imgUrl;
 
     /**
      * 링크url

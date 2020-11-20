@@ -193,8 +193,16 @@ public class DirectLinkRestController {
             @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
 
+        System.out.println("directLinkDTO.getImgUrl()::" + directLinkDTO.getImgUrl());
+
+        // 널이면 강제로 셋팅
+        if(directLinkDTO.getImgUrl().isEmpty() || directLinkDTO.getImgUrl() == null){
+            directLinkDTO.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
+        }
+
         // DirectLinkDTO -> DirectLink 변환
         DirectLink newDirectLink = modelMapper.map(directLinkDTO, DirectLink.class);
+
 
         DirectLink orgDirectLink = directLinkService.findById(newDirectLink.getLinkSeq()).orElseThrow(() -> {
             String message = messageByLocale.get("tps.direct-link.error.no-data");
@@ -204,30 +212,25 @@ public class DirectLinkRestController {
 
 
         try {
-
             /*
              * 이미지 파일 저장 새로운 파일이 있으면 기존 파일이 있으면 삭제하고 새 파일을 저장한다.
              */
-
-
             if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
-
                 // 기존이미지 삭제
                 if (McpString.isNotEmpty(orgDirectLink.getImgUrl())) {
                     directLinkService.deleteImage(orgDirectLink);
                     tpsLogger.success(ActionType.FILE_DELETE, true);
                 }
+
                 // 새로운 이미지 저장
                 String imgPath = directLinkService.saveImage(newDirectLink, directLinkThumbnailFile);
                 tpsLogger.success(ActionType.UPLOAD, true);
 
                 // 이미지 파일명 수정
                 newDirectLink.setImgUrl(imgPath);
-            }else{
-                // 널이면 강제로 셋팅
-                newDirectLink.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
             }
 
+            System.out.println("newDirectLink.getImgUrl()::" + newDirectLink.getImgUrl());
             // update
             DirectLink returnValue = directLinkService.updateDirectLink(newDirectLink);
 

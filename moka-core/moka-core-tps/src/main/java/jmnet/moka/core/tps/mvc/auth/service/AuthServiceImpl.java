@@ -85,6 +85,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                 .grpMemId(memberId)
                 .menuId(menuId)
                 .build());
-        return menuSeq > 0 ? true : false;
+        return (menuSeq != null && menuSeq > 0);
     }
 }

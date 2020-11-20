@@ -5,6 +5,11 @@ import Button from 'react-bootstrap/Button';
 import { MokaImageInput, MokaInput, MokaInputLabel, MokaModal, MokaSearchInput } from '@components';
 import toast from '@utils/toastUtil';
 
+const titlePrefixList = [{ type: '속보' }, { type: '단독' }];
+const prefixLocationList = [{ type: '제목 앞' }, { type: '제목 뒤' }, { type: '부제 앞' }, { type: '부제 뒤' }, { type: '리드문 앞' }, { type: '리드문 뒤' }];
+const titleLocationList = [{ type: '상단' }, { type: '하단' }];
+const fontSizeList = [{ size: '36px' }, { size: '41px' }, { size: '45px' }, { size: '48px' }];
+
 /**
  * 데스킹 기사정보 편집 모달 컴포넌트
  */
@@ -13,10 +18,13 @@ const DeskingWorkEditModal = (props) => {
 
     // 데스킹 정보
     const [thumbFileName, setThumbFileName] = useState('');
-    const [title, setTitle] = useState('');
-    const [nameplate, setNameplate] = useState('');
     const [titlePrefix, setTitlePrefix] = useState('');
-    const [subtitle, setSubtitle] = useState('');
+    const [prefixLocation, setPrefixLocation] = useState('');
+    const [titleLocation, setTitleLocation] = useState('');
+    const [title, setTitle] = useState('');
+    const [fontSize, setFontSize] = useState('');
+    const [nameplate, setNameplate] = useState('');
+    const [subTitle, setSubTitle] = useState('');
     const [bodyHead, setBodyHead] = useState('');
 
     React.useEffect(() => {
@@ -24,12 +32,26 @@ const DeskingWorkEditModal = (props) => {
         if (data) {
             setThumbFileName(data.thumbFileName || '');
             setTitle(data.title || '');
+            setTitle(data.title || '');
             setNameplate(data.nameplate || '');
             setTitlePrefix(data.titlePrefix || '');
-            setSubtitle(data.subtitle || '');
+            setSubTitle(data.subTitle || '');
             setBodyHead(data.bodyHead || '');
         }
     }, [data]);
+
+    /**
+     * 타이틀 byte 계산
+     * @param {String} text 타이틀
+     */
+    const euckrBytes = (text) => {
+        const euckrLength = ((s, b = 0, i = 0, c = 0) => {
+            // eslint-disable-next-line no-cond-assign
+            for (i = 0; (c = s.charCodeAt(i++)); b += c >= 128 ? 2 : 1);
+            return b;
+        })(text);
+        return euckrLength;
+    };
 
     /**
      * modal의 항목 값 변경
@@ -41,17 +63,29 @@ const DeskingWorkEditModal = (props) => {
             setThumbFileName(value);
         } else if (name === 'title') {
             setTitle(value);
+            if (value !== title && name === 'titleLength') {
+                euckrBytes(value);
+            }
         } else if (name === 'nameplate') {
             setNameplate(value);
         } else if (name === 'titlePrefix') {
             setTitlePrefix(value);
+        } else if (name === 'prefixLocation') {
+            setPrefixLocation(value);
+        } else if (name === 'titleLocation') {
+            setTitleLocation(value);
+        } else if (name === 'fontSize') {
+            setFontSize(value);
         } else if (name === 'subTitle') {
-            setSubtitle(value);
+            setSubTitle(value);
         } else if (name === 'bodyHead') {
             setBodyHead(value);
         }
     };
 
+    /**
+     * 저장
+     */
     const handleSaveDeskingWork = () => {
         const deskingWork = {
             ...data,
@@ -59,7 +93,7 @@ const DeskingWorkEditModal = (props) => {
             title,
             nameplate,
             titlePrefix,
-            subtitle,
+            subTitle,
             bodyHead,
         };
         const callback = (response) => {
@@ -78,7 +112,7 @@ const DeskingWorkEditModal = (props) => {
                 <div className="w-100 d-flex flex-column">
                     <div className="p-0 d-flex">
                         <p className="m-0">{data.contentOrd}</p>
-                        <p className="m-0">{title}</p>
+                        <p className="m-0">{data.title}</p>
                     </div>
                     <div className="p-0 d-flex ft-12">
                         <p className="m-0 mr-3">ID: {data.totalId}</p>
@@ -89,7 +123,7 @@ const DeskingWorkEditModal = (props) => {
                 </div>
             }
             width={650}
-            size="lg"
+            size="xl"
             show={show}
             onHide={onHide}
             buttons={[
@@ -98,6 +132,7 @@ const DeskingWorkEditModal = (props) => {
                 { variant: 'outline-neutral', text: '리로드' },
             ]}
             footerClassName="d-flex justify-content-center"
+            draggable
         >
             <div className="d-flex justify-content-between">
                 <div style={{ width: '150px' }}>
@@ -115,33 +150,59 @@ const DeskingWorkEditModal = (props) => {
                     </div>
                 </div>
                 <Form style={{ width: '453px' }}>
-                    <MokaInputLabel label="어깨제목" inputClassName="ft-12" name="nameplate" value={nameplate} onChange={handleChangeValue} />
+                    <MokaInputLabel label="어깨제목" labelWidth={80} inputClassName="ft-12" name="nameplate" value={nameplate} onChange={handleChangeValue} />
                     <Form.Row>
-                        <MokaInputLabel label="말머리" as="none" />
-                        <Col xs={4} className="p-0 d-flex align-items-center justify-content-between">
-                            <MokaInput className="mb-3 mr-2" as="select" name="titlePrefix" value={titlePrefix} onChange={handleChangeValue} />
-                            <MokaInput className="mb-3" as="select" />
+                        <MokaInputLabel label="말머리" labelWidth={80} as="none" />
+                        <Col xs={5} className="p-0 d-flex align-items-center justify-content-between">
+                            <MokaInput className="mb-3 mr-2 ft-12" as="select" name="titlePrefix" value={titlePrefix} onChange={handleChangeValue}>
+                                {titlePrefixList.map((prefix, idx) => (
+                                    <option key={idx} value={idx} className="ft-12">
+                                        {prefix.type}
+                                    </option>
+                                ))}
+                            </MokaInput>
+                            <MokaInput className="mb-3 mr-2 ft-12" as="select" name="prefixLocation" value={prefixLocation} onChange={handleChangeValue}>
+                                {prefixLocationList.map((prefixLocation, idx) => (
+                                    <option key={idx} value={idx} className="ft-12">
+                                        {prefixLocation.type}
+                                    </option>
+                                ))}
+                            </MokaInput>
                         </Col>
                         <div className="w-100">
                             <MokaInputLabel
+                                inputClassName="ft-12"
                                 label="제목/부제위치"
-                                labelWidth={100}
+                                labelWidth={90}
                                 as="select"
-                                // name=""
-                                // value={}
-                                // onChange={handleChangeValue}
-                            />
+                                name="titleLocation"
+                                value={titleLocation}
+                                onChange={handleChangeValue}
+                            >
+                                {titleLocationList.map((titleLocation, idx) => (
+                                    <option key={idx} value={idx} className="ft-12">
+                                        {titleLocation.type}
+                                    </option>
+                                ))}
+                            </MokaInputLabel>
                         </div>
                     </Form.Row>
                     <Form.Row>
-                        <Col xs={11} className="p-0">
+                        <div className="w-100 p-0">
                             <MokaInputLabel
                                 label={
                                     <React.Fragment>
                                         Web제목 <br />
-                                        <MokaInput as="select" size="sm" />
+                                        <MokaInput as="select" size="sm" name="fontSize" value={fontSize} onChange={handleChangeValue}>
+                                            {fontSizeList.map((font, idx) => (
+                                                <option key={idx} value={font.size}>
+                                                    {font.size}
+                                                </option>
+                                            ))}
+                                        </MokaInput>
                                     </React.Fragment>
                                 }
+                                labelWidth={80}
                                 inputClassName="ft-12"
                                 name="title"
                                 value={title}
@@ -149,15 +210,32 @@ const DeskingWorkEditModal = (props) => {
                                 inputProps={{ rows: 3 }}
                                 onChange={handleChangeValue}
                             />
-                        </Col>
-                        <Col xs={1} className="p-0 d-flex align-items-end">
-                            <div className="mb-3 ft-12">42byte</div>
+                        </div>
+                        <Col xs={1} className="w-100 p-0 d-flex align-items-end">
+                            <div className="mb-3 pl-1 ft-12" name="titleLength" onChange={handleChangeValue}>
+                                {euckrBytes(title)}byte
+                            </div>
                         </Col>
                     </Form.Row>
-                    <MokaInputLabel label="부제" inputClassName="ft-12" name="subtitle" value={subtitle} onChange={handleChangeValue} />
-                    <MokaInputLabel label="리드문" inputClassName="ft-12" name="bodyHead" as="textarea" inputProps={{ rows: 5 }} value={bodyHead} onChange={handleChangeValue} />
+                    <MokaInputLabel label="부제" labelWidth={80} inputClassName="ft-12" name="subTitle" value={subTitle} onChange={handleChangeValue} />
+                    <MokaInputLabel
+                        label="리드문"
+                        labelWidth={80}
+                        inputClassName="ft-12"
+                        name="bodyHead"
+                        as="textarea"
+                        inputProps={{ rows: 5 }}
+                        value={bodyHead}
+                        onChange={handleChangeValue}
+                    />
                     <Form.Row className="d-flex align-items-center">
-                        <MokaInputLabel label="영상" className="m-0" onChange={handleChangeValue} as="none" />
+                        <Col xs={9} className="p-0">
+                            <MokaInputLabel label="url" labelWidth={80} placeholder="url 입력해주세요" />
+                        </Col>
+                        <MokaInput className="mb-3 ml-2" as="select" />
+                    </Form.Row>
+                    <Form.Row className="d-flex align-items-center">
+                        <MokaInputLabel label="영상" labelWidth={80} className="m-0" onChange={handleChangeValue} as="none" />
                         <div className="w-100">
                             <MokaSearchInput placeholder="url 입력해주세요" />
                         </div>

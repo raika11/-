@@ -265,7 +265,7 @@ public class ColumnistRestController {
         if (file != null && !file.isEmpty()) {
             boolean isImage = ImageUtil.isImage(file);
             if (!isImage) {
-                String message = messageByLocale.get("tps.template.error.onlyimage.thumbnail");
+                String message = messageByLocale.get("tps.columnist.error.onlyimage.thumbnail");
                 invalidList.add(new InvalidDataDTO("thumbnail", message));
                 tpsLogger.fail(actionType, message, true);
             }

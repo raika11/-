@@ -135,8 +135,6 @@ public class DirectLinkRestController {
     public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO
             , @RequestParam(value="directLinkThumbnailFile") MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
-
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa::" + directLinkThumbnailFile);
         // 데이터 유효성 검사
         validData(directLinkThumbnailFile, ActionType.INSERT);
 
@@ -149,8 +147,6 @@ public class DirectLinkRestController {
         }
 
         try {
-            // 등록(이미지 등록에 seq가 필요해서 먼저 저장)
-            directLink.setImgUrl(""); // 빈값이라도 넣어줘야한다.
             DirectLink returnValue = directLinkService.insertDirectLink(directLink);
 
             if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
@@ -262,8 +258,7 @@ public class DirectLinkRestController {
     @GetMapping("/{linkSeq}/has-members")
     public ResponseEntity<?> hasMembers(HttpServletRequest request,
                                         @PathVariable("linkSeq")
-                                        @Min(value=0,
-                                                message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
+                                        @Min(value=0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
         boolean exists = directLinkService.hasMembers(linkSeq);
@@ -284,7 +279,7 @@ public class DirectLinkRestController {
      * @throws NoDataException      삭제 할 사이트정보 없음
      * @throws Exception            그 외 에러처리
      */
-    @ApiOperation(value = "그룹 삭제")
+    @ApiOperation(value = "사이트관리 삭제")
     @DeleteMapping("/{linkSeq}")
     public ResponseEntity<?> deleteDirectLink(HttpServletRequest request,
                                          @PathVariable("linkSeq")
@@ -325,9 +320,9 @@ public class DirectLinkRestController {
     }
 
     /**
-     * 템플릿 데이터 유효성 검사
+     * 사이트관리 데이터 유효성 검사
      *
-     * @param file                  템플릿썸네일파일
+     * @param file                  사이트관리 이미지
      * @param actionType            작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성 오류
      * @throws Exception            예외

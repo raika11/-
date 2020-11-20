@@ -34,7 +34,7 @@ import java.util.List;
 
 /**
  * <pre>
- * 기자관리
+ * 컬럼리스트
  * 2020. 11. 16. ssc 최초생성
  * RequestMapping 생성 규칙
  * RESTful 방식에 소문자만 허용하고 단어 사이 구분이 필요한 경우 '-' 사용
@@ -43,8 +43,6 @@ import java.util.List;
  * 조회 : get{Target}, HttpMethod = GET
  * 저장  : post{Target}, HttpMethod = POST
  * 수정  : put{Target}, HttpMethod = PUT
- * 삭제  : delete{Target}, HttpMethod = DELETE
- * 사이트내멤버조회 : get{Target}, HttpMethod = GET
  * </pre>
  *
  * @author ssc
@@ -101,11 +99,11 @@ public class ColumnistRestController {
      * 컬럼리스트 조회
      *
      * @param request  요청
-     * @param seqNo 링크일련번호 (필수)
+     * @param seqNo 일련번호 (필수)
      * @return 컬럼리스트정보
      * @throws NoDataException 컬럼리스트 정보가 없음
      */
-    @ApiOperation(value = "사이트관리 조회")
+    @ApiOperation(value = "컬럼리스트 조회")
     @GetMapping("/{seqNo}")
     public ResponseEntity<?> getColumninst(HttpServletRequest request
             , @PathVariable("seqNo") @Min(value = 0, message = "{tps.columnist.error.pattern.seqNo}") Long seqNo)
@@ -124,19 +122,18 @@ public class ColumnistRestController {
      * 컬럼리스트등록
      *
      * @param columnistDTO 등록할 컬럼리스트등록
-     * @param columnistFile 등록할 사이트바로가기 이미지
-     * @return 등록된 사이트정보
+     * @param columnistFile 등록할 컬럼리스트 이미지
+     * @return 등록된 컬럼리스트정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
-    @ApiOperation(value = "사이트 등록")
+    @ApiOperation(value = "컬럼리스트 등록")
     @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
     , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postColumnist(@Valid ColumnistDTO columnistDTO
             , @RequestParam(value="columnistFile") MultipartFile columnistFile
     )throws InvalidDataException, Exception {
 
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa::" + columnistFile);
         // 데이터 유효성 검사
         validData(columnistFile, ActionType.INSERT);
 
@@ -174,7 +171,7 @@ public class ColumnistRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO INSERT SITE]", e);
+            log.error("[FAIL TO INSERT]", e);
             // 액션 로그에 오류 내용 출력
             tpsLogger.error(ActionType.INSERT, e);
             throw new Exception(messageByLocale.get("tps.columnist.error.save"), e);
@@ -251,90 +248,16 @@ public class ColumnistRestController {
         }
     }
 
-    /**
-     * 컬럼리스트 내 속한 멤버 존재 여부
-     *
-     * @param request HTTP요청
-     * @param seqNo 컬럼리스트 일련번호
-     * @return 관련아이템 존재 여부
-     * @throws NoDataException 데이터없음 예외처리
-     */
-    @ApiOperation(value = "컬럼리스트 내 속한 멤버 존재 여부")
-    @GetMapping("/{seqNo}/has-members")
-    public ResponseEntity<?> hasMembers(HttpServletRequest request,
-                                        @PathVariable("seqNo")
-                                        @Min(value=0,
-                                                message = "{tps.columnist.error.pattern.seqNo}") Long seqNo)
-            throws NoDataException {
-
-        boolean exists = columnistService.hasMembers(seqNo);
-        String message = exists ? messageByLocale.get("tps.columnist.success.select.exist-member") : "";
-
-        // 결과리턴
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, message);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    }
 
     /**
-     * 삭제
+     * 컬럼리스트 데이터 유효성 검사
      *
-     * @param request 요청
-     * @param seqNo 삭제 할 일련번호 (필수)
-     * @return 삭제성공여부
-     * @throws InvalidDataException 데이타유효성오류
-     * @throws NoDataException      삭제 할 사이트정보 없음
-     * @throws Exception            그 외 에러처리
-     */
-    @ApiOperation(value = "그룹 삭제")
-    @DeleteMapping("/{seqNo}")
-    public ResponseEntity<?> deleteDirectLink(HttpServletRequest request,
-                                         @PathVariable("seqNo")
-                                         @Min(value=0,
-                                         message = "{tps.columnist.error.pattern.seqNo}") Long seqNo)
-            throws InvalidDataException, NoDataException, Exception {
-
-
-        // 그룹 데이터 조회
-        String noContentMessage = messageByLocale.get("tps.columnist.error.no-data", request);
-        Columnist member = columnistService.findById(seqNo)
-                .orElseThrow(() -> new NoDataException(noContentMessage));
-
-        try {
-            // 삭제
-            columnistService.deleteColumnist(member);
-
-            // 이미지 있으면 이미지도
-            if (McpString.isNotEmpty(member.getProfilePhoto())) {
-                columnistService.deleteImage(member);
-                tpsLogger.success(ActionType.FILE_DELETE, true);
-            }
-
-            // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.DELETE);
-
-            // 결과리턴
-            String message = messageByLocale.get("tps.columnist.success.delete");
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("[FAIL TO DELETE COLUMNIST] seqNo: {} {}", seqNo, e.getMessage());
-            // 액션 로그에 실패 로그 출력
-            tpsLogger.error(ActionType.DELETE, e.toString());
-            throw new Exception(messageByLocale.get("tps.columnist.error.delete", request), e);
-        }
-    }
-
-    /**
-     * 템플릿 데이터 유효성 검사
-     *
-     * @param file                  템플릿썸네일파일
+     * @param file                  컬럼리스트프로필이미지
      * @param actionType            작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성 오류
      * @throws Exception            예외
      */
-    private void validData(MultipartFile file, ActionType actionType)
-            throws InvalidDataException, Exception {
+    private void validData(MultipartFile file, ActionType actionType) throws InvalidDataException, Exception {
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
         // 문법검사

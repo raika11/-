@@ -64,21 +64,6 @@ public interface ColumnistService {
     boolean isDuplicatedId(Long seqNo);
 
     /**
-     * 그룹에 속한 멤버 존재 여부 조회
-     *
-     * @param seqNo 일련번호
-     * @return 존재 여부
-     */
-    boolean hasMembers(Long seqNo);
-
-    /**
-     * 그룹 삭제
-     *
-     * @param columnist 그룹 정보
-     */
-    void deleteColumnist(Columnist columnist);
-
-    /**
      * 썸네일 이미지 저장
      * @param columnist 템플릿
      * @param thumbnail 썸네일 이미지(Multipart)

@@ -63,16 +63,6 @@ public class ColumnistServiceImpl implements ColumnistService {
     }
 
     @Override
-    public boolean hasMembers(Long seqNo) {
-        return columnistRepository.countBySeqNo(seqNo) > 0 ? true : false;
-    }
-
-    @Override
-    public void deleteColumnist(Columnist columnist) {
-        columnistRepository.delete(columnist);
-    }
-
-    @Override
     public String saveImage(Columnist columnist, MultipartFile thumbnail)
             throws Exception {
         String extension = McpFile.getExtension(thumbnail.getOriginalFilename()).toLowerCase();
@@ -84,7 +74,8 @@ public class ColumnistServiceImpl implements ColumnistService {
             String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
             return uri;
         } else {
-            return "";
+            return "http://pds.joins.com/news/search_direct_link/" + columnist.getSeqNo();
+            // 현재는 ftp저장이 없어서 하드코딩한다.
         }
     }
 

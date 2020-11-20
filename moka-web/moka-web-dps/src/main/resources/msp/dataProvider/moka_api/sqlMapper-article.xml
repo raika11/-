@@ -77,6 +77,11 @@
   select * from TB_15RE_ARTICLE_MULTI
 where TOTAL_ID = #{totalId}
   </select>
+  <!-- article source -->
+  <select id="source" parameterType="hashmap" resultType="map">
+    select * from TB_15RE_ARTICLE_MULTI
+    where TOTAL_ID = #{totalId}
+  </select>
 
   <resultMap id="map" type="hashmap"/>
   <!-- article list -->

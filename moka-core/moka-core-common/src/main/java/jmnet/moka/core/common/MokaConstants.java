@@ -18,21 +18,21 @@ import jmnet.moka.common.utils.McpString;
  */
 public class MokaConstants {
 
-    public final static String ROOT_DATAPROVIDER = "dataProvider";    // 데이타 루트폴더명
-    public final static String ROOT_TEMPLATE = "template";            // 템플릿 루트폴더명
-    public final static String ROOT_TEMPLATE_HISTORY = "template_history";    // 템플릿히스토리 루트폴더명
+    public static final String ROOT_DATAPROVIDER = "dataProvider";    // 데이타 루트폴더명
+    public static final String ROOT_TEMPLATE = "template";            // 템플릿 루트폴더명
+    public static final String ROOT_TEMPLATE_HISTORY = "template_history";    // 템플릿히스토리 루트폴더명
 
 
-    public final static String DOMAINS_JSON = "domains.json";
-    public final static String DOMAIN_CODE_JSON = "code.json";
-    public final static String DEFAULT_PATH = "0000";                // 공통, 기본 폴더명
+    public static final String DOMAINS_JSON = "domains.json";
+    public static final String DOMAIN_CODE_JSON = "code.json";
+    public static final String DEFAULT_PATH = "0000";                // 공통, 기본 폴더명
 
     public static final String INTERCEPTOR_DEBUG = "moka.interceptor.debug";
     public static final String INTERCEPTOR_IGNORE = "moka.interceptor.ignore";
-    public final static String INTERCEPTOR_REFUSED = "interceptorRefused";
+    public static final String INTERCEPTOR_REFUSED = "interceptorRefused";
 
     /* Jpa PersistanceUnit Names */
-    public final static String PERSISTANCE_UNIT_TPS = "TPS-PersistenceUnit";
+    public static final String PERSISTANCE_UNIT_TPS = "TPS-PersistenceUnit";
 
     /* moka-core-template 확장 */
     public static String ATTR_REL_CP = "relCp";
@@ -44,62 +44,66 @@ public class MokaConstants {
     }
 
     /* Item Kind */
-    public final static String ITEM_DOMAIN = "DOMAIN";  // 도메인
-    public final static String ITEM_PAGE = "PG";        // 페이지
-    public final static String ITEM_COMPONENT = "CP";    // 컴포넌트
-    public final static String ITEM_TEMPLATE = "TP";    // 템플릿
-    public final static String ITEM_CONTAINER = "CT";    // 컨테이너
-    public final static String ITEM_AD = "AD";            // 광고
-    public final static String ITEM_ARTICLE_PAGE = "AP"; // 기사페이지
-    public final static String ITEM_UNKNOWN = "UNKNOWN";// 알수 없음
-    public final static String ITEM_DATASET = "DS";        // 데이타셋
-    public final static String ITEM_RESERVED = "RS";    // 예약어
+    public static final String ITEM_DOMAIN = "DOMAIN";  // 도메인
+    public static final String ITEM_PAGE = "PG";        // 페이지
+    public static final String ITEM_COMPONENT = "CP";    // 컴포넌트
+    public static final String ITEM_TEMPLATE = "TP";    // 템플릿
+    public static final String ITEM_CONTAINER = "CT";    // 컨테이너
+    public static final String ITEM_AD = "AD";            // 광고
+    public static final String ITEM_ARTICLE_PAGE = "AP"; // 기사페이지
+    public static final String ITEM_UNKNOWN = "UNKNOWN";// 알수 없음
+    public static final String ITEM_DATASET = "DS";        // 데이타셋
+    public static final String ITEM_RESERVED = "RS";    // 예약어
 
     /* TMS Constants */
-    public static String INDEX_PAGE = "index";
-    public static String MERGE_PATH = "mergePath";
-    public static String MERGE_DOMAIN_ID = "mergeDomainId";
-    public static String MERGE_ITEM_TYPE = "mergeItemType";
-    public static String MERGE_ITEM_ID = "mergeItemId";
-    public static String MERGE_CONTEXT = "mergeContext";
-    public static String MERGE_CONTEXT_ITEM = "item";
-    public static String MERGE_DATA_MAP = "mergeDataMap";
-    public static String MERGE_ARTICE_PREFIX = "/article";
-    public static String MERGE_DIGITAL_SPECIAL_PREFIX = "/digitalspecial";
+    public static final String INDEX_PAGE = "index";
+    public static final String MERGE_PATH = "mergePath";
+    public static final String MERGE_DOMAIN_ID = "mergeDomainId";
+    public static final String MERGE_ITEM_TYPE = "mergeItemType";
+    public static final String MERGE_ITEM_ID = "mergeItemId";
+    public static final String MERGE_CONTEXT = "mergeContext";
+    public static final String MERGE_CONTEXT_ITEM = "item";
+    public static final String MERGE_DATA_MAP = "mergeDataMap";
+    public static final String MERGE_ARTICE_PREFIX = "/article";
+    public static final String MERGE_DIGITAL_SPECIAL_PREFIX = "/digitalspecial";
 
     /* TMS Custom Token */
-    public static String MERGE_CONTEXT_DOMAIN = "domain";
-    public static String MERGE_CONTEXT_RESERVED = "reserved";
-    public static String MERGE_CONTEXT_PAGE = "page";
-    public static String MERGE_CONTEXT_PARAM = Constants.PARAM;
-    public static String MERGE_CONTEXT_CATEGORY = "category";
-    public static String MERGE_CONTEXT_HEADER = "header";
-    public static String MERGE_CONTEXT_COOKIE = "cookie";
-    public static String MERGE_CONTEXT_CONTAINER = "container";
-    public static String MERGE_CONTEXT_COMPONENT = "component";
-    public static String MERGE_CONTEXT_TEMPLATE = "template";
-    public static String MERGE_CONTEXT_AD = "ad";
-    public static String MERGE_CONTEXT_ARTICLE_ID = "articleId";
-    public static String MERGE_CONTEXT_DIGIAL_SPECIAL_ID = "ditalSpecialId";
-    public static String MERGE_CONTEXT_BODY = "body";
-    public static String MERGE_CONTEXT_WORKER_ID = "workerId";
-    public static String MERGE_CONTEXT_EDITION_SEQ = "editionSeq";
+    public static final String MERGE_CONTEXT_DOMAIN = "domain";
+    public static final String MERGE_CONTEXT_RESERVED = "reserved";
+    public static final String MERGE_CONTEXT_PAGE = "page";
+    public static final String MERGE_CONTEXT_PARAM = Constants.PARAM;
+    public static final String MERGE_CONTEXT_MENUS = "menus";
+    public static final String MERGE_CONTEXT_SECTION_MENU = "menus.sectionMenu";
+    public static final String MERGE_CONTEXT_CODES = "codes";
+    public static final String MERGE_CONTEXT_CATEGORY = "category";
+    public static final String MERGE_CONTEXT_HEADER = "header";
+    public static final String MERGE_CONTEXT_COOKIE = "cookie";
+    public static final String MERGE_CONTEXT_CONTAINER = "container";
+    public static final String MERGE_CONTEXT_COMPONENT = "component";
+    public static final String MERGE_CONTEXT_TEMPLATE = "template";
+    public static final String MERGE_CONTEXT_AD = "ad";
+    public static final String MERGE_CONTEXT_ARTICLE_ID = "articleId";
+    public static final String MERGE_CONTEXT_DIGIAL_SPECIAL_ID = "ditalSpecialId";
+    public static final String MERGE_CONTEXT_BODY = "body";
+    public static final String MERGE_CONTEXT_WORKER_ID = "workerId";
+    public static final String MERGE_CONTEXT_EDITION_SEQ = "editionSeq";
 
     /* Parameter & Component Paging */
-    public static String PARAM_PAGE = Constants.PARAM_PAGE;
-    public static String PARAM_COUNT = Constants.PARAM_COUNT;
-    public static String PARAM_SORT = Constants.PARAM_SORT;
-    public static String PARAM_START = "start";
-    public static String PARAM_WORKER_ID = "creator";
-    public static String PARAM_EDITION_SEQ = "editionSeq";
-    public static String COMPONENT_PAGING_TYPE_NUMBER = "N";
-    public static String COMPONENT_PAGING_TYPE_MORE = "M";
+    public static final String PARAM_PAGE = Constants.PARAM_PAGE;
+    public static final String PARAM_COUNT = Constants.PARAM_COUNT;
+    public static final String PARAM_SORT = Constants.PARAM_SORT;
+    public static final String PARAM_CATEGORY = "category";
+    public static final String PARAM_START = "start";
+    public static final String PARAM_WORKER_ID = "creator";
+    public static final String PARAM_EDITION_SEQ = "editionSeq";
+    public static final String COMPONENT_PAGING_TYPE_NUMBER = "N";
+    public static final String COMPONENT_PAGING_TYPE_MORE = "M";
 
     /* TMS ERROR PAGE */
-    public static String TMS_ERROR_PAGE = "/error";
+    public static final  String TMS_ERROR_PAGE = "/error";
 
     /* DPS Constants */
-    public static String SAMPLE_PATH = "samples";
+    public static final  String SAMPLE_PATH = "samples";
 
 
     /* TMS Http parameter & Item Wrapping and highlight */
@@ -130,15 +134,15 @@ public class MokaConstants {
     public static final String JSON_SERVICE_DT_FORMAT = "yyyyMMddHHmmss";
 
     // DateFormat은 thread-safe하지 않음, jackson에서는 문제없다고는 함
-    public static SimpleDateFormat jsonDateFormat() {
+    public static final  SimpleDateFormat jsonDateFormat() {
         return new SimpleDateFormat(JSON_DATE_FORMAT);
     }
 
     // thread-safe한 date formatter
-    public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern(JSON_DATE_FORMAT)
+    public static final  DateTimeFormatter dtf = DateTimeFormatter.ofPattern(JSON_DATE_FORMAT)
                                                            .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
 
-    public static String now() {
+    public static final  String now() {
         LocalDateTime now = LocalDateTime.now();
         return now.format(dtf);
     }
@@ -156,11 +160,10 @@ public class MokaConstants {
     public static final String NO = McpString.NO;
 
     /* codes for service & parameter */
-    public static final String MASTER_CODE_LIST = "mstCodes";
-    public static final String SERVICE_CODE_LIST = "svcCodes";
-    public static final String SOURCE_CODE_LIST = "srcCodes";
-    public static final String EXCEPT_SOURCE_CODE_LIST = "exSrcCodes";
-    public static final String PARAM_CATEGORY = "category";
+    public static final String MASTER_CODE_LIST = "masterCode";
+    public static final String SERVICE_CODE_LIST = "serviceCode";
+    public static final String SOURCE_CODE_LIST = "sourceCode";
+    public static final String EXCEPT_SOURCE_CODE_LIST = "exSourceCode";
 
     /* page service name regx */
     public static final String DIRECT_LINK_SERVICE_NAME_PATTERN = "/(http(s)?:\\/\\/)([a-z0-9\\w]+\\.*)+[a-z0-9]{2,4}/gi";

@@ -31,7 +31,6 @@ export const hasRelationList = (groupCd) => {
 
 // 그룹 등록
 export const postGroup = ({ group }) => {
-    console.log("iiiiiiiiiiiiiiiiiiiiiisert::" + decodeURIComponent(qs.stringify(group)));
     return instance.post('/api/groups', qs.stringify(group)).catch((err) => {
         throw err;
     });
@@ -39,8 +38,6 @@ export const postGroup = ({ group }) => {
 
 //  그룹 수정
 export const putGroups = ({ group }) => {
-    console.log("iiiiiiiiiiiiiiiiiiiiiisert::" + decodeURIComponent(qs.stringify(group)));
-
     return instance.put(`/api/groups/${group.groupCd}`, qs.stringify(group)).catch((err) => {
         throw err;
     });
@@ -49,6 +46,13 @@ export const putGroups = ({ group }) => {
 // 그룹 삭제
 export const deleteGroup = ({ groupCd }) => {
     return instance.delete(`/api/groups/${groupCd}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 그룹 메뉴 권한 수정
+export const updateGroupMenuAuth = (groupCd, changeMenuAuthList) => {
+    return instance.put(`/api/groups/${groupCd}/menu-auths`, changeMenuAuthList).catch((err) => {
         throw err;
     });
 };

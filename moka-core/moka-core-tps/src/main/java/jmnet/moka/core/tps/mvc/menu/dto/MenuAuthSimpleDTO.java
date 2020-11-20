@@ -27,7 +27,7 @@ public class MenuAuthSimpleDTO implements Serializable {
      */
     @Builder.Default
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.usedYn}")
-    private String usedYn = "Y";
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 조회권한여부

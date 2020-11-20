@@ -1,6 +1,10 @@
 package jmnet.moka.core.tms.merge;
 
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import jmnet.moka.common.JSONResult;
+import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
@@ -84,12 +88,12 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     }
 
     public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage)
-            throws TemplateMergeException, TemplateParseException {
+            throws TemplateMergeException, TemplateParseException, DataLoadException {
         return this.merge(pageItem, wrapItem, mergePage, true, false, true);    // 컴포넌트 미리보기 리소스 추가, 하이라이트 스크립트 제거, html wrap소스 추가
     }
 
     public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage, boolean resource, boolean highlight, boolean htmlWrap)
-            throws TemplateMergeException, TemplateParseException {
+            throws TemplateMergeException, TemplateParseException, DataLoadException {
         MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
         // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
         mergeContext
@@ -114,7 +118,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
         // 카테고리 설정
         httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, pageItem.getString(ItemConstants.PAGE_CATEGORY));
-
+        this.setCodesAndMenus(pageItem.getString(ItemConstants.PAGE_DOMAIN_ID),pageItem,mergeContext);
         String itemType = pageItem.getItemType();
         String itemId = pageItem.getItemId();
 
@@ -174,4 +178,19 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         return sb;
     }
 
+    private void setCodesAndMenus(String domainId, MergeItem item, MergeContext mergeContext)
+            throws TemplateMergeException, TemplateParseException, DataLoadException {
+        String category = item.getString(ItemConstants.PAGE_CATEGORY);
+        if ( category == null) return;
+        DataLoader loader = this.getDataLoader();
+        Map<String,Object> paramMap = new HashMap<>();
+        paramMap.put(MokaConstants.PARAM_CATEGORY, category);
+        JSONResult jsonResult =  loader.getJSONResult("menu.category",paramMap,true);
+        Map<String, Object> map = jsonResult.getData(); // 서비스 사용 코드들
+        Map codes = (Map)map.get(MokaConstants.MERGE_CONTEXT_CODES);
+        Map menus = (Map)map.get(MokaConstants.MERGE_CONTEXT_MENUS);
+        mergeContext.set(MokaConstants.PARAM_CATEGORY,MokaConstants.MERGE_CONTEXT_CATEGORY);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES,codes);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS,menus);
+    }
 }

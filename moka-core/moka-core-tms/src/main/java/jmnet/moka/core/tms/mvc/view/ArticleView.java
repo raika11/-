@@ -55,9 +55,6 @@ public class ArticleView extends AbstractView {
     @Autowired(required = false)
     private CacheManager cacheManager;
 
-    private final static String CODES = "codes";
-    private final static String MENUS = "menus";
-
     @Override
     protected boolean generatesDownloadContent() {
         return false;
@@ -151,8 +148,8 @@ public class ArticleView extends AbstractView {
         codesParam.put(MokaConstants.SOURCE_CODE_LIST, sourceCode);
         JSONResult jsonResult = loader.getJSONResult("menu.codes",codesParam,true);
         Map<String, Object> map = jsonResult.getData();
-        Map codes = (Map)map.get(CODES);
-        Map menus = (Map)map.get(MENUS);
+        Map codes = (Map)map.get(MokaConstants.MERGE_CONTEXT_CODES);
+        Map menus = (Map)map.get(MokaConstants.MERGE_CONTEXT_MENUS);
         mergeContext.set(MokaConstants.PARAM_CATEGORY,MokaConstants.MERGE_CONTEXT_CATEGORY);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES,codes);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS,menus);

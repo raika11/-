@@ -71,6 +71,7 @@ export function* getUserMenuTree({ payload: { pathName } }) {
             const menuOpens = {};
             const menuPaths = {};
             menuPaths['/404'] = '';
+            menuPaths['/403'] = '';
             getOpenMenuParentMenuId(response.data.body.children, pathName, menuOpens, menuPaths);
             response.data.body.menuPaths = menuPaths;
             response.data.body.menuOpens = menuOpens;

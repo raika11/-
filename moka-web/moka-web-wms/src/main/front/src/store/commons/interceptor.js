@@ -50,14 +50,21 @@ export default {
         const onFail = (error) => {
             if (typeof error.response === 'undefined') {
                 toast.error('네트워크가 불안정 합니다. 다시 시도해 주세요.');
-                return Promise.reject(error);
             } else {
                 const header = error.response.data.header;
                 toast.error(header.message);
-                if (error.response.status === 401) {
-                    store.dispatch(logout());
+                const errorCode = error.response.status;
+                switch (errorCode) {
+                    case 401:
+                        store.dispatch(logout());
+                        break;
+                    default:
+                        window.location = `/${errorCode}`;
+                        break;
                 }
             }
+
+            return Promise.reject(error);
         };
 
         // request 인터셉터

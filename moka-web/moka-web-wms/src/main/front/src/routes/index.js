@@ -4,6 +4,7 @@ import React from 'react';
 import { NoFrameLayout, SidebarCloseLayout, SidebarOpenLayout } from '@layout';
 import Page404 from '@pages/Auth/Page404';
 import ComponentDashboard from '@pages/Dashboard/ComponentDashboard';
+import Page403 from '@pages/Auth/Page403';
 
 // page
 const Dashboard = React.lazy(() => import('@pages/Dashboard'));
@@ -54,6 +55,13 @@ const routes = [
         name: 'Page404',
         displayName: '404',
         component: () => <Page404 defaultLink="/" />,
+        layout: NoFrameLayout,
+    },
+    {
+        path: '/403',
+        name: 'Page403',
+        displayName: '403',
+        component: () => <Page403 defaultLink="/" />,
         layout: NoFrameLayout,
     },
     {

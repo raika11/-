@@ -29,6 +29,7 @@ public class TpTemplateRoot extends MokaTemplateRoot {
         this.setHasPageToken();
         this.setHasPagingElement();
         this.setHasParamToken();
+        this.setHashSectionMenuToken();
     }
 
     @Override

@@ -49,6 +49,8 @@ public class DefaultView extends AbstractView {
     @Autowired(required = false)
     private CacheManager cacheManager;
 
+    private final static String CODES = "codes";
+    private final static String MENUS = "menus";
 
     @Override
     protected boolean generatesDownloadContent() {
@@ -109,7 +111,7 @@ public class DefaultView extends AbstractView {
         // content-type 설정 : PAGE에 설정된 content-type을 따르며, PAGE가 아니거나 없으면 text/html; charset=UTF-8로 설정 
         MergeItem item = (MergeItem) mergeContext.get(MokaConstants.MERGE_CONTEXT_ITEM);
         if (item != null && itemType.equals(MokaConstants.ITEM_PAGE)) {
-            this.setDefaultCodes(domainId, item, mergeContext);
+            this.setCodesAndMenus(domainId, item, mergeContext);
             String pageType = item.getString(ItemConstants.PAGE_TYPE);
             if (McpString.isNotEmpty(pageType)) {
                 response.setContentType(pageType + "; charset=UTF-8");
@@ -169,17 +171,19 @@ public class DefaultView extends AbstractView {
 
     }
 
-    private void setDefaultCodes(String domainId, MergeItem item, MergeContext context)
+    private void setCodesAndMenus(String domainId, MergeItem item, MergeContext mergeContext)
             throws TemplateMergeException, TemplateParseException, DataLoadException {
         String category = item.getString(ItemConstants.PAGE_CATEGORY);
         if ( category == null) return;
         DataLoader loader = this.templateMerger.getTemplateMerger(domainId).getDataLoader();
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put(MokaConstants.PARAM_CATEGORY, category);
-        JSONResult jsonResult =  loader.getJSONResult("category.codes",paramMap,true);
+        JSONResult jsonResult =  loader.getJSONResult("menu.category",paramMap,true);
         Map<String, Object> map = jsonResult.getData(); // 서비스 사용 코드들
-        context.set(MokaConstants.MASTER_CODE_LIST,map.get(MokaConstants.MASTER_CODE_LIST));
-        context.set(MokaConstants.SERVICE_CODE_LIST,map.get(MokaConstants.SERVICE_CODE_LIST));
-        context.set(MokaConstants.SOURCE_CODE_LIST,map.get(MokaConstants.SOURCE_CODE_LIST));
+        Map codes = (Map)map.get(CODES);
+        Map menus = (Map)map.get(MENUS);
+        mergeContext.set(MokaConstants.PARAM_CATEGORY,MokaConstants.MERGE_CONTEXT_CATEGORY);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES,codes);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS,menus);
     }
 }

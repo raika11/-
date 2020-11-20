@@ -31,6 +31,7 @@ public abstract class MokaTemplateRoot extends TemplateRoot {
     protected MergeItem item;
     protected boolean hasBodyToken = true;
     protected boolean hasParamToken = true;
+    protected boolean hasSectionMenuToken = true;
     protected boolean hasPageToken = true;
     protected boolean hasPagingElement = true;
 
@@ -93,12 +94,18 @@ public abstract class MokaTemplateRoot extends TemplateRoot {
         this.hasPageToken = hasToken(MokaConstants.MERGE_CONTEXT_PAGE);
     }
 
+    public void setHashSectionMenuToken() { this.hasSectionMenuToken = hasToken(MokaConstants.MERGE_CONTEXT_SECTION_MENU);}
+
     public boolean hasBodyToken() {
         return this.hasBodyToken;
     }
 
     public boolean hasParamToken() {
         return this.hasParamToken;
+    }
+
+    public boolean hasSectionMenuToken() {
+        return this.hasSectionMenuToken;
     }
 
     public boolean hasPageToken() {
@@ -117,7 +124,7 @@ public abstract class MokaTemplateRoot extends TemplateRoot {
         if (isComponent) {
             return (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
         } else {
-            if (hasParamToken() || hasPagingElement()) {
+            if (hasParamToken() || hasPagingElement() || hasSectionMenuToken()) {
                 return (HttpParamMap) context.get(MokaConstants.MERGE_CONTEXT_PARAM);
             } else {
                 return KeyResolver.EMPTY_MAP;

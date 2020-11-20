@@ -18,10 +18,12 @@ import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
+import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
+import jmnet.moka.core.tms.mvc.HttpParamMap;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,8 @@ public class ArticleView extends AbstractView {
     @Autowired(required = false)
     private CacheManager cacheManager;
 
+    private final static String CODES = "codes";
+    private final static String MENUS = "menus";
 
     @Override
     protected boolean generatesDownloadContent() {
@@ -95,7 +99,7 @@ public class ArticleView extends AbstractView {
             JSONResult jsonResult = loader.getJSONResult("article",paramMap,true);
             Map<String,Object> articleInfo = rebuildInfo(jsonResult);
             mergeContext.set("article",articleInfo);
-            this.setCategory(loader, articleInfo, mergeContext);
+            this.setCodesAndMenus(loader, articleInfo, mergeContext);
             response.setContentType("text/html; charset=UTF-8");
 
             PrintWriter writer = null;
@@ -136,30 +140,28 @@ public class ArticleView extends AbstractView {
         return article;
     }
 
-    private void setCategory(DataLoader loader, Map<String,Object> articleInfo,MergeContext mergeContext)
+    private void setCodesAndMenus(DataLoader loader, Map<String,Object> articleInfo, MergeContext mergeContext)
             throws DataLoadException {
         String masterCode = functions.joinColumn((List<Map<String, Object>>)articleInfo.get("mastercode"),"MASTER_CODE");
         String serviceCode = functions.joinColumn((List<Map<String, Object>>)articleInfo.get("servicemap"),"SERVICE_CODE");
         String sourceCode = (String)((Map<String,Object>)articleInfo.get("basic")).get("SOURCE_CODE");
-        Map<String,Object> menuParam = new HashMap<>();
-        menuParam.put(MokaConstants.MASTER_CODE_LIST, masterCode);
-        menuParam.put(MokaConstants.SERVICE_CODE_LIST, serviceCode);
-        menuParam.put(MokaConstants.SOURCE_CODE_LIST, sourceCode);
-        JSONResult jsonResult = loader.getJSONResult("category",menuParam,true);
-        Map<String, Object> map = jsonResult.getDataListFirst();
-        String category = (String)map.get("key");
-        Map paramMap = (Map)mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
-        if ( paramMap == null) {
-            paramMap = new HashMap();
-        }
-        paramMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY,category);
+        Map<String,Object> codesParam = new HashMap<>();
+        codesParam.put(MokaConstants.MASTER_CODE_LIST, masterCode);
+        codesParam.put(MokaConstants.SERVICE_CODE_LIST, serviceCode);
+        codesParam.put(MokaConstants.SOURCE_CODE_LIST, sourceCode);
+        JSONResult jsonResult = loader.getJSONResult("menu.codes",codesParam,true);
+        Map<String, Object> map = jsonResult.getData();
+        Map codes = (Map)map.get(CODES);
+        Map menus = (Map)map.get(MENUS);
+        mergeContext.set(MokaConstants.PARAM_CATEGORY,MokaConstants.MERGE_CONTEXT_CATEGORY);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES,codes);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS,menus);
 
-        // 메뉴..
-        Map<String,Object> tempMap = new HashMap<>();
-        tempMap.put("type","header");
-        tempMap.put("category",category);
-        jsonResult = loader.getJSONResult("menu",tempMap,true);
-        mergeContext.set("menu",jsonResult.get(ApiResult.MAIN_DATA));
+        // cache로 설정할 category를 추가한다.
+        if ( codes != null) {
+            HttpParamMap httpParamMap = (HttpParamMap) mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
+            httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, (String) codes.get(MokaConstants.MERGE_CONTEXT_CATEGORY));
+        }
     }
 
     private String getArticlePage(Map<String,Object> articleInfo) {

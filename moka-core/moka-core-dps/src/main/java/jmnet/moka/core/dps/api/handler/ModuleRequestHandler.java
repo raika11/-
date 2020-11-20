@@ -38,7 +38,7 @@ public class ModuleRequestHandler implements RequestHandler {
         long startTime = System.currentTimeMillis();
         ModuleRequest moduleRequest = (ModuleRequest) apiContext.getCurrentRequest();
         try {
-            ModuleInterface module = getModule(moduleRequest);
+            ModuleInterface module = getModule(moduleRequest.getClassName());
             Object result = callMethod(module, moduleRequest, apiContext);
             long endTime = System.currentTimeMillis();
             return ApiResult.createApiResult(startTime, endTime, result, true, null);
@@ -55,10 +55,10 @@ public class ModuleRequestHandler implements RequestHandler {
             throws Exception {
         String methodName = moduleRequest.getMethodName();
         if (McpString.isEmpty(methodName) || methodName.equals(INVOKE_METHOD)) {
-            return module.invoke(apiContext, apiRequestHandler, apiRequestHelper);
+            return module.invoke(apiContext);
         } else {
-            Method method = module.getClass().getMethod(methodName,ApiContext.class,ApiRequestHandler.class,ApiRequestHelper.class);
-            return method.invoke(module, apiContext,apiRequestHandler,apiRequestHelper);
+            Method method = module.getClass().getMethod(methodName,ApiContext.class);
+            return method.invoke(module, apiContext);
         }
     }
 
@@ -67,9 +67,7 @@ public class ModuleRequestHandler implements RequestHandler {
         // TODO Auto-generated method stub
     }
 
-
-    private ModuleInterface getModule(ModuleRequest moduleRequest) throws ClassNotFoundException {
-        String className = moduleRequest.getClassName();
+    public ModuleInterface getModule(String className) throws ClassNotFoundException {
         if (this.moduleMap.containsKey(className)) {
             return this.moduleMap.get(className);
         }
@@ -79,11 +77,11 @@ public class ModuleRequestHandler implements RequestHandler {
             if (this.moduleMap.containsKey(className)) {
                 return this.moduleMap.get(className);
             }
-            Class<?> moduleClass = Class.forName(moduleRequest.getClassName());
+            Class<?> moduleClass = Class.forName(className);
             appContext.registerBean(moduleClass.getName(), moduleClass, (beanDefinition) -> {
                 beanDefinition.setScope(ConfigurableBeanFactory.SCOPE_SINGLETON);
             });
-            module = (ModuleInterface) appContext.getBean(moduleClass);
+            module = (ModuleInterface) appContext.getBean(moduleClass, this, apiRequestHandler, apiRequestHelper);
             this.moduleMap.put(className, module);
         }
         return module;

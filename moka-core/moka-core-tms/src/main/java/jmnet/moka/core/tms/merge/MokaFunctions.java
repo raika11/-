@@ -114,10 +114,12 @@ public class MokaFunctions extends Functions {
 
 	/**
 	 * 2020-09-01 12:00:00을 2020-09-01T12:00:00+09:00 형식을 만든다.
-	 * @param dateString
+	 * @param obj
 	 * @return
 	 */
-	public String isoTime(String dateString) {
+	public String isoTime(Object obj) {
+		if ( obj == null) return "";
+		String dateString = (String)obj;
 		if ( dateString.contains(" ")) {
 			return dateString.replace(' ','T')+"+09:00";
 		}
@@ -139,5 +141,14 @@ public class MokaFunctions extends Functions {
 
 	public String t2p(String imagePath) {
 		return imagePath.replace(".tn_120.jpg","");
+	}
+
+	public String sourceName(Object obj) {
+		if ( obj == null) return "";
+		String sourceName = (String)obj;
+		if ( sourceName.equals("중앙일보(집배신)") || sourceName.equals("중앙일보(조판)")) {
+			return "중앙일보";
+		}
+		return sourceName;
 	}
 }

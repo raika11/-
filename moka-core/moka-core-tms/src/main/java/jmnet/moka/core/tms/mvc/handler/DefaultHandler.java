@@ -211,6 +211,8 @@ public class DefaultHandler extends AbstractHandler {
 
         // REST 방식 URI에 대한 처리: 마지막 경로를 파라미터로 넣어준다.
         if (item instanceof PageItem) {
+            // cache로 설정할 category를 추가한다.
+            httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY,item.getString(ItemConstants.PAGE_CATEGORY));
             String paramName = item.getString(ItemConstants.PAGE_URL_PARAM);
             if (McpString.isNotEmpty(paramName)) {
                 String mergePath = (String) mergeContext.get(MokaConstants.MERGE_PATH);

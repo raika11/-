@@ -7,11 +7,21 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
+import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
 
 public class ComponentWorkModule implements ModuleInterface {
+
+    private ApiRequestHandler apiRequestHandler;
+    private ApiRequestHelper apiRequestHelper;
+    private ModuleRequestHandler moduleRequestHandler;
+    public ComponentWorkModule(ModuleRequestHandler moduleRequestHandler, ApiRequestHandler apiRequestHandler, ApiRequestHelper apiRequestHelper) {
+        this.apiRequestHandler = apiRequestHandler;
+        this.apiRequestHelper = apiRequestHelper;
+        this.moduleRequestHandler = moduleRequestHandler;
+    }
+
     @Override
-    public Object invoke(ApiContext apiContext, ApiRequestHandler apiRequestHandler,
-            ApiRequestHelper apiRequestHelper)
+    public Object invoke(ApiContext apiContext)
             throws Exception {
         String apiPath = apiContext.getApiPath();
         ApiResult componentResult =

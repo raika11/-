@@ -5,7 +5,6 @@ import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
 
 public interface ModuleInterface {
-    public Object invoke(ApiContext apiContext, ApiRequestHandler apiRequestHandler,
-            ApiRequestHelper apiRequestHelper)
+    public Object invoke(ApiContext apiContext)
             throws Exception;
 }

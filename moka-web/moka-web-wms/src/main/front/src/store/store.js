@@ -15,7 +15,8 @@ const sagaMiddleware = createSagaMiddleware();
 
 let middleware;
 if (process.env.NODE_ENV !== 'production') {
-    middleware = composeWithDevTools(applyMiddleware(sagaMiddleware, createLogger()));
+    // middleware = composeWithDevTools(applyMiddleware(sagaMiddleware, createLogger()));
+    middleware = composeWithDevTools(applyMiddleware(sagaMiddleware));
 } else {
     middleware = applyMiddleware(sagaMiddleware);
 }

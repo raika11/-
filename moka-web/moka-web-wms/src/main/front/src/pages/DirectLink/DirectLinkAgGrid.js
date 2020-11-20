@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import columnDefs from './DirectLinkAgGridColumns';
 import { MokaTable } from '@components';
-import { GET_DIRECT_LINK_LIST, getDirectLinkList, changeSearchOption } from '@store/directLink';
+import { GET_DIRECT_LINK_LIST, getDirectLinkList, changeSearchOption, changeDirectLinkEditMode } from '@store/directLink';
 
 /**
  * 사이트 바로 가기 AgGrid 컴포넌트
@@ -49,6 +49,11 @@ const DirectLinkAgGrid = () => {
         [history],
     );
 
+    const handleEditNewMode = () => {
+        dispatch(changeDirectLinkEditMode({ editmode: false }));
+        history.push({ pathname: '/direct-link' });
+    };
+
     /**
      * 목록 리스트
      */
@@ -79,7 +84,7 @@ const DirectLinkAgGrid = () => {
             {/* 버튼 그룹 */}
             <div className="d-flex justify-content-end mb-10">
                 <div className="pt-0">
-                    <Button variant="positive" onClick={() => history.push('/direct-link')}>
+                    <Button variant="positive" onClick={() => handleEditNewMode()}>
                         사이트 바로 가기 추가
                     </Button>
                 </div>

@@ -42,3 +42,9 @@ export const saveDirectLink = createAction(SAVE_DIRECT_LINK, ({ type, actions, c
  */
 export const [DELETE_DIRECT_LINK, DELETE_DIRECT_LINK_SUCCESS, DELETE_DIRECT_LINK_FAILURE] = createRequestActionTypes('directLink/DELETE_DIRECT_LINK');
 export const deleteDirectLink = createAction(DELETE_DIRECT_LINK, ({ linkSeq, callback }) => ({ linkSeq, callback }));
+
+/**
+ * 등록 버튼 처리
+ */
+export const [CHANGE_DIRECT_LINK_EDIT_MODE, CHANGE_DIRECT_LINK_EDIT_MODE_SUCCESS] = createRequestActionTypes('directLink/CHANGE_DIRECT_LINK_EDIT_MODE');
+export const changeDirectLinkEditMode = createAction(CHANGE_DIRECT_LINK_EDIT_MODE, ({ editmode }) => ({ editmode }));

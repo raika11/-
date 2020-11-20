@@ -10,20 +10,24 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaCard, MokaInputLabel } from '@components';
 import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList, deleteDirectLink } from '@store/directLink';
+import { useLocation } from 'react-router-dom';
 
 /**
  * 사이트 바로 가기 등록/수정창
  */
 const DirectLinkEdit = ({ history }) => {
+    const location = useLocation();
     const dispatch = useDispatch();
     const { linkSeq } = useParams();
     const imgFileRef = useRef(null);
-    const [dateFixYn, setDateFixYn] = useState('N'); // 계속노출 서정.
+    const [dateFixYn, setDateFixYn] = useState('Y'); // 계속노출 서정.
     const [dateDisabled, setDateDisabled] = useState(true); // 계속 노출시 datePiker disable
+    const [inputBoxDisabled, setInputBoxDisabled] = useState(false);
 
-    const { directLink, invalidList, loading } = useSelector((store) => ({
+    const { directLink, invalidList, loading, editmode } = useSelector((store) => ({
         directLink: store.directLink.directLink,
         invalidList: store.directLink.invalidList,
+        editmode: store.directLink.editmode,
         loading: store.loading[GET_DIRECT_LINK] || store.loading[SAVE_DIRECT_LINK],
     }));
 
@@ -111,6 +115,15 @@ const DirectLinkEdit = ({ history }) => {
                 reason: '링크를 입력해 주세요.',
             });
             isInvalid = isInvalid || true;
+        } else {
+            // URL 체크
+            if (!validateLinkCheck()) {
+                errList.push({
+                    field: 'linkUrl',
+                    reason: '정확한 URL을 입력해 주세요.',
+                });
+                isInvalid = isInvalid || true;
+            }
         }
 
         // 키워드
@@ -122,6 +135,15 @@ const DirectLinkEdit = ({ history }) => {
             isInvalid = isInvalid || true;
         }
 
+        // 이미지 체크
+        // if (linkSeq && directLink.directLinkThumbnailFile === null && directLink.imgUrl === '') {
+        //     errList.push({
+        //         field: 'directLinkThumbnailFile',
+        //         reason: '이미지를 선택해 주세요.',
+        //     });
+        //     isInvalid = isInvalid || true;
+        // }
+
         dispatch(changeInvalidList(errList));
         return !isInvalid;
     };
@@ -129,20 +151,17 @@ const DirectLinkEdit = ({ history }) => {
     /**
      * 링크 유효성 검사
      */
-    const validateLink = () => {
+    const validateLinkCheck = () => {
         if (temp.linkUrl === undefined || temp.linkUrl.length === 0) {
-            setError({ ...error, linkUrl: false });
-            return;
+            return false;
         }
-        //var res = temp.linkUrl.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
-        var expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
-        var regex = new RegExp(expression);
+        let regex = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+        return regex.test(temp.linkUrl);
+    };
 
-        if (temp.linkUrl.match(regex)) {
-            setError({ ...error, linkUrl: false });
-        } else {
-            setError({ ...error, linkUrl: true });
-        }
+    // URL 체크.
+    const validateLink = () => {
+        setError({ ...error, linkUrl: validateLinkCheck() });
     };
 
     /**
@@ -155,15 +174,17 @@ const DirectLinkEdit = ({ history }) => {
             directLinkThumbnailFile: fileValue, // multipart 받는 dto의 필드명으로 변경하세요
         };
 
+        // console.log(saveData);
+
         let sdt = moment(temp.periodStartDt).format('YYYY-MM-DD');
         let edt = moment(temp.periodEndDt).format('YYYY-MM-DD');
 
-        // if (sdt !== 'Invalid date') {
-        // saveData.viewSdate = sdt;
-        // }
-        // if (edt !== 'Invalid date') {
-        // saveData.viewEdate = edt;
-        // }
+        if (sdt !== 'Invalid date') {
+            saveData.viewSdate = sdt;
+        }
+        if (edt !== 'Invalid date') {
+            saveData.viewEdate = edt;
+        }
 
         // 계속 노출시 날짜 초기화
         if (dateFixYn === 'Y') {
@@ -172,6 +193,10 @@ const DirectLinkEdit = ({ history }) => {
         } else {
             saveData.viewSdate = sdt;
             saveData.viewEdate = edt;
+        }
+
+        if (linkSeq && saveData.directLinkThumbnailFile === null && directLink.imgUrl) {
+            // console.log(saveData);
         }
 
         if (validate(saveData)) {
@@ -305,13 +330,32 @@ const DirectLinkEdit = ({ history }) => {
         }
     }, [dateFixYn, temp]);
 
+    useEffect(() => {
+        if (inputBoxDisabled) {
+            setDateDisabled(true);
+        }
+    }, [inputBoxDisabled]);
+
+    useEffect(() => {
+        // setInputBoxDisabled(editmode);
+        console.log(editmode);
+    }, [editmode]);
+
     return (
         <MokaCard width={535} title={`사이트 바로 가기 ${linkSeq ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
             <Form className="mb-gutter">
                 {/* 제목 */}
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">
-                        <MokaInputLabel label="제목" className="mb-0" name="linkTitle" value={temp.linkTitle} onChange={handleChangeValue} isInvalid={error.linkTitle} />
+                        <MokaInputLabel
+                            label="제목"
+                            className="mb-0"
+                            name="linkTitle"
+                            value={temp.linkTitle}
+                            onChange={handleChangeValue}
+                            isInvalid={error.linkTitle}
+                            disabled={inputBoxDisabled}
+                        />
                     </Col>
                 </Form.Row>
 
@@ -327,6 +371,7 @@ const DirectLinkEdit = ({ history }) => {
                             value={temp.linkContent}
                             onChange={handleChangeValue}
                             isInvalid={error.linkContent}
+                            disabled={inputBoxDisabled}
                         />
                     </Col>
                 </Form.Row>
@@ -334,7 +379,15 @@ const DirectLinkEdit = ({ history }) => {
                 {/* 링크 */}
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">
-                        <MokaInputLabel label="LINK" className="mb-0" name="linkUrl" value={temp.linkUrl} onChange={handleChangeValue} isInvalid={error.linkUrl} />
+                        <MokaInputLabel
+                            label="LINK"
+                            className="mb-0"
+                            name="linkUrl"
+                            value={temp.linkUrl}
+                            onChange={handleChangeValue}
+                            isInvalid={error.linkUrl}
+                            disabled={inputBoxDisabled}
+                        />
                     </Col>
                     <Col xs={3} className="pl-2">
                         <Button variant="outline-neutral" onClick={validateLink}>
@@ -346,11 +399,19 @@ const DirectLinkEdit = ({ history }) => {
                 {/* 키워드 */}
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">
-                        <MokaInputLabel label="키워드" className="mb-0" name="linkKwd" value={temp.linkKwd} onChange={handleChangeValue} isInvalid={error.linkKwd} />
+                        <MokaInputLabel
+                            label="키워드"
+                            className="mb-0"
+                            name="linkKwd"
+                            value={temp.linkKwd}
+                            onChange={handleChangeValue}
+                            isInvalid={error.linkKwd}
+                            disabled={inputBoxDisabled}
+                        />
                     </Col>
                 </Form.Row>
 
-                {/* 시작일/종료일 */}
+                {/* 계속 노출 */}
                 <Form.Row className="mb-2">
                     <Col xs={2} className="p-0">
                         <MokaInputLabel
@@ -361,9 +422,14 @@ const DirectLinkEdit = ({ history }) => {
                             label="계속노출"
                             inputProps={{ checked: dateFixYn === 'Y' }}
                             onChange={handleChangeValue}
+                            disabled={inputBoxDisabled}
                         />
                     </Col>
-                    <Col xs={5} className="p-0">
+                </Form.Row>
+
+                {/* 시작일/종료일 */}
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="p-0">
                         <MokaInputLabel
                             label="시작일"
                             as="dateTimePicker"
@@ -375,7 +441,7 @@ const DirectLinkEdit = ({ history }) => {
                             disabled={dateDisabled}
                         />
                     </Col>
-                    <Col xs={5} className="p-0">
+                    <Col xs={6} className="p-0">
                         <MokaInputLabel
                             label="종료일"
                             as="dateTimePicker"
@@ -406,7 +472,9 @@ const DirectLinkEdit = ({ history }) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     imgFileRef.current.deleteFile();
+                                    setTemp({ ...temp, imgUrl: null });
                                 }}
+                                disabled={inputBoxDisabled}
                             >
                                 삭제
                             </Button>
@@ -417,10 +485,11 @@ const DirectLinkEdit = ({ history }) => {
                         // width: 50,
                         height: 60,
                         img: temp.imgUrl,
-                        selectAccept: ['image/jpeg', 'image/aaa', 'image/bbb'], // 이미지중 업로드 가능한 타입 설정.
+                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                         setFileValue,
                     }}
                     labelClassName="justify-content-end mr-3"
+                    disabled={inputBoxDisabled}
                 />
 
                 {/* 사용여부 */}
@@ -437,7 +506,7 @@ const DirectLinkEdit = ({ history }) => {
                 {/* 노출고정 */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <MokaInputLabel label="노출고정" as="select" className="mb-0" name="fixYn" value={temp.fixYn} onChange={handleChangeValue}>
+                        <MokaInputLabel label="노출고정" as="select" className="mb-0" name="fixYn" value={temp.fixYn} onChange={handleChangeValue} disabled={inputBoxDisabled}>
                             <option value="Y">항상노출</option>
                             <option value="N">검색시만 노출</option>
                         </MokaInputLabel>
@@ -447,7 +516,15 @@ const DirectLinkEdit = ({ history }) => {
                 {/* 링크타입 */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <MokaInputLabel label="LINK 타입" as="select" className="mb-0" name="linkType" value={temp.linkType} onChange={handleChangeValue}>
+                        <MokaInputLabel
+                            label="LINK 타입"
+                            as="select"
+                            className="mb-0"
+                            name="linkType"
+                            value={temp.linkType}
+                            onChange={handleChangeValue}
+                            disabled={inputBoxDisabled}
+                        >
                             <option value="N">새창</option>
                             <option value="S">본창</option>
                         </MokaInputLabel>
@@ -456,7 +533,7 @@ const DirectLinkEdit = ({ history }) => {
             </Form>
 
             <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
-                <Button variant="positive" onClick={handleClickSave}>
+                <Button variant="positive" onClick={handleClickSave} disabled={inputBoxDisabled}>
                     저장
                 </Button>
             </div>

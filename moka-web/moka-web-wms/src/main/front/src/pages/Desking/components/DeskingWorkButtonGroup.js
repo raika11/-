@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast from '@utils/toastUtil';
-import { postPreComponentWork } from '@store/desking';
+import { getComponentWork, postPreComponentWork } from '@store/desking';
 
 const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
 const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
@@ -15,28 +15,37 @@ const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
 const DeskingWorkButtonGroup = (props) => {
     const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
     const dispatch = useDispatch();
-    const [selectedRows, setSelectedRows] = useState([]);
 
     // modal state
     const [htmlEditModal, setHtmlEditModal] = useState(false);
+    const [htmlEditModalData, sethtmlEditModalData] = useState({});
     const [registerModal, setRegisterModal] = useState(false);
 
     const title = `ID: CP${component.componentSeq} ${component.componentName}`;
 
-    // HTML편집 버튼 클릭
-    // const handleHtmlEditClicked = () => {
-    //     const pageSeq = Number(match.params.pageSeq);
-    //     const option = {
-    //         pageSeq,
-    //         componentWorkSeq: component.seq,
-    //         resourceYn: 'N'
-    //     };
-    //     dispatch();
+    /**
+     * HTML편집 버튼 클릭
+     */
+    const handleHtmlEditClicked = () => {
+        const option = {
+            componentWorkSeq: component.seq,
+            callback: ({ header, body }) => {
+                if (header.success) {
+                    if (body) {
+                        sethtmlEditModalData(body);
+                        setHtmlEditModal(true);
+                    }
+                } else {
+                    toast.warn(header.message);
+                }
+            },
+        };
+        dispatch(getComponentWork(option));
+    };
 
-    //     setHtmlEditModal(true);
-    // };
-
-    // 기사이동 버튼 클릭
+    /**
+     * 기사이동 버튼 클릭
+     */
     const handleRegisterClicked = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -44,11 +53,9 @@ const DeskingWorkButtonGroup = (props) => {
         if (!componentAgGridInstances[agGridIndex]) return;
         const api = componentAgGridInstances[agGridIndex].api;
 
-        // const { api } = agGrids.prototype.grids[agGridIndex];
         if (api.getSelectedRows().length < 1) {
             toast.warn('기사를 선택해주세요');
         } else {
-            setSelectedRows(api.getSelectedRows());
             setRegisterModal(true);
         }
     };
@@ -70,7 +77,7 @@ const DeskingWorkButtonGroup = (props) => {
 
     const iconButton = [
         { title: '관련기사 정보', iconName: 'fal-minus-circle' },
-        { title: 'HTML 수동편집', iconName: 'fal-minus-circle', onClick: () => setHtmlEditModal(true) },
+        { title: 'HTML 수동편집', iconName: 'fal-minus-circle', onClick: handleHtmlEditClicked },
         { title: '템플릿', iconName: 'fal-minus-circle' },
         { title: '히스토리', iconName: 'fal-minus-circle' },
         { title: '기사 이동', iconName: 'fal-minus-circle', onClick: handleRegisterClicked },
@@ -99,7 +106,7 @@ const DeskingWorkButtonGroup = (props) => {
 
             {/* HTML 수동 편집 */}
             <Suspense>
-                <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} />
+                <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} data={htmlEditModalData} />
             </Suspense>
 
             {/* 기사 이동 */}

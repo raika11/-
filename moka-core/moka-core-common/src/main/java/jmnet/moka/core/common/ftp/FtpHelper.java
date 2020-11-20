@@ -1,13 +1,28 @@
 package jmnet.moka.core.common.ftp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
+import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
+import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.exception.ResourceNotFoundException;
 import jmnet.moka.core.common.util.ResourceMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPReply;
+import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +32,7 @@ import org.springframework.core.io.Resource;
 
 /**
  * <pre>
- *
+ * Ftp 접속 Helper
  * Project : moka
  * Package : jmnet.moka.core.common.ftp
  * ClassName : FtpHelper
@@ -30,13 +45,25 @@ import org.springframework.core.io.Resource;
 @Slf4j
 public class FtpHelper {
 
-    private Map<String, FtpInfo> ftpInfoMap;
+    //private Map<String, FtpInfo> ftpInfoMap;
+    private SortedMap<String, GenericObjectPool<FTPClient>> ftpClientPoolMap;
 
     @Autowired
     public StringEncryptor mokaEncryptor;
 
     @Value("${ftp-info.resource.path:ftp-info.json}")
     public String resourcePath;
+
+    public final static String MEDIA = "MEDIA";
+    public final static String HOME = "HOME";
+    public final static String ISPLUS = "ISPLUS";
+    public final static String JOONGANG = "JOONGANG";
+    public final static String IMAGE = "IMAGE";
+    public final static String WIMAGE = "WIMAGE";
+    public final static String STATIC = "STATIC";
+    public final static String BLOG = "BLOG";
+    public final static String CDNM4V = "CDNM4V";
+    public final static String PMSDROOM = "PMSDROOM";
 
 
     /**
@@ -52,22 +79,12 @@ public class FtpHelper {
                 TypeReference<Map<String, FtpInfo>> typeRef = new TypeReference<>() {
                 };
 
-                ftpInfoMap = ResourceMapper
+                Map<String, FtpInfo> ftpInfoMap = ResourceMapper
                         .getDefaultObjectMapper()
                         .readValue(file, typeRef);
+                ftpClientPoolMap = new TreeMap<>();
                 if (this.mokaEncryptor != null) {
-                    ftpInfoMap
-                            .keySet()
-                            .forEach(key -> {
-                                FtpInfo fi = ftpInfoMap.get(key);
-                                try {
-                                    if (McpString.isNotEmpty(fi.getUser())) {
-                                        fi.setUser(mokaEncryptor.decrypt(fi.getUser()));
-                                    }
-                                } catch (EncryptionOperationNotPossibleException ex) {
-                                    log.error("FtpHelper error => exception : {}", ex.toString());
-                                }
-                            });
+                    ftpInfoMap.forEach(this::accept);
                 }
             }
 
@@ -77,13 +94,343 @@ public class FtpHelper {
         }
     }
 
+
     /**
-     * ftp 접속 정보
+     * ftp sender 생성
      *
      * @param alias ftp 서버 별칭
-     * @return FTPInfo
+     * @return GenericObjectPool
      */
-    public FtpInfo getFtpInfo(String alias) {
-        return ftpInfoMap.get(alias);
+    public GenericObjectPool<FTPClient> getFtpSender(String alias) {
+        return ftpClientPoolMap.get(alias);
     }
+
+
+    private void accept(String key, FtpInfo fi) {
+
+        try {
+            if (McpString.isNotEmpty(fi.getUser())) {
+                fi.setUser(mokaEncryptor.decrypt(fi.getUser()));
+            }
+            if (McpString.isNotEmpty(fi.getPasswd())) {
+                fi.setPasswd(mokaEncryptor.decrypt(fi.getPasswd()));
+            }
+            if (McpString.isNotEmpty(fi.getHost())) {
+                fi.setHost(mokaEncryptor.decrypt(fi.getHost()));
+            }
+            if (McpString.isNotEmpty(fi.getPort())) {
+                fi.setPort(mokaEncryptor.decrypt(fi.getPort()));
+            }
+        } catch (EncryptionOperationNotPossibleException ex) {
+            log.error("FtpHelper error => exception : {}", ex.toString());
+        }
+        ftpClientPoolMap.put(key, new GenericObjectPool<>(new FtpClientFactory(fi)));
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param localFile 로컬 파일
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(File localFile) {
+        return uploadFile(getFirstFtpInfoKey(), localFile, null, true);
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param localFile  로컬 파일
+     * @param remotePath ftp 저장 경로
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(File localFile, String remotePath) {
+        return uploadFile(getFirstFtpInfoKey(), localFile, remotePath, true);
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param fileName 로컬 파일 명
+     * @param inStream 파일 stream
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String fileName, FileInputStream inStream) {
+        return uploadFile(getFirstFtpInfoKey(), fileName, inStream, null, true);
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param fileName            로컬 파일 명
+     * @param bufferedInputStream 파일 stream
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String fileName, BufferedInputStream bufferedInputStream) {
+        return uploadFile(getFirstFtpInfoKey(), fileName, bufferedInputStream, null, true);
+    }
+
+    private String getFirstFtpInfoKey() {
+        return ftpClientPoolMap
+                .keySet()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+    }
+
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param key       FTP 프로퍼티 Key
+     * @param localFile 로컬 파일
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String key, File localFile) {
+        return uploadFile(key, localFile, null, true);
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param key      FTP 프로퍼티 Key
+     * @param fileName 로컬 파일 명
+     * @param inStream 파일 stream
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String key, String fileName, FileInputStream inStream) {
+        return uploadFile(key, fileName, inStream, null, true);
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param key                 FTP 프로퍼티 Key
+     * @param fileName            로컬 파일 명
+     * @param bufferedInputStream 파일 stream
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String key, String fileName, BufferedInputStream bufferedInputStream) {
+        return uploadFile(key, fileName, bufferedInputStream, null, true);
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param key        FTP 프로퍼티 Key
+     * @param localFile  로컬 파일
+     * @param remotePath ftp 저장 경로
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String key, File localFile, String remotePath) {
+        return uploadFile(key, localFile, remotePath, true);
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param key        FTP 프로퍼티 Key
+     * @param fileName   로컬 파일 명
+     * @param inStream   파일 stream
+     * @param remotePath ftp 저장 경로
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String key, String fileName, FileInputStream inStream, String remotePath) {
+        return uploadFile(key, fileName, inStream, remotePath, true);
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param key                 FTP 프로퍼티 Key
+     * @param fileName            로컬 파일 명
+     * @param bufferedInputStream 파일 stream
+     * @param remotePath          ftp 저장 경로
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String key, String fileName, BufferedInputStream bufferedInputStream, String remotePath) {
+        return uploadFile(key, fileName, bufferedInputStream, remotePath, true);
+    }
+
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param key        FTP 프로퍼티 Key
+     * @param localFile  로컬 파일 명
+     * @param remotePath ftp 저장 경로
+     * @param isTempSave 임시 디렉토리에 미리 저장 한 후 파일 이동 처리 여부
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String key, File localFile, String remotePath, boolean isTempSave) {
+        boolean success = false;
+        try {
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(localFile));
+            success = uploadFile(key, localFile.getName(), bufferedInputStream, remotePath, isTempSave);
+        } catch (FileNotFoundException e) {
+            log.error("file not found!{}", localFile);
+        }
+
+        return success;
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param key        FTP 프로퍼티 Key
+     * @param inStream   파일 stream
+     * @param remotePath ftp 저장 경로
+     * @param isTempSave 임시 디렉토리에 미리 저장 한 후 파일 이동 처리 여부
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String key, String fileName, FileInputStream inStream, String remotePath, boolean isTempSave) {
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(inStream);
+        return uploadFile(key, fileName, bufferedInputStream, remotePath, isTempSave);
+    }
+
+    /**
+     * 로컬 파일을 FTP 업로드 한다.
+     *
+     * @param key                 FTP 프로퍼티 Key
+     * @param bufferedInputStream 파일 stream
+     * @param remotePath          ftp 저장 경로
+     * @param isTempSave          임시 디렉토리에 미리 저장 한 후 파일 이동 처리 여부
+     * @return 업로드 결과
+     */
+    public boolean uploadFile(String key, String fileName, BufferedInputStream bufferedInputStream, String remotePath, boolean isTempSave) {
+        GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
+        Optional
+                .ofNullable(ftpClientPool)
+                .orElseThrow(() -> new ResourceNotFoundException(resourcePath, "ftp setting information", key));
+        FtpInfo fi = ((FtpClientFactory) ftpClientPool.getFactory()).getFtpInfo();
+        FTPClient ftpClient = null;
+
+        boolean success = false;
+        try {
+            ftpClient = ftpClientPool.borrowObject();
+
+            int replyCode = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(replyCode)) {
+                log.warn("ftpServer refused connection, replyCode:{}", replyCode);
+                return false;
+            }
+            StringBuilder realSavePath = new StringBuilder(fi.getRemotePath());
+            if (McpString.isNotEmpty(remotePath)) {
+                realSavePath
+                        .append(realSavePath
+                                .toString()
+                                .endsWith(File.separator) ? "" : File.separator)
+                        .append(remotePath);
+            }
+
+            String savePath = isTempSave ? fi.getTempPath() : realSavePath.toString();
+            ftpClient.makeDirectory(savePath);
+            ftpClient.changeWorkingDirectory(savePath);
+
+            for (int j = 0; j < fi.getRetry() && !success; j++) {
+                success = ftpClient.storeFile(fileName, bufferedInputStream);
+                if (success) {
+                    log.info("upload file success! {}", fileName);
+                } else {
+                    log.warn("upload file failure! try uploading again... {} times", j);
+                }
+            }
+            if (success && isTempSave) {
+                // 파일 경로를 변경한다.
+                ftpClient.makeDirectory(realSavePath.toString());
+                success = ftpClient.rename(McpFile.makeFilepathName(fi.getTempPath(), fileName),
+                        McpFile.makeFilepathName(realSavePath.toString(), fileName));
+            }
+
+        } catch (FileNotFoundException e) {
+            log.error("file not found!{}", fileName);
+        } catch (Exception e) {
+            log.error("upload file failure!", e);
+        } finally {
+            IOUtils.closeQuietly(bufferedInputStream);
+            ftpClientPool.returnObject(ftpClient);
+        }
+
+        return success;
+    }
+
+    /**
+     * 파일 다운로드
+     *
+     * @param key        FTP 프로퍼티 Key
+     * @param remotePath ftp 파일 경로
+     * @param fileName   파일 명
+     * @param localPath  로컬 저장 경로
+     * @return 성공 여부
+     */
+    public boolean downloadFile(String key, String remotePath, String fileName, String localPath) {
+        FTPClient ftpClient = null;
+        GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
+        Optional
+                .ofNullable(ftpClientPool)
+                .orElseThrow(() -> new ResourceNotFoundException(resourcePath, "ftp setting information", key));
+        OutputStream outputStream = null;
+        try {
+            ftpClient = ftpClientPool.borrowObject();
+            int replyCode = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(replyCode)) {
+                log.warn("ftpServer refused connection, replyCode:{}", replyCode);
+                return false;
+            }
+
+            ftpClient.changeWorkingDirectory(remotePath);
+            FTPFile[] ftpFiles = ftpClient.listFiles();
+            for (FTPFile file : ftpFiles) {
+                if (fileName.equalsIgnoreCase(file.getName())) {
+                    String stringBuilder = localPath + File.separator + file.getName();
+                    File localFile = new File(stringBuilder);
+                    outputStream = new FileOutputStream(localFile);
+                    ftpClient.retrieveFile(file.getName(), outputStream);
+                }
+            }
+            ftpClient.logout();
+            return true;
+        } catch (Exception e) {
+            log.error("download file failure!", e);
+        } finally {
+            IOUtils.closeQuietly(outputStream);
+            ftpClientPool.returnObject(ftpClient);
+        }
+        return false;
+    }
+
+    /**
+     * Ftp 파일 삭제 처리
+     *
+     * @param key        FTP 프로퍼티 Key
+     * @param remotePath FTP 파 경로
+     * @param fileName   파일 명명
+     * @return 삭제 결과
+     */
+    public boolean deleteFile(String key, String remotePath, String fileName) {
+        FTPClient ftpClient = null;
+        GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
+        Optional
+                .ofNullable(ftpClientPool)
+                .orElseThrow(() -> new ResourceNotFoundException(resourcePath, "ftp setting information", key));
+        try {
+            ftpClient = ftpClientPool.borrowObject();
+            int replyCode = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(replyCode)) {
+                log.warn("ftpServer refused connection, replyCode:{}", replyCode);
+                return false;
+            }
+            ftpClient.changeWorkingDirectory(remotePath);
+            int delCode = ftpClient.dele(fileName);
+            log.debug("delete file reply code:{}", delCode);
+            return true;
+        } catch (Exception e) {
+            log.error("delete file failure!", e);
+        } finally {
+            ftpClientPool.returnObject(ftpClient);
+        }
+        return false;
+    }
+
+
 }

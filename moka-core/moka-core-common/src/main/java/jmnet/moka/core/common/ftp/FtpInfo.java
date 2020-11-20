@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.net.ftp.FTP;
 
 /**
  * <pre>
@@ -22,15 +23,22 @@ import lombok.Setter;
 @Getter
 @Setter(AccessLevel.PACKAGE)
 public class FtpInfo {
+    public static final int UNASSIGNED = 0;
     private String host;
-    private int port;
+    private String port;
     private String user;
     private String passwd;
     private boolean passive;
     private String encoding;
-    private String remotePath;
-    private int connectTimeout = FtpSender.UNASSIGNED;
-    private int readTimeout = FtpSender.UNASSIGNED;
+    private String tempPath = "/tmp";
+    private String remotePath = "";
+    private Integer retry = 5;
+    private Integer connectTimeout = UNASSIGNED;
+    private Integer readTimeout = UNASSIGNED;
+    // buffer size
+    private Integer bufferSize = 2048;
+    // Transfer file type
+    private Integer transferFileType = FTP.BINARY_FILE_TYPE;
 
 
 
@@ -83,11 +91,11 @@ public class FtpInfo {
         index = url.indexOf('/');
         this.host = url.substring(0, index);
         this.remotePath = url.substring(index); // path에는 /를 포함
-        this.port = 21;
+        this.port = "21";
         // host, port 분리
         index = this.host.indexOf(':');
         if (index > 0) {
-            this.port = Integer.parseInt(this.host.substring(index + 1));
+            this.port = this.host.substring(index + 1);
             this.host = this.host.substring(0, index);
         }
 

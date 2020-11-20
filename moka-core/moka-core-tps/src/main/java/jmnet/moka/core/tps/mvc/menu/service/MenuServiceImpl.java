@@ -339,9 +339,10 @@ public class MenuServiceImpl implements MenuService {
         menuAuth.setGroupMemberDiv(menuAuthType != null ? menuAuthType.getCode() : menuAuth.getGroupMemberDiv());
         MenuAuth orgMenu = findMenuAuth(menuAuth);
         if (orgMenu != null) {
-            menuAuth.setSeqNo(orgMenu.getSeqNo());
-            menuAuth.setUsedYn(orgMenu.getUsedYn());
-            updateMenuAuth(menuAuth);
+            orgMenu.setViewYn(menuAuth.getViewYn());
+            orgMenu.setEditYn(menuAuth.getEditYn());
+            orgMenu.setUsedYn(menuAuth.getUsedYn());
+            updateMenuAuth(orgMenu);
         } else {
             insertMenuAuth(menuAuth);
         }

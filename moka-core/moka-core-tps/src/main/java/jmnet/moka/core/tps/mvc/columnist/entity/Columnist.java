@@ -77,6 +77,7 @@ public class Columnist extends BaseAudit {
     @Column(name = "PROFILE", length = 500)
     private String profile;
 
+
     @PrePersist
     @PreUpdate
     public void prePersist() {

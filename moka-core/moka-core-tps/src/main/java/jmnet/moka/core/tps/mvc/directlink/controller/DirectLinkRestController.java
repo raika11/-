@@ -133,7 +133,7 @@ public class DirectLinkRestController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
     , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO
-            , @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
+            , @RequestParam(value="directLinkThumbnailFile") MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
         // 데이터 유효성 검사
         validData(directLinkThumbnailFile, ActionType.INSERT);

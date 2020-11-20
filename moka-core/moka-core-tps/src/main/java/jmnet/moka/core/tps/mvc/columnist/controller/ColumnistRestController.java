@@ -147,7 +147,6 @@ public class ColumnistRestController {
 
         try {
             // 등록(이미지 등록에 seq가 필요해서 먼저 저장)
-            columnist.setProfilePhoto(""); // 빈값이라도 넣어줘야한다.
             Columnist returnValue = columnistService.insertColumnist(columnist);
 
             if (columnistFile != null && !columnistFile.isEmpty()) {
@@ -183,7 +182,7 @@ public class ColumnistRestController {
      *
      * @param seqNo  일련번호
      * @param columnistDTO 컬럼리스트 수정
-     * @param columnistThumbnailFile 프로필이미지
+     * @param columnistFile 프로필이미지
      * @return 수정된 컬럼리스트
      * @throws Exception 그외 모든 에러
      */
@@ -193,7 +192,7 @@ public class ColumnistRestController {
     public ResponseEntity<?> putColumnist(
             @PathVariable("seqNo") @Min(value = 0, message = "{tps.columnist.error.pattern.seqNo}") Long seqNo,
             @Valid ColumnistDTO columnistDTO,
-            @RequestParam(value="columnistThumbnailFile", required = false) MultipartFile columnistThumbnailFile
+            @RequestParam(value="columnistFile", required = false) MultipartFile columnistFile
     )throws InvalidDataException, Exception {
 
         // ColumnistDto -> Columnist 변환
@@ -212,7 +211,7 @@ public class ColumnistRestController {
              */
 
 
-            if (columnistThumbnailFile != null && !columnistThumbnailFile.isEmpty()) {
+            if (columnistFile != null && !columnistFile.isEmpty()) {
 
                 // 기존이미지 삭제
                 if (McpString.isNotEmpty(orgColumnist.getProfilePhoto())) {
@@ -220,7 +219,7 @@ public class ColumnistRestController {
                     tpsLogger.success(ActionType.FILE_DELETE, true);
                 }
                 // 새로운 이미지 저장
-                String imgPath = columnistService.saveImage(newColumnist, columnistThumbnailFile);
+                String imgPath = columnistService.saveImage(newColumnist, columnistFile);
                 tpsLogger.success(ActionType.UPLOAD, true);
 
                 // 이미지 파일명 수정
@@ -262,6 +261,9 @@ public class ColumnistRestController {
 
         // 문법검사
         // 등록한 파일이 이미지 파일인지 체크
+        System.out.println("filefilefilefile::" + file);
+        System.out.println("file.isEmpty()file.isEmpty()::" + file.isEmpty());
+
         if (file != null && !file.isEmpty()) {
             boolean isImage = ImageUtil.isImage(file);
             if (!isImage) {

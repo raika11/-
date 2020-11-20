@@ -230,7 +230,7 @@ public class DirectLinkRestController {
                 newDirectLink.setImgUrl(imgPath);
             }
 
-            System.out.println("newDirectLink.getImgUrl()::" + newDirectLink.getImgUrl());
+            System.out.println("이미지 변경시 오류 나서 입셉션!!");
             // update
             DirectLink returnValue = directLinkService.updateDirectLink(newDirectLink);
 

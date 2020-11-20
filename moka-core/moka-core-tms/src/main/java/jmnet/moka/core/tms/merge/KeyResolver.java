@@ -86,27 +86,27 @@ public class KeyResolver {
                 makeParamKey(httpParamMap));
     }
 
-    public static String makeApItemCacheKey(String domainId, String itemId, String cid,
+    public static String makeApItemCacheKey(String domainId, String itemId, String totalId,
             HttpParamMap httpParamMap) {
-        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_ARTICLE_PAGE, itemId, cid,
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_ARTICLE_PAGE, itemId, totalId,
                 makeParamKey(httpParamMap));
     }
 
     public static String makeCtItemCacheKey(String domainId, String itemId,
-            String pageId, String cid, HttpParamMap httpParamMap, String... extra) {
-        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_CONTAINER, itemId, pageId, cid,
+            String pageId, String totalId, HttpParamMap httpParamMap, String... extra) {
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_CONTAINER, itemId, pageId, totalId,
                 makeParamKey(httpParamMap));
     }
 
     public static String makeCpItemCacheKey(String domainId, String itemId,
-            String pageId, String cid, HttpParamMap httpParamMap, String... extra) {
-        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_COMPONENT, itemId, pageId, cid,
+            String pageId, String totalId, HttpParamMap httpParamMap, String... extra) {
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_COMPONENT, itemId, pageId, totalId,
                 makeParamKey(httpParamMap));
     }
 
     public static String makeTpItemCacheKey(String domainId, String itemId, String pageId,
-            String cid, String relCp, HttpParamMap httpParamMap, String... extra) {
-        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_TEMPLATE, itemId, pageId, cid, relCp,
+            String totalId, String relCp, HttpParamMap httpParamMap, String... extra) {
+        return makeDefaultCacheKey(domainId, MokaConstants.ITEM_TEMPLATE, itemId, pageId, totalId, relCp,
                 makeParamKey(httpParamMap));
     }
 

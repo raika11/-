@@ -89,7 +89,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
             parameterMap.put(PARAM_TBODY, "N");
             JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(ITEM_API_PAGE, parameterMap, true);
-            Object jsonArray = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
+            Object jsonArray = jsonResult.getDataList();
             for (JSONObject jsonObject : (List<JSONObject>) jsonArray) {
                 Map<String, Object> valueMap = ResourceMapper.getDefaultObjectMapper()
                                                              .convertValue(jsonObject, new TypeReference<Map<String, Object>>() {

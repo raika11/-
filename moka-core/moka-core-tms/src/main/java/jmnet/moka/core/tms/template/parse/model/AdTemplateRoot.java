@@ -26,7 +26,7 @@ public class AdTemplateRoot extends MokaTemplateRoot {
             throws TemplateParseException {
         super(item, ItemConstants.AD_BODY);
 
-        this.setHasBodyToken();
+        this.setHasArticleToken();
     }
 
     @Override

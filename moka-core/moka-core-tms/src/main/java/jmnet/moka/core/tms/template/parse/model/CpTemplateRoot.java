@@ -61,10 +61,10 @@ public class CpTemplateRoot extends MokaTemplateRoot {
     }
 
     @Override
-    public boolean hasBodyToken() {
+    public boolean hasArticleToken() {
         TpTemplateRoot tpTemplateRoot = this.getTpTemplateRoot();
         if (tpTemplateRoot != null) {
-            return tpTemplateRoot.hasBodyToken();
+            return tpTemplateRoot.hasArticleToken();
         } else {
             // template을 로딩하지 못하면 캐싱 factor로 의미가 없음
             return false;
@@ -130,10 +130,11 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 this.setDataRange(datasetParam, httpParamMap);
                 String datasetApi = datasetItem.getString(ItemConstants.DATASET_API);
                 if (datasetApi != null && datasetApi.length() > 1) {
-                    DataLoader loader = merger.getDataLoader();
-                    JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, null), datasetParam, false);
-                    ((MokaTemplateMerger) merger).setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
-                    return jsonResult;
+//                    DataLoader loader = merger.getDataLoader();
+//                    JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, null), datasetParam, false);
+//                    ((MokaTemplateMerger) merger).setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
+//                    return jsonResult;
+                    return loadDataSet((MokaTemplateMerger)merger, datasetItem, datasetParam, datasetApi, context);
                 }
             } else {
                 // SNAPSHOT_YN=Y일때 다른 용도로 사용할 수 있으므로 가져오도록 한다.
@@ -149,13 +150,35 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                     datasetParam.put(MokaConstants.PARAM_WORKER_ID, context.get(MokaConstants.MERGE_CONTEXT_WORKER_ID));
                     datasetParam.put(MokaConstants.PARAM_EDITION_SEQ, context.get(MokaConstants.MERGE_CONTEXT_EDITION_SEQ));
                 }
-                DataLoader loader = merger.getDataLoader();
-                JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, apiName), datasetParam, false);
-                ((MokaTemplateMerger) merger).setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
-                return jsonResult;
+//                DataLoader loader = merger.getDataLoader();
+//                JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, apiName), datasetParam, false);
+//                ((MokaTemplateMerger) merger).setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
+//                return jsonResult;
+                return loadDataSet((MokaTemplateMerger)merger, datasetItem, datasetParam, apiName, context);
             }
         }
         return null;
+    }
+
+    private JSONResult loadDataSet(MokaTemplateMerger merger, DatasetItem datasetItem, Map<String, Object> datasetParam,
+            String api, MergeContext context) throws DataLoadException {
+        DataLoader loader = merger.getDataLoader();
+        JSONResult jsonResult = null;
+        if ( merger.isDefaultApiHostPathUse()) {
+            jsonResult = loader.getJSONResult(api, datasetParam, true);
+        } else {
+            String apiHost = datasetItem.getString(ItemConstants.DATASET_API_HOST);
+            String apiPath = datasetItem.getString(ItemConstants.DATASET_API_PATH);
+            if (api == null) {
+                api = datasetItem.getString(ItemConstants.DATASET_API);
+            }
+            String uri = String.join("/", apiHost, apiPath, api);
+            jsonResult = loader.getJSONResult(uri, datasetParam, false);
+        }
+        if ( jsonResult != null) {
+            merger.setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
+        }
+        return jsonResult;
     }
 
     private void convertToken(TemplateMerger<?> merger, MergeContext context, JSONObject jsonObject) {
@@ -348,13 +371,13 @@ public class CpTemplateRoot extends MokaTemplateRoot {
         return Integer.parseInt(count);
     }
 
-    private String getDataUri(DatasetItem datasetItem, String api) {
-        String apiHost = datasetItem.getString(ItemConstants.DATASET_API_HOST);
-        String apiPath = datasetItem.getString(ItemConstants.DATASET_API_PATH);
-        if (api == null) {
-            api = datasetItem.getString(ItemConstants.DATASET_API);
-        }
-        return String.join("/", apiHost, apiPath, api);
-    }
+//    private String getDataUri(DatasetItem datasetItem, String api) {
+//        String apiHost = datasetItem.getString(ItemConstants.DATASET_API_HOST);
+//        String apiPath = datasetItem.getString(ItemConstants.DATASET_API_PATH);
+//        if (api == null) {
+//            api = datasetItem.getString(ItemConstants.DATASET_API);
+//        }
+//        return String.join("/", apiHost, apiPath, api);
+//    }
 
 }

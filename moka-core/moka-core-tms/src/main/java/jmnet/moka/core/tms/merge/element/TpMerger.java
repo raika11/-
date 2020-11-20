@@ -41,7 +41,7 @@ public class TpMerger extends MokaAbstractElementMerger {
         String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
         String relCp = (String) context.get(MokaConstants.ATTR_REL_CP);
         return KeyResolver.makeTpItemCacheKey(domainId, element.getAttribute("id"),
-                templateRoot.getPageIdForCache(context), templateRoot.getCidForCache(context),
+                templateRoot.getPageIdForCache(context), templateRoot.getTotalIdForCache(context),
                 relCp, templateRoot.getParamForCache(context, false));
     }
 	

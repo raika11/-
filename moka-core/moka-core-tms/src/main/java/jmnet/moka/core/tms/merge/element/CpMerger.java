@@ -40,7 +40,7 @@ public class CpMerger extends MokaAbstractElementMerger {
             MergeContext context) {
         String domainId = ((MokaTemplateMerger) this.templateMerger).getDomainId();
         return KeyResolver.makeCpItemCacheKey(domainId, element.getAttribute("id"),
-                templateRoot.getPageIdForCache(context), templateRoot.getCidForCache(context),
+                templateRoot.getPageIdForCache(context), templateRoot.getTotalIdForCache(context),
                 templateRoot.getParamForCache(context, true));
     }
 

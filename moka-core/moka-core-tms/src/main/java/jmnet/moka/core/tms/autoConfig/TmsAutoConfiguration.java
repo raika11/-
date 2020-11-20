@@ -77,6 +77,9 @@ public class TmsAutoConfiguration {
     @Value("${tms.default.api.path}")
     private String defaultApiPath;
 
+    @Value("${tms.default.api.hostPath.use}")
+    private boolean defaultApiHostUse;
+
     @Value("${tms.item.expire.time}")
     protected String itemExpireTimeStr;
 
@@ -176,7 +179,7 @@ public class TmsAutoConfiguration {
     @Bean(name = "domainTemplateMerger")
     @ConditionalOnMissingBean(name = "domainTemplateMerger")
     public MokaDomainTemplateMerger domainTemplateMerger() {
-        return new MokaDomainTemplateMerger(appContext, defaultApiHost, defaultApiPath);
+        return new MokaDomainTemplateMerger(appContext, defaultApiHost, defaultApiPath, defaultApiHostUse);
     }
 
     @Bean(name = "mergeHandlerMapping")

@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs, rowData, rowClassRules } from './data';
 import { toastr } from 'react-redux-toastr';
+import { EditThumbModal } from '@pages/Desking/modals';
 
 const AgGridPage = () => {
     const [moveRows, setMoveRows] = useState([]);
@@ -157,6 +158,7 @@ const AgGridPage = () => {
                     </div>
                 </Col>
             </Row>
+            <EditThumbModal show={true} onHide={() => {}} />
         </Container>
     );
 };

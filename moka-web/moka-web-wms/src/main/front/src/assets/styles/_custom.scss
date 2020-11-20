@@ -230,6 +230,10 @@ body {
             }
         }
     }
+
+    @include media-breakpoint-down(md) {
+        padding: 10px;
+    }
 }
 
 /* -----------------------
@@ -393,7 +397,7 @@ body {
 }
 
 /* -----------------------
-* Monaco Editor
+* Monaco Editor (glyph hover message)
 * ---------------------- */
 .errorContextGlyphMargin {
     background-image: url('../images/icon/error_icon.png');
@@ -406,10 +410,11 @@ body {
     margin-top: 1px;
     margin-left: 9px;
 }
+
 .errorContextDecoration {
     background-color: rgba($red, 0.09);
 }
-// 에디터 glyph hover message
+
 .monaco-hover .hover-row {
     font-family: 'Noto Sans KR';
     padding: 0px 4px;
@@ -448,5 +453,25 @@ body {
 
     &.youtube {
         color: $orange;
+    }
+}
+
+.deskthumb-gif-list {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    z-index: 2;
+    transition: top 0.25s ease-out;
+    background-color: darken($gray-100, 1.5);
+    min-height:502px;
+
+    .deskthumb-main {
+        background-color: $gray-300;
+    }
+
+    &.collapse {
+        transition: top 0.25s ease-out;
+        top: 502px;
+        min-height: 196px;
     }
 }

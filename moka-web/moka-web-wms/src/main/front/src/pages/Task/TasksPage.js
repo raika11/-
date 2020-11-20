@@ -7,7 +7,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import TaskComponent from './TaskComponent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH } from '@moka/fontawesome-pro-solid-svg-icons';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+// import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const IconToggle = forwardRef(({ children, onClick }, ref) => (
     <a
@@ -225,7 +225,7 @@ const TasksPage = () => {
                             {/* <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." />
                             <Task text="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada." /> */}
-                            <DragDropContext onDragEnd={onDragEnd}>
+                            {/* <DragDropContext onDragEnd={onDragEnd}>
                                 <Droppable droppableId="droppable">
                                     {(provided, snapshot) => (
                                         <div {...provided.droppableProps} ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
@@ -247,7 +247,7 @@ const TasksPage = () => {
                                         </div>
                                     )}
                                 </Droppable>
-                            </DragDropContext>
+                            </DragDropContext> */}
                         </Card.Body>
                     </Card>
                 </Col>

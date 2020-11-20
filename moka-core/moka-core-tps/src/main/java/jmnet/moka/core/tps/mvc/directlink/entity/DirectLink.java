@@ -100,6 +100,6 @@ public class DirectLink extends BaseAudit {
         this.usedYn = this.usedYn == null ? "N" : this.usedYn;
         this.fixYn = this.fixYn == null ? "N" : this.fixYn;
         this.linkType = this.linkType == null ? "N" : this.linkType;
-        this.imgUrl = this.linkUrl == null ? "http://pds.joins.com/news/search_direct_link/000.jpg" : this.linkUrl;
+        //this.imgUrl = this.linkUrl == null ? "http://pds.joins.com/news/search_direct_link/000.jpg" : this.linkUrl;
     }
 }

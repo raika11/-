@@ -306,9 +306,9 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * @return 파일의 물리 경로
      */
     public static String getFilepath(final String filePath, final String filename, boolean isMountPath) {
-        String destFilePath = (isMountPath ? getDatePath(filePath) : filePath) + "/";
+        String destFilePath = (isMountPath ? getDatePath(filePath) : filePath);
         mkDestdir(destFilePath);
-        return destFilePath + filename;
+        return makeFilepathName(destFilePath, filename);
     }
 
     /**
@@ -322,8 +322,25 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
      * @return String 파일 저장 경로
      */
     public static String getFilepath(final String basePath, final String date, final String filename) {
-        String destFilePath = getDatePath(basePath, date) + "/";
+        String destFilePath = getDatePath(basePath, date);
         mkDestdir(destFilePath);
+        return makeFilepathName(destFilePath, filename);
+    }
+
+    /**
+     * <pre>
+     * 파일경로와 파일명을 합친 경로를 반환한다.
+     * </pre>
+     *
+     * @param filePath 파일 패스
+     * @param filename 파일 명
+     * @return String 파일 저장 경로
+     */
+    public static String makeFilepathName(final String filePath, final String filename) {
+        String destFilePath = McpString.defaultValue(filePath, File.separator);
+        if (!destFilePath.endsWith(File.separator)) {
+            destFilePath += File.separator;
+        }
         return destFilePath + filename;
     }
 

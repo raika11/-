@@ -9,7 +9,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
-import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuNodeDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
@@ -57,13 +57,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public MenuNode findServiceMenuTree(MenuSearchDTO searchDTO) {
+    public MenuNodeDTO findServiceMenuTree(MenuSearchDTO searchDTO) {
         List<MenuVO> menuList = menuMapper.findAll(searchDTO);
         return menuList.isEmpty() ? null : makeTree(menuList);
     }
 
     @Override
-    public MenuNode findMenuTree(MenuSearchDTO searchDTO) {
+    public MenuNodeDTO findMenuTree(MenuSearchDTO searchDTO) {
         List<MenuVO> menuList = menuMapper.findAllMenuAuth(searchDTO);
         return menuList.isEmpty() ? null : makeTree(menuList);
     }
@@ -74,21 +74,21 @@ public class MenuServiceImpl implements MenuService {
      * @param menuList 메뉴 목록
      * @return 메뉴 Tree
      */
-    private MenuNode makeTree(List<MenuVO> menuList) {
+    private MenuNodeDTO makeTree(List<MenuVO> menuList) {
         int maxDepth = menuList
                 .stream()
                 .max((o1, o2) -> o1.getDepth() - o2.getDepth())
                 .get()
                 .getDepth();
-        MenuNode rootNode = new MenuNode();
+        MenuNodeDTO rootNode = new MenuNodeDTO();
         rootNode.setSeq((long) 0);
         rootNode.setMenuId(ROOT_MENU_ID);
         rootNode.setMenuNm("ROOT");
 
         for (MenuVO menu : menuList) {
             if (MenuService.ROOT_MENU_ID.equals(menu.getParentMenuId())) {
-                MenuNode menuNode = new MenuNode(menu);
-                rootNode.addNode(traceMenuNode(menuNode, menuList, maxDepth));
+                MenuNodeDTO menuNodeDTO = new MenuNodeDTO(menu);
+                rootNode.addNode(traceMenuNode(menuNodeDTO, menuList, maxDepth));
             }
         }
         rootNode.sort();
@@ -98,23 +98,23 @@ public class MenuServiceImpl implements MenuService {
     /**
      * 전 메뉴를 순회하며 자신의 하위 메뉴를 찾는다.
      *
-     * @param menuNode 메뉴 노드
-     * @param menuList 메뉴 목록
-     * @param maxDepth 전체 메뉴의 최대 깊이
+     * @param menuNodeDTO 메뉴 노드
+     * @param menuList    메뉴 목록
+     * @param maxDepth    전체 메뉴의 최대 깊이
      * @return MenuNode
      */
-    private MenuNode traceMenuNode(MenuNode menuNode, List<MenuVO> menuList, int maxDepth) {
-        if (menuNode.getDepth() < maxDepth) {
+    private MenuNodeDTO traceMenuNode(MenuNodeDTO menuNodeDTO, List<MenuVO> menuList, int maxDepth) {
+        if (menuNodeDTO.getDepth() < maxDepth) {
             for (MenuVO menu : menuList) {
                 if (menu
                         .getParentMenuId()
-                        .equals(menuNode.getMenuId())) {
-                    MenuNode child = new MenuNode(menu);
-                    menuNode.addNode(traceMenuNode(child, menuList, maxDepth));
+                        .equals(menuNodeDTO.getMenuId())) {
+                    MenuNodeDTO child = new MenuNodeDTO(menu);
+                    menuNodeDTO.addNode(traceMenuNode(child, menuList, maxDepth));
                 }
             }
         }
-        return menuNode;
+        return menuNodeDTO;
     }
 
     private Sort orderByIdAsc() {

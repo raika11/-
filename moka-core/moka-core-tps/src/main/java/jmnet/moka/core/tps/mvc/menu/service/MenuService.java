@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
-import jmnet.moka.core.tps.mvc.menu.dto.MenuNode;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuNodeDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
@@ -31,7 +31,7 @@ public interface MenuService {
      *
      * @return 메뉴목록
      */
-    MenuNode findServiceMenuTree(MenuSearchDTO search);
+    MenuNodeDTO findServiceMenuTree(MenuSearchDTO search);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface MenuService {
      *
      * @return 메뉴목록
      */
-    MenuNode findMenuTree(MenuSearchDTO search);
+    MenuNodeDTO findMenuTree(MenuSearchDTO search);
 
     /**
      * 메뉴 목록 조회

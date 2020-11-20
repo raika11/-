@@ -196,7 +196,7 @@ public class DirectLinkRestController {
         System.out.println("directLinkDTO.getImgUrl()::" + directLinkDTO.getImgUrl());
 
         // 널이면 강제로 셋팅
-        if(directLinkDTO.getImgUrl().isEmpty() || directLinkDTO.getImgUrl() == null){
+        if(directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == ""){
             directLinkDTO.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
         }
 

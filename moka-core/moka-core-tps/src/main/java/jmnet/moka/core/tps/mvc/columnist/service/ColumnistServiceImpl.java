@@ -9,6 +9,7 @@ import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.columnist.dto.ColumnistSearchDTO;
 import jmnet.moka.core.tps.mvc.columnist.entity.Columnist;
 import jmnet.moka.core.tps.mvc.columnist.repository.ColumnistRepository;
+import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -68,15 +69,20 @@ public class ColumnistServiceImpl implements ColumnistService {
         String extension = McpFile.getExtension(thumbnail.getOriginalFilename()).toLowerCase();
         String newFilename = String.valueOf(columnist.getSeqNo()) + "." + extension;
         // 이미지를 저장할 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
+        //String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
+        String uri = "https://pds.joins.com/news/search_direct_link/";
 
-        if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
-            String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
-            return uri;
-        } else {
-            return "http://pds.joins.com/news/search_direct_link/" + columnist.getSeqNo();
-            // 현재는 ftp저장이 없어서 하드코딩한다.
+        try {
+            if (uploadFileHelper.saveImage("c:/msp/wms/", thumbnail.getBytes())) {
+                //String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
+                uri= uri + newFilename;
+
+            }
+        } catch (Exception e) {
+            return "https://pds.joins.com/news/search_direct_link/" + newFilename;
         }
+
+        return uri;
     }
 
     @Override

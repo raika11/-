@@ -23,10 +23,10 @@ export const postComponentWork = ({ componentWorkSeq }) => {
     });
 };
 
-// 컴포넌트 워크 수정(스냅샷 수정!)
+// 컴포넌트 워크 수정(스냅샷 제외)
 export const putComponentWork = ({ componentWork }) => {
     return instance
-        .post(`/api/desking/components/${componentWork.seq}`, componentWork, {
+        .put(`/api/desking/components/${componentWork.seq}`, componentWork, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -34,6 +34,14 @@ export const putComponentWork = ({ componentWork }) => {
         .catch((err) => {
             throw err;
         });
+};
+
+// 컴포넌트 워크 스냅샷 수정
+export const putSnapshotComponentWork = ({ componentWorkSeq, snapshotYn, snapshotBody }) => {
+    const queryString = { snapshotYn, snapshotBody };
+    return instance.put(`/api/desking/components/${componentWorkSeq}/snapshot?${qs.stringify(queryString)}`).catch((err) => {
+        throw err;
+    });
 };
 
 // 컴포넌트 워크의 편집기사 1개 수정 => 폼데이터로 전송(multipart)

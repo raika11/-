@@ -38,10 +38,6 @@ export function createDeskingRequestSaga(actionType, api) {
             }
         } catch (e) {
             callbackData = errorResponse(e);
-            yield put({
-                type: act.COMPONENT_WORK_FAILURE,
-                payload: errorResponse(e),
-            });
         }
 
         if (typeof callback === 'function') {
@@ -92,38 +88,14 @@ function* getComponentWork({ payload }) {
 }
 
 /**
- * 컴포넌트 워크 수정
+ * 컴포넌트 워크 수정(스냅샷 제외)
  */
-function* putComponentWork({ payload }) {
-    const ACTION = act.PUT_COMPONENT_WORK;
-    const { componentWork, callback } = payload;
-    let response, callbackData;
+const putComponentWork = createDeskingRequestSaga(act.PUT_COMPONENT_WORK, api.putComponentWork);
 
-    yield startLoading(ACTION);
-    try {
-        response = yield call(api.putComponentWork, { componentWork });
-        callbackData = response.data;
-
-        if (response.data.header.success) {
-            yield put({
-                type: act.COMPONENT_WORK_SUCCESS,
-                payload: response.data,
-            });
-        } else {
-            yield put({
-                type: act.COMPONENT_WORK_FAILURE,
-                payload: response.data,
-            });
-        }
-    } catch (e) {
-        callbackData = errorResponse(e);
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-    yield put(finishLoading(ACTION));
-}
+/**
+ * 컴포넌트 워크 스냅샷 수정
+ */
+const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPONENT_WORK, api.putSnapshotComponentWork);
 
 /**
  * rowNode 생성
@@ -363,6 +335,7 @@ export default function* saga() {
     yield takeLatest(act.GET_COMPONENT_WORK_LIST, getComponentWorkList);
     yield takeLatest(act.GET_COMPONENT_WORK, getComponentWork);
     yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWork);
+    yield takeLatest(act.PUT_SNAPSHOT_COMPONENT_WORK, putSnapshotComponentWork);
 
     yield takeLatest(act.POST_SAVE_COMPONENT_WORK, postSaveComponentWork);
     yield takeLatest(act.POST_PUBLISH_COMPONENT_WORK, postPublishComponentWork);

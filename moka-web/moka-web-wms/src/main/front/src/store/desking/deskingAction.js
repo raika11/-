@@ -22,11 +22,22 @@ export const GET_COMPONENT_WORK = 'desking/GET_COMPONENT_WORK';
 export const getComponentWork = createAction(GET_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({ componentWorkSeq, callback }));
 
 /**
- * 컴포넌트 워크 수정
+ * 컴포넌트 워크 수정(스냅샷 제외)
  */
 export const PUT_COMPONENT_WORK = 'desking/PUT_COMPONENT_WORK';
 export const putComponentWork = createAction(PUT_COMPONENT_WORK, ({ componentWork, callback }) => ({
     componentWork,
+    callback,
+}));
+
+/**
+ * 컴포넌트 워크 스냅샷 수정
+ */
+export const PUT_SNAPSHOT_COMPONENT_WORK = 'desking/PUT_SNAPSHOT_COMPONENT_WORK';
+export const putSnapshotComponentWork = createAction(PUT_SNAPSHOT_COMPONENT_WORK, ({ componentWorkSeq, snapshotYn, snapshotBody, callback }) => ({
+    componentWorkSeq,
+    snapshotYn,
+    snapshotBody,
     callback,
 }));
 

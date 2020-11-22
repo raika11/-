@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaInputLabel, MokaModal } from '@components';
 import MokaEditor from '@/components/MokaEditor/MokaEditorCore';
-import { putComponentWork } from '@store/desking';
+import { putSnapshotComponentWork } from '@store/desking';
 import toast from '@utils/toastUtil';
 
 /**
@@ -21,11 +21,9 @@ const HtmlEditModal = (props) => {
      */
     const handleClickSave = (e) => {
         const option = {
-            componentWork: {
-                ...data,
-                snapshotYn: 'Y',
-                snapshotBody: body,
-            },
+            componentWorkSeq: data.seq,
+            snapshotYn: 'Y',
+            snapshotBody: body,
             callback: ({ header }) => {
                 if (header.success) {
                     toast.success(header.message);
@@ -38,7 +36,7 @@ const HtmlEditModal = (props) => {
             toast.confirm(
                 `선택하신 ${data.componentSeq} ${data.componentName}을 전송하시겠습니까?`,
                 () => {
-                    dispatch(putComponentWork(option));
+                    dispatch(putSnapshotComponentWork(option));
                     onHide();
                 },
                 () => {},

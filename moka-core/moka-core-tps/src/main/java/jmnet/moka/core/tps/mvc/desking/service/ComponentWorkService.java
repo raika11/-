@@ -11,6 +11,7 @@ package jmnet.moka.core.tps.mvc.desking.service;
 import java.util.Optional;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 
 /**
  * ComponentWork Service
@@ -21,9 +22,7 @@ import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
 public interface ComponentWorkService {
 
     /**
-     * <pre>
-      * work컴포넌트 조회
-     * </pre>
+     * 컴포넌트work 조회
      * 
      * @param seq 순번
      * @return work컴포넌트
@@ -31,13 +30,25 @@ public interface ComponentWorkService {
     Optional<ComponentWork> findComponentWorkBySeq(Long seq);
 
     /**
-     * work컴포넌트 업데이트
+     * 컴포넌트work 업데이트
      * 
-     * @param component 업데이트할 컴포넌트
-     * @return 업데이트된 컴포넌트
-     * @throws NoDataException 데이터없음
-     * @throws Exception 예외
+     * @param workVO            업데이트할 컴포넌트work VO
+     * @return                  업데이트된 컴포넌트work
+     * @throws NoDataException  데이터없음
+     * @throws Exception        예외
      */
-    public ComponentWork updateComponentWork(ComponentWork component) throws NoDataException, Exception;
+    ComponentWork updateComponentWork(ComponentWorkVO workVO) throws NoDataException, Exception;
+
+    /**
+     * 컴포넌트work 스냅샷 업데이트
+     * @param componentWorkSeq  컴포넌트work순번
+     * @param snapshotYn        스냅샷여부
+     * @param snapshotBody      스냅샷HTML
+     * @param regId             작업자
+     * @return                  등록된 컴포넌트work
+     * @throws NoDataException  데이타없음
+     * @throws Exception        예외
+     */
+    ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn, String snapshotBody, String regId) throws NoDataException, Exception;
 
 }

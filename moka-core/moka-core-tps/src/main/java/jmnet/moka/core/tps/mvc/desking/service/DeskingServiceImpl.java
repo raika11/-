@@ -399,38 +399,13 @@ public class DeskingServiceImpl implements DeskingService {
     @Override
     public ComponentWork updateComponentWork(ComponentWorkVO workVO, String regId)
             throws Exception {
-        String messageC = messageByLocale.get("tps.common.error.no-data");
-        ComponentWork componentWork = componentWorkService.findComponentWorkBySeq(workVO.getComponentSeq())
-                                                          .orElseThrow(() -> new NoDataException(messageC));
-
-        String messageT = messageByLocale.get("tps.common.error.no-data");
-        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-                                           .orElseThrow(() -> new NoDataException(messageT));
-
-        componentWork.setSnapshotYn(workVO.getSnapshotYn());
-        componentWork.setSnapshotBody(workVO.getSnapshotBody());
-        componentWork.setTemplate(template);
-        componentWork.setZone(workVO.getZone());
-        componentWork.setMatchZone(workVO.getMatchZone());
-        componentWork.setViewYn(workVO.getViewYn());
-        componentWork.setPerPageCount(workVO.getPerPageCount());
-
-        return componentWorkService.updateComponentWork(componentWork);
-
+        return componentWorkService.updateComponentWork(workVO);
     }
 
     @Override
     public ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn, String snapshotBody, String regId)
             throws NoDataException, Exception {
-
-        String messageC = messageByLocale.get("tps.common.error.no-data");
-        ComponentWork componentWork = componentWorkService.findComponentWorkBySeq(componentWorkSeq)
-                                                          .orElseThrow(() -> new NoDataException(messageC));
-
-        componentWork.setSnapshotYn(snapshotYn);
-        componentWork.setSnapshotBody(snapshotBody);
-
-        return componentWorkService.updateComponentWork(componentWork);
+        return componentWorkService.updateComponentWorkSnapshot(componentWorkSeq, snapshotYn, snapshotBody, regId);
     }
 
     @Override
@@ -465,7 +440,7 @@ public class DeskingServiceImpl implements DeskingService {
                 int relOrd = deskingWork.getRelOrd();
                 if (appendDeskingWork.getParentTotalId()
                                      .equals(deskingWork.getParentTotalId()) && !appendSeq.equals(deskingWork.getSeq()) && relOrd >= appendRelOrd) {
-                    deskingWork.setContentOrd(relOrd + 1);
+                    deskingWork.setRelOrd(relOrd + 1);
                     deskingWork.setRegDt(McpDate.now());
                     deskingWork.setRegId(regId);
                     deskingWorkRepository.save(deskingWork);
@@ -520,38 +495,46 @@ public class DeskingServiceImpl implements DeskingService {
         List<DeskingWork> deskingList = deskingWorkRepository.findAllDeskingWork(search);
         List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE); // DeskingWork -> DeskingWorkVO
 
+        // 주기사 오더링
         Integer ordering = 1;
         for (DeskingWorkVO deskingWorkVO : deskingVOList) {
             boolean rel = !(deskingWorkVO.getParentTotalId() == null);  // 관련기사 여부
             Long seq = deskingWorkVO.getSeq();
             DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
-            if (rel) {
-                // 주기사가 삭제대상일때는, 정렬하지 않는다.
-                // 같은 부모의 자식끼리 정렬한다.
-//                int appendRelOrd = appendDeskingWork.getRelOrd();    // 관련기사 추가된 순번
-//                int relOrd = deskingWork.getRelOrd();
-//                if (appendDeskingWork.getParentTotalId()
-//                                     .equals(deskingWork.getParentTotalId()) && !appendSeq.equals(deskingWork.getSeq()) && relOrd >= appendRelOrd) {
-//                    deskingWork.setContentOrd(relOrd + 1);
+
+            // 주기사 이면서, 삭제된 목록이 아니고,
+            if (!rel && !deskingWorkSeqList.contains(seq)) {
+                // 원본오더가 변경할 오더와 다르다면 => 오더 수정.
+                if (!ordering.equals(deskingWork.getContentOrd())) {
+                    deskingWork.setContentOrd(ordering);
+                    deskingWork.setRegDt(McpDate.now());
+                    deskingWork.setRegId(regId);
+                    deskingWorkRepository.save(deskingWork);
+                }
+                ordering++;
+            }
+        }
+
+        // 관련기사 오더링
+//        ordering = 1;
+//        for (DeskingWorkVO deskingWorkVO : deskingVOList) {
+//            boolean rel = !(deskingWorkVO.getParentTotalId() == null);  // 관련기사 여부
+//            Long seq = deskingWorkVO.getSeq();
+//            DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
+//
+//            // 주기사 이면서, 삭제된 목록이 아니고,
+//            if (rel && !deskingWorkSeqList.contains(seq)) {
+//                // 원본오더가 변경할 오더와 다르다면 => 오더 수정.
+//                if (!ordering.equals(deskingWork.getContentOrd())) {
+//                    deskingWork.setContentOrd(ordering);
 //                    deskingWork.setRegDt(McpDate.now());
 //                    deskingWork.setRegId(regId);
 //                    deskingWorkRepository.save(deskingWork);
-//                    log.debug("DESKING WORK RELATION RESORT seq: {} contentOrd: {}", deskingWork.getSeq(), deskingWork.getContentOrd());
 //                }
-            } else {
-                // 삭제된 목록이 아니고,
-                if (!deskingWorkSeqList.contains(seq)) {
-                    // 원본오더가 변경할 오더와 다르다면 => 오더 수정.
-                    if (!ordering.equals(deskingWork.getContentOrd())) {
-                        deskingWork.setContentOrd(ordering);
-                        deskingWork.setRegDt(McpDate.now());
-                        deskingWork.setRegId(regId);
-                        deskingWorkRepository.save(deskingWork);
-                    }
-                    ordering++;
-                }
-            }
-        }
+//                ordering++;
+//            }
+//        }
+
     }
 
 
@@ -619,24 +602,6 @@ public class DeskingServiceImpl implements DeskingService {
     //        java.util.Date dt = McpDate.minuteMinus(new Date(), interval);
     //        return deskingRepository.findByOtherCreator(datasetSeq, McpDate.dateTimeStr(dt), creator);
     //    }
-
-    @Override
-    public ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String creator)
-            throws NoDataException, Exception {
-
-        String messageC = messageByLocale.get("tps.common.error.no-data");
-        ComponentWork componentWork = componentWorkService.findComponentWorkBySeq(componentWorkSeq)
-                                                          .orElseThrow(() -> new NoDataException(messageC));
-
-        String messageT = messageByLocale.get("tps.co.error.no-data");
-        Template template = templateService.findTemplateBySeq(templateSeq)
-                                           .orElseThrow(() -> new NoDataException(messageT));
-
-        componentWork.setTemplate(template);
-
-        return componentWorkService.updateComponentWork(componentWork);
-
-    }
 
     @Override
     @Transactional

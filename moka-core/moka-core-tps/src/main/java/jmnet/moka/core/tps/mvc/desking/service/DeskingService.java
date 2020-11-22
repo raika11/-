@@ -273,18 +273,18 @@ public interface DeskingService {
 
 
 
-    /**
-     * work 컴포넌트워크 템플릿 수정
-     *
-     * @param componentWorkSeq work컴포넌트순번
-     * @param templateSeq      변경할 템플릿순번
-     * @param creator          작업자
-     * @return work컴포넌트
-     * @throws NoDataException
-     * @throws Exception
-     */
-    public ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String creator)
-            throws NoDataException, Exception;
+//    /**
+//     * work 컴포넌트워크 템플릿 수정
+//     *
+//     * @param componentWorkSeq work컴포넌트순번
+//     * @param templateSeq      변경할 템플릿순번
+//     * @param creator          작업자
+//     * @return work컴포넌트
+//     * @throws NoDataException
+//     * @throws Exception
+//     */
+//    public ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String creator)
+//            throws NoDataException, Exception;
 
 
 

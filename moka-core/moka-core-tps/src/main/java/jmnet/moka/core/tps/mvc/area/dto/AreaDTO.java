@@ -6,10 +6,12 @@ package jmnet.moka.core.tps.mvc.area.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.mvc.area.entity.AreaComp;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
 import jmnet.moka.core.tps.mvc.page.dto.PageSimpleDTO;
@@ -37,7 +40,8 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @Getter
 @Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "areaSeq", scope = AreaDTO.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "areaSeq")
 public class AreaDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -124,7 +128,7 @@ public class AreaDTO implements Serializable {
     /**
      * 컴포넌트목록
      */
-    private Set<AreaCompDTO> areaComps = new LinkedHashSet<AreaCompDTO>();
+    private List<AreaCompDTO> areaComps = new ArrayList<AreaCompDTO>();
 
     public void addAreaComp(AreaCompDTO areaComp) {
 

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -27,8 +28,10 @@ import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.dto.ParentAreaDTO;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
+import jmnet.moka.core.tps.mvc.area.entity.AreaComp;
 import jmnet.moka.core.tps.mvc.area.entity.AreaSimple;
 import jmnet.moka.core.tps.mvc.area.service.AreaService;
+import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,6 +117,8 @@ public class AreaRestController {
                                    tpsLogger.fail(message, true);
                                    return new NoDataException(message);
                                });
+//        List<AreaComp> areaCompList = area.getAreaComps().stream().sorted((prev, next) -> prev.getOrdNo() - next.getOrdNo()).collect(Collectors.toList());;
+//        area.setAreaComps(areaCompList);
 
         try {
             // 컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
@@ -215,7 +220,7 @@ public class AreaRestController {
      */
     @ApiOperation(value = "편집영역 수정")
     @PutMapping(value = "/{areaSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> putArea(HttpServletRequest request,
+    public ResponseEntity<?> putArea(
             @PathVariable("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq, @RequestBody @Valid AreaDTO areaDTO)
             throws InvalidDataException, Exception {
 

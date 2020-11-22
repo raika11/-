@@ -244,7 +244,7 @@ public class DeskingRestController {
      * @return 컴포넌트 정보
      * @throws Exception 예외
      */
-    @ApiOperation(value = "컴포넌트work 수정(편집기사work 수정 제외)")
+    @ApiOperation(value = "컴포넌트work 수정(편집기사work 수정 제외. snapshot제외)")
     @PutMapping(value = "/components/{componentWorkSeq}", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putComponentWork(
@@ -255,6 +255,39 @@ public class DeskingRestController {
         try {
             // 컴포넌트 워크 저장
             deskingService.updateComponentWork(componentWorkVO, principal.getName());
+
+            // 컴포넌트 워크 조회(편집기사포함)
+            ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+
+            // 리턴값 설정
+            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw new Exception(messageByLocale.get("tps.desking.component.error.work.update"), e);
+        }
+    }
+
+    /**
+     * 컴포넌트work snapshot 수정
+     *
+     * @param componentWorkSeq  컴포넌트work 순번
+     * @param snapshotYn        템플릿편집여부
+     * @param snapshotBody      템플릿
+     * @param principal         작업자
+     * @return 컴포넌트 정보
+     * @throws Exception 예외
+     */
+    @ApiOperation(value = "컴포넌트work snapshot 수정")
+    @PutMapping("/components/{componentWorkSeq}/snapshot")
+    public ResponseEntity<?> putSnapshotComponentWork(
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            String snapshotYn, String snapshotBody, Principal principal)
+            throws Exception {
+
+        try {
+            // 스냅샷 수정
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, snapshotYn, snapshotBody, principal.getName());
 
             // 컴포넌트 워크 조회(편집기사포함)
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);

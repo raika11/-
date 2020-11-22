@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast from '@utils/toastUtil';
-import { getComponentWork, postPreComponentWork } from '@store/desking';
+import { getComponentWork, postSaveComponentWork, postPublishComponentWork } from '@store/desking';
 
 const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
 const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
@@ -63,16 +63,35 @@ const DeskingWorkButtonGroup = (props) => {
     /**
      * 임시저장
      */
-    const handlePreComponentWork = () => {
+    const handleSaveComponentWork = () => {
         const option = {
             componentWorkSeq: component.seq,
             callback: ({ header }) => {
-                if (!header.success) {
-                    toast.warn(header.message);
+                if (header.success) {
+                    toast.success(header.message);
+                } else {
+                    toast.error(header.message);
                 }
             },
         };
-        dispatch(postPreComponentWork(option));
+        dispatch(postSaveComponentWork(option));
+    };
+
+    /**
+     * 전송
+     */
+    const handlePublishComponentWork = () => {
+        const option = {
+            componentWorkSeq: component.seq,
+            callback: ({ header }) => {
+                if (header.success) {
+                    toast.success(header.message);
+                } else {
+                    toast.error(header.message);
+                }
+            },
+        };
+        dispatch(postPublishComponentWork(option));
     };
 
     const iconButton = [
@@ -82,8 +101,8 @@ const DeskingWorkButtonGroup = (props) => {
         { title: '히스토리', iconName: 'fal-minus-circle' },
         { title: '기사 이동', iconName: 'fal-minus-circle', onClick: handleRegisterClicked },
         { title: '더미기사 등록', iconName: 'fal-minus-circle' },
-        { title: '임시저장', iconName: 'fal-minus-circle', onClick: handlePreComponentWork },
-        { title: '전송', iconName: 'fal-minus-circle' },
+        { title: '임시저장', iconName: 'fal-minus-circle', onClick: handleSaveComponentWork },
+        { title: '전송', iconName: 'fal-minus-circle', onClick: handlePublishComponentWork },
         { title: '삭제', iconName: 'fal-minus-circle' },
     ];
 

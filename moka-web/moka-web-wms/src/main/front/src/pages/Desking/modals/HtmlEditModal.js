@@ -21,10 +21,11 @@ const HtmlEditModal = (props) => {
      */
     const handleClickSave = (e) => {
         const option = {
-            componentWorkSeq: data.seq,
-            snapshotYn: 'Y',
-            snapshotBody: body,
-            templateSeq: data.templateSeq,
+            componentWork: {
+                ...data,
+                snapshotYn: 'Y',
+                snapshotBody: body,
+            },
             callback: ({ header }) => {
                 if (header.success) {
                     toast.success(header.message);

@@ -24,11 +24,16 @@ export const postComponentWork = ({ componentWorkSeq }) => {
 };
 
 // 컴포넌트 워크 수정(스냅샷 수정!)
-export const putComponentWork = ({ componentWorkSeq, snapshotYn, snapshotBody, templateSeq }) => {
-    const queryString = { snapshotYn, snapshotBody, templateSeq };
-    return instance.get(`/api/desking/components/${componentWorkSeq}?${qs.stringify(queryString)}`).catch((err) => {
-        throw err;
-    });
+export const putComponentWork = ({ componentWork }) => {
+    return instance
+        .post(`/api/desking/components/${componentWork.seq}`, componentWork, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
 // 컴포넌트 워크의 편집기사 1개 수정 => 폼데이터로 전송(multipart)
@@ -46,6 +51,7 @@ export const putDeskingWork = ({ componentWorkSeq, deskingWork }) => {
 
 // 컴포넌트 워크의 편집기사 여러개 추가 => payload
 export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, deskingWorkList }) => {
+    debugger;
     return instance
         .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}/list`, deskingWorkList, {
             headers: {
@@ -83,9 +89,24 @@ export const putDeskingWorkPriority = ({ componentWork }) => {
         });
 };
 
-// work편집기사목록 임시저장
-export const postPreComponentWork = ({ componentWorkSeq }) => {
-    return instance.post(`/api/desking/pre/components/${componentWorkSeq}`).catch((err) => {
+// 컴포넌트 워크 임시저장
+export const postSaveComponentWork = ({ componentWorkSeq }) => {
+    return instance.post(`/api/desking/components/save/${componentWorkSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 컴포넌트 워크 전송
+export const postPublishComponentWork = ({ componentWorkSeq }) => {
+    return instance.post(`/api/desking/components/publish/${componentWorkSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 컴포넌트 워크 예약
+export const postReserveComponentWork = ({ componentWorkSeq, reserveDt }) => {
+    const queryString = { reserveDt };
+    return instance.post(`/api/desking/components/reserve/${componentWorkSeq}?${qs.stringify(queryString)}`).catch((err) => {
         throw err;
     });
 };

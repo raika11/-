@@ -25,20 +25,8 @@ export const getComponentWork = createAction(GET_COMPONENT_WORK, ({ componentWor
  * 컴포넌트 워크 수정
  */
 export const PUT_COMPONENT_WORK = 'desking/PUT_COMPONENT_WORK';
-export const putComponentWork = createAction(PUT_COMPONENT_WORK, ({ componentWorkSeq, snapshotYn, snapshotBody, templateSeq, callback }) => ({
-    componentWorkSeq,
-    snapshotYn,
-    snapshotBody,
-    templateSeq,
-    callback,
-}));
-
-/**
- * Work컴포넌트 임시저장
- */
-export const POST_PRE_COMPONENT_WORK = 'desking/POST_PRE_COMPONENT_WORK';
-export const postPreComponentWork = createAction(POST_PRE_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({
-    componentWorkSeq,
+export const putComponentWork = createAction(PUT_COMPONENT_WORK, ({ componentWork, callback }) => ({
+    componentWork,
     callback,
 }));
 
@@ -51,6 +39,34 @@ export const postDeskingWorkList = createAction(POST_DESKING_WORK_LIST, ({ compo
     componentWorkSeq,
     datasetSeq,
     list,
+    callback,
+}));
+
+/**
+ * Work컴포넌트 임시저장
+ */
+export const POST_SAVE_COMPONENT_WORK = 'desking/POST_SAVE_COMPONENT_WORK';
+export const postSaveComponentWork = createAction(POST_SAVE_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({
+    componentWorkSeq,
+    callback,
+}));
+
+/**
+ * Work컴포넌트 전송
+ */
+export const POST_PUBLISH_COMPONENT_WORK = 'desking/POST_PUBLISH_COMPONENT_WORK';
+export const postPublishComponentWork = createAction(POST_PUBLISH_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({
+    componentWorkSeq,
+    callback,
+}));
+
+/**
+ * Work컴포넌트 예약
+ */
+export const POST_RESERVE_COMPONENT_WORK = 'desking/POST_RESERVE_COMPONENT_WORK';
+export const postReserveComponentWork = createAction(POST_RESERVE_COMPONENT_WORK, ({ componentWorkSeq, reserveDt, callback }) => ({
+    componentWorkSeq,
+    reserveDt,
     callback,
 }));
 

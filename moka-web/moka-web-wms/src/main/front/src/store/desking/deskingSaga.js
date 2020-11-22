@@ -9,6 +9,50 @@ import * as act from './deskingAction';
 import { DEFAULT_LANG } from '@/constants';
 
 /**
+ * Desking API 호출
+ * @param {string} actionType 액션명
+ * @param {func} api API 함수
+ */
+export function createDeskingRequestSaga(actionType, api) {
+    return function* (action) {
+        const payload = action.payload;
+        const { callback } = payload;
+        let callbackData;
+
+        yield put(startLoading(actionType));
+
+        try {
+            const response = yield call(api, action.payload);
+            callbackData = { ...response.data, payload };
+
+            if (response.data.header.success) {
+                yield put({
+                    type: act.COMPONENT_WORK_SUCCESS,
+                    payload: response.data,
+                });
+            } else {
+                yield put({
+                    type: act.COMPONENT_WORK_FAILURE,
+                    payload: response.data,
+                });
+            }
+        } catch (e) {
+            callbackData = errorResponse(e);
+            yield put({
+                type: act.COMPONENT_WORK_FAILURE,
+                payload: errorResponse(e),
+            });
+        }
+
+        if (typeof callback === 'function') {
+            yield call(callback, callbackData);
+        }
+
+        yield put(finishLoading(actionType));
+    };
+}
+
+/**
  * 편집영역 클릭시, 컴포넌트 워크 목록 조회
  */
 const getComponentWorkList = createRequestSaga(act.GET_COMPONENT_WORK_LIST, api.getComponentWorkList);
@@ -52,12 +96,12 @@ function* getComponentWork({ payload }) {
  */
 function* putComponentWork({ payload }) {
     const ACTION = act.PUT_COMPONENT_WORK;
-    const { componentWorkSeq, snapshotYn, snapshotBody, templateSeq, callback } = payload;
+    const { componentWork, callback } = payload;
     let response, callbackData;
 
     yield startLoading(ACTION);
     try {
-        response = yield call(api.getComponentWork, { componentWorkSeq, snapshotYn, snapshotBody, templateSeq });
+        response = yield call(api.putComponentWork, { componentWork });
         callbackData = response.data;
 
         if (response.data.header.success) {
@@ -101,9 +145,8 @@ const makeRowNode = (data, overIndex, component) => {
             seq: null,
             deskingSeq: null,
             datasetSeq: component.datasetSeq,
-            // editionSeq: component.editionSeq,
             totalId: data.totalId,
-            parentTotalId: null,
+            parentTotalId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
             contentType: data.contentType,
             artType: data.artType,
             sourceCode: data.sourceCode,
@@ -137,7 +180,6 @@ const makeRowNode = (data, overIndex, component) => {
             componentWorkSeq: component.seq,
             componentSeq: component.componentSeq,
             datasetSeq: component.datasetSeq,
-            // editionSeq: component.editionSeq,
             contentOrd,
         };
     }
@@ -217,92 +259,22 @@ function* deskingDragStop({ payload }) {
 /**
  * Work컴포넌트 임시저장
  */
-function* postPreComponentWork(action) {
-    const ACTION = act.POST_PRE_COMPONENT_WORK;
-    let response, callbackData;
-    const { callback } = action.payload;
+const postSaveComponentWork = createDeskingRequestSaga(act.POST_SAVE_COMPONENT_WORK, api.postSaveComponentWork);
 
-    yield put(startLoading(ACTION));
-    try {
-        response = yield call(api.postDeskingWorkList, action.payload);
+/**
+ * Work컴포넌트 전송
+ */
+const postPublishComponentWork = createDeskingRequestSaga(act.POST_PUBLISH_COMPONENT_WORK, api.postPublishComponentWork);
 
-        callbackData = response.data;
-
-        if (response.data.header.success) {
-            // 성공 액션 실행
-            yield put({
-                type: act.COMPONENT_WORK_SUCCESS,
-                payload: response.data,
-            });
-        } else {
-            // yield put({
-            //     type: deskingStore.COMPONENT_WORK_FAILURE,
-            //     payload: response.data,
-            //     error: true
-            // });
-        }
-    } catch (e) {
-        callbackData = errorResponse(e);
-
-        // 실패 액션 실행
-        yield put({
-            type: act.COMPONENT_WORK_FAILURE,
-            payload: callbackData,
-        });
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-    yield put(finishLoading(ACTION));
-}
+/**
+ * Work컴포넌트 예약
+ */
+const postReserveComponentWork = createDeskingRequestSaga(act.POST_RESERVE_COMPONENT_WORK, api.postReserveComponentWork);
 
 /**
  * 컴포넌트 워크에 편집기사 리스트 등록 => 성공 결과) 컴포넌트 워크 데이터가 리턴됨
  */
-function* postDeskingWorkList({ payload }) {
-    const { componentWorkSeq, datasetSeq, deskingWorkList, callback } = payload;
-    const ACTION = act.POST_DESKING_WORK_LIST;
-    let response, callbackData;
-
-    yield put(startLoading(ACTION));
-
-    try {
-        response = yield call(api.postDeskingWorkList, {
-            componentWorkSeq,
-            datasetSeq,
-            deskingWorkList,
-        });
-
-        callbackData = response.data;
-
-        if (response.data.header.success) {
-            // 성공 액션 실행
-            yield put({
-                type: act.COMPONENT_WORK_SUCCESS,
-                payload: response.data,
-            });
-        } else {
-            yield put({
-                type: act.COMPONENT_WORK_FAILURE,
-                payload: response.data,
-            });
-        }
-    } catch (e) {
-        callbackData = errorResponse(e);
-
-        // 실패 액션 실행
-        yield put({
-            type: act.COMPONENT_WORK_FAILURE,
-            payload: callbackData,
-        });
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-    yield put(finishLoading(ACTION));
-}
+const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST, api.postDeskingWorkList);
 
 /**
  * 컴포넌트워크 간의 데스킹기사 이동 => 성공 결과 ???
@@ -392,8 +364,10 @@ export default function* saga() {
     yield takeLatest(act.GET_COMPONENT_WORK, getComponentWork);
     yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWork);
 
+    yield takeLatest(act.POST_SAVE_COMPONENT_WORK, postSaveComponentWork);
+    yield takeLatest(act.POST_PUBLISH_COMPONENT_WORK, postPublishComponentWork);
+    yield takeLatest(act.POST_RESERVE_COMPONENT_WORK, postReserveComponentWork);
     // yield takeLatest(act.POST_COMPONENT_WORK, postComponentWorkSaga);
-    yield takeLatest(act.POST_PRE_COMPONENT_WORK, postPreComponentWork);
     // yield takeLatest(act.HAS_OTHER_SAVED, hasOtherSavedSaga);
 
     // 컴포넌트 워크의 데스킹 (편집기사)

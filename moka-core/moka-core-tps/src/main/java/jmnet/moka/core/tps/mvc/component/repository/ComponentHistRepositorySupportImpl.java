@@ -12,6 +12,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.component.entity.QComponentHist;
+import jmnet.moka.core.tps.mvc.dataset.entity.QDataset;
 import jmnet.moka.core.tps.mvc.template.entity.QTemplate;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -33,6 +34,7 @@ public class ComponentHistRepositorySupportImpl extends QuerydslRepositorySuppor
     public List<ComponentHist> findLastHist(Long componentSeq, String dataType) {
         QComponentHist componentHist = QComponentHist.componentHist;
         QTemplate template = QTemplate.template;
+        QDataset dataset = QDataset.dataset;
 
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -42,6 +44,10 @@ public class ComponentHistRepositorySupportImpl extends QuerydslRepositorySuppor
         builder.and(componentHist.status.eq(EditStatusCode.PUBLISH));
 
         JPQLQuery<ComponentHist> query = queryFactory.selectFrom(componentHist)
+                                                     .leftJoin(componentHist.template, template)
+                                                     .fetchJoin()
+                                                     .leftJoin(componentHist.dataset, dataset)
+                                                     .fetchJoin()
                                                      .where(builder)
                                                      .limit(1)
                                                      .orderBy(componentHist.seq.desc());

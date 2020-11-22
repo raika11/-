@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -58,7 +58,7 @@ public class DeskingWorkSearchDTO extends SearchDTO {
 
     // 검색 조건의 기본값을 설정
     public DeskingWorkSearchDTO() {
-        super(DeskingComponentWorkVO.class, "componentOrd,asc");
+        super(ComponentWorkVO.class, "componentOrd,asc");
         this.setUseTotal(MokaConstants.YES);
         this.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         this.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);

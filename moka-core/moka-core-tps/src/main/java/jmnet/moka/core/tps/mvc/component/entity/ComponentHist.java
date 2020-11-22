@@ -101,20 +101,21 @@ public class ComponentHist extends RegAudit {
      */
     @Column(name = "STATUS", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private EditStatusCode status;
+    @Builder.Default
+    private EditStatusCode status = EditStatusCode.SAVE;
 
     /**
      * 예약일시
      */
     @Column(name = "RESERVE_DT", updatable = false)
-    protected Date reserveDt;
+    private Date reserveDt;
 
     /**
      * 승인여부 예약일시가 설정되어 있을 경우 예약된 작업이 완료되면 Y로 처리
      */
     @Column(name = "APPROVAL_YN")
     @Builder.Default
-    protected String approvalYn = MokaConstants.NO;
+    private String approvalYn = MokaConstants.NO;
 
     /**
      * 매칭영역 목록
@@ -161,7 +162,7 @@ public class ComponentHist extends RegAudit {
     public void prePersist() {
         this.dataType = McpString.defaultValue(this.dataType, TpsConstants.DATATYPE_NONE);
         this.workType = McpString.defaultValue(this.workType, TpsConstants.WORKTYPE_UPDATE);
-        this.status = this.status == null ? EditStatusCode.PUBLISH : this.status;
+        this.status = this.status == null ? EditStatusCode.SAVE : this.status;
         this.approvalYn = McpString.defaultValue(this.approvalYn, MokaConstants.NO);
         this.viewYn = McpString.defaultValue(this.viewYn, MokaConstants.YES);
         this.perPageCount = this.perPageCount == null ? TpsConstants.PER_PAGE_COUNT : this.perPageCount;

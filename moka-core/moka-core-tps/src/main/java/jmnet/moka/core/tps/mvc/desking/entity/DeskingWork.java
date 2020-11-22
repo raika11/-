@@ -18,6 +18,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -84,7 +85,8 @@ public class DeskingWork implements Serializable {
      * 기사타입
      */
     @Column(name = "ART_TYPE", columnDefinition = "char")
-    private String artType;
+    @Builder.Default
+    private String artType = TpsConstants.DEFAULT_ART_TYPE;
 
     /**
      * 출처
@@ -96,12 +98,14 @@ public class DeskingWork implements Serializable {
      * 콘텐트순서
      */
     @Column(name = "CONTENT_ORD", nullable = false)
+    @Builder.Default
     private Integer contentOrd = 1;
 
     /**
      * 관련순서
      */
     @Column(name = "REL_ORD", nullable = false)
+    @Builder.Default
     private Integer relOrd = 1;
 
     /**
@@ -180,18 +184,21 @@ public class DeskingWork implements Serializable {
      * 썸네일용량
      */
     @Column(name = "THUMB_SIZE", nullable = false)
+    @Builder.Default
     private Integer thumbSize = 0;
 
     /**
      * 썸네일가로
      */
     @Column(name = "THUMB_WIDTH", nullable = false)
+    @Builder.Default
     private Integer thumbWidth = 0;
 
     /**
      * 썸네일세로
      */
     @Column(name = "THUMB_HEIGHT", nullable = false)
+    @Builder.Default
     private Integer thumbHeight = 0;
 
     /**
@@ -209,6 +216,7 @@ public class DeskingWork implements Serializable {
     @PrePersist
     @PreUpdate
     public void prePersist() {
+        this.artType = McpString.defaultValue(TpsConstants.DEFAULT_ART_TYPE);
         this.contentOrd = this.contentOrd == null ? 1 : this.contentOrd;
         this.relOrd = this.relOrd == null ? 1 : this.relOrd;
         this.lang = this.lang == null ? TpsConstants.DEFAULT_LANG : this.lang;

@@ -25,7 +25,7 @@ import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.desking.mapper.ComponentWorkMapper;
-import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
@@ -274,7 +274,7 @@ public class PreviewController {
 
         try {
             // 컴포넌트 : work 컴포넌트정보를 모두 보내지는 않는다.
-            DeskingComponentWorkVO componentVO = componentWorkMapper.findComponentWorkBySeq(componentWorkSeq);
+            ComponentWorkVO componentVO = componentWorkMapper.findComponentWorkBySeq(componentWorkSeq);
             if (componentVO == null) {
                 String message = messageByLocale.get("tps.common.error.no-data", request);
                 tpsLogger.fail(ActionType.SELECT, message, true);

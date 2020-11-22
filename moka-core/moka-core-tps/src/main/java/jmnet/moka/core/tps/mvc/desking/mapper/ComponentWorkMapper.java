@@ -14,7 +14,7 @@ package jmnet.moka.core.tps.mvc.desking.mapper;
 import java.util.List;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
-import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 
 /**
  * <pre>
@@ -25,7 +25,7 @@ import jmnet.moka.core.tps.mvc.desking.vo.DeskingComponentWorkVO;
  * @author ssc
  * @since 2020. 7. 29. 오후 4:07:10
  */
-public interface ComponentWorkMapper extends BaseMapper<DeskingComponentWorkVO, DeskingWorkSearchDTO> {
+public interface ComponentWorkMapper extends BaseMapper<ComponentWorkVO, DeskingWorkSearchDTO> {
 
     /**
      * 기존의 작업용 수동컴포넌트 삭제 및 import
@@ -52,7 +52,7 @@ public interface ComponentWorkMapper extends BaseMapper<DeskingComponentWorkVO, 
      * @param seq 컴포넌트work 순번
      * @return
      */
-    DeskingComponentWorkVO findComponentWorkBySeq(Long seq);
+    ComponentWorkVO findComponentWorkBySeq(Long seq);
 
 
 

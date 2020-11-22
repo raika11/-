@@ -6,10 +6,15 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSimpleDTO;
@@ -76,6 +81,23 @@ public class ComponentHistDTO implements Serializable {
      * 스냅샷본문
      */
     private String snapshotBody;
+
+    /**
+     * 상태 - SAVE(임시) / PUBLISH(전송)
+     */
+    @Builder.Default
+    private EditStatusCode status = EditStatusCode.SAVE;
+
+    /**
+     * 예약일시
+     */
+    protected Date reserveDt;
+
+    /**
+     * 승인여부 예약일시가 설정되어 있을 경우 예약된 작업이 완료되면 Y로 처리
+     */
+    @Builder.Default
+    protected String approvalYn = MokaConstants.NO;
 
     /**
      * 등록일자

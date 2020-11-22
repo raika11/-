@@ -29,16 +29,16 @@ public interface DeskingWorkMapper extends BaseMapper<DeskingWorkVO, DeskingWork
     //     */
     //    List<DeskingRelWorkVO> findDeskingRelWorkAll(DeskingWorkSearchDTO search);
 
-    /**
-     * <pre>
-     * Work 편집데이타 조회(단수)
-     *
-     * <pre>
-     *
-     * @param search 검색조건
-     * @return 페이지의 편집기사목록
-     */
-    List<DeskingWorkVO> findDeskingWork(DeskingWorkSearchDTO search);
+//    /**
+//     * <pre>
+//     * Work 편집데이타 조회(단수)
+//     *
+//     * <pre>
+//     *
+//     * @param search 검색조건
+//     * @return 페이지의 편집기사목록
+//     */
+//    List<DeskingWorkVO> findDeskingWork(DeskingWorkSearchDTO search);
 
     //    /**
     //     * <pre>

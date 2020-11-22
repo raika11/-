@@ -63,6 +63,12 @@ public class DeskingHist implements Serializable {
     private Long datasetSeq;
 
     /**
+     * 컴포넌트 히스토리 SEQ
+     */
+    @Column(name = "COMPONENT_HIST_SEQ")
+    private Long componentHistSeq;
+
+    /**
      * 서비스기사아이디
      */
     @Column(name = "TOTAL_ID")
@@ -84,7 +90,8 @@ public class DeskingHist implements Serializable {
      * 기사타입
      */
     @Column(name = "ART_TYPE", columnDefinition = "char")
-    private String artType;
+    @Builder.Default
+    private String artType = TpsConstants.DEFAULT_ART_TYPE;
 
     /**
      * 출처
@@ -97,18 +104,21 @@ public class DeskingHist implements Serializable {
      * 콘텐트순서
      */
     @Column(name = "CONTENT_ORD", nullable = false)
+    @Builder.Default
     private Integer contentOrd = 1;
 
     /**
      * 관련순서
      */
     @Column(name = "REL_ORD", nullable = false)
+    @Builder.Default
     private Integer relOrd = 1;
 
     /**
      * 언어(기타코드)
      */
     @Column(name = "LANG", nullable = false)
+    @Builder.Default
     private String lang = TpsConstants.DEFAULT_LANG;
 
     /**
@@ -186,18 +196,21 @@ public class DeskingHist implements Serializable {
      * 썸네일용량
      */
     @Column(name = "THUMB_SIZE", nullable = false)
+    @Builder.Default
     private Integer thumbSize = 0;
 
     /**
      * 썸네일가로
      */
     @Column(name = "THUMB_WIDTH", nullable = false)
+    @Builder.Default
     private Integer thumbWidth = 0;
 
     /**
      * 썸네일세로
      */
     @Column(name = "THUMB_HEIGHT", nullable = false)
+    @Builder.Default
     private Integer thumbHeight = 0;
 
     /**
@@ -223,24 +236,25 @@ public class DeskingHist implements Serializable {
      */
     @Column(name = "STATUS", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private EditStatusCode status;
+    private EditStatusCode status = EditStatusCode.SAVE;
 
     /**
      * 예약일시
      */
     @Column(name = "RESERVE_DT", updatable = false)
-    protected Date reserveDt;
+    private Date reserveDt;
 
     /**
      * 승인여부 예약일시가 설정되어 있을 경우 예약된 작업이 완료되면 Y로 처리
      */
     @Column(name = "APPROVAL_YN", updatable = false)
     @Builder.Default
-    protected String approvalYn = MokaConstants.NO;
+    private String approvalYn = MokaConstants.NO;
 
     @PrePersist
     @PreUpdate
     public void prePersist() {
+        this.artType = McpString.defaultValue(TpsConstants.DEFAULT_ART_TYPE);
         this.contentOrd = this.contentOrd == null ? 1 : this.contentOrd;
         this.relOrd = this.relOrd == null ? 1 : this.relOrd;
         this.lang = this.lang == null ? TpsConstants.DEFAULT_LANG : this.lang;
@@ -248,7 +262,7 @@ public class DeskingHist implements Serializable {
         this.thumbWidth = this.thumbWidth == null ? 0 : this.thumbWidth;
         this.thumbHeight = this.thumbHeight == null ? 0 : this.thumbHeight;
         this.regDt = McpDate.defaultValue(this.regDt);
-        this.status = this.status == null ? EditStatusCode.PUBLISH : this.status;
+        this.status = this.status == null ? EditStatusCode.SAVE : this.status;
         this.approvalYn = McpString.defaultValue(this.approvalYn, MokaConstants.NO);
     }
 }

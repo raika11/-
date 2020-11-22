@@ -7,6 +7,8 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
@@ -119,7 +121,7 @@ public class ComponentServiceImpl implements ComponentService {
 
     @Override
     @Transactional(rollbackFor = NoDataException.class)
-    public Component insertComponent(Component component)
+    public Component insertComponent(Component component, HistPublishDTO histPublishDTO)
             throws NoDataException, Exception {
         Component returnComp = null;
         //        Set<ComponentAd> ads = component.getComponentAdList();
@@ -132,11 +134,17 @@ public class ComponentServiceImpl implements ComponentService {
 
             // 데이터셋 생성하여 컴포넌트에 셋팅
             returnComp.setDataset(this.createNewDataset(returnComp));
-            returnComp = this.updateComponent(returnComp);
+
+            returnComp = this.updateComponent(returnComp, histPublishDTO);    // 히스토리 생성포함됨.
+
             entityManager.flush();
         } else {
             returnComp = componentRepository.save(component);
             log.debug("[COMPONENT INSERT] seq: {}", returnComp.getComponentSeq());
+
+            // 히스토리 생성
+            componentHistService.insertComponentHist(returnComp, histPublishDTO);
+            log.debug("[COMPONENT INSERT] seq: {} History Insert success", returnComp.getComponentSeq());
         }
 
         // 컴포넌트광고가 있으면 insert
@@ -150,10 +158,6 @@ public class ComponentServiceImpl implements ComponentService {
         //
         //            returnComp.setComponentAdList(returnAds);
         //        }
-
-        // 히스토리 생성
-        componentHistService.insertComponentHist(returnComp);
-        log.debug("[COMPONENT INSERT] seq: {} History Insert success", returnComp.getComponentSeq());
 
         // DB반영
         entityManager.refresh(returnComp);
@@ -171,17 +175,16 @@ public class ComponentServiceImpl implements ComponentService {
     }
 
     @Override
-    public Component updateComponent(Component component)
-            throws NoDataException, Exception {
-        String message = messageByLocale.get("tps.component.error.no-data");
+    public Component updateComponent(Component component, HistPublishDTO histPublishDTO) throws NoDataException, Exception {
+        String message = messageByLocale.get("tps.common.error.no-data");
         Component orgComponent = this.findComponentBySeq(component.getComponentSeq())
                                      .orElseThrow(() -> new NoDataException(message));
-        return this.updateComponent(component, orgComponent);
+        return this.updateComponent(component, orgComponent, histPublishDTO);
     }
 
     @Override
     @Transactional
-    public Component updateComponent(Component newComponent, Component orgComponent)
+    public Component updateComponent(Component newComponent, Component orgComponent, HistPublishDTO histPublishDTO)
             throws Exception {
 
         // DATASET_SEQ == null이고 DATA_TYPE == 'EDIT' 인 경우 데이터셋 생성하여 컴포넌트에 셋팅
@@ -201,7 +204,7 @@ public class ComponentServiceImpl implements ComponentService {
         //        log.debug("[COMPONENT UPDATE] seq: {} AdList Update success", component.getComponentSeq());
 
         // 히스토리 추가
-        componentHistService.insertComponentHist(component);
+        componentHistService.insertComponentHist(component, histPublishDTO);
         log.debug("[COMPONENT UPDATE] seq: {} History Insert success", component.getComponentSeq());
 
         // 템플릿 위치그룹명 셋팅
@@ -287,11 +290,11 @@ public class ComponentServiceImpl implements ComponentService {
 
     @Override
     @Transactional
-    public List<Component> insertComponents(List<Component> components)
+    public List<Component> insertComponents(List<Component> components, HistPublishDTO histPublishDTO)
             throws Exception {
         List<Component> result = componentRepository.saveAll(components);
         // 히스토리 생성
-        componentHistService.insertComponentHistList(result);
+        componentHistService.insertComponentHistList(result, histPublishDTO);
         return result;
     }
 

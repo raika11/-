@@ -21,15 +21,16 @@ import java.util.Map;
 @Validated
 @Slf4j
 @RequestMapping("/api/resttemplatetest")
-public class RestTemplateTestController {
+public class BrightController {
 
     private final HttpClient httpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
 
     @ApiOperation(value = "HttpRequest")
     @GetMapping("/getData2")
     public ResponseEntity<?> sendPost() throws Exception {
+        // 프로퍼티에서 가져오는것으로 저장
         String url = "https://oauth.brightcove.com/v4/access_token?grant_type=client_credentials";
-        // form parameters
+
         String params = "client_id=03cf20ff-f4c6-4668-87c8-ccaadb3680b4&client_secret=J7VeL4iUGc4xkVTLi7LZXj0fX0eX4CBvuYyPa3fHsIukwDIOG5kOHB0nYsVeHl0kD8_2n7UQK4dYihv_y-DJdw";
 
         HttpRequest request = HttpRequest.newBuilder()

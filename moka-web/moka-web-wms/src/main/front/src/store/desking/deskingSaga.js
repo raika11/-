@@ -328,7 +328,7 @@ function* deskingDragStop({ payload }) {
             const option = {
                 componentWorkSeq: tgtComponent.seq,
                 datasetSeq: tgtComponent.datasetSeq,
-                deskingWorkList: appendNodes,
+                list: appendNodes,
                 callback,
             };
             yield put({

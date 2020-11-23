@@ -172,14 +172,14 @@ const AreaFormDepth2 = (props) => {
         let save = {
             ...temp,
             page: Object.keys(page).length > 0 ? { pageSeq: page.pageSeq } : null,
-            parent: Object.keys(parent).length > 0 ? { areaSeq: parent.areaSeq } : null,
+            parent: parent.areaSeq ? { areaSeq: parent.areaSeq } : null,
             domain,
         };
 
         if (temp.areaDiv === ITEM_CP) {
             save.container = null;
             if (component.componentSeq) {
-                save.areaComps = [{ ...component, ordNo: 1 }];
+                save.areaComps = [{ component, ordNo: 1 }];
             }
         } else {
             save.container = container;
@@ -357,15 +357,15 @@ const AreaFormDepth2 = (props) => {
             setComponent({});
             setContainer({});
         }
+        setDomain(temp.domain);
         if (temp.parent && temp.parent.areaSeq) {
             setParent(temp.parent);
-            setDomain(temp.domain);
         } else if (depth === 2) {
             setParent(areaDepth1);
-            setDomain(areaDepth1.domain || {});
+            setDomain(areaDepth1.domain);
         } else {
             setParent(areaDepth2);
-            setDomain(areaDepth2.domain || {});
+            setDomain(areaDepth2.domain);
         }
         setContCnt(0);
         setCompCnt(0);

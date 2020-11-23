@@ -136,11 +136,9 @@ const DeskingWorkButtonGroup = (props) => {
             <div className="px-2 pt-1">
                 <Row className="m-0 d-flex align-items-center justify-content-between">
                     <Col className="p-0" xs={6}>
-                        <p className="ft-12 mb-0">
-                            <OverlayTrigger overlay={<Tooltip>{`데이타셋ID: ${component.datasetSeq}`}</Tooltip>}>
-                                <div>{title}</div>
-                            </OverlayTrigger>
-                        </p>
+                        <OverlayTrigger overlay={<Tooltip>{`데이타셋ID: ${component.datasetSeq}`}</Tooltip>}>
+                            <p className="ft-12 mb-0">{title}</p>
+                        </OverlayTrigger>
                     </Col>
                     <Col className="p-0 d-flex align-items-center justify-content-end" xs={6}>
                         {iconButton.map((icon, idx) => (

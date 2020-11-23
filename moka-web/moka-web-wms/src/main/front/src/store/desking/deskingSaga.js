@@ -267,9 +267,10 @@ function* deskingDragStop({ payload }) {
     const rd = (insertIndex) => {
         const ans = [];
 
-        if (source.nodes) {
+        const selectdNodes = source.api.getSelectedNodes();
+        if (selectdNodes.length > 1) {
             // 기사 여러개 이동
-            source.nodes.forEach((node, idx) => {
+            selectdNodes.forEach((node, idx) => {
                 const tmp = makeRowNode(node.data, insertIndex + idx, tgtComponent, callback);
                 if (tmp) ans.push(tmp);
             });
@@ -286,9 +287,10 @@ function* deskingDragStop({ payload }) {
     const rrd = (firstIndex, parentData) => {
         const ans = [];
 
-        if (source.nodes) {
+        const selectdNodes = source.api.getSelectedNodes();
+        if (selectdNodes.length > 1) {
             // 기사 여러개 이동
-            source.nodes.forEach((node, idx) => {
+            selectdNodes.forEach((node, idx) => {
                 const tmp = makeRelRowNode(node.data, firstIndex + idx, parentData, tgtComponent, callback);
                 if (tmp) ans.push(tmp);
             });

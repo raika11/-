@@ -12,7 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Setter
 @Getter
-public class data {
+public class DataDto {
     private  String clientId;
     private  String clientSecret;
 

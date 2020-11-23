@@ -1,9 +1,11 @@
-package jmnet.moka.core.dps.api.menu;
+package jmnet.moka.core.dps.api.handler.module.menu;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import lombok.AllArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * <pre>
@@ -91,6 +94,9 @@ public class Menu {
     @JsonIgnore
     private Menu parentMenu;
 
+    @JsonIgnore
+    private Map<String,Object> searchParamMap;
+
     public Menu(Menu parentMenu, Node menuNode, MenuParser menuParser)
             throws XPathExpressionException {
         this.parentMenu = parentMenu;
@@ -133,7 +139,7 @@ public class Menu {
         // IconHtml
             this.setIconHtml("");
         // CategoryKeys
-        this.setCategoryKey(getCategoryKey(menuEl, menuParser));
+        this.setCategoryAndSearchParamter(menuEl, menuParser);
     }
 
     public boolean hasChildren() {
@@ -170,17 +176,30 @@ public class Menu {
         return null;
     }
 
-    public String getCategoryKey(Element menuNode,MenuParser menuParser)
+    public void setCategoryAndSearchParamter(Element menuNode,MenuParser menuParser)
             throws XPathExpressionException {
+        String categoryKey = null;
         Node categoryNode = menuParser.getNode(menuNode,"Section/CategoryKeys/string");
         if ( categoryNode != null) {
-            return categoryNode.getTextContent();
+            categoryKey = categoryNode.getTextContent().trim();
         }
         Node listNode = menuParser.getNode(menuNode,"List");
         if ( listNode != null) {
-            return ((Element)listNode).getAttribute("CategoryKey");
+            Element listEl = (Element)listNode;
+            categoryKey = listEl.getAttribute("CategoryKey");
+            String type = listEl.getAttribute("Type");
+            if ( type.equals("Search")) {
+                NodeList nodeList = menuParser.getNodeList(menuNode,"Url/Parameters/Parameter");
+                if ( nodeList != null) {
+                    this.searchParamMap = new HashMap<>();
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Element parameterEl = (Element)nodeList.item(i);
+                        this.searchParamMap.put(parameterEl.getAttribute("Name"), parameterEl.getAttribute("Value"));
+                    }
+                }
+            }
         }
-        return null;
+        this.setCategoryKey(categoryKey);
     }
 
     public void addChildMenu(Menu childMenu) {

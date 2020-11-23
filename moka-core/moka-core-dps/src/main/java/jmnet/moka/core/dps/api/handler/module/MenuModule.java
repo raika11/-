@@ -7,12 +7,12 @@ import java.util.Map;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
-import jmnet.moka.core.dps.api.category.Category;
-import jmnet.moka.core.dps.api.category.CategoryParser;
+import jmnet.moka.core.dps.api.handler.module.category.Category;
+import jmnet.moka.core.dps.api.handler.module.category.CategoryParser;
 import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
-import jmnet.moka.core.dps.api.menu.Menu;
-import jmnet.moka.core.dps.api.menu.MenuParser;
+import jmnet.moka.core.dps.api.handler.module.menu.Menu;
+import jmnet.moka.core.dps.api.handler.module.menu.MenuParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -81,6 +81,11 @@ public class MenuModule implements ModuleInterface {
             return returnMap;
         }
         return returnMap;
+    }
+
+    public  Map<String, Object> getSearchParmeterByCategory(String categoryKey) throws Exception {
+        Menu foundMenu = findMenuByCategory(this.menuParser.getRootMenu(), categoryKey);
+        return foundMenu != null ? foundMenu.getSearchParamMap() : null;
     }
 
     private Map<String, Object> getFullMenu(String categoryKey) {

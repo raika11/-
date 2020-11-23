@@ -2,6 +2,8 @@ package jmnet.moka.core.dps.api.handler;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import jmnet.moka.common.proxy.autoConfig.HttpProxyConfiguration;
+import jmnet.moka.common.proxy.http.HttpProxy;
 import jmnet.moka.common.utils.McpString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,10 @@ public class ModuleRequestHandler implements RequestHandler {
     @Autowired
     public ModuleRequestHandler(GenericApplicationContext appContext) {
         this.appContext = appContext;
+    }
+
+    public HttpProxy getHttpProxy() {
+        return (HttpProxy) appContext.getBean(HttpProxyConfiguration.HTTP_PROXY);
     }
 
     @Override

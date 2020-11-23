@@ -151,11 +151,6 @@ export function* deleteArea({ payload: { areaSeq, callback, depth } }) {
 }
 
 /**
- * 관련 아이템 체크
- */
-// const hasRelationList = createRequestSaga(act.HAS_RELATION_LIST, api.hasRelationList, true);
-
-/**
  * 편집영역 트리 조회(페이지편집용)
  */
 const getAreaTree = createRequestSaga(act.GET_AREA_TREE, api.getAreaTree);

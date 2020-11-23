@@ -231,7 +231,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         </span>
 
                         {/* drag over mask */}
-                        <div className="dropzone-dragover-mask" />
+                        <div className="dropzone-dragover-mask dropzone-border" />
                     </Figure>
                 );
             }}

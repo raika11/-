@@ -1,13 +1,25 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, forwardRef } from 'react';
 import { useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast from '@utils/toastUtil';
-import { getComponentWork, postPreComponentWork } from '@store/desking';
+import { getComponentWork, postSaveComponentWork, postPublishComponentWork } from '@store/desking';
 
 const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
 const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
+
+/**
+ * 커스텀 토글
+ */
+const customToggle = forwardRef(({ onClick, id }, ref) => {
+    return (
+        <div ref={ref} className="px-2" onClick={onClick} id={id}>
+            <MokaIcon iconName="fal-ellipsis-v-alt" />
+        </div>
+    );
+});
 
 /**
  * 데스킹 워크 버튼 그룹 컴포넌트
@@ -24,7 +36,7 @@ const DeskingWorkButtonGroup = (props) => {
     const title = `ID: CP${component.componentSeq} ${component.componentName}`;
 
     /**
-     * HTML편집 버튼 클릭
+     * HTML편집 버튼
      */
     const handleHtmlEditClicked = () => {
         const option = {
@@ -44,12 +56,43 @@ const DeskingWorkButtonGroup = (props) => {
     };
 
     /**
-     * 기사이동 버튼 클릭
+     * 전송
      */
-    const handleRegisterClicked = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+    const handlePublishComponentWork = () => {
+        const option = {
+            componentWorkSeq: component.seq,
+            callback: ({ header }) => {
+                if (header.success) {
+                    toast.success(header.message);
+                } else {
+                    toast.error(header.message);
+                }
+            },
+        };
+        dispatch(postPublishComponentWork(option));
+    };
 
+    /**
+     * 임시저장
+     */
+    const handleSaveComponentWork = () => {
+        const option = {
+            componentWorkSeq: component.seq,
+            callback: ({ header }) => {
+                if (header.success) {
+                    toast.success(header.message);
+                } else {
+                    toast.error(header.message);
+                }
+            },
+        };
+        dispatch(postSaveComponentWork(option));
+    };
+
+    /**
+     * 기사이동 버튼
+     */
+    const handleRegisterClicked = () => {
         if (!componentAgGridInstances[agGridIndex]) return;
         const api = componentAgGridInstances[agGridIndex].api;
 
@@ -60,46 +103,42 @@ const DeskingWorkButtonGroup = (props) => {
         }
     };
 
-    /**
-     * 임시저장
-     */
-    const handlePreComponentWork = () => {
-        const option = {
-            componentWorkSeq: component.seq,
-            callback: ({ header }) => {
-                if (!header.success) {
-                    toast.warn(header.message);
-                }
-            },
-        };
-        dispatch(postPreComponentWork(option));
-    };
-
     const iconButton = [
-        { title: '관련기사 정보', iconName: 'fal-minus-circle' },
-        { title: 'HTML 수동편집', iconName: 'fal-minus-circle', onClick: handleHtmlEditClicked },
-        { title: '템플릿', iconName: 'fal-minus-circle' },
-        { title: '히스토리', iconName: 'fal-minus-circle' },
-        { title: '기사 이동', iconName: 'fal-minus-circle', onClick: handleRegisterClicked },
-        { title: '더미기사 등록', iconName: 'fal-minus-circle' },
-        { title: '임시저장', iconName: 'fal-minus-circle', onClick: handlePreComponentWork },
-        { title: '전송', iconName: 'fal-minus-circle' },
-        { title: '삭제', iconName: 'fal-minus-circle' },
+        { title: 'HTML 수동편집', iconName: 'fal-code', onClick: handleHtmlEditClicked },
+        { title: '템플릿', iconName: 'fal-expand-wide' },
+        { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
+        { title: '임시저장', iconName: 'fal-save', onClick: handleSaveComponentWork },
     ];
 
     return (
-        <React.Fragment>
+        <>
             <div className="px-2 pt-1">
                 <Row className="m-0 d-flex align-items-center justify-content-between">
                     <Col className="p-0" xs={6}>
                         <p className="ft-12 mb-0">{title}</p>
                     </Col>
-                    <Col className="p-0 d-flex align-items-center justify-content-between" xs={6}>
+                    <Col className="p-0 d-flex align-items-center justify-content-end" xs={6}>
                         {iconButton.map((icon, idx) => (
-                            <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="p-0" onClick={icon.onClick}>
+                            <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-2 mx-auto" onClick={icon.onClick}>
                                 <MokaIcon iconName={icon.iconName} />
                             </MokaOverlayTooltipButton>
                         ))}
+                        <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0 mx-auto">
+                            <Dropdown>
+                                <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
+                                <Dropdown.Menu className="ft-12">
+                                    <Dropdown.Item eventKey="1">공백 추가</Dropdown.Item>
+                                    <Dropdown.Item eventKey="2">전체 삭제</Dropdown.Item>
+                                    <Dropdown.Item eventKey="3" onClick={handleRegisterClicked}>
+                                        기사 이동
+                                    </Dropdown.Item>
+                                    <Dropdown.Item eventKey="4">리스트 건수</Dropdown.Item>
+                                    <Dropdown.Item eventKey="5" style={component.viewYn === 'Y' ? { color: 'red' } : { color: 'black' }} disabled>
+                                        영역 노출
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </MokaOverlayTooltipButton>
                     </Col>
                 </Row>
             </div>
@@ -119,7 +158,7 @@ const DeskingWorkButtonGroup = (props) => {
                     componentAgGridInstances={componentAgGridInstances}
                 />
             </Suspense>
-        </React.Fragment>
+        </>
     );
 };
 

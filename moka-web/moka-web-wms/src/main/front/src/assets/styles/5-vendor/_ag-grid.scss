@@ -257,10 +257,10 @@ $padding-height: 10px;
 
     .ag-center-cols-clipper {
         min-height: 32px;
-    }
 
-    .ag-body-horizontal-scroll {
-        display: none;
+        .ag-center-cols-viewport {
+            overflow: hidden;
+        }
     }
 }
 

@@ -21,6 +21,7 @@ import {
     faFilePlus as falFilePlus,
     faExternalLink as falExternalLink,
     faEllipsisV as falEllipsisV,
+    faEllipsisVAlt as falEllipsisVAlt,
     faPlus as falPlus,
     faMinus as falMinus,
     faFileImport as falFileImport,
@@ -36,12 +37,9 @@ import {
     faMoneyCheck as falMoneyCheck, // 페이지탭 아이콘
     faCalculator as falCalculator, // 컨테이너탭 아이콘
     faTv as falTv, // 페이지편집 > 미리보기
-    // faFileCode, // 데스킹 버튼 그룹
-    // faExpandWide, // 데스킹 버튼 그룹
-    // faExchange, // 데스킹 버튼 그룹
-    // faPlusSquare, // 데스킹 버튼 그룹
-    // faShareSquare, // 데스킹 버튼 그룹
-    // faTrash, // 데스킹 버튼 그룹
+    faCode as falCode,
+    faExpandWide as falExpandWide,
+    faShareSquare as falShareSquare,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -75,6 +73,7 @@ library.add(falHistory);
 library.add(falFilePlus);
 library.add(falExternalLink);
 library.add(falEllipsisV);
+library.add(falEllipsisVAlt);
 library.add(falPlus);
 library.add(falMinus);
 library.add(falFileImport);
@@ -91,6 +90,9 @@ library.add(falMoneyCheck);
 library.add(falCalculator);
 library.add(falTv);
 library.add(falSave);
+library.add(falCode);
+library.add(falExpandWide);
+library.add(falShareSquare);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

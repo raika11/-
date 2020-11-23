@@ -8,6 +8,7 @@ import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormPartHist;
 import org.springframework.data.domain.Page;
 
 /**
@@ -187,4 +188,20 @@ public interface EditFormService {
      * @return 사용여부
      */
     public boolean isUsedPage(Long editFormSeq);
+
+    /**
+     * 편집 폼 Part의 편집 이력 목록 조회
+     *
+     * @param search 검색 조건
+     * @return 검색 결과
+     */
+    Page<EditFormPartHist> findAllEditFormPartHistory(EditFormSearchDTO search);
+
+    /**
+     * 편집 폼 Part의 편집 이력 조회
+     *
+     * @param seqNo 이력 일련번호
+     * @return 검색 결과
+     */
+    Optional<EditFormPartHist> findEditFormPartHistoryBySeq(Long seqNo);
 }

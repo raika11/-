@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -132,7 +133,7 @@ public class ArticleBasic implements Serializable {
      * 기사타입
      */
     @Column(name = "ART_TYPE", columnDefinition = "char")
-    private String artType = "B";
+    private String artType = TpsConstants.DEFAULT_ART_TYPE;
 
     /**
      * 콘텐트타입

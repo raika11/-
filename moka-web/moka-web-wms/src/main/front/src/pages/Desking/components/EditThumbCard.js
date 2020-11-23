@@ -64,7 +64,7 @@ export const ItemTypes = {
  * https://github.com/react-dnd/react-dnd/issues/1550
  */
 const EditThumbCard = forwardRef((props, ref) => {
-    const { onClick, width, height, data, img, alt, selected, className, dropCard, addCard, moveCard } = props;
+    const { onClick, width, height, data, img, alt, selected, className, dropCard, moveCard, setAddIndex } = props;
     const imgRef = useRef(null);
     const wrapperRef = useRef(null);
     const cardRef = useRef(null);
@@ -83,32 +83,31 @@ const EditThumbCard = forwardRef((props, ref) => {
         accept: ItemTypes.GIF,
         hover: (item, monitor) => {
             if (!cardRef.current) return;
+            const dragIndex = item.index;
+            const hoverIndex = data.index;
+
+            if (dragIndex === hoverIndex) return;
+
+            // Determine rectangle on screen
+            const hoverBoundingRect = cardRef.current?.getBoundingClientRect();
+            // Get vertical middle
+            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+            // Determine mouse position
+            const clientOffset = monitor.getClientOffset();
+            // Get pixels to the top
+            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+            // Only perform the move when the mouse has crossed half of the items height
+            // When dragging downwards, only move when the cursor is below 50%
+            // When dragging upwards, only move when the cursor is above 50%
+
+            // Dragging downwards
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
+            // Dragging upwards
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
 
             if (item.move) {
-                const dragIndex = item.index;
-                const hoverIndex = data.index;
-
-                if (dragIndex === hoverIndex) return;
-
-                // Determine rectangle on screen
-                const hoverBoundingRect = cardRef.current?.getBoundingClientRect();
-                // Get vertical middle
-                const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-                // Determine mouse position
-                const clientOffset = monitor.getClientOffset();
-                // Get pixels to the top
-                const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-                // Only perform the move when the mouse has crossed half of the items height
-                // When dragging downwards, only move when the cursor is below 50%
-                // When dragging upwards, only move when the cursor is above 50%
-
-                // Dragging downwards
-                if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
-                // Dragging upwards
-                if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-
-                moveCard(dragIndex, hoverIndex);
                 // Time to actually perform the action
+                moveCard(dragIndex, hoverIndex);
 
                 // Note: we're mutating the monitor item here!
                 // Generally it's better to avoid mutations,
@@ -116,25 +115,7 @@ const EditThumbCard = forwardRef((props, ref) => {
                 // to avoid expensive index searches.
                 item.index = hoverIndex;
             } else {
-                const hoverIndex = data.index;
-                // Determine rectangle on screen
-                const hoverBoundingRect = cardRef.current?.getBoundingClientRect();
-                // Get vertical middle
-                const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-                // Determine mouse position
-                const clientOffset = monitor.getClientOffset();
-                // Get pixels to the top
-                const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-                // Only perform the move when the mouse has crossed half of the items height
-                // When dragging downwards, only move when the cursor is below 50%
-                // When dragging upwards, only move when the cursor is above 50%
-
-                // Dragging downwards
-                if (hoverClientY < hoverMiddleY) return;
-                // Dragging upwards
-                if (hoverClientY > hoverMiddleY) return;
-
-                addCard(item, hoverIndex);
+                if (setAddIndex) setAddIndex(hoverIndex);
             }
         },
     });

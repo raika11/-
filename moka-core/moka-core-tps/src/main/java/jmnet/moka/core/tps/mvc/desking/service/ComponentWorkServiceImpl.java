@@ -10,6 +10,9 @@ package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.Optional;
 
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
+import jmnet.moka.core.tps.mvc.template.entity.Template;
+import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,25 +38,52 @@ public class ComponentWorkServiceImpl implements
     @Autowired
     private MessageByLocale messageByLocale;
 
+	@Autowired
+	private TemplateService templateService;
+
     @Override
     public Optional<ComponentWork> findComponentWorkBySeq(Long seq) {
         return componentWorkRepository.findById(seq);
     }
 
 	@Override
-	public ComponentWork updateComponentWork(ComponentWork component) throws NoDataException, Exception {
-		String message = messageByLocale.get("tps.desking.component.error.work.noContent");
-		ComponentWork orgComponent = this.findComponentWorkBySeq(component.getSeq())
-                .orElseThrow(() -> new NoDataException(message));
-		
-		orgComponent.setSnapshotYn(component.getSnapshotYn());
-		orgComponent.setSnapshotBody(component.getSnapshotBody());
-		orgComponent.setTemplate(component.getTemplate());
+	public ComponentWork updateComponentWork(ComponentWorkVO workVO) throws NoDataException, Exception {
+		String messageC = messageByLocale.get("tps.common.error.no-data");
+		ComponentWork componentWork = this.findComponentWorkBySeq(workVO.getComponentSeq())
+														  .orElseThrow(() -> new NoDataException(messageC));
+
+		String messageT = messageByLocale.get("tps.common.error.no-data");
+		Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
+										   .orElseThrow(() -> new NoDataException(messageT));
+
+		componentWork.setTemplate(template);
+		componentWork.setZone(workVO.getZone());
+		componentWork.setMatchZone(workVO.getMatchZone());
+		componentWork.setViewYn(workVO.getViewYn());
+		componentWork.setPerPageCount(workVO.getPerPageCount());
 		
 		// 컴포넌트 업데이트
-		ComponentWork saved = componentWorkRepository.save(orgComponent);
-        log.debug("[COMPONENT UPDATE] seq: {}", saved.getSeq());
+		ComponentWork saved = componentWorkRepository.save(componentWork);
+        log.debug("[COMPONENT WORK UPDATE] seq: {}", saved.getSeq());
         
+		return saved;
+	}
+
+	@Override
+	public ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn, String snapshotBody, String regId)
+			throws NoDataException, Exception {
+
+		String messageC = messageByLocale.get("tps.common.error.no-data");
+		ComponentWork componentWork = this.findComponentWorkBySeq(componentWorkSeq)
+										  .orElseThrow(() -> new NoDataException(messageC));
+
+		componentWork.setSnapshotYn(snapshotYn);
+		componentWork.setSnapshotBody(snapshotBody);
+
+		// 컴포넌트 업데이트
+		ComponentWork saved = componentWorkRepository.save(componentWork);
+		log.debug("[COMPONENT WORK SNAPSHOT UPDATE] seq: {}", saved.getSeq());
+
 		return saved;
 	}
 

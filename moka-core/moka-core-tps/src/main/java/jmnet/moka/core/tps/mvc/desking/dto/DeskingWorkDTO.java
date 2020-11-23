@@ -72,7 +72,8 @@ public class DeskingWorkDTO implements Serializable {
     /**
      * 기사타입
      */
-    private String artType;
+    @Builder.Default
+    private String artType = TpsConstants.DEFAULT_ART_TYPE;
 
     /**
      * 출처
@@ -82,16 +83,19 @@ public class DeskingWorkDTO implements Serializable {
     /**
      * 콘텐트순서
      */
+    @Builder.Default
     private Integer contentOrd = 1;
 
     /**
      * 관련순서
      */
+    @Builder.Default
     private Integer relOrd = 1;
 
     /**
      * 언어(기타코드)
      */
+    @Builder.Default
     private String lang = TpsConstants.DEFAULT_LANG;
 
     /**
@@ -104,11 +108,6 @@ public class DeskingWorkDTO implements Serializable {
      * 제목
      */
     private String title;
-
-    /**
-     * 모바일제목
-     */
-    private String mobTitle;
 
     /**
      * 부제목
@@ -158,16 +157,19 @@ public class DeskingWorkDTO implements Serializable {
     /**
      * 썸네일용량
      */
+    @Builder.Default
     private Integer thumbSize = 0;
 
     /**
      * 썸네일가로
      */
+    @Builder.Default
     private Integer thumbWidth = 0;
 
     /**
      * 썸네일세로
      */
+    @Builder.Default
     private Integer thumbHeight = 0;
 
     /**

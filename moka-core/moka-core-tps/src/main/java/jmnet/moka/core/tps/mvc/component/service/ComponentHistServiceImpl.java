@@ -1,10 +1,12 @@
 package jmnet.moka.core.tps.mvc.component.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.component.repository.ComponentHistRepository;
@@ -33,8 +35,7 @@ public class ComponentHistServiceImpl implements ComponentHistService {
 
     @Override
     @Transactional
-    public List<ComponentHist> insertComponentHistList(List<?> maybeHistories)
-            throws Exception {
+    public List<ComponentHist> insertComponentHistList(List<?> maybeHistories, HistPublishDTO histPublishDTO){
         Iterator<?> iterator = maybeHistories.iterator();
         List<ComponentHist> histories = new ArrayList<ComponentHist>();
 
@@ -45,11 +46,19 @@ public class ComponentHistServiceImpl implements ComponentHistService {
                 histories.add(ComponentHist.builder()
                                            .dataset(component.getDataset())
                                            .dataType(component.getDataType())
+                                           .snapshotYn(component.getSnapshotYn())
                                            .snapshotBody(component.getSnapshotBody())
                                            .domainId(component.getDomain()
                                                               .getDomainId())
                                            .template(component.getTemplate())
                                            .componentSeq(component.getComponentSeq())
+                                           .status(histPublishDTO.getStatus())
+                                           .approvalYn(histPublishDTO.getApprovalYn())
+                                           .reserveDt(histPublishDTO.getReserveDt())
+                                           .zone(component.getZone())
+                                           .matchZone(component.getMatchZone())
+                                           .viewYn(component.getViewYn())
+                                           .perPageCount(component.getPerPageCount())
                                            .build());
             } else if (object.getClass() == ComponentHist.class) {
                 ComponentHist componentHist = (ComponentHist) object;
@@ -60,16 +69,9 @@ public class ComponentHistServiceImpl implements ComponentHistService {
         return componentHistRepository.saveAll(histories);
     }
 
-    @Override
-    public ComponentHist insertComponentHist(Component component)
+    public ComponentHist insertComponentHist(Component component, HistPublishDTO histPublishDTO)
             throws Exception {
         ComponentHist history = ComponentHist.builder()
-                                             // 수정일자 or 등록일자
-                                             //                .regDt(McpString.isNullOrEmpty(component.getModDt()) ?
-                                             //                        component.getRegDt() : component.getModDt())
-                                             // 수정자 or 등록자
-                                             //                .regId(McpString.isNullOrEmpty(component.getModId()) ?
-                                             //                        component.getRegId() : component.getModId())
                                              .dataset(component.getDataset())
                                              .dataType(component.getDataType())
                                              .domainId(component.getDomain()
@@ -78,15 +80,18 @@ public class ComponentHistServiceImpl implements ComponentHistService {
                                              .componentSeq(component.getComponentSeq())
                                              .snapshotYn(component.getSnapshotYn())
                                              .snapshotBody(component.getSnapshotBody())
-                                             .status(EditStatusCode.PUBLISH)
-                                             .approvalYn(MokaConstants.YES)
+                                             .status(histPublishDTO.getStatus())
+                                             .approvalYn(histPublishDTO.getApprovalYn())
+                                             .reserveDt(histPublishDTO.getReserveDt())
                                              .zone(component.getZone())
                                              .matchZone(component.getMatchZone())
                                              .viewYn(component.getViewYn())
                                              .perPageCount(component.getPerPageCount())
                                              .build();
 
-        return this.insertComponentHist(history);
+        ComponentHist componentHist = this.insertComponentHist(history);
+        histPublishDTO.setSeq(componentHist.getSeq());  // 등록된 히스토리SEQ값을 세팅해 준다.
+        return componentHist;
     }
 
     @Override

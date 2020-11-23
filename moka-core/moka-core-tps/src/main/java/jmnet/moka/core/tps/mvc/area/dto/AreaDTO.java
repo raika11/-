@@ -5,14 +5,13 @@
 package jmnet.moka.core.tps.mvc.area.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -37,7 +36,8 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @Getter
 @Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "areaSeq", scope = AreaDTO.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "areaSeq")
 public class AreaDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -122,15 +122,24 @@ public class AreaDTO implements Serializable {
     private String previewRsrc;
 
     /**
-     * 컴포넌트목록
+     * 컴포넌트목록: areaDiv == 'CT'인 경우 값 있음
      */
-    private Set<AreaCompDTO> areaComps = new LinkedHashSet<AreaCompDTO>();
+    private List<AreaCompDTO> areaComps = new ArrayList<AreaCompDTO>();
+
+    /**
+     * 컴포넌트: areaDiv == 'CP'인 경우 값 있음
+     */
+    private AreaCompDTO areaComp;
 
     public void addAreaComp(AreaCompDTO areaComp) {
 
         if (areaComp.getArea() == null) {
             areaComp.setArea(this);
             return;
+        }
+
+        if (areaComps == null) {
+            areaComps = new ArrayList<AreaCompDTO>();
         }
 
         if (areaComps.contains(areaComp)) {

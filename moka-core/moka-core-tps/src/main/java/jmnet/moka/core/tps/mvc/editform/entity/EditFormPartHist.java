@@ -5,12 +5,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
@@ -62,11 +59,6 @@ public class EditFormPartHist extends BaseAudit {
     @Column(name = "STATUS", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private EditStatusCode status;
-    /**
-     * 편집 폼 아이템 정보
-     */
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, targetEntity = EditFormPart.class)
-    @JoinColumn(name = "PART_SEQ", referencedColumnName = "PART_SEQ", nullable = false, insertable = false, updatable = false)
-    private EditFormPart editFormPart;
+    
 
 }

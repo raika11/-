@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FieldGroup from './FieldGroup';
-import { saveEditFormPart } from '@/store/editForm';
+import { saveEditFormPart, showPublishModal } from '@/store/editForm';
 import toast from '@/utils/toastUtil';
 
 const propTypes = {
@@ -25,6 +25,10 @@ const PartEdit = (props) => {
 
     const handleClickSave = (event) => {
         insertEditFormPart({ partJson: JSON.stringify(part) });
+    };
+
+    const handleClickPublish = () => {
+        dispatch(showPublishModal(true, part));
     };
 
     const insertEditFormPart = (tmp) => {
@@ -60,8 +64,11 @@ const PartEdit = (props) => {
                 ))}
             </Card.Body>
             <Card.Footer>
-                <Button variant="positive" onClick={handleClickSave}>
-                    저장
+                <Button className="float-left mr-10 pr-20 pl-20" variant="negative" onClick={handleClickSave}>
+                    임시저장
+                </Button>
+                <Button className="float-left mr-10 pr-20 pl-20" variant="positive" onClick={handleClickPublish}>
+                    퍼블리시
                 </Button>
             </Card.Footer>
         </Card>

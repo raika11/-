@@ -30,10 +30,12 @@ import jmnet.moka.core.tps.mvc.editform.dto.ChannelFormatDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartExtDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldGroupDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormPartHist;
 import jmnet.moka.core.tps.mvc.editform.service.EditFormService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -204,6 +206,69 @@ public class EditFormRestController {
         editFormPartExtDTO.setFormData(null);
 
         ResultDTO<EditFormPartExtDTO> resultDTO = new ResultDTO<>(editFormPartExtDTO);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * 편집 폼 Part 이력 목록 조회
+     *
+     * @param formSeq 편집 폼 일련번호
+     * @param partSeq 아이템 일련번호
+     * @return 편집 폼 아이템 정보
+     */
+    @ApiOperation(value = "Edit Form 데이터 조회")
+    @GetMapping("/{formSeq}/parts/{partSeq}/historys")
+    public ResponseEntity<?> getEditFormPartHistoryList(
+            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
+            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
+            @SearchParam EditFormSearchDTO search) {
+
+        ResultListDTO<EditFormPartHistDTO> resultListMessage = new ResultListDTO<>();
+
+        search.setFormSeq(formSeq);
+        search.setPartSeq(partSeq);
+
+        Page<EditFormPartHist> editFormPartHistorys = editFormService.findAllEditFormPartHistory(search);
+
+        List<EditFormPartHistDTO> resultDTOs = modelMapper.map(editFormPartHistorys.getContent(), EditFormPartHistDTO.TYPE);
+        resultListMessage.setTotalCnt(editFormPartHistorys.getTotalElements());
+        resultListMessage.setList(resultDTOs);
+
+        ResultDTO<ResultListDTO<EditFormPartHistDTO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(true);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 편집 폼 Part 이력 조회
+     *
+     * @param formSeq 편집 폼 일련번호
+     * @param partSeq 아이템 일련번호
+     * @param seqNo   편집 폼 Part 이력 일련번호
+     * @return 편집 폼 아이템 정보
+     * @throws NoDataException 데이터 없음 에러 처리
+     * @throws IOException     json 처리 오류
+     */
+    @ApiOperation(value = "Edit Form 데이터 조회")
+    @GetMapping("/{formSeq}/parts/{partSeq}/historys/{seqNo}")
+    public ResponseEntity<?> getEditFormPartHistory(
+            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
+            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
+            @PathVariable("seqNo") @Min(value = 0, message = "{tps.edit-form.error.min.seqNo}") Long seqNo)
+            throws NoDataException, IOException {
+
+        EditFormPartHist editFormPartHist = editFormService
+                .findEditFormPartHistoryBySeq(seqNo)
+                .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
+
+        EditFormPartHistDTO editFormPartExtDTO = modelMapper.map(editFormPartHist, EditFormPartHistDTO.class);
+
+        editFormPartExtDTO.setFieldGroups(objectMapper.readValue(editFormPartHist.getFormData(), collectionType));
+        editFormPartExtDTO.setFormData(null);
+
+        ResultDTO<EditFormPartHistDTO> resultDTO = new ResultDTO<>(editFormPartExtDTO);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 /*

@@ -8,6 +8,7 @@ import EditThumbCard, { ItemTypes } from './EditThumbCard';
 
 const EditThumbDropzone = ({ collapse, setCollapse }) => {
     const [imgList, setImgList] = useState([]);
+    const [addIndex, setAddIndex] = useState(-1);
     const cardRef = useRef(null);
 
     const [{ isOver }, drop] = useDrop({
@@ -17,27 +18,30 @@ const EditThumbDropzone = ({ collapse, setCollapse }) => {
             if (item.move) return;
             if (imgList.findIndex((img) => img.id === item.id) > -1) return;
 
-            setImgList(
-                produce(imgList, (draft) => {
-                    draft.push(item);
-                }),
-            );
+            if (addIndex > -1) {
+                setImgList(
+                    produce(imgList, (draft) => {
+                        draft.splice(addIndex, 0, item);
+                    }),
+                );
+            } else {
+                setImgList(
+                    produce(imgList, (draft) => {
+                        draft.push(item);
+                    }),
+                );
+            }
+
+            setAddIndex(-1);
         },
         collect: (monitor) => ({
             isOver: monitor.isOver(),
         }),
     });
 
-    const addCard = useCallback(
-        (item, hoverIndex) => {
-            setImgList(
-                produce(imgList, (draft) => {
-                    draft.splice(hoverIndex, 0, item);
-                }),
-            );
-        },
-        [imgList],
-    );
+    React.useEffect(() => {
+        console.log(addIndex);
+    }, [addIndex]);
 
     const moveCard = useCallback(
         (dragIndex, hoverIndex) => {
@@ -77,21 +81,24 @@ const EditThumbDropzone = ({ collapse, setCollapse }) => {
             </div>
 
             {/* 드롭 영역 */}
-            <div ref={drop} className={clsx('flex-fill', 'custom-scroll', 'px-3', { isOver: isOver })}>
-                <div className="d-flex flex-wrap align-content-start pb-2">
-                    {imgList.map((data, idx) => (
-                        <EditThumbCard
-                            ref={cardRef}
-                            width={191}
-                            height={135}
-                            className="flex-shrink-0"
-                            key={idx}
-                            data={{ ...data, move: true, index: idx }}
-                            moveCard={moveCard}
-                            addCard={addCard}
-                            dropCard
-                        />
-                    ))}
+            <div className={clsx('flex-fill', 'custom-scroll', 'px-3', 'is-file-dropzone', 'position-relative', { 'dropzone-dragover': isOver })}>
+                <div className="dropzone-dragover-mask"></div>
+                <div ref={drop} className="w-100 h-100">
+                    <div className="d-flex flex-wrap align-content-start pb-1">
+                        {imgList.map((data, idx) => (
+                            <EditThumbCard
+                                ref={cardRef}
+                                width={191}
+                                height={135}
+                                className="flex-shrink-0"
+                                key={idx}
+                                data={{ ...data, move: true, index: idx }}
+                                moveCard={moveCard}
+                                dropCard
+                                setAddIndex={setAddIndex}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

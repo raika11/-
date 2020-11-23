@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Id;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -71,14 +72,15 @@ public class DeskingWorkVO implements Serializable {
     /**
      * 콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상
      */
-    @Column(name = "CONTENT_TYPE")
+    @Column(name = "CONTENT_TYPE", columnDefinition = "char")
     private String contentType;
 
     /**
      * 기사타입
      */
     @Column(name = "ART_TYPE", columnDefinition = "char")
-    private String artType;
+    @Builder.Default
+    private String artType = TpsConstants.DEFAULT_ART_TYPE;
 
     /**
      * 출처
@@ -90,18 +92,21 @@ public class DeskingWorkVO implements Serializable {
      * 콘텐트순서
      */
     @Column(name = "CONTENT_ORD")
+    @Builder.Default
     private Integer contentOrd = 1;
 
     /**
      * 관련순서
      */
     @Column(name = "REL_ORD")
+    @Builder.Default
     private Integer relOrd = 1;
 
     /**
      * 언어(기타코드)
      */
     @Column(name = "LANG")
+    @Builder.Default
     private String lang = TpsConstants.DEFAULT_LANG;
 
     /**
@@ -175,18 +180,21 @@ public class DeskingWorkVO implements Serializable {
      * 썸네일용량
      */
     @Column(name = "THUMB_SIZE", nullable = false)
+    @Builder.Default
     private Integer thumbSize = 0;
 
     /**
      * 썸네일가로
      */
     @Column(name = "THUMB_WIDTH", nullable = false)
+    @Builder.Default
     private Integer thumbWidth = 0;
 
     /**
      * 썸네일세로
      */
     @Column(name = "THUMB_HEIGHT", nullable = false)
+    @Builder.Default
     private Integer thumbHeight = 0;
 
     /**
@@ -207,7 +215,8 @@ public class DeskingWorkVO implements Serializable {
     /**
      * 관련기사여부
      */
-    private boolean rel;
+    @Builder.Default
+    private boolean rel = false;
 
     /**
      * 자식관련기사 목록

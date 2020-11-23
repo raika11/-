@@ -13,6 +13,8 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
@@ -158,8 +160,10 @@ public class ComponentRestController {
         Component component = modelMapper.map(componentDTO, Component.class);
 
         try {
+            HistPublishDTO histPublishDTO = HistPublishDTO.builder().status(EditStatusCode.PUBLISH).approvalYn(MokaConstants.YES).build();
+
             // 등록
-            Component returnVal = componentService.insertComponent(component);
+            Component returnVal = componentService.insertComponent(component, histPublishDTO);
 
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
             returnValDTO = this.setPrevDataset(returnValDTO);
@@ -200,8 +204,10 @@ public class ComponentRestController {
         List<Component> components = modelMapper.map(componentDTOs, Component.TYPE);
 
         try {
+            HistPublishDTO histPublishDTO = HistPublishDTO.builder().status(EditStatusCode.PUBLISH).approvalYn(MokaConstants.YES).build();
+
             // 한번에 등록한다
-            List<Component> returnVal = componentService.insertComponents(components);
+            List<Component> returnVal = componentService.insertComponents(components, histPublishDTO);
             List<ComponentDTO> returnValDTO = modelMapper.map(returnVal, ComponentDTO.TYPE);
 
             // 리턴 DTO 생성
@@ -258,7 +264,9 @@ public class ComponentRestController {
             // 업데이트
             Component newComponent = modelMapper.map(componentDTO, Component.class);
 
-            Component returnVal = componentService.updateComponent(newComponent, orgComponent);
+            HistPublishDTO histPublishDTO = HistPublishDTO.builder().status(EditStatusCode.PUBLISH).approvalYn(MokaConstants.YES).build();
+
+            Component returnVal = componentService.updateComponent(newComponent, orgComponent, histPublishDTO);
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
             returnValDTO = this.setPrevDataset(returnValDTO);
 

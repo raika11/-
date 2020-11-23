@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
@@ -38,12 +39,12 @@ import org.apache.ibatis.type.Alias;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Alias("DeskingComponentWorkVO")
-public class DeskingComponentWorkVO implements Serializable {
+@Alias("ComponentWorkVO")
+public class ComponentWorkVO implements Serializable {
 
     private static final long serialVersionUID = 2885110989383287296L;
 
-    public static final Type TYPE = new TypeReference<List<DeskingComponentWorkVO>>() {
+    public static final Type TYPE = new TypeReference<List<ComponentWorkVO>>() {
     }.getType();
 
     @Column(name = "SEQ")
@@ -80,10 +81,12 @@ public class DeskingComponentWorkVO implements Serializable {
     private String matchZone;
 
     @Column(name = "VIEW_YN")
-    private String viewYn;
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
 
     @Column(name = "SNAPSHOT_YN")
-    private String snapshotYn;
+    @Builder.Default
+    private String snapshotYn = MokaConstants.NO;
 
     @Column(name = "SNAPSHOT_BODY")
     private String snapshotBody;
@@ -93,7 +96,8 @@ public class DeskingComponentWorkVO implements Serializable {
     private Integer perPageCount = TpsConstants.PER_PAGE_COUNT;
 
     @Column(name = "COMPONENT_ORD")
-    private Long componentOrd;
+    @Builder.Default
+    private Integer componentOrd = 1;
 
     @Column(name = "SCH_CODE_ID")
     private String schCodeId;
@@ -101,6 +105,9 @@ public class DeskingComponentWorkVO implements Serializable {
     @Column(name = "ART_PAGE_SEQ")
     private Long artPageSeq;
 
+    /**
+     * 서버기준 예약일자
+     */
     @DTODateTimeFormat
     @Column(name = "RESERVE_DT")
     private Date reserveDt;

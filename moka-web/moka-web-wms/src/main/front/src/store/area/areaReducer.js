@@ -4,6 +4,7 @@ import * as act from './areaAction';
 import { ITEM_CP, AREA_ALIGN_V } from '@/constants';
 
 const area = {
+    areaComp: {},
     areaComps: [],
     areaDiv: ITEM_CP,
     areaNm: '',

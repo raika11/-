@@ -27,7 +27,7 @@ const MemberEdit = () => {
     const [remarkError, setRemarkError] = useState(false);
     const [statusError, setStatusError] = useState(false);
 
-    const { member, loading, statusList } = useSelector(
+    const { member, loading, statusList, invalidList } = useSelector(
         (store) => ({
             member: store.member.member,
             loading: store.loading[GET_MEMBER] || store.loading[SAVE_MEMBER],
@@ -114,6 +114,29 @@ const MemberEdit = () => {
         dispatch(changeInvalidList(errList));
         return !isInvalid;
     };
+
+    useEffect(() => {
+        let errorMessage = '';
+        if (invalidList.length > 0) {
+            invalidList.forEach((i) => {
+                if (i.field === 'expireDt') {
+                    setExpireDtError(true);
+                }
+                if (i.field === 'status') {
+                    setStatusError(true);
+                }
+                if (i.field === 'remark') {
+                    setRemarkError(true);
+                }
+                errorMessage += '<p>' + i.reason + '</p>';
+            });
+            toast.error(errorMessage);
+        } else {
+            setExpireDtError(false);
+            setStatusError(false);
+            setRemarkError(false);
+        }
+    }, [invalidList]);
 
     const updateMember = (menuItem) => {
         dispatch(

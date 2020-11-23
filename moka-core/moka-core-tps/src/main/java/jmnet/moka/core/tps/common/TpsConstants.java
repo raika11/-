@@ -181,4 +181,9 @@ public class TpsConstants {
     public static final String AREA_COMP_ALIGN_RIGHT = "RIGHT";
     public static final String AREA_COMP_ALIGN_NONE = "NONE";
 
+    /**
+     * 기사타입
+     */
+    public static final String DEFAULT_ART_TYPE = "B";
+
 }

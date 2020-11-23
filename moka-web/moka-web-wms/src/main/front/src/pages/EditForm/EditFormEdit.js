@@ -8,12 +8,13 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import toast from '@utils/toastUtil';
-import { changeEditForm, changeInvalidList, clearEditForm, duplicateCheck, getEditForm, saveEditForm } from '@store/editForm';
+import { changeEditForm, changeInvalidList, clearEditForm, duplicateCheck, getEditForm, saveEditForm, showPublishModal } from '@store/editForm';
 import { getApi, getLang } from '@store/codeMgt';
 import { MokaCard, MokaInputLabel } from '@components';
 import PartList from './PartList';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { Card } from 'react-bootstrap';
+import EditFormPartPublishModal from './EditFormPartPublishModal';
 
 /**
  * 편집폼 상세/수정/등록
@@ -40,15 +41,21 @@ const EditFormEdit = ({ history, onDelete }) => {
     const [serviceUrlError, setEditFormUrlError] = useState(false);
 
     // getter
-    const { editForm, editFormParts, langRows, apiRows, invalidList } = useSelector(
+    const { editForm, editFormParts, langRows, apiRows, invalidList, editFormPart, publishModalShow } = useSelector(
         (store) => ({
             editForm: store.editForm.editForm,
             editFormParts: store.editForm.editFormParts,
+            editFormPart: store.editForm.editFormPart,
             invalidList: store.editForm.invalidList,
+            publishModalShow: store.editForm.publishModalShow,
         }),
         shallowEqual,
     );
     const dispatch = useDispatch();
+
+    const hidePublishModal = () => {
+        dispatch(showPublishModal(false));
+    };
 
     /**
      * 각 항목별 값 변경
@@ -350,6 +357,7 @@ const EditFormEdit = ({ history, onDelete }) => {
                     </Card>
                 </Col>
             </Row>
+            <EditFormPartPublishModal show={publishModalShow} onHide={() => hidePublishModal()} />
         </div>
     );
 };

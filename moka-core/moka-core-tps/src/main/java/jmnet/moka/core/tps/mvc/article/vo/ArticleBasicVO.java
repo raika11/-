@@ -38,6 +38,12 @@ public class ArticleBasicVO implements Serializable {
     private Long totalId;
 
     /**
+     * 출처코드
+     */
+    @Column(name = "SOURCE_CODE")
+    private String sourceCode;
+
+    /**
      * 출처
      */
     @Column(name = "SOURCE_NAME")

@@ -303,7 +303,7 @@ function* deskingDragStop({ payload }) {
 
     if (overIndex < 0) {
         // 1) 비어있는 ag-grid에 처음으로 데스킹할 때
-        appendNodes = rd();
+        appendNodes = rd(1);
     } else {
         // 2) 데스킹 기사가 있는 ag-grid에 기사를 추가할 때
         const targetRow = target.api.getDisplayedRowAtIndex(overIndex).data;
@@ -327,7 +327,7 @@ function* deskingDragStop({ payload }) {
             if (parentRow.isSelected()) {
                 // 관련기사 추가 (타겟의 relOrd의 밑으로)
                 const firstIndex = targetRow.relOrd + 1;
-                appendNodes = rrd(firstIndex, parentRow);
+                appendNodes = rrd(firstIndex, parentRow.data);
             } else {
                 // 주기사 추가 (parentRow의 밑으로)
                 appendNodes = rd(parentRow.data.contentOrd + 1);

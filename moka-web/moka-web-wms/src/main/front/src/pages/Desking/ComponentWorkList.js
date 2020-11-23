@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard } from '@components';
 import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
-import { DeskingWorkComponent } from './components';
+import { ComponentWork } from './components';
 
 /**
  * 컴포넌트의 워크 리스트
@@ -43,14 +43,14 @@ const ComponentWorkList = (props) => {
 
                 <div className="custom-scroll overflow-y-scroll" style={{ height: 'calc(100% - 45px)' }}>
                     {area.areaDiv === ITEM_CP && area.areaComp ? (
-                        <DeskingWorkComponent key={`${area.areaSeq}-${area.areaComp.componentSeq}`} component={list[0]} agGridIndex={0} {...props} />
+                        <ComponentWork key={`${area.areaSeq}-${area.areaComp.componentSeq}`} component={list[0]} agGridIndex={0} {...props} />
                     ) : (
                         area.areaComps.map((areaComp) => {
                             if (area.areaAlign === AREA_ALIGN_H && areaComp.compAlign === AREA_COMP_ALIGN_RIGHT) return null;
                             const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
 
                             return (
-                                <DeskingWorkComponent
+                                <ComponentWork
                                     key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
                                     component={list[targetIndex]}
                                     agGridIndex={targetIndex}
@@ -77,7 +77,7 @@ const ComponentWorkList = (props) => {
                             const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
 
                             return (
-                                <DeskingWorkComponent
+                                <ComponentWork
                                     key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
                                     component={list[targetIndex]}
                                     agGridIndex={targetIndex}

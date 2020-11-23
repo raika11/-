@@ -34,7 +34,7 @@ const defaultProps = {
     agGridIndex: 0,
 };
 
-const DeskingWorkComponent = (props) => {
+const ComponentWork = (props) => {
     const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
     const dispatch = useDispatch();
 
@@ -109,7 +109,7 @@ const DeskingWorkComponent = (props) => {
     );
 };
 
-DeskingWorkComponent.propTypes = propTypes;
-DeskingWorkComponent.defaultProps = defaultProps;
+ComponentWork.propTypes = propTypes;
+ComponentWork.defaultProps = defaultProps;
 
-export default DeskingWorkComponent;
+export default ComponentWork;

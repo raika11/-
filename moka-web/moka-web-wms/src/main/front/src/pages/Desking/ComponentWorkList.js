@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard } from '@components';
-import { AREA_ALIGN_H, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
+import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
 import { DeskingWorkComponent } from './components';
 
@@ -36,41 +36,34 @@ const ComponentWorkList = (props) => {
                 bodyClassName="p-0 overflow-hidden"
             >
                 <div className="d-flex justify-content-end p-2 border-bottom">
-                    {/* <Col xs={5} className="p-0">
-                            <MokaInputLabel
-                                label="기사 갯수"
-                                labelClassName="d-flex justify-content-start"
-                                className="mb-0"
-                                inputClassName="ft-12"
-                                name="perPageCount"
-                                // value={}
-                                onChange={handleChangeValue}
-                            />
-                        </Col> */}
                     <Button variant="outline-neutral" className="ft-12" onClick={handlePreviewClicked}>
                         페이지 미리보기
                     </Button>
                 </div>
 
                 <div className="custom-scroll overflow-y-scroll" style={{ height: 'calc(100% - 45px)' }}>
-                    {area.areaComps.map((areaComp) => {
-                        if (area.areaDiv === ITEM_CT && area.areaAlign === AREA_ALIGN_H && areaComp.compAlign === AREA_COMP_ALIGN_RIGHT) return null;
-                        const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
+                    {area.areaDiv === ITEM_CP ? (
+                        <DeskingWorkComponent key={`${area.areaSeq}-${area.areaComp.componentSeq}`} component={list[0]} agGridIndex={0} {...props} />
+                    ) : (
+                        area.areaComps.map((areaComp) => {
+                            if (area.areaAlign === AREA_ALIGN_H && areaComp.compAlign === AREA_COMP_ALIGN_RIGHT) return null;
+                            const targetIndex = list.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
 
-                        return (
-                            <DeskingWorkComponent
-                                key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
-                                component={list[targetIndex]}
-                                agGridIndex={targetIndex}
-                                // onRowClicked={handleRowClicked}
-                                {...props}
-                            />
-                        );
-                    })}
+                            return (
+                                <DeskingWorkComponent
+                                    key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
+                                    component={list[targetIndex]}
+                                    agGridIndex={targetIndex}
+                                    // onRowClicked={handleRowClicked}
+                                    {...props}
+                                />
+                            );
+                        })
+                    )}
                 </div>
             </MokaCard>
 
-            {area.areaAlign === AREA_ALIGN_H && (
+            {area.areaDiv === ITEM_CT && area.areaAlign === AREA_ALIGN_H && (
                 <MokaCard loading={loading} header={false} width={363} className="p-0 mr-gutter" bodyClassName="p-0 overflow-hidden">
                     <div className="d-flex justify-content-end p-2 border-bottom">
                         <Button variant="outline-neutral" className="ft-12" onClick={handlePreviewClicked}>

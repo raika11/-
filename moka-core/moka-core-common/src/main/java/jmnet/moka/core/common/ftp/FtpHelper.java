@@ -26,7 +26,7 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -51,8 +51,10 @@ public class FtpHelper {
     @Autowired
     public StringEncryptor mokaEncryptor;
 
-    @Value("${ftp-info.resource.path:ftp-info.json}")
-    public String resourcePath;
+    /**
+     * ftp 설정 정보 파일
+     */
+    private final String RESOURCE_PATH = "ftp-info.json";
 
     public final static String MEDIA = "MEDIA";
     public final static String HOME = "HOME";
@@ -71,9 +73,11 @@ public class FtpHelper {
      */
     @PostConstruct
     private void init() {
+        String SPRING_PROFILES_ACTIVE = System.getProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "");
+        String resourcePath =
+                McpString.isEmpty(SPRING_PROFILES_ACTIVE) ? RESOURCE_PATH : McpFile.addSuffix(RESOURCE_PATH, "-" + SPRING_PROFILES_ACTIVE);
         Resource resource = new ClassPathResource(resourcePath);
         try {
-
             File file = resource.getFile();
             if (file.exists()) {
                 TypeReference<Map<String, FtpInfo>> typeRef = new TypeReference<>() {
@@ -301,7 +305,7 @@ public class FtpHelper {
         GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
         Optional
                 .ofNullable(ftpClientPool)
-                .orElseThrow(() -> new ResourceNotFoundException(resourcePath, "ftp setting information", key));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_PATH, "ftp setting information", key));
         FtpInfo fi = ((FtpClientFactory) ftpClientPool.getFactory()).getFtpInfo();
         FTPClient ftpClient = null;
 
@@ -380,7 +384,7 @@ public class FtpHelper {
         GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
         Optional
                 .ofNullable(ftpClientPool)
-                .orElseThrow(() -> new ResourceNotFoundException(resourcePath, "ftp setting information", key));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_PATH, "ftp setting information", key));
         OutputStream outputStream = null;
         try {
             FtpInfo fi = ((FtpClientFactory) ftpClientPool.getFactory()).getFtpInfo();
@@ -447,7 +451,7 @@ public class FtpHelper {
         GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
         Optional
                 .ofNullable(ftpClientPool)
-                .orElseThrow(() -> new ResourceNotFoundException(resourcePath, "ftp setting information", key));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_PATH, "ftp setting information", key));
         try {
             FtpInfo fi = ((FtpClientFactory) ftpClientPool.getFactory()).getFtpInfo();
             ftpClient = ftpClientPool.borrowObject();

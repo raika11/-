@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 @RestController
 @Validated
@@ -48,21 +45,6 @@ public class BrightController {
         // print response body
         System.out.println(response.body());
         return new ResponseEntity<>(response.body(), HttpStatus.OK);
-    }
-
-    // map => ofString
-    private static HttpRequest.BodyPublisher buildFormDataFromMap(Map<Object, Object> data) {
-        var builder = new StringBuilder();
-        for (Map.Entry<Object, Object> entry : data.entrySet()) {
-            if (builder.length() > 0) {
-                builder.append("&");
-            }
-            builder.append(URLEncoder.encode(entry.getKey().toString(), StandardCharsets.UTF_8));
-            builder.append("=");
-            builder.append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
-        }
-        System.out.println(builder.toString());
-        return HttpRequest.BodyPublishers.ofString(builder.toString());
     }
 }
 

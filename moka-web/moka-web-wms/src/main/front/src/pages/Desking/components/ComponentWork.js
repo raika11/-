@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { putDeskingWork } from '@store/desking';
+import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './DeskingWorkButtonGroup';
 import AgGrid from './DeskingWorkAgGrid';
 import DeskingWorkEditModal from '../modals/DeskingWorkEditModal';
+import toast from '@utils/toastUtil';
 
 const propTypes = {
     /**
@@ -33,7 +34,7 @@ const defaultProps = {
     agGridIndex: 0,
 };
 
-const DeskingWorkComponent = (props) => {
+const ComponentWork = (props) => {
     const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
     const dispatch = useDispatch();
 
@@ -66,6 +67,24 @@ const DeskingWorkComponent = (props) => {
         );
     };
 
+    /**
+     * 데스킹워크 삭제 (delete)
+     * @param {object} deskingWork 삭제할 데스킹워크 데이터
+     */
+    const handleClickDelete = (deskingWork) => {
+        const option = {
+            componentWorkSeq: component.seq,
+            datasetSeq: component.datasetSeq,
+            list: [deskingWork],
+            callback: ({ header }) => {
+                if (!header.success) {
+                    toast.warn(header.message);
+                }
+            },
+        };
+        dispatch(deleteDeskingWorkList(option));
+    };
+
     return (
         <React.Fragment>
             <div id={`agGrid-${component.seq}`}>
@@ -82,6 +101,7 @@ const DeskingWorkComponent = (props) => {
                     setComponentAgGridInstances={setComponentAgGridInstances}
                     onRowClicked={handleRowClicked}
                     onSave={handleClickSave}
+                    onDelete={handleClickDelete}
                 />
             </div>
             <DeskingWorkEditModal show={showDeskingWorkEditModal} onHide={() => setShowDeskingWorkEditModal(false)} data={rowdata} onSave={handleClickSave} />
@@ -89,7 +109,7 @@ const DeskingWorkComponent = (props) => {
     );
 };
 
-DeskingWorkComponent.propTypes = propTypes;
-DeskingWorkComponent.defaultProps = defaultProps;
+ComponentWork.propTypes = propTypes;
+ComponentWork.defaultProps = defaultProps;
 
-export default DeskingWorkComponent;
+export default ComponentWork;

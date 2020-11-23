@@ -11,12 +11,13 @@ import DeskingReadyGrid from './DeskingReadyGrid';
  * 데스킹 AgGrid
  */
 const DeskingWorkAgGrid = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave, onDelete } = props;
     const { deskingWorks } = component;
     const [relRows, setRelRows] = useState([]);
 
     // local state
     const [rowData, setRowData] = useState([]);
+    const [gridApi, setGridApi] = useState(null);
 
     useEffect(() => {
         if (deskingWorks) {
@@ -36,11 +37,12 @@ const DeskingWorkAgGrid = (props) => {
                         relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
                         onRowClicked,
                         onSave,
+                        onDelete,
                     };
                 }),
             );
         }
-    }, [component.seq, deskingWorks, onRowClicked, onSave]);
+    }, [component.seq, deskingWorks, onRowClicked, onSave, onDelete]);
 
     /**
      * ag-grid onGridReady
@@ -52,6 +54,7 @@ const DeskingWorkAgGrid = (props) => {
                 draft[agGridIndex] = params;
             }),
         );
+        setGridApi(params);
     };
 
     /**
@@ -206,6 +209,12 @@ const DeskingWorkAgGrid = (props) => {
     const getRowHeight = (params) => {
         return params.data.rel ? 42 : 53;
     };
+
+    useEffect(() => {
+        if (gridApi) {
+            gridApi.api.redrawRows();
+        }
+    }, [deskingWorks, gridApi]);
 
     return (
         <div className="ag-theme-moka-desking-grid px-1">

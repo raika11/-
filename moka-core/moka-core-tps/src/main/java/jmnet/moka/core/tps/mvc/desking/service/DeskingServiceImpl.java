@@ -505,7 +505,59 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     public void sortDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq, String regId) {
+        // 편집기사work 조회(JPQL)
+        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
+                                                          .datasetSeq(datasetSeq)
+                                                          .regId(regId)
+                                                          .build();
+        List<DeskingWork> deskingList = deskingWorkRepository.findAllDeskingWork(search);
+        List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE); // DeskingWork -> DeskingWorkVO
 
+        // 주기사 오더링
+        Integer ordering = 1;
+        for (DeskingWorkVO deskingWorkVO : deskingVOList) {
+            boolean rel = !(deskingWorkVO.getParentTotalId() == null);  // 관련기사 여부
+            Long seq = deskingWorkVO.getSeq();
+            DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
+
+            // 주기사
+            if (!rel) {
+                // 원본오더가 변경할 오더와 다르다면 => 오더 수정.
+                if (!ordering.equals(deskingWork.getContentOrd())) {
+                    deskingWork.setContentOrd(ordering);
+                    deskingWork.setRegDt(McpDate.now());
+                    deskingWork.setRegId(regId);
+                    deskingWorkRepository.save(deskingWork);
+                }
+                ordering++;
+            }
+        }
+
+        //관련기사 오더링
+        ordering = 1;
+        Long prevParentTotalId = (long) 0;
+        for (DeskingWorkVO deskingWorkVO : deskingVOList) {
+            boolean rel = !(deskingWorkVO.getParentTotalId() == null);  // 관련기사 여부
+            Long seq = deskingWorkVO.getSeq();
+            DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
+
+            // 관련기사
+            if (rel) {
+                // 같은 부모이고, 관련기사 순번이 안 맞을 경우
+                if (deskingWork.getParentTotalId()
+                               .equals(prevParentTotalId) && deskingWork.getRelOrd()
+                                                                        .equals(ordering)) {
+                    deskingWork.setRelOrd(ordering);
+                    deskingWork.setRegDt(McpDate.now());
+                    deskingWork.setRegId(regId);
+                    deskingWorkRepository.save(deskingWork);
+                }
+                ordering++;
+            } else {
+                ordering = 1;
+                prevParentTotalId = deskingWork.getTotalId();
+            }
+        }
     }
 
     //    @Override

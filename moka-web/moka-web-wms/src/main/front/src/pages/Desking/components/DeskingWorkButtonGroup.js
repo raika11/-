@@ -2,10 +2,12 @@ import React, { useState, Suspense, forwardRef } from 'react';
 import { useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast from '@utils/toastUtil';
-import { getComponentWork, postSaveComponentWork, postPublishComponentWork } from '@store/desking';
+import { getComponentWork, postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
 const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
@@ -103,11 +105,30 @@ const DeskingWorkButtonGroup = (props) => {
         }
     };
 
+    /**
+     * 전체삭제
+     */
+    const handleDeleteClicked = () => {
+        if (component.deskingWorks.length > 0) {
+            const option = {
+                componentWorkSeq: component.seq,
+                datasetSeq: component.datasetSeq,
+                list: component.deskingWorks,
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        toast.error(header.message);
+                    }
+                },
+            };
+            dispatch(deleteDeskingWorkList(option));
+        }
+    };
+
     const iconButton = [
         { title: 'HTML 수동편집', iconName: 'fal-code', onClick: handleHtmlEditClicked },
         { title: '템플릿', iconName: 'fal-expand-wide' },
-        { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
         { title: '임시저장', iconName: 'fal-save', onClick: handleSaveComponentWork },
+        { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
     ];
 
     return (
@@ -115,7 +136,11 @@ const DeskingWorkButtonGroup = (props) => {
             <div className="px-2 pt-1">
                 <Row className="m-0 d-flex align-items-center justify-content-between">
                     <Col className="p-0" xs={6}>
-                        <p className="ft-12 mb-0">{title}</p>
+                        <p className="ft-12 mb-0">
+                            <OverlayTrigger overlay={<Tooltip>{`데이타셋ID: ${component.datasetSeq}`}</Tooltip>}>
+                                <div>{title}</div>
+                            </OverlayTrigger>
+                        </p>
                     </Col>
                     <Col className="p-0 d-flex align-items-center justify-content-end" xs={6}>
                         {iconButton.map((icon, idx) => (
@@ -128,7 +153,9 @@ const DeskingWorkButtonGroup = (props) => {
                                 <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
                                 <Dropdown.Menu className="ft-12">
                                     <Dropdown.Item eventKey="1">공백 추가</Dropdown.Item>
-                                    <Dropdown.Item eventKey="2">전체 삭제</Dropdown.Item>
+                                    <Dropdown.Item eventKey="2" onClick={handleDeleteClicked}>
+                                        전체 삭제
+                                    </Dropdown.Item>
                                     <Dropdown.Item eventKey="3" onClick={handleRegisterClicked}>
                                         기사 이동
                                     </Dropdown.Item>

@@ -60,3 +60,11 @@ button {
   @include button-color-hover($gray-550);
   @include button-active($white, $gray-650);
 }
+
+/* -----------------------
+* 2020.11.23
+* 요청에 의하여 .btn-outline-neutral의 text 컬러만 변경
+* ---------------------- */
+.btn-outline-neutral {
+  @include button-color($primary);
+}

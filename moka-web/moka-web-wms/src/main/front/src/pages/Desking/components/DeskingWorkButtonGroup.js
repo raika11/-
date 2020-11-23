@@ -10,6 +10,7 @@ import toast from '@utils/toastUtil';
 import { getComponentWork, postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
+const AddSpaceModal = React.lazy(() => import('../modals/AddSpaceModal'));
 const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
 
 /**
@@ -32,29 +33,16 @@ const DeskingWorkButtonGroup = (props) => {
 
     // modal state
     const [htmlEditModal, setHtmlEditModal] = useState(false);
-    const [htmlEditModalData, sethtmlEditModalData] = useState({});
+    const [addSpaceModal, setAddSpaceModal] = useState(false);
     const [registerModal, setRegisterModal] = useState(false);
 
     const title = `ID: CP${component.componentSeq} ${component.componentName}`;
 
     /**
-     * HTML편집 버튼
+     * HTML편집
      */
-    const handleHtmlEditClicked = () => {
-        const option = {
-            componentWorkSeq: component.seq,
-            callback: ({ header, body }) => {
-                if (header.success) {
-                    if (body) {
-                        sethtmlEditModalData(body);
-                        setHtmlEditModal(true);
-                    }
-                } else {
-                    toast.warn(header.message);
-                }
-            },
-        };
-        dispatch(getComponentWork(option));
+    const handleHtmlEdit = () => {
+        setHtmlEditModal(true);
     };
 
     /**
@@ -92,9 +80,16 @@ const DeskingWorkButtonGroup = (props) => {
     };
 
     /**
-     * 기사이동 버튼
+     * 공백추가
      */
-    const handleRegisterClicked = () => {
+    const handleAddSpace = () => {
+        setAddSpaceModal(true);
+    };
+
+    /**
+     * 기사이동
+     */
+    const handleRegister = () => {
         if (!componentAgGridInstances[agGridIndex]) return;
         const api = componentAgGridInstances[agGridIndex].api;
 
@@ -125,7 +120,7 @@ const DeskingWorkButtonGroup = (props) => {
     };
 
     const iconButton = [
-        { title: 'HTML 수동편집', iconName: 'fal-code', onClick: handleHtmlEditClicked },
+        { title: 'HTML 수동편집', iconName: 'fal-code', onClick: handleHtmlEdit },
         { title: '템플릿', iconName: 'fal-expand-wide' },
         { title: '임시저장', iconName: 'fal-save', onClick: handleSaveComponentWork },
         { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
@@ -150,11 +145,13 @@ const DeskingWorkButtonGroup = (props) => {
                             <Dropdown>
                                 <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
                                 <Dropdown.Menu className="ft-12">
-                                    <Dropdown.Item eventKey="1">공백 추가</Dropdown.Item>
+                                    <Dropdown.Item eventKey="1" onClick={handleAddSpace} date={component}>
+                                        공백 추가
+                                    </Dropdown.Item>
                                     <Dropdown.Item eventKey="2" onClick={handleDeleteClicked}>
                                         전체 삭제
                                     </Dropdown.Item>
-                                    <Dropdown.Item eventKey="3" onClick={handleRegisterClicked}>
+                                    <Dropdown.Item eventKey="3" onClick={handleRegister}>
                                         기사 이동
                                     </Dropdown.Item>
                                     <Dropdown.Item eventKey="4">리스트 건수</Dropdown.Item>
@@ -170,7 +167,18 @@ const DeskingWorkButtonGroup = (props) => {
 
             {/* HTML 수동 편집 */}
             <Suspense>
-                <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} data={htmlEditModalData} />
+                <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} data={component} />
+            </Suspense>
+
+            {/* 공백 추가 */}
+            <Suspense>
+                <AddSpaceModal
+                    show={addSpaceModal}
+                    onHide={() => setAddSpaceModal(false)}
+                    data={component}
+                    agGridIndex={agGridIndex}
+                    componentAgGridInstances={componentAgGridInstances}
+                />
             </Suspense>
 
             {/* 기사 이동 */}

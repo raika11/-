@@ -54,40 +54,6 @@ export function createDeskingRequestSaga(actionType, api) {
 const getComponentWorkList = createRequestSaga(act.GET_COMPONENT_WORK_LIST, api.getComponentWorkList);
 
 /**
- * 컴포넌트 워크 1개 조회
- */
-function* getComponentWork({ payload }) {
-    const ACTION = act.GET_COMPONENT_WORK;
-    const { componentWorkSeq, callback } = payload;
-    let response, callbackData;
-
-    yield startLoading(ACTION);
-    try {
-        response = yield call(api.getComponentWork, { componentWorkSeq });
-        callbackData = response.data;
-
-        if (response.data.header.success) {
-            yield put({
-                type: act.COMPONENT_WORK_SUCCESS,
-                payload: response.data,
-            });
-        } else {
-            yield put({
-                type: act.COMPONENT_WORK_FAILURE,
-                payload: response.data,
-            });
-        }
-    } catch (e) {
-        callbackData = errorResponse(e);
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-    yield put(finishLoading(ACTION));
-}
-
-/**
  * 컴포넌트 워크 수정(스냅샷 제외)
  */
 const putComponentWork = createDeskingRequestSaga(act.PUT_COMPONENT_WORK, api.putComponentWork);
@@ -482,7 +448,6 @@ const deleteDeskingWorkList = createDeskingRequestSaga(act.DELETE_DESKING_WORK_L
 export default function* saga() {
     // 컴포넌트 워크
     yield takeLatest(act.GET_COMPONENT_WORK_LIST, getComponentWorkList);
-    yield takeLatest(act.GET_COMPONENT_WORK, getComponentWork);
     yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWork);
     yield takeLatest(act.PUT_SNAPSHOT_COMPONENT_WORK, putSnapshotComponentWork);
 

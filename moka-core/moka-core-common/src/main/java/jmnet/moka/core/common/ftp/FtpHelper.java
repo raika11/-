@@ -133,8 +133,8 @@ public class FtpHelper {
      * @param localFile 로컬 파일
      * @return 업로드 결과
      */
-    public boolean uploadFile(File localFile) {
-        return uploadFile(getFirstFtpInfoKey(), localFile, null, true);
+    public boolean upload(File localFile) {
+        return upload(getFirstFtpInfoKey(), localFile, null, true);
     }
 
     /**
@@ -144,8 +144,8 @@ public class FtpHelper {
      * @param remotePath ftp 저장 경로
      * @return 업로드 결과
      */
-    public boolean uploadFile(File localFile, String remotePath) {
-        return uploadFile(getFirstFtpInfoKey(), localFile, remotePath, true);
+    public boolean upload(File localFile, String remotePath) {
+        return upload(getFirstFtpInfoKey(), localFile, remotePath, true);
     }
 
     /**
@@ -155,8 +155,8 @@ public class FtpHelper {
      * @param inStream 파일 stream
      * @return 업로드 결과
      */
-    public boolean uploadFile(String fileName, FileInputStream inStream) {
-        return uploadFile(getFirstFtpInfoKey(), fileName, inStream, null, true);
+    public boolean upload(String fileName, FileInputStream inStream) {
+        return upload(getFirstFtpInfoKey(), fileName, inStream, null, true);
     }
 
     /**
@@ -166,8 +166,8 @@ public class FtpHelper {
      * @param bufferedInputStream 파일 stream
      * @return 업로드 결과
      */
-    public boolean uploadFile(String fileName, BufferedInputStream bufferedInputStream) {
-        return uploadFile(getFirstFtpInfoKey(), fileName, bufferedInputStream, null, true);
+    public boolean upload(String fileName, BufferedInputStream bufferedInputStream) {
+        return upload(getFirstFtpInfoKey(), fileName, bufferedInputStream, null, true);
     }
 
     private String getFirstFtpInfoKey() {
@@ -186,8 +186,8 @@ public class FtpHelper {
      * @param localFile 로컬 파일
      * @return 업로드 결과
      */
-    public boolean uploadFile(String key, File localFile) {
-        return uploadFile(key, localFile, null, true);
+    public boolean upload(String key, File localFile) {
+        return upload(key, localFile, null, true);
     }
 
     /**
@@ -198,8 +198,8 @@ public class FtpHelper {
      * @param inStream 파일 stream
      * @return 업로드 결과
      */
-    public boolean uploadFile(String key, String fileName, FileInputStream inStream) {
-        return uploadFile(key, fileName, inStream, null, true);
+    public boolean upload(String key, String fileName, FileInputStream inStream) {
+        return upload(key, fileName, inStream, null, true);
     }
 
     /**
@@ -210,8 +210,8 @@ public class FtpHelper {
      * @param bufferedInputStream 파일 stream
      * @return 업로드 결과
      */
-    public boolean uploadFile(String key, String fileName, BufferedInputStream bufferedInputStream) {
-        return uploadFile(key, fileName, bufferedInputStream, null, true);
+    public boolean upload(String key, String fileName, BufferedInputStream bufferedInputStream) {
+        return upload(key, fileName, bufferedInputStream, null, true);
     }
 
     /**
@@ -222,8 +222,8 @@ public class FtpHelper {
      * @param remotePath ftp 저장 경로
      * @return 업로드 결과
      */
-    public boolean uploadFile(String key, File localFile, String remotePath) {
-        return uploadFile(key, localFile, remotePath, true);
+    public boolean upload(String key, File localFile, String remotePath) {
+        return upload(key, localFile, remotePath, true);
     }
 
     /**
@@ -235,8 +235,8 @@ public class FtpHelper {
      * @param remotePath ftp 저장 경로
      * @return 업로드 결과
      */
-    public boolean uploadFile(String key, String fileName, FileInputStream inStream, String remotePath) {
-        return uploadFile(key, fileName, inStream, remotePath, true);
+    public boolean upload(String key, String fileName, FileInputStream inStream, String remotePath) {
+        return upload(key, fileName, inStream, remotePath, true);
     }
 
     /**
@@ -248,8 +248,8 @@ public class FtpHelper {
      * @param remotePath          ftp 저장 경로
      * @return 업로드 결과
      */
-    public boolean uploadFile(String key, String fileName, BufferedInputStream bufferedInputStream, String remotePath) {
-        return uploadFile(key, fileName, bufferedInputStream, remotePath, true);
+    public boolean upload(String key, String fileName, BufferedInputStream bufferedInputStream, String remotePath) {
+        return upload(key, fileName, bufferedInputStream, remotePath, true);
     }
 
 
@@ -262,11 +262,11 @@ public class FtpHelper {
      * @param isTempSave 임시 디렉토리에 미리 저장 한 후 파일 이동 처리 여부
      * @return 업로드 결과
      */
-    public boolean uploadFile(String key, File localFile, String remotePath, boolean isTempSave) {
+    public boolean upload(String key, File localFile, String remotePath, boolean isTempSave) {
         boolean success = false;
         try {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(localFile));
-            success = uploadFile(key, localFile.getName(), bufferedInputStream, remotePath, isTempSave);
+            success = upload(key, localFile.getName(), bufferedInputStream, remotePath, isTempSave);
         } catch (FileNotFoundException e) {
             log.error("file not found!{}", localFile);
         }
@@ -283,9 +283,9 @@ public class FtpHelper {
      * @param isTempSave 임시 디렉토리에 미리 저장 한 후 파일 이동 처리 여부
      * @return 업로드 결과
      */
-    public boolean uploadFile(String key, String fileName, FileInputStream inStream, String remotePath, boolean isTempSave) {
+    public boolean upload(String key, String fileName, FileInputStream inStream, String remotePath, boolean isTempSave) {
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inStream);
-        return uploadFile(key, fileName, bufferedInputStream, remotePath, isTempSave);
+        return upload(key, fileName, bufferedInputStream, remotePath, isTempSave);
     }
 
     /**
@@ -297,7 +297,7 @@ public class FtpHelper {
      * @param isTempSave          임시 디렉토리에 미리 저장 한 후 파일 이동 처리 여부
      * @return 업로드 결과
      */
-    public boolean uploadFile(String key, String fileName, BufferedInputStream bufferedInputStream, String remotePath, boolean isTempSave) {
+    public boolean upload(String key, String fileName, BufferedInputStream bufferedInputStream, String remotePath, boolean isTempSave) {
         GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
         Optional
                 .ofNullable(ftpClientPool)
@@ -357,13 +357,25 @@ public class FtpHelper {
     /**
      * 파일 다운로드
      *
+     * @param key       FTP 프로퍼티 Key
+     * @param fileName  파일 명
+     * @param localPath 로컬 저장 경로
+     * @return 성공 여부
+     */
+    public boolean download(String key, String fileName, String localPath) {
+        return download(key, null, fileName, localPath);
+    }
+
+    /**
+     * 파일 다운로드
+     *
      * @param key        FTP 프로퍼티 Key
      * @param remotePath ftp 파일 경로
      * @param fileName   파일 명
      * @param localPath  로컬 저장 경로
      * @return 성공 여부
      */
-    public boolean downloadFile(String key, String remotePath, String fileName, String localPath) {
+    public boolean download(String key, String remotePath, String fileName, String localPath) {
         FTPClient ftpClient = null;
         GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
         Optional
@@ -371,6 +383,7 @@ public class FtpHelper {
                 .orElseThrow(() -> new ResourceNotFoundException(resourcePath, "ftp setting information", key));
         OutputStream outputStream = null;
         try {
+            FtpInfo fi = ((FtpClientFactory) ftpClientPool.getFactory()).getFtpInfo();
             ftpClient = ftpClientPool.borrowObject();
             int replyCode = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(replyCode)) {
@@ -378,7 +391,18 @@ public class FtpHelper {
                 return false;
             }
 
-            ftpClient.changeWorkingDirectory(remotePath);
+            McpFile.forceMkdir(new File(localPath));
+
+            StringBuilder realPath = new StringBuilder(fi.getRemotePath());
+            if (McpString.isNotEmpty(remotePath)) {
+                realPath
+                        .append(realPath
+                                .toString()
+                                .endsWith(File.separator) ? "" : File.separator)
+                        .append(remotePath);
+            }
+
+            ftpClient.changeWorkingDirectory(realPath.toString());
             FTPFile[] ftpFiles = ftpClient.listFiles();
             for (FTPFile file : ftpFiles) {
                 if (fileName.equalsIgnoreCase(file.getName())) {
@@ -402,25 +426,45 @@ public class FtpHelper {
     /**
      * Ftp 파일 삭제 처리
      *
+     * @param key      FTP 프로퍼티 Key
+     * @param fileName 파일 명명
+     * @return 삭제 결과
+     */
+    public boolean delete(String key, String fileName) {
+        return delete(key, null, fileName);
+    }
+
+    /**
+     * Ftp 파일 삭제 처리
+     *
      * @param key        FTP 프로퍼티 Key
      * @param remotePath FTP 파 경로
      * @param fileName   파일 명명
      * @return 삭제 결과
      */
-    public boolean deleteFile(String key, String remotePath, String fileName) {
+    public boolean delete(String key, String remotePath, String fileName) {
         FTPClient ftpClient = null;
         GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
         Optional
                 .ofNullable(ftpClientPool)
                 .orElseThrow(() -> new ResourceNotFoundException(resourcePath, "ftp setting information", key));
         try {
+            FtpInfo fi = ((FtpClientFactory) ftpClientPool.getFactory()).getFtpInfo();
             ftpClient = ftpClientPool.borrowObject();
             int replyCode = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(replyCode)) {
                 log.warn("ftpServer refused connection, replyCode:{}", replyCode);
                 return false;
             }
-            ftpClient.changeWorkingDirectory(remotePath);
+            StringBuilder realPath = new StringBuilder(fi.getRemotePath());
+            if (McpString.isNotEmpty(remotePath)) {
+                realPath
+                        .append(realPath
+                                .toString()
+                                .endsWith(File.separator) ? "" : File.separator)
+                        .append(remotePath);
+            }
+            ftpClient.changeWorkingDirectory(realPath.toString());
             int delCode = ftpClient.dele(fileName);
             log.debug("delete file reply code:{}", delCode);
             return true;

@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -141,9 +141,9 @@ public class DeskingRestController {
     /**
      * 컴포넌트 임시저장
      *
-     * @param componentWorkSeq  컴포넌트work SEQ
-     * @param principal         로그인사용자 세션
-     * @return                  등록된 편집 컴포넌트정보
+     * @param componentWorkSeq 컴포넌트work SEQ
+     * @param principal        로그인사용자 세션
+     * @return 등록된 편집 컴포넌트정보
      * @throws Exception
      */
     @ApiOperation(value = "컴포넌트 임시저장")
@@ -205,10 +205,10 @@ public class DeskingRestController {
     /**
      * 컴포넌트 예약
      *
-     * @param componentWorkSeq  컴포넌트work SEQ
-     * @param principal         로그인사용자 세션
-     * @param reserveDt         예약시간
-     * @return                  등록된 편집 컴포넌트정보
+     * @param componentWorkSeq 컴포넌트work SEQ
+     * @param principal        로그인사용자 세션
+     * @param reserveDt        예약시간
+     * @return 등록된 편집 컴포넌트정보
      * @throws Exception
      */
     @ApiOperation(value = "컴포넌트 예약")
@@ -238,21 +238,23 @@ public class DeskingRestController {
     /**
      * 컴포넌트work 수정
      *
-     * @param componentWorkSeq  컴포넌트work 순번
-     * @param componentWorkVO   컴포넌트 정보
-     * @param principal         작업자
+     * @param componentWorkSeq 컴포넌트work 순번
+     * @param componentWorkVO  컴포넌트 정보
+     * @param principal        작업자
      * @return 컴포넌트 정보
      * @throws Exception 예외
      */
     @ApiOperation(value = "컴포넌트work 수정(편집기사work 수정 제외. snapshot제외)")
-    @PutMapping(value = "/components/{componentWorkSeq}", headers = {
-            "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/components/{componentWorkSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putComponentWork(
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
             @RequestBody @Valid ComponentWorkVO componentWorkVO, Principal principal)
             throws Exception {
 
         try {
+            // 스냅샷 수정
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
+
             // 컴포넌트 워크 저장
             deskingService.updateComponentWork(componentWorkVO, principal.getName());
 
@@ -271,10 +273,10 @@ public class DeskingRestController {
     /**
      * 컴포넌트work snapshot 수정
      *
-     * @param componentWorkSeq  컴포넌트work 순번
-     * @param snapshotYn        템플릿편집여부
-     * @param snapshotBody      템플릿
-     * @param principal         작업자
+     * @param componentWorkSeq 컴포넌트work 순번
+     * @param snapshotYn       템플릿편집여부
+     * @param snapshotBody     템플릿
+     * @param principal        작업자
      * @return 컴포넌트 정보
      * @throws Exception 예외
      */
@@ -326,7 +328,7 @@ public class DeskingRestController {
 
             if (deskingWorkDTOList.size() > 0) {
                 // 스냅샷 수정
-                deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+                deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
 
                 // 편집기사work 추가 및 정렬
                 for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
@@ -371,7 +373,7 @@ public class DeskingRestController {
             List<DeskingWorkVO> deskingWorkVOList = validList.getList();
 
             // 스냅샷 수정
-            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
 
             // work 편집기사 삭제 및 정렬
             deskingService.deleteDeskingWorkList(deskingWorkVOList, datasetSeq, principal.getName());
@@ -387,27 +389,6 @@ public class DeskingRestController {
             throw new Exception(messageByLocale.get("tps.desking.error.work.delete"), e);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -442,8 +423,8 @@ public class DeskingRestController {
         // 오리진을 복사한 new데스킹워크 생성, dto 값 셋팅
         DeskingWork newDW = modelMapper.map(deskingWorkDTO, DeskingWork.class);
         newDW.setRegId(principal.getName());
-//        newDW.setDeskingSeq(orgDW.getDeskingSeq());
-//        newDW.setDatasetSeq(orgDW.getDatasetSeq());
+        //        newDW.setDeskingSeq(orgDW.getDeskingSeq());
+        //        newDW.setDatasetSeq(orgDW.getDatasetSeq());
         //        DeskingWork newDW = (DeskingWork) orgDW.clone();
         //        newDW.setTotalId(deskingWorkDTO.getTotalId());
         //        newDW.setContentsAttr(deskingWorkDTO.getContentsAttr());
@@ -472,7 +453,7 @@ public class DeskingRestController {
 
         try {
             // 스냅샷 수정
-            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
 
             deskingService.updateDeskingWork(newDW);
 
@@ -530,7 +511,7 @@ public class DeskingRestController {
                                                               .build();
 
             // 스냅샷 수정
-            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
 
             // 정렬변경
             List<DeskingWorkVO> deskingList =
@@ -632,7 +613,7 @@ public class DeskingRestController {
     //            }
     //
     //            // 스냅샷 수정
-    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
     //
     //            // work편집기사 추가 및 정렬
     //            deskingService.insertDeskingWork(deskingWork, datasetSeq, 0L, principal.getName());
@@ -682,8 +663,7 @@ public class DeskingRestController {
 
             if (deskingWorkDTOList.size() > 0) {
                 // 스냅샷 수정
-                deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
-                deskingService.updateComponentWorkSnapshot(srcComponentWorkSeq, "N", null, principal.getName());
+                deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
 
                 // target work편집기사 목록 추가 및 정렬
                 for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
@@ -761,7 +741,7 @@ public class DeskingRestController {
     //            }
     //
     //            // 스냅샷 수정
-    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
     //
     //            // 새로운 릴레이션 저장
     //            List<DeskingRelWork> result = deskingService.updateDeskingRelWorks(workVO.getDeskingSeq(), principal.getName(), relWorks);
@@ -795,7 +775,7 @@ public class DeskingRestController {
     //            deskingRelWork.setCreator(principal.getName());
     //
     //            // 스냅샷 수정
-    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
     //
     //            deskingService.deleteDeskingRelWork(deskingRelWork);
     //            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
@@ -886,7 +866,7 @@ public class DeskingRestController {
     //     */
     //    @GetMapping("/components/{componentWorkSeq}/contents/{datasetSeq}/histories")
     //    public ResponseEntity<?> getDeskingHistories(HttpServletRequest request, @PathVariable("datasetSeq") Long datasetSeq,
-    //            @RequestParam(value = "detail", defaultValue = "N") String detail, @Valid @SearchParam DeskingHistSearchDTO search, Principal principal)
+    //            @RequestParam(value = "detail", defaultValue = MokaConstants.NO) String detail, @Valid @SearchParam DeskingHistSearchDTO search, Principal principal)
     //            throws NoDataException, Exception {
     //
     //        search.setDatasetSeq(datasetSeq);
@@ -968,7 +948,7 @@ public class DeskingRestController {
     //        try {
     //
     //            // 스냅샷 수정
-    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, "N", null, principal.getName());
+    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
     //
     //            deskingService.importDeskingWorkHistory(search);
     //

@@ -28,16 +28,50 @@ import org.springframework.test.context.junit4.SpringRunner;
 @Slf4j
 public class FtpTest {
 
+    /**
+     * FtpHelper
+     */
     @Autowired
     private FtpHelper ftpHelper;
 
+    /**
+     * 업로드 테스트
+     *
+     * @throws Exception 예외 처리
+     */
     @Test
     public void ftpUploadTest()
             throws Exception {
 
-        ftpHelper.uploadFile(FtpHelper.MEDIA, new File("/server.log"));
+        ftpHelper.upload(FtpHelper.MEDIA, new File("/server.log"));
 
-        ftpHelper.uploadFile(FtpHelper.HOME, new File("/vcredist.bmp"), "/text");
+        ftpHelper.upload(FtpHelper.HOME, new File("/vcredist.bmp"), "/text");
+    }
+
+    /**
+     * 다운로드 테스트
+     *
+     * @throws Exception 예외 처리
+     */
+    @Test
+    public void ftpDownloadTest()
+            throws Exception {
+
+        ftpHelper.download(FtpHelper.MEDIA, "server.log", "/download");
+
+    }
+
+    /**
+     * 삭제 테스트
+     *
+     * @throws Exception 예외 처리
+     */
+    @Test
+    public void ftpDeleteTest()
+            throws Exception {
+
+        ftpHelper.delete(FtpHelper.MEDIA, "server.log");
+
     }
 
 

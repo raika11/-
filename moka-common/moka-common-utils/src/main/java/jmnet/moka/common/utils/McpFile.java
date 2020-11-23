@@ -610,4 +610,15 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
         }
         return true;
     }
+
+    /**
+     * 파일명 확장자 바로 앞에 접미어를 추가한다.
+     *
+     * @param fileName 파일명
+     * @param suffix   접미어
+     * @return 새 파일명
+     */
+    public static String addSuffix(String fileName, String suffix) {
+        return McpFile.getFileBasename(fileName) + suffix + "." + McpFile.getExtension(fileName);
+    }
 }

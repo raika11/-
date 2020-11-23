@@ -223,8 +223,8 @@ function* deskingDragStop({ payload }) {
         appendNodes = [],
         rowNodeData = null;
 
-    if (source.overIndex) {
-        overIndex = source.overIndex;
+    if (target.overIndex) {
+        overIndex = target.overIndex;
     } else if (source.event) {
         overIndex = getRowIndex(source.event);
     }
@@ -276,9 +276,11 @@ function* deskingDragStop({ payload }) {
         // 2) 데스킹 기사가 있는 ag-grid에 기사를 추가할 때
         const targetRow = target.api.getDisplayedRowAtIndex(overIndex).data;
         if (!targetRow.rel) {
-            // 2-1) hover된 row가 주기사 => 관련기사 추가인가? => target에 체크된 row가 있는지 확인한다
+            // 2-1) hover된 row가 주기사 => 관련기사 추가인가? => 체크된 row에 targetRow가 있는지 확인한다
             const selectedNodes = target.api.getSelectedNodes();
-            if (selectedNodes.length > 0) addRelArt = true;
+            selectedNodes.forEach((s) => {
+                if (s.data.totalId === targetRow.totalId) addRelArt = true;
+            });
 
             if (!addRelArt) {
                 // 주기사 추가

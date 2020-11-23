@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +46,9 @@ public class EditFormSearchDTO extends SearchDTO {
     private Long partSeq;
 
     private String formId;
+
+    @DTODateTimeFormat
+    private Date regDt;
 
 
 }

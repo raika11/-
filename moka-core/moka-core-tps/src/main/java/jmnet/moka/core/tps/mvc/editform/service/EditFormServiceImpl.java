@@ -283,4 +283,14 @@ public class EditFormServiceImpl implements EditFormService {
         return false;
     }
 
+    @Override
+    public Page<EditFormPartHist> findAllEditFormPartHistory(EditFormSearchDTO search) {
+        return editFormPartHistRepository.findAll(search);
+    }
+
+    @Override
+    public Optional<EditFormPartHist> findEditFormPartHistoryBySeq(Long seqNo) {
+        return editFormPartHistRepository.findById(seqNo);
+    }
+
 }

@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
-import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 
 /**
  * <pre>
- * 편집 폼 아이템
+ * 편집 폼 Part 이력
  * Project : moka
  * Package : jmnet.moka.core.tps.common.dto.edit
  * ClassName : Part
@@ -35,17 +37,19 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class EditFormPartDTO {
+public class EditFormPartHistDTO {
+
+    public static final Type TYPE = new TypeReference<List<EditFormPartHistDTO>>() {
+    }.getType();
 
     /**
      * 예약일시
      */
-    @DTODateTimeFormat
     protected Date reserveDt;
     /**
-     * Edit Form 일련번호
+     * 이력 일련번호
      */
-    private Long formSeq;
+    private Long seqNo;
     /**
      * Edit Form Part 일련번호
      */
@@ -62,10 +66,7 @@ public class EditFormPartDTO {
      * Edit Form Data
      */
     private String formData;
-    /**
-     * EditForm
-     */
-    private EditFormDTO editForm;
+
     /**
      * 사용 여부
      */
@@ -74,6 +75,13 @@ public class EditFormPartDTO {
      * 상태
      */
     private EditStatusCode status;
+
+    /**
+     * 승인 여부
+     */
+    @Builder.Default
+    private String approvalYn = MokaConstants.NO;
+
     /**
      * 필드 그룹 목록
      */

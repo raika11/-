@@ -8,6 +8,7 @@ import * as act from './deskingAction';
 export const initialState = {
     area: {
         areaComps: [],
+        areaComp: {},
     },
     list: [],
     total: 0,

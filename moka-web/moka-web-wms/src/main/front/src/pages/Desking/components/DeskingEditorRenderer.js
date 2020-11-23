@@ -78,7 +78,7 @@ const DeskingEditorRenderer = (params) => {
 
     return (
         <div className="d-flex h-100 align-items-center desking-ag-grid-editor">
-            <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: 173 }}>
+            <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: data.rel ? 245 : 173 }}>
                 {data.rel ? data.relTitle : data.title}
             </div>
             {editMode && (

@@ -17,6 +17,7 @@ const DeskingWorkAgGrid = (props) => {
 
     // local state
     const [rowData, setRowData] = useState([]);
+    const [gridApi, setGridApi] = useState(null);
 
     useEffect(() => {
         if (deskingWorks) {
@@ -53,6 +54,7 @@ const DeskingWorkAgGrid = (props) => {
                 draft[agGridIndex] = params;
             }),
         );
+        setGridApi(params);
     };
 
     /**
@@ -207,6 +209,12 @@ const DeskingWorkAgGrid = (props) => {
     const getRowHeight = (params) => {
         return params.data.rel ? 42 : 53;
     };
+
+    useEffect(() => {
+        if (gridApi) {
+            gridApi.api.redrawRows();
+        }
+    }, [deskingWorks, gridApi]);
 
     return (
         <div className="ag-theme-moka-desking-grid px-1">

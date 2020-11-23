@@ -277,6 +277,7 @@ const MokaTable = forwardRef((props, ref) => {
                     getRowClass={getRowClass}
                     onColumnResized={onColumnResized}
                     onColumnVisible={onColumnVisible}
+                    enableMultiRowDragging={rowSelection === 'multiple'}
                 />
             </div>
 

@@ -21,7 +21,6 @@ import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.mvc.area.dto.AreaCompDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaCompLoadDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
@@ -155,7 +154,7 @@ public class AreaRestController {
             // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
             if (areaDTO.getAreaDiv()
                        .equals(MokaConstants.ITEM_COMPONENT)) {
-                compsToComp(areaDTO);
+                areaService.compsToComp(areaDTO);
             }
 
             ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
@@ -208,7 +207,7 @@ public class AreaRestController {
         // 컴포넌트타입일 경우, areaComp-> areaComps로 컴포넌트 정보 이동
         if (areaDTO.getAreaDiv()
                    .equals(MokaConstants.ITEM_COMPONENT)) {
-            compToComps(areaDTO);
+            areaService.compToComps(areaDTO);
         }
 
         Area area = modelMapper.map(areaDTO, Area.class);
@@ -226,7 +225,7 @@ public class AreaRestController {
             // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
             if (returnValDTO.getAreaDiv()
                             .equals(MokaConstants.ITEM_COMPONENT)) {
-                compsToComp(returnValDTO);
+                areaService.compsToComp(returnValDTO);
             }
 
             String message = messageByLocale.get("tps.common.success.insert");
@@ -289,7 +288,7 @@ public class AreaRestController {
         // 컴포넌트타입일 경우, areaComp-> areaComps로 컴포넌트 정보 이동
         if (areaDTO.getAreaDiv()
                    .equals(MokaConstants.ITEM_COMPONENT)) {
-            compToComps(areaDTO);
+            areaService.compToComps(areaDTO);
         }
 
         Area area = modelMapper.map(areaDTO, Area.class);
@@ -307,7 +306,7 @@ public class AreaRestController {
             // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
             if (returnValDTO.getAreaDiv()
                             .equals(MokaConstants.ITEM_COMPONENT)) {
-                compsToComp(returnValDTO);
+                areaService.compsToComp(returnValDTO);
             }
 
             String message = messageByLocale.get("tps.common.success.insert");
@@ -407,46 +406,6 @@ public class AreaRestController {
         tpsLogger.success(true);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    }
-
-    /**
-     * 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
-     *
-     * @param areaDTO
-     * @return
-     */
-    private AreaDTO compsToComp(AreaDTO areaDTO) {
-        if (areaDTO.getAreaDiv()
-                   .equals(MokaConstants.ITEM_COMPONENT)) {
-            if (areaDTO.getAreaComps()
-                       .size() > 0) {
-                areaDTO.setAreaComp(areaDTO.getAreaComps()
-                                           .get(0));
-                areaDTO.setAreaComps(null);
-            }
-        }
-        return areaDTO;
-    }
-
-    /**
-     * 컴포넌트타입일 경우, areaComp-> areaComps로 컴포넌트 정보 이동
-     *
-     * @param areaDTO
-     * @return
-     */
-    private AreaDTO compToComps(AreaDTO areaDTO) {
-        if (areaDTO.getAreaDiv()
-                   .equals(MokaConstants.ITEM_COMPONENT)) {
-            if (areaDTO.getAreaComp() != null) {
-                AreaCompDTO comp = areaDTO.getAreaComp();
-                if (comp.getArea() == null) {
-                    comp.setArea(areaDTO);
-                }
-
-                areaDTO.setAreaComp(null);
-            }
-        }
-        return areaDTO;
     }
 
 }

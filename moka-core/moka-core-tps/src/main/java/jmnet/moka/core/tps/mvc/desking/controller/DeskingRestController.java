@@ -104,6 +104,12 @@ public class DeskingRestController {
 
             AreaDTO areaDto = modelMapper.map(area, AreaDTO.class);
 
+            // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
+            if (areaDto.getAreaDiv()
+                       .equals(MokaConstants.ITEM_COMPONENT)) {
+                areaService.compsToComp(areaDto);
+            }
+
             ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
             resultMapDTO.addBodyAttribute("desking", returnValue);
             resultMapDTO.addBodyAttribute("area", areaDto);
@@ -675,7 +681,7 @@ public class DeskingRestController {
                 List<Long> deleteList = deskingWorkDTOList.stream()
                                                           .map(DeskingWorkDTO::getSeq)
                                                           .collect(Collectors.toList());
-                deskingService.sortBeforeDeleteDeskingWork(deleteList, srcDatasetSeq, principal.getName());
+                //                deskingService.sortBeforeDeleteDeskingWork(deleteList, srcDatasetSeq, principal.getName());
 
                 // work 컴포넌트 조회(편집기사,관련편집기사포함)
                 ComponentWorkVO workVO = deskingService.findComponentWorkBySeq(componentWorkSeq, true);

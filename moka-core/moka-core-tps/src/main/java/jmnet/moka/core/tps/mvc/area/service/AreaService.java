@@ -7,6 +7,7 @@ package jmnet.moka.core.tps.mvc.area.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
@@ -76,4 +77,20 @@ public interface AreaService {
      * @return
      */
     AreaNode makeTree();
+
+    /**
+     * 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
+     *
+     * @param areaDTO
+     * @return
+     */
+    AreaDTO compsToComp(AreaDTO areaDTO);
+
+    /**
+     * 컴포넌트타입일 경우, areaComp-> areaComps로 컴포넌트 정보 이동
+     *
+     * @param areaDTO
+     * @return
+     */
+    AreaDTO compToComps(AreaDTO areaDTO);
 }

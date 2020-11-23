@@ -40,8 +40,6 @@ import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -166,7 +164,8 @@ public class DeskingServiceImpl implements DeskingService {
 
     /**
      * 관련기사 정보 (rel,relSeqs) 및 컴포넌트SEQ(componentSeq) 세팅
-     * @param deskingList 관련기사목록
+     *
+     * @param deskingList  관련기사목록
      * @param componentSeq 컴포넌트SEQ
      * @return 관련기사 정보 세팅한(rel,relSeqs) 기사목록
      */
@@ -231,7 +230,10 @@ public class DeskingServiceImpl implements DeskingService {
     public void save(ComponentWorkVO componentWorkVO, String regId)
             throws Exception {
 
-        HistPublishDTO histPublishDTO = HistPublishDTO.builder().status(EditStatusCode.SAVE).approvalYn(MokaConstants.NO).build();
+        HistPublishDTO histPublishDTO = HistPublishDTO.builder()
+                                                      .status(EditStatusCode.SAVE)
+                                                      .approvalYn(MokaConstants.NO)
+                                                      .build();
 
         // 컴포넌트 히스토리 추가
         ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO);
@@ -243,9 +245,13 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     @Transactional
-    public void publish(ComponentWorkVO componentWorkVO, String regId) throws Exception {
+    public void publish(ComponentWorkVO componentWorkVO, String regId)
+            throws Exception {
 
-        HistPublishDTO histPublishDTO = HistPublishDTO.builder().status(EditStatusCode.PUBLISH).approvalYn(MokaConstants.YES).build();
+        HistPublishDTO histPublishDTO = HistPublishDTO.builder()
+                                                      .status(EditStatusCode.PUBLISH)
+                                                      .approvalYn(MokaConstants.YES)
+                                                      .build();
 
         // 컴포넌트 수정
         Component component = updateComponent(componentWorkVO, regId, histPublishDTO);
@@ -257,9 +263,14 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     @Transactional
-    public void reserve(ComponentWorkVO componentWorkVO, String regId, Date reserveDt) throws Exception {
+    public void reserve(ComponentWorkVO componentWorkVO, String regId, Date reserveDt)
+            throws Exception {
 
-        HistPublishDTO histPublishDTO = HistPublishDTO.builder().status(EditStatusCode.PUBLISH).approvalYn(MokaConstants.NO).reserveDt(reserveDt).build();
+        HistPublishDTO histPublishDTO = HistPublishDTO.builder()
+                                                      .status(EditStatusCode.PUBLISH)
+                                                      .approvalYn(MokaConstants.NO)
+                                                      .reserveDt(reserveDt)
+                                                      .build();
 
         // 컴포넌트 히스토리 추가
         ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO);
@@ -326,7 +337,8 @@ public class DeskingServiceImpl implements DeskingService {
     @Transactional
     public void insertDeskingHist(ComponentHist componentHist, List<DeskingWorkVO> deskingWorkList, String regId) {
 
-        Long datasetSeq = componentHist.getDataset().getDatasetSeq();
+        Long datasetSeq = componentHist.getDataset()
+                                       .getDatasetSeq();
         Dataset dataset = componentHist.getDataset();
         Date sendDt = McpDate.now();   // 전송시간
 
@@ -337,7 +349,9 @@ public class DeskingServiceImpl implements DeskingService {
 
             DeskingHist deskingHist = modelMapper.map(deskingVO, DeskingHist.class);
             deskingHist.setComponentHistSeq(componentHist.getSeq());    // 컴포넌트 히스토리와 연결
-            deskingHist.setDeskingSeq(deskingVO.getDeskingSeq()==null?deskingVO.getSeq():deskingVO.getDeskingSeq());  // desking.deskingSeq = desking_work.seq로 설정?
+            deskingHist.setDeskingSeq(deskingVO.getDeskingSeq() == null
+                                              ? deskingVO.getSeq()
+                                              : deskingVO.getDeskingSeq());  // desking.deskingSeq = desking_work.seq로 설정?
             deskingHist.setDatasetSeq(dataset.getDatasetSeq());
             deskingHist.setRegDt(sendDt); // 전송시간
             deskingHist.setDeskingDt(deskingVO.getRegDt()); // 작업자의 편집시간.
@@ -355,7 +369,8 @@ public class DeskingServiceImpl implements DeskingService {
     @Override
     @Transactional
     public void updateDesking(Component component, List<DeskingWorkVO> deskingWorkList, String regId, HistPublishDTO histPublishDTO) {
-        Long datasetSeq = component.getDataset().getDatasetSeq();
+        Long datasetSeq = component.getDataset()
+                                   .getDatasetSeq();
         Dataset dataset = component.getDataset();
         Date sendDt = McpDate.now();   // 전송시간
 
@@ -465,17 +480,16 @@ public class DeskingServiceImpl implements DeskingService {
     public void deleteDeskingWorkList(List<DeskingWorkVO> deskingWorkVOList, Long datasetSeq, String regId) {
 
         // 삭제된 순번목록
-        List<Long> deleteList =
-                deskingWorkVOList.stream().map(DeskingWorkVO::getSeq).collect(Collectors.toList());
-
-        // 삭제 전 정렬값 수정
-        sortBeforeDeleteDeskingWork(deleteList, datasetSeq, regId);
+        List<Long> deleteList = deskingWorkVOList.stream()
+                                                 .map(DeskingWorkVO::getSeq)
+                                                 .collect(Collectors.toList());
 
         // 편집기사work 삭제
         for (DeskingWorkVO vo : deskingWorkVOList) {
             //  주기사에 관련기사가 딸려있는 경우, 관련기사 삭제
-            if( vo.getRelSeqs() != null && vo.getRelSeqs().size() > 0 ) {
-                for(Long relSeq: vo.getRelSeqs()) {
+            if (vo.getRelSeqs() != null && vo.getRelSeqs()
+                                             .size() > 0) {
+                for (Long relSeq : vo.getRelSeqs()) {
                     deskingWorkRepository.deleteById(relSeq);
                 }
             }
@@ -483,91 +497,68 @@ public class DeskingServiceImpl implements DeskingService {
             // 주기사 삭제
             deskingWorkRepository.deleteById(vo.getSeq());
         }
+
+        // 삭제 후 정렬값 수정
+        sortDeskingWork(deleteList, datasetSeq, regId);
+
     }
 
     @Override
-    public void sortBeforeDeleteDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq, String regId) {
-        // 편집기사work 조회(JPQL)
-        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
-                                                          .datasetSeq(datasetSeq)
-                                                          .regId(regId)
-                                                          .build();
-        List<DeskingWork> deskingList = deskingWorkRepository.findAllDeskingWork(search);
-        List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE); // DeskingWork -> DeskingWorkVO
-
-        // 주기사 오더링
-        Integer ordering = 1;
-        for (DeskingWorkVO deskingWorkVO : deskingVOList) {
-            boolean rel = !(deskingWorkVO.getParentTotalId() == null);  // 관련기사 여부
-            Long seq = deskingWorkVO.getSeq();
-            DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
-
-            // 주기사 이면서, 삭제된 목록이 아니고,
-            if (!rel && !deskingWorkSeqList.contains(seq)) {
-                // 원본오더가 변경할 오더와 다르다면 => 오더 수정.
-                if (!ordering.equals(deskingWork.getContentOrd())) {
-                    deskingWork.setContentOrd(ordering);
-                    deskingWork.setRegDt(McpDate.now());
-                    deskingWork.setRegId(regId);
-                    deskingWorkRepository.save(deskingWork);
-                }
-                ordering++;
-            }
-        }
-
-        // 관련기사 오더링
-//        ordering = 1;
-//        for (DeskingWorkVO deskingWorkVO : deskingVOList) {
-//            boolean rel = !(deskingWorkVO.getParentTotalId() == null);  // 관련기사 여부
-//            Long seq = deskingWorkVO.getSeq();
-//            DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
-//
-//            // 주기사 이면서, 삭제된 목록이 아니고,
-//            if (rel && !deskingWorkSeqList.contains(seq)) {
-//                // 원본오더가 변경할 오더와 다르다면 => 오더 수정.
-//                if (!ordering.equals(deskingWork.getContentOrd())) {
-//                    deskingWork.setContentOrd(ordering);
-//                    deskingWork.setRegDt(McpDate.now());
-//                    deskingWork.setRegId(regId);
-//                    deskingWorkRepository.save(deskingWork);
-//                }
-//                ordering++;
-//            }
-//        }
+    public void sortDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq, String regId) {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //    @Override
+    //    public void sortBeforeDeleteDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq, String regId) {
+    //        // 편집기사work 조회(JPQL)
+    //        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
+    //                                                          .datasetSeq(datasetSeq)
+    //                                                          .regId(regId)
+    //                                                          .build();
+    //        List<DeskingWork> deskingList = deskingWorkRepository.findAllDeskingWork(search);
+    //        List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE); // DeskingWork -> DeskingWorkVO
+    //
+    //        // 주기사 오더링
+    //        Integer ordering = 1;
+    //        for (DeskingWorkVO deskingWorkVO : deskingVOList) {
+    //            boolean rel = !(deskingWorkVO.getParentTotalId() == null);  // 관련기사 여부
+    //            Long seq = deskingWorkVO.getSeq();
+    //            DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
+    //
+    //            // 주기사 이면서, 삭제된 목록이 아니고,
+    //            if (!rel && !deskingWorkSeqList.contains(seq)) {
+    //                // 원본오더가 변경할 오더와 다르다면 => 오더 수정.
+    //                if (!ordering.equals(deskingWork.getContentOrd())) {
+    //                    deskingWork.setContentOrd(ordering);
+    //                    deskingWork.setRegDt(McpDate.now());
+    //                    deskingWork.setRegId(regId);
+    //                    deskingWorkRepository.save(deskingWork);
+    //                }
+    //                ordering++;
+    //            }
+    //        }
+    //
+    //        // 관련기사 오더링
+    ////        ordering = 1;
+    ////        for (DeskingWorkVO deskingWorkVO : deskingVOList) {
+    ////            boolean rel = !(deskingWorkVO.getParentTotalId() == null);  // 관련기사 여부
+    ////            Long seq = deskingWorkVO.getSeq();
+    ////            DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
+    ////
+    ////            // 주기사 이면서, 삭제된 목록이 아니고,
+    ////            if (rel && !deskingWorkSeqList.contains(seq)) {
+    ////                // 원본오더가 변경할 오더와 다르다면 => 오더 수정.
+    ////                if (!ordering.equals(deskingWork.getContentOrd())) {
+    ////                    deskingWork.setContentOrd(ordering);
+    ////                    deskingWork.setRegDt(McpDate.now());
+    ////                    deskingWork.setRegId(regId);
+    ////                    deskingWorkRepository.save(deskingWork);
+    ////                }
+    ////                ordering++;
+    ////            }
+    ////        }
+    //
+    //    }
 
 
 

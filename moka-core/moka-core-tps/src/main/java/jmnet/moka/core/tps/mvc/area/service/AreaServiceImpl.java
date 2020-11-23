@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Optional;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.mvc.area.dto.AreaCompDTO;
+import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
@@ -158,5 +160,45 @@ public class AreaServiceImpl implements AreaService {
             // 삭제
             areaRepository.deleteById(area.getAreaSeq());
         });
+    }
+
+    /**
+     * 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
+     *
+     * @param areaDTO
+     * @return
+     */
+    public AreaDTO compsToComp(AreaDTO areaDTO) {
+        if (areaDTO.getAreaDiv()
+                   .equals(MokaConstants.ITEM_COMPONENT)) {
+            if (areaDTO.getAreaComps()
+                       .size() > 0) {
+                areaDTO.setAreaComp(areaDTO.getAreaComps()
+                                           .get(0));
+                areaDTO.setAreaComps(null);
+            }
+        }
+        return areaDTO;
+    }
+
+    /**
+     * 컴포넌트타입일 경우, areaComp-> areaComps로 컴포넌트 정보 이동
+     *
+     * @param areaDTO
+     * @return
+     */
+    public AreaDTO compToComps(AreaDTO areaDTO) {
+        if (areaDTO.getAreaDiv()
+                   .equals(MokaConstants.ITEM_COMPONENT)) {
+            if (areaDTO.getAreaComp() != null) {
+                AreaCompDTO comp = areaDTO.getAreaComp();
+                if (comp.getArea() == null) {
+                    comp.setArea(areaDTO);
+                }
+
+                areaDTO.setAreaComp(null);
+            }
+        }
+        return areaDTO;
     }
 }

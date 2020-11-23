@@ -42,7 +42,7 @@ const ComponentWorkList = (props) => {
                 </div>
 
                 <div className="custom-scroll overflow-y-scroll" style={{ height: 'calc(100% - 45px)' }}>
-                    {area.areaDiv === ITEM_CP ? (
+                    {area.areaDiv === ITEM_CP && area.areaComp ? (
                         <DeskingWorkComponent key={`${area.areaSeq}-${area.areaComp.componentSeq}`} component={list[0]} agGridIndex={0} {...props} />
                     ) : (
                         area.areaComps.map((areaComp) => {

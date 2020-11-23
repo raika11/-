@@ -223,6 +223,7 @@ const DeskingWorkAgGrid = (props) => {
                 enableMultiRowDragging
                 suppressRowClickSelection
                 suppressMoveWhenRowDragging
+                suppressHorizontalScroll
                 onCellClicked={handleCellClicked}
                 headerHeight={0}
                 rowClassRules={rowClassRules}

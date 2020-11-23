@@ -53,7 +53,7 @@ const AreaFormDepth2 = (props) => {
 
     const [container, setContainer] = useState({}); // 선택한 컨테이너 담고 있는 state
     const [component, setComponent] = useState({}); // 선택한 컴포넌트 담고 있는 state
-    const [areaComps, setAreaComps] = useState([]); // DB에 저장되는 areaComp 리스트
+    const [areaComps, setAreaComps] = useState([]); // areaDiv === ITEM_CT 일 때 DB에 저장되는 areaComp 리스트
     const [areaCompLoad, setAreaCompLoad] = useState({});
 
     const [contOptions, setContOptions] = useState([]); // 컨테이너 options
@@ -100,8 +100,9 @@ const AreaFormDepth2 = (props) => {
         } else if (name === 'areaDiv') {
             setTemp({ ...temp, areaDiv: value });
             setAreaComps([]);
-        } else if (name === 'areaComp') {
+        } else if (name === 'component') {
             setComponent({ componentSeq: value });
+            setAreaComps([]);
         } else if (name === 'areaAlign') {
             setTemp({ ...temp, areaAlign: value });
         } else if (name === 'container') {
@@ -178,11 +179,13 @@ const AreaFormDepth2 = (props) => {
 
         if (temp.areaDiv === ITEM_CP) {
             save.container = null;
+            save.areaComps = null;
             if (component.componentSeq) {
-                save.areaComps = [{ component, ordNo: 1 }];
+                save.areaComp = { component, ordNo: 1 };
             }
         } else {
             save.container = container;
+            save.areaComp = null;
             save.areaComps = areaComps.map((comp) => ({
                 ...comp,
                 ordNo: comp.component.relOrd + 1,
@@ -259,6 +262,8 @@ const AreaFormDepth2 = (props) => {
      * 페이지의 컴포넌트 options 조회
      */
     const getCompOptions = useCallback(() => {
+        setAreaComps([]);
+
         if (!page.pageSeq) {
             setError({ ...error, page: true });
         } else {
@@ -275,8 +280,8 @@ const AreaFormDepth2 = (props) => {
                     callback: ({ body }) => {
                         setCompOptions(body.list || []);
 
-                        if (origin.areaDiv === ITEM_CP && compCnt < 1) {
-                            setComponent(origin.areaComps.length > 0 ? origin.areaComps[0].component : component || {});
+                        if (compCnt < 1) {
+                            setComponent(origin.areaComp && origin.areaComp.component ? origin.areaComp.component : component || {});
                         } else {
                             setAreaCompLoad({
                                 ...areaCompLoad,
@@ -297,6 +302,8 @@ const AreaFormDepth2 = (props) => {
      * 페이지의 컨테이너 options 조회
      */
     const getContOptions = useCallback(() => {
+        setComponent({});
+
         dispatch(
             getContainerListModal({
                 search: {
@@ -333,11 +340,12 @@ const AreaFormDepth2 = (props) => {
 
     useEffect(() => {
         // origin 데이터 가져오는 부분
-        if (origin.areaDiv === ITEM_CP && origin.areaComps && origin.areaComps.length > 0) {
-            setComponent(origin.areaComps[0].component);
+        if (origin.areaDiv === ITEM_CP && origin.areaComp) {
+            setComponent(origin.areaComp.component || {});
+            setAreaComps([]);
         }
         // areaComps 셋팅
-        if (Array.isArray(origin.areaComps)) {
+        if (origin.areaDiv === ITEM_CT && Array.isArray(origin.areaComps)) {
             setAreaComps(origin.areaComps);
         }
     }, [origin]);
@@ -519,7 +527,7 @@ const AreaFormDepth2 = (props) => {
 
                         {temp.areaDiv === ITEM_CP && (
                             <Col xs={8} className="p-0 pl-2 pr-2">
-                                <MokaInput as="select" name="areaComp" value={component.componentSeq} onChange={handleChangeValue} isInvalid={error.component}>
+                                <MokaInput as="select" name="component" value={component.componentSeq} onChange={handleChangeValue} isInvalid={error.component}>
                                     <option hidden>컴포넌트를 선택하세요</option>
                                     {compOptions.map((com) => (
                                         <option value={com.componentSeq} key={com.componentSeq}>

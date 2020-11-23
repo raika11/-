@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,11 @@ import java.util.Map;
 @Setter
 @Getter
 public class DataDto {
+
+    @NotNull(message = "{tps.bright.error.notnull.clientId}")
     private  String clientId;
+
+    @NotNull(message = "{tps.bright.error.notnull.clientSecret}")
     private  String clientSecret;
 
     private Map<String, String> info = new HashMap<>();

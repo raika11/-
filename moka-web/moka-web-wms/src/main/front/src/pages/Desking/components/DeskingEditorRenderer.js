@@ -52,7 +52,7 @@ const DeskingEditorRenderer = (params) => {
             setEditValue(data.rel ? data.relTitle : data.title);
         } else {
             if (data.onDelete) {
-                data.onDelete(params);
+                data.onDelete(data);
             }
         }
     };

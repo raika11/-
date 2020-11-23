@@ -59,7 +59,6 @@ export const putDeskingWork = ({ componentWorkSeq, deskingWork }) => {
 
 // 컴포넌트 워크의 편집기사 여러개 추가 => payload
 export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, deskingWorkList }) => {
-    debugger;
     return instance
         .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}/list`, deskingWorkList, {
             headers: {
@@ -117,4 +116,17 @@ export const postReserveComponentWork = ({ componentWorkSeq, reserveDt }) => {
     return instance.post(`/api/desking/components/reserve/${componentWorkSeq}?${qs.stringify(queryString)}`).catch((err) => {
         throw err;
     });
+};
+
+// work편집기사 삭제 : payload
+export const deleteDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
+    return instance
+        .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}/delete`, list, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };

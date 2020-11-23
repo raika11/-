@@ -175,10 +175,11 @@ function* deskingDragStop({ payload }) {
     let appendNodes = [],
         rowNodeData = null;
 
-    if (source.nodes) {
+    const selectedNodes = source.api.getSelectedNodes();
+    if (selectedNodes.length > 1) {
         // 기사 여러개 이동
-        for (let i = 0; i < source.nodes.length; i++) {
-            const node = source.nodes[i];
+        for (let i = 0; i < selectedNodes.length; i++) {
+            const node = selectedNodes[i];
             rowNodeData = makeRowNode(node.data, overIndex, tgtComponent);
             if (rowNodeData) {
                 overIndex++;
@@ -329,6 +330,11 @@ function* putDeskingWork({ payload }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * work편집기사 삭제
+ */
+const deleteDeskingWorkList = createDeskingRequestSaga(act.DELETE_DESKING_WORK_LIST, api.deleteDeskingWorkList);
+
 /** saga */
 export default function* saga() {
     // 컴포넌트 워크
@@ -351,7 +357,7 @@ export default function* saga() {
     // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPrioritySaga);
     // yield takeLatest(act.POST_DESKING_WORK, postDeskingWorkSaga);
     // yield takeLatest(act.PUT_DESKING_REL_WORKS, putDeskingRelWorksSaga);
-    // yield takeLatest(act.DELETE_DESKING_WORK_LIST, deleteDeskingWorkListSaga);
+    yield takeLatest(act.DELETE_DESKING_WORK_LIST, deleteDeskingWorkList);
 
     // drag 관련
     yield takeEvery(act.DESKING_DRAG_STOP, deskingDragStop);

@@ -11,7 +11,7 @@ import DeskingReadyGrid from './DeskingReadyGrid';
  * 데스킹 AgGrid
  */
 const DeskingWorkAgGrid = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave, onDelete } = props;
     const { deskingWorks } = component;
     const [relRows, setRelRows] = useState([]);
 
@@ -36,11 +36,12 @@ const DeskingWorkAgGrid = (props) => {
                         relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
                         onRowClicked,
                         onSave,
+                        onDelete,
                     };
                 }),
             );
         }
-    }, [component.seq, deskingWorks, onRowClicked, onSave]);
+    }, [component.seq, deskingWorks, onRowClicked, onSave, onDelete]);
 
     /**
      * ag-grid onGridReady

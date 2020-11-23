@@ -124,11 +124,10 @@ export const putDeskingWork = createAction(PUT_DESKING_WORK, ({ componentWorkSeq
  *  work편집기사 삭제
  */
 export const DELETE_DESKING_WORK_LIST = 'desking/DELETE_DESKING_WORK_LIST';
-export const deleteDeskingWorkList = createAction(DELETE_DESKING_WORK_LIST, ({ componentWorkSeq, datasetSeq, list, noMessage, callback }) => ({
+export const deleteDeskingWorkList = createAction(DELETE_DESKING_WORK_LIST, ({ componentWorkSeq, datasetSeq, list, callback }) => ({
     componentWorkSeq,
     datasetSeq,
     list,
-    noMessage,
     callback,
 }));
 

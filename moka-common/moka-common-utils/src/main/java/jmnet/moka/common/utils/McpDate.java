@@ -13,7 +13,7 @@ public class McpDate {
 
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String TIME_FORMAT = "HH:mm:ss";
-    public static final String DATETIME_FORMAT = DATE_FORMAT + TIME_FORMAT;
+    public static final String DATETIME_FORMAT = DATE_FORMAT + " " + TIME_FORMAT;
 
     /**
      * <pre>
@@ -103,11 +103,10 @@ public class McpDate {
          * 메소드를 호출하는데, java.sql.Date를 사용하면 해당 메소드(getHours())가 존재하지 않아 오류가 발생하게 된다.
          */
         // java.sql.Date today = new java.sql.Date(cal.getTime().getTime());
-        java.util.Date today = new java.util.Date(cal
+
+        return new Date(cal
                 .getTime()
                 .getTime());
-
-        return today;
     }
 
     /**
@@ -115,7 +114,7 @@ public class McpDate {
      * 오늘 날짜에 인자값만큼 더한 후 java.util.Date형을 반환한다. 반환시 시간, 분, 초, MILLISECOND는 0으로 초기화 된값이다.
      * </pre>
      *
-     * @param plus
+     * @param plus 더할 날수
      * @return Date
      */
     public static java.util.Date todayDatePlus(int plus) {
@@ -127,10 +126,9 @@ public class McpDate {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
-        java.util.Date todayplus = new java.util.Date(cal
+        return new Date(cal
                 .getTime()
                 .getTime());
-        return todayplus;
     }
 
     /**
@@ -138,8 +136,8 @@ public class McpDate {
      * 특정날짜에 plus만큼 연산을 한다.
      * </pre>
      *
-     * @param date
-     * @param plus
+     * @param date 날짜
+     * @param plus 더할 날수
      * @return Date
      */
     public static java.util.Date dateMinus(java.util.Date date, int plus) {
@@ -151,8 +149,8 @@ public class McpDate {
      * 특정날짜에 plus만큼 연산을 한다.
      * </pre>
      *
-     * @param date
-     * @param plus
+     * @param date 날짜
+     * @param plus 더할 날수
      * @return Date
      */
     public static java.util.Date datePlus(java.util.Date date, int plus) {
@@ -164,8 +162,8 @@ public class McpDate {
      * 특정날짜에 plus만큼 연산을 한다.
      * </pre>
      *
-     * @param date
-     * @param plus
+     * @param date 날짜
+     * @param plus 더할 날수
      * @return Date
      */
     public static java.util.Date dateMinus(java.util.Date date, int plus, boolean onlyDate) {
@@ -174,17 +172,7 @@ public class McpDate {
         cal.setTime(date);
         cal.add(Calendar.DATE, plus * (-1));
 
-        if (onlyDate) {
-            cal.set(Calendar.HOUR, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-        }
-
-        java.util.Date todayplus = new java.util.Date(cal
-                .getTime()
-                .getTime());
-        return todayplus;
+        return getDate(onlyDate, cal);
     }
 
     /**
@@ -192,8 +180,8 @@ public class McpDate {
      * 특정날짜에 plus만큼 연산을 한다.
      * </pre>
      *
-     * @param date
-     * @param plus
+     * @param date 날짜
+     * @param plus 더할 날수
      * @return Date
      */
     public static java.util.Date datePlus(java.util.Date date, int plus, boolean onlyDate) {
@@ -202,6 +190,10 @@ public class McpDate {
         cal.setTime(date);
         cal.add(Calendar.DATE, plus);
 
+        return getDate(onlyDate, cal);
+    }
+
+    private static Date getDate(boolean onlyDate, Calendar cal) {
         if (onlyDate) {
             cal.set(Calendar.HOUR, 0);
             cal.set(Calendar.MINUTE, 0);
@@ -209,10 +201,9 @@ public class McpDate {
             cal.set(Calendar.MILLISECOND, 0);
         }
 
-        java.util.Date todayplus = new java.util.Date(cal
+        return new Date(cal
                 .getTime()
                 .getTime());
-        return todayplus;
     }
 
     /**
@@ -220,8 +211,8 @@ public class McpDate {
      * 특정날짜에 분을 plus만큼 감소시킨다.
      * </pre>
      *
-     * @param date
-     * @param plus
+     * @param date 날짜
+     * @param plus 더할 날수
      * @return Date
      */
     public static java.util.Date minuteMinus(java.util.Date date, int plus) {
@@ -230,10 +221,9 @@ public class McpDate {
         cal.setTime(date);
 
         cal.add(Calendar.MINUTE, plus * (-1));
-        java.util.Date todayplus = new java.util.Date(cal
+        return new Date(cal
                 .getTime()
                 .getTime());
-        return todayplus;
     }
 
     /**
@@ -241,8 +231,8 @@ public class McpDate {
      * 특정날짜에 분을 plus만큼 증가시킨다.
      * </pre>
      *
-     * @param date
-     * @param plus
+     * @param date 날짜
+     * @param plus 더할 날수
      * @return Date
      */
     public static java.util.Date minutePlus(java.util.Date date, int plus) {
@@ -252,10 +242,9 @@ public class McpDate {
 
         cal.add(Calendar.MINUTE, plus);
 
-        java.util.Date todayplus = new java.util.Date(cal
+        return new Date(cal
                 .getTime()
                 .getTime());
-        return todayplus;
     }
 
     /**
@@ -263,8 +252,8 @@ public class McpDate {
      * 특정날짜에 시간을 plus만큼 감소시킨다.
      * </pre>
      *
-     * @param date
-     * @param plus
+     * @param date 날짜
+     * @param plus 더할 시간수
      * @return Date
      */
     public static java.util.Date hourMinus(java.util.Date date, int plus) {
@@ -274,10 +263,9 @@ public class McpDate {
 
         cal.add(Calendar.HOUR, plus * (-1));
 
-        java.util.Date todayplus = new java.util.Date(cal
+        return new Date(cal
                 .getTime()
                 .getTime());
-        return todayplus;
     }
 
     /**
@@ -285,21 +273,20 @@ public class McpDate {
      * 특정날짜에 시간을 plus만큼 증가시킨다.
      * </pre>
      *
-     * @param date
-     * @param plus
+     * @param date 날짜
+     * @param plus 더할 시간수
      * @return Date
      */
-    public static java.util.Date hourPlus(java.util.Date date, int type, int plus) {
+    public static java.util.Date hourPlus(java.util.Date date, int plus) {
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.setTime(date);
 
         cal.add(Calendar.HOUR, plus);
 
-        java.util.Date todayplus = new java.util.Date(cal
+        return new Date(cal
                 .getTime()
                 .getTime());
-        return todayplus;
     }
 
     /**
@@ -506,7 +493,7 @@ public class McpDate {
         if (day == null) {
             return null;
         }
-        List<Date> dateList = new ArrayList<Date>();
+        List<Date> dateList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         dateList.add(sdf.parse(day + " 00:00:00"));
         dateList.add(datePlus(sdf.parse(day + " 00:00:00"), 1, false));
@@ -550,7 +537,7 @@ public class McpDate {
      * </pre>
      *
      * @param date date
-     * @return
+     * @return Date
      */
     public static Date defaultValue(Date date) {
         if (date == null) {

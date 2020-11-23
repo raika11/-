@@ -131,7 +131,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dropTargetAgGrid, gridInstance]);
+    }, [dropTargetAgGrid, gridInstance, onDragStop]);
 
     useEffect(() => {
         if (gridInstance) {

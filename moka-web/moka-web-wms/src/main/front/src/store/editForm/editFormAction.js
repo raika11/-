@@ -51,3 +51,9 @@ export const deleteEditForm = createAction(DELETE_EDIT_FORM, ({ partId, callback
  */
 export const DUPLICATE_CHECK = 'editForm/DUPLICATE_CHECK';
 export const duplicateCheck = createAction(DUPLICATE_CHECK, ({ formId, callback }) => ({ formId, callback }));
+
+/**
+ * 퍼블리시 모달 show/hide
+ */
+export const PUBLISH_MODAL = 'editForm/PUBLISH_MODAL';
+export const showPublishModal = createAction(PUBLISH_MODAL, (show, editFormPart) => ({ show, editFormPart }));

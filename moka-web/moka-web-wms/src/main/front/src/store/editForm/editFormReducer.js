@@ -16,8 +16,10 @@ export const initialState = {
         sort: 'formId,asc',
     },
     editForm: {},
+    editFormPart: {},
     editFormError: {},
     invalidList: [],
+    publishModalShow: false,
 };
 
 /**
@@ -118,6 +120,15 @@ export default handleActions(
         [act.DELETE_EDIT_FORM_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.editFormError = payload;
+            });
+        },
+        /**
+         * 퍼블리시 팝업창
+         */
+        [act.PUBLISH_MODAL]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.editFormPart = payload.editFormPart;
+                draft.publishModalShow = payload.show;
             });
         },
     },

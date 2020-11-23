@@ -32,14 +32,17 @@ export default [
         },
     },
     {
-        headerName: '기사유형',
+        headerName: 'ID\n기사유형',
         width: 75,
-        field: 'artTypeName',
+        field: 'artIdType',
         cellStyle: {
             display: 'flex',
             alignItems: 'center',
+            whiteSpace: 'pre-wrap',
+            lineHeight: '20px',
             fontSize: '12px',
         },
+        cellClass: 'user-select-text',
     },
     {
         headerName: '사진',

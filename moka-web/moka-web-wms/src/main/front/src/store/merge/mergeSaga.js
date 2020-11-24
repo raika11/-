@@ -1,5 +1,5 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { createRequestSaga, errorResponse } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import produce from 'immer';
 
@@ -19,7 +19,7 @@ function* w3cPageSaga(action) {
     let callbackData = {};
     let message = '';
     const { content, page, callback } = action.payload;
-    
+
     try {
         const resSyntax = yield call(api.postSyntax, { content });
         callbackData = resSyntax.data;
@@ -38,7 +38,7 @@ function* w3cPageSaga(action) {
     } catch (e) {
         message = 'W3C검사에 실패했습니다.';
     }
-    
+
     yield put(finishLoading(act.W3C_PAGE)); // 로딩 끝
 
     // 에러가 있을 경우, 메세지 수정.
@@ -53,9 +53,48 @@ function* w3cPageSaga(action) {
     }
 }
 
+/**
+ * 컴포넌트 미리보기
+ */
+function* previewComponent({ payload }) {
+    const { pageSeq, componentWorkSeq, resourceYn, callback } = payload;
+
+    const ACTION = act.PREVIEW_COMPONENT;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.getPreviewCP, { pageSeq, componentWorkSeq, resourceYn });
+        callbackData = response;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.PREVIEW_COMPONENT_SUCCESS,
+                payload: response.data,
+            });
+        } else {
+            yield put({
+                type: act.PREVIEW_COMPONENT_FAILURE,
+                payload: response.data,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+        yield put({
+            type: act.PREVIEW_COMPONENT_FAILURE,
+            payload: callbackData,
+        });
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
 /** saga */
-export default function* mergeSaga() {
+export default function* saga() {
     yield takeLatest(act.PREVIEW_PAGE, previewPageSaga);
     yield takeLatest(act.W3C_PAGE, w3cPageSaga);
-    // yield takeLatest(act.PREVIEW_COMPONENT, previewComponentSaga);
+    yield takeLatest(act.PREVIEW_COMPONENT, previewComponent);
 }

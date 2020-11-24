@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { MokaInputLabel, MokaModal } from '@components';
 import MokaEditor from '@/components/MokaEditor/MokaEditorCore';
 import { putSnapshotComponentWork } from '@store/desking';
@@ -34,7 +34,7 @@ const HtmlEditModal = (props) => {
         };
         if (e) {
             toast.confirm(
-                `선택하신 ${data.componentSeq} ${data.componentName}을 전송하시겠습니까?`,
+                `선택하신 ${data.componentSeq} ${data.componentName}을 저장하시겠습니까?`,
                 () => {
                     dispatch(putSnapshotComponentWork(option));
                     onHide();
@@ -54,14 +54,14 @@ const HtmlEditModal = (props) => {
 
     return (
         <MokaModal
-            title="Html 수동 편집"
+            title="HTML 수동 편집"
             size="xl"
             show={show}
             onHide={onHide}
             width={700}
             height={770}
             buttons={[
-                { variant: 'positive', text: '저장 후 등록', onClick: handleClickSave },
+                { variant: 'positive', text: '저장', onClick: handleClickSave },
                 { variant: 'outline-neutral', text: '미리보기' },
                 { variant: 'negative', text: '닫기', onClick: handleClickClose },
             ]}

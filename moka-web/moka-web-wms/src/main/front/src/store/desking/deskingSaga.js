@@ -54,40 +54,6 @@ export function createDeskingRequestSaga(actionType, api) {
 const getComponentWorkList = createRequestSaga(act.GET_COMPONENT_WORK_LIST, api.getComponentWorkList);
 
 /**
- * 컴포넌트 워크 1개 조회
- */
-function* getComponentWork({ payload }) {
-    const ACTION = act.GET_COMPONENT_WORK;
-    const { componentWorkSeq, callback } = payload;
-    let response, callbackData;
-
-    yield startLoading(ACTION);
-    try {
-        response = yield call(api.getComponentWork, { componentWorkSeq });
-        callbackData = response.data;
-
-        if (response.data.header.success) {
-            yield put({
-                type: act.COMPONENT_WORK_SUCCESS,
-                payload: response.data,
-            });
-        } else {
-            yield put({
-                type: act.COMPONENT_WORK_FAILURE,
-                payload: response.data,
-            });
-        }
-    } catch (e) {
-        callbackData = errorResponse(e);
-    }
-
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-    yield put(finishLoading(ACTION));
-}
-
-/**
  * 컴포넌트 워크 수정(스냅샷 제외)
  */
 const putComponentWork = createDeskingRequestSaga(act.PUT_COMPONENT_WORK, api.putComponentWork);
@@ -257,8 +223,8 @@ function* deskingDragStop({ payload }) {
         appendNodes = [],
         rowNodeData = null;
 
-    if (source.overIndex) {
-        overIndex = source.overIndex;
+    if (target.overIndex) {
+        overIndex = target.overIndex;
     } else if (source.event) {
         overIndex = getRowIndex(source.event);
     }
@@ -310,9 +276,11 @@ function* deskingDragStop({ payload }) {
         // 2) 데스킹 기사가 있는 ag-grid에 기사를 추가할 때
         const targetRow = target.api.getDisplayedRowAtIndex(overIndex).data;
         if (!targetRow.rel) {
-            // 2-1) hover된 row가 주기사 => 관련기사 추가인가? => target에 체크된 row가 있는지 확인한다
+            // 2-1) hover된 row가 주기사 => 관련기사 추가인가? => 체크된 row에 targetRow가 있는지 확인한다
             const selectedNodes = target.api.getSelectedNodes();
-            if (selectedNodes.length > 0) addRelArt = true;
+            selectedNodes.forEach((s) => {
+                if (s.data.totalId === targetRow.totalId) addRelArt = true;
+            });
 
             if (!addRelArt) {
                 // 주기사 추가
@@ -360,7 +328,7 @@ function* deskingDragStop({ payload }) {
             const option = {
                 componentWorkSeq: tgtComponent.seq,
                 datasetSeq: tgtComponent.datasetSeq,
-                deskingWorkList: appendNodes,
+                list: appendNodes,
                 callback,
             };
             yield put({
@@ -482,7 +450,6 @@ const deleteDeskingWorkList = createDeskingRequestSaga(act.DELETE_DESKING_WORK_L
 export default function* saga() {
     // 컴포넌트 워크
     yield takeLatest(act.GET_COMPONENT_WORK_LIST, getComponentWorkList);
-    yield takeLatest(act.GET_COMPONENT_WORK, getComponentWork);
     yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWork);
     yield takeLatest(act.PUT_SNAPSHOT_COMPONENT_WORK, putSnapshotComponentWork);
 

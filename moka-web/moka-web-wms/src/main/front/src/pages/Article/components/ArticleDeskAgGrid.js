@@ -61,6 +61,9 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                 const reporters = art.artReporter.split('.');
                 if (reporters.length > 1) reportersText = `${reporters[0]} 외 ${reporters.length - 1}명`;
 
+                // ID, 기사유형
+                let artIdType = `${art.totalId}\n${art.artTypeName}`;
+
                 // 제목 replace
                 let escapeTitle = art.artTitle;
                 if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
@@ -78,6 +81,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                 return {
                     ...art,
                     escapeTitle,
+                    artIdType,
                     myunPan,
                     articleDt,
                     reportersText,

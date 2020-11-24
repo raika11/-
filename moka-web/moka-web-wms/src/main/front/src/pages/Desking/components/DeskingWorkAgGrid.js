@@ -42,7 +42,9 @@ const DeskingWorkAgGrid = (props) => {
                 }),
             );
         }
-    }, [component.seq, deskingWorks, onRowClicked, onSave, onDelete]);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [component.seq, deskingWorks]);
 
     /**
      * ag-grid onGridReady

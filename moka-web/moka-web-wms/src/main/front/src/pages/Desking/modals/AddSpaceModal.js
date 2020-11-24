@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaImageInput, MokaInput, MokaInputLabel, MokaModal, MokaSearchInput } from '@components';
+import { postDeskingWorkList } from '@store/desking';
 import toast from '@utils/toastUtil';
 
 const titlePrefixList = [{ type: '속보' }, { type: '단독' }];
@@ -13,33 +15,16 @@ const fontSizeList = [{ size: '36px' }, { size: '41px' }, { size: '45px' }, { si
 /**
  * 데스킹 기사정보 편집 모달 컴포넌트
  */
-const DeskingWorkEditModal = (props) => {
-    const { show, onHide, data, onSave } = props;
+const AddSpaceModal = (props) => {
+    const { show, onHide, data, componentAgGridInstances } = props;
+    const dispatch = useDispatch();
 
     // 데스킹 정보
     const [thumbFileName, setThumbFileName] = useState('');
-    const [titlePrefix, setTitlePrefix] = useState('');
-    const [prefixLocation, setPrefixLocation] = useState('');
-    const [titleLocation, setTitleLocation] = useState('');
     const [title, setTitle] = useState('');
-    const [fontSize, setFontSize] = useState('');
-    const [nameplate, setNameplate] = useState('');
-    const [subTitle, setSubTitle] = useState('');
     const [bodyHead, setBodyHead] = useState('');
-    const [url, setUrl] = useState('');
-    const [videoUrl, setVideoUrl] = useState('');
-
-    React.useEffect(() => {
-        // 기사 data 셋팅
-        if (data) {
-            setThumbFileName(data.thumbFileName || '');
-            setTitle(data.title || '');
-            setNameplate(data.nameplate || '');
-            setTitlePrefix(data.titlePrefix || '');
-            setSubTitle(data.subTitle || '');
-            setBodyHead(data.bodyHead || '');
-        }
-    }, [data]);
+    const [linkUrl, setLinkUrl] = useState('');
+    const [moreUrl, setMoreUrl] = useState('');
 
     /**
      * 타이틀 byte 계산
@@ -67,24 +52,12 @@ const DeskingWorkEditModal = (props) => {
             if (value !== title && name === 'titleLength') {
                 euckrBytes(value);
             }
-        } else if (name === 'nameplate') {
-            setNameplate(value);
-        } else if (name === 'titlePrefix') {
-            setTitlePrefix(value);
-        } else if (name === 'prefixLocation') {
-            setPrefixLocation(value);
-        } else if (name === 'titleLocation') {
-            setTitleLocation(value);
-        } else if (name === 'fontSize') {
-            setFontSize(value);
-        } else if (name === 'subTitle') {
-            setSubTitle(value);
         } else if (name === 'bodyHead') {
             setBodyHead(value);
-        } else if (name === 'url') {
-            setUrl(value);
-        } else if (name === 'videoUrl') {
-            setVideoUrl(value);
+        } else if (name === 'linkUrl') {
+            setLinkUrl(value);
+        } else if (name === 'moreUrl') {
+            setMoreUrl(value);
         }
     };
 
@@ -92,23 +65,29 @@ const DeskingWorkEditModal = (props) => {
      * 저장
      */
     const handleSaveDeskingWork = () => {
-        const deskingWork = {
-            ...data,
-            thumbFileName,
-            title,
-            nameplate,
-            titlePrefix,
-            subTitle,
-            bodyHead,
+        const option = {
+            componentWorkSeq: data.seq,
+            datasetSeq: data.datasetSeq,
+            list: [
+                {
+                    contentOrd: componentAgGridInstances.length + 1,
+                    thumbFileName,
+                    title,
+                    bodyHead,
+                    linkUrl,
+                    moreUrl,
+                },
+            ],
+            callback: ({ header }) => {
+                if (header.success) {
+                    toast.success(header.message);
+                } else {
+                    toast.error(header.message);
+                }
+            },
         };
-        const callback = (response) => {
-            if (response.header) {
-                toast.success(response.header.message);
-            } else {
-                toast.warn(response.header.message);
-            }
-        };
-        onSave(deskingWork, callback);
+        dispatch(postDeskingWorkList(option));
+        onHide();
     };
 
     return (
@@ -116,8 +95,7 @@ const DeskingWorkEditModal = (props) => {
             titleAs={
                 <div className="w-100 d-flex flex-column">
                     <div className="p-0 d-flex">
-                        <p className="m-0 mr-2">{data.contentOrd}</p>
-                        <p className="m-0">{data.title}</p>
+                        <p className="m-0">공백 추가</p>
                     </div>
                     <div className="p-0 d-flex ft-12">
                         <p className="m-0 mr-3">ID: {data.totalId}</p>
@@ -162,18 +140,18 @@ const DeskingWorkEditModal = (props) => {
                     </div>
                 </div>
                 <Form style={{ width: '453px' }}>
-                    <MokaInputLabel label="어깨제목" labelWidth={80} inputClassName="ft-12" name="nameplate" value={nameplate} onChange={handleChangeValue} />
+                    <MokaInputLabel label="어깨제목" labelWidth={80} inputClassName="ft-12" name="nameplate" inputProps={{ readOnly: true }} disabled />
                     <Form.Row>
                         <MokaInputLabel label="말머리" labelWidth={80} as="none" />
                         <Col xs={5} className="p-0 d-flex align-items-center justify-content-between">
-                            <MokaInput className="mb-3 mr-2 ft-12" as="select" name="titlePrefix" value={titlePrefix} onChange={handleChangeValue}>
+                            <MokaInput className="mb-3 mr-2 ft-12" as="select" name="titlePrefix" inputProps={{ readOnly: true }} disabled>
                                 {titlePrefixList.map((prefix, idx) => (
                                     <option key={idx} value={idx} className="ft-12">
                                         {prefix.type}
                                     </option>
                                 ))}
                             </MokaInput>
-                            <MokaInput className="mb-3 mr-2 ft-12" as="select" name="prefixLocation" value={prefixLocation} onChange={handleChangeValue}>
+                            <MokaInput className="mb-3 mr-2 ft-12" as="select" name="prefixLocation" inputProps={{ readOnly: true }} disabled>
                                 {prefixLocationList.map((prefixLocation, idx) => (
                                     <option key={idx} value={idx} className="ft-12">
                                         {prefixLocation.type}
@@ -182,15 +160,7 @@ const DeskingWorkEditModal = (props) => {
                             </MokaInput>
                         </Col>
                         <div className="w-100">
-                            <MokaInputLabel
-                                inputClassName="ft-12"
-                                label="제목/부제위치"
-                                labelWidth={90}
-                                as="select"
-                                name="titleLocation"
-                                value={titleLocation}
-                                onChange={handleChangeValue}
-                            >
+                            <MokaInputLabel inputClassName="ft-12" label="제목/부제위치" labelWidth={90} as="select" name="titleLocation" inputProps={{ readOnly: true }} disabled>
                                 {titleLocationList.map((titleLocation, idx) => (
                                     <option key={idx} value={idx} className="ft-12">
                                         {titleLocation.type}
@@ -205,7 +175,7 @@ const DeskingWorkEditModal = (props) => {
                                 label={
                                     <React.Fragment>
                                         Web제목 <br />
-                                        <MokaInput as="select" size="sm" name="fontSize" value={fontSize} onChange={handleChangeValue}>
+                                        <MokaInput as="select" size="sm" name="fontSize" inputProps={{ readOnly: true }} disabled>
                                             {fontSizeList.map((font, idx) => (
                                                 <option key={idx} value={font.size}>
                                                     {font.size}
@@ -229,7 +199,7 @@ const DeskingWorkEditModal = (props) => {
                             </div>
                         </Col>
                     </Form.Row>
-                    <MokaInputLabel label="부제" labelWidth={80} inputClassName="ft-12" name="subTitle" value={subTitle} onChange={handleChangeValue} />
+                    <MokaInputLabel label="부제" labelWidth={80} inputClassName="ft-12" name="subTitle" inputProps={{ readOnly: true }} disabled />
                     <MokaInputLabel
                         label="리드문"
                         labelWidth={80}
@@ -242,14 +212,14 @@ const DeskingWorkEditModal = (props) => {
                     />
                     <Form.Row className="d-flex align-items-center">
                         <Col xs={9} className="p-0">
-                            <MokaInputLabel label="url" labelWidth={80} placeholder="url 입력해주세요" name="url" value={url} onChange={handleChangeValue} />
+                            <MokaInputLabel label="url" labelWidth={80} placeholder="url 입력해주세요" name="linkUrl" value={linkUrl} onChange={handleChangeValue} />
                         </Col>
                         <MokaInput className="mb-3 ml-2" as="select" />
                     </Form.Row>
                     <Form.Row className="d-flex align-items-center">
                         <MokaInputLabel label="영상" labelWidth={80} className="m-0" onChange={handleChangeValue} as="none" />
                         <div className="w-100">
-                            <MokaSearchInput placeholder="url 입력해주세요" name="videoUrl" value={videoUrl} onChange={handleChangeValue} />
+                            <MokaSearchInput placeholder="url 입력해주세요" name="moreUrl" value={moreUrl} onChange={handleChangeValue} />
                         </div>
                     </Form.Row>
                 </Form>
@@ -258,4 +228,4 @@ const DeskingWorkEditModal = (props) => {
     );
 };
 
-export default DeskingWorkEditModal;
+export default AddSpaceModal;

@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.category;
+package jmnet.moka.core.dps.api.handler.module.category;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,8 +14,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import jmnet.moka.core.dps.api.menu.Menu;
-import jmnet.moka.core.dps.api.menu.MenuParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;

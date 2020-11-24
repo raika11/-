@@ -1,10 +1,9 @@
-package jmnet.moka.core.dps.api.category;
+package jmnet.moka.core.dps.api.handler.module.category;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.xpath.XPathExpressionException;
-import jmnet.moka.common.utils.McpString;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

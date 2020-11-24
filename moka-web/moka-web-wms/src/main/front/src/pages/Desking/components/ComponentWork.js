@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
@@ -45,12 +45,10 @@ const ComponentWork = (props) => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((desking) => {
-        // history.push(`/desking/${desking.Seq}`);
-        console.log(desking);
+    const handleRowClicked = (desking) => {
         setRowData(desking);
         setShowDeskingWorkEditModal(true);
-    }, []);
+    };
 
     /**
      * 데스킹워크 저장 (put)

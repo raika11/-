@@ -9,13 +9,6 @@ export const getComponentWorkList = ({ areaSeq }) => {
     });
 };
 
-// 컴포넌트 워크 1개 조회
-export const getComponentWork = ({ componentWorkSeq }) => {
-    return instance.get(`/api/desking/components/${componentWorkSeq}`).catch((err) => {
-        throw err;
-    });
-};
-
 // 컴포넌트 워크를 데스킹 테이블로 전송
 export const postComponentWork = ({ componentWorkSeq }) => {
     return instance.post(`/api/desking/components/${componentWorkSeq}`).catch((err) => {
@@ -58,9 +51,9 @@ export const putDeskingWork = ({ componentWorkSeq, deskingWork }) => {
 };
 
 // 컴포넌트 워크의 편집기사 여러개 추가 => payload
-export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, deskingWorkList }) => {
+export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
     return instance
-        .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}/list`, deskingWorkList, {
+        .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}/list`, list, {
             headers: {
                 'Content-Type': 'application/json',
             },

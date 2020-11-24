@@ -72,6 +72,11 @@
             padding-right: 5px;  
         }
 
+        .user-select-text {
+            cursor: text;
+            user-select: text;
+        }
+
         .ag-cell-center {
             text-align: center;
         }

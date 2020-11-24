@@ -87,6 +87,7 @@ public class MokaConstants {
     public static final String MERGE_CONTEXT_DIGIAL_SPECIAL_ID = "ditalSpecialId";
     public static final String MERGE_CONTEXT_BODY = "body";
     public static final String MERGE_CONTEXT_WORKER_ID = "workerId";
+    public static final String MERGE_CONTEXT_EDITION_SEQ = "editionSeq";
 
     /* Parameter & Component Paging */
     public static final String PARAM_PAGE = Constants.PARAM_PAGE;
@@ -95,6 +96,7 @@ public class MokaConstants {
     public static final String PARAM_CATEGORY = "category";
     public static final String PARAM_START = "start";
     public static final String PARAM_WORKER_ID = "creator";
+    public static final String PARAM_EDITION_SEQ = "editionSeq";
     public static final String COMPONENT_PAGING_TYPE_NUMBER = "N";
     public static final String COMPONENT_PAGING_TYPE_MORE = "M";
 
@@ -138,8 +140,9 @@ public class MokaConstants {
     }
 
     // thread-safe한 date formatter
-    public static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(JSON_DATE_FORMAT)
-                                                                 .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
+    public static final DateTimeFormatter dtf = DateTimeFormatter
+            .ofPattern(JSON_DATE_FORMAT)
+            .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
 
     public static final String now() {
         LocalDateTime now = LocalDateTime.now();
@@ -168,4 +171,9 @@ public class MokaConstants {
     public static final String DIRECT_LINK_SERVICE_NAME_PATTERN = "/(http(s)?:\\/\\/)([a-z0-9\\w]+\\.*)+[a-z0-9]{2,4}/gi";
 
 
+    /**
+     * Http Request Content-Type
+     */
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String AUTHORIZATION = "Authorization";
 }

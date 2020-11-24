@@ -1,8 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import * as act from '@store/reporter/reporterAction';
+import * as act from './reporterAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
-import qs from 'qs';
 
 /**
  * initialState
@@ -13,13 +12,13 @@ export const initialState = {
     error: null,
     search: {
         page: 0,
-        searchType: 'all',
+        size: PAGESIZE_OPTIONS[0],
         sort: 'repSeq,asc',
+        searchType: 'all',
         keyword: '',
     },
     reporter: {},
     reporterError: {},
-    invalidList: [],
 };
 
 /**
@@ -43,16 +42,10 @@ export default handleActions(
                 draft.reporter = payload;
             });
         },
-        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.invalidList = payload;
-            });
-        },
         [act.CLEAR_REPORTER]: (state) => {
             return produce(state, (draft) => {
                 draft.reporter = initialState.reporter;
                 draft.reporterError = initialState.reporterError;
-                draft.invalidList = initialState.invalidList;
             });
         },
         /**
@@ -63,7 +56,6 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.reporter = initialState.reporter;
                 draft.reporterError = initialState.reporterError;
-                draft.invalidList = initialState.invalidList;
             });
         },
 
@@ -103,7 +95,6 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.reporter = body;
                 draft.reporterError = initialState.reporterError;
-                draft.invalidList = initialState.invalidList;
             });
         },
         [act.GET_REPORTER_FAILURE]: (state, { payload }) => {
@@ -112,7 +103,6 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.reporter = initialState.reporter;
                 draft.reporterError = payload;
-                draft.invalidList = body;
             });
         },
     },

@@ -20,9 +20,8 @@ const DeskingTree = () => {
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState([]);
 
-    const { tree, area, loading } = useSelector((store) => ({
+    const { tree, loading } = useSelector((store) => ({
         tree: store.area.tree,
-        area: store.desking.area,
         loading: store.loading[GET_AREA_TREE],
     }));
 
@@ -35,6 +34,7 @@ const DeskingTree = () => {
             dispatch(clearTree());
             dispatch(clearList());
         };
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

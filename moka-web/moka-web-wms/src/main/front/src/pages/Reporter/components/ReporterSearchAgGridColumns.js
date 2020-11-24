@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'react-bootstrap/Image';
-import ReporterModalAddButton from '../components/ReporterModalAddButton';
-export const columnDefs = [
+import ReporterModalAddButton from './ReporterModalAddButton';
+
+export default [
     {
         headerName: '',
         field: 'add',
@@ -12,7 +13,7 @@ export const columnDefs = [
         },
     },
     {
-        headerName: '번호',
+        headerName: 'No',
         field: 'repSeq',
         cellStyle: { fontSize: '12px' },
         width: 90,
@@ -29,7 +30,7 @@ export const columnDefs = [
         width: 100,
         cellRendererFramework: (row) => {
             const { data } = row;
-            return <Image width="35" height="35" src={data.repImg} data={data} roundedCircle />;
+            return <Image width="40" height="40" src={data.repImg} data={data} roundedCircle />;
         },
     },
     {
@@ -42,7 +43,7 @@ export const columnDefs = [
         headerName: '소속',
         field: 'belong',
         cellStyle: { fontSize: '12px' },
-        width: 130,
+        width: 150,
     },
     {
         headerName: '직책',
@@ -54,17 +55,6 @@ export const columnDefs = [
         headerName: '이메일',
         field: 'repEmail1',
         cellStyle: { fontSize: '12px' },
-        width: 180,
-    },
-];
-
-export const rowData = [
-    {
-        repSeq: 1000,
-        joinsId: 'Richards',
-        repName: '강기헌',
-        jamDeptNm: '편집국',
-        repTitle: '논설위원',
-        repEmail1: 'crutis@test.com',
+        width: 200,
     },
 ];

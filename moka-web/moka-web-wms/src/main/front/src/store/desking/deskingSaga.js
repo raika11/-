@@ -61,7 +61,7 @@ const putComponentWork = createDeskingRequestSaga(act.PUT_COMPONENT_WORK, api.pu
 /**
  * 컴포넌트 워크 스냅샷 수정
  */
-const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPONENT_WORK, api.putSnapshotComponentWork);
+const putSnapshotComponentWork = createRequestSaga(act.PUT_SNAPSHOT_COMPONENT_WORK, api.putSnapshotComponentWork, true);
 
 /**
  * 데스킹 워크의 관련기사 rowNode 생성
@@ -174,7 +174,7 @@ const makeRowNode = (data, contentOrd, component, callback) => {
             artType: data.artType,
             sourceCode: data.sourceCode,
             contentOrd: contentOrd,
-            relOrd: null,
+            relOrd: 1,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
             title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,

@@ -213,6 +213,9 @@ public class DeskingServiceImpl implements DeskingService {
         if (componentWorkVO != null && includeDesking) {
             List<DeskingWorkVO> deskingVOList = this.findAllDeskingWork(componentWorkVO.getDatasetSeq(), componentWorkVO.getRegId());
 
+            // 편집기사에 관련기사정보 세팅(rel,relSeqs)
+            deskingVOList = updateRelArticle(deskingVOList);
+
             // 편집기사에 componentSeq세팅
             deskingVOList.stream()
                          .forEach(desking -> desking.setComponentSeq(componentWorkVO.getComponentSeq()));
@@ -493,6 +496,8 @@ public class DeskingServiceImpl implements DeskingService {
     @Transactional
     public void insertDeskingWorkList(List<DeskingWorkDTO> insertdeskingList, Long datasetSeq, String regId) {
         // 1. 편집기사work 등록
+        Integer maxContentOrd = 1;
+        Integer maxRelOrd = 1;
         for (DeskingWorkDTO vo : insertdeskingList) {
             DeskingWork appendDeskingWork = modelMapper.map(vo, DeskingWork.class);
             appendDeskingWork.setDatasetSeq(datasetSeq);
@@ -504,6 +509,9 @@ public class DeskingServiceImpl implements DeskingService {
                 saved.setDeskingSeq(appendSeq);
                 deskingWorkRepository.save(saved);
             }
+            maxContentOrd = appendDeskingWork.getContentOrd() > maxContentOrd ? appendDeskingWork.getContentOrd() : maxContentOrd;
+            maxRelOrd = appendDeskingWork.getRelOrd() > maxRelOrd ? appendDeskingWork.getRelOrd() : maxRelOrd;
+
             log.debug("DESKING WORK APPEND seq: {}", appendSeq);
         }
 
@@ -516,7 +524,7 @@ public class DeskingServiceImpl implements DeskingService {
         List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE); // DeskingWork -> DeskingWorkVO
 
         // 4. 순번조정 및 삭제
-        resortDeskingWorkList(deskingVOList, deskingVOList, regId);
+        resortDeskingWorkList(deskingVOList, deskingVOList, regId, maxContentOrd, maxRelOrd);
     }
 
     @Override
@@ -543,12 +551,13 @@ public class DeskingServiceImpl implements DeskingService {
                                                       .collect(Collectors.toList());
 
         // 4. 순번조정 및 삭제
-        resortDeskingWorkList(deskingVOList, filterList, regId);
+        resortDeskingWorkList(deskingVOList, filterList, regId, 1, 1);
     }
 
     @Override
     @Transactional
-    public void resortDeskingWorkList(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId) {
+    public void resortDeskingWorkList(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId, Integer maxContentOrd,
+            Integer maxRelOrd) {
 
         // 1. 수정할 순번목록
         List<Long> updateList = new ArrayList<Long>();
@@ -567,7 +576,7 @@ public class DeskingServiceImpl implements DeskingService {
 
             // 주기사의 오더가 잘못됐다면
             if (!vo.getContentOrd()
-                   .equals(contentOrd)) {
+                   .equals(contentOrd) && maxContentOrd > vo.getContentOrd()) {
                 vo.setContentOrd(contentOrd);
                 updateList.add(vo.getSeq());    // 순번수정
             }
@@ -586,7 +595,7 @@ public class DeskingServiceImpl implements DeskingService {
             // 같은 부모이고, 관련기사 순번이 안 맞을 경우
             if (vo.getParentTotalId() != null && vo.getParentTotalId()
                                                    .equals(prevParentTotalId) && !vo.getRelOrd()
-                                                                                    .equals(relOrd)) {
+                                                                                    .equals(relOrd) && maxRelOrd > vo.getRelOrd()) {
                 vo.setRelOrd(relOrd);
                 updateList.add(vo.getSeq());    // 순번수정
             }
@@ -619,7 +628,10 @@ public class DeskingServiceImpl implements DeskingService {
                                                .getRelOrd());
                     deskingWork.setRegDt(McpDate.now());
                     deskingWork.setRegId(regId);
-                    //                    deskingWorkRepository.save(deskingWork);
+                    deskingWorkRepository.save(deskingWork);
+                    log.debug("resort seq: {} TotalId: {} parentTotalId : {} contentOrd: {}, relOrd: {} title: {} ", deskingWork.getSeq(),
+                              deskingWork.getTotalId(), deskingWork.getParentTotalId(), deskingWork.getContentOrd(), deskingWork.getRelOrd(),
+                              deskingWork.getTitle());
                 }
             } else {
                 // seq가 없다면, 삭제

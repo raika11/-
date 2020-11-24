@@ -291,6 +291,47 @@ public class McpDate {
 
     /**
      * <pre>
+     * 특정날짜에 초를 plus만큼 증가시킨다.
+     * </pre>
+     *
+     * @param plus 더할 초수
+     * @return Date
+     */
+    public static java.util.Date secondPlus(int plus) {
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.setTime(now());
+
+        cal.add(Calendar.HOUR, plus);
+
+        return new Date(cal
+                .getTime()
+                .getTime());
+    }
+
+    /**
+     * <pre>
+     * 특정날짜에 초를 plus만큼 증가시킨다.
+     * </pre>
+     *
+     * @param date 날짜
+     * @param plus 더할 초수
+     * @return Date
+     */
+    public static java.util.Date secondPlus(java.util.Date date, int plus) {
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.setTime(date);
+
+        cal.add(Calendar.HOUR, plus);
+
+        return new Date(cal
+                .getTime()
+                .getTime());
+    }
+
+    /**
+     * <pre>
      * 어제 날짜
      * </pre>
      *

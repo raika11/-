@@ -25,8 +25,9 @@ const DeskingEditorRenderer = (params) => {
                 data.onSave(
                     {
                         ...data,
-                        title: !data.rel ? editValue : '',
-                        relTitle: data.rel ? editValue : '',
+                        // title: !data.rel ? editValue : '',
+                        // relTitle: data.rel ? editValue : '',
+                        title: editValue,
                         onRowClicked: undefined,
                         onSave: undefined,
                         onDelete: undefined,

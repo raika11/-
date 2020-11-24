@@ -213,18 +213,8 @@ public class DefaultHandler extends AbstractHandler {
         if (item instanceof PageItem) {
             // cache로 설정할 category를 추가한다.
             httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY,item.getString(ItemConstants.PAGE_CATEGORY));
-            String paramName = item.getString(ItemConstants.PAGE_URL_PARAM);
-            if (McpString.isNotEmpty(paramName)) {
-                String mergePath = (String) mergeContext.get(MokaConstants.MERGE_PATH);
-                int length = mergePath.length();
-                int lastSlashIndex = mergePath.lastIndexOf("/");
-                if (lastSlashIndex > 0 && lastSlashIndex < length) {
-                    String paramValue = mergePath.substring(lastSlashIndex + 1, length);
-                    httpParamMap.put(paramName, paramValue);
-                } else {
-                    return null;
-                }
-            }
+            // 경로 파라미터 처리
+            processPathParam(mergeContext, (PageItem)item, httpParamMap);
         }
 
         // Http 헤더 설정
@@ -234,6 +224,30 @@ public class DefaultHandler extends AbstractHandler {
 
         model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
         return this.viewName;
+    }
+
+    private void processPathParam(MergeContext mergeContext, PageItem pageItem, HttpParamMap httpParamMap) {
+        String urlParam = pageItem.getString(ItemConstants.PAGE_URL_PARAM);
+        if (McpString.isNotEmpty(urlParam)) {
+            String paramName = urlParam;
+            String paramValue = null;
+            if (urlParam.contains(",")) { // default 파라미터가 없는 경우
+                String[] param = urlParam.split(",");
+                paramName = param[0];
+                paramValue = param[1];
+            }
+            String mergePath = (String) mergeContext.get(MokaConstants.MERGE_PATH);
+            if ( !mergePath.equalsIgnoreCase(pageItem.getString(ItemConstants.PAGE_URL))) { // 경로 파라미터가 있을 경우
+                int length = mergePath.length();
+                int lastSlashIndex = mergePath.lastIndexOf("/");
+                if (lastSlashIndex > 0 && lastSlashIndex < length) {
+                    paramValue = mergePath.substring(lastSlashIndex + 1, length);
+                }
+            }
+            if ( paramValue != null) { // default값이나 PathParam이 있을 경우만 추가
+                httpParamMap.put(paramName, paramValue);
+            }
+        }
     }
 
     private MergeItem getErrorPageItem(String domainId) {

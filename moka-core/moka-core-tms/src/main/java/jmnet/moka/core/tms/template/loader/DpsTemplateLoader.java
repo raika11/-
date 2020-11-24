@@ -99,7 +99,9 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
                 if (pageItem.getBoolYN(ItemConstants.PAGE_USE_YN)) { // 사용일 경우만 등록한다.
                     // case-insensitive를 지원하기 위해 소문자로 변환
                     String itemKey = KeyResolver.makeItemKey(this.domainId, pageItem.getItemType(), pageItem.getItemId());
-                    newUri2ItemMap.put(this.getPageUriLowerCase(pageItem), itemKey);
+                    String uri = getPageUriLowerCase(pageItem.getString(ItemConstants.PAGE_URL), pageItem.getString(ItemConstants.PAGE_URL_PARAM));
+                    logger.debug("load uri: {} {}", this.domainId,uri);
+                    newUri2ItemMap.put(uri, itemKey);
                 }
             }
 //            this.uri2ItemMap = newUri2ItemMap;

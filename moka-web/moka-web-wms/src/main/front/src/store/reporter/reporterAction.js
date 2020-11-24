@@ -24,24 +24,22 @@ export const clearSearch = createAction(CLEAR_SEARCH);
  */
 export const [GET_REPORTER_LIST, GET_REPORTER_LIST_SUCCESS, GET_REPORTER_LIST_FAILURE] = createRequestActionTypes('reporter/GET_REPORTER_LIST');
 export const [GET_REPORTER, GET_REPORTER_SUCCESS, GET_REPORTER_FAILURE] = createRequestActionTypes('reporter/GET_REPORTER');
-export const getReporterList = createAction(GET_REPORTER_LIST, (...actions) => {
-    return actions;
-});
+export const getReporterList = createAction(GET_REPORTER_LIST, (...actions) => actions);
 export const getReporter = createAction(GET_REPORTER, (reporter) => reporter);
 
 /**
  * 모달 데이터 조회
  */
-export const GET_REPORTER_LIST_MODAL = 'dataset/GET_REPORTER_LIST_MODAL';
-export const getReporterListModal = createAction(GET_REPORTER_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+export const GET_REPORTER_LIST_MODAL = 'reporter/GET_REPORTER_LIST_MODAL';
+export const getReporterListModal = createAction(GET_REPORTER_LIST_MODAL, ({ search, callback, type }) => ({ search, callback, type }));
 
 /**
  * 데이터 변경
  */
 export const CHANGE_REPORTER = 'reporter/CHANGE_REPORTER';
-export const CHANGE_INVALID_LIST = 'reporter/CHANGE_INVALID_LIST';
+// export const CHANGE_INVALID_LIST = 'reporter/CHANGE_INVALID_LIST';
 export const changeReporter = createAction(CHANGE_REPORTER, (reporter) => reporter);
-export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
+// export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 /**
  * 저장

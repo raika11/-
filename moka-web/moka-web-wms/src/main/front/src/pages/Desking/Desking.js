@@ -41,11 +41,7 @@ const Desking = ({ match }) => {
                 <Route
                     path={[match.url, `${match.url}/:areaSeq`]}
                     exact
-                    render={() => (
-                        <Suspense>
-                            <ComponentWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
-                        </Suspense>
-                    )}
+                    render={() => <ComponentWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />}
                 />
             </Switch>
 

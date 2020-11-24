@@ -9,6 +9,7 @@ import jmnet.moka.common.proxy.http.HttpProxy;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.mvc.DefaultMergeHandlerMapping;
 import jmnet.moka.core.tms.mvc.DefaultMergeViewResolver;
 import jmnet.moka.core.tms.mvc.HandlerAndView;
@@ -142,6 +143,10 @@ public class TmsAutoConfiguration {
         long reservedExpireTime = TimeHumanizer.parseLong(this.reservedExpireTimeStr, ITEM_EXPIRE_TIME);
         HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
         domainResolver = new DpsDomainResolver(httpProxyDataLoader, reservedExpireTime);
+        // 도메인별 uri를 로딩한다.
+        for ( DomainItem domainItem : domainResolver.getDomainInfoList()) {
+            this.appContext.getBean(AbstractTemplateLoader.class,domainItem.getItemId());
+        }
         return domainResolver;
     }
 

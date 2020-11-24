@@ -1,20 +1,11 @@
 package jmnet.moka.core.tms.template.loader;
 
-import com.hazelcast.config.Config;
-import com.hazelcast.config.FileSystemXmlConfig;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import jmnet.moka.common.cache.CacheConfigParser;
 import jmnet.moka.common.cache.CacheManager;
-import jmnet.moka.common.cache.Cacheable;
 import jmnet.moka.common.cache.HazelcastCache;
-import jmnet.moka.common.cache.model.Cache;
-import jmnet.moka.common.cache.model.CacheGroup;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.TemplateLoader;
@@ -38,12 +29,7 @@ import jmnet.moka.core.tms.template.parse.model.PgTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.TpTemplateRoot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 
 /**
  * <pre>
@@ -84,7 +70,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
             logger.warn("Load hazelcast Instance fail :{}", e.getMessage());
         }
 
-        if ( hzInstance != null && cacheable) {
+        if (hzInstance != null && cacheable) {
             this.mergeItemMap = hzInstance.getMap("mergeItem");
             this.uri2ItemMap = hzInstance.getMap("uri2Item");
         } else {
@@ -96,7 +82,8 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         }
     }
 
-    public abstract void loadUri() throws TmsException;
+    public abstract void loadUri()
+            throws TmsException;
 
     public Map<String, String> getUri2ItemMap() {
         return this.uri2ItemMap;
@@ -115,32 +102,28 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         if (uri == null) {
             return null;
         }
-        String itemKey = this.uri2ItemMap.get(uri.toLowerCase()); // uri case-insensitive
+        uri = uri.toLowerCase(); // 소문자로 비교한다.
+        String itemKey = this.uri2ItemMap.get(uri); // uri case-insensitive
         if (itemKey != null) { // REST방식 URL이 아닌 경우
             return itemKey;
         }
+        // REST 방식 중 default 파라미터를 사용하는 경우
+        if ( this.uri2ItemMap.containsKey(uri+AbstractTemplateLoader.URI_REST_PREFIX)) {
+            return this.uri2ItemMap.get(uri+AbstractTemplateLoader.URI_REST_PREFIX);
+        }
         // REST 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
         int lastSlashIndex = uri.lastIndexOf("/");
-        if (lastSlashIndex > 0) {
-            String restUri = uri.substring(0, lastSlashIndex) + AbstractTemplateLoader.URI_REST_PREFIX;
-            return this.uri2ItemMap.get(restUri.toLowerCase()); // uri case-insensitive
+        if (lastSlashIndex > 0) { // URL_PARAM을 사용하는  페이지의 경우
+            return this.uri2ItemMap.get(uri.substring(0, lastSlashIndex) + AbstractTemplateLoader.URI_REST_PREFIX);
         }
         return null;
     }
 
-    protected String getPageUriLowerCase(PageItem pageItem) {
-        String uri = null;
-        if (pageItem.getItemType()
-                    .equals(MokaConstants.ITEM_PAGE)) {
-            // REST 방식의 page에 대한 처리
-            String urlParam = pageItem.getString(ItemConstants.PAGE_URL_PARAM);
-            if (McpString.isEmpty(urlParam)) {
-                uri = pageItem.getString(ItemConstants.PAGE_URL);
-            } else {
-                uri = pageItem.getString(ItemConstants.PAGE_URL) + AbstractTemplateLoader.URI_REST_PREFIX;
-            }
+    protected String getPageUriLowerCase(String uri, String urlParam) {
+        if (McpString.isNotEmpty(urlParam)) {
+            uri = uri + AbstractTemplateLoader.URI_REST_PREFIX;
         }
-        return uri != null ? uri.toLowerCase() : null;
+        return uri.toLowerCase();
     }
 
     /**
@@ -149,7 +132,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
      * @param pageItem 페이지 아이템
      */
     protected void addUri(PageItem pageItem) {
-        String uri = getPageUriLowerCase(pageItem);
+        String uri = getPageUriLowerCase(pageItem.getString(ItemConstants.PAGE_URL), pageItem.getString(ItemConstants.PAGE_URL_PARAM));
         String itemKey = KeyResolver.makeItemKey(this.domainId, pageItem.getItemType(), pageItem.getItemId());
         if (uri != null) {
             this.uri2ItemMap.put(uri, itemKey);
@@ -162,7 +145,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
      * @param pageItem 페이지 아이템
      */
     public void removeUri(PageItem pageItem) {
-        String uri = getPageUriLowerCase(pageItem);
+        String uri = getPageUriLowerCase(pageItem.getString(ItemConstants.PAGE_URL), pageItem.getString(ItemConstants.PAGE_URL_PARAM));
         if (uri != null) {
             // uri case-insensitive를 위해 소문자로 변환
             this.uri2ItemMap.remove(uri);
@@ -170,13 +153,16 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
     }
 
     @Override
-    public abstract MergeItem getItem(String itemType, String itemId) throws TemplateLoadException, TemplateParseException;
+    public abstract MergeItem getItem(String itemType, String itemId)
+            throws TemplateLoadException, TemplateParseException;
 
 
-    public abstract MergeItem getItem(String itemType, String itemId, boolean force) throws TemplateLoadException, TemplateParseException;
+    public abstract MergeItem getItem(String itemType, String itemId, boolean force)
+            throws TemplateLoadException, TemplateParseException;
 
     @Override
-    public TemplateRoot setItem(String itemType, String itemId, MergeItem item) throws TemplateParseException {
+    public TemplateRoot setItem(String itemType, String itemId, MergeItem item)
+            throws TemplateParseException {
         String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
         if (cacheable) {
             this.mergeItemMap.put(itemKey, item);
@@ -188,7 +174,8 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         return templateRoot;
     }
 
-    private MokaTemplateRoot getParsedTemplate(MergeItem item) throws TemplateParseException {
+    private MokaTemplateRoot getParsedTemplate(MergeItem item)
+            throws TemplateParseException {
         MokaTemplateRoot templateRoot = null;
         if (item instanceof PageItem) {
             templateRoot = new PgTemplateRoot((PageItem) item);
@@ -205,8 +192,9 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
     }
 
     @Override
-    public TemplateRoot getParsedTemplate(String itemType, String itemId) throws TemplateParseException, TemplateLoadException {
-        MokaTemplateRoot templateRoot ;
+    public TemplateRoot getParsedTemplate(String itemType, String itemId)
+            throws TemplateParseException, TemplateLoadException {
+        MokaTemplateRoot templateRoot;
         MergeItem remoteItem = null;
         String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
         if (cacheable && (templateRoot = this.templateRootMap.get(itemKey)) != null) {
@@ -240,7 +228,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
      * </pre>
      *
      * @param itemType 아이템 타입
-     * @param itemId 아이템 ID
+     * @param itemId   아이템 ID
      */
     public void purgeItem(String itemType, String itemId) {
         String itemKey = KeyResolver.makeItemKey(this.domainId, itemType, itemId);
@@ -253,8 +241,9 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
                     try {
                         MokaTemplateRoot templateRoot = (MokaTemplateRoot) this.getParsedTemplate(itemType, itemId);
                         PageItem pageItem = (PageItem) templateRoot.getItem();
-                        if (pageItem.getString(ItemConstants.PAGE_USE_YN)
-                                    .equals("Y")) {
+                        if (pageItem
+                                .getString(ItemConstants.PAGE_USE_YN)
+                                .equals("Y")) {
                             this.addUri(pageItem);
                         }
                     } catch (TemplateParseException | TemplateLoadException e) {

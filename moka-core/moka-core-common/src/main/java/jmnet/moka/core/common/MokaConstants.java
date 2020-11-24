@@ -87,7 +87,6 @@ public class MokaConstants {
     public static final String MERGE_CONTEXT_DIGIAL_SPECIAL_ID = "ditalSpecialId";
     public static final String MERGE_CONTEXT_BODY = "body";
     public static final String MERGE_CONTEXT_WORKER_ID = "workerId";
-    public static final String MERGE_CONTEXT_EDITION_SEQ = "editionSeq";
 
     /* Parameter & Component Paging */
     public static final String PARAM_PAGE = Constants.PARAM_PAGE;
@@ -96,15 +95,14 @@ public class MokaConstants {
     public static final String PARAM_CATEGORY = "category";
     public static final String PARAM_START = "start";
     public static final String PARAM_WORKER_ID = "creator";
-    public static final String PARAM_EDITION_SEQ = "editionSeq";
     public static final String COMPONENT_PAGING_TYPE_NUMBER = "N";
     public static final String COMPONENT_PAGING_TYPE_MORE = "M";
 
     /* TMS ERROR PAGE */
-    public static final  String TMS_ERROR_PAGE = "/error";
+    public static final String TMS_ERROR_PAGE = "/error";
 
     /* DPS Constants */
-    public static final  String SAMPLE_PATH = "samples";
+    public static final String SAMPLE_PATH = "samples";
 
 
     /* TMS Http parameter & Item Wrapping and highlight */
@@ -135,15 +133,15 @@ public class MokaConstants {
     public static final String JSON_SERVICE_DT_FORMAT = "yyyyMMddHHmmss";
 
     // DateFormat은 thread-safe하지 않음, jackson에서는 문제없다고는 함
-    public static final  SimpleDateFormat jsonDateFormat() {
+    public static final SimpleDateFormat jsonDateFormat() {
         return new SimpleDateFormat(JSON_DATE_FORMAT);
     }
 
     // thread-safe한 date formatter
-    public static final  DateTimeFormatter dtf = DateTimeFormatter.ofPattern(JSON_DATE_FORMAT)
-                                                           .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
+    public static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(JSON_DATE_FORMAT)
+                                                                 .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
 
-    public static final  String now() {
+    public static final String now() {
         LocalDateTime now = LocalDateTime.now();
         return now.format(dtf);
     }

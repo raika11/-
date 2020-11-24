@@ -1,102 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <apiConfig>
-	<api id="domain.list" expire="0">
-		<description>도메인 목록을 반환한다.</description>
-		<request>dps.item.domain_list</request>
-		<request total="Y">dps.item.domain_total</request>
-		<keys></keys>
-	</api>
-	<api id="reserved.list">
-		<description>도메인의 예약어를 반환한다.</description>
-		<parameter>
-			<refParameter>
-				domainId
-			</refParameter>
-		</parameter>
-		<request>dps.item.reserved_list</request>
-		<keys>
-			domainId
-		</keys>
-	</api>
-	<api id="page.list" expire="0">
-		<description>도메인별 페이지 목록 혹은 페이지 정보 반환한다.</description>
-		<parameter>
-			<!-- domainId는 페이지 목록이 아닐 경우 필수가 아니여서 재정의 함 -->
-			<domainId desc="도메인 Id">[0-9]{4}</domainId>
-			<id desc="페이지 Id">[0-9]{1,6}</id>
-			<tBody desc="템플릿 조회여부(Y/N)" require="N" default="Y">(Y|N)</tBody>
-		</parameter>
-		<request>dps.item.page_list</request>
-		<keys>
-			domainId
-			id
-			tBody
-		</keys>
-	</api>
-	<api id="container" expire="0">
-		<description>컨테이너 정보를 반환한다.</description>
-		<parameter>
-			<id desc="컨테이너 Id" require="Y">[0-9]{1,6}</id>
-		</parameter>
-		<request>dps.item.container</request>
-		<keys>
-			id
-		</keys>
-	</api>
-	<api id="component" expire="0">
-		<description>컴포넌트 정보를 반환한다.</description>
-		<parameter>
-			<id desc="컴포넌트 Id" require="Y">[0-9]{1,6}</id>
-		</parameter>
-		<request>dps.item.component</request>
-		<keys>
-			id
-		</keys>
-	</api>
-	<api id="component.work" expire="0">
-		<description>작업내용이 반영된 컴포넌트 정보를 반환한다.</description>
-		<parameter>
-			<creator require="Y">[0-9|A-z]{1,20}</creator>
-			<id desc="컴포넌트 Id" require="Y">[0-9]{1,6}</id>
-		</parameter>
-		<!-- 
-		<request type="module">jmnet.moka.core.dps.api.handler.module.ComponentWorkModule</request>
-		 -->
-		<request>dps.item.component_work</request>
-		<request resultName="COMPONENT_AD">dps.item.component_ad_list</request>
-		<keys>
-			domainId
-			id
-		</keys>
-	</api>
-	<api id="template" expire="0">
-		<description>템플릿 정보를 반환한다.</description>
-		<parameter>
-			<id desc="템플릿 Id" require="Y">[0-9]{1,6}</id>
-		</parameter>
-		<request>dps.item.template</request>
-		<keys>
-			id
-		</keys>
-	</api>
-	<api id="dataset" expire="0">
-		<description>데이터셋 정보를 반환한다.</description>
-		<parameter>
-			<id desc="데이터셋 Id" require="Y">[0-9]{1,6}</id>
-		</parameter>
-		<request>dps.item.dataset</request>
-		<keys>
-			id
-		</keys>
-	</api>
-	<api id="ad" expire="0">
-		<description>광고 정보를 반환한다.</description>
-		<parameter>
-			<id desc="템플릿 Id" require="Y">[0-9]{1,6}</id>
-		</parameter>
-		<request>dps.item.ad</request>
-		<keys>
-			id
-		</keys>
-	</api>
+  <api id="domain.list" expire="0">
+    <description>도메인 목록을 반환한다.</description>
+    <request>dps.item.domain_list</request>
+    <request total="Y">dps.item.domain_total</request>
+    <keys></keys>
+  </api>
+  <api id="reserved.list">
+    <description>도메인의 예약어를 반환한다.</description>
+    <parameter>
+      <refParameter>
+        domainId
+      </refParameter>
+    </parameter>
+    <request>dps.item.reserved_list</request>
+    <keys>
+      domainId
+    </keys>
+  </api>
+  <api id="page.list" expire="0">
+    <description>도메인별 페이지 목록 혹은 페이지 정보 반환한다.</description>
+    <parameter>
+      <!-- domainId는 페이지 목록이 아닐 경우 필수가 아니여서 재정의 함 -->
+      <domainId desc="도메인 Id">[0-9]{4}</domainId>
+      <id desc="페이지 Id">[0-9]{1,6}</id>
+      <tBody desc="템플릿 조회여부(Y/N)" require="N" default="Y">(Y|N)</tBody>
+    </parameter>
+    <request>dps.item.page_list</request>
+    <keys>
+      domainId
+      id
+      tBody
+    </keys>
+  </api>
+  <api id="container" expire="0">
+    <description>컨테이너 정보를 반환한다.</description>
+    <parameter>
+      <id desc="컨테이너 Id" require="Y">[0-9]{1,6}</id>
+    </parameter>
+    <request>dps.item.container</request>
+    <keys>
+      id
+    </keys>
+  </api>
+  <api id="component" expire="0">
+    <description>컴포넌트 정보를 반환한다.</description>
+    <parameter>
+      <id desc="컴포넌트 Id" require="Y">[0-9]{1,6}</id>
+    </parameter>
+    <request>dps.item.component</request>
+    <keys>
+      id
+    </keys>
+  </api>
+  <api id="component.work" expire="0">
+    <description>작업내용이 반영된 컴포넌트 정보를 반환한다.</description>
+    <parameter>
+      <creator require="Y">[0-9|A-z]{1,20}</creator>
+      <id desc="컴포넌트 Id" require="Y">[0-9]{1,6}</id>
+    </parameter>
+    <request>dps.item.component_work</request>
+    <keys>
+      domainId
+      id
+    </keys>
+  </api>
+  <api id="template" expire="0">
+    <description>템플릿 정보를 반환한다.</description>
+    <parameter>
+      <id desc="템플릿 Id" require="Y">[0-9]{1,6}</id>
+    </parameter>
+    <request>dps.item.template</request>
+    <keys>
+      id
+    </keys>
+  </api>
+  <api id="dataset" expire="0">
+    <description>데이터셋 정보를 반환한다.</description>
+    <parameter>
+      <id desc="데이터셋 Id" require="Y">[0-9]{1,6}</id>
+    </parameter>
+    <request>dps.item.dataset</request>
+    <keys>
+      id
+    </keys>
+  </api>
+  <api id="ad" expire="0">
+    <description>광고 정보를 반환한다.</description>
+    <parameter>
+      <id desc="템플릿 Id" require="Y">[0-9]{1,6}</id>
+    </parameter>
+    <request>dps.item.ad</request>
+    <keys>
+      id
+    </keys>
+  </api>
 </apiConfig>

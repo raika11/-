@@ -177,7 +177,8 @@ public class MergeRestController {
     public ResponseEntity<?> getPreviewCP(HttpServletRequest request, Long pageSeq, Long componentWorkSeq, Principal principal, String resourceYn)
             throws Exception {
 
-        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+        //        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
         // 페이지
         Page pageInfo = pageService.findPageBySeq(pageSeq)
@@ -222,7 +223,7 @@ public class MergeRestController {
 
             // merger
             MokaPreviewTemplateMerger dtm =
-                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(), 0, componentIdList);
+                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(), componentIdList);
 
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, componentItem, false, resourceYn.equals("Y"), false, false);

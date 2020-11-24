@@ -1,38 +1,31 @@
 import { takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
-import qs from 'qs';
 
 import * as groupAPI from './groupApi';
 import * as groupAction from './groupAction';
 import * as menuAPI from '@store/menu/menuApi';
 
 const toGroupMenuTree = (menus) => {
-    const treeInfo = { list: [], used: [], edited: [] };
+    const treeInfo = { list: [], used: [], edited: [], halfCheckedKeys: [] };
     if (menus && menus.length > 0) {
         menus.map((menu) => {
             const isMenuUsed = menu.usedYn === 'Y';
-            const isMenuEdit = isMenuUsed && menu.editYn === 'Y';
+            const isMenuEdit = menu.editYn === 'Y';
 
             const treeMenu = { key: menu.menuId, title: menu.menuDisplayNm, selectable: false };
-
-            if (isMenuUsed) {
-                treeInfo.used.push(menu.menuId);
-            }
-
-            if (isMenuEdit) {
-                treeInfo.edited.push(menu.menuId);
-            }
-
+            let childrenUsedLength = 0;
             if (menu.children) {
+                childrenUsedLength = menu.children.length;
                 const parentKey = menu.menuId;
                 const treeChildrens = [];
                 menu.children.map((children) => {
-                    const isChildrenUsed = children.usedYn === 'Y' || isMenuUsed;
-                    const isChildrenEdit = isChildrenUsed && (children.editYn === 'Y' || isMenuEdit);
+                    const isChildrenUsed = children.usedYn === 'Y';
+                    const isChildrenEdit = children.editYn === 'Y';
 
                     if (isChildrenUsed) {
                         treeInfo.used.push(children.menuId);
+                        childrenUsedLength--;
                     }
 
                     if (isChildrenEdit) {
@@ -48,6 +41,19 @@ const toGroupMenuTree = (menus) => {
                 });
                 treeMenu.children = treeChildrens;
             }
+
+            if (isMenuUsed) {
+                if (childrenUsedLength === 0) {
+                    treeInfo.used.push(menu.menuId);
+                } else {
+                    treeInfo.halfCheckedKeys.push(menu.menuId);
+                }
+            }
+
+            if (isMenuEdit) {
+                treeInfo.edited.push(menu.menuId);
+            }
+
             treeInfo.list.push(treeMenu);
         });
     }
@@ -251,14 +257,13 @@ function* deleteGroup({ payload: { groupCd, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-function* updateMenuAuth({ payload: { groupCd, changeMenuAuthList } }) {
-    console.log('groupCd', groupCd);
-    console.log('useMenuAuthList', changeMenuAuthList);
+function* updateGroupMenuAuth({ type, payload: { groupCd, changeMenuAuthList, callback } }) {
+    yield startLoading('group/GET_GROUP_MENU_LIST');
 
     const response = yield call(groupAPI.updateGroupMenuAuth, groupCd, changeMenuAuthList);
+    callback(response.data);
 
-    console.log(response);
-    console.log('aaa');
+    yield finishLoading('group/GET_GROUP_MENU_LIST');
 }
 
 export default function* groupSaga() {
@@ -269,5 +274,5 @@ export default function* groupSaga() {
     yield takeLatest(groupAction.DELETE_GROUP, deleteGroup);
     yield takeLatest(groupAction.HAS_RELATION_LIST, hasRelationList);
     yield takeLatest(groupAction.getGroupMenuList, getGroupMenuList);
-    yield takeLatest(groupAction.updateGroupMenuAuth, updateMenuAuth);
+    yield takeLatest(groupAction.updateGroupMenuAuth, updateGroupMenuAuth);
 }

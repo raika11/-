@@ -203,7 +203,7 @@ const CodeListModal = (props) => {
             draggable
             className="code-modal"
             footerClassName="d-flex justify-content-center"
-            buttons={buttons || [{ variant: 'primary', text: '적용', variant: 'positive', onClick: handleOkTrigger }]}
+            buttons={buttons || [{ variant: 'positive', text: '적용', onClick: handleOkTrigger }]}
             centered
         >
             <div className="d-flex align-items-center justify-content-around">

@@ -7,7 +7,7 @@ import * as act from './mergeAction';
  */
 export const initialState = {
     content: null,
-    snapshotContent: null,
+    snapshotBody: null,
     error: null,
 };
 
@@ -37,7 +37,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.error = initialState.error;
                 if (resourceYn && resourceYn === 'N') {
-                    draft.snapshotContent = body;
+                    draft.snapshotBody = body;
                 } else {
                     draft.content = body;
                 }

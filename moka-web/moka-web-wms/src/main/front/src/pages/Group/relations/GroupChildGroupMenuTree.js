@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { changeGroupMenuAuthInfo, updateGroupMenuAuth } from '@store/group';
+import { changeGroupMenuAuthInfo, getGroupMenuList, updateGroupMenuAuth } from '@store/group';
 import clsx from 'clsx';
 import { MokaRCTree } from '@components/MokaTree';
 import Button from 'react-bootstrap/Button';
+import { Link, NavLink } from 'react-router-dom';
+import toastUtil from '@utils/toastUtil';
 
 const GroupChildGroupMenuTree = () => {
     const { menuAuthInfo, groupCd } = useSelector(
@@ -48,13 +50,17 @@ const GroupChildGroupMenuTree = () => {
         const menuIds = [menuId];
         let edited = menuAuthInfo.edited;
         const used = menuAuthInfo.used;
+        const halfCheckKeys = menuAuthInfo.halfCheckedKeys;
+
         const list = menuAuthInfo.list;
-        if (used.includes(menuId)) {
+        if (used.includes(menuId) || halfCheckKeys.includes(menuId)) {
             list.map((menu) => {
                 if (menu.key === menuId) {
                     if (menu.children) {
                         menu.children.map((child) => {
-                            menuIds.push(child.key);
+                            if (used.includes(child.key)) {
+                                menuIds.push(child.key);
+                            }
                         });
                     }
                 }
@@ -158,11 +164,18 @@ const GroupChildGroupMenuTree = () => {
             changeMenuAuthList = [...changeMenuAuthList, { menuId, usedYn, editYn, vidwYn }];
         });
 
-        /*const payload = { groupCd, useMenuAuthList };*/
-        dispatch(updateGroupMenuAuth({ groupCd, changeMenuAuthList }));
-        /*console.log('used', used);
-        console.log('edited', edited);
-        console.log(payload);*/
+        dispatch(
+            updateGroupMenuAuth({
+                groupCd,
+                changeMenuAuthList,
+                callback: (response) => {
+                    if (response.body) {
+                        dispatch(getGroupMenuList(groupCd));
+                    }
+                    toastUtil.result(response);
+                },
+            }),
+        );
     };
 
     useEffect(() => {

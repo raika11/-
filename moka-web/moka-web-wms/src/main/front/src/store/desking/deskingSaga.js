@@ -66,7 +66,7 @@ const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPO
 /**
  * 데스킹 워크의 관련기사 rowNode 생성
  */
-const makeRelRowNode = (data, overIndexInRels, parentData, component, callback) => {
+const makeRelRowNode = (data, relOrd, parentData, component, callback) => {
     if (!parentData || parentData.totalId === null) {
         if (callback) {
             callback({
@@ -98,7 +98,6 @@ const makeRelRowNode = (data, overIndexInRels, parentData, component, callback) 
 
     if (data.gridType === 'ARTICLE') {
         appendData = {
-            gridType: 'DESKING',
             componentWorkSeq: component.seq,
             seq: null,
             deskingSeq: null,
@@ -109,7 +108,7 @@ const makeRelRowNode = (data, overIndexInRels, parentData, component, callback) 
             artType: data.artType,
             sourceCode: data.sourceCode,
             contentOrd: parentData.contentOrd,
-            relOrd: overIndexInRels,
+            relOrd,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
             title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,
@@ -165,7 +164,6 @@ const makeRowNode = (data, contentOrd, component, callback) => {
 
     if (data.gridType === 'ARTICLE') {
         appendData = {
-            gridType: 'DESKING',
             componentWorkSeq: component.seq,
             seq: null,
             deskingSeq: null,
@@ -220,6 +218,7 @@ function* deskingDragStop({ payload }) {
 
     let overIndex = -1,
         addRelArt = false,
+        sourceNode = null,
         appendNodes = [],
         rowNodeData = null;
 
@@ -227,22 +226,27 @@ function* deskingDragStop({ payload }) {
         overIndex = target.overIndex;
     } else if (source.event) {
         overIndex = getRowIndex(source.event);
+    } else {
+        // 마지막 row
+        overIndex = target.api.getRenderedNodes().length - 1;
+        overIndex = overIndex === 0 ? -1 : overIndex;
     }
+
+    sourceNode = source.api.getSelectedNodes().length > 0 ? source.api.getSelectedNodes() : source.node;
 
     // 주기사 추가하는 함수
     const rd = (insertIndex) => {
         const ans = [];
 
-        const selectdNodes = source.api.getSelectedNodes();
-        if (selectdNodes.length > 1) {
+        if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
-            selectdNodes.forEach((node, idx) => {
+            sourceNode.forEach((node, idx) => {
                 const tmp = makeRowNode(node.data, insertIndex + idx, tgtComponent, callback);
                 if (tmp) ans.push(tmp);
             });
-        } else if (source.node) {
+        } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
-            rowNodeData = makeRowNode(source.node.data, insertIndex, tgtComponent, callback);
+            rowNodeData = makeRowNode(sourceNode.data, insertIndex, tgtComponent, callback);
             if (rowNodeData) ans.push(rowNodeData);
         }
 
@@ -253,16 +257,15 @@ function* deskingDragStop({ payload }) {
     const rrd = (firstIndex, parentData) => {
         const ans = [];
 
-        const selectdNodes = source.api.getSelectedNodes();
-        if (selectdNodes.length > 1) {
+        if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
-            selectdNodes.forEach((node, idx) => {
+            sourceNode.forEach((node, idx) => {
                 const tmp = makeRelRowNode(node.data, firstIndex + idx, parentData, tgtComponent, callback);
                 if (tmp) ans.push(tmp);
             });
-        } else if (source.node) {
+        } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
-            rowNodeData = makeRelRowNode(source.node.data, firstIndex, parentData, tgtComponent, callback);
+            rowNodeData = makeRelRowNode(sourceNode.data, firstIndex, parentData, tgtComponent, callback);
             if (rowNodeData) ans.push(rowNodeData);
         }
 
@@ -305,38 +308,37 @@ function* deskingDragStop({ payload }) {
         }
     }
 
+    if (appendNodes.length < 0) return;
+
     // 컴포넌트간의 이동여부 : 기사목록에서 편집컴포넌트로 드래그드롭됐을때, 기사목록의 체크박스 제거
     const bMoveComponents = srcComponent && srcComponent.seq >= 0;
-
-    if (appendNodes.length > 0) {
-        if (bMoveComponents) {
-            // 이동
-            const option = {
-                componentWorkSeq: tgtComponent.seq,
-                datasetSeq: tgtComponent.datasetSeq,
-                srcComponentWorkSeq: srcComponent.seq,
-                srcDatasetSeq: srcComponent.datasetSeq,
-                list: appendNodes,
-                callback,
-            };
-            yield put({
-                type: act.MOVE_DESKING_WORK_LIST,
-                payload: option,
-            });
-        } else {
-            // 추가
-            const option = {
-                componentWorkSeq: tgtComponent.seq,
-                datasetSeq: tgtComponent.datasetSeq,
-                list: appendNodes,
-                callback,
-            };
-            yield put({
-                type: act.POST_DESKING_WORK_LIST,
-                payload: option,
-            });
-            source.api.deselectAll();
-        }
+    if (bMoveComponents) {
+        // 이동
+        const option = {
+            componentWorkSeq: tgtComponent.seq,
+            datasetSeq: tgtComponent.datasetSeq,
+            srcComponentWorkSeq: srcComponent.seq,
+            srcDatasetSeq: srcComponent.datasetSeq,
+            list: appendNodes,
+            callback,
+        };
+        yield put({
+            type: act.MOVE_DESKING_WORK_LIST,
+            payload: option,
+        });
+    } else {
+        // 추가
+        const option = {
+            componentWorkSeq: tgtComponent.seq,
+            datasetSeq: tgtComponent.datasetSeq,
+            list: appendNodes,
+            callback,
+        };
+        yield put({
+            type: act.POST_DESKING_WORK_LIST,
+            payload: option,
+        });
+        source.api.deselectAll();
     }
 }
 

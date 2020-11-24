@@ -7,7 +7,7 @@ import { createRequestActionTypes } from '@store/commons/saga';
 export const PREVIEW_PAGE = 'merge/PREVIEW_PAGE';
 export const previewPage = createAction(PREVIEW_PAGE, ({ content, callback }) => ({
     content,
-    callback
+    callback,
 }));
 
 /**

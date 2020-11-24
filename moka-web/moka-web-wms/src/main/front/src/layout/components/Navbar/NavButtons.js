@@ -10,9 +10,9 @@ const NavButtons = () => {
 
     return (
         <div>
-            <Button as="a" variant="white" className="px-05 mr-1">
+            {/* <Button as="a" variant="white" className="px-05 mr-1">
                 <MokaIcon iconName="fal-coffee" size="lg" />
-            </Button>
+            </Button> */}
 
             {/* 로그아웃 버튼 */}
             <Button

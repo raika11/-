@@ -28,7 +28,7 @@ const customToggle = forwardRef(({ onClick, id }, ref) => {
  * 데스킹 워크 버튼 그룹 컴포넌트
  */
 const DeskingWorkButtonGroup = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
+    const { component, agGridIndex, componentAgGridInstances } = props;
     const dispatch = useDispatch();
 
     // modal state
@@ -128,7 +128,7 @@ const DeskingWorkButtonGroup = (props) => {
 
     return (
         <>
-            <div className="px-2 pt-1">
+            <div className="px-2 py-1">
                 <Row className="m-0 d-flex align-items-center justify-content-between">
                     <Col className="p-0" xs={6}>
                         <OverlayTrigger overlay={<Tooltip>{`데이타셋ID: ${component.datasetSeq}`}</Tooltip>}>
@@ -137,11 +137,11 @@ const DeskingWorkButtonGroup = (props) => {
                     </Col>
                     <Col className="p-0 d-flex align-items-center justify-content-end" xs={6}>
                         {iconButton.map((icon, idx) => (
-                            <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-2 mx-auto" onClick={icon.onClick}>
+                            <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-1 py-0 mr-1" onClick={icon.onClick}>
                                 <MokaIcon iconName={icon.iconName} />
                             </MokaOverlayTooltipButton>
                         ))}
-                        <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0 mx-auto">
+                        <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
                             <Dropdown>
                                 <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
                                 <Dropdown.Menu className="ft-12">

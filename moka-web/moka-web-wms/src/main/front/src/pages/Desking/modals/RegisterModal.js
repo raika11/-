@@ -70,11 +70,17 @@ const RegisterModal = (props) => {
         <MokaModal title="기사 이동" show={show} onHide={onHide} size="xs" width={300} height={441} draggable>
             {loading && <MokaLoader />}
             <ListGroup variant="flush" className="border custom-scroll h-100">
-                {filterList.map((rg) => (
-                    <ListGroup.Item className="w-100 user-select-none" key={rg.seq} action onClick={(e) => handleClickItem(e, rg)}>
-                        {rg.componentSeq}_{rg.componentName}
-                    </ListGroup.Item>
-                ))}
+                {filterList.length < 1 && (
+                    <div className="d-flex align-items-center justify-content-center h-100 v-100 p-2">
+                        <p className="h5">이동할 컴포넌트가 존재하지 않습니다.</p>
+                    </div>
+                )}
+                {filterList.length > 0 &&
+                    filterList.map((rg) => (
+                        <ListGroup.Item className="w-100 user-select-none" key={rg.seq} action onClick={(e) => handleClickItem(e, rg)}>
+                            {rg.componentSeq}_{rg.componentName}
+                        </ListGroup.Item>
+                    ))}
             </ListGroup>
         </MokaModal>
     );

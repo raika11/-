@@ -113,7 +113,7 @@ public class PageDTO implements Serializable {
     /**
      * URL파라미터
      */
-    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.urlParam}")
+    @Pattern(regexp = "^[a-zA-Z0-9,_\\-\\/]*$", message = "{tps.page.error.pattern.urlParam}")
     @Length(max = 64, message = "{tps.page.error.length.urlParam}")
     private String urlParam;
 

@@ -40,13 +40,12 @@ public class ColumnistRepositorySupportImpl extends QuerydslRepositorySupport im
         
         // 상태구분
         if (McpString.isNotEmpty(searchDTO.getStatus())) {
-
             query.where(qColumnist.status.toUpperCase().eq(searchDTO.getStatus().toUpperCase()));
         }
 
         // 기자이름
-        if (McpString.isNotEmpty(searchDTO.getColumnNm())) {
-            query.where(qColumnist.columnistNm.contains(searchDTO.getColumnNm().toUpperCase()));
+        if (McpString.isNotEmpty(searchDTO.getKeyword())) {
+            query.where(qColumnist.columnistNm.contains(searchDTO.getKeyword().toUpperCase()));
         }
 
         Pageable pageable = searchDTO.getPageable();

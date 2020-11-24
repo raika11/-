@@ -36,19 +36,14 @@ public class ColumnistSearchDTO extends SearchDTO {
     private Long seqNo;
 
     /**
-     * char	1   ('O')   NO	내외부구분(I내부,O외부)
-     */
-    private String inout;
-
-    /**
      * char	1   ('N')	NO	상태(유효/정지)
      */
     private String status;
 
-    /**
-     * char	1   ('N')	NO	상태(유효/정지)
-     */
-    private String columnNm;
+//    /**
+//     * char	1   ('N')	NO	상태(유효/정지)
+//     */
+//    private String columnNm;
 
     /**
      * 총갯수 사용여부

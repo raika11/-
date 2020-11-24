@@ -1,13 +1,11 @@
 package jmnet.moka.core.tps.mvc.columnist.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -119,11 +117,4 @@ public class ColumnistDTO implements Serializable {
      * 수정자아이디
      */
     private String modId;
-
-    /**
-     * 이미지파일
-     */
-    @JsonIgnore
-    private MultipartFile thumbnailFile;
-
 }

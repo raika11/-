@@ -66,7 +66,7 @@ const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPO
 /**
  * 데스킹 워크의 관련기사 rowNode 생성
  */
-const makeRelRowNode = (data, overIndexInRels, parentData, component, callback) => {
+const makeRelRowNode = (data, relOrd, parentData, component, callback) => {
     if (!parentData || parentData.totalId === null) {
         if (callback) {
             callback({
@@ -98,7 +98,6 @@ const makeRelRowNode = (data, overIndexInRels, parentData, component, callback) 
 
     if (data.gridType === 'ARTICLE') {
         appendData = {
-            gridType: 'DESKING',
             componentWorkSeq: component.seq,
             seq: null,
             deskingSeq: null,
@@ -109,7 +108,7 @@ const makeRelRowNode = (data, overIndexInRels, parentData, component, callback) 
             artType: data.artType,
             sourceCode: data.sourceCode,
             contentOrd: parentData.contentOrd,
-            relOrd: overIndexInRels,
+            relOrd,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
             title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,
@@ -165,7 +164,6 @@ const makeRowNode = (data, contentOrd, component, callback) => {
 
     if (data.gridType === 'ARTICLE') {
         appendData = {
-            gridType: 'DESKING',
             componentWorkSeq: component.seq,
             seq: null,
             deskingSeq: null,

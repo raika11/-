@@ -1,5 +1,5 @@
 /**
- * msp-tps DomainService.java 2020. 1. 8. 오후 2:06:54 ssc
+ * msp-tps ColumnistService.java 2020. 1. 8. 오후 2:06:54 ssc
  */
 package jmnet.moka.core.tps.mvc.columnist.service;
 
@@ -11,20 +11,23 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Optional;
 
 /**
- * 도메인 서비스 2020. 1. 8. ssc 최초생성
+ * 칼럼리스트 서비스 2020. 1. 8. ssc 최초생성
  * 메소드 생성 규칙
- * 목록 조회 : find{Target}List
+ * 목록 조회 : findAllColumnist{Target}List
  * ID로 상세 조회 : find{Target}ById
  * 여러 속성으로 상세 조회 : find{Target}
+ * 등록 : insert{Target}
  * 수정 : update{Target}
- *
+ * 중복조회 : isDuplicatedId{Target}
+ * 이미지저장 : saveImage{Target}
+ * 이미지삭제 : deleteImage{Target}
  * @author ssc
  * @since 2020. 1. 8. 오후 2:06:54
  */
 public interface ColumnistService {
 
     /**
-     * 링크목록 조회
+     * 칼럼리스트목록 조회
      *
      * @param search 검색조건
      * @return 칼럼리스트 목록조회
@@ -32,9 +35,9 @@ public interface ColumnistService {
     Page<Columnist> findAllColumnist(ColumnistSearchDTO search);
 
     /**
-     * 링크 조회
+     * 칼럼리스트 조회
      *
-     * @param seqNo 링크일련번호
+     * @param seqNo 일련번호
      * @return 칼럼리스트 단건조회
      */
     Optional<Columnist> findById(Long seqNo);
@@ -48,7 +51,7 @@ public interface ColumnistService {
     Columnist updateColumnist(Columnist columnist);
 
     /**
-     * 링크관리 등록
+     * 칼럼리스트 등록
      *
      * @param columnist 컬럼리스트 컬럼리스트정보
      * @return 등록된 컬럼리스트

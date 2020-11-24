@@ -10,6 +10,7 @@ import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
+import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
@@ -52,6 +53,16 @@ public interface DeskingService {
      * @return 편집컴포넌트
      */
     ComponentWorkVO findComponentWorkBySeq(Long seq, boolean includeDesking);
+
+
+    /**
+     * 편집기사work 목록조회
+     *
+     * @param datasetSeq 데이타셋SEQ
+     * @param regId      작업자
+     * @return 편집기사work 목록
+     */
+    List<DeskingWorkVO> findAllDeskingWork(Long datasetSeq, String regId);
 
     /**
      * 컴포넌트 임시저장 : ComponentHist에 status='SAVE', approvalYn='N'로 저장.
@@ -163,36 +174,41 @@ public interface DeskingService {
     public ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn, String snapshotBody, String regId)
             throws NoDataException, Exception;
 
-    /**
-     * work 편집기사 추가 및 편집기사목록 정렬
-     *
-     * @param deskingWork 추가할 편집기사
-     * @param datasetSeq  데이타셋순번
-     * @param regId       작업자
-     */
-    public void insertDeskingWork(DeskingWork deskingWork, Long datasetSeq, String regId);
+    //    /**
+    //     * work 편집기사 추가 및 편집기사목록 정렬
+    //     *
+    //     * @param deskingWork 추가할 편집기사
+    //     * @param datasetSeq  데이타셋순번
+    //     * @param regId       작업자
+    //     */
+    //    public void insertDeskingWork(DeskingWork deskingWork, Long datasetSeq, String regId);
 
     /**
-     * work 편집기사 삭제(VO로 삭제. 관련기사도 삭제)
+     * 편집기사work 추가 및 편집기사목록 정렬
      *
-     * @param deskingWorkVOList 삭제할 work편집기사 목록
+     * @param insertdeskingList 추가할 편집기사work 목록
      * @param datasetSeq        데이타셋순번
      * @param regId             작업자
      */
-    public void deleteDeskingWorkList(List<DeskingWorkVO> deskingWorkVOList, Long datasetSeq, String regId);
-
-    void sortDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq, String regId);
+    void insertDeskingWorkList(List<DeskingWorkDTO> insertdeskingList, Long datasetSeq, String regId);
 
     /**
-     * work 편집기사 삭제 전 정렬
+     * 편집기사work  삭제(VO로 삭제. 관련기사도 삭제)
      *
-     * @param deskingWorkSeqList    삭제할 work편집기사 Seq 목록
-     * @param datasetSeq            데이타셋순번
-     * @param regId                 작업자
+     * @param deleteDeksingList 삭제할 편집기사work 목록
+     * @param datasetSeq        데이타셋순번
+     * @param regId             작업자
      */
-    //    public void sortBeforeDeleteDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq, String regId);
+    void deleteDeskingWorkList(List<DeskingWorkVO> deleteDeksingList, Long datasetSeq, String regId);
 
-
+    /**
+     * 정렬값 조정 및 삭제
+     *
+     * @param deskingVOList 원본기사목록
+     * @param filterList    삭제할 기사목록을 제거한 기사목록
+     * @param regId         작업자
+     */
+    void resortDeskingWorkList(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId);
 
     /**
      * 편집기사work를 조회한다
@@ -201,7 +217,6 @@ public interface DeskingService {
      * @return 데스킹 워크
      */
     public Optional<DeskingWork> findDeskingWorkBySeq(Long seq);
-
 
 
     /**
@@ -243,7 +258,7 @@ public interface DeskingService {
      * @param editionSeq    예약순번
      * @param creator       작업자
      */
-    public void moveDeskingWork(DeskingWork deskingWork, Long tgtDatasetSeq, Long srcDatasetSeq, Long editionSeq, String creator);
+    public void moveDeskingWork(DeskingWorkDTO deskingWork, Long tgtDatasetSeq, Long srcDatasetSeq, Long editionSeq, String creator);
 
     //    /**
     //     * 저장간격내에 저장한 사람을 조회

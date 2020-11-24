@@ -232,12 +232,7 @@ function* deskingDragStop({ payload }) {
         overIndex = overIndex === 0 ? -1 : overIndex;
     }
 
-    // source가 rowDragEnd의 결과일 때
-    if (source.type === 'rowDragEnd') {
-        sourceNode = source.nodes || source.node;
-    } else if (source.type === 'gridReady') {
-        sourceNode = source.api.getSelectedNodes();
-    }
+    sourceNode = source.api.getSelectedNodes().length > 0 ? source.api.getSelectedNodes() : source.node;
 
     // 주기사 추가하는 함수
     const rd = (insertIndex) => {

@@ -8,7 +8,7 @@ export const getReporterList = ({ search }) => {
     });
 };
 
-// 기자조회 조회
+// 기자관리 조회
 export const getReporter = (repSeq) => {
     return instance.get(`/api/reporters/${repSeq}`).catch((err) => {
         throw err;

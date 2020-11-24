@@ -1,7 +1,6 @@
 import { takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
-import qs from 'qs';
 
 import * as reporterAPI from './reporterApi';
 import * as reporterAction from './reporterAction';
@@ -9,9 +8,7 @@ import * as reporterAction from './reporterAction';
 /**
  * 기자관리 목록 조회
  */
-const getReporterList = callApiAfterActions(reporterAction.GET_REPORTER_LIST, reporterAPI.getReporterList, (state) => {
-    return state.reporter;
-});
+const getReporterList = callApiAfterActions(reporterAction.GET_REPORTER_LIST, reporterAPI.getReporterList, (store) => store.reporter);
 
 /**
  * 기자관리 조회
@@ -19,12 +16,12 @@ const getReporterList = callApiAfterActions(reporterAction.GET_REPORTER_LIST, re
 const getReporter = createRequestSaga(reporterAction.GET_REPORTER, reporterAPI.getReporter);
 
 /**
- * 데이터셋 리스트 조회(모달에서 사용하는 리스트)
+ * 기자 리스트 조회(모달에서 사용하는 리스트)
  */
 const getReporterListModal = createRequestSaga(reporterAction.GET_REPORTER_LIST_MODAL, reporterAPI.getReporterList, true);
 
 /**
- * 수정
+ * 등록/수정
  * @param {string} param0.payload.type insert|update
  * @param {array} param0.payload.actions 선처리 액션들
  * @param {func} param0.payload.callback 콜백
@@ -43,7 +40,7 @@ function* saveReporter({ payload: { type, actions, callback } }) {
             payload: act.payload,
         });
 
-        // 도메인 데이터
+        // 기자 데이터
         const reporter = yield select((store) => store.reporter.reporter);
         response = yield call(reporterAPI.putReporter, { reporter });
         callbackData = response.data;
@@ -62,7 +59,6 @@ function* saveReporter({ payload: { type, actions, callback } }) {
         } else {
             yield put({
                 type: reporterAction.GET_REPORTER_FAILURE,
-                //payload: callbackData,
                 payload: response.data,
             });
         }

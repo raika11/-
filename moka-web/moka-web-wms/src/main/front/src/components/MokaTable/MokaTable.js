@@ -268,6 +268,7 @@ const MokaTable = forwardRef((props, ref) => {
                     rowSelection={rowSelection}
                     rowDragManaged={dragManaged}
                     suppressMoveWhenRowDragging={dragManaged}
+                    suppressMovableColumns
                     onRowDragMove={onRowDragMove}
                     onRowDragEnd={onRowDragEnd}
                     onRowDataUpdated={handleRowDataUpdated}

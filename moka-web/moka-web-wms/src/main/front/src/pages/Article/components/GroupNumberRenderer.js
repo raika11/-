@@ -4,7 +4,11 @@ import { MokaIcon } from '@components';
 
 const GroupNumberRenderer = (params) => {
     const { data, api } = params;
-    const { artGroupNum, ovpYn, youtubeYn } = data;
+    // const { artGroupNum, ovpYn, youtubeYn } = data;
+    // 테스트용 데이터
+    const artGroupNum = (data.totalId % 8) + 1;
+    const youtubeYn = data.totalId % 2 === 0 ? 'Y' : 'N';
+    const ovpYn = data.totalId % 3 === 0 ? 'Y' : 'N';
 
     return (
         <div className="d-flex flex-column overflow-hidden h-100 py-1">
@@ -14,7 +18,7 @@ const GroupNumberRenderer = (params) => {
             {(youtubeYn === 'Y' || ovpYn === 'Y') && (
                 <div
                     className={clsx('article-media', {
-                        orange: youtubeYn === 'Y' && ovpYn !== 'Y',
+                        youtube: youtubeYn === 'Y' && ovpYn !== 'Y',
                         ovp: youtubeYn !== 'Y' && ovpYn === 'Y',
                     })}
                 >

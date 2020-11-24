@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import { MokaTableEditButton, MokaInput, MokaTableEditCancleButton } from '@components';
 import toast from '@utils/toastUtil';
 
@@ -78,9 +80,11 @@ const DeskingEditorRenderer = (params) => {
 
     return (
         <div className="d-flex h-100 align-items-center desking-ag-grid-editor">
-            <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: data.rel ? 245 : 173 }}>
-                {data.rel ? data.relTitle : data.title}
-            </div>
+            <OverlayTrigger overlay={<Tooltip id={data.totalId}>{editValue}</Tooltip>}>
+                <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: data.rel ? 245 : 173 }}>
+                    {editValue}
+                </div>
+            </OverlayTrigger>
             {editMode && (
                 <div className="edit">
                     <MokaInput as={data.rel ? 'input' : 'textarea'} className="resize-none" value={editValue} onChange={(e) => setEditValue(e.target.value)} />

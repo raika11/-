@@ -424,7 +424,7 @@ body {
 }
 
 /* -----------------------
-* 페이지편집
+* 기사관리
 * ---------------------- */
 .article-group-number {
     display: flex;
@@ -437,6 +437,13 @@ body {
     @each $number, $color in $group-colors {
         &[data-group-number="#{$number}"] {
             background-color: $color;
+            @if $number == "6" {
+                border: 1px solid #d9d9d9;
+            } @else if $number == '7' {
+                color: $white;
+            } @else if $number == '8' {
+                color: $white;
+            }
         }
     }
 }
@@ -458,6 +465,9 @@ body {
     }
 }
 
+/* -----------------------
+* 페이지편집
+* ---------------------- */
 .deskthumb-gif-list {
     position: absolute;
     bottom: 0;

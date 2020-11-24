@@ -308,7 +308,7 @@ function* deskingDragStop({ payload }) {
         }
     }
 
-    if (appendNodes.length < 0) return;
+    if (appendNodes.length < 1) return;
 
     // 컴포넌트간의 이동여부 : 기사목록에서 편집컴포넌트로 드래그드롭됐을때, 기사목록의 체크박스 제거
     const bMoveComponents = srcComponent && srcComponent.seq >= 0;

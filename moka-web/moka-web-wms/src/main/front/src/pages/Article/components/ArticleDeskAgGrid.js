@@ -96,36 +96,41 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
          * 드롭 타겟 ag-grid에 drop-zone 설정
          */
         if (gridInstance) {
-            // 타겟이 리스트인 경우
+            let loader = document.createElement('div');
+            loader.classList.add('is-over');
+
             if (Array.isArray(dropTargetAgGrid)) {
+                // 타겟이 리스트인 경우
                 dropTargetAgGrid.forEach((targetGrid, agGridIndex) => {
+                    const bodyElement = targetGrid.api.gridOptionsWrapper.layoutElements[2]; // .ag-body-viewport
+
                     const dropZone = {
-                        getContainer: () => {
-                            //  .ag-body-viewport dom을 return한다
-                            return targetGrid.api.gridOptionsWrapper.layoutElements[2];
-                        },
+                        getContainer: () => bodyElement,
+                        onDragEnter: () => bodyElement.appendChild(loader),
+                        onDragLeave: () => bodyElement.removeChild(loader),
                         onDragStop: (source) => {
                             if (onDragStop) {
                                 onDragStop(source, targetGrid, agGridIndex);
                             }
+                            bodyElement.removeChild(loader);
                         },
                     };
 
                     gridInstance.api.removeRowDropZone(dropZone);
                     gridInstance.api.addRowDropZone(dropZone);
                 });
-            }
-            // 타겟이 오브젝트인 경우
-            else {
+            } else {
+                // 타겟이 1개인 경우
+                const bodyElement = dropTargetAgGrid.api.gridOptionsWrapper.layoutElements[2];
                 const dropZone = {
-                    getContainer: () => {
-                        //  .ag-body-viewport dom을 return한다
-                        return dropTargetAgGrid.api.gridOptionsWrapper.layoutElements[2];
-                    },
+                    getContainer: () => bodyElement,
+                    onDragEnter: () => bodyElement.appendChild(loader),
+                    onDragLeave: () => bodyElement.removeChild(loader),
                     onDragStop: (source) => {
                         if (onDragStop) {
                             onDragStop(source, dropTargetAgGrid);
                         }
+                        bodyElement.removeChild(loader);
                     },
                 };
 

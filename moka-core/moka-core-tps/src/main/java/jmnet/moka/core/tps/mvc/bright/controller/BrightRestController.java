@@ -47,7 +47,6 @@ public class BrightRestController {
             UriComponents uri = UriComponentsBuilder.fromHttpUrl(url+"&"+params).build();
 
             //이 한줄의 코드로 API를 호출해 MAP타입으로 전달 받는다.
-            //ResponseEntity<Map> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Map.class);
             ResponseEntity<Map> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.POST, entity, Map.class);
             result.put("statusCode", resultMap.getStatusCodeValue()); //http status code를 확인
             result.put("header", resultMap.getHeaders()); //헤더 정보 확인

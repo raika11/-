@@ -213,6 +213,9 @@ public class DeskingServiceImpl implements DeskingService {
         if (componentWorkVO != null && includeDesking) {
             List<DeskingWorkVO> deskingVOList = this.findAllDeskingWork(componentWorkVO.getDatasetSeq(), componentWorkVO.getRegId());
 
+            // 편집기사에 관련기사정보 세팅(rel,relSeqs)
+            deskingVOList = updateRelArticle(deskingVOList);
+
             // 편집기사에 componentSeq세팅
             deskingVOList.stream()
                          .forEach(desking -> desking.setComponentSeq(componentWorkVO.getComponentSeq()));

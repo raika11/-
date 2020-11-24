@@ -174,7 +174,7 @@ const makeRowNode = (data, contentOrd, component, callback) => {
             artType: data.artType,
             sourceCode: data.sourceCode,
             contentOrd: contentOrd,
-            relOrd: null,
+            relOrd: 1,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
             title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,

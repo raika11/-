@@ -2,6 +2,7 @@ package jmnet.moka.core.dps.api.handler;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
 import jmnet.moka.common.proxy.autoConfig.HttpProxyConfiguration;
 import jmnet.moka.common.proxy.http.HttpProxy;
 import jmnet.moka.common.utils.McpString;
@@ -47,6 +48,11 @@ public class ModuleRequestHandler implements RequestHandler {
             ModuleInterface module = getModule(moduleRequest.getClassName());
             Object result = callMethod(module, moduleRequest, apiContext);
             long endTime = System.currentTimeMillis();
+            if ( result instanceof ApiResult) {
+                if ( ((ApiResult)result).containsKey(ApiResult.MAIN_DATA)) {
+                    return (ApiResult)result;
+                }
+            }
             return ApiResult.createApiResult(startTime, endTime, result, true, null);
         } catch (Exception e) {
             logger.error("Module invoke Failed:",e);

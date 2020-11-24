@@ -59,7 +59,7 @@ public class Collection extends ResultParser {
                 this.documentList.add(fieldObject);
             }
         } else {
-            this.documentList = EMPTY_LIST;
+            this.documentList = EMPTY_DOCUMENT_LIST;
         }
     }
 

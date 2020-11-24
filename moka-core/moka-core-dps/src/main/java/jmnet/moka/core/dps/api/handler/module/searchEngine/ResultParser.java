@@ -27,7 +27,8 @@ public class ResultParser {
     protected static final String COUNT = "Count";
     protected static final String DOCUMENT = "Document";
     protected static final String FIELD = "Field";
-    protected static final List<Object> EMPTY_LIST = new ArrayList<>(0);
+    protected static final List<Collection> EMPTY_COLLECTION_LIST = new ArrayList<>(0);
+    protected static final List<Object> EMPTY_DOCUMENT_LIST = new ArrayList<>(0);
 
     protected Object getObject(Object object, String key) {
         if ( object instanceof Map) {

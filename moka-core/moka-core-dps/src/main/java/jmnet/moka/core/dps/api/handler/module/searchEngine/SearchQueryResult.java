@@ -28,7 +28,7 @@ import org.json.simple.parser.ParseException;
 @Builder
 public class SearchQueryResult extends ResultParser {
     @JsonProperty("CollectionList")
-    private List<Object> collectionList;
+    private List<Collection> collectionList;
 
     public SearchQueryResult(String jsonpString)
             throws ParseException, java.text.ParseException {
@@ -45,7 +45,7 @@ public class SearchQueryResult extends ResultParser {
                 this.collectionList.add(new Collection(collectionObject));
             }
         } else {
-            this.collectionList = EMPTY_LIST;
+            this.collectionList = EMPTY_COLLECTION_LIST;
         }
     }
 

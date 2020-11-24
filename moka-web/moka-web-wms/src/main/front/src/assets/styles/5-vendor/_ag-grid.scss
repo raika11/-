@@ -167,6 +167,20 @@ $padding-height: 10px;
         overflow: hidden;
         height: unset !important;
         min-height: unset !important;
+
+        .ag-body-viewport {
+            .is-over {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border: 2px dashed $secondary;
+                border-radius: 5px;
+                transition: border-color 0.24s ease-in-out;
+                z-index: 1;
+            }
+        }
     }
 
     .ag-react-container > button {

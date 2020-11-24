@@ -1,17 +1,17 @@
 package jmnet.moka.core.dps.api.handler.module;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import jmnet.moka.common.ApiResult;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
+import jmnet.moka.core.dps.api.handler.module.searchEngine.Collection;
 import jmnet.moka.core.dps.api.handler.module.searchEngine.SearchQueryResult;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import jmnet.moka.core.dps.api.model.Api;
 
 public class SearchEngineModule implements ModuleInterface {
     private static final String PARAM_KEY = "Key";
@@ -41,39 +41,67 @@ public class SearchEngineModule implements ModuleInterface {
 
     public Object getLatestArticle(ApiContext apiContext)
             throws Exception {
-        String categoryKey = (String)apiContext.getCheckedParamMap().get("category");
-        String startCount = (String)apiContext.getCheckedParamMap().get("startCount");
-        String listCount = (String)apiContext.getCheckedParamMap().get("listCount");
+        long startTime = System.currentTimeMillis();
+        String categoryKey = (String) apiContext
+                .getCheckedParamMap()
+                .get("category");
+        Integer startCount = (Integer) apiContext
+                .getCheckedParamMap()
+                .get("startCount");
+        Integer listCount = (Integer) apiContext
+                .getCheckedParamMap()
+                .get("listCount");
 
-        Map<String,Object> searchParamMap = (Map<String,Object>)getParameterByCategory(categoryKey);
-        searchParamMap.put("collection","news");
-        searchParamMap.put("sort","DATE/DESC,RANK/DESC");
-        searchParamMap.put("srcGrpCode","1");
+        Map<String, Object> searchParamMap = (Map<String, Object>) getParameterByCategory(categoryKey);
+        searchParamMap.put("collection", "news");
+        searchParamMap.put("sort", "DATE/DESC,RANK/DESC");
+        searchParamMap.put("srcGrpCode", "1");
         searchParamMap.put("listCount", listCount);
-        searchParamMap.put("startCount",startCount);
+        searchParamMap.put("startCount", startCount);
 
-        String resultString = moduleRequestHandler.getHttpProxy().getString(SEARCH_URI, searchParamMap, false);
-        return new SearchQueryResult(resultString);
-
+        String resultString = moduleRequestHandler
+                .getHttpProxy()
+                .getString(SEARCH_URI, searchParamMap, false);
+        SearchQueryResult sqr = new SearchQueryResult(resultString);
+        List<Collection> collectionList = sqr.getCollectionList();
+        if (collectionList != null && collectionList.size() > 0) {
+            Collection collection = collectionList.get(0);
+            ApiResult apiResult =
+                    ApiResult.createApiResult(startTime, System.currentTimeMillis(), collection.getDocumentList(), true, ApiResult.MAIN_DATA);
+            apiResult.addApiResult(ApiResult.MAIN_TOTAL, ApiResult.createApiResult(collection.getTotalCount()));
+            return apiResult;
+        }
+        return null;
     }
 
-    public Map<String,Object> getParameterByCategory(String categoryKey)
+    public Map<String, Object> getParameterByCategory(String categoryKey)
             throws Exception {
-        MenuModule menuModule = (MenuModule)moduleRequestHandler.getModule(MenuModule.class.getName());
-        Map<String,Object> paramMapFromMenu = menuModule.getSearchParmeterByCategory(categoryKey);
-        Map<String,Object> resultMap = new HashMap<>();
-        if ( paramMapFromMenu != null) {
-            for ( Entry<String,Object> entry : paramMapFromMenu.entrySet()) {
-                if ( entry.getKey().equals(PARAM_SCOPE_TYPE)) {
-                    if (entry.getValue().toString().equalsIgnoreCase(VALUE_KEYWORD)) {
-                        resultMap.put("sfield","ART_KWD");
-//                        resultMap.put("sfield","ART_TITLE");
+        MenuModule menuModule = (MenuModule) moduleRequestHandler.getModule(MenuModule.class.getName());
+        Map<String, Object> paramMapFromMenu = menuModule.getSearchParmeterByCategory(categoryKey);
+        Map<String, Object> resultMap = new HashMap<>();
+        if (paramMapFromMenu != null) {
+            for (Entry<String, Object> entry : paramMapFromMenu.entrySet()) {
+                if (entry
+                        .getKey()
+                        .equals(PARAM_SCOPE_TYPE)) {
+                    if (entry
+                            .getValue()
+                            .toString()
+                            .equalsIgnoreCase(VALUE_KEYWORD)) {
+                        resultMap.put("sfield", "ART_KWD");
+                        //                        resultMap.put("sfield","ART_TITLE");
                     }
-                } else if ( entry.getKey().equalsIgnoreCase(PARAM_KEYWORD)) {
+                } else if (entry
+                        .getKey()
+                        .equalsIgnoreCase(PARAM_KEYWORD)) {
                     resultMap.put("query", entry.getValue());
-                } else if ( entry.getKey().equalsIgnoreCase(PARAM_SOURCE_CODE)) {
+                } else if (entry
+                        .getKey()
+                        .equalsIgnoreCase(PARAM_SOURCE_CODE)) {
                     resultMap.put("SourceCode", entry.getValue());
-                } else if ( entry.getKey().equalsIgnoreCase(PARAM_START_SEARCH_DATE)) {
+                } else if (entry
+                        .getKey()
+                        .equalsIgnoreCase(PARAM_START_SEARCH_DATE)) {
                     resultMap.put("startDate", entry.getValue());
                 }
             }

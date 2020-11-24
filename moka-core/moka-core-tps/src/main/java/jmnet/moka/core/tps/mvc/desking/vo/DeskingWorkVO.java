@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Id;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -200,7 +199,6 @@ public class DeskingWorkVO implements Serializable {
     /**
      * 생성일시
      */
-    @JsonIgnore
     @DTODateTimeFormat
     @Column(name = "REG_DT")
     private Date regDt;

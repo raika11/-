@@ -337,10 +337,11 @@ public class DeskingRestController {
                 deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
 
                 // 편집기사work 추가 및 정렬
-                for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
-                    DeskingWork appendDeskingWork = modelMapper.map(appendDeskingWorkDTO, DeskingWork.class);
-                    deskingService.insertDeskingWork(appendDeskingWork, datasetSeq, principal.getName());
-                }
+                deskingService.insertDeskingWorkList(deskingWorkDTOList, datasetSeq, principal.getName());
+                //                for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
+                //                    DeskingWork appendDeskingWork = modelMapper.map(appendDeskingWorkDTO, DeskingWork.class);
+                //                    deskingService.insertDeskingWork(appendDeskingWork, datasetSeq, principal.getName());
+                //                }
 
                 // 컴포넌트work 조회(편집기사사포함)
                 ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
@@ -673,8 +674,7 @@ public class DeskingRestController {
 
                 // target work편집기사 목록 추가 및 정렬
                 for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
-                    DeskingWork appendDeskingWork = modelMapper.map(appendDeskingWorkDTO, DeskingWork.class);
-                    deskingService.moveDeskingWork(appendDeskingWork, datasetSeq, srcDatasetSeq, 0L, principal.getName());
+                    deskingService.moveDeskingWork(appendDeskingWorkDTO, datasetSeq, srcDatasetSeq, 0L, principal.getName());
                 }
 
                 // source 정렬

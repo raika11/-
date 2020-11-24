@@ -40,29 +40,26 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     private DomainItem domainItem;
     private DomainResolver domainResolver;
     private String workerId;
-    private Long editionSeq;
 
     public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem, DomainResolver domainResolver,
             AbstractTemplateLoader templateLoader, DataLoader dataLoader) {
-        this(appContext, domainItem, domainResolver, templateLoader, dataLoader, null, null);
+        this(appContext, domainItem, domainResolver, templateLoader, dataLoader, null);
     }
 
     public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem, DomainResolver domainResolver,
-            AbstractTemplateLoader templateLoader, DataLoader dataLoader, String workerId, Long editionSeq) {
-        super(appContext, domainItem.getItemId(), templateLoader, dataLoader,false);
+            AbstractTemplateLoader templateLoader, DataLoader dataLoader, String workerId) {
+        super(appContext, domainItem.getItemId(), templateLoader, dataLoader, false);
         this.domainResolver = domainResolver;
         this.domainItem = domainItem;
         this.workerId = workerId;
-        this.editionSeq = editionSeq;
     }
 
     private void setBaseTag(String pagePath, MergeContext context, StringBuilder sb) {
         DomainItem domainItem = (DomainItem) context.get(MokaConstants.MERGE_CONTEXT_DOMAIN);
         PageItem pageItem = (PageItem) context.get(MokaConstants.MERGE_CONTEXT_PAGE);
         // html인 경우만 baseTag 처리
-        if (!pageItem
-                .get(ItemConstants.PAGE_TYPE)
-                .equals("text/html")) {
+        if (!pageItem.get(ItemConstants.PAGE_TYPE)
+                     .equals("text/html")) {
             return;
         }
         String domainUrl = "http://" + domainItem.get(ItemConstants.DOMAIN_URL) + "/" + pagePath;
@@ -96,12 +93,10 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
             throws TemplateMergeException, TemplateParseException, DataLoadException {
         MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
         // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
-        mergeContext
-                .getMergeOptions()
-                .setPreview(true);
+        mergeContext.getMergeOptions()
+                    .setPreview(true);
         if (this.workerId != null) {
             mergeContext.set(MokaConstants.MERGE_CONTEXT_WORKER_ID, this.workerId);
-            mergeContext.set(MokaConstants.MERGE_CONTEXT_EDITION_SEQ, this.editionSeq);
         }
         mergeContext.set(MokaConstants.MERGE_CONTEXT_DOMAIN, this.domainItem);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_PAGE, pageItem);
@@ -118,7 +113,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
         // 카테고리 설정
         httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, pageItem.getString(ItemConstants.PAGE_CATEGORY));
-        this.setCodesAndMenus(pageItem.getString(ItemConstants.PAGE_DOMAIN_ID),pageItem,mergeContext);
+        this.setCodesAndMenus(pageItem.getString(ItemConstants.PAGE_DOMAIN_ID), pageItem, mergeContext);
         String itemType = pageItem.getItemType();
         String itemId = pageItem.getItemId();
 
@@ -127,24 +122,20 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
         if (wrapItem != null) {
             if (mergePage) { // page를 머지하고, wrapItem을 highlight
-                mergeContext
-                        .getMergeOptions()
-                        .setWrapItem(true);
-                mergeContext
-                        .getMergeOptions()
-                        .setShowItem(wrapItem.getItemType());
-                mergeContext
-                        .getMergeOptions()
-                        .setShowItemId(wrapItem.getItemId());
+                mergeContext.getMergeOptions()
+                            .setWrapItem(true);
+                mergeContext.getMergeOptions()
+                            .setShowItem(wrapItem.getItemType());
+                mergeContext.getMergeOptions()
+                            .setShowItemId(wrapItem.getItemId());
                 this.setItem(wrapItem.getItemType(), wrapItem.getItemId(), wrapItem);
             } else { // wrapItem을 머지
                 itemType = wrapItem.getItemType();
                 itemId = wrapItem.getItemId();
                 this.setItem(itemType, itemId, wrapItem);
                 if (wrapItem instanceof ComponentItem) { // 미리보기 리소스 추가
-                    mergeContext
-                            .getMergeOptions()
-                            .setPreviewResource(resource);
+                    mergeContext.getMergeOptions()
+                                .setPreviewResource(resource);
                 }
             }
         } else {
@@ -167,9 +158,8 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         // addShowItemStyle(sb, mergeContext, true);
 
         // 편집컴포넌트 미리보기일 경우 html 태그를 감싸준다.
-        if (mergeContext
-                .getMergeOptions()
-                .isPreview() && this.workerId != null && htmlWrap) {
+        if (mergeContext.getMergeOptions()
+                        .isPreview() && this.workerId != null && htmlWrap) {
             sb = setHtmlWrap(itemType, itemId, sb);
         }
 
@@ -181,16 +171,18 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     private void setCodesAndMenus(String domainId, MergeItem item, MergeContext mergeContext)
             throws TemplateMergeException, TemplateParseException, DataLoadException {
         String category = item.getString(ItemConstants.PAGE_CATEGORY);
-        if ( category == null) return;
+        if (category == null) {
+            return;
+        }
         DataLoader loader = this.getDataLoader();
-        Map<String,Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put(MokaConstants.PARAM_CATEGORY, category);
-        JSONResult jsonResult =  loader.getJSONResult("menu.category",paramMap,true);
+        JSONResult jsonResult = loader.getJSONResult("menu.category", paramMap, true);
         Map<String, Object> map = jsonResult.getData(); // 서비스 사용 코드들
-        Map codes = (Map)map.get(MokaConstants.MERGE_CONTEXT_CODES);
-        Map menus = (Map)map.get(MokaConstants.MERGE_CONTEXT_MENUS);
-        mergeContext.set(MokaConstants.PARAM_CATEGORY,MokaConstants.MERGE_CONTEXT_CATEGORY);
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES,codes);
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS,menus);
+        Map codes = (Map) map.get(MokaConstants.MERGE_CONTEXT_CODES);
+        Map menus = (Map) map.get(MokaConstants.MERGE_CONTEXT_MENUS);
+        mergeContext.set(MokaConstants.PARAM_CATEGORY, MokaConstants.MERGE_CONTEXT_CATEGORY);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES, codes);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS, menus);
     }
 }

@@ -178,7 +178,7 @@ public class PreviewController {
      * @throws TemplateLoadException        TMS 로드 실패
      */
     @GetMapping("/preview/desking/page")
-    public void perviewDeskingPage(HttpServletRequest request, HttpServletResponse response, Long pageSeq, Principal principal, Long editionSeq)
+    public void perviewDeskingPage(HttpServletRequest request, HttpServletResponse response, Long pageSeq, Principal principal)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
 
@@ -210,7 +210,7 @@ public class PreviewController {
         try {
             // merger
             MokaPreviewTemplateMerger dtm =
-                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(), editionSeq,
+                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(),
                                                                    new ArrayList<String>());
 
             // 랜더링

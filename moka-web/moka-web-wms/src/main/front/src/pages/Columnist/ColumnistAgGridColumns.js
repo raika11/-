@@ -1,0 +1,48 @@
+export default [
+    {
+        headerName: '기자번호',
+        field: 'linkSeq',
+        width: 100,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+    },
+    {
+        headerName: '기자이름',
+        field: 'columnistNm',
+        width: 200,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+        wrapText: true,
+        autoHeight: true,
+    },
+    {
+        headerName: '이메일',
+        field: 'email',
+        width: 200,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+        wrapText: true,
+        autoHeight: true,
+    },
+    {
+        headerName: '상태정보',
+        field: 'status',
+        width: 200,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+        wrapText: true,
+        autoHeight: true,
+    },
+    {
+        headerName: '약력정보',
+        field: 'profile',
+        width: 200,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+        wrapText: true,
+        autoHeight: true,
+    },
+    {
+        headerName: '등록일',
+        field: 'regDt',
+        width: 150,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+        wrapText: true,
+        autoHeight: true,
+    },
+];

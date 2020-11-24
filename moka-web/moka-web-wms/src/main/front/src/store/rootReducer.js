@@ -26,6 +26,7 @@ import reporter from '@store/reporter/reporterReducer';
 import directLink from '@store/directLink/directLinkReducer';
 import desking from '@store/desking/deskingReducer';
 import member from '@store/member/memberReducer';
+import columNist from '@store/columNist/columnistReducer';
 
 export default combineReducers({
     toastr,
@@ -54,4 +55,5 @@ export default combineReducers({
     directLink,
     desking,
     member,
+    columNist,
 });

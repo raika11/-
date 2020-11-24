@@ -23,6 +23,7 @@ import reporterSaga from '@store/reporter/reporterSaga';
 import deskingSaga from '@store/desking/deskingSaga';
 import memberSaga from '@store/member/memberSaga';
 import directLinkSaga from '@store/directLink/directLinkSaga';
+import columNistSaga from '@store/columNist/columnistSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -49,5 +50,6 @@ export default function* rootSaga() {
         deskingSaga(),
         memberSaga(),
         directLinkSaga(),
+        columNistSaga(),
     ]);
 }

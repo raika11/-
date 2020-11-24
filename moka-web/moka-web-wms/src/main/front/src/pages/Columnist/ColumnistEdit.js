@@ -1,0 +1,463 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { MokaCard, MokaInputLabel } from '@components';
+import { useDispatch, useSelector } from 'react-redux';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import ColumnistModal from './modals/RepoterlistModal';
+import { notification } from '@utils/toastUtil';
+import { GET_COLUMNIST, saveColumnist, changeColumnist, changeInvalidList } from '@store/columNist';
+
+const ColumnistEdit = () => {
+    const dispatch = useDispatch();
+    const imgFileRef = useRef(null);
+    const [fileValue, setFileValue] = useState(null);
+    const [editDisabled, setEditDisabled] = useState(false);
+    const [repoterlistModalShow, setRepoterlistModalShow] = useState(false);
+    const [selectRepoterData, setSelectRepoterData] = useState(repoterDataInitialize);
+    const [error, setError] = useState(setErrorInitialize);
+
+    const { loading, columnlist, invalidList } = useSelector((store) => ({
+        loading: store.loading[GET_COLUMNIST],
+        columnlist: store.columNist.columnlist,
+        invalidList: store.columNist.invalidList,
+    }));
+
+    // input 값 변경.
+    const tempOnchange = (e) => {
+        // FIXME: 2020-11-23 16:50  사용여부가 checkbox 여서 checked 가 있을땐 Y / N 세팅.
+        const { name, value, checked } = e.target;
+        if (checked) {
+            setSelectRepoterData({
+                ...selectRepoterData,
+                [name]: checked ? 'Y' : 'N',
+            });
+        } else {
+            setSelectRepoterData({
+                ...selectRepoterData,
+                [name]: value,
+            });
+        }
+    };
+
+    // 기자 검색 버튼 클릭.
+    const handleClickReportSearchbutton = () => {
+        setRepoterlistModalShow(true);
+    };
+
+    // 기자 검색 모달 창에서 기자 선택.
+    const handleRepoterRowClick = (repoterData) => {
+        // 모달창 닫기.
+        setRepoterlistModalShow(false);
+        // 기존 데이터 초기화.
+        setSelectRepoterData(repoterDataInitialize);
+
+        // 기자 정보 설정
+        try {
+            let tmpEmail = [];
+            tmpEmail = repoterData.repEmail1 && repoterData.repEmail1 && repoterData.repEmail1.split('@');
+            setEditData({
+                seqNo: null,
+                // inout: null,
+                status: 'Y', // FIXME: 2020-11-23 16:37 임시 Y
+                repSeq: repoterData.repSeq,
+                columnistNm: repoterData.repName,
+                email1: tmpEmail[0],
+                email2: tmpEmail[1],
+                position: '', // FIXME : 2020-11-23 15:14 직책 데이터가 존재 하지 않아서 임시로 등록.
+                profile: '',
+                // selectImg: repoterData.repPhoto,
+                selectImg: '', // 기자 검색후 추가시 어떻게 해야 할지 몰라서 일단 '' 처리.
+                profile_photo: '',
+            });
+        } catch (e) {
+            console.log('기자 선택후 데이터 set 중 에러발생.', e);
+            setSelectRepoterData(repoterDataInitialize);
+        }
+    };
+
+    // 에디트 정보 설정.
+    const setEditData = ({ seqNo, status, repSeq, columnistNm, email1, email2, position, profile_photo, profile, selectImg }) => {
+        // 기존 선택 이미지 삭제.
+        if (imgFileRef.current) {
+            imgFileRef.current.deleteFile();
+        }
+
+        setEditDisabled(false);
+        setSelectRepoterData({
+            seqNo: seqNo,
+            // inout: null,
+            status: status,
+            repSeq: repSeq,
+            columnistNm: columnistNm,
+            email1: email1,
+            email2: email2,
+            position: position,
+            profile_photo: profile_photo,
+            profile: profile,
+            selectImg: selectImg,
+        });
+    };
+
+    /**
+     * 유효성 검사를 한다.
+     */
+    const validate = (editData) => {
+        let isInvalid = false;
+        let errList = [];
+
+        // 이메일1
+        if (!editData.email2) {
+            errList.push({
+                field: 'email1',
+                reason: '이메일을 입력해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 이메일
+        if (!editData.email2) {
+            errList.push({
+                field: 'email2',
+                reason: '이메일을 입력해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 직책
+        if (!editData.position) {
+            errList.push({
+                field: 'position',
+                reason: '직책을 입력해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 약력 정보.
+        if (!editData.profile) {
+            errList.push({
+                field: 'profile',
+                reason: '약력정보를 입력해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 이미지 체크(정보 등록시)
+        if (!editData.seqNo && editData.columnistFile === null) {
+            errList.push({
+                field: 'selectImg',
+                reason: '이미지를 선택해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        // 이미지 체크(정보 수정시)
+        if (editData.seqNo && !editData.profile_photo && editData.columnistFile === null) {
+            errList.push({
+                field: 'selectImg',
+                reason: '이미지를 선택해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        dispatch(changeInvalidList(errList));
+        return !isInvalid;
+    };
+
+    // 저장 버튼 클릭.
+    const handleClickSaveButton = () => {
+        // FIXME : 2020-11-23 16:54 저장데이터 셋 할때 기존 데이터 업데이트 와 연동.
+
+        // 이미지 설정.
+        let saveData = {
+            ...selectRepoterData,
+            columnistFile: fileValue, // multipart 받는 dto의 필드명으로 변경하세요
+        };
+
+        // 이메일 합치는거 때문에 미리 체크.
+        if (validate(saveData)) {
+            // 이메일 설정.
+            const tmpEmail = saveData.email1 && saveData.email2 ? `${saveData.email1}@${saveData.email2}` : ``;
+            delete saveData.email1;
+            delete saveData.email2;
+            delete saveData.selectImg;
+            saveData.email = tmpEmail;
+
+            if (saveData.seqNo) {
+                updateColunmList(saveData);
+            } else {
+                insertColunmList(saveData);
+            }
+        }
+    };
+
+    // 등록 처리.
+    const insertColunmList = (insertData) => {
+        dispatch(
+            saveColumnist({
+                type: 'insert',
+                actions: [changeColumnist({ ...insertData })],
+                callback: (response) => {
+                    if (response.header.success) {
+                        notification('success', '등록하였습니다.');
+                    } else {
+                        notification('warning', '실패하였습니다.');
+                    }
+                },
+            }),
+        );
+    };
+
+    // 정보 업데이트 처리.
+    const updateColunmList = (updateData) => {
+        dispatch(
+            saveColumnist({
+                type: 'update',
+                actions: [changeColumnist({ ...updateData })],
+                callback: (response) => {
+                    if (response.header.success) {
+                        notification('success', '수정하였습니다.');
+                    } else {
+                        notification('warning', '실패하였습니다.');
+                    }
+                },
+            }),
+        );
+    };
+
+    // 취소 버튼 클릭.
+    const handleClickCancleButton = () => {
+        setSelectRepoterData(repoterDataInitialize); // 초기화.
+        setEditDisabled(true); // input disabled
+    };
+
+    // 리트스에서 아이템 클릭후 store 값 변경 되면 정보 변경.
+    useEffect(() => {
+        if (columnlist) {
+            let tmpEmail = [];
+            tmpEmail = columnlist.email !== 'undefined' && columnlist.email != null && columnlist.email.split('@');
+
+            setEditData({
+                repNo: columnlist.repNo,
+                // inout: null,
+                status: 'Y', // FIXME: 2020-11-23 16:37 임시 Y
+                repSeq: columnlist.repSeq,
+                seqNo: columnlist.seqNo,
+                columnistNm: columnlist.columnistNm,
+                email1: tmpEmail[0],
+                email2: tmpEmail[1],
+                position: columnlist.position,
+                profile_photo: columnlist.profilePhoto,
+                profile: columnlist.profile,
+                selectImg: columnlist.selectImg,
+            });
+        }
+    }, [columnlist]);
+
+    // 저장시 벨리데이션 에러 표현.
+    useEffect(() => {
+        if (invalidList !== null && invalidList.length > 0) {
+            setError(
+                invalidList.reduce(
+                    (all, c) => ({
+                        ...all,
+                        [c.field]: true,
+                    }),
+                    {},
+                ),
+            );
+        }
+    }, [invalidList]);
+
+    // 페이지 시작.
+    useEffect(() => {
+        const pageLoading = () => {
+            setEditDisabled(true); // true 면 input disabled
+        };
+
+        pageLoading();
+    }, []);
+
+    return (
+        <MokaCard width={535} title={`컬럼 니스트 ${columnlist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
+            <Form className="mb-gutter">
+                <Form.Row className="mb-2">
+                    <Col xs={5} className="p-0">
+                        <MokaInputLabel
+                            label="기자번호"
+                            className="mb-0"
+                            name="repseq"
+                            value={selectRepoterData.repSeq}
+                            onChange={(e) => tempOnchange(e)}
+                            isInvalid={error.repseq}
+                            disabled={true}
+                        />
+                    </Col>
+                    <Col xs={5} className="p-0">
+                        <MokaInputLabel
+                            label="기자명"
+                            className="mb-0"
+                            name="columnistnm"
+                            value={selectRepoterData.columnistNm}
+                            onChange={(e) => tempOnchange(e)}
+                            isInvalid={error.columnistNm}
+                            disabled={true}
+                        />
+                    </Col>
+                    <div className="d-flex justify-content-center">
+                        <Col xs={2} className="p-0">
+                            <Button variant="negative" className="mr-05" onClick={handleClickReportSearchbutton}>
+                                검색
+                            </Button>
+                        </Col>
+                    </div>
+                </Form.Row>
+
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="p-0">
+                        <MokaInputLabel
+                            label="이메일"
+                            className="mb-1"
+                            name="email1"
+                            value={selectRepoterData.email1}
+                            onChange={(e) => tempOnchange(e)}
+                            isInvalid={error.email1}
+                            disabled={editDisabled}
+                        />
+                    </Col>
+                    @
+                    <Col xs={5} className="p-0">
+                        <MokaInputLabel
+                            label=""
+                            className="mb-0"
+                            name="email2"
+                            value={selectRepoterData.email2}
+                            onChange={(e) => tempOnchange(e)}
+                            isInvalid={error.email2}
+                            disabled={editDisabled}
+                        />
+                    </Col>
+                </Form.Row>
+
+                <MokaInputLabel
+                    as="switch"
+                    name="status"
+                    id="status"
+                    className="mb-2"
+                    label="사용여부"
+                    inputProps={{ checked: selectRepoterData.status === 'Y' }}
+                    onChange={tempOnchange}
+                    disabled={editDisabled}
+                />
+
+                <Form.Row className="mb-2">
+                    <Col xs={9} className="p-0">
+                        <MokaInputLabel
+                            label="직첵"
+                            className="mb-0"
+                            name="position"
+                            value={selectRepoterData.position}
+                            onChange={(e) => tempOnchange(e)}
+                            isInvalid={error.position}
+                            disabled={editDisabled}
+                        />
+                    </Col>
+                </Form.Row>
+
+                <Form.Row className="mb-2">
+                    <Col xs={9} className="p-0">
+                        <MokaInputLabel
+                            as="textarea"
+                            label="약력정보"
+                            className="mb-0"
+                            inputClassName="resize-none"
+                            name="profile"
+                            id="profile"
+                            value={selectRepoterData.profile && selectRepoterData.profile}
+                            onChange={tempOnchange}
+                            isInvalid={error.profile}
+                            disabled={editDisabled}
+                        />
+                    </Col>
+                </Form.Row>
+
+                {/* 이미지 */}
+                <MokaInputLabel
+                    as="imageFile"
+                    className="mb-2"
+                    name="selectImg"
+                    isInvalid={error.selectImg}
+                    label={
+                        <React.Fragment>
+                            이미지
+                            <br />
+                            <Button
+                                className="mt-1"
+                                size="sm"
+                                variant="negative"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    imgFileRef.current.deleteFile();
+                                }}
+                                disabled={editDisabled}
+                            >
+                                삭제
+                            </Button>
+                        </React.Fragment>
+                    }
+                    ref={imgFileRef}
+                    inputProps={{
+                        height: 80,
+                        img: selectRepoterData.profile_photo,
+                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
+                        setFileValue,
+                    }}
+                    labelClassName="justify-content-end mr-3"
+                />
+            </Form>
+
+            <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
+                <div className="d-flex justify-content-center">
+                    <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editDisabled}>
+                        저장
+                    </Button>
+                    <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editDisabled}>
+                        취소
+                    </Button>
+                </div>
+            </div>
+            <ColumnistModal show={repoterlistModalShow} onHide={() => setRepoterlistModalShow(false)} onClickSave={null} onClick={handleRepoterRowClick} />
+        </MokaCard>
+    );
+};
+
+const repoterDataInitialize = {
+    seqNo: null,
+    inout: null,
+    status: null,
+    repSeq: null,
+    columnistNm: null,
+    email: null,
+    reg_dt: null,
+    reg_id: null,
+    mod_dt: null,
+    mod_id: null,
+    position: null,
+    profile_photo: null,
+    profile: null,
+    selectImg: null,
+};
+
+const setErrorInitialize = {
+    repseq: false,
+    columnistnm: false,
+    email1: false,
+    email2: false,
+    status: null,
+    position: null,
+    profile: null,
+    selectImg: null,
+};
+
+export default ColumnistEdit;

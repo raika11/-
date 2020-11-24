@@ -29,6 +29,7 @@ const Reporter = React.lazy(() => import('@pages/Reporter'));
 const Special = React.lazy(() => import('@pages/Special'));
 const DirectLink = React.lazy(() => import('@pages/DirectLink'));
 const Member = React.lazy(() => import('@pages/Member'));
+const Columnist = React.lazy(() => import('@pages/Columnist'));
 
 const routes = [
     {
@@ -264,6 +265,16 @@ const routes = [
         name: 'member',
         displayName: '사용자 관리',
         component: Member,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/columnist',
+        name: 'columnist',
+        displayName: '컬럼니스트 관리',
+        component: Columnist,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

@@ -14,10 +14,22 @@ export const previewPage = createAction(PREVIEW_PAGE, ({ content, callback }) =>
  * 컴포넌트 미리보기
  */
 export const [PREVIEW_COMPONENT, PREVIEW_COMPONENT_SUCCESS, PREVIEW_COMPONENT_FAILURE] = createRequestActionTypes('merge/PREVIEW_COMPONENT');
-export const previewComponent = createAction(PREVIEW_COMPONENT, ({ pageSeq, componentWorkSeq, resourceYn }) => ({
+export const previewComponent = createAction(PREVIEW_COMPONENT, ({ pageSeq, componentWorkSeq, resourceYn, callback }) => ({
     pageSeq,
     componentWorkSeq,
     resourceYn,
+    callback,
+}));
+
+/**
+ * 컴포넌트 미리보기 (일시적인 데이터 처리)
+ */
+export const PREVIEW_COMPONENT_MODAL = 'merge/PREVIEW_COMPONENT_MODAL';
+export const previewComponentModal = createAction(PREVIEW_COMPONENT_MODAL, ({ pageSeq, componentWorkSeq, resourceYn, callback }) => ({
+    pageSeq,
+    componentWorkSeq,
+    resourceYn,
+    callback,
 }));
 
 /**

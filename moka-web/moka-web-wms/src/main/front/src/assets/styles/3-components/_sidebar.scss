@@ -47,6 +47,8 @@ a.sidebar-link {
   position: relative;
   text-decoration: none;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 
   i,
   svg {

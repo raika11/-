@@ -49,7 +49,7 @@ const TemplateEdit = ({ onDelete }) => {
     const [copyModalShow, setCopyModalShow] = useState(false);
     const [addComponentModalShow, setAddComponentModalShow] = useState(false);
     const [copyModalData, setCopyModalData] = useState({
-        title: '컴포넌트명',
+        title: '템플릿명',
         value: '',
         isInvalid: false,
     });

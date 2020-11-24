@@ -3,8 +3,8 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { MokaTable } from '@components';
-import { columnDefs, rowData } from './ReporterAgGridColumns';
-import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList, getReporter } from '@store/reporter';
+import { columnDefs } from './ReporterAgGridColumns';
+import { changeSearchOption, GET_REPORTER_LIST, getReporterList } from '@store/reporter';
 
 /**
  * 기자 목록 AgGrid
@@ -27,7 +27,6 @@ const ReporterMgrAgGrid = () => {
     /**
      * 테이블에서 검색옵션 변경
      */
-
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
             let temp = { ...search, [key]: value };
@@ -52,7 +51,6 @@ const ReporterMgrAgGrid = () => {
     /**
      * 목록에서 Row클릭
      */
-
     const handleRowClicked = useCallback(
         (list) => {
             history.push(`/reporter/${list.id}`);

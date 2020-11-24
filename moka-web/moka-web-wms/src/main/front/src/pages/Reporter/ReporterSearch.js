@@ -6,7 +6,7 @@ import { MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
 import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList, getReporter } from '@store/reporter';
 import { Button } from 'react-bootstrap';
-import ReporterListModal from '@pages/Reporter/modals/ReporterListModal';
+import ReporterSearchListModal from './modals/ReporterSearchListModal';
 import toast from '@utils/toastUtil'; // 내가 참조해서 만든거
 
 /**
@@ -90,7 +90,7 @@ const ReporterMgrSearch = () => {
                     */}
                 </Col>
             </Form.Row>
-            <ReporterListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} onClickSave={handleClicktListModalSave} />
+            <ReporterSearchListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} onClickSave={handleClicktListModalSave} />
         </Form>
     );
 };

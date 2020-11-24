@@ -48,14 +48,3 @@ export const columnDefs = [
         },
     },
 ];
-
-export const rowData = [
-    {
-        repSeq: 1000,
-        joinsId: 'Richards',
-        repName: '강기헌',
-        jplusJobInfo: '중앙일보 편집부 기자',
-        repEmail1: 'crutis@test.com',
-        usedYn: 'Y',
-    },
-];

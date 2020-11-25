@@ -1,5 +1,6 @@
 import React, { useState, Suspense, forwardRef } from 'react';
 import { useDispatch } from 'react-redux';
+
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -7,11 +8,13 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast from '@utils/toastUtil';
-import { getComponentWork, postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
+
+import { postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
 const AddSpaceModal = React.lazy(() => import('../modals/AddSpaceModal'));
 const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
+const ListNumberEditModal = React.lazy(() => import('../modals/ListNumberEditModal'));
 
 /**
  * 커스텀 토글
@@ -35,6 +38,7 @@ const DeskingWorkButtonGroup = (props) => {
     const [htmlEditModal, setHtmlEditModal] = useState(false);
     const [addSpaceModal, setAddSpaceModal] = useState(false);
     const [registerModal, setRegisterModal] = useState(false);
+    const [listNumberModal, setListNumberModal] = useState(false);
 
     const title = `ID: CP${component.componentSeq} ${component.componentName}`;
 
@@ -101,6 +105,13 @@ const DeskingWorkButtonGroup = (props) => {
     };
 
     /**
+     * 리스트 건수
+     */
+    const handleListNumber = () => {
+        setListNumberModal(true);
+    };
+
+    /**
      * 전체삭제
      */
     const handleDeleteClicked = () => {
@@ -154,7 +165,9 @@ const DeskingWorkButtonGroup = (props) => {
                                     <Dropdown.Item eventKey="3" onClick={handleRegister}>
                                         기사 이동
                                     </Dropdown.Item>
-                                    <Dropdown.Item eventKey="4">리스트 건수</Dropdown.Item>
+                                    <Dropdown.Item eventKey="4" onClick={handleListNumber}>
+                                        리스트 건수
+                                    </Dropdown.Item>
                                     <Dropdown.Item eventKey="5" style={component.viewYn === 'Y' ? { color: 'red' } : { color: 'black' }} disabled>
                                         영역 노출
                                     </Dropdown.Item>
@@ -190,6 +203,11 @@ const DeskingWorkButtonGroup = (props) => {
                     component={component}
                     componentAgGridInstances={componentAgGridInstances}
                 />
+            </Suspense>
+
+            {/* 리스트 건수 */}
+            <Suspense>
+                <ListNumberEditModal show={listNumberModal} onHide={() => setListNumberModal(false)} data={component} />
             </Suspense>
         </>
     );

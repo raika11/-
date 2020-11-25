@@ -1,7 +1,7 @@
 export default [
     {
         headerName: '기자번호',
-        field: 'seqNo',
+        field: 'repSeq',
         width: 100,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },

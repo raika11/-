@@ -21,26 +21,28 @@ const DeskingWorkAgGrid = (props) => {
 
     useEffect(() => {
         if (deskingWorks) {
-            setRowData(
-                deskingWorks.map((desking) => {
-                    // 제목 replace
-                    let escapeTitle = desking.title;
-                    if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
+            if (component.viewYn === 'Y') {
+                setRowData(
+                    deskingWorks.map((desking) => {
+                        // 제목 replace
+                        let escapeTitle = desking.title;
+                        if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
 
-                    return {
-                        ...desking,
-                        gridType: 'DESKING',
-                        componentWorkSeq: component.seq,
-                        title: desking.rel ? '' : escapeTitle,
-                        relTitle: desking.rel ? escapeTitle : '',
-                        contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
-                        relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
-                        onRowClicked,
-                        onSave,
-                        onDelete,
-                    };
-                }),
-            );
+                        return {
+                            ...desking,
+                            gridType: 'DESKING',
+                            componentWorkSeq: component.seq,
+                            title: desking.rel ? '' : escapeTitle,
+                            relTitle: desking.rel ? escapeTitle : '',
+                            contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
+                            relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
+                            onRowClicked,
+                            onSave,
+                            onDelete,
+                        };
+                    }),
+                );
+            }
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
@@ -85,7 +86,7 @@ const ComponentWork = (props) => {
 
     return (
         <React.Fragment>
-            <div className="component-work" id={`agGrid-${component.seq}`}>
+            <div className={clsx('component-work', { disabled: component.viewYn === 'N' })} id={`agGrid-${component.seq}`}>
                 <ButtonGroup
                     component={component}
                     agGridIndex={agGridIndex}

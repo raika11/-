@@ -152,7 +152,7 @@ const DeskingWorkButtonGroup = (props) => {
                 <Row className="m-0 d-flex align-items-center justify-content-between">
                     <Col className="p-0" xs={6}>
                         <OverlayTrigger overlay={<Tooltip>{`데이타셋ID: ${component.datasetSeq}`}</Tooltip>}>
-                            <p className="ft-12 mb-0">{title}</p>
+                            <p className="ft-12 mb-0 component-title">{title}</p>
                         </OverlayTrigger>
                     </Col>
                     <Col className="p-0 d-flex align-items-center justify-content-end" xs={6}>

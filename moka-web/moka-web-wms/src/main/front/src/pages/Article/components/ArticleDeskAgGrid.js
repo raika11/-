@@ -101,14 +101,18 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                 // 타겟이 리스트인 경우
                 dropTargetAgGrid.forEach((targetGrid, agGridIndex) => {
                     const dropzone = makeDeskingWorkDropzone(onDragStop, targetGrid, agGridIndex);
-                    gridInstance.api.removeRowDropZone(dropzone);
-                    gridInstance.api.addRowDropZone(dropzone);
+                    if (dropzone) {
+                        gridInstance.api.removeRowDropZone(dropzone);
+                        gridInstance.api.addRowDropZone(dropzone);
+                    }
                 });
             } else {
                 // 타겟이 1개인 경우
                 const dropzone = makeDeskingWorkDropzone(onDragStop, dropTargetAgGrid);
-                gridInstance.api.removeRowDropZone(dropzone);
-                gridInstance.api.addRowDropZone(dropzone);
+                if (dropzone) {
+                    gridInstance.api.removeRowDropZone(dropzone);
+                    gridInstance.api.addRowDropZone(dropzone);
+                }
             }
         }
 

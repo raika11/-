@@ -482,6 +482,22 @@ body {
         transition: border-color 0.24s ease-in-out;
         z-index: 1;
     }
+
+    &.hover::before {
+        content: "";
+        z-index: 1;
+        position: absolute;
+        top: 33px;
+        left: 0px;
+        right: 0px;
+        border-top: 2px solid $positive;
+    }
+
+    &.disabled {
+        .component-title {
+            @include disable-font;
+        }
+    }
 }
 
 .deskthumb-gif-list {

@@ -80,19 +80,32 @@ const makeHoverBox = () => {
 };
 
 /**
- * 데스킹 워크 ag-grid에 추가할 dropzone 을 생성해주는 함수
+ * 데스킹 워크 ag-grid에 추가할 dropzone 을 생성해주는 함수 + 다른 dropzone에 드래그 시 화면 처리
  * @param {func} onDragStop drag stop 시 실행하는 함수
  * @param {object} targetGrid drop target
  * @param {number} currentIndex 타겟 grid리스트에서 현재 넘어온 타겟 grid의 인덱스 (있으면 넘긴다)
  */
 export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) => {
     const workElement = findWork(targetGrid.api.gridOptionsWrapper.layoutElements[0]); // .component-work
+    if (workElement.classList.contains('disabled')) return null;
+
     let next = { idx: -1, node: null };
     let hover = { idx: -1, node: null };
     let hoverBox = makeHoverBox();
 
     const clearNextStyle = () => next.node && next.node.classList.remove('next');
     const clearHoverStyle = () => hover.node && hover.node.classList.remove('hover');
+    const clearWorkStyle = () => workElement.classList.remove('hover');
+    const addNextRowStyle = (nextRow) => {
+        if (nextRow.type === 'none') return;
+        next = { idx: nextRow.node.getAttribute('row-index'), node: nextRow.node };
+        if (nextRow.type === 'next') {
+            nextRow.node.classList.add('next');
+        } else if (nextRow.type === 'last') {
+            nextRow.node.classList.remove('hover');
+            nextRow.node.classList.add('next');
+        }
+    };
 
     const dropzone = {
         getContainer: () => workElement,
@@ -101,15 +114,23 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
             workElement.removeChild(hoverBox);
             clearHoverStyle();
             clearNextStyle();
+            clearWorkStyle();
         },
         onDragging: (source) => {
             let draggingRow = getRow(source.event);
-            if (!draggingRow) return;
+
+            if (!draggingRow) {
+                workElement.classList.add('hover');
+                clearNextStyle();
+                clearHoverStyle();
+                return;
+            }
 
             let draggingIdx = draggingRow.getAttribute('row-index');
             if (hover.idx !== draggingIdx) {
                 clearNextStyle();
                 clearHoverStyle();
+                clearWorkStyle();
                 hover = { idx: draggingIdx, node: draggingRow };
 
                 const selected = targetGrid.api.getSelectedRows();
@@ -119,14 +140,7 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
                         draggingRow.classList.add('hover');
                     } else {
                         const nextRow = findNextMainRow(draggingRow);
-                        if (nextRow.type === 'none') return;
-                        next = { idx: nextRow.node.getAttribute('row-index'), node: nextRow.node };
-                        if (nextRow.type === 'next') {
-                            nextRow.node.classList.add('next');
-                        } else if (nextRow.type === 'last') {
-                            nextRow.node.classList.remove('hover');
-                            nextRow.node.classList.add('next');
-                        }
+                        addNextRowStyle(nextRow);
                     }
                 } else {
                     // 관련기사 추가
@@ -137,14 +151,7 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
                             draggingRow.classList.add('hover');
                         } else {
                             const nextRow = findNextMainRow(draggingRow);
-                            if (nextRow.type === 'none') return;
-                            next = { idx: nextRow.node.getAttribute('row-index'), node: nextRow.node };
-                            if (nextRow.type === 'next') {
-                                nextRow.node.classList.add('next');
-                            } else if (nextRow.type === 'last') {
-                                nextRow.node.classList.remove('hover');
-                                nextRow.node.classList.add('next');
-                            }
+                            addNextRowStyle(nextRow);
                         }
                     } else {
                         const mainRow = findPreviousMainRow(draggingRow);
@@ -154,14 +161,7 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
                                 draggingRow.classList.add('hover');
                             } else {
                                 const nextRow = findNextMainRow(draggingRow);
-                                if (nextRow.type === 'none') return;
-                                next = { idx: nextRow.node.getAttribute('row-index'), node: nextRow.node };
-                                if (nextRow.type === 'next') {
-                                    nextRow.node.classList.add('next');
-                                } else if (nextRow.type === 'last') {
-                                    nextRow.node.classList.remove('hover');
-                                    nextRow.node.classList.add('next');
-                                }
+                                addNextRowStyle(nextRow);
                             }
                         }
                     }

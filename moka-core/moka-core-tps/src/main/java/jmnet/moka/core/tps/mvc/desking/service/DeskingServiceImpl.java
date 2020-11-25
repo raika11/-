@@ -25,6 +25,7 @@ import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.component.service.ComponentHistService;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
+import jmnet.moka.core.tps.mvc.desking.dto.DeskingOrdDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
@@ -495,9 +496,16 @@ public class DeskingServiceImpl implements DeskingService {
     @Override
     @Transactional
     public void insertDeskingWorkList(List<DeskingWorkDTO> insertdeskingList, Long datasetSeq, String regId) {
-        // 1. 편집기사work 등록
-        Integer maxContentOrd = 1;
-        Integer maxRelOrd = 1;
+        boolean rel = false;
+        if (insertdeskingList.size() > 0) {
+            rel = !(insertdeskingList.get(0)
+                                     .getParentTotalId() == null);
+        }
+
+        // 1. 순서변경할 목록 조회
+        List<DeskingOrdDTO> ordDTOList = resortBeforeInsert(rel, insertdeskingList, datasetSeq, regId);
+
+        // 2. 편집기사work 등록
         for (DeskingWorkDTO vo : insertdeskingList) {
             DeskingWork appendDeskingWork = modelMapper.map(vo, DeskingWork.class);
             appendDeskingWork.setDatasetSeq(datasetSeq);
@@ -509,22 +517,84 @@ public class DeskingServiceImpl implements DeskingService {
                 saved.setDeskingSeq(appendSeq);
                 deskingWorkRepository.save(saved);
             }
-            maxContentOrd = appendDeskingWork.getContentOrd() > maxContentOrd ? appendDeskingWork.getContentOrd() : maxContentOrd;
-            maxRelOrd = appendDeskingWork.getRelOrd() > maxRelOrd ? appendDeskingWork.getRelOrd() : maxRelOrd;
-
             log.debug("DESKING WORK APPEND seq: {}", appendSeq);
         }
 
-        // 2. 편집기사work 조회(JPQL)
-        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
-                                                          .datasetSeq(datasetSeq)
-                                                          .regId(regId)
-                                                          .build();
-        List<DeskingWork> deskingList = deskingWorkRepository.findAllDeskingWork(search);
-        List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE); // DeskingWork -> DeskingWorkVO
+        // 3. 순서변경
+        updateOrder(ordDTOList, regId);
+    }
 
-        // 4. 순번조정 및 삭제
-        resortDeskingWorkList(deskingVOList, deskingVOList, regId, maxContentOrd, maxRelOrd);
+    private List<DeskingOrdDTO> resortBeforeInsert(boolean rel, List<DeskingWorkDTO> insertdeskingList, Long datasetSeq, String regId) {
+        List<DeskingOrdDTO> returnOrdList = new ArrayList<>();
+        List<DeskingWorkVO> deskingVOList = this.findAllDeskingWork(datasetSeq, regId);
+
+        if (rel) {
+            // 관련기사
+            Integer minRelOrd = 1;
+            Long parentTotalId = null;
+            Optional<DeskingWorkDTO> findMin = insertdeskingList.stream()
+                                                                .min(Comparator.comparing(DeskingWorkDTO::getRelOrd));
+            if (findMin.isPresent()) {
+                minRelOrd = findMin.get()
+                                   .getRelOrd();
+                parentTotalId = findMin.get()
+                                       .getParentTotalId();
+            }
+
+            for (DeskingWorkVO vo : deskingVOList) {
+                Integer relOrd = vo.getRelOrd();
+                if (parentTotalId.equals(vo.getParentTotalId()) && minRelOrd <= relOrd) {
+                    DeskingOrdDTO ord = DeskingOrdDTO.builder()
+                                                     .seq(vo.getSeq())
+                                                     .contentOrd(vo.getContentOrd())
+                                                     .relOrd(relOrd + insertdeskingList.size())
+                                                     .title(vo.getTitle())
+                                                     .build();
+                    returnOrdList.add(ord);
+                }
+            }
+        } else {
+            // 주기사
+            Integer minContentOrd = 1;
+            Optional<DeskingWorkDTO> findMin = insertdeskingList.stream()
+                                                                .min(Comparator.comparing(DeskingWorkDTO::getContentOrd));
+            if (findMin.isPresent()) {
+                minContentOrd = findMin.get()
+                                       .getContentOrd();
+            }
+
+            for (DeskingWorkVO vo : deskingVOList) {
+                Integer contentOrd = vo.getContentOrd();
+                if (minContentOrd <= contentOrd) {
+                    DeskingOrdDTO ord = DeskingOrdDTO.builder()
+                                                     .seq(vo.getSeq())
+                                                     .contentOrd(contentOrd + insertdeskingList.size())
+                                                     .relOrd(vo.getRelOrd())
+                                                     .title(vo.getTitle())
+                                                     .build();
+                    returnOrdList.add(ord);
+                }
+            }
+        }
+
+        return returnOrdList;
+    }
+
+    private void updateOrder(List<DeskingOrdDTO> ordDTOList, String regId) {
+        for (DeskingOrdDTO dto : ordDTOList) {
+            Optional<DeskingWork> deskingWork = deskingWorkRepository.findById(dto.getSeq());
+            if (deskingWork.isPresent()) {
+                deskingWork.get()
+                           .setContentOrd(dto.getContentOrd());
+                deskingWork.get()
+                           .setRelOrd(dto.getRelOrd());
+                deskingWork.get()
+                           .setRegId(regId);
+                deskingWork.get()
+                           .setRegDt(McpDate.now());
+                deskingWorkRepository.save(deskingWork.get());
+            }
+        }
     }
 
     @Override
@@ -551,13 +621,11 @@ public class DeskingServiceImpl implements DeskingService {
                                                       .collect(Collectors.toList());
 
         // 4. 순번조정 및 삭제
-        resortDeskingWorkList(deskingVOList, filterList, regId, 1, 1);
+        resortDeskingWorkList(deskingVOList, filterList, regId);
     }
 
-    @Override
     @Transactional
-    public void resortDeskingWorkList(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId, Integer maxContentOrd,
-            Integer maxRelOrd) {
+    public void resortDeskingWorkList(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId) {
 
         // 1. 수정할 순번목록
         List<Long> updateList = new ArrayList<Long>();
@@ -576,7 +644,7 @@ public class DeskingServiceImpl implements DeskingService {
 
             // 주기사의 오더가 잘못됐다면
             if (!vo.getContentOrd()
-                   .equals(contentOrd) && maxContentOrd > vo.getContentOrd()) {
+                   .equals(contentOrd)) {
                 vo.setContentOrd(contentOrd);
                 updateList.add(vo.getSeq());    // 순번수정
             }
@@ -593,11 +661,13 @@ public class DeskingServiceImpl implements DeskingService {
             rel = !(vo.getParentTotalId() == null);
 
             // 같은 부모이고, 관련기사 순번이 안 맞을 경우
-            if (vo.getParentTotalId() != null && vo.getParentTotalId()
-                                                   .equals(prevParentTotalId) && !vo.getRelOrd()
-                                                                                    .equals(relOrd) && maxRelOrd > vo.getRelOrd()) {
-                vo.setRelOrd(relOrd);
-                updateList.add(vo.getSeq());    // 순번수정
+            if (rel && vo.getParentTotalId()
+                         .equals(prevParentTotalId)) {
+                if (!vo.getRelOrd()
+                       .equals(relOrd)) {
+                    vo.setRelOrd(relOrd);
+                    updateList.add(vo.getSeq());    // 순번수정
+                }
             }
 
             // 주기사라면

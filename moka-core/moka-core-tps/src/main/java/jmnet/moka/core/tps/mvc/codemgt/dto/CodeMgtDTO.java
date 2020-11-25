@@ -71,7 +71,7 @@ public class CodeMgtDTO implements Serializable {
      */
     @NotNull(message = "{tps.codeMgt.error.notnull.cdNm}")
     @Pattern(regexp = ".+", message = "{tps.codeMgt.error.pattern.cdNm}")
-    @Length(min = 1, max = 100, message = "{tps.codeMgt.error.length.cdNm}")
+    @Length(min = 1, max = 512, message = "{tps.codeMgt.error.length.cdNm}")
     private String cdNm;
 
     /**

@@ -24,5 +24,5 @@ import lombok.Setter;
 public class CmsRetrieveVO<T> implements Serializable {
 
     private T retrieve;
-    private List<String> relPostList;
+    private List<Object> relPostList;
 }

@@ -9,8 +9,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
@@ -20,14 +19,13 @@ import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,22 +38,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/articles")
-public class ArticleRestController {
+public class ArticleRestController extends AbstractCommonController {
 
-    @Autowired
-    private ArticleService articleService;
-
-    @Autowired
-    private MessageByLocale messageByLocale;
+    private final ArticleService articleService;
 
     @Value("${tps.desking.article.source.list}")
     private String[] deskingSourceList;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public ArticleRestController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
 
     /**
      * 기사목록조회
@@ -106,7 +98,7 @@ public class ArticleRestController {
         } catch (Exception e) {
             log.error("[FAIL TO LOAD ARTICLE BASIC]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD ARTICLE BASIC]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.select"), e);
+            throw new Exception(msg("tps.common.error.select"), e);
         }
     }
 
@@ -117,7 +109,7 @@ public class ArticleRestController {
 
         ArticleBasic articleBasic = articleService.findArticleBasicById(totalId)
                                                   .orElseThrow(() -> {
-                                                      String message = messageByLocale.get("tps.common.error.no-data");
+                                                      String message = msg("tps.common.error.no-data");
                                                       tpsLogger.fail(message, true);
                                                       return new NoDataException(message);
                                                   });
@@ -144,5 +136,28 @@ public class ArticleRestController {
         ResultDTO<ResultListDTO<ArticleSourceDTO>> resultDto = new ResultDTO<>(resultListMessage);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "기사 편집제목 등록/수정")
+    @PutMapping("/{totalId}/edit-title")
+    public ResponseEntity<?> putEditTitle(@PathVariable("totalId") Long totalId, String title, String mobTitle)
+            throws Exception {
+        ArticleBasic articleBasic = articleService.findArticleBasicById(totalId)
+                                                  .orElseThrow(() -> {
+                                                      String message = msg("tps.common.error.no-data");
+                                                      tpsLogger.fail(message, true);
+                                                      return new NoDataException(message);
+                                                  });
+        try {
+            articleService.saveArticleTitle(articleBasic, title, mobTitle);
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg("tps.contents.article.success.edittitle.save"));
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT ARTICLE EDIT TITLE]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT ARTICLE EDIT TITLE]", e, true);
+            throw new Exception(msg("tps.contents.article.error.edittitle.save"), e);
+        }
     }
 }

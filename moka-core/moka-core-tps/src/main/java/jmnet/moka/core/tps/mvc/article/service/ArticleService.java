@@ -30,4 +30,6 @@ public interface ArticleService {
      * @return
      */
     List<ArticleSource> findAllArticleSource(String[] deskingSourceList);
+
+    void saveArticleTitle(ArticleBasic articleBasic, String title, String mobTitle);
 }

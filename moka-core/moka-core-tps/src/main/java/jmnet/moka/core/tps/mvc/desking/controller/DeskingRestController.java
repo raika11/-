@@ -30,7 +30,6 @@ import jmnet.moka.core.tps.mvc.desking.service.DeskingService;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,14 +49,17 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/desking")
 public class DeskingRestController extends AbstractCommonController {
 
-    @Autowired
-    private DeskingService deskingService;
+    private final DeskingService deskingService;
 
-    @Autowired
-    private AreaService areaService;
+    private final AreaService areaService;
 
-    @Autowired
-    private UploadFileHelper uploadFileHelper;
+    private final UploadFileHelper uploadFileHelper;
+
+    public DeskingRestController(DeskingService deskingService, AreaService areaService, UploadFileHelper uploadFileHelper) {
+        this.deskingService = deskingService;
+        this.areaService = areaService;
+        this.uploadFileHelper = uploadFileHelper;
+    }
 
     /**
      * 편집영역의 모든 Work 초기화 및 컴포넌트Work 목록 조회

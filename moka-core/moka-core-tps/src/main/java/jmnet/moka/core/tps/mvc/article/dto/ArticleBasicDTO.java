@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -81,43 +82,48 @@ public class ArticleBasicDTO implements Serializable {
     private String pressNumber;
 
     /**
+     * 지면 면별 기사 위치(번호)
+     */
+    private String pressPosition;
+
+    /**
      * 기사기자
      */
-    private String articleReporter;
+    private String artReporter;
 
     /**
      * 기사요약
      */
-    private String articleSummary;
+    private String artSummary;
 
     /**
      * 기사썸네일
      */
-    private String articleThumb;
+    private String artThumb;
 
     /**
      * 등록일시
      */
     @DTODateTimeFormat
-    private Date articleRegDt;
+    private Date artRegDt;
 
     /**
      * 수정일시
      */
     @DTODateTimeFormat
-    private Date articleModDt;
+    private Date artModDt;
 
     /**
      * 원본기사ID(복제시)
      */
     @Builder.Default
-    private Integer orgId = 0;
+    private Long orgId = (long) 0;
 
     /**
      * 기사타입
      */
     @Builder.Default
-    private String artType = "B";
+    private String artType = TpsConstants.DEFAULT_ART_TYPE;
 
     /**
      * 콘텐트타입
@@ -131,19 +137,28 @@ public class ArticleBasicDTO implements Serializable {
     private String serviceFlag = MokaConstants.NO;
 
     /**
-     * 연결댓글ID
+     * 엠바고 [Y/N]
      */
-    @Builder.Default
-    private Long cmtTotalid = (long) 0;
+    private String embargo;
+
+    /**
+     * 통합CMS ID
+     */
+    private Long jamId;
+
+    /**
+     * 통합CMS ORG ID
+     */
+    private Long jamOrgId;
 
     /**
      * 기사제목
      */
-    private String articleTitle;
+    private String artTitle;
 
     /**
      * 기사부제목
      */
-    private String articleSubTitle;
-    
+    private String artSubTitle;
+
 }

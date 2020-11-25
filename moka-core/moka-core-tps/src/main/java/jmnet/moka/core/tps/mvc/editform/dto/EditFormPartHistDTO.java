@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -86,5 +88,16 @@ public class EditFormPartHistDTO {
      * 필드 그룹 목록
      */
     private List<FieldGroupDTO> fieldGroups;
+
+    /**
+     * 등록자
+     */
+    private MemberDTO regMember;
+
+    /**
+     * 등록일시
+     */
+    @DTODateTimeFormat
+    private Date regDt;
 
 }

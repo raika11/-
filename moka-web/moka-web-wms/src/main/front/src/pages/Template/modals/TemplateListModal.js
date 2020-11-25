@@ -10,7 +10,6 @@ import { getTpZone, getTpSize } from '@store/codeMgt';
 import { initialState, GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
 import { defaultTemplateSearchType } from '@pages/commons';
-import { template } from '@babel/core';
 
 const propTypes = {
     show: PropTypes.bool,

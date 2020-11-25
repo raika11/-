@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './DeskingWorkButtonGroup';
 import AgGrid from './DeskingWorkAgGrid';
-import DeskingWorkEditModal from '../modals/DeskingWorkEditModal';
+import { DeskingWorkEditModal } from '@pages/Desking/modals';
 import toast from '@utils/toastUtil';
 
 const propTypes = {

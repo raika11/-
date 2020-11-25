@@ -9,82 +9,80 @@
 package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.Optional;
-
+import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
+import jmnet.moka.core.tps.mvc.desking.repository.ComponentWorkRepository;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
-import jmnet.moka.core.tps.mvc.desking.repository.ComponentWorkRepository;
 
 /**
  * ComponentWorkServiceImpl
- * 
- * @author jeon0525
  *
+ * @author jeon0525
  */
 
 @Service
 @Slf4j
-public class ComponentWorkServiceImpl implements
-	jmnet.moka.core.tps.mvc.desking.service.ComponentWorkService {
+public class ComponentWorkServiceImpl implements jmnet.moka.core.tps.mvc.desking.service.ComponentWorkService {
     @Autowired
     private ComponentWorkRepository componentWorkRepository;
-    
+
     @Autowired
     private MessageByLocale messageByLocale;
 
-	@Autowired
-	private TemplateService templateService;
+    @Autowired
+    private TemplateService templateService;
 
     @Override
     public Optional<ComponentWork> findComponentWorkBySeq(Long seq) {
         return componentWorkRepository.findById(seq);
     }
 
-	@Override
-	public ComponentWork updateComponentWork(ComponentWorkVO workVO) throws NoDataException, Exception {
-		String messageC = messageByLocale.get("tps.common.error.no-data");
-		ComponentWork componentWork = this.findComponentWorkBySeq(workVO.getComponentSeq())
-														  .orElseThrow(() -> new NoDataException(messageC));
+    @Override
+    public ComponentWork updateComponentWork(ComponentWorkVO workVO)
+            throws NoDataException, Exception {
+        String messageC = messageByLocale.get("tps.common.error.no-data");
+        ComponentWork componentWork = this.findComponentWorkBySeq(workVO.getSeq())
+                                          .orElseThrow(() -> new NoDataException(messageC));
 
-		String messageT = messageByLocale.get("tps.common.error.no-data");
-		Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-										   .orElseThrow(() -> new NoDataException(messageT));
+        String messageT = messageByLocale.get("tps.common.error.no-data");
+        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
+                                           .orElseThrow(() -> new NoDataException(messageT));
 
-		componentWork.setTemplate(template);
-		componentWork.setZone(workVO.getZone());
-		componentWork.setMatchZone(workVO.getMatchZone());
-		componentWork.setViewYn(workVO.getViewYn());
-		componentWork.setPerPageCount(workVO.getPerPageCount());
-		
-		// 컴포넌트 업데이트
-		ComponentWork saved = componentWorkRepository.save(componentWork);
+        componentWork.setTemplate(template);
+        componentWork.setZone(workVO.getZone());
+        componentWork.setMatchZone(workVO.getMatchZone());
+        componentWork.setViewYn(workVO.getViewYn());
+        componentWork.setPerPageCount(workVO.getPerPageCount());
+
+        // 컴포넌트 업데이트
+        ComponentWork saved = componentWorkRepository.save(componentWork);
         log.debug("[COMPONENT WORK UPDATE] seq: {}", saved.getSeq());
-        
-		return saved;
-	}
 
-	@Override
-	public ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn, String snapshotBody, String regId)
-			throws NoDataException, Exception {
+        return saved;
+    }
 
-		String messageC = messageByLocale.get("tps.common.error.no-data");
-		ComponentWork componentWork = this.findComponentWorkBySeq(componentWorkSeq)
-										  .orElseThrow(() -> new NoDataException(messageC));
+    @Override
+    public ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn, String snapshotBody, String regId)
+            throws NoDataException, Exception {
 
-		componentWork.setSnapshotYn(snapshotYn);
-		componentWork.setSnapshotBody(snapshotBody);
+        String messageC = messageByLocale.get("tps.common.error.no-data");
+        ComponentWork componentWork = this.findComponentWorkBySeq(componentWorkSeq)
+                                          .orElseThrow(() -> new NoDataException(messageC));
 
-		// 컴포넌트 업데이트
-		ComponentWork saved = componentWorkRepository.save(componentWork);
-		log.debug("[COMPONENT WORK SNAPSHOT UPDATE] seq: {}", saved.getSeq());
+        componentWork.setSnapshotYn(snapshotYn);
+        componentWork.setSnapshotBody(snapshotBody);
 
-		return saved;
-	}
+        // 컴포넌트 업데이트
+        ComponentWork saved = componentWorkRepository.save(componentWork);
+        log.debug("[COMPONENT WORK SNAPSHOT UPDATE] seq: {}", saved.getSeq());
+
+        return saved;
+    }
 
 }

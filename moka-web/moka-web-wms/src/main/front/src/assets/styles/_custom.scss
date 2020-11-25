@@ -494,7 +494,7 @@ body {
 
     &.disabled {
         .component-title {
-            @include disable-font;
+            @include disabled-font;
         }
     }
 }

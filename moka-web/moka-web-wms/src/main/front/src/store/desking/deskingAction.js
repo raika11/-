@@ -84,11 +84,11 @@ export const postReserveComponentWork = createAction(POST_RESERVE_COMPONENT_WORK
 /**
  * Work컴포넌트 순번수정
  */
-export const PUT_DESKING_WORK_PRIORITY = 'desking/PUT_DESKING_WORK_PRIORITY';
-export const putDeskingWorkPriority = createAction(PUT_DESKING_WORK_PRIORITY, ({ component, callback }) => ({
-    component,
-    callback,
-}));
+// export const PUT_DESKING_WORK_PRIORITY = 'desking/PUT_DESKING_WORK_PRIORITY';
+// export const putDeskingWorkPriority = createAction(PUT_DESKING_WORK_PRIORITY, ({ component, callback }) => ({
+//     component,
+//     callback,
+// }));
 
 /**
  * 데스킹 워크 등록

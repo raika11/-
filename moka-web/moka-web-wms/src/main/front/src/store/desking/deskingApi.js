@@ -77,17 +77,17 @@ export const moveDeskingWorkList = ({ componentWorkSeq, datasetSeq, srcComponent
 };
 
 // 컴포넌트 워크의 편집기사 정렬 변경 => payload
-export const putDeskingWorkPriority = ({ componentWork }) => {
-    return instance
-        .put(`/api/desking/components/${componentWork.seq}/contents/${componentWork.datasetSeq}/priority`, componentWork, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
-};
+// export const putDeskingWorkPriority = ({ componentWork }) => {
+//     return instance
+//         .put(`/api/desking/components/${componentWork.seq}/contents/${componentWork.datasetSeq}/priority`, componentWork, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         })
+//         .catch((err) => {
+//             throw err;
+//         });
+// };
 
 // 컴포넌트 워크 임시저장
 export const postSaveComponentWork = ({ componentWorkSeq }) => {

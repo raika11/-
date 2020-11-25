@@ -13,12 +13,12 @@ import {
     getCodeMgtGrpList,
     getCodeMgtGrp,
     initialState,
-    changeSearchOption,
+    changeGrpSearchOption,
     deleteCodeMgtGrp,
     saveCodeMgtGrp,
     changeGrp,
 } from '@store/codeMgt';
-import { columnDefs } from './CodeMgtListAgGridColumns';
+import columnDefs from './CodeMgtListAgGridColumns';
 import CodeMgtListModal from './modals/CodeMgtListModal';
 
 /**
@@ -80,7 +80,7 @@ const CodeMgtListAgGrid = () => {
             if (key !== 'page') {
                 temp['page'] = 0;
             }
-            dispatch(getCodeMgtGrpList(changeSearchOption(temp)));
+            dispatch(getCodeMgtGrpList(changeGrpSearchOption(temp)));
         },
         [dispatch, search],
     );

@@ -12,6 +12,7 @@ import toast from '@utils/toastUtil';
 import { postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
+const TemplateListModal = React.lazy(() => import('@/pages/Template/modals/TemplateListModal'));
 const AddSpaceModal = React.lazy(() => import('../modals/AddSpaceModal'));
 const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
 const ListNumberEditModal = React.lazy(() => import('../modals/ListNumberEditModal'));
@@ -36,6 +37,7 @@ const DeskingWorkButtonGroup = (props) => {
 
     // modal state
     const [htmlEditModal, setHtmlEditModal] = useState(false);
+    const [templateModal, setTemplateModal] = useState(false);
     const [addSpaceModal, setAddSpaceModal] = useState(false);
     const [registerModal, setRegisterModal] = useState(false);
     const [listNumberModal, setListNumberModal] = useState(false);
@@ -47,6 +49,13 @@ const DeskingWorkButtonGroup = (props) => {
      */
     const handleHtmlEdit = () => {
         setHtmlEditModal(true);
+    };
+
+    /**
+     * 템플릿
+     */
+    const handleTemplate = () => {
+        setTemplateModal(true);
     };
 
     /**
@@ -132,7 +141,7 @@ const DeskingWorkButtonGroup = (props) => {
 
     const iconButton = [
         { title: 'HTML 수동편집', iconName: 'fal-code', onClick: handleHtmlEdit },
-        { title: '템플릿', iconName: 'fal-expand-wide' },
+        { title: '템플릿', iconName: 'fal-expand-wide', onClick: handleTemplate },
         { title: '임시저장', iconName: 'fal-save', onClick: handleSaveComponentWork },
         { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
     ];
@@ -181,6 +190,11 @@ const DeskingWorkButtonGroup = (props) => {
             {/* HTML 수동 편집 */}
             <Suspense>
                 <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} data={component} />
+            </Suspense>
+
+            {/* 템플릿 */}
+            <Suspense>
+                <TemplateListModal show={templateModal} onHide={() => setTemplateModal(false)} templateGroup={component.templateGroup} templateWidth={component.templateWidth} />
             </Suspense>
 
             {/* 공백 추가 */}

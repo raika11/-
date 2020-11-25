@@ -10,6 +10,7 @@ import { getTpZone, getTpSize } from '@store/codeMgt';
 import { initialState, GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
 import { defaultTemplateSearchType } from '@pages/commons';
+import { template } from '@babel/core';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -35,7 +36,7 @@ const defaultProps = {};
  * (템플릿 스토어 사용)
  */
 const TemplateListModal = (props) => {
-    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected } = props;
+    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, templateGroup, templateWidth } = props;
     const dispatch = useDispatch();
 
     const { latestDomainId, domainList, tpZoneRows, tpSizeRows, search, total, list, error, loading, UPLOAD_PATH_URL } = useSelector((store) => ({
@@ -56,6 +57,7 @@ const TemplateListModal = (props) => {
     const [rowData, setRowData] = useState([]);
     const [selected, setSelected] = useState('');
     const [selectedTemplate, setSelectedTemplate] = useState({});
+    const [loadCnt, setLoadCnt] = useState(0);
 
     useEffect(() => {
         // 선택된 값 셋팅
@@ -68,6 +70,7 @@ const TemplateListModal = (props) => {
     const handleHide = () => {
         dispatch(clearStore());
         setListType('list');
+        setLoadCnt(0);
         onHide();
     };
 
@@ -201,19 +204,40 @@ const TemplateListModal = (props) => {
 
     useEffect(() => {
         if (show) {
-            dispatch(
-                changeSearchOption({
+            if (templateGroup || templateWidth) {
+                let ts = {
                     ...initialState.search,
                     domainId: latestDomainId,
+                    templateGroup: templateGroup,
                     size: MODAL_PAGESIZE_OPTIONS[0],
                     page: 0,
-                }),
-            );
+                };
+                if (templateWidth) {
+                    const tpSize = tpSizeRows.find((size) => Number(size.cdNmEtc1) <= templateWidth && Number(size.cdNmEtc2) >= templateWidth);
+                    if (tpSize) {
+                        ts.templateWidth = tpSize.dtlCd;
+                        ts.widthMin = tpSize.cdNmEtc1;
+                        ts.widthMax = tpSize.cdNmEtc2;
+                    }
+                }
+                dispatch(changeSearchOption(ts));
+            } else {
+                dispatch(
+                    changeSearchOption({
+                        ...initialState.search,
+                        domainId: latestDomainId,
+                        size: MODAL_PAGESIZE_OPTIONS[0],
+                        page: 0,
+                    }),
+                );
+            }
         }
-    }, [dispatch, latestDomainId, show]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [latestDomainId, tpSizeRows, show, templateGroup, templateWidth]);
 
     useEffect(() => {
-        // 템플릿의 search.domainId 변경 시리스트 조회
+        if (loadCnt > 1) return;
+        // 템플릿의 search.domainId 변경시 리스트 조회
         if (search.domainId) {
             dispatch(
                 getTemplateList(
@@ -223,13 +247,14 @@ const TemplateListModal = (props) => {
                     }),
                 ),
             );
+            setLoadCnt(loadCnt + 1);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, search.domainId]);
 
     useEffect(() => {
-        dispatch(getTpZone());
-        dispatch(getTpSize());
+        if (tpSizeRows.length < 1) dispatch(getTpSize());
+        if (tpZoneRows.length < 1) dispatch(getTpZone());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

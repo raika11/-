@@ -75,9 +75,13 @@ export default handleActions(
         /**
          * 검색조건 변경
          */
-        [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CHANGE_GRP_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.grpSearch = payload;
+            });
+        },
+        [act.CHANGE_CD_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
                 draft.cdSearch = payload;
             });
         },

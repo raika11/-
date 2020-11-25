@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaSearchInput, MokaInput, MokaModal } from '@components';
 import CodeMgtEditModal from './modals/CodeMgtEditModal';
-import { clearCdList, initialState, getCodeMgtList, changeSearchOption, getCodeMgtGrp } from '@store/codeMgt';
+import { clearCdList, initialState, getCodeMgtList, changeCdSearchOption, getCodeMgtGrp } from '@store/codeMgt';
 
 /**
  * 기타코드 편집 검색
@@ -34,7 +34,7 @@ const CodeMgtEditSearch = (props) => {
     const handleSearch = () => {
         dispatch(
             getCodeMgtList(
-                changeSearchOption({
+                changeCdSearchOption({
                     ...search,
                     page: 0,
                 }),
@@ -66,7 +66,7 @@ const CodeMgtEditSearch = (props) => {
         if (grp.seqNo) {
             dispatch(
                 getCodeMgtList(
-                    changeSearchOption({
+                    changeCdSearchOption({
                         ...search,
                         page: 0,
                     }),

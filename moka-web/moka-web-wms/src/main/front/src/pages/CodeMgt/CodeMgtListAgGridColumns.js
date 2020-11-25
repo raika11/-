@@ -1,7 +1,7 @@
 import React from 'react';
 import CodeMgtEditButton from './components/CodeMgtEditButton';
 
-export const columnDefs = [
+export default [
     {
         headerName: '기타코드',
         field: 'cdNm',

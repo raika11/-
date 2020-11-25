@@ -1,3 +1,7 @@
+import React from 'react';
+import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 export default [
     {
         headerName: 'No',
@@ -6,10 +10,11 @@ export default [
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
     {
-        headerName: '대표이미지',
+        headerName: '이미지',
         field: 'imgUrl',
         cellRenderer: 'imageRenderer',
-        width: 100,
+        width: 50,
+        height: 60,
         cellStyle: { minHeight: '10px', paddingBottom: '1px' },
         autoHeight: false,
     },
@@ -17,7 +22,7 @@ export default [
         headerName: '제목',
         field: 'linkTitle',
         tooltipField: 'linkTitle',
-        width: 100,
+        width: 120,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
         wrapText: true,
         autoHeight: false,
@@ -26,7 +31,7 @@ export default [
         headerName: 'URL',
         field: 'linkUrl',
         tooltipField: 'linkUrl',
-        width: 100,
+        width: 150,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
         wrapText: true,
         autoHeight: false,
@@ -35,16 +40,16 @@ export default [
         headerName: '설명',
         field: 'linkContent',
         tooltipField: 'linkContent',
-        width: 100,
-        cellStyle: { fontSize: '12px', lineHeight: '23px', whiteSpace: 'pre-line' },
-        wrapText: true,
+        width: 200,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+        // wrapText: true,
         autoHeight: false,
     },
     {
         headerName: '등록자',
         field: 'regId',
         tooltipField: 'regId',
-        width: 110,
+        width: 80,
         // flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '23px', whiteSpace: 'pre-line' },
         wrapText: true,
@@ -63,7 +68,7 @@ export default [
         headerName: '수정자',
         field: 'modId',
         tooltipField: 'modId',
-        width: 110,
+        width: 80,
         // flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '23px', whiteSpace: 'pre-line' },
         wrapText: true,
@@ -82,8 +87,12 @@ export default [
         headerName: '게재여부',
         field: 'usedYnText',
         flex: 1,
-        cellStyle: { fontSize: '12px', lineHeight: '23px' },
-        // wrapText: true,
         width: 100,
+        cellStyle: { fontSize: '12px', lineHeight: '23px', textAlign: 'center' },
+        cellRendererFramework: (params) => {
+            const usedYnText = params.data.usedYnText;
+            let clazz = usedYnText === 'Y' ? 'color-negative' : '';
+            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
+        },
     },
 ];

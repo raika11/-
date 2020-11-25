@@ -66,32 +66,14 @@ const putSnapshotComponentWork = createRequestSaga(act.PUT_SNAPSHOT_COMPONENT_WO
 /**
  * 데스킹 워크의 관련기사 rowNode 생성
  */
-const makeRelRowNode = (data, relOrd, parentData, component, callback) => {
+const makeRelRowNode = (data, relOrd, parentData, component) => {
     if (!parentData || parentData.totalId === null) {
-        if (callback) {
-            callback({
-                header: {
-                    success: false,
-                    message: '올바른 주기사를 선택해주세요',
-                },
-            });
-        }
-
-        return;
+        return { success: false, message: '올바른 주기사를 선택하세요' };
     }
 
     const existRow = parentData.relSeqs ? parentData.relSeqs.filter((relSeq) => relSeq === data.totalId) : null;
     if (existRow && existRow.length > 0) {
-        if (callback) {
-            callback({
-                header: {
-                    success: false,
-                    message: '이미 존재하는 기사입니다',
-                },
-            });
-        }
-
-        return;
+        return { success: false, message: '이미 존재하는 기사입니다' };
     }
 
     let appendData = null;
@@ -126,7 +108,7 @@ const makeRelRowNode = (data, relOrd, parentData, component, callback) => {
         };
     }
 
-    return appendData;
+    return { success: true, list: appendData };
 };
 
 /**
@@ -134,30 +116,12 @@ const makeRelRowNode = (data, relOrd, parentData, component, callback) => {
  */
 const makeRowNode = (data, contentOrd, component, callback) => {
     if (!data || data.totalId === null) {
-        if (callback) {
-            callback({
-                header: {
-                    success: false,
-                    message: '올바르지 않은 기사입니다',
-                },
-            });
-        }
-
-        return;
+        return { success: false, message: '올바르지 않은 기사입니다' };
     }
 
     const existRow = component.deskingWorks.filter((desking) => desking.totalId === data.totalId);
     if (existRow && existRow.length > 0) {
-        if (callback) {
-            callback({
-                header: {
-                    success: false,
-                    message: '이미 존재하는 기사입니다',
-                },
-            });
-        }
-
-        return;
+        return { success: false, message: '이미 존재하는 기사입니다' };
     }
 
     let appendData = null;
@@ -207,7 +171,7 @@ const makeRowNode = (data, contentOrd, component, callback) => {
         };
     }
 
-    return appendData;
+    return { success: true, list: appendData };
 };
 
 /**
@@ -219,8 +183,7 @@ function* deskingDragStop({ payload }) {
     let overIndex = -1,
         addRelArt = false,
         sourceNode = null,
-        appendNodes = [],
-        rowNodeData = null;
+        appendNodes = [];
 
     if (target.overIndex) {
         overIndex = target.overIndex;
@@ -236,18 +199,24 @@ function* deskingDragStop({ payload }) {
 
     // 주기사 추가하는 함수
     const rd = (insertIndex) => {
-        const ans = [];
+        let ans = [];
 
         if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
-            sourceNode.forEach((node, idx) => {
-                const tmp = makeRowNode(node.data, insertIndex + idx, tgtComponent, callback);
-                if (tmp) ans.push(tmp);
+            sourceNode.some((node, idx) => {
+                const result = makeRowNode(node.data, insertIndex + idx, tgtComponent);
+                if (result.success) ans.push(result.list);
+                else {
+                    callback && callback({ header: result });
+                    ans = [];
+                    return true;
+                }
             });
         } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
-            rowNodeData = makeRowNode(sourceNode.data, insertIndex, tgtComponent, callback);
-            if (rowNodeData) ans.push(rowNodeData);
+            const result = makeRowNode(sourceNode.data, insertIndex, tgtComponent);
+            if (result.success) ans.push(result.list);
+            else callback && callback({ header: result });
         }
 
         return ans;
@@ -255,18 +224,24 @@ function* deskingDragStop({ payload }) {
 
     // 관련기사 추가하는 함수
     const rrd = (firstIndex, parentData) => {
-        const ans = [];
+        let ans = [];
 
         if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
-            sourceNode.forEach((node, idx) => {
-                const tmp = makeRelRowNode(node.data, firstIndex + idx, parentData, tgtComponent, callback);
-                if (tmp) ans.push(tmp);
+            sourceNode.some((node, idx) => {
+                const result = makeRelRowNode(node.data, firstIndex + idx, parentData, tgtComponent);
+                if (result.success) ans.push(result.list);
+                else {
+                    callback && callback({ header: result });
+                    ans = [];
+                    return true;
+                }
             });
         } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
-            rowNodeData = makeRelRowNode(sourceNode.data, firstIndex, parentData, tgtComponent, callback);
-            if (rowNodeData) ans.push(rowNodeData);
+            const result = makeRelRowNode(sourceNode.data, firstIndex, parentData, tgtComponent);
+            if (result.success) ans.push(result.list);
+            else callback && callback({ header: result });
         }
 
         return ans;
@@ -277,29 +252,29 @@ function* deskingDragStop({ payload }) {
         appendNodes = rd(1);
     } else {
         // 2) 데스킹 기사가 있는 ag-grid에 기사를 추가할 때
-        const targetRow = target.api.getDisplayedRowAtIndex(overIndex).data;
-        if (!targetRow.rel) {
+        const targetRowData = target.api.getDisplayedRowAtIndex(overIndex).data;
+        if (!targetRowData.rel) {
             // 2-1) hover된 row가 주기사 => 관련기사 추가인가? => 체크된 row에 targetRow가 있는지 확인한다
             const selectedNodes = target.api.getSelectedNodes();
             selectedNodes.forEach((s) => {
-                if (s.data.totalId === targetRow.totalId) addRelArt = true;
+                if (s.data.totalId === targetRowData.totalId) addRelArt = true;
             });
 
             if (!addRelArt) {
                 // 주기사 추가
-                appendNodes = rd(overIndex + 2);
+                appendNodes = rd(targetRowData.contentOrd + 1);
             } else {
                 // 관련기사 추가 (주기사의 원래 관련기사의 개수를 찾아서 맨 마지막 index로 셋팅)
-                const firstIndex = !targetRow.relSeqs ? 1 : targetRow.relSeqs.length + 1;
-                appendNodes = rrd(firstIndex, targetRow);
+                const firstIndex = !targetRowData.relSeqs ? 1 : targetRowData.relSeqs.length + 1;
+                appendNodes = rrd(firstIndex, targetRowData);
             }
         } else {
             // 2-2) hover된 row가 관련기사 => 주기사를 찾아서 체크된 row인지 확인한다
-            const parentRow = target.api.getRowNode(targetRow.parentTotalId);
+            const parentRow = target.api.getRowNode(targetRowData.parentTotalId);
 
             if (parentRow.isSelected()) {
                 // 관련기사 추가 (타겟의 relOrd의 밑으로)
-                const firstIndex = targetRow.relOrd + 1;
+                const firstIndex = targetRowData.relOrd + 1;
                 appendNodes = rrd(firstIndex, parentRow.data);
             } else {
                 // 주기사 추가 (parentRow의 밑으로)

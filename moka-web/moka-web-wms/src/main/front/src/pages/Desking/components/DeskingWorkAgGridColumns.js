@@ -1,6 +1,3 @@
-import React from 'react';
-import DeskingEditorRenderer from './DeskingEditorRenderer';
-
 const cellClassRules = {
     'ag-rel-cell': (params) => params.data.rel === true,
     'ag-edit-cell': (params) => params.colDef.editable,
@@ -52,7 +49,7 @@ export const columnDefs = [
         colSpan: (params) => {
             return params.data.rel ? 4 : 0;
         },
-        cellRendererFramework: (params) => <DeskingEditorRenderer {...params} />,
+        cellRenderer: 'editor',
         cellClassRules: cellClassRules,
         cellStyle: { fontSize: '12px' },
         suppressKeyboardEvent: suppressKeyboardEvent,
@@ -75,7 +72,7 @@ export const columnDefs = [
         field: 'title',
         flex: 1,
         autoHeight: true,
-        cellRendererFramework: (params) => <DeskingEditorRenderer {...params} />,
+        cellRenderer: 'editor',
         cellClassRules: cellClassRules,
         suppressKeyboardEvent: suppressKeyboardEvent,
     },

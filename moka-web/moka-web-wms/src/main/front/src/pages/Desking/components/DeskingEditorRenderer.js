@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import clsx from 'clsx';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
@@ -8,12 +8,22 @@ import toast from '@utils/toastUtil';
 /**
  * 데스킹 워크의 타이틀 노출 + 에디터 + 제목 수정 + 삭제 기능이 모여있는 컴포넌트
  */
-const DeskingEditorRenderer = (params) => {
+const DeskingEditorRenderer = forwardRef((params, ref) => {
     const { data } = params;
 
     // state
     const [editMode, setEditMode] = useState(false);
     const [editValue, setEditValue] = useState('');
+
+    useImperativeHandle(ref, () => ({
+        refresh: (params) => {
+            if (params.data.rel) {
+                return params.data.relTitle !== data.relTitle;
+            } else {
+                return params.data.title !== data.title;
+            }
+        },
+    }));
 
     /**
      * 제목수정/저장 버튼
@@ -25,9 +35,8 @@ const DeskingEditorRenderer = (params) => {
                 data.onSave(
                     {
                         ...data,
-                        // title: !data.rel ? editValue : '',
-                        // relTitle: data.rel ? editValue : '',
-                        title: editValue,
+                        title: !data.rel ? editValue : '',
+                        relTitle: data.rel ? editValue : '',
                         onRowClicked: undefined,
                         onSave: undefined,
                         onDelete: undefined,
@@ -80,7 +89,7 @@ const DeskingEditorRenderer = (params) => {
     if (data.title !== '' && data.rel) return null;
 
     return (
-        <div className="d-flex h-100 align-items-center desking-ag-grid-editor">
+        <div ref={ref} className="d-flex h-100 align-items-center desking-ag-grid-editor">
             <OverlayTrigger overlay={<Tooltip id={data.totalId}>{editValue}</Tooltip>}>
                 <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: data.rel ? 245 : 173 }}>
                     {editValue}
@@ -99,6 +108,6 @@ const DeskingEditorRenderer = (params) => {
             </div>
         </div>
     );
-};
+});
 
 export default DeskingEditorRenderer;

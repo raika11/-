@@ -4,10 +4,13 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
+import { getRow } from '@utils/agGridUtil';
 import { GET_ARTICLE_LIST, getArticleList, changeSearchOption } from '@store/article';
 import columnDefs from './ArticleDeskAgGridColums';
 import GroupNumberRenderer from './GroupNumberRenderer';
 import ChangeArtTitleModal from '../modals/ChangeArtTitleModal';
+
+const findWork = (node) => (node && node.classList.contains('component-work') ? node : node.parentElement ? findWork(node.parentElement) : null);
 
 /**
  * 기사관리 ag-grid 컴포넌트 (페이지편집)
@@ -102,17 +105,56 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
             if (Array.isArray(dropTargetAgGrid)) {
                 // 타겟이 리스트인 경우
                 dropTargetAgGrid.forEach((targetGrid, agGridIndex) => {
-                    const bodyElement = targetGrid.api.gridOptionsWrapper.layoutElements[2]; // .ag-body-viewport
+                    const workElement = findWork(targetGrid.api.gridOptionsWrapper.layoutElements[0]); // .component-work
+                    let hoverIdx = -1;
+                    let hoverRow = null;
 
                     const dropZone = {
-                        getContainer: () => bodyElement,
-                        onDragEnter: () => bodyElement.appendChild(loader),
-                        onDragLeave: () => bodyElement.removeChild(loader),
+                        getContainer: () => workElement,
+                        onDragEnter: () => workElement.appendChild(loader),
+                        onDragLeave: () => workElement.removeChild(loader),
+                        onDragging: (source) => {
+                            let tmpRow = getRow(source.event);
+
+                            if (tmpRow) {
+                                let tmpIdx = tmpRow.getAttribute('row-index');
+
+                                if (hoverIdx !== tmpIdx) {
+                                    const selected = targetGrid.api.getSelectedRows();
+
+                                    if (selected.length < 1) {
+                                        // 주기사만
+                                        if (!tmpRow.classList.contains('ag-rel-row')) {
+                                            console.log(tmpIdx);
+                                            if (hoverRow) hoverRow.classList.remove('hover');
+                                            tmpRow.classList.add('hover');
+                                            hoverIdx = tmpIdx;
+                                            hoverRow = tmpRow;
+                                        }
+                                    } else {
+                                        // 관련기사만
+                                        if (tmpRow.classList.contains('ag-rel-row')) {
+                                            console.log(tmpIdx);
+                                            if (hoverRow) hoverRow.classList.remove('hover');
+                                            tmpRow.classList.add('hover');
+                                            hoverIdx = tmpIdx;
+                                            hoverRow = tmpRow;
+                                        }
+                                    }
+                                }
+                            } else {
+                                hoverIdx = -1;
+                                if (hoverRow) {
+                                    hoverRow.classList.remove('hover');
+                                    hoverRow = null;
+                                }
+                            }
+                        },
                         onDragStop: (source) => {
                             if (onDragStop) {
                                 onDragStop(source, targetGrid, agGridIndex);
                             }
-                            bodyElement.removeChild(loader);
+                            workElement.removeChild(loader);
                         },
                     };
 
@@ -121,16 +163,17 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                 });
             } else {
                 // 타겟이 1개인 경우
-                const bodyElement = dropTargetAgGrid.api.gridOptionsWrapper.layoutElements[2];
+                const workElement = findWork(dropTargetAgGrid.api.gridOptionsWrapper.layoutElements[0]); // .component-work
+
                 const dropZone = {
-                    getContainer: () => bodyElement,
-                    onDragEnter: () => bodyElement.appendChild(loader),
-                    onDragLeave: () => bodyElement.removeChild(loader),
+                    getContainer: () => workElement,
+                    onDragEnter: () => workElement.appendChild(loader),
+                    onDragLeave: () => workElement.removeChild(loader),
                     onDragStop: (source) => {
                         if (onDragStop) {
                             onDragStop(source, dropTargetAgGrid);
                         }
-                        bodyElement.removeChild(loader);
+                        workElement.removeChild(loader);
                     },
                 };
 

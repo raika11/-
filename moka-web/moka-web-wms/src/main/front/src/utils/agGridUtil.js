@@ -1,45 +1,11 @@
-import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
-
-export function agGrids() {}
-agGrids.prototype.grids = [];
-agGrids.prototype.rgrids = { main: {}, rel: {} }; // 관련기사 다이얼로그
-agGrids.prototype.change = function (idx, instance, etc) {
-    if (etc) {
-        const { target, field } = etc;
-        if (target === 'relationArticle') {
-            this.rgrids[field] = instance;
-        }
-    } else {
-        this.grids[idx] = instance;
-    }
-};
-
 /**
- * 편집제목 셀 만들기
- * @param {string} title 기사제목
- * @param {string} distYmdt 배부시간
- * @param {number} relCount 관련기사 건수
- * @param {number} pvCount 편집기사의 PV
- * @param {number} uvCount 편집기사의 UV
+ * 마우스 위치에 따른 row 찾는 함수
+ * @param {object} event 드래그 이벤트
  */
-export const makeTitleEx = (title, distYmdt, relCount, pvCount, uvCount) => {
-    let titleStr = title;
-    const distYmdtStr = `배부 ${moment(distYmdt, DB_DATEFORMAT).format('YYYYMMDD hh:mm')}`;
-    const relCountStr = relCount && relCount > 0 ? ` 관련기사: ${relCount}건` : '';
-    const pvUvCountStr = ` PV(${pvCount}) UV(${uvCount})`;
-    const strArr = [
-        // eslint-disable-next-line max-len
-        '<p style="font-size:14px; margin: 0; text-overflow: ellipsis; width: 100%; white-space: nowrap; overflow: hidden;">',
-        titleStr,
-        '</p>',
-        '<p style="font-size:10px; color:rgba(0, 0, 0, 0.65); margin: 0;">',
-        distYmdtStr,
-        relCountStr,
-        pvUvCountStr,
-        '</p>',
-    ];
-    return strArr.join('');
+export const getRow = (event) => {
+    const elements = document.elementsFromPoint(event.clientX, event.clientY);
+    const agGridRow = elements.find((r) => r.classList.contains('ag-row'));
+    return agGridRow;
 };
 
 /**
@@ -47,11 +13,72 @@ export const makeTitleEx = (title, distYmdt, relCount, pvCount, uvCount) => {
  * @param {object} event 드래그 이벤트
  */
 export const getRowIndex = (event) => {
-    const elements = document.elementsFromPoint(event.clientX, event.clientY);
-    const agGridRow = elements.find((r) => r.classList.contains('ag-row'));
+    const agGridRow = getRow(event);
     if (agGridRow) {
         const index = agGridRow.getAttribute('row-index');
         return Number(index);
     }
     return -1;
+};
+
+const findWork = (node) => (node && node.classList.contains('component-work') ? node : node.parentElement ? findWork(node.parentElement) : null);
+
+export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) => {
+    let loader = document.createElement('div');
+    loader.classList.add('is-over');
+
+    const workElement = findWork(targetGrid.api.gridOptionsWrapper.layoutElements[0]); // .component-work
+    let hoverIdx = -1;
+    let hoverRow = null;
+
+    const dropZone = {
+        getContainer: () => workElement,
+        onDragEnter: () => workElement.appendChild(loader),
+        onDragLeave: () => workElement.removeChild(loader),
+        onDragging: (source) => {
+            let tmpRow = getRow(source.event);
+
+            if (tmpRow) {
+                let tmpIdx = tmpRow.getAttribute('row-index');
+
+                if (hoverIdx !== tmpIdx) {
+                    const selected = targetGrid.api.getSelectedRows();
+
+                    if (selected.length < 1) {
+                        // 주기사만
+                        if (!tmpRow.classList.contains('ag-rel-row')) {
+                            console.log(tmpIdx);
+                            if (hoverRow) hoverRow.classList.remove('hover');
+                            tmpRow.classList.add('hover');
+                            hoverIdx = tmpIdx;
+                            hoverRow = tmpRow;
+                        }
+                    } else {
+                        // 관련기사만
+                        if (tmpRow.classList.contains('ag-rel-row')) {
+                            console.log(tmpIdx);
+                            if (hoverRow) hoverRow.classList.remove('hover');
+                            tmpRow.classList.add('hover');
+                            hoverIdx = tmpIdx;
+                            hoverRow = tmpRow;
+                        }
+                    }
+                }
+            } else {
+                hoverIdx = -1;
+                if (hoverRow) {
+                    hoverRow.classList.remove('hover');
+                    hoverRow = null;
+                }
+            }
+        },
+        onDragStop: (source) => {
+            if (onDragStop) {
+                onDragStop(source, targetGrid, currentIndex);
+            }
+            workElement.removeChild(loader);
+        },
+    };
+
+    return dropZone;
 };

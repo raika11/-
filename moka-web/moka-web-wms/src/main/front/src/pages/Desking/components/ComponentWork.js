@@ -85,7 +85,7 @@ const ComponentWork = (props) => {
 
     return (
         <React.Fragment>
-            <div id={`agGrid-${component.seq}`}>
+            <div className="component-work" id={`agGrid-${component.seq}`}>
                 <ButtonGroup
                     component={component}
                     agGridIndex={agGridIndex}

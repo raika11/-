@@ -68,6 +68,9 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "TEMPLATE_WIDTH")
     private Integer templateWidth;
 
+    @Column(name = "TEMPLATE_GROUP")
+    private String templateGroup;
+
     @Column(name = "DATASET_SEQ")
     private Long datasetSeq;
 

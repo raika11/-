@@ -196,6 +196,12 @@ function* deskingDragStop({ payload }) {
     }
 
     sourceNode = source.api.getSelectedNodes().length > 0 ? source.api.getSelectedNodes() : source.node;
+    if (Array.isArray(sourceNode)) {
+        // sourceNode 정렬 (childIndex 순으로)
+        sourceNode = sourceNode.sort(function (a, b) {
+            return a.childIndex - b.childIndex;
+        });
+    }
 
     // 주기사 추가하는 함수
     const rd = (insertIndex) => {
@@ -205,8 +211,10 @@ function* deskingDragStop({ payload }) {
             // 기사 여러개 이동
             sourceNode.some((node, idx) => {
                 const result = makeRowNode(node.data, insertIndex + idx, tgtComponent);
-                if (result.success) ans.push(result.list);
-                else {
+                if (result.success) {
+                    ans.push(result.list);
+                    return false;
+                } else {
                     callback && callback({ header: result });
                     ans = [];
                     return true;
@@ -230,8 +238,10 @@ function* deskingDragStop({ payload }) {
             // 기사 여러개 이동
             sourceNode.some((node, idx) => {
                 const result = makeRelRowNode(node.data, firstIndex + idx, parentData, tgtComponent);
-                if (result.success) ans.push(result.list);
-                else {
+                if (result.success) {
+                    ans.push(result.list);
+                    return false;
+                } else {
                     callback && callback({ header: result });
                     ans = [];
                     return true;

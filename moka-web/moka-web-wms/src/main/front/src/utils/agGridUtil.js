@@ -27,7 +27,7 @@ const findNextMainRow = (node) => {
     let result = { type: 'none', node: null };
     if (node) {
         const friend = [...node.parentNode.childNodes]
-            .filter((a) => a.getAttribute('row-index') > node.getAttribute('row-index'))
+            .filter((a) => Number(a.getAttribute('row-index')) > Number(node.getAttribute('row-index')))
             .sort(function (a, b) {
                 const aIdx = Number(a.getAttribute('row-index'));
                 const bIdx = Number(b.getAttribute('row-index'));
@@ -52,7 +52,7 @@ const findPreviousMainRow = (node) => {
     let result = { type: 'none', node: null };
     if (node) {
         const friend = [...node.parentNode.childNodes]
-            .filter((a) => a.getAttribute('row-index') < node.getAttribute('row-index'))
+            .filter((a) => Number(a.getAttribute('row-index')) < Number(node.getAttribute('row-index')))
             .sort(function (a, b) {
                 const aIdx = Number(a.getAttribute('row-index'));
                 const bIdx = Number(b.getAttribute('row-index'));

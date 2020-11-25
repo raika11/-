@@ -9,6 +9,7 @@
   display: block;
   content: '';
   transition: $transition-appearance-fast;
+  user-select: none;
 }
 
 .hamburger {

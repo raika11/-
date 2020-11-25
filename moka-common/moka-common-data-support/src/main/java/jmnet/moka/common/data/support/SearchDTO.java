@@ -37,12 +37,12 @@ public class SearchDTO implements Serializable {
     /**
      * 기본 페이지 수
      */
-    final static int DEFAULT_PAGE = 0;
+    public final static int DEFAULT_PAGE = 0;
 
     /**
      * 기본 페이지당 조회 건수
      */
-    final static int DEFAULT_SIZE = 30;
+    public final static int DEFAULT_SIZE = 30;
 
     /**
      * 페이지

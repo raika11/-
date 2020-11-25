@@ -87,6 +87,7 @@ const makeHoverBox = () => {
  */
 export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) => {
     const workElement = findWork(targetGrid.api.gridOptionsWrapper.layoutElements[0]); // .component-work
+    if (!workElement) return null;
     if (workElement.classList.contains('disabled')) return null;
 
     let next = { idx: -1, node: null };

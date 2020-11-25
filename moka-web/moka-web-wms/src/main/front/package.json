@@ -10,7 +10,7 @@
         "watch:css": "chokidar \"src/assets/styles/**/*\" -c \"yarn build:css\"",
         "watch:js": "node scripts/start.js",
         "start": "cross-env NODE_ENV=development API_SERVER=http://localhost:8100 npm-run-all -p build:css watch:*",
-        "start-stg": "cross-env NODE_ENV=development API_SERVER=http://stg-backoffice.joongang.co.kr npm-run-all -p build:css watch:*",
+        "start-stg": "cross-env NODE_ENV=development API_SERVER=http://stg-backoffice.joongang.co.kr npm-run-all -p sass:compile watch:*",
         "build": "npm-run-all -p build:*",
         "build-prod": "npm-run-all -p build:*",
         "test": "node scripts/test.js",

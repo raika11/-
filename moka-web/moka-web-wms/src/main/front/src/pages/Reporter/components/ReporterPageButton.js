@@ -49,7 +49,7 @@ const ReporterPageButton = (props) => {
     return (
         <>
             <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                <Button variant="outline-neutral" size="sm" onClick={handleClick} disabled={btnDisabled}>
+                <Button variant="outline-table-btn" size="sm" onClick={handleClick} disabled={btnDisabled}>
                     기자 페이지
                 </Button>
             </div>

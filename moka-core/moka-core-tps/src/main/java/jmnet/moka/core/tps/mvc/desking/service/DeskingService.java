@@ -238,17 +238,17 @@ public interface DeskingService {
      */
     public DeskingHist updateDeskingHist(DeskingHist deskingHist);
 
-    /**
-     * work 컴포넌트의 정렬순서 변경
-     *
-     * @param datasetSeq   데이타셋순
-     * @param deskingWorks 편집기사목록
-     * @param creator      작업자
-     * @param search       편집기사목록 조회용 검색조건
-     * @return Work편집기사목록
-     */
-    public List<DeskingWorkVO> updateDeskingWorkPriority(Long datasetSeq, List<DeskingWorkVO> deskingWorks, String creator,
-            DeskingWorkSearchDTO search);
+    //    /**
+    //     * work 컴포넌트의 정렬순서 변경
+    //     *
+    //     * @param datasetSeq   데이타셋순
+    //     * @param deskingWorks 편집기사목록
+    //     * @param creator      작업자
+    //     * @param search       편집기사목록 조회용 검색조건
+    //     * @return Work편집기사목록
+    //     */
+    //    public List<DeskingWorkVO> updateDeskingWorkPriority(Long datasetSeq, List<DeskingWorkVO> deskingWorks, String creator,
+    //            DeskingWorkSearchDTO search);
 
     /**
      * <pre>

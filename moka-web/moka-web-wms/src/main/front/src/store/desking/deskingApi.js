@@ -63,6 +63,19 @@ export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
         });
 };
 
+// 더미기사추가 => payload
+export const postDeskingWork = ({ componentWorkSeq, datasetSeq, deskingWork }) => {
+    return instance
+        .post(`/api/desking/components/${componentWorkSeq}/contents${datasetSeq}`, objectToFormData(deskingWork), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
 // 컴포넌트 워크의 편집기사 이동 => payload
 export const moveDeskingWorkList = ({ componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list }) => {
     return instance

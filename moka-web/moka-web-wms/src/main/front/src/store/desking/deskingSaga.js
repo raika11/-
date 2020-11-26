@@ -351,7 +351,7 @@ const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST,
 /**
  * 컴포넌트워크 간의 데스킹기사 이동 => 성공 결과 ???
  */
-const moveDeskingWorkList = createDeskingRequestSaga(act.MOVE_DESKING_WORK_LIST, api.moveDeskingWorkList);
+const moveDeskingWorkList = createDeskingRequestSaga(act.MOVE_DESKING_WORK_LIST, api.moveDeskingWorkList, 'work');
 // function* moveDeskingWorkList({ payload }) {
 //     const { componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list, callback } = payload;
 //     const ACTION = act.MOVE_DESKING_WORK_LIST;
@@ -390,6 +390,11 @@ const moveDeskingWorkList = createDeskingRequestSaga(act.MOVE_DESKING_WORK_LIST,
 // }
 
 /**
+ * 더미기사 추가
+ */
+const postDeskingWork = createDeskingRequestSaga(act.POST_DESKING_WORK, api.postDeskingWork, 'work');
+
+/**
  * Work컴포넌트 순번수정
  */
 // const putDeskingWorkPriority = createDeskingRequestSaga(act.PUT_DESKING_WORK_PRIORITY, api.putDeskingWorkPriority);
@@ -421,9 +426,9 @@ export default function* saga() {
     yield takeLatest(act.PUT_DESKING_WORK, putDeskingWork);
     yield takeLatest(act.POST_DESKING_WORK_LIST, postDeskingWorkList);
     yield takeLatest(act.MOVE_DESKING_WORK_LIST, moveDeskingWorkList);
+    yield takeLatest(act.POST_DESKING_WORK, postDeskingWork);
 
     // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPriority);
-    // yield takeLatest(act.POST_DESKING_WORK, postDeskingWorkSaga);
     yield takeLatest(act.DELETE_DESKING_WORK_LIST, deleteDeskingWorkList);
 
     // drag 관련

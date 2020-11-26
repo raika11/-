@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import UrlCopyModal from '../modals/UrlCopyModal';
@@ -21,7 +21,7 @@ const defaultProps = {
  * 디지털 스페셜 리스트 테이블의 URL 복사 버튼
  */
 const UrlCopyButton = (props) => {
-    const { data, onClick } = props;
+    // const { data, onClick } = props;
     const [showModal, setShowModal] = useState(false);
 
     // const handleClick = useCallback(
@@ -40,7 +40,7 @@ const UrlCopyButton = (props) => {
     return (
         <>
             <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                <Button variant="outline-neutral" size="sm" onClick={() => setShowModal(true)}>
+                <Button variant="outline-table-btn" size="sm" onClick={() => setShowModal(true)}>
                     URL 복사
                 </Button>
             </div>

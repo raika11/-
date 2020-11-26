@@ -57,12 +57,12 @@ public class DeskingWorkDTO implements Serializable {
     /**
      * 서비스기사아이디
      */
-    private Long totalId;
+    private String contentId;
 
     /**
      * 부모 서비스기사아이디
      */
-    private Long parentTotalId;
+    private String parentContentId;
 
     /**
      * 콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상

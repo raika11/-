@@ -129,8 +129,8 @@ public class ArticleSource extends BaseAudit {
     /**
      * CP FTP 로컬경로
      */
-    @Column(name = "CP_FTP_PATH")
-    private String cpFtpPath;
+    @Column(name = "CP_XML_PATH")
+    private String cpXmlPath;
 
     /**
      * CP등록IP주소
@@ -153,6 +153,6 @@ public class ArticleSource extends BaseAudit {
     /**
      * 이미지수신여부
      */
-    @Column(name = "IMG_RECEIVE_YN", columnDefinition = "char")
-    private String imgReceiveYn = MokaConstants.NO;
+    @Column(name = "RECEIVE_IMG_YN", columnDefinition = "char")
+    private String receiveImgYn = MokaConstants.NO;
 }

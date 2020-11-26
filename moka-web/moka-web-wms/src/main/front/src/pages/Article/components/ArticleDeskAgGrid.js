@@ -119,14 +119,6 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dropTargetAgGrid, gridInstance, onDragStop]);
 
-    useEffect(() => {
-        if (gridInstance) {
-            gridInstance.api.redrawRows();
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rowData]);
-
     return (
         <React.Fragment>
             <MokaTable

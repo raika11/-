@@ -1,16 +1,12 @@
 package jmnet.moka.core.tps.mvc.desking.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
 import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,20 +14,16 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
-import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Nationalized;
 
 /**
  * 데스킹 히스토리 DTO
- * 
- * @author jeon0525
  *
+ * @author jeon0525
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -67,12 +59,12 @@ public class DeskingHistDTO implements Serializable {
     /**
      * 서비스기사아이디
      */
-    private Long totalId;
+    private String contentId;
 
     /**
      * 부모 서비스기사아이디
      */
-    private Long parentTotalId;
+    private String parentContentId;
 
     /**
      * 콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상

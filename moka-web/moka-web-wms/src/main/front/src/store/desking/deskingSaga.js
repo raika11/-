@@ -68,16 +68,17 @@ const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPO
  * 데스킹 워크의 관련기사 rowNode 생성
  */
 const makeRelRowNode = (data, relOrd, parentData, component) => {
-    if (!parentData || parentData.totalId === null) {
+    if (!parentData || parentData.contentId === null) {
         return { success: false, message: '올바른 주기사를 선택하세요' };
     }
 
-    const existRow = parentData.relSeqs ? parentData.relSeqs.filter((relSeq) => relSeq === data.totalId) : null;
+    const existRow = parentData.relSeqs ? parentData.relSeqs.filter((relSeq) => relSeq === data.contentId) : null;
     if (existRow && existRow.length > 0) {
         return { success: false, message: '이미 존재하는 기사입니다' };
     }
 
     let appendData = null;
+    let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
 
     if (data.gridType === 'ARTICLE') {
         appendData = {
@@ -85,8 +86,8 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
             seq: null,
             deskingSeq: null,
             datasetSeq: component.datasetSeq,
-            totalId: data.totalId,
-            parentTotalId: parentData.totalId,
+            contentId: String(data.totalId),
+            parentContentId: parentData.contentId,
             contentType: data.contentType,
             artType: data.artType,
             sourceCode: data.sourceCode,
@@ -94,7 +95,7 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
             relOrd,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
-            title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,
+            title,
             subTitle: data.artSubTitle,
             nameplate: null,
             titlePrefix: null,
@@ -116,16 +117,17 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
  * 데스킹 워크의 rowNode 생성
  */
 const makeRowNode = (data, contentOrd, component) => {
-    if (!data || data.totalId === null) {
+    if (!data || data.contentId === null) {
         return { success: false, message: '올바르지 않은 기사입니다' };
     }
 
-    const existRow = component.deskingWorks.filter((desking) => desking.totalId === data.totalId);
+    const existRow = component.deskingWorks.filter((desking) => desking.contentId === data.contentId);
     if (existRow && existRow.length > 0) {
         return { success: false, message: '이미 존재하는 기사입니다' };
     }
 
     let appendData = null;
+    let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
 
     if (data.gridType === 'ARTICLE') {
         appendData = {
@@ -133,8 +135,8 @@ const makeRowNode = (data, contentOrd, component) => {
             seq: null,
             deskingSeq: null,
             datasetSeq: component.datasetSeq,
-            totalId: data.totalId,
-            parentTotalId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
+            contentId: String(data.totalId),
+            parentContentId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
             contentType: data.contentType,
             artType: data.artType,
             sourceCode: data.sourceCode,
@@ -142,7 +144,7 @@ const makeRowNode = (data, contentOrd, component) => {
             relOrd: 1,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
-            title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,
+            title,
             // mobTitle: data.artEditMobTitle == null ? data.artTitle : data.artEditTitle,
             subTitle: data.artSubTitle,
             nameplate: null,
@@ -268,7 +270,7 @@ function* deskingDragStop({ payload }) {
             // 2-1) hover된 row가 주기사 => 관련기사 추가인가? => 체크된 row에 targetRow가 있는지 확인한다
             const selectedNodes = target.api.getSelectedNodes();
             selectedNodes.forEach((s) => {
-                if (s.data.totalId === targetRowData.totalId) addRelArt = true;
+                if (s.data.contentId === targetRowData.contentId) addRelArt = true;
             });
 
             if (!addRelArt) {
@@ -281,7 +283,7 @@ function* deskingDragStop({ payload }) {
             }
         } else {
             // 2-2) hover된 row가 관련기사 => 주기사를 찾아서 체크된 row인지 확인한다
-            const parentRow = target.api.getRowNode(targetRowData.parentTotalId);
+            const parentRow = target.api.getRowNode(targetRowData.parentContentId);
 
             if (parentRow.isSelected()) {
                 // 관련기사 추가 (타겟의 relOrd의 밑으로)
@@ -351,42 +353,53 @@ const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST,
 /**
  * 컴포넌트워크 간의 데스킹기사 이동 => 성공 결과 ???
  */
-function* moveDeskingWorkList({ payload }) {
-    const { componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list, callback } = payload;
-    const ACTION = act.MOVE_DESKING_WORK_LIST;
-    let response, callbackData;
+const moveDeskingWorkList = createDeskingRequestSaga(act.MOVE_DESKING_WORK_LIST, api.moveDeskingWorkList, 'work');
+// function* moveDeskingWorkList({ payload }) {
+//     const { componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list, callback } = payload;
+//     const ACTION = act.MOVE_DESKING_WORK_LIST;
+//     let response, callbackData;
 
-    yield put(startLoading(ACTION));
-    try {
-        // 데스킹기사 이동 api콜
-        response = yield call(api.moveDeskingWorkList, { componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list });
-        callbackData = response.data;
+//     yield put(startLoading(ACTION));
+//     try {
+//         // 데스킹기사 이동 api콜
+//         response = yield call(api.moveDeskingWorkList, { componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list });
+//         callbackData = response.data;
 
-        if (response.data.header.success) {
-            // 컴포넌트 워크 조회 => 이해가 안됨. 컴포넌트 워크가 2개가 바꼈으니까 리스트를 다시 조회해야하는게 아닌지????
-            yield put({
-                type: act.GET_COMPONENT_WORK,
-                payload: { componentWorkSeq: srcComponentWorkSeq },
-            });
-        } else {
-            yield put({
-                type: act.COMPONENT_WORK_FAILURE,
-                payload: response.data,
-            });
-        }
-    } catch (e) {
-        callbackData = errorResponse(e);
-        yield put({
-            type: act.COMPONENT_WORK_FAILURE,
-            payload: callbackData,
-        });
-    }
+//         if (response.data.header.success) {
+//             // 컴포넌트 워크 조회 => 이해가 안됨. 컴포넌트 워크가 2개가 바꼈으니까 리스트를 다시 조회해야하는게 아닌지????
+//             yield put({
+//                 type: act.GET_COMPONENT_WORK,
+//                 payload: { componentWorkSeq: srcComponentWorkSeq },
+//             });
+//         } else {
+//             yield put({
+//                 type: act.COMPONENT_WORK_FAILURE,
+//                 payload: response.data,
+//             });
+//         }
+//     } catch (e) {
+//         callbackData = errorResponse(e);
+//         yield put({
+//             type: act.COMPONENT_WORK_FAILURE,
+//             payload: callbackData,
+//         });
+//     }
 
-    if (typeof callback === 'function') {
-        yield call(callback, callbackData);
-    }
-    yield put(finishLoading(ACTION));
-}
+//     if (typeof callback === 'function') {
+//         yield call(callback, callbackData);
+//     }
+//     yield put(finishLoading(ACTION));
+// }
+
+/**
+ * 공백 기사 추가
+ */
+const postDeskingWork = createDeskingRequestSaga(act.POST_DESKING_WORK, api.postDeskingWork, 'work');
+
+/**
+ * Work컴포넌트 순번수정
+ */
+// const putDeskingWorkPriority = createDeskingRequestSaga(act.PUT_DESKING_WORK_PRIORITY, api.putDeskingWorkPriority);
 
 /**
  * 컴포넌트워크의 편집기사 1개 수정 => 결과로 컴포넌트워크가 리턴됨
@@ -415,10 +428,9 @@ export default function* saga() {
     yield takeLatest(act.PUT_DESKING_WORK, putDeskingWork);
     yield takeLatest(act.POST_DESKING_WORK_LIST, postDeskingWorkList);
     yield takeLatest(act.MOVE_DESKING_WORK_LIST, moveDeskingWorkList);
+    yield takeLatest(act.POST_DESKING_WORK, postDeskingWork);
 
-    // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPrioritySaga);
-    // yield takeLatest(act.POST_DESKING_WORK, postDeskingWorkSaga);
-    // yield takeLatest(act.PUT_DESKING_REL_WORKS, putDeskingRelWorksSaga);
+    // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPriority);
     yield takeLatest(act.DELETE_DESKING_WORK_LIST, deleteDeskingWorkList);
 
     // drag 관련

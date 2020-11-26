@@ -35,6 +35,10 @@ const propTypes = {
      * 템플릿 사이즈
      */
     templateWidth: PropTypes.number,
+    /**
+     * 목록 어떻게 보일지 설정
+     */
+    listType: PropTypes.string,
 };
 const defaultProps = {};
 
@@ -43,7 +47,7 @@ const defaultProps = {};
  * (템플릿 스토어 사용)
  */
 const TemplateListModal = (props) => {
-    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, templateGroup, templateWidth } = props;
+    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, templateGroup, templateWidth, listType: listTypeProp } = props;
     const dispatch = useDispatch();
 
     const { latestDomainId, domainList, tpZoneRows, tpSizeRows, search, total, list, error, loading, UPLOAD_PATH_URL } = useSelector((store) => ({
@@ -60,7 +64,7 @@ const TemplateListModal = (props) => {
     }));
 
     // state
-    const [listType, setListType] = useState('list');
+    const [listType, setListType] = useState(listTypeProp || 'list');
     const [rowData, setRowData] = useState([]);
     const [selected, setSelected] = useState('');
     const [selectedTemplate, setSelectedTemplate] = useState({});
@@ -212,7 +216,6 @@ const TemplateListModal = (props) => {
     useEffect(() => {
         if (show) {
             if (templateGroup || templateWidth) {
-                setListType('thumbnail');
                 let ts = {
                     ...initialState.search,
                     domainId: latestDomainId,
@@ -261,10 +264,12 @@ const TemplateListModal = (props) => {
     }, [dispatch, search.domainId]);
 
     useEffect(() => {
-        if (tpSizeRows.length < 1) dispatch(getTpSize());
-        if (tpZoneRows.length < 1) dispatch(getTpZone());
+        if (show) {
+            if (tpSizeRows.length < 1) dispatch(getTpSize());
+            if (tpZoneRows.length < 1) dispatch(getTpZone());
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [show]);
 
     return (
         <MokaModal

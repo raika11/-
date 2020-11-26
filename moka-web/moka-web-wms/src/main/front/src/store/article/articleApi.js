@@ -9,3 +9,10 @@ export const getArticleList = ({ search }) => {
         throw err;
     });
 };
+
+// 기사 편집제목 수정
+export const putArticleEditTitle = ({ totalId, title, mobTitle }) => {
+    return instance.put(`/api/articles/${totalId}/edit-title?${qs.stringify({ title, mobTitle })}`).catch((err) => {
+        throw err;
+    });
+};

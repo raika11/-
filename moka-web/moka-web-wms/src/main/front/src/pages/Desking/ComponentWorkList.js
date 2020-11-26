@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard } from '@components';
-import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
+import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT, API_BASE_URL } from '@/constants';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
 import ComponentWork from './components/ComponentWork';
 
@@ -19,10 +19,9 @@ const ComponentWorkList = (props) => {
     }));
 
     const handleClickPreview = () => {
-        // window.open(
-        //     `${API_BASE_URL}/preview/desking/page?pageSeq=${pageSeq}&editionSeq=0`,
-        //     '전체미리보기'
-        // );
+        if (area.page.pageSeq) {
+            window.open(`${API_BASE_URL}/preview/desking/page?pageSeq=${area.page.pageSeq}`, '페이지미리보기');
+        }
     };
 
     return (

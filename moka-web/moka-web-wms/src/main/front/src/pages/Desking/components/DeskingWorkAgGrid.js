@@ -121,7 +121,7 @@ const DeskingWorkAgGrid = (props) => {
                 }
             }
         } else {
-            if (movingData.parentTotalId === overData.parentTotalId) {
+            if (movingData.parentContentId === overData.parentContentId) {
                 // 관련기사 -> 관련기사(형제) : drag, sort
                 return 'FamillyChildToChild';
             } else {
@@ -219,7 +219,7 @@ const DeskingWorkAgGrid = (props) => {
                 immutableData
                 onGridReady={handleGridReady}
                 rowData={rowData}
-                getRowNodeId={(params) => params.totalId}
+                getRowNodeId={(params) => params.contentId}
                 columnDefs={columnDefs}
                 onRowDragEnter={handleRowDragEnter}
                 onRowDragEnd={handleRowDragEnd}

@@ -89,8 +89,8 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
     if (data.title !== '' && data.rel) return null;
 
     return (
-        <div ref={ref} className="d-flex h-100 align-items-center desking-ag-grid-editor">
-            <OverlayTrigger overlay={<Tooltip id={data.totalId}>{editValue}</Tooltip>}>
+        <div className="d-flex h-100 align-items-center desking-ag-grid-editor">
+            <OverlayTrigger overlay={<Tooltip id={data.contentId}>{editValue}</Tooltip>}>
                 <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: data.rel ? 245 : 173 }}>
                     {editValue}
                 </div>

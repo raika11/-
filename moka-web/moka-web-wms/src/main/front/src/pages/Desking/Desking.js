@@ -32,18 +32,14 @@ const Desking = ({ match }) => {
             </Helmet>
 
             {/* 데스킹 트리 */}
-            <Suspense>
-                <DeskingList />
-            </Suspense>
+            <Switch>
+                <Route path={[match.url, `${match.url}/:areaSeq`]} exact render={() => <DeskingList />} />
+            </Switch>
 
             {/* 워크 */}
-            <Switch>
-                <Route
-                    path={[match.url, `${match.url}/:areaSeq`]}
-                    exact
-                    render={() => <ComponentWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />}
-                />
-            </Switch>
+            <Suspense>
+                <ComponentWorkList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
+            </Suspense>
 
             {/* 데스킹 탭 */}
             <Suspense>

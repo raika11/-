@@ -86,7 +86,7 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
             deskingSeq: null,
             datasetSeq: component.datasetSeq,
             contentId: data.totalId,
-            parentCotentId: parentData.parentCotentId,
+            parentContentId: parentData.parentContentId,
             contentType: data.contentType,
             artType: data.artType,
             sourceCode: data.sourceCode,

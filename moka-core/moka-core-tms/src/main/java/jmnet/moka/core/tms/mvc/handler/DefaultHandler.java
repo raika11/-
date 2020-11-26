@@ -81,6 +81,10 @@ public class DefaultHandler extends AbstractHandler {
                 request.setAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
 
             } else {
+                // command일 경우 CommandController가 처리하도록 한다.
+                if ( requestPath.startsWith(MokaConstants.MERGE_COMMAND_PREFIX)) {
+                    return null;
+                }
                 // 에러페이지로 보낸다
                 itemKey = this.domainTemplateMerger.getItemKey(domainId, MokaConstants.TMS_ERROR_PAGE);
 

@@ -1,44 +1,44 @@
-import React, { useState } from 'react';
-// import { useSelector, useDispatch, shallowEqual } from 'react-redux';;
+import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
+import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaInputLabel } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
-// import toast from '@utils/toastUtil';
-// import { getCodeMgtGrp, getArtGroup, getCodeMgt, saveCodeMgt, changeCd, GET_CODE_MGT, GET_CODE_MGT_GRP, SAVE_CODE_MGT, GET_ART_GROUP } from '@store/codeMgt';
-// import { getArticleList } from '@store/article';
+import toast from '@utils/toastUtil';
+import { putArticleEditTitle, PUT_ARTICLE_EDIT_TITLE } from '@store/article';
 
 /**
  * 기사별 웹제목 / 모바일제목 수정하는 모달
  */
 const ChangeArtGroupModal = (props) => {
     const { show, onHide, artData } = props;
+    const dispatch = useDispatch();
+
+    const { loading } = useSelector((store) => ({
+        loading: store.loading[PUT_ARTICLE_EDIT_TITLE],
+    }));
 
     // state
     const [webTitle, setWebTitle] = useState('');
-    const [mTitle, setMTitle] = useState('');
+    const [mobTitle, setMobTitle] = useState('');
 
     /**
      * 저장 버튼
      */
     const handleClickSave = () => {
-        // dispatch(
-        //     saveCodeMgt({
-        //         type: 'update',
-        //         actions: [
-        //             changeCd({
-        //                 ...cd,
-        //                 cdNmEtc1: String(value),
-        //             }),
-        //         ],
-        //         callback: ({ header }) => {
-        //             if (header.success) {
-        //                 toast.success(header.message);
-        //                 dispatch(getArticleList());
-        //             } else {
-        //                 toast.warn(header.message);
-        //             }
-        //         },
-        //     }),
-        // );
+        dispatch(
+            putArticleEditTitle({
+                totalId: artData.totalId,
+                title: webTitle,
+                mobTitle: mobTitle,
+                callback: ({ header }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                    } else {
+                        toast.warn(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     /**
@@ -47,16 +47,24 @@ const ChangeArtGroupModal = (props) => {
     const handleHide = () => {
         if (onHide) onHide();
         setWebTitle('');
-        setMTitle('');
+        setMobTitle('');
     };
 
-    // useEffect(() => {
-    //     if (show) {
-    //         if (artGroupRows.length < 1) {
-    //             dispatch(getArtGroup());
-    //         }
-    //     }
-    // }, [artGroupRows.length, dispatch, show]);
+    useEffect(() => {
+        if (show) {
+            if (artData.artEditTitle && artData.artEditTitle !== '') {
+                setWebTitle(artData.artEditTitle);
+            } else if (artData.artJamTitle && artData.artJamTitle !== '') {
+                setWebTitle(artData.artJamTitle);
+            }
+
+            if (artData.artEditMobTitle && artData.artEditMobTitle !== '') {
+                setMobTitle(artData.artEditMobTitle);
+            } else if (artData.artJamMobTitle && artData.artJamMobTitle !== '') {
+                setMobTitle(artData.artJamMobTitle);
+            }
+        }
+    }, [show, artData]);
 
     return (
         <MokaModal
@@ -64,6 +72,7 @@ const ChangeArtGroupModal = (props) => {
             title={unescapeHtml(artData.artTitle || '')}
             show={show}
             size="md"
+            loading={loading}
             onHide={handleHide}
             footerClassName="d-flex justify-content-center"
             buttons={[
@@ -80,9 +89,20 @@ const ChangeArtGroupModal = (props) => {
             ]}
             centered
         >
-            <MokaInputLabel label="웹제목" className="mb-2" value={webTitle} onChange={(e) => setWebTitle(e.target.value)} />
+            <MokaInputLabel
+                as="textarea"
+                label="웹제목"
+                labelClassName={clsx('mr-2', {
+                    'color-positive': !artData.artEditTitle || artData.artEditTitle === '',
+                })}
+                className="mb-2"
+                inputClassName="resize-none"
+                value={webTitle}
+                onChange={(e) => setWebTitle(e.target.value)}
+            />
 
             <MokaInputLabel
+                as="textarea"
                 label={
                     <React.Fragment>
                         모바일
@@ -90,9 +110,13 @@ const ChangeArtGroupModal = (props) => {
                         제목
                     </React.Fragment>
                 }
+                labelClassName={clsx('mr-2', {
+                    'color-positive': !artData.artEditMobTitle || artData.artEditMobTitle === '',
+                })}
                 className="mb-0"
-                value={mTitle}
-                onChange={(e) => setMTitle(e.target.value)}
+                inputClassName="resize-none"
+                value={mobTitle}
+                onChange={(e) => setMobTitle(e.target.value)}
             />
         </MokaModal>
     );

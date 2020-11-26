@@ -27,4 +27,4 @@ export const getArticleList = createAction(GET_ARTICLE_LIST, (...actions) => act
  * 기사 편집제목 수정
  */
 export const PUT_ARTICLE_EDIT_TITLE = 'article/PUT_ARTICLE_EDIT_TITLE';
-export const putArticleEditTitle = createAction(PUT_ARTICLE_EDIT_TITLE, ({ totalId, title, mobTitle }) => ({ totalId, title, mobTitle }));
+export const putArticleEditTitle = createAction(PUT_ARTICLE_EDIT_TITLE, ({ totalId, title, mobTitle, callback }) => ({ totalId, title, mobTitle, callback }));

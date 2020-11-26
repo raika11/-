@@ -68,11 +68,11 @@ const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPO
  * 데스킹 워크의 관련기사 rowNode 생성
  */
 const makeRelRowNode = (data, relOrd, parentData, component) => {
-    if (!parentData || parentData.totalId === null) {
+    if (!parentData || parentData.contentId === null) {
         return { success: false, message: '올바른 주기사를 선택하세요' };
     }
 
-    const existRow = parentData.relSeqs ? parentData.relSeqs.filter((relSeq) => relSeq === data.totalId) : null;
+    const existRow = parentData.relSeqs ? parentData.relSeqs.filter((relSeq) => relSeq === data.contentId) : null;
     if (existRow && existRow.length > 0) {
         return { success: false, message: '이미 존재하는 기사입니다' };
     }
@@ -85,8 +85,8 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
             seq: null,
             deskingSeq: null,
             datasetSeq: component.datasetSeq,
-            totalId: data.totalId,
-            parentTotalId: parentData.totalId,
+            contentId: data.totalId,
+            parentCotentId: parentData.parentCotentId,
             contentType: data.contentType,
             artType: data.artType,
             sourceCode: data.sourceCode,
@@ -116,11 +116,11 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
  * 데스킹 워크의 rowNode 생성
  */
 const makeRowNode = (data, contentOrd, component) => {
-    if (!data || data.totalId === null) {
+    if (!data || data.contentId === null) {
         return { success: false, message: '올바르지 않은 기사입니다' };
     }
 
-    const existRow = component.deskingWorks.filter((desking) => desking.totalId === data.totalId);
+    const existRow = component.deskingWorks.filter((desking) => desking.contentId === data.contentId);
     if (existRow && existRow.length > 0) {
         return { success: false, message: '이미 존재하는 기사입니다' };
     }
@@ -133,8 +133,8 @@ const makeRowNode = (data, contentOrd, component) => {
             seq: null,
             deskingSeq: null,
             datasetSeq: component.datasetSeq,
-            totalId: data.totalId,
-            parentTotalId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
+            contentId: data.totalId,
+            parentContentId: null, // 주기사일 경우 null, 관련기사일경우 주기사 키 지정.
             contentType: data.contentType,
             artType: data.artType,
             sourceCode: data.sourceCode,
@@ -268,7 +268,7 @@ function* deskingDragStop({ payload }) {
             // 2-1) hover된 row가 주기사 => 관련기사 추가인가? => 체크된 row에 targetRow가 있는지 확인한다
             const selectedNodes = target.api.getSelectedNodes();
             selectedNodes.forEach((s) => {
-                if (s.data.totalId === targetRowData.totalId) addRelArt = true;
+                if (s.data.contentId === targetRowData.contentId) addRelArt = true;
             });
 
             if (!addRelArt) {
@@ -281,7 +281,7 @@ function* deskingDragStop({ payload }) {
             }
         } else {
             // 2-2) hover된 row가 관련기사 => 주기사를 찾아서 체크된 row인지 확인한다
-            const parentRow = target.api.getRowNode(targetRowData.parentTotalId);
+            const parentRow = target.api.getRowNode(targetRowData.parentContentId);
 
             if (parentRow.isSelected()) {
                 // 관련기사 추가 (타겟의 relOrd의 밑으로)

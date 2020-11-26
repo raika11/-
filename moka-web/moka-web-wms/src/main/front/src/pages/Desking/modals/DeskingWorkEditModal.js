@@ -152,7 +152,7 @@ const DeskingWorkEditModal = (props) => {
                             <p className="m-0">{data.rel ? data.relTitle : data.title}</p>
                         </div>
                         <div className="p-0 d-flex ft-12">
-                            <p className="m-0 mr-3">ID: {data.totalId}</p>
+                            <p className="m-0 mr-3">ID: {data.contentId}</p>
                             <p className="m-0">
                                 (cp{data.componentSeq} {data.componentName})
                             </p>

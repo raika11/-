@@ -63,7 +63,7 @@ export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
         });
 };
 
-// 더미기사추가 => payload
+// 공백 기사 추가=> payload
 export const postDeskingWork = ({ componentWorkSeq, datasetSeq, deskingWork }) => {
     return instance
         .post(`/api/desking/components/${componentWorkSeq}/contents${datasetSeq}`, objectToFormData(deskingWork), {

@@ -390,7 +390,7 @@ const moveDeskingWorkList = createDeskingRequestSaga(act.MOVE_DESKING_WORK_LIST,
 // }
 
 /**
- * 더미기사 추가
+ * 공백 기사 추가
  */
 const postDeskingWork = createDeskingRequestSaga(act.POST_DESKING_WORK, api.postDeskingWork, 'work');
 

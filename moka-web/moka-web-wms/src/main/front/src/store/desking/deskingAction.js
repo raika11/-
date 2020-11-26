@@ -91,7 +91,7 @@ export const postReserveComponentWork = createAction(POST_RESERVE_COMPONENT_WORK
 // }));
 
 /**
- * 더미기사 추가
+ * 공백 기사 추가
  */
 export const POST_DESKING_WORK = 'desking/POST_DESKING_WORK';
 export const postDeskingWork = createAction(POST_DESKING_WORK, ({ componentWorkSeq, datasetSeq, deskingWork, callback }) => ({

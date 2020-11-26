@@ -3,6 +3,8 @@ package jmnet.moka.core.tps.mvc.codemgt.service;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
+
+import com.querydsl.core.QueryResults;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
@@ -126,6 +128,11 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     @Override
     public Optional<CodeMgtGrp> findByGrpCd(String grpCd) {
         return codeMgtGrpRepository.findByGrpCd(grpCd);
+    }
+
+    @Override
+    public List<CodeMgt> findByDtlCd(String grpCd, String dtlCd) {
+        return codeMgtRepository.findByDtlCd(grpCd, dtlCd);
     }
 
 }

@@ -1,11 +1,11 @@
 package jmnet.moka.core.tps.mvc.codemgt.controller;
 
+import com.querydsl.core.QueryResults;
 import io.swagger.annotations.ApiOperation;
-import java.security.Principal;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,6 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
@@ -28,7 +27,6 @@ import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
-import jmnet.moka.core.tps.mvc.template.dto.TemplateDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -585,5 +582,77 @@ public class CodeMgtRestController {
         }
     }
 
+    /**
+     * 약물정보 조회
+     *
+     * @param grpCd 코드순번 (필수)
+     * @param dtlCd 상세코드 (필수)
+     * @return 코드정보
+     * @throws NoDataException      코드 정보가 없음
+     * @throws InvalidDataException 코드 아이디 형식오류
+     * @throws Exception            기타예외
+     */
+    @ApiOperation(value = "코드 목록조회")
+    @GetMapping("/{grpCd}/getSpecialChar/{dtlCd}")
+    public ResponseEntity<?> getSpecialChar(@PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
+                                            @PathVariable("dtlCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.dtlCd}") String dtlCd
+    ) throws InvalidDataException, Exception {
+        // specialChar
+        // 조회
+        List<CodeMgt> returnValue = codeMgtService.findByDtlCd(grpCd, dtlCd);
+
+        // 리턴값 설정
+        ResultListDTO<CodeMgtDTO> resultListMessage = new ResultListDTO<CodeMgtDTO>();
+        List<CodeMgtDTO> codeDtoList = modelMapper.map(returnValue, CodeMgtDTO.TYPE);
+
+        ResultDTO<List<CodeMgtDTO>> resultDto = new ResultDTO<>(codeDtoList);
+        tpsLogger.success(ActionType.SELECT, true);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+//    /**
+//     * 코드수정
+//     *
+//     * @param seqNo      코드순
+//     * @param codeMgtDTO 수정할 코드정보
+//     * @return 수정된 코드정보
+//     * @throws InvalidDataException 데이타 유효성오류
+//     * @throws NoDataException      데이타 없음
+//     * @throws Exception            기타예외
+//     */
+//    @ApiOperation(value = "코드수정")
+//    @PutMapping("/codemgts/{seqNo}")
+//    public ResponseEntity<?> putCodeMgt(@PathVariable("seqNo")
+//                                        @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo,
+//                                        @Valid CodeMgtDTO codeMgtDTO)
+//            throws InvalidDataException, NoDataException, Exception {
+//
+//// 수정
+//        CodeMgt newCodeMgt = modelMapper.map(codeMgtDTO, CodeMgt.class);
+//        CodeMgt orgCodeMgt = codeMgtService.findBySeqNo(seqNo)
+//                .orElseThrow(() -> {
+//                    String message = messageByLocale.get("tps.common.error.no-data");
+//                    tpsLogger.fail(ActionType.UPDATE, message, true);
+//                    return new NoDataException(message);
+//                });
+//
+//        try {
+//
+//            CodeMgt returnValue = codeMgtService.updateCodeMgt(newCodeMgt);
+//
+//            // 결과리턴
+//            CodeMgtDTO dto = modelMapper.map(returnValue, CodeMgtDTO.class);
+//
+//            String message = messageByLocale.get("tps.common.success.update");
+//            ResultDTO<CodeMgtDTO> resultDTO = new ResultDTO<CodeMgtDTO>(dto, message);
+//            tpsLogger.success(ActionType.UPDATE, true);
+//            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+//        } catch (Exception e) {
+//            log.error("[FAIL TO UPDATE CODE_MGT] seqNo: {} {}", seqNo, e.getMessage());
+//            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE CODE_MGT]", e, true);
+//            throw new Exception(messageByLocale.get("tps.common.error.update"), e);
+//        }
+//
+//    }
 }
 

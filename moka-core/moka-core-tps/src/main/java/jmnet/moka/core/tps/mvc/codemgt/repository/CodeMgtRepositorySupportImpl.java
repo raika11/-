@@ -56,6 +56,7 @@ public class CodeMgtRepositorySupportImpl extends QuerydslRepositorySupport impl
                     .fetch();
     }
 
+
     @Override
     public Page<CodeMgt> findList(CodeMgtSearchDTO search, Pageable pageable) {
         QCodeMgt codeMgt = QCodeMgt.codeMgt;
@@ -84,6 +85,21 @@ public class CodeMgtRepositorySupportImpl extends QuerydslRepositorySupport impl
                                           .fetchResults();
 
         return new PageImpl<CodeMgt>(list.getResults(), pageable, list.getTotal());
+    }
+
+    @Override
+    public List<CodeMgt> findByDtlCd(String grpCd, String dtlCd) {
+        QCodeMgt QcodeMgt = QCodeMgt.codeMgt;
+        JPQLQuery<CodeMgt> query = from(QcodeMgt);
+
+        BooleanBuilder builder = new BooleanBuilder();
+        query.where(QcodeMgt.codeMgtGrp.grpCd.eq(grpCd));
+        query.where(QcodeMgt.usedYn.eq("Y"));
+        query.where(QcodeMgt.dtlCd.eq(dtlCd));
+
+        QueryResults<CodeMgt> list = query.fetchResults();
+
+        return query.fetchResults().getResults();
     }
 
 }

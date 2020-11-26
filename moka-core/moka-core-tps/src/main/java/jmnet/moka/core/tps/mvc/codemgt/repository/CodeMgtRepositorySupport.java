@@ -4,6 +4,8 @@
 package jmnet.moka.core.tps.mvc.codemgt.repository;
 
 import java.util.List;
+
+import com.querydsl.core.QueryResults;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import org.springframework.data.domain.Page;
@@ -25,5 +27,8 @@ public interface CodeMgtRepositorySupport {
 
     // 코드목록 조회(페이징O)
     public Page<CodeMgt> findList(CodeMgtSearchDTO search, Pageable pageable);
+
+    List<CodeMgt> findByDtlCd(String grpCd, String dtlCd);
+
 
 }

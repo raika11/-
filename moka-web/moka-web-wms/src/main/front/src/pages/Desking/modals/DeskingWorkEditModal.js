@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaImageInput, MokaInput, MokaInputLabel, MokaModal, MokaSearchInput } from '@components';
 import toast from '@utils/toastUtil';
 import EditThumbModal from './EditThumbModal';
+import { getBulkChar } from '@store/codeMgt';
 
 const titlePrefixList = [{ name: '속보' }, { name: '단독' }];
 const prefixLocationList = [{ name: '제목 앞' }, { name: '제목 뒤' }, { name: '부제 앞' }, { name: '부제 뒤' }, { name: '리드문 앞' }, { name: '리드문 뒤' }];
@@ -20,13 +23,17 @@ const urlTargetList = [
  */
 const DeskingWorkEditModal = (props) => {
     const { show, onHide, data, onSave } = props;
+    const dispatch = useDispatch();
+    const bulkCharRows = useSelector((store) => store.codeMgt.bulkCharRows);
 
     // 데스킹 정보
+    const [specialChar, setSpecialChar] = useState(bulkCharRows);
     const [thumbFileName, setThumbFileName] = useState('');
     const [titlePrefix, setTitlePrefix] = useState('');
     const [prefixLocation, setPrefixLocation] = useState('');
     const [titleLocation, setTitleLocation] = useState('');
     const [title, setTitle] = useState('');
+    const [relTitle, setRelTitle] = useState('');
     const [fontSize, setFontSize] = useState('');
     const [nameplate, setNameplate] = useState('');
     const [subTitle, setSubTitle] = useState('');
@@ -37,17 +44,27 @@ const DeskingWorkEditModal = (props) => {
 
     const [showModal, setShowModal] = useState(false);
 
-    React.useEffect(() => {
+    useEffect(() => {
         // 기사 data 셋팅
         if (data) {
             setThumbFileName(data.thumbFileName || '');
             setTitle(data.title || '');
+            setRelTitle(data.relTitle || '');
             setNameplate(data.nameplate || '');
             setTitlePrefix(data.titlePrefix || '');
             setSubTitle(data.subTitle || '');
             setBodyHead(data.bodyHead || '');
+            dispatch(getBulkChar());
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
+
+    useEffect(() => {
+        // 약물 셋팅
+        if (bulkCharRows && bulkCharRows.length > 0) {
+            setSpecialChar(bulkCharRows.find((char) => char.dtlCd === 'bulkChar').cdNm);
+        }
+    }, [bulkCharRows]);
 
     /**
      * 타이틀 byte 계산
@@ -72,6 +89,7 @@ const DeskingWorkEditModal = (props) => {
             setThumbFileName(value);
         } else if (name === 'title') {
             setTitle(value);
+            setRelTitle(value);
             if (value !== title && name === 'titleLength') {
                 euckrBytes(value);
             }
@@ -127,8 +145,8 @@ const DeskingWorkEditModal = (props) => {
                 titleAs={
                     <div className="w-100 d-flex flex-column">
                         <div className="p-0 d-flex">
-                            <p className="m-0 mr-2">{data.contentOrd}</p>
-                            <p className="m-0">{data.title}</p>
+                            <p className="m-0 mr-2">{data.rel ? `0${data.relOrd}`.substr(-2) : `0${data.contentOrd}`.substr(-2)}</p>
+                            <p className="m-0">{data.rel ? data.relTitle : data.title}</p>
                         </div>
                         <div className="p-0 d-flex ft-12">
                             <p className="m-0 mr-3">ID: {data.totalId}</p>
@@ -156,8 +174,7 @@ const DeskingWorkEditModal = (props) => {
                             label="약물"
                             labelWidth={50}
                             labelClassName="d-flex justify-content-start"
-                            name="subTitle"
-                            value={`「」·“”※↑↓★●`}
+                            value={specialChar}
                             inputProps={{ plaintext: true, readOnly: true }}
                         />
                         <div>
@@ -228,7 +245,7 @@ const DeskingWorkEditModal = (props) => {
                                     labelWidth={80}
                                     inputClassName="ft-12"
                                     name="title"
-                                    value={title}
+                                    value={data.rel ? relTitle : title}
                                     as="textarea"
                                     inputProps={{ rows: 3 }}
                                     onChange={handleChangeValue}
@@ -236,7 +253,7 @@ const DeskingWorkEditModal = (props) => {
                             </div>
                             <Col xs={1} className="w-100 p-0 d-flex align-items-end">
                                 <div className="mb-3 pl-1 ft-12" name="titleLength" onChange={handleChangeValue}>
-                                    {euckrBytes(title)}byte
+                                    {relTitle ? euckrBytes(relTitle) : euckrBytes(title)}byte
                                 </div>
                             </Col>
                         </Form.Row>

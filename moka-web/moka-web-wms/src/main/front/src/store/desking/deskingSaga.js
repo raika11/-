@@ -78,6 +78,7 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
     }
 
     let appendData = null;
+    let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
 
     if (data.gridType === 'ARTICLE') {
         appendData = {
@@ -94,7 +95,7 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
             relOrd,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
-            title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,
+            title,
             subTitle: data.artSubTitle,
             nameplate: null,
             titlePrefix: null,
@@ -126,6 +127,7 @@ const makeRowNode = (data, contentOrd, component) => {
     }
 
     let appendData = null;
+    let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
 
     if (data.gridType === 'ARTICLE') {
         appendData = {
@@ -142,7 +144,7 @@ const makeRowNode = (data, contentOrd, component) => {
             relOrd: 1,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
-            title: data.artEditTitle == null ? data.artTitle : data.artEditTitle,
+            title,
             // mobTitle: data.artEditMobTitle == null ? data.artTitle : data.artEditTitle,
             subTitle: data.artSubTitle,
             nameplate: null,

@@ -464,6 +464,18 @@ body {
     }
 }
 
+.title-line1 {
+    border-right: 1px solid $warning;
+}
+
+.title-line2 {
+    border-right: 1px solid $info;
+}
+
+.mob-title-line {
+    border-right: 1px solid $warning;
+}
+
 /* -----------------------
 * 페이지편집
 * ---------------------- */

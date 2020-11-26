@@ -13,8 +13,10 @@ const ChangeArtGroupModal = (props) => {
     const { show, onHide, artData } = props;
     const dispatch = useDispatch();
 
-    const { loading } = useSelector((store) => ({
+    const { loading, mobWidth, titleWidth } = useSelector((store) => ({
         loading: store.loading[PUT_ARTICLE_EDIT_TITLE],
+        mobWidth: store.app['DESKING_MTITLE_WIDTH'] || 215,
+        titleWidth: store.app['DESKING_TITLE_WIDTH'] || [240, 326],
     }));
 
     // state
@@ -28,8 +30,8 @@ const ChangeArtGroupModal = (props) => {
         dispatch(
             putArticleEditTitle({
                 totalId: artData.totalId,
-                title: webTitle,
-                mobTitle: mobTitle,
+                title: webTitle.length > 0 ? webTitle : null,
+                mobTitle: mobTitle.length > 0 ? mobTitle : null,
                 callback: ({ header }) => {
                     if (header.success) {
                         toast.success(header.message);
@@ -74,6 +76,7 @@ const ChangeArtGroupModal = (props) => {
             size="md"
             loading={loading}
             onHide={handleHide}
+            bodyClassName="relative"
             footerClassName="d-flex justify-content-center"
             buttons={[
                 {
@@ -89,18 +92,22 @@ const ChangeArtGroupModal = (props) => {
             ]}
             centered
         >
+            <div className="title-line1 position-absolute" style={{ height: 21, top: 20, left: 70 + 5 + titleWidth[0] }}></div>
+            <div className="title-line2 position-absolute" style={{ height: 21, top: 20, left: 70 + 5 + titleWidth[1] }}></div>
             <MokaInputLabel
                 as="textarea"
                 label="웹제목"
+                labelWidth={70}
                 labelClassName={clsx('mr-2', {
                     'color-positive': !artData.artEditTitle || artData.artEditTitle === '',
                 })}
                 className="mb-2"
-                inputClassName="resize-none"
+                inputClassName="resize-none custom-scroll p-05"
                 value={webTitle}
                 onChange={(e) => setWebTitle(e.target.value)}
             />
 
+            <div className="mob-title-line position-absolute" style={{ height: 21, top: 82, left: 70 + 5 + mobWidth }}></div>
             <MokaInputLabel
                 as="textarea"
                 label={
@@ -114,7 +121,7 @@ const ChangeArtGroupModal = (props) => {
                     'color-positive': !artData.artEditMobTitle || artData.artEditMobTitle === '',
                 })}
                 className="mb-0"
-                inputClassName="resize-none"
+                inputClassName="resize-none custom-scroll"
                 value={mobTitle}
                 onChange={(e) => setMobTitle(e.target.value)}
             />

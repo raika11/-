@@ -78,23 +78,7 @@ public class NaverBulkServiceImpl implements NaverBulkService {
             saveArticle = naverBulkRepository.save(saveArticle);
             // 여기서 기존 로직 처리
             naverBulkRepository.updateArticle(saveArticle) ;
-            System.out.println("111111111111111111111111111111111111111");
             Long clickarSeq = saveArticle.getClickartSeq();
-            // 상세목록에 인설트
-//            asList.forEach(
-//                    part -> {
-//
-//                        try {
-//
-//                            System.out.println("part.getOrdNo()::" + part.getOrdNo());
-//                            part.setClickartSeq(clickarSeq);
-//                            ArticleList articleList = modelMapper.map(part, ArticleList.class);
-//                            naverBulkListRepository.save(articleList);
-//                            System.out.println("22222222222222222222222222222222222222");
-//                        } catch (Exception e) {
-//                            log.error(e.toString());
-//                        }
-//                    });
 
             Long ordNo = 1L;
             for(NaverBulkListDTO naverBulkListDTO : asList){

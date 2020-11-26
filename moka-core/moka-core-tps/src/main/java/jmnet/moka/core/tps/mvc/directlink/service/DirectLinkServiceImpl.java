@@ -56,7 +56,6 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     @Override
     @Transactional
     public DirectLink updateDirectLink(DirectLink directLink) {
-        System.out.println("iiiiiiiiiiimpl::" + directLink.getImgUrl());
         return directLinkRepository.save(directLink);
     }
 

@@ -261,9 +261,6 @@ public class ColumnistRestController {
 
         // 문법검사
         // 등록한 파일이 이미지 파일인지 체크
-        System.out.println("filefilefilefile::" + file);
-        System.out.println("file.isEmpty()file.isEmpty()::" + file.isEmpty());
-
         if (file != null && !file.isEmpty()) {
             boolean isImage = ImageUtil.isImage(file);
             if (!isImage) {

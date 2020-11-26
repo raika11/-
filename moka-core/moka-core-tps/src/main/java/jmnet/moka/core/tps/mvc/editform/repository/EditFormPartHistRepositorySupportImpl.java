@@ -7,6 +7,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPartHist;
 import jmnet.moka.core.tps.mvc.editform.entity.QEditFormPartHist;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +34,7 @@ public class EditFormPartHistRepositorySupportImpl extends QuerydslRepositorySup
     @Override
     public Page<EditFormPartHist> findAll(EditFormSearchDTO searchDTO) {
         QEditFormPartHist qPartHist = QEditFormPartHist.editFormPartHist;
-
+        QMemberInfo qMember = QMemberInfo.memberInfo;
 
         JPQLQuery<EditFormPartHist> query = from(qPartHist);
         if (McpString.isNotEmpty(searchDTO.getPartSeq())) {
@@ -48,6 +49,7 @@ public class EditFormPartHistRepositorySupportImpl extends QuerydslRepositorySup
         }
 
         QueryResults<EditFormPartHist> list = query
+                .leftJoin(qPartHist.regMember, qMember)
                 .fetchJoin()
                 .fetchResults();
 

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
@@ -11,7 +11,7 @@ const defaultProps = {
 };
 
 /**
- * 기자 검색 모달 AgGrid 조회 버튼
+ * 기자 검색 모달 AgGrid 등록 버튼
  */
 const ReporterModalAddButton = (props) => {
     const { data } = props;

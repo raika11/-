@@ -544,7 +544,7 @@ module.exports = function (webpackEnv) {
                     'inPlaceReplace',
                     'inspectTokens',
                     'linesOperations',
-                    'links',
+                    // 'links',
                     // 'multicursor',
                     'parameterHints',
                     // 'quickCommand',

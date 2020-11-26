@@ -166,12 +166,10 @@ const ColumnistEdit = () => {
 
     // 저장 버튼 클릭.
     const handleClickSaveButton = () => {
-        // FIXME : 2020-11-23 16:54 저장데이터 셋 할때 기존 데이터 업데이트 와 연동.
-
         // 이미지 설정.
         let saveData = {
             ...selectRepoterData,
-            columnistFile: fileValue, // multipart 받는 dto의 필드명으로 변경하세요
+            columnistFile: fileValue,
         };
 
         // 이메일 합치는거 때문에 미리 체크.

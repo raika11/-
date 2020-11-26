@@ -1,5 +1,6 @@
 import React, { useState, Suspense, forwardRef } from 'react';
 import { useDispatch } from 'react-redux';
+
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -7,11 +8,14 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast from '@utils/toastUtil';
-import { getComponentWork, postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
+
+import { postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
+const TemplateListModal = React.lazy(() => import('@/pages/Template/modals/TemplateListModal'));
 const AddSpaceModal = React.lazy(() => import('../modals/AddSpaceModal'));
 const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
+const ListNumberEditModal = React.lazy(() => import('../modals/ListNumberEditModal'));
 
 /**
  * 커스텀 토글
@@ -33,8 +37,10 @@ const DeskingWorkButtonGroup = (props) => {
 
     // modal state
     const [htmlEditModal, setHtmlEditModal] = useState(false);
+    const [templateModal, setTemplateModal] = useState(false);
     const [addSpaceModal, setAddSpaceModal] = useState(false);
     const [registerModal, setRegisterModal] = useState(false);
+    const [listNumberModal, setListNumberModal] = useState(false);
 
     const title = `ID: CP${component.componentSeq} ${component.componentName}`;
 
@@ -43,6 +49,13 @@ const DeskingWorkButtonGroup = (props) => {
      */
     const handleHtmlEdit = () => {
         setHtmlEditModal(true);
+    };
+
+    /**
+     * 템플릿
+     */
+    const handleTemplate = () => {
+        setTemplateModal(true);
     };
 
     /**
@@ -101,6 +114,13 @@ const DeskingWorkButtonGroup = (props) => {
     };
 
     /**
+     * 리스트 건수
+     */
+    const handleListNumber = () => {
+        setListNumberModal(true);
+    };
+
+    /**
      * 전체삭제
      */
     const handleDeleteClicked = () => {
@@ -121,7 +141,7 @@ const DeskingWorkButtonGroup = (props) => {
 
     const iconButton = [
         { title: 'HTML 수동편집', iconName: 'fal-code', onClick: handleHtmlEdit },
-        { title: '템플릿', iconName: 'fal-expand-wide' },
+        { title: '템플릿', iconName: 'fal-expand-wide', onClick: handleTemplate },
         { title: '임시저장', iconName: 'fal-save', onClick: handleSaveComponentWork },
         { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
     ];
@@ -132,7 +152,7 @@ const DeskingWorkButtonGroup = (props) => {
                 <Row className="m-0 d-flex align-items-center justify-content-between">
                     <Col className="p-0" xs={6}>
                         <OverlayTrigger overlay={<Tooltip>{`데이타셋ID: ${component.datasetSeq}`}</Tooltip>}>
-                            <p className="ft-12 mb-0">{title}</p>
+                            <p className="ft-12 mb-0 component-title">{title}</p>
                         </OverlayTrigger>
                     </Col>
                     <Col className="p-0 d-flex align-items-center justify-content-end" xs={6}>
@@ -154,7 +174,9 @@ const DeskingWorkButtonGroup = (props) => {
                                     <Dropdown.Item eventKey="3" onClick={handleRegister}>
                                         기사 이동
                                     </Dropdown.Item>
-                                    <Dropdown.Item eventKey="4">리스트 건수</Dropdown.Item>
+                                    <Dropdown.Item eventKey="4" onClick={handleListNumber}>
+                                        리스트 건수
+                                    </Dropdown.Item>
                                     <Dropdown.Item eventKey="5" style={component.viewYn === 'Y' ? { color: 'red' } : { color: 'black' }} disabled>
                                         영역 노출
                                     </Dropdown.Item>
@@ -168,6 +190,11 @@ const DeskingWorkButtonGroup = (props) => {
             {/* HTML 수동 편집 */}
             <Suspense>
                 <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} data={component} />
+            </Suspense>
+
+            {/* 템플릿 */}
+            <Suspense>
+                <TemplateListModal show={templateModal} onHide={() => setTemplateModal(false)} templateGroup={component.templateGroup} templateWidth={component.templateWidth} />
             </Suspense>
 
             {/* 공백 추가 */}
@@ -190,6 +217,11 @@ const DeskingWorkButtonGroup = (props) => {
                     component={component}
                     componentAgGridInstances={componentAgGridInstances}
                 />
+            </Suspense>
+
+            {/* 리스트 건수 */}
+            <Suspense>
+                <ListNumberEditModal show={listNumberModal} onHide={() => setListNumberModal(false)} data={component} />
             </Suspense>
         </>
     );

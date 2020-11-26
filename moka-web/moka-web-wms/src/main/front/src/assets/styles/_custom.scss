@@ -257,7 +257,6 @@ body {
             align-items: center;
             position: relative;
             user-select: none;
-            -webkit-user-select: none;
             cursor: pointer;
 
             & button {
@@ -424,7 +423,7 @@ body {
 }
 
 /* -----------------------
-* 페이지편집
+* 기사관리
 * ---------------------- */
 .article-group-number {
     display: flex;
@@ -437,6 +436,13 @@ body {
     @each $number, $color in $group-colors {
         &[data-group-number="#{$number}"] {
             background-color: $color;
+            @if $number == "6" {
+                border: 1px solid #d9d9d9;
+            } @else if $number == '7' {
+                color: $white;
+            } @else if $number == '8' {
+                color: $white;
+            }
         }
     }
 }
@@ -455,6 +461,41 @@ body {
 
     &.youtube {
         color: $orange;
+    }
+}
+
+/* -----------------------
+* 페이지편집
+* ---------------------- */
+.component-work {
+    position: relative;
+    
+    .is-over {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px dashed $secondary;
+        border-radius: 5px;
+        transition: border-color 0.24s ease-in-out;
+        z-index: 1;
+    }
+
+    &.hover::before {
+        content: "";
+        z-index: 1;
+        position: absolute;
+        top: 33px;
+        left: 0px;
+        right: 0px;
+        border-top: 2px solid $positive;
+    }
+
+    &.disabled {
+        .component-title {
+            @include disabled-font;
+        }
     }
 }
 

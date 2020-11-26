@@ -11,6 +11,7 @@ export const initialState = {
         areaComp: {},
     },
     list: [],
+    deskingStateList: [],
     total: 0,
     error: null,
     selectedComponent: {

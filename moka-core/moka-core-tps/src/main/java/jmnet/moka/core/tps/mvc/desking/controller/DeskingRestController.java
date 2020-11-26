@@ -13,11 +13,10 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.dto.ValidList;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
@@ -31,12 +30,9 @@ import jmnet.moka.core.tps.mvc.desking.service.DeskingService;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,31 +40,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+@RestController
 @Validated
 @Slf4j
 @RequestMapping("/api/desking")
-public class DeskingRestController {
+public class DeskingRestController extends AbstractCommonController {
 
-    @Autowired
-    private DeskingService deskingService;
+    private final DeskingService deskingService;
 
-    @Autowired
-    private AreaService areaService;
+    private final AreaService areaService;
 
-    @Autowired
-    private UploadFileHelper uploadFileHelper;
+    private final UploadFileHelper uploadFileHelper;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private MessageByLocale messageByLocale;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public DeskingRestController(DeskingService deskingService, AreaService areaService, UploadFileHelper uploadFileHelper) {
+        this.deskingService = deskingService;
+        this.areaService = areaService;
+        this.uploadFileHelper = uploadFileHelper;
+    }
 
     /**
      * 편집영역의 모든 Work 초기화 및 컴포넌트Work 목록 조회
@@ -97,7 +88,7 @@ public class DeskingRestController {
             // area
             Area area = areaService.findAreaBySeq(areaSeq)
                                    .orElseThrow(() -> {
-                                       String message = messageByLocale.get("tps.common.error.no-data");
+                                       String message = msg("tps.common.error.no-data");
                                        tpsLogger.fail(message, true);
                                        return new NoDataException(message);
                                    });
@@ -118,7 +109,7 @@ public class DeskingRestController {
         } catch (Exception e) {
             log.error("[FAIL TO LOAD COMPONENT WORK LIST]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD COMPONENT WORK LIST]", e, true);
-            throw new Exception(messageByLocale.get("tps.desking.error.work.init"), e);
+            throw new Exception(msg("tps.desking.error.work.init"), e);
         }
     }
 
@@ -167,12 +158,12 @@ public class DeskingRestController {
             deskingService.save(returnValue, principal.getName());
 
             // work를 그대로 리턴
-            String message = messageByLocale.get("tps.desking.success.save");
+            String message = msg("tps.desking.success.save");
             ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, message);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.error.save"), e);
+            throw new Exception(msg("tps.desking.error.save"), e);
         }
     }
 
@@ -199,12 +190,12 @@ public class DeskingRestController {
             deskingService.publish(returnValue, principal.getName());
 
             // work를 그대로 리턴
-            String message = messageByLocale.get("tps.desking.success.publish");
+            String message = msg("tps.desking.success.publish");
             ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, message);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.error.publish"), e);
+            throw new Exception(msg("tps.desking.error.publish"), e);
         }
     }
 
@@ -232,12 +223,12 @@ public class DeskingRestController {
             deskingService.reserve(returnValue, principal.getName(), reserveDt);
 
             // work를 그대로 리턴
-            String message = messageByLocale.get("tps.desking.success.reserve");
+            String message = msg("tps.desking.success.reserve");
             ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, message);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.error.reserve"), e);
+            throw new Exception(msg("tps.desking.error.reserve"), e);
         }
     }
 
@@ -268,11 +259,11 @@ public class DeskingRestController {
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 리턴값 설정
-            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue);
+            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, msg("tps.desking.component.success.work.update"));
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.component.error.work.update"), e);
+            throw new Exception(msg("tps.desking.component.error.work.update"), e);
         }
     }
 
@@ -305,7 +296,7 @@ public class DeskingRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.component.error.work.update"), e);
+            throw new Exception(msg("tps.desking.component.error.work.update"), e);
         }
     }
 
@@ -350,11 +341,11 @@ public class DeskingRestController {
                 ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue);
                 return new ResponseEntity<>(resultDto, HttpStatus.OK);
             } else {
-                throw new Exception(messageByLocale.get("tps.desking.error.work.insert", request));
+                throw new Exception(msg("tps.desking.error.work.insert", request));
             }
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.error.work.insert", request), e);
+            throw new Exception(msg("tps.desking.error.work.insert", request), e);
         }
     }
 
@@ -393,7 +384,7 @@ public class DeskingRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.error.work.delete"), e);
+            throw new Exception(msg("tps.desking.error.work.delete"), e);
         }
     }
 
@@ -419,13 +410,13 @@ public class DeskingRestController {
         // 데이터 검증
         List<InvalidDataDTO> invalidList = this.validDeskingWorkDTO(deskingWorkDTO);
         if (invalidList.size() > 0) {
-            String message = messageByLocale.get("tps.desking.error.invalidContent");
+            String message = msg("tps.desking.error.invalidContent");
             throw new InvalidDataException(invalidList, message);
         }
 
         // 오리진 데스킹워크 조회
         DeskingWork orgDW = deskingService.findDeskingWorkBySeq(deskingWorkDTO.getSeq())
-                                          .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.desking.error.work.noContent")));
+                                          .orElseThrow(() -> new NoDataException(msg("tps.desking.error.work.noContent")));
 
         // 오리진을 복사한 new데스킹워크 생성, dto 값 셋팅
         DeskingWork newDW = modelMapper.map(deskingWorkDTO, DeskingWork.class);
@@ -470,7 +461,7 @@ public class DeskingRestController {
             ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(workVO);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.error.work.save"), e);
+            throw new Exception(msg("tps.desking.error.work.save"), e);
         }
     }
 
@@ -535,7 +526,7 @@ public class DeskingRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.error.priority", request), e);
+            throw new Exception(msg("tps.desking.error.priority", request), e);
         }
     }
 
@@ -571,7 +562,7 @@ public class DeskingRestController {
     //            }
     //
     //        } catch (Exception e) {
-    //            throw new Exception(messageByLocale.get("tps.desking.error.hasOtherSaved", request), e);
+    //            throw new Exception(msg("tps.desking.error.hasOtherSaved", request), e);
     //        }
     //    }
     //
@@ -633,7 +624,7 @@ public class DeskingRestController {
     //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
     //
     //        } catch (Exception e) {
-    //            throw new Exception(messageByLocale.get("tps.desking.error.work.insert", request), e);
+    //            throw new Exception(msg("tps.desking.error.work.insert", request), e);
     //        }
     //    }
 
@@ -690,11 +681,11 @@ public class DeskingRestController {
                 ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(workVO);
                 return new ResponseEntity<>(resultDto, HttpStatus.OK);
             } else {
-                throw new Exception(messageByLocale.get("tps.desking.error.work.move", request));
+                throw new Exception(msg("tps.desking.error.work.move", request));
             }
 
         } catch (Exception e) {
-            throw new Exception(messageByLocale.get("tps.desking.error.work.move", request), e);
+            throw new Exception(msg("tps.desking.error.work.move", request), e);
         }
     }
 
@@ -715,7 +706,7 @@ public class DeskingRestController {
     //            @PathVariable("componentWorkSeq") Long componentWorkSeq, @PathVariable("contentsId") String contentsId, Principal principal)
     //            throws NoDataException, Exception {
     //
-    //        String noDataMessage = messageByLocale.get("tps.desking.error.noComponentInfo");
+    //        String noDataMessage = msg("tps.desking.error.noComponentInfo");
     //
     //        // 데스킹워크 seq를 찾기 위해서 데스킹컴포넌트워크의 데스킹워크리스트에서 contentsId로 데스킹워크를 찾음
     //        DeskingComponentWorkVO resultWorkVO = deskingService.getComponentWork(componentWorkSeq);
@@ -758,7 +749,7 @@ public class DeskingRestController {
     //
     //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
     //        } catch (Exception e) {
-    //            throw new Exception(messageByLocale.get("tps.desking.error.work.relation.save", request), e);
+    //            throw new Exception(msg("tps.desking.error.work.relation.save", request), e);
     //        }
     //    }
     //
@@ -788,7 +779,7 @@ public class DeskingRestController {
     //
     //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
     //        } catch (Exception e) {
-    //            throw new Exception(messageByLocale.get("tps.desking.error.work.relation.delete", request), e);
+    //            throw new Exception(msg("tps.desking.error.work.relation.delete", request), e);
     //        }
     //    }
     //
@@ -821,7 +812,7 @@ public class DeskingRestController {
     //            ResultDTO<ResultListDTO<DeskingHistGroupVO>> resultDTO = new ResultDTO<ResultListDTO<DeskingHistGroupVO>>(resultList);
     //            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     //        } catch (Exception e) {
-    //            throw new Exception(messageByLocale.get("tps.desking.error.hist", request), e);
+    //            throw new Exception(msg("tps.desking.error.hist", request), e);
     //        }
     //    }
     //
@@ -854,7 +845,7 @@ public class DeskingRestController {
     //            ResultDTO<ResultListDTO<DeskingHistVO>> resultDTO = new ResultDTO<ResultListDTO<DeskingHistVO>>(resultList);
     //            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     //        } catch (Exception e) {
-    //            throw new Exception(messageByLocale.get("tps.desking.error.hist", request), e);
+    //            throw new Exception(msg("tps.desking.error.hist", request), e);
     //        }
     //    }
     //
@@ -903,7 +894,7 @@ public class DeskingRestController {
     //                return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     //            }
     //        } catch (Exception e) {
-    //            throw new Exception(messageByLocale.get("tps.desking.error.hist", request), e);
+    //            throw new Exception(msg("tps.desking.error.hist", request), e);
     //        }
     //    }
     //
@@ -931,7 +922,7 @@ public class DeskingRestController {
     //
     //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
     //        } catch (Exception e) {
-    //            throw new Exception(messageByLocale.get("tps.desking.edition.error.select", request), e);
+    //            throw new Exception(msg("tps.desking.edition.error.select", request), e);
     //        }
     //    }
     //
@@ -965,7 +956,7 @@ public class DeskingRestController {
     //            ResultDTO<DeskingComponentWorkVO> resultDto = new ResultDTO<DeskingComponentWorkVO>(workVO);
     //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
     //        } catch (Exception e) {
-    //            throw new Exception(messageByLocale.get("tps.desking.error.work.histories.move", request), e);
+    //            throw new Exception(msg("tps.desking.error.work.histories.move", request), e);
     //        }
     //    }
 }

@@ -10,13 +10,13 @@ export const initialState = {
     // 코드 그룹 검색 조건
     grpSearch: {
         page: 0,
-        size: PAGESIZE_OPTIONS[0],
+        size: 25,
         sort: undefined,
     },
     // 코드 그룹의 리스트 검색 조건
     cdSearch: {
         page: 0,
-        size: 25,
+        size: PAGESIZE_OPTIONS[0],
         sort: undefined,
         grpCd: null,
         searchType: 'dtlCd',
@@ -75,9 +75,13 @@ export default handleActions(
         /**
          * 검색조건 변경
          */
-        [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CHANGE_GRP_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.grpSearch = payload;
+            });
+        },
+        [act.CHANGE_CD_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
                 draft.cdSearch = payload;
             });
         },

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { MokaTable } from '@components';
-import { GET_CODE_MGT_LIST, getCodeMgt, getCodeMgtList, changeSearchOption } from '@store/codeMgt';
-import { columnDefs } from './CodeMgtEditAgGridColumns';
+import { GET_CODE_MGT_LIST, getCodeMgt, getCodeMgtList, changeCdSearchOption } from '@store/codeMgt';
+import columnDefs from './CodeMgtEditAgGridColumns';
 import CodeMgtEditModal from './modals/CodeMgtEditModal';
 
 const CodeMgtEditAgGrid = (props) => {
@@ -23,7 +23,7 @@ const CodeMgtEditAgGrid = (props) => {
 
     useEffect(() => {
         if (grpCd !== search.grpCd) {
-            dispatch(getCodeMgtList(changeSearchOption({ ...search, grpCd })));
+            dispatch(getCodeMgtList(changeCdSearchOption({ ...search, grpCd })));
         }
     }, [dispatch, grpCd, search]);
 
@@ -36,7 +36,7 @@ const CodeMgtEditAgGrid = (props) => {
             if (key !== 'page') {
                 temp['page'] = 0;
             }
-            dispatch(getCodeMgtList(changeSearchOption(temp)));
+            dispatch(getCodeMgtList(changeCdSearchOption(temp)));
         },
         [dispatch, search],
     );

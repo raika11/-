@@ -1,4 +1,4 @@
-export const columnDefs = [
+export default [
     {
         headerName: '코드그룹',
         field: 'grpCd',

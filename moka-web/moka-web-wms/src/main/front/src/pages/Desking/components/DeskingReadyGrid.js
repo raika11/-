@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deskingDragStop } from '@store/desking';
+import { makeDeskingWorkDropzone } from '@utils/agGridUtil';
 import toast from '@utils/toastUtil';
 
 const DeskingReadyGrid = (props) => {
@@ -26,9 +27,8 @@ const DeskingReadyGrid = (props) => {
 
             const target = componentAgGridInstances[targetIdx];
 
-            const dropZone = {
-                getContainer: () => target.api.gridOptionsWrapper.layoutElements[2],
-                onDragStop: (source) => {
+            const dropzone = makeDeskingWorkDropzone(
+                (source) => {
                     const payload = {
                         source,
                         target,
@@ -43,15 +43,19 @@ const DeskingReadyGrid = (props) => {
 
                     dispatch(deskingDragStop(payload));
                 },
-            };
+                target,
+                targetIdx,
+            );
 
-            // 동일한 드롭존이 존재할 수 있으므로 삭제 후 다시 추가한다
-            componentAgGridInstances[agGridIndex].api.removeRowDropZone(dropZone);
-            componentAgGridInstances[agGridIndex].api.addRowDropZone(dropZone);
+            if (dropzone) {
+                // 동일한 드롭존이 존재할 수 있으므로 삭제 후 다시 추가한다
+                componentAgGridInstances[agGridIndex].api.removeRowDropZone(dropzone);
+                componentAgGridInstances[agGridIndex].api.addRowDropZone(dropzone);
+            }
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [componentAgGridInstances, components]);
+    }, [componentAgGridInstances, agGridIndex, components]);
 
     return null;
 };

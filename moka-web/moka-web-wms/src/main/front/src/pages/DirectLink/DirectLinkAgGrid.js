@@ -56,10 +56,8 @@ const DirectLinkAgGrid = () => {
         setRowData(
             list.map((data) => {
                 let imgUrl = data.imgUrl;
-                // Full URL 이어서 주석처리.
-                // if (imgUrl && imgUrl !== '') {
-                //     imgUrl = `${API_BASE_URL}${UPLOAD_PATH_URL}/${imgUrl}`;
-                // }
+                let regDt = data.regDt && data.regDt.length > 10 ? data.regDt.substr(0, 10) : data.regDt;
+                let modDt = data.modDt && data.modDt.length > 10 ? data.modDt.substr(0, 10) : data.modDt;
 
                 // 이미지가 없으면 빈값으로 출력 되기 떄문에 기본 이미지 설정.
                 if (imgUrl === '' || imgUrl === 'https://joongang.joins.com/') {
@@ -68,7 +66,9 @@ const DirectLinkAgGrid = () => {
                 return {
                     ...data,
                     imgUrl,
-                    usedYnText: data.usedYn === 'Y' ? '게재 중' : '정지',
+                    regDt,
+                    modDt,
+                    usedYnText: data.usedYn,
                 };
             }),
         );

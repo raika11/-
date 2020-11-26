@@ -4,6 +4,7 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
+import { makeDeskingWorkDropzone } from '@utils/agGridUtil';
 import { GET_ARTICLE_LIST, getArticleList, changeSearchOption } from '@store/article';
 import columnDefs from './ArticleDeskAgGridColums';
 import GroupNumberRenderer from './GroupNumberRenderer';
@@ -96,41 +97,22 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
          * 드롭 타겟 ag-grid에 drop-zone 설정
          */
         if (gridInstance) {
-            // 타겟이 리스트인 경우
             if (Array.isArray(dropTargetAgGrid)) {
+                // 타겟이 리스트인 경우
                 dropTargetAgGrid.forEach((targetGrid, agGridIndex) => {
-                    const dropZone = {
-                        getContainer: () => {
-                            //  .ag-body-viewport dom을 return한다
-                            return targetGrid.api.gridOptionsWrapper.layoutElements[2];
-                        },
-                        onDragStop: (source) => {
-                            if (onDragStop) {
-                                onDragStop(source, targetGrid, agGridIndex);
-                            }
-                        },
-                    };
-
-                    gridInstance.api.removeRowDropZone(dropZone);
-                    gridInstance.api.addRowDropZone(dropZone);
+                    const dropzone = makeDeskingWorkDropzone(onDragStop, targetGrid, agGridIndex);
+                    if (dropzone) {
+                        gridInstance.api.removeRowDropZone(dropzone);
+                        gridInstance.api.addRowDropZone(dropzone);
+                    }
                 });
-            }
-            // 타겟이 오브젝트인 경우
-            else {
-                const dropZone = {
-                    getContainer: () => {
-                        //  .ag-body-viewport dom을 return한다
-                        return dropTargetAgGrid.api.gridOptionsWrapper.layoutElements[2];
-                    },
-                    onDragStop: (source) => {
-                        if (onDragStop) {
-                            onDragStop(source, dropTargetAgGrid);
-                        }
-                    },
-                };
-
-                gridInstance.api.removeRowDropZone(dropZone);
-                gridInstance.api.addRowDropZone(dropZone);
+            } else {
+                // 타겟이 1개인 경우
+                const dropzone = makeDeskingWorkDropzone(onDragStop, dropTargetAgGrid);
+                if (dropzone) {
+                    gridInstance.api.removeRowDropZone(dropzone);
+                    gridInstance.api.addRowDropZone(dropzone);
+                }
             }
         }
 

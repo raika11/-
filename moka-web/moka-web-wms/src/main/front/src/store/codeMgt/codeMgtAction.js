@@ -4,8 +4,10 @@ import { createRequestActionTypes } from '@store/commons/saga';
 /**
  * 검색조건 변경 액션
  */
-export const CHANGE_SEARCH_OPTION = 'codeMgt/CHANGE_SEARCH_GRP_OPTION';
-export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
+export const CHANGE_GRP_SEARCH_OPTION = 'codeMgt/CHANGE_SEARCH_GRP_OPTION';
+export const CHANGE_CD_SEARCH_OPTION = 'codeMgt/CHANGE_CD_SEARCH_OPTION';
+export const changeGrpSearchOption = createAction(CHANGE_GRP_SEARCH_OPTION, (search) => search);
+export const changeCdSearchOption = createAction(CHANGE_CD_SEARCH_OPTION, (search) => search);
 
 /**
  * 스토어 데이터 삭제 액션

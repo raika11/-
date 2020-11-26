@@ -20,7 +20,9 @@ const SidebarCloseLayout = ({ children, nonResponsive }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(closeSidebar());
+        setTimeout(function () {
+            dispatch(closeSidebar());
+        }, 500);
     }, [dispatch]);
 
     const layout = () => (

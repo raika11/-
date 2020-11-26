@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard } from '@components';
 import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';
-import { ComponentWork } from './components';
+import ComponentWork from './components/ComponentWork';
 
 /**
  * 컴포넌트의 워크 리스트
@@ -18,7 +18,7 @@ const ComponentWorkList = (props) => {
         loading: store.loading[GET_COMPONENT_WORK_LIST],
     }));
 
-    const handlePreviewClicked = () => {
+    const handleClickPreview = () => {
         // window.open(
         //     `${API_BASE_URL}/preview/desking/page?pageSeq=${pageSeq}&editionSeq=0`,
         //     '전체미리보기'
@@ -36,7 +36,7 @@ const ComponentWorkList = (props) => {
                 bodyClassName="p-0 overflow-hidden"
             >
                 <div className="d-flex justify-content-end p-2 border-bottom">
-                    <Button variant="outline-neutral" className="ft-12" onClick={handlePreviewClicked}>
+                    <Button variant="outline-neutral" className="ft-12" onClick={handleClickPreview}>
                         페이지 미리보기
                     </Button>
                 </div>
@@ -65,6 +65,8 @@ const ComponentWorkList = (props) => {
 
             {area.areaDiv === ITEM_CT && area.areaAlign === AREA_ALIGN_H && (
                 <MokaCard loading={loading} header={false} width={363} className="p-0 mr-gutter" bodyClassName="p-0 overflow-hidden">
+                    <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 45 }}></div>
+
                     <div className="custom-scroll overflow-y-scroll" style={{ height: 'calc(100% - 45px)' }}>
                         {area.areaComps.map((areaComp) => {
                             if (areaComp.compAlign === AREA_COMP_ALIGN_LEFT) return null;

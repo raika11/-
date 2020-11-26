@@ -132,11 +132,11 @@ $group-colors: (
 	"1": #FFA7A7,
 	"2": #CEF279,
 	"3": #D1B2FF,
-	"4": #D1B2FF,
-	"5": #D1B2FF,
-	"6": #D1B2FF,
-	"7": #D1B2FF,
-	"8": #D1B2FF,
+	"4": #FAED7D,
+	"5": #FFB2D9,
+	"6": #FFFFFF,
+	"7": #909090,
+	"8": #000000,
 ) !default;
 $ovp: #09A5FC !default;
 
@@ -246,6 +246,7 @@ $input-group-validation-states: (
 $custom-select-padding-x: 0.55rem;
 $custom-control-indicator-bg: $gray-300 !default;
 $custom-control-indicator-disabled-bg: $gray-200 !default;
+$custom-control-indicator-checked-disabled-bg: rgba($searching, .5) !default;
 
 // Dropdowns
 $dropdown-link-color: $gray-700 !default;
@@ -297,7 +298,7 @@ $sidebar-link-color: $white !default;
 $sidebar-link-bg: $sidebar-bg !default;
 $sidebar-link-hover-color: $white !default;
 $sidebar-link-hover-bg: $gray-900 !default;
-$sidebar-link-hover-font-weight: $font-weight-normal !default;
+$sidebar-link-hover-font-weight: $font-weight-bold !default;
 $sidebar-link-active-color: $sidebar-link-hover-color !default;
 $sidebar-link-active-bg: $gray-900 !default;
 $sidebar-link-active-font-weight: $font-weight-bold !default;
@@ -308,7 +309,7 @@ $sidebar-link-child-font-weight: 400 !default;
 $sidebar-link-child-color: $white !default;
 $sidebar-link-child-bg: $gray-900 !default;
 $sidebar-link-child-hover-color: $white !default;
-$sidebar-link-child-hover-bg: $gray-900 !default;
+$sidebar-link-child-hover-bg: $secondary !default;
 $sidebar-link-child-active-color: $sidebar-link-child-hover-color !default;
 $sidebar-link-child-active-bg: $secondary !default;
 

@@ -1,45 +1,11 @@
-import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
-
-export function agGrids() {}
-agGrids.prototype.grids = [];
-agGrids.prototype.rgrids = { main: {}, rel: {} }; // 관련기사 다이얼로그
-agGrids.prototype.change = function (idx, instance, etc) {
-    if (etc) {
-        const { target, field } = etc;
-        if (target === 'relationArticle') {
-            this.rgrids[field] = instance;
-        }
-    } else {
-        this.grids[idx] = instance;
-    }
-};
-
 /**
- * 편집제목 셀 만들기
- * @param {string} title 기사제목
- * @param {string} distYmdt 배부시간
- * @param {number} relCount 관련기사 건수
- * @param {number} pvCount 편집기사의 PV
- * @param {number} uvCount 편집기사의 UV
+ * 마우스 위치에 따른 row 찾는 함수
+ * @param {object} event 드래그 이벤트
  */
-export const makeTitleEx = (title, distYmdt, relCount, pvCount, uvCount) => {
-    let titleStr = title;
-    const distYmdtStr = `배부 ${moment(distYmdt, DB_DATEFORMAT).format('YYYYMMDD hh:mm')}`;
-    const relCountStr = relCount && relCount > 0 ? ` 관련기사: ${relCount}건` : '';
-    const pvUvCountStr = ` PV(${pvCount}) UV(${uvCount})`;
-    const strArr = [
-        // eslint-disable-next-line max-len
-        '<p style="font-size:14px; margin: 0; text-overflow: ellipsis; width: 100%; white-space: nowrap; overflow: hidden;">',
-        titleStr,
-        '</p>',
-        '<p style="font-size:10px; color:rgba(0, 0, 0, 0.65); margin: 0;">',
-        distYmdtStr,
-        relCountStr,
-        pvUvCountStr,
-        '</p>',
-    ];
-    return strArr.join('');
+export const getRow = (event) => {
+    const elements = document.elementsFromPoint(event.clientX, event.clientY);
+    const agGridRow = elements.find((r) => r.classList.contains('ag-row'));
+    return agGridRow;
 };
 
 /**
@@ -47,11 +13,169 @@ export const makeTitleEx = (title, distYmdt, relCount, pvCount, uvCount) => {
  * @param {object} event 드래그 이벤트
  */
 export const getRowIndex = (event) => {
-    const elements = document.elementsFromPoint(event.clientX, event.clientY);
-    const agGridRow = elements.find((r) => r.classList.contains('ag-row'));
+    const agGridRow = getRow(event);
     if (agGridRow) {
         const index = agGridRow.getAttribute('row-index');
         return Number(index);
     }
     return -1;
+};
+
+const findWork = (node) => (node && node.classList.contains('component-work') ? node : node.parentElement ? findWork(node.parentElement) : null);
+
+const findNextMainRow = (node) => {
+    let result = { type: 'none', node: null };
+    if (node) {
+        const friend = [...node.parentNode.childNodes]
+            .filter((a) => Number(a.getAttribute('row-index')) > Number(node.getAttribute('row-index')))
+            .sort(function (a, b) {
+                const aIdx = Number(a.getAttribute('row-index'));
+                const bIdx = Number(b.getAttribute('row-index'));
+                return aIdx - bIdx;
+            });
+
+        for (let i = 0; i < friend.length; i++) {
+            if (!friend[i].classList.contains('ag-rel-row')) {
+                result = { type: 'next', node: friend[i] };
+                break;
+            } else {
+                if (i === friend.lenght - 1) {
+                    result = { type: 'last', node: friend[i] };
+                }
+            }
+        }
+    }
+    return result;
+};
+
+const findPreviousMainRow = (node) => {
+    let result = { type: 'none', node: null };
+    if (node) {
+        const friend = [...node.parentNode.childNodes]
+            .filter((a) => Number(a.getAttribute('row-index')) < Number(node.getAttribute('row-index')))
+            .sort(function (a, b) {
+                const aIdx = Number(a.getAttribute('row-index'));
+                const bIdx = Number(b.getAttribute('row-index'));
+                return aIdx - bIdx;
+            });
+
+        for (let i = friend.length - 1; i >= 0; i--) {
+            if (!friend[i].classList.contains('ag-rel-row')) {
+                result = { type: 'prev', node: friend[i] };
+                break;
+            } else {
+                if (i === 0) {
+                    result = { type: 'first', node: friend[i] };
+                }
+            }
+        }
+    }
+    return result;
+};
+
+const makeHoverBox = () => {
+    let hoberBox = document.createElement('div');
+    hoberBox.classList.add('is-over');
+    return hoberBox;
+};
+
+/**
+ * 데스킹 워크 ag-grid에 추가할 dropzone 을 생성해주는 함수 + 다른 dropzone에 드래그 시 화면 처리
+ * @param {func} onDragStop drag stop 시 실행하는 함수
+ * @param {object} targetGrid drop target
+ * @param {number} currentIndex 타겟 grid리스트에서 현재 넘어온 타겟 grid의 인덱스 (있으면 넘긴다)
+ */
+export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) => {
+    const workElement = findWork(targetGrid.api.gridOptionsWrapper.layoutElements[0]); // .component-work
+    if (!workElement) return null;
+    if (workElement.classList.contains('disabled')) return null;
+
+    let next = { idx: -1, node: null };
+    let hover = { idx: -1, node: null };
+    let hoverBox = makeHoverBox();
+
+    const clearNextStyle = () => next.node && next.node.classList.remove('next');
+    const clearHoverStyle = () => hover.node && hover.node.classList.remove('hover');
+    const clearWorkStyle = () => workElement.classList.remove('hover');
+    const addNextRowStyle = (nextRow) => {
+        if (nextRow.type === 'none') return;
+        next = { idx: nextRow.node.getAttribute('row-index'), node: nextRow.node };
+        if (nextRow.type === 'next') {
+            nextRow.node.classList.add('next');
+        } else if (nextRow.type === 'last') {
+            nextRow.node.classList.remove('hover');
+            nextRow.node.classList.add('next');
+        }
+    };
+
+    const dropzone = {
+        getContainer: () => workElement,
+        onDragEnter: () => workElement.appendChild(hoverBox),
+        onDragLeave: () => {
+            workElement.removeChild(hoverBox);
+            clearHoverStyle();
+            clearNextStyle();
+            clearWorkStyle();
+        },
+        onDragging: (source) => {
+            let draggingRow = getRow(source.event);
+
+            if (!draggingRow) {
+                workElement.classList.add('hover');
+                clearNextStyle();
+                clearHoverStyle();
+                return;
+            }
+
+            let draggingIdx = draggingRow.getAttribute('row-index');
+            if (hover.idx !== draggingIdx) {
+                clearNextStyle();
+                clearHoverStyle();
+                clearWorkStyle();
+                hover = { idx: draggingIdx, node: draggingRow };
+
+                const selected = targetGrid.api.getSelectedRows();
+                if (selected.length < 1) {
+                    // 주기사 추가
+                    if (draggingRow.classList.contains('ag-row-last')) {
+                        draggingRow.classList.add('hover');
+                    } else {
+                        const nextRow = findNextMainRow(draggingRow);
+                        addNextRowStyle(nextRow);
+                    }
+                } else {
+                    // 관련기사 추가
+                    if (!draggingRow.classList.contains('ag-rel-row')) {
+                        if (draggingRow.classList.contains('ag-row-last')) {
+                            draggingRow.classList.add('hover');
+                        } else if (draggingRow.classList.contains('ag-row-selected')) {
+                            draggingRow.classList.add('hover');
+                        } else {
+                            const nextRow = findNextMainRow(draggingRow);
+                            addNextRowStyle(nextRow);
+                        }
+                    } else {
+                        const mainRow = findPreviousMainRow(draggingRow);
+                        if (mainRow.type === 'prev') {
+                            const drs = targetGrid.api.getDisplayedRowAtIndex(Number(mainRow.node.getAttribute('row-index')));
+                            if (drs.isSelected()) {
+                                draggingRow.classList.add('hover');
+                            } else {
+                                const nextRow = findNextMainRow(draggingRow);
+                                addNextRowStyle(nextRow);
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        onDragStop: (source) => {
+            if (onDragStop) {
+                onDragStop(source, targetGrid, currentIndex);
+            }
+            dropzone.onDragLeave();
+        },
+    };
+
+    return dropzone;
 };

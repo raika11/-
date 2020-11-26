@@ -40,6 +40,7 @@ import {
     faCode as falCode,
     faExpandWide as falExpandWide,
     faShareSquare as falShareSquare,
+    faPencil as falPencil,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -93,6 +94,7 @@ library.add(falSave);
 library.add(falCode);
 library.add(falExpandWide);
 library.add(falShareSquare);
+library.add(falPencil);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

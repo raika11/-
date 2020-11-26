@@ -44,7 +44,17 @@ const ColumnistAgGrid = () => {
 
     // store 변경 되었을떄.
     useEffect(() => {
-        setRowData(list);
+        setRowData(
+            list.map((data) => {
+                let regDt = data.regDt && data.regDt.length > 10 ? data.regDt.substr(0, 10) : data.regDt;
+                let modDt = data.modDt && data.modDt.length > 10 ? data.modDt.substr(0, 10) : data.modDt;
+                return {
+                    ...data,
+                    regDt,
+                    modDt,
+                };
+            }),
+        );
     }, [list]);
 
     return (

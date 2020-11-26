@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './DeskingWorkButtonGroup';
 import AgGrid from './DeskingWorkAgGrid';
-import DeskingWorkEditModal from '../modals/DeskingWorkEditModal';
+import { DeskingWorkEditModal } from '@pages/Desking/modals';
 import toast from '@utils/toastUtil';
 
 const propTypes = {
@@ -85,7 +86,7 @@ const ComponentWork = (props) => {
 
     return (
         <React.Fragment>
-            <div id={`agGrid-${component.seq}`}>
+            <div className={clsx('component-work', { disabled: component.viewYn === 'N' })} id={`agGrid-${component.seq}`}>
                 <ButtonGroup
                     component={component}
                     agGridIndex={agGridIndex}

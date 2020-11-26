@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import { MODAL_PAGESIZE_OPTIONS, API_BASE_URL } from '@/constants';
 import { MokaModal, MokaInput, MokaSearchInput, MokaTable, MokaThumbTable, MokaTableTypeButton } from '@components';
 import { getTpZone, getTpSize } from '@store/codeMgt';
-import { initialState, GET_TEMPLATE_LIST, getTemplateList, changeSearchOption, clearStore } from '@store/template';
+import { initialState, GET_TEMPLATE_LIST_MODAL, getTemplateListModal } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
 import { defaultTemplateSearchType } from '@pages/commons';
 
@@ -36,7 +36,7 @@ const propTypes = {
      */
     templateWidth: PropTypes.number,
     /**
-     * 목록 어떻게 보일지 설정
+     * 목록타입 list|thumbnail
      */
     listType: PropTypes.string,
 };
@@ -50,25 +50,22 @@ const TemplateListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, templateGroup, templateWidth, listType: listTypeProp } = props;
     const dispatch = useDispatch();
 
-    const { latestDomainId, domainList, tpZoneRows, tpSizeRows, search, total, list, error, loading, UPLOAD_PATH_URL } = useSelector((store) => ({
+    const { latestDomainId, domainList, tpZoneRows, tpSizeRows, loading, UPLOAD_PATH_URL } = useSelector((store) => ({
         latestDomainId: store.auth.latestDomainId,
         domainList: store.auth.domainList,
         tpZoneRows: store.codeMgt.tpZoneRows,
         tpSizeRows: store.codeMgt.tpSizeRows,
-        search: store.template.search,
-        total: store.template.total,
-        list: store.template.list,
-        error: store.template.error,
-        loading: store.loading[GET_TEMPLATE_LIST],
+        loading: store.loading[GET_TEMPLATE_LIST_MODAL],
         UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
     }));
 
     // state
+    const [total, setTotal] = useState(0);
+    const [search, setSearch] = useState(initialState.search);
     const [listType, setListType] = useState(listTypeProp || 'list');
     const [rowData, setRowData] = useState([]);
     const [selected, setSelected] = useState('');
     const [selectedTemplate, setSelectedTemplate] = useState({});
-    const [loadCnt, setLoadCnt] = useState(0);
 
     useEffect(() => {
         // 선택된 값 셋팅
@@ -79,9 +76,9 @@ const TemplateListModal = (props) => {
      * 모달 닫기
      */
     const handleHide = () => {
-        dispatch(clearStore());
         setListType('list');
-        setLoadCnt(0);
+        setTotal(0);
+        setSearch({});
         onHide();
     };
 
@@ -102,18 +99,72 @@ const TemplateListModal = (props) => {
     };
 
     /**
+     * row 생성
+     */
+    const makeRowData = useCallback(
+        (list) =>
+            list.map((data) => {
+                let thumb = data.templateThumb;
+                if (thumb && thumb !== '') {
+                    thumb = `${API_BASE_URL}${UPLOAD_PATH_URL}/${thumb}`;
+                }
+                return {
+                    ...data,
+                    id: data.templateSeq,
+                    name: data.templateName,
+                    thumb,
+                };
+            }),
+        [UPLOAD_PATH_URL],
+    );
+
+    const responseCallback = useCallback(
+        ({ header, body }) => {
+            if (header.success) {
+                setRowData(makeRowData(body.list));
+                setTotal(body.totalCnt);
+            } else {
+                setRowData([]);
+                setTotal(0);
+            }
+        },
+        [makeRowData],
+    );
+
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
+
+        if (name === 'domainId') {
+            const tmp = { ...search, domainId: value };
+            setSearch(tmp);
+            dispatch(
+                getTemplateListModal({
+                    search: tmp,
+                    callback: responseCallback,
+                }),
+            );
+        } else if (name === 'templateGroup') {
+            setSearch({ ...search, templateGroup: value });
+        } else if (name === 'searchType') {
+            setSearch({ ...search, searchType: value });
+        } else if (name === 'keyword') {
+            setSearch({ ...search, keyword: value });
+        }
+    };
+
+    /**
      * 검색
      */
     const handleSearch = useCallback(() => {
+        const tmp = { ...search, page: 0 };
+        setSearch(tmp);
         dispatch(
-            getTemplateList(
-                changeSearchOption({
-                    ...search,
-                    page: 0,
-                }),
-            ),
+            getTemplateListModal({
+                search: { ...search, page: 0 },
+                callback: responseCallback,
+            }),
         );
-    }, [dispatch, search]);
+    }, [dispatch, responseCallback, search]);
 
     /**
      * 템플릿 사이즈 변경 함수
@@ -121,35 +172,29 @@ const TemplateListModal = (props) => {
      */
     const handleChangeTpSize = (e) => {
         if (e.target.value === 'all') {
-            dispatch(
-                changeSearchOption({
-                    ...search,
-                    templateWidth: e.target.value,
-                    widthMin: null,
-                    widthMax: null,
-                }),
-            );
+            setSearch({
+                ...search,
+                templateWidth: e.target.value,
+                widthMin: null,
+                widthMax: null,
+            });
             return;
         }
         try {
             const { widthmin, widthmax } = e.target.selectedOptions[0].dataset;
-            dispatch(
-                changeSearchOption({
-                    ...search,
-                    templateWidth: e.target.value,
-                    widthMin: Number(widthmin),
-                    widthMax: Number(widthmax),
-                }),
-            );
+            setSearch({
+                ...search,
+                templateWidth: e.target.value,
+                widthMin: Number(widthmin),
+                widthMax: Number(widthmax),
+            });
         } catch (err) {
-            dispatch(
-                changeSearchOption({
-                    ...search,
-                    templateWidth: e.target.value,
-                    widthMin: null,
-                    widthMax: null,
-                }),
-            );
+            setSearch({
+                ...search,
+                templateWidth: e.target.value,
+                widthMin: null,
+                widthMax: null,
+            });
         }
     };
 
@@ -158,13 +203,17 @@ const TemplateListModal = (props) => {
      */
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
-            let temp = { ...search, [key]: value };
-            if (key !== 'page') {
-                temp['page'] = 0;
-            }
-            dispatch(getTemplateList(changeSearchOption(temp)));
+            let tmp = { ...search, [key]: value };
+            if (key !== 'page') tmp['page'] = 0;
+            setSearch(tmp);
+            dispatch(
+                getTemplateListModal({
+                    search: tmp,
+                    callback: responseCallback,
+                }),
+            );
         },
-        [dispatch, search],
+        [dispatch, responseCallback, search],
     );
 
     /**
@@ -192,76 +241,34 @@ const TemplateListModal = (props) => {
     );
 
     useEffect(() => {
-        // rowData 변경
-        if (list.length > 0) {
-            setRowData(
-                list.map((data) => {
-                    let thumb = data.templateThumb;
-                    if (thumb && thumb !== '') {
-                        thumb = `${API_BASE_URL}${UPLOAD_PATH_URL}/${thumb}`;
-                    }
-                    return {
-                        ...data,
-                        id: data.templateSeq,
-                        name: data.templateName,
-                        thumb,
-                    };
+        if (show) {
+            let tmp = {
+                ...initialState.search,
+                domainId: latestDomainId,
+                templateGroup,
+                size: MODAL_PAGESIZE_OPTIONS[0],
+                page: 0,
+            };
+
+            if (templateWidth) {
+                const tpSize = tpSizeRows.find((size) => Number(size.cdNmEtc1) <= templateWidth && Number(size.cdNmEtc2) >= templateWidth);
+                if (tpSize) {
+                    tmp.templateWidth = tpSize.dtlCd;
+                    tmp.widthMin = tpSize.cdNmEtc1;
+                    tmp.widthMax = tpSize.cdNmEtc2;
+                }
+            }
+
+            dispatch(
+                getTemplateListModal({
+                    search: { ...tmp, page: 0 },
+                    callback: responseCallback,
                 }),
             );
-        } else {
-            setRowData([]);
-        }
-    }, [UPLOAD_PATH_URL, list]);
-
-    useEffect(() => {
-        if (show) {
-            if (templateGroup || templateWidth) {
-                let ts = {
-                    ...initialState.search,
-                    domainId: latestDomainId,
-                    templateGroup: templateGroup,
-                    size: MODAL_PAGESIZE_OPTIONS[0],
-                    page: 0,
-                };
-                if (templateWidth) {
-                    const tpSize = tpSizeRows.find((size) => Number(size.cdNmEtc1) <= templateWidth && Number(size.cdNmEtc2) >= templateWidth);
-                    if (tpSize) {
-                        ts.templateWidth = tpSize.dtlCd;
-                        ts.widthMin = tpSize.cdNmEtc1;
-                        ts.widthMax = tpSize.cdNmEtc2;
-                    }
-                }
-                dispatch(changeSearchOption(ts));
-            } else {
-                dispatch(
-                    changeSearchOption({
-                        ...initialState.search,
-                        domainId: latestDomainId,
-                        size: MODAL_PAGESIZE_OPTIONS[0],
-                        page: 0,
-                    }),
-                );
-            }
+            setSearch(tmp);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [latestDomainId, tpSizeRows, show, templateGroup, templateWidth]);
-
-    useEffect(() => {
-        if (loadCnt > 1) return;
-        // 템플릿의 search.domainId 변경시 리스트 조회
-        if (search.domainId) {
-            dispatch(
-                getTemplateList(
-                    changeSearchOption({
-                        ...search,
-                        page: 0,
-                    }),
-                ),
-            );
-            setLoadCnt(loadCnt + 1);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, search.domainId]);
 
     useEffect(() => {
         if (show) {
@@ -289,19 +296,7 @@ const TemplateListModal = (props) => {
                 <Form.Row className="mb-2">
                     {/* 도메인 */}
                     <Col xs={7} className="p-0 pr-2">
-                        <MokaInput
-                            as="select"
-                            className="w-100"
-                            value={search.domainId || undefined}
-                            onChange={(e) => {
-                                dispatch(
-                                    changeSearchOption({
-                                        ...search,
-                                        domainId: e.target.value,
-                                    }),
-                                );
-                            }}
-                        >
+                        <MokaInput as="select" className="w-100" value={search.domainId} name="domainId" onChange={handleChangeValue}>
                             {domainList.map((domain) => (
                                 <option key={domain.domainId} value={domain.domainId}>
                                     {domain.domainName}
@@ -311,18 +306,7 @@ const TemplateListModal = (props) => {
                     </Col>
                     {/* 템플릿 위치그룹 */}
                     <Col xs={5} className="p-0">
-                        <MokaInput
-                            as="select"
-                            value={search.templateGroup}
-                            onChange={(e) => {
-                                dispatch(
-                                    changeSearchOption({
-                                        ...search,
-                                        templateGroup: e.target.value,
-                                    }),
-                                );
-                            }}
-                        >
+                        <MokaInput as="select" value={search.templateGroup} name="templateGroup" onChange={handleChangeValue}>
                             <option value="all">위치그룹 전체</option>
                             {tpZoneRows.map((cd) => (
                                 <option key={cd.dtlCd} value={cd.dtlCd}>
@@ -346,19 +330,7 @@ const TemplateListModal = (props) => {
                     </Col>
                     {/* 검색조건 */}
                     <Col xs={2} className="p-0 pr-2">
-                        <MokaInput
-                            as="select"
-                            value={search.searchType || undefined}
-                            className="ft-12"
-                            onChange={(e) => {
-                                dispatch(
-                                    changeSearchOption({
-                                        ...search,
-                                        searchType: e.target.value,
-                                    }),
-                                );
-                            }}
-                        >
+                        <MokaInput as="select" value={search.searchType} className="ft-12" name="searchType" onChange={handleChangeValue}>
                             {defaultTemplateSearchType.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
@@ -368,25 +340,9 @@ const TemplateListModal = (props) => {
                     </Col>
                     <Col xs={7} className="p-0 d-flex">
                         {/* 키워드 */}
-                        <MokaSearchInput
-                            className="pr-2 flex-fill"
-                            value={search.keyword}
-                            onChange={(e) => {
-                                dispatch(
-                                    changeSearchOption({
-                                        ...search,
-                                        keyword: e.target.value,
-                                    }),
-                                );
-                            }}
-                            onSearch={handleSearch}
-                        />
+                        <MokaSearchInput className="pr-2 flex-fill" value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
                         {/* 버튼 그룹 */}
-                        <MokaTableTypeButton
-                            onSelect={(selectedKey) => {
-                                setListType(selectedKey);
-                            }}
-                        />
+                        <MokaTableTypeButton defaultActiveKey={listType} onSelect={(selectedKey) => setListType(selectedKey)} />
                     </Col>
                 </Form.Row>
             </Form>
@@ -395,7 +351,6 @@ const TemplateListModal = (props) => {
             {listType === 'list' && (
                 <MokaTable
                     agGridHeight={501}
-                    error={error}
                     columnDefs={columnDefs}
                     rowData={rowData}
                     onRowNodeId={(template) => template.templateSeq}

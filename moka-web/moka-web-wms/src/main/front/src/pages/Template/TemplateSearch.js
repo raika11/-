@@ -97,8 +97,8 @@ const TemplateSearch = () => {
     }, [dispatch, latestDomainId, search]);
 
     useEffect(() => {
-        dispatch(getTpZone());
-        dispatch(getTpSize());
+        if (tpSizeRows.length < 1) dispatch(getTpSize());
+        if (tpZoneRows.length < 1) dispatch(getTpZone());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

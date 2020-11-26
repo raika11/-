@@ -7,7 +7,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast from '@utils/toastUtil';
-import { postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
+import { putComponentWork, postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 import HtmlEditModal from '../modals/HtmlEditModal';
 import TemplateListModal from '@pages/Template/modals/TemplateListModal';
@@ -40,20 +40,6 @@ const DeskingWorkButtonGroup = (props) => {
     const [registerModal, setRegisterModal] = useState(false);
     const [listNumberModal, setListNumberModal] = useState(false);
     const [title, setTitle] = useState('');
-
-    /**
-     * HTML편집
-     */
-    const handleHtmlEdit = () => {
-        setHtmlEditModal(true);
-    };
-
-    /**
-     * 템플릿
-     */
-    const handleTemplate = () => {
-        setTemplateModal(true);
-    };
 
     /**
      * 전송
@@ -92,14 +78,12 @@ const DeskingWorkButtonGroup = (props) => {
     /**
      * 공백추가
      */
-    const handleAddSpace = () => {
-        setAddSpaceModal(true);
-    };
+    const handleOpenAddSpace = () => setAddSpaceModal(true);
 
     /**
      * 기사이동
      */
-    const handleRegister = () => {
+    const handleOpenRegister = () => {
         if (!componentAgGridInstances[agGridIndex]) return;
         const api = componentAgGridInstances[agGridIndex].api;
 
@@ -113,14 +97,12 @@ const DeskingWorkButtonGroup = (props) => {
     /**
      * 리스트 건수
      */
-    const handleListNumber = () => {
-        setListNumberModal(true);
-    };
+    const handleOpenListNumber = () => setListNumberModal(true);
 
     /**
      * 전체삭제
      */
-    const handleDeleteClicked = () => {
+    const handleClickDelete = () => {
         if (component.deskingWorks.length > 0) {
             const option = {
                 componentWorkSeq: component.seq,
@@ -136,9 +118,30 @@ const DeskingWorkButtonGroup = (props) => {
         }
     };
 
+    /**
+     * 템플릿 변경
+     */
+    const handleClickSaveTemplate = (templateData) => {
+        if (!templateData.templateSeq) {
+            toast.warn('선택된 템플릿이 없습니다');
+            return;
+        }
+
+        dispatch(
+            putComponentWork({
+                componentWork: { ...component, templateSeq: templateData.templateSeq },
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        toast.error(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
     const iconButton = [
-        { title: 'HTML 수동편집', iconName: 'fal-code', onClick: handleHtmlEdit },
-        { title: '템플릿', iconName: 'fal-expand-wide', onClick: handleTemplate },
+        { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => setHtmlEditModal(true) },
+        { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModal(true) },
         { title: '임시저장', iconName: 'fal-save', onClick: handleSaveComponentWork },
         { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
     ];
@@ -168,16 +171,16 @@ const DeskingWorkButtonGroup = (props) => {
                             <Dropdown>
                                 <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
                                 <Dropdown.Menu className="ft-12">
-                                    <Dropdown.Item eventKey="1" onClick={handleAddSpace} date={component}>
+                                    <Dropdown.Item eventKey="1" onClick={handleOpenAddSpace} date={component}>
                                         공백 추가
                                     </Dropdown.Item>
-                                    <Dropdown.Item eventKey="2" onClick={handleDeleteClicked}>
+                                    <Dropdown.Item eventKey="2" onClick={handleClickDelete}>
                                         전체 삭제
                                     </Dropdown.Item>
-                                    <Dropdown.Item eventKey="3" onClick={handleRegister}>
+                                    <Dropdown.Item eventKey="3" onClick={handleOpenRegister}>
                                         기사 이동
                                     </Dropdown.Item>
-                                    <Dropdown.Item eventKey="4" onClick={handleListNumber}>
+                                    <Dropdown.Item eventKey="4" onClick={handleOpenListNumber}>
                                         리스트 건수
                                     </Dropdown.Item>
                                     <Dropdown.Item eventKey="5" style={component.viewYn === 'Y' ? { color: 'red' } : { color: 'black' }} disabled>
@@ -197,9 +200,11 @@ const DeskingWorkButtonGroup = (props) => {
             <TemplateListModal
                 show={templateModal}
                 onHide={() => setTemplateModal(false)}
+                selected={component.templateSeq}
                 templateGroup={component.templateGroup}
                 templateWidth={component.templateWidth}
                 listType="thumbnail"
+                onClickSave={handleClickSaveTemplate}
             />
 
             {/* 공백 추가 */}

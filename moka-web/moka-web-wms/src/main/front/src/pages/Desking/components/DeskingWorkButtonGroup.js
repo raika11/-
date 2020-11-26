@@ -151,7 +151,7 @@ const DeskingWorkButtonGroup = (props) => {
             <div className="px-2 py-1">
                 <Row className="m-0 d-flex align-items-center justify-content-between">
                     <Col className="p-0" xs={6}>
-                        <OverlayTrigger overlay={<Tooltip>{`데이타셋ID: ${component.datasetSeq}`}</Tooltip>}>
+                        <OverlayTrigger overlay={<Tooltip>{`데이터셋ID: ${component.datasetSeq}`}</Tooltip>}>
                             <p className="ft-12 mb-0 component-title">{title}</p>
                         </OverlayTrigger>
                     </Col>

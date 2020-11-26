@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.MokaConstants;
@@ -564,6 +565,7 @@ public class DeskingRestController extends AbstractCommonController {
      * @return work컴포넌트
      * @throws Exception 예외
      */
+    @ApiOperation(value = "더미기사 추가")
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}")
     public ResponseEntity<?> postDeskingWork(HttpServletRequest request,
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
@@ -583,7 +585,7 @@ public class DeskingRestController extends AbstractCommonController {
             if (deskingWorkDTO.getContentType() != null && deskingWorkDTO.getContentType()
                                                                          .equals("D")) {
                 // 컨텐츠아이디 생성
-                //                deskingWorkDTO.setContentId(McpDate.dateStr());
+                deskingWorkDTO.setContentId(McpDate.dateStr(new Date(), "yyyyMMddHHmmss"));
             }
 
             // 썸네일 파일 저장

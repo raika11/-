@@ -30,6 +30,8 @@ const Special = React.lazy(() => import('@pages/Special'));
 const DirectLink = React.lazy(() => import('@pages/DirectLink'));
 const Member = React.lazy(() => import('@pages/Member'));
 const Columnist = React.lazy(() => import('@pages/Columnist'));
+const SnsMata = React.lazy(() => import('@pages/SnsManage/SnsMata'));
+const FbArt = React.lazy(() => import('@pages/SnsManage/FbArt'));
 
 const routes = [
     {
@@ -275,6 +277,36 @@ const routes = [
         name: 'columnist',
         displayName: '컬럼니스트 관리',
         component: Columnist,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/columnist',
+        name: 'columnist',
+        displayName: '컬럼니스트 관리',
+        component: Columnist,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/sns-mata',
+        name: 'sns-mata',
+        displayName: 'FB & TW 관리',
+        component: SnsMata,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/fb-art',
+        name: 'fb-art',
+        displayName: 'FB전송기사 관리',
+        component: FbArt,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

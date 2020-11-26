@@ -22,6 +22,7 @@ import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDTO;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtGrpDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
@@ -602,57 +603,56 @@ public class CodeMgtRestController {
         List<CodeMgt> returnValue = codeMgtService.findByDtlCd(grpCd, dtlCd);
 
         // 리턴값 설정
-        ResultListDTO<CodeMgtDTO> resultListMessage = new ResultListDTO<CodeMgtDTO>();
-        List<CodeMgtDTO> codeDtoList = modelMapper.map(returnValue, CodeMgtDTO.TYPE);
+        List<CodeMgtDtlDTO> codeDtoList = modelMapper.map(returnValue, CodeMgtDtlDTO.TYPE);
 
-        ResultDTO<List<CodeMgtDTO>> resultDto = new ResultDTO<>(codeDtoList);
+        ResultDTO<List<CodeMgtDtlDTO>> resultDto = new ResultDTO<>(codeDtoList);
         tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-//    /**
-//     * 코드수정
-//     *
-//     * @param seqNo      코드순
-//     * @param codeMgtDTO 수정할 코드정보
-//     * @return 수정된 코드정보
-//     * @throws InvalidDataException 데이타 유효성오류
-//     * @throws NoDataException      데이타 없음
-//     * @throws Exception            기타예외
-//     */
-//    @ApiOperation(value = "코드수정")
-//    @PutMapping("/codemgts/{seqNo}")
-//    public ResponseEntity<?> putCodeMgt(@PathVariable("seqNo")
-//                                        @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo,
-//                                        @Valid CodeMgtDTO codeMgtDTO)
-//            throws InvalidDataException, NoDataException, Exception {
-//
-//// 수정
-//        CodeMgt newCodeMgt = modelMapper.map(codeMgtDTO, CodeMgt.class);
-//        CodeMgt orgCodeMgt = codeMgtService.findBySeqNo(seqNo)
-//                .orElseThrow(() -> {
-//                    String message = messageByLocale.get("tps.common.error.no-data");
-//                    tpsLogger.fail(ActionType.UPDATE, message, true);
-//                    return new NoDataException(message);
-//                });
-//
-//        try {
-//
-//            CodeMgt returnValue = codeMgtService.updateCodeMgt(newCodeMgt);
-//
-//            // 결과리턴
-//            CodeMgtDTO dto = modelMapper.map(returnValue, CodeMgtDTO.class);
-//
-//            String message = messageByLocale.get("tps.common.success.update");
-//            ResultDTO<CodeMgtDTO> resultDTO = new ResultDTO<CodeMgtDTO>(dto, message);
-//            tpsLogger.success(ActionType.UPDATE, true);
-//            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-//        } catch (Exception e) {
-//            log.error("[FAIL TO UPDATE CODE_MGT] seqNo: {} {}", seqNo, e.getMessage());
-//            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE CODE_MGT]", e, true);
-//            throw new Exception(messageByLocale.get("tps.common.error.update"), e);
-//        }
-//
-//    }
+    /**
+     * 코드수정
+     *
+     * @param seqNo            코드순
+     * @param codeMgtDtlDTO       수정할 코드정보
+     * @return 수정된 코드정보
+     * @throws InvalidDataException 데이타 유효성오류
+     * @throws NoDataException      데이타 없음
+     * @throws Exception            기타예외
+     */
+    @ApiOperation(value = "코드수정")
+    @PutMapping("/{seqNo}/setSpecialChar")
+    public ResponseEntity<?> putCodeMgtDtl(@PathVariable("seqNo")
+                @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo
+            , @Valid CodeMgtDtlDTO codeMgtDtlDTO
+    )throws InvalidDataException, NoDataException, Exception {
+
+
+        // 수정
+        CodeMgt orgCodeMgt = codeMgtService.findBySeqNo(seqNo)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
+
+        try {
+
+            CodeMgtDtlDTO returnValue = codeMgtService.updateCodeMgtDtl(codeMgtDtlDTO);
+
+            // 결과리턴
+            CodeMgtDtlDTO dto = modelMapper.map(returnValue, CodeMgtDtlDTO.class);
+
+            String message = messageByLocale.get("tps.common.success.update");
+            ResultDTO<CodeMgtDtlDTO> resultDTO = new ResultDTO<CodeMgtDtlDTO>(dto, message);
+            tpsLogger.success(ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE CODE_MGT] seqNo: {} {}", seqNo, e.getMessage());
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE CODE_MGT]", e, true);
+            throw new Exception(messageByLocale.get("tps.common.error.update"), e);
+        }
+
+    }
 }
 

@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 
 import com.querydsl.core.QueryResults;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
@@ -134,6 +135,14 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     public List<CodeMgt> findByDtlCd(String grpCd, String dtlCd) {
         return codeMgtRepository.findByDtlCd(grpCd, dtlCd);
     }
+
+
+    @Override
+    public CodeMgtDtlDTO updateCodeMgtDtl(CodeMgtDtlDTO codeMgtDtlDTO)
+    {
+        return codeMgtRepository.updateCodeMgtDtl(codeMgtDtlDTO);
+    }
+
 
 }
 

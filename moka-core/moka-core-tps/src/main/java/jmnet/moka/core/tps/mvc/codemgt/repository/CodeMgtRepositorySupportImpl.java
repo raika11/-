@@ -9,6 +9,8 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeMgt;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <pre>
@@ -100,6 +103,18 @@ public class CodeMgtRepositorySupportImpl extends QuerydslRepositorySupport impl
         QueryResults<CodeMgt> list = query.fetchResults();
 
         return query.fetchResults().getResults();
+    }
+
+    @Override
+    @Transactional
+    public CodeMgtDtlDTO updateCodeMgtDtl(CodeMgtDtlDTO codeMgtDtlDTO) {
+        QCodeMgt QcodeMgt = QCodeMgt.codeMgt;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(QcodeMgt.seqNo.eq(codeMgtDtlDTO.getSeqNo()));
+        queryFactory.update(QcodeMgt).where(builder).set(QcodeMgt.cdNm, codeMgtDtlDTO.getCdNm()).execute();
+
+        return codeMgtDtlDTO;
     }
 
 }

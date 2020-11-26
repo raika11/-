@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.querydsl.core.QueryResults;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
@@ -174,4 +175,13 @@ public interface CodeMgtService {
      * @return CodeMgt
      */
     List<CodeMgt> findByDtlCd(String grpCd, String dtlCd);
+
+    /**
+     * 코드정보수정
+     *
+     * @param codeMgtDtlDTO 코드정보
+     *
+     * @return 코드정보
+     */
+    public CodeMgtDtlDTO updateCodeMgtDtl(CodeMgtDtlDTO codeMgtDtlDTO);
 }

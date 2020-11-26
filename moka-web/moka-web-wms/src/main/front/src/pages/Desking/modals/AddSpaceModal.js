@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaImageInput, MokaInput, MokaInputLabel, MokaModal } from '@components';
 
-import { postDeskingWorkList } from '@store/desking';
+import { postDeskingWork } from '@store/desking';
 import toast from '@utils/toastUtil';
 
 const linkTargetList = [
@@ -18,7 +18,7 @@ const linkTargetList = [
  * 공백기사 컴포넌트
  */
 const AddSpaceModal = (props) => {
-    const { show, onHide, data, componentAgGridInstances } = props;
+    const { show, onHide, data } = props;
     const dispatch = useDispatch();
 
     // 데스킹 정보
@@ -70,25 +70,36 @@ const AddSpaceModal = (props) => {
         const option = {
             componentWorkSeq: data.seq,
             datasetSeq: data.datasetSeq,
-            list: [
-                {
-                    contentOrd: componentAgGridInstances.length + 1,
-                    thumbFileName,
-                    title,
-                    bodyHead,
-                    linkUrl,
-                    linkTarget,
-                },
-            ],
+            deskingWork: {
+                contentOrd: 1,
+                contentType: 'D',
+                thumbFileName,
+                title,
+                bodyHead,
+                linkUrl,
+                linkTarget,
+            },
             callback: ({ header }) => {
                 if (header.success) {
                     toast.success(header.message);
+                    handleHide();
                 } else {
                     toast.error(header.message);
                 }
             },
         };
-        dispatch(postDeskingWorkList(option));
+        dispatch(postDeskingWork(option));
+    };
+
+    /**
+     * 닫기
+     */
+    const handleHide = () => {
+        setThumbFileName('');
+        setTitle('');
+        setBodyHead('');
+        setLinkUrl('');
+        setLinkTarget('');
         onHide();
     };
 
@@ -98,10 +109,10 @@ const AddSpaceModal = (props) => {
             width={650}
             size="xl"
             show={show}
-            onHide={onHide}
+            onHide={handleHide}
             buttons={[
                 { variant: 'positive', text: '저장', onClick: handleSaveDeskingWork },
-                { variant: 'negative', text: '취소', onClick: onHide },
+                { variant: 'negative', text: '취소', onClick: handleHide },
             ]}
             footerClassName="d-flex justify-content-center"
             draggable

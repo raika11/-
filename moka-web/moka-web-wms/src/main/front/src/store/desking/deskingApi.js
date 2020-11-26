@@ -66,7 +66,7 @@ export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
 // 공백 기사 추가=> payload
 export const postDeskingWork = ({ componentWorkSeq, datasetSeq, deskingWork }) => {
     return instance
-        .post(`/api/desking/components/${componentWorkSeq}/contents${datasetSeq}`, objectToFormData(deskingWork), {
+        .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}`, objectToFormData(deskingWork), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

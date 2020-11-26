@@ -129,8 +129,8 @@ public class ArticleSource extends BaseAudit {
     /**
      * CP FTP 로컬경로
      */
-    @Column(name = "CP_FTP_PATH")
-    private String cpFtpPath;
+    @Column(name = "CP_XML_PATH")
+    private String cpXmlPath;
 
     /**
      * CP등록IP주소

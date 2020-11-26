@@ -35,6 +35,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -552,73 +553,72 @@ public class DeskingRestController extends AbstractCommonController {
     //        }
     //    }
 
-    //    /**
-    //     * work편집기사, 더미기사 추가
-    //     *
-    //     * @param request          요청
-    //     * @param componentWorkSeq work컴포넌트순번
-    //     * @param datasetSeq       데이타셋순번
-    //     * @param deskingWorkDTO   등록할 편집기사
-    //     * @param principal        작업자
-    //     * @return work컴포넌트
-    //     * @throws Exception 예외
-    //     */
-    //    @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}")
-    //    public ResponseEntity<?> postDeskingWork(HttpServletRequest request,
-    //            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-    //            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
-    //            @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO, Principal principal)
-    //            throws Exception {
-    //
-    //        try {
-    //            // 데이터 검증
-    //            List<InvalidDataDTO> invalidList = this.validDeskingWorkDTO(deskingWorkDTO);
-    //            if (invalidList.size() > 0) {
-    //                String message = msg("tps.desking.error.invalidContent");
-    //                throw new InvalidDataException(invalidList, message);
-    //            }
-    //
-    //            // 더미기사인지 체크
-    //            if (deskingWorkDTO.getContentType() != null && deskingWorkDTO.getContentType()
-    //                                                                         .equals("D")) {
-    //                // 컨텐츠아이디 생성
-    //                //                deskingWorkDTO.setTotalId(Long.);
-    //            }
-    //
-    ////            DeskingWork deskingWork = modelMapper.map(deskingWorkDTO, DeskingWork.class);
-    //
-    //            // 썸네일 파일 저장
-    //            if (deskingWorkDTO.getThumbnailFile() != null) {
-    //                MultipartFile mfile = deskingWorkDTO.getThumbnailFile();
-    //                String fileName = deskingService.saveDeskingWorkImage(deskingWork, mfile);
-    //                int[] imgInfo = uploadFileHelper.getImgFileSize(mfile);
-    //
-    //                // 썸네일 정보 셋팅
-    //                deskingWork.setThumbFileName(fileName);
-    //                deskingWork.setThumbSize((int) mfile.getSize());
-    //                deskingWork.setThumbWidth(imgInfo[0]);
-    //                deskingWork.setThumbHeight(imgInfo[1]);
-    //            }
-    //
-    //            // 스냅샷 수정
-    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
-    //
-    //            // work편집기사 추가 및 정렬
-    //            List<DeskingWorkDTO> appendList = new ArrayList<>();
-    //            appendList.add(deskingWorkDTO);
-    //            deskingService.insertDeskingWorkList(appendList, datasetSeq, principal.getName());
-    //
-    //            // 컴포넌트 워크 조회(편집기사포함)
-    //            ComponentWorkVO workVO = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
-    //
-    //            // 리턴값 설정
-    //            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(workVO, msg("tps.desking.success.work.dummy.insert"));
-    //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    //
-    //        } catch (Exception e) {
-    //            throw new Exception(msg("tps.desking.error.work.dummy.insert", request), e);
-    //        }
-    //    }
+    /**
+     * work편집기사, 더미기사 추가
+     *
+     * @param request          요청
+     * @param componentWorkSeq work컴포넌트순번
+     * @param datasetSeq       데이타셋순번
+     * @param deskingWorkDTO   등록할 편집기사
+     * @param principal        작업자
+     * @return work컴포넌트
+     * @throws Exception 예외
+     */
+    @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}")
+    public ResponseEntity<?> postDeskingWork(HttpServletRequest request,
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO, Principal principal)
+            throws Exception {
+
+        try {
+            // 데이터 검증
+            List<InvalidDataDTO> invalidList = this.validDeskingWorkDTO(deskingWorkDTO);
+            if (invalidList.size() > 0) {
+                String message = msg("tps.desking.error.invalidContent");
+                throw new InvalidDataException(invalidList, message);
+            }
+
+            // 더미기사인지 체크
+            if (deskingWorkDTO.getContentType() != null && deskingWorkDTO.getContentType()
+                                                                         .equals("D")) {
+                // 컨텐츠아이디 생성
+                //                deskingWorkDTO.setContentId(McpDate.dateStr());
+            }
+
+            // 썸네일 파일 저장
+            if (deskingWorkDTO.getThumbnailFile() != null) {
+                DeskingWork deskingWork = modelMapper.map(deskingWorkDTO, DeskingWork.class);
+                MultipartFile mfile = deskingWorkDTO.getThumbnailFile();
+                String fileName = deskingService.saveDeskingWorkImage(deskingWork, mfile);
+                int[] imgInfo = uploadFileHelper.getImgFileSize(mfile);
+
+                // 썸네일 정보 셋팅
+                deskingWorkDTO.setThumbFileName(fileName);
+                deskingWorkDTO.setThumbSize((int) mfile.getSize());
+                deskingWorkDTO.setThumbWidth(imgInfo[0]);
+                deskingWorkDTO.setThumbHeight(imgInfo[1]);
+            }
+
+            // 스냅샷 수정
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
+
+            // work편집기사 추가 및 정렬
+            List<DeskingWorkDTO> appendList = new ArrayList<>();
+            appendList.add(deskingWorkDTO);
+            deskingService.insertDeskingWorkList(appendList, datasetSeq, principal.getName());
+
+            // 컴포넌트 워크 조회(편집기사포함)
+            ComponentWorkVO workVO = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+
+            // 리턴값 설정
+            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(workVO, msg("tps.desking.success.work.dummy.insert"));
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw new Exception(msg("tps.desking.error.work.dummy.insert", request), e);
+        }
+    }
 
 
 

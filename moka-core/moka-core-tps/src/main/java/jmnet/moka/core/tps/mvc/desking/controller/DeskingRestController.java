@@ -584,7 +584,7 @@ public class DeskingRestController extends AbstractCommonController {
             if (deskingWorkDTO.getContentType() != null && deskingWorkDTO.getContentType()
                                                                          .equals("D")) {
                 // 컨텐츠아이디 생성
-                deskingWorkDTO.setContentId(McpDate.dateStr(new Date(), "yyyyMMddHHmmss"));
+                deskingWorkDTO.setContentId("D" + McpDate.dateStr(new Date(), "yyyyMMddHHmmss"));
             }
 
             // 썸네일 파일 저장

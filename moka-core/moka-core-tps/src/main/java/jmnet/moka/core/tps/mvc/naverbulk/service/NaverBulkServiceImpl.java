@@ -3,6 +3,7 @@
  */
 package jmnet.moka.core.tps.mvc.naverbulk.service;
 
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkListDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkSearchDTO;
@@ -70,8 +71,9 @@ public class NaverBulkServiceImpl implements NaverBulkService {
             saveArticle.setSourceCode(sourceCode);
             saveArticle.setStatus(status);
 
-            if("PUBLISH".equals(status)){
+            if(MokaConstants.STATUS_PUBLISH.equals(status)){
                 saveArticle.setUsedYn(MokaConstants.YES);
+                saveArticle.setSendDt(McpDate.now());
             }
 
             // 마스터 테이블에 한건

@@ -43,14 +43,20 @@ export const getRepoterList = createAction(GET_REPOTER_LIST, (...actions) => act
 export const CHANGE_INVALID_LINK = 'columnNist/CHANGE_INVALID_LINK';
 export const changeInvalidList = createAction(CHANGE_INVALID_LINK, (invalidList) => invalidList);
 
-// 컬럼니스트 저장.
+// 칼럼니스트 저장.
 export const SAVE_COLUMNIST = 'columnNist/SAVE_COLUMNIST';
 export const saveColumnist = createAction(SAVE_COLUMNIST, ({ type, actions, callback }) => ({ type, actions, callback }));
 
 // 스토어 컬럼니스트 정보 변경.
-export const CHANGE_COLUMNIST = 'directLink/CHANGE_COLUMNIST';
+export const CHANGE_COLUMNIST = 'columnNist/CHANGE_COLUMNIST';
 export const changeColumnist = createAction(CHANGE_COLUMNIST, (columist) => columist);
 
 // 삭제
-export const [DELETE_COLUMNIST, DELETE_COLUMNIST_SUCCESS, DELETE_COLUMNIST_FAILURE] = createRequestActionTypes('directLink/DELETE_DIRECT_LINK');
+export const [DELETE_COLUMNIST, DELETE_COLUMNIST_SUCCESS, DELETE_COLUMNIST_FAILURE] = createRequestActionTypes('columnNist/DELETE_DIRECT_LINK');
 export const deleteColumnist = createAction(DELETE_COLUMNIST, ({ seqNo, callback }) => ({ seqNo, callback }));
+
+/**
+ * 등록 버튼 처리
+ */
+export const [CHANGE_COLUMNIST_LIST_EDIT_MODE, CHANGE_COLUMNIST_LIST_EDIT_MODE_SUCCESS] = createRequestActionTypes('columnNist/CHANGE_COLUMNIST_LIST_EDIT_MODE');
+export const changeColumnlistEditMode = createAction(CHANGE_COLUMNIST_LIST_EDIT_MODE, ({ editmode }) => ({ editmode }));

@@ -3,17 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
-import { GET_COLUMNIST_LIST, getColumnistList, getColumnist, changeSearchOption } from '@store/columNist';
+import { GET_COLUMNIST_LIST, getColumnistList, getColumnist, changeSearchOption, changeColumnlistEditMode } from '@store/columNist';
 
 const ColumnistAgGrid = () => {
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
 
-    const { loading, list, search, total } = useSelector((store) => ({
+    const { loading, list, search, total, editmode, columnlist } = useSelector((store) => ({
         loading: store.loading[GET_COLUMNIST_LIST],
+        columnlist: store.columNist.columnlist,
         list: store.columNist.columnlist_list.list,
         search: store.columNist.columnlist_list.search,
         total: store.columNist.columnlist_list.total,
+        editmode: store.columNist.editmode,
     }));
 
     // 목록에서 아이템 클릭시 수정 모드.
@@ -27,7 +29,7 @@ const ColumnistAgGrid = () => {
 
     // FIXME: 신규등록 버튼인데 기자를 선택 하면 신규이기 때문에 어떻게 해야 할지?
     const handleNewColumnlist = () => {
-        console.log('handleNewColumnlist');
+        dispatch(changeColumnlistEditMode({ editmode: editmode ? false : true }));
     };
 
     // 검색
@@ -80,7 +82,7 @@ const ColumnistAgGrid = () => {
                 size={search.size}
                 displayPageNum={3}
                 onChangeSearchOption={handleChangeSearchOption}
-                selected={null}
+                selected={columnlist && columnlist.seqNo}
             />
         </React.Fragment>
     );

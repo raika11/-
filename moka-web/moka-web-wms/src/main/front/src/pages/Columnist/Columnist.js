@@ -20,8 +20,8 @@ const Columnist = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>컬럼니스트 관리</title>
-                <meta name="description" content="컬럼니스트 관리페이지입니다." />
+                <title>칼럼니스트 관리</title>
+                <meta name="description" content="칼럼니스트 관리페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 

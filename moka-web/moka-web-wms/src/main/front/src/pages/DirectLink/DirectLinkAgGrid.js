@@ -95,6 +95,7 @@ const DirectLinkAgGrid = () => {
                 agGridHeight={650}
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={60}
                 onRowNodeId={(data) => data.linkSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}

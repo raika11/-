@@ -153,6 +153,6 @@ public class ArticleSource extends BaseAudit {
     /**
      * 이미지수신여부
      */
-    @Column(name = "IMG_RECEIVE_YN", columnDefinition = "char")
-    private String imgReceiveYn = MokaConstants.NO;
+    @Column(name = "RECEIVE_IMG_YN", columnDefinition = "char")
+    private String receiveImgYn = MokaConstants.NO;
 }

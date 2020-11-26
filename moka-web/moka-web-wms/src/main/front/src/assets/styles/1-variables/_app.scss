@@ -92,7 +92,6 @@ $positive:         $primary !default;
 $neutral:          $secondary !default;
 $negative:         #6C78A0 !default;
 $searching:        $gray-800 !default;
-$table-btn:        $gray-900 !default;
 
 $theme-colors: (
 	"primary": $primary,
@@ -110,7 +109,8 @@ $theme-colors: (
 	"searching": $searching,
 	"white": $white,
 	"gray150": $gray-150,
-	"table-btn": $table-btn
+	"table-btn": $gray-500,
+	"table-btn2": $gray-900,
 ) !default;
 
 // Social colors

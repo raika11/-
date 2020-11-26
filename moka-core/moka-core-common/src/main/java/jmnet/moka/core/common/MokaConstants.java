@@ -64,6 +64,7 @@ public class MokaConstants {
     public static final String MERGE_CONTEXT = "mergeContext";
     public static final String MERGE_CONTEXT_ITEM = "item";
     public static final String MERGE_DATA_MAP = "mergeDataMap";
+    public static final String MERGE_COMMAND_PREFIX = "/digitalspecial";
     public static final String MERGE_ARTICE_PREFIX = "/article";
     public static final String MERGE_DIGITAL_SPECIAL_PREFIX = "/digitalspecial";
 
@@ -151,7 +152,7 @@ public class MokaConstants {
 
     /* page service name regx */
     public static final String PAGE_SERVICE_NAME_PATTERN = "^[a-zA-Z0-9_\\-]*$";
-    public static final String PAGE_SERVICE_URL_PATTERN = "^[a-zA-Z0-9_\\-\\/]*$";
+    public static final String PAGE_SERVICE_URL_PATTERN = "^[a-zA-Z0-9_\\-\\/\\*]*$";
 
     public static final String UNKNOWN = "UNKNOWN";
     public static final String SYSTEM_UNKNOWN = UNKNOWN;

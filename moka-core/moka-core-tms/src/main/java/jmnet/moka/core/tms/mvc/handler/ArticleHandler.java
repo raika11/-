@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
@@ -88,6 +89,11 @@ public class ArticleHandler extends AbstractHandler {
         mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
 
         String articleId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
+
+        // Http 헤더 설정
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_HEADER, HttpHelper.getHeaderMap(request));
+        // Http 쿠기 설정
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_COOKIE, HttpHelper.getCookieMap(request));
 
         model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
         return this.viewName;

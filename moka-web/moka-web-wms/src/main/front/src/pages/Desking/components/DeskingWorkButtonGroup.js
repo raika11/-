@@ -1,6 +1,5 @@
-import React, { useState, Suspense, forwardRef } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { useDispatch } from 'react-redux';
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -8,14 +7,13 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast from '@utils/toastUtil';
-
 import { postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
-const HtmlEditModal = React.lazy(() => import('../modals/HtmlEditModal'));
-const TemplateListModal = React.lazy(() => import('@/pages/Template/modals/TemplateListModal'));
-const AddSpaceModal = React.lazy(() => import('../modals/AddSpaceModal'));
-const RegisterModal = React.lazy(() => import('../modals/RegisterModal'));
-const ListNumberEditModal = React.lazy(() => import('../modals/ListNumberEditModal'));
+import HtmlEditModal from '../modals/HtmlEditModal';
+import TemplateListModal from '@pages/Template/modals/TemplateListModal';
+import AddSpaceModal from '../modals/AddSpaceModal';
+import RegisterModal from '../modals/RegisterModal';
+import ListNumberEditModal from '../modals/ListNumberEditModal';
 
 /**
  * 커스텀 토글
@@ -41,8 +39,7 @@ const DeskingWorkButtonGroup = (props) => {
     const [addSpaceModal, setAddSpaceModal] = useState(false);
     const [registerModal, setRegisterModal] = useState(false);
     const [listNumberModal, setListNumberModal] = useState(false);
-
-    const title = `ID: CP${component.componentSeq} ${component.componentName}`;
+    const [title, setTitle] = useState('');
 
     /**
      * HTML편집
@@ -146,6 +143,12 @@ const DeskingWorkButtonGroup = (props) => {
         { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
     ];
 
+    React.useEffect(() => {
+        if (component.componentSeq) {
+            setTitle(`ID: CP${component.componentSeq} ${component.componentName}`);
+        }
+    }, [component.componentName, component.componentSeq]);
+
     return (
         <>
             <div className="px-2 py-1">
@@ -188,41 +191,37 @@ const DeskingWorkButtonGroup = (props) => {
             </div>
 
             {/* HTML 수동 편집 */}
-            <Suspense>
-                <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} data={component} />
-            </Suspense>
+            <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} data={component} />
 
             {/* 템플릿 */}
-            <Suspense>
-                <TemplateListModal show={templateModal} onHide={() => setTemplateModal(false)} templateGroup={component.templateGroup} templateWidth={component.templateWidth} />
-            </Suspense>
+            <TemplateListModal
+                show={templateModal}
+                onHide={() => setTemplateModal(false)}
+                templateGroup={component.templateGroup}
+                templateWidth={component.templateWidth}
+                listType="thumbnail"
+            />
 
             {/* 공백 추가 */}
-            <Suspense>
-                <AddSpaceModal
-                    show={addSpaceModal}
-                    onHide={() => setAddSpaceModal(false)}
-                    data={component}
-                    agGridIndex={agGridIndex}
-                    componentAgGridInstances={componentAgGridInstances}
-                />
-            </Suspense>
+            <AddSpaceModal
+                show={addSpaceModal}
+                onHide={() => setAddSpaceModal(false)}
+                data={component}
+                agGridIndex={agGridIndex}
+                componentAgGridInstances={componentAgGridInstances}
+            />
 
             {/* 기사 이동 */}
-            <Suspense>
-                <RegisterModal
-                    show={registerModal}
-                    onHide={() => setRegisterModal(false)}
-                    agGridIndex={agGridIndex}
-                    component={component}
-                    componentAgGridInstances={componentAgGridInstances}
-                />
-            </Suspense>
+            <RegisterModal
+                show={registerModal}
+                onHide={() => setRegisterModal(false)}
+                agGridIndex={agGridIndex}
+                component={component}
+                componentAgGridInstances={componentAgGridInstances}
+            />
 
             {/* 리스트 건수 */}
-            <Suspense>
-                <ListNumberEditModal show={listNumberModal} onHide={() => setListNumberModal(false)} data={component} />
-            </Suspense>
+            <ListNumberEditModal show={listNumberModal} onHide={() => setListNumberModal(false)} data={component} />
         </>
     );
 };

@@ -1,0 +1,101 @@
+import React from 'react';
+import { ListTitleRenderer, IArticleStatusRenderer, MataButtonRenderer, SendStatusRenderer, EtcButtonRenderer } from './GirdRenderer';
+
+export const tempColumnDefs = [
+    {
+        headerName: 'ID',
+        field: 'repId',
+        width: 50,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+    },
+    {
+        headerName: '출고일',
+        field: 'listOutDate',
+        width: 100,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+    },
+    {
+        headerName: '이미지',
+        field: 'listRepImg',
+        cellRenderer: 'imageRenderer',
+        width: 100,
+        cellStyle: { textAlign: 'center', fontSize: '12px', lineHeight: '23px' },
+    },
+    {
+        headerName: '\t\t\t기사제목\n\t\t\tSNS제목',
+        field: 'listTitle',
+        width: 300,
+        flex: 1,
+        cellRendererFramework: (params) => <ListTitleRenderer {...params} />,
+        cellStyle: { textAlign: 'center', fontSize: '12px', lineHeight: '40px' },
+    },
+    {
+        headerName: '\t\tFB InstantArticle\n상태\t\t\t전송일\t\t\t전송',
+        field: 'listArticleStatus',
+        width: 300,
+        flex: 1,
+        cellRendererFramework: (params) => <IArticleStatusRenderer {...params} />,
+        cellStyle: { textAlign: 'center', fontSize: '12px', lineHeight: '23px' },
+    },
+    {
+        headerName: '메타',
+        field: 'listMata',
+        width: 100,
+        cellRendererFramework: (params) => <MataButtonRenderer {...params} />,
+        cellStyle: { textAlign: 'left', fontSize: '12px', lineHeight: '23px' },
+    },
+    {
+        headerName: '전송상태',
+        field: 'listOutStatus',
+        width: 150,
+        cellRendererFramework: (params) => <SendStatusRenderer {...params} />,
+        cellStyle: { textAlign: 'center', fontSize: '12px', lineHeight: '23px' },
+    },
+    {
+        headerName: '기타.',
+        field: '',
+        width: 200,
+        flex: 1,
+        cellStyle: { textAlign: 'center', fontSize: '12px', lineHeight: '23px' },
+        cellRendererFramework: (params) => <EtcButtonRenderer {...params} />,
+    },
+];
+
+export const tempRowData = [
+    {
+        repId: 1000,
+        outDate: '2020-11-25 13:44:06',
+        repImg: 'http://pds.joins.com/news/search_direct_link/000.jpg',
+        articleTitle: `"시그널·비숲과 달라"..'낮과 밤' 믿고보는 남궁민, 살인 추리극도 홈런 칠까(종합)'`,
+        snsTitle: `"시그널·비숲과 달라"..'낮과 밤' 믿고보는 남궁민, 살인 추리극도 홈런 칠까(종합)'`,
+        insStatus: 'Y',
+        sendDate: '2020-11-25 13:40:05',
+        sendFlag: 'N',
+        facebook: 'N',
+        twitter: 'N',
+    },
+    {
+        repId: 999,
+        outDate: '2020-10-25 13:40:05',
+        repImg: 'http://pds.joins.com/news/search_direct_link/000.jpg',
+        articleTitle: `'펜트' 뛰는 놈 위에 나는 이지아, 아무도 못 이기네`,
+        snsTitle: `'펜트' 뛰는 놈 위에 나는 이지아, 아무도 못 이기네`,
+        insStatus: 'N',
+        sendDate: '2020-10-25 13:40:05',
+        sendFlag: 'Y',
+        facebook: 'N',
+        twitter: 'Y',
+    },
+    {
+        repId: 998,
+        outDate: '2020-10-25 13:40:05',
+        repImg: 'http://pds.joins.com/news/search_direct_link/000.jpg',
+        articleTitle: `"그동안 쌓인 감정을 터뜨린 기분" 박신혜의 이유있는 선택`,
+        snsTitle: `"그동안 쌓인 감정을 터뜨린 기분" 박신혜의 이유있는 선택`,
+        insStatus: 'N',
+        sendDate: '2020-10-25 13:40:05',
+        sendFlag: 'Y',
+        facebook: 'Y',
+        twitter: 'N',
+    },
+];

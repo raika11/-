@@ -9,11 +9,17 @@
   }
 }
 
-@mixin button-hover($color, $background) {
+@mixin button-hover($color, $background, $border-color: null, $font-weight: null) {
   &:hover:not(:disabled):not(.disabled),
   &.hover:not(:disabled):not(.disabled) {
     color: $color;
     background: $background;
+    @if ($border-color) {
+      border-color: $border-color;
+    }
+    @if($font-weight) {
+      font-weight: $font-weight;
+    }
   }
 }
 
@@ -24,12 +30,18 @@
   }
 }
 
-@mixin button-active($color, $background) {
+@mixin button-active($color, $background, $border-color: null, $font-weight: null) {
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active {
     color: $color;
     background: $background;
     border-color: $background;
+    @if ($border-color) {
+      border-color: $border-color;
+    }
+    @if($font-weight) {
+      font-weight: $font-weight;
+    }
   }
 }
 
@@ -37,5 +49,13 @@
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active {
     color: $color;
+  }
+}
+
+@mixin button-disabled($color, $background) {
+  &.disabled, &:disabled {
+    color: $color;
+    background: $background;
+    border-color: $background;
   }
 }

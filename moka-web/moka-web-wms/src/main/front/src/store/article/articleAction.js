@@ -22,3 +22,9 @@ export const clearSearch = createAction(CLEAR_SEARCH);
  */
 export const [GET_ARTICLE_LIST, GET_ARTICLE_LIST_SUCCESS, GET_ARTICLE_LIST_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_LIST');
 export const getArticleList = createAction(GET_ARTICLE_LIST, (...actions) => actions);
+
+/**
+ * 기사 편집제목 수정
+ */
+export const PUT_ARTICLE_EDIT_TITLE = 'article/PUT_ARTICLE_EDIT_TITLE';
+export const putArticleEditTitle = createAction(PUT_ARTICLE_EDIT_TITLE, ({ totalId, title, mobTitle }) => ({ totalId, title, mobTitle }));

@@ -27,6 +27,14 @@ const propTypes = {
      * 선택된 템플릿아이디
      */
     selected: PropTypes.number,
+    /**
+     * 템플릿 위치
+     */
+    templateGroup: PropTypes.string,
+    /**
+     * 템플릿 사이즈
+     */
+    templateWidth: PropTypes.number,
 };
 const defaultProps = {};
 
@@ -204,6 +212,7 @@ const TemplateListModal = (props) => {
     useEffect(() => {
         if (show) {
             if (templateGroup || templateWidth) {
+                setListType('thumbnail');
                 let ts = {
                     ...initialState.search,
                     domainId: latestDomainId,

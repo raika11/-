@@ -11,6 +11,7 @@ export const initialState = {
         areaComp: {},
     },
     list: [],
+    workStatus: {},
     total: 0,
     error: null,
     selectedComponent: {
@@ -74,12 +75,18 @@ export default handleActions(
         /**
          * 컴포넌트 워크 조회
          */
-        [act.COMPONENT_WORK_SUCCESS]: (state, { payload: { body } }) => {
+        [act.COMPONENT_WORK_SUCCESS]: (state, { payload: { body, status } }) => {
             return produce(state, (draft) => {
                 let idx = draft.list.findIndex((l) => l.seq === body.seq);
                 draft.list[idx] = body;
                 draft.selectedComponent = body;
-                // draft.componentError = initialState.componentError;
+
+                // 워크 / 임시저장 / 전송 상태 저장
+                if (status === 'work' || status === 'save' || status === 'publish') {
+                    draft.workStatus[body.seq] = status;
+                } else if (status === 'delete') {
+                    delete draft.workStatus[body.seq];
+                }
             });
         },
         [act.COMPONENT_WORK_FAILURE]: (state, { payload: componentError }) => {

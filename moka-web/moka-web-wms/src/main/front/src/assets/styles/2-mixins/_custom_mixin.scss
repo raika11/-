@@ -21,7 +21,7 @@
     }
 }
 
-@mixin disable-font {
+@mixin disabled-font {
     font-style: italic;
     color: $gray-500;
 }

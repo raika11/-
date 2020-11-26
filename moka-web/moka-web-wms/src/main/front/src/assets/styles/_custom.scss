@@ -257,7 +257,6 @@ body {
             align-items: center;
             position: relative;
             user-select: none;
-            -webkit-user-select: none;
             cursor: pointer;
 
             & button {
@@ -470,6 +469,24 @@ body {
 * ---------------------- */
 .component-work {
     position: relative;
+
+    &.work {
+        .component-title {
+            color: $red;
+        }
+    }
+
+    &.publish {
+        .component-title {
+            color: $info;
+        }
+    }
+
+    &.disabled {
+        .component-title {
+            @include disabled-font;
+        }
+    }
     
     .is-over {
         position: absolute;
@@ -481,6 +498,7 @@ body {
         border-radius: 5px;
         transition: border-color 0.24s ease-in-out;
         z-index: 1;
+        pointer-events: none;
     }
 
     &.hover::before {
@@ -491,12 +509,6 @@ body {
         left: 0px;
         right: 0px;
         border-top: 2px solid $positive;
-    }
-
-    &.disabled {
-        .component-title {
-            @include disable-font;
-        }
     }
 }
 

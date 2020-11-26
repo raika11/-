@@ -170,6 +170,13 @@ public class MokaConstants {
     /* page service name regx */
     public static final String DIRECT_LINK_SERVICE_NAME_PATTERN = "/(http(s)?:\\/\\/)([a-z0-9\\w]+\\.*)+[a-z0-9]{2,4}/gi";
 
+    /* naverbulk service */
+    public static final String STATUS_SAVE = "SAVE";
+    public static final String STATUS_PUBLISH = "PUBLISH";
+    public static final String SOURCE_CODE_60 = "60";
+    public static final String SOURCE_CODE_3 = "3";
+    public static final String CLICKART_DIV_H = "H";
+    public static final String CLICKART_DIV_N = "N";
 
     /**
      * Http Request Content-Type

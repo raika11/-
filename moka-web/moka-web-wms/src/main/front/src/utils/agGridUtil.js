@@ -27,7 +27,7 @@ const findNextMainRow = (node) => {
     let result = { type: 'none', node: null };
     if (node) {
         const friend = [...node.parentNode.childNodes]
-            .filter((a) => a.getAttribute('row-index') > node.getAttribute('row-index'))
+            .filter((a) => Number(a.getAttribute('row-index')) > Number(node.getAttribute('row-index')))
             .sort(function (a, b) {
                 const aIdx = Number(a.getAttribute('row-index'));
                 const bIdx = Number(b.getAttribute('row-index'));
@@ -52,7 +52,7 @@ const findPreviousMainRow = (node) => {
     let result = { type: 'none', node: null };
     if (node) {
         const friend = [...node.parentNode.childNodes]
-            .filter((a) => a.getAttribute('row-index') < node.getAttribute('row-index'))
+            .filter((a) => Number(a.getAttribute('row-index')) < Number(node.getAttribute('row-index')))
             .sort(function (a, b) {
                 const aIdx = Number(a.getAttribute('row-index'));
                 const bIdx = Number(b.getAttribute('row-index'));
@@ -95,7 +95,12 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
     let hoverBox = makeHoverBox();
 
     const clearNextStyle = () => next.node && next.node.classList.remove('next');
-    const clearHoverStyle = () => hover.node && hover.node.classList.remove('hover');
+    const clearHoverStyle = () => {
+        if (hover.node) {
+            hover.node.classList.remove('hover');
+            hover.node.classList.remove('ag-row-hover');
+        }
+    };
     const clearWorkStyle = () => workElement.classList.remove('hover');
     const addNextRowStyle = (nextRow) => {
         if (nextRow.type === 'none') return;
@@ -121,18 +126,21 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
             let draggingRow = getRow(source.event);
 
             if (!draggingRow) {
-                workElement.classList.add('hover');
                 clearNextStyle();
                 clearHoverStyle();
+                workElement.classList.add('hover');
+                hover = { idx: -1, node: null };
                 return;
             }
 
             let draggingIdx = draggingRow.getAttribute('row-index');
+
             if (hover.idx !== draggingIdx) {
                 clearNextStyle();
                 clearHoverStyle();
                 clearWorkStyle();
                 hover = { idx: draggingIdx, node: draggingRow };
+                draggingRow.classList.add('ag-row-hover');
 
                 const selected = targetGrid.api.getSelectedRows();
                 if (selected.length < 1) {

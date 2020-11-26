@@ -2,6 +2,10 @@ body, html, #root {
   height: 100%;
 }
 
+div, li, button {
+  user-select: none;
+}
+
 body {
   overflow-y: scroll;
   opacity: 1 !important;

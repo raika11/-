@@ -15,6 +15,7 @@ import jmnet.moka.core.tps.mvc.achive.dto.PhotoArchiveDTO;
 import jmnet.moka.core.tps.mvc.achive.dto.PhotoArchiveSearchDTO;
 import jmnet.moka.core.tps.mvc.achive.service.PhotoArchiveService;
 import jmnet.moka.core.tps.mvc.achive.vo.OriginCodeVO;
+import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveDetailVO;
 import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveVO;
 import jmnet.moka.core.tps.mvc.achive.vo.PhotoTypeVO;
 import org.springframework.data.domain.Page;
@@ -93,9 +94,9 @@ public class PhotoArchiveController extends AbstractCommonController {
                 .orElseThrow(() -> {
                     return new NoDataException(message);
                 });
-        PhotoArchiveDTO resultDTO = modelMapper.map(returnValue, PhotoArchiveDTO.class);
+        PhotoArchiveDetailVO resultDTO = modelMapper.map(returnValue, PhotoArchiveDetailVO.class);
 
-        ResultDTO<PhotoArchiveDTO> resultDto = new ResultDTO<>(resultDTO);
+        ResultDTO<PhotoArchiveDetailVO> resultDto = new ResultDTO<>(resultDTO);
 
         tpsLogger.success(true);
 

@@ -201,17 +201,14 @@ public interface DeskingService {
      */
     void deleteDeskingWorkList(List<DeskingWorkVO> deleteDeksingList, Long datasetSeq, String regId);
 
-    //    /**
-    //     * 정렬값 조정 및 삭제
-    //     *
-    //     * @param deskingVOList 원본기사목록
-    //     * @param filterList    삭제할 기사목록을 제거한 기사목록
-    //     * @param regId         작업자
-    //     * @param maxContentOrd 최대 주기사 순서번호
-    //     * @param maxRelOrd     최대 관련기사 순서번호
-    //     */
-    //    void resortDeskingWorkList(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId, Integer maxContentOrd,
-    //            Integer maxRelOrd);
+    /**
+     * 삭제 후 정렬값 조정
+     *
+     * @param deskingVOList 원본기사목록
+     * @param filterList    삭제 후 기사목록
+     * @param regId         작업자
+     */
+    void resortAfterDelete(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId);
 
     /**
      * 편집기사work를 조회한다

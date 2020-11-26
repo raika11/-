@@ -5,7 +5,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -656,17 +655,19 @@ public class DeskingRestController extends AbstractCommonController {
             if (deskingWorkDTOList.size() > 0) {
                 // 스냅샷 수정
                 deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
+                deskingService.updateComponentWorkSnapshot(srcComponentWorkSeq, "N", null, principal.getName());
+
 
                 // target work편집기사 목록 추가 및 정렬
                 for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
                     deskingService.moveDeskingWork(appendDeskingWorkDTO, datasetSeq, srcDatasetSeq, 0L, principal.getName());
                 }
 
-                // source 정렬
-                List<Long> deleteList = deskingWorkDTOList.stream()
-                                                          .map(DeskingWorkDTO::getSeq)
-                                                          .collect(Collectors.toList());
-                //                deskingService.sortBeforeDeleteDeskingWork(deleteList, srcDatasetSeq, principal.getName());
+                // source 에서 삭제
+                //                List<Long> deleteList = deskingWorkDTOList.stream()
+                //                                                          .map(DeskingWorkDTO::getSeq)
+                //                                                          .collect(Collectors.toList());
+                //                deskingService.resortAfterDelete(deleteList, srcDatasetSeq, principal.getName());
 
                 // work 컴포넌트 조회(편집기사,관련편집기사포함)
                 ComponentWorkVO workVO = deskingService.findComponentWorkBySeq(componentWorkSeq, true);

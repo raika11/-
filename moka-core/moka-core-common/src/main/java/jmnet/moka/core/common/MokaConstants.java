@@ -151,7 +151,7 @@ public class MokaConstants {
 
     /* page service name regx */
     public static final String PAGE_SERVICE_NAME_PATTERN = "^[a-zA-Z0-9_\\-]*$";
-    public static final String PAGE_SERVICE_URL_PATTERN = "^[a-zA-Z0-9_\\-\\/]*$";
+    public static final String PAGE_SERVICE_URL_PATTERN = "^[a-zA-Z0-9_\\-\\/\\*]*$";
 
     public static final String UNKNOWN = "UNKNOWN";
     public static final String SYSTEM_UNKNOWN = UNKNOWN;

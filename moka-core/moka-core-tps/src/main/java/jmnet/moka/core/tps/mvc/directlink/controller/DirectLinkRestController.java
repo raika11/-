@@ -136,7 +136,6 @@ public class DirectLinkRestController {
             , @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
 
-        System.out.println("directLinkDTO.getImgUrl()::" + directLinkDTO.getImgUrl());
 
         // 널이면 강제로 셋팅
         if(directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == ""){
@@ -201,7 +200,6 @@ public class DirectLinkRestController {
             @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
     )throws InvalidDataException, Exception {
 
-        System.out.println("directLinkDTO.getImgUrl()::" + directLinkDTO.getImgUrl());
 
         // 널이면 강제로 셋팅
         if(directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == ""){

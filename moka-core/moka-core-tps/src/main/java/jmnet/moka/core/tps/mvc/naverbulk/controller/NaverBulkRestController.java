@@ -120,7 +120,7 @@ public class NaverBulkRestController {
     @GetMapping("/news-list/{clickartSeq}")
     public ResponseEntity<?> getNaverBulkList(HttpServletRequest request
             , @PathVariable("clickartSeq") @Min(value = 0, message = "{tps.naver-bulk.error.pattern.clickartSeq}") Long clickartSeq)
-            throws NoDataException {
+            throws Exception {
 
         ResultListDTO<NaverBulkListDTO> resultListMessage = new ResultListDTO<>();
 

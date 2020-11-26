@@ -221,8 +221,8 @@ const DeskingWorkAgGrid = (props) => {
                 rowData={rowData}
                 getRowNodeId={(params) => params.contentId}
                 columnDefs={columnDefs}
-                onRowDragEnter={handleRowDragEnter}
-                onRowDragEnd={handleRowDragEnd}
+                // onRowDragEnter={handleRowDragEnter}
+                // onRowDragEnd={handleRowDragEnd}
                 rowSelection="multiple"
                 rowDragManaged
                 animateRows

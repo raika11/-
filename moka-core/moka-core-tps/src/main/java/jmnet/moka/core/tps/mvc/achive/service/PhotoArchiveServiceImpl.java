@@ -1,18 +1,20 @@
 package jmnet.moka.core.tps.mvc.achive.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.BeanConverter;
 import jmnet.moka.common.utils.MapBuilder;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.mvc.achive.dto.PhotoArchiveSearchDTO;
 import jmnet.moka.core.tps.mvc.achive.vo.CmsDataVO;
 import jmnet.moka.core.tps.mvc.achive.vo.CmsResultListVO;
+import jmnet.moka.core.tps.mvc.achive.vo.CmsRetrieveVO;
 import jmnet.moka.core.tps.mvc.achive.vo.CmsVO;
 import jmnet.moka.core.tps.mvc.achive.vo.OriginCodeVO;
+import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveDetailVO;
 import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveVO;
 import jmnet.moka.core.tps.mvc.achive.vo.PhotoTypeVO;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -81,43 +84,26 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
     @Override
     public Page<PhotoArchiveVO> findAllPhotoArchive(PhotoArchiveSearchDTO searchDTO, String memberId) {
         CmsVO<CmsResultListVO<PhotoArchiveVO>> result = new CmsVO<>();
+        Page<PhotoArchiveVO> page = new PageImpl<>(new ArrayList<>(), PageRequest.of(searchDTO.getPage(), searchDTO.getPageCount()), 0);
         try {
             MultiValueMap<String, Object> params = MapBuilder
                     .getInstance()
                     .getMultiValueMap();
             params.setAll(BeanConverter.toMap(searchDTO));
             params.set("page", searchDTO.getPage() + 1);
-            params.remove("createdOrderby");
-            params.remove("textOrderby");
-            params.set("pageCount", searchDTO.getSize());
-            if (McpString.isNotEmpty(searchDTO.getCreatedOrderby())) {
-                params.set("created_orderby", searchDTO.getCreatedOrderby());
-            }
-            if (McpString.isNotEmpty(searchDTO.getTextOrderby())) {
-                params.set("text_orderby", searchDTO.getTextOrderby());
-            }
-            if (McpString.isNotEmpty(searchDTO.getSearchType())) {
-                params.set("searchKey", searchDTO.getSearchType());
-            }
-            if (McpString.isNotEmpty(searchDTO.getKeyword())) {
-                params.set("searchValue", searchDTO.getKeyword());
-            }
+
             ResponseEntity<String> responseEntity = restTemplateHelper.post(archiveAddress + photoListApi, params, getHeader(memberId));
 
             result = ResourceMapper
                     .getDefaultObjectMapper()
                     .readValue(responseEntity.getBody(), new TypeReference<CmsVO<CmsResultListVO<PhotoArchiveVO>>>() {
                     });
+            CmsResultListVO data = result.getData();
+            page = new PageImpl<PhotoArchiveVO>(data.getResultList(), PageRequest.of(data.getPage(), data.getPageCount()), data.getTotalCount());
 
         } catch (Exception ex) {
             log.error(ex.toString());
         }
-
-        Page page = result != null ? new PageImpl<PhotoArchiveVO>(result
-                .getData()
-                .getResultList(), searchDTO.getPageable(), result
-                .getData()
-                .getTotalCount()) : new PageImpl<PhotoArchiveVO>(null, searchDTO.getPageable(), 0);
 
         return page;
     }
@@ -129,18 +115,20 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
      * @return 사진 정보
      */
     @Override
-    public Optional<PhotoArchiveVO> findPhotoArchiveById(String id, String memberId) {
-        PhotoArchiveVO result = null;
+    public Optional<PhotoArchiveDetailVO> findPhotoArchiveById(String id, String memberId) {
+        PhotoArchiveDetailVO result = null;
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
         params.set("nid", id);
         ResponseEntity<String> responseEntity = restTemplateHelper.post(archiveAddress + photoDetailApi, params, getHeader(memberId));
         try {
-            CmsVO<PhotoArchiveVO> resultCmsVo = ResourceMapper
+            CmsVO<CmsRetrieveVO<PhotoArchiveDetailVO>> resultCmsVo = ResourceMapper
                     .getDefaultObjectMapper()
-                    .readValue(responseEntity.getBody(), new TypeReference<CmsVO<PhotoArchiveVO>>() {
+                    .readValue(responseEntity.getBody(), new TypeReference<CmsVO<CmsRetrieveVO<PhotoArchiveDetailVO>>>() {
                     });
 
-            result = resultCmsVo.getData();
+            result = resultCmsVo
+                    .getData()
+                    .getRetrieve();
         } catch (Exception ex) {
             log.error(ex.toString());
         }
@@ -156,7 +144,7 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
      */
     @Override
     public List<OriginCodeVO> findAllPhotoOrigin(String menuNo, String memberId) {
-        CmsVO<CmsDataVO<OriginCodeVO>> result = new CmsVO<>();
+        CmsVO<CmsDataVO<List<OriginCodeVO>>> result = new CmsVO<>();
         try {
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
             params.set("menuNo", menuNo);
@@ -164,7 +152,7 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
 
             result = ResourceMapper
                     .getDefaultObjectMapper()
-                    .readValue(responseEntity.getBody(), new TypeReference<CmsVO<CmsDataVO<OriginCodeVO>>>() {
+                    .readValue(responseEntity.getBody(), new TypeReference<CmsVO<CmsDataVO<List<OriginCodeVO>>>>() {
                     });
 
         } catch (Exception ex) {
@@ -178,7 +166,7 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
 
     @Override
     public List<PhotoTypeVO> findAllPhotoType(String memberId) {
-        CmsVO<CmsDataVO<PhotoTypeVO>> result = new CmsVO<>();
+        CmsVO<CmsDataVO<List<PhotoTypeVO>>> result = new CmsVO<>();
         try {
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
             params.set("type", IMAGE);
@@ -186,7 +174,7 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
 
             result = ResourceMapper
                     .getDefaultObjectMapper()
-                    .readValue(responseEntity.getBody(), new TypeReference<CmsVO<CmsDataVO<PhotoTypeVO>>>() {
+                    .readValue(responseEntity.getBody(), new TypeReference<CmsVO<CmsDataVO<List<PhotoTypeVO>>>>() {
                     });
 
         } catch (Exception ex) {

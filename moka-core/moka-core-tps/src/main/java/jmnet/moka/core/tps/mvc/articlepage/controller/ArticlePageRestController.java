@@ -1,15 +1,14 @@
 /*
- * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan. 
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna. 
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus. 
- * Vestibulum commodo. Ut rhoncus gravida arcu. 
+ * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 package jmnet.moka.core.tps.mvc.articlepage.controller;
 
 import io.swagger.annotations.ApiOperation;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
@@ -32,8 +31,6 @@ import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageSearchDTO;
 import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePage;
 import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
-import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
-import jmnet.moka.core.tps.mvc.page.dto.ParentPageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +58,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/article-pages")
-public class ArticlePageController {
+public class ArticlePageRestController {
     @Autowired
     private MessageByLocale messageByLocale;
 
@@ -111,18 +108,19 @@ public class ArticlePageController {
      */
     @ApiOperation(value = "기사페이지 상세조회")
     @GetMapping("/{artPageSeq}")
-    public ResponseEntity<?> getArticlePage(@PathVariable("artPageSeq") @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq)
-        throws NoDataException, InvalidDataException, Exception {
+    public ResponseEntity<?> getArticlePage(
+            @PathVariable("artPageSeq") @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq)
+            throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
         validData(artPageSeq, null, ActionType.SELECT);
 
         ArticlePage page = articlePageService.findArticlePageBySeq(artPageSeq)
-            .orElseThrow(() -> {
-                String message = messageByLocale.get("tps.common.error.no-data");
-                tpsLogger.fail(message, true);
-                return new NoDataException(message);
-            });
+                                             .orElseThrow(() -> {
+                                                 String message = messageByLocale.get("tps.common.error.no-data");
+                                                 tpsLogger.fail(message, true);
+                                                 return new NoDataException(message);
+                                             });
 
         ArticlePageDTO dto = modelMapper.map(page, ArticlePageDTO.class);
         ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<ArticlePageDTO>(dto);
@@ -133,14 +131,14 @@ public class ArticlePageController {
     /**
      * 기사페이지정보 유효성 검사
      *
-     * @param artPageSeq 기사페이지 순번. 0이면 등록일때 유효성 검사
+     * @param artPageSeq     기사페이지 순번. 0이면 등록일때 유효성 검사
      * @param articlePageDTO 기사페이지정보
-     * @param actionType 동작유형
+     * @param actionType     동작유형
      * @throws InvalidDataException 유효성예외
-     * @throws Exception 기타예외
+     * @throws Exception            기타예외
      */
     private void validData(Long artPageSeq, ArticlePageDTO articlePageDTO, ActionType actionType)
-        throws InvalidDataException, Exception {
+            throws InvalidDataException, Exception {
 
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
@@ -176,7 +174,7 @@ public class ArticlePageController {
     /**
      * 기사페이지 등록
      *
-     * @param articlePageDTO   등록할 기사페이지정보
+     * @param articlePageDTO 등록할 기사페이지정보
      * @return 등록된 기사페이지정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            기타예외
@@ -184,7 +182,7 @@ public class ArticlePageController {
     @ApiOperation(value = "기사페이지 등록")
     @PostMapping(headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postArticlePage(@RequestBody @Valid ArticlePageDTO articlePageDTO)
-        throws InvalidDataException, Exception {
+            throws InvalidDataException, Exception {
 
         if (McpString.isEmpty(articlePageDTO.getArtPageBody())) {
             articlePageDTO.setArtPageBody("");
@@ -218,7 +216,7 @@ public class ArticlePageController {
     /**
      * 기사페이지 수정
      *
-     * @param artPageSeq   페이지번호
+     * @param artPageSeq 페이지번호
      * @return 수정된 페이지정보
      * @throws InvalidDataException 데이타 유효성오류
      * @throws NoDataException      데이타 없음
@@ -227,8 +225,8 @@ public class ArticlePageController {
     @ApiOperation(value = "기사페이지 수정")
     @PutMapping(value = "/{artPageSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putPage(@PathVariable("artPageSeq") @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq,
-        @RequestBody @Valid ArticlePageDTO articlePageDTO)
-        throws InvalidDataException, NoDataException, Exception {
+            @RequestBody @Valid ArticlePageDTO articlePageDTO)
+            throws InvalidDataException, NoDataException, Exception {
 
         // 데이타유효성검사.
         validData(artPageSeq, articlePageDTO, ActionType.UPDATE);
@@ -236,18 +234,18 @@ public class ArticlePageController {
         // 수정
         ArticlePage newPage = modelMapper.map(articlePageDTO, ArticlePage.class);
         articlePageService.findArticlePageBySeq(artPageSeq)
-            .orElseThrow(() -> {
-                String message = messageByLocale.get("tps.common.error.no-data");
-                tpsLogger.fail(ActionType.UPDATE, message, true);
-                return new NoDataException(message);
-            });
+                          .orElseThrow(() -> {
+                              String message = messageByLocale.get("tps.common.error.no-data");
+                              tpsLogger.fail(ActionType.UPDATE, message, true);
+                              return new NoDataException(message);
+                          });
 
         try {
             ArticlePage returnValue = articlePageService.updateArticlePage(newPage);
 
             // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
             purgeHelper.purgeTms(returnValue.getDomain()
-                .getDomainId(), MokaConstants.ITEM_ARTICLE_PAGE, returnValue.getArtPageSeq());
+                                            .getDomainId(), MokaConstants.ITEM_ARTICLE_PAGE, returnValue.getArtPageSeq());
 
             // 결과리턴
             ArticlePageDTO dto = modelMapper.map(returnValue, ArticlePageDTO.class);
@@ -266,7 +264,7 @@ public class ArticlePageController {
     /**
      * 기사페이지 삭제
      *
-     * @param artPageSeq   삭제 할 기사페이지순번 (필수)
+     * @param artPageSeq 삭제 할 기사페이지순번 (필수)
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
      * @throws NoDataException      페이지정보 없음 오류
@@ -274,20 +272,20 @@ public class ArticlePageController {
      */
     @ApiOperation(value = "기사페이지 삭제")
     @DeleteMapping("/{artPageSeq}")
-    public ResponseEntity<?> deletePage(@PathVariable("artPageSeq") @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq
-        )
-        throws InvalidDataException, NoDataException, Exception {
+    public ResponseEntity<?> deletePage(
+            @PathVariable("artPageSeq") @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq)
+            throws InvalidDataException, NoDataException, Exception {
 
         // 1.1 아이디체크
         validData(artPageSeq, null, ActionType.DELETE);
 
         // 1.2. 데이타 존재여부 검사
         ArticlePage page = articlePageService.findArticlePageBySeq(artPageSeq)
-            .orElseThrow(() -> {
-                String message = messageByLocale.get("tps.common.error.no-data");
-                tpsLogger.fail(ActionType.DELETE, message, true);
-                return new NoDataException(message);
-            });
+                                             .orElseThrow(() -> {
+                                                 String message = messageByLocale.get("tps.common.error.no-data");
+                                                 tpsLogger.fail(ActionType.DELETE, message, true);
+                                                 return new NoDataException(message);
+                                             });
 
         try {
             // 2. 삭제

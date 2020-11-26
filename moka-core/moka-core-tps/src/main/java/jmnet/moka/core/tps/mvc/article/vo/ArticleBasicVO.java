@@ -131,6 +131,18 @@ public class ArticleBasicVO implements Serializable {
     private String youtubeYn;
 
     /**
+     * JAM 기사제목
+     */
+    @Column(name = "ART_JAM_TITLE")
+    private String artJamTitle;
+
+    /**
+     * JAM 모바일 기사제목
+     */
+    @Column(name = "ART_JAM_MOB_TITLE")
+    private String artJamMobTitle;
+
+    /**
      * 편집된 기사제목
      */
     @Column(name = "ART_EDIT_TITLE")

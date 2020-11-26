@@ -62,9 +62,23 @@ button {
 }
 
 /* -----------------------
-* 2020.11.23
-* 요청에 의하여 .btn-outline-neutral의 text 컬러만 변경
+* .btn-outline-neutral의 text 컬러만 변경
+* .btn-outline-table-btn, .bn-outline-table-btn2 .disabled 변경
 * ---------------------- */
 .btn-outline-neutral {
   @include button-color($primary);
+}
+
+.btn-outline-table-btn {
+  color: $gray-900;
+  font-weight: $font-weight-normal;
+  // @include button-hover($black, transparent, $gray-900, $font-weight-bold);
+  // @include button-active($black, transparent, $gray-900, $font-weight-bold);
+  @include button-disabled($white, $gray-400);
+}
+
+.btn-outline-table-btn2 {
+  color: $black;
+  font-weight: $font-weight-bold;
+  @include button-disabled($white, $gray-400);
 }

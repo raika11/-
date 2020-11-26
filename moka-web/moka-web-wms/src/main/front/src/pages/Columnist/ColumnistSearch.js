@@ -16,6 +16,7 @@ const ColumnistSearch = () => {
         search: store.columNist.columnlist_list.search,
     }));
 
+    // 검색 스테이트.
     const [search, setSearch] = useState(initialState.columnlist_list.search);
 
     // 검색 조건 설정.
@@ -51,6 +52,7 @@ const ColumnistSearch = () => {
         [dispatch, search],
     );
 
+    // 검색 스토어 연결.
     useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
@@ -68,6 +70,7 @@ const ColumnistSearch = () => {
             {/* 상태정보 */}
             <Col xs={2} className="p-0 pr-2">
                 <MokaInputLabel label="상태정보" labelWidth={56} as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">
+                    <option value="">전체</option>
                     <option value="Y">설정</option>
                     <option value="N">해제</option>
                 </MokaInputLabel>
@@ -75,7 +78,7 @@ const ColumnistSearch = () => {
 
             {/* 이름 검색 */}
             <Col xs={4} className="p-0">
-                <MokaSearchInput name="keyword" placeholder={'컬럼니스트 이름 검색'} value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                <MokaSearchInput name="keyword" placeholder={'칼럼니스트 이름 검색'} value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
             </Col>
 
             {/* 초기화 버튼 */}

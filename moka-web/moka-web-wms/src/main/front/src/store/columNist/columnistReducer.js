@@ -43,6 +43,7 @@ export const initialState = {
     },
     columnistError: null,
     invalidList: [],
+    editmode: false,
 };
 
 export default handleActions(
@@ -140,6 +141,14 @@ export default handleActions(
                 draft.repoter_list.list = initialState.repoter_list.list;
                 draft.repoter_list.total = initialState.repoter_list.total;
                 draft.repoter_list.error = payload;
+            });
+        },
+        /**
+         * 등록 버튼 처리.
+         */
+        [act.CHANGE_COLUMNIST_LIST_EDIT_MODE_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.editmode = payload;
             });
         },
     },

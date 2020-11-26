@@ -42,6 +42,8 @@ export const CODETYPE_SERVICE_TYPE = 'SERVICE_TYPE';
 // 공통코드 : 등록기사그룹
 export const CODETYPE_ART_GROUP = 'ART_GROUP';
 export const CODETYPE_ART_GROUP_NAME = 'ART_GROUP_NUM';
+// 네이버 벌크 약물
+export const CODETYPE_SPECIALCHAR = 'specialChar';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

@@ -4,6 +4,9 @@ import { MokaInputLabel, MokaModal } from '@components';
 import { putComponentWork } from '@store/desking';
 import toast from '@utils/toastUtil';
 
+/**
+ * 리스트 건수 모달
+ */
 const ListNumberEditModal = (props) => {
     const { show, onHide, data } = props;
     const dispatch = useDispatch();
@@ -19,6 +22,7 @@ const ListNumberEditModal = (props) => {
                 callback: ({ header }) => {
                     if (header.success) {
                         toast.success(header.message);
+                        onHide();
                     } else {
                         toast.warn(header.message);
                     }

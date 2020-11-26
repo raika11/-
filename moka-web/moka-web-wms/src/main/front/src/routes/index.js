@@ -275,7 +275,7 @@ const routes = [
     {
         path: '/columnist',
         name: 'columnist',
-        displayName: '컬럼니스트 관리',
+        displayName: '칼럼니스트 관리',
         component: Columnist,
         layout: SidebarOpenLayout,
         nonResponsive: true,

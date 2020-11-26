@@ -6,31 +6,33 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ColumnistModal from './modals/RepoterlistModal';
 import { notification } from '@utils/toastUtil';
-import { GET_COLUMNIST, saveColumnist, changeColumnist, changeInvalidList } from '@store/columNist';
+import { GET_COLUMNIST, saveColumnist, changeColumnist, changeInvalidList, changeColumnlistEditMode } from '@store/columNist';
 
 const ColumnistEdit = () => {
     const dispatch = useDispatch();
     const imgFileRef = useRef(null);
     const [fileValue, setFileValue] = useState(null);
-    const [editDisabled, setEditDisabled] = useState(false);
+    const [editDisabled, setEditDisabled] = useState(setEditDisabledInitialize);
     const [repoterlistModalShow, setRepoterlistModalShow] = useState(false);
     const [selectRepoterData, setSelectRepoterData] = useState(repoterDataInitialize);
     const [error, setError] = useState(setErrorInitialize);
 
-    const { loading, columnlist, invalidList } = useSelector((store) => ({
+    const { loading, columnlist, invalidList, editmode } = useSelector((store) => ({
         loading: store.loading[GET_COLUMNIST],
         columnlist: store.columNist.columnlist,
         invalidList: store.columNist.invalidList,
+        editmode: store.columNist.editmode,
     }));
 
     // input 값 변경.
     const tempOnchange = (e) => {
         // FIXME: 2020-11-23 16:50  사용여부가 checkbox 여서 checked 가 있을땐 Y / N 세팅.
         const { name, value, checked } = e.target;
-        if (checked) {
+        // console.log({ name: name, value: value, checked: checked });
+        if (name === 'status') {
             setSelectRepoterData({
                 ...selectRepoterData,
-                [name]: checked ? 'Y' : 'N',
+                [name]: checked === true ? 'Y' : 'N',
             });
         } else {
             setSelectRepoterData({
@@ -83,7 +85,12 @@ const ColumnistEdit = () => {
             imgFileRef.current.deleteFile();
         }
 
-        setEditDisabled(false);
+        setEditDisabled(
+            Object.keys(setEditDisabledInitialize).reduce(function (element, key) {
+                element[key] = key === 'repSeq' ? true : false;
+                return element;
+            }, {}),
+        ); // input disabled
         setSelectRepoterData({
             seqNo: seqNo,
             // inout: null,
@@ -105,6 +112,15 @@ const ColumnistEdit = () => {
     const validate = (editData) => {
         let isInvalid = false;
         let errList = [];
+
+        // 기자명
+        if (!editData.columnistNm) {
+            errList.push({
+                field: 'columnistNm',
+                reason: '기자번호를 입력해 주세요.',
+            });
+            isInvalid = isInvalid || true;
+        }
 
         // 이메일1
         if (!editData.email2) {
@@ -152,7 +168,7 @@ const ColumnistEdit = () => {
         }
 
         // 이미지 체크(정보 수정시)
-        if (editData.seqNo && !editData.profile_photo && editData.columnistFile === null) {
+        if (editData.seqNo && editData.profile_photo === '' && editData.columnistFile === null) {
             errList.push({
                 field: 'selectImg',
                 reason: '이미지를 선택해 주세요.',
@@ -169,7 +185,7 @@ const ColumnistEdit = () => {
         // 이미지 설정.
         let saveData = {
             ...selectRepoterData,
-            columnistFile: fileValue,
+            columnistFile: fileValue ? fileValue : null,
         };
 
         // 이메일 합치는거 때문에 미리 체크.
@@ -197,6 +213,7 @@ const ColumnistEdit = () => {
                 actions: [changeColumnist({ ...insertData })],
                 callback: (response) => {
                     if (response.header.success) {
+                        setError(setErrorInitialize);
                         notification('success', '등록하였습니다.');
                     } else {
                         notification('warning', '실패하였습니다.');
@@ -214,6 +231,7 @@ const ColumnistEdit = () => {
                 actions: [changeColumnist({ ...updateData })],
                 callback: (response) => {
                     if (response.header.success) {
+                        setError(setErrorInitialize);
                         notification('success', '수정하였습니다.');
                     } else {
                         notification('warning', '실패하였습니다.');
@@ -226,7 +244,16 @@ const ColumnistEdit = () => {
     // 취소 버튼 클릭.
     const handleClickCancleButton = () => {
         setSelectRepoterData(repoterDataInitialize); // 초기화.
-        setEditDisabled(true); // input disabled
+        setEditDisabled(setEditDisabledInitialize); // input disabled
+        dispatch(changeColumnlistEditMode({ editmode: editmode === false ? true : false }));
+    };
+
+    // 기자번호 삭제.
+    const handleClickDeleterepSeq = () => {
+        setSelectRepoterData({
+            ...selectRepoterData,
+            repSeq: '',
+        });
     };
 
     // 리트스에서 아이템 클릭후 store 값 변경 되면 정보 변경.
@@ -238,7 +265,7 @@ const ColumnistEdit = () => {
             setEditData({
                 repNo: columnlist.repNo,
                 // inout: null,
-                status: 'Y', // FIXME: 2020-11-23 16:37 임시 Y
+                status: columnlist.status, // FIXME: 2020-11-23 16:37 임시 Y
                 repSeq: columnlist.repSeq,
                 seqNo: columnlist.seqNo,
                 columnistNm: columnlist.columnistNm,
@@ -267,45 +294,71 @@ const ColumnistEdit = () => {
         }
     }, [invalidList]);
 
+    // 등록 버튼 클릭 ( 스토어 이용.)
+    useEffect(() => {
+        if (editmode === true) {
+            setSelectRepoterData(repoterDataInitialize); // 초기화.
+            // 에드트 박스 Disable 초기화.
+            setEditDisabled(
+                Object.keys(setEditDisabledInitialize).reduce(function (element, key) {
+                    element[key] = key === 'repSeq' ? true : false;
+                    return element;
+                }, {}),
+            );
+        } else {
+            setSelectRepoterData(repoterDataInitialize); // 초기화.
+        }
+    }, [editmode]);
+
     // 페이지 시작.
     useEffect(() => {
         const pageLoading = () => {
-            setEditDisabled(true); // true 면 input disabled
+            setEditDisabled(setEditDisabledInitialize);
         };
 
         pageLoading();
     }, []);
 
     return (
-        <MokaCard width={535} title={`컬럼 니스트 ${columnlist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
+        <MokaCard width={535} title={`칼럼 니스트 ${columnlist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
             <Form className="mb-gutter">
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
-                            label="기자번호"
-                            className="mb-0"
-                            name="repseq"
-                            value={selectRepoterData.repSeq}
-                            onChange={(e) => tempOnchange(e)}
-                            isInvalid={error.repseq}
-                            disabled={true}
-                        />
-                    </Col>
-                    <Col xs={5} className="p-0">
-                        <MokaInputLabel
                             label="기자명"
                             className="mb-0"
-                            name="columnistnm"
+                            name="columnistNm"
                             value={selectRepoterData.columnistNm}
                             onChange={(e) => tempOnchange(e)}
                             isInvalid={error.columnistNm}
-                            disabled={true}
+                            disabled={editDisabled.columnistNm}
+                            required
                         />
                     </Col>
                     <div className="d-flex justify-content-center">
                         <Col xs={2} className="p-0">
                             <Button variant="negative" className="mr-05" onClick={handleClickReportSearchbutton}>
                                 검색
+                            </Button>
+                        </Col>
+                    </div>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={5} className="p-0">
+                        <MokaInputLabel
+                            label="기자번호"
+                            className="mb-0"
+                            name="repSeq"
+                            value={selectRepoterData.repSeq}
+                            onChange={(e) => tempOnchange(e)}
+                            isInvalid={error.repSeq}
+                            disabled={editDisabled.repSeq}
+                        />
+                    </Col>
+                    <div className="d-flex justify-content-center">
+                        <Col xs={2} className="p-0">
+                            <Button variant="negative" className="mr-05" onClick={handleClickDeleterepSeq}>
+                                삭제
                             </Button>
                         </Col>
                     </div>
@@ -320,7 +373,7 @@ const ColumnistEdit = () => {
                             value={selectRepoterData.email1}
                             onChange={(e) => tempOnchange(e)}
                             isInvalid={error.email1}
-                            disabled={editDisabled}
+                            disabled={editDisabled.email1}
                         />
                     </Col>
                     @
@@ -332,7 +385,7 @@ const ColumnistEdit = () => {
                             value={selectRepoterData.email2}
                             onChange={(e) => tempOnchange(e)}
                             isInvalid={error.email2}
-                            disabled={editDisabled}
+                            disabled={editDisabled.email2}
                         />
                     </Col>
                 </Form.Row>
@@ -343,21 +396,22 @@ const ColumnistEdit = () => {
                     id="status"
                     className="mb-2"
                     label="사용여부"
-                    inputProps={{ checked: selectRepoterData.status === 'Y' }}
+                    inputProps={{ checked: selectRepoterData.status === 'Y' ? true : false }}
                     onChange={tempOnchange}
-                    disabled={editDisabled}
+                    disabled={editDisabled.status}
                 />
 
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">
                         <MokaInputLabel
-                            label="직첵"
+                            label="직책"
                             className="mb-0"
                             name="position"
                             value={selectRepoterData.position}
                             onChange={(e) => tempOnchange(e)}
                             isInvalid={error.position}
-                            disabled={editDisabled}
+                            disabled={editDisabled.position}
+                            required
                         />
                     </Col>
                 </Form.Row>
@@ -374,7 +428,7 @@ const ColumnistEdit = () => {
                             value={selectRepoterData.profile && selectRepoterData.profile}
                             onChange={tempOnchange}
                             isInvalid={error.profile}
-                            disabled={editDisabled}
+                            disabled={editDisabled.profile}
                         />
                     </Col>
                 </Form.Row>
@@ -387,7 +441,9 @@ const ColumnistEdit = () => {
                     isInvalid={error.selectImg}
                     label={
                         <React.Fragment>
-                            이미지
+                            <span className="required-text">*</span>이미지
+                            <br />
+                            (200*200)
                             <br />
                             <Button
                                 className="mt-1"
@@ -398,7 +454,6 @@ const ColumnistEdit = () => {
                                     e.stopPropagation();
                                     imgFileRef.current.deleteFile();
                                 }}
-                                disabled={editDisabled}
                             >
                                 삭제
                             </Button>
@@ -417,10 +472,10 @@ const ColumnistEdit = () => {
 
             <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
                 <div className="d-flex justify-content-center">
-                    <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editDisabled}>
+                    <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editDisabled.savebutton}>
                         저장
                     </Button>
-                    <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editDisabled}>
+                    <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editDisabled.canclebutton}>
                         취소
                     </Button>
                 </div>
@@ -448,14 +503,27 @@ const repoterDataInitialize = {
 };
 
 const setErrorInitialize = {
-    repseq: false,
-    columnistnm: false,
+    repSeq: false,
+    columnistNm: false,
     email1: false,
     email2: false,
     status: null,
     position: null,
     profile: null,
     selectImg: null,
+};
+
+const setEditDisabledInitialize = {
+    columnistNm: true,
+    repSeq: true,
+    email1: true,
+    email2: true,
+    status: true,
+    position: true,
+    profile: true,
+    selectImg: true,
+    savebutton: true,
+    canclebutton: true,
 };
 
 export default ColumnistEdit;

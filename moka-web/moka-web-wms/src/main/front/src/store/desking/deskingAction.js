@@ -84,14 +84,14 @@ export const postReserveComponentWork = createAction(POST_RESERVE_COMPONENT_WORK
 /**
  * Work컴포넌트 순번수정
  */
-export const PUT_DESKING_WORK_PRIORITY = 'desking/PUT_DESKING_WORK_PRIORITY';
-export const putDeskingWorkPriority = createAction(PUT_DESKING_WORK_PRIORITY, ({ component, callback }) => ({
-    component,
-    callback,
-}));
+// export const PUT_DESKING_WORK_PRIORITY = 'desking/PUT_DESKING_WORK_PRIORITY';
+// export const putDeskingWorkPriority = createAction(PUT_DESKING_WORK_PRIORITY, ({ component, callback }) => ({
+//     component,
+//     callback,
+// }));
 
 /**
- * 데스킹 워크 등록
+ * 공백 기사 추가
  */
 export const POST_DESKING_WORK = 'desking/POST_DESKING_WORK';
 export const postDeskingWork = createAction(POST_DESKING_WORK, ({ componentWorkSeq, datasetSeq, deskingWork, callback }) => ({

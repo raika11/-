@@ -1,7 +1,6 @@
 package jmnet.moka.core.tps.mvc.achive.vo;
 
 import java.io.Serializable;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +22,5 @@ import lombok.Setter;
 @Setter
 public class CmsDataVO<T> implements Serializable {
 
-    private List<T> data;
+    private T data;
 }

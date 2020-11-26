@@ -98,8 +98,6 @@ export default handleActions(
             });
         },
         [act.GET_REPORTER_FAILURE]: (state, { payload }) => {
-            const { body } = payload;
-
             return produce(state, (draft) => {
                 draft.reporter = initialState.reporter;
                 draft.reporterError = payload;

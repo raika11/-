@@ -92,6 +92,12 @@ public class ArticleBasic implements Serializable {
     private String pressNumber;
 
     /**
+     * 지면 면별 기사 위치(번호)
+     */
+    @Column(name = "PRESS_POSITION")
+    private String pressPosition;
+
+    /**
      * 기사기자
      */
     @Nationalized
@@ -127,7 +133,7 @@ public class ArticleBasic implements Serializable {
      * 원본기사ID(복제시)
      */
     @Column(name = "ORG_ID", nullable = false)
-    private Integer orgId = 0;
+    private Long orgId = (long) 0;
 
     /**
      * 기사타입
@@ -148,10 +154,28 @@ public class ArticleBasic implements Serializable {
     private String serviceFlag = MokaConstants.NO;
 
     /**
-     * 연결댓글ID
+     * (입력시 0 수정시 9)
      */
-    @Column(name = "CMT_TOTALID", nullable = false)
-    private Long cmtTotalid = (long) 0;
+    @Column(name = "INXFLG", columnDefinition = "char", nullable = false)
+    private String inxflg = "0";
+
+    /**
+     * 엠바고 [Y/N]
+     */
+    @Column(name = "EMBARGO", columnDefinition = "char")
+    private String embargo;
+
+    /**
+     * 통합CMS ID
+     */
+    @Column(name = "JAM_ID")
+    private Long jamId;
+
+    /**
+     * 통합CMS ORG ID
+     */
+    @Column(name = "JAM_ORG_ID")
+    private Long jamOrgId;
 
     /**
      * 기사제목

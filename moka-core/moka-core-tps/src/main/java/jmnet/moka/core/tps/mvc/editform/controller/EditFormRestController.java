@@ -21,6 +21,7 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.DuplicateIdException;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -70,21 +71,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @Slf4j
 @RequestMapping("/api/edit-forms")
-public class EditFormRestController {
-
-    private final TpsLogger tpsLogger;
+public class EditFormRestController extends AbstractCommonController {
 
     private final EditFormHelper editFormHelper;
 
     private final ObjectMapper objectMapper;
 
-    private final ModelMapper modelMapper;
-
     private final static String DEFAULT_SITE = "joongang";
 
     private final EditFormService editFormService;
-
-    private final MessageByLocale messageByLocale;
 
     private final CollectionType collectionType;
 
@@ -157,7 +152,7 @@ public class EditFormRestController {
 
         EditForm editForm = editFormService
                 .findEditFormBySeq(formSeq)
-                .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
         EditFormDTO editFormDTO = modelMapper.map(editForm, EditFormDTO.class);
         List<EditFormPartExtDTO> editFormPartExtDTOS = new ArrayList<>();
@@ -198,7 +193,7 @@ public class EditFormRestController {
 
         EditFormPart editFormPart = editFormService
                 .findEditFormPartBySeq(partSeq)
-                .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
         EditFormPartExtDTO editFormPartExtDTO = modelMapper.map(editFormPart, EditFormPartExtDTO.class);
 
@@ -261,7 +256,7 @@ public class EditFormRestController {
 
         EditFormPartHist editFormPartHist = editFormService
                 .findEditFormPartHistoryBySeq(seqNo)
-                .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
         EditFormPartHistDTO editFormPartExtDTO = modelMapper.map(editFormPartHist, EditFormPartHistDTO.class);
 
@@ -365,7 +360,7 @@ public class EditFormRestController {
             EditForm editForm = modelMapper.map(editFormDTO, EditForm.class);
 
             if (editFormService.isDuplicatedId(editForm)) {
-                throw new DuplicateIdException(messageByLocale.get("tps.common.error.duplicated.id"));
+                throw new DuplicateIdException(msg("tps.common.error.duplicated.id"));
             }
             Set<String> partIdSet = new HashSet<>();
             List<EditFormPartDTO> editFormPartDTOS = new ArrayList<>();
@@ -373,7 +368,7 @@ public class EditFormRestController {
             if (editFormParts != null && editFormParts.size() > 0) {
                 for (EditFormPartDTO editFormPartDTO : editFormParts) {
                     if (partIdSet.contains(editFormPartDTO.getPartId())) {
-                        throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.partId"));
+                        throw new DuplicateIdException(msg("tps.edit-form.error.duplicate.partId"));
                     }
                     partIdSet.add(editFormPartDTO.getPartId());
                 }
@@ -416,7 +411,7 @@ public class EditFormRestController {
             EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
 
             if (editFormService.isDuplicatedId(editFormPart)) {
-                throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.partId"));
+                throw new DuplicateIdException(msg("tps.edit-form.error.duplicate.partId"));
             }
             editFormPart.setFormSeq(editFormPartDTO.getFormSeq());
             editFormPart = editFormService.insertEditFormPart(editFormPart, editFormPartDTO.getStatus(), editFormPartDTO.getReserveDt());
@@ -449,9 +444,9 @@ public class EditFormRestController {
 
             EditForm orgEditForm = editFormService
                     .findEditFormBySeq(formSeq)
-                    .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
+                    .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
             if (editFormService.isDuplicatedId(editForm)) {
-                throw new DuplicateIdException(messageByLocale.get("tps.common.error.duplicated.id"));
+                throw new DuplicateIdException(msg("tps.common.error.duplicated.id"));
             }
             Set<String> partIdSet = new HashSet<>();
             List<EditFormPartDTO> editFormPartDTOS = new ArrayList<>();
@@ -461,7 +456,7 @@ public class EditFormRestController {
             if (editFormParts != null && editFormParts.size() > 0) {
                 for (EditFormPartDTO editFormPartDTO : editFormParts) {
                     if (partIdSet.contains(editFormPartDTO.getPartId())) {
-                        throw new DuplicateIdException(messageByLocale.get("tps.edit-form.error.duplicate.partId"));
+                        throw new DuplicateIdException(msg("tps.edit-form.error.duplicate.partId"));
                     }
                     partIdSet.add(editFormPartDTO.getPartId());
                 }
@@ -517,7 +512,7 @@ public class EditFormRestController {
 
             editFormService
                     .findEditFormPart(editFormPart)
-                    .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
+                    .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
             editFormPart.setFormSeq(formSeq);
             editFormPart.setPartSeq(partSeq);
@@ -557,9 +552,9 @@ public class EditFormRestController {
             // 삭제
             if (editFormService.deleteEditFormBySeq(formSeq) > 0) {
                 success = true;
-                message = messageByLocale.get("tps.edit-form.success.delete", request);
+                message = msg("tps.edit-form.success.delete", request);
             } else {
-                message = messageByLocale.get("tps.edit-form.error.delete", request);
+                message = msg("tps.edit-form.error.delete", request);
             }
 
             if (success) {
@@ -578,7 +573,7 @@ public class EditFormRestController {
             log.error("[FAIL TO DELETE MENU] menuId: {} {}", formSeq, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
-            throw new Exception(messageByLocale.get("tps.edit-form.error.delete", request), e);
+            throw new Exception(msg("tps.edit-form.error.delete", request), e);
         }
     }
 
@@ -608,9 +603,9 @@ public class EditFormRestController {
             // 삭제
             if (editFormService.deleteEditFormPart(formSeq, partSeq) > 0) {
                 success = true;
-                message = messageByLocale.get("tps.edit-form-part.success.delete", request);
+                message = msg("tps.edit-form-part.success.delete", request);
             } else {
-                message = messageByLocale.get("tps.edit-form-part.error.delete", request);
+                message = msg("tps.edit-form-part.error.delete", request);
             }
 
             if (success) {
@@ -629,7 +624,7 @@ public class EditFormRestController {
             log.error("[FAIL TO DELETE MENU] menuId: {} {}", formSeq, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
-            throw new Exception(messageByLocale.get("tps.edit-form.error.delete", request), e);
+            throw new Exception(msg("tps.edit-form.error.delete", request), e);
         }
     }
 
@@ -657,7 +652,7 @@ public class EditFormRestController {
             // 삭제
             if (editFormService.countEditFormById(formId) > 0) {
                 exists = true;
-                message = messageByLocale.get("tps.edit-form.error.duplicate.formId");
+                message = msg("tps.edit-form.error.duplicate.formId");
             }
 
             // 결과리턴
@@ -669,7 +664,7 @@ public class EditFormRestController {
             log.error("[FAIL TO DELETE MENU] menuId: {} {}", formId, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
-            throw new Exception(messageByLocale.get("tps.edit-form.error.select", formId), e);
+            throw new Exception(msg("tps.edit-form.error.select", formId), e);
         }
     }
 

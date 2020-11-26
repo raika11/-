@@ -5,7 +5,7 @@ import { callApiAfterActions, createRequestSaga, errorResponse } from '../common
 import * as Api from './columnistApi';
 import * as act from './columnistAction';
 
-// 컬럼 니스트 검색.
+// 칼럼 니스트 검색.
 const getColumnistListSaga = callApiAfterActions(act.GET_COLUMNIST_LIST, Api.getColumnistList, (state) => state.columNist.columnlist_list.search);
 
 // 기자 검색.
@@ -39,11 +39,7 @@ function* saveColumnist({ payload: { type, actions, callback } }) {
         callbackData = response.data;
         if (response.data.header.success) {
             yield put({
-                type: act.CLEAR_COLUMNIST_LIST,
-            });
-            // 성공시 리스트 가지고 오기.
-            yield put({
-                type: act.GET_COLUMNIST,
+                type: act.GET_COLUMNIST_SUCCESS,
                 payload: response.data,
             });
             yield put({ type: act.GET_COLUMNIST_LIST });
@@ -72,9 +68,20 @@ function* saveColumnist({ payload: { type, actions, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 에디트 모드 처리.
+ */
+function* chengEditModeToggle({ payload: { editmode, callback } }) {
+    yield put({ type: act.CHANGE_COLUMNIST_LIST_EDIT_MODE_SUCCESS, payload: editmode });
+    if (typeof callback === 'function') {
+        yield call(callback);
+    }
+}
+
 export default function* columNistSaga() {
     yield takeLatest(act.GET_COLUMNIST_LIST, getColumnistListSaga);
     yield takeLatest(act.GET_REPOTER_LIST, getRepoterSearchList);
     yield takeLatest(act.SAVE_COLUMNIST, saveColumnist);
     yield takeLatest(act.GET_COLUMNIST, getColumnist);
+    yield takeLatest(act.CHANGE_COLUMNIST_LIST_EDIT_MODE, chengEditModeToggle);
 }

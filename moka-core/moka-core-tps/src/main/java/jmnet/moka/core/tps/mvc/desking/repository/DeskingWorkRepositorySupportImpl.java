@@ -53,7 +53,7 @@ public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport 
 
         JPQLQuery<DeskingWork> query = queryFactory.selectFrom(deskingWork)
                                                    .where(builder)
-                                                   .orderBy(deskingWork.contentOrd.asc(), deskingWork.relOrd.asc(), deskingWork.parentTotalId.asc(),
+                                                   .orderBy(deskingWork.contentOrd.asc(), deskingWork.relOrd.asc(), deskingWork.parentContentId.asc(),
                                                             deskingWork.seq.desc());
 
         return query.fetch();

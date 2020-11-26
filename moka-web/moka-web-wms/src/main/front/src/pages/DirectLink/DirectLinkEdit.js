@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import toast from '@utils/toastUtil';
 import { notification } from '@utils/toastUtil';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
@@ -476,6 +475,8 @@ const DirectLinkEdit = ({ history }) => {
                         <React.Fragment>
                             이미지
                             <br />
+                            (60*50)
+                            <br />
                             <Button
                                 className="mt-1"
                                 size="sm"
@@ -495,7 +496,7 @@ const DirectLinkEdit = ({ history }) => {
                     ref={imgFileRef}
                     inputProps={{
                         // width: 50,
-                        height: 60,
+                        height: 90,
                         img: temp.imgUrl,
                         selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                         setFileValue,

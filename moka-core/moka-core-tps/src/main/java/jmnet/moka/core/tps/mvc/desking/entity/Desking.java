@@ -55,14 +55,14 @@ public class Desking implements Serializable {
     /**
      * 서비스기사아이디
      */
-    @Column(name = "TOTAL_ID")
-    private Long totalId;
+    @Column(name = "CONTENT_ID")
+    private String contentId;
 
     /**
      * 부모 서비스기사아이디
      */
-    @Column(name = "PARENT_TOTAL_ID")
-    private Long parentTotalId;
+    @Column(name = "PARENT_CONTENT_ID")
+    private String parentContentId;
 
     /**
      * 콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상

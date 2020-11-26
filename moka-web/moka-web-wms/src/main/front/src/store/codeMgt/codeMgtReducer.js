@@ -38,6 +38,7 @@ export const initialState = {
     pageTypeRows: [],
     apiRows: [],
     artGroupRows: [],
+    bulkCharRows: [],
 };
 
 export default handleActions(

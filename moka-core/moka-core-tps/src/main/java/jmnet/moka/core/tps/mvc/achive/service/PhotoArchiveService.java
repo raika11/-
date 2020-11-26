@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.achive.dto.PhotoArchiveSearchDTO;
 import jmnet.moka.core.tps.mvc.achive.vo.OriginCodeVO;
+import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveDetailVO;
 import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveVO;
 import jmnet.moka.core.tps.mvc.achive.vo.PhotoTypeVO;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,7 @@ public interface PhotoArchiveService {
      * @param id 사진 ID
      * @return 사진 정보
      */
-    Optional<PhotoArchiveVO> findPhotoArchiveById(String id, String memberId);
+    Optional<PhotoArchiveDetailVO> findPhotoArchiveById(String id, String memberId);
 
     /**
      * 사진 아카이브 목록 조회

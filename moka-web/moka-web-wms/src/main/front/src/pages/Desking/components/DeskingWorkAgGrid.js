@@ -6,6 +6,7 @@ import toast from '@utils/toastUtil';
 import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
 import DeskingReadyGrid from './DeskingReadyGrid';
+import DeskingEditorRenderer from './DeskingEditorRenderer';
 
 /**
  * 데스킹 AgGrid
@@ -17,30 +18,31 @@ const DeskingWorkAgGrid = (props) => {
 
     // local state
     const [rowData, setRowData] = useState([]);
-    const [gridApi, setGridApi] = useState(null);
 
     useEffect(() => {
         if (deskingWorks) {
-            setRowData(
-                deskingWorks.map((desking) => {
-                    // 제목 replace
-                    let escapeTitle = desking.title;
-                    if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
+            if (component.viewYn === 'Y') {
+                setRowData(
+                    deskingWorks.map((desking) => {
+                        // 제목 replace
+                        let escapeTitle = desking.title;
+                        if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
 
-                    return {
-                        ...desking,
-                        gridType: 'DESKING',
-                        componentWorkSeq: component.seq,
-                        title: desking.rel ? '' : escapeTitle,
-                        relTitle: desking.rel ? escapeTitle : '',
-                        contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
-                        relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
-                        onRowClicked,
-                        onSave,
-                        onDelete,
-                    };
-                }),
-            );
+                        return {
+                            ...desking,
+                            gridType: 'DESKING',
+                            componentWorkSeq: component.seq,
+                            title: desking.rel ? '' : escapeTitle,
+                            relTitle: desking.rel ? escapeTitle : '',
+                            contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
+                            relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
+                            onRowClicked,
+                            onSave,
+                            onDelete,
+                        };
+                    }),
+                );
+            }
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,7 +58,6 @@ const DeskingWorkAgGrid = (props) => {
                 draft[agGridIndex] = params;
             }),
         );
-        setGridApi(params);
     };
 
     /**
@@ -120,7 +121,7 @@ const DeskingWorkAgGrid = (props) => {
                 }
             }
         } else {
-            if (movingData.parentTotalId === overData.parentTotalId) {
+            if (movingData.parentContentId === overData.parentContentId) {
                 // 관련기사 -> 관련기사(형제) : drag, sort
                 return 'FamillyChildToChild';
             } else {
@@ -212,19 +213,13 @@ const DeskingWorkAgGrid = (props) => {
         return params.data.rel ? 42 : 53;
     };
 
-    useEffect(() => {
-        if (gridApi) {
-            gridApi.api.redrawRows();
-        }
-    }, [deskingWorks, gridApi]);
-
     return (
         <div className="ag-theme-moka-desking-grid px-1">
             <AgGridReact
                 immutableData
                 onGridReady={handleGridReady}
                 rowData={rowData}
-                getRowNodeId={(params) => params.totalId}
+                getRowNodeId={(params) => params.contentId}
                 columnDefs={columnDefs}
                 onRowDragEnter={handleRowDragEnter}
                 onRowDragEnd={handleRowDragEnd}
@@ -239,7 +234,7 @@ const DeskingWorkAgGrid = (props) => {
                 headerHeight={0}
                 rowClassRules={rowClassRules}
                 getRowHeight={getRowHeight}
-                frameworkComponents={{ imageRenderer: MokaTableImageRenderer }}
+                frameworkComponents={{ imageRenderer: MokaTableImageRenderer, editor: DeskingEditorRenderer }}
             />
             {componentAgGridInstances[agGridIndex] && <DeskingReadyGrid componentAgGridInstances={componentAgGridInstances} agGridIndex={agGridIndex} component={component} />}
         </div>

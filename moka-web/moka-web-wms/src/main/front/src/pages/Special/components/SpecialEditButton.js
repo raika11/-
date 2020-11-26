@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import SpecialEditModal from '../modals/SpecialEditModal';
@@ -21,7 +21,7 @@ const defaultProps = {
  * 디지털 스페셜 리스트 테이블의 cms용 태그 복사 버튼
  */
 const EditButton = (props) => {
-    const { data, onClick } = props;
+    // const { data, onClick } = props;
     const [showModal, setShowModal] = useState(false);
 
     // const handleClick = useCallback(
@@ -39,7 +39,7 @@ const EditButton = (props) => {
     return (
         <>
             <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                <Button variant="outline-neutral" size="sm" onClick={() => setShowModal(true)}>
+                <Button variant="outline-table-btn2" size="sm" onClick={() => setShowModal(true)}>
                     관리
                 </Button>
             </div>

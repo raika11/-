@@ -63,6 +63,19 @@ export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
         });
 };
 
+// 공백 기사 추가=> payload
+export const postDeskingWork = ({ componentWorkSeq, datasetSeq, deskingWork }) => {
+    return instance
+        .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}`, objectToFormData(deskingWork), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
 // 컴포넌트 워크의 편집기사 이동 => payload
 export const moveDeskingWorkList = ({ componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list }) => {
     return instance
@@ -77,17 +90,17 @@ export const moveDeskingWorkList = ({ componentWorkSeq, datasetSeq, srcComponent
 };
 
 // 컴포넌트 워크의 편집기사 정렬 변경 => payload
-export const putDeskingWorkPriority = ({ componentWork }) => {
-    return instance
-        .put(`/api/desking/components/${componentWork.seq}/contents/${componentWork.datasetSeq}/priority`, componentWork, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
-};
+// export const putDeskingWorkPriority = ({ componentWork }) => {
+//     return instance
+//         .put(`/api/desking/components/${componentWork.seq}/contents/${componentWork.datasetSeq}/priority`, componentWork, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         })
+//         .catch((err) => {
+//             throw err;
+//         });
+// };
 
 // 컴포넌트 워크 임시저장
 export const postSaveComponentWork = ({ componentWorkSeq }) => {

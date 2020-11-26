@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './DeskingWorkButtonGroup';
@@ -38,6 +38,10 @@ const defaultProps = {
 const ComponentWork = (props) => {
     const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
     const dispatch = useDispatch();
+
+    const { workStatus } = useSelector((store) => ({
+        workStatus: store.desking.workStatus,
+    }));
 
     // state
     const [rowdata, setRowData] = useState({});
@@ -86,7 +90,15 @@ const ComponentWork = (props) => {
 
     return (
         <React.Fragment>
-            <div className={clsx('component-work', { disabled: component.viewYn === 'N' })} id={`agGrid-${component.seq}`}>
+            <div
+                className={clsx('component-work', {
+                    disabled: component.viewYn === 'N',
+                    work: workStatus[component.seq] === 'work',
+                    save: workStatus[component.seq] === undefined || workStatus[component.seq] === 'save',
+                    publish: workStatus[component.seq] === 'publish',
+                })}
+                id={`agGrid-${component.seq}`}
+            >
                 <ButtonGroup
                     component={component}
                     agGridIndex={agGridIndex}

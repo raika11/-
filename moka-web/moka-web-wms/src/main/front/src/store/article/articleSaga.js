@@ -1,6 +1,6 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { callApiAfterActions, errorResponse } from '../commons/saga';
+import { createRequestSaga, callApiAfterActions, errorResponse } from '../commons/saga';
 
 import * as act from './articleAction';
 import * as api from './articleApi';
@@ -9,6 +9,11 @@ import * as api from './articleApi';
  * 기사 목록 조회
  */
 const getArticleList = callApiAfterActions(act.getArticleList, api.getArticleList, (store) => store.article);
+
+/**
+ * 매체 목록 조회
+ */
+const getSourceList = createRequestSaga(act.getSourceList, api.getSourceList);
 
 /**
  * 기사 편집제목 수정
@@ -40,5 +45,6 @@ function* putArticleEditTitle({ payload }) {
 
 export default function* saga() {
     yield takeLatest(act.GET_ARTICLE_LIST, getArticleList);
+    yield takeLatest(act.GET_SOURCE_LIST, getSourceList);
     yield takeLatest(act.PUT_ARTICLE_EDIT_TITLE, putArticleEditTitle);
 }

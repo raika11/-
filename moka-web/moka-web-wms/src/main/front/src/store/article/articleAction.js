@@ -21,7 +21,9 @@ export const clearSearch = createAction(CLEAR_SEARCH);
  * 데이터 조회
  */
 export const [GET_ARTICLE_LIST, GET_ARTICLE_LIST_SUCCESS, GET_ARTICLE_LIST_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_LIST');
+export const [GET_SOURCE_LIST, GET_SOURCE_LIST_SUCCESS, GET_SOURCE_LIST_FAILURE] = createRequestActionTypes('article/GET_SOURCE_LIST');
 export const getArticleList = createAction(GET_ARTICLE_LIST, (...actions) => actions);
+export const getSourceList = createAction(GET_SOURCE_LIST, () => ({}));
 
 /**
  * 기사 편집제목 수정

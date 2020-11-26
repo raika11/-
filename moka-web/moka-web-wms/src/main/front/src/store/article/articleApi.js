@@ -10,6 +10,13 @@ export const getArticleList = ({ search }) => {
     });
 };
 
+// 매체 목록 조회
+export const getSourceList = () => {
+    return instance.get(`/api/articles/sources`).catch((err) => {
+        throw err;
+    });
+};
+
 // 기사 편집제목 수정
 export const putArticleEditTitle = ({ totalId, title, mobTitle }) => {
     return instance.put(`/api/articles/${totalId}/edit-title?${qs.stringify({ title, mobTitle })}`).catch((err) => {

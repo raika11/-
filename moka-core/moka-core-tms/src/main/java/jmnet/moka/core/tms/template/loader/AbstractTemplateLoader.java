@@ -41,7 +41,7 @@ import org.springframework.context.support.GenericApplicationContext;
  * @since 2019. 9. 4. 오후 4:16:52
  */
 public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem> {
-    public static final String URI_REST_PREFIX = "/*";
+    public static final String PATH_PARAM_PREFIX = "/*";
     protected String domainId;
 
     protected ConcurrentMap<String, MergeItem> mergeItemMap;
@@ -108,21 +108,22 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
             return itemKey;
         }
         // REST 방식 중 default 파라미터를 사용하는 경우
-        if ( this.uri2ItemMap.containsKey(uri+AbstractTemplateLoader.URI_REST_PREFIX)) {
-            return this.uri2ItemMap.get(uri+AbstractTemplateLoader.URI_REST_PREFIX);
+        if ( this.uri2ItemMap.containsKey(uri+AbstractTemplateLoader.PATH_PARAM_PREFIX)) {
+            return this.uri2ItemMap.get(uri+AbstractTemplateLoader.PATH_PARAM_PREFIX);
         }
         // REST 방식인 경우 마지막 경로를 제거하고 PageItem을 찾는다.
         int lastSlashIndex = uri.lastIndexOf("/");
         if (lastSlashIndex > 0) { // URL_PARAM을 사용하는  페이지의 경우
-            return this.uri2ItemMap.get(uri.substring(0, lastSlashIndex) + AbstractTemplateLoader.URI_REST_PREFIX);
+            return this.uri2ItemMap.get(uri.substring(0, lastSlashIndex) + AbstractTemplateLoader.PATH_PARAM_PREFIX);
         }
         return null;
     }
 
     protected String getPageUriLowerCase(String uri, String urlParam) {
-        if (McpString.isNotEmpty(urlParam)) {
-            uri = uri + AbstractTemplateLoader.URI_REST_PREFIX;
-        }
+        // 2020-11-26 backoffice에서 path parameter가 있을 경우 /*를 넣어주는 방식으로 변경
+//        if (McpString.isNotEmpty(urlParam)) {
+//            uri = uri + AbstractTemplateLoader.PATH_PARAM_PREFIX;
+//        }
         return uri.toLowerCase();
     }
 

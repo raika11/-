@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { DB_DATEFORMAT } from '@/constants';
 import toast from '@/utils/toastUtil';
-import { clearMember, getMember, changeInvalidList, changeMember, saveMember, GET_MEMBER, SAVE_MEMBER } from '@store/member';
+import { clearMember, getMember, changeInvalidList, changeMember, saveMember, GET_MEMBER, SAVE_MEMBER, getMemberMenuAuth, clearMemberMenuAuth } from '@store/member';
 import { MokaInputLabel } from '@components';
 
 /**
@@ -40,8 +40,10 @@ const MemberEdit = () => {
     useEffect(() => {
         if (paramId) {
             dispatch(getMember(paramId));
+            dispatch(getMemberMenuAuth(paramId));
         } else {
             dispatch(clearMember());
+            dispatch(clearMemberMenuAuth());
         }
     }, [dispatch, paramId]);
 

@@ -9,6 +9,7 @@ import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import toast from '@utils/toastUtil';
 import { putComponentWork, postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
+import ReserveComponentWork from './ReserveComponentWork';
 import HtmlEditModal from '../modals/HtmlEditModal';
 import TemplateListModal from '@pages/Template/modals/TemplateListModal';
 import TemplateHtmlModal from '@pages/Template/modals/TemplateHtmlModal';
@@ -163,20 +164,24 @@ const DeskingWorkButtonGroup = (props) => {
 
     React.useEffect(() => {
         if (component.componentSeq) {
-            setTitle(`ID: CP${component.componentSeq} ${component.componentName}`);
+            setTitle(component.componentName);
         }
     }, [component.componentName, component.componentSeq]);
 
     return (
         <>
             <div className="px-2 py-1">
-                <Row className="m-0 d-flex align-items-center justify-content-between">
-                    <Col className="p-0" xs={6}>
-                        <OverlayTrigger overlay={<Tooltip>{`데이터셋ID: ${component.datasetSeq}`}</Tooltip>}>
-                            <p className="ft-12 mb-0 component-title">{title}</p>
+                <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
+                    {/* 예약 + 타이틀 */}
+                    <Col className="d-flex align-items-center p-0 position-static" xs={7}>
+                        <ReserveComponentWork component={component} />
+                        <OverlayTrigger overlay={<Tooltip>{`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}`}</Tooltip>}>
+                            <p className="ft-12 mb-0 component-title text-truncate">{title}</p>
                         </OverlayTrigger>
                     </Col>
-                    <Col className="p-0 d-flex align-items-center justify-content-end" xs={6}>
+
+                    {/* 기능 버튼 + 드롭다운 메뉴 */}
+                    <Col className="p-0 d-flex align-items-center justify-content-end" xs={5}>
                         {iconButton.map((icon, idx) => (
                             <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-1 py-0 mr-1" onClick={icon.onClick}>
                                 <MokaIcon iconName={icon.iconName} />
@@ -224,6 +229,22 @@ const DeskingWorkButtonGroup = (props) => {
                     { title: 'TEMS 소스 보기', onClick: handleClickOpenTemplateTems },
                     { title: '새창열기', onClick: (data) => window.open(`/template/${data.templateSeq}`) },
                 ]}
+                topAs={
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                        <div className="d-flex">
+                            <span className="ft-12 font-weight-bold mr-2">컴포넌트명</span>
+                            <a className="ft-12 font-weight-bold" onClick={() => window.open(`/component/${component?.componentSeq}`)}>
+                                ID{component?.componentSeq}_{component?.componentName}
+                            </a>
+                        </div>
+                        <div className="d-flex">
+                            <span className="ft-12 font-weight-bold mr-2">사용 템플릿명</span>
+                            <a className="ft-12 font-weight-bold" onClick={() => window.open(`/template/${component?.templateSeq}`)}>
+                                ID{component?.templateSeq}_{component?.templateName}
+                            </a>
+                        </div>
+                    </div>
+                }
             />
 
             {/* 템플릿 소스보기 */}

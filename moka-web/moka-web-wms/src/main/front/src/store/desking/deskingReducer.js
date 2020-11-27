@@ -84,8 +84,6 @@ export default handleActions(
                 // 워크 / 임시저장 / 전송 상태 저장
                 if (status === 'work' || status === 'save' || status === 'publish') {
                     draft.workStatus[body.seq] = status;
-                } else if (status === 'delete') {
-                    delete draft.workStatus[body.seq];
                 }
             });
         },

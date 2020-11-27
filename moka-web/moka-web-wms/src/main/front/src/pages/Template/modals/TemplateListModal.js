@@ -44,6 +44,10 @@ const propTypes = {
      * 썸네일 리스트의 드롭다운 메뉴 리스트
      */
     menus: thumbTableProps.menus,
+    /**
+     * 검색 영역 위에 추가로 넣는 node
+     */
+    topAs: PropTypes.node,
 };
 const defaultProps = {};
 
@@ -52,7 +56,7 @@ const defaultProps = {};
  * (템플릿 스토어 사용)
  */
 const TemplateListModal = (props) => {
-    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, templateGroup, templateWidth, menus, listType: listTypeProp } = props;
+    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, templateGroup, templateWidth, menus, listType: listTypeProp, topAs } = props;
     const dispatch = useDispatch();
 
     const { latestDomainId, domainList, tpZoneRows, tpSizeRows, loading, UPLOAD_PATH_URL } = useSelector((store) => ({
@@ -306,6 +310,7 @@ const TemplateListModal = (props) => {
             footerClassName="justify-content-center"
             draggable
         >
+            {topAs}
             <Form>
                 <Form.Row className="mb-2">
                     {/* 도메인 */}

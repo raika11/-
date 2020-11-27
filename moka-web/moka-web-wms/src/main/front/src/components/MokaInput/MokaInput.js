@@ -11,6 +11,10 @@ export const propTypes = {
      */
     className: PropTypes.string,
     /**
+     * input size
+     */
+    size: PropTypes.oneOf(['sm', 'md', 'lg']),
+    /**
      * ---------------------------------------------------------------------------------------------
      * Input element의 타입 정의
      *
@@ -95,7 +99,7 @@ const defaultProps = {
  * controlled input
  */
 const MokaInput = forwardRef((props, ref) => {
-    const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, isInvalid, disabled, uncontrolled, ...rest } = props;
+    const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, isInvalid, disabled, uncontrolled, size, ...rest } = props;
     // const { rules, control } = props;
 
     let Type = Form.Control;
@@ -108,6 +112,7 @@ const MokaInput = forwardRef((props, ref) => {
         onChange,
         placeholder,
         ref,
+        size,
         ...inputProps,
         ...rest,
     };

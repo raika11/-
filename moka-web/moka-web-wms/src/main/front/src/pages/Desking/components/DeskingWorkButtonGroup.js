@@ -32,7 +32,7 @@ const customToggle = forwardRef(({ onClick, id }, ref) => {
  * 데스킹 워크 버튼 그룹 컴포넌트
  */
 const DeskingWorkButtonGroup = (props) => {
-    const { component, agGridIndex, componentAgGridInstances } = props;
+    const { component, agGridIndex, componentAgGridInstances, workStatus } = props;
     const dispatch = useDispatch();
 
     // state
@@ -174,7 +174,7 @@ const DeskingWorkButtonGroup = (props) => {
                 <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
                     {/* 예약 + 타이틀 */}
                     <Col className="d-flex align-items-center p-0 position-static" xs={7}>
-                        <ReserveComponentWork component={component} />
+                        <ReserveComponentWork component={component} workStatus={workStatus} />
                         <OverlayTrigger overlay={<Tooltip>{`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}`}</Tooltip>}>
                             <p className="ft-12 mb-0 component-title text-truncate">{title}</p>
                         </OverlayTrigger>

@@ -55,6 +55,10 @@ const propTypes = {
      * input size
      */
     size: PropTypes.oneOf(['sm', 'md', 'lg']),
+    /**
+     * isInvalid 체크
+     */
+    isInvalid: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -69,7 +73,7 @@ const defaultProps = {
  * TimePicker
  */
 const MokaDateTimePicker = forwardRef((props, ref) => {
-    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, className, inputClassName, size, ...rest } = props;
+    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, className, inputClassName, size, isInvalid, ...rest } = props;
 
     // 날짜시간 포맷
     const dateTimeFormat = (() => {
@@ -104,7 +108,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
                         e.preventDefault();
                         e.stopPropagation();
                     }}
-                    className={clsx(props.className, inputClassName)}
+                    className={clsx(props.className, inputClassName, { 'is-invalid': isInvalid })}
                     mask={dateTimeFormat.replace(/y|m|d|h|s/gi, '9')}
                     placeholder={placeholder}
                     disabled={disabled}

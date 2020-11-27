@@ -99,7 +99,7 @@ const ComponentWork = (props) => {
                 })}
                 id={`agGrid-${component.seq}`}
             >
-                <ButtonGroup component={component} agGridIndex={agGridIndex} componentAgGridInstances={componentAgGridInstances} />
+                <ButtonGroup component={component} agGridIndex={agGridIndex} componentAgGridInstances={componentAgGridInstances} workStatus={workStatus[component.seq]} />
                 <AgGrid
                     component={component}
                     agGridIndex={agGridIndex}

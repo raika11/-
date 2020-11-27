@@ -210,7 +210,8 @@ const MokaTable = forwardRef((props, ref) => {
      * 혹시 문제가 생기면 아래 기존 소스로 변경 부탁 드립니다.
      */
     const handleSelected = useCallback(() => {
-        if ((selected && gridApi) || initSelected.current !== selected) {
+        if (!gridApi) return;
+        if (selected || initSelected.current !== selected) {
             gridApi.deselectAll();
             const selectedNode = gridApi.getRowNode(selected);
             if (selectedNode) {

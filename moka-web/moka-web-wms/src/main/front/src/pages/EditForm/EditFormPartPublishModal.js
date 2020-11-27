@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { MokaInputLabel, MokaModal } from '@components';
@@ -13,11 +12,10 @@ import moment from 'moment';
  * 폼 Publish 설정 Modal
  */
 const EditFormPartPublishModal = (props) => {
-    const { show, onHide, componentSeq } = props;
+    const { show, onHide } = props;
     const dispatch = useDispatch();
-    const history = useHistory();
 
-    const [reserveDtError, setReserveDtError] = useState(false);
+    const [reserveDtError] = useState(false);
     const [reserve, setReserve] = useState('N');
     const [reserveDt, setReserveDt] = useState(new Date());
 
@@ -35,11 +33,11 @@ const EditFormPartPublishModal = (props) => {
     const handleChangeValue = async (event) => {
         const target = event.target;
         const value = target.value;
-        await setReserve(value);
+        setReserve(value);
     };
 
     const handleReserveDt = async (date) => {
-        await setReserveDt(date);
+        setReserveDt(date);
     };
 
     /**

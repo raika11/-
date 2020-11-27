@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import java.util.Arrays;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -14,6 +15,7 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSourceDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
@@ -140,7 +142,8 @@ public class ArticleRestController extends AbstractCommonController {
 
     @ApiOperation(value = "기사 편집제목 등록/수정")
     @PutMapping("/{totalId}/edit-title")
-    public ResponseEntity<?> putEditTitle(@PathVariable("totalId") Long totalId, String title, String mobTitle)
+    public ResponseEntity<?> putEditTitle(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
+            @Valid ArticleTitleDTO articleTitleDTO)
             throws Exception {
         ArticleBasic articleBasic = articleService.findArticleBasicById(totalId)
                                                   .orElseThrow(() -> {
@@ -149,15 +152,15 @@ public class ArticleRestController extends AbstractCommonController {
                                                       return new NoDataException(message);
                                                   });
         try {
-            articleService.saveArticleTitle(articleBasic, title, mobTitle);
+            articleService.saveArticleTitle(articleBasic, articleTitleDTO);
 
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg("tps.contents.article.success.edittitle.save"));
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg("tps.article.success.edittitle.save"));
             tpsLogger.success(ActionType.SELECT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO INSERT ARTICLE EDIT TITLE]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT ARTICLE EDIT TITLE]", e, true);
-            throw new Exception(msg("tps.contents.article.error.edittitle.save"), e);
+            throw new Exception(msg("tps.article.error.edittitle.save"), e);
         }
     }
 }

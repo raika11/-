@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleTitle;
@@ -53,40 +54,40 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void saveArticleTitle(ArticleBasic articleBasic, String title, String mobTitle) {
+    public void saveArticleTitle(ArticleBasic articleBasic, ArticleTitleDTO articleTitleDTO) {
         // 웹제목
-        if (McpString.isNotEmpty(title)) {
+        if (McpString.isNotEmpty(articleTitleDTO.getArtEditTitle())) {
             Optional<ArticleTitle> articleTitle = articleTitleRepository.findByTotalIdAndTitleDiv(articleBasic.getTotalId(), "DP");
             if (articleTitle.isPresent()) {
                 // 수정
                 articleTitle.get()
-                            .setTitle(title);
+                            .setTitle(articleTitleDTO.getArtEditTitle());
                 articleTitleRepository.save(articleTitle.get());
             } else {
                 // 등록
                 ArticleTitle newTitle = ArticleTitle.builder()
                                                     .totalId(articleBasic.getTotalId())
                                                     .titleDiv("DP")
-                                                    .title(title)
+                                                    .title(articleTitleDTO.getArtEditTitle())
                                                     .build();
                 articleTitleRepository.save(newTitle);
             }
         }
 
         // 모바일제목
-        if (McpString.isNotEmpty(mobTitle)) {
+        if (McpString.isNotEmpty(articleTitleDTO.getArtEditMobTitle())) {
             Optional<ArticleTitle> articleTitle = articleTitleRepository.findByTotalIdAndTitleDiv(articleBasic.getTotalId(), "DM");
             if (articleTitle.isPresent()) {
                 // 수정
                 articleTitle.get()
-                            .setTitle(mobTitle);
+                            .setTitle(articleTitleDTO.getArtEditMobTitle());
                 articleTitleRepository.save(articleTitle.get());
             } else {
                 // 등록
                 ArticleTitle newTitle = ArticleTitle.builder()
                                                     .totalId(articleBasic.getTotalId())
                                                     .titleDiv("DM")
-                                                    .title(mobTitle)
+                                                    .title(articleTitleDTO.getArtEditMobTitle())
                                                     .build();
                 articleTitleRepository.save(newTitle);
             }

@@ -22,25 +22,51 @@ const ChangeArtGroupModal = (props) => {
     // state
     const [webTitle, setWebTitle] = useState('');
     const [mobTitle, setMobTitle] = useState('');
+    const [error, setError] = useState({});
+
+    const validate = () => {
+        const regex = /[^\s\t\n]+/;
+        let invalid = false,
+            ne = {};
+
+        if (!regex.test(webTitle)) {
+            ne.webTitle = true;
+            invalid = invalid || true;
+        } else {
+            ne.webTitle = false;
+        }
+
+        if (!regex.test(mobTitle)) {
+            ne.mobTitle = true;
+            invalid = invalid || true;
+        } else {
+            ne.mobTitle = false;
+        }
+
+        setError({ ...error, ...ne });
+        return !invalid;
+    };
 
     /**
      * 저장 버튼
      */
     const handleClickSave = () => {
-        dispatch(
-            putArticleEditTitle({
-                totalId: artData.totalId,
-                title: webTitle.length > 0 ? webTitle : null,
-                mobTitle: mobTitle.length > 0 ? mobTitle : null,
-                callback: ({ header }) => {
-                    if (header.success) {
-                        toast.success(header.message);
-                    } else {
-                        toast.warn(header.message);
-                    }
-                },
-            }),
-        );
+        if (validate()) {
+            dispatch(
+                putArticleEditTitle({
+                    totalId: artData.totalId,
+                    title: webTitle.length > 0 ? webTitle : null,
+                    mobTitle: mobTitle.length > 0 ? mobTitle : null,
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                        } else {
+                            toast.warn(header.message);
+                        }
+                    },
+                }),
+            );
+        }
     };
 
     /**
@@ -50,6 +76,7 @@ const ChangeArtGroupModal = (props) => {
         if (onHide) onHide();
         setWebTitle('');
         setMobTitle('');
+        setError({});
     };
 
     useEffect(() => {
@@ -105,6 +132,7 @@ const ChangeArtGroupModal = (props) => {
                 inputClassName="resize-none custom-scroll p-05"
                 value={webTitle}
                 onChange={(e) => setWebTitle(e.target.value)}
+                isInvalid={error.webTitle}
             />
 
             <div className="mob-title-line position-absolute" style={{ height: 21, top: 82, left: 70 + 5 + mobWidth }}></div>
@@ -124,6 +152,7 @@ const ChangeArtGroupModal = (props) => {
                 inputClassName="resize-none custom-scroll"
                 value={mobTitle}
                 onChange={(e) => setMobTitle(e.target.value)}
+                isInvalid={error.mobTitle}
             />
         </MokaModal>
     );

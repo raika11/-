@@ -53,6 +53,7 @@ const ChangeArtGroupModal = (props) => {
      * 닫기
      */
     const handleHide = () => {
+        setValue('');
         if (onHide) onHide();
     };
 
@@ -73,8 +74,10 @@ const ChangeArtGroupModal = (props) => {
     }, [artGroupRows, dispatch]);
 
     useEffect(() => {
-        setValue(cd.cdNmEtc1);
-    }, [cd]);
+        if (show) {
+            setValue(cd.cdNmEtc1);
+        }
+    }, [cd, show]);
 
     return (
         <MokaModal
@@ -95,15 +98,7 @@ const ChangeArtGroupModal = (props) => {
             centered
             loading={loading}
         >
-            <MokaInputLabel
-                label="그룹개수"
-                as="select"
-                className="mb-0"
-                value={value}
-                onChange={(e) => {
-                    setValue(e.target.value);
-                }}
-            >
+            <MokaInputLabel label="그룹개수" as="select" className="mb-0" value={value} onChange={(e) => setValue(e.target.value)}>
                 {[...Array(MAX_GROUP_NUMBER)].map(
                     (x, i) =>
                         i > 0 && (

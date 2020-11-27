@@ -41,6 +41,7 @@ import {
     faExpandWide as falExpandWide,
     faShareSquare as falShareSquare,
     faPencil as falPencil,
+    faAlarmClock as falAlarmClock,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -55,6 +56,7 @@ import {
 } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
+import { faFacebook as fabFacebook, faTwitter as fabTwitter } from '@fortawesome/free-brands-svg-icons';
 
 // 아이콘 등록 (fal)
 library.add(falCoffee);
@@ -95,6 +97,7 @@ library.add(falCode);
 library.add(falExpandWide);
 library.add(falShareSquare);
 library.add(falPencil);
+library.add(falAlarmClock);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);
@@ -112,6 +115,10 @@ library.add(fasTimes);
 
 // 아이콘 등록 (fad)
 library.add(fadImage);
+
+// 아이콘 등록 (fab)
+library.add(fabFacebook);
+library.add(fabTwitter);
 
 const propTypes = {
     /**

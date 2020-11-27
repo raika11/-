@@ -7,7 +7,7 @@ export { default as MokaAlert, MokaAlertWithButtons } from './MokaAlert';
 export * from './MokaTabs';
 export { MokaCardEditor, MokaModalEditor } from './MokaEditor';
 export * from './MokaCard';
-export { default as MokaIcon } from './MokaIcon';
+export * from './MokaIcon';
 export { default as MokaPagination } from './MokaPagination';
 export * from './MokaTable';
 export { default as MokaTreeView } from './MokaTree';

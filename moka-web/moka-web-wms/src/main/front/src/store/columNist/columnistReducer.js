@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './columnistAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
-// ?page=0&searchType=all&sort=repSeq%2Casc&keyword=정중앙
+
 export const initialState = {
     columnlist_list: {
         total: 0,
@@ -29,8 +29,7 @@ export const initialState = {
     columnist: {
         seqNo: '',
         repNo: '',
-        // inout: null,
-        status: 'Y', // FIXME: 2020-11-23 16:37 임시 Y
+        status: 'Y',
         repSeq: '',
         columnistNm: '',
         email: '',
@@ -77,6 +76,11 @@ export default handleActions(
                 draft.invalidList = initialState.invalidList;
             });
         },
+        [act.CLEAR_COLUMNIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.columnist = initialState.columnist;
+            });
+        },
         [act.CLEAR_REPORTER_LIST]: (state) => {
             return produce(state, (draft) => {
                 draft.repoter_list = initialState.repoter_list;
@@ -117,7 +121,7 @@ export default handleActions(
          */
         [act.GET_COLUMNIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.columnlist = body;
+                draft.columnist = body;
                 draft.columnistError = initialState.directLinkError;
             });
         },
@@ -149,6 +153,8 @@ export default handleActions(
         [act.CHANGE_COLUMNIST_LIST_EDIT_MODE_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.editmode = payload;
+                draft.columnist = initialState.columnist;
+                draft.columnistError = initialState.directLinkError;
             });
         },
     },

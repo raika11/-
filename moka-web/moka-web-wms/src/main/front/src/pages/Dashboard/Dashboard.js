@@ -30,6 +30,7 @@ import {
     MokaImageInput,
     MokaModal,
     MokaCardTabs,
+    NewIcon,
 } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 // import { changeTheme } from '@store/layout/layoutAction';
@@ -38,6 +39,7 @@ import bg from '@assets/images/bg.jpeg';
 
 const Dashboard = () => {
     const { register, handleSubmit, errors, control } = useForm();
+
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [checked, setChecked] = useState(true);
@@ -160,6 +162,11 @@ const Dashboard = () => {
                             }}
                         />
                     </Form.Group>
+
+                    {/* 페이스북, 트위터 아이콘 */}
+                    <MokaIcon iconName="fab-twitter" size="lg" />
+                    <MokaIcon iconName="fab-facebook" size="lg" />
+                    <NewIcon width={20} height={20} className="ml-1" />
                 </MokaCard>
 
                 <MokaCardTabs

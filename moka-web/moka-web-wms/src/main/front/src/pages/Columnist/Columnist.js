@@ -34,7 +34,7 @@ const Columnist = ({ match }) => {
 
             {/* 등록/수정창 */}
             <Route
-                path={[match.url, `${match.url}/:linkSeq`]}
+                path={[match.url, `${match.url}/:seqNo`]}
                 exact
                 render={(props) => (
                     <Suspense>

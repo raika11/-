@@ -35,7 +35,7 @@ const ColumnistSearch = () => {
         }
     };
 
-    // 검색 조건 초기화/
+    // 검색 조건 초기화
     const handleSearchReset = (e) => {
         dispatch(getColumnistList(clearSearchOption()));
     };

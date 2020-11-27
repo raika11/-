@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.article.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
@@ -31,5 +32,11 @@ public interface ArticleService {
      */
     List<ArticleSource> findAllArticleSource(String[] deskingSourceList);
 
-    void saveArticleTitle(ArticleBasic articleBasic, String title, String mobTitle);
+    /**
+     * 편집제목수정
+     *
+     * @param articleBasic    기사정보
+     * @param articleTitleDTO 편집제목(pc,모바일)
+     */
+    void saveArticleTitle(ArticleBasic articleBasic, ArticleTitleDTO articleTitleDTO);
 }

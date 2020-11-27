@@ -79,11 +79,6 @@ const ColumnistEdit = ({ history }) => {
 
     // 에디트 정보 설정.
     const setEditData = ({ seqNo, status, repSeq, columnistNm, email1, email2, position, profilePhoto, profile, selectImg }) => {
-        // 기존 선택 이미지 삭제.
-        if (imgFileRef.current) {
-            imgFileRef.current.deleteFile();
-        }
-
         setEditDisabled(
             Object.keys(setEditDisabledInitialize).reduce(function (element, key) {
                 element[key] = key === 'repSeq' ? true : false;
@@ -199,6 +194,11 @@ const ColumnistEdit = ({ history }) => {
                 updateColunmList(saveData);
             } else {
                 insertColunmList(saveData);
+
+                // 등록 일떄 기존 이미지 삭제.
+                if (imgFileRef.current) {
+                    imgFileRef.current.deleteFile();
+                }
             }
         }
     };
@@ -230,6 +230,11 @@ const ColumnistEdit = ({ history }) => {
                 callback: (response) => {
                     if (response.header.success) {
                         setError(setErrorInitialize);
+                        dispatch(
+                            getColumnist({
+                                seqNo: updateData.seqNo,
+                            }),
+                        );
                         notification('success', '수정하였습니다.');
                     } else {
                         notification('warning', '실패하였습니다.');
@@ -259,7 +264,8 @@ const ColumnistEdit = ({ history }) => {
         if (columnist) {
             let tmpEmail = [];
             tmpEmail = columnist.email !== 'undefined' && columnist.email != null && columnist.email.split('@');
-
+            // setSelectRepoterData(repoterDataInitialize);
+            console.log(columnist.profilePhoto);
             setEditData({
                 repNo: columnist.repNo,
                 // inout: null,
@@ -330,6 +336,10 @@ const ColumnistEdit = ({ history }) => {
             );
         }
     }, [dispatch, seqNo]);
+
+    useEffect(() => {
+        console.log(selectRepoterData.profilePhoto);
+    }, [selectRepoterData]);
 
     return (
         <MokaCard width={535} title={`칼럼 니스트 ${columnist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>

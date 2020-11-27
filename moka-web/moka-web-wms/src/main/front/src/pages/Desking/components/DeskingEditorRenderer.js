@@ -14,6 +14,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
     // state
     const [editMode, setEditMode] = useState(false);
     const [editValue, setEditValue] = useState('');
+    const [error, setError] = useState(false);
 
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
@@ -25,11 +26,25 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
         },
     }));
 
+    const validate = () => {
+        const regex = /[^\s\t\n]+/;
+
+        if (!regex.test(editValue)) {
+            setError(true);
+            return false;
+        }
+
+        setError(false);
+        return true;
+    };
+
     /**
      * 제목수정/저장 버튼
      */
     const handleClickEdit = () => {
         if (editMode) {
+            if (!validate()) return;
+
             // 저장 로직
             if (data.onSave) {
                 data.onSave(
@@ -62,6 +77,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
         if (editMode) {
             setEditMode(false);
             setEditValue(data.rel ? data.relTitle : data.title);
+            setError(false);
         } else {
             if (data.onDelete) {
                 data.onDelete(data);
@@ -97,7 +113,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
             </OverlayTrigger>
             {editMode && (
                 <div className="edit">
-                    <MokaInput as={data.rel ? 'input' : 'textarea'} className="resize-none" value={editValue} onChange={(e) => setEditValue(e.target.value)} />
+                    <MokaInput as={data.rel ? 'input' : 'textarea'} className="resize-none" value={editValue} onChange={(e) => setEditValue(e.target.value)} isInvalid={error} />
                 </div>
             )}
             <div className="mr-1" style={{ height: 25, width: 25 }}>

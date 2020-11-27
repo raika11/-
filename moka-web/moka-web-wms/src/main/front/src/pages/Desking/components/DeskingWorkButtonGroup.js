@@ -11,6 +11,7 @@ import { putComponentWork, postSaveComponentWork, postPublishComponentWork, dele
 
 import HtmlEditModal from '../modals/HtmlEditModal';
 import TemplateListModal from '@pages/Template/modals/TemplateListModal';
+import TemplateHtmlModal from '@pages/Template/modals/TemplateHtmlModal';
 import AddSpaceModal from '../modals/AddSpaceModal';
 import RegisterModal from '../modals/RegisterModal';
 import ListNumberEditModal from '../modals/ListNumberEditModal';
@@ -33,13 +34,17 @@ const DeskingWorkButtonGroup = (props) => {
     const { component, agGridIndex, componentAgGridInstances } = props;
     const dispatch = useDispatch();
 
+    // state
+    const [title, setTitle] = useState('');
+    const [selectedTemplate, setSelectedTemplate] = useState(null);
+
     // modal state
     const [htmlEditModal, setHtmlEditModal] = useState(false);
     const [templateModal, setTemplateModal] = useState(false);
+    const [templateHtmlModal, setTemplateHtmlModal] = useState(false);
     const [addSpaceModal, setAddSpaceModal] = useState(false);
     const [registerModal, setRegisterModal] = useState(false);
     const [listNumberModal, setListNumberModal] = useState(false);
-    const [title, setTitle] = useState('');
 
     /**
      * 전송
@@ -139,6 +144,16 @@ const DeskingWorkButtonGroup = (props) => {
         );
     };
 
+    /**
+     * 템플릿 썸네일테이블 -> tems 소스보기
+     */
+    const handleClickOpenTemplateTems = (templateData) => {
+        if (templateData) {
+            setSelectedTemplate(templateData?.templateSeq);
+            setTemplateHtmlModal(true);
+        }
+    };
+
     const iconButton = [
         { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => setHtmlEditModal(true) },
         { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModal(true) },
@@ -205,7 +220,14 @@ const DeskingWorkButtonGroup = (props) => {
                 templateWidth={component.templateWidth}
                 listType="thumbnail"
                 onClickSave={handleClickSaveTemplate}
+                menus={[
+                    { title: 'TEMS 소스 보기', onClick: handleClickOpenTemplateTems },
+                    { title: '새창열기', onClick: (data) => window.open(`/template/${data.templateSeq}`) },
+                ]}
             />
+
+            {/* 템플릿 소스보기 */}
+            <TemplateHtmlModal show={templateHtmlModal} onHide={() => setTemplateHtmlModal(false)} templateSeq={selectedTemplate} editable={false} />
 
             {/* 공백 추가 */}
             <AddSpaceModal

@@ -163,6 +163,10 @@ public class TpsConstants {
      * request header의 메뉴 ID key
      */
     public static final String HEADER_MENU_ID = "x-menuid";
+    /**
+     * response header의 다운로드 파일명
+     */
+    public static final String HEADER_DOWNLOAD_FILENAME = "X-Suggested-Filename";
 
     // 최상위 메뉴 ID
     public static final String ROOT_MENU_ID = "00";

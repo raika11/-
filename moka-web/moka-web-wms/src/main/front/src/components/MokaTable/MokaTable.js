@@ -7,8 +7,6 @@ import { propTypes as paginationPropTypes } from '@components/MokaPagination';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 // cell renderer
-import Tooltip from './MokaTableTooltip';
-import RadioButton from './MokaTableRadioButton';
 import ImageRenderer from './MokaTableImageRenderer';
 
 const propTypes = {
@@ -212,7 +210,8 @@ const MokaTable = forwardRef((props, ref) => {
      * 혹시 문제가 생기면 아래 기존 소스로 변경 부탁 드립니다.
      */
     const handleSelected = useCallback(() => {
-        if ((selected && gridApi) || initSelected.current !== selected) {
+        if (!gridApi) return;
+        if (selected || initSelected.current !== selected) {
             gridApi.deselectAll();
             const selectedNode = gridApi.getRowNode(selected);
             if (selectedNode) {
@@ -294,7 +293,7 @@ const MokaTable = forwardRef((props, ref) => {
                     onRowDragEnd={onRowDragEnd}
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
-                    frameworkComponents={{ mokaTooltip: Tooltip, radio: RadioButton, imageRenderer: ImageRenderer, ...frameworkComponents }}
+                    frameworkComponents={{ imageRenderer: ImageRenderer, ...frameworkComponents }}
                     suppressRowClickSelection
                     getRowClass={getRowClass}
                     onColumnResized={onColumnResized}

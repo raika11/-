@@ -12,7 +12,7 @@ export default [
     {
         headerName: '템플릿명',
         field: 'templateName',
-        width: 297,
+        width: 298,
         flex: 1,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'templateName',

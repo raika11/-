@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MokaPagination, MokaTemplateThumbCard, MokaLoader } from '@components';
+import { MokaPagination, MokaLoader } from '@components';
+import TemplateThumbCard from './TemplateThumbCard';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
-const propTypes = {
+export const propTypes = {
     /**
      * 이미지 Card width
      */
@@ -89,9 +90,9 @@ const defaultProps = {
 };
 
 /**
- * 썸네일 테이블
+ * 템플릿관리의 썸네일 테이블
  */
-const MokaThumbTable = (props) => {
+const TemplateThumbTable = (props) => {
     // table props
     const { loading, tableHeight } = props;
 
@@ -107,7 +108,7 @@ const MokaThumbTable = (props) => {
                 {loading && <MokaLoader />}
                 <div className="d-flex flex-wrap align-content-start custom-scroll p-05 h-100 overflow-y-scroll">
                     {rowData.map((data) => (
-                        <MokaTemplateThumbCard
+                        <TemplateThumbCard
                             key={data.id}
                             data={data}
                             width={cardWidth}
@@ -127,7 +128,7 @@ const MokaThumbTable = (props) => {
     );
 };
 
-MokaThumbTable.propTypes = propTypes;
-MokaThumbTable.defaultProps = defaultProps;
+TemplateThumbTable.propTypes = propTypes;
+TemplateThumbTable.defaultProps = defaultProps;
 
-export default MokaThumbTable;
+export default TemplateThumbTable;

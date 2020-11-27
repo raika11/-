@@ -13,7 +13,7 @@ const propTypes = {
  * 기본 input
  */
 const Field = (props) => {
-    const { id, name, partIdx, groupIdx, index, fieldIdx, onFieldChange } = props;
+    const { id, partIdx, groupIdx, fieldIdx } = props;
 
     const { editFormParts } = useSelector((store) => ({
         editFormParts: store.editForm.editFormParts,
@@ -24,6 +24,7 @@ const Field = (props) => {
 
     const dispatch = useDispatch();
 
+    // eslint-disable-next-line no-unused-vars
     const [fieldValue, setFieldValue] = useState('');
     const [title, setTitle] = useState('');
     const [options, setOptions] = useState('');

@@ -226,8 +226,12 @@ const MokaImageInput = forwardRef((props, ref) => {
                             ref={defaultRef}
                             style={{ whiteSpace: 'pre-wrap' }}
                         >
-                            <MokaIcon iconName="fal-cloud-upload" className="mr-2" />
-                            Drop files to attach, or browse
+                            {alert === false && (
+                                <>
+                                    <MokaIcon iconName="fal-cloud-upload" className="mr-2" />
+                                    Drop files to attach, or browse
+                                </>
+                            )}
                         </span>
 
                         {/* drag over mask */}

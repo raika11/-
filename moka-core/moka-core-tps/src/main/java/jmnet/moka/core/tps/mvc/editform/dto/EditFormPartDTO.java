@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
@@ -28,6 +31,7 @@ import lombok.experimental.SuperBuilder;
  * @since 2020-10-25 07:41
  */
 @JsonRootName("part")
+@JacksonXmlRootElement(localName = "part")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -62,10 +66,7 @@ public class EditFormPartDTO {
      * Edit Form Data
      */
     private String formData;
-    /**
-     * EditForm
-     */
-    private EditFormDTO editForm;
+
     /**
      * 사용 여부
      */
@@ -77,6 +78,8 @@ public class EditFormPartDTO {
     /**
      * 필드 그룹 목록
      */
+    @JacksonXmlElementWrapper(localName = "fieldGroups")
+    @JacksonXmlProperty(localName = "fieldGroup")
     private List<FieldGroupDTO> fieldGroups;
 
 }

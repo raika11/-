@@ -64,7 +64,8 @@ public class EditFormPartHist extends BaseAudit {
      */
     @Column(name = "STATUS", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private EditStatusCode status;
+    @Builder.Default
+    private EditStatusCode status = EditStatusCode.SAVE;
 
     /**
      * 등록자
@@ -73,5 +74,9 @@ public class EditFormPartHist extends BaseAudit {
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
     private MemberInfo regMember;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = EditFormPart.class)
+    @JoinColumn(name = "PART_SEQ", referencedColumnName = "PART_SEQ", nullable = false, insertable = false, updatable = false)
+    private EditFormPart editFormPart;
 
 }

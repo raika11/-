@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FieldGroup from './FieldGroup';
-import { saveEditFormPart, showPublishModal } from '@/store/editForm';
+import { exportEditFormPartXml, saveEditFormPart, showHistoryModal, showPublishModal } from '@/store/editForm';
 import toast from '@/utils/toastUtil';
 
 const propTypes = {
@@ -14,7 +14,7 @@ const propTypes = {
  * 기본 input
  */
 const PartEdit = (props) => {
-    const { partIdx, formId } = props;
+    const { partIdx } = props;
     const dispatch = useDispatch();
 
     const { editFormParts } = useSelector((store) => ({
@@ -29,6 +29,15 @@ const PartEdit = (props) => {
 
     const handleClickPublish = () => {
         dispatch(showPublishModal(true, part));
+    };
+
+    const handleClickHistoryOpen = () => {
+        dispatch(showHistoryModal(true, part, partIdx));
+    };
+
+    const handleClickExport = () => {
+        console.log(part);
+        dispatch(exportEditFormPartXml(part));
     };
 
     const insertEditFormPart = (tmp) => {
@@ -59,17 +68,27 @@ const PartEdit = (props) => {
             </Card.Header>
 
             <Card.Body>
-                {part.fieldGroups.map((fieldGroup, groupIdx) => (
-                    <FieldGroup key={'F' + fieldGroup.group} partIdx={partIdx} groupIdx={groupIdx}></FieldGroup>
-                ))}
+                {part.fieldGroups && part.fieldGroups.map((fieldGroup, groupIdx) => <FieldGroup key={'F' + fieldGroup.group} partIdx={partIdx} groupIdx={groupIdx}></FieldGroup>)}
             </Card.Body>
             <Card.Footer>
-                <Button className="float-left mr-10 pr-20 pl-20" variant="negative" onClick={handleClickSave}>
-                    임시저장
-                </Button>
-                <Button className="float-left mr-10 pr-20 pl-20" variant="positive" onClick={handleClickPublish}>
-                    퍼블리시
-                </Button>
+                <Form.Group className="mb-3 d-flex justify-content-between">
+                    <div className="d-flex">
+                        <Button className="float-left mr-10 pr-20 pl-20" variant="negative" onClick={handleClickSave}>
+                            임시저장
+                        </Button>
+                        <Button variant="outline-neutral" className="mr-05" onClick={handleClickHistoryOpen}>
+                            복구
+                        </Button>
+                    </div>
+                    <div className="d-flex">
+                        <Button className="float-left mr-10 pr-20 pl-20" variant="negative" title="XML Export" onClick={handleClickExport}>
+                            Export
+                        </Button>
+                        <Button className="float-left mr-10 pr-20 pl-20" variant="positive" onClick={handleClickPublish}>
+                            퍼블리시
+                        </Button>
+                    </div>
+                </Form.Group>
             </Card.Footer>
         </Card>
     );

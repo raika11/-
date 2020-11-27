@@ -150,10 +150,34 @@ function* deleteEditForm({ payload: { channelId, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 목록
+ */
+const getEditFormHistoryList = callApiAfterActions(editFormAction.GET_EDIT_FORM_HISTORY_LIST, editFormApi.getEditFormHistoryList, (state) => state.editForm);
+
+/**
+ * 편집폼 XML Export
+ */
+const exportEditFormXml = createRequestSaga(editFormAction.EXPORT_EDIT_FROM_XML, editFormApi.exportEditFormXml);
+
+/**
+ * 편집폼 Part XML Export
+ */
+const exportEditFormPartXml = createRequestSaga(editFormAction.EXPORT_EDIT_FROM_PART_XML, editFormApi.exportEditFormPartXml, (part) => part);
+
+/**
+ * 편집폼 Part XML Export
+ */
+const exportEditFormPartHistoryXml = createRequestSaga(editFormAction.EXPORT_EDIT_FROM_PART_HISTORY_XML, editFormApi.exportEditFormPartHistoryXml, (history) => history);
+
 export default function* editSaga() {
     yield takeLatest(editFormAction.GET_EDIT_FORM_LIST, getEditFormList);
     yield takeLatest(editFormAction.GET_EDIT_FORM, getEditForm);
     yield takeLatest(editFormAction.SAVE_EDIT_FORM, saveEditForm);
     yield takeLatest(editFormAction.SAVE_EDIT_FORM_PART, saveEditFormPart);
     yield takeLatest(editFormAction.DELETE_EDIT_FORM, deleteEditForm);
+    yield takeLatest(editFormAction.GET_EDIT_FORM_HISTORY_LIST, getEditFormHistoryList);
+    yield takeLatest(editFormAction.EXPORT_EDIT_FROM_XML, exportEditFormXml);
+    yield takeLatest(editFormAction.EXPORT_EDIT_FROM_PART_XML, exportEditFormPartXml);
+    yield takeLatest(editFormAction.EXPORT_EDIT_FROM_PART_HISTORY_XML, exportEditFormPartHistoryXml);
 }

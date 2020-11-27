@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -21,6 +22,8 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.common.util.Downloader;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.DuplicateIdException;
@@ -30,7 +33,6 @@ import jmnet.moka.core.tps.helper.EditFormHelper;
 import jmnet.moka.core.tps.mvc.editform.dto.ChannelFormatDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
-import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartExtDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldGroupDTO;
@@ -155,16 +157,15 @@ public class EditFormRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
         EditFormDTO editFormDTO = modelMapper.map(editForm, EditFormDTO.class);
-        List<EditFormPartExtDTO> editFormPartExtDTOS = new ArrayList<>();
-        if (editForm.getEditFormParts() != null) {
-            editForm
+        if (editFormDTO.getEditFormParts() != null) {
+            editFormDTO
                     .getEditFormParts()
                     .forEach(part -> {
                         try {
-                            EditFormPartExtDTO editFormPartExtDTO = modelMapper.map(part, EditFormPartExtDTO.class);
-                            editFormPartExtDTO.setFieldGroups(objectMapper.readValue(part.getFormData(), collectionType));
-                            editFormPartExtDTO.setFormData(null);
-                            editFormPartExtDTOS.add(editFormPartExtDTO);
+                            if (McpString.isNotEmpty(part.getFormData())) {
+                                part.setFieldGroups(objectMapper.readValue(part.getFormData(), collectionType));
+                                part.setFormData(null);
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -172,7 +173,6 @@ public class EditFormRestController extends AbstractCommonController {
         }
         ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
         resultMapDTO.addBodyAttribute("editForm", editFormDTO);
-        resultMapDTO.addBodyAttribute("editFormParts", editFormPartExtDTOS);
         return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
     }
 
@@ -195,13 +195,81 @@ public class EditFormRestController extends AbstractCommonController {
                 .findEditFormPartBySeq(partSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
-        EditFormPartExtDTO editFormPartExtDTO = modelMapper.map(editFormPart, EditFormPartExtDTO.class);
+        EditFormPartDTO editFormPartExtDTO = modelMapper.map(editFormPart, EditFormPartDTO.class);
 
         editFormPartExtDTO.setFieldGroups(objectMapper.readValue(editFormPart.getFormData(), collectionType));
         editFormPartExtDTO.setFormData(null);
 
-        ResultDTO<EditFormPartExtDTO> resultDTO = new ResultDTO<>(editFormPartExtDTO);
+        ResultDTO<EditFormPartDTO> resultDTO = new ResultDTO<>(editFormPartExtDTO);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * 편집 폼 xml export
+     *
+     * @param formSeq 편집 폼 일련번호
+     * @throws Exception 오류 처리
+     */
+    @ApiOperation(value = "Edit Form 데이터 조회")
+    @GetMapping("/{formSeq}/export")
+    public void getEditFormXmlExport(HttpServletResponse response,
+            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq)
+            throws Exception {
+
+        EditForm editForm = editFormService
+                .findEditFormBySeq(formSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        EditFormDTO editFormDTO = modelMapper.map(editForm, EditFormDTO.class);
+
+        if (editFormDTO.getEditFormParts() != null) {
+            editFormDTO
+                    .getEditFormParts()
+                    .forEach(part -> {
+                        try {
+                            if (McpString.isNotEmpty(part.getFormData())) {
+                                part.setFieldGroups(objectMapper.readValue(part.getFormData(), collectionType));
+                                part.setFormData(null);
+                            }
+                        } catch (IOException ex) {
+                            part.setFieldGroups(null);
+                        }
+                    });
+        }
+
+        String fileName = editFormDTO
+                .getFormId()
+                .endsWith(".xml") ? editFormDTO.getFormId() : editFormDTO.getFormId() + ".xml";
+        //xml 파일 다운로드
+        Downloader.download(response, MediaType.TEXT_XML_VALUE, fileName, editFormHelper.convertPartXml(editFormDTO));
+    }
+
+    /**
+     * 편집 폼 Part xml export
+     *
+     * @param formSeq 편집 폼 일련번호
+     * @param partSeq 아이템 일련번호
+     * @throws Exception 에러 처리 오류
+     */
+    @ApiOperation(value = "Edit Form 데이터 조회")
+    @GetMapping("/{formSeq}/parts/{partSeq}/export")
+    public void getEditFormPartXmlExport(HttpServletResponse response,
+            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
+            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq)
+            throws Exception {
+
+        EditFormPart editFormPart = editFormService
+                .findEditFormPartBySeq(partSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        EditFormPartDTO editFormPartExtDTO = modelMapper.map(editFormPart, EditFormPartDTO.class);
+
+        editFormPartExtDTO.setFieldGroups(objectMapper.readValue(editFormPart.getFormData(), collectionType));
+        editFormPartExtDTO.setFormData(null);
+
+        //xml 파일 다운로드
+        Downloader.download(response, MediaType.TEXT_XML_VALUE, editFormPartExtDTO.getPartTitle() + ".xml",
+                editFormHelper.convertPartXml(editFormPartExtDTO));
     }
 
     /**
@@ -266,6 +334,38 @@ public class EditFormRestController extends AbstractCommonController {
         ResultDTO<EditFormPartHistDTO> resultDTO = new ResultDTO<>(editFormPartExtDTO);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
+
+    /**
+     * 편집 폼 Part 이력 조회
+     *
+     * @param formSeq 편집 폼 일련번호
+     * @param partSeq 아이템 일련번호
+     * @param seqNo   편집 폼 Part 이력 일련번호
+     * @throws NoDataException 데이터 없음 에러 처리
+     * @throws IOException     json 처리 오류
+     */
+    @ApiOperation(value = "Edit Form 데이터 조회")
+    @GetMapping("/{formSeq}/parts/{partSeq}/historys/{seqNo}/export")
+    public void getEditFormPartHistoryExport(HttpServletResponse response,
+            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
+            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
+            @PathVariable("seqNo") @Min(value = 0, message = "{tps.edit-form.error.min.seqNo}") Long seqNo)
+            throws Exception {
+
+        EditFormPartHist editFormPartHist = editFormService
+                .findEditFormPartHistoryBySeq(seqNo)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        EditFormPartHistDTO editFormPartExtDTO = modelMapper.map(editFormPartHist, EditFormPartHistDTO.class);
+
+        editFormPartExtDTO.setFieldGroups(objectMapper.readValue(editFormPartHist.getFormData(), collectionType));
+        editFormPartExtDTO.setFormData(null);
+
+        //xml 파일 다운로드
+        Downloader.download(response, MediaType.TEXT_XML_VALUE, editFormPartExtDTO
+                .getEditFormPart()
+                .getPartTitle() + "_" + editFormPartExtDTO.getSeqNo() + ".xml", editFormHelper.convertPartXml(editFormPartExtDTO));
+    }
 /*
     private ResponseEntity<?> getResponseEditFormDTO(String site, String formId, @RequestParam(value = "partId", required = false) String partId)
             throws MokaException {
@@ -303,38 +403,84 @@ public class EditFormRestController extends AbstractCommonController {
             throws MokaException {
 
         try {
-            //List<EditForm> editForms = new ArrayList<>();
-            //if (files != null) {
-            //  for (MultipartFile file : files) {
-            ChannelFormatDTO channelFormatDTO = editFormHelper.mapping(DEFAULT_SITE, file.getOriginalFilename(), file.getBytes());
-            EditForm editForm = modelMapper.map(channelFormatDTO, EditForm.class);
-            editForm.setEditFormParts(new HashSet<>());
-            final EditForm newEditForm = editFormService.insertEditForm(editForm);
 
-            channelFormatDTO
-                    .getParts()
-                    .forEach(partDTO -> {
-                        EditFormPart editFormPart = modelMapper.map(partDTO, EditFormPart.class);
-                        editFormPart.setFormSeq(newEditForm.getFormSeq());
-                        try {
-                            Date reserveDt = McpString.isNotEmpty(partDTO.getReserveDate())
-                                    ? McpDate.date("yyyy/MM/dd HH:mm:ss", partDTO.getReserveDate())
-                                    : null;
-                            editFormPart.setFormData(objectMapper.writeValueAsString(partDTO.getFieldGroups()));
-                            editForm
-                                    .getEditFormParts()
-                                    .add(editFormService.insertEditFormPart(editFormPart, partDTO.getStatus(), reserveDt));
-                        } catch (Exception e) {
-                            log.error(e.toString());
-                        }
-                    });
+            String xml = new String(file.getBytes());
+            ResultDTO<EditFormDTO> resultDTO = null;
+            if (xml.contains("<channelFormat>")) { // legacy xml 업로드
+                ChannelFormatDTO channelFormatDTO = editFormHelper.mapping(DEFAULT_SITE, file.getOriginalFilename(), file.getBytes());
+                EditForm editForm = modelMapper.map(channelFormatDTO, EditForm.class);
+                editForm.setEditFormParts(new HashSet<>());
+                final EditForm newEditForm = editFormService.insertEditForm(editForm);
+                channelFormatDTO
+                        .getParts()
+                        .forEach(partDTO -> {
+                            EditFormPart editFormPart = modelMapper.map(partDTO, EditFormPart.class);
+                            editFormPart.setFormSeq(newEditForm.getFormSeq());
+                            try {
+                                Date reserveDt = McpString.isNotEmpty(partDTO.getReserveDate())
+                                        ? McpDate.date("yyyy/MM/dd HH:mm:ss", partDTO.getReserveDate())
+                                        : null;
+                                editFormPart.setFormData(objectMapper.writeValueAsString(partDTO.getFieldGroups()));
+                                editForm
+                                        .getEditFormParts()
+                                        .add(editFormService.insertEditFormPart(editFormPart, partDTO.getStatus(), reserveDt));
+                            } catch (Exception e) {
+                                log.error(e.toString());
+                            }
+                        });
+                resultDTO = new ResultDTO<>(modelMapper.map(editForm, EditFormDTO.class));
+            } else if (xml.contains("<editForm>")) { // 내려받은 편집 폼 xml을 업로드
+                EditFormDTO editFormDTO = editFormHelper.getEditForm(xml);
+                EditForm editForm = modelMapper.map(editFormDTO, EditForm.class);
+                editForm.setEditFormParts(new HashSet<>());
 
-            //editForms.add(editFormService.insertEditForm(editForm));
-            //  }
-            //}
+                if (editForm.getFormSeq() == null || editForm.getFormSeq() == 0) {
+                    // 신규는 없음
+                    throw new NoDataException(msg("tps.common.error.no-data"));
+                }
+                // 기존 데이터 없을 경우 에러 처리
+                editFormService
+                        .findEditFormBySeq(editForm.getFormSeq())
+                        .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
-            //ResultDTO<List<EditFormDTO>> resultDTO = new ResultDTO<>(modelMapper.map(editForms, EditFormDTO.TYPE));
-            ResultDTO<EditFormDTO> resultDTO = new ResultDTO<>(modelMapper.map(editForm, EditFormDTO.class));
+                editFormService.updateEditForm(editForm);
+
+                editFormDTO
+                        .getEditFormParts()
+                        .forEach(partDTO -> {
+                            EditFormPart editFormPart = modelMapper.map(partDTO, EditFormPart.class);
+                            editFormPart.setFormSeq(editForm.getFormSeq());
+                            try {
+                                editFormPart.setFormData(objectMapper.writeValueAsString(partDTO.getFieldGroups()));
+                                editForm
+                                        .getEditFormParts()
+                                        .add(editFormService.insertEditFormPart(editFormPart, EditStatusCode.SAVE, null));
+                            } catch (Exception e) {
+                                log.error(e.toString());
+                            }
+                        });
+            } else if (xml.contains("<part>")) { // 내려받은 편집 폼 Part xml을 업로드
+                // xml에서 form part 정보 불러오기
+                EditFormPartDTO editFormPartDTO = editFormHelper.getEditFormPart(xml);
+                EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
+
+                if (editFormPartDTO.getFormSeq() == null || editFormPartDTO.getFormSeq() == 0) {
+                    // part xml은 존재하는 part를 정보를 수정하는 것이므로 기존 데이터가 없을 경우 에러 처리
+                    throw new NoDataException(msg("tps.common.error.no-data"));
+                }
+                // 기존 데이터 없을 경우 에러 처리
+                editFormService
+                        .findEditFormPartBySeq(editFormPart.getPartSeq())
+                        .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+                // part xml 업로드는 무조건 임시저장 상태로 업데이트
+                editFormPart.setFormData(objectMapper.writeValueAsString(editFormPartDTO.getFieldGroups()));
+                editFormService.updateEditFormPart(editFormPart, EditStatusCode.SAVE, null);
+
+            } else {
+                throw new MokaException(msg("tps.edit-form.error.xml-format"));
+            }
+
+
 
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 

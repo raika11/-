@@ -1,6 +1,7 @@
-package jmnet.moka.core.tps.mvc.achive.vo;
+package jmnet.moka.core.tps.mvc.archive.vo;
 
 import java.io.Serializable;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,12 +21,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CmsVO<T> implements Serializable {
+public class CmsRetrieveVO<T> implements Serializable {
 
-    protected Integer code;
-    protected String message;
-    protected T data;
-
-
-
+    private T retrieve;
+    private List<Object> relPostList;
 }

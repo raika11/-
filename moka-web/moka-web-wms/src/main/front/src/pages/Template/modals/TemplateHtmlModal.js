@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModalEditor } from '@components';
 import { getTemplate, changeTemplateBody, saveTemplate, clearTemplate, hasRelationList, GET_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import toast from '@utils/toastUtil';
+
+const propTypes = {
+    editable: PropTypes.bool,
+};
+
+const defaultProps = {
+    editable: true,
+};
 
 /**
  * 템플릿 TEMS 소스 수정 모달
  * (템플릿 스토어 사용)
  */
 const TemplateHtmlModal = (props) => {
-    const { show, onHide, templateSeq } = props;
+    const { show, onHide, templateSeq, editable } = props;
     const dispatch = useDispatch();
 
     const { template, templateBody, invalidList, loading } = useSelector((store) => ({
@@ -137,14 +146,21 @@ const TemplateHtmlModal = (props) => {
             onBlur={handleBlur}
             defaultValue={defaultValue}
             value={templateBody}
-            buttons={[
-                { text: '저장', variant: 'primary', onClick: handleClickSave },
-                { text: '닫기', variant: 'gray150', onClick: handleHide },
-            ]}
+            buttons={
+                editable
+                    ? [
+                          { text: '저장', variant: 'primary', onClick: handleClickSave },
+                          { text: '닫기', variant: 'gray150', onClick: handleHide },
+                      ]
+                    : [{ text: '닫기', variant: 'gray150', onClick: handleHide }]
+            }
             error={error}
             loading={loading}
         />
     );
 };
+
+TemplateHtmlModal.propsType = propTypes;
+TemplateHtmlModal.defaultProps = defaultProps;
 
 export default TemplateHtmlModal;

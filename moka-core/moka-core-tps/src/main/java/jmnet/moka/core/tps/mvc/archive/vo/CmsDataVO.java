@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.achive.vo;
+package jmnet.moka.core.tps.mvc.archive.vo;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;

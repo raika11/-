@@ -25,7 +25,7 @@ const ReporterMgr = () => {
             </Helmet>
 
             {/* 기자 목록 */}
-            <MokaCard title="기자 목록" width={830} className="mr-4" headerClassName="pb-0" titleClassName="mb-0">
+            <MokaCard title="기자 목록" width={830} className="mr-4 flex-fill" headerClassName="pb-0" titleClassName="mb-0">
                 <Suspense>
                     <ReporterList />
                 </Suspense>

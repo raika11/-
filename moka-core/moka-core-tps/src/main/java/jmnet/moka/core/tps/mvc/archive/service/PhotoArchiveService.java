@@ -1,12 +1,12 @@
-package jmnet.moka.core.tps.mvc.achive.service;
+package jmnet.moka.core.tps.mvc.archive.service;
 
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.core.tps.mvc.achive.dto.PhotoArchiveSearchDTO;
-import jmnet.moka.core.tps.mvc.achive.vo.OriginCodeVO;
-import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveDetailVO;
-import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveVO;
-import jmnet.moka.core.tps.mvc.achive.vo.PhotoTypeVO;
+import jmnet.moka.core.tps.mvc.archive.dto.PhotoArchiveSearchDTO;
+import jmnet.moka.core.tps.mvc.archive.vo.OriginCodeVO;
+import jmnet.moka.core.tps.mvc.archive.vo.PhotoArchiveDetailVO;
+import jmnet.moka.core.tps.mvc.archive.vo.PhotoArchiveVO;
+import jmnet.moka.core.tps.mvc.archive.vo.PhotoTypeVO;
 import org.springframework.data.domain.Page;
 
 /**

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.lang.reflect.Type;
 import java.util.List;
 import javax.validation.constraints.Size;
@@ -26,7 +28,7 @@ import lombok.Setter;
  * @author ince
  * @since 2020-10-25 07:36
  */
-@JsonRootName("channelFormat")
+@JsonRootName("editForm")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -67,9 +69,9 @@ public class EditFormDTO {
      */
     private String baseUrl;
 
-
-    //@JsonManagedReference
-    //private List<EditFormItemDTO> editFormItems;
+    @JacksonXmlElementWrapper(localName = "parts")
+    @JacksonXmlProperty(localName = "part")
+    private List<EditFormPartDTO> editFormParts;
 
 
     /**

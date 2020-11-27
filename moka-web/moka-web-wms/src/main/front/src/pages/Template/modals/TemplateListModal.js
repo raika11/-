@@ -5,7 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
 import { MODAL_PAGESIZE_OPTIONS, API_BASE_URL } from '@/constants';
-import { MokaModal, MokaInput, MokaSearchInput, MokaTable, MokaThumbTable, MokaTableTypeButton } from '@components';
+import { MokaModal, MokaInput, MokaSearchInput, MokaTable, MokaTableTypeButton } from '@components';
+import TemplateThumbTable, { propTypes as thumbTableProps } from '@pages/Template/components/TemplateThumbTable';
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { initialState, GET_TEMPLATE_LIST_MODAL, getTemplateListModal } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
@@ -39,6 +40,10 @@ const propTypes = {
      * 목록타입 list|thumbnail
      */
     listType: PropTypes.string,
+    /**
+     * 썸네일 리스트의 드롭다운 메뉴 리스트
+     */
+    menus: thumbTableProps.menus,
 };
 const defaultProps = {};
 
@@ -47,7 +52,7 @@ const defaultProps = {};
  * (템플릿 스토어 사용)
  */
 const TemplateListModal = (props) => {
-    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, templateGroup, templateWidth, listType: listTypeProp } = props;
+    const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, templateGroup, templateWidth, menus, listType: listTypeProp } = props;
     const dispatch = useDispatch();
 
     const { latestDomainId, domainList, tpZoneRows, tpSizeRows, loading, UPLOAD_PATH_URL } = useSelector((store) => ({
@@ -99,6 +104,14 @@ const TemplateListModal = (props) => {
     };
 
     /**
+     * 링크 버튼 클릭
+     * @param {object} data row data
+     */
+    const handleClickLink = (data) => {
+        window.open(`/template/${data.templateSeq}`);
+    };
+
+    /**
      * row 생성
      */
     const makeRowData = useCallback(
@@ -113,6 +126,7 @@ const TemplateListModal = (props) => {
                     id: data.templateSeq,
                     name: data.templateName,
                     thumb,
+                    handleClickLink,
                 };
             }),
         [UPLOAD_PATH_URL],
@@ -363,10 +377,11 @@ const TemplateListModal = (props) => {
                     onChangeSearchOption={handleChangeSearchOption}
                     selected={selected}
                     pageSizes={MODAL_PAGESIZE_OPTIONS}
+                    preventRowClickCell={['link']}
                 />
             )}
             {listType === 'thumbnail' && (
-                <MokaThumbTable
+                <TemplateThumbTable
                     cardWidth={209}
                     cardHeight={209}
                     tableHeight={501}
@@ -379,6 +394,7 @@ const TemplateListModal = (props) => {
                     onClick={handleRowClicked}
                     selected={selected}
                     pageSizes={MODAL_PAGESIZE_OPTIONS}
+                    menus={menus}
                 />
             )}
         </MokaModal>

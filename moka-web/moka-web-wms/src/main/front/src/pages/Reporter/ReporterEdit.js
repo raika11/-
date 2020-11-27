@@ -260,9 +260,10 @@ const ReporterEdit = () => {
                         <Button variant="positive" className="mr-05" onClick={handleClickSave} disabled={inputDisabled}>
                             저장
                         </Button>
-                        <Button variant="negative" onClick={handleClickCancle} disabled={inputDisabled}>
+                        {/* 2020-11-27 14:55 추후에 기능을 추가 할수 있어서 일단 주석 처리. */}
+                        {/* <Button variant="negative" onClick={handleClickCancle} disabled={inputDisabled}>
                             취소
-                        </Button>
+                        </Button> */}
                     </div>
                 </div>
             </div>

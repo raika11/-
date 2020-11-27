@@ -171,7 +171,7 @@ public class EditFormServiceImpl implements EditFormService {
                         log.error(e.toString());
                     }
                 });
-        return null;
+        return editForm;
     }
 
     @Override

@@ -355,6 +355,20 @@ const DirectLinkEdit = ({ history }) => {
     return (
         <MokaCard width={535} title={`사이트 바로 가기 ${linkSeq ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
             <Form className="mb-gutter">
+                {/* 사용여부 */}
+                <Form.Row className="mb-2">
+                    <Col xs={9} className="p-0">
+                        <MokaInputLabel
+                            as="switch"
+                            name="usedYn"
+                            id="usedYn"
+                            className="mb-2"
+                            label="사용여부"
+                            inputProps={{ checked: temp.usedYn === 'Y' }}
+                            onChange={handleChangeValue}
+                        />
+                    </Col>
+                </Form.Row>
                 {/* 제목 */}
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">
@@ -503,17 +517,6 @@ const DirectLinkEdit = ({ history }) => {
                     }}
                     labelClassName="justify-content-end mr-3"
                     disabled={inputBoxDisabled}
-                />
-
-                {/* 사용여부 */}
-                <MokaInputLabel
-                    as="switch"
-                    name="usedYn"
-                    id="usedYn"
-                    className="mb-2"
-                    label="사용여부"
-                    inputProps={{ checked: temp.usedYn === 'Y' }}
-                    onChange={handleChangeValue}
                 />
 
                 {/* 노출고정 */}

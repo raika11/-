@@ -6,9 +6,11 @@ import { createRequestActionTypes } from '@store/commons/saga';
  */
 export const CLEAR_STORE = 'columNist/CLEAR_STORE';
 export const CLEAR_COLUMNIST_LIST = 'columNist/CLEAR_COLUMNIST_LIST';
+export const CLEAR_COLUMNIST = 'columNist/CLEAR_COLUMNIST';
 export const CLEAR_REPORTER_LIST = 'columNist/CLEAR_REPORTER_LIST';
 export const clearStore = createAction(CLEAR_STORE);
-export const clearColumnist = createAction(CLEAR_COLUMNIST_LIST);
+export const clearColumnistList = createAction(CLEAR_COLUMNIST_LIST);
+export const clearColumnist = createAction(CLEAR_COLUMNIST);
 export const clearRepoterlist = createAction(CLEAR_REPORTER_LIST);
 
 /**

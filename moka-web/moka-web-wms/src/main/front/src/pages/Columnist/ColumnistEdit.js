@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { MokaCard, MokaInputLabel } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -6,10 +7,11 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ColumnistModal from './modals/RepoterlistModal';
 import { notification } from '@utils/toastUtil';
-import { GET_COLUMNIST, saveColumnist, changeColumnist, changeInvalidList, changeColumnlistEditMode } from '@store/columNist';
+import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, changeColumnlistEditMode, clearColumnist } from '@store/columNist';
 
-const ColumnistEdit = () => {
+const ColumnistEdit = ({ history }) => {
     const dispatch = useDispatch();
+    const { seqNo } = useParams();
     const imgFileRef = useRef(null);
     const [fileValue, setFileValue] = useState(null);
     const [editDisabled, setEditDisabled] = useState(setEditDisabledInitialize);
@@ -17,9 +19,9 @@ const ColumnistEdit = () => {
     const [selectRepoterData, setSelectRepoterData] = useState(repoterDataInitialize);
     const [error, setError] = useState(setErrorInitialize);
 
-    const { loading, columnlist, invalidList, editmode } = useSelector((store) => ({
+    const { loading, columnist, invalidList, editmode } = useSelector((store) => ({
         loading: store.loading[GET_COLUMNIST],
-        columnlist: store.columNist.columnlist,
+        columnist: store.columNist.columnist,
         invalidList: store.columNist.invalidList,
         editmode: store.columNist.editmode,
     }));
@@ -28,7 +30,6 @@ const ColumnistEdit = () => {
     const tempOnchange = (e) => {
         // FIXME: 2020-11-23 16:50  사용여부가 checkbox 여서 checked 가 있을땐 Y / N 세팅.
         const { name, value, checked } = e.target;
-        // console.log({ name: name, value: value, checked: checked });
         if (name === 'status') {
             setSelectRepoterData({
                 ...selectRepoterData,
@@ -60,16 +61,14 @@ const ColumnistEdit = () => {
             tmpEmail = repoterData.repEmail1 && repoterData.repEmail1 && repoterData.repEmail1.split('@');
             setEditData({
                 seqNo: null,
-                // inout: null,
-                status: 'Y', // FIXME: 2020-11-23 16:37 임시 Y
+                status: 'Y', // 디폴드 값.
                 repSeq: repoterData.repSeq,
                 columnistNm: repoterData.repName,
                 email1: tmpEmail[0],
                 email2: tmpEmail[1],
-                position: '', // FIXME : 2020-11-23 15:14 직책 데이터가 존재 하지 않아서 임시로 등록.
+                position: '',
                 profile: '',
-                // selectImg: repoterData.repPhoto,
-                selectImg: '', // 기자 검색후 추가시 어떻게 해야 할지 몰라서 일단 '' 처리.
+                selectImg: '',
                 profile_photo: '',
             });
         } catch (e) {
@@ -93,7 +92,6 @@ const ColumnistEdit = () => {
         ); // input disabled
         setSelectRepoterData({
             seqNo: seqNo,
-            // inout: null,
             status: status,
             repSeq: repSeq,
             columnistNm: columnistNm,
@@ -107,7 +105,7 @@ const ColumnistEdit = () => {
     };
 
     /**
-     * 유효성 검사를 한다.
+     * 유효성 검사
      */
     const validate = (editData) => {
         let isInvalid = false;
@@ -117,7 +115,7 @@ const ColumnistEdit = () => {
         if (!editData.columnistNm) {
             errList.push({
                 field: 'columnistNm',
-                reason: '기자번호를 입력해 주세요.',
+                reason: '기자명을 입력해 주세요.',
             });
             isInvalid = isInvalid || true;
         }
@@ -131,7 +129,7 @@ const ColumnistEdit = () => {
             isInvalid = isInvalid || true;
         }
 
-        // 이메일
+        // 이메일2
         if (!editData.email2) {
             errList.push({
                 field: 'email2',
@@ -243,9 +241,9 @@ const ColumnistEdit = () => {
 
     // 취소 버튼 클릭.
     const handleClickCancleButton = () => {
-        setSelectRepoterData(repoterDataInitialize); // 초기화.
-        setEditDisabled(setEditDisabledInitialize); // input disabled
         dispatch(changeColumnlistEditMode({ editmode: editmode === false ? true : false }));
+        dispatch(clearColumnist());
+        history.push(`/columnist`);
     };
 
     // 기자번호 삭제.
@@ -258,26 +256,26 @@ const ColumnistEdit = () => {
 
     // 리트스에서 아이템 클릭후 store 값 변경 되면 정보 변경.
     useEffect(() => {
-        if (columnlist) {
+        if (columnist) {
             let tmpEmail = [];
-            tmpEmail = columnlist.email !== 'undefined' && columnlist.email != null && columnlist.email.split('@');
+            tmpEmail = columnist.email !== 'undefined' && columnist.email != null && columnist.email.split('@');
 
             setEditData({
-                repNo: columnlist.repNo,
+                repNo: columnist.repNo,
                 // inout: null,
-                status: columnlist.status, // FIXME: 2020-11-23 16:37 임시 Y
-                repSeq: columnlist.repSeq,
-                seqNo: columnlist.seqNo,
-                columnistNm: columnlist.columnistNm,
+                status: columnist.status, // FIXME: 2020-11-23 16:37 임시 Y
+                repSeq: columnist.repSeq,
+                seqNo: columnist.seqNo,
+                columnistNm: columnist.columnistNm,
                 email1: tmpEmail[0],
                 email2: tmpEmail[1],
-                position: columnlist.position,
-                profile_photo: columnlist.profilePhoto,
-                profile: columnlist.profile,
-                selectImg: columnlist.selectImg,
+                position: columnist.position,
+                profile_photo: columnist.profilePhoto,
+                profile: columnist.profile,
+                selectImg: columnist.selectImg,
             });
         }
-    }, [columnlist]);
+    }, [columnist]);
 
     // 저장시 벨리데이션 에러 표현.
     useEffect(() => {
@@ -298,7 +296,7 @@ const ColumnistEdit = () => {
     useEffect(() => {
         if (editmode === true) {
             setSelectRepoterData(repoterDataInitialize); // 초기화.
-            // 에드트 박스 Disable 초기화.
+            // 에디트 박스 Disable 초기화.
             setEditDisabled(
                 Object.keys(setEditDisabledInitialize).reduce(function (element, key) {
                     element[key] = key === 'repSeq' ? true : false;
@@ -306,7 +304,9 @@ const ColumnistEdit = () => {
                 }, {}),
             );
         } else {
-            setSelectRepoterData(repoterDataInitialize); // 초기화.
+            // 초기화.
+            setSelectRepoterData(repoterDataInitialize);
+            setEditDisabled(setEditDisabledInitialize);
         }
     }, [editmode]);
 
@@ -319,9 +319,35 @@ const ColumnistEdit = () => {
         pageLoading();
     }, []);
 
+    // 라우터 변경 체크(목록에서 클릭.)
+    useEffect(() => {
+        if (seqNo) {
+            dispatch(changeColumnlistEditMode({ editmode: true }));
+            dispatch(
+                getColumnist({
+                    seqNo: seqNo,
+                }),
+            );
+        }
+    }, [dispatch, seqNo]);
+
     return (
-        <MokaCard width={535} title={`칼럼 니스트 ${columnlist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
+        <MokaCard width={535} title={`칼럼 니스트 ${columnist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
             <Form className="mb-gutter">
+                <Form.Row className="mb-2">
+                    <Col xs={5} className="p-0">
+                        <MokaInputLabel
+                            as="switch"
+                            name="status"
+                            id="status"
+                            className="mb-2"
+                            label="사용여부"
+                            inputProps={{ checked: selectRepoterData.status === 'Y' ? true : false }}
+                            onChange={tempOnchange}
+                            disabled={editDisabled.status}
+                        />
+                    </Col>
+                </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
@@ -342,6 +368,9 @@ const ColumnistEdit = () => {
                             </Button>
                         </Col>
                     </div>
+                </Form.Row>
+                <Form.Row className="d-flex mb-10 text-align-center" style={{ marginLeft: '80px' }}>
+                    <Form.Label className="text-danger">* 외부 칼럼니스트 이름을 직접 입력해 주세요.</Form.Label>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
@@ -389,17 +418,6 @@ const ColumnistEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-
-                <MokaInputLabel
-                    as="switch"
-                    name="status"
-                    id="status"
-                    className="mb-2"
-                    label="사용여부"
-                    inputProps={{ checked: selectRepoterData.status === 'Y' ? true : false }}
-                    onChange={tempOnchange}
-                    disabled={editDisabled.status}
-                />
 
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">

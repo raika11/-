@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default [
     {
-        headerName: '',
-        field: 'repNo',
+        headerName: 'seqNo',
+        field: 'seqNo',
         width: 1,
         hide: true,
     },

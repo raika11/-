@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
@@ -154,6 +154,12 @@ const MokaTable = forwardRef((props, ref) => {
     // gridApi state
     const [gridApi, setGridApi] = useState(null);
 
+    /**
+     * 2020-11-27 09:35 MokaTable 외부에서 selected 값이 바껴도 unseleced가 동작 되지 않아서
+     * 아래 처럼 변수에 담아놓고 값이 현재 값과 비교해서 다르면 un seleced 가 되도록 값을 담아 놓음.
+     */
+    const initSelected = useRef(selected);
+
     // return ref 설정
     useImperativeHandle(
         ref,
@@ -201,16 +207,31 @@ const MokaTable = forwardRef((props, ref) => {
     /**
      * ag-grid가 화면에 그릴 row data가 변경되었을 때 실행
      * (selected 값이 있을 때 select함)
+     *
+     * 2020-11-27 09:38 selected 값이 변경 되어도 deselectAll 이 실행 되지 않아서 기존 선택된 ROW 가 유지되는 부분이 있어서 아래 처럼 수정.
+     * 혹시 문제가 생기면 아래 기존 소스로 변경 부탁 드립니다.
      */
     const handleSelected = useCallback(() => {
-        if (selected && gridApi) {
+        if ((selected && gridApi) || initSelected.current !== selected) {
             gridApi.deselectAll();
             const selectedNode = gridApi.getRowNode(selected);
             if (selectedNode) {
                 selectedNode.selectThisNode(true);
+                initSelected.current = selected;
             }
         }
     }, [selected, gridApi]);
+
+    // 2020-11-27 09:40 기존 소스.
+    // const handleSelected = useCallback(() => {
+    //     if (selected && gridApi) {
+    //         gridApi.deselectAll();
+    //         const selectedNode = gridApi.getRowNode(selected);
+    //         if (selectedNode) {
+    //             selectedNode.selectThisNode(true);
+    //         }
+    //     }
+    // }, [selected, gridApi]);
 
     /**
      * selection 변경 시 실행

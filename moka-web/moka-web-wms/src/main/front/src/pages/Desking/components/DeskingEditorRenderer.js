@@ -55,7 +55,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
                 },
                 ({ header }) => {
                     if (!header.success) {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     } else {
                         setEditMode(false);
                     }

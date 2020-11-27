@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore, deleteDomain, hasRelationList, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
-import { notification, toastr } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 const DomainEdit = React.lazy(() => import('./DomainEditTest'));
 const DomainList = React.lazy(() => import('./DomainList'));
@@ -35,7 +35,7 @@ const Domain = () => {
      * @param {object} domain domain
      */
     const deleteCallback = (domain) => {
-        toastr.confirm(`${domain.domainId}_${domain.domainName}을 정말 삭제하시겠습니까?`, {
+        messageBox.confirm(`${domain.domainId}_${domain.domainName}을 정말 삭제하시겠습니까?`, {
             onOk: () => {
                 dispatch(
                     deleteDomain({
@@ -43,12 +43,12 @@ const Domain = () => {
                         callback: ({ header }) => {
                             // 삭제 성공
                             if (header.success) {
-                                notification('success', header.message);
+                                toast.success(header.message);
                                 history.push('/domain');
                             }
                             // 삭제 실패
                             else {
-                                notification('warning', header.message);
+                                toast.fail(header.message);
                             }
                         },
                     }),
@@ -72,9 +72,11 @@ const Domain = () => {
                         // 관련 아이템 없음
                         if (!body) deleteCallback(domain);
                         // 관련 아이템 있음
-                        else notification('warning', '사용 중인 도메인은 삭제할 수 없습니다');
+                        else {
+                            toast.fail('사용 중인 도메인은 삭제할 수 없습니다');
+                        }
                     } else {
-                        notification('warning', header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),

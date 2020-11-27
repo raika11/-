@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ColumnistModal from './modals/RepoterlistModal';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, changeColumnlistEditMode, clearColumnist } from '@store/columNist';
 
 const ColumnistEdit = ({ history }) => {
@@ -212,9 +212,9 @@ const ColumnistEdit = ({ history }) => {
                 callback: (response) => {
                     if (response.header.success) {
                         setError(setErrorInitialize);
-                        notification('success', '등록하였습니다.');
+                        toast.success('등록하였습니다.');
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),
@@ -235,9 +235,9 @@ const ColumnistEdit = ({ history }) => {
                                 seqNo: updateData.seqNo,
                             }),
                         );
-                        notification('success', '수정하였습니다.');
+                        toast.success('수정하였습니다.');
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),

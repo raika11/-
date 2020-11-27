@@ -10,7 +10,7 @@ import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
 import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, copyTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { DefaultInputModal } from '@pages/commons';
 import AddComponentModal from './modals/AddComponentModal';
 
@@ -116,7 +116,7 @@ const TemplateEdit = ({ onDelete }) => {
                         toast.success(header.message);
                         history.push(`/template/${body.templateSeq}`);
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -137,14 +137,8 @@ const TemplateEdit = ({ onDelete }) => {
                         if (!body) saveCallback(temp);
                         // 관련 아이템 있음
                         else {
-                            toast.confirm(
-                                <React.Fragment>
-                                    다른 곳에서 사용 중입니다.
-                                    <br />
-                                    변경 시 전체 수정 반영됩니다.
-                                    <br />
-                                    수정하시겠습니까?
-                                </React.Fragment>,
+                            messageBox.confirm(
+                                '다른 곳에서 사용 중입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?',
                                 () => {
                                     saveCallback(temp);
                                 },
@@ -223,7 +217,7 @@ const TemplateEdit = ({ onDelete }) => {
                             toast.success(header.message);
                             history.push(`/template/${body.templateSeq}`);
                         } else {
-                            toast.warn(header.message);
+                            toast.warning(header.message);
                         }
                     },
                 }),

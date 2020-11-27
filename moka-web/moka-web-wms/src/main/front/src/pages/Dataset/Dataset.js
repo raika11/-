@@ -8,7 +8,7 @@ import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { useDispatch } from 'react-redux';
 import { clearStore, deleteDataset, hasRelationList } from '@store/dataset';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 const DatasetEdit = React.lazy(() => import('./DatasetEdit'));
 const DatasetList = React.lazy(() => import('./DatasetList'));
@@ -52,7 +52,7 @@ const Dataset = () => {
     };
 
     const handleClickDelete = (dataset) => {
-        toast.confirm(
+        messageBox.confirm(
             `${dataset.datasetSeq}을(를) 정말 삭제 하시겠습니까?`,
             () => {
                 dispatch(

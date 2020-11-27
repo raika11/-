@@ -10,7 +10,7 @@ import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
 import { getPageType } from '@store/codeMgt';
 import { previewPage, w3cPage } from '@store/merge';
 import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/Page/modals';
 
@@ -287,10 +287,10 @@ const PageEdit = ({ onDelete }) => {
                     actions: [changePage(tmp)],
                     callback: ({ header, body }) => {
                         if (header.success) {
-                            notification('success', header.message);
+                            toast.success(header.message);
                             history.push(`/page/${body.pageSeq}`);
                         } else {
-                            notification('warning', header.message);
+                            toast.fail(header.message);
                         }
                     },
                 }),
@@ -342,7 +342,7 @@ const PageEdit = ({ onDelete }) => {
                     });
                     popupPreview('/preview/page', item);
                 } else {
-                    notification('warning', header.message || '미리보기에 실패하였습니다');
+                    toast.fail(header.message || '미리보기에 실패하였습니다');
                 }
             },
         };
@@ -404,7 +404,7 @@ const PageEdit = ({ onDelete }) => {
                 if (header.success) {
                     popupW3C(body);
                 } else {
-                    notification('warning', header.message || 'W3C검사에 실패했습니다');
+                    toast.fail(header.message || 'W3C검사에 실패했습니다');
                 }
             },
         };

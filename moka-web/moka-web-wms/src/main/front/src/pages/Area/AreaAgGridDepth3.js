@@ -57,7 +57,7 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
                 history.push(`${baseUrl}/${areaDepth1.areaSeq}`);
             }
         } else {
-            toast.warn('상위 편집영역을 선택해주세요');
+            toast.warning('상위 편집영역을 선택해주세요');
         }
     };
 

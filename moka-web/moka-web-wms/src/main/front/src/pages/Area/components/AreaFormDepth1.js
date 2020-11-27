@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { MokaInputLabel, MokaCard } from '@components';
 import { saveArea, changeArea, GET_AREA_DEPTH1, DELETE_AREA, SAVE_AREA } from '@store/area';
 
@@ -57,7 +57,7 @@ const AreaFormDepth1 = ({ onDelete }) => {
                         toast.success(header.message);
                         history.push(`/area/${body.areaSeq}`);
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -78,12 +78,8 @@ const AreaFormDepth1 = ({ onDelete }) => {
         };
 
         if (areaListDepth2.length > 0 && save.usedYn === 'N') {
-            toast.confirm(
-                <React.Fragment>
-                    하위 뎁스 메뉴도 편집 영역에 노출되지 않습니다.
-                    <br />
-                    사용여부를 off 하시겠습니까?
-                </React.Fragment>,
+            messageBox.confirm(
+                '하위 뎁스 메뉴도 편집 영역에 노출되지 않습니다.\n사용여부를 off 하시겠습니까?',
                 () => handleSave(save),
                 () => {},
             );

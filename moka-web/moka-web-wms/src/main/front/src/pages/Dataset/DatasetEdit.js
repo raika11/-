@@ -245,7 +245,7 @@ const DatasetEdit = ({ onDelete }) => {
             setDataApiParamShape(parameters || []);
             hideCallback();
         } else {
-            toast.warn('하나 이상의 자동 데이타셋을 선택해 주세요.');
+            toast.warning('하나 이상의 자동 데이타셋을 선택해 주세요.');
         }
     };
 

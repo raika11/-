@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { MokaModalEditor } from '@components';
 import { getPageModal } from '@store/page';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 
 /**
  * 페이지 TEMS 소스 보여주는 모달
@@ -34,7 +34,7 @@ const PageHtmlModal = (props) => {
                         if (header.success) {
                             setPage(body);
                         } else {
-                            notification(header.message);
+                            toast.fail(header.message);
                         }
                         setLoading(false);
                     },

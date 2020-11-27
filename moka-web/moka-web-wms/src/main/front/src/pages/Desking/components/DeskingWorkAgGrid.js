@@ -196,7 +196,7 @@ const DeskingWorkAgGrid = (props) => {
 
             // rollback
             if (moveMode === 'ParentToChild' || moveMode === 'ChildToParent' || moveMode === 'ChildToChild') {
-                toast.warn('이동할 수 없습니다');
+                toast.warning('이동할 수 없습니다');
             }
         }
 

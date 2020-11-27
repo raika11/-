@@ -8,7 +8,7 @@ import { ITEM_PG, ITEM_SK, ITEM_TP, ITEM_CT, DB_DATEFORMAT } from '@/constants';
 import { defaultHistorySearchType } from './index';
 import { MokaCard, MokaTable, MokaSearchInput, MokaInput, MokaInputLabel } from '@components';
 import { initialState, changeSearchOption, getHistoryList, GET_HISTORY_LIST, clearStore, getHistory } from '@store/history';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import columDefs from './HistoryListColums';
 
 const propTypes = {
@@ -71,8 +71,7 @@ const HistoryList = (props) => {
                 ),
             );
         } else {
-            notification(
-                'warning',
+            toast.error(
                 seqType === ITEM_TP
                     ? '템플릿을 선택해주세요'
                     : seqType === ITEM_CT

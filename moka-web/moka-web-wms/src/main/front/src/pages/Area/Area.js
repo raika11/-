@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import { initialState, deleteArea, clearArea, getAreaListModal, clearStore } from '@store/area';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 const AreaList = React.lazy(() => import('./AreaList'));
 const AreaEdit = React.lazy(() => import('./AreaEdit'));
@@ -46,7 +46,7 @@ const Area = ({ match }) => {
                             dispatch(clearArea(1));
                         }
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -58,7 +58,7 @@ const Area = ({ match }) => {
      */
     const handleClickDelete = (area) => {
         if (area.depth === 3) {
-            toast.confirm(
+            messageBox.confirm(
                 '삭제하시겠습니까?',
                 () => handleDelete(area),
                 () => {},
@@ -74,24 +74,20 @@ const Area = ({ match }) => {
                     callback: ({ header, body }) => {
                         if (header.success) {
                             if (body.list.length > 0) {
-                                toast.confirm(
-                                    <React.Fragment>
-                                        하위 편집영역이 모두 삭제됩니다.
-                                        <br />
-                                        삭제하시겠습니까?
-                                    </React.Fragment>,
+                                messageBox.confirm(
+                                    '하위 편집영역이 모두 삭제됩니다.\n삭제하시겠습니까?',
                                     () => handleDelete(area),
                                     () => {},
                                 );
                             } else {
-                                toast.confirm(
+                                messageBox.confirm(
                                     '삭제하시겠습니까?',
                                     () => handleDelete(area),
                                     () => {},
                                 );
                             }
                         } else {
-                            toast.warn(header.message);
+                            toast.warning(header.message);
                         }
                     },
                 }),

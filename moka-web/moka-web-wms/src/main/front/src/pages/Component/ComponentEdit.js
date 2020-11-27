@@ -17,7 +17,7 @@ import {
     DELETE_COMPONENT,
 } from '@store/component';
 import { DB_DATEFORMAT } from '@/constants';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 import BasicForm from './components/BasicForm';
 import DetailRelationForm from './components/DetailRelationForm';
@@ -90,7 +90,7 @@ const ComponentEdit = ({ onDelete }) => {
                         toast.success(header.message);
                         history.push(`/component/${body.componentSeq}`);
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -111,14 +111,8 @@ const ComponentEdit = ({ onDelete }) => {
                         if (!body) saveCallback(component);
                         // 관련 아이템 있음
                         else {
-                            toast.confirm(
-                                <React.Fragment>
-                                    다른 곳에서 사용 중입니다.
-                                    <br />
-                                    변경 시 전체 수정 반영됩니다.
-                                    <br />
-                                    수정하시겠습니까?
-                                </React.Fragment>,
+                            messageBox.confirm(
+                                '다른 곳에서 사용 중입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?',
                                 () => {
                                     saveCallback(component);
                                 },

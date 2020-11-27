@@ -5,7 +5,7 @@ import { MokaLoader } from '@components';
 import MokaEditor from '@/components/MokaEditor/MokaEditorCore';
 import { putSnapshotComponentWork, postSaveComponentWork, PUT_SNAPSHOT_COMPONENT_WORK, POST_SAVE_COMPONENT_WORK } from '@store/desking';
 import { previewComponentModal, PREVIEW_COMPONENT_MODAL } from '@store/merge';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 /**
  * Html 수동 편집 모달 컴포넌트
@@ -34,7 +34,7 @@ const HtmlEditModal = (props) => {
                 componentWorkSeq,
                 callback: ({ header }) => {
                     if (!header.success) {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     } else {
                         toast.success(header.message);
                     }
@@ -47,7 +47,7 @@ const HtmlEditModal = (props) => {
      * 임시저장 버튼
      */
     const handleClickSave = () => {
-        toast.confirm(
+        messageBox.confirm(
             '임시저장 하시겠습니까?',
             () => {
                 dispatch(
@@ -59,7 +59,7 @@ const HtmlEditModal = (props) => {
                             if (header.success) {
                                 saveCallback({ componentWorkSeq: data.seq });
                             } else {
-                                toast.warn(header.message);
+                                toast.warning(header.message);
                             }
                         },
                     }),
@@ -83,7 +83,7 @@ const HtmlEditModal = (props) => {
                         let win = window.open('', '스냅샷 미리보기');
                         win.document.body.innerHTML = body;
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),

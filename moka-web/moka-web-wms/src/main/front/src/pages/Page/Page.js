@@ -7,11 +7,10 @@ import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { CARD_DEFAULT_HEIGHT, ITEM_PG, ITEM_TP, ITEM_CT, ITEM_CP, TEMS_PREFIX } from '@/constants';
-import toast from '@utils/toastUtil';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { clearStore, deletePage, appendTag, changePageBody } from '@store/page';
 import { clearStore as clearHistoryStore } from '@store/history';
-import { notification, toastr } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 import PageEditor from './PageEditor';
 const PageList = React.lazy(() => import('./PageList'));
@@ -113,7 +112,7 @@ const Page = () => {
     const handleClickDelete = useCallback(
         (item) => {
             if (item.pageUrl === '/') {
-                toastr.warning('', '메인화면은 삭제할 수 없습니다.');
+                toast.warning('메인화면은 삭제할 수 없습니다.');
             } else {
                 let findInfo = {
                     findSeq: item.pageSeq,
@@ -128,16 +127,16 @@ const Page = () => {
                     msg = `${item.pageSeq}_${item.pageName}(${item.pageUrl})을(를) 삭제하시겠습니까?`;
                 }
 
-                toastr.confirm(msg, {
+                messageBox.confirm(msg, {
                     onOk: () => {
                         const option = {
                             pageSeq: item.pageSeq,
                             callback: (response) => {
                                 if (response.header.success) {
-                                    notification('success', response.header.message);
+                                    toast.success(response.header.message);
                                     history.push('/page');
                                 } else {
-                                    notification('warning', response.header.message);
+                                    toast.fail(response.header.message);
                                 }
                             },
                         };
@@ -175,16 +174,9 @@ const Page = () => {
      */
     const handleClickHistLoad = ({ header, body }) => {
         if (header.success) {
-            toast.confirm(
-                <React.Fragment>
-                    현재 작업된 소스가 히스토리 내용으로 변경됩니다.
-                    <br />
-                    변경하시겠습니까?
-                </React.Fragment>,
-                () => {
-                    dispatch(changePageBody(body.body));
-                },
-            );
+            messageBox.confirm('현재 작업된 소스가 히스토리 내용으로 변경됩니다.\n변경하시겠습니까?', () => {
+                dispatch(changePageBody(body.body));
+            });
         } else {
             toast.error(header.message);
         }
@@ -195,16 +187,9 @@ const Page = () => {
      */
     const handleClickPageLoad = ({ header, body }) => {
         if (header.success) {
-            toast.confirm(
-                <React.Fragment>
-                    현재 작업된 소스가 변경됩니다.
-                    <br />
-                    변경하시겠습니까?
-                </React.Fragment>,
-                () => {
-                    dispatch(changePageBody(body.pageBody));
-                },
-            );
+            messageBox.confirm('현재 작업된 소스가 변경됩니다.\n변경하시겠습니까?', () => {
+                dispatch(changePageBody(body.pageBody));
+            });
         } else {
             toast.error(header.message);
         }

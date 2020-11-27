@@ -12,7 +12,7 @@ import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon, MokaOve
 import { GET_AREA_DEPTH2, GET_AREA_DEPTH3, SAVE_AREA, DELETE_AREA, saveArea, changeArea } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 const AreaFormDepth2 = (props) => {
     const { onShowModal, page, setPage, onChangeModalDomainId, depth, onDelete } = props;
@@ -147,7 +147,7 @@ const AreaFormDepth2 = (props) => {
                             history.push(`/area/${areaDepth1.areaSeq}/${body.parent.areaSeq}/${body.areaSeq}`);
                         }
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -194,12 +194,8 @@ const AreaFormDepth2 = (props) => {
 
         if (validate(save)) {
             if (depth === 2 && areaListDepth3.length > 0 && save.usedYn === 'N') {
-                toast.confirm(
-                    <React.Fragment>
-                        하위 뎁스 메뉴도 편집 영역에 노출되지 않습니다.
-                        <br />
-                        사용여부를 off 하시겠습니까?
-                    </React.Fragment>,
+                messageBox.confirm(
+                    '하위 뎁스 메뉴도 편집 영역에 노출되지 않습니다.\n사용여부를 off 하시겠습니까?',
                     () => handleSave(save),
                     () => {},
                 );

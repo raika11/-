@@ -48,7 +48,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
         }
 
         if (workStatus !== 'save' && workStatus) {
-            toast.warn('임시저장한 데이터만 예약할 수 있습니다');
+            toast.warning('임시저장한 데이터만 예약할 수 있습니다');
             return;
         }
 
@@ -58,7 +58,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
                 reserveDt: moment(reserveDt).format(DB_DATEFORMAT),
                 callback: ({ header }) => {
                     if (!header.success) {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     } else {
                         toast.success(header.message);
                         setOpenReserve(false);

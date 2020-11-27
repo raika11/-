@@ -1,128 +1,41 @@
+import React from 'react';
 import { toastr } from 'react-redux-toastr';
-
-export { toastr } from 'react-redux-toastr';
+import { MokaMessageBox, MokaIcon } from '@components';
 
 const DEFAULT_TITLE = {
     SUCCESS: '성공',
+    COMPLATE: '완료',
     FAIL: '실패',
     ERROR: '오류',
     COMPLETE: '완료',
     WARNING: '경고',
     INFO: '안내',
     CONFIRM: '확인',
-};
-
-const TYPES = {
-    SUCCESS: 'success',
-    ERROR: 'error',
-    WARN: 'warning',
-    INFO: 'info',
-    CONFIRM: 'confirm',
+    ALERT: '알림',
 };
 
 const DEFAULT_SUCCESS_MSG = '정상 처리 되었습니다.';
 const DEFAULT_ERROR_MSG = '처리 중 오류가 발생했습니다.';
 const DEFAULT_NO_DATA = '수신된 데이터가 없습니다.';
-const defaultOptions = {
-    progressBar: false,
-};
-/**
- * 성공 notification
- * @param {string} title 제목
- * @param {string} message 내용
- * @param {object} options 세부옵션
- */
-const success = (
-    title = '',
-    message,
-    options = {
-        closeButton: true,
-        progressBar: false,
-        showMethod: 'slideDown',
-        position: 'top-center',
-        timeOut: 2000,
-        escapeHtml: false,
-    },
-) => {
-    toastr.success(title, message, options);
-};
 
-/**
- * 오류 notification
- * @param {string} title 제목
- * @param {string} message 내용
- * @param {object} options 세부옵션
- */
-const error = (
-    title = '',
-    message,
-    options = {
-        closeButton: true,
-        progressBar: false,
-        showMethod: 'fadeIn',
-        transitionIn: 'fadeIn',
-        transitionOut: 'fadeOut',
-        position: 'top-center',
-        removeOnHover: false,
-        attention: true,
-        timeOut: 5000,
-        escapeHtml: false,
-    },
-) => {
-    toastr.error(title, message, options);
-};
-
-/**
- * 경고 notification
- * @param {string} title 제목
- * @param {string} message 내용
- * @param {object} options 세부옵션
- */
-const warning = (
-    title = '',
-    message,
-    options = {
-        closeButton: true,
-        progressBar: false,
-        showMethod: 'fadeIn',
-        transitionIn: 'fadeIn',
-        transitionOut: 'fadeOut',
-        position: 'top-right',
-        timeOut: 0,
-        escapeHtml: false,
-    },
-) => {
-    toastr.warning(title, message, options);
-};
-
-export const notification = (type, message, options = defaultOptions) => {
-    switch (type) {
-        case TYPES.SUCCESS:
-            success(type, message, options);
-            break;
-        case TYPES.ERROR:
-            error(type, message, options);
-            break;
-        case TYPES.WARN:
-            console.log(type);
-            warning(type, message, options);
-            break;
-        default:
-            break;
-    }
-};
-
-export default {
+export const toast = {
     success: (message) => {
-        success(DEFAULT_TITLE.SUCCESS, message);
+        toastr.success(DEFAULT_TITLE.COMPLETE, message, {
+            closeButton: true,
+            progressBar: false,
+            showMethod: 'slideDown',
+            position: 'top-right',
+            timeOut: 2000,
+            escapeHtml: false,
+        });
     },
     complete: (message) => {
-        toastr.info(DEFAULT_TITLE.COMPLETE, message, {
+        toastr.success(DEFAULT_TITLE.COMPLETE, message, {
             closeButton: true,
             progressBar: true,
             showMethod: 'slideDown',
             position: 'top-right',
-            timeOut: 3000,
+            timeOut: 2000,
             escapeHtml: false,
         });
     },
@@ -137,72 +50,135 @@ export default {
         });
     },
     fail: (message) => {
-        error(DEFAULT_TITLE.FAIL, message);
-    },
-    error: (message) => {
-        error(DEFAULT_TITLE.ERROR, message);
-    },
-    warn: (message) => {
-        warning(DEFAULT_TITLE.WARNING, message);
-    },
-    confirm: (message, ok, cancel) => {
-        toastr.confirm(message, {
+        toastr.error(DEFAULT_TITLE.FAIL, message, {
             closeButton: true,
             progressBar: false,
-            showMethod: 'slideDown',
+            showMethod: 'fadeIn',
+            transitionIn: 'fadeIn',
+            transitionOut: 'fadeOut',
             position: 'top-center',
-            escapeHtml: false,
-            timeOut: 5000,
+            removeOnHover: false,
             attention: true,
-            okText: '확인',
-            cancelText: '취소',
-            onOk: () => {
-                if (ok) {
-                    ok(true);
-                }
-            },
-            onCancel: (id) => {
-                if (cancel) {
-                    cancel(false);
-                } else {
-                    if (ok) {
-                        ok(false);
-                    }
-                }
-            },
+            timeOut: 0,
+            escapeHtml: false,
         });
     },
-    alert: (message, ok) => {
-        toastr.confirm(message, {
-            okText: '확인',
-            disableCancel: true,
-            onOk: () => {
-                if (ok) {
-                    ok(true);
-                }
-            },
+    error: (message) => {
+        toastr.error(DEFAULT_TITLE.FAIL, message, {
+            closeButton: true,
+            progressBar: true,
+            showMethod: 'fadeIn',
+            transitionIn: 'fadeIn',
+            transitionOut: 'fadeOut',
+            position: 'top-center',
+            removeOnHover: false,
+            attention: true,
+            timeOut: 5000,
+            escapeHtml: false,
         });
     },
+    warning: (message) => {
+        toastr.warning(DEFAULT_TITLE.FAIL, message, {
+            closeButton: true,
+            progressBar: false,
+            showMethod: 'fadeIn',
+            transitionIn: 'fadeIn',
+            transitionOut: 'fadeOut',
+            position: 'top-right',
+            timeOut: 5000,
+            escapeHtml: false,
+        });
+    },
+
     result: (response, onSuccess, onFail) => {
         if (response && response.header) {
             const resultHeader = response.header;
 
             if (resultHeader.success) {
-                success(DEFAULT_TITLE.SUCCESS, resultHeader.message || DEFAULT_SUCCESS_MSG);
+                toast.success(resultHeader.message || DEFAULT_SUCCESS_MSG);
                 if (onSuccess) {
                     onSuccess(response);
                 }
             } else {
-                error(DEFAULT_TITLE.FAIL, resultHeader.message || DEFAULT_ERROR_MSG);
+                toast.fail(resultHeader.message || DEFAULT_ERROR_MSG);
                 if (onFail) {
                     onFail(response);
                 }
             }
         } else {
-            error(DEFAULT_TITLE.ERROR, DEFAULT_NO_DATA);
+            toast.error(DEFAULT_NO_DATA);
             if (onFail) {
                 onFail(response);
             }
         }
     },
 };
+
+export const messageBox = {
+    alert: (message, ok) => {
+        message = message.replace(/\n/g, '<br />');
+        const confirmOption = {
+            disableCancel: true,
+            okText: '확인',
+            title: DEFAULT_TITLE.ALERT,
+            onOk: () => {
+                if (ok) {
+                    ok(true);
+                }
+            },
+            buttons: [
+                {
+                    text: '×',
+                    className: 'close',
+                    handler: () => {
+                        if (ok) {
+                            ok(true);
+                        }
+                    },
+                },
+                {
+                    cancel: true, // move the cancel button to the end
+                },
+            ],
+            component: () => <MokaMessageBox icon={<MokaIcon iconName="fal-info-circle" />} title={DEFAULT_TITLE.ALERT} message={message} />,
+        };
+        toastr.confirm('', confirmOption);
+    },
+    confirm: (message, ok, cancel) => {
+        message = message.replace(/\n/g, '<br />');
+        const confirmOption = {
+            closeButton: true,
+            okText: '확인',
+            cancelText: '취소',
+            title: DEFAULT_TITLE.CONFIRM,
+            onOk: () => {
+                if (ok) {
+                    ok(true);
+                }
+            },
+            onCancel: () => {
+                if (cancel) {
+                    cancel(false);
+                }
+            },
+            buttons: [
+                {
+                    text: '×',
+                    className: 'close',
+                    handler: () => {
+                        if (cancel) {
+                            cancel(false);
+                        }
+                    },
+                },
+                {
+                    cancel: true, // move the cancel button to the end
+                },
+            ],
+            component: () => <MokaMessageBox icon={<MokaIcon iconName="fal-question-circle" />} title={DEFAULT_TITLE.CONFIRM} headerClassName="confirm-header" message={message} />,
+        };
+        toastr.confirm('', confirmOption);
+    },
+};
+
+export default toast;

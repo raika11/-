@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, changeInvalidList } from '@store/domain';
 import { getApi, getLang } from '@store/codeMgt';
 import { MokaInput, MokaInputLabel } from '@components';
@@ -142,9 +142,9 @@ const DomainEditTest = ({ history, onDelete }) => {
                 ],
                 callback: (response) => {
                     if (response.header.success) {
-                        notification('success', response.header.message);
+                        toast.success(response.header.message);
                     } else {
-                        notification('warning', response.header.message);
+                        toast.fail(response.header.message);
                     }
                 },
             }),
@@ -175,16 +175,16 @@ const DomainEditTest = ({ history, onDelete }) => {
                                 ],
                                 callback: (response) => {
                                     if (response.header.success) {
-                                        notification('success', response.header.message);
+                                        toast.success(response.header.message);
                                         history.push(`/domain/${domainId}`);
                                     } else {
-                                        notification('warning', response.header.message);
+                                        toast.fail(response.header.message);
                                     }
                                 },
                             }),
                         );
                     } else {
-                        notification('warning', '중복된 도메인아이디가 존재합니다.');
+                        toast.warning('중복된 도메인아이디가 존재합니다.');
                     }
                 },
             }),

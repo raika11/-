@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { MokaModal, MokaInputLabel } from '@components';
 import { copyTemplate } from '@store/template/templateAction';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 
 /**
  * 템플릿 복사 Modal
@@ -39,10 +39,10 @@ const CopyModal = (props) => {
                     callback: ({ header, body }) => {
                         if (header.success) {
                             handleHide();
-                            notification('success', header.message);
+                            toast.success(header.message);
                             history.push(`/template/${body.templateSeq}`);
                         } else {
-                            notification('warning', header.message || '실패하였습니다');
+                            toast.fail(header.message || '실패하였습니다');
                         }
                     },
                 }),

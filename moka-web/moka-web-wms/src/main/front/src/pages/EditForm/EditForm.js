@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore, deleteEditForm, GET_EDIT_FORM, SAVE_EDIT_FORM } from '@store/editForm';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 const EditFormEdit = React.lazy(() => import('./EditFormEdit'));
 const EditFormList = React.lazy(() => import('./EditFormList'));
@@ -35,7 +35,7 @@ const EditForm = () => {
      * 삭제 버튼 클릭
      */
     const handleClickDelete = (editForm) => {
-        toast.confirm(`${editForm.formId}_${editForm.formName}을 정말 삭제하시겠습니까?`, (ok) => {
+        messageBox.confirm(`${editForm.formId}_${editForm.formName}을 정말 삭제하시겠습니까?`, (ok) => {
             if (ok) {
                 deleteEditForm({
                     formId: editForm.formSeq,

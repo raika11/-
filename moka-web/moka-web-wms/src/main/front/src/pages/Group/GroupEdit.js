@@ -18,8 +18,7 @@ import {
     getGroupMenuAuth,
     clearGroupMenuAuth,
 } from '@store/group';
-import { notification } from '@utils/toastUtil';
-import { toastr } from 'react-redux-toastr';
+import toast, { messageBox } from '@utils/toastUtil';
 
 /**
  * 그룹 상세/수정/등록
@@ -69,11 +68,15 @@ const GroupEdit = () => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         // 관련 아이템 없음
-                        if (!body) deleteCallback(group);
+                        if (!body) {
+                            deleteCallback(group);
+                        }
                         // 관련 아이템 있음
-                        else notification('warning', '사용 중인 그룹은 삭제할 수 없습니다');
+                        else {
+                            toast.fail('사용 중인 그룹은 삭제할 수 없습니다');
+                        }
                     } else {
-                        notification('warning', header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -85,26 +88,23 @@ const GroupEdit = () => {
      * @param {object} domain domain
      */
     const deleteCallback = (group) => {
-        toastr.confirm(`${group.groupCd}_${group.groupNm}을 정말 삭제하시겠습니까?`, {
-            onOk: () => {
-                dispatch(
-                    deleteGroup({
-                        groupCd: group.groupCd,
-                        callback: ({ header }) => {
-                            // 삭제 성공
-                            if (header.success) {
-                                notification('success', header.message);
-                                history.push('/group');
-                            }
-                            // 삭제 실패
-                            else {
-                                notification('warning', header.message);
-                            }
-                        },
-                    }),
-                );
-            },
-            onCancel: () => {},
+        messageBox.confirm(`${group.groupCd}_${group.groupNm}을 정말 삭제하시겠습니까?`, () => {
+            dispatch(
+                deleteGroup({
+                    groupCd: group.groupCd,
+                    callback: ({ header }) => {
+                        // 삭제 성공
+                        if (header.success) {
+                            toast.success(header.message);
+                            history.push('/group');
+                        }
+                        // 삭제 실패
+                        else {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
         });
     };
 
@@ -223,9 +223,9 @@ const GroupEdit = () => {
                 callback: (response) => {
                     // 만약 response.header.message로 서버 메세지를 전달해준다면, 그 메세지를 보여준다.
                     if (response.header.success) {
-                        notification('success', '수정하였습니다.');
+                        toast.success('수정하였습니다.');
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),
@@ -254,16 +254,16 @@ const GroupEdit = () => {
                                 ],
                                 callback: (response) => {
                                     if (response.header.success) {
-                                        notification('success', '등록하였습니다.');
+                                        toast.success('등록하였습니다.');
                                         history.push(`/group/${groupCd}`);
                                     } else {
-                                        notification('warning', '실패하였습니다.');
+                                        toast.fail('실패하였습니다.');
                                     }
                                 },
                             }),
                         );
                     } else {
-                        notification('warning', '중복된 도메인아이디가 존재합니다.');
+                        toast.fail('중복된 도메인아이디가 존재합니다.');
                     }
                 },
             }),

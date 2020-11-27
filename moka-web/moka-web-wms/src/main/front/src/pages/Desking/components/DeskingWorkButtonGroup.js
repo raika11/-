@@ -94,7 +94,7 @@ const DeskingWorkButtonGroup = (props) => {
         const api = componentAgGridInstances[agGridIndex].api;
 
         if (api.getSelectedRows().length < 1) {
-            toast.warn('기사를 선택해주세요');
+            toast.warning('기사를 선택해주세요');
         } else {
             setRegisterModal(true);
         }
@@ -129,7 +129,7 @@ const DeskingWorkButtonGroup = (props) => {
      */
     const handleClickSaveTemplate = (templateData) => {
         if (!templateData.templateSeq) {
-            toast.warn('선택된 템플릿이 없습니다');
+            toast.warning('선택된 템플릿이 없습니다');
             return;
         }
 

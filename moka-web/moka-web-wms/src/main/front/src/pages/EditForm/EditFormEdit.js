@@ -225,7 +225,7 @@ const EditFormEdit = ({ history, onDelete }) => {
                             }),
                         );
                     } else {
-                        toast.warn('중복된 편집폼아이디가 존재합니다.');
+                        toast.warning('중복된 편집폼아이디가 존재합니다.');
                     }
                 },
             }),

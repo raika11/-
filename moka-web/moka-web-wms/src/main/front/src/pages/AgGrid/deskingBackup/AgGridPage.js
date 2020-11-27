@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs, rowData, rowClassRules } from './data';
-import { toastr } from 'react-redux-toastr';
+import toast from '@/utils/toastUtil';
 import { EditThumbModal } from '@pages/Desking/modals';
 
 const AgGridPage = () => {
@@ -114,7 +114,7 @@ const AgGridPage = () => {
 
             // rollback
             if (moveMode === 'ParentToChild' || moveMode === 'ChildToParent' || moveMode === 'ChildToChild') {
-                toastr.warning('드래그드랍 오류', '이동할 수 없습니다');
+                toast.warning('이동할 수 없습니다');
             }
         }
 

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import toast from '@utils/toastUtil';
+import { messageBox } from '@utils/toastUtil';
 
 const propTypes = {
     /**
@@ -27,7 +27,7 @@ const EditButton = (props) => {
         (e) => {
             e.stopPropagation();
             e.preventDefault();
-            toast.confirm(
+            messageBox.confirm(
                 '이전에 저장한 내용을 불러오시겠습니까?\n불러온 후 임시저장을 하셔야 적용이 됩니다.',
                 () => {
                     if (onClick) {

@@ -36,13 +36,8 @@ public class CodeMgtDtlDTO implements Serializable {
     }.getType();
 
     /**
-     * 코드명
+     * 그룹코드
      */
-    @NotNull(message = "{tps.codeMgt.error.notnull.cdNm}")
-    @Pattern(regexp = ".+", message = "{tps.codeMgt.error.pattern.cdNm}")
-    @Length(min = 1, max = 512, message = "{tps.codeMgt.error.length.cdNm}")
-    private String cdNm;
-
     @NotNull(message = "{tps.codeMgtGrp.error.notnull.grpCd}")
     @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}")
     @Length(min = 1, max = 12, message = "{tps.codeMgtGrp.error.length.grpCd}")
@@ -55,6 +50,14 @@ public class CodeMgtDtlDTO implements Serializable {
     @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgt.error.pattern.dtlCd}")
     @Length(min = 1, max = 24, message = "{tps.codeMgt.error.length.dtlCd}")
     private String dtlCd;
+
+    /**
+     * 코드명
+     */
+    @NotNull(message = "{tps.codeMgt.error.notnull.cdNm}")
+    @Pattern(regexp = ".+", message = "{tps.codeMgt.error.pattern.cdNm}")
+    @Length(min = 1, max = 512, message = "{tps.codeMgt.error.length.cdNm}")
+    private String cdNm;
 
     /**
      * 일련번호

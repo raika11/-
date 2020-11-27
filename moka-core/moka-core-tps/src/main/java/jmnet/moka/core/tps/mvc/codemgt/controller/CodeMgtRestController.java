@@ -632,18 +632,19 @@ public class CodeMgtRestController {
 
 
         // 수정
-//        List<CodeMgt> orgCodeMgt = codeMgtService.findByDtlCd(codeMgtDtlDTO.getGrpCd(), codeMgtDtlDTO.getDtlCd())
-//                .orElseThrow(() -> {
-//                    String message = messageByLocale.get("tps.common.error.no-data");
-//                    tpsLogger.fail(ActionType.UPDATE, message, true);
-//                    return new NoDataException(message);
-//                });
+        List<CodeMgt> result = codeMgtService.findByDtlCd(grpCd, codeMgtDtlDTO.getDtlCd());
+
+        if(result.size() == 0){
+            String message = messageByLocale.get("tps.common.error.no-data");
+            tpsLogger.fail(ActionType.UPDATE, message, true);
+            throw new Exception(message);
+        }
 
         try {
 
             // 일련번호 추출
-            CodeMgt result = codeMgtService.findByDtlCd(grpCd, codeMgtDtlDTO.getDtlCd()).get(0);
-            codeMgtDtlDTO.setSeqNo(result.getSeqNo());
+            //CodeMgt result = codeMgtService.findByDtlCd(grpCd, codeMgtDtlDTO.getDtlCd()).get(0);
+            codeMgtDtlDTO.setSeqNo(result.get(0).getSeqNo());
             CodeMgtDtlDTO returnValue = codeMgtService.updateCodeMgtDtl(codeMgtDtlDTO);
 
             // 결과리턴

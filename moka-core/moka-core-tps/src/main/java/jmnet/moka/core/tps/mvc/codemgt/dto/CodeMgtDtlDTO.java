@@ -43,10 +43,23 @@ public class CodeMgtDtlDTO implements Serializable {
     @Length(min = 1, max = 512, message = "{tps.codeMgt.error.length.cdNm}")
     private String cdNm;
 
+    @NotNull(message = "{tps.codeMgtGrp.error.notnull.grpCd}")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}")
+    @Length(min = 1, max = 12, message = "{tps.codeMgtGrp.error.length.grpCd}")
     private String grpCd;
 
+    /**
+     * 상세코드
+     */
+    @NotNull(message = "{tps.codeMgt.error.notnull.cdNm}")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgt.error.pattern.dtlCd}")
+    @Length(min = 1, max = 24, message = "{tps.codeMgt.error.length.dtlCd}")
     private String dtlCd;
 
+    /**
+     * 일련번호
+     */
+    @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}")
     private Long seqNo;
 
 }

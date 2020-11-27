@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { faAddressBook, faDiceTwo } from '@moka/fontawesome-pro-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NewIcon } from '@components';
 
 const ListTitleRenderer = (params) => {
     const paramValue = params.value;
-
-    const status = 'Y';
-    let clazz = status === 'Y' ? 'color-negative' : '';
-
     useEffect(() => {}, [paramValue]);
     return (
         <>
-            <div className="p-03 border-top" style={{ minHeight: 55 }}>
-                <div className="d-flex justify-content-between">
+            <div className="pt-01" style={{ minHeight: 55 }}>
+                <div className="d-flex">
                     <p className="pt-01 pl-01 mb-0 flex-fill text-truncate">{paramValue.article}</p>
                 </div>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex">
                     <p className="pt-01 pl-01 mb-0 flex-fill h5 text-truncate">
-                        <FontAwesomeIcon icon={faAddressBook} fixedWidth className={clazz} />
+                        <NewIcon width={10} height={10} className="ml-1" />
                         {paramValue.sns}
                     </p>
                 </div>

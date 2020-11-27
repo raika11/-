@@ -1,8 +1,10 @@
 import React, { useEffect, Suspense } from 'react';
+import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 
 const SnsMataList = React.lazy(() => import('./SnsMataList'));
+const SnsMataEdit = React.lazy(() => import('./SnsMataEdit'));
 
 /**
  * FB & TW
@@ -19,11 +21,22 @@ const SnsMata = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={840} className="mr-gutter flex-fill" titleClassName="mb-0" header={false}>
+            <MokaCard width={750} className="mr-gutter flex-fill" titleClassName="mb-0" header={false}>
                 <Suspense>
                     <SnsMataList />
                 </Suspense>
             </MokaCard>
+
+            {/* 등록/수정창 */}
+            <Route
+                path={[match.url, `${match.url}/:mataSeq`]}
+                exact
+                render={(props) => (
+                    <Suspense>
+                        <SnsMataEdit {...props} />
+                    </Suspense>
+                )}
+            />
         </div>
     );
 };

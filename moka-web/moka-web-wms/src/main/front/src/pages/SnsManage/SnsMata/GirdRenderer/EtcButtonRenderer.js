@@ -2,10 +2,8 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 
 const EtcButtonRenderer = (params) => {
-    // console.log(params);
-
     const handleClickSaveButton = () => {
-        console.log('handleClickSaveButton');
+        console.log('::: handleClickSaveButton ::');
     };
     return (
         <div className="d-flex py-2">

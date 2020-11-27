@@ -39,9 +39,9 @@ const MataModal = (props) => {
             <Form className="mb-gutter">
                 {/* 시작일/종료일 */}
                 <Form.Row className="mb-2">
-                    <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'text-right', 'mr-3')} style={{ width: 80 }} key={`test_label`}>
+                    <label className="px-0 mb-0 position-relative text-right mr-3 form-label" htmlFor="none" style={{ width: '70px', minWidth: '70px' }}>
                         사용유무
-                    </Form.Label>
+                    </label>
                     <Col xs={3} className="p-0 mr-05">
                         <MokaInputLabel as="switch" name="facebook" id="facebook" className="mb-1" label="페이스북" inputProps={{ checked: 'Y' }} onChange={tempHandleChange} />
                     </Col>
@@ -95,6 +95,8 @@ const MataModal = (props) => {
                             <React.Fragment>
                                 SNS 이미지
                                 <br />
+                                (850*350)
+                                <br />
                                 <Button
                                     className="mt-1"
                                     size="sm"
@@ -121,7 +123,8 @@ const MataModal = (props) => {
                         }
                         ref={null}
                         inputProps={{
-                            height: 80,
+                            height: 120,
+                            width: 420,
                             img: null,
                             selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                         }}
@@ -129,11 +132,11 @@ const MataModal = (props) => {
                     />
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'text-right', 'mr-3')} style={{ width: 80 }} key={`test_label`}>
+                    <label className="px-0 mb-0 position-relative text-right mr-3 form-label" htmlFor="none" style={{ width: '70px', minWidth: '70px' }}>
                         예약
-                    </Form.Label>
-                    <Col xs={3} className="p-0 mr-05">
-                        <Form.Check label="예약 노출" type="checkbox" name="checkbox-test" />
+                    </label>
+                    <Col className="p-1 mr-04 col-2">
+                        <Form.Check label="예약 노출" type="checkbox" name="checkbox-test" style={{ width: '80px' }} />
                     </Col>
                     <Col xs={3} className="p-0 pr-2">
                         <MokaInput
@@ -146,10 +149,15 @@ const MataModal = (props) => {
                             disabled={null}
                         />
                     </Col>
-                    <Col xs={2} className="p-0 mr-05">
-                        <MokaInputLabel label="시" className="p-0" name="title" value={''} onChange={tempHandleChange} />
-                    </Col>
-                    <Col xs={2} className="p-0">
+                    <div className="p-0 mr-01 col-2 col">
+                        <div className="d-flex align-items-center p-0 form-group">
+                            <input name="title" type="text" className="flex-fill form-control" value="" />
+                            <label className="px-0 mb-0 position-relative text-right mr-3 form-label" htmlFor="none" style={{ width: '8px', minWidth: '8px' }}>
+                                시
+                            </label>
+                        </div>
+                    </div>
+                    <Col xs={2} className="p-0 mr-01">
                         <MokaInputLabel label="분" className="p-0" name="title" value={''} onChange={tempHandleChange} />
                     </Col>
                 </Form.Row>

@@ -4,10 +4,10 @@ import AgGrid from './SnsMataAgGrid';
 
 const SnsMataList = () => {
     return (
-        <>
+        <React.Fragment>
             <Search />
             <AgGrid />
-        </>
+        </React.Fragment>
     );
 };
 

@@ -117,7 +117,7 @@ const MemberEdit = () => {
 
     useEffect(() => {
         let errorMessage = '';
-        if (invalidList.length > 0) {
+        if (invalidList && invalidList.length > 0) {
             invalidList.forEach((i) => {
                 if (i.field === 'expireDt') {
                     setExpireDtError(true);
@@ -226,7 +226,7 @@ const MemberEdit = () => {
                 {/* 버튼 */}
                 {member.memberId ? (
                     <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                        <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
+                        <Button variant="positive" className="float-left pr-20 pl-20" onClick={handleClickSave}>
                             저장
                         </Button>
                     </Form.Group>

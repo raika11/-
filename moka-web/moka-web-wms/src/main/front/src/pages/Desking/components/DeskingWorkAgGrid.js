@@ -16,8 +16,9 @@ const DeskingWorkAgGrid = (props) => {
     const { deskingWorks } = component;
     const [relRows, setRelRows] = useState([]);
 
-    // local state
+    // state
     const [rowData, setRowData] = useState([]);
+    const [gridInstance, setGridInstance] = useState(null);
 
     useEffect(() => {
         if (deskingWorks) {
@@ -58,6 +59,7 @@ const DeskingWorkAgGrid = (props) => {
                 draft[agGridIndex] = params;
             }),
         );
+        setGridInstance(params);
     };
 
     /**
@@ -212,6 +214,13 @@ const DeskingWorkAgGrid = (props) => {
     const getRowHeight = (params) => {
         return params.data.rel ? 42 : 53;
     };
+
+    useEffect(() => {
+        if (gridInstance) {
+            gridInstance.api.refreshCells({ force: true });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rowData]);
 
     return (
         <div className="ag-theme-moka-desking-grid px-1">

@@ -47,4 +47,6 @@ public class CodeMgtDtlDTO implements Serializable {
 
     private String dtlCd;
 
+    private Long seqNo;
+
 }

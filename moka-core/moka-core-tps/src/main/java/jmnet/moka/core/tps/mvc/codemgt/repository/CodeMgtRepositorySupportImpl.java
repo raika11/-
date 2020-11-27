@@ -111,8 +111,7 @@ public class CodeMgtRepositorySupportImpl extends QuerydslRepositorySupport impl
         QCodeMgt QcodeMgt = QCodeMgt.codeMgt;
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(QcodeMgt.codeMgtGrp.grpCd.eq(codeMgtDtlDTO.getGrpCd()));
-        builder.and(QcodeMgt.dtlCd.eq(codeMgtDtlDTO.getDtlCd()));
+        builder.and(QcodeMgt.seqNo.eq(codeMgtDtlDTO.getSeqNo()));
         queryFactory.update(QcodeMgt).where(builder).set(QcodeMgt.cdNm, codeMgtDtlDTO.getCdNm()).execute();
 
         return codeMgtDtlDTO;

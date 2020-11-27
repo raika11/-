@@ -2,7 +2,6 @@ import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from '@store/group/groupAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
-import qs from 'qs';
 
 /**
  * initialState
@@ -80,7 +79,6 @@ export default handleActions(
          * 목록
          */
         [act.GET_GROUP_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            console.log('성공듀서탓음::' + state);
             return produce(state, (draft) => {
                 draft.error = initialState.error;
                 draft.list = body.list;
@@ -88,8 +86,6 @@ export default handleActions(
             });
         },
         [act.GET_GROUP_LIST_FAILURE]: (state, { payload }) => {
-            console.log('실패듀서탓음::' + decodeURIComponent(qs.stringify(payload)));
-
             return produce(state, (draft) => {
                 draft.error = payload;
                 draft.list = initialState.list;
@@ -133,7 +129,7 @@ export default handleActions(
         /**
          * 메뉴정보
          */
-        [act.GET_GROUP_MENU_SUCCESS]: (state, { payload }) => {
+        [act.GET_GROUP_MENU_AUTH_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.menuAuthInfo = { ...state.menuAuthInfo, ...payload };
             });
@@ -141,11 +137,19 @@ export default handleActions(
         /**
          * 메뉴 수정 권한 삭제
          */
-        [act.CHANGE_GROUP_MENU_AUTH_INFO]: (state, { payload }) => {
+        [act.CHANGE_GROUP_MENU_AUTH]: (state, { payload }) => {
             return produce(state, (draft) => {
                 const name = payload.name;
                 const value = payload.value;
                 draft.menuAuthInfo[name] = value;
+            });
+        },
+        /**
+         * 메뉴 수정 권한 초기화
+         */
+        [act.CLEAR_GROUP_MENU_AUTH]: (state) => {
+            return produce(state, (draft) => {
+                draft.menuAuthInfo = initialState.menuAuthInfo;
             });
         },
     },

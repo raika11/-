@@ -62,3 +62,15 @@ export const changeHistorySearchOption = createAction(CHANGE_HISTORY_SEARCH_OPTI
  */
 export const [GET_LOGIN_HISTORY_LIST, GET_LOGIN_HISTORY_LIST_SUCCESS, GET_LOGIN_HISTORY_LIST_FAILURE] = createRequestActionTypes('member/GET_LOGIN_HISTORY_LIST');
 export const getLoginHistoryList = createAction(GET_LOGIN_HISTORY_LIST, (...actions) => actions);
+
+export const [GET_MEMBER_MENU_AUTH, GET_MEMBER_MENU_AUTH_SUCCESS, GET_MEMBER_MENU_AUTH_FAILURE] = createRequestActionTypes('member/GET_MEMBER_MENU_AUTH');
+export const getMemberMenuAuth = createAction(GET_MEMBER_MENU_AUTH, (memberId) => memberId);
+
+export const CHANGE_MEMBER_MENU_AUTH = 'member/CHANGE_MEMBER_MENU_AUTH';
+export const changeMemberMenuAuth = createAction(CHANGE_MEMBER_MENU_AUTH, (memberId) => memberId);
+
+export const UPDATE_MEMBER_MENU_AUTH = 'member/UPDATE_MEMBER_MENU_AUTH';
+export const updateMemberMenuAuth = createAction(UPDATE_MEMBER_MENU_AUTH, ({ memberId, changeMenuAuthList, callback }) => ({ memberId, changeMenuAuthList, callback }));
+
+export const CLEAR_MEMBER_MENU_AUTH = 'member/CLEAR_MEMBER_MENU_AUTH';
+export const clearMemberMenuAuth = createAction(CLEAR_MEMBER_MENU_AUTH);

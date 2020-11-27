@@ -21,6 +21,12 @@ export const initialState = {
         { id: 'memberNm', name: '이름' },
     ],
     member: {},
+    menuAuthInfo: {
+        list: [],
+        edited: [],
+        used: [],
+        halfCheckedKeys: [],
+    },
     memberError: {},
     invalidList: {},
     historySearch: {
@@ -149,6 +155,35 @@ export default handleActions(
                 draft.historyError = payload;
                 draft.historyList = initialState.list;
                 draft.historyTotal = initialState.historyTotal;
+            });
+        },
+
+        /**
+         * 메뉴 권한
+         */
+        [act.GET_MEMBER_MENU_AUTH_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.menuAuthInfo = { ...state.menuAuthInfo, ...payload };
+            });
+        },
+
+        /**
+         * 메뉴 권한 수정
+         */
+        [act.CHANGE_MEMBER_MENU_AUTH]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                const name = payload.name;
+                const value = payload.value;
+                draft.menuAuthInfo[name] = value;
+            });
+        },
+
+        /**
+         * 메뉴 권한 초기화
+         */
+        [act.CLEAR_MEMBER_MENU_AUTH]: (state) => {
+            return produce(state, (draft) => {
+                draft.menuAuthInfo = initialState.menuAuthInfo;
             });
         },
     },

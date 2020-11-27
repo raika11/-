@@ -4,11 +4,56 @@ import { callApiAfterActions, createRequestSaga, errorResponse } from '../common
 
 import * as memberAPI from './memberApi';
 import * as memberAction from './memberAction';
+import * as menuAPI from '@store/menu/menuApi';
+import commonUtil from '@utils/commonUtil';
 
 /**
  * 목록
  */
 //const getMemberList = callApiAfterActions(memberAction.GET_MEMBER_LIST, memberAPI.getMemberList, (state) => state.member);
+function* getMemeberAuthMenuList({ type, payload }) {
+    const ACTION = type;
+    let callbackData;
+
+    try {
+        const response = yield call(menuAPI.getMenuTree, { grpMemId: payload, grpMemDiv: 'U' });
+
+        const serverData = response.data.body.children;
+        const treeInfos = commonUtil.makeRCTreeData(serverData);
+
+        //const used = yield call(toGroupMenuUsed, serverData, 'usedYn');
+        //const edited = yield call(toGroupMenuUsed, serverData, 'editYn');
+
+        if (response.data.header.success) {
+            yield put({
+                type: `${ACTION}_SUCCESS`,
+                payload: treeInfos,
+            });
+        } else {
+            yield put({
+                type: `${ACTION}_FAILURE`,
+                payload: [],
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+        yield put({
+            type: `${ACTION}_FAILURE`,
+            payload: callbackData,
+        });
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+function* updateMemberMenuAuth({ type, payload: { memberId, changeMenuAuthList, callback } }) {
+    yield startLoading('member/GET_MEMBER_MENU_AUTH_LIST');
+
+    const response = yield call(memberAPI.updateMemberMenuAuth, memberId, changeMenuAuthList);
+    callback(response.data);
+
+    yield finishLoading('member/GET_MEMBER_MENU_AUTH_LIST');
+}
 
 /**
  * 사용 목록 조회
@@ -170,4 +215,6 @@ export default function* memberSaga() {
     yield takeLatest(memberAction.DUPLICATE_CHECK, duplicateCheck);
     yield takeLatest(memberAction.SAVE_MEMBER, saveMember);
     yield takeLatest(memberAction.GET_LOGIN_HISTORY_LIST, getLoginHistoryList);
+    yield takeLatest(memberAction.GET_MEMBER_MENU_AUTH, getMemeberAuthMenuList);
+    yield takeLatest(memberAction.updateMemberMenuAuth, updateMemberMenuAuth);
 }

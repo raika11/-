@@ -42,3 +42,10 @@ export const getLoginHistoryList = ({ historySearch }) => {
         throw err;
     });
 };
+
+// 사용자 메뉴 권한 수정
+export const updateMemberMenuAuth = (memberId, changeMenuAuthList) => {
+    return instance.put(`/api/members/${memberId}/menu-auths`, changeMenuAuthList).catch((err) => {
+        throw err;
+    });
+};

@@ -4,6 +4,7 @@
 package jmnet.moka.core.tps.mvc.naverbulk.repository;
 
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeRelArt;
+import jmnet.moka.core.tps.mvc.naverbulk.entity.Article;
 import jmnet.moka.core.tps.mvc.naverbulk.entity.ArticleList;
 import jmnet.moka.core.tps.mvc.naverbulk.entity.ArticlePK;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <pre>
@@ -23,6 +25,7 @@ import java.util.List;
  * @author ssc
  */
 @Repository
-public interface NaverBulkListRepository extends CrudRepository<ArticleList, ArticlePK>, JpaSpecificationExecutor<ArticleList> {
-    //public ArticleList findAllByClickartSeq(ArticlePK articlePK);
+public interface NaverBulkListRepository extends CrudRepository<ArticleList, ArticlePK>
+        , JpaSpecificationExecutor<ArticleList>, NaverBulkListRepositorySupport {
+    public List<ArticleList> findAllByClickartSeq(ArticlePK articlePK);
 }

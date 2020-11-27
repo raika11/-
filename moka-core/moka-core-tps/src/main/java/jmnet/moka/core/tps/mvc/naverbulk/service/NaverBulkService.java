@@ -33,13 +33,13 @@ public interface NaverBulkService {
      */
     Page<Article> findAllNaverBulkList(NaverBulkSearchDTO search);
 
-//    /**
-//     * 네이버벌크문구목록 목록조회
-//     *
-//     * @param clickartSeq 클릭기사일련번호
-//     * @return 네이버벌크문구 목록조회
-//     */
-//    List<ArticleList> findAllByClickartSeq(Long clickartSeq);
+    /**
+     * 네이버벌크문구목록 목록조회
+     *
+     * @param clickartSeq 클릭기사일련번호
+     * @return 네이버벌크문구 목록조회
+     */
+    List<ArticleList> findAllByClickartSeq(Long clickartSeq);
 
 
     /**

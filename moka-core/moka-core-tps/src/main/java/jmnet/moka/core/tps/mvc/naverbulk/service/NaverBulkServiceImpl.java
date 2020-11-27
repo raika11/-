@@ -46,12 +46,12 @@ public class NaverBulkServiceImpl implements NaverBulkService {
         return naverBulkRepository.findAllNaverBulkList(search);
     }
 
-//    @Override
-//    public List<ArticleList>  findAllByClickartSeq(Long clickartSeq) {
-//        return naverBulkListRepository.findAllByClickartSeq(
-//                new ArticlePK(clickartSeq, null)
-//        );
-//    }
+    @Override
+    public List<ArticleList>  findAllByClickartSeq(Long clickartSeq) {
+        ArticlePK param = new ArticlePK();
+        param.setClickartSeq(clickartSeq);
+        return naverBulkListRepository.findAllByClickartSeq(param);
+    }
 
     @Override
     public Optional<Article> findById(Long clickartSeq) {

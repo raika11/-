@@ -45,6 +45,7 @@ const DeskingReadyGrid = (props) => {
                 },
                 target,
                 targetIdx,
+                true,
             );
 
             if (dropzone) {

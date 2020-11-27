@@ -77,7 +77,7 @@ public class NaverBulkRepositorySupportImpl extends QuerydslRepositorySupport im
     public void updateArticle(Article article) {
         // 기존 로직 데이터 서비스여부 N처리
         QArticle qArticle = QArticle.article;
-        //JPQLQuery<Article> query = from(qArticle);
+
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qArticle.clickartDiv.eq(article.getClickartDiv()));
         builder.and(qArticle.sourceCode.eq(article.getSourceCode()));

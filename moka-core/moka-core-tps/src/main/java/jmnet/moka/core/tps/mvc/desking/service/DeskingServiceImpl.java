@@ -510,7 +510,7 @@ public class DeskingServiceImpl implements DeskingService {
         // 2. 편집기사work 등록
         for (DeskingWorkDTO vo : insertdeskingList) {
             DeskingWork appendDeskingWork = modelMapper.map(vo, DeskingWork.class);
-            appendDeskingWork.setDatasetSeq(datasetSeq);
+            appendDeskingWork.setDatasetSeq(datasetSeq);    // 이동할 경우, target의 datasetSeq값임.
             appendDeskingWork.setRegId(regId);
             appendDeskingWork.setRegDt(McpDate.now());
             DeskingWork saved = deskingWorkRepository.save(appendDeskingWork);
@@ -623,11 +623,12 @@ public class DeskingServiceImpl implements DeskingService {
                                                       .collect(Collectors.toList());
 
         // 4. 순번조정 및 삭제
-        resortDeskingWorkList(deskingVOList, filterList, regId);
+        resortAfterDelete(deskingVOList, filterList, regId);
     }
 
+    @Override
     @Transactional
-    public void resortDeskingWorkList(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId) {
+    public void resortAfterDelete(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId) {
 
         // 1. 수정할 순번목록
         List<Long> updateList = new ArrayList<Long>();

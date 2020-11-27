@@ -9,6 +9,13 @@ export const getComponentWorkList = ({ areaSeq }) => {
     });
 };
 
+// 컴포넌트 워크 조회
+export const getComponentWork = ({ componentWorkSeq }) => {
+    return instance.get(`/api/desking/components/${componentWorkSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 컴포넌트 워크를 데스킹 테이블로 전송
 export const postComponentWork = ({ componentWorkSeq }) => {
     return instance.post(`/api/desking/components/${componentWorkSeq}`).catch((err) => {

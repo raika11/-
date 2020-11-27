@@ -110,6 +110,27 @@ const PageEdit = ({ onDelete }) => {
         }
     }, [invalidList]);
 
+    const makePageUrl = useCallback(
+        (name, value) => {
+            let url = '';
+            if (name === 'pageServiceName') {
+                url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${value}`;
+                if (/[^\s\t\n]+/.test(temp.urlParam)) {
+                    url = `${url}/*`;
+                }
+            } else if (name === 'urlParam') {
+                url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${temp.pageServiceName}`;
+                if (/[^\s\t\n]+/.test(value)) {
+                    url = `${url}/*`;
+                }
+            } else {
+                url = temp.pageUrl;
+            }
+            return url;
+        },
+        [temp],
+    );
+
     /**
      * 각 항목별 값 변경
      */
@@ -125,7 +146,7 @@ const PageEdit = ({ onDelete }) => {
                     setError({ ...error, pageName: false });
                 }
             } else if (name === 'pageServiceName') {
-                const url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${value}`;
+                const url = makePageUrl(name, value);
                 setTemp({
                     ...temp,
                     pageUrl: url,
@@ -150,12 +171,17 @@ const PageEdit = ({ onDelete }) => {
             } else if (name === 'description') {
                 setTemp({ ...temp, description: value });
             } else if (name === 'urlParam') {
-                setTemp({ ...temp, urlParam: value });
+                const url = makePageUrl(name, value);
+                setTemp({
+                    ...temp,
+                    pageUrl: url,
+                    urlParam: value,
+                });
             } else if (name === 'category') {
                 setTemp({ ...temp, category: value });
             }
         },
-        [error, temp],
+        [error, makePageUrl, temp],
     );
 
     /**

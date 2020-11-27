@@ -21,6 +21,7 @@ import jmnet.moka.core.tms.mvc.HttpParamFactory;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.domain.ReservedMap;
+import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,8 @@ public class DefaultHandler extends AbstractHandler {
     }
 
     @Override
-    public HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId) throws Exception {
+    public HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId)
+            throws Exception {
         if (requestPath.startsWith("/_")) {
             // _CP, _TP, _CT 머지
             if (isMergableItem(request, domainId, requestPath, pathList)) {
@@ -79,6 +81,10 @@ public class DefaultHandler extends AbstractHandler {
                 request.setAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
 
             } else {
+                // command일 경우 CommandController가 처리하도록 한다.
+                if ( requestPath.startsWith(MokaConstants.MERGE_COMMAND_PREFIX)) {
+                    return null;
+                }
                 // 에러페이지로 보낸다
                 itemKey = this.domainTemplateMerger.getItemKey(domainId, MokaConstants.TMS_ERROR_PAGE);
 
@@ -97,10 +103,12 @@ public class DefaultHandler extends AbstractHandler {
         return null;
     }
 
+
     private boolean isMergableItem(HttpServletRequest request, String domainId, String requestPath, List<String> pathList) {
         try {
-            String itemType = pathList.get(0)
-                                      .substring(1); // _제거
+            String itemType = pathList
+                    .get(0)
+                    .substring(1); // _제거
             if (!this.mergeItemList.contains(itemType)) {
                 return false;
             }
@@ -129,27 +137,34 @@ public class DefaultHandler extends AbstractHandler {
         // 머지 옵션설정
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
 
-        if (request.getParameterMap()
-                   .containsKey(MokaConstants.PARAM_WRAP_ITEM)) {
-            mergeContext.getMergeOptions()
-                        .setWrapItem(true);
+        if (request
+                .getParameterMap()
+                .containsKey(MokaConstants.PARAM_WRAP_ITEM)) {
+            mergeContext
+                    .getMergeOptions()
+                    .setWrapItem(true);
         }
 
-        if (request.getParameterMap()
-                   .containsKey(MokaConstants.PARAM_MERGE_DEBUG)) {
-            mergeContext.getMergeOptions()
-                        .setDebug(true);
+        if (request
+                .getParameterMap()
+                .containsKey(MokaConstants.PARAM_MERGE_DEBUG)) {
+            mergeContext
+                    .getMergeOptions()
+                    .setDebug(true);
         }
 
         if (request.getParameter(MokaConstants.PARAM_SHOW_ITEM) != null) {
             String showItem = request.getParameter(MokaConstants.PARAM_SHOW_ITEM);
             if (showItem.length() > 2) {
-                mergeContext.getMergeOptions()
-                            .setShowItem(showItem.substring(0, 2));
-                mergeContext.getMergeOptions()
-                            .setShowItemId(showItem.substring(2));
-                mergeContext.getMergeOptions()
-                            .setWrapItem(true);
+                mergeContext
+                        .getMergeOptions()
+                        .setShowItem(showItem.substring(0, 2));
+                mergeContext
+                        .getMergeOptions()
+                        .setShowItemId(showItem.substring(2));
+                mergeContext
+                        .getMergeOptions()
+                        .setWrapItem(true);
             }
         }
 
@@ -173,7 +188,8 @@ public class DefaultHandler extends AbstractHandler {
             if (item != null) {
                 if (item instanceof PageItem) {
                     // 페이지 이동 - MOVE_YN='Y' 일 경우 MOVE_URL 사용
-                    if (item.getString(ItemConstants.PAGE_MOVE_YN)
+                    if (item
+                            .getString(ItemConstants.PAGE_MOVE_YN)
                             .equalsIgnoreCase("Y")) {
                         MergeItem moveItem = this.getPageItem(domainId, item.getString(ItemConstants.PAGE_MOVE_URL));
                         if (moveItem != null) {
@@ -209,12 +225,12 @@ public class DefaultHandler extends AbstractHandler {
         HttpParamMap httpParamMap = this.httpParamFactory.creatHttpParamMap(request);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
 
-        // REST 방식 URI에 대한 처리: 마지막 경로를 파라미터로 넣어준다.
+        // Path Parameter 방식 URI에 대한 처리: 마지막 경로를 파라미터로 넣어준다.
         if (item instanceof PageItem) {
             // cache로 설정할 category를 추가한다.
-            httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY,item.getString(ItemConstants.PAGE_CATEGORY));
+            httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, item.getString(ItemConstants.PAGE_CATEGORY));
             // 경로 파라미터 처리
-            processPathParam(mergeContext, (PageItem)item, httpParamMap);
+            processPathParam(mergeContext, (PageItem) item, httpParamMap);
         }
 
         // Http 헤더 설정
@@ -226,25 +242,34 @@ public class DefaultHandler extends AbstractHandler {
         return this.viewName;
     }
 
+    /**
+     * 경로 파라미터를 처리한다.
+     * @param mergeContext 컨텍스트
+     * @param pageItem 페이지 아이템
+     * @param httpParamMap 파라미터 맵
+     */
     private void processPathParam(MergeContext mergeContext, PageItem pageItem, HttpParamMap httpParamMap) {
         String urlParam = pageItem.getString(ItemConstants.PAGE_URL_PARAM);
         if (McpString.isNotEmpty(urlParam)) {
             String paramName = urlParam;
             String paramValue = null;
-            if (urlParam.contains(",")) { // default 파라미터가 없는 경우
+            if (urlParam.contains(",")) { // default 파라미터가 있는 경우
                 String[] param = urlParam.split(",");
                 paramName = param[0];
                 paramValue = param[1];
             }
             String mergePath = (String) mergeContext.get(MokaConstants.MERGE_PATH);
-            if ( !mergePath.equalsIgnoreCase(pageItem.getString(ItemConstants.PAGE_URL))) { // 경로 파라미터가 있을 경우
+            String noPathParamUrl = pageItem
+                    .getString(ItemConstants.PAGE_URL)
+                    .replace(AbstractTemplateLoader.PATH_PARAM_PREFIX, "");
+            if (!mergePath.equalsIgnoreCase(noPathParamUrl)) { // 경로 파라미터가 있을 경우
                 int length = mergePath.length();
                 int lastSlashIndex = mergePath.lastIndexOf("/");
                 if (lastSlashIndex > 0 && lastSlashIndex < length) {
                     paramValue = mergePath.substring(lastSlashIndex + 1, length);
                 }
             }
-            if ( paramValue != null) { // default값이나 PathParam이 있을 경우만 추가
+            if (paramValue != null) { // default값이나 PathParam이 있을 경우만 추가
                 httpParamMap.put(paramName, paramValue);
             }
         }

@@ -11,6 +11,12 @@ export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) =>
 export const changeLookupSearchOption = createAction(CHANGE_LOOKUP_SEARCH_OPTION, (search) => search);
 
 /**
+ * 모달 데이터 조회
+ */
+export const GET_TEMPLATE_LIST_MODAL = 'template/GET_TEMPLATE_LIST_MODAL';
+export const getTemplateListModal = createAction(GET_TEMPLATE_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+
+/**
  * 스토어 데이터 삭제
  */
 export const CLEAR_STORE = 'template/CLEAR_STORE';

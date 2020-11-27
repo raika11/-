@@ -1,6 +1,10 @@
 package jmnet.moka.core.tps.mvc.codemgt.repository;
 
+import java.util.List;
 import java.util.Optional;
+
+import com.querydsl.core.QueryResults;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -25,4 +29,8 @@ public interface CodeMgtRepository extends JpaRepository<CodeMgt, Long>, CodeMgt
 
     // dtlCd로 CodeMgt 조회
     public Optional<CodeMgt> findByDtlCd(String dtlCd);
+
+    List<CodeMgt> findByDtlCd(String grpCd, String dtlCd);
+
+    CodeMgtDtlDTO updateCodeMgtDtl(CodeMgtDtlDTO codeMgtDtlDTO);
 }

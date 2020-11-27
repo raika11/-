@@ -7,7 +7,7 @@ import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultArticleSearchType, CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
-import { initialState, getArticleList, changeSearchOption, clearList } from '@store/article';
+import { initialState, getArticleList, getSourceList, changeSearchOption, clearList } from '@store/article';
 
 /**
  * 기사 검색
@@ -15,8 +15,9 @@ import { initialState, getArticleList, changeSearchOption, clearList } from '@st
 const ArticleDeskSearch = (props) => {
     const { media, selectedComponent, show } = props;
     const dispatch = useDispatch();
-    const { storeSearch } = useSelector((store) => ({
+    const { storeSearch, sourceList } = useSelector((store) => ({
         storeSearch: store.article.search,
+        sourceList: store.article.sourceList,
     }));
 
     // state
@@ -35,6 +36,8 @@ const ArticleDeskSearch = (props) => {
             setSearch({ ...search, searchType: value });
         } else if (name === 'keyword') {
             setSearch({ ...search, keyword: value });
+        } else if (name === 'sourceCode') {
+            setSearch({ ...search, sourceCode: value });
         } else if (name === 'pressMyun') {
             setSearch({ ...search, pressMyun: value });
         } else if (name === 'pressPan') {
@@ -104,6 +107,14 @@ const ArticleDeskSearch = (props) => {
             page: 0,
         });
     };
+
+    useEffect(() => {
+        // 매체 조회
+        if (sourceList.length < 1) {
+            dispatch(getSourceList());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         setSearch({
@@ -194,7 +205,14 @@ const ArticleDeskSearch = (props) => {
                     {/* 매체 */}
                     <div style={{ width: 130 }} className="mr-2">
                         <MokaInput as="select" name="sourceCode" value={search.sourceCode} onChange={handleChangeValue}>
-                            <option hidden>매체 전체</option>
+                            {sourceList.map(
+                                (cd) =>
+                                    cd.usedYn === 'Y' && (
+                                        <option key={cd.sourceCode} value={cd.sourceCode}>
+                                            {cd.sourceName}
+                                        </option>
+                                    ),
+                            )}
                         </MokaInput>
                     </div>
 

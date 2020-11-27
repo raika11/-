@@ -57,17 +57,22 @@ const DeskingWorkEditModal = (props) => {
             setLinkUrl(data.linkUrl || '');
             setLinkTarget(data.linkTarget || '');
             setMoreUrl(data.moreUrl || '');
-            dispatch(getBulkChar());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
     useEffect(() => {
         // 약물 셋팅
+        if (show) {
+            if (bulkCharRows.length < 1) {
+                dispatch(getBulkChar());
+            }
+        }
         if (bulkCharRows && bulkCharRows.length > 0) {
             setSpecialChar(bulkCharRows.find((char) => char.dtlCd === 'bulkChar').cdNm);
         }
-    }, [bulkCharRows]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show]);
 
     /**
      * 타이틀 byte 계산

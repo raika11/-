@@ -84,8 +84,9 @@ const makeHoverBox = () => {
  * @param {func} onDragStop drag stop 시 실행하는 함수
  * @param {object} targetGrid drop target
  * @param {number} currentIndex 타겟 grid리스트에서 현재 넘어온 타겟 grid의 인덱스 (있으면 넘긴다)
+ * @param {number} isMoveComponent 컴포넌트간 이동일때 true
  */
-export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) => {
+export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex, isMoveComponent) => {
     const workElement = findWork(targetGrid.api.gridOptionsWrapper.layoutElements[0]); // .component-work
     if (!workElement) return null;
     if (workElement.classList.contains('disabled')) return null;
@@ -115,7 +116,27 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
 
     const dropzone = {
         getContainer: () => workElement,
-        onDragEnter: () => workElement.appendChild(hoverBox),
+        onDragEnter: (source) => {
+            workElement.appendChild(hoverBox);
+
+            // 컴포넌트간 이동
+            if (isMoveComponent) {
+                // 관련기사 삭제
+                let selected = source.api.getSelectedRows();
+                if (selected.length < 1 && source.node) {
+                    selected = [source.node];
+                }
+                for (let i = 0; i < selected.length; i++) {
+                    const data = selected[i].data;
+                    if (!data.rel && data.relSeqs && data.relSeqs.length > 0) {
+                        // setRelRows(deskingWorks.slice(fromIndex + 1, fromIndex + 1 + data.relSeqs.length));
+                        let rowData = source.api.gridOptionsWrapper.getRowData();
+                        let filterRowData = rowData.filter((node) => !data.relSeqs.includes(node.seq));
+                        source.api.setRowData(filterRowData);
+                    }
+                }
+            }
+        },
         onDragLeave: () => {
             workElement.removeChild(hoverBox);
             clearHoverStyle();

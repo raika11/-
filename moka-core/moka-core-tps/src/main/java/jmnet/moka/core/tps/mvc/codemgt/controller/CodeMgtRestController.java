@@ -616,7 +616,7 @@ public class CodeMgtRestController {
     /**
      * 코드상세수정
      *
-     * @param seqNo            코드순
+     * @param grpCd                 코드순
      * @param codeMgtDtlDTO       수정할 코드정보
      * @return 수정된 코드정보
      * @throws InvalidDataException 데이타 유효성오류
@@ -624,23 +624,26 @@ public class CodeMgtRestController {
      * @throws Exception            기타예외
      */
     @ApiOperation(value = "코드수정")
-    @PutMapping("/{seqNo}/special-char")
-    public ResponseEntity<?> putCodeMgtDtl(@PathVariable("seqNo")
-                @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo
+    @PutMapping("/{grpCd}/special-char")
+    public ResponseEntity<?> putCodeMgtDtl(
+            @PathVariable("grpCd") @NotNull(message = "{tps.codeMgt.error.notnul.grpCd}") String grpCd
             , @Valid CodeMgtDtlDTO codeMgtDtlDTO
     )throws InvalidDataException, NoDataException, Exception {
 
 
         // 수정
-        CodeMgt orgCodeMgt = codeMgtService.findBySeqNo(seqNo)
-                .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
-                    tpsLogger.fail(ActionType.UPDATE, message, true);
-                    return new NoDataException(message);
-                });
+//        List<CodeMgt> orgCodeMgt = codeMgtService.findByDtlCd(codeMgtDtlDTO.getGrpCd(), codeMgtDtlDTO.getDtlCd())
+//                .orElseThrow(() -> {
+//                    String message = messageByLocale.get("tps.common.error.no-data");
+//                    tpsLogger.fail(ActionType.UPDATE, message, true);
+//                    return new NoDataException(message);
+//                });
 
         try {
 
+            // 일련번호 추출
+            CodeMgt result = codeMgtService.findByDtlCd(grpCd, codeMgtDtlDTO.getDtlCd()).get(0);
+            codeMgtDtlDTO.setSeqNo(result.getSeqNo());
             CodeMgtDtlDTO returnValue = codeMgtService.updateCodeMgtDtl(codeMgtDtlDTO);
 
             // 결과리턴
@@ -651,7 +654,7 @@ public class CodeMgtRestController {
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE CODE_MGT] seqNo: {} {}", seqNo, e.getMessage());
+            log.error("[FAIL TO UPDATE CODE_MGT] seqNo: {} {}", grpCd, e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE CODE_MGT]", e, true);
             throw new Exception(messageByLocale.get("tps.common.error.update"), e);
         }

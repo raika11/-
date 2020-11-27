@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { tempColumnDefs, tempRowData } from './SnsMataAgGridColumns';
 import { MokaTable } from '@components';
+import MataModal from './modal/MataModal';
 
 const SnsMataAgGrid = () => {
     const [rowData, setRowData] = useState([]);
@@ -12,6 +13,8 @@ const SnsMataAgGrid = () => {
         console.log('handleChangeSearchOption');
     };
     const handleOnRowNodeId = () => {};
+
+    const [modalShow, setModalShow] = useState(false);
 
     // 최초 로딩.
     useEffect(() => {
@@ -66,6 +69,7 @@ const SnsMataAgGrid = () => {
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={null}
             />
+            <MataModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={null} />
         </React.Fragment>
     );
 };

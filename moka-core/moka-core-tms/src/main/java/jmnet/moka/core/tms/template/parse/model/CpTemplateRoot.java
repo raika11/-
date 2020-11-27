@@ -130,10 +130,6 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 this.setDataRange(datasetParam, httpParamMap);
                 String datasetApi = datasetItem.getString(ItemConstants.DATASET_API);
                 if (datasetApi != null && datasetApi.length() > 1) {
-                    //                    DataLoader loader = merger.getDataLoader();
-                    //                    JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, null), datasetParam, false);
-                    //                    ((MokaTemplateMerger) merger).setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
-                    //                    return jsonResult;
                     return loadDataSet((MokaTemplateMerger) merger, datasetItem, datasetParam, datasetApi, context);
                 }
             } else {
@@ -148,10 +144,6 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 if (isDeskingWork) {
                     datasetParam.put(MokaConstants.PARAM_WORKER_ID, context.get(MokaConstants.MERGE_CONTEXT_WORKER_ID));
                 }
-                //                DataLoader loader = merger.getDataLoader();
-                //                JSONResult jsonResult = loader.getJSONResult(getDataUri(datasetItem, apiName), datasetParam, false);
-                //                ((MokaTemplateMerger) merger).setData(context, KeyResolver.makeDataId(this.getItemType(), this.getId()), jsonResult);
-                //                return jsonResult;
                 return loadDataSet((MokaTemplateMerger) merger, datasetItem, datasetParam, apiName, context);
             }
         }

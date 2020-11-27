@@ -187,6 +187,41 @@ function makeRCTreeData(serverData) {
     return { list, used, edited, halfCheckedKeys };
 }
 
+/**
+ * 이미지 비율을 유지한 채로 프리뷰를 생성한다
+ * @param {string} src 이미지 src
+ * @param {object} ele img element
+ * @param {object} wrapperEle img를 담고 있는 wrapper element
+ * @param {func} loadFunc onload 실행
+ * @param {func} errorFunc onerror 실행
+ */
+const makeImgPreview = (src, ele, wrapperEle, loadFunc, errorFunc) => {
+    let image = new Image();
+    image.src = src;
+    image.onload = (imgProps) => {
+        let w = imgProps.path[0].width;
+        let h = imgProps.path[0].height;
+        let rate = 1;
+
+        if (ele) {
+            ele.src = src;
+        }
+        if (wrapperEle) {
+            rate = wrapperEle.innerWidth / wrapperEle.innerHeight;
+        }
+        if (w / h > rate) {
+            ele.className = 'landscape';
+        } else {
+            ele.className = 'portrait';
+        }
+
+        if (typeof loadFunc === 'function') loadFunc();
+    };
+    image.onerror = () => {
+        if (typeof errorFunc === 'function') errorFunc();
+    };
+};
+
 export default {
     fileDownload,
     isEmpty,
@@ -194,4 +229,5 @@ export default {
     findChildNodeKeys,
     findParentNodeKeys,
     makeRCTreeData,
+    makeImgPreview,
 };

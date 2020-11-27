@@ -69,7 +69,7 @@ const ColumnistEdit = ({ history }) => {
                 position: '',
                 profile: '',
                 selectImg: '',
-                profile_photo: '',
+                profilePhoto: '',
             });
         } catch (e) {
             console.log('기자 선택후 데이터 set 중 에러발생.', e);
@@ -78,7 +78,7 @@ const ColumnistEdit = ({ history }) => {
     };
 
     // 에디트 정보 설정.
-    const setEditData = ({ seqNo, status, repSeq, columnistNm, email1, email2, position, profile_photo, profile, selectImg }) => {
+    const setEditData = ({ seqNo, status, repSeq, columnistNm, email1, email2, position, profilePhoto, profile, selectImg }) => {
         // 기존 선택 이미지 삭제.
         if (imgFileRef.current) {
             imgFileRef.current.deleteFile();
@@ -98,7 +98,7 @@ const ColumnistEdit = ({ history }) => {
             email1: email1,
             email2: email2,
             position: position,
-            profile_photo: profile_photo,
+            profilePhoto: profilePhoto,
             profile: profile,
             selectImg: selectImg,
         });
@@ -166,7 +166,7 @@ const ColumnistEdit = ({ history }) => {
         }
 
         // 이미지 체크(정보 수정시)
-        if (editData.seqNo && editData.profile_photo === '' && editData.columnistFile === null) {
+        if (editData.seqNo && editData.profilePhoto === '' && editData.columnistFile === null) {
             errList.push({
                 field: 'selectImg',
                 reason: '이미지를 선택해 주세요.',
@@ -270,7 +270,7 @@ const ColumnistEdit = ({ history }) => {
                 email1: tmpEmail[0],
                 email2: tmpEmail[1],
                 position: columnist.position,
-                profile_photo: columnist.profilePhoto,
+                profilePhoto: columnist.profilePhoto,
                 profile: columnist.profile,
                 selectImg: columnist.selectImg,
             });
@@ -480,7 +480,7 @@ const ColumnistEdit = ({ history }) => {
                     ref={imgFileRef}
                     inputProps={{
                         height: 80,
-                        img: selectRepoterData.profile_photo,
+                        img: selectRepoterData.profilePhoto,
                         selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                         setFileValue,
                     }}
@@ -515,7 +515,7 @@ const repoterDataInitialize = {
     mod_dt: null,
     mod_id: null,
     position: null,
-    profile_photo: null,
+    profilePhoto: null,
     profile: null,
     selectImg: null,
 };

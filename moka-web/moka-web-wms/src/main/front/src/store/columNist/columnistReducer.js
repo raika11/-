@@ -36,7 +36,7 @@ export const initialState = {
         email1: '',
         email2: '',
         position: '',
-        profile_photo: '',
+        profilePhoto: '',
         profile: '',
         selectImg: '',
     },

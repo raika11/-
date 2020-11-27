@@ -131,6 +131,9 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex, is
                     if (!data.rel && data.relSeqs && data.relSeqs.length > 0) {
                         // setRelRows(deskingWorks.slice(fromIndex + 1, fromIndex + 1 + data.relSeqs.length));
                         let rowData = source.api.gridOptionsWrapper.getRowData();
+                        rowData.forEach((node) => {
+                            if (data.relSeqs.includes(node.seq)) node.setSelected(true);
+                        });
                         let filterRowData = rowData.filter((node) => !data.relSeqs.includes(node.seq));
                         source.api.setRowData(filterRowData);
                     }

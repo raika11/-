@@ -466,34 +466,37 @@ const PageEdit = ({ onDelete }) => {
                         </Button>
                     </div>
                 </Form.Group>
-                {/* 사용여부 */}
-                <MokaInputLabel
-                    as="switch"
-                    className="mb-2"
-                    label="사용여부"
-                    id="usedYn"
-                    name="usedYn"
-                    inputProps={{ checked: temp.usedYn === 'Y' }}
-                    onChange={handleChangeValue}
-                />
-                {/* 페이지 ID, URL */}
+                {/* 사용여부,페이지 ID */}
                 <Form.Row className="mb-2">
+                    {/* 페이지 ID */}
                     <Col xs={6} className="px-0">
                         <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={paramPageSeq} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
+                    {/* 사용여부 */}
                     <Col xs={6} className="px-0">
                         <MokaInputLabel
-                            label="URL"
-                            labelWidth={47}
-                            className="mb-0"
-                            value={temp.pageUrl}
-                            inputProps={{
-                                plaintext: true,
-                                readOnly: true,
-                                onClick: handleClickOpenService,
-                            }}
+                            as="switch"
+                            className="mb-2"
+                            label="사용여부"
+                            id="usedYn"
+                            name="usedYn"
+                            inputProps={{ checked: temp.usedYn === 'Y' }}
+                            onChange={handleChangeValue}
                         />
                     </Col>
+                </Form.Row>
+                {/* 페이지 URL */}
+                <Form.Row className="mb-2">
+                    <MokaInputLabel
+                        label="URL"
+                        className="mb-0 w-100"
+                        value={temp.pageUrl}
+                        inputProps={{
+                            plaintext: true,
+                            readOnly: true,
+                            onClick: handleClickOpenService,
+                        }}
+                    />
                 </Form.Row>
                 {/* 페이지명 */}
                 <Form.Row className="mb-2">

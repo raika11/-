@@ -15,6 +15,7 @@ import qs from 'qs';
 import toast from '@utils/toastUtil';
 import { API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_CODE_ID, API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID, DESKING_API } from '@/constants';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
+import { clearStore } from '@store/relation';
 
 const defaultSearch = {
     apiCodeId: null,
@@ -111,7 +112,7 @@ const DatasetEdit = ({ onDelete }) => {
             invalidated = { ...invalidated, dataApiUrl: true };
         }
 
-        Object.keys(dataApiParamShape).map((key) => {
+        for (const key of Object.keys(dataApiParamShape)) {
             const param = dataApiParamShape[key];
             if (param.require) {
                 if (dataApiParam && dataApiParam[param.name]) {
@@ -126,11 +127,11 @@ const DatasetEdit = ({ onDelete }) => {
                 }
                 //if (!dataApiParam || !dataApiParam[param.name])
             }
-        });
+        }
 
-        Object.values(invalidated).map((value) => {
+        for (const value of Object.values(invalidated)) {
             isInvalid = isInvalid | value;
-        });
+        }
 
         setInvalid(invalidated);
 
@@ -173,13 +174,11 @@ const DatasetEdit = ({ onDelete }) => {
         (payload) => {
             const { header, body, payload: param } = payload;
             if (header.success) {
-                const option = [];
-                body.list.map((data) => {
-                    option.push({
-                        value: '' + data.datasetSeq,
-                        label: data.datasetName,
-                    });
-                });
+                const option = body.list.map((data) => ({
+                    value: '' + data.datasetSeq,
+                    label: data.datasetName,
+                }));
+
                 setOptions({ ...options, [param.type]: option });
             } else {
             }
@@ -368,6 +367,7 @@ const DatasetEdit = ({ onDelete }) => {
             );
         } else {
             dispatch(clearDataset());
+            dispatch(clearStore());
         }
     }, [dispatch, paramSeq]);
 

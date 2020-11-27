@@ -69,7 +69,7 @@ const ReporterMgrAgGrid = () => {
             total={total}
             page={search.page}
             size={search.size}
-            selected={reporter.id}
+            selected={reporter.repSeq}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

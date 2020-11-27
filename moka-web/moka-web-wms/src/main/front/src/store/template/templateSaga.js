@@ -26,6 +26,11 @@ const getTemplateLookupList = callApiAfterActions(act.GET_TEMPLATE_LOOKUP_LIST, 
 const getTemplate = createRequestSaga(act.GET_TEMPLATE, api.getTemplate);
 
 /**
+ * 템플릿 조회(모달)
+ */
+const getTemplateModal = createRequestSaga(act.GET_TEMPLATE, api.getTemplate, true);
+
+/**
  * 저장
  */
 function* saveTemplate({ payload: { actions, callback } }) {
@@ -174,4 +179,5 @@ export default function* saga() {
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
     yield takeLatest(act.GET_TEMPLATE_LOOKUP_LIST, getTemplateLookupList);
     yield takeLatest(act.GET_TEMPLATE_LIST_MODAL, getTemplateListModal);
+    yield takeLatest(act.GET_TEMPLATE_MODAL, getTemplateModal);
 }

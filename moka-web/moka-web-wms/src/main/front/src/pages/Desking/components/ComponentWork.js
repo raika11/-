@@ -91,7 +91,7 @@ const ComponentWork = (props) => {
     return (
         <React.Fragment>
             <div
-                className={clsx('component-work', {
+                className={clsx('component-work', 'border-top', {
                     disabled: component.viewYn === 'N',
                     work: workStatus[component.seq] === 'work',
                     save: workStatus[component.seq] === undefined || workStatus[component.seq] === 'save',

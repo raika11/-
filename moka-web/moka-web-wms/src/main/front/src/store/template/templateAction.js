@@ -15,6 +15,8 @@ export const changeLookupSearchOption = createAction(CHANGE_LOOKUP_SEARCH_OPTION
  */
 export const GET_TEMPLATE_LIST_MODAL = 'template/GET_TEMPLATE_LIST_MODAL';
 export const getTemplateListModal = createAction(GET_TEMPLATE_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+export const GET_TEMPLATE_MODAL = 'template/GET_TEMPLATE_MODAL';
+export const getTemplateModal = createAction(GET_TEMPLATE_MODAL, ({ templateSeq, callback }) => ({ templateSeq, callback }));
 
 /**
  * 스토어 데이터 삭제

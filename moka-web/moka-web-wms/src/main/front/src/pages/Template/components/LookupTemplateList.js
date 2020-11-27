@@ -6,7 +6,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { ITEM_PG, ITEM_CT, ITEM_SK, API_BASE_URL, ITEM_TP } from '@/constants';
-import { MokaCard, MokaInput, MokaSearchInput, MokaTableTypeButton, MokaTable, MokaThumbTable } from '@components';
+import { MokaCard, MokaInput, MokaSearchInput, MokaTableTypeButton, MokaTable } from '@components';
+import { TemplateThumbTable } from '@pages/Template/components';
 import { defaultTemplateSearchType } from '@pages/commons';
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { getTemplateLookupList, changeLookupSearchOption, initialState, clearLookup, GET_TEMPLATE_LOOKUP_LIST } from '@store/template';
@@ -293,7 +294,7 @@ const LookupTemplateList = (props) => {
                     />
                 )}
                 {listType === 'thumbnail' && (
-                    <MokaThumbTable
+                    <TemplateThumbTable
                         tableHeight={567}
                         rowData={rowData}
                         loading={loading}
@@ -306,14 +307,8 @@ const LookupTemplateList = (props) => {
                         onClick={handleRowClicked}
                         selected={selected.templateSeq}
                         menus={[
-                            {
-                                title: '태그삽입',
-                                onClick: handleClickAppend,
-                            },
-                            {
-                                title: '새창열기',
-                                onClick: handleClickLink,
-                            },
+                            { title: '태그삽입', onClick: handleClickAppend },
+                            { title: '새창열기', onClick: handleClickLink },
                         ]}
                     />
                 )}

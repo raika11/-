@@ -3,7 +3,8 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './TemplateAgGridColumns';
 import Button from 'react-bootstrap/Button';
-import { MokaTable, MokaThumbTable, MokaTableTypeButton } from '@components';
+import { MokaTable, MokaTableTypeButton } from '@components';
+import { TemplateThumbTable } from '@pages/Template/components';
 import { API_BASE_URL } from '@/constants';
 import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template';
 import CopyModal from './modals/CopyModal';
@@ -111,7 +112,7 @@ const TemplateAgGrid = ({ onDelete }) => {
                 />
             )}
             {listType === 'thumbnail' && (
-                <MokaThumbTable
+                <TemplateThumbTable
                     tableHeight={523}
                     rowData={rowData}
                     loading={loading}

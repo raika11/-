@@ -64,7 +64,7 @@ const defaultProps = {
 /**
  * 템플릿 썸네일 카드 컴포넌트
  */
-const MokaTemplateThumbCard = forwardRef((props, ref) => {
+const TemplateThumbCard = forwardRef((props, ref) => {
     const { onClick, menus, width, height, data, img, alt, selected } = props;
     const imgRef = useRef(null);
     const wrapperRef = useRef(null);
@@ -180,7 +180,7 @@ const MokaTemplateThumbCard = forwardRef((props, ref) => {
     );
 });
 
-MokaTemplateThumbCard.propTypes = propTypes;
-MokaTemplateThumbCard.defaultProps = defaultProps;
+TemplateThumbCard.propTypes = propTypes;
+TemplateThumbCard.defaultProps = defaultProps;
 
-export default MokaTemplateThumbCard;
+export default TemplateThumbCard;

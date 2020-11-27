@@ -7,8 +7,6 @@ import { propTypes as paginationPropTypes } from '@components/MokaPagination';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 // cell renderer
-import Tooltip from './MokaTableTooltip';
-import RadioButton from './MokaTableRadioButton';
 import ImageRenderer from './MokaTableImageRenderer';
 
 const propTypes = {
@@ -294,7 +292,7 @@ const MokaTable = forwardRef((props, ref) => {
                     onRowDragEnd={onRowDragEnd}
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
-                    frameworkComponents={{ mokaTooltip: Tooltip, radio: RadioButton, imageRenderer: ImageRenderer, ...frameworkComponents }}
+                    frameworkComponents={{ imageRenderer: ImageRenderer, ...frameworkComponents }}
                     suppressRowClickSelection
                     getRowClass={getRowClass}
                     onColumnResized={onColumnResized}

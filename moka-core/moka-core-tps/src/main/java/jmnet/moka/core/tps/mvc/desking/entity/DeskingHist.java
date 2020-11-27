@@ -10,9 +10,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -21,6 +24,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,10 +67,11 @@ public class DeskingHist implements Serializable {
     private Long datasetSeq;
 
     /**
-     * 컴포넌트 히스토리 SEQ
+     * 컴포넌트 히스토리
      */
-    @Column(name = "COMPONENT_HIST_SEQ")
-    private Long componentHistSeq;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "COMPONENT_HIST_SEQ", referencedColumnName = "SEQ", nullable = false)
+    private ComponentHist componentHist;
 
     /**
      * 서비스기사아이디

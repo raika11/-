@@ -10,12 +10,14 @@ import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
+import jmnet.moka.core.tps.mvc.desking.dto.DeskingHistSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.DeskingHistGroupVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -323,14 +325,14 @@ public interface DeskingService {
      */
     public String saveDeskingWorkImage(DeskingWork deskingWork, MultipartFile thumbnail)
             throws Exception;
-    //
-    //    /**
-    //     * 데스킹 히스토리 그룹 목록 조회
-    //     *
-    //     * @param search 검색객체
-    //     * @return 데스킹 히스토리 그룹 목록
-    //     */
-    //    public List<DeskingHistGroupVO> findDeskingHistGroup(DeskingHistSearchDTO search);
+
+    /**
+     * 데스킹 히스토리 그룹 목록 조회
+     *
+     * @param search 검색객체
+     * @return 데스킹 히스토리 그룹 목록
+     */
+    public List<DeskingHistGroupVO> findDeskingHistGroup(DeskingHistSearchDTO search);
     //
     //    /**
     //     * 데스킹 히스토리 그룹 카운트
@@ -338,8 +340,8 @@ public interface DeskingService {
     //     * @param search 검색객체
     //     * @return 데스킹 히스토리 그룹 카운트
     //     */
-    //    public Long countByHistGroup(DeskingHistSearchDTO search);
-    //
+    //    Long countByHistGroup(DeskingHistSearchDTO search);
+
     //    /**
     //     * 데스킹 히스토리 상세 목록 조회
     //     *

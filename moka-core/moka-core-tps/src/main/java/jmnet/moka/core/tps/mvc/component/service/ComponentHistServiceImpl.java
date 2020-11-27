@@ -1,11 +1,9 @@
 package jmnet.moka.core.tps.mvc.component.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.code.EditStatusCode;
+import java.util.Optional;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
@@ -35,7 +33,7 @@ public class ComponentHistServiceImpl implements ComponentHistService {
 
     @Override
     @Transactional
-    public List<ComponentHist> insertComponentHistList(List<?> maybeHistories, HistPublishDTO histPublishDTO){
+    public List<ComponentHist> insertComponentHistList(List<?> maybeHistories, HistPublishDTO histPublishDTO) {
         Iterator<?> iterator = maybeHistories.iterator();
         List<ComponentHist> histories = new ArrayList<ComponentHist>();
 
@@ -98,5 +96,10 @@ public class ComponentHistServiceImpl implements ComponentHistService {
     public List<ComponentHist> findLastHist(Long componentSeq, String dataType)
             throws Exception {
         return componentHistRepository.findLastHist(componentSeq, dataType);
+    }
+
+    @Override
+    public Optional<ComponentHist> findComponentHistBySeq(Long seq) {
+        return componentHistRepository.findById(seq);
     }
 }

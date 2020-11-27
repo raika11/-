@@ -26,6 +26,7 @@ import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.component.service.ComponentHistService;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
+import jmnet.moka.core.tps.mvc.desking.dto.DeskingHistSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingOrdDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
@@ -39,6 +40,7 @@ import jmnet.moka.core.tps.mvc.desking.repository.DeskingHistRepository;
 import jmnet.moka.core.tps.mvc.desking.repository.DeskingRepository;
 import jmnet.moka.core.tps.mvc.desking.repository.DeskingWorkRepository;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
+import jmnet.moka.core.tps.mvc.desking.vo.DeskingHistGroupVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
@@ -367,7 +369,7 @@ public class DeskingServiceImpl implements DeskingService {
             deskingVO.setDatasetSeq(datasetSeq);    // 데이타셋순번이 매칭이 안된 데이타가 있을경우 고려해서 세팅
 
             DeskingHist deskingHist = modelMapper.map(deskingVO, DeskingHist.class);
-            deskingHist.setComponentHistSeq(componentHist.getSeq());    // 컴포넌트 히스토리와 연결
+            deskingHist.setComponentHist(componentHist);    // 컴포넌트 히스토리와 연결
             deskingHist.setDeskingSeq(deskingVO.getDeskingSeq() == null
                                               ? deskingVO.getSeq()
                                               : deskingVO.getDeskingSeq());  // desking.deskingSeq = desking_work.seq로 설정?
@@ -413,8 +415,11 @@ public class DeskingServiceImpl implements DeskingService {
             Desking saveDesking = deskingRepository.save(desking);
 
             //3. 편집기사 히스토리등록
+            Optional<ComponentHist> componentHist = componentHistService.findComponentHistBySeq(histPublishDTO.getSeq());
+
             DeskingHist deskingHist = modelMapper.map(deskingVO, DeskingHist.class);
-            deskingHist.setComponentHistSeq(histPublishDTO.getSeq());    // 컴포넌트 히스토리와 연결
+
+            deskingHist.setComponentHist(componentHist.get());    // 컴포넌트 히스토리와 연결
             deskingHist.setDatasetSeq(dataset.getDatasetSeq());
             deskingHist.setRegDt(sendDt); // 전송시간
             deskingHist.setDeskingDt(deskingVO.getRegDt()); // 작업자의 편집시간.
@@ -911,17 +916,16 @@ public class DeskingServiceImpl implements DeskingService {
         return "";
     }
 
-    //    @Override
-    //    public List<DeskingHistGroupVO> findDeskingHistGroup(DeskingHistSearchDTO search) {
-    //        return deskingWorkMapper.findHistGroup(search,
-    //                getRowBounds(search.getPage(), search.getSize()));
-    //    }
+    @Override
+    public List<DeskingHistGroupVO> findDeskingHistGroup(DeskingHistSearchDTO search) {
+        return deskingWorkMapper.findHistGroup(search);
+    }
     //
     //    @Override
     //    public Long countByHistGroup(DeskingHistSearchDTO search) {
     //        return deskingWorkMapper.countByHistGroup(search);
     //    }
-    //
+
     //    @Override
     //    public List<EditionVO> getEditionList(Long pageSeq) {
     //        return componentWorkMapper.findEditionAll(pageSeq);

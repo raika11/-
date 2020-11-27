@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import PropTypes from 'prop-types';
 import Figure from 'react-bootstrap/Figure';
 
+import util from '@utils/commonUtil';
 import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 import { MokaAlert, MokaIcon } from '@components';
 
@@ -124,29 +125,20 @@ const MokaImageInput = forwardRef((props, ref) => {
     /**
      * 이미지 프리뷰 생성
      */
-    const previewImg = useCallback(
-        (src) => {
-            let image = new Image();
-            image.src = src;
-            image.onload = (imgProps) => {
-                let w = imgProps.path[0].width;
-                let h = imgProps.path[0].height;
-                let rate = width / height;
-
-                if (w / h > rate) {
-                    imgRef.current.className = 'landscape';
-                } else {
-                    imgRef.current.className = 'portrait';
-                }
+    const previewImg = useCallback((src) => {
+        util.makeImgPreview(
+            src,
+            imgRef.current,
+            wrapRef.current,
+            () => {
                 setImgSrc(src);
                 imageShow();
-            };
-            image.onerror = () => {
+            },
+            () => {
                 imageShow();
-            };
-        },
-        [height, width],
-    );
+            },
+        );
+    }, []);
 
     /**
      * 파일 드롭

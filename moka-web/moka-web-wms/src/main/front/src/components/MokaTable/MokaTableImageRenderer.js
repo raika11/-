@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useEffect } from 'react';
+import util from '@utils/commonUtil';
 
 /**
  * ag-grid 셀에 이미지를 그리는 컴포넌트.
@@ -18,27 +19,7 @@ const MokaTableImageRenderer = (params) => {
      * 이미지 프리뷰 생성
      */
     const previewImg = useCallback((src) => {
-        let image = new Image();
-        image.src = src;
-        image.onload = (imgProps) => {
-            let w = imgProps.path[0].width;
-            let h = imgProps.path[0].height;
-            let rate = 1;
-
-            if (boxRef.current) {
-                const box = boxRef.current;
-                rate = box.offsetWidth / box.offsetHeight;
-            }
-
-            if (imgRef.current) {
-                if (w / h > rate) {
-                    imgRef.current.className = 'landscape';
-                } else {
-                    imgRef.current.className = 'portrait';
-                }
-                imgRef.current.src = src;
-            }
-        };
+        util.makeImgPreview(src, imgRef.current, boxRef.current);
     }, []);
 
     useEffect(() => {

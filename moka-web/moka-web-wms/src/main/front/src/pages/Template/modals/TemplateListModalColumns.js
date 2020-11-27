@@ -1,3 +1,6 @@
+import React from 'react';
+import { MokaTableLinkButton } from '@components';
+
 export default [
     { headerName: '', checkboxSelection: true, width: 35 },
     {
@@ -9,7 +12,8 @@ export default [
     {
         headerName: '템플릿명',
         field: 'templateName',
-        width: 333,
+        width: 297,
+        flex: 1,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'templateName',
     },
@@ -26,5 +30,14 @@ export default [
         width: 80,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'templateWidth',
+    },
+    {
+        headerName: '',
+        field: 'link',
+        width: 36,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;
+        },
     },
 ];

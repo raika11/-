@@ -410,25 +410,33 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
 
     @SuppressWarnings("unchecked")
     public void setData(MergeContext context, String dataId, JSONResult result) {
-        Map<String, JSONResult> dataMap = null;
-        if (context.has(MokaConstants.MERGE_DATA_MAP) == false) {
-            dataMap = new HashMap<String, JSONResult>(16);
-            context.set(MokaConstants.MERGE_DATA_MAP, dataMap);
-        } else {
-            dataMap = (Map<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
-        }
+        Map<String, JSONResult> dataMap = getDataMap(context);
         dataMap.put(dataId, result);
         logger.debug("Loaded Data put : {}", dataId);
     }
 
     public JSONResult getData(MergeContext context, String dataId) {
-        if (context.has(MokaConstants.MERGE_DATA_MAP) == false) {
-            return null;
+        Map<String, JSONResult> dataMap = getDataMap(context);
+        return dataMap.get(dataId);
+    }
+
+    /**
+     * DATA MAP을 반환한다. 없을 경우 최상위 컨텍스트에 DATA MAP을 생성한다.
+     * @param context 컨텍스트
+     * @return 데이터 맵
+     */
+    private Map<String, JSONResult> getDataMap(MergeContext context) {
+        if ( context.has(MokaConstants.MERGE_DATA_MAP) ) {
+            return (Map<String, JSONResult>)context.get(MokaConstants.MERGE_DATA_MAP);
         } else {
-            @SuppressWarnings("unchecked")
-            Map<String, JSONResult> dataMap =
-                    (Map<String, JSONResult>) context.get(MokaConstants.MERGE_DATA_MAP);
-            return dataMap.get(dataId);
+            MergeContext parent = context;
+            while ( parent.has(Constants.PARENT)) {
+                if ( parent == null) break;
+                parent = (MergeContext)parent.get(Constants.PARENT);
+            }
+            Map<String, JSONResult> dataMap = new HashMap<String, JSONResult>(16);
+            parent.set(MokaConstants.MERGE_DATA_MAP,dataMap);
+            return dataMap;
         }
     }
 

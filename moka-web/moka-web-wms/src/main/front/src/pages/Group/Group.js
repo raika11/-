@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import Helmet from 'react-helmet';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@components';
@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/group';
-import GroupChildGroupMenuTree from '@pages/Group/relations/GroupChildGroupMenuTree';
+import GroupChildMenuAuth from '@pages/Group/relations/GroupChildMenuAuth';
 // relations
 
 const MemberGroupList = React.lazy(() => import('./GroupList'));
@@ -74,17 +74,15 @@ const Group = () => {
                                     </Suspense>,
 
                                     <Suspense>
-                                        <MokaCard title="메뉴 권한">
-                                            <GroupChildGroupMenuTree />
-                                        </MokaCard>
+                                        <GroupChildMenuAuth />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}
                                 tabNavPosition="right"
                                 tabNavs={[
-                                    { title: '사이트 정보', text: 'Info' },
+                                    { title: '그룹정보', text: 'Info' },
                                     { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '콘텐츠 스킨 검색', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '메뉴권한', icon: <MokaIcon iconName="fal-file-alt" /> },
                                 ]}
                             />
                         </>

@@ -1,18 +1,12 @@
 package jmnet.moka.core.tps.mvc.naverbulk.repository;
 
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkSearchDTO;
-import jmnet.moka.core.tps.mvc.naverbulk.entity.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import jmnet.moka.core.tps.mvc.naverbulk.entity.ArticleList;
+import jmnet.moka.core.tps.mvc.naverbulk.entity.ArticlePK;
+import jmnet.moka.core.tps.mvc.naverbulk.entity.QArticleList;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

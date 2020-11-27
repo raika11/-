@@ -15,11 +15,14 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 /**
  * <pre>
  * FTP 전송 기능을 구현한다.
- * 2019. 1. 28. kspark 최초생성
+ * Project : moka
+ * Package : jmnet.moka.core.common.ftp
+ * ClassName : FtpClientFactory
+ * Created : 2020-11-20 ince
  * </pre>
  *
- * @author kspark
- * @since 2019. 1. 28. 오후 2:41:09
+ * @author ince
+ * @since 2020-11-20 10:39
  */
 @Slf4j
 public class FtpClientFactory extends BasePooledObjectFactory<FTPClient> {

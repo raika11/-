@@ -601,11 +601,14 @@ public class CodeMgtRestController {
         // specialChar
         // 조회
         List<CodeMgt> returnValue = codeMgtService.findByDtlCd(grpCd, dtlCd);
+        CodeMgtDtlDTO codeMgtDtlDTO = null;
 
-        // 리턴값 설정
-        List<CodeMgtDtlDTO> codeDtoList = modelMapper.map(returnValue, CodeMgtDtlDTO.TYPE);
-
-        ResultDTO<List<CodeMgtDtlDTO>> resultDto = new ResultDTO<>(codeDtoList);
+        for(CodeMgt cc : returnValue){
+            codeMgtDtlDTO = CodeMgtDtlDTO.builder().grpCd(cc.getCodeMgtGrp().getGrpCd())
+                    .dtlCd(cc.getDtlCd()).cdNm(cc.getCdNm()).build();
+            break;
+        }
+        ResultDTO<CodeMgtDtlDTO> resultDto = new ResultDTO<>(codeMgtDtlDTO);
         tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

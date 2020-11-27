@@ -5,6 +5,8 @@ package jmnet.moka.core.tps.mvc.naverbulk.service;
 
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkListDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkSearchDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.entity.Article;
@@ -67,31 +69,38 @@ public class NaverBulkServiceImpl implements NaverBulkService {
     @Override
     public Article insertNaverBulk(List<NaverBulkListDTO> asList, String clickartDiv, String sourceCode, String status) {
 
-        Article saveArticle = new Article();
+//        Article saveArticle = new Article();
+//        saveArticle.setClickartDiv(clickartDiv);
+//        saveArticle.setSourceCode(sourceCode);
+//        saveArticle.setStatus(status);
+        Article saveArticle = Article.builder()
+                .clickartDiv(clickartDiv)
+                .sourceCode(sourceCode)
+                .status(status)
+                .build();
 
         try {
-            saveArticle.setClickartDiv(clickartDiv);
-            saveArticle.setSourceCode(sourceCode);
-            saveArticle.setStatus(status);
 
             if(MokaConstants.STATUS_PUBLISH.equals(status)){
-                saveArticle.setUsedYn(MokaConstants.YES);
-                saveArticle.setSendDt(McpDate.now());
+                saveArticle = Article.builder().usedYn(MokaConstants.YES)
+                        .sendDt(McpDate.now()).build();
+//                saveArticle.setUsedYn(MokaConstants.YES);
+//                saveArticle.setSendDt(McpDate.now());
             }
 
             // 마스터 테이블에 한건
             saveArticle = naverBulkRepository.save(saveArticle);
 
-            // 여기서 기존 로직 처리
+            // 상세내역 인설트
             naverBulkRepository.updateArticle(saveArticle) ;
-            Long clickarSeq = saveArticle.getClickartSeq();
-            ArticlePK articlePK = new ArticlePK();
             for(NaverBulkListDTO naverBulkListDTO : asList){
                 ArticleList articleList = modelMapper.map(naverBulkListDTO, ArticleList.class);
-                articlePK.setClickartSeq(saveArticle.getClickartSeq());
-                articlePK.setOrdNo(Long.valueOf(asList.indexOf(naverBulkListDTO)+1));
+                ArticlePK articlePK = ArticlePK.builder().clickartSeq(saveArticle.getClickartSeq())
+                        .ordNo(Long.valueOf(asList.indexOf(naverBulkListDTO)+1)).build();
+//                articlePK.setClickartSeq(saveArticle.getClickartSeq());
+//                articlePK.setOrdNo(Long.valueOf(asList.indexOf(naverBulkListDTO)+1));
                 articleList.setId(articlePK);
-                articleList = naverBulkListRepository.save(articleList);
+                naverBulkListRepository.save(articleList);
             }
         } catch (Exception e) {
             log.error(e.toString());

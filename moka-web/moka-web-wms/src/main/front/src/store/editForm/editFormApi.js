@@ -1,5 +1,6 @@
 import qs from 'qs';
 import instance from '../commons/axios';
+import common from '@utils/commonUtil';
 
 // Edit Form목록 조회
 export const getEditFormList = ({ search }) => {
@@ -41,4 +42,68 @@ export const deleteEditForm = ({ formSeq }) => {
     return instance.delete(`/api/edit-forms/${formSeq}`).catch((err) => {
         throw err;
     });
+};
+
+// Edit Form목록 조회
+export const getEditFormHistoryList = ({ editFormPart, search }) => {
+    return instance.get(`/api/edit-forms/${editFormPart.formSeq}/parts/${editFormPart.partSeq}/historys`).catch((err) => {
+        throw err;
+    });
+};
+
+// Edit Form xml 다운로드
+export const exportEditFormXml = (formSeq) => {
+    instance
+        .get(`/api/edit-forms/${formSeq}/export`, {
+            responseType: 'arraybuffer',
+            headers: {
+                Accept: 'text/xml',
+            },
+        })
+        .then((response) => {
+            let filename = response.headers['x-suggested-filename'];
+
+            common.fileDownload(response.data, filename, 'text/xml');
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// Edit Form part xml 다운로드
+export const exportEditFormPartXml = (part) => {
+    instance
+        .get(`/api/edit-forms/${part.formSeq}/parts/${part.partSeq}/export`, {
+            responseType: 'arraybuffer',
+            headers: {
+                Accept: 'text/xml',
+            },
+        })
+        .then((response) => {
+            let filename = decodeURI(response.headers['x-suggested-filename']);
+
+            common.fileDownload(response.data, filename, 'text/xml');
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// Edit Form part 이력 xml 다운로드
+export const exportEditFormPartHistoryXml = (history) => {
+    instance
+        .get(`/api/edit-forms/${history.formSeq}/parts/${history.partSeq}/historys/${history.seqNo}/export`, {
+            responseType: 'arraybuffer',
+            headers: {
+                Accept: 'text/xml',
+            },
+        })
+        .then((response) => {
+            let filename = decodeURI(response.headers['x-suggested-filename']);
+
+            common.fileDownload(response.data, filename, 'text/xml');
+        })
+        .catch((err) => {
+            throw err;
+        });
 };

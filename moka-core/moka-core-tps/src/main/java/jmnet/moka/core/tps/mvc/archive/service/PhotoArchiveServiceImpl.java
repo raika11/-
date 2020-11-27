@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.achive.service;
+package jmnet.moka.core.tps.mvc.archive.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
@@ -8,15 +8,15 @@ import jmnet.moka.common.utils.BeanConverter;
 import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.core.tps.mvc.achive.dto.PhotoArchiveSearchDTO;
-import jmnet.moka.core.tps.mvc.achive.vo.CmsDataVO;
-import jmnet.moka.core.tps.mvc.achive.vo.CmsResultListVO;
-import jmnet.moka.core.tps.mvc.achive.vo.CmsRetrieveVO;
-import jmnet.moka.core.tps.mvc.achive.vo.CmsVO;
-import jmnet.moka.core.tps.mvc.achive.vo.OriginCodeVO;
-import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveDetailVO;
-import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveVO;
-import jmnet.moka.core.tps.mvc.achive.vo.PhotoTypeVO;
+import jmnet.moka.core.tps.mvc.archive.dto.PhotoArchiveSearchDTO;
+import jmnet.moka.core.tps.mvc.archive.vo.CmsDataVO;
+import jmnet.moka.core.tps.mvc.archive.vo.CmsResultListVO;
+import jmnet.moka.core.tps.mvc.archive.vo.CmsRetrieveVO;
+import jmnet.moka.core.tps.mvc.archive.vo.CmsVO;
+import jmnet.moka.core.tps.mvc.archive.vo.OriginCodeVO;
+import jmnet.moka.core.tps.mvc.archive.vo.PhotoArchiveDetailVO;
+import jmnet.moka.core.tps.mvc.archive.vo.PhotoArchiveVO;
+import jmnet.moka.core.tps.mvc.archive.vo.PhotoTypeVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +32,7 @@ import org.springframework.util.MultiValueMap;
  * <pre>
  *
  * Project : moka
- * Package : jmnet.moka.core.tps.mvc.achive.service
+ * Package : jmnet.moka.core.tps.mvc.archive.service
  * ClassName : PhotoArchiveServiceImpl
  * Created : 2020-11-23 ince
  * </pre>
@@ -83,7 +83,7 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
      */
     @Override
     public Page<PhotoArchiveVO> findAllPhotoArchive(PhotoArchiveSearchDTO searchDTO, String memberId) {
-        CmsVO<CmsResultListVO<PhotoArchiveVO>> result = new CmsVO<>();
+        CmsVO<CmsResultListVO<PhotoArchiveVO>> result;
         Page<PhotoArchiveVO> page = new PageImpl<>(new ArrayList<>(), PageRequest.of(searchDTO.getPage(), searchDTO.getPageCount()), 0);
         try {
             MultiValueMap<String, Object> params = MapBuilder
@@ -98,8 +98,8 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
                     .getDefaultObjectMapper()
                     .readValue(responseEntity.getBody(), new TypeReference<CmsVO<CmsResultListVO<PhotoArchiveVO>>>() {
                     });
-            CmsResultListVO data = result.getData();
-            page = new PageImpl<PhotoArchiveVO>(data.getResultList(), PageRequest.of(data.getPage(), data.getPageCount()), data.getTotalCount());
+            CmsResultListVO<PhotoArchiveVO> data = result.getData();
+            page = new PageImpl<>(data.getResultList(), PageRequest.of(data.getPage(), data.getPageCount()), data.getTotalCount());
 
         } catch (Exception ex) {
             log.error(ex.toString());

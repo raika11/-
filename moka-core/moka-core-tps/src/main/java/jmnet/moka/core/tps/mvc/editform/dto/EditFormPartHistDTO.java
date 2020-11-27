@@ -100,4 +100,6 @@ public class EditFormPartHistDTO {
     @DTODateTimeFormat
     private Date regDt;
 
+    private EditFormPartDTO editFormPart;
+
 }

@@ -36,12 +36,6 @@ public class CodeMgtDtlDTO implements Serializable {
     }.getType();
 
     /**
-     * 일련번호
-     */
-    @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}")
-    private Long seqNo;
-
-    /**
      * 코드명
      */
     @NotNull(message = "{tps.codeMgt.error.notnull.cdNm}")
@@ -49,10 +43,8 @@ public class CodeMgtDtlDTO implements Serializable {
     @Length(min = 1, max = 512, message = "{tps.codeMgt.error.length.cdNm}")
     private String cdNm;
 
-    /**
-     * 코드영문명
-     */
-    @Length(max = 100, message = "{tps.codeMgt.error.length.cdEngNm}")
-    private String cdEngNm;
+    private String grpCd;
+
+    private String dtlCd;
 
 }

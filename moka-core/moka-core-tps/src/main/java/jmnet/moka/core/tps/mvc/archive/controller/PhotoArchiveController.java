@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.achive.controller;
+package jmnet.moka.core.tps.mvc.archive.controller;
 
 import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
@@ -11,13 +11,13 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.mvc.achive.dto.PhotoArchiveDTO;
-import jmnet.moka.core.tps.mvc.achive.dto.PhotoArchiveSearchDTO;
-import jmnet.moka.core.tps.mvc.achive.service.PhotoArchiveService;
-import jmnet.moka.core.tps.mvc.achive.vo.OriginCodeVO;
-import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveDetailVO;
-import jmnet.moka.core.tps.mvc.achive.vo.PhotoArchiveVO;
-import jmnet.moka.core.tps.mvc.achive.vo.PhotoTypeVO;
+import jmnet.moka.core.tps.mvc.archive.dto.PhotoArchiveDTO;
+import jmnet.moka.core.tps.mvc.archive.dto.PhotoArchiveSearchDTO;
+import jmnet.moka.core.tps.mvc.archive.service.PhotoArchiveService;
+import jmnet.moka.core.tps.mvc.archive.vo.OriginCodeVO;
+import jmnet.moka.core.tps.mvc.archive.vo.PhotoArchiveDetailVO;
+import jmnet.moka.core.tps.mvc.archive.vo.PhotoArchiveVO;
+import jmnet.moka.core.tps.mvc.archive.vo.PhotoTypeVO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

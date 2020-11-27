@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -97,5 +98,7 @@ public class FieldDTO {
     /**
      * type이 SELECT일때 값 목록
      */
+    @JacksonXmlElementWrapper(localName = "options")
+    @JacksonXmlProperty(localName = "option")
     private Set<OptionDTO> options;
 }

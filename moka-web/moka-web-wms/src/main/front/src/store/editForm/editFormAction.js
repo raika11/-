@@ -24,13 +24,17 @@ export const getEditForm = createAction(GET_EDIT_FORM, (partId) => partId);
 /**
  * 데이터 변경
  */
-export const CHANGE_EDIT_FORM = 'editForm/CHANGE_EDIT_FORM';
-export const CHANGE_EDIT_FORM_PART = 'editForm/CHANGE_EDIT_FORM_PART';
-export const CHANGE_FIELD = 'editForm/CHANGE_FIELD';
 export const CHANGE_INVALID_LIST = 'editForm/CHANGE_INVALID_LIST';
-export const changeEditForm = createAction(CHANGE_EDIT_FORM, (editForm) => editForm);
-export const changeField = createAction(CHANGE_FIELD, (partIdx, groupIdx, fieldIdx, field) => ({ partIdx, groupIdx, fieldIdx, field }));
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
+
+export const CHANGE_EDIT_FORM = 'editForm/CHANGE_EDIT_FORM';
+export const changeEditForm = createAction(CHANGE_EDIT_FORM, (editForm) => editForm);
+
+export const CHANGE_EDIT_FORM_PART = 'editForm/CHANGE_EDIT_FORM_PART';
+export const changeEditFormPart = createAction(CHANGE_EDIT_FORM_PART, (recoveryData) => ({ recoveryData }));
+
+export const CHANGE_FIELD = 'editForm/CHANGE_FIELD';
+export const changeField = createAction(CHANGE_FIELD, (partIdx, groupIdx, fieldIdx, field) => ({ partIdx, groupIdx, fieldIdx, field }));
 
 /**
  * 저장
@@ -57,3 +61,42 @@ export const duplicateCheck = createAction(DUPLICATE_CHECK, ({ formId, callback 
  */
 export const PUBLISH_MODAL = 'editForm/PUBLISH_MODAL';
 export const showPublishModal = createAction(PUBLISH_MODAL, (show, editFormPart) => ({ show, editFormPart }));
+
+/**
+ * 퍼블리시 모달 show/hide
+ */
+export const HISTORY_MODAL = 'editForm/HISTORY_MODAL';
+export const showHistoryModal = createAction(HISTORY_MODAL, (show, editFormPart, partIdx) => ({ show, editFormPart, partIdx }));
+
+/**
+ * 이력 검색 조건
+ */
+export const CHANGE_SEARCH_OPTION = 'editForm/CHANGE_SEARCH_OPTION';
+export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
+
+/**
+ * 이력 검색 조건
+ */
+
+export const [GET_EDIT_FORM_HISTORY_LIST, GET_EDIT_FORM_HISTORY_LIST_SUCCESS, GET_EDIT_FORM_HISTORY_LIST_FAILURE] = createRequestActionTypes('editForm/GET_EDIT_FORM_HISTORY_LIST');
+export const getEditFormHistoryList = createAction(GET_EDIT_FORM_HISTORY_LIST, (editFormPart, search) => ({ editFormPart, search }));
+
+/**
+ * 편집 폼 XML Export
+ */
+export const [EXPORT_EDIT_FROM_XML, EXPORT_EDIT_FROM_XML_SUCCESS, EXPORT_EDIT_FROM_XML_FAILURE] = createRequestActionTypes('editForm/EXPORT_EDIT_FROM_XML');
+export const exportEditFormXml = createAction(EXPORT_EDIT_FROM_XML, (formSeq) => formSeq);
+
+/**
+ * 편집 폼 XML Export
+ */
+export const [EXPORT_EDIT_FROM_PART_XML, EXPORT_EDIT_FROM_PART_XML_SUCCESS, EXPORT_EDIT_FROM_PART_XML_FAILURE] = createRequestActionTypes('editForm/EXPORT_EDIT_FROM_PART_XML');
+export const exportEditFormPartXml = createAction(EXPORT_EDIT_FROM_PART_XML, (part) => part);
+
+/**
+ * 편집 폼 XML Export
+ */
+export const [EXPORT_EDIT_FROM_PART_HISTORY_XML, EXPORT_EDIT_FROM_PART_HISTORY_XML_SUCCESS, EXPORT_EDIT_FROM_PART_HISTORY_XML_FAILURE] = createRequestActionTypes(
+    'editForm/EXPORT_EDIT_FROM_PART_HISTORY_XML',
+);
+export const exportEditFormPartHistoryXml = createAction(EXPORT_EDIT_FROM_PART_HISTORY_XML, (history) => history);

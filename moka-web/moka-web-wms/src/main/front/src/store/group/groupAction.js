@@ -58,11 +58,14 @@ export const deleteGroup = createAction(DELETE_GROUP, ({ groupCd, callback }) =>
 /**
  * 그룹 메뉴 권한 가져오기
  */
-export const [GET_GROUP_MENU_LIST, GET_GROUP_MENU_SUCCESS, GET_GROUP_MENU_FAILURE] = createRequestActionTypes('group/GET_GROUP_MENU_LIST');
-export const getGroupMenuList = createAction(GET_GROUP_MENU_LIST, (groupCd) => groupCd);
+export const [GET_GROUP_MENU_AUTH, GET_GROUP_MENU_AUTH_SUCCESS, GET_GROUP_MENU_AUTH_FAILURE] = createRequestActionTypes('group/GET_GROUP_MENU_AUTH');
+export const getGroupMenuAuth = createAction(GET_GROUP_MENU_AUTH, (groupCd) => groupCd);
 
-export const CHANGE_GROUP_MENU_AUTH_INFO = 'group/CHANGE_GROUP_MENU_AUTH_INFO';
-export const changeGroupMenuAuthInfo = createAction(CHANGE_GROUP_MENU_AUTH_INFO, (groupCd) => groupCd);
+export const CHANGE_GROUP_MENU_AUTH = 'group/CHANGE_GROUP_MENU_AUTH';
+export const changeGroupMenuAuth = createAction(CHANGE_GROUP_MENU_AUTH, (changeInfo) => changeInfo);
 
 export const UPDATE_GROUP_MENU_AUTH = 'group/SAVE_GROUP_MENU_AUTH';
 export const updateGroupMenuAuth = createAction(UPDATE_GROUP_MENU_AUTH, ({ groupCd, changeMenuAuthList, callback }) => ({ groupCd, changeMenuAuthList, callback }));
+
+export const CLEAR_GROUP_MENU_AUTH = 'group/CLEAR_GROUP_MENU_AUTH';
+export const clearGroupMenuAuth = createAction(CLEAR_GROUP_MENU_AUTH);

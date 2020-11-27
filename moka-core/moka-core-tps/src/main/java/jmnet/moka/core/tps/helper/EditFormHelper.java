@@ -1,6 +1,8 @@
 package jmnet.moka.core.tps.helper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator.Feature;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,6 +21,8 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.mvc.editform.code.EditFieldTypeCode;
 import jmnet.moka.core.tps.mvc.editform.dto.ChannelFormatDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldGroupDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.OptionDTO;
@@ -50,6 +54,7 @@ public class EditFormHelper {
 
     public EditFormHelper(XmlMapper xmlMapper) {
         this.xmlMapper = xmlMapper;
+        this.xmlMapper.configure(Feature.WRITE_XML_DECLARATION, true);
         editFormMap = new HashMap<>();
     }
 
@@ -211,6 +216,23 @@ public class EditFormHelper {
     public ChannelFormatDTO getChannelFormat(String site, String channelId)
             throws MokaException {
         return mapping(site, channelId);
+    }
+
+    public String convertPartXml(Object obj)
+            throws JsonProcessingException {
+        return xmlMapper
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(obj);
+    }
+
+    public EditFormDTO getEditForm(String xml)
+            throws IOException {
+        return xmlMapper.readValue(xml, EditFormDTO.class);
+    }
+
+    public EditFormPartDTO getEditFormPart(String xml)
+            throws IOException {
+        return xmlMapper.readValue(xml, EditFormPartDTO.class);
     }
 
 

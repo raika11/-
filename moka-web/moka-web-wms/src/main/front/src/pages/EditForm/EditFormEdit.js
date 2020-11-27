@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
@@ -8,13 +8,24 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import toast from '@utils/toastUtil';
-import { changeEditForm, changeInvalidList, clearEditForm, duplicateCheck, getEditForm, saveEditForm, showPublishModal } from '@store/editForm';
+import {
+    changeEditForm,
+    changeInvalidList,
+    clearEditForm,
+    duplicateCheck,
+    exportEditFormXml,
+    getEditForm,
+    saveEditForm,
+    showHistoryModal,
+    showPublishModal,
+} from '@store/editForm';
 import { getApi, getLang } from '@store/codeMgt';
 import { MokaCard, MokaInputLabel } from '@components';
 import PartList from './PartList';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { Card } from 'react-bootstrap';
 import EditFormPartPublishModal from './EditFormPartPublishModal';
+import EditFormPartHistoryModal from './EditFormPartHistoryModal';
 
 /**
  * 편집폼 상세/수정/등록
@@ -23,8 +34,6 @@ import EditFormPartPublishModal from './EditFormPartPublishModal';
 
 const EditFormEdit = ({ history, onDelete }) => {
     const { formId: paramId } = useParams();
-    const elLang = useRef();
-    const elApiCodeId = useRef();
 
     // entity
     const [formId, setFormId] = useState('');
@@ -41,13 +50,14 @@ const EditFormEdit = ({ history, onDelete }) => {
     const [serviceUrlError, setEditFormUrlError] = useState(false);
 
     // getter
-    const { editForm, editFormParts, langRows, apiRows, invalidList, editFormPart, publishModalShow } = useSelector(
+    const { editForm, editFormParts, invalidList, publishModalShow, historyModalShow } = useSelector(
         (store) => ({
             editForm: store.editForm.editForm,
             editFormParts: store.editForm.editFormParts,
             editFormPart: store.editForm.editFormPart,
             invalidList: store.editForm.invalidList,
             publishModalShow: store.editForm.publishModalShow,
+            historyModalShow: store.editForm.historyModalShow,
         }),
         shallowEqual,
     );
@@ -55,6 +65,14 @@ const EditFormEdit = ({ history, onDelete }) => {
 
     const hidePublishModal = () => {
         dispatch(showPublishModal(false));
+    };
+
+    const hideHistoryModal = () => {
+        dispatch(showHistoryModal(false));
+    };
+
+    const handleClickExport = () => {
+        dispatch(exportEditFormXml(editForm.formSeq));
     };
 
     /**
@@ -333,17 +351,22 @@ const EditFormEdit = ({ history, onDelete }) => {
                             </Form.Row>
 
                             {/* 버튼 */}
-                            <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
+                            <Form.Group as={Row} className="d-flex pt-20 justify-content-center" title="저장">
                                 <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
                                     저장
                                 </Button>
-                                <Button className="float-left mr-10 pr-20 pl-20" variant="negative">
+                                <Button className="float-left mr-10 pr-20 pl-20" variant="negative" title="취소">
                                     취소
                                 </Button>
                                 {paramId && (
-                                    <Button className="float-left mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete}>
-                                        삭제
-                                    </Button>
+                                    <>
+                                        <Button className="float-left mr-10 pr-20 pl-20" variant="negative" title="XML Export" onClick={handleClickExport}>
+                                            Export
+                                        </Button>
+                                        <Button className="float-left mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete} title="삭제">
+                                            삭제
+                                        </Button>
+                                    </>
                                 )}
                             </Form.Group>
                         </Form>
@@ -358,6 +381,7 @@ const EditFormEdit = ({ history, onDelete }) => {
                 </Col>
             </Row>
             <EditFormPartPublishModal show={publishModalShow} onHide={() => hidePublishModal()} />
+            <EditFormPartHistoryModal show={historyModalShow} onHide={() => hideHistoryModal()} />
         </div>
     );
 };

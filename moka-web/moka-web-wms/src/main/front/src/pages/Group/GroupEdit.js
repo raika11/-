@@ -1,6 +1,6 @@
-import React, { useEffect, useState, state } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Form, Button, Row } from 'react-bootstrap';
-import { MokaCard, MokaInput, MokaInputLabel } from '@components';
+import { MokaCard, MokaInputLabel } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
@@ -15,7 +15,8 @@ import {
     DELETE_GROUP,
     deleteGroup,
     hasRelationList,
-    getGroupMenuList,
+    getGroupMenuAuth,
+    clearGroupMenuAuth,
 } from '@store/group';
 import { notification } from '@utils/toastUtil';
 import { toastr } from 'react-redux-toastr';
@@ -24,7 +25,7 @@ import { toastr } from 'react-redux-toastr';
  * 그룹 상세/수정/등록
  * @param history rect-router-dom useHisotry
  */
-const GroupEdit = (onDelete) => {
+const GroupEdit = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { groupCd: paramCd } = useParams();
@@ -122,7 +123,6 @@ const GroupEdit = (onDelete) => {
 
         switch (name) {
             case 'groupCd':
-                const regex = /^[0-9\b]+$/;
                 if (value.length <= 3) {
                     setGroupCdError(false);
                     setGroupCd(value);
@@ -199,9 +199,10 @@ const GroupEdit = (onDelete) => {
     useEffect(() => {
         if (paramCd) {
             dispatch(getGroup(paramCd));
-            dispatch(getGroupMenuList(paramCd));
+            dispatch(getGroupMenuAuth(paramCd));
         } else {
             dispatch(clearGroup());
+            dispatch(clearGroupMenuAuth());
         }
     }, [dispatch, paramCd]);
 

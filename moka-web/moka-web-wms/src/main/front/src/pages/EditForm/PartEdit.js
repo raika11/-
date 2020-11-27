@@ -14,7 +14,7 @@ const propTypes = {
  * 기본 input
  */
 const PartEdit = (props) => {
-    const { partIdx, formId } = props;
+    const { partIdx } = props;
     const dispatch = useDispatch();
 
     const { editFormParts } = useSelector((store) => ({

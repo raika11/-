@@ -12,7 +12,7 @@ const propTypes = {
  * 기본 input
  */
 const FieldGroup = (props) => {
-    const { groupIdx, partIdx, onFieldChange } = props;
+    const { groupIdx, partIdx } = props;
 
     const { editFormParts } = useSelector((store) => ({
         editFormParts: store.editForm.editFormParts,

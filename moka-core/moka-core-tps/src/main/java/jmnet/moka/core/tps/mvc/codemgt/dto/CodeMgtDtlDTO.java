@@ -46,7 +46,7 @@ public class CodeMgtDtlDTO implements Serializable {
     /**
      * 상세코드
      */
-    @NotNull(message = "{tps.codeMgt.error.notnull.cdNm}")
+    @NotNull(message = "{tps.codeMgt.error.notnull.dtlCd}")
     @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgt.error.pattern.dtlCd}")
     @Length(min = 1, max = 24, message = "{tps.codeMgt.error.length.dtlCd}")
     private String dtlCd;

@@ -17,7 +17,7 @@ const DatasetParameter = (props) => {
      */
     const handleChangeValue = (event, name, defaultValue) => {
         const { value } = event.target;
-        const { type } = fieldInfos[name];
+        /*const { type } = fieldInfos[name];*/
         let regex = /./;
         /*if (type === 'number') {
             regex = /^[0-9\b]+$/;
@@ -154,9 +154,9 @@ const DatasetParameter = (props) => {
                     if (isAutocomplete) {
                         let param = [];
                         if (isMultiple) {
-                            dataApiParam[name].split(',').map((d) => {
+                            for (const d of dataApiParam[name].split(',')) {
                                 param.push(options[type].filter((data) => data.value === d)[0]);
-                            });
+                            }
                         } else {
                             param = [{ seq: dataApiParam[name] }];
                         }

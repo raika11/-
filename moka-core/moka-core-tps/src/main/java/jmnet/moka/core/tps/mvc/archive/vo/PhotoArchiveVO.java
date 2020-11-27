@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.achive.vo;
+package jmnet.moka.core.tps.mvc.archive.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;

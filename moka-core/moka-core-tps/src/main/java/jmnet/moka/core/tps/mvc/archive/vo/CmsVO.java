@@ -1,7 +1,6 @@
-package jmnet.moka.core.tps.mvc.achive.vo;
+package jmnet.moka.core.tps.mvc.archive.vo;
 
 import java.io.Serializable;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,16 +20,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CmsResultListVO<T> implements Serializable {
+public class CmsVO<T> implements Serializable {
 
-    private Integer pageCount;
-    private String errorMessage;
-    private Integer count;
-    private Integer start;
-    private String errorCode;
-    private Integer page;
-    private Integer totalCount;
-    private List<T> resultList;
+    protected Integer code;
+    protected String message;
+    protected T data;
 
 
 

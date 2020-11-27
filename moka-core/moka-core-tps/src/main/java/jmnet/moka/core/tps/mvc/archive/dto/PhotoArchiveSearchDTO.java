@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.achive.dto;
+package jmnet.moka.core.tps.mvc.archive.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jmnet.moka.common.data.support.SearchDTO;

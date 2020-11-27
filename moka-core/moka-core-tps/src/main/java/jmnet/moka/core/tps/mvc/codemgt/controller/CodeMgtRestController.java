@@ -584,7 +584,7 @@ public class CodeMgtRestController {
     }
 
     /**
-     * 약물정보 조회
+     * 코드상세조회
      *
      * @param grpCd 코드순번 (필수)
      * @param dtlCd 상세코드 (필수)
@@ -594,7 +594,7 @@ public class CodeMgtRestController {
      * @throws Exception            기타예외
      */
     @ApiOperation(value = "코드 목록조회")
-    @GetMapping("/{grpCd}/getSpecialChar/{dtlCd}")
+    @GetMapping("/{grpCd}/special-char/{dtlCd}")
     public ResponseEntity<?> getSpecialChar(@PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
                                             @PathVariable("dtlCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.dtlCd}") String dtlCd
     ) throws InvalidDataException, Exception {
@@ -611,7 +611,7 @@ public class CodeMgtRestController {
     }
 
     /**
-     * 코드수정
+     * 코드상세수정
      *
      * @param seqNo            코드순
      * @param codeMgtDtlDTO       수정할 코드정보
@@ -621,7 +621,7 @@ public class CodeMgtRestController {
      * @throws Exception            기타예외
      */
     @ApiOperation(value = "코드수정")
-    @PutMapping("/{seqNo}/setSpecialChar")
+    @PutMapping("/{seqNo}/special-char")
     public ResponseEntity<?> putCodeMgtDtl(@PathVariable("seqNo")
                 @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo
             , @Valid CodeMgtDtlDTO codeMgtDtlDTO

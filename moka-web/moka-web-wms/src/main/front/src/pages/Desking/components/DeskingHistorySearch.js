@@ -8,7 +8,7 @@ import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultHistorySearchType } from '@pages/commons';
 
 const component = [{ name: '컴포넌트 명' }];
-const history = [{ name: '전송기록' }];
+const history = [{ name: '임시저장' }, { name: '전송' }];
 
 /**
  * 데스킹 히스토리 검색 컴포넌트

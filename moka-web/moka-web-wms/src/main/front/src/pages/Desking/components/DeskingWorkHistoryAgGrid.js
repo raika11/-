@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { MokaTable } from '@components';
-import columnDefs from './ArticleHistoryAgGridColumns';
+import columnDefs from './DeskingWorkHistoryAgGridColumns';
 
-const ArticleHistoryAgGrid = () => {
+const DeskingWorkHistoryAgGrid = () => {
     const [loading] = useState(false);
 
     const handleChangeSearchOption = useCallback((search) => console.log(search), []);
@@ -25,4 +25,4 @@ const ArticleHistoryAgGrid = () => {
     );
 };
 
-export default ArticleHistoryAgGrid;
+export default DeskingWorkHistoryAgGrid;

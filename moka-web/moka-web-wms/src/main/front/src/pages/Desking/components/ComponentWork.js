@@ -44,14 +44,14 @@ const ComponentWork = (props) => {
     }));
 
     // state
-    const [rowdata, setRowData] = useState({});
+    const [deskingWorkData, setDeskingWorkData] = useState({});
     const [showDeskingWorkEditModal, setShowDeskingWorkEditModal] = useState(false);
 
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = (desking) => {
-        setRowData(desking);
+    const handleRowClicked = (rowData) => {
+        setDeskingWorkData(rowData);
         setShowDeskingWorkEditModal(true);
     };
 
@@ -110,7 +110,7 @@ const ComponentWork = (props) => {
                     onDelete={handleClickDelete}
                 />
             </div>
-            <DeskingWorkEditModal show={showDeskingWorkEditModal} onHide={() => setShowDeskingWorkEditModal(false)} data={rowdata} onSave={handleClickSave} />
+            <DeskingWorkEditModal show={showDeskingWorkEditModal} onHide={() => setShowDeskingWorkEditModal(false)} data={deskingWorkData} onSave={handleClickSave} />
         </React.Fragment>
     );
 };

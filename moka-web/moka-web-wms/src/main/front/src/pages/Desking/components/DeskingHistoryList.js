@@ -1,8 +1,8 @@
 import React from 'react';
 import { MokaCard } from '@components';
 import Search from './DeskingHistorySearch';
-import HistoryAgGrid from './DeskingHistoryAgGrid';
-import ArticleHistoryAgGrid from './ArticleHistoryAgGrid';
+import ComponentWorkAgGrid from './ComponentWorkHistoryAgGrid';
+import DeskingWorkAgGrid from './DeskingWorkHistoryAgGrid';
 
 const DeskingHistoryList = () => {
     return (
@@ -11,10 +11,10 @@ const DeskingHistoryList = () => {
                 {/* search의 테이블 */}
                 <Search />
                 {/*  히스토리 데이터 테이블 */}
-                <HistoryAgGrid />
+                <ComponentWorkAgGrid />
             </div>
             <div className="flex-fill">
-                <ArticleHistoryAgGrid />
+                <DeskingWorkAgGrid />
             </div>
         </MokaCard>
     );

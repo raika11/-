@@ -419,7 +419,7 @@ const putDeskingWork = createDeskingRequestSaga(act.PUT_DESKING_WORK, api.putDes
 /**
  * work편집기사 삭제
  */
-const deleteDeskingWorkList = createDeskingRequestSaga(act.DELETE_DESKING_WORK_LIST, api.deleteDeskingWorkList, 'delete');
+const deleteDeskingWorkList = createDeskingRequestSaga(act.DELETE_DESKING_WORK_LIST, api.deleteDeskingWorkList, 'work');
 
 /** saga */
 export default function* saga() {

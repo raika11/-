@@ -51,6 +51,10 @@ const propTypes = {
      * input disabled 속성
      */
     disabled: PropTypes.bool,
+    /**
+     * input size
+     */
+    size: PropTypes.oneOf(['sm', 'md', 'lg']),
 };
 
 const defaultProps = {
@@ -65,7 +69,7 @@ const defaultProps = {
  * TimePicker
  */
 const MokaDateTimePicker = forwardRef((props, ref) => {
-    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, className, inputClassName, ...rest } = props;
+    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, className, inputClassName, size, ...rest } = props;
 
     // 날짜시간 포맷
     const dateTimeFormat = (() => {
@@ -93,7 +97,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
     // input element 생성
     const renderInput = (props, openCalendar, closeCalendar) => {
         return (
-            <InputGroup style={{ width }}>
+            <InputGroup style={{ width }} size={size}>
                 <InputMask
                     {...props}
                     onFocus={(e) => {

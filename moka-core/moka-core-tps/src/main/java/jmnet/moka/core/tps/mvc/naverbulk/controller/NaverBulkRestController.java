@@ -72,8 +72,6 @@ public class NaverBulkRestController {
 
     private final TpsLogger tpsLogger;
 
-    private final String Yes = "Y";
-
     public NaverBulkRestController(NaverBulkService naverBulkService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger, CodeMgtService codeMgtService) {
         this.codeMgtService = codeMgtService;
         this.naverBulkService = naverBulkService;

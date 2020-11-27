@@ -74,8 +74,6 @@ const GroupAgGrid = (props) => {
         [history],
     );
 
-    let count = 0;
-
     return (
         <MokaTable
             columnDefs={columnDefs}

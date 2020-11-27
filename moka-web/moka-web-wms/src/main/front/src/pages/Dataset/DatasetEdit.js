@@ -229,7 +229,7 @@ const DatasetEdit = ({ onDelete }) => {
         if (parameters) {
             setInvalid({ ...invalid, dataApiUrl: false });
             let apiParam = null;
-            Object.keys(parameters).map((key) => {
+            for (const key of Object.keys(parameters)) {
                 const parameter = parameters[key];
                 if (parameter.defaultValue) {
                     if (apiParam === null) {
@@ -238,7 +238,7 @@ const DatasetEdit = ({ onDelete }) => {
 
                     apiParam = { ...apiParam, [parameter.name]: parameter.defaultValue };
                 }
-            });
+            }
 
             setDataApi(selectApi.id);
             setDataApiParam(apiParam);

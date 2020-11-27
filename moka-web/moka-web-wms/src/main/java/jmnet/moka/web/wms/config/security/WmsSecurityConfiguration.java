@@ -6,6 +6,7 @@ package jmnet.moka.web.wms.config.security;
 import com.hazelcast.core.HazelcastInstance;
 import java.io.IOException;
 import java.util.Arrays;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.web.wms.config.ReactRoutesHandlerMapping;
 import jmnet.moka.web.wms.config.hazelcast.HazelcastSessionRegistry;
@@ -210,6 +211,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
         configuration.addAllowedMethod("*");
         configuration.setExposedHeaders(Arrays.asList(WmsJwtHelper.HEADER_STRING, TpsConstants.HEADER_MENU_ID));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        configuration.addExposedHeader(MokaConstants.HEADER_DOWNLOAD_FILENAME);
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

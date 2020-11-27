@@ -106,37 +106,37 @@ public class NaverBulkRestController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    /**
-     * 네이버 벌크문구 기사 목록 조회
-     *
-     * @param request  요청
-     * @param clickartSeq 일련번호 (필수)
-     * @return 네이버 벌크 문구 기사 목록
-     * @throws NoDataException 네이버 벌크문구 기사 정보가 없음
-     */
-    @ApiOperation(value = "네이버 벌크문구 기사 목록 조회")
-    @GetMapping("/news-list/{clickartSeq}")
-    public ResponseEntity<?> getNaverBulkList(HttpServletRequest request
-            , @PathVariable("clickartSeq") @Min(value = 0, message = "{tps.naver-bulk.error.pattern.clickartSeq}") Long clickartSeq)
-            throws Exception {
-
-        ResultListDTO<NaverBulkListDTO> resultListMessage = new ResultListDTO<>();
-
-        // 조회
-        List<ArticleList> returnValue = naverBulkService.findAllByClickartSeq(clickartSeq);
-
-        // 리턴값 설정
-        List<NaverBulkListDTO> columnistList = modelMapper.map(returnValue, NaverBulkListDTO.TYPE);
-        resultListMessage.setTotalCnt(returnValue.size());
-        resultListMessage.setList(columnistList);
-
-        // 결과값 셋팅
-        ResultDTO<ResultListDTO<NaverBulkListDTO>> resultDto = new ResultDTO<>(resultListMessage);
-        tpsLogger.success(ActionType.SELECT);
-
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-
-    }
+//    /**
+//     * 네이버 벌크문구 기사 목록 조회
+//     *
+//     * @param request  요청
+//     * @param clickartSeq 일련번호 (필수)
+//     * @return 네이버 벌크 문구 기사 목록
+//     * @throws NoDataException 네이버 벌크문구 기사 정보가 없음
+//     */
+//    @ApiOperation(value = "네이버 벌크문구 기사 목록 조회")
+//    @GetMapping("/news-list/{clickartSeq}")
+//    public ResponseEntity<?> getNaverBulkList(HttpServletRequest request
+//            , @PathVariable("clickartSeq") @Min(value = 0, message = "{tps.naver-bulk.error.pattern.clickartSeq}") Long clickartSeq)
+//            throws Exception {
+//
+//        ResultListDTO<NaverBulkListDTO> resultListMessage = new ResultListDTO<>();
+//
+//        // 조회
+//        List<ArticleList> returnValue = naverBulkService.findAllByClickartSeq(clickartSeq);
+//
+//        // 리턴값 설정
+//        List<NaverBulkListDTO> columnistList = modelMapper.map(returnValue, NaverBulkListDTO.TYPE);
+//        resultListMessage.setTotalCnt(returnValue.size());
+//        resultListMessage.setList(columnistList);
+//
+//        // 결과값 셋팅
+//        ResultDTO<ResultListDTO<NaverBulkListDTO>> resultDto = new ResultDTO<>(resultListMessage);
+//        tpsLogger.success(ActionType.SELECT);
+//
+//        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+//
+//    }
 
     /**
      * 네이버벌크문구 서비스 여부 저장

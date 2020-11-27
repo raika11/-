@@ -42,7 +42,7 @@ public class NaverBulkListDTO implements Serializable {
     /**
      * tinyint  3,0 ((1))   NO  순서
      */
-    @NotNull(message = "{tps.naver-bulk.error.notnull.ordNo}")
+    //@NotNull(message = "{tps.naver-bulk.error.notnull.ordNo}")
     @Min(value = 0, message = "{tps.naver-bulk.error.min.ordNo}")
     private Long ordNo;
 

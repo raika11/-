@@ -1,38 +1,43 @@
 package jmnet.moka.core.tps.mvc.naverbulk.entity;
 
-import jmnet.moka.core.tps.common.entity.RegAudit;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 /**
- * The persistent class for the TB_15RE_DIRECT_LINK table.
+ * The persistent class for the TB_CLICK_ARTICLE_LIST table.
  */
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
-@Getter
-@Builder
 @Entity
 @Table(name = "TB_CLICK_ARTICLE_LIST")
-@NamedQuery(name = "ArticleList.findAll", query = "SELECT d FROM ArticleList d")
-public class ArticleList  {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+//@NamedQuery(name = "ArticleList.findAll", query = "SELECT d FROM ArticleList d")
+public class ArticleList implements Serializable{
 
     private static final long serialVersionUID = -6123879324816610973L;
 
     /**
-     * int   10,0    NO  클릭기사일련번호
+     * 에피소드 관련기사 ID
      */
-    @Id
-    @Column(name = "CLICKART_SEQ")
-    Long clickartSeq;
+    @EmbeddedId
+    private ArticlePK id;
 
-    /**
-     * tinyint  3,0 ((1))   NO  순서
-     */
-    @Column(name = "ORD_NO", nullable = false, length = 3)
-    Long ordNo;
+//    /**
+//     * int   10,0    NO  클릭기사일련번호
+//     */
+//    @Column(name = "CLICKART_SEQ" insertable=false, )
+//    Long clickartSeq;
+
+//    /**
+//     * tinyint  3,0 ((1))   NO  순서
+//     */
+//    @Column(name = "ORD_NO", nullable = false, length = 3)
+//    Long ordNo;
 
     /**
      * nvarchar 510 NO  제목

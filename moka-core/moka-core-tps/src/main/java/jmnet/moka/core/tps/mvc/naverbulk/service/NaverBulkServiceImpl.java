@@ -1,5 +1,5 @@
 /**
- * msp-tps DomainServiceImpl.java 2020. 1. 8. 오후 2:07:40 ssc
+ * msp-tps NaverBulkServiceImpl.java 2020. 1. 8. 오후 2:07:40 ssc
  */
 package jmnet.moka.core.tps.mvc.naverbulk.service;
 
@@ -9,6 +9,7 @@ import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkListDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkSearchDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.entity.Article;
 import jmnet.moka.core.tps.mvc.naverbulk.entity.ArticleList;
+import jmnet.moka.core.tps.mvc.naverbulk.entity.ArticlePK;
 import jmnet.moka.core.tps.mvc.naverbulk.repository.NaverBulkListRepository;
 import jmnet.moka.core.tps.mvc.naverbulk.repository.NaverBulkRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -45,10 +46,12 @@ public class NaverBulkServiceImpl implements NaverBulkService {
         return naverBulkRepository.findAllNaverBulkList(search);
     }
 
-    @Override
-    public List<ArticleList> findAllByClickartSeq(Long clickartSeq) {
-        return naverBulkListRepository.findAllByClickartSeq(clickartSeq);
-    }
+//    @Override
+//    public List<ArticleList>  findAllByClickartSeq(Long clickartSeq) {
+//        return naverBulkListRepository.findAllByClickartSeq(
+//                new ArticlePK(clickartSeq, null)
+//        );
+//    }
 
     @Override
     public Optional<Article> findById(Long clickartSeq) {
@@ -78,15 +81,16 @@ public class NaverBulkServiceImpl implements NaverBulkService {
 
             // 마스터 테이블에 한건
             saveArticle = naverBulkRepository.save(saveArticle);
+
             // 여기서 기존 로직 처리
             naverBulkRepository.updateArticle(saveArticle) ;
             Long clickarSeq = saveArticle.getClickartSeq();
-
-            Long ordNo = 1L;
+            ArticlePK articlePK = new ArticlePK();
             for(NaverBulkListDTO naverBulkListDTO : asList){
                 ArticleList articleList = modelMapper.map(naverBulkListDTO, ArticleList.class);
-                articleList.setClickartSeq(clickarSeq);
-                articleList.setOrdNo(ordNo++);
+                articlePK.setClickartSeq(saveArticle.getClickartSeq());
+                articlePK.setOrdNo(Long.valueOf(asList.indexOf(naverBulkListDTO)+1));
+                articleList.setId(articlePK);
                 articleList = naverBulkListRepository.save(articleList);
             }
         } catch (Exception e) {

@@ -37,6 +37,7 @@ public class ArticlePK implements Serializable {
     /**
      * 정렬번호
      */
-    @Column(name = "ORD_NO")
+    @Column(name = "ORD_NO", nullable = false)
     private Long ordNo;
+
 }

@@ -6,6 +6,7 @@ package jmnet.moka.core.tps.mvc.desking.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
@@ -16,9 +17,10 @@ import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
-import jmnet.moka.core.tps.mvc.desking.vo.DeskingHistGroupVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -327,28 +329,28 @@ public interface DeskingService {
             throws Exception;
 
     /**
-     * 데스킹 히스토리 그룹 목록 조회
+     * 컴포넌트 히스토리 목록 조회
      *
-     * @param search 검색객체
-     * @return 데스킹 히스토리 그룹 목록
+     * @param search        검색객체
+     * @return              데스킹히스토리 그룹 목록
      */
-    public List<DeskingHistGroupVO> findDeskingHistGroup(DeskingHistSearchDTO search);
+    List<ComponentHistVO> findAllComponentHist(DeskingHistSearchDTO search);
     //
     //    /**
     //     * 데스킹 히스토리 그룹 카운트
     //     *
-    //     * @param search 검색객체
-    //     * @return 데스킹 히스토리 그룹 카운트
+    //     * @param search          검색객체
+    //     * @return                데스킹 히스토리 그룹 카운트
     //     */
     //    Long countByHistGroup(DeskingHistSearchDTO search);
 
-    //    /**
-    //     * 데스킹 히스토리 상세 목록 조회
-    //     *
-    //     * @param search 검색객체
-    //     * @return 데스킹 히스토리 상세
-    //     */
-    //    public List<DeskingHistVO> findDeskingHistDetail(DeskingHistSearchDTO search);
+    /**
+     * 데스킹 히스토리 목록 조회
+     *
+     * @param componentHistSeq      컴포넌트 히스토리 SEQ
+     * @return                      데스킹히스토리 상세
+     */
+    List<DeskingHist> findAllDeskingHist(Long componentHistSeq);
     //
     //    /**
     //     * 페이지내 모든 데스킹 히스토리 그룹 목록 조회
@@ -362,5 +364,14 @@ public interface DeskingService {
     //
     //    public List<EditionVO> getEditionList(Long pageSeq);
     //
-    //    public void importDeskingWorkHistory(DeskingHistSearchDTO search);
+
+    /**
+     * 히스토리를 불러와 컴포넌트work, 편집기사work에 저장한다.
+     *
+     * @param componentWorkSeq 컴포넌트 work SEQ
+     * @param componentHistSeq 컴포넌트 히스토리 SEQ
+     * @param regId            작업자
+     */
+    void importDeskingWorkHistory(Long componentWorkSeq, Long componentHistSeq, String regId)
+            throws Exception;
 }

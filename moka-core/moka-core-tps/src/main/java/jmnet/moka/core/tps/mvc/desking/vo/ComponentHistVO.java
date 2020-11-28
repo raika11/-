@@ -16,9 +16,7 @@ import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 /**
- * 생성일과 생성자로 group by한 데스킹히스토리 목록 제공
- *
- * @author jeon0525
+ * 데스킹컴포넌트 히스토리 목록
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +25,7 @@ import org.apache.ibatis.type.Alias;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Alias("DeskingHistGroupVO")
-public class DeskingHistGroupVO implements Serializable {
+public class ComponentHistVO implements Serializable {
 
     private static final long serialVersionUID = 4599769615811508579L;
 

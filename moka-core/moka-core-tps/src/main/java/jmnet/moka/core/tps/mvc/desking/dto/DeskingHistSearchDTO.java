@@ -11,7 +11,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
-import jmnet.moka.core.tps.mvc.desking.vo.DeskingHistVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,7 +45,7 @@ public class DeskingHistSearchDTO extends SearchDTO {
     private String regId;
 
     /**
-     * 작업 컴포넌트 SEQ
+     * 컴포넌트 SEQ
      */
     @Min(value = 1, message = "{tps.deskinghist.error.min.componentSeq}")
     private Long componentSeq;
@@ -62,8 +61,12 @@ public class DeskingHistSearchDTO extends SearchDTO {
     @Builder.Default
     private EditStatusCode status = EditStatusCode.SAVE;
 
+    /**
+     * 컴포넌트 히스토리 SEQ
+     */
+    private Long componentHistSeq;
+
     public DeskingHistSearchDTO() {
-        super(DeskingHistVO.class, "regDt,desc");
         super.setUseTotal(MokaConstants.YES);
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);

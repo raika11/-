@@ -17,6 +17,7 @@ import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
  * @since 2020. 8. 11. 오전 10:42:56
  */
 public interface DeskingWorkRepositorySupport {
+
     void deleteByDatasetSeq(Long datasetSeq, String regId);
 
     List<DeskingWork> findAllDeskingWork(DeskingWorkSearchDTO search);

@@ -4,6 +4,8 @@
 
 package jmnet.moka.core.tps.mvc.desking.repository;
 
+import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingHistSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import org.springframework.data.domain.Page;
@@ -16,5 +18,5 @@ import org.springframework.data.domain.Page;
  */
 public interface DeskingHistRepositorySupport {
 
-    Page<DeskingHist> findAllDeskingHist(DeskingHistSearchDTO search);
+    List<DeskingHist> findAllDeskingHist(Long componentHistSeq);
 }

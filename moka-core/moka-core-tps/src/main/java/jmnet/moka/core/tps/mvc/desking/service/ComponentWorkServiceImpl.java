@@ -9,8 +9,10 @@
 package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.Optional;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
 import jmnet.moka.core.tps.mvc.desking.repository.ComponentWorkRepository;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
@@ -81,6 +83,28 @@ public class ComponentWorkServiceImpl implements jmnet.moka.core.tps.mvc.desking
         // 컴포넌트 업데이트
         ComponentWork saved = componentWorkRepository.save(componentWork);
         log.debug("[COMPONENT WORK SNAPSHOT UPDATE] seq: {}", saved.getSeq());
+
+        return saved;
+    }
+
+    @Override
+    public ComponentWork updateComponentWork(Long componentWorkSeq, ComponentHist componentHist)
+            throws NoDataException {
+        String messageC = messageByLocale.get("tps.common.error.no-data");
+        ComponentWork componentWork = this.findComponentWorkBySeq(componentWorkSeq)
+                                          .orElseThrow(() -> new NoDataException(messageC));
+
+        componentWork.setSnapshotYn(componentHist.getSnapshotYn());
+        componentWork.setSnapshotBody(componentHist.getSnapshotBody());
+        componentWork.setTemplate(componentHist.getTemplate());
+        componentWork.setZone(componentHist.getZone());
+        componentWork.setMatchZone(componentHist.getMatchZone());
+        componentWork.setViewYn(componentHist.getViewYn());
+        componentWork.setPerPageCount(componentHist.getPerPageCount());
+
+        // 컴포넌트 업데이트
+        ComponentWork saved = componentWorkRepository.save(componentWork);
+        log.debug("[COMPONENT WORK FROM HIST UPDATE] seq: {}", saved.getSeq());
 
         return saved;
     }

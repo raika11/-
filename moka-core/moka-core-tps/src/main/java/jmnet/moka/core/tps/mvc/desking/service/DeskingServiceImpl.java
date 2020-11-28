@@ -6,11 +6,14 @@ package jmnet.moka.core.tps.mvc.desking.service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
@@ -35,12 +38,12 @@ import jmnet.moka.core.tps.mvc.desking.entity.Desking;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.mapper.ComponentWorkMapper;
-import jmnet.moka.core.tps.mvc.desking.mapper.DeskingWorkMapper;
+import jmnet.moka.core.tps.mvc.desking.mapper.DeskingMapper;
 import jmnet.moka.core.tps.mvc.desking.repository.DeskingHistRepository;
 import jmnet.moka.core.tps.mvc.desking.repository.DeskingRepository;
 import jmnet.moka.core.tps.mvc.desking.repository.DeskingWorkRepository;
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
-import jmnet.moka.core.tps.mvc.desking.vo.DeskingHistGroupVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
@@ -48,6 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,7 +80,7 @@ public class DeskingServiceImpl implements DeskingService {
     private ComponentWorkMapper componentWorkMapper;
 
     @Autowired
-    private DeskingWorkMapper deskingWorkMapper;
+    private DeskingMapper deskingMapper;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -917,48 +921,41 @@ public class DeskingServiceImpl implements DeskingService {
     }
 
     @Override
-    public List<DeskingHistGroupVO> findDeskingHistGroup(DeskingHistSearchDTO search) {
-        return deskingWorkMapper.findHistGroup(search);
+    public List<ComponentHistVO> findAllComponentHist(DeskingHistSearchDTO search) {
+        return deskingMapper.findAllComponentHistByDesking(search);
     }
-    //
-    //    @Override
-    //    public Long countByHistGroup(DeskingHistSearchDTO search) {
-    //        return deskingWorkMapper.countByHistGroup(search);
-    //    }
 
-    //    @Override
-    //    public List<EditionVO> getEditionList(Long pageSeq) {
-    //        return componentWorkMapper.findEditionAll(pageSeq);
-    //    }
-    //
-    //    @Override
-    //    public List<DeskingHistVO> findDeskingHistDetail(DeskingHistSearchDTO search) {
-    //        return deskingWorkMapper.findHistDetail(search);
-    //    }
-    //
-    //    @Override
-    //    public List<DeskingHistGroupVO> findAllDeskingHistGroup(DeskingHistSearchDTO search,
-    //            Long pageSeq) {
-    //
-    //        // 데이터셋이 포함된 히스토리들
-    //        List<DeskingHistGroupVO> groups = deskingWorkMapper.findAllHistGroup(search,
-    //                getRowBounds(search.getPage(), search.getSize()));
-    //        return groups;
-    //    }
-    //
-    //    @Override
-    //    public void importDeskingWorkHistory(DeskingHistSearchDTO search) {
-    //        // desking rel work 삭제
-    //        deskingRelWorkRepository.deleteByDatasetSeq(search.getDatasetSeq(), search.getCreator());
-    //
-    //        // desking work 삭제
-    //        deskingWorkRepository.deleteByDatasetSeq(search.getDatasetSeq(), search.getCreator());
-    //
-    //        // 등록
-    //        deskingWorkMapper.importDeskingWorkFromHist(search);
-    //        deskingWorkMapper.importDeskingRelWorkFromHist(search);
-    //    }
+    @Override
+    public List<DeskingHist> findAllDeskingHist(Long componentHistSeq) {
+        return deskingHistRepository.findAllDeskingHist(componentHistSeq);
+    }
 
+    @Override
+    @Transactional
+    public void importDeskingWorkHistory(Long componentWorkSeq, Long componentHistSeq, String regId)
+            throws Exception {
+
+         // component work 수정
+        Optional<ComponentHist> componentHist = componentHistService.findComponentHistBySeq(componentHistSeq);
+        if(componentHist.isPresent()) {
+            ComponentWork componentWork = componentWorkService.updateComponentWork(componentWorkSeq, componentHist.get());
+
+            Long datasetSeq = componentWork.getDataset().getDatasetSeq();
+
+            // desking work 삭제 및  등록
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
+            paramMap.put("datasetSeq", datasetSeq);
+            paramMap.put("componentHistSeq", componentHistSeq);
+            paramMap.put("regId", regId);
+            paramMap.put("returnValue", returnValue);
+            deskingMapper.importDeskingWorkFromHist(paramMap);
+            if ((int) paramMap.get("returnValue") < 0) {
+                log.debug("INSERT FAIL DESKING WORK : {} ", returnValue);
+                throw new Exception("Failed to insert DESKING WORK error code: " + returnValue);
+            }
+        }
+    }
 }
 
 

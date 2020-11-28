@@ -4,10 +4,18 @@
 
 package jmnet.moka.core.tps.mvc.desking.repository;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.tps.mvc.component.entity.QComponentHist;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingHistSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
+import jmnet.moka.core.tps.mvc.desking.entity.QDeskingHist;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
@@ -26,25 +34,19 @@ public class DeskingHistRepositorySupportImpl extends QuerydslRepositorySupport 
     }
 
     @Override
-    public Page<DeskingHist> findAllDeskingHist(DeskingHistSearchDTO search) {
-        //        QDeskingHist deskingHist = QDeskingHist.deskingHist;
-        //        QComponentHist componentHist = QComponentHist.componentHist;
-        //
-        //        BooleanBuilder builder = new BooleanBuilder();
-        //        builder.and(deskingHist.componentHist.eq(componentHist));
-        //        builder.and(deskingHist.status.eq(search.getStatus()));
-        //        builder.and(componentHist.seq.eq(search.getComponentSeq()));
-        //
-        //        JPQLQuery<DeskingHist> query = queryFactory.selectFrom(deskingHist);
-        //        query = getQuerydsl().applyPagination(search.getPageable(), query);
-        //        QueryResults<DeskingHist> list = query.innerJoin(componentHist)
-        //                                              .fetchJoin()
-        //                                              .where(builder)
-        //                                              .groupBy(deskingHist.componentHistSeq, deskingHist.regDt, deskingHist.regId)
-        //                                              .orderBy(deskingHist.componentHistSeq.desc())
-        //                                              .fetchResults();
-        //
-        //        return new PageImpl<DeskingHist>(list.getResults(), search.getPageable(), list.getTotal());
-        return null;
+    public List<DeskingHist> findAllDeskingHist(Long componentHistSeq) {
+        QDeskingHist deskingHist = QDeskingHist.deskingHist;
+        QComponentHist componentHist = QComponentHist.componentHist;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(componentHist.seq.eq(componentHistSeq));
+
+        JPQLQuery<DeskingHist> query = queryFactory.selectFrom(deskingHist)
+                                                   .innerJoin(deskingHist.componentHist, componentHist)
+                                                  .fetchJoin()
+                                                  .where(builder)
+                                                  .orderBy(deskingHist.contentOrd.asc(), deskingHist.relOrd.asc());
+
+        return query.fetch();
     }
 }

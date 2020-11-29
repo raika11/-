@@ -25,6 +25,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
 
     // state
     const [rowData, setRowData] = useState([]);
+    const [gridInstance, setGridInstance] = useState(null);
 
     useEffect(() => {
         setRowData(
@@ -77,6 +78,12 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [areaSeq]);
 
+    useEffect(() => {
+        if (gridInstance) {
+            gridInstance.api.redrawRows();
+        }
+    }, [rowData, gridInstance]);
+
     return (
         <React.Fragment>
             <MokaCard header={false} width={280} className="mr-10">
@@ -100,6 +107,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
                     onRowClicked={handleRowClicked}
                     loading={loading}
                     preventRowClickCell={['delete']}
+                    setGridInstance={setGridInstance}
                 />
             </MokaCard>
 

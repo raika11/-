@@ -114,6 +114,8 @@ const RelationInPageList = (props) => {
                     }),
                 ),
             );
+        } else if (!relSeq) {
+            dispatch(clearStore());
         }
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 

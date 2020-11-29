@@ -204,7 +204,7 @@ const ArticleDeskSearch = (props) => {
 
                     {/* 매체 */}
                     <div style={{ width: 130 }} className="mr-2">
-                        <MokaInput as="select" name="sourceCode" value={search.sourceCode} onChange={handleChangeValue}>
+                        <MokaInput as="select" name="sourceCode" value={search.sourceCode} onChange={handleChangeValue} className="ft-12">
                             {sourceList.map(
                                 (cd) =>
                                     cd.usedYn === 'Y' && (

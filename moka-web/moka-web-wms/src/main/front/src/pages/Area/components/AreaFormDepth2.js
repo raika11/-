@@ -9,7 +9,7 @@ import Card from 'react-bootstrap/Card';
 
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { GET_AREA_DEPTH2, GET_AREA_DEPTH3, SAVE_AREA, DELETE_AREA, saveArea, changeArea } from '@store/area';
+import { GET_AREA_DEPTH2, GET_AREA_DEPTH3, SAVE_AREA, DELETE_AREA, saveArea, changeArea, changeInvalidList } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -29,6 +29,7 @@ const AreaFormDepth2 = (props) => {
         areaDepth1,
         areaDepth2,
         areaDepth3,
+        invalidList,
         loading,
         selectedDepth,
     } = useSelector((store) => ({
@@ -41,6 +42,7 @@ const AreaFormDepth2 = (props) => {
         areaDepth1: store.area.depth1.area,
         areaDepth2: store.area.depth2.area,
         areaDepth3: store.area.depth3.area,
+        invalidList: store.area.invalidList,
         loading: store.loading[GET_AREA_DEPTH2] || store.loading[GET_AREA_DEPTH3] || store.loading[SAVE_AREA] || store.loading[DELETE_AREA],
         selectedDepth: store.area.selectedDepth,
     }));
@@ -48,8 +50,8 @@ const AreaFormDepth2 = (props) => {
     // state
     const [origin, setOrigin] = useState({}); // 원본 데이터
     const [temp, setTemp] = useState({}); // 수정가능한 데이터
-    const [parent, setParent] = useState({});
-    const [domain, setDomain] = useState({});
+    const [parent, setParent] = useState({}); // 부모 데이터
+    const [domain, setDomainId] = useState({}); // 도메인
 
     const [container, setContainer] = useState({}); // 선택한 컨테이너 담고 있는 state
     const [component, setComponent] = useState({}); // 선택한 컴포넌트 담고 있는 state
@@ -60,7 +62,7 @@ const AreaFormDepth2 = (props) => {
     const [compOptions, setCompOptions] = useState([]); // 컴포넌트 options
     const [contCnt, setContCnt] = useState(0); // 컨테이너 load 카운트
     const [compCnt, setCompCnt] = useState(0); // 컴포넌트 load 카운트
-    const [error, setError] = useState({ page: false });
+    const [error, setError] = useState({ areaNm: false, page: false });
 
     /**
      * depth에 따라 기본값 셋팅
@@ -96,7 +98,8 @@ const AreaFormDepth2 = (props) => {
         } else if (name === 'previewRsrc') {
             setTemp({ ...temp, previewRsrc: value });
         } else if (name === 'domain') {
-            setDomain({ domainId: e.target.value });
+            setDomainId({ domainId: e.target.value });
+            onChangeModalDomainId(e.target.value);
         } else if (name === 'areaDiv') {
             setTemp({ ...temp, areaDiv: value });
             setAreaComps([]);
@@ -126,6 +129,17 @@ const AreaFormDepth2 = (props) => {
      */
     const validate = (saveObj) => {
         let isInvalid = false;
+        let errList = [];
+
+        if (!/[^\s\t\n]+/.test(saveObj.areaNm)) {
+            errList.push({
+                field: 'areaNm',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        dispatch(changeInvalidList(errList));
         return !isInvalid;
     };
 
@@ -146,8 +160,6 @@ const AreaFormDepth2 = (props) => {
                         } else {
                             history.push(`/area/${areaDepth1.areaSeq}/${body.parent.areaSeq}/${body.areaSeq}`);
                         }
-                    } else {
-                        toast.warning(header.message);
                     }
                 },
             }),
@@ -170,11 +182,16 @@ const AreaFormDepth2 = (props) => {
             return;
         }
 
+        if (!page?.pageSeq) {
+            toast.warning('페이지, 컴포넌트 혹은 컨테이너를 선택하세요');
+            return;
+        }
+
         let save = {
             ...temp,
-            page: Object.keys(page).length > 0 ? { pageSeq: page.pageSeq } : null,
+            page: page.pageSeq ? { pageSeq: page.pageSeq } : null,
             parent: parent.areaSeq ? { areaSeq: parent.areaSeq } : null,
-            domain,
+            domain: domain,
         };
 
         if (temp.areaDiv === ITEM_CP) {
@@ -224,7 +241,7 @@ const AreaFormDepth2 = (props) => {
                             useArea: 'Y',
                             searchType: 'containerSeq',
                             keyword: cont.containerSeq,
-                            domainId: page.domain.domainId,
+                            domainId: page.domain?.domainId,
                         },
                         callback: ({ body }) => {
                             setAreaComps(
@@ -271,7 +288,7 @@ const AreaFormDepth2 = (props) => {
                         useArea: 'Y',
                         searchType: 'pageSeq',
                         keyword: page.pageSeq,
-                        domainId: page.domain.domainId,
+                        domainId: page.domain?.domainId,
                     },
                     callback: ({ body }) => {
                         setCompOptions(body.list || []);
@@ -307,7 +324,7 @@ const AreaFormDepth2 = (props) => {
                     usePaging: 'N',
                     searchType: 'pageSeq',
                     keyword: page.pageSeq,
-                    domainId: page.domain.domainId,
+                    domainId: page.domain?.domainId,
                 },
                 callback: ({ body }) => {
                     setContOptions(body.list || []);
@@ -352,36 +369,23 @@ const AreaFormDepth2 = (props) => {
          * 1) page, parent, domain 데이터 변경
          * 2) cnt 0으로 셋팅
          */
-        if (temp.page) {
-            setPage(temp.page);
-        } else {
-            setPage({});
-        }
         if (!temp.areaSeq) {
             setComponent({});
             setContainer({});
         }
-        setDomain(temp.domain);
-        if (temp.parent && temp.parent.areaSeq) {
+        temp.page ? setPage(temp.page) : setParent({});
+        if (temp.parent?.areaSeq) {
             setParent(temp.parent);
         } else if (depth === 2) {
             setParent(areaDepth1);
-            setDomain(areaDepth1.domain);
-        } else {
+        } else if (depth === 3) {
             setParent(areaDepth2);
-            setDomain(areaDepth2.domain);
         }
+        setDomainId(areaDepth1.domain);
         setContCnt(0);
         setCompCnt(0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [temp.areaSeq, depth]);
-
-    useEffect(() => {
-        // 도메인 변경 시 페이지 변경 모달의 도메인 검색조건 변경
-        if (domain.domainId) {
-            onChangeModalDomainId(domain.domainId);
-        }
-    }, [domain, onChangeModalDomainId]);
+    }, [temp.areaSeq, areaDepth1, areaDepth2]);
 
     useEffect(() => {
         // 모달한테 전달받은 page 변경 시, 혹은 areaDiv 변경 시 CP, CT 리스트 조회
@@ -401,6 +405,18 @@ const AreaFormDepth2 = (props) => {
         setCompOptions([]);
         setContOptions([]);
     }, [selectedDepth]);
+
+    useEffect(() => {
+        setError(
+            invalidList.reduce(
+                (all, c) => ({
+                    ...all,
+                    [c.field]: true,
+                }),
+                {},
+            ),
+        );
+    }, [invalidList]);
 
     return (
         <MokaCard title={`편집영역 ${temp.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>
@@ -430,7 +446,7 @@ const AreaFormDepth2 = (props) => {
                                     className="mb-0"
                                     labelWidth={87}
                                     label="그룹 영역"
-                                    value={parent.areaSeq}
+                                    value={parent?.areaSeq}
                                     onChange={handleChangeValue}
                                     disabled={areaDepth1.areaSeq ? true : false}
                                 >
@@ -457,7 +473,7 @@ const AreaFormDepth2 = (props) => {
                                     className="mb-0"
                                     labelWidth={87}
                                     label="중분류 영역"
-                                    value={parent.areaSeq}
+                                    value={parent?.areaSeq}
                                     onChange={handleChangeValue}
                                     disabled={areaDepth2.areaSeq ? true : false}
                                 >
@@ -481,8 +497,8 @@ const AreaFormDepth2 = (props) => {
                         label="도메인"
                         name="domain"
                         labelWidth={87}
-                        value={domain.domainId}
-                        disabled={parent.areaSeq && domain.domainId ? true : false}
+                        value={domain?.domainId}
+                        disabled={parent?.areaSeq ? true : false}
                         onChange={handleChangeValue}
                     >
                         {domainList.map((domain) => (
@@ -493,7 +509,16 @@ const AreaFormDepth2 = (props) => {
                     </MokaInputLabel>
 
                     {/* 영역명 */}
-                    <MokaInputLabel className="mb-2" label="영역명" labelWidth={87} name="areaNm" value={temp.areaNm} onChange={handleChangeValue} />
+                    <MokaInputLabel
+                        className="mb-2"
+                        label="영역명"
+                        labelWidth={87}
+                        name="areaNm"
+                        value={temp.areaNm}
+                        onChange={handleChangeValue}
+                        isInvalid={error.areaNm}
+                        required
+                    />
 
                     <hr className="divider" />
 

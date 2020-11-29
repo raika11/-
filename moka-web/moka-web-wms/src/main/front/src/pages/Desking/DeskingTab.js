@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MokaIconTabs, MokaIcon } from '@components';
-import { DeskingHistoryList, DeskingArticleTab } from './components';
-import { EditThumbModal } from './modals';
+import { DeskingHistoryList, DeskingArticleTab, ComponentWorkPreview } from './components';
 
 const DeskingTabs = ({ componentAgGridInstances }) => {
     const { componentList } = useSelector((store) => ({
@@ -10,8 +9,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
     }));
 
     // state
-    const [activeTabIdx, setActiveTabIdx] = useState(0);
-    const [modalShow, setModalShow] = useState(false);
+    const [, setActiveTabIdx] = useState(0);
 
     // 순서 반대로
     return (
@@ -30,10 +28,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                     /**
                      * 미리보기
                      */
-                    <div>
-                        TEST
-                        <button onClick={() => setModalShow(true)}>이미지편집 모달</button>
-                    </div>,
+                    <ComponentWorkPreview />,
                     /**
                      * 히스토리
                      */
@@ -47,7 +42,6 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                     { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
                 ]}
             />
-            <EditThumbModal show={modalShow} onHide={() => setModalShow(false)} />
         </React.Fragment>
     );
 };

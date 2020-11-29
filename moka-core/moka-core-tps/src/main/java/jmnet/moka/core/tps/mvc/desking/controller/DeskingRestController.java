@@ -689,14 +689,11 @@ public class DeskingRestController extends AbstractCommonController {
 
                 // target work편집기사 목록 추가 및 정렬
                 for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
-                    deskingService.moveDeskingWork(appendDeskingWorkDTO, datasetSeq, srcDatasetSeq, 0L, principal.getName());
+                    deskingService.moveDeskingWork(appendDeskingWorkDTO, datasetSeq, srcDatasetSeq, principal.getName());
                 }
 
                 // source 정렬
-                //                List<Long> deleteList = deskingWorkDTOList.stream()
-                //                                                          .map(DeskingWorkDTO::getSeq)
-                //                                                          .collect(Collectors.toList());
-                //                deskingService.resortAfterDelete(deleteList, srcDatasetSeq, principal.getName());
+                deskingService.deleteDeskingWorkList(null, srcDatasetSeq, principal.getName());
 
                 // work 컴포넌트 조회(편집기사,관련편집기사포함)
                 ComponentWorkVO workVO = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
@@ -714,133 +711,6 @@ public class DeskingRestController extends AbstractCommonController {
             throw new Exception(msg("tps.desking.error.work.move", request), e);
         }
     }
-
-    //    /**
-    //     * DeskingRelWorks (관련기사 워크) 저장
-    //     *
-    //     * @param request          HTTP요청
-    //     * @param validList        DeskingRelWorkDTO 리스트
-    //     * @param principal        Principal
-    //     * @param componentWorkSeq 컴포넌트워크아이디
-    //     * @param contentsId       대표기사 아이디
-    //     * @return 결과
-    //     * @throws NoDataException 데이터없음
-    //     * @throws Exception       에러 처리
-    //     */
-    //    @PutMapping("/components/{componentWorkSeq}/contents/{datasetSeq}/{contentsId}/relations")
-    //    public ResponseEntity<?> updateDeskingRelWorks(HttpServletRequest request, @RequestBody @Valid ValidList<DeskingRelWorkDTO> validList,
-    //            @PathVariable("componentWorkSeq") Long componentWorkSeq, @PathVariable("contentsId") String contentsId, Principal principal)
-    //            throws NoDataException, Exception {
-    //
-    //        String noDataMessage = msg("tps.desking.error.noComponentInfo");
-    //
-    //        // 데스킹워크 seq를 찾기 위해서 데스킹컴포넌트워크의 데스킹워크리스트에서 contentsId로 데스킹워크를 찾음
-    //        DeskingComponentWorkVO resultWorkVO = deskingService.getComponentWork(componentWorkSeq);
-    //
-    //        if (resultWorkVO == null) {
-    //            throw new NoDataException(noDataMessage);
-    //        }
-    //        Optional<DeskingWorkVO> maybeWorkVO = resultWorkVO.getDeskingWorks()
-    //                                                          .stream()
-    //                                                          .filter(deskingWork -> {
-    //                                                              return deskingWork.getContentsId()
-    //                                                                                .equals(contentsId);
-    //                                                          })
-    //                                                          .findFirst();
-    //
-    //        DeskingWorkVO workVO = maybeWorkVO.orElseThrow(() -> new NoDataException(noDataMessage));
-    //
-    //        try {
-    //            String nowStr = McpDate.nowStr();
-    //            List<DeskingRelWorkDTO> dtoList = validList.getList();
-    //            List<DeskingRelWork> relWorks = modelMapper.map(dtoList, DeskingRelWork.TYPE);
-    //            ResultListDTO<DeskingRelWork> resultList = new ResultListDTO<DeskingRelWork>();
-    //
-    //            if (relWorks.size() > 0) {
-    //                for (DeskingRelWork relWork : relWorks) {
-    //                    relWork.setCreator(principal.getName());
-    //                    relWork.setCreateYmdt(nowStr);
-    //                }
-    //            }
-    //
-    //            // 스냅샷 수정
-    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
-    //
-    //            // 새로운 릴레이션 저장
-    //            List<DeskingRelWork> result = deskingService.updateDeskingRelWorks(workVO.getDeskingSeq(), principal.getName(), relWorks);
-    //            resultList.setList(result);
-    //            resultList.setTotalCnt(result.size());
-    //
-    //            ResultDTO<ResultListDTO<DeskingRelWork>> resultDto = new ResultDTO<ResultListDTO<DeskingRelWork>>(resultList);
-    //
-    //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    //        } catch (Exception e) {
-    //            throw new Exception(msg("tps.desking.error.work.relation.save", request), e);
-    //        }
-    //    }
-    //
-    //    /**
-    //     * DeskingRelWorks (관련기사 워크) 삭제
-    //     *
-    //     * @param request   HTTP요청
-    //     * @param drwDTO    DeskingRelWorkDTO
-    //     * @param principal Principal
-    //     * @return 결과
-    //     * @throws Exception 에러 처리
-    //     */
-    //    @DeleteMapping("/components/{componentWorkSeq}/contents/{datasetSeq}/{contentsId}/relations")
-    //    public ResponseEntity<?> deleteDeskingRelWork(HttpServletRequest request, @PathVariable("componentWorkSeq") Long componentWorkSeq,
-    //            @Valid DeskingRelWorkDTO drwDTO, Principal principal)
-    //            throws Exception {
-    //
-    //        try {
-    //            DeskingRelWork deskingRelWork = modelMapper.map(drwDTO, DeskingRelWork.class);
-    //            deskingRelWork.setCreator(principal.getName());
-    //
-    //            // 스냅샷 수정
-    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
-    //
-    //            deskingService.deleteDeskingRelWork(deskingRelWork);
-    //            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true);
-    //
-    //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    //        } catch (Exception e) {
-    //            throw new Exception(msg("tps.desking.error.work.relation.delete", request), e);
-    //        }
-    //    }
-    //
-    //    /**
-    //     * 페이지 내 모든 컴포넌트의 데스킹 히스토리 조회
-    //     *
-    //     * @param request   HTTP요청
-    //     * @param search    검색객체
-    //     * @param pageSeq   페이지아이디
-    //     * @param principal Principal
-    //     * @return 히스토리 목록
-    //     * @throws Exception 에러
-    //     */
-    //    @GetMapping("/histories")
-    //    public ResponseEntity<?> getAllDeskingHistories(HttpServletRequest request, @Valid @SearchParam DeskingHistSearchDTO search,
-    //            @RequestParam("pageSeq") Long pageSeq, Principal principal)
-    //            throws Exception {
-    //
-    //        try {
-    //            search.setCreator(principal.getName());
-    //
-    //            // 히스토리 그룹 목록 조회(mybatis)
-    //            List<DeskingHistGroupVO> returnValue = deskingService.findAllDeskingHistGroup(search, pageSeq);
-    //
-    //            // 리턴 DTO 생성
-    //            ResultListDTO<DeskingHistGroupVO> resultList = new ResultListDTO<DeskingHistGroupVO>();
-    //            resultList.setList(returnValue);
-    //            resultList.setTotalCnt(returnValue.size());
-    //
-    //            ResultDTO<ResultListDTO<DeskingHistGroupVO>> resultDTO = new ResultDTO<ResultListDTO<DeskingHistGroupVO>>(resultList);
-    //            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    //        } catch (Exception e) {
-    //            throw new Exception(msg("tps.desking.error.hist", request), e);
-    //        }
-    //    }
 
     /**
      * 데스킹 히스토리 조회(컴포넌트별)

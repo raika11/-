@@ -26,6 +26,7 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
 
     // state
     const [rowData, setRowData] = useState([]);
+    const [gridInstance, setGridInstance] = useState(null);
 
     useEffect(() => {
         setRowData(
@@ -70,6 +71,12 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [areaSeq]);
 
+    useEffect(() => {
+        if (gridInstance) {
+            gridInstance.api.redrawRows();
+        }
+    }, [rowData, gridInstance]);
+
     return (
         <MokaCard header={false} width={280} className="mr-gutter">
             <Form.Row className="mb-2">
@@ -92,6 +99,7 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 preventRowClickCell={['delete']}
+                setGridInstance={setGridInstance}
             />
         </MokaCard>
     );

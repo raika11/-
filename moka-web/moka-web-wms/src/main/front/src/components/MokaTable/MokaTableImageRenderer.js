@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 import util from '@utils/commonUtil';
 
 /**
@@ -7,13 +7,24 @@ import util from '@utils/commonUtil';
  *
  * @param {object} params ag grid params
  */
-const MokaTableImageRenderer = (params) => {
-    const { data } = params;
+const MokaTableImageRenderer = forwardRef((params, ref) => {
+    const { data: initialData } = params;
     const field = params.colDef.field;
-    const { imgAlt } = data;
+    const [data, setData] = useState(initialData);
 
     const boxRef = useRef(null);
     const imgRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        refresh: (params) => {
+            if (params.data[field] !== data[field]) {
+                setData(params.data);
+                return true;
+            } else {
+                return false;
+            }
+        },
+    }));
 
     /**
      * 이미지 프리뷰 생성
@@ -28,9 +39,9 @@ const MokaTableImageRenderer = (params) => {
 
     return (
         <div className="d-flex h-100 w-100 align-items-center justify-content-center border" ref={boxRef}>
-            <img ref={imgRef} alt={imgAlt} />
+            <img ref={imgRef} alt={data.imgAlt} />
         </div>
     );
-};
+});
 
 export default MokaTableImageRenderer;

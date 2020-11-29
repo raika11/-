@@ -5,3 +5,4 @@ export { default as ComponentWork } from './ComponentWork';
 export { default as DeskingReadyGrid } from './DeskingReadyGrid';
 export { default as EditThumbSearch } from './EditThumbSearch';
 export { default as EditThumbDropzone } from './EditThumbDropzone';
+export { default as ComponentWorkPreview } from './ComponentWorkPreview';

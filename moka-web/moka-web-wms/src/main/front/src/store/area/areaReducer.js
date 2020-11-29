@@ -181,11 +181,6 @@ export default handleActions(
                 draft.invalidList = initialState.invalidList;
             });
         },
-        [act.GET_AREA_DEPTH1_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.areaError = payload;
-            });
-        },
         [act.GET_AREA_DEPTH2_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 const { area, areaCompLoad } = body;
@@ -193,11 +188,6 @@ export default handleActions(
                 draft.depth2.areaCompLoad = areaCompLoad;
                 draft.areaError = initialState.areaError;
                 draft.invalidList = initialState.invalidList;
-            });
-        },
-        [act.GET_AREA_DEPTH2_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.areaError = payload;
             });
         },
         [act.GET_AREA_DEPTH3_SUCCESS]: (state, { payload: { body } }) => {
@@ -209,14 +199,10 @@ export default handleActions(
                 draft.invalidList = initialState.invalidList;
             });
         },
-        [act.GET_AREA_DEPTH3_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.areaError = payload;
-            });
-        },
         [act.GET_AREA_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.areaError = payload;
+                draft.invalidList = payload.body?.list || [];
             });
         },
         /**

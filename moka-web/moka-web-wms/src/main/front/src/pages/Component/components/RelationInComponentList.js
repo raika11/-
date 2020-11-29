@@ -105,6 +105,8 @@ const RelationInComponentList = (props) => {
                     }),
                 ),
             );
+        } else if (!relSeq) {
+            dispatch(clearStore());
         }
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 

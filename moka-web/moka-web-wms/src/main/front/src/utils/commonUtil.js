@@ -207,7 +207,7 @@ const makeImgPreview = (src, ele, wrapperEle, loadFunc, errorFunc) => {
             ele.src = src;
         }
         if (wrapperEle) {
-            rate = wrapperEle.innerWidth / wrapperEle.innerHeight;
+            rate = (wrapperEle.innerWidth || wrapperEle.offsetWidth) / (wrapperEle.innerHeight || wrapperEle.offsetHeight);
         }
         if (w / h > rate) {
             ele.className = 'landscape';

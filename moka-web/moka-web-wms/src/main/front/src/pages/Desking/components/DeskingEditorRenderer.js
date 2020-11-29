@@ -47,8 +47,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
             onSave(
                 {
                     ...data,
-                    title: !data.rel ? editValue : '',
-                    relTitle: data.rel ? editValue : '',
+                    title: editValue,
                     onRowClicked: undefined,
                     onSave: undefined,
                     onDelete: undefined,

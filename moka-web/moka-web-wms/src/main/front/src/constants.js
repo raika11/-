@@ -81,3 +81,7 @@ export const MAX_GROUP_NUMBER = 8;
 
 // 편집기사 기본언어
 export const DEFAULT_LANG = 'KR';
+
+// 편집상태
+export const HIST_SAVE = 'SAVE'; // 임시저장
+export const HIST_PUBLISH = 'PUBLISH'; // 전송

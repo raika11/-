@@ -7,6 +7,7 @@ import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
 import DeskingReadyGrid from './DeskingReadyGrid';
 import DeskingEditorRenderer from './DeskingEditorRenderer';
+import { getMoveMode } from '@utils/agGridUtil';
 
 /**
  * 데스킹 AgGrid
@@ -79,65 +80,40 @@ const DeskingWorkAgGrid = (props) => {
      * @param {object} params ag-grid instance
      */
     const handleRowDragEnter = (params) => {
-        const data = params.node.data;
-        let fromIndex = deskingWorks.findIndex((d) => d.seq === data.seq);
-
-        // 관련기사 삭제
-        if (fromIndex > -1 && data.relSeqs && data.relSeqs.length > 0) {
-            setRelRows(deskingWorks.slice(fromIndex + 1, fromIndex + 1 + data.relSeqs.length));
-            let newRel = deskingWorks.filter((node) => !data.relSeqs.includes(node.seq));
-            params.api.setRowData(newRel);
+        let selected = params.api.getSelectedNodes();
+        if (selected.length < 1 && params.node) {
+            selected = [params.node];
         }
-    };
 
-    /**
-     * 드래그 시작점, 목적지 검사
-     * @param {object} movingData 드래그 중인 데이터
-     * @param {object} overData 마우스 오버된 row의 데이터
-     */
-    const getMoveMode = (movingData, overData) => {
-        if (movingData.rel) {
-            if (movingData.relSeqs && movingData.relSeqs.includes(overData.seq)) {
-                // 주기사 -> 관련기사(부모가 자식으로 변경): trade
-                return 'FamillyParentToChild';
-            } else {
-                if (overData.rel) {
-                    // 주기사 -> 타 주기사: drag
-                    return 'ParentToParent';
-                } else {
-                    // 주기사 -> 타 관련기사: rollback
-                    return 'ParentToChild';
-                }
+        // selected로 상태변경
+        for (let i = 0; i < selected.length; i++) {
+            const data = selected[i].data;
+
+            // 주기사 selected로 상태변경
+            let rowNode = params.api.getRowNode(data.contentId);
+            if (rowNode) {
+                rowNode.setSelected(true);
             }
-        } else if (overData.rel) {
-            if (overData.relSeqs && overData.relSeqs.includes(movingData.seq)) {
-                // 관련기사 -> 주기사(자식이 부모로 변경): trade
-                return 'FamillyChildToParent';
-            } else {
-                if (movingData.rel) {
-                    // 주기사 -> 타 주기사: drag
-                    return 'ParentToParent';
-                } else {
-                    // 관련기사 -> 타 주기사: rollback
-                    return 'ChildToParent';
-                }
-            }
-        } else {
-            if (movingData.parentContentId === overData.parentContentId) {
-                // 관련기사 -> 관련기사(형제) : drag, sort
-                return 'FamillyChildToChild';
-            } else {
-                // 관련기사 -> 타 관련기사 : rollback
-                return 'ChildToChild';
+
+            // 주기사 이동시, 관련기사도 selected로 상태변경
+            if (!data.rel && data.relSeqs && data.relSeqs.length > 0) {
+                rowData.forEach((node) => {
+                    if (data.relSeqs.includes(node.seq)) {
+                        let rowNode = params.api.getRowNode(node.contentId);
+                        if (rowNode) {
+                            rowNode.setSelected(true);
+                        }
+                    }
+                });
             }
         }
     };
 
-    /**
-     * rollback
-     * @param {object} api
-     */
-    const rollbackRows = (api) => api.setRowData(rowData);
+    // /**
+    //  * rollback
+    //  * @param {object} api
+    //  */
+    // const rollbackRows = (api) => api.setRowData(rowData);
 
     /**
      * 관련기사 추가
@@ -169,7 +145,6 @@ const DeskingWorkAgGrid = (props) => {
         const overNode = params.overNode;
         const sameNode = movingNode === overNode;
         let rollback = true;
-        // let isRelInsert = params.event.ctrlKey;  // 관련기사로 넣을지 여부
 
         if (!sameNode) {
             const moveMode = getMoveMode(movingNode.data, overNode.data);
@@ -201,7 +176,7 @@ const DeskingWorkAgGrid = (props) => {
         }
 
         if (rollback) {
-            rollbackRows(params.api, movingNode.data);
+            // rollbackRows(params.api, movingNode.data);
         } else if (movingNode.data.relSeqs && movingNode.data.relSeqs.length > 0) {
             appendRelRows(params.api, movingNode.data);
         }
@@ -230,7 +205,8 @@ const DeskingWorkAgGrid = (props) => {
                 rowData={rowData}
                 getRowNodeId={(params) => params.contentId}
                 columnDefs={columnDefs}
-                // onRowDragEnter={handleRowDragEnter}
+                localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다..' }}
+                onRowDragEnter={handleRowDragEnter}
                 // onRowDragEnd={handleRowDragEnd}
                 rowSelection="multiple"
                 rowDragManaged

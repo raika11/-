@@ -1,6 +1,6 @@
 import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 import { createRequestSaga, errorResponse } from '@store/commons/saga';
-import { getRowIndex } from '@utils/agGridUtil';
+import { getRowIndex, getMoveMode } from '@utils/agGridUtil';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 
 import * as api from './deskingApi';
@@ -83,9 +83,8 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
     }
 
     let appendData = null;
-    let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
-
     if (data.gridType === 'ARTICLE') {
+        let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
         appendData = {
             componentWorkSeq: component.seq,
             seq: null,
@@ -132,9 +131,9 @@ const makeRowNode = (data, contentOrd, component) => {
     }
 
     let appendData = null;
-    let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
 
     if (data.gridType === 'ARTICLE') {
+        let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
         appendData = {
             componentWorkSeq: component.seq,
             seq: null,
@@ -150,7 +149,6 @@ const makeRowNode = (data, contentOrd, component) => {
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
             title,
-            // mobTitle: data.artEditMobTitle == null ? data.artTitle : data.artEditTitle,
             subTitle: data.artSubTitle,
             nameplate: null,
             titlePrefix: null,
@@ -169,6 +167,7 @@ const makeRowNode = (data, contentOrd, component) => {
         };
     } else if (data.gridType === 'DESKING') {
         // 편집 컴포넌트영역 -> 편집컴포넌트 이동
+        let title = data.rel ? data.relTitle : data.title;
         appendData = {
             ...data,
             regDt: undefined,
@@ -176,6 +175,7 @@ const makeRowNode = (data, contentOrd, component) => {
             componentSeq: component.componentSeq,
             datasetSeq: component.datasetSeq,
             contentOrd,
+            title,
         };
     }
 
@@ -203,12 +203,42 @@ function* deskingDragStop({ payload }) {
         overIndex = overIndex === 0 ? -1 : overIndex;
     }
 
+    if (source.node) {
+        let rowNode = source.api.getRowNode(source.node.contentId);
+        if (rowNode) {
+            rowNode.setSelected(true);
+        }
+    }
+
     sourceNode = source.api.getSelectedNodes().length > 0 ? source.api.getSelectedNodes() : source.node;
     if (Array.isArray(sourceNode)) {
         // sourceNode 정렬 (childIndex 순으로)
         sourceNode = sourceNode.sort(function (a, b) {
             return a.childIndex - b.childIndex;
         });
+        // selected상태 변경
+        source.api.deselectAll();
+    }
+
+    // 컴포넌트간의 이동여부 : 기사목록에서 편집컴포넌트로 드래그드롭됐을때, 기사목록의 체크박스 제거
+    const bMoveComponents = srcComponent && srcComponent.seq >= 0;
+
+    if (bMoveComponents) {
+        const targetRowData = target.api.getDisplayedRowAtIndex(overIndex).data;
+        const movable = getMoveMode(sourceNode, targetRowData);
+        if (!movable) {
+            if (typeof callback === 'function') {
+                const result = {
+                    header: {
+                        success: false,
+                        message: '이동할 수 없습니다',
+                    },
+                    body: null,
+                };
+                yield call(callback, result);
+            }
+            return;
+        }
     }
 
     // 주기사 추가하는 함수
@@ -217,17 +247,29 @@ function* deskingDragStop({ payload }) {
 
         if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
-            sourceNode.some((node, idx) => {
-                const result = makeRowNode(node.data, insertIndex + idx, tgtComponent);
+            let contentOrding = insertIndex - 1;
+            for (let i = 0; i < sourceNode.length; i++) {
+                const node = sourceNode[i];
+                if (!node.data.rel) contentOrding++;
+                const result = makeRowNode(node.data, contentOrding, tgtComponent);
                 if (result.success) {
                     ans.push(result.list);
-                    return false;
                 } else {
                     callback && callback({ header: result });
                     ans = [];
-                    return true;
                 }
-            });
+            }
+            // sourceNode.some((node, idx) => {
+            //     const result = makeRowNode(node.data, node.data.rel ? insertIndex + idx, tgtComponent);
+            //     if (result.success) {
+            //         ans.push(result.list);
+            //         return false;
+            //     } else {
+            //         callback && callback({ header: result });
+            //         ans = [];
+            //         return true;
+            //     }
+            // });
         } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
             const result = makeRowNode(sourceNode.data, insertIndex, tgtComponent);
@@ -303,8 +345,6 @@ function* deskingDragStop({ payload }) {
 
     if (appendNodes.length < 1) return;
 
-    // 컴포넌트간의 이동여부 : 기사목록에서 편집컴포넌트로 드래그드롭됐을때, 기사목록의 체크박스 제거
-    const bMoveComponents = srcComponent && srcComponent.seq >= 0;
     if (bMoveComponents) {
         // 이동
         const option = {

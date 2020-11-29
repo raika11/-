@@ -116,29 +116,8 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex, is
 
     const dropzone = {
         getContainer: () => workElement,
-        onDragEnter: (source) => {
+        onDragEnter: () => {
             workElement.appendChild(hoverBox);
-
-            // 컴포넌트간 이동
-            if (isMoveComponent) {
-                // 관련기사 삭제
-                let selected = source.api.getSelectedRows();
-                if (selected.length < 1 && source.node) {
-                    selected = [source.node];
-                }
-                for (let i = 0; i < selected.length; i++) {
-                    const data = selected[i].data;
-                    if (!data.rel && data.relSeqs && data.relSeqs.length > 0) {
-                        // setRelRows(deskingWorks.slice(fromIndex + 1, fromIndex + 1 + data.relSeqs.length));
-                        let rowData = source.api.gridOptionsWrapper.getRowData();
-                        rowData.forEach((node) => {
-                            if (data.relSeqs.includes(node.seq)) node.setSelected(true);
-                        });
-                        let filterRowData = rowData.filter((node) => !data.relSeqs.includes(node.seq));
-                        source.api.setRowData(filterRowData);
-                    }
-                }
-            }
         },
         onDragLeave: () => {
             workElement.removeChild(hoverBox);
@@ -210,4 +189,34 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex, is
     };
 
     return dropzone;
+};
+
+/**
+ * 드래그 시작점, 목적지 검사
+ * @param {object} movingData 드래그 중인 데이터
+ * @param {object} overData 마우스 오버된 row의 데이터
+ */
+export const getMoveMode = (movingDatas, overData) => {
+    let movable = true;
+    if (Array.isArray(movingDatas)) {
+        // 주기사 목록
+        let parentContentIds = [];
+        movingDatas.some((node) => {
+            if (!node.data.rel) {
+                parentContentIds.push(node.data.contentId);
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        for (let i = 0; i < movingDatas.length; i++) {
+            const node = movingDatas[i];
+            if (node.data.rel) {
+                movable = parentContentIds.includes(node.data.parentContentId);
+                if (!movable) break;
+            }
+        }
+    }
+    return movable;
 };

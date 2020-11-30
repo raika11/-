@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
 import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption, changeColumnlistEditMode } from '@store/columnist';
+import { DISPLAY_PAGE_NUM } from '@/constants';
 
 const ColumnistAgGrid = () => {
     const history = useHistory();
@@ -83,7 +84,7 @@ const ColumnistAgGrid = () => {
                 total={total}
                 page={search.page}
                 size={search.size}
-                displayPageNum={3}
+                displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={columnist.seqNo === '' ? '' : columnist.seqNo}
             />

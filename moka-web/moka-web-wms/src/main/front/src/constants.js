@@ -22,7 +22,7 @@ export const DISPLAY_PAGE_NUM = 5;
 
 // TEMS 아이템 타입
 export const ITEM_PG = 'PG';
-export const ITEM_SK = 'CS';
+export const ITEM_AP = 'AP';
 export const ITEM_CT = 'CT';
 export const ITEM_CP = 'CP';
 export const ITEM_TP = 'TP';

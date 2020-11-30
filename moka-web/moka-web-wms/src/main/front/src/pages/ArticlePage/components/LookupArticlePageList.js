@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_SK } from '@/constants';
+import { ITEM_AP } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
 import columnDefs from './LookupArticlePageListColumns';
@@ -16,7 +16,7 @@ const propTypes = {
     /**
      * seq의 타입
      */
-    seqType: PropTypes.oneOf([ITEM_SK]),
+    seqType: PropTypes.oneOf([ITEM_AP]),
     /**
      * seq
      */
@@ -113,7 +113,7 @@ const LookupArticlePageList = (props) => {
                     changeLookupSearchOption({
                         ...initialState.lookup.search,
                         keyword: seq,
-                        searchType: seqType === ITEM_SK ? 'skinSeq' : '',
+                        searchType: seqType === ITEM_AP ? 'skinSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -141,7 +141,7 @@ const LookupArticlePageList = (props) => {
                                     });
                                 }}
                             >
-                                {seqType === ITEM_SK && <option value="skinSeq">기사페이지ID</option>}
+                                {seqType === ITEM_AP && <option value="skinSeq">기사페이지ID</option>}
                                 {defaultContainerSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.name}

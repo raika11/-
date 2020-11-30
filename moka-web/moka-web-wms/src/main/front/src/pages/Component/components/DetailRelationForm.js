@@ -188,15 +188,15 @@ const DetailRelationForm = (props) => {
                 value={component.delWords}
                 onChange={handleChangeValue}
             />
-            {/* 영역 설정 */}
-            <Form.Row className="mb-2">
+            {/* 영역 설정 -> 사용X */}
+            {/* <Form.Row className="mb-2">
                 <Col xs={4} className="p-0">
                     <MokaInputLabel label="매칭영역" className="mb-0" value={component.matchZone} name="matchZone" onChange={handleChangeValue} />
                 </Col>
                 <Col xs={8} className="p-0">
                     <MokaInputLabel label="영역 목록" className="mb-0" value={component.zone} name="zone" onChange={handleChangeValue} />
                 </Col>
-            </Form.Row>
+            </Form.Row> */}
 
             {/* 템플릿 선택 팝업 */}
             <TemplateListModal

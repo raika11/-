@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-
 import { MokaCard } from '@components';
 import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT, API_BASE_URL } from '@/constants';
 import { GET_COMPONENT_WORK_LIST } from '@store/desking';

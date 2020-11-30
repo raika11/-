@@ -1,5 +1,5 @@
 import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
-import { createRequestSaga, errorResponse } from '@store/commons/saga';
+import { createRequestSaga, errorResponse, callApiAfterActions } from '@store/commons/saga';
 import { getRowIndex, getMoveMode } from '@utils/agGridUtil';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 
@@ -443,6 +443,16 @@ const putDeskingWork = createDeskingRequestSaga(act.PUT_DESKING_WORK, api.putDes
  */
 const deleteDeskingWorkList = createDeskingRequestSaga(act.DELETE_DESKING_WORK_LIST, api.deleteDeskingWorkList, 'work');
 
+/**
+ * 히스토리 조회(컴포넌트 별)
+ */
+const getComponentHistory = callApiAfterActions(act.GET_COMPONENT_WORK_HISTORY, api.getComponentHistoryList, (store) => store.desking.history);
+
+/**
+ * 히스토리 상세조회(컴포넌트 히스토리 seq의 데스킹 기사 조회)
+ */
+const getDeskingWorkHistory = createRequestSaga(act.GET_DESKING_WORK_HISTORY, api.getDeskingHistory);
+
 /** saga */
 export default function* saga() {
     // 컴포넌트 워크
@@ -468,4 +478,8 @@ export default function* saga() {
 
     // drag 관련
     yield takeEvery(act.DESKING_DRAG_STOP, deskingDragStop);
+
+    // 히스토리
+    yield takeLatest(act.GET_COMPONENT_WORK_HISTORY, getComponentHistory);
+    yield takeLatest(act.GET_DESKING_WORK_HISTORY, getDeskingWorkHistory);
 }

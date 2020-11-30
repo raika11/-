@@ -1,30 +1,31 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { MokaTable } from '@components';
 import columnDefs from './ComponentWorkHistoryAgGridColumns';
+import { getDeskingWorkHistory } from '@store/desking';
 
-const ComponentWorkHistoryAgGrid = () => {
-    const [total] = useState(0);
-    const [loading] = useState(false);
-    const [search] = useState({ page: 1, size: 10 });
+const ComponentWorkHistoryAgGrid = (props) => {
+    const { search, setSearch, total, loading, rowData, onChange } = props;
+    const dispatch = useDispatch();
 
-    const handleChangeSearchOption = useCallback((search) => console.log(search), []);
-
-    const handleRowClicked = useCallback((row) => {
-        console.log(row);
-    }, []);
+    const handleRowClicked = (row) => {
+        setSearch({ ...search, componentHistorySeq: row.seq });
+        dispatch(getDeskingWorkHistory(row.seq));
+    };
 
     return (
         <MokaTable
             columnDefs={columnDefs}
-            rowData={total}
-            onRowNodeId={(params) => params.containerSeq}
+            rowData={rowData}
+            onRowNodeId={(history) => history.seq}
             agGridHeight={558}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}
             page={search.page}
             size={search.size}
-            onChangeSearchOption={handleChangeSearchOption}
+            onChangeSearchOption={onChange}
+            preventRowClickCell={['load']}
         />
     );
 };

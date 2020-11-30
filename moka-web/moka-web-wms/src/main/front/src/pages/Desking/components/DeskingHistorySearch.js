@@ -1,39 +1,59 @@
-import React, { useState } from 'react';
-import moment from 'moment';
-
+import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultHistorySearchType } from '@pages/commons';
 
-const component = [{ name: '컴포넌트 명' }];
-const history = [{ name: '임시저장' }, { name: '전송' }];
+const status = [
+    { id: 'PUBLISH', name: '전송 기록' },
+    { id: 'SAVE', name: '임시저장 기록' },
+];
 
 /**
  * 데스킹 히스토리 검색 컴포넌트
  */
-const DeskingHistorySearch = () => {
-    const [search, setSearch] = useState({});
-    const handleSearch = () => {};
+const DeskingHistorySearch = (props) => {
+    const { search, setSearch, list, onSearch } = props;
 
     return (
         <Form>
             {/* 컴포넌트 명 */}
-            <MokaInput as="select" className="mb-2" onChange={(e) => e.target.value} value={search}>
-                {component.map((comp, idx) => (
-                    <option key={idx} value={idx}>
-                        {comp.name}
+            <MokaInput
+                as="select"
+                className="mb-2"
+                onChange={(e) => {
+                    setSearch({
+                        ...search,
+                        componentSeq: e.target.value,
+                    });
+                }}
+                value={search.componentSeq}
+            >
+                {list.map((comp) => (
+                    <option key={comp.seq} value={comp.seq}>
+                        {comp.componentName}
                     </option>
                 ))}
             </MokaInput>
             {/* 날짜 검색 */}
             <Form.Row className="mb-2">
                 <Col xs={4} className="p-0 pr-2">
-                    <MokaInput as="select" className="mb-0" value={search} onChange={(e) => e.target.value}>
-                        {history.map((history, idx) => (
-                            <option key={idx} value={idx}>
-                                {history.name}
+                    <MokaInput
+                        as="select"
+                        className="mb-0"
+                        value={search.status}
+                        onChange={(e) => {
+                            setSearch({
+                                ...search,
+                                status: e.target.value,
+                            });
+                        }}
+                    >
+                        {status.map((status) => (
+                            <option key={status.id} value={status.id}>
+                                {status.name}
                             </option>
                         ))}
                     </MokaInput>
@@ -47,7 +67,7 @@ const DeskingHistorySearch = () => {
                         inputProps={{
                             timeFormat: null,
                         }}
-                        value={moment(search.regDt, DB_DATEFORMAT)}
+                        value={moment(moment(), DB_DATEFORMAT)}
                         onChange={(date) => {
                             if (typeof date === 'object') {
                                 setSearch({
@@ -95,7 +115,7 @@ const DeskingHistorySearch = () => {
                                 keyword: e.target.value,
                             });
                         }}
-                        onSearch={handleSearch}
+                        onSearch={onSearch}
                     />
                 </Col>
             </Form.Row>

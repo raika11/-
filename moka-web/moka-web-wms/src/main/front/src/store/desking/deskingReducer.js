@@ -16,8 +16,8 @@ export const initialState = {
     total: 0,
     error: null,
     selectedComponent: {
-        seq: 0,
-        componentSeq: 0,
+        seq: null,
+        componentSeq: null,
         componentName: '',
         regId: '',
         templateSeq: 0,
@@ -37,15 +37,25 @@ export const initialState = {
         reserveDt: null,
         deskingWorks: [],
     },
-    search: {
-        page: 0,
-        size: PAGESIZE_OPTIONS[0],
-        sort: 'seq,desc',
-        componentSeq: null,
-        regDt: null,
-        status: HIST_SAVE,
-        searchType: 'all', // all/regId/regNm
-        keyword: '',
+    history: {
+        total: 0,
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            sort: 'seq,desc',
+            componentSeq: null,
+            componentHistorySeq: null,
+            regDt: null,
+            status: HIST_SAVE,
+            searchType: 'all', // all/regId/regNm
+            keyword: '',
+        },
+        componentWorkHistory: {
+            list: [],
+        },
+        deskingWorkHistory: {
+            list: [],
+        },
     },
 };
 
@@ -62,6 +72,11 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.list = initialState.list;
                 draft.error = initialState.error;
+            });
+        },
+        [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.history.search = payload;
             });
         },
         /**
@@ -143,6 +158,35 @@ export default handleActions(
         [act.CHANGE_AREA]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.area = payload;
+            });
+        },
+        /**
+         * 히스토리
+         */
+        [act.GET_COMPONENT_WORK_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.history.componentWorkHistory.list = body.list;
+                draft.history.total = body.totalCnt;
+                draft.error = initialState.error;
+            });
+        },
+        [act.GET_COMPONENT_WORK_HISTORY_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.history.componentWorkHistory.list = initialState.history.componentWorkHistory.list;
+                draft.history.total = initialState.total;
+                draft.error = payload;
+            });
+        },
+        [act.GET_DESKING_WORK_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.history.deskingWorkHistory.list = body.list;
+                draft.error = initialState.error;
+            });
+        },
+        [act.GET_DESKING_WORK_HISTORY_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.history.deskingWorkHistory.list = initialState.history.deskingWorkHistory.list;
+                draft.error = payload;
             });
         },
     },

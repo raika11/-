@@ -153,7 +153,7 @@ export const getComponentHistoryList = ({ search }) => {
 };
 
 // 히스토리 상세조회(페이징 없음)
-export const getDeskingHistory = ({ componentHistSeq }) => {
+export const getDeskingHistory = (componentHistSeq) => {
     return instance.get(`/api/desking/histories/${componentHistSeq}`).catch((err) => {
         throw err;
     });

@@ -240,7 +240,7 @@ public class MergeRestController {
                     (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(), componentIdList);
 
             // 랜더링
-            StringBuilder sb = dtm.merge(pageItem, componentItem, false, resourceYn.equals("Y"), false, false);
+            StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false);
 
             String content = sb.toString();
             ResultDTO<String> resultDto = new ResultDTO<String>(HttpStatus.OK, content);
@@ -338,7 +338,7 @@ public class MergeRestController {
                         (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(), componentIdList);
 
                 // 랜더링
-                StringBuilder sb = dtm.merge(pageItem, containerItem, false, true, false, false);
+                StringBuilder sb = dtm.merge(pageItem, containerItem, false, false, false);
 
                 content = sb.toString();
 
@@ -367,7 +367,7 @@ public class MergeRestController {
                                                                            componentIdList);
 
                     // 랜더링
-                    StringBuilder sb = dtm.merge(pageItem, componentItem, false, true, false, false);
+                    StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false);
 
                     content = sb.toString();
                 }

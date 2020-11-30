@@ -364,9 +364,6 @@ function* deskingDragStop({ payload }) {
             payload: option,
         });
     }
-
-    // selected상태 변경
-    source.api.deselectAll();
 }
 
 /**

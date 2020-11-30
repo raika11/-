@@ -104,7 +104,7 @@ export const postDeskingWork = createAction(POST_DESKING_WORK, ({ componentWorkS
 /**
  * 데스킹 워크 목록 이동
  */
-export const [MOVE_DESKING_WORK_LIST, MOVE_DESKING_WORK_LIST_SUCCESS, MOVE_DESKING_WORK_LIST_FAILURE] = createRequestActionTypes('desking/POST_DESKING_WORK_LIST');
+export const [MOVE_DESKING_WORK_LIST, MOVE_DESKING_WORK_LIST_SUCCESS, MOVE_DESKING_WORK_LIST_FAILURE] = createRequestActionTypes('desking/MOVE_DESKING_WORK_LIST');
 export const moveDeskingWorkList = createAction(MOVE_DESKING_WORK_LIST, ({ componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list, callback }) => ({
     componentWorkSeq,
     datasetSeq,

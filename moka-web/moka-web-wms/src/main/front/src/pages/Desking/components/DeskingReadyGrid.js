@@ -5,7 +5,7 @@ import { makeDeskingWorkDropzone } from '@utils/agGridUtil';
 import toast from '@utils/toastUtil';
 
 const DeskingReadyGrid = (props) => {
-    const { componentAgGridInstances = [], agGridIndex, component } = props;
+    const { componentAgGridInstances = [], agGridIndex: sourceIdx, component } = props;
     const dispatch = useDispatch();
     const components = useSelector((store) => store.desking.list);
 
@@ -15,7 +15,7 @@ const DeskingReadyGrid = (props) => {
         components.forEach((comp, targetIdx) => {
             if (component.seq === comp.seq) return;
 
-            if (!componentAgGridInstances[agGridIndex]) {
+            if (!componentAgGridInstances[sourceIdx]) {
                 return;
             }
 
@@ -25,7 +25,7 @@ const DeskingReadyGrid = (props) => {
 
             const target = componentAgGridInstances[targetIdx];
 
-            const dropzone = makeDeskingWorkDropzone(
+            let dropzone = makeDeskingWorkDropzone(
                 (source) => {
                     const payload = {
                         source,
@@ -35,6 +35,8 @@ const DeskingReadyGrid = (props) => {
                         callback: ({ header }) => {
                             if (!header.success) {
                                 toast.warning(header.message);
+                            } else {
+                                componentAgGridInstances[sourceIdx].api.deselectAll();
                             }
                         },
                     };
@@ -43,18 +45,17 @@ const DeskingReadyGrid = (props) => {
                 },
                 target,
                 targetIdx,
-                true,
             );
 
             if (dropzone) {
                 // 동일한 드롭존이 존재할 수 있으므로 삭제 후 다시 추가한다
-                componentAgGridInstances[agGridIndex].api.removeRowDropZone(dropzone);
-                componentAgGridInstances[agGridIndex].api.addRowDropZone(dropzone);
+                componentAgGridInstances[sourceIdx].api.removeRowDropZone(dropzone);
+                componentAgGridInstances[sourceIdx].api.addRowDropZone(dropzone);
             }
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [componentAgGridInstances, agGridIndex, components]);
+    }, [componentAgGridInstances, sourceIdx, components]);
 
     return null;
 };

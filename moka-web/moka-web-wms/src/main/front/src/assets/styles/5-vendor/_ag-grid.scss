@@ -192,7 +192,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         border-radius: 8px;
         background-color: $desking-row-color;
 
-        &:hover, &.ag-row-hover {
+        &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
             background-color: $row-hover-color;
         }
 
@@ -222,7 +222,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
     .ag-rel-row {
         background-color: $rel-row-color;
 
-        &:hover, &.ag-row-hover {
+        &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
             background-color: $rel-row-hover-color;
         }
 

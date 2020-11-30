@@ -109,6 +109,42 @@ export default handleActions(
             });
         },
         /**
+         * 컴포넌트 워크 조회
+         */
+        [act.MOVE_DESKING_WORK_LIST_SUCCESS]: (state, { payload: { body, status } }) => {
+            return produce(state, (draft) => {
+                // source
+                let sourceIdx = draft.list.findIndex((l) => l.seq === body.source.seq);
+                draft.list[sourceIdx] = body.source;
+                // draft.selectedComponent = body.source;
+
+                // source 워크 / 임시저장 / 전송 상태 저장
+                if (status === 'work' || status === 'save' || status === 'publish') {
+                    draft.workStatus[body.source.seq] = status;
+                }
+
+                // target
+                let targetIdx = draft.list.findIndex((l) => l.seq === body.target.seq);
+                draft.list[targetIdx] = body.target;
+                draft.selectedComponent = body.target;
+
+                // target 워크 / 임시저장 / 전송 상태 저장
+                if (status === 'work' || status === 'save' || status === 'publish') {
+                    draft.workStatus[body.target.seq] = status;
+                }
+            });
+        },
+        [act.MOVE_DESKING_WORK_LIST_FAILURE]: (state, { payload: componentError }) => {
+            return produce(state, (draft) => {
+                if (draft.selectedComponent.seq) {
+                    let idx = draft.list.findIndex((l) => l.seq === draft.selectedComponent.seq);
+                    draft.list[idx] = initialState.selectedComponent;
+                }
+                draft.selectedComponent = initialState.selectedComponent;
+                // draft.componentError = initialState.componentError;
+            });
+        },
+        /**
          * 편집영역 변경
          */
         [act.CHANGE_AREA]: (state, { payload }) => {

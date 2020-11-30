@@ -394,7 +394,7 @@ const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST,
  */
 function* moveDeskingWorkList({ payload }) {
     const ACTION = act.MOVE_DESKING_WORK_LIST;
-    const { srcComponentWorkSeq, callback } = payload;
+    const { callback } = payload;
     let callbackData,
         status = 'work';
 
@@ -406,21 +406,21 @@ function* moveDeskingWorkList({ payload }) {
 
         if (response.data.header.success) {
             yield put({
-                type: act.COMPONENT_WORK_SUCCESS,
+                type: act.MOVE_DESKING_WORK_LIST_SUCCESS,
                 payload: { ...response.data, status },
             });
 
             // source 컴포넌트 재조회
-            yield put({
-                type: act.GET_COMPONENT_WORK,
-                payload: {
-                    componentWorkSeq: srcComponentWorkSeq,
-                    status,
-                },
-            });
+            // yield put({
+            //     type: act.GET_COMPONENT_WORK,
+            //     payload: {
+            //         componentWorkSeq: srcComponentWorkSeq,
+            //         status,
+            //     },
+            // });
         } else {
             yield put({
-                type: act.COMPONENT_WORK_FAILURE,
+                type: act.MOVE_DESKING_WORK_LIST_FAILURE,
                 payload: { ...response.data, status },
             });
         }

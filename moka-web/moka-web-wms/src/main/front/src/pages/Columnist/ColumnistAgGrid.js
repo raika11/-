@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
-import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption, changeColumnlistEditMode } from '@store/columNist';
+import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption, changeColumnlistEditMode } from '@store/columnist';
 
 const ColumnistAgGrid = () => {
     const history = useHistory();
@@ -13,11 +13,11 @@ const ColumnistAgGrid = () => {
 
     const { loading, list, search, total, columnist, editmode } = useSelector((store) => ({
         loading: store.loading[GET_COLUMNIST_LIST],
-        columnist: store.columNist.columnist,
-        list: store.columNist.columnlist_list.list,
-        search: store.columNist.columnlist_list.search,
-        total: store.columNist.columnlist_list.total,
-        editmode: store.columNist.editmode,
+        columnist: store.columnist.columnist,
+        list: store.columnist.columnlist_list.list,
+        search: store.columnist.columnlist_list.search,
+        total: store.columnist.columnlist_list.total,
+        editmode: store.columnist.editmode,
     }));
 
     // 목록에서 아이템 클릭시 수정 모드.

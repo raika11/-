@@ -6,10 +6,10 @@ import * as Api from './columnistApi';
 import * as act from './columnistAction';
 
 // 칼럼 니스트 검색.
-const getColumnistListSaga = callApiAfterActions(act.GET_COLUMNIST_LIST, Api.getColumnistList, (state) => state.columNist.columnlist_list.search);
+const getColumnistListSaga = callApiAfterActions(act.GET_COLUMNIST_LIST, Api.getColumnistList, (state) => state.columnist.columnlist_list.search);
 
 // 기자 검색.
-const getRepoterSearchList = callApiAfterActions(act.GET_REPOTER_LIST, Api.getRepoterList, (state) => state.columNist.repoter_list.search);
+const getRepoterSearchList = callApiAfterActions(act.GET_REPOTER_LIST, Api.getRepoterList, (state) => state.columnist.repoter_list.search);
 
 const getColumnist = createRequestSaga(act.GET_COLUMNIST, Api.getColumnist);
 
@@ -30,7 +30,7 @@ function* saveColumnist({ payload: { type, actions, callback } }) {
             }
         }
 
-        const columnist = yield select((store) => store.columNist.columnist);
+        const columnist = yield select((store) => store.columnist.columnist);
         if (type === 'insert') {
             response = yield call(Api.postColumnist, { columnist });
         } else if (type === 'update') {

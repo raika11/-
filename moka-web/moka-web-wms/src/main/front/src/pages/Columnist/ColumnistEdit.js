@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ColumnistModal from './modals/RepoterlistModal';
 import toast from '@utils/toastUtil';
-import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, changeColumnlistEditMode, clearColumnist } from '@store/columNist';
+import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, changeColumnlistEditMode, clearColumnist } from '@store/columnist';
 
 const ColumnistEdit = ({ history }) => {
     const dispatch = useDispatch();
@@ -21,9 +21,9 @@ const ColumnistEdit = ({ history }) => {
 
     const { loading, columnist, invalidList, editmode } = useSelector((store) => ({
         loading: store.loading[GET_COLUMNIST],
-        columnist: store.columNist.columnist,
-        invalidList: store.columNist.invalidList,
-        editmode: store.columNist.editmode,
+        columnist: store.columnist.columnist,
+        invalidList: store.columnist.invalidList,
+        editmode: store.columnist.editmode,
     }));
 
     // input 값 변경.

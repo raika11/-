@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
-import { clearStore } from '@store/columNist';
+import { clearStore } from '@store/columnist';
 
 const ColumnistList = React.lazy(() => import('./ColumnistList'));
 const ColumnistEdit = React.lazy(() => import('./ColumnistEdit'));

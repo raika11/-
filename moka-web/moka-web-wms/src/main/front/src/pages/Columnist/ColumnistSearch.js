@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaInputLabel, MokaSearchInput } from '@components';
-import { initialState, getColumnistList, changeSearchOption, clearSearchOption } from '@store/columNist';
+import { initialState, getColumnistList, changeSearchOption, clearSearchOption } from '@store/columnist';
 
 // TODO 검색 버튼 옆 초기화 버튼 추가 필요.
 const ColumnistSearch = () => {
@@ -13,7 +13,7 @@ const ColumnistSearch = () => {
 
     // store 연결.
     const { search: storeSearch } = useSelector((store) => ({
-        search: store.columNist.columnlist_list.search,
+        search: store.columnist.columnlist_list.search,
     }));
 
     // 검색 스테이트.

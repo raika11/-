@@ -5,7 +5,7 @@ import { Form, Col } from 'react-bootstrap';
 import { MokaModal, MokaSearchInput, MokaTable } from '@components';
 import { columnDefs } from './RepoterlistModalAgGridColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
-import { GET_REPOTER_LIST, getRepoterList, changeRepoterSearchOption } from '@store/columNist';
+import { GET_REPOTER_LIST, getRepoterList, changeRepoterSearchOption } from '@store/columnist';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -38,9 +38,9 @@ const RepoterlistModal = (props) => {
 
     const { loading, list, repotersearch, total } = useSelector((store) => ({
         loading: store.loading[GET_REPOTER_LIST],
-        list: store.columNist.repoter_list.list,
-        repotersearch: store.columNist.repoter_list.search,
-        total: store.columNist.repoter_list.total,
+        list: store.columnist.repoter_list.list,
+        repotersearch: store.columnist.repoter_list.search,
+        total: store.columnist.repoter_list.total,
     }));
 
     // 검색어 스테이트 설정

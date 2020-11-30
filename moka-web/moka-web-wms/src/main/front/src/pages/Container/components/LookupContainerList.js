@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG, ITEM_SK, ITEM_CT } from '@/constants';
+import { ITEM_PG, ITEM_AP, ITEM_CT } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, getContainerLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
 import columnDefs, { ctColumnDefs } from './LookupContainerListColumns';
@@ -16,7 +16,7 @@ const propTypes = {
     /**
      * seq의 타입
      */
-    seqType: PropTypes.oneOf([ITEM_CT, ITEM_SK, ITEM_PG]),
+    seqType: PropTypes.oneOf([ITEM_CT, ITEM_AP, ITEM_PG]),
     /**
      * seq
      */
@@ -156,7 +156,7 @@ const LookupContainerList = (props) => {
                     changeLookupSearchOption({
                         ...initialState.lookup.search,
                         keyword: seq,
-                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_SK ? 'skinSeq' : seqType === ITEM_CT ? 'containerSeq' : '',
+                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_AP ? 'skinSeq' : seqType === ITEM_CT ? 'containerSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -184,7 +184,7 @@ const LookupContainerList = (props) => {
                             >
                                 {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
                                 {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {seqType === ITEM_SK && <option value="skinSeq">기사페이지ID</option>}
+                                {seqType === ITEM_AP && <option value="skinSeq">기사페이지ID</option>}
                                 {defaultContainerSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.name}
@@ -236,7 +236,7 @@ const LookupContainerList = (props) => {
             <ContainerHtmlModal
                 containerSeq={selected.containerSeq}
                 show={showModal}
-                containerSave={seqType === ITEM_PG || seqType === ITEM_SK ? true : false}
+                containerSave={seqType === ITEM_PG || seqType === ITEM_AP ? true : false}
                 onHide={() => {
                     setShowModal(false);
                     setSelected({});

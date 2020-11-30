@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { ITEM_PG, ITEM_CT, ITEM_SK, API_BASE_URL, ITEM_TP } from '@/constants';
+import { ITEM_PG, ITEM_CT, ITEM_AP, API_BASE_URL, ITEM_TP } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTableTypeButton, MokaTable } from '@components';
 import { TemplateThumbTable } from '@pages/Template/components';
 import { defaultTemplateSearchType } from '@pages/commons';
@@ -18,7 +18,7 @@ const propTypes = {
     /**
      * seq의 타입
      */
-    seqType: PropTypes.oneOf([ITEM_CT, ITEM_SK, ITEM_PG]),
+    seqType: PropTypes.oneOf([ITEM_CT, ITEM_AP, ITEM_PG]),
     /**
      * seq
      */
@@ -175,7 +175,7 @@ const LookupTemplateList = (props) => {
                     changeLookupSearchOption({
                         ...initialState.lookup.search,
                         keyword: seq,
-                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_SK ? 'skinSeq' : seqType === ITEM_CT ? 'containerSeq' : '',
+                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_AP ? 'skinSeq' : seqType === ITEM_CT ? 'containerSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -240,7 +240,7 @@ const LookupTemplateList = (props) => {
                                 }}
                             >
                                 {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {seqType === ITEM_SK && <option value="skinSeq">기사페이지ID</option>}
+                                {seqType === ITEM_AP && <option value="skinSeq">기사페이지ID</option>}
                                 {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
                                 {defaultTemplateSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>

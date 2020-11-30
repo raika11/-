@@ -4,7 +4,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
-import { ITEM_PG, ITEM_SK, ITEM_TP, ITEM_CT, DB_DATEFORMAT } from '@/constants';
+import { ITEM_PG, ITEM_AP, ITEM_TP, ITEM_CT, DB_DATEFORMAT } from '@/constants';
 import { defaultHistorySearchType } from './index';
 import { MokaCard, MokaTable, MokaSearchInput, MokaInput, MokaInputLabel } from '@components';
 import { initialState, changeSearchOption, getHistoryList, GET_HISTORY_LIST, clearStore, getHistory } from '@store/history';
@@ -15,7 +15,7 @@ const propTypes = {
     /**
      * seq의 타입
      */
-    seqType: PropTypes.oneOf([ITEM_TP, ITEM_CT, ITEM_SK, ITEM_PG]),
+    seqType: PropTypes.oneOf([ITEM_TP, ITEM_CT, ITEM_AP, ITEM_PG]),
     /**
      * seq
      */
@@ -76,7 +76,7 @@ const HistoryList = (props) => {
                     ? '템플릿을 선택해주세요'
                     : seqType === ITEM_CT
                     ? '컨테이너를 선택해주세요'
-                    : seqType === ITEM_SK
+                    : seqType === ITEM_AP
                     ? '기사페이지를 선택해주세요'
                     : '페이지를 선택해주세요',
             );

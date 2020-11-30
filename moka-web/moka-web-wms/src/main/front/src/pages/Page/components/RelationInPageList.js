@@ -8,14 +8,14 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
 import columnDefs from './RelationInPageListColums';
-import { ITEM_TP, ITEM_CP, ITEM_CT, ITEM_SK, ITEM_DS, ITEM_PG } from '@/constants';
+import { ITEM_TP, ITEM_CP, ITEM_CT, ITEM_AP, ITEM_DS, ITEM_PG } from '@/constants';
 import { relationAgGridHeight, relationDSAgGridHeight } from '@pages/commons';
 
 const propTypes = {
     /**
      * relSeq의 타입
      */
-    relSeqType: PropTypes.oneOf([ITEM_TP, ITEM_CP, ITEM_CT, ITEM_SK, ITEM_DS]),
+    relSeqType: PropTypes.oneOf([ITEM_TP, ITEM_CP, ITEM_CT, ITEM_AP, ITEM_DS]),
     /**
      * relSeq
      */

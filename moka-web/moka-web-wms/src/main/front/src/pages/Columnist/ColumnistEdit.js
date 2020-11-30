@@ -85,6 +85,7 @@ const ColumnistEdit = ({ history }) => {
                 return element;
             }, {}),
         ); // input disabled
+        setError(setErrorInitialize);
         setSelectRepoterData({
             seqNo: seqNo,
             status: status,
@@ -120,22 +121,6 @@ const ColumnistEdit = ({ history }) => {
             errList.push({
                 field: 'position',
                 reason: '직책을 입력해 주세요.',
-            });
-            isInvalid = isInvalid || true;
-        }
-
-        if (!editData.seqNo && editData.columnistFile === null) {
-            errList.push({
-                field: 'selectImg',
-                reason: '이미지를 선택해 주세요.',
-            });
-            isInvalid = isInvalid || true;
-        }
-
-        if (editData.seqNo && editData.columnistFile === null && editData.profilePhoto.length === 0) {
-            errList.push({
-                field: 'selectImg',
-                reason: '이미지를 선택해 주세요.',
             });
             isInvalid = isInvalid || true;
         }
@@ -262,7 +247,11 @@ const ColumnistEdit = ({ history }) => {
                 ),
             );
 
-            messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});
+            // alert message 동시에 여러개일 경우.
+            // messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});
+
+            // alert message 처음 메시지 하나만.
+            messageBox.alert(invalidList[0].reason, () => {});
         }
     }, [invalidList]);
 
@@ -281,6 +270,7 @@ const ColumnistEdit = ({ history }) => {
             // 초기화.
             setSelectRepoterData(repoterDataInitialize);
             setEditDisabled(setEditDisabledInitialize);
+            setError(setErrorInitialize);
         }
     }, [editmode]);
 
@@ -318,7 +308,7 @@ const ColumnistEdit = ({ history }) => {
                             label="사용여부"
                             inputProps={{ checked: selectRepoterData.status === 'Y' ? true : false }}
                             onChange={tempOnchange}
-                            disabled={editDisabled.status}
+                            disabled={editDisabled.editBoxButton}
                         />
                     </Col>
                 </Form.Row>
@@ -431,7 +421,7 @@ const ColumnistEdit = ({ history }) => {
                     isInvalid={error.selectImg}
                     label={
                         <React.Fragment>
-                            <span className="required-text">*</span>이미지
+                            이미지
                             <br />
                             (200*200)
                             <br />
@@ -483,7 +473,7 @@ const ColumnistEdit = ({ history }) => {
 const repoterDataInitialize = {
     seqNo: null,
     inout: null,
-    status: null,
+    status: 'N',
     repSeq: null,
     columnistNm: null,
     email: null,
@@ -513,7 +503,7 @@ const setEditDisabledInitialize = {
     repSeq: true,
     email1: true,
     email2: true,
-    status: true,
+    status: false,
     position: true,
     profile: true,
     selectImg: true,

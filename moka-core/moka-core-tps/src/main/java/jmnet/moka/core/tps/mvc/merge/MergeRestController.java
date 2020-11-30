@@ -5,7 +5,9 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import jmnet.moka.common.template.exception.TemplateParseException;
@@ -17,12 +19,18 @@ import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
+import jmnet.moka.core.tms.merge.item.ContainerItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.area.entity.Area;
+import jmnet.moka.core.tps.mvc.area.service.AreaService;
+import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
+import jmnet.moka.core.tps.mvc.container.entity.Container;
+import jmnet.moka.core.tps.mvc.container.service.ContainerService;
 import jmnet.moka.core.tps.mvc.desking.mapper.ComponentWorkMapper;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainDTO;
@@ -59,6 +67,12 @@ public class MergeRestController {
 
     @Autowired
     private PageService pageService;
+
+    @Autowired
+    private AreaService areaService;
+
+    @Autowired
+    private ContainerService containerService;
 
     @Autowired
     private ComponentWorkMapper componentWorkMapper;
@@ -235,6 +249,136 @@ public class MergeRestController {
 
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] componentWorkSeq: {} {}", componentWorkSeq, e.getMessage());
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
+            throw new Exception(messageByLocale.get("tps.merge.error.component", request), e);
+        }
+    }
+
+    /**
+     * 편집영역 미리보기
+     *
+     * @param areaSeq   편집영역seq
+     * @param principal 작업자
+     * @return 편집영역 랜더링된 HTML소스
+     * @throws Exception 예외
+     */
+    @ApiOperation(value = "편집영역 미리보기")
+    @GetMapping(value = "/previewArea")
+    public ResponseEntity<?> getPreviewArea(HttpServletRequest request, Long areaSeq, Principal principal)
+            throws Exception {
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+        try {
+            // 1. 편집영역조회
+            Area area = areaService.findAreaBySeq(areaSeq)
+                                   .orElseThrow(() -> {
+                                       String message = messageByLocale.get("tps.common.error.no-data");
+                                       tpsLogger.fail(message, true);
+                                       return new NoDataException(message);
+                                   });
+
+            // 페이지
+            Page pageInfo = pageService.findPageBySeq(area.getPage()
+                                                          .getPageSeq())
+                                       .orElseThrow(() -> {
+                                           String message = messageByLocale.get("tps.common.error.no-data", request);
+                                           tpsLogger.fail(ActionType.SELECT, message, true);
+                                           return new NoDataException(message);
+                                       });
+
+            PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
+            PageItem pageItem = pageDto.toPageItem();
+            pageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                                   .format(df));
+
+            // 도메인
+            Domain domainInfo = domainService.findDomainById(area.getDomain()
+                                                                 .getDomainId())
+                                             .orElseThrow(() -> {
+                                                 String message = messageByLocale.get("tps.common.error.no-data", request);
+                                                 tpsLogger.fail(ActionType.SELECT, message, true);
+                                                 return new NoDataException(message);
+                                             });
+            DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
+            DomainItem domainItem = domainDto.toDomainItem();
+
+            String content = "";
+            // 편집영역이 컨테이너인 경우 머지
+            if (area.getAreaDiv()
+                    .equals(MokaConstants.ITEM_CONTAINER)) {
+                // 컨테이너 조회
+                Long containerSeq = area.getContainer()
+                                        .getContainerSeq();
+                Container container = containerService.findContainerBySeq(containerSeq)
+                                                      .orElseThrow(() -> {
+                                                          String message = messageByLocale.get("tps.common.error.no-data", request);
+                                                          tpsLogger.fail(ActionType.SELECT, message, true);
+                                                          return new NoDataException(message);
+                                                      });
+                ContainerDTO dto = modelMapper.map(container, ContainerDTO.class);
+                ContainerItem containerItem = dto.toContainerItem();
+                containerItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                                            .format(df));
+
+                // 컨테이너안의 작업컴포넌트 목록 조회
+                Map paramMap = new HashMap();
+                paramMap.put("areaSeq", areaSeq);
+                paramMap.put("regId", principal.getName());
+                List<ComponentWorkVO> componentWorkVOList = componentWorkMapper.findComponentWorkByArea(paramMap);
+                List<String> componentIdList = new ArrayList<String>();
+
+                for (ComponentWorkVO workVo : componentWorkVOList) {
+                    componentIdList.add(workVo.getSeq()
+                                              .toString());
+                }
+
+                // merger
+                MokaPreviewTemplateMerger dtm =
+                        (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(), componentIdList);
+
+                // 랜더링
+                StringBuilder sb = dtm.merge(pageItem, containerItem, false, true, false, false);
+
+                content = sb.toString();
+
+            } else {
+                // 작업컴포넌트 목록 조회
+                Map paramMap = new HashMap();
+                paramMap.put("areaSeq", areaSeq);
+                paramMap.put("regId", principal.getName());
+                List<ComponentWorkVO> componentWorkVOList = componentWorkMapper.findComponentWorkByArea(paramMap);
+                List<String> componentIdList = new ArrayList<String>();
+                ComponentItem componentItem = null;
+
+                if (componentWorkVOList.size() > 0) {
+                    for (ComponentWorkVO workVo : componentWorkVOList) {
+                        componentIdList.add(workVo.getSeq()
+                                                  .toString());
+                        componentItem = workVo.toComponentItem();
+                    }
+
+                    componentItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime.now()
+                                                                                .format(df));
+
+                    // merger
+                    MokaPreviewTemplateMerger dtm =
+                            (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, principal.getName(),
+                                                                           componentIdList);
+
+                    // 랜더링
+                    StringBuilder sb = dtm.merge(pageItem, componentItem, false, true, false, false);
+
+                    content = sb.toString();
+                }
+            }
+
+            ResultDTO<String> resultDto = new ResultDTO<String>(HttpStatus.OK, content);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            //            log.error("[FAIL TO MERGE] componentWorkSeq: {} {}", componentWorkSeq, e.getMessage());
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
             throw new Exception(messageByLocale.get("tps.merge.error.component", request), e);
         }

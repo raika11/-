@@ -1,6 +1,7 @@
 import qs from 'qs';
 import instance from '../commons/axios';
 import common from '@utils/commonUtil';
+import { objectToFormData } from '@/utils/convertUtil';
 
 // Edit Form목록 조회
 export const getEditFormList = ({ search }) => {
@@ -102,6 +103,27 @@ export const exportEditFormPartHistoryXml = (history) => {
             let filename = decodeURI(response.headers['x-suggested-filename']);
 
             common.fileDownload(response.data, filename, 'text/xml');
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// Edit Form 저장
+export const importEditFormXmlFile = ({ xmlFile, importForm }) => {
+    var formData = new FormData();
+    formData.append('file', xmlFile);
+    if (importForm && importForm.formSeq) {
+        formData.append('formSeq', importForm.formSeq);
+    }
+    if (importForm && importForm.partSeq) {
+        formData.append('partSeq', importForm.partSeq);
+    }
+    return instance
+        .post(`/api/edit-forms/import-xml`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         })
         .catch((err) => {
             throw err;

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import PartEdit from './PartEdit';
+import { shallowEqual, useSelector } from 'react-redux';
 
 const propTypes = {
     parts: PropTypes.any,
@@ -11,25 +12,36 @@ const propTypes = {
  * 기본 input
  */
 const PartList = (props) => {
-    const { formId, parts } = props;
-    const [editForm, setEditForm] = useState(parts);
+    const { formId } = props;
 
-    const renderFormData = () => {
+    const { editFormParts } = useSelector(
+        (store) => ({
+            editForm: store.editForm.editForm,
+            editFormParts: store.editForm.editFormParts,
+            editFormPart: store.editForm.editFormPart,
+            invalidList: store.editForm.invalidList,
+            publishModalShow: store.editForm.publishModalShow,
+            historyModalShow: store.editForm.historyModalShow,
+        }),
+        shallowEqual,
+    );
+
+    const renderFormData = useCallback(() => {
         const formRows = [];
-        if (parts && parts.length > 0) {
-            parts.forEach((part, partIdx) => {
+        if (editFormParts && editFormParts.length > 0) {
+            editFormParts.forEach((part, partIdx) => {
                 formRows.push(<PartEdit key={`part${partIdx}`} partIdx={partIdx} formId={formId} />);
             });
         }
 
         return formRows;
-    };
+    });
 
     useEffect(() => {
-        if (parts) {
-            setEditForm(parts);
+        if (editFormParts) {
+            renderFormData();
         }
-    }, [parts, setEditForm]);
+    }, [editFormParts, renderFormData]);
 
     return <div>{renderFormData()}</div>;
 };

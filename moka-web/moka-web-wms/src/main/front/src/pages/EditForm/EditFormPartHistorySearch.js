@@ -47,21 +47,6 @@ const EditFormPartHistorySearch = () => {
         });
     };
 
-    /**
-     * dataApiListPopup 저장 이벤트 핸들러
-     * @param {Object} selectApi 선택한 API
-     * @param {function} hideCallback 숨김 함수
-     */
-    const handleClicktListModalSave = (data, hideCallback) => {
-        if (data) {
-            setSearch({
-                ...search,
-                keyword: data.repName,
-            });
-            hideCallback();
-        }
-    };
-
     return (
         <Form>
             <Form.Row>

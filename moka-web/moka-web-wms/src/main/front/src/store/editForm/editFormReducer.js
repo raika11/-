@@ -14,22 +14,25 @@ export const initialState = {
         page: 0,
         searchKeyword: '',
         size: PAGESIZE_OPTIONS[0],
-        sort: 'seqNo,asc',
+        sort: 'seqNo,desc',
     },
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        sort: 'formId,asc',
+        sort: 'formSeq,desc',
     },
     historyTotal: 0,
     historyList: [],
     editForm: {},
+    editFormParts: {},
     editFormPart: {},
     editFormError: {},
     invalidList: [],
     partIdx: 0,
     publishModalShow: false,
     historyModalShow: false,
+    formImportModalShow: false,
+    importForm: null,
 };
 
 /**
@@ -132,6 +135,9 @@ export default handleActions(
         [act.DELETE_EDIT_FORM_SUCCESS]: (state) => {
             return produce(state, (draft) => {
                 draft.editForm = initialState.editForm;
+                draft.editFormParts = initialState.editFormParts;
+                draft.editFormPart = initialState.editFormPart;
+                draft.importForm = initialState.importForm;
                 draft.editFormError = initialState.editFormError;
             });
         },
@@ -176,6 +182,17 @@ export default handleActions(
                 draft.error = payload;
                 draft.historyList = initialState.list;
                 draft.historyTotal = initialState.total;
+            });
+        },
+        /**
+         * 편집 폼 xml file import 팝업창
+         */
+        [act.FORM_XML_INPORT_MODAL]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                if (payload.importForm) {
+                    draft.importForm = payload.importForm;
+                }
+                draft.formImportModalShow = payload.show;
             });
         },
     },

@@ -107,17 +107,17 @@ function* saveEditFormPart({ payload: { type, formSeq, partSeq, partJson, callba
 
 /**
  * 삭제
- * @param {string} param0.payload.channelId 도메인아이디
+ * @param {string} param0.payload.formSeq 폼일련번호
  * @param {func} param0.payload.callback 콜백
  */
-function* deleteEditForm({ payload: { channelId, callback } }) {
+function* deleteEditForm({ payload: { formSeq, callback } }) {
     const ACTION = editFormAction.DELETE_EDIT_FORM;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(editFormApi.deleteEditForm, { channelId });
+        const response = yield call(editFormApi.deleteEditForm, { formSeq });
         callbackData = response.data;
 
         if (response.data.header.success && response.data.body) {
@@ -170,6 +170,46 @@ const exportEditFormPartXml = createRequestSaga(editFormAction.EXPORT_EDIT_FROM_
  */
 const exportEditFormPartHistoryXml = createRequestSaga(editFormAction.EXPORT_EDIT_FROM_PART_HISTORY_XML, editFormApi.exportEditFormPartHistoryXml, (history) => history);
 
+/**
+ * xml 파일 import
+ * @param {array} param0.payload.xmlFile 업로드 파일
+ * @param {func} param0.payload.callback 콜백
+ */
+function* importEditFormXmlFile({ payload: { xmlFile, importForm, callback } }) {
+    const ACTION = editFormAction.SAVE_EDIT_FORM_XML;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(editFormApi.importEditFormXmlFile, { xmlFile, importForm });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            yield put({ type: editFormAction.GET_EDIT_FORM_LIST });
+        } else {
+            yield put({
+                type: editFormAction.GET_EDIT_FORM_FAILURE,
+                payload: response.data,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+
+        yield put({
+            type: editFormAction.GET_EDIT_FORM_FAILURE,
+            payload: callbackData,
+        });
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
 export default function* editSaga() {
     yield takeLatest(editFormAction.GET_EDIT_FORM_LIST, getEditFormList);
     yield takeLatest(editFormAction.GET_EDIT_FORM, getEditForm);
@@ -180,4 +220,5 @@ export default function* editSaga() {
     yield takeLatest(editFormAction.EXPORT_EDIT_FROM_XML, exportEditFormXml);
     yield takeLatest(editFormAction.EXPORT_EDIT_FROM_PART_XML, exportEditFormPartXml);
     yield takeLatest(editFormAction.EXPORT_EDIT_FROM_PART_HISTORY_XML, exportEditFormPartHistoryXml);
+    yield takeLatest(editFormAction.SAVE_EDIT_FORM_XML, importEditFormXmlFile);
 }

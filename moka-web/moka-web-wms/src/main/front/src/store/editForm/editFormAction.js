@@ -48,13 +48,13 @@ export const saveEditFormPart = createAction(SAVE_EDIT_FORM_PART, ({ type, formS
  * 삭제
  */
 export const [DELETE_EDIT_FORM, DELETE_EDIT_FORM_SUCCESS, DELETE_EDIT_FORM_FAILURE] = createRequestActionTypes('editForm/DELETE_EDIT_FORM');
-export const deleteEditForm = createAction(DELETE_EDIT_FORM, ({ partId, callback }) => ({ partId, callback }));
+export const deleteEditForm = createAction(DELETE_EDIT_FORM, ({ formSeq, callback }) => ({ formSeq, callback }));
 
 /**
  * 중복체크
  */
 export const DUPLICATE_CHECK = 'editForm/DUPLICATE_CHECK';
-export const duplicateCheck = createAction(DUPLICATE_CHECK, ({ formId, callback }) => ({ formId, callback }));
+export const duplicateCheck = createAction(DUPLICATE_CHECK, ({ formSeq, callback }) => ({ formSeq, callback }));
 
 /**
  * 퍼블리시 모달 show/hide
@@ -100,3 +100,15 @@ export const [EXPORT_EDIT_FROM_PART_HISTORY_XML, EXPORT_EDIT_FROM_PART_HISTORY_X
     'editForm/EXPORT_EDIT_FROM_PART_HISTORY_XML',
 );
 export const exportEditFormPartHistoryXml = createAction(EXPORT_EDIT_FROM_PART_HISTORY_XML, (history) => history);
+
+/**
+ * xml import하여 저장
+ */
+export const SAVE_EDIT_FORM_XML = 'editForm/SAVE_EDIT_FORM_XML';
+export const saveEditFormXml = createAction(SAVE_EDIT_FORM_XML, (xmlFile, importForm, callback) => ({ xmlFile, importForm, callback }));
+
+/**
+ * 퍼블리시 모달 show/hide
+ */
+export const FORM_XML_INPORT_MODAL = 'editForm/FORM_XML_INPORT_MODAL';
+export const showFormXmlImportModal = createAction(FORM_XML_INPORT_MODAL, (show, importForm) => ({ show, importForm }));

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FieldGroup from './FieldGroup';
-import { exportEditFormPartXml, saveEditFormPart, showHistoryModal, showPublishModal } from '@/store/editForm';
+import { exportEditFormPartXml, saveEditFormPart, showFormXmlImportModal, showHistoryModal, showPublishModal } from '@/store/editForm';
 import toast from '@/utils/toastUtil';
 
 const propTypes = {
@@ -36,8 +36,11 @@ const PartEdit = (props) => {
     };
 
     const handleClickExport = () => {
-        console.log(part);
         dispatch(exportEditFormPartXml(part));
+    };
+
+    const handleClickImport = () => {
+        dispatch(showFormXmlImportModal(true, { formSeq: part.formSeq, partSeq: part.partSeq, title: part.partTitle }));
     };
 
     const insertEditFormPart = (tmp) => {
@@ -81,6 +84,9 @@ const PartEdit = (props) => {
                         </Button>
                     </div>
                     <div className="d-flex">
+                        <Button className="float-left mr-10 pr-20 pl-20" variant="negative" title="XML Export" onClick={handleClickImport}>
+                            Import
+                        </Button>
                         <Button className="float-left mr-10 pr-20 pl-20" variant="negative" title="XML Export" onClick={handleClickExport}>
                             Export
                         </Button>

@@ -16,6 +16,7 @@ import {
     exportEditFormXml,
     getEditForm,
     saveEditForm,
+    showFormXmlImportModal,
     showHistoryModal,
     showPublishModal,
 } from '@store/editForm';
@@ -73,6 +74,10 @@ const EditFormEdit = ({ history, onDelete }) => {
 
     const handleClickExport = () => {
         dispatch(exportEditFormXml(editForm.formSeq));
+    };
+
+    const handleClickImport = () => {
+        dispatch(showFormXmlImportModal(true, { formSeq: editForm.formSeq, title: editForm.formName }));
     };
 
     /**
@@ -316,6 +321,7 @@ const EditFormEdit = ({ history, onDelete }) => {
                                         disabled={editForm.formId && true}
                                         isInvalid={formIdError}
                                         required
+                                        inputProps={{ plaintext: true, readOnly: true }}
                                     />
                                 </Col>
                             </Form.Row>
@@ -331,6 +337,7 @@ const EditFormEdit = ({ history, onDelete }) => {
                                         name="formName"
                                         isInvalid={formNameError}
                                         required
+                                        inputProps={{ plaintext: true, readOnly: true }}
                                     />
                                 </Col>
                             </Form.Row>
@@ -346,36 +353,32 @@ const EditFormEdit = ({ history, onDelete }) => {
                                         name="serviceUrl"
                                         isInvalid={serviceUrlError}
                                         required
+                                        inputProps={{ plaintext: true, readOnly: true }}
                                     />
                                 </Col>
                             </Form.Row>
 
                             {/* 버튼 */}
-                            <Form.Group as={Row} className="d-flex pt-20 justify-content-center" title="저장">
-                                <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
-                                    저장
-                                </Button>
-                                <Button className="float-left mr-10 pr-20 pl-20" variant="negative" title="취소">
-                                    취소
-                                </Button>
-                                {paramId && (
-                                    <>
-                                        <Button className="float-left mr-10 pr-20 pl-20" variant="negative" title="XML Export" onClick={handleClickExport}>
-                                            Export
-                                        </Button>
-                                        <Button className="float-left mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete} title="삭제">
-                                            삭제
-                                        </Button>
-                                    </>
-                                )}
-                            </Form.Group>
+                            {paramId && (
+                                <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
+                                    <Button className="float-left mr-10 pr-20 pl-20" variant="positive" title="XML Export" onClick={handleClickImport}>
+                                        Import
+                                    </Button>
+                                    <Button className="float-left mr-10 pr-20 pl-20" variant="negative" title="XML Export" onClick={handleClickExport}>
+                                        Export
+                                    </Button>
+                                    <Button className="float-left mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete} title="삭제">
+                                        삭제
+                                    </Button>
+                                </Form.Group>
+                            )}
                         </Form>
                     </MokaCard>
                 </Col>
                 <Col xs={7}>
                     <Card className="w-100">
                         <Card.Body style={{ overflowY: 'auto', height: CARD_DEFAULT_HEIGHT - 120 }}>
-                            <PartList parts={editFormParts} editForm={editForm && editForm.formSeq}></PartList>
+                            <PartList></PartList>
                         </Card.Body>
                     </Card>
                 </Col>

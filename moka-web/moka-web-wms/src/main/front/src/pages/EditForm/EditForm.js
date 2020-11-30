@@ -6,8 +6,9 @@ import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
-import { clearStore, deleteEditForm, GET_EDIT_FORM, SAVE_EDIT_FORM } from '@store/editForm';
+import { clearStore, deleteEditForm, GET_EDIT_FORM, SAVE_EDIT_FORM, showFormXmlImportModal } from '@store/editForm';
 import toast, { messageBox } from '@utils/toastUtil';
+import EditFormImportModal from './EditFormImportModal';
 
 const EditFormEdit = React.lazy(() => import('./EditFormEdit'));
 const EditFormList = React.lazy(() => import('./EditFormList'));
@@ -20,7 +21,8 @@ const EditForm = () => {
 
     const dispatch = useDispatch();
 
-    const { loading } = useSelector((store) => ({
+    const { formImportModalShow, loading } = useSelector((store) => ({
+        formImportModalShow: store.editForm.formImportModalShow,
         loading: store.loading[GET_EDIT_FORM] || store.loading[SAVE_EDIT_FORM],
     }));
 
@@ -28,24 +30,28 @@ const EditForm = () => {
      * 편집폼 추가
      */
     const handleAddClickEditForm = () => {
-        history.push('/edit-form');
+        dispatch(showFormXmlImportModal(true));
+    };
+
+    const hideImportModal = () => {
+        dispatch(showFormXmlImportModal(false));
     };
 
     /**
      * 삭제 버튼 클릭
      */
     const handleClickDelete = (editForm) => {
-        messageBox.confirm(`${editForm.formId}_${editForm.formName}을 정말 삭제하시겠습니까?`, (ok) => {
-            if (ok) {
+        messageBox.confirm(`${editForm.formName}을 삭제하시겠습니까?`, () => {
+            dispatch(
                 deleteEditForm({
-                    formId: editForm.formSeq,
+                    formSeq: editForm.formSeq,
                     callback: (response) => {
                         toast.result(response, () => {
                             history.push('/edit-form');
                         });
                     },
-                });
-            }
+                }),
+            );
         });
     };
 
@@ -83,6 +89,7 @@ const EditForm = () => {
                     </Switch>
                 </Suspense>
             </MokaCard>
+            <EditFormImportModal show={formImportModalShow} onHide={() => hideImportModal()} />
         </div>
     );
 };

@@ -6,6 +6,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { clearReporter, getReporter, changeReporter, changeInvalidList, GET_REPORTER, CHANGE_REPORTER, saveReporter } from '@store/reporter';
 import toast from '@utils/toastUtil';
 import bg from '@assets/images/v_noimg.jpg';
+import Col from 'react-bootstrap/Col';
 
 /**
  * 기자 정보 조회/수정
@@ -302,7 +303,7 @@ const ReporterEdit = () => {
                         <MokaInputLabel label="JNET 이메일4" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={rMail4} name="" />
                     </div>
                 </Form.Row>
-                <MokaInputLabel label="기자 한마디" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repTalk} name="repTalk" />
+                <MokaInputLabel as="textarea" label="기자 한마디" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repTalk} name="repTalk" />
             </Form>
         </>
     );

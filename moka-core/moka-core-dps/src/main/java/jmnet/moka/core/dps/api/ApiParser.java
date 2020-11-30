@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,6 +55,7 @@ public class ApiParser {
     private static final String EL_KEYS = "keys";
     private static final String EL_IP_GROUP = "ipGroup";
     private static final String EL_ACL = "acl";
+    private static final String EL_REFERER = "referer";
 	private static final String EL_CHILDREN = "./*";
 	private static final String ATTR_ID = "id";
     private static final String ATTR_EXPIRE = "expire";
@@ -77,6 +80,7 @@ public class ApiParser {
     public static final String ATTR_API_ID = "apiId";
     public static final String ATTR_KEYS = "keys";
     public static final String ATTR_IP_GROUP = "ipGroup";
+    public static final String ATTR_CORS = "cors";
 	public static final String PARAM_TYPE_NUMBER = "number";
 	public static final String PARAM_TYPE_STRING = "string";
 	public static final String PARAM_TYPE_DATE = "date";
@@ -154,7 +158,8 @@ public class ApiParser {
     	String period = apiEl.getAttribute(ATTR_PERIOD);
     	Node descriptionNode = getNode(apiEl, "./"+EL_DESCRIPTION);
     	String description = descriptionNode.getTextContent(); 
-        Api api = new Api(apiConfig, id, expire, period, description);
+    	String cors =apiEl.getAttribute(ATTR_CORS);
+        Api api = new Api(apiConfig, id, expire, period, description, cors);
     	setParameter(api, apiEl);
     	setRequestList(api, apiEl);
         setKeys(api, apiEl);
@@ -279,6 +284,22 @@ public class ApiParser {
             }
         }
         return paramGroupMap;
+    }
+
+    public Set<String> getRefererSet()
+            throws XPathExpressionException {
+        Element doucumentElement = this.document.getDocumentElement();
+        NodeList nodes = getNodeList(doucumentElement, EL_REFERER);
+        Set<String> refererSet = new HashSet<String>();
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Element refererEl = (Element) nodes.item(i);
+            String referers = refererEl.getTextContent();
+            if ( McpString.isNotEmpty(referers)) {
+                referers = referers.trim();
+            }
+            Arrays.stream(referers.split(",")).forEach(r-> refererSet.add(r.trim()));
+        }
+        return refererSet;
     }
 
     private void setRequestList(Api api, Element apiEl) throws ApiException, XPathExpressionException {

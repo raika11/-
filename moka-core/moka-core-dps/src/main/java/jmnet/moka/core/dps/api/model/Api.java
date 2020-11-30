@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.dps.api.ApiCacheHelper;
 import jmnet.moka.core.dps.api.ApiParser;
 
@@ -18,6 +19,7 @@ public class Api {
     private String id;
     private long expire;
     private String period;
+    private String cors;
     private boolean hasDbRequest = false;
     private boolean hasAsyncRequest = false;
     private boolean hasCookieParameter = false;
@@ -25,15 +27,16 @@ public class Api {
     private List<String> keyList = ApiParser.EMPTY_TOKEN_LIST;
 
     public Api(ApiConfig apiConfig, String id) {
-        this(apiConfig, id, 0L, null, null);
+        this(apiConfig, id, 0L, null, null, null);
     }
 
-    public Api(ApiConfig apiConfig, String id, long expire, String period, String description) {
+    public Api(ApiConfig apiConfig, String id, long expire, String period, String description, String cors) {
         this.apiConfig = apiConfig;
         this.id = id;
         this.period = period;
         this.expire = expire;
         this.description = description;
+        this.cors = McpString.isNotEmpty(cors)? cors:null;
         this.parameterMap = new LinkedHashMap<String, Parameter>(16);
         this.requestList = new ArrayList<Request>(4);
     }
@@ -96,6 +99,8 @@ public class Api {
     public String getDescription() {
         return this.description;
     }
+
+    public String getCors() { return this.cors; }
 
     public Map<String, Parameter> getParameterMap() {
         return this.parameterMap;

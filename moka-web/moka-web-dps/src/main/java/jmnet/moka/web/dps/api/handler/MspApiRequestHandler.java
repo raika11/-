@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.core.dps.excepton.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -65,18 +67,28 @@ public class MspApiRequestHandler extends DefaultApiRequestHandler {
 
             ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker,
                     apiResolver, HttpHelper.getParamMap(request));
-            // ACL 적용
-            ResponseEntity<?> aclResponse = getAclResponse(request, apiContext);
-            if (aclResponse != null) {
-                return aclResponse;
-            }
+
+            // ACL, Cross Origin 적용
+			String referer = request.getHeader("Referer");
+			String accessControllAllowOrigin = null;
+			if ( !isPermittedIp(request,apiContext) && referer == null) {
+				ApiResult errorResult = ApiResult.createApiErrorResult(new ApiException("Access Denied",
+						apiContext.getApiPath(), apiContext.getApiId()));
+				ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
+																 .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
+																 .body(errorResult);
+			} else {
+				accessControllAllowOrigin =  getAccessControllAllowOrigin(referer,apiContext);
+			}
 
             String cachedString = ApiCacheHelper.getCachedString(apiContext, this.cacheManager);
 			ResponseEntity<?> responseEntity = null;
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+			if (accessControllAllowOrigin != null ) {
+				responseHeaders.set("Access-Control-Allow-Origin", accessControllAllowOrigin);
+			}
             if (cachedString != null) {
-				responseEntity = ResponseEntity.ok()
-						.header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
-                        .body(cachedString);
 				//async가 있을 경우에 async만 수행한다.
 				processApi(apiContext, true);
 			} else {
@@ -87,10 +99,8 @@ public class MspApiRequestHandler extends DefaultApiRequestHandler {
 				} catch (JsonProcessingException e) {
 					e.printStackTrace();
 				}
-				responseEntity = ResponseEntity.ok()
-						.header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
-                        .body(cachedString);
 			}
+			responseEntity = ResponseEntity.ok().headers(responseHeaders).body(cachedString);
 			return responseEntity;
 		} catch (ParameterException|ClassNotFoundException e) {
 			logger.error("api Request:{}",e.toString(), e);

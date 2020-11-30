@@ -84,7 +84,7 @@ const DeskingTreeCategory = (props) => {
     return (
         <li className="tree-category" key={nodeId} onClick={handleSelected}>
             <div className={clsx('tree-label', { selected: nodeId === selected })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
-                <Button size="sm" variant="searching" className="mr-1" onClick={handleExpanded}>
+                <Button size="sm" variant="searching" className="mr-1 flex-shrink-0" onClick={handleExpanded}>
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />
                 </Button>
                 <DeskingTreeLabel nodeId={nodeId} nodeData={nodeData} onClick={handleSelected} />

@@ -34,13 +34,17 @@ const findNextMainRow = (node) => {
                 return aIdx - bIdx;
             });
 
-        for (let i = 0; i < friend.length; i++) {
-            if (!friend[i].classList.contains('ag-rel-row')) {
-                result = { type: 'next', node: friend[i] };
-                break;
-            } else {
-                if (i === friend.lenght - 1) {
-                    result = { type: 'last', node: friend[i] };
+        if (friend.length < 1) {
+            result = node.classList.contains('ag-rel-row') ? { type: 'last-rel', node: node } : { type: 'last', node: node };
+        } else {
+            for (let i = 0; i < friend.length; i++) {
+                if (!friend[i].classList.contains('ag-rel-row')) {
+                    result = { type: 'next', node: friend[i] };
+                    break;
+                } else {
+                    if (i === friend.length - 1) {
+                        result = friend[i].classList.contains('ag-rel-row') ? { type: 'last-rel', node: friend[i] } : { type: 'last', node: friend[i] };
+                    }
                 }
             }
         }
@@ -59,13 +63,17 @@ const findPreviousMainRow = (node) => {
                 return aIdx - bIdx;
             });
 
-        for (let i = friend.length - 1; i >= 0; i--) {
-            if (!friend[i].classList.contains('ag-rel-row')) {
-                result = { type: 'prev', node: friend[i] };
-                break;
-            } else {
-                if (i === 0) {
-                    result = { type: 'first', node: friend[i] };
+        if (friend.length < 1) {
+            result = { type: 'first', node };
+        } else {
+            for (let i = friend.length - 1; i >= 0; i--) {
+                if (!friend[i].classList.contains('ag-rel-row')) {
+                    result = { type: 'prev', node: friend[i] };
+                    break;
+                } else {
+                    if (i === 0) {
+                        result = { type: 'first', node: friend[i] };
+                    }
                 }
             }
         }
@@ -95,7 +103,12 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex, is
     let hover = { idx: -1, node: null };
     let hoverBox = makeHoverBox();
 
-    const clearNextStyle = () => next.node && next.node.classList.remove('next');
+    const clearNextStyle = () => {
+        if (next.node) {
+            next.node.classList.remove('next');
+            next.node.classList.remove('hover');
+        }
+    };
     const clearHoverStyle = () => {
         if (hover.node) {
             hover.node.classList.remove('hover');
@@ -111,6 +124,8 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex, is
         } else if (nextRow.type === 'last') {
             nextRow.node.classList.remove('hover');
             nextRow.node.classList.add('next');
+        } else if (nextRow.type === 'last-rel') {
+            nextRow.node.classList.add('hover');
         }
     };
 

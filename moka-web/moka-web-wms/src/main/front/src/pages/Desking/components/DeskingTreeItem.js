@@ -43,7 +43,7 @@ const DeskingTreeItem = (props) => {
     return (
         <li className="tree-item" onClick={handleSelected} key={nodeId}>
             <div className={clsx('tree-label', { selected: selected === nodeId })}>
-                <Button variant="negative" size="sm" className="mr-1" disabled>
+                <Button variant="negative" size="sm" className="mr-1 flex-shrink-0" disabled>
                     <MokaIcon iconName="fal-minus" />
                 </Button>
                 <DeskingTreeLabel nodeId={nodeId} nodeData={nodeData} />

@@ -195,7 +195,7 @@ const ComponentEdit = ({ onDelete }) => {
     }, [dispatch, componentSeq]);
 
     return (
-        <MokaCard width={688} title={`컴포넌트 ${componentSeq ? '정보' : '등록'}`} className="flex-fill mr-gutter" loading={loading}>
+        <MokaCard width={688} title={`컴포넌트 ${componentSeq ? '정보' : '등록'}`} className="flex-fill mr-gutter" loading={loading} bodyClassName="pb-0">
             <BasicForm
                 component={temp}
                 setComponent={setTemp}
@@ -204,8 +204,8 @@ const ComponentEdit = ({ onDelete }) => {
                 onClickDelete={() => onDelete(component)}
                 invalidList={invalidList}
             />
-            <hr className="divider" />
-            <div className="custom-scroll component-padding-box pb-10" style={{ height: 563 }}>
+            <hr className="divider mb-0" />
+            <div className="custom-scroll component-padding-box py-3" style={{ height: 615 }}>
                 <DetailRelationForm component={temp} setComponent={setTemp} inputTag={inputTag} invalidList={invalidList} />
                 <hr className="divider" />
                 <DetailPeriodForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />

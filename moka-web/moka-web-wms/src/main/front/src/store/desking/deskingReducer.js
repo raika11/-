@@ -116,22 +116,15 @@ export default handleActions(
                 // source
                 let sourceIdx = draft.list.findIndex((l) => l.seq === body.source.seq);
                 draft.list[sourceIdx] = body.source;
-                // draft.selectedComponent = body.source;
-
                 // source 워크 / 임시저장 / 전송 상태 저장
-                if (status === 'work' || status === 'save' || status === 'publish') {
-                    draft.workStatus[body.source.seq] = status;
-                }
+                draft.workStatus[body.source.seq] = status;
 
                 // target
                 let targetIdx = draft.list.findIndex((l) => l.seq === body.target.seq);
                 draft.list[targetIdx] = body.target;
                 draft.selectedComponent = body.target;
-
                 // target 워크 / 임시저장 / 전송 상태 저장
-                if (status === 'work' || status === 'save' || status === 'publish') {
-                    draft.workStatus[body.target.seq] = status;
-                }
+                draft.workStatus[body.target.seq] = status;
             });
         },
         [act.MOVE_DESKING_WORK_LIST_FAILURE]: (state, { payload: componentError }) => {

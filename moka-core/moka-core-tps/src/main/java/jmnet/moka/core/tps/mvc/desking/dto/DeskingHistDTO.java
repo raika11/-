@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
@@ -41,9 +42,6 @@ public class DeskingHistDTO implements Serializable {
     /**
      * 히스토리일련번호
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "HIST_SEQ", nullable = false)
     private Long histSeq;
 
     /**
@@ -57,6 +55,11 @@ public class DeskingHistDTO implements Serializable {
     private Long datasetSeq;
 
     /**
+     * 컴포넌트 히스토리 SEQ
+     */
+    private Long componentHistSeq;
+
+    /**
      * 서비스기사아이디
      */
     private String contentId;
@@ -67,25 +70,9 @@ public class DeskingHistDTO implements Serializable {
     private String parentContentId;
 
     /**
-     * 콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상
-     */
-    private String contentType;
-
-    /**
-     * 기사타입
-     */
-    @Builder.Default
-    private String artType = TpsConstants.DEFAULT_ART_TYPE;
-
-    /**
-     * 출처
-     */
-    private String sourceCode;
-
-
-    /**
      * 콘텐트순서
      */
+    @Column(name = "CONTENT_ORD")
     @Builder.Default
     private Integer contentOrd = 1;
 
@@ -94,12 +81,6 @@ public class DeskingHistDTO implements Serializable {
      */
     @Builder.Default
     private Integer relOrd = 1;
-
-    /**
-     * 언어(기타코드)
-     */
-    @Builder.Default
-    private String lang = TpsConstants.DEFAULT_LANG;
 
     /**
      * 배부일시
@@ -111,69 +92,6 @@ public class DeskingHistDTO implements Serializable {
      * 제목
      */
     private String title;
-
-    /**
-     * 부제목
-     */
-    private String subTitle;
-
-    /**
-     * 어깨제목
-     */
-    private String nameplate;
-
-    /**
-     * 말머리
-     */
-    private String titlePrefix;
-
-    /**
-     * 발췌문
-     */
-    private String bodyHead;
-
-    /**
-     * 링크URL
-     */
-    private String linkUrl;
-
-    /**
-     * 링크TARGET
-     */
-    private String linkTarget;
-
-    /**
-     * 더보기URL
-     */
-    private String moreUrl;
-
-    /**
-     * 더보기TARGET
-     */
-    private String moreTarget;
-
-    /**
-     * 썸네일파일명
-     */
-    private String thumbFileName;
-
-    /**
-     * 썸네일용량
-     */
-    @Builder.Default
-    private Integer thumbSize = 0;
-
-    /**
-     * 썸네일가로
-     */
-    @Builder.Default
-    private Integer thumbWidth = 0;
-
-    /**
-     * 썸네일세로
-     */
-    @Builder.Default
-    private Integer thumbHeight = 0;
 
     /**
      * 화면편집생성일시 : wms_desking.deskingDt == wms_desking_hist.deskingDt(편집시간)
@@ -195,17 +113,17 @@ public class DeskingHistDTO implements Serializable {
     /**
      * 상태 - SAVE(임시) / PUBLISH(전송)
      */
-    private EditStatusCode status = EditStatusCode.SAVE;
+    private String status = EditStatusCode.SAVE.getCode();
 
     /**
      * 예약일시
      */
     @DTODateTimeFormat
-    protected Date reserveDt;
+    private Date reserveDt;
 
     /**
      * 승인여부 예약일시가 설정되어 있을 경우 예약된 작업이 완료되면 Y로 처리
      */
     @Builder.Default
-    protected String approvalYn = MokaConstants.NO;
+    private String approvalYn = MokaConstants.NO;
 }

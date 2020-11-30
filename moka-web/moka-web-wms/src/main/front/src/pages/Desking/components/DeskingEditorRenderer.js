@@ -9,20 +9,19 @@ import toast from '@utils/toastUtil';
  * 데스킹 워크의 타이틀 노출 + 에디터 + 제목 수정 + 삭제 기능이 모여있는 컴포넌트
  */
 const DeskingEditorRenderer = forwardRef((params, ref) => {
-    const { data } = params;
+    const { data: initialData } = params;
+    const { onSave, onDelete, onRowClicked } = initialData;
 
     // state
     const [editMode, setEditMode] = useState(false);
     const [editValue, setEditValue] = useState('');
     const [error, setError] = useState(false);
+    const [data, setData] = useState(initialData);
 
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
-            if (params.data.rel) {
-                return params.data.relTitle !== data.relTitle;
-            } else {
-                return params.data.title !== data.title;
-            }
+            setData(params.data);
+            return true;
         },
     }));
 
@@ -44,27 +43,23 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
     const handleClickEdit = () => {
         if (editMode) {
             if (!validate()) return;
-
-            // 저장 로직
-            if (data.onSave) {
-                data.onSave(
-                    {
-                        ...data,
-                        title: !data.rel ? editValue : '',
-                        relTitle: data.rel ? editValue : '',
-                        onRowClicked: undefined,
-                        onSave: undefined,
-                        onDelete: undefined,
-                    },
-                    ({ header }) => {
-                        if (!header.success) {
-                            toast.warn(header.message);
-                        } else {
-                            setEditMode(false);
-                        }
-                    },
-                );
-            }
+            if (!onSave) return;
+            onSave(
+                {
+                    ...data,
+                    title: editValue,
+                    onRowClicked: undefined,
+                    onSave: undefined,
+                    onDelete: undefined,
+                },
+                ({ header }) => {
+                    if (!header.success) {
+                        toast.warning(header.message);
+                    } else {
+                        setEditMode(false);
+                    }
+                },
+            );
         } else {
             setEditMode(true);
         }
@@ -79,8 +74,8 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
             setEditValue(data.rel ? data.relTitle : data.title);
             setError(false);
         } else {
-            if (data.onDelete) {
-                data.onDelete(data);
+            if (onDelete) {
+                onDelete(data);
             }
         }
     };
@@ -93,8 +88,8 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
         e.preventDefault();
         e.stopPropagation();
 
-        if (data.onRowClicked) {
-            data.onRowClicked(data);
+        if (onRowClicked) {
+            onRowClicked(data);
         }
     };
 

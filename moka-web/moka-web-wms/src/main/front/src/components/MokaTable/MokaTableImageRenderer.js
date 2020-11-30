@@ -1,4 +1,5 @@
-import React, { useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
+import util from '@utils/commonUtil';
 
 /**
  * ag-grid 셀에 이미지를 그리는 컴포넌트.
@@ -6,39 +7,30 @@ import React, { useCallback, useRef, useEffect } from 'react';
  *
  * @param {object} params ag grid params
  */
-const MokaTableImageRenderer = (params) => {
-    const { data } = params;
+const MokaTableImageRenderer = forwardRef((params, ref) => {
+    const { data: initialData } = params;
     const field = params.colDef.field;
-    const { imgAlt } = data;
+    const [data, setData] = useState(initialData);
 
     const boxRef = useRef(null);
     const imgRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        refresh: (params) => {
+            if (params.data[field] !== data[field]) {
+                setData(params.data);
+                return true;
+            } else {
+                return false;
+            }
+        },
+    }));
 
     /**
      * 이미지 프리뷰 생성
      */
     const previewImg = useCallback((src) => {
-        let image = new Image();
-        image.src = src;
-        image.onload = (imgProps) => {
-            let w = imgProps.path[0].width;
-            let h = imgProps.path[0].height;
-            let rate = 1;
-
-            if (boxRef.current) {
-                const box = boxRef.current;
-                rate = box.offsetWidth / box.offsetHeight;
-            }
-
-            if (imgRef.current) {
-                if (w / h > rate) {
-                    imgRef.current.className = 'landscape';
-                } else {
-                    imgRef.current.className = 'portrait';
-                }
-                imgRef.current.src = src;
-            }
-        };
+        util.makeImgPreview(src, imgRef.current, boxRef.current);
     }, []);
 
     useEffect(() => {
@@ -47,9 +39,9 @@ const MokaTableImageRenderer = (params) => {
 
     return (
         <div className="d-flex h-100 w-100 align-items-center justify-content-center border" ref={boxRef}>
-            <img ref={imgRef} alt={imgAlt} />
+            <img ref={imgRef} alt={data.imgAlt} />
         </div>
     );
-};
+});
 
 export default MokaTableImageRenderer;

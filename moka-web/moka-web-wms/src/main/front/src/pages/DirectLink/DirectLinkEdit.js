@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaCard, MokaInputLabel } from '@components';
@@ -224,12 +224,12 @@ const DirectLinkEdit = ({ history }) => {
                     callback: ({ header }) => {
                         // 삭제 성공
                         if (header.success) {
-                            notification('success', '삭제 되었습니다.');
+                            toast.success('삭제 되었습니다.');
                             history.push('/direct-link');
                         }
                         // 삭제 실패
                         else {
-                            notification('warning', header.message);
+                            toast.fail(header.message);
                         }
                     },
                 }),
@@ -249,9 +249,9 @@ const DirectLinkEdit = ({ history }) => {
                 ],
                 callback: (response) => {
                     if (response.header.success) {
-                        notification('success', '수정하였습니다.');
+                        toast.success('수정하였습니다.');
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),
@@ -270,14 +270,14 @@ const DirectLinkEdit = ({ history }) => {
                 ],
                 callback: (response) => {
                     if (response.header.success) {
-                        notification('success', '등록하였습니다.');
+                        toast.success('등록하였습니다.');
                         // TODO 저장 완료후 어떻게 해야 할지?
                         history.push(`direct-link/${response.body.linkSeq}`);
                         // dispatch(clearDirectLink());
                         // history.push('/direct-link');
                         // setTemp({});
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),

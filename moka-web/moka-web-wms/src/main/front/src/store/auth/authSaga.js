@@ -4,7 +4,7 @@ import { setLocalItem, setLocalStorage } from '@utils/storageUtil';
 import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { AUTHORIZATION, SIGNIN_MEMBER_ID } from '@/constants';
 
 /**
@@ -27,7 +27,7 @@ export function* loginJwtSaga({ payload }) {
                 yield call(window.location.reload());
             } else {
                 // 패스워드 변경 안내 팝업으로 변경 예정
-                toast.confirm(data.header.message.replace(/\\n/g, '<br/>'), (ok) => {
+                messageBox.confirm(data.header.message, (ok) => {
                     if (ok) {
                         toast.info('비밀번호 변경 페이지로 이동. 기능 구현중...');
                     } else {

@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { MokaInputLabel } from '@components';
 import { deleteReserved, getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
 
@@ -119,7 +119,7 @@ const ReservedEdit = () => {
                         toast.success(header.message);
                         history.push(`/reserved/${body.reservedSeq}`);
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -145,10 +145,10 @@ const ReservedEdit = () => {
                         }
                         // 중복 있음
                         else {
-                            toast.warn(header.message);
+                            toast.warning(header.message);
                         }
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -199,7 +199,7 @@ const ReservedEdit = () => {
      * 삭제 버튼
      */
     const handleClickDelete = () => {
-        toast.confirm(
+        messageBox.confirm(
             `${reservedId}를 삭제하시겠습니까?`,
             () => {
                 const reservedSet = {

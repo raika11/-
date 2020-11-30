@@ -4,7 +4,7 @@ import { MokaInputLabel } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { clearReporter, getReporter, changeReporter, changeInvalidList, GET_REPORTER, CHANGE_REPORTER, saveReporter } from '@store/reporter';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import bg from '@assets/images/v_noimg.jpg';
 
 /**
@@ -122,9 +122,9 @@ const ReporterEdit = () => {
                 ],
                 callback: (response) => {
                     if (response.header.success) {
-                        notification('success', '수정하였습니다.');
+                        toast.success('수정하였습니다.');
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModalEditor } from '@components';
 import { getTemplate, changeTemplateBody, saveTemplate, clearTemplate, hasRelationList, GET_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 const propTypes = {
     editable: PropTypes.bool,
@@ -52,7 +52,7 @@ const TemplateHtmlModal = (props) => {
                         toast.success(header.message);
                         handleHide();
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -72,14 +72,8 @@ const TemplateHtmlModal = (props) => {
                         if (!body) submitTemplate();
                         // 관련 아이템 있음
                         else {
-                            toast.confirm(
-                                <React.Fragment>
-                                    다른 곳에서 사용 중입니다.
-                                    <br />
-                                    변경 시 전체 수정 반영됩니다.
-                                    <br />
-                                    수정하시겠습니까?
-                                </React.Fragment>,
+                            messageBox.confirm(
+                                '다른 곳에서 사용 중입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?',
                                 () => {
                                     submitTemplate();
                                 },
@@ -87,7 +81,7 @@ const TemplateHtmlModal = (props) => {
                             );
                         }
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),

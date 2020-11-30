@@ -199,7 +199,7 @@ const MokaTable = forwardRef((props, ref) => {
         if (instance.node.data.usedYn === 'N') {
             return 'usedyn-n';
         }
-        return undefined;
+        return null;
     };
 
     /**

@@ -34,7 +34,7 @@ const DeskingReadyGrid = (props) => {
                         tgtComponent: comp,
                         callback: ({ header }) => {
                             if (!header.success) {
-                                toast.warn(header.message);
+                                toast.warning(header.message);
                             }
                         },
                     };

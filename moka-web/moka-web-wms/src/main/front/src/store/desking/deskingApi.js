@@ -143,3 +143,25 @@ export const deleteDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) =>
             throw err;
         });
 };
+
+// 히스토리 조회(컴포넌트별)
+export const getComponentHistoryList = ({ search }) => {
+    const queryString = qs.stringify(search);
+    return instance.get(`/api/desking/components/histories/${search.componentSeq}?${queryString}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 히스토리 상세조회(페이징 없음)
+export const getDeskingHistory = ({ componentHistSeq }) => {
+    return instance.get(`/api/desking/histories/${componentHistSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 히스토리를 편집기사 워크로 등록
+export const putDeskingWorkHistory = ({ componentWorkSeq, componentHistSeq }) => {
+    return instance.get(`/api/desking/components/${componentWorkSeq}/history/${componentHistSeq}`).catch((err) => {
+        throw err;
+    });
+};

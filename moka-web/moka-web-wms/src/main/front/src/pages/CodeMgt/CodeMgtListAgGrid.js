@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 
 import { MokaTable } from '@components';
-import { notification, toastr } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import {
     GET_CODE_MGT_GRP_LIST,
     clearGrp,
@@ -120,9 +120,9 @@ const CodeMgtListAgGrid = () => {
                 ],
                 callback: (response) => {
                     if (response.header.success) {
-                        notification('success', '수정하였습니다.');
+                        toast.success('수정하였습니다.');
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),
@@ -145,10 +145,10 @@ const CodeMgtListAgGrid = () => {
                 ],
                 callback: (response) => {
                     if (response.header.success) {
-                        notification('success', '등록하였습니다.');
+                        toast.success('등록하였습니다.');
                         history.push(`/codeMgt/${codeGrp.grpCd}`);
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),
@@ -160,16 +160,12 @@ const CodeMgtListAgGrid = () => {
      * @param {object} codeGrp 코드그룹 데이터
      */
     const onClickSave = (codeGrp) => {
-        toastr.confirm('적용하시겠습니까?', {
-            onOk: () => {
-                if (!codeGrp.grpSeq) {
-                    insertGrp(codeGrp);
-                } else {
-                    updateGrp(codeGrp);
-                }
-            },
-            onCancel: () => {},
-            attention: false,
+        messageBox.confirm('적용하시겠습니까?', () => {
+            if (!codeGrp.grpSeq) {
+                insertGrp(codeGrp);
+            } else {
+                updateGrp(codeGrp);
+            }
         });
     };
 
@@ -178,31 +174,21 @@ const CodeMgtListAgGrid = () => {
      * @param {object} codeGrp 코드그룹 데이터
      */
     const onClickDelete = (codeGrp) => {
-        toastr.confirm(
-            <>
-                <p>선택하신 코드그룹의 하위 코드도 전부 삭제됩니다.</p>
-                <p>코드그룹을 삭제하시겠습니까?</p>
-            </>,
-            {
-                onOk: () => {
-                    dispatch(
-                        deleteCodeMgtGrp({
-                            grpSeq: codeGrp.grpSeq,
-                            callback: (response) => {
-                                if (response.header.success) {
-                                    notification('success', '삭제하였습니다.');
-                                    history.push('/codeMgt');
-                                } else {
-                                    notification('warning', response.header.message);
-                                }
-                            },
-                        }),
-                    );
-                },
-                onCancel: () => {},
-                attention: false,
-            },
-        );
+        messageBox.confirm('선택하신 코드그룹의 하위 코드도 전부 삭제됩니다.\n코드그룹을 삭제하시겠습니까?', () => {
+            dispatch(
+                deleteCodeMgtGrp({
+                    grpSeq: codeGrp.grpSeq,
+                    callback: (response) => {
+                        if (response.header.success) {
+                            toast.success('삭제하였습니다.');
+                            history.push('/codeMgt');
+                        } else {
+                            toast.fail(response.header.message);
+                        }
+                    },
+                }),
+            );
+        });
     };
 
     return (

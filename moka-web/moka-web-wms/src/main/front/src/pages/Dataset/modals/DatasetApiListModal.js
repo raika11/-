@@ -140,7 +140,6 @@ const DatsetListModal = (props) => {
 
     const handleSelectionChanged = useCallback(
         (selectedNodes) => {
-            console.log(selectedNodes.length);
             if (selectedNodes.length > 0) {
                 const sd = selectedNodes[0].data;
                 if (sd.id !== selected) {

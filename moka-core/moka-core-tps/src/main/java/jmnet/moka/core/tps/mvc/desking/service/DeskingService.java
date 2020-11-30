@@ -6,17 +6,22 @@ package jmnet.moka.core.tps.mvc.desking.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
+import jmnet.moka.core.tps.mvc.desking.dto.DeskingHistSearchDTO;
+import jmnet.moka.core.tps.mvc.desking.dto.DeskingOrdDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
+import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -202,13 +207,13 @@ public interface DeskingService {
     void deleteDeskingWorkList(List<DeskingWorkVO> deleteDeksingList, Long datasetSeq, String regId);
 
     /**
-     * 삭제 후 정렬값 조정
+     * 삭제 후 수정할 정렬값 조회
      *
-     * @param deskingVOList 원본기사목록
-     * @param filterList    삭제 후 기사목록
-     * @param regId         작업자
+     * @param datasetSeq        데이타셋순번
+     * @param regId             작업자
+     * @return                  수정할 순번목록
      */
-    void resortAfterDelete(List<DeskingWorkVO> deskingVOList, List<DeskingWorkVO> filterList, String regId);
+    List<DeskingOrdDTO> resortAfterDelete(Long datasetSeq, String regId);
 
     /**
      * 편집기사work를 조회한다
@@ -255,10 +260,9 @@ public interface DeskingService {
      * @param deskingWork   추가할 편집기사
      * @param tgtDatasetSeq target 데이타셋순번
      * @param srcDatasetSeq source 데이타셋순번
-     * @param editionSeq    예약순번
      * @param creator       작업자
      */
-    public void moveDeskingWork(DeskingWorkDTO deskingWork, Long tgtDatasetSeq, Long srcDatasetSeq, Long editionSeq, String creator);
+    public void moveDeskingWork(DeskingWorkDTO deskingWork, Long tgtDatasetSeq, Long srcDatasetSeq, String creator);
 
     //    /**
     //     * 저장간격내에 저장한 사람을 조회
@@ -323,30 +327,30 @@ public interface DeskingService {
      */
     public String saveDeskingWorkImage(DeskingWork deskingWork, MultipartFile thumbnail)
             throws Exception;
-    //
-    //    /**
-    //     * 데스킹 히스토리 그룹 목록 조회
-    //     *
-    //     * @param search 검색객체
-    //     * @return 데스킹 히스토리 그룹 목록
-    //     */
-    //    public List<DeskingHistGroupVO> findDeskingHistGroup(DeskingHistSearchDTO search);
+
+    /**
+     * 컴포넌트 히스토리 목록 조회
+     *
+     * @param search        검색객체
+     * @return              데스킹히스토리 그룹 목록
+     */
+    List<ComponentHistVO> findAllComponentHist(DeskingHistSearchDTO search);
     //
     //    /**
     //     * 데스킹 히스토리 그룹 카운트
     //     *
-    //     * @param search 검색객체
-    //     * @return 데스킹 히스토리 그룹 카운트
+    //     * @param search          검색객체
+    //     * @return                데스킹 히스토리 그룹 카운트
     //     */
-    //    public Long countByHistGroup(DeskingHistSearchDTO search);
-    //
-    //    /**
-    //     * 데스킹 히스토리 상세 목록 조회
-    //     *
-    //     * @param search 검색객체
-    //     * @return 데스킹 히스토리 상세
-    //     */
-    //    public List<DeskingHistVO> findDeskingHistDetail(DeskingHistSearchDTO search);
+    //    Long countByHistGroup(DeskingHistSearchDTO search);
+
+    /**
+     * 데스킹 히스토리 목록 조회
+     *
+     * @param componentHistSeq      컴포넌트 히스토리 SEQ
+     * @return                      데스킹히스토리 상세
+     */
+    List<DeskingHist> findAllDeskingHist(Long componentHistSeq);
     //
     //    /**
     //     * 페이지내 모든 데스킹 히스토리 그룹 목록 조회
@@ -360,5 +364,14 @@ public interface DeskingService {
     //
     //    public List<EditionVO> getEditionList(Long pageSeq);
     //
-    //    public void importDeskingWorkHistory(DeskingHistSearchDTO search);
+
+    /**
+     * 히스토리를 불러와 컴포넌트work, 편집기사work에 저장한다.
+     *
+     * @param componentWorkSeq 컴포넌트 work SEQ
+     * @param componentHistSeq 컴포넌트 히스토리 SEQ
+     * @param regId            작업자
+     */
+    void importDeskingWorkHistory(Long componentWorkSeq, Long componentHistSeq, String regId)
+            throws Exception;
 }

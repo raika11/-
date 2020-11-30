@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, changeInvalidList } from '@store/domain';
 import { getApi, getLang } from '@store/codeMgt';
 import { MokaInput, MokaInputLabel } from '@components';
@@ -172,9 +172,9 @@ const DomainEdit = ({ history, onDelete }) => {
                 callback: (response) => {
                     // 만약 response.header.message로 서버 메세지를 전달해준다면, 그 메세지를 보여준다.
                     if (response.header.success) {
-                        notification('success', '수정하였습니다.');
+                        toast.success('수정하였습니다.');
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),
@@ -204,16 +204,16 @@ const DomainEdit = ({ history, onDelete }) => {
                                 ],
                                 callback: (response) => {
                                     if (response.header.success) {
-                                        notification('success', '등록하였습니다.');
+                                        toast.success('등록하였습니다.');
                                         history.push(`/domain/${domainId}`);
                                     } else {
-                                        notification('warning', '실패하였습니다.');
+                                        toast.fail('실패하였습니다.');
                                     }
                                 },
                             }),
                         );
                     } else {
-                        notification('warning', '중복된 도메인아이디가 존재합니다.');
+                        toast.warning('중복된 도메인아이디가 존재합니다.');
                     }
                 },
             }),

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModalEditor } from '@components';
 import { getContainerModal, getContainer, changeContainerBody, saveContainer, clearContainer, hasRelationList, GET_CONTAINER, SAVE_CONTAINER } from '@store/container';
-import toast, { notification } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 /**
  * 컨테이너 TEMS 소스 보여주는 모달
@@ -50,7 +50,7 @@ const ContainerHtmlModal = (props) => {
                         toast.success(header.message);
                         handleHide();
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -69,20 +69,10 @@ const ContainerHtmlModal = (props) => {
                     if (!body) submitContainer();
                     // 관련 아이템 있음
                     else {
-                        toast.confirm(
-                            <React.Fragment>
-                                다른 곳에서 사용 중입니다.
-                                <br />
-                                변경 시 전체 수정 반영됩니다.
-                                <br />
-                                수정하시겠습니까?
-                            </React.Fragment>,
-                            () => submitContainer(),
-                            () => {},
-                        );
+                        messageBox.confirm('다른 곳에서 사용 중입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?', () => submitContainer());
                     }
                 } else {
-                    toast.warn(header.message);
+                    toast.warning(header.message);
                 }
             },
         };
@@ -120,7 +110,7 @@ const ContainerHtmlModal = (props) => {
                             if (header.success) {
                                 setContainerModal(body);
                             } else {
-                                notification(header.message);
+                                toast.fail(header.message);
                             }
                             setLoadingModal(false);
                         },

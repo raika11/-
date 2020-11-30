@@ -10,6 +10,7 @@ package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.Optional;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 
@@ -51,4 +52,13 @@ public interface ComponentWorkService {
      */
     ComponentWork updateComponentWorkSnapshot(Long componentWorkSeq, String snapshotYn, String snapshotBody, String regId) throws NoDataException, Exception;
 
+    /**
+     * 컴포넌트 히스토리에서 컴포넌트 정보 불러와서 업데이트
+     *
+     * @param componentWorkSeq  컴포넌트work순번
+     * @param componentHist     컴포넌트 히스토리
+     * @return                  수정된 컴포넌트work
+     */
+    ComponentWork updateComponentWork(Long componentWorkSeq, ComponentHist componentHist)
+            throws NoDataException;
 }

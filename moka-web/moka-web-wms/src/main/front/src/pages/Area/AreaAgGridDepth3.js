@@ -26,6 +26,7 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
 
     // state
     const [rowData, setRowData] = useState([]);
+    const [gridInstance, setGridInstance] = useState(null);
 
     useEffect(() => {
         setRowData(
@@ -57,7 +58,7 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
                 history.push(`${baseUrl}/${areaDepth1.areaSeq}`);
             }
         } else {
-            toast.warn('상위 편집영역을 선택해주세요');
+            toast.warning('상위 편집영역을 선택해주세요');
         }
     };
 
@@ -69,6 +70,12 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [areaSeq]);
+
+    useEffect(() => {
+        if (gridInstance) {
+            gridInstance.api.redrawRows();
+        }
+    }, [rowData, gridInstance]);
 
     return (
         <MokaCard header={false} width={280} className="mr-gutter">
@@ -92,6 +99,7 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 preventRowClickCell={['delete']}
+                setGridInstance={setGridInstance}
             />
         </MokaCard>
     );

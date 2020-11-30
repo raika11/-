@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './deskingAction';
+import { PAGESIZE_OPTIONS, HIST_SAVE } from '@/constants';
 
 /**
  * initialState
@@ -35,6 +36,16 @@ export const initialState = {
         artPageSeq: null,
         reserveDt: null,
         deskingWorks: [],
+    },
+    search: {
+        page: 0,
+        size: PAGESIZE_OPTIONS[0],
+        sort: 'seq,desc',
+        componentSeq: null,
+        regDt: null,
+        status: HIST_SAVE,
+        searchType: 'all', // all/regId/regNm
+        keyword: '',
     },
 };
 

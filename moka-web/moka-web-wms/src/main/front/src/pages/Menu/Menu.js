@@ -6,7 +6,7 @@ import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { clearStore } from '@store/menu';
-import toast from '@/utils/toastUtil';
+import toast, { messageBox } from '@/utils/toastUtil';
 import { changeSearchOption, deleteMenu, existAuth } from '@store/menu';
 const MenuLargeLIst = React.lazy(() => import('./MenuLargeLIst'));
 const MenuMiddleLIst = React.lazy(() => import('./MenuMiddleLIst'));
@@ -56,7 +56,7 @@ const Menu = () => {
         if (typeof btnParentMenuId !== 'undefined' && btnParentMenuId.length > 0) {
             setMenuSearchInfo(0, btnDepth, '', btnParentMenuId);
         } else {
-            toast.warn('상위 메뉴를 선택하세요.');
+            toast.warning('상위 메뉴를 선택하세요.');
         }
     };
 
@@ -88,7 +88,7 @@ const Menu = () => {
         event.preventDefault();
         event.stopPropagation();
 
-        toast.confirm(
+        messageBox.confirm(
             `삭제하시겠습니까?`,
             () => {
                 let isSubList = false;

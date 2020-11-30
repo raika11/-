@@ -31,7 +31,7 @@ const DeskingArticleTab = (props) => {
             tgtComponent: componentList[agGridIndex],
             callback: ({ header }) => {
                 if (!header.success) {
-                    toast.warn(header.message);
+                    toast.warning(header.message);
                 }
             },
         };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { notification, toastr } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 import Search from './CodeMgtEditSearch';
 import AgGrid from './CodeMgtEditAgGrid';
@@ -35,11 +35,11 @@ const CodeMgtEdit = () => {
                 callback: (response) => {
                     if (response.header.success) {
                         const { body } = response;
-                        notification('success', '수정하였습니다.');
+                        toast.success('수정하였습니다.');
                         history.push(`/codeMgt/${body.codeMgtGrp.grpCd}`);
                         dispatch(clearCd());
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),
@@ -63,11 +63,11 @@ const CodeMgtEdit = () => {
                 callback: (response) => {
                     if (response.header.success) {
                         const { body } = response;
-                        notification('success', '등록하였습니다.');
+                        toast.success('등록하였습니다.');
                         history.push(`/codeMgt/${body.codeMgtGrp.grpCd}`);
                         dispatch(clearCd());
                     } else {
-                        notification('warning', '실패하였습니다.');
+                        toast.fail('실패하였습니다.');
                     }
                 },
             }),
@@ -79,16 +79,12 @@ const CodeMgtEdit = () => {
      * @param {object} code 코드 데이터
      */
     const onClickSave = (code) => {
-        toastr.confirm('적용하시겠습니까?', {
-            onOk: () => {
-                if (!code.seqNo) {
-                    insertGrp(code);
-                } else {
-                    updateGrp(code);
-                }
-            },
-            onCancel: () => {},
-            attention: false,
+        messageBox.confirm('적용하시겠습니까?', () => {
+            if (!code.seqNo) {
+                insertGrp(code);
+            } else {
+                updateGrp(code);
+            }
         });
     };
 
@@ -97,24 +93,20 @@ const CodeMgtEdit = () => {
      * @param {object} code 코드 데이터
      */
     const onClickDelete = (code) => {
-        toastr.confirm('코드를 삭제하시겠습니까?', {
-            onOk: () => {
-                dispatch(
-                    deleteCodeMgt({
-                        cdSeq: code.cdSeq,
-                        callback: (response) => {
-                            if (response.header.success) {
-                                notification('success', '삭제하였습니다.');
-                                history.push(`/codeMgt/${code.grpCd}`);
-                            } else {
-                                notification('warning', response.header.message);
-                            }
-                        },
-                    }),
-                );
-            },
-            onCancel: () => {},
-            attention: false,
+        messageBox.confirm('코드를 삭제하시겠습니까?', () => {
+            dispatch(
+                deleteCodeMgt({
+                    cdSeq: code.cdSeq,
+                    callback: (response) => {
+                        if (response.header.success) {
+                            toast.success('삭제하였습니다.');
+                            history.push(`/codeMgt/${code.grpCd}`);
+                        } else {
+                            toast.fail(response.header.message);
+                        }
+                    },
+                }),
+            );
         });
     };
 

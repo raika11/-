@@ -28,7 +28,7 @@ export const initialState = {
         halfCheckedKeys: [],
     },
     memberError: {},
-    invalidList: {},
+    invalidList: [],
     historySearch: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],

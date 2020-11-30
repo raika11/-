@@ -14,3 +14,4 @@ export { default as MokaTreeView } from './MokaTree';
 export { default as MokaLoader } from './MokaLoader';
 export { default as Moka } from './ComponentFactory';
 export * from './MokaButton';
+export { default as MokaMessageBox } from './MokaMessageBox';

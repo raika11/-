@@ -4,7 +4,7 @@ import copy from 'copy-to-clipboard';
 
 import Button from 'react-bootstrap/Button';
 import { MokaIcon } from '@components';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 
 const propTypes = {
     /**
@@ -28,7 +28,7 @@ const MokaCopyTextButton = (props) => {
             disabled={copyText === ''}
             onClick={() => {
                 copy(copyText);
-                notification('success', '태그를 복사하였습니다');
+                toast.success('태그를 복사하였습니다');
             }}
         >
             <MokaIcon iconName="fal-copy" />

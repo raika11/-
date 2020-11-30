@@ -15,7 +15,7 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Carousel from 'react-bootstrap/Carousel';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import { toastr } from 'react-redux-toastr';
+import toast, { messageBox } from '@/utils/toastUtil';
 
 import { MokaDateTimePicker, MokaDraggableModal, MokaCodeListModal, MokaAutocomplete, MokaPrependLinkInput, MokaSearchInput, MokaCardTabs, MokaAlert } from '@components';
 import { MokaImageInput } from '@components/MokaInput';
@@ -263,13 +263,13 @@ const Test = () => {
                                         <h1>드래그 가능한 모달</h1>
                                         <Button
                                             onClick={() => {
-                                                toastr.confirm('적용하시겠습니까?', {
-                                                    onOk: () => {
+                                                messageBox.confirm(
+                                                    '적용하시겠습니까?',
+                                                    () => {
                                                         setShowD(false);
                                                     },
-                                                    onCancel: () => {},
-                                                    attention: false,
-                                                });
+                                                    () => {},
+                                                );
                                             }}
                                         >
                                             적용
@@ -281,11 +281,12 @@ const Test = () => {
                                 <Button
                                     className="mr-2"
                                     onClick={() => {
-                                        // toastr.confirm('확인창', {
-                                        //     onOk: () => console.log('OK: clicked'),
-                                        //     onCancel: () => console.log('CANCLE: clicked')
-                                        // });
-                                        toastr.success('ddd', 'ddd');
+                                        //messageBox.confirm(
+                                        //    '확인창',
+                                        //    () => console.log('OK: clicked'),
+                                        //    () => console.log('CANCLE: clicked'),
+                                        //);
+                                        toast.success('ddd');
                                     }}
                                 >
                                     토스트 테스트
@@ -299,7 +300,7 @@ const Test = () => {
                                     show={showLMS}
                                     onHide={() => setShowLMS(false)}
                                     onOk={(codeData) => {
-                                        toastr.success('선택한 코드', codeData.codeId);
+                                        toast.success(codeData.codeId);
                                     }}
                                     title="분류 검색"
                                 />
@@ -334,7 +335,7 @@ const Test = () => {
                                         { placeholder: '템플릿명' },
                                     ]}
                                 />
-                                <MokaSearchInput variant="warning" onSearch={() => toastr.success('테스트', '성공')} />
+                                <MokaSearchInput variant="warning" onSearch={() => toast.success('성공')} />
                             </Form.Group>
 
                             <Form.Group>

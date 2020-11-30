@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { clearStore, deleteComponent, hasRelationList } from '@store/component';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { ITEM_CP } from '@/constants';
 
 const ComponentList = React.lazy(() => import('./ComponentList'));
@@ -38,7 +38,7 @@ const Component = ({ match }) => {
      */
     const deleteCallback = useCallback(
         (component) => {
-            toast.confirm(
+            messageBox.confirm(
                 `${component.componentSeq}_${component.componentName}을 삭제하시겠습니까?`,
                 () => {
                     dispatch(
@@ -52,7 +52,7 @@ const Component = ({ match }) => {
                                 }
                                 // 삭제 실패
                                 else {
-                                    toast.warn(header.message);
+                                    toast.warning(header.message);
                                 }
                             },
                         }),
@@ -80,16 +80,10 @@ const Component = ({ match }) => {
                             if (!body) deleteCallback(component);
                             // 관련 아이템 있음
                             else {
-                                toast.alert(
-                                    <React.Fragment>
-                                        사용 중인 컴포넌트입니다.
-                                        <br />
-                                        삭제할 수 없습니다.
-                                    </React.Fragment>,
-                                );
+                                messageBox.alert('사용 중인 컴포넌트입니다.\n삭제할 수 없습니다.');
                             }
                         } else {
-                            toast.warn(header.message);
+                            toast.warning(header.message);
                         }
                     },
                 }),

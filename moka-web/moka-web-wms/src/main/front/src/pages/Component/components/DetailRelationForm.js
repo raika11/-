@@ -38,6 +38,11 @@ const DetailRelationForm = (props) => {
                 ...component,
                 zone: value,
             });
+        } else if (name === 'matchZone') {
+            setComponent({
+                ...component,
+                matchZone: value,
+            });
         }
     };
 
@@ -186,7 +191,7 @@ const DetailRelationForm = (props) => {
             {/* 영역 설정 */}
             <Form.Row className="mb-2">
                 <Col xs={4} className="p-0">
-                    <MokaInputLabel label="매칭영역" className="mb-0" value={component.matchZone} disabled />
+                    <MokaInputLabel label="매칭영역" className="mb-0" value={component.matchZone} name="matchZone" onChange={handleChangeValue} />
                 </Col>
                 <Col xs={8} className="p-0">
                     <MokaInputLabel label="영역 목록" className="mb-0" value={component.zone} name="zone" onChange={handleChangeValue} />

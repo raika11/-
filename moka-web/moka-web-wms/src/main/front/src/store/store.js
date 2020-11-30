@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import createSagaMiddleware from 'redux-saga';
-import { createLogger } from 'redux-logger';
+// import { createLogger } from 'redux-logger';
 
 import rootReducer from './rootReducer';
 import rootSaga from './rootSaga';
@@ -15,7 +15,8 @@ const sagaMiddleware = createSagaMiddleware();
 
 let middleware;
 if (process.env.NODE_ENV !== 'production') {
-    middleware = composeWithDevTools(applyMiddleware(sagaMiddleware, createLogger()));
+    // middleware = composeWithDevTools(applyMiddleware(sagaMiddleware, createLogger()));
+    middleware = composeWithDevTools(applyMiddleware(sagaMiddleware));
 } else {
     middleware = applyMiddleware(sagaMiddleware);
 }

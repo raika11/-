@@ -10,7 +10,7 @@ import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
 import { getPageType } from '@store/codeMgt';
 import { previewPage, w3cPage } from '@store/merge';
 import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
-import { notification } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/Page/modals';
 
@@ -287,10 +287,10 @@ const PageEdit = ({ onDelete }) => {
                     actions: [changePage(tmp)],
                     callback: ({ header, body }) => {
                         if (header.success) {
-                            notification('success', header.message);
+                            toast.success(header.message);
                             history.push(`/page/${body.pageSeq}`);
                         } else {
-                            notification('warning', header.message);
+                            toast.fail(header.message);
                         }
                     },
                 }),
@@ -342,7 +342,7 @@ const PageEdit = ({ onDelete }) => {
                     });
                     popupPreview('/preview/page', item);
                 } else {
-                    notification('warning', header.message || '미리보기에 실패하였습니다');
+                    toast.fail(header.message || '미리보기에 실패하였습니다');
                 }
             },
         };
@@ -404,7 +404,7 @@ const PageEdit = ({ onDelete }) => {
                 if (header.success) {
                     popupW3C(body);
                 } else {
-                    notification('warning', header.message || 'W3C검사에 실패했습니다');
+                    toast.fail(header.message || 'W3C검사에 실패했습니다');
                 }
             },
         };
@@ -466,34 +466,37 @@ const PageEdit = ({ onDelete }) => {
                         </Button>
                     </div>
                 </Form.Group>
-                {/* 사용여부 */}
-                <MokaInputLabel
-                    as="switch"
-                    className="mb-2"
-                    label="사용여부"
-                    id="usedYn"
-                    name="usedYn"
-                    inputProps={{ checked: temp.usedYn === 'Y' }}
-                    onChange={handleChangeValue}
-                />
-                {/* 페이지 ID, URL */}
+                {/* 사용여부,페이지 ID */}
                 <Form.Row className="mb-2">
+                    {/* 페이지 ID */}
                     <Col xs={6} className="px-0">
                         <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={paramPageSeq} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
+                    {/* 사용여부 */}
                     <Col xs={6} className="px-0">
                         <MokaInputLabel
-                            label="URL"
-                            labelWidth={47}
-                            className="mb-0"
-                            value={temp.pageUrl}
-                            inputProps={{
-                                plaintext: true,
-                                readOnly: true,
-                                onClick: handleClickOpenService,
-                            }}
+                            as="switch"
+                            className="mb-2"
+                            label="사용여부"
+                            id="usedYn"
+                            name="usedYn"
+                            inputProps={{ checked: temp.usedYn === 'Y' }}
+                            onChange={handleChangeValue}
                         />
                     </Col>
+                </Form.Row>
+                {/* 페이지 URL */}
+                <Form.Row className="mb-2">
+                    <MokaInputLabel
+                        label="URL"
+                        className="mb-0 w-100"
+                        value={temp.pageUrl}
+                        inputProps={{
+                            plaintext: true,
+                            readOnly: true,
+                            onClick: handleClickOpenService,
+                        }}
+                    />
                 </Form.Row>
                 {/* 페이지명 */}
                 <Form.Row className="mb-2">

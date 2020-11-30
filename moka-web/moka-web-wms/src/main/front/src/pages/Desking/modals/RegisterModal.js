@@ -42,7 +42,7 @@ const RegisterModal = (props) => {
         tgtComponent = targetIndex > -1 ? list[targetIndex] : null;
 
         if (!tgtComponent) {
-            toast.warn('선택한 컴포넌트가 올바르지 않은 컴포넌트입니다');
+            toast.warning('선택한 컴포넌트가 올바르지 않은 컴포넌트입니다');
             return;
         }
 
@@ -56,7 +56,7 @@ const RegisterModal = (props) => {
             list: selectedNodes,
             callback: ({ header }) => {
                 if (!header.success) {
-                    toast.warn(header.message);
+                    toast.warning(header.message);
                 } else {
                     onHide();
                 }

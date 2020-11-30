@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Dropdown from 'react-bootstrap/Dropdown';
 import BSImage from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
+import util from '@utils/commonUtil';
 import { MokaIcon } from '@components';
 
 const propTypes = {
@@ -72,25 +73,17 @@ const TemplateThumbCard = forwardRef((props, ref) => {
     // 이미지 landscape, portrait 설정
     useEffect(() => {
         if (imgRef.current !== null) {
-            let image = new Image();
-            image.src = imgRef.current.src;
-            image.onload = (imgProps) => {
-                let w = imgProps.path[0].width;
-                let h = imgProps.path[0].height;
-                let rate = 1;
-                if (wrapperRef.current) {
-                    rate = wrapperRef.current.innerWidth / wrapperRef.current.innerHeight;
-                }
-                if (w / h > rate) {
-                    imgRef.current.className = 'landscape';
-                } else {
-                    imgRef.current.className = 'portrait';
-                }
-                imgRef.current.style.visibility = 'visible';
-            };
-            image.onerror = () => {
-                imgRef.current.style.visibility = 'visible';
-            };
+            util.makeImgPreview(
+                imgRef.current.src,
+                imgRef.current,
+                wrapperRef.current,
+                () => {
+                    imgRef.current.style.visibility = 'visible';
+                },
+                () => {
+                    imgRef.current.style.visibility = 'visible';
+                },
+            );
         }
     }, []);
 

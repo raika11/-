@@ -61,7 +61,7 @@ const ChangeArtGroupModal = (props) => {
                         if (header.success) {
                             toast.success(header.message);
                         } else {
-                            toast.warn(header.message);
+                            toast.warning(header.message);
                         }
                     },
                 }),

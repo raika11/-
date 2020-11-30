@@ -32,7 +32,7 @@ const customToggle = forwardRef(({ onClick, id }, ref) => {
  * 데스킹 워크 버튼 그룹 컴포넌트
  */
 const DeskingWorkButtonGroup = (props) => {
-    const { component, agGridIndex, componentAgGridInstances } = props;
+    const { component, agGridIndex, componentAgGridInstances, workStatus } = props;
     const dispatch = useDispatch();
 
     // state
@@ -94,7 +94,7 @@ const DeskingWorkButtonGroup = (props) => {
         const api = componentAgGridInstances[agGridIndex].api;
 
         if (api.getSelectedRows().length < 1) {
-            toast.warn('기사를 선택해주세요');
+            toast.warning('기사를 선택해주세요');
         } else {
             setRegisterModal(true);
         }
@@ -129,7 +129,7 @@ const DeskingWorkButtonGroup = (props) => {
      */
     const handleClickSaveTemplate = (templateData) => {
         if (!templateData.templateSeq) {
-            toast.warn('선택된 템플릿이 없습니다');
+            toast.warning('선택된 템플릿이 없습니다');
             return;
         }
 
@@ -174,7 +174,7 @@ const DeskingWorkButtonGroup = (props) => {
                 <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
                     {/* 예약 + 타이틀 */}
                     <Col className="d-flex align-items-center p-0 position-static" xs={7}>
-                        <ReserveComponentWork component={component} />
+                        <ReserveComponentWork component={component} workStatus={workStatus} />
                         <OverlayTrigger overlay={<Tooltip>{`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}`}</Tooltip>}>
                             <p className="ft-12 mb-0 component-title text-truncate">{title}</p>
                         </OverlayTrigger>

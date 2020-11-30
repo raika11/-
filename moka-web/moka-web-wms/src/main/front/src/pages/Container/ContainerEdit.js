@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
 /**
@@ -97,7 +97,7 @@ const ContainerEdit = ({ onDelete }) => {
                         toast.success(header.message);
                         history.push(`/container/${body.containerSeq}`);
                     } else {
-                        toast.warn(header.message);
+                        toast.warning(header.message);
                     }
                 },
             }),
@@ -143,14 +143,8 @@ const ContainerEdit = ({ onDelete }) => {
                         if (!body) submitContainer(container);
                         // 관련 아이템 있음
                         else {
-                            toast.confirm(
-                                <React.Fragment>
-                                    다른 곳에서 사용 중입니다.
-                                    <br />
-                                    변경 시 전체 수정 반영됩니다.
-                                    <br />
-                                    수정하시겠습니까?
-                                </React.Fragment>,
+                            messageBox.confirm(
+                                '다른 곳에서 사용 중입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?',
                                 () => {
                                     submitContainer(container);
                                 },

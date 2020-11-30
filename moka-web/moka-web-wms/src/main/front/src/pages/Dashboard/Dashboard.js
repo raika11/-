@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import produce from 'immer';
 import { Helmet } from 'react-helmet';
 import InputMask from 'react-input-mask';
-import { toastr } from 'react-redux-toastr';
 import { useForm } from 'react-hook-form';
+import toast, { messageBox } from '@/utils/toastUtil';
 
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -111,7 +111,7 @@ const Dashboard = () => {
                             variant: 'white',
                             icon: <MokaIcon iconName="fal-coffee" />,
                             onClick: () => {
-                                toastr.success('토스트', '성공하였습니다');
+                                toast.success('성공하였습니다');
                             },
                         },
                     ]}
@@ -280,7 +280,7 @@ const Dashboard = () => {
                                         { placeholder: '템플릿명', disabled: true },
                                     ]}
                                 />
-                                {/* <MokaSearchInput variant="warning" onSearch={() => toastr.success('테스트', '성공')} /> */}
+                                {/* <MokaSearchInput variant="warning" onSearch={() => toast.success('성공')} /> */}
                             </Form.Group>
                         </Form>,
                         <div className="p-3">
@@ -356,12 +356,8 @@ const Dashboard = () => {
                                     <h1>드래그 가능한 모달</h1>
                                     <Button
                                         onClick={() => {
-                                            toastr.confirm('적용하시겠습니까?', {
-                                                onOk: () => {
-                                                    setShowD(false);
-                                                },
-                                                onCancel: () => {},
-                                                attention: false,
+                                            messageBox.confirm('적용하시겠습니까?', () => {
+                                                setShowD(false);
                                             });
                                         }}
                                     >
@@ -374,13 +370,86 @@ const Dashboard = () => {
                                     variant="outline-neutral"
                                     className="mr-2"
                                     onClick={() => {
-                                        toastr.confirm('확인창', {
-                                            onOk: () => alert('OK: clicked'),
-                                            onCancel: () => alert('CANCLE: clicked'),
-                                        });
+                                        toast.success('성공하였습니다.');
                                     }}
                                 >
-                                    토스트 테스트
+                                    toast - success
+                                </Button>
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-2"
+                                    onClick={() => {
+                                        toast.complete('완료되었습니다.');
+                                    }}
+                                >
+                                    toast - complete
+                                </Button>
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-2"
+                                    onClick={() => {
+                                        toast.fail('등록에 실패하였습니다.');
+                                    }}
+                                >
+                                    toast - fail
+                                </Button>
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-2"
+                                    onClick={() => {
+                                        toast.error('네트워크 오류가 발생하였습니다.');
+                                    }}
+                                >
+                                    toast - error
+                                </Button>
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-2"
+                                    onClick={() => {
+                                        toast.warning('값이 비어있습니다.');
+                                    }}
+                                >
+                                    toast - warning
+                                </Button>
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-2"
+                                    onClick={() => {
+                                        toast.info('잠금해제 요청이 있습니다.');
+                                    }}
+                                >
+                                    toast - info
+                                </Button>
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-2"
+                                    onClick={() => {
+                                        messageBox.alert(
+                                            'BackOffice에 등록된 휴대번호로 본인인증 문자가 발송됩니다.\n수신한 인증번호 입력 후 인증버튼을을 누르면 잠금이 해제됩니다.',
+                                            () => {
+                                                alert('OK: clicked');
+                                            },
+                                        );
+                                    }}
+                                >
+                                    alert
+                                </Button>
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-2"
+                                    onClick={() => {
+                                        messageBox.confirm(
+                                            '확인버튼을 누르시면 이동합니다.\n이동하시겠습니까?',
+                                            () => {
+                                                alert('OK: clicked');
+                                            },
+                                            () => {
+                                                alert('CANCLE: clicked');
+                                            },
+                                        );
+                                    }}
+                                >
+                                    confirm
                                 </Button>
 
                                 {/* 대중소 모달 */}
@@ -392,7 +461,7 @@ const Dashboard = () => {
                                     show={showLMS}
                                     onHide={() => setShowLMS(false)}
                                     onOk={(codeData) => {
-                                        toastr.success('선택한 코드', codeData.codeId);
+                                        toast.success(codeData.codeId);
                                     }}
                                     title="분류 검색(화면 틀어지는건 나중에 처리)"
                                 /> */}

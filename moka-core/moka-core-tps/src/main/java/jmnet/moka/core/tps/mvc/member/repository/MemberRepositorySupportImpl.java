@@ -1,10 +1,13 @@
 package jmnet.moka.core.tps.mvc.member.repository;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import java.util.Objects;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.mvc.group.entity.QGroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
@@ -35,6 +38,7 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
     public Page<MemberInfo> findAllMember(MemberSearchDTO memberSearchDTO) {
         QMemberInfo qMember = QMemberInfo.memberInfo;
         QMemberInfo qRegMember = new QMemberInfo("regMember");
+        QGroupMember qGroupMember = QGroupMember.groupMember;
 
         JPQLQuery<MemberInfo> query = from(qMember);
         if (McpString.isNotEmpty(memberSearchDTO.getKeyword())) {
@@ -65,13 +69,23 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
             query.where(qMember.memberNm.contains(memberSearchDTO.getMemberNm()));
         }
 
+        if (McpString.isNotEmpty(memberSearchDTO.getGroupCd())) {
+            query.where(qMember.groupMembers.contains(JPAExpressions
+                    .selectFrom(qGroupMember)
+                    .where(qGroupMember.member
+                            .eq(qMember)
+                            .and(qGroupMember.groupCd.eq(memberSearchDTO.getGroupCd())))));
+        }
+
         if (memberSearchDTO.getStatus() != null) {
             query.where(qMember.status.eq(memberSearchDTO.getStatus()));
         }
 
         Pageable pageable = memberSearchDTO.getPageable();
         if (McpString.isYes(memberSearchDTO.getUseTotal())) {
-            query = getQuerydsl().applyPagination(pageable, query);
+            query = Objects
+                    .requireNonNull(getQuerydsl())
+                    .applyPagination(pageable, query);
         }
 
 

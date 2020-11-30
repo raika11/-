@@ -39,6 +39,11 @@ public class MemberSearchDTO extends SearchDTO {
     private String memberNm;
 
     /**
+     * 그룹코드
+     */
+    private String groupCd;
+
+    /**
      * 상태(유효/정지)
      */
     private MemberStatusCode status;

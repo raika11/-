@@ -192,10 +192,9 @@ const DeskingWorkAgGrid = (props) => {
 
     useEffect(() => {
         if (gridInstance) {
-            gridInstance.api.refreshCells({ force: true });
+            gridInstance.api.refreshCells({ force: true, columns: ['relOrdEx', 'relTitle', 'contentOrdEx', 'title', 'thumbFileName'] });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rowData]);
+    }, [rowData, gridInstance]);
 
     return (
         <div className="ag-theme-moka-desking-grid px-1">

@@ -189,6 +189,7 @@ export default handleActions(
          */
         [act.FORM_XML_INPORT_MODAL]: (state, { payload }) => {
             return produce(state, (draft) => {
+                console.log(payload.importForm);
                 if (payload.importForm) {
                     draft.importForm = payload.importForm;
                 }

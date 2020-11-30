@@ -55,6 +55,7 @@ export const columnDefs = [
         field: 'repEmail1',
         cellStyle: { fontSize: '12px' },
         width: 180,
+        flex: true,
     },
 ];
 

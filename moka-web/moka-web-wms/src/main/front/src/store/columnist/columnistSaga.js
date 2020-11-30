@@ -45,7 +45,7 @@ function* saveColumnist({ payload: { type, actions, callback } }) {
             yield put({ type: act.GET_COLUMNIST_LIST });
         } else {
             // 실패 처리.
-            const { body } = response.data.body;
+            const { body } = response.data;
             if (body && body.list && Array.isArray(body.list)) {
                 yield put({
                     type: act.CHANGE_INVALID_LINK,

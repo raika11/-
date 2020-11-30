@@ -4,10 +4,10 @@ import AgGrid from './ColumnistAgGrid';
 
 const ColumnistList = () => {
     return (
-        <React.Fragment>
+        <>
             <Search />
             <AgGrid />
-        </React.Fragment>
+        </>
     );
 };
 

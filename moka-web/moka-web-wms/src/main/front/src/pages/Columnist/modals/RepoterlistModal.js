@@ -82,9 +82,19 @@ const RepoterlistModal = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
-        <MokaModal show={props.show} onHide={props.onHide} title="기자 검색" size="xl" footerClassName="justify-content-center" width={970} draggable>
+        <MokaModal
+            show={props.show}
+            onHide={props.onHide}
+            title="기자 검색"
+            size="xl"
+            bodyClassName="overflow-x-hidden custom-scroll"
+            footerClassName="d-flex justify-content-center"
+            width={970}
+            // centered
+            draggable
+        >
             <Form.Row>
-                <Col xs={7} className="p-0 mb-2">
+                <Col xs={6} className="p-2">
                     <MokaSearchInput value={searchKeyword} onChange={handleChangeValue} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" />
                 </Col>
             </Form.Row>
@@ -92,6 +102,7 @@ const RepoterlistModal = (props) => {
                 agGridHeight={600}
                 getRowHeight={40}
                 error={null}
+                rowHeight={39}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(reporter) => reporter.id}

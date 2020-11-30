@@ -83,7 +83,7 @@ const ColumnistSearch = () => {
 
             {/* 초기화 버튼 */}
             <div style={{ width: 85 }} className="d-flex justify-content-center">
-                <Button variant="negative" onClick={handleSearchReset}>
+                <Button variant="outline-neutral" onClick={handleSearchReset}>
                     초기화
                 </Button>
             </div>

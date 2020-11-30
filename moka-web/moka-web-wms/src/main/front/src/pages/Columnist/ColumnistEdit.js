@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { MokaCard, MokaInputLabel } from '@components';
+import { MokaCard, MokaInputLabel, MokaSearchInput } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ColumnistModal from './modals/RepoterlistModal';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, changeColumnlistEditMode, clearColumnist } from '@store/columnist';
 
 const ColumnistEdit = ({ history }) => {
@@ -115,24 +115,6 @@ const ColumnistEdit = ({ history }) => {
             isInvalid = isInvalid || true;
         }
 
-        // 이메일1
-        if (!editData.email2) {
-            errList.push({
-                field: 'email1',
-                reason: '이메일을 입력해 주세요.',
-            });
-            isInvalid = isInvalid || true;
-        }
-
-        // 이메일2
-        if (!editData.email2) {
-            errList.push({
-                field: 'email2',
-                reason: '이메일을 입력해 주세요.',
-            });
-            isInvalid = isInvalid || true;
-        }
-
         // 직책
         if (!editData.position) {
             errList.push({
@@ -142,16 +124,6 @@ const ColumnistEdit = ({ history }) => {
             isInvalid = isInvalid || true;
         }
 
-        // 약력 정보.
-        if (!editData.profile) {
-            errList.push({
-                field: 'profile',
-                reason: '약력정보를 입력해 주세요.',
-            });
-            isInvalid = isInvalid || true;
-        }
-
-        // 이미지 체크(정보 등록시)
         if (!editData.seqNo && editData.columnistFile === null) {
             errList.push({
                 field: 'selectImg',
@@ -160,8 +132,7 @@ const ColumnistEdit = ({ history }) => {
             isInvalid = isInvalid || true;
         }
 
-        // 이미지 체크(정보 수정시)
-        if (editData.seqNo && editData.profilePhoto === '' && editData.columnistFile === null) {
+        if (editData.seqNo && editData.columnistFile === null && editData.profilePhoto.length === 0) {
             errList.push({
                 field: 'selectImg',
                 reason: '이미지를 선택해 주세요.',
@@ -178,7 +149,7 @@ const ColumnistEdit = ({ history }) => {
         // 이미지 설정.
         let saveData = {
             ...selectRepoterData,
-            columnistFile: fileValue ? fileValue : null,
+            columnistFile: fileValue,
         };
 
         // 이메일 합치는거 때문에 미리 체크.
@@ -212,9 +183,7 @@ const ColumnistEdit = ({ history }) => {
                 callback: (response) => {
                     if (response.header.success) {
                         setError(setErrorInitialize);
-                        toast.success('등록하였습니다.');
-                    } else {
-                        toast.fail('실패하였습니다.');
+                        toast.success(response.header.message);
                     }
                 },
             }),
@@ -235,9 +204,7 @@ const ColumnistEdit = ({ history }) => {
                                 seqNo: updateData.seqNo,
                             }),
                         );
-                        toast.success('수정하였습니다.');
-                    } else {
-                        toast.fail('실패하였습니다.');
+                        toast.success(response.header.message);
                     }
                 },
             }),
@@ -265,7 +232,6 @@ const ColumnistEdit = ({ history }) => {
             let tmpEmail = [];
             tmpEmail = columnist.email !== 'undefined' && columnist.email != null && columnist.email.split('@');
             // setSelectRepoterData(repoterDataInitialize);
-            console.log(columnist.profilePhoto);
             setEditData({
                 repNo: columnist.repNo,
                 // inout: null,
@@ -295,6 +261,8 @@ const ColumnistEdit = ({ history }) => {
                     {},
                 ),
             );
+
+            messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});
         }
     }, [invalidList]);
 
@@ -337,10 +305,6 @@ const ColumnistEdit = ({ history }) => {
         }
     }, [dispatch, seqNo]);
 
-    useEffect(() => {
-        console.log(selectRepoterData.profilePhoto);
-    }, [selectRepoterData]);
-
     return (
         <MokaCard width={535} title={`칼럼 니스트 ${columnist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
             <Form className="mb-gutter">
@@ -371,13 +335,11 @@ const ColumnistEdit = ({ history }) => {
                             required
                         />
                     </Col>
-                    <div className="d-flex justify-content-center">
-                        <Col xs={2} className="p-0">
-                            <Button variant="negative" className="mr-05" onClick={handleClickReportSearchbutton}>
-                                검색
-                            </Button>
-                        </Col>
-                    </div>
+                    <Col xs={1} className="justify-content-center">
+                        <Button className="mr-05 btn btn-searching" onClick={handleClickReportSearchbutton} disabled={editDisabled.editBoxButton}>
+                            검색
+                        </Button>
+                    </Col>
                 </Form.Row>
                 <Form.Row className="d-flex mb-10 text-align-center" style={{ marginLeft: '80px' }}>
                     <Form.Label className="text-danger">* 외부 칼럼니스트 이름을 직접 입력해 주세요.</Form.Label>
@@ -394,13 +356,11 @@ const ColumnistEdit = ({ history }) => {
                             disabled={editDisabled.repSeq}
                         />
                     </Col>
-                    <div className="d-flex justify-content-center">
-                        <Col xs={2} className="p-0">
-                            <Button variant="negative" className="mr-05" onClick={handleClickDeleterepSeq}>
-                                삭제
-                            </Button>
-                        </Col>
-                    </div>
+                    <Col xs={1} className="justify-content-center">
+                        <Button variant="negative" className="mr-05" onClick={handleClickDeleterepSeq} disabled={editDisabled.editBoxButton}>
+                            삭제
+                        </Button>
+                    </Col>
                 </Form.Row>
 
                 <Form.Row className="mb-2">
@@ -415,7 +375,9 @@ const ColumnistEdit = ({ history }) => {
                             disabled={editDisabled.email1}
                         />
                     </Col>
-                    @
+                    <Col xs={1} className="text-center pt-1">
+                        @
+                    </Col>
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label=""
@@ -430,7 +392,7 @@ const ColumnistEdit = ({ history }) => {
                 </Form.Row>
 
                 <Form.Row className="mb-2">
-                    <Col xs={9} className="p-0">
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
                             label="직책"
                             className="mb-0"
@@ -445,7 +407,7 @@ const ColumnistEdit = ({ history }) => {
                 </Form.Row>
 
                 <Form.Row className="mb-2">
-                    <Col xs={9} className="p-0">
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="textarea"
                             label="약력정보"
@@ -481,7 +443,12 @@ const ColumnistEdit = ({ history }) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     imgFileRef.current.deleteFile();
+                                    setSelectRepoterData({
+                                        ...selectRepoterData,
+                                        profilePhoto: '',
+                                    });
                                 }}
+                                disabled={editDisabled.editBoxButton}
                             >
                                 삭제
                             </Button>
@@ -500,10 +467,10 @@ const ColumnistEdit = ({ history }) => {
 
             <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
                 <div className="d-flex justify-content-center">
-                    <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editDisabled.savebutton}>
+                    <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editDisabled.editBoxButton}>
                         저장
                     </Button>
-                    <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editDisabled.canclebutton}>
+                    <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editDisabled.editBoxButton}>
                         취소
                     </Button>
                 </div>
@@ -550,8 +517,7 @@ const setEditDisabledInitialize = {
     position: true,
     profile: true,
     selectImg: true,
-    savebutton: true,
-    canclebutton: true,
+    editBoxButton: true,
 };
 
 export default ColumnistEdit;

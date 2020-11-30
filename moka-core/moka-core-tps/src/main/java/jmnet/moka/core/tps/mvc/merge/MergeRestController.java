@@ -179,7 +179,7 @@ public class MergeRestController {
      * 컴포넌트 미리보기
      *
      * @param request          요청
-     * @param pageSeq          페이지SEQ
+     * @param areaSeq          편집영역seq
      * @param componentWorkSeq 작업중인 컴포넌트SEQ
      * @param principal        작업자
      * @param resourceYn       미리보기 리소스 포함여부
@@ -188,14 +188,23 @@ public class MergeRestController {
      */
     @ApiOperation(value = "컴포넌트 미리보기")
     @GetMapping(value = "/previewCP")
-    public ResponseEntity<?> getPreviewCP(HttpServletRequest request, Long pageSeq, Long componentWorkSeq, Principal principal, String resourceYn)
+    public ResponseEntity<?> getPreviewCP(HttpServletRequest request, Long areaSeq, Long componentWorkSeq, Principal principal, String resourceYn)
             throws Exception {
 
         //        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
+        // 1. 편집영역조회
+        Area area = areaService.findAreaBySeq(areaSeq)
+                               .orElseThrow(() -> {
+                                   String message = messageByLocale.get("tps.common.error.no-data");
+                                   tpsLogger.fail(message, true);
+                                   return new NoDataException(message);
+                               });
+
         // 페이지
-        Page pageInfo = pageService.findPageBySeq(pageSeq)
+        Page pageInfo = pageService.findPageBySeq(area.getPage()
+                                                      .getPageSeq())
                                    .orElseThrow(() -> {
                                        String message = messageByLocale.get("tps.common.error.no-data", request);
                                        tpsLogger.fail(ActionType.SELECT, message, true);
@@ -208,8 +217,8 @@ public class MergeRestController {
                                                                .format(df));
 
         // 도메인
-        Domain domainInfo = domainService.findDomainById(pageDto.getDomain()
-                                                                .getDomainId())
+        Domain domainInfo = domainService.findDomainById(area.getDomain()
+                                                             .getDomainId())
                                          .orElseThrow(() -> {
                                              String message = messageByLocale.get("tps.common.error.no-data", request);
                                              tpsLogger.fail(ActionType.SELECT, message, true);
@@ -243,6 +252,12 @@ public class MergeRestController {
             StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false);
 
             String content = sb.toString();
+
+            // 미리보기 리소스 추가
+            if (content.length() > 0 && resourceYn.equals(MokaConstants.YES)) {
+                content = area.getPreviewRsrc() + content;
+            }
+
             ResultDTO<String> resultDto = new ResultDTO<String>(HttpStatus.OK, content);
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -342,6 +357,11 @@ public class MergeRestController {
 
                 content = sb.toString();
 
+                // 미리보기 리소스 추가
+                if (content.length() > 0) {
+                    content = area.getPreviewRsrc() + content;
+                }
+
             } else {
                 // 작업컴포넌트 목록 조회
                 Map paramMap = new HashMap();
@@ -370,6 +390,11 @@ public class MergeRestController {
                     StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false);
 
                     content = sb.toString();
+
+                    // 미리보기 리소스 추가
+                    if (content.length() > 0) {
+                        content = area.getPreviewRsrc() + content;
+                    }
                 }
             }
 
@@ -378,9 +403,9 @@ public class MergeRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            //            log.error("[FAIL TO MERGE] componentWorkSeq: {} {}", componentWorkSeq, e.getMessage());
+            log.error("[FAIL TO MERGE] areaSeq: {} {}", areaSeq, e.getMessage());
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
-            throw new Exception(messageByLocale.get("tps.merge.error.component", request), e);
+            throw new Exception(messageByLocale.get("tps.merge.error.area", request), e);
         }
     }
 }

@@ -23,6 +23,7 @@ import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.Downloader;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
@@ -32,6 +33,7 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import jmnet.moka.core.tps.mvc.editform.dto.ChannelFormatDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormImportDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
@@ -152,6 +154,14 @@ public class EditFormRestController extends AbstractCommonController {
     public ResponseEntity<?> getEditForm(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq)
             throws NoDataException {
 
+        EditFormDTO editFormDTO = getEditFormAndFieldMarshalling(formSeq);
+        ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
+        resultMapDTO.addBodyAttribute("editForm", editFormDTO);
+        return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
+    }
+
+    private EditFormDTO getEditFormAndFieldMarshalling(Long formSeq)
+            throws NoDataException {
         EditForm editForm = editFormService
                 .findEditFormBySeq(formSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
@@ -171,9 +181,7 @@ public class EditFormRestController extends AbstractCommonController {
                         }
                     });
         }
-        ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
-        resultMapDTO.addBodyAttribute("editForm", editFormDTO);
-        return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
+        return editFormDTO;
     }
 
     /**
@@ -393,19 +401,19 @@ public class EditFormRestController extends AbstractCommonController {
     /**
      * legacy xml을 추출하여 db에 저장
      *
-     * @param file xml파일
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
     @ApiOperation(value = "Edit form 정보를 xml 에서 추출하여 DB에 저장한다.")
-    @PostMapping(value = "/xml-to-db", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<?> postEditFormXmlToDB(MultipartFile file)
+    @PostMapping(value = "/import-xml", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> postEditFormXmlToDB(@Valid EditFormImportDTO editFormImport)
             throws MokaException {
 
         try {
-
+            long formSeq;
+            MultipartFile file = editFormImport.getFile();
             String xml = new String(file.getBytes());
-            ResultDTO<EditFormDTO> resultDTO = null;
+
             if (xml.contains("<channelFormat>")) { // legacy xml 업로드
                 ChannelFormatDTO channelFormatDTO = editFormHelper.mapping(DEFAULT_SITE, file.getOriginalFilename(), file.getBytes());
                 EditForm editForm = modelMapper.map(channelFormatDTO, EditForm.class);
@@ -428,61 +436,87 @@ public class EditFormRestController extends AbstractCommonController {
                                 log.error(e.toString());
                             }
                         });
-                resultDTO = new ResultDTO<>(modelMapper.map(editForm, EditFormDTO.class));
+                formSeq = newEditForm.getFormSeq();
             } else if (xml.contains("<editForm>")) { // 내려받은 편집 폼 xml을 업로드
                 EditFormDTO editFormDTO = editFormHelper.getEditForm(xml);
                 EditForm editForm = modelMapper.map(editFormDTO, EditForm.class);
                 editForm.setEditFormParts(new HashSet<>());
 
-                if (editForm.getFormSeq() == null || editForm.getFormSeq() == 0) {
-                    // 신규는 없음
-                    throw new NoDataException(msg("tps.common.error.no-data"));
+                if (editFormImport.getFormSeq() == null || editFormImport.getFormSeq() == 0) {
+                    EditForm newEditForm = editFormService.insertEditForm(editForm);
+                    formSeq = newEditForm.getFormSeq();
+                    editFormDTO
+                            .getEditFormParts()
+                            .forEach(partDTO -> {
+                                try {
+                                    EditFormPart editFormPart = modelMapper.map(partDTO, EditFormPart.class);
+                                    editFormPart.setFormSeq(newEditForm.getFormSeq());
+                                    editFormPart.setPartSeq(null);
+                                    editFormPart.setFormData(objectMapper.writeValueAsString(partDTO.getFieldGroups()));
+                                    editFormService.insertEditFormPart(editFormPart, EditStatusCode.SAVE, null);
+                                } catch (Exception ex) {
+                                    log.error(ex.toString());
+                                }
+                            });
+                } else {
+                    // 기존 데이터 없을 경우 에러 처리
+                    editFormService
+                            .findEditFormBySeq(editFormImport.getFormSeq())
+                            .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+                    editForm.setFormSeq(editFormImport.getFormSeq());
+                    editFormService.updateEditForm(editForm);
+                    formSeq = editFormImport.getFormSeq();
+                    editFormDTO
+                            .getEditFormParts()
+                            .forEach(partDTO -> {
+                                EditFormPart editFormPart = modelMapper.map(partDTO, EditFormPart.class);
+                                editFormPart.setFormSeq(editForm.getFormSeq());
+                                try {
+                                    editFormPart.setFormData(objectMapper.writeValueAsString(partDTO.getFieldGroups()));
+                                    editForm
+                                            .getEditFormParts()
+                                            .add(editFormService.insertEditFormPart(editFormPart, EditStatusCode.SAVE, null));
+                                } catch (Exception e) {
+                                    log.error(e.toString());
+                                }
+                            });
                 }
-                // 기존 데이터 없을 경우 에러 처리
-                editFormService
-                        .findEditFormBySeq(editForm.getFormSeq())
-                        .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
-                editFormService.updateEditForm(editForm);
-
-                editFormDTO
-                        .getEditFormParts()
-                        .forEach(partDTO -> {
-                            EditFormPart editFormPart = modelMapper.map(partDTO, EditFormPart.class);
-                            editFormPart.setFormSeq(editForm.getFormSeq());
-                            try {
-                                editFormPart.setFormData(objectMapper.writeValueAsString(partDTO.getFieldGroups()));
-                                editForm
-                                        .getEditFormParts()
-                                        .add(editFormService.insertEditFormPart(editFormPart, EditStatusCode.SAVE, null));
-                            } catch (Exception e) {
-                                log.error(e.toString());
-                            }
-                        });
             } else if (xml.contains("<part>")) { // 내려받은 편집 폼 Part xml을 업로드
                 // xml에서 form part 정보 불러오기
                 EditFormPartDTO editFormPartDTO = editFormHelper.getEditFormPart(xml);
                 EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
 
-                if (editFormPartDTO.getFormSeq() == null || editFormPartDTO.getFormSeq() == 0) {
+                if (editFormImport.getPartSeq() == null || editFormImport.getPartSeq() == 0) {
                     // part xml은 존재하는 part를 정보를 수정하는 것이므로 기존 데이터가 없을 경우 에러 처리
                     throw new NoDataException(msg("tps.common.error.no-data"));
                 }
                 // 기존 데이터 없을 경우 에러 처리
                 editFormService
-                        .findEditFormPartBySeq(editFormPart.getPartSeq())
+                        .findEditFormPartBySeq(editFormImport.getPartSeq())
                         .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+                formSeq = editFormImport.getFormSeq();
                 // part xml 업로드는 무조건 임시저장 상태로 업데이트
+                editFormPart.setPartSeq(editFormImport.getPartSeq());
+                editFormPart.setFormSeq(editFormImport.getFormSeq());
                 editFormPart.setFormData(objectMapper.writeValueAsString(editFormPartDTO.getFieldGroups()));
                 editFormService.updateEditFormPart(editFormPart, EditStatusCode.SAVE, null);
 
             } else {
                 throw new MokaException(msg("tps.edit-form.error.xml-format"));
             }
+            if (formSeq > 0) {
+                ResultDTO<EditFormDTO> resultMapDTO = new ResultDTO<>(EditFormDTO
+                        .builder()
+                        .formSeq(formSeq)
+                        .build(), msg("tps.edit-form.success.xml-import"));
+                return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
+            } else {
+                ResultDTO<EditFormDTO> resultDTO = new ResultDTO<>(TpsConstants.HEADER_FILE_ERROR, msg("tps.edit-form.error.xml-import"));
+                return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            }
 
 
-
-            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception ex) {
             throw new MokaException(ex);

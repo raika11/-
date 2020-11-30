@@ -23,8 +23,15 @@ export const postPreviewPG = ({ page }) => {
 };
 
 // 컴포넌트 미리보기
-export const getPreviewCP = ({ pageSeq, componentWorkSeq, resourceYn }) => {
-    return instance.get(`/api/merge/previewCP?pageSeq=${pageSeq}&componentWorkSeq=${componentWorkSeq}&resourceYn=${resourceYn || 'Y'}`).catch((err) => {
+export const getPreviewCP = ({ areaSeq, componentWorkSeq, resourceYn }) => {
+    return instance.get(`/api/merge/previewCP?areaSeq=${areaSeq}&componentWorkSeq=${componentWorkSeq}&resourceYn=${resourceYn || 'Y'}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 편집영역 미리보기
+export const getPreviewArea = ({ areaSeq }) => {
+    return instance.get(`/api/merge/previewArea?areaSeq=${areaSeq}`).catch((err) => {
         throw err;
     });
 };

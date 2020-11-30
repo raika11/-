@@ -12,7 +12,6 @@ package jmnet.moka.common.template.merge;
 public class MergeOptions {
 	private boolean debug;
     private boolean preview;
-    private boolean previewResource;
 	private boolean wrapItem;
 	private String showItem;
 	private String showItemId;
@@ -24,11 +23,9 @@ public class MergeOptions {
 		this.debug = debug;
 		this.wrapItem = wrapItem;
 	}
-
 	public boolean isDebug() {
 		return debug;
 	}
-
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 	}
@@ -50,19 +47,9 @@ public class MergeOptions {
 	public void setShowItemId(String highlightElementId) {
 		this.showItemId = highlightElementId;
 	}
-
-    public boolean isPreviewResource() {
-        return previewResource;
-    }
-
-    public void setPreviewResource(boolean preview) {
-        this.previewResource = preview;
-    }
-
     public boolean isPreview() {
         return preview;
     }
-
     public void setPreview(boolean preview) {
         this.preview = preview;
     }

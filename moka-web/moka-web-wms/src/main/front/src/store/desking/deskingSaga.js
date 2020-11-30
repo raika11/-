@@ -7,6 +7,11 @@ import * as api from './deskingApi';
 import * as act from './deskingAction';
 
 import { DEFAULT_LANG } from '@/constants';
+const dragResult = {
+    existRow: { success: false, message: '이미 존재하는 기사입니다' },
+    unmovableRow: { success: false, message: '관련기사를 포함한 주기사를 이동하세요' },
+    incorrectRow: { success: false, message: '올바른 주기사를 선택하세요' },
+};
 
 /**
  * Desking API 호출 => 결과를 COMPONENT_WORK_ 액션에 담는다
@@ -73,13 +78,15 @@ const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPO
  * 데스킹 워크의 관련기사 rowNode 생성
  */
 const makeRelRowNode = (data, relOrd, parentData, component) => {
+    let key = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
+
     if (!parentData || parentData.contentId === null) {
-        return { success: false, message: '올바른 주기사를 선택하세요' };
+        return dragResult.incorrectRow;
     }
 
-    const existRow = parentData.relSeqs ? parentData.relSeqs.filter((relSeq) => relSeq === data.contentId) : null;
+    const existRow = component.deskingWorks.filter((desking) => desking.contentId === key);
     if (existRow && existRow.length > 0) {
-        return { success: false, message: '이미 존재하는 기사입니다' };
+        return dragResult.existRow;
     }
 
     let appendData = null;
@@ -121,13 +128,15 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
  * 데스킹 워크의 rowNode 생성
  */
 const makeRowNode = (data, contentOrd, component) => {
-    if (!data || data.contentId === null) {
-        return { success: false, message: '올바르지 않은 기사입니다' };
+    let key = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
+
+    if (!data || key === null) {
+        return dragResult.incorrectRow;
     }
 
-    const existRow = component.deskingWorks.filter((desking) => desking.contentId === data.contentId);
+    const existRow = component.deskingWorks.filter((desking) => desking.contentId === key);
     if (existRow && existRow.length > 0) {
-        return { success: false, message: '이미 존재하는 기사입니다' };
+        return dragResult.existRow;
     }
 
     let appendData = null;
@@ -197,18 +206,12 @@ function* deskingDragStop({ payload }) {
         overIndex = target.overIndex;
     } else if (source.event) {
         overIndex = getRowIndex(source.event);
-    } else {
-        // 마지막 row
-        overIndex = target.api.getRenderedNodes().length - 1;
-        overIndex = overIndex === 0 ? -1 : overIndex;
     }
 
-    if (source.node) {
-        let rowNode = source.api.getRowNode(source.node.contentId);
-        if (rowNode) {
-            rowNode.setSelected(true);
-        }
-    }
+    // if (source.node.data.gridType === 'DESKING') {
+    //     let rowNode = source.api.getRowNode(source.node.contentId);
+    //     rowNode && rowNode.setSelected(true);
+    // }
 
     sourceNode = source.api.getSelectedNodes().length > 0 ? source.api.getSelectedNodes() : source.node;
     if (Array.isArray(sourceNode)) {
@@ -216,30 +219,10 @@ function* deskingDragStop({ payload }) {
         sourceNode = sourceNode.sort(function (a, b) {
             return a.childIndex - b.childIndex;
         });
-        // selected상태 변경
-        source.api.deselectAll();
     }
 
-    // 컴포넌트간의 이동여부 : 기사목록에서 편집컴포넌트로 드래그드롭됐을때, 기사목록의 체크박스 제거
-    const bMoveComponents = srcComponent && srcComponent.seq >= 0;
-
-    if (bMoveComponents) {
-        const targetRowData = target.api.getDisplayedRowAtIndex(overIndex).data;
-        const movable = getMoveMode(sourceNode, targetRowData);
-        if (!movable) {
-            if (typeof callback === 'function') {
-                const result = {
-                    header: {
-                        success: false,
-                        message: '이동할 수 없습니다',
-                    },
-                    body: null,
-                };
-                yield call(callback, result);
-            }
-            return;
-        }
-    }
+    // move api 호출 파악(컴포넌트 워크 간의 이동)
+    const bMoveComponents = srcComponent?.seq >= 0;
 
     // 주기사 추가하는 함수
     const rd = (insertIndex) => {
@@ -248,28 +231,18 @@ function* deskingDragStop({ payload }) {
         if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
             let contentOrding = insertIndex - 1;
-            for (let i = 0; i < sourceNode.length; i++) {
-                const node = sourceNode[i];
+            sourceNode.some((node) => {
                 if (!node.data.rel) contentOrding++;
                 const result = makeRowNode(node.data, contentOrding, tgtComponent);
                 if (result.success) {
                     ans.push(result.list);
+                    return false;
                 } else {
                     callback && callback({ header: result });
                     ans = [];
+                    return true;
                 }
-            }
-            // sourceNode.some((node, idx) => {
-            //     const result = makeRowNode(node.data, node.data.rel ? insertIndex + idx, tgtComponent);
-            //     if (result.success) {
-            //         ans.push(result.list);
-            //         return false;
-            //     } else {
-            //         callback && callback({ header: result });
-            //         ans = [];
-            //         return true;
-            //     }
-            // });
+            });
         } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
             const result = makeRowNode(sourceNode.data, insertIndex, tgtComponent);
@@ -309,12 +282,31 @@ function* deskingDragStop({ payload }) {
 
     if (overIndex < 0) {
         // 1) 비어있는 ag-grid에 처음으로 데스킹할 때
+        // 1-1) 워크 간의 이동일 때 이동가능한지 판단
+        if (bMoveComponents) {
+            const movable = getMoveMode(sourceNode, null);
+            if (!movable && callback) {
+                yield call(callback, { header: dragResult.unmovableRow });
+                return;
+            }
+        }
+
         appendNodes = rd(1);
     } else {
-        // 2) 데스킹 기사가 있는 ag-grid에 기사를 추가할 때
+        // 2) 기사가 있는 ag-grid에 기사를 추가할 때
         const targetRowData = target.api.getDisplayedRowAtIndex(overIndex).data;
+
+        // 2-1) 워크 간의 이동일 때 이동가능한지 판단
+        if (bMoveComponents) {
+            const movable = getMoveMode(sourceNode, targetRowData);
+            if (!movable && callback) {
+                yield call(callback, { header: dragResult.unmovableRow });
+                return;
+            }
+        }
+
         if (!targetRowData.rel) {
-            // 2-1) hover된 row가 주기사 => 관련기사 추가인가? => 체크된 row에 targetRow가 있는지 확인한다
+            // 2-2) hover된 row가 주기사 => 관련기사 추가인가? => 체크된 row에 targetRow가 있는지 확인한다
             const selectedNodes = target.api.getSelectedNodes();
             selectedNodes.forEach((s) => {
                 if (s.data.contentId === targetRowData.contentId) addRelArt = true;
@@ -324,12 +316,12 @@ function* deskingDragStop({ payload }) {
                 // 주기사 추가
                 appendNodes = rd(targetRowData.contentOrd + 1);
             } else {
-                // 관련기사 추가 (주기사의 원래 관련기사의 개수를 찾아서 맨 마지막 index로 셋팅)
-                const firstIndex = !targetRowData.relSeqs ? 1 : targetRowData.relSeqs.length + 1;
+                // 관련기사 추가 (첫번째 index에 넣는다)
+                const firstIndex = 1;
                 appendNodes = rrd(firstIndex, targetRowData);
             }
         } else {
-            // 2-2) hover된 row가 관련기사 => 주기사를 찾아서 체크된 row인지 확인한다
+            // 2-3) hover된 row가 관련기사 => 주기사를 찾아서 체크된 row인지 확인한다
             const parentRow = target.api.getRowNode(targetRowData.parentContentId);
 
             if (parentRow.isSelected()) {
@@ -371,8 +363,10 @@ function* deskingDragStop({ payload }) {
             type: act.POST_DESKING_WORK_LIST,
             payload: option,
         });
-        source.api.deselectAll();
     }
+
+    // selected상태 변경
+    source.api.deselectAll();
 }
 
 /**
@@ -400,9 +394,9 @@ const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST,
  */
 function* moveDeskingWorkList({ payload }) {
     const ACTION = act.MOVE_DESKING_WORK_LIST;
-    const { srcComponentWorkSeq, callback } = payload;
-    let callbackData;
-    const status = 'work';
+    const { callback } = payload;
+    let callbackData,
+        status = 'work';
 
     yield put(startLoading(ACTION));
 
@@ -412,21 +406,12 @@ function* moveDeskingWorkList({ payload }) {
 
         if (response.data.header.success) {
             yield put({
-                type: act.COMPONENT_WORK_SUCCESS,
+                type: act.MOVE_DESKING_WORK_LIST_SUCCESS,
                 payload: { ...response.data, status },
-            });
-
-            // source 컴포넌트 재조회
-            yield put({
-                type: act.GET_COMPONENT_WORK,
-                payload: {
-                    componentWorkSeq: srcComponentWorkSeq,
-                    status,
-                },
             });
         } else {
             yield put({
-                type: act.COMPONENT_WORK_FAILURE,
+                type: act.MOVE_DESKING_WORK_LIST_FAILURE,
                 payload: { ...response.data, status },
             });
         }

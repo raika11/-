@@ -12,6 +12,7 @@
 package jmnet.moka.core.tps.mvc.desking.mapper;
 
 import java.util.List;
+import java.util.Map;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
@@ -34,27 +35,20 @@ public interface ComponentWorkMapper extends BaseMapper<ComponentWorkVO, Desking
      */
     List<List<Object>> findAllComponentWork(DeskingWorkSearchDTO search);
 
-    //    /**
-    //     * <pre>
-    //     * 페이지에서 수동컴포넌트인 것 모두 조회
-    //     * </pre>
-    //     *
-    //     * @param param
-    //     * @return
-    //     */
-    //    List<DeskingComponentWorkVO> findComponentsWorkAll(DeskingWorkSearchDTO search);
-
     /**
-     * <pre>
      * 컴포넌트 조회
-     * </pre>
      *
      * @param seq 컴포넌트work 순번
-     * @return
+     * @return 컴포넌트wor
      */
     ComponentWorkVO findComponentWorkBySeq(Long seq);
 
+    /**
+     * 편집영역내의 컴포넌트work 목록 조회
+     *
+     * @param map areaSeq:편집영역Seq regId: 작업자ID
+     * @return 컴포넌트work 목록
+     */
+    List<ComponentWorkVO> findComponentWorkByArea(Map<String, Object> map);
 
-
-    //    List<EditionVO> findEditionAll(Long pageSeq);
 }

@@ -8,7 +8,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -37,7 +36,6 @@ import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -696,11 +694,16 @@ public class DeskingRestController extends AbstractCommonController {
                 deskingService.deleteDeskingWorkList(null, srcDatasetSeq, principal.getName());
 
                 // work 컴포넌트 조회(편집기사,관련편집기사포함)
-                ComponentWorkVO workVO = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+                ComponentWorkVO targetWorkVO = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+                ComponentWorkVO sourceWorkVO = deskingService.findComponentWorkBySeq(srcComponentWorkSeq, true);
 
                 // 리턴값 설정
-                ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(workVO);
-                return new ResponseEntity<>(resultDto, HttpStatus.OK);
+                ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
+                resultMapDTO.addBodyAttribute("target", targetWorkVO);
+                resultMapDTO.addBodyAttribute("source", sourceWorkVO);
+                tpsLogger.success(true);
+                return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
+
             } else {
                 throw new Exception(msg("tps.desking.error.work.move", request));
             }
@@ -715,16 +718,16 @@ public class DeskingRestController extends AbstractCommonController {
     /**
      * 데스킹 히스토리 조회(컴포넌트별)
      *
-     * @param componentSeq      컴포넌트 아이디
-     * @param search            검색조건
+     * @param componentSeq 컴포넌트 아이디
+     * @param search       검색조건
      * @return 결과
-     * @throws NoDataException  데이터없음
-     * @throws Exception        그외 에러
+     * @throws NoDataException 데이터없음
+     * @throws Exception       그외 에러
      */
     @ApiOperation(value = "히스토리 조회(컴포넌트별)")
     @GetMapping("/components/histories/{componentSeq}")
     public ResponseEntity<?> getComponentHistoryList(
-            @PathVariable("componentSeq")  @Min(value = 0, message = "{tps.deskinghist.error.min.componentSeq}") Long componentSeq,
+            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentSeq}") Long componentSeq,
             @Valid @SearchParam DeskingHistSearchDTO search)
             throws NoDataException, Exception {
 
@@ -752,13 +755,14 @@ public class DeskingRestController extends AbstractCommonController {
     /**
      * 데스킹 히스토리 상세조회
      *
-     * @param componentHistSeq  컴포넌트 히스토리 아이디
-     * @return                  결과(기사목록)
-     * @throws Exception        에러처리
+     * @param componentHistSeq 컴포넌트 히스토리 아이디
+     * @return 결과(기사목록)
+     * @throws Exception 에러처리
      */
     @ApiOperation(value = "히스토리 상세조회")
     @GetMapping("/histories/{componentHistSeq}")
-    public ResponseEntity<?> getDeskingHistory(@PathVariable("componentHistSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentHistSeq}") Long componentHistSeq)
+    public ResponseEntity<?> getDeskingHistory(
+            @PathVariable("componentHistSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentHistSeq}") Long componentHistSeq)
             throws Exception {
 
         try {
@@ -784,17 +788,17 @@ public class DeskingRestController extends AbstractCommonController {
     /**
      * 히스토리를 편집기사 워크로 등록 (파일업로드 안됨)
      *
-     * @param componentWorkSeq  컴포넌트work 아이디
-     * @param componentHistSeq  컴포넌트 히스토리 아이디
+     * @param componentWorkSeq 컴포넌트work 아이디
+     * @param componentHistSeq 컴포넌트 히스토리 아이디
      * @return 결과
-     * @throws NoDataException  데이터없음
-     * @throws Exception        그외 에러
+     * @throws NoDataException 데이터없음
+     * @throws Exception       그외 에러
      */
     @ApiOperation(value = "히스토리 불러오기")
     @PutMapping("/components/{componentWorkSeq}/history/{componentHistSeq}")
     public ResponseEntity<?> putDeskingWorkHistory(
-            @PathVariable("componentWorkSeq")  @Min(value = 0, message = "{tps.deskinghist.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("componentHistSeq")  @Min(value = 0, message = "{tps.deskinghist.error.min.componentHistSeq}") Long componentHistSeq,
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @PathVariable("componentHistSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentHistSeq}") Long componentHistSeq,
             Principal principal)
             throws NoDataException, Exception {
 

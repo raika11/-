@@ -14,6 +14,7 @@
   <!-- acl 목록에 없는 api는 모두 허용, acl 목록에 있는 경우는 해당 ipGroup만 허용 -->
   <acl name="item" ipGroup="system,test"> <!--  api목록에 정규표현식을 사용하지 않는다. -->
     term.list
+    category.codes
   </acl>
   <parameter>
     <termName desc="검색할 용어">.{0,100}</termName>
@@ -29,4 +30,5 @@
     start
     sort
   </parameterGroup>
+  <referer>localhost:8081,stg-mnews.joongang.co.kr</referer>
 </DefaultConfig>

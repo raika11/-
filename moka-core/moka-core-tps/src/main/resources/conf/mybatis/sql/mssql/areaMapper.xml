@@ -33,4 +33,11 @@
 		) }
   </select>
 
+  <select id="findAllArea" parameterType="string" resultType="AreaVO"
+    statementType="CALLABLE">
+		{call UPA_WMS_AREA_LIST_SEL(
+			#{useYn, mode=IN, jdbcType=VARCHAR, javaType=string}
+		) }
+  </select>
+
 </mapper>

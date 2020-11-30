@@ -17,12 +17,14 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
 
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
-            if (params.data[field] !== data[field]) {
-                setData(params.data);
-                return true;
-            } else {
-                return false;
-            }
+            // if (params.data[field] !== data[field]) {
+            //     setData(params.data);
+            //     return true;
+            // } else {
+            //     return false;
+            // }
+            setData(params.data);
+            return true;
         },
     }));
 

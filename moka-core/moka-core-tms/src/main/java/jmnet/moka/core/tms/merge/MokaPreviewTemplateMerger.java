@@ -86,10 +86,10 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage)
             throws TemplateMergeException, TemplateParseException, DataLoadException {
-        return this.merge(pageItem, wrapItem, mergePage, true, false, true);    // 컴포넌트 미리보기 리소스 추가, 하이라이트 스크립트 제거, html wrap소스 추가
+        return this.merge(pageItem, wrapItem, mergePage, false, true);    // 하이라이트 스크립트 제거, html wrap소스 추가
     }
 
-    public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage, boolean resource, boolean highlight, boolean htmlWrap)
+    public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage, boolean highlight, boolean htmlWrap)
             throws TemplateMergeException, TemplateParseException, DataLoadException {
         MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
         // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
@@ -133,10 +133,6 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
                 itemType = wrapItem.getItemType();
                 itemId = wrapItem.getItemId();
                 this.setItem(itemType, itemId, wrapItem);
-                if (wrapItem instanceof ComponentItem) { // 미리보기 리소스 추가
-                    mergeContext.getMergeOptions()
-                                .setPreviewResource(resource);
-                }
             }
         } else {
             if (mergePage) {

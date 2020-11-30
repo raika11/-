@@ -11,7 +11,7 @@ const DeskingArticleTab = (props) => {
     const dispatch = useDispatch();
 
     // state
-    const [tabNavs, setTabNav] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
+    const [tabNavs] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
     const [navIdx, setNavIdx] = useState(0);
 
     // ref

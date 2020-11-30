@@ -4,7 +4,6 @@
 
 package jmnet.moka.core.tps.mvc.area.repository;
 
-import java.util.List;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,11 +15,4 @@ public interface AreaRepository extends JpaRepository<Area, Long>, AreaRepositor
     //    List<Area> findByParent_AreaSeq(Long parentAreaSeq, Pageable pageable);
     //    List<AreaSimple> findByParent_AreaSeqOrderByOrdNo(Long parentAreaSeq);
 
-    /**
-     * 사용중인 편집영역 조회
-     *
-     * @param usedYn 사용여부
-     * @return 편집영역 목록
-     */
-    List<Area> findByUsedYn(String usedYn);
 }

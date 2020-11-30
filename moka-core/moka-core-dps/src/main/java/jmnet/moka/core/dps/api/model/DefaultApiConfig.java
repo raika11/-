@@ -28,6 +28,7 @@ public class DefaultApiConfig  {
     private Map<String, IpGroup> ipGroupMap;
     private Map<String, Acl> aclMap;
     private Set<String> aclApiSet; // acl이 걸린 api인지 확인을 위한 맵
+    private Set<String> refererSet;
     private String apiPath;
 	
     public DefaultApiConfig(String apiPath, String defaultConfigXml) throws IOException {
@@ -44,6 +45,7 @@ public class DefaultApiConfig  {
                     this.ipGroupMap = apiParser.getIpGroupMap();
                     this.aclMap = apiParser.getAclMap(this.ipGroupMap);
                     this.aclApiSet = updateAclApiSet();
+                    this.refererSet = apiParser.getRefererSet();
                 } catch (Exception e) {
                     logger.error("DefaultApiConfig Load Fail:{} {}", resource.getFilename(),
                             e.getMessage());
@@ -52,6 +54,7 @@ public class DefaultApiConfig  {
                 this.ipGroupMap = new HashMap<String, IpGroup>(0);
                 this.aclMap = new HashMap<String, Acl>(0);
                 this.aclApiSet = new HashSet<String>(0);
+                this.refererSet = new HashSet<>(0);
                 logger.error("DefaultApiConfig Not Found:{}", resource.getFilename());
             }
         }
@@ -104,6 +107,8 @@ public class DefaultApiConfig  {
             return false;
         }
     }
+
+    public Set<String> getRefererSet() { return this.refererSet; }
 
     public List<Parameter> getDefaultValueParameterList() {
         return this.defaultValueParameterList;

@@ -19,6 +19,7 @@ import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.entity.AreaSimple;
 import jmnet.moka.core.tps.mvc.area.mapper.AreaMapper;
 import jmnet.moka.core.tps.mvc.area.repository.AreaRepository;
+import jmnet.moka.core.tps.mvc.area.vo.AreaVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,31 +117,24 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public AreaNode makeTree() {
-        List<Area> areaList = areaRepository.findByUsedYn(MokaConstants.YES);
+        List<AreaVO> areaList = areaMapper.findAllArea(MokaConstants.YES);
         return areaList.isEmpty() ? null : makeTree(areaList);
     }
 
-    private AreaNode makeTree(List<Area> areaList) {
+    private AreaNode makeTree(List<AreaVO> areaList) {
         AreaNode rootNode = new AreaNode();
         rootNode.setAreaSeq((long) 0);
 
-        Iterator<Area> it = areaList.iterator();
+        Iterator<AreaVO> it = areaList.iterator();
         while (it.hasNext()) {
-            Area area = it.next();
+            AreaVO area = it.next();
 
-            if (area.getUsedYn()
-                    .equals(MokaConstants.NO)) {
-                continue;
-            }
-
-            if (area.getParent() == null || area.getParent()
-                                                .getAreaSeq() == 0) {
+            if (area.getParentAreaSeq() == null || area.getParentAreaSeq() == 0) {
                 AreaNode areaNode = new AreaNode(area);
                 rootNode.addNode(areaNode);
                 //                rootNode.setMatch(getMatch(page, search) ? "Y" : "N");
             } else {
-                AreaNode parentNode = rootNode.findNode(area.getParent()
-                                                            .getAreaSeq(), rootNode);
+                AreaNode parentNode = rootNode.findNode(area.getParentAreaSeq(), rootNode);
                 if (parentNode != null) {
                     AreaNode areaNode = new AreaNode(area);
                     //                    areaNode.setMatch(getMatch(page, search) ? "Y" : "N");

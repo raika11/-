@@ -16,10 +16,20 @@
 		) }
   	</select>
 
+  <!--컴포넌트work 조회-->
   <select id="findComponentWorkBySeq" parameterType="Long"
     resultType="ComponentWorkVO" statementType="CALLABLE">
 		{call UPA_WMS_COMPONENT_WORK_SEL(
 			#{seq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+  	</select>
+
+  <!-- 편집영역내의 컴포넌트work 목록 조회 -->
+  <select id="findComponentWorkByArea" parameterType="hashMap"
+    resultType="ComponentWorkVO" statementType="CALLABLE">
+		{call UPA_WMS_COMPONENT_WORK_LIST_SEL_BY_AREA(
+			#{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+			#{regId, mode=IN, jdbcType=VARCHAR, javaType=string}
 		) }
   	</select>
 

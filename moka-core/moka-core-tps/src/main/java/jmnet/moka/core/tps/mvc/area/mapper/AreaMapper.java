@@ -12,6 +12,7 @@ import java.util.Map;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
+import jmnet.moka.core.tps.mvc.area.vo.AreaVO;
 
 /**
  * 편집영역 Mapper
@@ -42,4 +43,12 @@ public interface AreaMapper extends BaseMapper<AreaDTO, AreaSearchDTO> {
      * @param map
      */
     void deleteByAreaSeq(Map<String, Object> map);
+
+    /**
+     * 사용중인 편집영역 조회
+     *
+     * @param usedYn 사용여부
+     * @return 편집영역 목록
+     */
+    List<AreaVO> findAllArea(String usedYn);
 }

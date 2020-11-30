@@ -213,25 +213,17 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex, is
  */
 export const getMoveMode = (movingDatas, overData) => {
     let movable = true;
+
     if (Array.isArray(movingDatas)) {
         // 주기사 목록
-        let parentContentIds = [];
-        movingDatas.some((node) => {
-            if (!node.data.rel) {
-                parentContentIds.push(node.data.contentId);
-                return true;
-            } else {
-                return false;
-            }
-        });
+        let parentContentIds = movingDatas.filter((node) => !node.data.rel).map((node) => node.data.contentId);
 
-        for (let i = 0; i < movingDatas.length; i++) {
-            const node = movingDatas[i];
-            if (node.data.rel) {
-                movable = parentContentIds.includes(node.data.parentContentId);
-                if (!movable) break;
-            }
-        }
+        // 관련기사 목록
+        let rels = movingDatas.filter((node) => node.data.rel);
+
+        rels.forEach((relNode) => {
+            movable = movable && parentContentIds.includes(relNode.data.parentContentId);
+        });
     }
     return movable;
 };

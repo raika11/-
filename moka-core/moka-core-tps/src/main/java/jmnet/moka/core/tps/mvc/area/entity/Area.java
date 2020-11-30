@@ -143,9 +143,7 @@ public class Area extends BaseAudit {
 
     @Builder.Default
     @OrderBy("ordNo asc")
-    //    @OrderColumn(name = "ORD_NO")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "area", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
-    //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "area", cascade = {CascadeType.ALL})
     private List<AreaComp> areaComps = new ArrayList<AreaComp>();
 
     @PrePersist

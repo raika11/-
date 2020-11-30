@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.mvc.area.entity.Area;
+import jmnet.moka.core.tps.mvc.area.vo.AreaVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -86,24 +86,15 @@ public class AreaNode implements Serializable {
      *
      * @param area Area Entity
      */
-    public AreaNode(Area area) {
+    public AreaNode(AreaVO area) {
         this.areaSeq = area.getAreaSeq();
         this.areaNm = area.getAreaNm();
-        this.parentAreaSeq = area.getParent() == null
-                ? 0
-                : area.getParent()
-                      .getAreaSeq();
-        this.parentAreaNm = area.getParent() == null
-                ? null
-                : area.getParent()
-                      .getAreaNm();
+        this.parentAreaSeq = area.getParentAreaSeq();
+        this.parentAreaNm = area.getParentAreaNm();
         this.ordNo = area.getOrdNo()
                          .intValue();
         this.areaDiv = area.getAreaDiv();
         this.areaAlign = area.getAreaAlign();
-        //        this.btnShow = false;
-        //        this.usedYn = page.getUsedYn()
-        //                          .equals("Y") ? "Y" : "N";
     }
 
     /**

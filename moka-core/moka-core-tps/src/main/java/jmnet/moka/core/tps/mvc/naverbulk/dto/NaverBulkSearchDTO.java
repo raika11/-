@@ -11,7 +11,6 @@ import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 

@@ -137,7 +137,7 @@ public class ColumnistRestController {
         // 데이터 유효성 검사
         validData(columnistFile, ActionType.INSERT);
 
-        // DirectLinkDTO -> directlink 변환
+        // columnistDTO -> columnist 변환
         Columnist columnist = modelMapper.map(columnistDTO, Columnist.class);
         if (McpString.isNotEmpty(columnist.getSeqNo())) { // 자동 발번이 아닌 경우 중복 체크
             if (columnistService.isDuplicatedId(columnist.getSeqNo())) {

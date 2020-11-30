@@ -11,9 +11,6 @@ import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDTO;
-import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
-import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkListDTO;
@@ -34,9 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <pre>

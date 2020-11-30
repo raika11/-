@@ -1,10 +1,7 @@
 package jmnet.moka.core.tps.mvc.naverbulk.repository;
 
-import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkSearchDTO;
-import jmnet.moka.core.tps.mvc.naverbulk.entity.Article;
 import jmnet.moka.core.tps.mvc.naverbulk.entity.ArticleList;
 import jmnet.moka.core.tps.mvc.naverbulk.entity.ArticlePK;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

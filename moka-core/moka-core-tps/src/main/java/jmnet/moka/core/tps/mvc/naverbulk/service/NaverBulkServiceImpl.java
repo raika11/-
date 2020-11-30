@@ -5,8 +5,6 @@ package jmnet.moka.core.tps.mvc.naverbulk.service;
 
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.code.EditStatusCode;
-import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkListDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.dto.NaverBulkSearchDTO;
 import jmnet.moka.core.tps.mvc.naverbulk.entity.Article;
@@ -69,10 +67,6 @@ public class NaverBulkServiceImpl implements NaverBulkService {
     @Override
     public Article insertNaverBulk(List<NaverBulkListDTO> asList, String clickartDiv, String sourceCode, String status) {
 
-//        Article saveArticle = new Article();
-//        saveArticle.setClickartDiv(clickartDiv);
-//        saveArticle.setSourceCode(sourceCode);
-//        saveArticle.setStatus(status);
         Article saveArticle = Article.builder()
                 .clickartDiv(clickartDiv)
                 .sourceCode(sourceCode)
@@ -84,8 +78,6 @@ public class NaverBulkServiceImpl implements NaverBulkService {
             if(MokaConstants.STATUS_PUBLISH.equals(status)){
                 saveArticle = Article.builder().usedYn(MokaConstants.YES)
                         .sendDt(McpDate.now()).build();
-//                saveArticle.setUsedYn(MokaConstants.YES);
-//                saveArticle.setSendDt(McpDate.now());
             }
 
             // 마스터 테이블에 한건
@@ -97,8 +89,6 @@ public class NaverBulkServiceImpl implements NaverBulkService {
                 ArticleList articleList = modelMapper.map(naverBulkListDTO, ArticleList.class);
                 ArticlePK articlePK = ArticlePK.builder().clickartSeq(saveArticle.getClickartSeq())
                         .ordNo(Long.valueOf(asList.indexOf(naverBulkListDTO)+1)).build();
-//                articlePK.setClickartSeq(saveArticle.getClickartSeq());
-//                articlePK.setOrdNo(Long.valueOf(asList.indexOf(naverBulkListDTO)+1));
                 articleList.setId(articlePK);
                 naverBulkListRepository.save(articleList);
             }

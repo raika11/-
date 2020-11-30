@@ -104,6 +104,7 @@ public class TpsConstants {
     public static final String DATATYPE_NONE = "NONE";      // NONE
     public static final String DATATYPE_DESK = "DESK";      // DESK
     public static final String DATATYPE_AUTO = "AUTO";      // AUTO
+    public static final String DATATYPE_FORM = "FORM";      // FORM
 
     /**
      * 컴포넌트 페이징 유형

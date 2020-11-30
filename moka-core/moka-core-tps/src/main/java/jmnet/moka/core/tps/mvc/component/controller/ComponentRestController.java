@@ -157,10 +157,22 @@ public class ComponentRestController {
             componentDTO.setDataset(null);
         }
 
+        // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
+        if (componentDTO.getDataType()
+                        .equals(TpsConstants.DATATYPE_DESK) || componentDTO.getDataType()
+                                                                           .equals(TpsConstants.DATATYPE_FORM)) {
+            componentDTO.setViewYn(MokaConstants.NO);
+        } else {
+            componentDTO.setViewYn(MokaConstants.YES);
+        }
+
         Component component = modelMapper.map(componentDTO, Component.class);
 
         try {
-            HistPublishDTO histPublishDTO = HistPublishDTO.builder().status(EditStatusCode.PUBLISH).approvalYn(MokaConstants.YES).build();
+            HistPublishDTO histPublishDTO = HistPublishDTO.builder()
+                                                          .status(EditStatusCode.PUBLISH)
+                                                          .approvalYn(MokaConstants.YES)
+                                                          .build();
 
             // 등록
             Component returnVal = componentService.insertComponent(component, histPublishDTO);
@@ -199,12 +211,23 @@ public class ComponentRestController {
         // 데이터 유효성 검사
         for (ComponentDTO componentDTO : componentDTOs) {
             validData(componentDTO, ActionType.INSERT);
+            // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
+            if (componentDTO.getDataType()
+                            .equals(TpsConstants.DATATYPE_DESK) || componentDTO.getDataType()
+                                                                               .equals(TpsConstants.DATATYPE_FORM)) {
+                componentDTO.setViewYn(MokaConstants.NO);
+            } else {
+                componentDTO.setViewYn(MokaConstants.YES);
+            }
         }
 
         List<Component> components = modelMapper.map(componentDTOs, Component.TYPE);
 
         try {
-            HistPublishDTO histPublishDTO = HistPublishDTO.builder().status(EditStatusCode.PUBLISH).approvalYn(MokaConstants.YES).build();
+            HistPublishDTO histPublishDTO = HistPublishDTO.builder()
+                                                          .status(EditStatusCode.PUBLISH)
+                                                          .approvalYn(MokaConstants.YES)
+                                                          .build();
 
             // 한번에 등록한다
             List<Component> returnVal = componentService.insertComponents(components, histPublishDTO);
@@ -260,11 +283,23 @@ public class ComponentRestController {
             componentDTO.setDataset(null);
         }
 
+        // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
+        if (componentDTO.getDataType()
+                        .equals(TpsConstants.DATATYPE_DESK) || componentDTO.getDataType()
+                                                                           .equals(TpsConstants.DATATYPE_FORM)) {
+            componentDTO.setViewYn(MokaConstants.NO);
+        } else {
+            componentDTO.setViewYn(MokaConstants.YES);
+        }
+
         try {
             // 업데이트
             Component newComponent = modelMapper.map(componentDTO, Component.class);
 
-            HistPublishDTO histPublishDTO = HistPublishDTO.builder().status(EditStatusCode.PUBLISH).approvalYn(MokaConstants.YES).build();
+            HistPublishDTO histPublishDTO = HistPublishDTO.builder()
+                                                          .status(EditStatusCode.PUBLISH)
+                                                          .approvalYn(MokaConstants.YES)
+                                                          .build();
 
             Component returnVal = componentService.updateComponent(newComponent, orgComponent, histPublishDTO);
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);

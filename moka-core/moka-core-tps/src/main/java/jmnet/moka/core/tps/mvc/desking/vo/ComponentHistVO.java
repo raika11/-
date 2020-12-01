@@ -1,6 +1,5 @@
 package jmnet.moka.core.tps.mvc.desking.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
@@ -45,7 +44,6 @@ public class ComponentHistVO implements Serializable {
     /**
      * 생성자
      */
-    @JsonIgnore
     @Column(name = "REG_ID")
     private String regId;
 

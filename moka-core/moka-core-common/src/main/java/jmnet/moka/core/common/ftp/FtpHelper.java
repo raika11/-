@@ -480,14 +480,16 @@ public class FtpHelper {
     private void mkdirs(FTPClient ftpClient, String path)
             throws IOException {
         if (McpString.isNotEmpty(path)) {
-            String[] paths = path.split(File.separator);
+            String[] paths = path.split("/");
             String tempPath = "";
             for (String subPath : paths) {
-                tempPath += "/" + subPath;
-                if (ftpClient.changeWorkingDirectory(tempPath)) {
-                    ftpClient.changeWorkingDirectory("/");
-                } else {
-                    ftpClient.makeDirectory(tempPath);
+                if (McpString.isNotEmpty(subPath)) {
+                    tempPath += "/" + subPath;
+                    if (ftpClient.changeWorkingDirectory(tempPath)) {
+                        ftpClient.changeWorkingDirectory("/");
+                    } else {
+                        ftpClient.makeDirectory(tempPath);
+                    }
                 }
             }
         }

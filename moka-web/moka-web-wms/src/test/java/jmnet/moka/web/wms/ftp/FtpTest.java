@@ -43,9 +43,9 @@ public class FtpTest {
     public void ftpUploadTest()
             throws Exception {
 
-        ftpHelper.upload(FtpHelper.MEDIA, new File("/server.log"));
+        ftpHelper.upload(FtpHelper.IMAGES, new File("/server.log"));
 
-        ftpHelper.upload(FtpHelper.HOME, new File("/vcredist.bmp"), "/text");
+        ftpHelper.upload(FtpHelper.WIMAGE, new File("/vcredist.bmp"), "/text");
     }
 
     /**
@@ -57,7 +57,7 @@ public class FtpTest {
     public void ftpDownloadTest()
             throws Exception {
 
-        ftpHelper.download(FtpHelper.MEDIA, "server.log", "/download");
+        ftpHelper.download(FtpHelper.IMAGES, "server.log", "/download");
 
     }
 
@@ -70,7 +70,7 @@ public class FtpTest {
     public void ftpDeleteTest()
             throws Exception {
 
-        ftpHelper.delete(FtpHelper.MEDIA, "server.log");
+        ftpHelper.delete(FtpHelper.IMAGES, "server.log");
 
     }
 

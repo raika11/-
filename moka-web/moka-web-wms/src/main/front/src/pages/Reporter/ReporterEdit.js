@@ -313,8 +313,6 @@ const ReporterEdit = () => {
                     <Col xs={10} className="p-0">
                         <MokaInput as={'textarea'} className="resize-none" value={repTalk} inputProps={{ plaintext: true, readOnly: true, rows: '5' }} />
                     </Col>
-
-                    {/* <MokaInput as={'textarea'} className="resize-none" value={repTalk} /> */}
                 </Form.Row>
                 {/* <MokaInputLabel
                     as="textarea"

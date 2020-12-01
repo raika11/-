@@ -5,10 +5,11 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultHistorySearchType } from '@pages/commons';
+import { HIST_PUBLISH, HIST_SAVE } from '@/constants';
 
 const status = [
-    { id: 'PUBLISH', name: '전송 기록' },
-    { id: 'SAVE', name: '임시저장 기록' },
+    { id: HIST_PUBLISH, name: '전송 기록' },
+    { id: HIST_SAVE, name: '임시저장 기록' },
 ];
 
 /**
@@ -22,17 +23,18 @@ const DeskingHistorySearch = (props) => {
             {/* 컴포넌트 명 */}
             <MokaInput
                 as="select"
-                className="mb-2"
+                className="mb-2 ft-12"
                 onChange={(e) => {
                     setSearch({
                         ...search,
                         componentSeq: e.target.value,
                     });
                 }}
-                value={search.componentSeq}
+                value={search.componentSeq || undefined}
             >
+                <option value="null">컴포넌트 명</option>
                 {list.map((comp) => (
-                    <option key={comp.seq} value={comp.seq}>
+                    <option key={comp.componentSeq} value={comp.componentSeq}>
                         {comp.componentName}
                     </option>
                 ))}
@@ -42,7 +44,7 @@ const DeskingHistorySearch = (props) => {
                 <Col xs={4} className="p-0 pr-2">
                     <MokaInput
                         as="select"
-                        className="mb-0"
+                        className="mb-0 ft-12"
                         value={search.status}
                         onChange={(e) => {
                             setSearch({
@@ -64,20 +66,16 @@ const DeskingHistorySearch = (props) => {
                         as="dateTimePicker"
                         labelWidth={28}
                         className="mb-0 w-100"
+                        inputClassName="ft-12"
                         inputProps={{
                             timeFormat: null,
                         }}
-                        value={moment(moment(), DB_DATEFORMAT)}
+                        value={search.regDt}
                         onChange={(date) => {
                             if (typeof date === 'object') {
                                 setSearch({
                                     ...search,
                                     regDt: moment(date).format(DB_DATEFORMAT),
-                                });
-                            } else {
-                                setSearch({
-                                    ...search,
-                                    regDt: null,
                                 });
                             }
                         }}
@@ -89,7 +87,7 @@ const DeskingHistorySearch = (props) => {
                 <Col xs={4} className="p-0 pr-2">
                     <MokaInput
                         as="select"
-                        className="mb-0"
+                        className="mb-0 ft-12"
                         value={search.searchType || undefined}
                         onChange={(e) => {
                             setSearch({

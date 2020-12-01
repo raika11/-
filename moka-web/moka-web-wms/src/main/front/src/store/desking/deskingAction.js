@@ -6,8 +6,12 @@ import { createRequestActionTypes } from '@store/commons/saga';
  */
 export const CLEAR_STORE = 'desking/CLEAR_STORE';
 export const CLEAR_LIST = 'desking/CLEAR_LIST';
+export const CLEAR_HISTORY_LIST = 'desking/CLEAR_LIST';
+export const CLEAR_SELECTED_COMPONENT = 'desking/CLEAR_SELECTED_COMPONENT';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearList = createAction(CLEAR_LIST);
+export const clearHistoryList = createAction(CLEAR_HISTORY_LIST);
+export const clearSelectedComponent = createAction(CLEAR_SELECTED_COMPONENT);
 
 /**
  * 검색조건 변경
@@ -123,7 +127,7 @@ export const postDeskingWorkListMove = createAction(POST_DESKING_WORK_LIST_MOVE,
 }));
 
 /**
- * 포넌트 워크의 기사목록 정렬(컴포넌트 내 정렬)
+ * 컴포넌트 워크의 기사목록 정렬(컴포넌트 내 정렬)
  */
 export const [PUT_DESKING_WORK_LIST_SORT] = createRequestActionTypes('desking/PUT_DESKING_WORK_LIST_SORT');
 export const putDeskingWorkListSort = createAction(PUT_DESKING_WORK_LIST_SORT, ({ componentWorkSeq, datasetSeq, list, callback }) => ({
@@ -179,8 +183,14 @@ export const deskingSortGrid = createAction(DESKING_SORT_GRID, ({ grid, componen
  */
 export const [GET_COMPONENT_WORK_HISTORY, GET_COMPONENT_WORK_HISTORY_SUCCESS, GET_COMPONENT_WORK_HISTORY_FAILURE] = createRequestActionTypes('desking/GET_COMPONENT_WORK_HISTORY');
 export const [GET_DESKING_WORK_HISTORY, GET_DESKING_WORK_HISTORY_SUCCESS, GET_DESKING_WORK_HISTORY_FAILURE] = createRequestActionTypes('desking/GET_DESKING_WORK_HISTORY');
+export const PUT_DESKING_WORK_HISTORY = 'desking/PUT_DESKING_WORK_HISTORY';
 export const getComponentWorkHistory = createAction(GET_COMPONENT_WORK_HISTORY, (...actions) => actions);
 export const getDeskingWorkHistory = createAction(GET_DESKING_WORK_HISTORY, (seq) => seq);
+export const putDeskingWorkHistory = createAction(PUT_DESKING_WORK_HISTORY, ({ componentWorkSeq, componentHistSeq, callback }) => ({
+    componentWorkSeq,
+    componentHistSeq,
+    callback,
+}));
 
 export const COMPONENT_WORK_SUCCESS = 'desking/COMPONENT_WORK_SUCCESS';
 export const COMPONENT_WORK_FAILURE = 'desking/COMPONENT_WORK_FAILURE';

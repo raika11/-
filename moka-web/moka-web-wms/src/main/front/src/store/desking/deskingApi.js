@@ -161,7 +161,7 @@ export const getDeskingHistory = (componentHistSeq) => {
 
 // 히스토리를 편집기사 워크로 등록
 export const putDeskingWorkHistory = ({ componentWorkSeq, componentHistSeq }) => {
-    return instance.get(`/api/desking/components/${componentWorkSeq}/history/${componentHistSeq}`).catch((err) => {
+    return instance.put(`/api/desking/components/${componentWorkSeq}/history/${componentHistSeq}`).catch((err) => {
         throw err;
     });
 };

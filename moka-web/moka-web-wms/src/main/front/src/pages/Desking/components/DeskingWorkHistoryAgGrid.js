@@ -13,7 +13,7 @@ const DeskingWorkHistoryAgGrid = (props) => {
         <MokaTable
             columnDefs={columnDefs}
             rowData={rowData}
-            onRowNodeId={(history) => history.seq}
+            onRowNodeId={(history) => history.histSeq}
             agGridHeight={721}
             onRowClicked={handleRowClicked}
             loading={loading}

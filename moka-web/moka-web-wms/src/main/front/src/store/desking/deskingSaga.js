@@ -456,6 +456,11 @@ const getComponentHistory = callApiAfterActions(act.GET_COMPONENT_WORK_HISTORY, 
  */
 const getDeskingWorkHistory = createRequestSaga(act.GET_DESKING_WORK_HISTORY, api.getDeskingHistory);
 
+/**
+ * 히스토리를 편집기사 워크로 등록
+ */
+const putDeskingWorkHistory = createDeskingRequestSaga(act.PUT_DESKING_WORK_HISTORY, api.putDeskingWorkHistory, 'work');
+
 /** saga */
 export default function* saga() {
     // 컴포넌트 워크
@@ -486,4 +491,5 @@ export default function* saga() {
     // 히스토리
     yield takeLatest(act.GET_COMPONENT_WORK_HISTORY, getComponentHistory);
     yield takeLatest(act.GET_DESKING_WORK_HISTORY, getDeskingWorkHistory);
+    yield takeLatest(act.PUT_DESKING_WORK_HISTORY, putDeskingWorkHistory);
 }

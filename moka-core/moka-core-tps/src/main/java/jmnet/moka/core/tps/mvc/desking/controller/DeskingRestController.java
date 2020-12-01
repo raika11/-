@@ -336,7 +336,7 @@ public class DeskingRestController extends AbstractCommonController {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postDeskingWorkList(HttpServletRequest request,
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
             @RequestBody @Valid ValidList<DeskingWorkDTO> validList, Principal principal)
             throws Exception {
         try {
@@ -386,7 +386,7 @@ public class DeskingRestController extends AbstractCommonController {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteDeskingWorkList(
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
             @RequestBody @Valid ValidList<DeskingWorkVO> validList, Principal principal)
             throws Exception {
         try {
@@ -487,60 +487,50 @@ public class DeskingRestController extends AbstractCommonController {
         return invalidList;
     }
 
-    //    /**
-    //     * <pre>
-    //     * 기사정렬변경
-    //     * </pre>
-    //     *
-    //     * @param request          요청
-    //     * @param componentWorkSeq work컴포넌트순번
-    //     * @param datasetSeq       데이타셋순번
-    //     * @param workVO           작업컴포넌트
-    //     * @param principal        작업자정보
-    //     * @return 변경된 컴포넌트
-    //     * @throws Exception
-    //     */
-    //    @ApiOperation(value = "기사정렬변경")
-    //    @PutMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/priority", headers = {
-    //            "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    //    public ResponseEntity<?> putDeskingWorkPriority(HttpServletRequest request,
-    //            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-    //            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
-    //            @RequestBody @Valid ComponentWorkVO workVO, Principal principal)
-    //            throws Exception {
-    //
-    //        try {
-    //            // 데이타유효성검사.
-    //            // validData(request, datasetSeq, workVO);
-    //
-    //            DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
-    //                                                              .componentSeq(workVO.getComponentSeq())
-    //                                                              .regId(principal.getName())
-    //                                                              .datasetSeq(workVO.getDatasetSeq())
-    //                                                              //                                                              .editionSeq(workVO.getEditionSeq())
-    //                                                              .build();
-    //
-    //            // 스냅샷 수정
-    //            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
-    //
-    //            // 정렬변경
-    //            List<DeskingWorkVO> deskingList =
-    //                    deskingService.updateDeskingWorkPriority(datasetSeq, workVO.getDeskingWorks(), principal.getName(), search);
-    //
-    //            workVO.getDeskingWorks()
-    //                  .clear();
-    //            workVO.setDeskingWorks(deskingList);
-    //
-    //
-    //            // 리턴값 설정
-    //            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(workVO);
-    //
-    //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    //
-    //        } catch (Exception e) {
-    //            throw new Exception(msg("tps.desking.error.priority", request), e);
-    //        }
-    //    }
+    /**
+     * <pre>
+     * 기사정렬변경
+     * </pre>
+     *
+     * @param request          요청
+     * @param componentWorkSeq work컴포넌트순번
+     * @param datasetSeq       데이타셋순번
+     * @param validList        편집기사목록
+     * @param principal        작업자정보
+     * @return 변경된 컴포넌트
+     * @throws Exception
+     */
+    @ApiOperation(value = "기사정렬변경")
+    @PutMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/sort", headers = {
+            "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> putDeskingWorkListSort(HttpServletRequest request,
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
+            @RequestBody @Valid ValidList<DeskingWorkVO> validList, Principal principal)
+            throws Exception {
+
+        try {
+            // 데이타유효성검사.
+            // validData(request, datasetSeq, workVO);
+
+            List<DeskingWorkVO> deskingWorkVOList = validList.getList();
+
+            // 스냅샷 수정
+            deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
+
+            // 정렬변경
+            deskingService.updateDeskingWorkSort(datasetSeq, deskingWorkVOList, principal.getName());
+
+            // 컴포넌트 워크 조회(편집기사포함)
+            ComponentWorkVO workVO = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+
+            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(workVO);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw new Exception(msg("tps.desking.error.priority", request), e);
+        }
+    }
 
 
     //    /**
@@ -557,7 +547,7 @@ public class DeskingRestController extends AbstractCommonController {
     //    @GetMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/hasOtherSaved")
     //    public ResponseEntity<?> hasOtherSaved(HttpServletRequest request,
     //            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-    //            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq, Integer interval,
+    //            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq, Integer interval,
     //            Principal principal)
     //            throws Exception {
     //
@@ -593,7 +583,7 @@ public class DeskingRestController extends AbstractCommonController {
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}")
     public ResponseEntity<?> postDeskingWork(HttpServletRequest request,
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
             @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO, Principal principal)
             throws Exception {
 
@@ -666,11 +656,11 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "work편집기사목록 이동(source->target)")
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/move", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> moveDeskingWorkList(HttpServletRequest request,
+    public ResponseEntity<?> postDeskingWorkListMove(HttpServletRequest request,
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq,
+            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
             @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long srcComponentWorkSeq,
-            @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long srcDatasetSeq,
+            @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long srcDatasetSeq,
             @RequestBody @Valid ValidList<DeskingWorkDTO> validList, Principal principal)
             throws Exception {
 

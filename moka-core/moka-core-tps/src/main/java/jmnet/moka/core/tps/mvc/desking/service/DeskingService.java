@@ -6,7 +6,6 @@ package jmnet.moka.core.tps.mvc.desking.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
@@ -21,7 +20,6 @@ import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
-import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -209,9 +207,9 @@ public interface DeskingService {
     /**
      * 삭제 후 수정할 정렬값 조회
      *
-     * @param datasetSeq        데이타셋순번
-     * @param regId             작업자
-     * @return                  수정할 순번목록
+     * @param datasetSeq 데이타셋순번
+     * @param regId      작업자
+     * @return 수정할 순번목록
      */
     List<DeskingOrdDTO> resortAfterDelete(Long datasetSeq, String regId);
 
@@ -240,17 +238,14 @@ public interface DeskingService {
      */
     public DeskingHist updateDeskingHist(DeskingHist deskingHist);
 
-    //    /**
-    //     * work 컴포넌트의 정렬순서 변경
-    //     *
-    //     * @param datasetSeq   데이타셋순
-    //     * @param deskingWorks 편집기사목록
-    //     * @param creator      작업자
-    //     * @param search       편집기사목록 조회용 검색조건
-    //     * @return Work편집기사목록
-    //     */
-    //    public List<DeskingWorkVO> updateDeskingWorkPriority(Long datasetSeq, List<DeskingWorkVO> deskingWorks, String creator,
-    //            DeskingWorkSearchDTO search);
+    /**
+     * work 컴포넌트의 정렬순서 변경
+     *
+     * @param datasetSeq   데이타셋순
+     * @param deskingWorks 편집기사목록
+     * @param regId        작업자
+     */
+    public void updateDeskingWorkSort(Long datasetSeq, List<DeskingWorkVO> deskingWorks, String regId);
 
     /**
      * <pre>
@@ -331,8 +326,8 @@ public interface DeskingService {
     /**
      * 컴포넌트 히스토리 목록 조회
      *
-     * @param search        검색객체
-     * @return              데스킹히스토리 그룹 목록
+     * @param search 검색객체
+     * @return 데스킹히스토리 그룹 목록
      */
     List<ComponentHistVO> findAllComponentHist(DeskingHistSearchDTO search);
     //
@@ -347,8 +342,8 @@ public interface DeskingService {
     /**
      * 데스킹 히스토리 목록 조회
      *
-     * @param componentHistSeq      컴포넌트 히스토리 SEQ
-     * @return                      데스킹히스토리 상세
+     * @param componentHistSeq 컴포넌트 히스토리 SEQ
+     * @return 데스킹히스토리 상세
      */
     List<DeskingHist> findAllDeskingHist(Long componentHistSeq);
     //

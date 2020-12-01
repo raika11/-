@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
-import { MokaInputLabel } from '@components';
+import { MokaInputLabel, MokaInput } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { clearReporter, getReporter, changeReporter, changeInvalidList, GET_REPORTER, CHANGE_REPORTER, saveReporter } from '@store/reporter';
 import toast from '@utils/toastUtil';
 import bg from '@assets/images/v_noimg.jpg';
 import Col from 'react-bootstrap/Col';
+import clsx from 'clsx';
 
 /**
  * 기자 정보 조회/수정
@@ -303,7 +304,31 @@ const ReporterEdit = () => {
                         <MokaInputLabel label="JNET 이메일4" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={rMail4} name="" />
                     </div>
                 </Form.Row>
-                <MokaInputLabel as="textarea" label="기자 한마디" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={repTalk} name="repTalk" />
+                <Form.Row className="d-flex justify-content-between">
+                    <Col xs={2} className="p-1 mb-0 mr-2">
+                        <Form.Label className={'text-right'} style={{ width: '100px', minwidth: '100px' }} htmlFor="none">
+                            기자 한마디
+                        </Form.Label>
+                    </Col>
+                    <Col xs={10} className="p-0">
+                        <MokaInput as={'textarea'} className="resize-none" value={repTalk} inputProps={{ plaintext: true, readOnly: true, rows: '5' }} />
+                    </Col>
+                </Form.Row>
+                {/* <MokaInputLabel
+                    as="textarea"
+                    label={
+                        <>
+                            <div className="" style={{ position: 'relative', padding: '0px 0px 80px' }}>
+                                기자 한마디
+                            </div>
+                        </>
+                    }
+                    labelWidth={100}
+                    inputProps={{ plaintext: true, readOnly: true, rows: '5' }}
+                    value={repTalk}
+                    name="repTalk"
+                    className="resize-none"
+                /> */}
             </Form>
         </>
     );

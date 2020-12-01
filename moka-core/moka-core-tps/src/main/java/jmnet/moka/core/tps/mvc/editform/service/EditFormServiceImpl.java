@@ -7,6 +7,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
@@ -284,7 +285,7 @@ public class EditFormServiceImpl implements EditFormService {
     }
 
     @Override
-    public Page<EditFormPartHist> findAllEditFormPartHistory(EditFormSearchDTO search) {
+    public Page<EditFormPartHist> findAllEditFormPartHistory(EditFormPartHistSearchDTO search) {
         return editFormPartHistRepository.findAll(search);
     }
 

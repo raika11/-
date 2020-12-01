@@ -34,23 +34,21 @@ import lombok.Setter;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class EditFormSearchDTO extends SearchDTO {
+public class EditFormPartHistSearchDTO extends SearchDTO {
 
-    public static final Type TYPE = new TypeReference<List<EditFormSearchDTO>>() {
+    public static final Type TYPE = new TypeReference<List<EditFormPartHistSearchDTO>>() {
     }.getType();
 
     private Long formSeq;
 
     private Long partSeq;
 
-    private String formId;
-
     @DTODateTimeFormat
     private Date regDt;
 
     // 정렬 기본값을 설정
-    public EditFormSearchDTO() {
-        super("formSeq,desc");
+    public EditFormPartHistSearchDTO() {
+        super("seqNo,desc");
     }
 
 

@@ -61,8 +61,6 @@ const RegisterModal = (props) => {
         for (let i = 0; i < selectedNodes.length; i++) {
             if (!selectedNodes[i].rel) {
                 contentOrd++;
-            } else {
-                selectedNodes[i].title = selectedNodes[i].relTitle;
             }
             selectedNodes[i].contentOrd = contentOrd;
         }

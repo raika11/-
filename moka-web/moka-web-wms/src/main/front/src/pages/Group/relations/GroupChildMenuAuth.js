@@ -55,7 +55,7 @@ const GroupChildMenuAuth = () => {
     };
 
     return (
-        <MokaCard title="메뉴 권한">
+        <MokaCard title="메뉴 권한" width={500}>
             <Row>
                 <MenuAuthTree menuAuthInfo={menuAuthInfo} onChange={handleChange} />
             </Row>

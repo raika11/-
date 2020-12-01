@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +36,7 @@ public class TestFtpController {
 
     @ApiOperation(value = "이미지 업로드 - 테스트용 FTP 파일 업로드", tags = {"*** TEST FTP Upload ***"})
     @PostMapping("/upload/images")
-    public ResponseEntity<?> imageUpload(MultipartFile file)
+    public ResponseEntity<?> imageUpload(@RequestParam(value = "file") MultipartFile file)
             throws InvalidDataException, Exception {
 
         boolean success = ftpHelper.upload(FtpHelper.IMAGES, file.getOriginalFilename(), file.getInputStream());
@@ -46,7 +47,7 @@ public class TestFtpController {
 
     @ApiOperation(value = "PDS 업로드 - 테스트용 FTP 파일 업로드", tags = {"*** TEST FTP Upload ***"})
     @PostMapping("/upload/pds")
-    public ResponseEntity<?> pdsUpload(MultipartFile file)
+    public ResponseEntity<?> pdsUpload(@RequestParam(value = "file") MultipartFile file)
             throws InvalidDataException, Exception {
 
         boolean success = ftpHelper.upload(FtpHelper.PDS, file.getOriginalFilename(), file.getInputStream());
@@ -57,7 +58,7 @@ public class TestFtpController {
 
     @ApiOperation(value = "static 업로드 - 테스트용 FTP 파일 업로드", tags = {"*** TEST FTP Upload ***"})
     @PostMapping("/upload/static")
-    public ResponseEntity<?> staticUpload(MultipartFile file)
+    public ResponseEntity<?> staticUpload(@RequestParam(value = "file") MultipartFile file)
             throws InvalidDataException, Exception {
 
         boolean success = ftpHelper.upload(FtpHelper.STATIC, file.getOriginalFilename(), file.getInputStream());
@@ -68,7 +69,7 @@ public class TestFtpController {
 
     @ApiOperation(value = "W이미지 업로드 - 테스트용 FTP 파일 업로드", tags = {"*** TEST FTP Upload ***"})
     @PostMapping("/upload/wimage")
-    public ResponseEntity<?> wimageUpload(MultipartFile file)
+    public ResponseEntity<?> wimageUpload(@RequestParam(value = "file") MultipartFile file)
             throws InvalidDataException, Exception {
 
         boolean success = ftpHelper.upload(FtpHelper.WIMAGE, file.getOriginalFilename(), file.getInputStream());

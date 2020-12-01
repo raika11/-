@@ -96,7 +96,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                 };
             }),
         );
-    }, [list]);
+    }, [IR_URL, PDS_URL, list]);
 
     useEffect(() => {
         /**

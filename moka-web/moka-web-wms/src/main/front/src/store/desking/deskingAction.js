@@ -110,12 +110,25 @@ export const postDeskingWork = createAction(POST_DESKING_WORK, ({ componentWorkS
 /**
  * 데스킹 워크 목록 이동
  */
-export const [MOVE_DESKING_WORK_LIST, MOVE_DESKING_WORK_LIST_SUCCESS, MOVE_DESKING_WORK_LIST_FAILURE] = createRequestActionTypes('desking/MOVE_DESKING_WORK_LIST');
-export const moveDeskingWorkList = createAction(MOVE_DESKING_WORK_LIST, ({ componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list, callback }) => ({
+export const [POST_DESKING_WORK_LIST_MOVE, POST_DESKING_WORK_LIST_MOVE_SUCCESS, POST_DESKING_WORK_LIST_MOVE_FAILURE] = createRequestActionTypes(
+    'desking/POST_DESKING_WORK_LIST_MOVE',
+);
+export const postDeskingWorkListMove = createAction(POST_DESKING_WORK_LIST_MOVE, ({ componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list, callback }) => ({
     componentWorkSeq,
     datasetSeq,
     srcComponentWorkSeq,
     srcDatasetSeq,
+    list,
+    callback,
+}));
+
+/**
+ * 포넌트 워크의 기사목록 정렬(컴포넌트 내 정렬)
+ */
+export const [PUT_DESKING_WORK_LIST_SORT] = createRequestActionTypes('desking/PUT_DESKING_WORK_LIST_SORT');
+export const putDeskingWorkListSort = createAction(PUT_DESKING_WORK_LIST_SORT, ({ componentWorkSeq, datasetSeq, list, callback }) => ({
+    componentWorkSeq,
+    datasetSeq,
     list,
     callback,
 }));

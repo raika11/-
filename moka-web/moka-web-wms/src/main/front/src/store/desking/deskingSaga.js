@@ -348,7 +348,7 @@ function* deskingDragStop({ payload }) {
             callback,
         };
         yield put({
-            type: act.MOVE_DESKING_WORK_LIST,
+            type: act.POST_DESKING_WORK_LIST_MOVE,
             payload: option,
         });
     } else {
@@ -389,8 +389,8 @@ const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST,
 /**
  * 컴포넌트워크 간의 데스킹기사 이동
  */
-function* moveDeskingWorkList({ payload }) {
-    const ACTION = act.MOVE_DESKING_WORK_LIST;
+function* postDeskingWorkListMove({ payload }) {
+    const ACTION = act.POST_DESKING_WORK_LIST_MOVE;
     const { callback } = payload;
     let callbackData,
         status = 'work';
@@ -398,17 +398,17 @@ function* moveDeskingWorkList({ payload }) {
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(api.moveDeskingWorkList, payload);
+        const response = yield call(api.postDeskingWorkListMove, payload);
         callbackData = { ...response.data, payload };
 
         if (response.data.header.success) {
             yield put({
-                type: act.MOVE_DESKING_WORK_LIST_SUCCESS,
+                type: act.POST_DESKING_WORK_LIST_MOVE_SUCCESS,
                 payload: { ...response.data, status },
             });
         } else {
             yield put({
-                type: act.MOVE_DESKING_WORK_LIST_FAILURE,
+                type: act.POST_DESKING_WORK_LIST_MOVE_FAILURE,
                 payload: { ...response.data, status },
             });
         }
@@ -422,6 +422,11 @@ function* moveDeskingWorkList({ payload }) {
 
     yield put(finishLoading(ACTION));
 }
+
+/**
+ * 컴포넌트 워크의 기사목록 정렬(컴포넌트 내 정렬)
+ */
+const putDeskingWorkListSort = createDeskingRequestSaga(act.PUT_DESKING_WORK_LIST_SORT, api.putDeskingWorkListSort, 'work');
 
 /**
  * 공백 기사 추가
@@ -470,7 +475,8 @@ export default function* saga() {
     // 컴포넌트 워크의 데스킹 (편집기사)
     yield takeLatest(act.PUT_DESKING_WORK, putDeskingWork);
     yield takeLatest(act.POST_DESKING_WORK_LIST, postDeskingWorkList);
-    yield takeLatest(act.MOVE_DESKING_WORK_LIST, moveDeskingWorkList);
+    yield takeLatest(act.POST_DESKING_WORK_LIST_MOVE, postDeskingWorkListMove);
+    yield takeLatest(act.PUT_DESKING_WORK_LIST_SORT, putDeskingWorkListSort);
     yield takeLatest(act.POST_DESKING_WORK, postDeskingWork);
 
     // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPriority);

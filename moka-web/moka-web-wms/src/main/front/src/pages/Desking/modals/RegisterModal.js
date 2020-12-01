@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { MokaModal, MokaLoader } from '@components';
-import { GET_COMPONENT_WORK_LIST, moveDeskingWorkList } from '@store/desking';
+import { GET_COMPONENT_WORK_LIST, postDeskingWorkListMove } from '@store/desking';
 import toast from '@utils/toastUtil';
 
 /**
@@ -63,7 +63,7 @@ const RegisterModal = (props) => {
             },
         };
 
-        dispatch(moveDeskingWorkList(option));
+        dispatch(postDeskingWorkListMove(option));
     };
 
     return (

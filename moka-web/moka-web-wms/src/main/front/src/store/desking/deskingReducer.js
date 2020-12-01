@@ -126,7 +126,7 @@ export default handleActions(
         /**
          * 컴포넌트 워크 조회
          */
-        [act.MOVE_DESKING_WORK_LIST_SUCCESS]: (state, { payload: { body, status } }) => {
+        [act.POST_DESKING_WORK_LIST_MOVE_SUCCESS]: (state, { payload: { body, status } }) => {
             return produce(state, (draft) => {
                 // source
                 let sourceIdx = draft.list.findIndex((l) => l.seq === body.source.seq);
@@ -142,7 +142,7 @@ export default handleActions(
                 draft.workStatus[body.target.seq] = status;
             });
         },
-        [act.MOVE_DESKING_WORK_LIST_FAILURE]: (state, { payload: componentError }) => {
+        [act.POST_DESKING_WORK_LIST_MOVE_FAILURE]: (state, { payload: componentError }) => {
             return produce(state, (draft) => {
                 if (draft.selectedComponent.seq) {
                     let idx = draft.list.findIndex((l) => l.seq === draft.selectedComponent.seq);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { MokaModal } from '@components';
-import { getEditForm, saveEditFormXml } from '@/store/editForm';
+import { saveEditFormXml } from '@/store/editForm';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from '@utils/toastUtil';
 /**

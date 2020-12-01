@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 
 import Form from 'react-bootstrap/Form';
 import { MokaImageInput, MokaAutocomplete, MokaDateTimePicker } from '@components';
-import { Controller } from 'react-hook-form';
 
 const propTypes = {
     /**
@@ -86,7 +85,6 @@ const defaultProps = {
  */
 const InputFactory = forwardRef((props, ref) => {
     const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, isInvalid, disabled, uncontrolled, ...rest } = props;
-    const { rules, control } = props;
 
     let Element = Form.Control;
     let attributes = {

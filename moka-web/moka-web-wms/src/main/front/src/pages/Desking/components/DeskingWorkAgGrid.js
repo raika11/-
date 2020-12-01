@@ -132,26 +132,40 @@ const DeskingWorkAgGrid = (props) => {
             }
 
             if (type === 'mainToMain') {
-                // draggingNode와 overNode의 contentOrd 변경
-                let firstArr = displayedRows.splice(0, forwardNode.childIndex);
-                let secondArr = displayedRows.splice(0, 1 + (forwardNode.data.relSeqs?.length || 0)); // forwardNode + 관련기사
-                let thirdArr = displayedRows.splice(0, backwardNode.childIndex - firstArr.length - secondArr.length);
-                let fourthArr = displayedRows.splice(0, 1 + (backwardNode.data.relSeqs?.length || 0)); // backwardNode + 관련기사
-                let lastArr = displayedRows;
+                let selected = api.getSelectedNodes();
+                let contentOrd = overNode.data.contentOrd - 1;
+                for (let i = 0; i < selected.length; i++) {
+                    if (!selected[i].data.rel) {
+                        contentOrd++;
+                    }
+                    displayedRows.forEach((a) => {
+                        if (a.contentId === selected[i].data.contentId) {
+                            a.contentOrd = contentOrd;
+                        }
+                    });
+                }
 
-                secondArr = secondArr.map((node) => ({
-                    ...node,
-                    contentOrd: backwardNode.data.contentOrd,
-                    contentOrdEx: node.rel ? '' : `0${backwardNode.data.contentOrd}`.substr(-2),
-                }));
-                fourthArr = fourthArr.map((node) => ({
-                    ...node,
-                    contentOrd: forwardNode.data.contentOrd,
-                    contentOrdEx: node.rel ? '' : `0${forwardNode.data.contentOrd}`.substr(-2),
-                }));
+                // 정렬
+                result = displayedRows.sort(function (a, b) {
+                    if (a.contentOrd === b.contentOrd) {
+                        if (selected.map((node) => node.data.contentId).includes(b.contentId)) {
+                            return -1;
+                        } else {
+                            return a.relOrd - b.relOrd;
+                        }
+                    } else {
+                        return a.contentOrd - b.contentOrd;
+                    }
+                });
 
-                // 순서 변경 (2번이 4번 자리로 감)
-                result = firstArr.concat(thirdArr).concat(fourthArr).concat(secondArr).concat(lastArr);
+                // 순번 재지정
+                contentOrd = 0;
+                result.forEach((node) => {
+                    if (!node.rel) {
+                        contentOrd++;
+                    }
+                    node.contentOrd = contentOrd;
+                });
             } else if (type === 'relToRel') {
                 // draggingNode와 overNode의 relOrd 변경
                 let firstArr = displayedRows.splice(0, forwardNode.childIndex);
@@ -291,7 +305,6 @@ const DeskingWorkAgGrid = (props) => {
             const sameNode = draggingNode === overNode;
 
             handleRowDragLeave(params);
-            params.api.deselectAll();
 
             if (sameNode) return;
 
@@ -326,10 +339,12 @@ const DeskingWorkAgGrid = (props) => {
 
             if (rollback) {
                 toast.warning('이동할 수 없습니다');
+                params.api.deselectAll();
                 return;
             }
 
             appendRelRows(params.api, type, draggingNode, overNode);
+            params.api.deselectAll();
         },
         [appendRelRows, handleRowDragLeave],
     );

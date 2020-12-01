@@ -14,12 +14,12 @@ const propTypes = {
     /**
      * title
      */
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const defaultProps = {
     variant: 'dark',
-    title: ''
+    title: '',
 };
 
 const BadgeComponent = (props) => {

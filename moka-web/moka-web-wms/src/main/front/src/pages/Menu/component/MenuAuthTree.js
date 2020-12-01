@@ -94,13 +94,19 @@ const MenuAuthTree = ({ menuAuthInfo, onChange }) => {
      * @returns Custom Label
      */
     const makeCustomLabel = useCallback(
-        (info, isUsed, isEdited) => {
+        (info, isUsed, isEdited, index) => {
             const { title } = info;
             return (
                 <div className="cus-label">
                     <span>{title}</span>
                     <span
-                        className={clsx('edit-checkbox', 'rc-tree-checkbox', isEdited && 'rc-tree-checkbox-checked', !isUsed && 'rc-tree-checkbox-disabled')}
+                        className={clsx(
+                            'edit-checkbox',
+                            'rc-tree-checkbox',
+                            isEdited && 'rc-tree-checkbox-checked',
+                            !isUsed && 'rc-tree-checkbox-disabled',
+                            index && `rc-tree-use-checkbox-${index}`,
+                        )}
                         onClick={(e) => {
                             e.stopPropagation();
                             handleClickEditChange(info);
@@ -118,17 +124,21 @@ const MenuAuthTree = ({ menuAuthInfo, onChange }) => {
      * @returns Custom Label로 구성된 Tree Data
      */
     const makeCustomLabelTreeData = useCallback(
-        (orgTreeData) => {
+        (orgTreeData, order) => {
             const treeData = [];
             for (const item of orgTreeData) {
+                let index = 1;
+                if (order) {
+                    index = order;
+                }
                 const key = item.key;
                 const isEdited = menuAuthInfo.edited.includes(key);
                 let isUsed = menuAuthInfo.used.includes(key) || menuAuthInfo.halfCheckedKeys.includes(key);
-                const title = makeCustomLabel(item, isUsed, isEdited);
-
+                const title = makeCustomLabel(item, isUsed, isEdited, index);
                 let children = null;
                 if (item.children) {
-                    children = makeCustomLabelTreeData(item.children);
+                    index++;
+                    children = makeCustomLabelTreeData(item.children, index);
                 }
 
                 treeData.push({

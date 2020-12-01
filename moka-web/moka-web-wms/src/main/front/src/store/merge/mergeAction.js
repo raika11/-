@@ -14,8 +14,8 @@ export const previewPage = createAction(PREVIEW_PAGE, ({ content, callback }) =>
  * 컴포넌트 미리보기
  */
 export const [PREVIEW_COMPONENT, PREVIEW_COMPONENT_SUCCESS, PREVIEW_COMPONENT_FAILURE] = createRequestActionTypes('merge/PREVIEW_COMPONENT');
-export const previewComponent = createAction(PREVIEW_COMPONENT, ({ pageSeq, componentWorkSeq, resourceYn, callback }) => ({
-    pageSeq,
+export const previewComponent = createAction(PREVIEW_COMPONENT, ({ areaSeq, componentWorkSeq, resourceYn, callback }) => ({
+    areaSeq,
     componentWorkSeq,
     resourceYn,
     callback,
@@ -25,10 +25,28 @@ export const previewComponent = createAction(PREVIEW_COMPONENT, ({ pageSeq, comp
  * 컴포넌트 미리보기 (일시적인 데이터 처리)
  */
 export const PREVIEW_COMPONENT_MODAL = 'merge/PREVIEW_COMPONENT_MODAL';
-export const previewComponentModal = createAction(PREVIEW_COMPONENT_MODAL, ({ pageSeq, componentWorkSeq, resourceYn, callback }) => ({
-    pageSeq,
+export const previewComponentModal = createAction(PREVIEW_COMPONENT_MODAL, ({ areaSeq, componentWorkSeq, resourceYn, callback }) => ({
+    areaSeq,
     componentWorkSeq,
     resourceYn,
+    callback,
+}));
+
+/**
+ * 편집영역 미리보기
+ */
+export const [PREVIEW_AREA, PREVIEW_AREA_SUCCESS, PREVIEW_AREA_FAILURE] = createRequestActionTypes('merge/PREVIEW_AREA');
+export const previewArea = createAction(PREVIEW_AREA, ({ areaSeq, callback }) => ({
+    areaSeq,
+    callback,
+}));
+
+/**
+ * 편집영역 미리보기 (일시적인 데이터 처리)
+ */
+export const PREVIEW_AREA_MODAL = 'merge/PREVIEW_AREA_MODAL';
+export const previewAreaModal = createAction(PREVIEW_AREA_MODAL, ({ areaSeq, callback }) => ({
+    areaSeq,
     callback,
 }));
 

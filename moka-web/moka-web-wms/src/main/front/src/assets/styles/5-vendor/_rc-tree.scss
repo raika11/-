@@ -11,9 +11,19 @@
 }
 
 .rc-tree .rc-tree-treenode span.rc-tree-checkbox {
-    position:fixed;
-    left: 970px
+    position:absolute;
+    left: 300px
 }
-.rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox {
-    left:1000px
+
+.rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-1{
+    left:400px
+}
+.rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-2{
+    left:384px
+}
+.rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-3{
+    left:368px
+}
+.rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-4{
+    left:352px
 }

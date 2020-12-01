@@ -82,6 +82,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                 }
 
                 // 이미지경로
+                let artPdsThumb = `${PDS_URL}${art.artThumb}`;
                 let artThumb = `${IR_URL}?t=k&w=100&h=100u=//${PDS_URL}${art.artThumb}`;
 
                 return {
@@ -93,6 +94,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                     reportersText,
                     gridType: 'ARTICLE',
                     artThumb,
+                    artPdsThumb,
                 };
             }),
         );

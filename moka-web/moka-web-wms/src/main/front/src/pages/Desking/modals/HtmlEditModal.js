@@ -75,7 +75,7 @@ const HtmlEditModal = (props) => {
     const handleClickPreview = () => {
         dispatch(
             previewComponentModal({
-                pageSeq: area.page.pageSeq,
+                area: area.areaSeq,
                 componentWorkSeq: data.seq,
                 resourceYn: 'Y',
                 callback: ({ header, body }) => {
@@ -103,7 +103,7 @@ const HtmlEditModal = (props) => {
         if (show) {
             dispatch(
                 previewComponentModal({
-                    pageSeq: area.page.pageSeq,
+                    areaSeq: area.areaSeq,
                     componentWorkSeq: data.seq,
                     resourceYn: 'N',
                     callback: ({ header, body }) => {

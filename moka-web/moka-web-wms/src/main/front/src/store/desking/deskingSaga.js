@@ -115,7 +115,7 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
             linkTarget: null,
             moreUrl: null,
             moreTarget: null,
-            thumbFileName: data.artThumb,
+            thumbFileName: data.artPdsThumb,
             rel: true,
             relSeqs: null,
         };
@@ -166,7 +166,7 @@ const makeRowNode = (data, contentOrd, component) => {
             linkTarget: null,
             moreUrl: null,
             moreTarget: null,
-            thumbFileName: data.artThumb,
+            thumbFileName: data.artPdsThumb,
             // thumbSize:,
             // thumbWidth:
             // thumbHeight:

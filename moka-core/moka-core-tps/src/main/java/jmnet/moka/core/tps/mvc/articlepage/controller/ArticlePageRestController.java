@@ -121,7 +121,7 @@ public class ArticlePageRestController extends AbstractCommonController {
         // 데이타유효성검사.
         validData(artPageSeq, null, ActionType.SELECT);
 
-        ArticlePage page = articlePageService
+        ArticlePage articlePage = articlePageService
                 .findArticlePageBySeq(artPageSeq)
                 .orElseThrow(() -> {
                     String message = msg("tps.common.error.no-data");
@@ -129,7 +129,11 @@ public class ArticlePageRestController extends AbstractCommonController {
                     return new NoDataException(message);
                 });
 
-        ArticlePageDTO dto = modelMapper.map(page, ArticlePageDTO.class);
+        ArticlePageDTO dto = modelMapper.map(articlePage, ArticlePageDTO.class);
+
+        Long totalId = articleService.findLastestArticleBasicByArtType(dto.getArtType());
+        dto.setPreviewTotalId(totalId);
+
         ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<>(dto);
         tpsLogger.success(true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);

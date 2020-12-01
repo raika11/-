@@ -60,10 +60,19 @@ const previewComponent = createRequestSaga(act.PREVIEW_COMPONENT, api.getPreview
 
 const previewComponentModal = createRequestSaga(act.PREVIEW_COMPONENT_MODAL, api.getPreviewCP, true);
 
+/**
+ * 편집영역 미리보기
+ */
+const previewArea = createRequestSaga(act.PREVIEW_AREA, api.getPreviewArea);
+
+const previewAreaModal = createRequestSaga(act.PREVIEW_AREA_MODAL, api.getPreviewArea, true);
+
 /** saga */
 export default function* saga() {
     yield takeLatest(act.PREVIEW_PAGE, previewPageSaga);
     yield takeLatest(act.W3C_PAGE, w3cPageSaga);
     yield takeLatest(act.PREVIEW_COMPONENT, previewComponent);
     yield takeLatest(act.PREVIEW_COMPONENT_MODAL, previewComponentModal);
+    yield takeLatest(act.PREVIEW_AREA, previewArea);
+    yield takeLatest(act.PREVIEW_AREA_MODAL, previewAreaModal);
 }

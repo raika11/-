@@ -49,6 +49,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public Long findLastestArticleBasicByArtType(String artType) {
+        return articleBasicRepository.findLastestByTotalIdByArtType(artType);
+    }
+
+    @Override
     public List<ArticleSource> findAllArticleSource(String[] deskingSourceList) {
         return articleSourceRepository.findAllSourceByDesking(deskingSourceList);
     }
@@ -60,16 +65,18 @@ public class ArticleServiceImpl implements ArticleService {
             Optional<ArticleTitle> articleTitle = articleTitleRepository.findByTotalIdAndTitleDiv(articleBasic.getTotalId(), "DP");
             if (articleTitle.isPresent()) {
                 // 수정
-                articleTitle.get()
-                            .setTitle(articleTitleDTO.getArtEditTitle());
+                articleTitle
+                        .get()
+                        .setTitle(articleTitleDTO.getArtEditTitle());
                 articleTitleRepository.save(articleTitle.get());
             } else {
                 // 등록
-                ArticleTitle newTitle = ArticleTitle.builder()
-                                                    .totalId(articleBasic.getTotalId())
-                                                    .titleDiv("DP")
-                                                    .title(articleTitleDTO.getArtEditTitle())
-                                                    .build();
+                ArticleTitle newTitle = ArticleTitle
+                        .builder()
+                        .totalId(articleBasic.getTotalId())
+                        .titleDiv("DP")
+                        .title(articleTitleDTO.getArtEditTitle())
+                        .build();
                 articleTitleRepository.save(newTitle);
             }
         }
@@ -79,16 +86,18 @@ public class ArticleServiceImpl implements ArticleService {
             Optional<ArticleTitle> articleTitle = articleTitleRepository.findByTotalIdAndTitleDiv(articleBasic.getTotalId(), "DM");
             if (articleTitle.isPresent()) {
                 // 수정
-                articleTitle.get()
-                            .setTitle(articleTitleDTO.getArtEditMobTitle());
+                articleTitle
+                        .get()
+                        .setTitle(articleTitleDTO.getArtEditMobTitle());
                 articleTitleRepository.save(articleTitle.get());
             } else {
                 // 등록
-                ArticleTitle newTitle = ArticleTitle.builder()
-                                                    .totalId(articleBasic.getTotalId())
-                                                    .titleDiv("DM")
-                                                    .title(articleTitleDTO.getArtEditMobTitle())
-                                                    .build();
+                ArticleTitle newTitle = ArticleTitle
+                        .builder()
+                        .totalId(articleBasic.getTotalId())
+                        .titleDiv("DM")
+                        .title(articleTitleDTO.getArtEditMobTitle())
+                        .build();
                 articleTitleRepository.save(newTitle);
             }
         }

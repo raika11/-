@@ -22,14 +22,13 @@ const defaultProps = {
  * 기자관리 리스트 테이블의 새창열기 페이지
  */
 const ReporterPageButton = (props) => {
-    const { data, onClick } = props;
+    const { data } = props;
     const dispatch = useDispatch();
 
     const [btnDisabled, setBtnDisabled] = useState(true);
-    const [usedYn, setUsedYn] = useState(true);
 
     useEffect(() => {
-        if (data.usedYn == 'Y') {
+        if (data.usedYn === 'Y') {
             setBtnDisabled(false);
         } else {
             setBtnDisabled(true);

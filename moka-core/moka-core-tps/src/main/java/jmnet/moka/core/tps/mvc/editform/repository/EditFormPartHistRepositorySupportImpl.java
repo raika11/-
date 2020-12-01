@@ -4,7 +4,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPartHist;
 import jmnet.moka.core.tps.mvc.editform.entity.QEditFormPartHist;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
@@ -32,7 +32,7 @@ public class EditFormPartHistRepositorySupportImpl extends QuerydslRepositorySup
     }
 
     @Override
-    public Page<EditFormPartHist> findAll(EditFormSearchDTO searchDTO) {
+    public Page<EditFormPartHist> findAll(EditFormPartHistSearchDTO searchDTO) {
         QEditFormPartHist qPartHist = QEditFormPartHist.editFormPartHist;
         QMemberInfo qMember = QMemberInfo.memberInfo;
 

@@ -17,12 +17,14 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
     const { onDragStop, dropTargetAgGrid } = props;
 
     const dispatch = useDispatch();
-    const { search, list, total, error, loading } = useSelector((store) => ({
+    const { search, list, total, error, loading, PDS_URL, IR_URL } = useSelector((store) => ({
         search: store.article.search,
         list: store.article.list,
         total: store.article.total,
         error: store.article.error,
         loading: store.loading[GET_ARTICLE_LIST],
+        PDS_URL: store.app.PDS_URL,
+        IR_URL: store.app.IR_URL,
     }));
 
     // state
@@ -79,6 +81,9 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                     articleDt = `${articleDt}\n${moment(art.artModDt, DB_DATEFORMAT).format('MM-DD HH:mm')}`;
                 }
 
+                // 이미지경로
+                let artThumb = `${IR_URL}?t=k&w=100&h=100u=//${PDS_URL}${art.artThumb}`;
+
                 return {
                     ...art,
                     escapeTitle,
@@ -87,10 +92,11 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                     articleDt,
                     reportersText,
                     gridType: 'ARTICLE',
+                    artThumb,
                 };
             }),
         );
-    }, [list]);
+    }, [IR_URL, PDS_URL, list]);
 
     useEffect(() => {
         /**

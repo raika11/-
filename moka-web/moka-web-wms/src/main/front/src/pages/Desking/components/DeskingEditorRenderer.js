@@ -71,7 +71,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
     const handleClickDelete = () => {
         if (editMode) {
             setEditMode(false);
-            setEditValue(data.rel ? data.relTitle : data.title);
+            setEditValue(data.title);
             setError(false);
         } else {
             if (onDelete) {
@@ -94,10 +94,8 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
     };
 
     useEffect(() => {
-        setEditValue(data.rel ? data.relTitle : data.title);
+        setEditValue(data.title);
     }, [data]);
-
-    if (data.title !== '' && data.rel) return null;
 
     return (
         <div className="d-flex h-100 align-items-center desking-ag-grid-editor">

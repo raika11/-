@@ -19,9 +19,9 @@ export const columnDefs = [
                 const message = params.rowNodes ? params.rowNodes[0].data.title : params.rowNode.data.title;
                 return `${message} 외 [${dragItemCount - 1}건]`;
             }
-            if (params.rowNode.data.rel) {
-                return params.rowNode.data.relTitle;
-            }
+            // if (params.rowNode.data.rel) {
+            //     return params.rowNode.data.relTitle;
+            // }
             return params.rowNode.data.title;
         },
         cellClassRules: cellClassRules,

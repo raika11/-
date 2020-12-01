@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.menu.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -19,7 +20,6 @@ import jmnet.moka.core.tps.mvc.menu.repository.MenuRepository;
 import jmnet.moka.core.tps.mvc.menu.vo.MenuVO;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,11 +75,12 @@ public class MenuServiceImpl implements MenuService {
      * @return 메뉴 Tree
      */
     private MenuNodeDTO makeTree(List<MenuVO> menuList) {
-        int maxDepth = menuList
+        Optional<MenuVO> menuVO = menuList
                 .stream()
-                .max((o1, o2) -> o1.getDepth() - o2.getDepth())
+                .max(Comparator.comparingInt(MenuVO::getDepth));
+        int maxDepth = menuVO.isPresent() ? menuVO
                 .get()
-                .getDepth();
+                .getDepth() : 0;
         MenuNodeDTO rootNode = new MenuNodeDTO();
         rootNode.setSeq((long) 0);
         rootNode.setMenuId(ROOT_MENU_ID);
@@ -115,10 +116,6 @@ public class MenuServiceImpl implements MenuService {
             }
         }
         return menuNodeDTO;
-    }
-
-    private Sort orderByIdAsc() {
-        return new Sort(Sort.Direction.ASC, "parentMenuId").and(new Sort(Sort.Direction.ASC, "menuOrder"));
     }
 
     @Override
@@ -187,7 +184,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public boolean isUsedGroupOrMember(String menuId) {
-        return menuAuthRepository.countByMenuId(menuId) > 0 ? true : false;
+        return menuAuthRepository.countByMenuIdAndUsedYn(menuId, MokaConstants.YES) > 0;
     }
 
     @Override
@@ -328,11 +325,9 @@ public class MenuServiceImpl implements MenuService {
                 .filter(menu -> McpString.isNotEmpty(menu.getMenuUrl()) && !menu
                         .getMenuUrl()
                         .equals("/"))
-                .map(menu -> {
-                    return menu
-                            .getMenuUrl()
-                            .trim();
-                })
+                .map(menu -> menu
+                        .getMenuUrl()
+                        .trim())
                 .collect(Collectors.toSet());
     }
 
@@ -357,14 +352,12 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void saveMenuAuth(String groupMemberId, MenuAuthTypeCode menuAuthType, List<MenuAuth> menuAuths) {
 
-        findMenuAuthList(groupMemberId, menuAuthType.getCode())
-                .stream()
-                .forEach(menuAuth -> {
-                    menuAuth.setUsedYn(MokaConstants.NO);
-                    menuAuth.setEditYn(MokaConstants.NO);
-                    menuAuth.setViewYn(MokaConstants.NO);
-                    updateMenuAuth(menuAuth);
-                });
+        findMenuAuthList(groupMemberId, menuAuthType.getCode()).forEach(menuAuth -> {
+            menuAuth.setUsedYn(MokaConstants.NO);
+            menuAuth.setEditYn(MokaConstants.NO);
+            menuAuth.setViewYn(MokaConstants.NO);
+            updateMenuAuth(menuAuth);
+        });
         menuAuths.forEach(menuAuth -> {
             try {
                 // 조회 여부는 useYn이 Y이 이면 자동으로 Y

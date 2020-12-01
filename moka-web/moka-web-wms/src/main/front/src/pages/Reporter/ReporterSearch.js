@@ -3,20 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput } from '@components';
-import { useHistory } from 'react-router-dom';
-import { initialState, changeSearchOption, GET_REPORTER_LIST, getReporterList, getReporter } from '@store/reporter';
-import { Button } from 'react-bootstrap';
+import { initialState, changeSearchOption, getReporterList } from '@store/reporter';
 import ReporterSearchListModal from './modals/ReporterSearchListModal';
-import toast from '@utils/toastUtil'; // 내가 참조해서 만든거
 
 /**
  * 기자 목록 검색 컴포넌트
  */
 const ReporterMgrSearch = () => {
-    const history = useHistory();
     const dispatch = useDispatch();
     const [datasetApiListModalShow, setDatasetApiListModalShow] = useState(false);
-    const { reporter, search: storeSearch } = useSelector((store) => ({
+    const { search: storeSearch } = useSelector((store) => ({
         search: store.reporter.search,
     }));
 

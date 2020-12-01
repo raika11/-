@@ -51,6 +51,15 @@ public class AppRestController {
     @Value("${desking.mtitle.width}")
     private Long deskingMTitleWidth;
 
+    @Value("${pds.url}")
+    private String pdsUrl;
+
+    @Value("${wimage.url}")
+    private String wimageUrl;
+
+    @Value("${ir.url}")
+    private String irUrl;
+
     @Autowired
     private TpsLogger tpsLogger;
 
@@ -76,6 +85,9 @@ public class AppRestController {
                                                .add("PAGE_TYPE_HTML", TpsConstants.PAGE_TYPE_HTML)                  // 페이지 기본타입
                                                .add("DESKING_TITLE_WIDTH", deskingTitleWidth)                       // pc title width
                                                .add("DESKING_MTITLE_WIDTH", deskingMTitleWidth)                     // mobile title width
+                                               .add("PDS_URL", pdsUrl)                                              // pds Url
+                                               .add("WIMAGE_URL", wimageUrl)                                        // wimage Url
+                                               .add("IR_URL", irUrl)                                                // ir Url
                                                .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());

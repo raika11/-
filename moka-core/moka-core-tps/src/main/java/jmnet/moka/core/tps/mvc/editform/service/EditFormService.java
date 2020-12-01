@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
@@ -195,7 +196,7 @@ public interface EditFormService {
      * @param search 검색 조건
      * @return 검색 결과
      */
-    Page<EditFormPartHist> findAllEditFormPartHistory(EditFormSearchDTO search);
+    Page<EditFormPartHist> findAllEditFormPartHistory(EditFormPartHistSearchDTO search);
 
     /**
      * 편집 폼 Part의 편집 이력 조회

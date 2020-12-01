@@ -176,7 +176,6 @@ const makeRowNode = (data, contentOrd, component) => {
         };
     } else if (data.gridType === 'DESKING') {
         // 편집 컴포넌트영역 -> 편집컴포넌트 이동
-        let title = data.rel ? data.relTitle : data.title;
         appendData = {
             ...data,
             regDt: undefined,
@@ -184,7 +183,6 @@ const makeRowNode = (data, contentOrd, component) => {
             componentSeq: component.componentSeq,
             datasetSeq: component.datasetSeq,
             contentOrd,
-            title,
         };
     }
 
@@ -230,10 +228,10 @@ function* deskingDragStop({ payload }) {
 
         if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
-            let contentOrding = insertIndex - 1;
+            let contentOrdering = insertIndex - 1;
             sourceNode.some((node) => {
-                if (!node.data.rel) contentOrding++;
-                const result = makeRowNode(node.data, contentOrding, tgtComponent);
+                if (!node.data.rel) contentOrdering++;
+                const result = makeRowNode(node.data, contentOrdering, tgtComponent);
                 if (result.success) {
                     ans.push(result.list);
                     return false;

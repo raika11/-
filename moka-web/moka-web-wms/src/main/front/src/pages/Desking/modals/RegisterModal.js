@@ -48,6 +48,23 @@ const RegisterModal = (props) => {
 
         selectedNodes = componentAgGridInstances[agGridIndex].api.getSelectedNodes().map((node) => node.data);
 
+        // sourceNode 정렬
+        selectedNodes = selectedNodes.sort(function (a, b) {
+            if (a.contentOrd === b.contentOrd) {
+                return a.relOrd - b.relOrd;
+            } else {
+                return a.contentOrd - b.contentOrd;
+            }
+        });
+
+        let contentOrd = 0;
+        for (let i = 0; i < selectedNodes.length; i++) {
+            if (!selectedNodes[i].rel) {
+                contentOrd++;
+            }
+            selectedNodes[i].contentOrd = contentOrd;
+        }
+
         const option = {
             componentWorkSeq: tgtComponent.seq,
             datasetSeq: tgtComponent.datasetSeq,

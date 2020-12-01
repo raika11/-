@@ -141,7 +141,7 @@ const ReservedEdit = () => {
                     if (header.success) {
                         // 중복 없음
                         if (!body) {
-                            saveCallback(tmp, 'update');
+                            saveCallback(tmp, 'insert');
                         }
                         // 중복 있음
                         else {
@@ -187,10 +187,10 @@ const ReservedEdit = () => {
         if (validate(newReserved)) {
             if (!paramSeq) {
                 // 등록
-                saveCallback(newReserved, 'insert');
+                checkDuplicated(newReserved);
             } else {
                 // 수정
-                checkDuplicated(newReserved);
+                saveCallback(newReserved, 'update');
             }
         }
     };
@@ -259,6 +259,7 @@ const ReservedEdit = () => {
                         className="mb-2"
                         placeholder="예약어를 입력하세요"
                         name="reservedId"
+                        inputProps={{ plaintext: paramSeq && true, readOnly: paramSeq && true }}
                         onChange={handleChangeValue}
                         isInvalid={reservedIdError}
                         required

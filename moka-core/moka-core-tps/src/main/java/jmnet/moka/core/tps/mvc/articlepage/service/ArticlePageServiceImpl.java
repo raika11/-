@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan. 
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna. 
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus. 
- * Vestibulum commodo. Ut rhoncus gravida arcu. 
+ * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 package jmnet.moka.core.tps.mvc.articlepage.service;
@@ -76,7 +76,7 @@ public class ArticlePageServiceImpl implements ArticlePageService {
 
     @Override
     public ArticlePage insertArticlePage(ArticlePage articlePage)
-        throws IOException, TemplateParseException {
+            throws IOException, TemplateParseException {
 
         // 1. 관련정보 추가
         insertArticlePageRel(articlePage);
@@ -109,24 +109,29 @@ public class ArticlePageServiceImpl implements ArticlePageService {
     @Override
     public void updateArticlePageRelItems(Component newComponent, Component orgComponent) {
         // 템플릿 업데이트
-        if (!newComponent.getTemplate()
-            .getTemplateSeq()
-            .equals(orgComponent.getTemplate()
-                .getTemplateSeq())) {
+        if (!newComponent
+                .getTemplate()
+                .getTemplateSeq()
+                .equals(orgComponent
+                        .getTemplate()
+                        .getTemplateSeq())) {
             articlePageRelRepository.updateRelTemplates(newComponent);
         }
 
         // 데이타셋 업데이트
         boolean updateDS = false;
-        if (!newComponent.getDataType()
-            .equals(orgComponent.getDataType())) {
+        if (!newComponent
+                .getDataType()
+                .equals(orgComponent.getDataType())) {
             updateDS = true;
         }
         if (newComponent.getDataset() != null && orgComponent.getDataset() != null) {
-            if (!newComponent.getDataset()
-                .getDatasetSeq()
-                .equals(orgComponent.getDataset()
-                    .getDatasetSeq())) {
+            if (!newComponent
+                    .getDataset()
+                    .getDatasetSeq()
+                    .equals(orgComponent
+                            .getDataset()
+                            .getDatasetSeq())) {
                 updateDS = true;
             }
         }
@@ -140,23 +145,27 @@ public class ArticlePageServiceImpl implements ArticlePageService {
 
         if (updateDS) {
             // datasetSeq가 추가된 경우: select -> insert. querydsl에서 insert는 안되므로 여기서 처리
-            if (!newComponent.getDataType()
-                .equals(TpsConstants.DATATYPE_NONE) && orgComponent.getDataType()
-                .equals(TpsConstants.DATATYPE_NONE)) {
+            if (!newComponent
+                    .getDataType()
+                    .equals(TpsConstants.DATATYPE_NONE) && orgComponent
+                    .getDataType()
+                    .equals(TpsConstants.DATATYPE_NONE)) {
 
                 List<ArticlePageRel> relList = articlePageRelRepository.findList(MokaConstants.ITEM_COMPONENT, newComponent.getComponentSeq());
 
                 for (ArticlePageRel rel : relList) {
-                    ArticlePageRel newRel = ArticlePageRel.builder()
-                        .articlePage(rel.getArticlePage())
-                        .domain(rel.getDomain())
-                        .relType(MokaConstants.ITEM_DATASET)
-                        .relSeq(newComponent.getDataset()
-                            .getDatasetSeq())
-                        .relParentType(MokaConstants.ITEM_COMPONENT)
-                        .relParentSeq(newComponent.getComponentSeq())
-                        .relOrd(rel.getRelOrd())
-                        .build();
+                    ArticlePageRel newRel = ArticlePageRel
+                            .builder()
+                            .articlePage(rel.getArticlePage())
+                            .domain(rel.getDomain())
+                            .relType(MokaConstants.ITEM_DATASET)
+                            .relSeq(newComponent
+                                    .getDataset()
+                                    .getDatasetSeq())
+                            .relParentType(MokaConstants.ITEM_COMPONENT)
+                            .relParentSeq(newComponent.getComponentSeq())
+                            .relOrd(rel.getRelOrd())
+                            .build();
                     articlePageRelRepository.save(newRel);
                 }
             } else {
@@ -171,9 +180,10 @@ public class ArticlePageServiceImpl implements ArticlePageService {
     }
 
     @Override
-    public ArticlePage updateArticlePage(ArticlePage articlePage) throws Exception {
+    public ArticlePage updateArticlePage(ArticlePage articlePage)
+            throws Exception {
         // 1. 기존 관련아이템은 삭제 후, 저장
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
         Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
         paramMap.put("artPageSeq", articlePage.getArtPageSeq());
         paramMap.put("returnValue", returnValue);
@@ -199,8 +209,9 @@ public class ArticlePageServiceImpl implements ArticlePageService {
 
         insertArticlePageHist(articlePage, TpsConstants.WORKTYPE_DELETE);
 
-        log.info("[DELETE ARTICLE PAGE] domainId : {} artPageSeq : {}", articlePage.getDomain()
-            .getDomainId(), articlePage.getArtPageSeq());
+        log.info("[DELETE ARTICLE PAGE] domainId : {} artPageSeq : {}", articlePage
+                .getDomain()
+                .getDomainId(), articlePage.getArtPageSeq());
 
         // 삭제
         articlePageRepository.deleteById(articlePage.getArtPageSeq());
@@ -210,16 +221,17 @@ public class ArticlePageServiceImpl implements ArticlePageService {
      * 관련아이템 등록
      *
      * @param articlePage 기사페이지 정보
-     * @throws IOException 입출력오류
+     * @throws IOException            입출력오류
      * @throws TemplateParseException tems소스 문법오류
      */
     private void insertArticlePageRel(ArticlePage articlePage)
-        throws IOException, TemplateParseException {
+            throws IOException, TemplateParseException {
 
         List<ParsedItemDTO> parsedItemDTOList = TemplateParserHelper.getItemList(articlePage.getArtPageBody());
-        List<ItemDTO> itemDTOList = ResourceMapper.getDefaultObjectMapper()
-            .convertValue(parsedItemDTOList, new TypeReference<List<ItemDTO>>() {
-            });
+        List<ItemDTO> itemDTOList = ResourceMapper
+                .getDefaultObjectMapper()
+                .convertValue(parsedItemDTOList, new TypeReference<List<ItemDTO>>() {
+                });
         for (ItemDTO item : itemDTOList) {
             ArticlePageRel relation = new ArticlePageRel();
             relation.setRelType(item.getNodeName());
@@ -236,8 +248,9 @@ public class ArticlePageServiceImpl implements ArticlePageService {
                 // page.addPageRel(relation);
             }
 
-            if (item.getNodeName()
-                .equals(MokaConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
+            if (item
+                    .getNodeName()
+                    .equals(MokaConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
                 // 추가한다.
                 Optional<Component> component = componentService.findComponentBySeq(Long.parseLong(item.getId()));
 
@@ -246,12 +259,14 @@ public class ArticlePageServiceImpl implements ArticlePageService {
                     // template 아이템 추가
                     ArticlePageRel relationTP = new ArticlePageRel();
                     relationTP.setRelType(MokaConstants.ITEM_TEMPLATE);
-                    relationTP.setRelSeq(component.get()
-                        .getTemplate()
-                        .getTemplateSeq());
+                    relationTP.setRelSeq(component
+                            .get()
+                            .getTemplate()
+                            .getTemplateSeq());
                     relationTP.setRelParentType(MokaConstants.ITEM_COMPONENT);
-                    relationTP.setRelParentSeq(component.get()
-                        .getComponentSeq());
+                    relationTP.setRelParentSeq(component
+                            .get()
+                            .getComponentSeq());
                     relationTP.setRelOrd(item.getOrder());
 
                     // 동일한 아이템은 추가하지 않는다.
@@ -262,16 +277,19 @@ public class ArticlePageServiceImpl implements ArticlePageService {
                     }
 
                     // data 아이템 추가
-                    if (component.get()
-                        .getDataset() != null) {
+                    if (component
+                            .get()
+                            .getDataset() != null) {
                         ArticlePageRel relatioDS = new ArticlePageRel();
                         relatioDS.setRelType(MokaConstants.ITEM_DATASET);
-                        relatioDS.setRelSeq(component.get()
-                            .getDataset()
-                            .getDatasetSeq());
+                        relatioDS.setRelSeq(component
+                                .get()
+                                .getDataset()
+                                .getDatasetSeq());
                         relatioDS.setRelParentType(MokaConstants.ITEM_COMPONENT);
-                        relatioDS.setRelParentSeq(component.get()
-                            .getComponentSeq());
+                        relatioDS.setRelParentSeq(component
+                                .get()
+                                .getComponentSeq());
                         relatioDS.setRelOrd(item.getOrder());
 
                         if (!articlePage.isEqualRel(relatioDS)) {
@@ -288,6 +306,7 @@ public class ArticlePageServiceImpl implements ArticlePageService {
 
     /**
      * 히스토리를 등록한다.
+     *
      * @param savePage 등록된 기사페이지
      * @param workType 작업유형
      */
@@ -298,17 +317,22 @@ public class ArticlePageServiceImpl implements ArticlePageService {
         hist.setArtPageBody(savePage.getArtPageBody());
         hist.setWorkType(workType);
 
-//        if (workType.equals(TpsConstants.WORKTYPE_INSERT)) {
-//            hist.setRegDt(savePage.getRegDt());
-//            hist.setRegId(savePage.getRegId());
-//        } else if (workType.equals(TpsConstants.WORKTYPE_UPDATE)) {
-//            hist.setRegDt(savePage.getModDt());
-//            hist.setRegId(savePage.getModId());
-//        } else if (workType.equals(TpsConstants.WORKTYPE_DELETE)) {
-//            hist.setRegDt(McpDate.now());
-//            hist.setRegId(userName);
-//        }
+        //        if (workType.equals(TpsConstants.WORKTYPE_INSERT)) {
+        //            hist.setRegDt(savePage.getRegDt());
+        //            hist.setRegId(savePage.getRegId());
+        //        } else if (workType.equals(TpsConstants.WORKTYPE_UPDATE)) {
+        //            hist.setRegDt(savePage.getModDt());
+        //            hist.setRegId(savePage.getModId());
+        //        } else if (workType.equals(TpsConstants.WORKTYPE_DELETE)) {
+        //            hist.setRegDt(McpDate.now());
+        //            hist.setRegId(userName);
+        //        }
 
         articlePageHistRepository.save(hist);
+    }
+
+    @Override
+    public boolean existArtType(String domainId, String artType) {
+        return articlePageRepository.countByDomainDomainIdAndArtType(domainId, artType) > 0;
     }
 }

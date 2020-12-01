@@ -323,7 +323,8 @@ public class FtpHelper {
             }
 
             String savePath = isTempSave ? fi.getTempPath() : realSavePath.toString();
-            ftpClient.makeDirectory(savePath);
+            //ftpClient.makeDirectory(savePath);
+            mkdirs(ftpClient, savePath);
             ftpClient.changeWorkingDirectory(savePath);
 
             for (int j = 0; j < fi.getRetry() && !success; j++) {
@@ -336,7 +337,8 @@ public class FtpHelper {
             }
             if (success && isTempSave) {
                 // 파일 경로를 변경한다.
-                ftpClient.makeDirectory(realSavePath.toString());
+                //ftpClient.makeDirectory(realSavePath.toString());
+                mkdirs(ftpClient, realSavePath.toString());
                 success = ftpClient.rename(McpFile.makeFilepathName(fi.getTempPath(), fileName),
                         McpFile.makeFilepathName(realSavePath.toString(), fileName));
             }
@@ -473,6 +475,22 @@ public class FtpHelper {
             ftpClientPool.returnObject(ftpClient);
         }
         return false;
+    }
+
+    private void mkdirs(FTPClient ftpClient, String path)
+            throws IOException {
+        if (McpString.isNotEmpty(path)) {
+            String[] paths = path.split(File.separator);
+            String tempPath = "";
+            for (String subPath : paths) {
+                tempPath += "/" + subPath;
+                if (ftpClient.changeWorkingDirectory(tempPath)) {
+                    ftpClient.changeWorkingDirectory("/");
+                } else {
+                    ftpClient.makeDirectory(tempPath);
+                }
+            }
+        }
     }
 
 

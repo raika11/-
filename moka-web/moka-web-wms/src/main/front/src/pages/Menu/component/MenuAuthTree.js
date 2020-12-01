@@ -100,7 +100,7 @@ const MenuAuthTree = ({ menuAuthInfo, onChange }) => {
                 <div className="cus-label">
                     <span>{title}</span>
                     <span
-                        className={clsx('rc-tree-checkbox', isEdited && 'rc-tree-checkbox-checked', !isUsed && 'rc-tree-checkbox-disabled')}
+                        className={clsx('edit-checkbox', 'rc-tree-checkbox', isEdited && 'rc-tree-checkbox-checked', !isUsed && 'rc-tree-checkbox-disabled')}
                         onClick={(e) => {
                             e.stopPropagation();
                             handleClickEditChange(info);

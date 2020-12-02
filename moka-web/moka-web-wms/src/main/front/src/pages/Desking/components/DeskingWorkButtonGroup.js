@@ -218,7 +218,9 @@ const DeskingWorkButtonGroup = (props) => {
                     {/* 예약 + 타이틀 */}
                     <Col className="d-flex align-items-center p-0 position-static" xs={7}>
                         <ReserveComponentWork component={component} workStatus={workStatus} />
-                        <OverlayTrigger overlay={<Tooltip>{`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}`}</Tooltip>}>
+                        <OverlayTrigger
+                            overlay={<Tooltip>{`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}, 템플릿ID: ${component.templateSeq}`}</Tooltip>}
+                        >
                             <p className="ft-12 mb-0 component-title text-truncate">{title}</p>
                         </OverlayTrigger>
                     </Col>

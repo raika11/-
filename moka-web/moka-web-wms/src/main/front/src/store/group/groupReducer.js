@@ -22,6 +22,10 @@ export const initialState = {
         used: [],
         halfCheckedKeys: [],
     },
+    member: {
+        groupIn: { list: [], total: 0 },
+        groupOut: { list: [], total: 0, search: { searchType: 'all', keyword: '', page: 0, size: PAGESIZE_OPTIONS[0] } },
+    },
     groupError: {},
     invalidList: [],
 };
@@ -150,6 +154,31 @@ export default handleActions(
         [act.CLEAR_GROUP_MENU_AUTH]: (state) => {
             return produce(state, (draft) => {
                 draft.menuAuthInfo = initialState.menuAuthInfo;
+            });
+        },
+
+        /**
+         * 그룹 사용자 목록
+         */
+        [act.GET_GROUP_IN_MEMBER_LIST_SUCCESS]: (state, { payload: { list, total } }) => {
+            return produce(state, (draft) => {
+                draft.member.groupIn.list = list;
+                draft.member.groupIn.total = total;
+            });
+        },
+        [act.GET_SEARCH_MEMBER_LIST_SUCCESS]: (state, { payload: { list, total } }) => {
+            return produce(state, (draft) => {
+                draft.member.groupOut.list = list;
+                draft.member.groupOut.total = total;
+            });
+        },
+
+        /**
+         * 검색조건 변경
+         */
+        [act.CHANGE_MEMBER_SEARCH_OPTION]: (state, { payload: { name, value } }) => {
+            return produce(state, (draft) => {
+                draft.member.groupOut.search[name] = value;
             });
         },
     },

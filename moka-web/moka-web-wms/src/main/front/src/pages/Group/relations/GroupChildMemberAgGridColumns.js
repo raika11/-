@@ -1,24 +1,22 @@
 import React from 'react';
-import { MokaInput } from '@components';
+const cellClassRules = {
+    'ag-rel-cell': (params) => params.data.rel === true,
+    'ag-edit-cell': (params) => params.colDef.editable,
+};
+
+export const rowClassRules = {
+    'ag-rel-row': (params) => params.data.rel === true,
+};
 
 export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 export const columnDefs = [
     {
-        headerName: '선택',
-        field: 'select',
-        //cellStyle: { textAlign: 'center' },
-        width: 65,
-        cellRendererFramework: (params) => {
-            const { seqNo } = params.data;
-            return <MokaInput as="checkbox" value={seqNo}></MokaInput>;
-        },
-    },
-    {
-        headerName: '번호',
-        field: 'seqNo',
-        // cellClass: 'ag-cell-center',
-        //cellStyle: { textAlign: 'center' },
-        width: 75,
+        colId: 'checkbox',
+        width: 28,
+        checkboxSelection: true,
+        suppressMenu: true,
+        headerCheckboxSelection: true,
+        cellStyle: { width: '28px' },
     },
     {
         headerName: '이름',
@@ -42,16 +40,16 @@ export const columnDefs = [
         width: 135,
         cellRendererFramework: (params) => {
             //J중앙I일간E기타M매거진A관리자D청백R기사수신
-            const { value: groups } = params;
-            console.log(groups);
+
+            const { memberGroups } = params.data;
+
             let groupNm = '';
-            if (groups) {
-                const groupCodes = groups.split(',');
+            if (memberGroups) {
+                const groupCodes = memberGroups.split(',');
                 for (const groupCode of groupCodes) {
                     if (groupNm !== '') {
                         groupNm += ',';
                     }
-                    console.log(groupCode);
                     switch (groupCode) {
                         case 'J':
                             console.log('hhhh');

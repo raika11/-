@@ -56,3 +56,10 @@ export const updateGroupMenuAuth = (groupCd, changeMenuAuthList) => {
         throw err;
     });
 };
+
+// 그룹 내 사용자 수정
+export const updateGroupInMember = (groupCd, memberIds, useYn) => {
+    return instance.put(`/api/groups/${groupCd}/members`, qs.stringify({ memberIds, useYn })).catch((err) => {
+        throw err;
+    });
+};

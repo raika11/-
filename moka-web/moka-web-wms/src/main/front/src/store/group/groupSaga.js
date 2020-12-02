@@ -3,6 +3,7 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
 
 import * as groupAPI from './groupApi';
+import * as memberAPI from '../member/memberApi';
 import * as groupAction from './groupAction';
 import * as menuAPI from '@store/menu/menuApi';
 import commonUtil from '@utils/commonUtil';
@@ -217,6 +218,71 @@ function* updateGroupMenuAuth({ type, payload: { groupCd, changeMenuAuthList, ca
     yield finishLoading('group/GET_GROUP_MENU_LIST');
 }
 
+function* getGroupInMemberList({ type, payload: { search } }) {
+    console.log(type);
+    yield put(startLoading(type));
+    try {
+        const response = yield call(memberAPI.getMemberList, { search });
+        const groupInMember = response.data.body.list;
+        const total = response.data.body.totalCnt;
+        if (response.data.header.success) {
+            yield put({
+                type: `${type}_SUCCESS`,
+                payload: { list: groupInMember, total },
+            });
+        } else {
+            yield put({
+                type: `${type}_FAILURE`,
+                payload: { list: [], total: 0 },
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    }
+    yield put(finishLoading(type));
+}
+
+function* getSearchMemberList({ type, payload: { name, search } }) {
+    yield put(startLoading(type));
+    try {
+        const response = yield call(memberAPI.getMemberList, { search });
+        const searchMembers = response.data.body.list;
+        const total = response.data.body.totalCnt;
+        console.log(total);
+        if (response.data.header.success) {
+            yield put({
+                type: `${type}_SUCCESS`,
+                payload: { list: searchMembers, total },
+            });
+        } else {
+            yield put({
+                type: `${type}_FAILURE`,
+                payload: {
+                    list: [],
+                    total: 0,
+                },
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    yield put(finishLoading(type));
+}
+
+function* updateGroupInMember({ type, payload: { groupCd, memberIds, useYn, callback } }) {
+    yield startLoading(type);
+
+    const response = yield call(groupAPI.updateGroupInMember, groupCd, memberIds, useYn);
+    callback(response.data);
+
+    yield finishLoading(type);
+}
+
+function toSearchUserList(allMembers, groupUsers) {
+    return allMembers.filter((searchUser) => groupUsers.filter((groupUser) => groupUser.memberId === searchUser.memberId).length === 0);
+}
+
 export default function* groupSaga() {
     yield takeLatest(groupAction.GET_GROUP_LIST, getGroupList);
     yield takeLatest(groupAction.GET_GROUP, getGroup);
@@ -224,6 +290,9 @@ export default function* groupSaga() {
     yield takeLatest(groupAction.SAVE_GROUP, saveGroup);
     yield takeLatest(groupAction.DELETE_GROUP, deleteGroup);
     yield takeLatest(groupAction.HAS_RELATION_LIST, hasRelationList);
-    yield takeLatest(groupAction.getGroupMenuAuth, getGroupMenuAuthList);
-    yield takeLatest(groupAction.updateGroupMenuAuth, updateGroupMenuAuth);
+    yield takeLatest(groupAction.GET_GROUP_MENU_AUTH, getGroupMenuAuthList);
+    yield takeLatest(groupAction.UPDATE_GROUP_MENU_AUTH, updateGroupMenuAuth);
+    yield takeLatest(groupAction.GET_GROUP_IN_MEMBER_LIST, getGroupInMemberList);
+    yield takeLatest(groupAction.GET_SEARCH_MEMBER_LIST, getSearchMemberList);
+    yield takeLatest(groupAction.UPDATE_GROUP_IN_MEMBER, updateGroupInMember);
 }

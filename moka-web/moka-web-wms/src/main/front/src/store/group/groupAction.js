@@ -69,3 +69,15 @@ export const updateGroupMenuAuth = createAction(UPDATE_GROUP_MENU_AUTH, ({ group
 
 export const CLEAR_GROUP_MENU_AUTH = 'group/CLEAR_GROUP_MENU_AUTH';
 export const clearGroupMenuAuth = createAction(CLEAR_GROUP_MENU_AUTH);
+
+export const [GET_GROUP_IN_MEMBER_LIST, GET_GROUP_IN_MEMBER_LIST_SUCCESS, GET_GROUP_IN_MEMBER_LIST_FAILURE] = createRequestActionTypes('group/GET_GROUP_IN_MEMBER_LIST');
+export const getGroupInMemberList = createAction(GET_GROUP_IN_MEMBER_LIST);
+
+export const [GET_SEARCH_MEMBER_LIST, GET_SEARCH_MEMBER_LIST_SUCCESS, GET_SEARCH_MEMBER_LIST_FAILURE] = createRequestActionTypes('group/GET_SEARCH_MEMBER_LIST');
+export const getSearchMemberList = createAction(GET_SEARCH_MEMBER_LIST);
+
+export const CHANGE_MEMBER_SEARCH_OPTION = 'group/CHANGE_MEMBER_SEARCH_OPTION';
+export const changeMemberSearchOption = createAction(CHANGE_MEMBER_SEARCH_OPTION, ({ name, value }) => ({ name, value }));
+
+export const UPDATE_GROUP_IN_MEMBER = 'group/UPDATE_GROUP_IN_MEMBER';
+export const updateGroupInMember = createAction(UPDATE_GROUP_IN_MEMBER);

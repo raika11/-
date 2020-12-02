@@ -8,91 +8,90 @@ export const columnDefs = [
     {
         headerName: '번호',
         field: 'cdNo',
-        width: 120,
+        width: 60,
         cellStyle: { fontSize: '12px' },
+        tooltipField: 'cdNo',
     },
     {
         headerName: '페이지 코드',
         field: 'pageCd',
-        width: 210,
+        width: 100,
         cellStyle: { fontSize: '12px' },
-        tooltipField: 'templateName',
+        tooltipField: 'pageCd',
     },
     {
         headerName: '제목',
         field: 'pageTitle',
-        width: 387,
+        width: 250,
         cellStyle: { fontSize: '12px' },
-        tooltipField: 'templateGroupName',
+        tooltipField: 'pageTitle',
     },
     {
         headerName: '게시일',
         field: 'modDt',
-        width: 120,
+        width: 100,
         cellStyle: { fontSize: '12px' },
-        tooltipField: 'templateWidth',
+        tooltipField: 'modDt',
     },
     {
         headerName: '등록일',
         field: 'regDt',
         width: 120,
         cellStyle: { fontSize: '12px' },
-        tooltipField: 'templateWidth',
+        tooltipField: 'regDt',
     },
     {
         headerName: '리스트 노출',
         field: 'listYn',
-        width: 100,
+        width: 90,
         cellStyle: { fontSize: '12px' },
-        tooltipField: 'templateWidth',
     },
     {
         headerName: '사용여부',
         field: 'usedYn',
-        width: 70,
-        cellStyle: { fontSize: '12px' },
-        tooltipField: 'templateWidth',
-    },
-    {
-        headerName: '',
-        field: 'urlCopy',
-        width: 90,
-        cellStyle: { fontSize: '12px' },
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <UrlCopyButton {...row} data={data} />;
-        },
-    },
-    {
-        headerName: '',
-        field: 'cmsTagCopy',
-        width: 150,
-        cellStyle: { fontSize: '12px' },
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <CmsTagCopyButton {...row} data={data} />;
-        },
-    },
-    {
-        headerName: '',
-        field: 'urlConfirm',
-        width: 90,
-        cellStyle: { fontSize: '12px' },
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <UrlConfirmButton {...row} data={data} />;
-        },
-    },
-    {
-        headerName: '',
-        field: 'edit',
         width: 80,
         cellStyle: { fontSize: '12px' },
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <SpecialEditButton {...row} data={data} />;
-        },
     },
+    // {
+    //     headerName: '',
+    //     field: 'urlCopy',
+    //     width: 90,
+    //     cellStyle: { fontSize: '12px' },
+    //     cellRendererFramework: (row) => {
+    //         const { data } = row;
+    //         return <UrlCopyButton {...row} data={data} />;
+    //     },
+    // },
+    // {
+    //     headerName: '',
+    //     field: 'cmsTagCopy',
+    //     width: 150,
+    //     cellStyle: { fontSize: '12px' },
+    //     cellRendererFramework: (row) => {
+    //         const { data } = row;
+    //         return <CmsTagCopyButton {...row} data={data} />;
+    //     },
+    // },
+    // {
+    //     headerName: '',
+    //     field: 'urlConfirm',
+    //     width: 90,
+    //     cellStyle: { fontSize: '12px' },
+    //     cellRendererFramework: (row) => {
+    //         const { data } = row;
+    //         return <UrlConfirmButton {...row} data={data} />;
+    //     },
+    // },
+    // {
+    //     headerName: '',
+    //     field: 'edit',
+    //     width: 80,
+    //     cellStyle: { fontSize: '12px' },
+    //     cellRendererFramework: (row) => {
+    //         const { data } = row;
+    //         return <SpecialEditButton {...row} data={data} />;
+    //     },
+    // },
 ];
 
 export const rowData = [

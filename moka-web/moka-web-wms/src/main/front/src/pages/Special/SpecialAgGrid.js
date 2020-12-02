@@ -1,10 +1,9 @@
 import React from 'react';
-
 import { MokaTable } from '@components';
 import { columnDefs, rowData } from './SpecialAgGridColumns';
 
-const SpecialAgGrid = () => {
-    const handleRowClicked = () => {};
+const SpecialAgGrid = (props) => {
+    const { onRowClicked } = props;
 
     const handleChangeSearchOption = () => {};
 
@@ -14,13 +13,13 @@ const SpecialAgGrid = () => {
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(special) => special.cdSeq}
-            onRowClicked={handleRowClicked}
+            onRowClicked={onRowClicked}
             // loading={loading}
             total={0}
             page={0}
             size={20}
             onChangeSearchOption={handleChangeSearchOption}
-            preventRowClickCell={['urlCopy', 'cmsTagCopy', 'urlConfirm', 'edit']}
+            // preventRowClickCell={['urlCopy', 'cmsTagCopy', 'urlConfirm', 'edit']}
             // selected={special.cdSeq}
         />
     );

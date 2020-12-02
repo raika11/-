@@ -1,31 +1,18 @@
-/**
- * msp-wms AATestLoginController.java 2020. 10. 7. 오후 2:09:06 ince
- */
 package jmnet.moka.web.wms.mvc.test;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.exception.InvalidDataException;
+import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.auth.service.AuthService;
-import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
-import jmnet.moka.web.wms.config.security.jwt.WmsJwtHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,52 +30,35 @@ public class TestLoginController {
 
     private static ObjectMapper MAPPER = new ObjectMapper();
 
+    private UserDetailsService userService;    //UserService
+
     private AuthService authService;    //UserService
+
 
     /**
      * 생성자 UserService를 Autowired 하지 않고 Arguments로 받는다.
      *
      * @param authService userService
      */
-    public TestLoginController(AuthService authService) {
+    public TestLoginController(AuthService authService, UserDetailsService userService) {
         this.authService = authService;
+        this.userService = userService;
     }
 
     /**
      * @param request HttpServletRequest
      * @param userId  사용자 ID
      * @return ResponseEntity
-     * @throws InvalidDataException InvalidDataException
-     * @throws Exception            기본 Exception
      */
     @ApiOperation(value = "테스트용 로그인", tags = {"*** TEST LOGIN ***"})
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "사용자 ID", required = true, dataType = "String", paramType = "query", defaultValue = "ssc")})
+            @ApiImplicitParam(name = "userId", value = "사용자 ID", required = true, dataType = "String", paramType = "query", defaultValue = "ssc01")})
     @PostMapping("/api/user/test-login")
-    public ResponseEntity<?> postLogin(HttpServletRequest request, String userId)
-            throws InvalidDataException, Exception {
+    public ResponseEntity<?> postLogin(HttpServletRequest request, String userId) {
 
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        String loginUserId = McpString.defaultValue(userId, MokaConstants.USER_UNKNOWN);
-        UserDTO userDetails = UserDTO.create(MemberInfo
-                .builder()
-                .memberId(loginUserId)
-                .memberNm(MokaConstants.USER_UNKNOWN)
-                .build(), grantedAuthorities);
-
-        String detailsJson = MAPPER.writeValueAsString(userDetails);
-        String token = JWT
-                .create()
-                .withSubject(detailsJson)
-                .withExpiresAt(new Date(System.currentTimeMillis() + WmsJwtHelper.EXPIRATION_TIME))
-                .sign(Algorithm.HMAC512(WmsJwtHelper.SECRET.getBytes()));
-
-
-
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUserId, loginUserId, grantedAuthorities);
-
+        UserDTO userDetails = (UserDTO) userService.loadUserByUsername(userId);
+        String userIp = HttpHelper.getRemoteAddr();
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, null, userDetails.getAuthorities());
         authenticationToken.setDetails(userDetails);
 
 
@@ -96,7 +66,7 @@ public class TestLoginController {
                 .getContext()
                 .setAuthentication(authenticationToken);
 
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>(userDetails, HttpStatus.OK);
 
     }
 }

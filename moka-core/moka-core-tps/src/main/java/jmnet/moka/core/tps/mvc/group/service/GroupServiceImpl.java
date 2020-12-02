@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.group.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
@@ -63,11 +64,17 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void deleteGroup(GroupInfo group) {
-        groupRepository.delete(group);
+        if (group != null && McpString.isNotEmpty(group.getGroupCd())) {
+            deleteGroupById(group.getGroupCd());
+        }
     }
 
     @Override
     public void deleteGroupById(String groupId) {
+        List<GroupMember> groupMemberList = groupMemberRepository.findAllByGroupCd(groupId);
+        if (groupMemberList != null) {
+            groupMemberList.forEach(groupMember -> groupMemberRepository.deleteById(groupMember.getSeqNo()));
+        }
         groupRepository.deleteById(groupId);
     }
 
@@ -79,15 +86,13 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean hasMembers(String groupId) {
-        return groupMemberRepository.countByGroupCd(groupId) > 0 ? true : false;
+        return groupMemberRepository.countByGroupCdAndUsedYn(groupId, MokaConstants.YES) > 0;
     }
 
     private String getNewGroupCd() {
         long count = groupRepository.count();
 
-        String newId = String.format("%s%02d", GROUP_CD_PREFIX, count + 1);
-
-        return newId;
+        return String.format("%s%02d", GROUP_CD_PREFIX, count + 1);
     }
 
 }

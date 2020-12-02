@@ -30,11 +30,12 @@ public interface GroupService {
      */
     List<GroupMember> findAllGroupMember(String groupCd);
 
+
     /**
      * 그룹 ID로 그룹 상세 조회
      *
      * @param groupId 그룹 ID
-     * @return
+     * @return GroupInfo
      */
     Optional<GroupInfo> findGroupById(String groupId);
 

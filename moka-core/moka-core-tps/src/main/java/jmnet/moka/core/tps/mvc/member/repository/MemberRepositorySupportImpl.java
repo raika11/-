@@ -6,7 +6,9 @@ import com.querydsl.jpa.JPQLQuery;
 import java.util.Objects;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.mvc.group.entity.QGroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.QGroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
@@ -39,6 +41,7 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
         QMemberInfo qMember = QMemberInfo.memberInfo;
         QMemberInfo qRegMember = new QMemberInfo("regMember");
         QGroupMember qGroupMember = QGroupMember.groupMember;
+        QGroupInfo qGroupInfo = QGroupInfo.groupInfo;
 
         JPQLQuery<MemberInfo> query = from(qMember);
         if (McpString.isNotEmpty(memberSearchDTO.getKeyword())) {
@@ -74,7 +77,13 @@ public class MemberRepositorySupportImpl extends QuerydslRepositorySupport imple
                     .selectFrom(qGroupMember)
                     .where(qGroupMember.member
                             .eq(qMember)
-                            .and(qGroupMember.groupCd.eq(memberSearchDTO.getGroupCd())))));
+                            .and(qGroupMember.groupCd.eq(memberSearchDTO.getGroupCd()))
+                            .and(qGroupMember.usedYn.eq(MokaConstants.YES))
+                            .and(qGroupMember.group.eq(JPAExpressions
+                                    .selectFrom(qGroupInfo)
+                                    .where(qGroupInfo.groupCd
+                                            .eq(memberSearchDTO.getGroupCd())
+                                            .and(qGroupInfo.usedYn.eq(MokaConstants.YES))))))));
         }
 
         if (memberSearchDTO.getStatus() != null) {

@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel, MokaInputGroup, MokaIcon, MokaPrependLinkInput, MokaCopyTextButton } from '@components';
 import { DatasetListModal } from '@pages/Dataset/modals';
 import { TemplateListModal } from '@pages/Template/modals';
+import { EditFormListModal } from '@pages/EditForm/modals';
 
 const DetailRelationForm = (props) => {
     const { component, setComponent, inputTag, error } = props;
@@ -12,6 +13,7 @@ const DetailRelationForm = (props) => {
     // state
     const [templateModalShow, setTemplateModalShow] = useState(false);
     const [datasetModalShow, setDatasetModalShow] = useState(false);
+    const [formModalShow, setFormModalShow] = useState(false);
     const [templateError, setTemplateError] = useState(false);
 
     const [dataset, setDataset] = useState({});
@@ -172,7 +174,7 @@ const DetailRelationForm = (props) => {
                                     }}
                                     icon={<MokaIcon iconName="fal-search" />}
                                     // 아이콘 클릭했을 때 데이터셋 팝업 열고, 데이터셋 선택하면 화면에 보여줌
-                                    onIconClick={() => setDatasetModalShow(true)}
+                                    onIconClick={() => setFormModalShow(true)}
                                 />
                             )}
                         </Col>
@@ -232,6 +234,9 @@ const DetailRelationForm = (props) => {
                 selected={dataset.datasetSeq}
                 exclude={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : undefined}
             />
+
+            {/* 폼 선택 팝업 */}
+            <EditFormListModal show={formModalShow} onHide={() => setFormModalShow(false)} />
         </Form>
     );
 };

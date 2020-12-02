@@ -6,6 +6,7 @@ const columnDefs = [
         headerName: '',
         field: 'areaNm',
         width: 196,
+        flex: 1,
         tooltipField: 'areaNm',
     },
     {

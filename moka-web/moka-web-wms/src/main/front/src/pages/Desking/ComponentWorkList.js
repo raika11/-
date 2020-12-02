@@ -60,7 +60,7 @@ const ComponentWorkList = (props) => {
                 ? area.areaComps.forEach((comp) => {
                       comp.compAlign === AREA_COMP_ALIGN_LEFT ? left.push(comp) : right.push(comp);
                   })
-                : left.concat(area.areaComps);
+                : (left = left.concat(area.areaComps));
 
             setLeftList(left);
             setRightList(right);
@@ -84,7 +84,7 @@ const ComponentWorkList = (props) => {
             >
                 <div className="d-flex justify-content-between p-2 border-bottom">
                     <div style={{ width: 170 }}>
-                        <MokaInput as="select" className="ft-12" value={null} onChange={handleChangeDisabled}>
+                        <MokaInput as="select" className="ft-12 h-100" value={null} inputProps={{ size: 'sm' }} onChange={handleChangeDisabled}>
                             <option hidden>비활성 영역 보기</option>
                             {disabledList.map((work) => (
                                 <option key={work.seq} value={work.seq}>
@@ -98,7 +98,7 @@ const ComponentWorkList = (props) => {
                     </Button>
                 </div>
 
-                <div className="custom-scroll" style={{ height: 'calc(100% - 48px)' }}>
+                <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
                     {leftList.map((areaComp) => {
                         const targetIdx = componentWorkList.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
                         const component = componentWorkList[targetIdx];
@@ -116,9 +116,9 @@ const ComponentWorkList = (props) => {
 
             {rightList.length > 0 && (
                 <MokaCard loading={loading} header={false} width={363} className="p-0 mr-gutter" bodyClassName="p-0 overflow-hidden">
-                    <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 48 }}></div>
+                    <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 45 }}></div>
 
-                    <div className="custom-scroll" style={{ height: 'calc(100% - 48px)' }}>
+                    <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
                         {rightList.map((areaComp) => {
                             const targetIdx = componentWorkList.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
                             const component = componentWorkList[targetIdx];

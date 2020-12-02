@@ -22,6 +22,10 @@ const propTypes = {
      */
     bodyClassName: PropTypes.string,
     /**
+     * footerClassName
+     */
+    footerClassName: PropTypes.string,
+    /**
      * titleClassName
      */
     titleClassName: PropTypes.string,
@@ -37,6 +41,10 @@ const propTypes = {
      * 헤더 여부 (false 이면 헤더가 나오지 않음)
      */
     header: PropTypes.bool,
+    /**
+     * 푸터 여부 (false 이면 푸터가 나오지 않음)
+     */
+    footer: PropTypes.bool,
     /**
      * title
      */
@@ -55,6 +63,13 @@ const propTypes = {
             text: PropTypes.string,
             onClick: PropTypes.func,
             ref: PropTypes.ref,
+        }),
+    ),
+    footerButtons: PropTypes.arrayOf(
+        PropTypes.shape({
+            variant: PropTypes.string,
+            text: PropTypes.string,
+            onClick: PropTypes.func,
         }),
     ),
     /**
@@ -82,8 +97,10 @@ const defaultProps = {
     foldable: false,
     expansion: true,
     buttons: [],
+    footerButtons: [],
     loading: false,
     header: true,
+    footer: false,
 };
 
 /**
@@ -92,9 +109,11 @@ const defaultProps = {
 const MokaCard = forwardRef((props, ref) => {
     const {
         header,
+        footer,
         className,
         headerClassName,
         bodyClassName,
+        footerClassName,
         titleClassName,
         width,
         height,
@@ -104,6 +123,7 @@ const MokaCard = forwardRef((props, ref) => {
         expansion,
         onExpansion,
         buttons,
+        footerButtons,
         foldable,
         loading,
     } = props;
@@ -189,6 +209,17 @@ const MokaCard = forwardRef((props, ref) => {
 
             {/* 카드 본문 */}
             <Card.Body className={clsx({ 'd-none': foldable && !localExpandState }, 'custom-scroll', bodyClassName)}>{children}</Card.Body>
+
+            {/* 푸터 버튼 */}
+            {footer && footerButtons && (
+                <Card.Footer className={clsx({ 'd-none': foldable && !localExpandState }, 'd-flex', footerClassName)}>
+                    {footerButtons.map(({ variant, text, ...rest }, idx) => (
+                        <Button key={`${text}-${idx}`} variant={variant} {...rest}>
+                            {text}
+                        </Button>
+                    ))}
+                </Card.Footer>
+            )}
         </Card>
     );
 });

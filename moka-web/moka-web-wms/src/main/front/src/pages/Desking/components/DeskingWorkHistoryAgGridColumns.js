@@ -22,6 +22,7 @@ export default [
         field: 'title',
         width: 565,
         tooltipField: 'title',
+        flex: 1,
         cellStyle: { fontSize: '12px' },
     },
 ];

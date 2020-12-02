@@ -54,7 +54,7 @@ const DeskingWorkEditModal = (props) => {
                 thumbFileName: data.thumbFileName || '',
                 nameplate: data.nameplate || '',
                 titlePrefix: data.titlePrefix || '',
-                title: data.rel ? data.relTitle : data.title || '',
+                title: data.title || '',
                 subTitle: data.subTitle || '',
                 bodyHead: data.bodyHead || '',
                 linkUrl: data.linkUrl || '',
@@ -183,7 +183,7 @@ const DeskingWorkEditModal = (props) => {
                     <div className="w-100 d-flex flex-column">
                         <div className="p-0 d-flex">
                             <p className="m-0 mr-2">{data.rel ? `0${data.relOrd}`.substr(-2) : `0${data.contentOrd}`.substr(-2)}</p>
-                            <p className="m-0">{data.rel ? data.relTitle : data.title}</p>
+                            <p className="m-0">{data.title}</p>
                         </div>
                         <div className="p-0 d-flex ft-12">
                             <p className="m-0 mr-3">ID: {data.contentId}</p>

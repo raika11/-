@@ -61,7 +61,7 @@ const CodeMgtEditAgGrid = (props) => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClick = useCallback(
+    const handleRowClicked = useCallback(
         (cd) => {
             history.push(`/codeMgt/${grpCd}/${cd.cdSeq}`);
             setShowEditModal(true);
@@ -78,7 +78,7 @@ const CodeMgtEditAgGrid = (props) => {
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(cdList) => cdList.cdSeq}
-                onRowClicked={handleRowClick}
+                onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}
                 page={search.page}

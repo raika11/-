@@ -95,7 +95,7 @@ const CodeMgtListAgGrid = () => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClick = useCallback(
+    const handleRowClicked = useCallback(
         (grpList) => {
             history.push(`/codeMgt/${grpList.grpCd}`);
             dispatch(getCodeMgtGrp(grpList.grpCd));
@@ -204,7 +204,7 @@ const CodeMgtListAgGrid = () => {
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(grpList) => grpList.grpCd}
-                onRowClicked={handleRowClick}
+                onRowClicked={handleRowClicked}
                 loading={loading}
                 page={search.page}
                 size={search.size}

@@ -37,7 +37,7 @@ const ReservedAgGrid = () => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClick = useCallback((reserved) => history.push(`/reserved/${reserved.reservedSeq}`), [history]);
+    const handleRowClicked = useCallback((reserved) => history.push(`/reserved/${reserved.reservedSeq}`), [history]);
 
     /**
      * 예약어 등록 버튼 클릭
@@ -57,7 +57,7 @@ const ReservedAgGrid = () => {
                 rowData={list}
                 onRowNodeId={(reserved) => reserved.reservedSeq}
                 agGridHeight={569}
-                onRowClicked={handleRowClick}
+                onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}
                 page={search.page}

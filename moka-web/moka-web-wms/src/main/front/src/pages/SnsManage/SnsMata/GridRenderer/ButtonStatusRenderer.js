@@ -6,18 +6,16 @@ const ButtonStatusRenderer = ({ value }) => {
     return (
         <>
             <div className="d-flex py-2">
-                <div className="d-flex py-2">
-                    <div className="justify-content-between mr-3 p-1">
-                        {value === 'Y' ? (
-                            <Button variant="positive" className="mr-0" onClick={handleClickSaveButton}>
-                                재전송
-                            </Button>
-                        ) : (
-                            <Button variant="negative" className="mr-0" onClick={handleClickSaveButton}>
-                                전송
-                            </Button>
-                        )}
-                    </div>
+                <div className="d-flex py-2 text-center">
+                    {value === 'Y' ? (
+                        <Button variant="positive" className="mr-0" onClick={handleClickSaveButton}>
+                            재전송
+                        </Button>
+                    ) : (
+                        <Button variant="negative" className="mr-0" onClick={handleClickSaveButton}>
+                            전송
+                        </Button>
+                    )}
                 </div>
             </div>
         </>

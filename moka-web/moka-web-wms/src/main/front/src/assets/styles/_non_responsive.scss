@@ -5,17 +5,17 @@
     min-width: 1920px;
     height: 100%;
 
-    .sidebar {
-        width: 260px;
+    // .sidebar {
+    //     width: 260px;
 
-        @media (min-width: 1px) and (max-width: #{map-get($grid-breakpoints, 'lg') - .02px}) {
-            width: 260px;
-            margin-left: unset;
-            .sidebar-content {
-                left: unset;
-            }
-        }
-    }
+    //     @media (min-width: 1px) and (max-width: #{map-get($grid-breakpoints, 'lg') - .02px}) {
+    //         width: 260px;
+    //         margin-left: unset;
+    //         .sidebar-content {
+    //             left: unset;
+    //         }
+    //     }
+    // }
 
     .main {
         height: 100%;

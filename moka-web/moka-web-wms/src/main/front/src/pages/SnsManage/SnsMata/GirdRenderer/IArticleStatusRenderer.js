@@ -14,9 +14,15 @@ const IArticleStatusRenderer = ({ value: { senddate, sendflag, status } }) => {
                     </div>
                     <div className="justify-content-between mr-3 p-1">{senddate}</div>
                     <div className="justify-content-between mr-3 p-1">
-                        <Button variant="negative" className="mr-0" onClick={handleClickSaveButton}>
-                            전송
-                        </Button>
+                        {status === 'Y' ? (
+                            <Button variant="positive" className="mr-0" onClick={handleClickSaveButton}>
+                                재전송
+                            </Button>
+                        ) : (
+                            <Button variant="negative" className="mr-0" onClick={handleClickSaveButton}>
+                                전송
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>

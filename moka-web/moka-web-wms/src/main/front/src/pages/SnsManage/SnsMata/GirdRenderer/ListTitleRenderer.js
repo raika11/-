@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { NewIcon } from '@components';
+import React from 'react';
+import { MokaIcon } from '@components';
 
-const ListTitleRenderer = (params) => {
-    const paramValue = params.value;
-    useEffect(() => {}, [paramValue]);
+// fal-alarm-clock
+
+const ListTitleRenderer = ({ value: { articleTitle, snsTitle, reservation } }) => {
     return (
         <>
-            <div className="pt-01" style={{ minHeight: 55 }}>
+            <div className="pt-01" style={{ minHeight: 55, textAlign: 'left' }}>
                 <div className="d-flex">
-                    <p className="pt-01 pl-01 mb-0 flex-fill text-truncate">{paramValue.article}</p>
+                    <p className="pt-01 pl-01 mb-0 flex-fill text-truncate">{articleTitle}</p>
                 </div>
                 <div className="d-flex">
-                    <p className="pt-01 pl-01 mb-0 flex-fill h5 text-truncate">
-                        <NewIcon width={10} height={10} className="ml-1" />
-                        {paramValue.sns}
-                    </p>
+                    {reservation === true && (
+                        <div className="d-flex pr-2">
+                            <MokaIcon iconName="fal-alarm-clock" style={{ color: 'FF3907' }} />
+                        </div>
+                    )}
+                    <div className="d-flex text-truncate">
+                        <p className="pt-01 pl-02 mb-0 flex-fill h5 text-truncate">{snsTitle}</p>
+                    </div>
                 </div>
             </div>
         </>

@@ -70,7 +70,7 @@ const EditFormAgGrid = (props) => {
             columnDefs={columnDefs}
             rowData={editFormRows}
             onRowNodeId={(rowData) => rowData.formSeq}
-            agGridHeight={600}
+            agGridHeight={620}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}

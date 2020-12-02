@@ -26,14 +26,14 @@ export const duplicateCheck = (formId) => {
 
 // Edit Form 저장
 export const postEditForm = ({ formSeq, partSeq, partJson }) => {
-    return instance.post(`/api/edit-forms/${formSeq}/parts/${partSeq}`, qs.stringify(partJson)).catch((err) => {
+    return instance.post(`/api/edit-forms/parts/${partSeq}`, qs.stringify(partJson)).catch((err) => {
         throw err;
     });
 };
 
 // Edit Form 수정
 export const putEditForm = ({ formSeq, partSeq, partJson }) => {
-    return instance.put(`/api/edit-forms/${formSeq}/parts/${partSeq}`, qs.stringify(partJson)).catch((err) => {
+    return instance.put(`/api/edit-forms/parts/${partSeq}`, qs.stringify(partJson)).catch((err) => {
         throw err;
     });
 };
@@ -47,7 +47,7 @@ export const deleteEditForm = ({ formSeq }) => {
 
 // Edit Form목록 조회
 export const getEditFormHistoryList = ({ editFormPart, search }) => {
-    return instance.get(`/api/edit-forms/${editFormPart.formSeq}/parts/${editFormPart.partSeq}/historys`).catch((err) => {
+    return instance.get(`/api/edit-forms/parts/${editFormPart.partSeq}/historys`).catch((err) => {
         throw err;
     });
 };
@@ -74,7 +74,7 @@ export const exportEditFormXml = (formSeq) => {
 // Edit Form part xml 다운로드
 export const exportEditFormPartXml = (part) => {
     instance
-        .get(`/api/edit-forms/${part.formSeq}/parts/${part.partSeq}/export`, {
+        .get(`/api/edit-forms/parts/${part.partSeq}/export`, {
             responseType: 'arraybuffer',
             headers: {
                 Accept: 'text/xml',
@@ -93,7 +93,7 @@ export const exportEditFormPartXml = (part) => {
 // Edit Form part 이력 xml 다운로드
 export const exportEditFormPartHistoryXml = (history) => {
     instance
-        .get(`/api/edit-forms/${history.formSeq}/parts/${history.partSeq}/historys/${history.seqNo}/export`, {
+        .get(`/api/edit-forms/parts/${history.partSeq}/historys/${history.seqNo}/export`, {
             responseType: 'arraybuffer',
             headers: {
                 Accept: 'text/xml',

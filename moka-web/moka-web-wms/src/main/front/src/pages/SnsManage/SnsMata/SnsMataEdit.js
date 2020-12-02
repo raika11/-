@@ -8,8 +8,8 @@ const SnsMataEdit = () => {
 
     // 임시 예약 노출 클릭시 dateTimePicker disabled 처리.
     const [rdateDisable, setRdateDisable] = useState({
-        facebook: false,
-        twitter: false,
+        facebook: true,
+        twitter: true,
     });
 
     // 임시 예약노출 체크 박스 클릭 처리.
@@ -19,12 +19,12 @@ const SnsMataEdit = () => {
         if (name === 'facebookReservation') {
             setRdateDisable({
                 ...rdateDisable,
-                facebook: checked,
+                facebook: checked === true ? false : true,
             });
         } else if (name === 'twitterReservation') {
             setRdateDisable({
                 ...rdateDisable,
-                twitter: checked,
+                twitter: checked === true ? false : true,
             });
         }
     };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListTitleRenderer, ImageRenderer, ButtonStatusRenderer, SendStatusRenderer } from './GirdRenderer';
+import { ListTitleRenderer, ImageRenderer, ButtonStatusRenderer, SendStatusRenderer } from './GridRenderer';
 import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -14,8 +14,8 @@ export const tempColumnDefs = [
         headerName: '\t출처',
         field: 'source',
         wrapText: true,
-        width: 100,
-        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', paddingLeft: '12px' },
+        width: 130,
+        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', paddingLeft: '8px' },
     },
     {
         headerName: '\t출고일',

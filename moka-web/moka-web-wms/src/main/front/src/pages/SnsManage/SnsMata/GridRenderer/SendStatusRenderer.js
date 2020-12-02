@@ -6,10 +6,10 @@ const StatusIdle = () => <div className="justify-content-between mr-3 p-1">ëŒ€ê¸
 const StatusSend = ({ FaceBook, Twitter }) => {
     return (
         <>
-            <div className="justify-content-between mr-3 p-1">
+            <div className="d-flex justify-content-between p-1">
                 <MokaIcon iconName="fab-facebook-square" size="2x" style={FaceBook === 'Y' ? { color: '3B5998' } : { color: 'ADB1BE' }} />
             </div>
-            <div className="justify-content-between mr-3 p-1">
+            <div className="d-flex justify-content-between p-1">
                 <MokaIcon iconName="fab-twitter-square" size="2x" style={Twitter === 'Y' ? { color: '00ACEE' } : { color: 'ADB1BE' }} />
             </div>
         </>

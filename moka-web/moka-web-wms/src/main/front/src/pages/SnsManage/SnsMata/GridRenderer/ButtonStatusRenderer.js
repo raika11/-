@@ -2,7 +2,6 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 
 const ButtonStatusRenderer = ({ value }) => {
-    console.log(value);
     const handleClickSaveButton = () => {};
     return (
         <>

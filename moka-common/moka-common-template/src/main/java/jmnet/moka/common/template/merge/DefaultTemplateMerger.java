@@ -45,6 +45,7 @@ public class DefaultTemplateMerger implements TemplateMerger<String> {
 	private FileTemplateLoader templateLoader;
 	private Evaluator evaluator;
 	private DataLoader dataLoader;
+	private DataLoader defaultDataLoader;
 	private Template wrapItemStart;
 	private Template wrapItemEnd;
 	
@@ -53,20 +54,13 @@ public class DefaultTemplateMerger implements TemplateMerger<String> {
 	public DefaultTemplateMerger(String basePath, String apiHost, String apiPath) throws IOException {
 		this(basePath, new DefaultDataLoader(apiHost, apiPath), null);
 	}
-	
-	public DefaultTemplateMerger(String basePath, DataLoader dataLoader) throws IOException {
-		this(basePath, dataLoader, null);
-	}
 
-	public DefaultTemplateMerger(String basePath, DataLoader dataLoader, TemplateLoader<String> assistantTemplateLoader) throws IOException {
+	public DefaultTemplateMerger(String basePath, DataLoader dataLoader, DataLoader defaultDataLoader)  {
 		this.templateLoader = new FileTemplateLoader(basePath);
 		this.elementMergerMap = new HashMap<String, ElementMerger>(16);
 		this.evaluator = new Evaluator();
 		this.dataLoader = dataLoader;
-//		this.assistantTemplateLoader = assistantTemplateLoader;
-		if ( assistantTemplateLoader != null) {
-			this.templateLoader.setAssistantTemplateLoader(assistantTemplateLoader);
-		}
+		this.defaultDataLoader = defaultDataLoader;
 		this.wrapItemStart = templateEngine.createTemplate(Constants.WRAP_ITEM_START);
 		this.wrapItemEnd = templateEngine.createTemplate(Constants.WRAP_ITEM_END);
 	}
@@ -78,17 +72,8 @@ public class DefaultTemplateMerger implements TemplateMerger<String> {
 	
     public TemplateRoot getParsedTemplate(String type, String id)
             throws TemplateParseException, TemplateLoadException {
-//		try {
-				return this.templateLoader.getParsedTemplate(type, id);
-//		} catch ( NoSuchFileException e) {
-//			if ( this.assistantTemplateLoader != null ) {
-//				logger.warn("Template Not Found And Load With Assistant TemplateLoader  : {}", e.getFile());
-//				String templateText = this.assistantTemplateLoader.getItemInfo(type, id);
-//				return this.templateLoader.setParsedTemplate(type, id, templateText, this.assistantTemplateLoader);
-//			} else {
-//				throw e;
-//			}
-//		}
+		return this.templateLoader.getParsedTemplate(type, id);
+
 	}
 	
     public String getItem(String type, String id) throws TemplateParseException {
@@ -155,6 +140,8 @@ public class DefaultTemplateMerger implements TemplateMerger<String> {
 	public DataLoader getDataLoader() {
 		return this.dataLoader;
 	}
+
+	public DataLoader getDefaultDataLoader() { return this.defaultDataLoader; }
 
 	public StringBuilder merge(String type, String id, MergeContext context) throws TemplateMergeException {
 		StringBuilder sb = new StringBuilder(1024);

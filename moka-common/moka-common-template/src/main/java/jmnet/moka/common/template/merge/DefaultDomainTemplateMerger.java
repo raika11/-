@@ -22,34 +22,24 @@ import jmnet.moka.common.template.loader.TemplateLoader;
 public class DefaultDomainTemplateMerger  {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultDomainTemplateMerger.class);
-	private static String DEFAULT_TEMPLATE_DOMAIN = "_default";
 	private HashMap<String, DefaultTemplateMerger> templateMergerMap;
-	private TemplateLoader<String> assistantTemplateLoader;
 	private String basePath;
 	private DataLoader dataLoader;
 	private HashMap<String,DataLoader> dataLoaderMap;
 	
 	public DefaultDomainTemplateMerger(String basePath, String apiHost, String apiPath, String defaultTemplateDomain) {
-		this(basePath, new DefaultDataLoader(apiHost, apiPath), defaultTemplateDomain);
+		this(basePath, new DefaultDataLoader(apiHost, apiPath));
 	}
 	
-	public DefaultDomainTemplateMerger(String basePath, DataLoader dataLoader, String defaultTemplateDomain) {
+	public DefaultDomainTemplateMerger(String basePath, DataLoader dataLoader) {
 		this.basePath = basePath;
 		this.templateMergerMap = new HashMap<String, DefaultTemplateMerger>(16);
-		if ( defaultTemplateDomain != null) {
-			DEFAULT_TEMPLATE_DOMAIN = defaultTemplateDomain;
-		}
-		this.assistantTemplateLoader = new FileTemplateLoader(basePath+"/"+DEFAULT_TEMPLATE_DOMAIN);
 		this.dataLoader = dataLoader;
 	}
 	
 	public DefaultDomainTemplateMerger(String basePath, HashMap<String,DataLoader> dataLoaderMap, String defaultTemplateDomain) {
 		this.basePath = basePath;
 		this.templateMergerMap = new HashMap<String, DefaultTemplateMerger>(16);
-		if ( defaultTemplateDomain != null) {
-			DEFAULT_TEMPLATE_DOMAIN = defaultTemplateDomain;
-		}
-		this.assistantTemplateLoader = new FileTemplateLoader(basePath+"/"+DEFAULT_TEMPLATE_DOMAIN);
 		this.dataLoaderMap = dataLoaderMap;
 	}
 	
@@ -57,12 +47,9 @@ public class DefaultDomainTemplateMerger  {
 		DefaultTemplateMerger ftm = this.templateMergerMap.get(domainId);
 		if ( ftm == null) {
 			try {
-				DataLoader domainDataLoader = this.dataLoader;
-				if ( domainDataLoader == null) {
-					domainDataLoader = this.dataLoaderMap.get(domainId);
-				}
+				DataLoader domainDataLoader = this.dataLoaderMap.get(domainId);
 				if ( domainDataLoader != null ) {
-					ftm = new DefaultTemplateMerger(this.basePath+"/"+domainId, domainDataLoader, this.assistantTemplateLoader);
+					ftm = new DefaultTemplateMerger(this.basePath+"/"+domainId, domainDataLoader, this.dataLoader);
 					this.templateMergerMap.put(domainId, ftm);
 					logger.debug("Domain Template Merger Created : {}", domainId);					
 				} else {

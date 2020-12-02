@@ -70,6 +70,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     protected AbstractTemplateLoader templateLoader;
     protected Evaluator evaluator;
     protected DataLoader dataLoader;
+    protected DataLoader defaultDataLoader;
     protected CacheManager cacheManager;
     protected Template wrapItemStart;
     protected Template wrapItemEnd;
@@ -86,7 +87,8 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     private static final Logger logger = LoggerFactory.getLogger(MokaTemplateMerger.class);
 
     public MokaTemplateMerger(GenericApplicationContext appContext, String domainId,
-                              AbstractTemplateLoader templateLoader, DataLoader dataLoader, boolean defaultApiHostPathUse) {
+                              AbstractTemplateLoader templateLoader, DataLoader dataLoader,
+                                DataLoader defaultDataLoader, boolean defaultApiHostPathUse) {
         this.appContext = appContext;
         try {
             this.cacheManager = this.appContext.getBean(CacheManager.class);
@@ -99,6 +101,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
         this.elementMergerMap = new HashMap<String, ElementMerger>(16);
         this.evaluator = new Evaluator();
         this.dataLoader = dataLoader;
+        this.defaultDataLoader = defaultDataLoader;
         this.esiEnabled = Boolean
                 .valueOf(appContext.getBeanFactory().resolveEmbeddedValue("${tms.esi.enable}"));
 
@@ -265,6 +268,11 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     @Override
     public DataLoader getDataLoader() {
         return this.dataLoader;
+    }
+
+    @Override
+    public DataLoader getDefaultDataLoader() {
+        return this.defaultDataLoader;
     }
 
     public CacheManager getCacheManager() {

@@ -32,7 +32,8 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
 
     private static final Logger logger = LoggerFactory.getLogger(MokaDomainTemplateMerger.class);
     private HashMap<String, MokaTemplateMerger> templateMergerMap;
-    private DataLoader dataLoader;
+    private HashMap<String, DataLoader> dataLoaderMap;
+    private DataLoader defaultDataLoader;
     private GenericApplicationContext appContext;
     private boolean defaultApiHostPathUse;
 
@@ -48,11 +49,63 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
                                     String defaultApiHost, String defaultApiPath, boolean defaultApiHostPathUse) {
         this.appContext = appContext;
         this.templateMergerMap = new HashMap<String, MokaTemplateMerger>(16);
-        this.dataLoader =
+        this.defaultDataLoader =
                 appContext.getBean(HttpProxyDataLoader.class, defaultApiHost, defaultApiPath);
         this.defaultApiHostPathUse = defaultApiHostPathUse;
-        logger.debug("HttpProxyDataLoader Created: {} {}", defaultApiHost, defaultApiPath);
+        loadDataLoaderMap();
+        String defaultDataLoaderKey = defaultApiHost + "_" + defaultApiPath;
+        if ( this.dataLoaderMap.containsKey(defaultDataLoaderKey)) {
+            this.defaultDataLoader = this.dataLoaderMap.get(defaultDataLoaderKey);
+        } else {
+            this.defaultDataLoader =
+                    appContext.getBean(HttpProxyDataLoader.class, defaultApiHost, defaultApiPath);
+            this.dataLoaderMap.put(defaultDataLoaderKey,this.defaultDataLoader);
+        }
+        logger.debug("Default HttpProxyDataLoader Created: {} {}", defaultApiHost, defaultApiPath);
+        this.defaultApiHostPathUse = defaultApiHostPathUse;
     }
+
+    /**
+     * <pre>
+     * DataLoader정보 맵을 설정한다.
+     * </pre>
+     *
+     */
+    private void loadDataLoaderMap() {
+        HashMap<String, DataLoader> domainDataLoaderMap = new HashMap<String, DataLoader>(8);
+        HashMap<String, DataLoader> targetDataLoaderMap = new HashMap<String, DataLoader>(8);
+
+        DomainResolver domainResolver = appContext.getBean(DomainResolver.class);
+
+        for (MergeItem domainItem : domainResolver.getDomainInfoList()) {
+            String domainId = domainItem.getString(ItemConstants.DOMAIN_ID);
+            String domainUrl = domainItem.getString(ItemConstants.DOMAIN_URL);
+            String apiHost = domainItem.getString(ItemConstants.DOMAIN_API_HOST);
+            String apiPath = domainItem.getString(ItemConstants.DOMAIN_API_PATH);
+
+            String dataLoaderKey = apiHost + "_" + apiPath;
+            if (targetDataLoaderMap.containsKey(dataLoaderKey)) {
+                // targetPrefix가 같을 경우 존재하는 loader 사용
+                domainDataLoaderMap.put(domainId, targetDataLoaderMap.get(dataLoaderKey));
+                logger.debug("HttpProxyDataLoader Assigned already Created: {} {} {} {}", domainUrl,
+                        domainId, apiHost, apiPath);
+            } else {
+                // HttpProxyDataLoader로 직접 bean이 생성되지 않고, apiHost와 apiPath 파라미터로 HttpProxy prototype bean이
+                // 생성된 후 httpProxyDataLoader bean이 생성됨
+                HttpProxyDataLoader httpProxyDataLoader =
+                        appContext.getBean(HttpProxyDataLoader.class, apiHost, apiPath);
+                domainDataLoaderMap.put(domainId, httpProxyDataLoader);
+                targetDataLoaderMap.put(dataLoaderKey, httpProxyDataLoader);
+                logger.debug("HttpProxyDataLoader Created: {} {} {} {}", domainUrl, domainId,
+                        apiHost, apiPath);
+            }
+        }
+        if (domainDataLoaderMap.size() > 0) {
+            this.dataLoaderMap = domainDataLoaderMap;
+        }
+        //        else  다시 로딩을 시도할 수 있도록 null 상태로 유지한다.
+    }
+
 
     @Override
     public void loadUri(String domainId)
@@ -109,15 +162,19 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
      */
     public MokaTemplateMerger getTemplateMerger(String domainId)
             throws TemplateMergeException, TemplateParseException {
-
+        // 도메인 정보 로드 실패시 로더맵이 생성되지 않아 다시 생성해야 한다.
+        if (this.dataLoaderMap == null) {
+            this.loadDataLoaderMap();
+        }
         MokaTemplateMerger tm = this.templateMergerMap.get(domainId);
         if (tm == null) {
             try {
-                if (this.dataLoader != null) {
+                DataLoader domainDataLoader = this.dataLoaderMap.get(domainId);
+                if (domainDataLoader != null) {
                     AbstractTemplateLoader templateLoader =
                             this.appContext.getBean(AbstractTemplateLoader.class, domainId);
                     tm = new MokaTemplateMerger(this.appContext, domainId, templateLoader,
-                            this.dataLoader, defaultApiHostPathUse);
+                            domainDataLoader, this.defaultDataLoader, defaultApiHostPathUse);
                     this.templateMergerMap.put(domainId, tm);
                     logger.debug("Domain Template Merger Created : {}", domainId);
                 } else {

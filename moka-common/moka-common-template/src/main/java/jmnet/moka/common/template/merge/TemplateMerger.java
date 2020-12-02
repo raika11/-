@@ -35,6 +35,8 @@ public interface TemplateMerger<T> {
 	
 	public DataLoader getDataLoader();
 	
+	public DataLoader getDefaultDataLoader();
+	
 	public String getWrapItemStart(String itemType, String itemId);
 	
 	public String getWrapItemEnd(String itemType, String itemId);

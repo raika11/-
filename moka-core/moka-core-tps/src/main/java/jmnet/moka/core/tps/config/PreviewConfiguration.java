@@ -6,6 +6,7 @@ import jmnet.moka.common.TimeHumanizer;
 import jmnet.moka.common.proxy.autoConfig.HttpProxyConfiguration;
 import jmnet.moka.common.proxy.http.HttpProxy;
 import jmnet.moka.common.template.exception.TemplateParseException;
+import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
@@ -41,17 +42,44 @@ public class PreviewConfiguration {
     @Value("${tms.item.api.path}")
     private String itemApiPath;
 
+    @Value("${tms.default.api.host}")
+    private String defaultApiHost;
+
+    @Value("${tms.default.api.path}")
+    private String defaultApiPath;
+
+    @Value("${tms.default.api.hostPath.use}")
+    private boolean defaultApiHostUse;
+
     @Value("${tms.template.loader.cache}")
     private boolean templateLoaderCache;
 
     @Autowired
     private GenericApplicationContext appContext;
 
+    private DataLoader defaultDataLoader;
+
     @Bean
     @Scope("prototype")
     @ConditionalOnMissingBean
     public HttpProxyDataLoader httpProxyDataLoader(String apiHost, String apiPath) {
         HttpProxy httpProxy = (HttpProxy) appContext.getBean(HttpProxyConfiguration.API_HTTP_PROXY, apiHost, apiPath);
+        return new HttpProxyDataLoader(httpProxy);
+    }
+
+    @Bean
+    @Scope("singleton")
+    @ConditionalOnMissingBean
+    public HttpProxyDataLoader itemDataLoader() {
+        HttpProxy httpProxy = (HttpProxy) appContext.getBean(HttpProxyConfiguration.API_HTTP_PROXY, this.itemApiHost, this.itemApiPath);
+        return new HttpProxyDataLoader(httpProxy);
+    }
+
+    @Bean
+    @Scope("singleton")
+    @ConditionalOnMissingBean
+    public HttpProxyDataLoader defaultDataLoader() {
+        HttpProxy httpProxy = (HttpProxy) appContext.getBean(HttpProxyConfiguration.API_HTTP_PROXY, this.defaultApiHost, this.defaultApiPath);
         return new HttpProxyDataLoader(httpProxy);
     }
 
@@ -70,8 +98,6 @@ public class PreviewConfiguration {
     @Scope("prototype")
     public AbstractTemplateLoader templateLoader(String domainId)
             throws TemplateParseException, TmsException {
-        HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
-
         long expire = 10000L;
         try {
             String expireSeconds = appContext.getBeanFactory()
@@ -82,34 +108,29 @@ public class PreviewConfiguration {
         } catch (Exception e) {
             logger.info("property {} not set, item will not cache", "tms.item.preview.expire.seconds");
         }
-        return new DpsTemplateLoader(appContext, domainId, httpProxyDataLoader, templateLoaderCache, expire);
+        return new DpsTemplateLoader(appContext, domainId, itemDataLoader(), templateLoaderCache, expire);
     }
 
     @Bean
     @Scope("prototype")
     public AbstractTemplateLoader workTemplateLoader(String domainId, String workerId, List<String> componentIdList)
             throws TemplateParseException, TmsException {
-        HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
-        return new DpsWorkTemplateLoader(appContext, domainId, httpProxyDataLoader, workerId, componentIdList);
+        return new DpsWorkTemplateLoader(appContext, domainId, itemDataLoader(), workerId, componentIdList);
     }
 
     @Bean
     @Scope("prototype")
     public MokaPreviewTemplateMerger previewTemplateMerger(DomainItem domainItem)
             throws IOException {
-        // AbstractTemplateLoader assistantTemplateLoader =
-        // this.appContext.getBean(AbstractTemplateLoader.class, defaultTemplateDomain);
         String domainId = domainItem.getString(ItemConstants.DOMAIN_ID);
-        // String domainUrl = domainItem.getString(ItemConstants.DOMAIN_URL);
         String apiHost = domainItem.getString(ItemConstants.DOMAIN_API_HOST);
         String apiPath = domainItem.getString(ItemConstants.DOMAIN_API_PATH);
-        HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, apiHost, apiPath);
-        // AbstractTemplateLoader templateLoader =
-        // this.appContext.getBean(AbstractTemplateLoader.class, domainId);
+        HttpProxyDataLoader domainDataLoader = appContext.getBean(HttpProxyDataLoader.class, apiHost, apiPath);
         AbstractTemplateLoader templateLoader = (AbstractTemplateLoader) this.appContext.getBean("templateLoader", domainId);
         DomainResolver domainResolver = this.appContext.getBean(DomainResolver.class);
         MokaPreviewTemplateMerger ptm =
-                new MokaPreviewTemplateMerger(this.appContext, domainItem, domainResolver, templateLoader, httpProxyDataLoader);
+                new MokaPreviewTemplateMerger(this.appContext, domainItem, domainResolver, templateLoader,
+                        domainDataLoader, defaultDataLoader(), this.defaultApiHostUse);
         return ptm;
     }
 
@@ -117,19 +138,17 @@ public class PreviewConfiguration {
     @Scope("prototype")
     public MokaPreviewTemplateMerger previewWorkTemplateMerger(DomainItem domainItem, String regId, List<String> componentIdList)
             throws IOException {
-        // AbstractTemplateLoader assistantTemplateLoader =
-        // this.appContext.getBean(AbstractTemplateLoader.class, defaultTemplateDomain);
+
         String domainId = domainItem.getString(ItemConstants.DOMAIN_ID);
         String apiHost = domainItem.getString(ItemConstants.DOMAIN_API_HOST);
         String apiPath = domainItem.getString(ItemConstants.DOMAIN_API_PATH);
         HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, apiHost, apiPath);
-        // AbstractTemplateLoader templateLoader = this.appContext
-        // .getBean(AbstractTemplateLoader.class, domainId, workerId, componentId);
         AbstractTemplateLoader templateLoader =
                 (AbstractTemplateLoader) this.appContext.getBean("workTemplateLoader", domainId, regId, componentIdList);
         DomainResolver domainResolver = this.appContext.getBean(DomainResolver.class);
         MokaPreviewTemplateMerger ptm =
-                new MokaPreviewTemplateMerger(this.appContext, domainItem, domainResolver, templateLoader, httpProxyDataLoader, regId);
+                new MokaPreviewTemplateMerger(this.appContext, domainItem, domainResolver, templateLoader, httpProxyDataLoader, defaultDataLoader(),
+                        this.defaultApiHostUse, regId);
         return ptm;
     }
 

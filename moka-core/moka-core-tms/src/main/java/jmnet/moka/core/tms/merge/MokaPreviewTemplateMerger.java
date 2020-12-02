@@ -41,13 +41,13 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     private String regId;
 
     public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem, DomainResolver domainResolver,
-            AbstractTemplateLoader templateLoader, DataLoader dataLoader) {
-        this(appContext, domainItem, domainResolver, templateLoader, dataLoader, null);
+            AbstractTemplateLoader templateLoader, DataLoader dataLoader, DataLoader defaultDataLoader, boolean defaultApiHostPathUse) {
+        this(appContext, domainItem, domainResolver, templateLoader, dataLoader, defaultDataLoader, defaultApiHostPathUse, null);
     }
 
     public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem, DomainResolver domainResolver,
-            AbstractTemplateLoader templateLoader, DataLoader dataLoader, String regId) {
-        super(appContext, domainItem.getItemId(), templateLoader, dataLoader, false);
+            AbstractTemplateLoader templateLoader, DataLoader dataLoader, DataLoader defaultDataLoader, boolean defaultApiHostPathUse, String regId) {
+        super(appContext, domainItem.getItemId(), templateLoader, dataLoader, defaultDataLoader, defaultApiHostPathUse );
         this.domainResolver = domainResolver;
         this.domainItem = domainItem;
         this.regId = regId;

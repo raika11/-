@@ -153,10 +153,10 @@ public class CpTemplateRoot extends MokaTemplateRoot {
     private JSONResult loadDataSet(MokaTemplateMerger merger, DatasetItem datasetItem, Map<String, Object> datasetParam, String api,
             MergeContext context)
             throws DataLoadException {
-        DataLoader loader = merger.getDataLoader();
         JSONResult jsonResult = null;
         if (merger.isDefaultApiHostPathUse()) {
-            jsonResult = loader.getJSONResult(api, datasetParam, true);
+            DataLoader defaultDoader = merger.getDefaultDataLoader();
+            jsonResult = defaultDoader.getJSONResult(api, datasetParam, true);
         } else {
             String apiHost = datasetItem.getString(ItemConstants.DATASET_API_HOST);
             String apiPath = datasetItem.getString(ItemConstants.DATASET_API_PATH);
@@ -164,6 +164,7 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 api = datasetItem.getString(ItemConstants.DATASET_API);
             }
             String uri = String.join("/", apiHost, apiPath, api);
+            DataLoader loader = merger.getDataLoader();
             jsonResult = loader.getJSONResult(uri, datasetParam, false);
         }
         if (jsonResult != null) {

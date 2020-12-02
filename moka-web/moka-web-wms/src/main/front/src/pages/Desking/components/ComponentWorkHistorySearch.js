@@ -15,7 +15,7 @@ const status = [
 /**
  * 데스킹 히스토리 검색 컴포넌트
  */
-const DeskingHistorySearch = (props) => {
+const ComponentWorkHistorySearch = (props) => {
     const { search, setSearch, list, onSearch } = props;
 
     return (
@@ -126,4 +126,4 @@ const DeskingHistorySearch = (props) => {
     );
 };
 
-export default DeskingHistorySearch;
+export default ComponentWorkHistorySearch;

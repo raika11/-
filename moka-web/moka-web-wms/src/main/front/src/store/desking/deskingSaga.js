@@ -375,6 +375,51 @@ const postSaveComponentWork = createDeskingRequestSaga(act.POST_SAVE_COMPONENT_W
 const postPublishComponentWork = createDeskingRequestSaga(act.POST_PUBLISH_COMPONENT_WORK, api.postPublishComponentWork, 'publish');
 
 /**
+ * 컴포넌트 워크 임시저장 + 전송
+ */
+function* postSavePublishComponentWork({ payload }) {
+    const { componentWorkSeq, callback } = payload;
+    const ACTION = act.POST_SAVE_PUBLISH_COMPONENT_WORK;
+    let callbackData;
+
+    yield startLoading(ACTION);
+    try {
+        const saveResponse = yield call(api.postSaveComponentWork, { componentWorkSeq });
+
+        if (saveResponse.data.header.success) {
+            const publishResponse = yield call(api.postPublishComponentWork, { componentWorkSeq });
+            callbackData = publishResponse.data;
+
+            if (publishResponse.data.header.success) {
+                yield put({
+                    type: act.COMPONENT_WORK_SUCCESS,
+                    payload: { ...publishResponse.data, status: 'publish' },
+                });
+            } else {
+                yield put({
+                    type: act.COMPONENT_WORK_FAILURE,
+                    payload: publishResponse.data,
+                });
+            }
+        } else {
+            callbackData = saveResponse.data;
+            yield put({
+                type: act.COMPONENT_WORK_FAILURE,
+                payload: saveResponse.data,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
  * Work컴포넌트 예약
  */
 const postReserveComponentWork = createDeskingRequestSaga(act.POST_RESERVE_COMPONENT_WORK, api.postReserveComponentWork);
@@ -385,7 +430,7 @@ const postReserveComponentWork = createDeskingRequestSaga(act.POST_RESERVE_COMPO
 const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST, api.postDeskingWorkList, 'work');
 
 /**
- * 컴포넌트워크 간의 데스킹기사 이동
+ * 컴포넌트 워크 간의 데스킹기사 이동
  */
 function* postDeskingWorkListMove({ payload }) {
     const ACTION = act.POST_DESKING_WORK_LIST_MOVE;
@@ -472,6 +517,7 @@ export default function* saga() {
     yield takeLatest(act.POST_SAVE_COMPONENT_WORK, postSaveComponentWork);
     yield takeLatest(act.POST_PUBLISH_COMPONENT_WORK, postPublishComponentWork);
     yield takeLatest(act.POST_RESERVE_COMPONENT_WORK, postReserveComponentWork);
+    yield takeLatest(act.POST_SAVE_PUBLISH_COMPONENT_WORK, postSavePublishComponentWork);
     // yield takeLatest(act.POST_COMPONENT_WORK, postComponentWorkSaga);
     // yield takeLatest(act.HAS_OTHER_SAVED, hasOtherSavedSaga);
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,7 +8,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import { HIST_SAVE, HIST_PUBLISH } from '@/constants';
 import toast from '@utils/toastUtil';
-import { initialState, changeSearchOption, putComponentWork, postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
+import { changeSearchOption, putComponentWork, postSaveComponentWork, postPublishComponentWork, postSavePublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 import ReserveComponentWork from './ReserveComponentWork';
 import HtmlEditModal from '../modals/HtmlEditModal';
@@ -35,12 +35,13 @@ const customToggle = forwardRef(({ onClick, id }, ref) => {
 const DeskingWorkButtonGroup = (props) => {
     const { component, agGridIndex, componentAgGridInstances, workStatus } = props;
     const dispatch = useDispatch();
-    const { search: storeSearch } = useSelector((store) => store.desking.history.search);
+    const { search } = useSelector((store) => store.desking.history.search);
 
     // state
-    const [search, setSearch] = useState(initialState.history.search);
     const [title, setTitle] = useState('');
     const [selectedTemplate, setSelectedTemplate] = useState(null);
+    const [viewN, setViewN] = useState(false);
+    const [iconButton, setIconButton] = useState([]);
 
     // modal state
     const [htmlEditModal, setHtmlEditModal] = useState(false);
@@ -50,14 +51,10 @@ const DeskingWorkButtonGroup = (props) => {
     const [registerModal, setRegisterModal] = useState(false);
     const [listNumberModal, setListNumberModal] = useState(false);
 
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
     /**
      * 전송
      */
-    const handlePublishComponentWork = () => {
+    const handleClickPublish = useCallback(() => {
         const option = {
             componentWorkSeq: component.seq,
             callback: ({ header }) => {
@@ -70,12 +67,12 @@ const DeskingWorkButtonGroup = (props) => {
         };
         dispatch(changeSearchOption({ ...search, status: HIST_PUBLISH }));
         dispatch(postPublishComponentWork(option));
-    };
+    }, [component.seq, dispatch, search]);
 
     /**
      * 임시저장
      */
-    const handleSaveComponentWork = () => {
+    const handleClickSave = useCallback(() => {
         const option = {
             componentWorkSeq: component.seq,
             callback: ({ header }) => {
@@ -88,7 +85,21 @@ const DeskingWorkButtonGroup = (props) => {
         };
         dispatch(changeSearchOption({ ...search, status: HIST_SAVE }));
         dispatch(postSaveComponentWork(option));
-    };
+    }, [component.seq, dispatch, search]);
+
+    /**
+     * 임시저장 + 전송
+     */
+    const handleClickSavePublish = useCallback(() => {
+        dispatch(
+            postSavePublishComponentWork({
+                componentWorkSeq: component.seq,
+                callback: ({ header }) => {
+                    if (!header.success) toast.fail(header.message);
+                },
+            }),
+        );
+    }, [component.seq, dispatch]);
 
     /**
      * 공백추가
@@ -136,7 +147,7 @@ const DeskingWorkButtonGroup = (props) => {
     /**
      * 템플릿 변경
      */
-    const handleClickSaveTemplate = (templateData) => {
+    const handleChangeTemplate = (templateData) => {
         if (!templateData.templateSeq) {
             toast.warning('선택된 템플릿이 없습니다');
             return;
@@ -157,25 +168,48 @@ const DeskingWorkButtonGroup = (props) => {
     /**
      * 템플릿 썸네일테이블 -> tems 소스보기
      */
-    const handleClickOpenTemplateTems = (templateData) => {
+    const handleOpenTemplateTems = (templateData) => {
         if (templateData) {
             setSelectedTemplate(templateData?.templateSeq);
             setTemplateHtmlModal(true);
         }
     };
 
-    const iconButton = [
-        { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => setHtmlEditModal(true) },
-        // { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModal(true) },
-        { title: '임시저장', iconName: 'fal-save', onClick: handleSaveComponentWork },
-        { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
-    ];
+    /**
+     * 영역 노출, 비노출
+     */
+    const handleClickViewYn = () => {
+        dispatch(
+            putComponentWork({
+                componentWork: { ...component, viewYn: viewN ? 'Y' : 'N' },
+                callbak: ({ header }) => {
+                    if (!header.success) {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+    };
 
-    React.useEffect(() => {
-        if (component.componentSeq) {
-            setTitle(component.componentName);
-        }
+    useEffect(() => {
+        if (component.componentSeq) setTitle(component.componentName);
     }, [component.componentName, component.componentSeq]);
+
+    useEffect(() => {
+        setViewN(component.viewYn === 'N');
+    }, [component.viewYn]);
+
+    useEffect(() => {
+        let btns = [
+            { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => setHtmlEditModal(true) },
+            // { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModal(true) },
+            { title: '임시저장', iconName: 'fal-save', onClick: handleClickSave },
+            { title: '전송', iconName: 'fal-share-square', onClick: handleClickPublish },
+        ];
+
+        if (viewN) btns = [{ title: '저장', iconName: 'fal-save', onClick: handleClickSavePublish }];
+        setIconButton(btns);
+    }, [handleClickSave, handleClickPublish, handleClickSavePublish, viewN]);
 
     return (
         <>
@@ -200,20 +234,24 @@ const DeskingWorkButtonGroup = (props) => {
                             <Dropdown>
                                 <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
                                 <Dropdown.Menu className="ft-12">
-                                    <Dropdown.Item eventKey="1" onClick={handleOpenAddSpace} date={component}>
-                                        공백 추가
-                                    </Dropdown.Item>
-                                    <Dropdown.Item eventKey="2" onClick={handleClickDelete}>
-                                        전체 삭제
-                                    </Dropdown.Item>
-                                    <Dropdown.Item eventKey="3" onClick={handleOpenRegister}>
-                                        기사 이동
-                                    </Dropdown.Item>
-                                    <Dropdown.Item eventKey="4" onClick={handleOpenListNumber}>
-                                        리스트 건수
-                                    </Dropdown.Item>
-                                    <Dropdown.Item eventKey="5" style={component.viewYn === 'Y' ? { color: 'red' } : { color: 'black' }} disabled>
-                                        영역 노출
+                                    {!viewN && (
+                                        <React.Fragment>
+                                            <Dropdown.Item eventKey="1" onClick={handleOpenAddSpace} date={component}>
+                                                공백 추가
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="2" onClick={handleClickDelete}>
+                                                전체 삭제
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="3" onClick={handleOpenRegister}>
+                                                기사 이동
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="4" onClick={handleOpenListNumber}>
+                                                리스트 건수
+                                            </Dropdown.Item>
+                                        </React.Fragment>
+                                    )}
+                                    <Dropdown.Item eventKey="5" onClick={handleClickViewYn}>
+                                        {viewN ? '영역 노출' : '영역 비노출'}
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -233,9 +271,9 @@ const DeskingWorkButtonGroup = (props) => {
                 templateGroup={component.templateGroup}
                 templateWidth={component.templateWidth}
                 listType="thumbnail"
-                onClickSave={handleClickSaveTemplate}
+                onClickSave={handleChangeTemplate}
                 menus={[
-                    { title: 'TEMS 소스 보기', onClick: handleClickOpenTemplateTems },
+                    { title: 'TEMS 소스 보기', onClick: handleOpenTemplateTems },
                     { title: '새창열기', onClick: (data) => window.open(`/template/${data.templateSeq}`) },
                 ]}
                 topAs={

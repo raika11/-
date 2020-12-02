@@ -323,6 +323,7 @@ public class FtpHelper {
             }
 
             String savePath = isTempSave ? fi.getTempPath() : realSavePath.toString();
+            log.info("current ftp directory : {}", ftpClient.listNames());
             //ftpClient.makeDirectory(savePath);
             mkdirs(ftpClient, savePath);
             ftpClient.changeWorkingDirectory(savePath);
@@ -488,7 +489,8 @@ public class FtpHelper {
                     if (ftpClient.changeWorkingDirectory(tempPath)) {
                         ftpClient.changeWorkingDirectory("/");
                     } else {
-                        ftpClient.makeDirectory(tempPath);
+                        boolean isCreateDirectory = ftpClient.makeDirectory(tempPath);
+                        log.info("ftp directory : {}, created : {}", tempPath, isCreateDirectory);
                     }
                 }
             }

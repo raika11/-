@@ -6,8 +6,8 @@
     "passwd": "+XRlTKp2JmGRo7AS/rrQ6w==",
     "passive": true,
     "encoding": "",
-    "tempPath": "/images/file_upload_tmp",
-    "remotePath": "/images",
+    "tempPath": "/box/mokaftp/images/file_upload_tmp",
+    "remotePath": "/box/mokaftp/images",
     "connectTimeout": 0,
     "readTimeout": 0
   },
@@ -18,8 +18,8 @@
     "passwd": "+XRlTKp2JmGRo7AS/rrQ6w==",
     "passive": true,
     "encoding": "",
-    "tempPath": "/wimage/file_upload_tmp",
-    "remotePath": "/wimage",
+    "tempPath": "wimage/file_upload_tmp",
+    "remotePath": "wimage",
     "connectTimeout": 0,
     "readTimeout": 0
   },
@@ -30,8 +30,8 @@
     "passwd": "+XRlTKp2JmGRo7AS/rrQ6w==",
     "passive": true,
     "encoding": "",
-    "tempPath": "/static/file_upload_tmp",
-    "remotePath": "/static",
+    "tempPath": "/file_upload_tmp",
+    "remotePath": "",
     "connectTimeout": 0,
     "readTimeout": 0
   },
@@ -42,8 +42,8 @@
     "passwd": "+XRlTKp2JmGRo7AS/rrQ6w==",
     "passive": true,
     "encoding": "",
-    "tempPath": "/pds/file_upload_tmp",
-    "remotePath": "/pds",
+    "tempPath": "file_upload_tmp",
+    "remotePath": "",
     "connectTimeout": 0,
     "readTimeout": 0
   }

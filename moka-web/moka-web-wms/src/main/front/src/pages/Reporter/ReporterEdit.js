@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import { MokaInputLabel, MokaInput } from '@components';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { clearReporter, getReporter, changeReporter, changeInvalidList, GET_REPORTER, CHANGE_REPORTER, saveReporter } from '@store/reporter';
+import { clearReporter, getReporter, changeReporter, GET_REPORTER, CHANGE_REPORTER, saveReporter } from '@store/reporter';
 import toast from '@utils/toastUtil';
 import bg from '@assets/images/v_noimg.jpg';
 import Col from 'react-bootstrap/Col';
-import clsx from 'clsx';
 
 /**
  * 기자 정보 조회/수정
  */
 const ReporterEdit = () => {
-    const history = useHistory();
     const dispatch = useDispatch();
     const { repSeq: paramSeq } = useParams();
-    const metadata = new Map();
 
     // use
     const [inputDisabled, setInputDisabled] = useState(true);
 
     // entity
+    // eslint-disable-next-line no-unused-vars
     const [repSeq, setRepSeq] = useState('');
     const [usedYn, setUsedYn] = useState('N');
     const [talkYn, setTalkYn] = useState('N');
@@ -50,11 +48,15 @@ const ReporterEdit = () => {
     const [r4CdNm, setR4CdNm] = useState('');
     const [repField, setRepField] = useState('');
     const [repTalk, setRepTalk] = useState('');
+    // eslint-disable-next-line no-unused-vars
     const [userTalk, setUserTalk] = useState('');
 
     // error
+    // eslint-disable-next-line no-unused-vars
     const [repSeqError, setRepSeqError] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [usedYnError, setUsedYnError] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [talkYnError, setTalkYnError] = useState(false);
 
     // getter
@@ -79,7 +81,6 @@ const ReporterEdit = () => {
 
         switch (name) {
             case 'repSeq':
-                const regex = /^[0-9\b]+$/;
                 if (value.length <= 4) {
                     setRepSeqError(false);
                     setRepSeq(value);
@@ -151,21 +152,6 @@ const ReporterEdit = () => {
 
         if (paramSeq) {
             updateReporter(tmp);
-        }
-    };
-
-    /**
-     * 기자관리 내용 취소 이벤트
-     * @param event 이벤트 객체
-     */
-
-    const handleClickCancle = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (paramSeq) {
-            setUsedYn(reporter.usedYn);
-            setTalkYn(reporter.talkYn);
         }
     };
 

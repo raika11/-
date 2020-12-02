@@ -1,6 +1,6 @@
 import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { setLocalItem, setLocalStorage } from '@utils/storageUtil';
+import { setLocalItem } from '@utils/storageUtil';
 import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';

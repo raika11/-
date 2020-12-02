@@ -1,5 +1,6 @@
 import React from 'react';
 import { MokaTableLoadButton } from '@components';
+import { HIST_PUBLISH } from '@/constants';
 
 export default [
     {
@@ -13,7 +14,10 @@ export default [
         headerName: '작업일시',
         field: 'regDt',
         width: 200,
-        cellStyle: { fontSize: '12px' },
+        cellStyle: (row) => {
+            const { data } = row;
+            return data.approvalYn === 'N' && data.status === HIST_PUBLISH ? { fontSize: '12px', color: 'red' } : { fontSize: '12px' };
+        },
     },
     {
         headerName: '작업자',

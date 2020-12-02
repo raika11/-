@@ -70,7 +70,7 @@ const EditFormPartHistoryAgGrid = (props) => {
     const { historyList, total, search: storeSearch, loading } = useSelector(
         (store) => ({
             historyList: store.editForm.historyList,
-            total: store.editForm.total,
+            total: store.editForm.historyTotal,
             search: store.editForm.historySearch,
             loading: store.loading[GET_EDIT_FORM_HISTORY_LIST],
         }),

@@ -115,7 +115,7 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
             linkTarget: null,
             moreUrl: null,
             moreTarget: null,
-            thumbFileName: data.artThumb,
+            thumbFileName: data.artPdsThumb,
             rel: true,
             relSeqs: null,
         };
@@ -166,7 +166,7 @@ const makeRowNode = (data, contentOrd, component) => {
             linkTarget: null,
             moreUrl: null,
             moreTarget: null,
-            thumbFileName: data.artThumb,
+            thumbFileName: data.artPdsThumb,
             // thumbSize:,
             // thumbWidth:
             // thumbHeight:
@@ -176,7 +176,6 @@ const makeRowNode = (data, contentOrd, component) => {
         };
     } else if (data.gridType === 'DESKING') {
         // 편집 컴포넌트영역 -> 편집컴포넌트 이동
-        let title = data.rel ? data.relTitle : data.title;
         appendData = {
             ...data,
             regDt: undefined,
@@ -184,7 +183,6 @@ const makeRowNode = (data, contentOrd, component) => {
             componentSeq: component.componentSeq,
             datasetSeq: component.datasetSeq,
             contentOrd,
-            title,
         };
     }
 
@@ -230,10 +228,10 @@ function* deskingDragStop({ payload }) {
 
         if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
-            let contentOrding = insertIndex - 1;
+            let contentOrdering = insertIndex - 1;
             sourceNode.some((node) => {
-                if (!node.data.rel) contentOrding++;
-                const result = makeRowNode(node.data, contentOrding, tgtComponent);
+                if (!node.data.rel) contentOrdering++;
+                const result = makeRowNode(node.data, contentOrdering, tgtComponent);
                 if (result.success) {
                     ans.push(result.list);
                     return false;
@@ -348,7 +346,7 @@ function* deskingDragStop({ payload }) {
             callback,
         };
         yield put({
-            type: act.MOVE_DESKING_WORK_LIST,
+            type: act.POST_DESKING_WORK_LIST_MOVE,
             payload: option,
         });
     } else {
@@ -389,8 +387,8 @@ const postDeskingWorkList = createDeskingRequestSaga(act.POST_DESKING_WORK_LIST,
 /**
  * 컴포넌트워크 간의 데스킹기사 이동
  */
-function* moveDeskingWorkList({ payload }) {
-    const ACTION = act.MOVE_DESKING_WORK_LIST;
+function* postDeskingWorkListMove({ payload }) {
+    const ACTION = act.POST_DESKING_WORK_LIST_MOVE;
     const { callback } = payload;
     let callbackData,
         status = 'work';
@@ -398,17 +396,17 @@ function* moveDeskingWorkList({ payload }) {
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(api.moveDeskingWorkList, payload);
+        const response = yield call(api.postDeskingWorkListMove, payload);
         callbackData = { ...response.data, payload };
 
         if (response.data.header.success) {
             yield put({
-                type: act.MOVE_DESKING_WORK_LIST_SUCCESS,
+                type: act.POST_DESKING_WORK_LIST_MOVE_SUCCESS,
                 payload: { ...response.data, status },
             });
         } else {
             yield put({
-                type: act.MOVE_DESKING_WORK_LIST_FAILURE,
+                type: act.POST_DESKING_WORK_LIST_MOVE_FAILURE,
                 payload: { ...response.data, status },
             });
         }
@@ -422,6 +420,11 @@ function* moveDeskingWorkList({ payload }) {
 
     yield put(finishLoading(ACTION));
 }
+
+/**
+ * 컴포넌트 워크의 기사목록 정렬(컴포넌트 내 정렬)
+ */
+const putDeskingWorkListSort = createDeskingRequestSaga(act.PUT_DESKING_WORK_LIST_SORT, api.putDeskingWorkListSort, 'work');
 
 /**
  * 공백 기사 추가
@@ -453,6 +456,11 @@ const getComponentHistory = callApiAfterActions(act.GET_COMPONENT_WORK_HISTORY, 
  */
 const getDeskingWorkHistory = createRequestSaga(act.GET_DESKING_WORK_HISTORY, api.getDeskingHistory);
 
+/**
+ * 히스토리를 편집기사 워크로 등록
+ */
+const putDeskingWorkHistory = createDeskingRequestSaga(act.PUT_DESKING_WORK_HISTORY, api.putDeskingWorkHistory, 'work');
+
 /** saga */
 export default function* saga() {
     // 컴포넌트 워크
@@ -470,7 +478,8 @@ export default function* saga() {
     // 컴포넌트 워크의 데스킹 (편집기사)
     yield takeLatest(act.PUT_DESKING_WORK, putDeskingWork);
     yield takeLatest(act.POST_DESKING_WORK_LIST, postDeskingWorkList);
-    yield takeLatest(act.MOVE_DESKING_WORK_LIST, moveDeskingWorkList);
+    yield takeLatest(act.POST_DESKING_WORK_LIST_MOVE, postDeskingWorkListMove);
+    yield takeLatest(act.PUT_DESKING_WORK_LIST_SORT, putDeskingWorkListSort);
     yield takeLatest(act.POST_DESKING_WORK, postDeskingWork);
 
     // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPriority);
@@ -482,4 +491,5 @@ export default function* saga() {
     // 히스토리
     yield takeLatest(act.GET_COMPONENT_WORK_HISTORY, getComponentHistory);
     yield takeLatest(act.GET_DESKING_WORK_HISTORY, getDeskingWorkHistory);
+    yield takeLatest(act.PUT_DESKING_WORK_HISTORY, putDeskingWorkHistory);
 }

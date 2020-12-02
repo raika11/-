@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { MokaModal, MokaLoader } from '@components';
-import { GET_COMPONENT_WORK_LIST, moveDeskingWorkList } from '@store/desking';
+import { GET_COMPONENT_WORK_LIST, postDeskingWorkListMove } from '@store/desking';
 import toast from '@utils/toastUtil';
 
 /**
@@ -48,6 +48,23 @@ const RegisterModal = (props) => {
 
         selectedNodes = componentAgGridInstances[agGridIndex].api.getSelectedNodes().map((node) => node.data);
 
+        // sourceNode 정렬
+        selectedNodes = selectedNodes.sort(function (a, b) {
+            if (a.contentOrd === b.contentOrd) {
+                return a.relOrd - b.relOrd;
+            } else {
+                return a.contentOrd - b.contentOrd;
+            }
+        });
+
+        let contentOrd = 0;
+        for (let i = 0; i < selectedNodes.length; i++) {
+            if (!selectedNodes[i].rel) {
+                contentOrd++;
+            }
+            selectedNodes[i].contentOrd = contentOrd;
+        }
+
         const option = {
             componentWorkSeq: tgtComponent.seq,
             datasetSeq: tgtComponent.datasetSeq,
@@ -63,7 +80,7 @@ const RegisterModal = (props) => {
             },
         };
 
-        dispatch(moveDeskingWorkList(option));
+        dispatch(postDeskingWorkListMove(option));
     };
 
     return (

@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.Optional;
@@ -56,16 +57,10 @@ public class FtpHelper {
      */
     private final String RESOURCE_PATH = "ftp-info.json";
 
-    public final static String MEDIA = "MEDIA";
-    public final static String HOME = "HOME";
-    public final static String ISPLUS = "ISPLUS";
-    public final static String JOONGANG = "JOONGANG";
-    public final static String IMAGE = "IMAGE";
+    public final static String IMAGES = "IMAGES";
     public final static String WIMAGE = "WIMAGE";
     public final static String STATIC = "STATIC";
-    public final static String BLOG = "BLOG";
-    public final static String CDNM4V = "CDNM4V";
-    public final static String PMSDROOM = "PMSDROOM";
+    public final static String PDS = "PDS";
 
 
     /**
@@ -159,7 +154,7 @@ public class FtpHelper {
      * @param inStream 파일 stream
      * @return 업로드 결과
      */
-    public boolean upload(String fileName, FileInputStream inStream) {
+    public boolean upload(String fileName, InputStream inStream) {
         return upload(getFirstFtpInfoKey(), fileName, inStream, null, true);
     }
 
@@ -202,7 +197,7 @@ public class FtpHelper {
      * @param inStream 파일 stream
      * @return 업로드 결과
      */
-    public boolean upload(String key, String fileName, FileInputStream inStream) {
+    public boolean upload(String key, String fileName, InputStream inStream) {
         return upload(key, fileName, inStream, null, true);
     }
 
@@ -239,7 +234,7 @@ public class FtpHelper {
      * @param remotePath ftp 저장 경로
      * @return 업로드 결과
      */
-    public boolean upload(String key, String fileName, FileInputStream inStream, String remotePath) {
+    public boolean upload(String key, String fileName, InputStream inStream, String remotePath) {
         return upload(key, fileName, inStream, remotePath, true);
     }
 
@@ -287,7 +282,7 @@ public class FtpHelper {
      * @param isTempSave 임시 디렉토리에 미리 저장 한 후 파일 이동 처리 여부
      * @return 업로드 결과
      */
-    public boolean upload(String key, String fileName, FileInputStream inStream, String remotePath, boolean isTempSave) {
+    public boolean upload(String key, String fileName, InputStream inStream, String remotePath, boolean isTempSave) {
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inStream);
         return upload(key, fileName, bufferedInputStream, remotePath, isTempSave);
     }
@@ -328,7 +323,8 @@ public class FtpHelper {
             }
 
             String savePath = isTempSave ? fi.getTempPath() : realSavePath.toString();
-            ftpClient.makeDirectory(savePath);
+            //ftpClient.makeDirectory(savePath);
+            mkdirs(ftpClient, savePath);
             ftpClient.changeWorkingDirectory(savePath);
 
             for (int j = 0; j < fi.getRetry() && !success; j++) {
@@ -341,7 +337,8 @@ public class FtpHelper {
             }
             if (success && isTempSave) {
                 // 파일 경로를 변경한다.
-                ftpClient.makeDirectory(realSavePath.toString());
+                //ftpClient.makeDirectory(realSavePath.toString());
+                mkdirs(ftpClient, realSavePath.toString());
                 success = ftpClient.rename(McpFile.makeFilepathName(fi.getTempPath(), fileName),
                         McpFile.makeFilepathName(realSavePath.toString(), fileName));
             }
@@ -478,6 +475,24 @@ public class FtpHelper {
             ftpClientPool.returnObject(ftpClient);
         }
         return false;
+    }
+
+    private void mkdirs(FTPClient ftpClient, String path)
+            throws IOException {
+        if (McpString.isNotEmpty(path)) {
+            String[] paths = path.split("/");
+            String tempPath = "";
+            for (String subPath : paths) {
+                if (McpString.isNotEmpty(subPath)) {
+                    tempPath += "/" + subPath;
+                    if (ftpClient.changeWorkingDirectory(tempPath)) {
+                        ftpClient.changeWorkingDirectory("/");
+                    } else {
+                        ftpClient.makeDirectory(tempPath);
+                    }
+                }
+            }
+        }
     }
 
 

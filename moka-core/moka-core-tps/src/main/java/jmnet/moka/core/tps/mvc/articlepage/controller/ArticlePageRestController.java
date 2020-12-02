@@ -8,6 +8,8 @@
 
 package jmnet.moka.core.tps.mvc.articlepage.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +24,20 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.PurgeHelper;
+import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageSearchDTO;
 import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePage;
 import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,6 +50,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -58,21 +63,22 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/article-pages")
-public class ArticlePageRestController {
-    @Autowired
-    private MessageByLocale messageByLocale;
+public class ArticlePageRestController extends AbstractCommonController {
+    private final PurgeHelper purgeHelper;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ArticlePageService articlePageService;
 
-    @Autowired
-    private PurgeHelper purgeHelper;
+    private final ArticleService articleService;
 
-    @Autowired
-    private TpsLogger tpsLogger;
-
-    @Autowired
-    private ArticlePageService articlePageService;
+    public ArticlePageRestController(MessageByLocale messageByLocale, ModelMapper modelMapper, PurgeHelper purgeHelper, TpsLogger tpsLogger,
+            ArticlePageService articlePageService, ArticleService articleService) {
+        this.messageByLocale = messageByLocale;
+        this.modelMapper = modelMapper;
+        this.purgeHelper = purgeHelper;
+        this.tpsLogger = tpsLogger;
+        this.articlePageService = articlePageService;
+        this.articleService = articleService;
+    }
 
     /**
      * 기사페이지 목록조회
@@ -87,12 +93,12 @@ public class ArticlePageRestController {
         Page<ArticlePage> returnValue = articlePageService.findAllArticlePage(search, search.getPageable());
 
         // 리턴값 설정
-        ResultListDTO<ArticlePageDTO> resultListMessage = new ResultListDTO<ArticlePageDTO>();
+        ResultListDTO<ArticlePageDTO> resultListMessage = new ResultListDTO<>();
         List<ArticlePageDTO> dtoList = modelMapper.map(returnValue.getContent(), ArticlePageDTO.TYPE);
         resultListMessage.setTotalCnt(returnValue.getTotalElements());
         resultListMessage.setList(dtoList);
 
-        ResultDTO<ResultListDTO<ArticlePageDTO>> resultDto = new ResultDTO<ResultListDTO<ArticlePageDTO>>(resultListMessage);
+        ResultDTO<ResultListDTO<ArticlePageDTO>> resultDto = new ResultDTO<>(resultListMessage);
         tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -115,15 +121,20 @@ public class ArticlePageRestController {
         // 데이타유효성검사.
         validData(artPageSeq, null, ActionType.SELECT);
 
-        ArticlePage page = articlePageService.findArticlePageBySeq(artPageSeq)
-                                             .orElseThrow(() -> {
-                                                 String message = messageByLocale.get("tps.common.error.no-data");
-                                                 tpsLogger.fail(message, true);
-                                                 return new NoDataException(message);
-                                             });
+        ArticlePage articlePage = articlePageService
+                .findArticlePageBySeq(artPageSeq)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
-        ArticlePageDTO dto = modelMapper.map(page, ArticlePageDTO.class);
-        ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<ArticlePageDTO>(dto);
+        ArticlePageDTO dto = modelMapper.map(articlePage, ArticlePageDTO.class);
+
+        Long totalId = articleService.findLastestArticleBasicByArtType(dto.getArtType());
+        dto.setPreviewTotalId(totalId);
+
+        ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<>(dto);
         tpsLogger.success(true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -140,14 +151,21 @@ public class ArticlePageRestController {
     private void validData(Long artPageSeq, ArticlePageDTO articlePageDTO, ActionType actionType)
             throws InvalidDataException, Exception {
 
-        List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+        List<InvalidDataDTO> invalidList = new ArrayList<>();
 
         if (articlePageDTO != null) {
             // url id와 json의 id가 동일한지 검사
             if (artPageSeq > 0 && !artPageSeq.equals(articlePageDTO.getArtPageSeq())) {
-                String message = messageByLocale.get("tps.common.error.no-data");
+                String message = msg("tps.common.error.no-data");
                 invalidList.add(new InvalidDataDTO("matchId", message));
                 tpsLogger.fail(actionType, message, true);
+            }
+
+            if (actionType == ActionType.INSERT && articlePageService.existArtType(articlePageDTO
+                    .getDomain()
+                    .getDomainId(), articlePageDTO.getArtType())) {
+                String message = msg("tps.article-page.error.duplicate.artType");
+                invalidList.add(new InvalidDataDTO("artPageBody", message));
             }
 
             // 문법검사
@@ -165,7 +183,7 @@ public class ArticlePageRestController {
             }
 
             if (invalidList.size() > 0) {
-                String validMessage = messageByLocale.get("tps.common.error.invalidContent");
+                String validMessage = msg("tps.common.error.invalidContent");
                 throw new InvalidDataException(invalidList, validMessage);
             }
         }
@@ -201,14 +219,14 @@ public class ArticlePageRestController {
             // 결과리턴
             ArticlePageDTO dto = modelMapper.map(returnValue, ArticlePageDTO.class);
 
-            String message = messageByLocale.get("tps.common.success.insert");
-            ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<ArticlePageDTO>(dto, message);
+            String message = msg("tps.common.success.insert");
+            ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<>(dto, message);
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO INSERT ARTICLE PAGE]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT ARTICLE PAGE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.insert"), e);
+            throw new Exception(msg("tps.common.error.insert"), e);
         }
 
     }
@@ -233,31 +251,33 @@ public class ArticlePageRestController {
 
         // 수정
         ArticlePage newPage = modelMapper.map(articlePageDTO, ArticlePage.class);
-        articlePageService.findArticlePageBySeq(artPageSeq)
-                          .orElseThrow(() -> {
-                              String message = messageByLocale.get("tps.common.error.no-data");
-                              tpsLogger.fail(ActionType.UPDATE, message, true);
-                              return new NoDataException(message);
-                          });
+        articlePageService
+                .findArticlePageBySeq(artPageSeq)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             ArticlePage returnValue = articlePageService.updateArticlePage(newPage);
 
             // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
-            purgeHelper.purgeTms(returnValue.getDomain()
-                                            .getDomainId(), MokaConstants.ITEM_ARTICLE_PAGE, returnValue.getArtPageSeq());
+            purgeHelper.purgeTms(returnValue
+                    .getDomain()
+                    .getDomainId(), MokaConstants.ITEM_ARTICLE_PAGE, returnValue.getArtPageSeq());
 
             // 결과리턴
             ArticlePageDTO dto = modelMapper.map(returnValue, ArticlePageDTO.class);
 
-            String message = messageByLocale.get("tps.common.success.update");
-            ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<ArticlePageDTO>(dto, message);
+            String message = msg("tps.common.success.update");
+            ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<>(dto, message);
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE ARTICLE PAGE] seq: {} {}", artPageSeq, e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE ARTICLE  PAGE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.update"), e);
+            throw new Exception(msg("tps.common.error.update"), e);
         }
     }
 
@@ -280,27 +300,68 @@ public class ArticlePageRestController {
         validData(artPageSeq, null, ActionType.DELETE);
 
         // 1.2. 데이타 존재여부 검사
-        ArticlePage page = articlePageService.findArticlePageBySeq(artPageSeq)
-                                             .orElseThrow(() -> {
-                                                 String message = messageByLocale.get("tps.common.error.no-data");
-                                                 tpsLogger.fail(ActionType.DELETE, message, true);
-                                                 return new NoDataException(message);
-                                             });
+        ArticlePage page = articlePageService
+                .findArticlePageBySeq(artPageSeq)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             // 2. 삭제
             articlePageService.deleteArticlePage(page);
 
             // 3. 결과리턴
-            String message = messageByLocale.get("tps.common.success.delete");
-            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
+            String message = msg("tps.common.success.delete");
+            ResultDTO<Boolean> resultDTO = new ResultDTO<>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO DELETE ARTICLE PAGE] seq: {} {}", artPageSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE ARTICLE PAGE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.delete"), e);
+            throw new Exception(msg("tps.common.error.delete"), e);
         }
+    }
+
+    /**
+     * 기사 유형 중복 체크
+     *
+     * @param search domainId, artType
+     * @return 중복 여부
+     */
+    @ApiOperation(value = "동일 기사 유형 존재 여부")
+    @GetMapping("/exists-type")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "domainId", value = "도메인 ID", required = true, dataType = "String", paramType = "query", defaultValue = "1000"),
+            @ApiImplicitParam(name = "artType", value = "기사 유형", required = true, dataType = "String", paramType = "query", defaultValue = "B")})
+    public ResponseEntity<?> existsArtType(@Valid @SearchParam ArticlePageSearchDTO search) {
+
+        boolean duplicated = articlePageService.existArtType(search.getDomainId(), search.getArtType());
+        String message = "";
+        if (duplicated) {
+            message = msg("tps.article-page.error.duplicate.artType");
+        }
+        ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated, message);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * 기사 유형 중복 체크
+     *
+     * @param artType 기사 유형
+     * @return 중복 여부
+     */
+    @ApiOperation(value = "미리보기용 최근 기사ID 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "artType", value = "기사 유형", required = true, dataType = "String", paramType = "query", defaultValue = "B")})
+    @GetMapping("/preview-totalid")
+    public ResponseEntity<?> getPreviewTotalId(
+            @RequestParam("artType") @Length(max = 24, message = "{tps.article-page.error.length.artType}") String artType) {
+
+        Long totalId = articleService.findLastestArticleBasicByArtType(artType);
+        ResultDTO<Long> resultDTO = new ResultDTO<>(totalId);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 }

@@ -1,61 +1,13 @@
 {
-  "MEDIA": {
+  "IMAGES": {
     "host": "SGgW9cjuViU5nSojIiD9Lw==",
     "port": "lNDtlzbSi80=",
     "user": "pGNIqIPX5z4=",
     "passwd": "/zxK7myOdI4/xl9qUt/ZKQ==",
     "passive": false,
     "encoding": "",
-    "tempPath": "/tmp",
-    "remotePath": "/media",
-    "connectTimeout": 0,
-    "readTimeout": 0
-  },
-  "HOME": {
-    "host": "SGgW9cjuViU5nSojIiD9Lw==",
-    "port": "lNDtlzbSi80=",
-    "user": "pGNIqIPX5z4=",
-    "passwd": "/zxK7myOdI4/xl9qUt/ZKQ==",
-    "passive": false,
-    "encoding": "",
-    "tempPath": "/tmp",
-    "remotePath": "/home",
-    "connectTimeout": 0,
-    "readTimeout": 0
-  },
-  "ISPLUS": {
-    "host": "SGgW9cjuViU5nSojIiD9Lw==",
-    "port": "lNDtlzbSi80=",
-    "user": "pGNIqIPX5z4=",
-    "passwd": "/zxK7myOdI4/xl9qUt/ZKQ==",
-    "passive": false,
-    "encoding": "",
-    "tempPath": "/tmp",
-    "remotePath": "/home",
-    "connectTimeout": 0,
-    "readTimeout": 0
-  },
-  "JOONGANG": {
-    "host": "SGgW9cjuViU5nSojIiD9Lw==",
-    "port": "lNDtlzbSi80=",
-    "user": "pGNIqIPX5z4=",
-    "passwd": "/zxK7myOdI4/xl9qUt/ZKQ==",
-    "passive": false,
-    "encoding": "",
-    "tempPath": "/tmp",
-    "remotePath": "/home",
-    "connectTimeout": 0,
-    "readTimeout": 0
-  },
-  "IMAGE": {
-    "host": "SGgW9cjuViU5nSojIiD9Lw==",
-    "port": "lNDtlzbSi80=",
-    "user": "pGNIqIPX5z4=",
-    "passwd": "/zxK7myOdI4/xl9qUt/ZKQ==",
-    "passive": false,
-    "encoding": "",
-    "tempPath": "/file_upload_tmp/component/image",
-    "remotePath": "/home",
+    "tempPath": "/file_upload_tmp/component/images",
+    "remotePath": "/images",
     "connectTimeout": 0,
     "readTimeout": 0
   },
@@ -83,39 +35,15 @@
     "connectTimeout": 0,
     "readTimeout": 0
   },
-  "BLOG": {
-    "host": "SGgW9cjuViU5nSojIiD9Lw==",
-    "port": "lNDtlzbSi80=",
-    "user": "pGNIqIPX5z4=",
-    "passwd": "/zxK7myOdI4/xl9qUt/ZKQ==",
+  "PDS": {
+    "host": "62vGCGOixq4MWmH1dgpnmg==",
+    "port": "ldzL+teaAU0=",
+    "user": "DF1b1+AdbEw=",
+    "passwd": "+XRlTKp2JmGRo7AS/rrQ6w==",
     "passive": false,
     "encoding": "",
-    "tempPath": "/tmp",
-    "remotePath": "/home",
-    "connectTimeout": 0,
-    "readTimeout": 0
-  },
-  "CDNM4V": {
-    "host": "SGgW9cjuViU5nSojIiD9Lw==",
-    "port": "lNDtlzbSi80=",
-    "user": "pGNIqIPX5z4=",
-    "passwd": "/zxK7myOdI4/xl9qUt/ZKQ==",
-    "passive": false,
-    "encoding": "",
-    "tempPath": "/tmp",
-    "remotePath": "/home",
-    "connectTimeout": 0,
-    "readTimeout": 0
-  },
-  "PMSDROOM": {
-    "host": "SGgW9cjuViU5nSojIiD9Lw==",
-    "port": "lNDtlzbSi80=",
-    "user": "pGNIqIPX5z4=",
-    "passwd": "/zxK7myOdI4/xl9qUt/ZKQ==",
-    "passive": false,
-    "encoding": "",
-    "tempPath": "/tmp",
-    "remotePath": "/home",
+    "tempPath": "/pds/file_upload_tmp",
+    "remotePath": "/pds",
     "connectTimeout": 0,
     "readTimeout": 0
   }

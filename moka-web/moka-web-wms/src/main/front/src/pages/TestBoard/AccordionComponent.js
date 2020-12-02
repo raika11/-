@@ -23,7 +23,7 @@ const AccordionComponent = (props) => {
                         </Card.Body>
                     </Accordion.Collapse>
                 </Card>
-            ))
+            )),
         );
     }, [card]);
 

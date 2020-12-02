@@ -58,13 +58,23 @@ function* updateMemberMenuAuth({ type, payload: { memberId, changeMenuAuthList, 
 /**
  * 사용 목록 조회
  */
-function* getMemberList() {
+function* getMemberList({ payload }) {
     const ACTION = memberAction.GET_MEMBER_LIST;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
+        if (payload && payload.length > 0) {
+            for (let i = 0; i < payload.length; i++) {
+                const act = payload[i];
+                yield put({
+                    type: act.type,
+                    payload: act.payload,
+                });
+            }
+        }
+
         const search = yield select((store) => store.member.search);
         const statusList = yield select((store) => store.app.MEMBER_STATUS_CODE);
         const response = yield call(memberAPI.getMemberList, { search });

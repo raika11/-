@@ -5,7 +5,6 @@ import { Switch, Route } from 'react-router-dom';
 
 import { MokaCard } from '@components';
 import { GET_REPORTER, CHANGE_REPORTER } from '@store/reporter';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 // relations
 const ReporterList = React.lazy(() => import('./ReporterList'));

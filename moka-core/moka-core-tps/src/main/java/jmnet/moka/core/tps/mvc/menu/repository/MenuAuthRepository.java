@@ -13,7 +13,7 @@ public interface MenuAuthRepository extends JpaRepository<MenuAuth, Long>, JpaSp
      * @param menuId 메뉴 ID
      * @return 메뉴권한 목록
      */
-    public List<MenuAuth> findAllByMenuId(String menuId);
+    List<MenuAuth> findAllByMenuId(String menuId);
 
     /**
      * 메뉴ID로 메뉴권한 건수 조회
@@ -21,7 +21,7 @@ public interface MenuAuthRepository extends JpaRepository<MenuAuth, Long>, JpaSp
      * @param menuId 메뉴 ID
      * @return 메뉴권한 건수
      */
-    public Long countByMenuId(String menuId);
+    Long countByMenuIdAndUsedYn(String menuId, String useYn);
 
     /**
      * 그룹멤버 ID로 메뉴권한 목록 조회
@@ -30,5 +30,5 @@ public interface MenuAuthRepository extends JpaRepository<MenuAuth, Long>, JpaSp
      * @param groupMemberDiv 그룹멤버 구분
      * @return 메뉴권한 목록
      */
-    public List<MenuAuth> findAllByGroupMemberIdAndGroupMemberDiv(String groupMemberId, String groupMemberDiv);
+    List<MenuAuth> findAllByGroupMemberIdAndGroupMemberDiv(String groupMemberId, String groupMemberDiv);
 }

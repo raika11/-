@@ -98,6 +98,7 @@ export const clearHoverStyle = (node) => {
     if (node) {
         node.classList.remove('hover');
         node.classList.remove('ag-row-hover');
+        node.classList.remove('change');
     }
 };
 
@@ -213,7 +214,8 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
 };
 
 /**
- * 드래그 시작점, 목적지 검사
+ * 관련기사가 포함된 리스트의 validation
+ * (관련기사는 이동할 때 반드시 주기사랑 같이 이동돼야함)
  * @param {object} movingDatas 드래그 중인 데이터
  * @param {object} overData 마우스 오버된 row의 데이터
  */

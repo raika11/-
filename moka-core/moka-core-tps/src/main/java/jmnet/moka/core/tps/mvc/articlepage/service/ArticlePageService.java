@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan. 
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna. 
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus. 
- * Vestibulum commodo. Ut rhoncus gravida arcu. 
+ * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 package jmnet.moka.core.tps.mvc.articlepage.service;
@@ -31,7 +31,8 @@ public interface ArticlePageService {
 
     /**
      * 기사페이지 목록조회
-     * @param search 검색조건
+     *
+     * @param search   검색조건
      * @param pageable 페이징
      * @return 기사페이지 목록
      */
@@ -39,6 +40,7 @@ public interface ArticlePageService {
 
     /**
      * 기사페이지 상세조회
+     *
      * @param artPageSeq 기사페이지 순번
      * @return 기사페이지
      */
@@ -46,16 +48,18 @@ public interface ArticlePageService {
 
     /**
      * 기사페이지 등록
+     *
      * @param articlePage 등록할 기사페이지 정보
-     * @return
-     * @throws IOException 입출력오류
+     * @return ArticlePage
+     * @throws IOException            입출력오류
      * @throws TemplateParseException 본문 문법오류
      */
     ArticlePage insertArticlePage(ArticlePage articlePage)
-        throws IOException, TemplateParseException;
+            throws IOException, TemplateParseException;
 
     /**
      * 관련기사페이지 목록조회(부모찾기)
+     *
      * @param search 검색조건
      * @return 기사페이지목록
      */
@@ -63,6 +67,7 @@ public interface ArticlePageService {
 
     /**
      * 관련기사페이지 건수
+     *
      * @param search 검색조건
      * @return 관련기사페이지 건수
      */
@@ -70,6 +75,7 @@ public interface ArticlePageService {
 
     /**
      * 해당 도메인의 기사페이지 건수(도메인 관련조사시 사용)
+     *
      * @param domainId 도메인아이디
      * @return 기사페이지 건수
      */
@@ -85,21 +91,33 @@ public interface ArticlePageService {
 
     /**
      * 히스토리 상세조회
-     * @param histSeq
-     * @return
+     *
+     * @param histSeq 이력 일련번호
+     * @return ArticlePageHist
      */
     Optional<ArticlePageHist> findArticlePageHistBySeq(Long histSeq);
 
     /**
      * 기사페이지 수정
+     *
      * @param articlePage 수정할 기사페이지
      * @return 수정된 기사페이지
      */
-    ArticlePage updateArticlePage(ArticlePage articlePage) throws Exception;
+    ArticlePage updateArticlePage(ArticlePage articlePage)
+            throws Exception;
 
     /**
      * 기사페이지
-     * @param articlePage
+     *
+     * @param articlePage ArticlePage
      */
     void deleteArticlePage(ArticlePage articlePage);
+
+    /**
+     * 같은 기사페이지 일련번호에 기사 타입이 중복으로 있는지 체크
+     *
+     * @param domainId 도메인ID
+     * @param artType  기사 유형
+     */
+    boolean existArtType(String domainId, String artType);
 }

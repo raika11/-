@@ -9,11 +9,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * Description: 기사정보
+ * <pre>
+ * ArticleBasicRepository
+ * Project : moka
+ * Package : jmnet.moka.core.tps.mvc.article.repository
+ * ClassName : ArticleBasicRepository
+ * Created : 2020-12-01 ince
+ * </pre>
  *
- * @author ssc
- * @since 2020-11-12
+ * @author ince
+ * @since 2020-12-01 13:07
  */
 @Repository
-public interface ArticleBasicRepository extends JpaRepository<ArticleBasic, Long> {
+public interface ArticleBasicRepository extends JpaRepository<ArticleBasic, Long>, ArticleBasicRepositorySupport {
+
 }

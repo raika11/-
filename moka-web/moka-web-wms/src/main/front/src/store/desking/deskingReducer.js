@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './deskingAction';
-import { PAGESIZE_OPTIONS, HIST_SAVE } from '@/constants';
+import { PAGESIZE_OPTIONS, HIST_PUBLISH } from '@/constants';
 
 /**
  * initialState
@@ -40,13 +40,14 @@ export const initialState = {
     history: {
         total: 0,
         search: {
+            areaSeq: null,
             page: 0,
             size: PAGESIZE_OPTIONS[0],
             sort: 'seq,desc',
             componentSeq: null,
             componentHistorySeq: null,
             regDt: null,
-            status: HIST_SAVE,
+            status: HIST_PUBLISH,
             searchType: 'all', // all/regId/regNm
             keyword: '',
         },
@@ -74,6 +75,27 @@ export default handleActions(
                 draft.error = initialState.error;
             });
         },
+        /**
+         * 히스토리 데이터 초기화
+         */
+        [act.CLEAR_HISTORY_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.history.componentWorkHistory.list = initialState.history.componentWorkHistory.list;
+                draft.history.deskingWorkHistory.list = initialState.history.deskingWorkHistory.list;
+                draft.error = initialState.error;
+            });
+        },
+        /**
+         * 선택된 컴포넌트 데이터 초기화
+         */
+        [act.CLEAR_SELECTED_COMPONENT]: (state) => {
+            return produce(state, (draft) => {
+                draft.history.selectedComponent = initialState.history.selectedComponent;
+            });
+        },
+        /**
+         * 검색 옵션 변경
+         */
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.history.search = payload;
@@ -126,7 +148,7 @@ export default handleActions(
         /**
          * 컴포넌트 워크 조회
          */
-        [act.MOVE_DESKING_WORK_LIST_SUCCESS]: (state, { payload: { body, status } }) => {
+        [act.POST_DESKING_WORK_LIST_MOVE_SUCCESS]: (state, { payload: { body, status } }) => {
             return produce(state, (draft) => {
                 // source
                 let sourceIdx = draft.list.findIndex((l) => l.seq === body.source.seq);
@@ -142,7 +164,7 @@ export default handleActions(
                 draft.workStatus[body.target.seq] = status;
             });
         },
-        [act.MOVE_DESKING_WORK_LIST_FAILURE]: (state, { payload: componentError }) => {
+        [act.POST_DESKING_WORK_LIST_MOVE_FAILURE]: (state, { payload: componentError }) => {
             return produce(state, (draft) => {
                 if (draft.selectedComponent.seq) {
                     let idx = draft.list.findIndex((l) => l.seq === draft.selectedComponent.seq);
@@ -161,7 +183,7 @@ export default handleActions(
             });
         },
         /**
-         * 히스토리
+         * 히스토리 조회
          */
         [act.GET_COMPONENT_WORK_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {

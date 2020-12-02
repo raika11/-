@@ -36,6 +36,7 @@ import jmnet.moka.core.tps.mvc.editform.dto.EditFormDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormImportDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldGroupDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
@@ -292,7 +293,7 @@ public class EditFormRestController extends AbstractCommonController {
     public ResponseEntity<?> getEditFormPartHistoryList(
             @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
-            @SearchParam EditFormSearchDTO search) {
+            @SearchParam EditFormPartHistSearchDTO search) {
 
         ResultListDTO<EditFormPartHistDTO> resultListMessage = new ResultListDTO<>();
 

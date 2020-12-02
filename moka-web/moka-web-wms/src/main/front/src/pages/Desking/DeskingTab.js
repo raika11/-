@@ -9,7 +9,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
     }));
 
     // state
-    const [, setActiveTabIdx] = useState(0);
+    const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     // 순서 반대로
     return (
@@ -24,15 +24,15 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                     /**
                      * 기사보기
                      */
-                    <DeskingArticleTab componentAgGridInstances={componentAgGridInstances} componentList={componentList} />,
+                    <DeskingArticleTab componentAgGridInstances={componentAgGridInstances} componentList={componentList} show={activeTabIdx === 0} />,
                     /**
                      * 미리보기
                      */
-                    <ComponentWorkPreview />,
+                    <ComponentWorkPreview show={activeTabIdx === 1} />,
                     /**
                      * 히스토리
                      */
-                    <DeskingHistoryList />,
+                    <DeskingHistoryList show={activeTabIdx === 2} />,
                 ]}
                 tabNavWidth={48}
                 tabNavPosition="right"

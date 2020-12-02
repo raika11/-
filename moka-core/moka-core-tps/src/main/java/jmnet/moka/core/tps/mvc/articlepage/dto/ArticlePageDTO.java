@@ -72,6 +72,11 @@ public class ArticlePageDTO implements Serializable {
     private String artType;
 
     /**
+     * 미리보기용 기사ID, 상세조회시에만 사용
+     */
+    private Long previewTotalId;
+
+    /**
      * 기사페이지본문
      */
     @Builder.Default

@@ -25,10 +25,18 @@ public interface ArticleService {
     Optional<ArticleBasic> findArticleBasicById(Long totalId);
 
     /**
+     * 기사 유형으로 최신 기사의 totalId 조회
+     *
+     * @param artType 기사 유형
+     * @return totalId
+     */
+    Long findLastestArticleBasicByArtType(String artType);
+
+    /**
      * 매체목록 조회
      *
      * @param deskingSourceList 조회할 매체아이디 목록
-     * @return
+     * @return ArticleSource 목록
      */
     List<ArticleSource> findAllArticleSource(String[] deskingSourceList);
 

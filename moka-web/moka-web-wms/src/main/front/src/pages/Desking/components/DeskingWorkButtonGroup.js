@@ -1,13 +1,14 @@
-import React, { useState, forwardRef } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect, forwardRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
+import { HIST_SAVE, HIST_PUBLISH } from '@/constants';
 import toast from '@utils/toastUtil';
-import { putComponentWork, postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
+import { initialState, changeSearchOption, putComponentWork, postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 import ReserveComponentWork from './ReserveComponentWork';
 import HtmlEditModal from '../modals/HtmlEditModal';
@@ -34,8 +35,10 @@ const customToggle = forwardRef(({ onClick, id }, ref) => {
 const DeskingWorkButtonGroup = (props) => {
     const { component, agGridIndex, componentAgGridInstances, workStatus } = props;
     const dispatch = useDispatch();
+    const { search: storeSearch } = useSelector((store) => store.desking.history.search);
 
     // state
+    const [search, setSearch] = useState(initialState.history.search);
     const [title, setTitle] = useState('');
     const [selectedTemplate, setSelectedTemplate] = useState(null);
 
@@ -46,6 +49,10 @@ const DeskingWorkButtonGroup = (props) => {
     const [addSpaceModal, setAddSpaceModal] = useState(false);
     const [registerModal, setRegisterModal] = useState(false);
     const [listNumberModal, setListNumberModal] = useState(false);
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     /**
      * 전송
@@ -61,6 +68,7 @@ const DeskingWorkButtonGroup = (props) => {
                 }
             },
         };
+        dispatch(changeSearchOption({ ...search, status: HIST_PUBLISH }));
         dispatch(postPublishComponentWork(option));
     };
 
@@ -78,6 +86,7 @@ const DeskingWorkButtonGroup = (props) => {
                 }
             },
         };
+        dispatch(changeSearchOption({ ...search, status: HIST_SAVE }));
         dispatch(postSaveComponentWork(option));
     };
 

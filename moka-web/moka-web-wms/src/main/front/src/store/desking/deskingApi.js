@@ -84,7 +84,7 @@ export const postDeskingWork = ({ componentWorkSeq, datasetSeq, deskingWork }) =
 };
 
 // 컴포넌트 워크의 편집기사 이동 => payload
-export const moveDeskingWorkList = ({ componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list }) => {
+export const postDeskingWorkListMove = ({ componentWorkSeq, datasetSeq, srcComponentWorkSeq, srcDatasetSeq, list }) => {
     return instance
         .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}/move?srcComponentWorkSeq=${srcComponentWorkSeq}&srcDatasetSeq=${srcDatasetSeq}`, list, {
             headers: {
@@ -96,18 +96,18 @@ export const moveDeskingWorkList = ({ componentWorkSeq, datasetSeq, srcComponent
         });
 };
 
-// 컴포넌트 워크의 편집기사 정렬 변경 => payload
-// export const putDeskingWorkPriority = ({ componentWork }) => {
-//     return instance
-//         .put(`/api/desking/components/${componentWork.seq}/contents/${componentWork.datasetSeq}/priority`, componentWork, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         })
-//         .catch((err) => {
-//             throw err;
-//         });
-// };
+// 컴포넌트 워크의 기사목록 정렬(컴포넌트 내 정렬) => payload
+export const putDeskingWorkListSort = ({ componentWorkSeq, datasetSeq, list }) => {
+    return instance
+        .put(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}/sort`, list, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
 
 // 컴포넌트 워크 임시저장
 export const postSaveComponentWork = ({ componentWorkSeq }) => {
@@ -161,7 +161,7 @@ export const getDeskingHistory = (componentHistSeq) => {
 
 // 히스토리를 편집기사 워크로 등록
 export const putDeskingWorkHistory = ({ componentWorkSeq, componentHistSeq }) => {
-    return instance.get(`/api/desking/components/${componentWorkSeq}/history/${componentHistSeq}`).catch((err) => {
+    return instance.put(`/api/desking/components/${componentWorkSeq}/history/${componentHistSeq}`).catch((err) => {
         throw err;
     });
 };

@@ -217,11 +217,11 @@ const DeskingWorkEditModal = (props) => {
                         <div>
                             <MokaImageInput width={150} height={150} img={deskingData.thumbFileName} alt="기사 사진" name="thumbFileName" />
                             <div className="mt-2 px-1 d-flex justify-content-between">
-                                <Button variant="outline-neutral" size="sm">
-                                    편집
-                                </Button>
                                 <Button variant="outline-neutral" size="sm" onClick={() => setShowModal(true)}>
                                     대표사진변경
+                                </Button>
+                                <Button variant="outline-neutral" size="sm">
+                                    편집
                                 </Button>
                             </div>
                         </div>

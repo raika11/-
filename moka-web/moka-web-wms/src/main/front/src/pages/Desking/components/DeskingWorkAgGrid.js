@@ -116,14 +116,196 @@ const DeskingWorkAgGrid = (props) => {
     }, []);
 
     /**
+     * 주기사간 이동(주기사의 관련기사 포함 이동)
+     * @param {*} api agGrid api
+     * @param {*} displayedRows 기사목록
+     * @param {*} overNode target기사
+     */
+    const mainToMain = (api, displayedRows, overNode) => {
+        // selected 정렬
+        let selected = api.getSelectedNodes().sort(function (a, b) {
+            if (a.data.contentOrd === b.data.contentOrd) {
+                if (a.data.relOrd === b.data.relOrd) {
+                    return a.data.rel ? 1 : -1;
+                } else {
+                    return a.data.relOrd - b.data.relOrd;
+                }
+            } else {
+                return a.data.contentOrd - b.data.contentOrd;
+            }
+        });
+
+        // selected 순번 수정
+        let contentOrd = overNode.data.contentOrd;
+        selected.forEach((node) => {
+            if (!node.data.rel) {
+                contentOrd++;
+            }
+            displayedRows.forEach((a) => {
+                if (a.contentId === node.data.contentId) {
+                    a.contentOrd = contentOrd;
+                }
+            });
+        });
+
+        // 겹치는 순번에서 selected를 우선으로 정렬
+        let selectedSeqs = selected.map((node) => node.data.contentId);
+        let result = displayedRows.sort(function (a, b) {
+            if (a.contentOrd === b.contentOrd) {
+                if (a.relOrd === b.relOrd) {
+                    if (a.rel === b.rel) {
+                        if (selectedSeqs.includes(a.contentId) && selectedSeqs.includes(b.contentId)) {
+                            return a.rel ? 1 : -1;
+                        } else if (selectedSeqs.includes(a.contentId)) {
+                            return -1;
+                        } else if (selectedSeqs.includes(b.contentId)) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    } else {
+                        if (selectedSeqs.includes(a.contentId) && selectedSeqs.includes(b.contentId)) {
+                            return a.rel ? 1 : -1;
+                        } else if (selectedSeqs.includes(a.contentId)) {
+                            return -1;
+                        } else if (selectedSeqs.includes(b.contentId)) {
+                            return 1;
+                        } else {
+                            return a.rel ? 1 : -1;
+                        }
+                    }
+                } else {
+                    if (selectedSeqs.includes(a.contentId) && selectedSeqs.includes(b.contentId)) {
+                        return a.rel ? 1 : -1;
+                    } else if (selectedSeqs.includes(a.contentId)) {
+                        return -1;
+                    } else if (selectedSeqs.includes(b.contentId)) {
+                        return 1;
+                    } else {
+                        return a.relOrd - b.relOrd;
+                    }
+                }
+            } else {
+                return a.contentOrd - b.contentOrd;
+            }
+        });
+
+        // 순번 1부터 지정
+        contentOrd = 0;
+        result.forEach((node) => {
+            if (!node.rel) {
+                contentOrd++;
+            }
+            node.contentOrd = contentOrd;
+        });
+
+        return result;
+    };
+
+    /**
+     * 패밀리내에서 관련기사간 이동
+     * @param {} draggingNode 이동하는 기사
+     * @param {*} displayedRows 기사목록
+     * @param {*} overNode target기사
+     */
+    const relToRel = (draggingNode, displayedRows, overNode) => {
+        // overNode기준으로 source의 순번을 조정
+        let relOrd = overNode.data.relOrd + 1;
+        displayedRows.forEach((a) => {
+            if (a.parentContentId === draggingNode.data.parentContentId && a.contentId === draggingNode.data.contentId) {
+                a.relOrd = relOrd;
+            }
+        });
+
+        // 겹치는 순번에서 draggingNode를 우선으로 정렬
+        let result = displayedRows.sort(function (a, b) {
+            if (a.contentOrd === b.contentOrd) {
+                if (a.relOrd === b.relOrd) {
+                    if (draggingNode.data.contentId === b.contentId) {
+                        return 1;
+                    } else if (draggingNode.data.contentId === a.contentId) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    return a.relOrd - b.relOrd;
+                }
+            } else {
+                return a.contentOrd - b.contentOrd;
+            }
+        });
+
+        // 순번 1부터 지정
+        relOrd = 1;
+        result.forEach((node) => {
+            if (node.rel) {
+                if (node.parentContentId === draggingNode.data.parentContentId) {
+                    node.relOrd = relOrd;
+                    relOrd++;
+                }
+            }
+        });
+
+        return result;
+    };
+
+    /**
+     * 패밀리내에서 관련기사를 주기사로 이동
+     * @param {} draggingNode 이동하는 기사
+     * @param {*} displayedRows 기사목록
+     * @param {*} overNode target기사
+     */
+    const relToMain = (draggingNode, displayedRows, overNode) => {
+        let moveForward = draggingNode.childIndex > overNode.childIndex;
+        let forwardNode = moveForward ? overNode : draggingNode;
+        let backwardNode = moveForward ? draggingNode : overNode;
+
+        let firstArr = displayedRows.splice(0, forwardNode.childIndex);
+        let secondArr = displayedRows.splice(0, 1); // forwardNode(주기사 1건)
+        let thirdArr = displayedRows.splice(0, backwardNode.childIndex - firstArr.length - secondArr.length); // 가운데 관련기사
+        let fourthArr = displayedRows.splice(0, 1); // backwardNode(교체하는 관련기사 1건)
+        let fifthArr = displayedRows.splice(0, forwardNode.data.relSeqs.length - thirdArr.length - fourthArr.length); // 남은 관련기사
+        let lastArr = displayedRows;
+
+        secondArr = secondArr.map((node) => ({
+            ...node,
+            parentContentId: backwardNode.data.contentId,
+            rel: true,
+            relOrd: backwardNode.data.relOrd,
+            relSeqs: null,
+        }));
+        thirdArr = thirdArr.map((node) => ({
+            ...node,
+            parentContentId: backwardNode.data.contentId,
+        }));
+        fifthArr = fifthArr.map((node) => ({
+            ...node,
+            parentContentId: backwardNode.data.contentId,
+        }));
+        fourthArr = fourthArr.map((node) => ({
+            ...node,
+            parentContentId: null,
+            rel: false,
+            relOrd: 1,
+            contentOrd: forwardNode.data.contentOrd,
+            relSeqs: secondArr
+                .concat(thirdArr)
+                .concat(fifthArr)
+                .map((a) => a.seq),
+        }));
+
+        // 순서 변경 (2 <-> 4)
+        let result = firstArr.concat(fourthArr).concat(thirdArr).concat(secondArr).concat(fifthArr).concat(lastArr);
+
+        return result;
+    };
+
+    /**
      * 관련기사 추가
      */
     const appendRelRows = useCallback(
         (api, type, draggingNode, overNode) => {
-            let moveForward = draggingNode.childIndex > overNode.childIndex;
-            let forwardNode = moveForward ? overNode : draggingNode;
-            let backwardNode = moveForward ? draggingNode : overNode;
-
             // display 기준으로 새로운 rows생성
             let displayedRows = [],
                 result = [];
@@ -132,98 +314,11 @@ const DeskingWorkAgGrid = (props) => {
             }
 
             if (type === 'mainToMain') {
-                let selected = api.getSelectedNodes();
-                let contentOrd = overNode.data.contentOrd - 1;
-                for (let i = 0; i < selected.length; i++) {
-                    if (!selected[i].data.rel) {
-                        contentOrd++;
-                    }
-                    displayedRows.forEach((a) => {
-                        if (a.contentId === selected[i].data.contentId) {
-                            a.contentOrd = contentOrd;
-                        }
-                    });
-                }
-
-                // 정렬
-                result = displayedRows.sort(function (a, b) {
-                    if (a.contentOrd === b.contentOrd) {
-                        if (selected.map((node) => node.data.contentId).includes(b.contentId)) {
-                            return -1;
-                        } else {
-                            return a.relOrd - b.relOrd;
-                        }
-                    } else {
-                        return a.contentOrd - b.contentOrd;
-                    }
-                });
-
-                // 순번 재지정
-                contentOrd = 0;
-                result.forEach((node) => {
-                    if (!node.rel) {
-                        contentOrd++;
-                    }
-                    node.contentOrd = contentOrd;
-                });
+                result = mainToMain(api, displayedRows, overNode);
             } else if (type === 'relToRel') {
-                // draggingNode와 overNode의 relOrd 변경
-                let firstArr = displayedRows.splice(0, forwardNode.childIndex);
-                let secondArr = displayedRows.splice(0, 1); // forwardNode + 관련기사
-                let thirdArr = displayedRows.splice(0, backwardNode.childIndex - firstArr.length - secondArr.length);
-                let fourthArr = displayedRows.splice(0, 1); // backwardNode + 관련기사
-                let lastArr = displayedRows;
-
-                secondArr = secondArr.map((node) => ({
-                    ...node,
-                    relOrd: backwardNode.data.relOrd,
-                    relOrdEx: `0${backwardNode.data.relOrd}`.substr(-2),
-                }));
-                fourthArr = fourthArr.map((node) => ({
-                    ...node,
-                    relOrd: forwardNode.data.relOrd,
-                    relOrdEx: `0${forwardNode.data.relOrd}`.substr(-2),
-                }));
-
-                // 순서 변경 (2번이 4번 자리로 감)
-                result = firstArr.concat(thirdArr).concat(fourthArr).concat(secondArr).concat(lastArr);
+                result = relToRel(draggingNode, displayedRows, overNode);
             } else if (type === 'relToMain') {
-                let firstArr = displayedRows.splice(0, forwardNode.childIndex);
-                let secondArr = displayedRows.splice(0, 1); // forwardNode(주기사 1건)
-                let thirdArr = displayedRows.splice(0, backwardNode.childIndex - firstArr.length - secondArr.length); // 가운데 관련기사
-                let fourthArr = displayedRows.splice(0, 1); // backwardNode(교체하는 관련기사 1건)
-                let fifthArr = displayedRows.splice(0, forwardNode.data.relSeqs.length - thirdArr.length - fourthArr.length); // 남은 관련기사
-                let lastArr = displayedRows;
-
-                secondArr = secondArr.map((node) => ({
-                    ...node,
-                    parentContentId: backwardNode.data.contentId,
-                    rel: true,
-                    relOrd: backwardNode.data.relOrd,
-                    relSeqs: null,
-                }));
-                thirdArr = thirdArr.map((node) => ({
-                    ...node,
-                    parentContentId: backwardNode.data.contentId,
-                }));
-                fifthArr = fifthArr.map((node) => ({
-                    ...node,
-                    parentContentId: backwardNode.data.contentId,
-                }));
-                fourthArr = fourthArr.map((node) => ({
-                    ...node,
-                    parentContentId: null,
-                    rel: false,
-                    relOrd: 1,
-                    contentOrd: forwardNode.data.contentOrd,
-                    relSeqs: secondArr
-                        .concat(thirdArr)
-                        .concat(fifthArr)
-                        .map((a) => a.seq),
-                }));
-
-                // 순서 변경 (2 <-> 4)
-                result = firstArr.concat(fourthArr).concat(thirdArr).concat(secondArr).concat(fifthArr).concat(lastArr);
+                result = relToMain(draggingNode, displayedRows, overNode);
             }
 
             // api.setRowData([]);

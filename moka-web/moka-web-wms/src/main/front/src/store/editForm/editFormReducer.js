@@ -21,6 +21,14 @@ export const initialState = {
         size: PAGESIZE_OPTIONS[0],
         sort: 'formSeq,desc',
     },
+    partSearch: {
+        page: 0,
+        size: PAGESIZE_OPTIONS[0],
+        formSeq: null,
+        partSeq: null,
+        keyword: '',
+        sort: 'partSeq,desc',
+    },
     historyTotal: 0,
     historyList: [],
     editForm: {},
@@ -36,8 +44,8 @@ export const initialState = {
     searchTypeList: [
         { id: 'all', name: '전체' },
         { id: 'formName', name: '폼명' },
-        { id: 'partId', name: '파트ID' },
-        { id: 'partName', name: '파트명' },
+        { id: 'partSeq', name: '파트ID' },
+        { id: 'partTitle', name: '파트제목' },
     ],
 };
 

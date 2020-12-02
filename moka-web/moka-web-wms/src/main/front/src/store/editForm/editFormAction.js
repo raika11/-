@@ -25,8 +25,8 @@ export const getEditForm = createAction(GET_EDIT_FORM, (partId) => partId);
 /**
  * 데이터 조회 (모달에서 쓰는 일회용 데이터)
  */
-export const GET_EDIT_FORM_LIST_MODAL = 'editForm/GET_EDIT_FORM_LIST_MODAL';
-export const getEditFormListModal = createAction(GET_EDIT_FORM_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+export const GET_EDIT_FORM_PART_LIST_MODAL = 'editForm/GET_EDIT_FORM_PART_LIST_MODAL';
+export const getEditFormPartListModal = createAction(GET_EDIT_FORM_PART_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
 
 /**
  * 데이터 변경

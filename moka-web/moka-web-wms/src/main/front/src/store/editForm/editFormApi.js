@@ -1,11 +1,18 @@
 import qs from 'qs';
 import instance from '../commons/axios';
 import common from '@utils/commonUtil';
-import { objectToFormData } from '@/utils/convertUtil';
+// import { objectToFormData } from '@/utils/convertUtil';
 
 // Edit Form목록 조회
 export const getEditFormList = ({ search }) => {
     return instance.get(`/api/edit-forms`).catch((err) => {
+        throw err;
+    });
+};
+
+// part 목록 조회
+export const getEditFormPartList = ({ search }) => {
+    return instance.get(`/api/edit-forms/parts?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };

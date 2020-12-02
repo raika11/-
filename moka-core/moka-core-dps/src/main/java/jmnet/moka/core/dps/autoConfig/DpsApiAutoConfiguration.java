@@ -183,8 +183,16 @@ public class DpsApiAutoConfiguration {
 		return new MenuParser(resource);
 	}
 
-	@Bean(name="pcCategoryParser")
-	public CategoryParser pcCategoryParser()
+	@Bean(name="mobileMenuParser")
+	public MenuParser mobileMenuParser()
+			throws ParserConfigurationException, XPathExpressionException, IOException {
+		ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
+		Resource resource = patternResolver.getResource("classpath:/Menu_mobile.xml");
+		return new MenuParser(resource);
+	}
+
+	@Bean(name="categoryParser")
+	public CategoryParser categoryParser()
 			throws ParserConfigurationException, XPathExpressionException, IOException {
 		ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
 		Resource resource = patternResolver.getResource("classpath:/CategoryDefinition.xml");

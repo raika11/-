@@ -1,8 +1,8 @@
 package jmnet.moka.core.dps.api.model;
 
-import jmnet.moka.core.dps.api.handler.EvalRequestHandler;
+import jmnet.moka.core.dps.api.handler.ScriptRequestHandler;
 
-public class EvalRequest implements Request {
+public class ScriptRequest implements Request {
 
 	private String type;
 	private boolean async;
@@ -10,7 +10,7 @@ public class EvalRequest implements Request {
 	private String scriptContent;
 	
 	
-	public EvalRequest(String type, boolean async, String resultName, String scriptContent) {
+	public ScriptRequest(String type, boolean async, String resultName, String scriptContent) {
 		this.type = type;
 		this.async = async;
 		this.resultName = resultName;
@@ -35,7 +35,7 @@ public class EvalRequest implements Request {
 	
 	@Override
 	public Class<?> getHandlerClass() {
-		return EvalRequestHandler.class;
+		return ScriptRequestHandler.class;
 	}
 	
 	public String toString() {

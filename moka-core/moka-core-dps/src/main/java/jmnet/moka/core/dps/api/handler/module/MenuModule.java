@@ -32,10 +32,10 @@ public class MenuModule implements ModuleInterface {
     private final static String GNB_ROOT_MENU = "NewsGroup";
     @Autowired
     @Qualifier("pcMenuParser")
-    private MenuParser menuParser;
+    private MenuParser pcMenuParser;
 
     @Autowired
-    @Qualifier("pcCategoryParser")
+    @Qualifier("categoryParser")
     private CategoryParser categoryParser;
 
     private String[][] megaMenuKeys = {{"NewsGroup"}, {"SectionGroup"}, {"NewsLetter", "NewsDigest", "Issue", "Trend", "Reporter"}, {"User"}};
@@ -53,7 +53,7 @@ public class MenuModule implements ModuleInterface {
     @Override
     public Object invoke(ApiContext apiContext)
             throws Exception {
-        return null;
+        return this.pcMenuParser.getRootMenu();
     }
 
     public Object getMenuByCategory(ApiContext apiContext) throws Exception {
@@ -84,7 +84,7 @@ public class MenuModule implements ModuleInterface {
     }
 
     public  Map<String, Object> getSearchParmeterByCategory(String categoryKey) throws Exception {
-        Menu foundMenu = findMenuByCategory(this.menuParser.getRootMenu(), categoryKey);
+        Menu foundMenu = findMenuByCategory(this.pcMenuParser.getRootMenu(), categoryKey);
         return foundMenu != null ? foundMenu.getSearchParamMap() : null;
     }
 
@@ -107,7 +107,7 @@ public class MenuModule implements ModuleInterface {
     }
 
     private Object getSectionMenu(String categoryKey) {
-        Menu foundMenu = findMenuByCategory(this.menuParser.getRootMenu(), categoryKey);
+        Menu foundMenu = findMenuByCategory(this.pcMenuParser.getRootMenu(), categoryKey);
         if (foundMenu == null) {
             return MenuParser.EMPTY_CHILDREN;
         }
@@ -148,7 +148,7 @@ public class MenuModule implements ModuleInterface {
     }
 
     private void collectMegaMap(List<Map<String, Object>> resultList, String key) {
-        Menu rootMenu = this.menuParser.getRootMenu();
+        Menu rootMenu = this.pcMenuParser.getRootMenu();
         Menu foundMenu = findMenu(rootMenu, key);
         if (foundMenu == null) {
             return;
@@ -193,7 +193,7 @@ public class MenuModule implements ModuleInterface {
     }
 
     public List<Menu> getChildrenMenu(String parentKey) {
-        Menu rootMenu = this.menuParser.getRootMenu();
+        Menu rootMenu = this.pcMenuParser.getRootMenu();
         Menu foundMenu = findMenu(rootMenu, parentKey);
         if (foundMenu != null) {
             return foundMenu.getChildren();

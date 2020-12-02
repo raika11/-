@@ -1,6 +1,7 @@
 package jmnet.moka.core.dps.api.handler;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.core.dps.api.ApiCacheHelper;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -230,26 +232,30 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
 
             // ACL, Cross Origin 적용
             String referer = request.getHeader("Referer");
-            String accessControllAllowOrigin =  getAccessControllAllowOrigin(referer,apiContext);
-            if ( !isPermittedIp(request,apiContext) &&  accessControllAllowOrigin == null) {
+            String accessControllAllowOrigin =  null;
+            if ( !isPermittedIp(request,apiContext) && referer == null) {
                 ApiResult errorResult = ApiResult.createApiErrorResult(new ApiException("Access Denied",
                         apiContext.getApiPath(), apiContext.getApiId()));
                 ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
-                                                 .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
-                                                 .body(errorResult);
-                return responseEntity;
+                                                                 .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
+                                                                 .body(errorResult);
+            } else {
+                accessControllAllowOrigin =  getAccessControllAllowOrigin(referer,apiContext);
             }
 
-            ApiResult apiResult = processApi(apiContext);
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
             if (accessControllAllowOrigin != null ) {
                 responseHeaders.set("Access-Control-Allow-Origin", accessControllAllowOrigin);
             }
-//            ResponseEntity<?> responseEntity = ResponseEntity.ok()
-//                    .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
-//                    .body(apiResult);
-            ResponseEntity<?> responseEntity = ResponseEntity.ok().headers(responseHeaders).body(apiResult);
+
+            ApiResult apiResult = processApi(apiContext);
+            ResponseEntity<?> responseEntity = null;
+            if ( apiContext.getApi().getContentType() != null) {
+                responseHeaders.set("Content-Type",apiContext.getApi().getContentType());
+                responseEntity = ResponseEntity.ok().headers(responseHeaders).body(apiResult.get(ApiResult.MAIN_DATA));
+            } else {
+                responseEntity = ResponseEntity.ok().headers(responseHeaders).body(apiResult);
+            }
             return responseEntity;
         } catch (ParameterException | ClassNotFoundException e) {
             logger.error("api Request:{}", e.toString(), e);

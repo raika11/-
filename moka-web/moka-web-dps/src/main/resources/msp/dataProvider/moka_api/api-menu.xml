@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <apiConfig>
+  <api id="menu.all" expire="5s">
+    <description>전체 메뉴정보를 반환한다.</description>
+    <parameter/>
+    <request type="module">jmnet.moka.core.dps.api.handler.module.MenuModule</request>
+    <keys/>
+  </api>
   <api id="menu.category" expire="5s">
     <description>카테고리에 해당하는 메뉴정보와 코드정보를 반환한다.</description>
     <parameter>
@@ -18,7 +24,22 @@
     <request type="module" methodName="getMenuByCodes">jmnet.moka.core.dps.api.handler.module.MenuModule</request>
     <keys/>
   </api>
-
+  <api id="menu.pc.js" contentType="application/javascript">
+    <description>메뉴정보를 js형태로 반환한다.</description>
+    <request type="script"><![CDATA[
+      var result = $arh.apiRequest("moka_api","menu.all", new("java.util.HashMap"));
+      var menuMap = new("java.util.HashMap");
+      menuMap.put("Menu",result.get("_DATA"));
+      return "var menu = " + $mapper.writeValueAsString(menuMap) + ";";
+      ]]>
+    </request>
+  </api>
+  <!--      var merger = new("jmnet.moka.common.template.merge.SimpleTemplateMerger");-->
+  <!--      var merger1 = $merger.getInstance();-->
+  <!--      var mergeContext = new("jmnet.moka.common.template.merge.MergeContext");-->
+  <!--      mergeContext.set("a",1);-->
+  <!--      var templateText = "<tems:case if=\"a==1\">1111</tems:case>";-->
+  <!--      merger.merge(templateText, mergeContext);-->
   <api id="category" expire="5s">
     <description>Category정보를 반환한다.</description>
     <parameter>

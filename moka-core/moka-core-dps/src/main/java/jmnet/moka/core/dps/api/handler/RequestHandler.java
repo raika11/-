@@ -1,5 +1,6 @@
 package jmnet.moka.core.dps.api.handler;
 
+import jmnet.moka.common.template.merge.SimpleTemplateMerger;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
 import jmnet.moka.common.ApiResult;
@@ -14,6 +15,7 @@ public interface RequestHandler{
     public static final String CONTEXT_ARH = "$arh";
     public static final String CONTEXT_API_CONTEXT = "$ac";
     public static final String CONTEXT_PARAM = "$param";
+    public static final String CONTEXT_MERGER = "$merger";
 
 	public ApiResult processRequest(ApiContext apiContext);
 	public void processAsyncRequest(AsyncRequestContext asyncRequestContext);

@@ -1,0 +1,2078 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<MenuConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Menu IsDummy="true">
+    <Children>
+      <Menu Key="TodayNews" Display="추천뉴스" IsDummy="true">
+        <Children>
+          <Menu Key="TodayNews" Display="추천뉴스">
+            <Url Controller="Section" Action="TodayNews" />
+            <PartialUrl Controller="Section" Action="TodayNews">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+          </Menu>
+        </Children>
+      </Menu>
+
+      <Menu Key="RealTimeNews" Display="실시간 뉴스" IsDummy="true">
+        <Children>
+          <Menu Key="RealTimeNews" Display="실시간 뉴스">
+            <Url Controller="Section" Action="RealTimeNews" />
+            <PartialUrl Controller="Section" Action="RealTimeNews">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+          </Menu>
+        </Children>
+      </Menu>
+
+      <Menu Key="VisualNews" Display="홈" IsDummy="true">
+        <MetaInfo>
+          <Title></Title>
+          <Description>
+            <![CDATA[현장의 진실을 중앙에 두다 - 대한민국 No.1 종합 일간지 중앙일보]]>
+          </Description>
+          <Keywords>
+            <![CDATA[ 중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 정치, 경제, 오피니언, 사회, 국제, 문화, 스포츠, 스타기자, 뉴스레터, news, newspaper, south Korea, korea]]>
+          </Keywords>
+        </MetaInfo>
+        <!-- <Children>
+          <Menu Key="VisualNews" Display="홈 뉴스">
+            <Url Controller="Section" Action="VisualNews" />
+            <PartialUrl Controller="Section" Action="VisualNews">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+          </Menu>
+        </Children> -->
+      </Menu>
+
+      <Menu Key="NewsGroup" Display="뉴스" IsDummy="true">
+        <Children>
+          <Menu Key="Rio2016" Display="리우 2016" IsShowMegaMenu="false">
+            <Section Type="Default" IsMainNews="false">
+              <CategoryKeys>
+                <string>Rio2016</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Rio2016" Action="Index" />
+            <PartialUrl Controller="Rio2016" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+          </Menu>
+
+					<Menu Key="PreElection2017" Display="대통령 후보 경선" IsShowMegaMenu="false">
+						<Section Type="Default" IsMainNews="false">
+							<CategoryKeys>
+								<string>PreElection2017</string>
+								<string>TheMinjoo</string>
+								<string>LibertyKorea</string>
+								<string>People21</string>
+								<string>Bareun</string>
+							</CategoryKeys>
+						</Section>
+						<Url Controller="PreElection2017" Action="Index" />
+						<PartialUrl Controller="PreElection2017" Action="Index">
+							<Parameters>
+								<Parameter Name="ispartial" Value="true" />
+							</Parameters>
+						</PartialUrl>
+						<Children>
+							<Menu Key="TheMinjoo" Display="더민주당">
+								<Url Controller="PreElection2017" Action="TheMinjoo" />
+							</Menu>
+							<Menu Key="LibertyKorea" Display="자유한국당">
+								<Url Controller="PreElection2017" Action="LibertyKorea" />
+							</Menu>
+							<Menu Key="People21" Display="국민의당">
+								<Url Controller="PreElection2017" Action="People21" />
+							</Menu>
+							<Menu Key="Bareun" Display="바른정당">
+								<Url Controller="PreElection2017" Action="Bareun" />
+							</Menu>
+						</Children>
+					</Menu>
+
+					<Menu Key="SectionNews" Display="섹션주요뉴스">
+						<Url Controller="Section" Action="MainNews" />
+						<PartialUrl Controller="Section" Action="MainNews">
+							<Parameters>
+								<Parameter Name="ispartial" Value="true" />
+							</Parameters>
+						</PartialUrl>
+					</Menu>
+          
+          <Menu Key="Opinion" Display="오피니언" IsDisplayTitle="true">
+            <Section Type="Unique">
+              <CategoryKeys>
+                <string>Opinion</string>
+                <!--<string>EditorialColumn</string>
+                <string>SatiricalCartoon</string>-->
+              </CategoryKeys>
+            </Section>
+
+            <Url Controller="Opinion" Action="Index" />
+						<MetaInfo>
+							<Title></Title>
+							<Description></Description>
+							<Keywords></Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="Opinion" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+
+            <Children>
+              <Menu Key="Opinioncast" Display="오피니언 방송">
+                <Url Controller="Opinion" Action="Opinioncast" />
+
+              </Menu>
+
+              <Menu Key="EditorialColumn" Display="사설칼럼">
+                <List CategoryKey="EditorialColumn" Type="General"></List>
+                <Url Controller="Opinion" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="EditorialColumn" />
+                  </Parameters>
+                </Url>
+              </Menu>
+
+              <Menu Key="SatiricalCartoon" Display="만평">
+                <List CategoryKey="SatiricalCartoon" Type="Search" />
+                <Url Controller="Find" Action="List">
+                  <Parameters>
+                    <Parameter Name="Key" Value="SatiricalCartoon" />
+                    <Parameter Name="Keyword" Value="박용석 만평|김회룡 만평" />
+                    <Parameter Name="ListType" Value="Cartoon" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Journalist" Display="대기자">
+                <Url Controller="Opinion" Action="JournalistList" />
+              </Menu>
+							<Menu Key="eTextCenter" Display="e글중심">
+								<List CategoryKey="eTextCenter" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="eTextCenter" />
+										<Parameter Name="Keyword" Value="e글중심" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Politics" Display="정치" IsDisplayTitle="true">
+            <Section Type="NewestList" IsMainNews="true">
+              <CategoryKeys>
+                <string>Politics</string>
+                <string>NationalAssemblyParty</string>
+                <string>CheongWaDae</string>
+                <string>Diplomacy</string>
+                <string>NationalDefense</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Politics" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[정치 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 정치 뉴스 - 국회, 정당, 청와대, 외교, 국방, 북한, 여론조사]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 국회, 정당, 청와대, 외교, 국방, 북한, 여론조사, 밀착마크, 평양 오디세이]]>
+							</Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="Politics" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+            <Children>
+              <Menu Key="Newest" Display="실시간 기사" DisplayTitle="정치">
+                <List CategoryKey="Politics" Type="Newest" />
+                <Url Controller="Politics" Action="List" />
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Money" Display="경제" IsDisplayTitle="true">
+            <Section Type="NewestList" IsMainNews="true">
+              <CategoryKeys>
+								<string>Money</string>
+                <string>Finance</string>
+                <string>Labor</string>
+                <string>Science</string>
+                <string>Globaleconomy</string>
+								<string>Indusrty</string>
+							</CategoryKeys>
+            </Section>
+            <Url Controller="Money" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[경제 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 경제 뉴스 - 정책, 산업, 금융, 증권, 부동산, 과학, 미래, 고용, 노동]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 경제, 경제정책, 산업, 금융, 증권, 부동산, 미래, 과학, 글로벌, 고용, 노동, 부동산 노트, 라면로드, 김치로드, 더,오래, 경제 브리핑]]>
+							</Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="Money" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+            <Children>
+              <Menu Key="Newest" Display="실시간 기사" DisplayTitle="경제">
+                <List CategoryKey="Money" Type="Newest" />
+                <Url Controller="Money" Action="List" />
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Society" Display="사회" IsDisplayTitle="true">
+            <Section Type="NewestList" IsMainNews="true">
+              <CategoryKeys>
+                <string>Society</string>
+                <string>ProsecutionAndCourt</string>
+                <string>Education</string>
+                <string>Accident</string>
+                <string>WelfareLabor</string>
+								<string>Traffic</string>
+								<string>Environment</string>
+                <string>Health</string>
+                <string>RegionalGroups</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Society" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[사회 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 사회 뉴스 - 사건사고, 검찰, 법원, 교육, 복지, 교통, 지역, 건강]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 검찰, 법원, 교육, 사건사고, 복지, 교통, 환경, 지역, 건강, 미세먼지, 소년중앙, 강갑생, 신성식]]>
+							</Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="Society" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+            <Children>
+              <Menu Key="Newest" Display="실시간 기사" DisplayTitle="사회">
+                <List CategoryKey="Society" Type="Newest" />
+                <Url Controller="Society" Action="List" />
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="World" Display="국제" IsDisplayTitle="true">
+            <Section Type="NewestList" IsMainNews="true">
+              <CategoryKeys>
+                <string>World</string>
+                <string>America</string>
+                <string>China</string>
+                <string>Japan</string>
+                <string>Europe</string>
+                <string>WorldEtc</string>
+                <string>CorrespondentView</string>
+                <string>Report</string>
+                <string>OhMyGlobal</string>
+                <string>TopicWorld</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="World" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[국제 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 국제 뉴스 - 글로벌 뉴스, 토픽월드, 미국, 중국, 일본, 유럽]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 미국, 중국, 일본, 유럽, 기타, 토픽월드, world news, 채인택, 글로벌 줌업, 후후월드, 알쓸신세]]>
+							</Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="World" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+            <Children>
+              <Menu Key="Newest" Display="실시간 기사" DisplayTitle="국제">
+                <List CategoryKey="World" Type="Newest" />
+                <Url Controller="World" Action="List" />
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Culture" Display="문화" IsDisplayTitle="true">
+            <Section Type="Unique" SpecializedAction="Culture" IsMainNews="true">
+              <CategoryKeys>
+                <string>Culture</string>
+                <string>Book</string>
+                <string>Perfomance</string>
+                <string>Art</string>
+                <string>Classic</string>
+                <string>Song</string>
+                <string>Broadcast</string>
+                <string>Movie</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Culture" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[문화 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 문화 뉴스 - 책, 공연, 미술, 클래식, 가요, 영화, 방송]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 책, 공연, 미술, 클래식, 가요, 방송, 영화, ONE SHOT, BTS]]>
+							</Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="Culture" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+          </Menu>
+
+          <Menu Key="LifeStyle" Display="라이프" DisplayTitle="라이프" IsDisplayTitle="true">
+            <Section Type="Unique" SpecializedAction="LifeStyle">
+              <CategoryKeys>
+                <string>LifeStyle</string>
+                <string>Fashion</string>
+                <string>Taste</string>
+                <string>Luxury</string>
+                <string>Beauty</string>
+                <string>Living</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="LifeStyle" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[라이프 스타일 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 라이프 스타일 뉴스 - 패션, 맛, 뷰티, 리빙, 럭셔리]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 패션, 맛, 럭셔리, 뷰티, 리빙]]>
+							</Keywords>
+						</MetaInfo>
+          </Menu>
+
+          <Menu Key="Sports" Display="스포츠" IsDisplayTitle="true">
+            <Section Type="NewestList" IsMainNews="true">
+              <CategoryKeys>
+                <string>Sports</string>
+                <string>Baseball</string>
+                <string>OverseasBaseball</string>
+                <string>Soccer</string>
+                <string>OverseasSoccer</string>
+                <string>BasketballAndVolleyball</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Sports" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[스포츠 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 스포츠 뉴스 - 야구, 축구, 농구, 배구, 골프, 해외스포츠]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 야구, 해외야구, 축구, 해외축구, 농구, 배구, 골프]]>
+							</Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="Sports" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+            <Children>
+              <Menu Key="Newest" Display="실시간 기사" DisplayTitle="스포츠">
+                <List CategoryKey="Sports" Type="Newest" />
+                <Url Controller="Sports" Action="List" />
+              </Menu>
+            </Children>
+          </Menu>
+
+					<Menu Key="Travel" Display="여행레저" IsDisplayTitle="true">
+						<Section Type="Catalog" SpecializedAction="Travel">
+							<CategoryKeys>
+								<string>Travel</string>
+								<string>TravelDomestic</string>
+								<string>TravelOverseas</string>
+								<string>TravelNews</string>
+								<string>WeekEnd</string>
+								<string>TravelJ</string>
+								<string>UsaDiscover</string>
+							</CategoryKeys>
+						</Section>
+						<Url Controller="Travel" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[week&+ - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보 week& - 여행, 라이프, 주말, 힐링, 휴식, 레저, 즐길거리]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 국내여행, 해외여행, 여행, week&, J travel, 캐나다여행, 주말 나들이, 주말, 가족, 라이프, 힐링, 휴식, 레저, 즐길거리]]>
+							</Keywords>
+						</MetaInfo>
+						<PartialUrl Controller="Travel" Action="Index">
+							<Parameters>
+								<Parameter Name="ispartial" Value="true" />
+							</Parameters>
+						</PartialUrl>
+					</Menu>
+					
+          <Menu Key="Star" Display="연예" IsShowTopMenu="false" IsShowMegaMenu="false">
+            <Section Type="Combination" IsMainNews="false">
+              <CategoryKeys>
+                <string>Star</string>
+                <string>StarNewly</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Star" Action="Index" />
+            <PartialUrl Controller="Star" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+          </Menu>
+
+          <Menu Key="TodayPeople" Display="피플" IsMainNews="false" IsShowMegaMenu="false">
+            <Section Type="NewestList">
+              <CategoryKeys>
+                <string>TodayPeople</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="People" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[피플 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 피플 뉴스 - 사랑방, 인물, 인터뷰, 인사, 부음]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 사랑방, 인사, 부음, 인물, 인터뷰]]>
+							</Keywords>
+						</MetaInfo>
+            <Children>
+              <Menu Key="Room" Display="사랑방">
+                <List CategoryKey="TodayPeopleRoom" Type="General" />
+                <Url Controller="People" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Room" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Personnel" Display="인사">
+                <List CategoryKey="TodayPeoplePersonnel" Type="General" />
+                <Url Controller="People" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Personnel" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Death" Display="부음">
+                <List CategoryKey="TodayPeopleDeath" Type="General" />
+                <Url Controller="People" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Death" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Newest" Display="실시간 기사" DisplayTitle="피플">
+                <List CategoryKey="TodayPeople" Type="Newest" />
+                <Url Controller="People" Action="List" />
+              </Menu>
+            </Children>
+          </Menu>
+
+					<Menu Key="Pic" Display="포토 &#183; 영상" IsShowMegaMenu="false">
+            <Url Controller="Pic" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[포토·동영상 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 포토, 동영상 뉴스 - 현장 캐치, 사건사고, 화보, 현장취재, CCTV, 블랙박스]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 화보, 동영상, 사진, 현장취재, CCTV, 블랙박스, 포토라인]]>
+							</Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="Pic" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+            <Children>
+              <Menu Key="PhotoGallery" Display="포토">
+                <Url Controller="Pic" Action="PhotoGallery" />
+              </Menu>
+              <Menu Key="Vod" Display="영상">
+                <Url Controller="Pic" Action="Vod" />
+              </Menu>
+            </Children>
+          </Menu>
+        </Children>
+      </Menu>
+      
+			<Menu Key="SectionGroup" Display="섹션" IsDummy="true">
+				<Children>          
+					<Menu Key="Election2017" Display="대통령 선거" IsShowMegaMenu="false">
+					<Section Type="Unique" SpecializedAction="Election2017">
+						<CategoryKeys>
+						<string>Election2017</string>
+						</CategoryKeys>
+					</Section>
+					<Url Controller="Election2017" Action="Index" />
+					<Children>
+						<Menu Key="E2017Candidate" Display="후보자비교">
+							<List CategoryKey="Candidate" />
+							<Url Controller="Election2017" Action="Candidate" />
+						</Menu>
+						<Menu Key="E2017Policy" Display="정책공약">
+							<List CategoryKey="Election2017" />
+							<Url Controller="Election2017" Action="Policy" />
+						</Menu>
+						<Menu Key="E2017FactCheck" Display="팩트체크">
+							<List CategoryKey="Election2017" />
+							<Url Controller="Election2017" Action="FactCheck" />
+						</Menu>
+						<Menu Key="E2017LineNews" Display="한줄뉴스">
+							<List CategoryKey="Election2017" />
+							<Url Controller="Election2017" Action="LineNews" />
+						</Menu>
+						<Menu Key="E2017AndI" Display="선거와나">
+							<List CategoryKey="Election2017" />
+							<Url Controller="Election2017" Action="ElectionAndI" />
+						</Menu>
+						<Menu Key="E2017LiveFact" Display="라이브팩트체크">
+							<List CategoryKey="Election2017" />
+							<Url Controller="Election2017" Action="LiveFact" />
+						</Menu>
+						<Menu Key="E2017VoteResult" Display="대선결과">
+							<List CategoryKey="Election2017" />
+							<Url Controller="Election2017" Action="VoteResult" />
+						</Menu>
+						<Menu Key="E2017PresidentElect" Display="대통령">
+							<List CategoryKey="Election2017" />
+							<Url Controller="Election2017" Action="PresidentElect" />
+						</Menu>
+						<Menu Key="E2017NowPresidentElect" Display="대통령은 지금">
+							<List CategoryKey="Election2017" />
+							<Url Controller="Election2017" Action="NowPresidentElect" />
+						</Menu>
+					</Children>
+				</Menu>
+
+          <Menu Key="Sunday" Display="중앙SUNDAY">
+            <Section Type="Unique" SpecializedAction="Sunday">
+              <CategoryKeys>
+                <string>Sunday</string>
+                <string>SundayNews</string>
+                <string>SundayMoney</string>
+                <string>SundayOpinion</string>
+                <string>SundayMagazine</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Sunday" Action="Index"/>
+						<MetaInfo>
+							<Title>
+								<![CDATA[중앙SUNDAY - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[긴 호흡으로 읽을 수 있는 품격 있는 콘텐트 - 중앙SUNDAY]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙SUNDAY, 중앙선데이, 일요신문, 선데이, 중앙일보, 중앙]]>
+							</Keywords>
+						</MetaInfo>
+            <Children>
+              <Menu Key="SundayNews" Display="뉴스">
+                <List CategoryKey="SundayNews" Type="General" />
+                <Url Controller="Sunday" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="SundayNews" />
+                  </Parameters>
+                </Url>
+								<MetaInfo>
+									<Title>
+										<![CDATA[중앙SUNDAY - 뉴스]]>
+									</Title>
+								</MetaInfo>
+                <Children>
+                  <Menu Key="SundayFocus" Display="FOCUS">
+                    <List CategoryKey="SundayFocus" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayFocus" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundaySubNews" Display="NEWS" DisplayTitle="NEWS">
+                    <List CategoryKey="SundaySubNews" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundaySubNews" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundaySports" Display="SPORTS">
+                    <List CategoryKey="SundaySports" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundaySports" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayHealth" Display="HEALTH PLUS">
+                    <List CategoryKey="SundayHealth" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayHealth" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SpecialReport" Display="SPECIAL REPORT">
+                    <List CategoryKey="SpecialReport" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SpecialReport" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayWideShot" Display="WIDE SHOT">
+                    <List CategoryKey="SundayWideShot" Type="General"/>
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayWideShot" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayInterview" Display="INTERVIEW">
+                    <List CategoryKey="SundayInterview" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayInterview" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayPeople" Display="PEOPLE">
+                    <List CategoryKey="SundayPeople" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayPeople" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  
+                  
+                  <!-- ##########################################################################-->
+                  <Menu Key="SundayLeisure" Display="LEISURE">
+                    <List CategoryKey="SundayLeisure" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayLeisure" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayFoodTravel" Display="FOOD&amp;TRAVEL">
+                    <List CategoryKey="SundayFoodTravel" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayFoodTravel" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayLife" Display="LIFE">
+                    <List CategoryKey="SundayLife" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayLife" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayCulture" Display="CULTURE">
+                    <List CategoryKey="SundayCulture" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayCulture" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayScience" Display="SCIENCE">
+                    <List CategoryKey="SundayScience" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayScience" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayBooks" Display="BOOKS">
+                    <List CategoryKey="SundayBooks" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayNews" />
+                        <Parameter Name="SubKey" Value="SundayBooks" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <!-- ##########################################################################-->
+                  
+                  
+                  
+                </Children>
+              </Menu>
+              <Menu Key="SundayMoney" Display="머니">
+                <List CategoryKey="SundayMoney" Type="General" />
+                <Url Controller="Sunday" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="SundayMoney" />
+                  </Parameters>
+                </Url>
+								<MetaInfo>
+									<Title>
+										<![CDATA[중앙SUNDAY - 머니]]>
+									</Title>
+								</MetaInfo>
+              </Menu>
+              <Menu Key="SundayOpinion" Display="오피니언">
+                <List CategoryKey="SundayOpinion" Type="General" />
+                <Url Controller="Sunday" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="SundayOpinion" />
+                  </Parameters>
+                </Url>
+								<MetaInfo>
+									<Title>
+										<![CDATA[중앙SUNDAY - 오피니언]]>
+									</Title>
+								</MetaInfo>
+                <Children>
+                  <Menu Key="SundayColumn" Display="COLUMN">
+                    <List CategoryKey="SundayColumn" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayOpinion" />
+                        <Parameter Name="SubKey" Value="SundayColumn" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                  <Menu Key="SundayViewOpinion" Display="VIEW &amp; OPINION">
+                    <List CategoryKey="SundayViewOpinion" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                    </Url>
+                  </Menu>
+                  <Menu Key="ForeignCartoon" Display="해외만평">
+                    <List CategoryKey="ForeignCartoon" Type="General" />
+                    <Url Controller="Sunday" Action="List">
+                      <Parameters>
+                        <Parameter Name="Key" Value="SundayOpinion" />
+                        <Parameter Name="SubKey" Value="ForeignCartoon" />
+                      </Parameters>
+                    </Url>
+                  </Menu>
+                </Children>
+              </Menu>
+              <Menu Key="SundayMagazine" Display="S MAGAZINE">
+                <List CategoryKey="SundayMagazine" Type="General" />
+                <Url Controller="Sunday" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="SundayMagazine" />
+                  </Parameters>
+                </Url>
+								<MetaInfo>
+									<Title>
+										<![CDATA[중앙SUNDAY - S MAGAZINE]]>
+									</Title>
+								</MetaInfo>
+              </Menu>
+              <Menu Key="SundayVolume" Display="호별보기" IsShowTopMenu="false">
+                <List CategoryKey="Sunday" Type="General" IsDisplayFilterByDate="true" />
+                <Url Controller="Sunday" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="SundayVolume" />
+                  </Parameters>
+                </Url>
+              </Menu>
+            </Children>
+          </Menu>
+
+					<Menu Key="DigitalSpecial" Display="디지털스페셜" IsShowTopMenu="false" IsDisplayTitle="true">
+						<Url Controller="DigitalSpecial" Action="ListSpecial" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[디지털 스페셜 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[깊이 있는 분석, 다양한 데이터, 쉬운 스토리로 기존 뉴스와 다른 중앙일보의 특집 콘텐트]]>
+							</Description>
+							<Keywords>
+								<![CDATA[뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 디지털 스페셜, 디지털 뉴스, 우리동네다자녀, 우리동네의회예산]]>
+							</Keywords>
+						</MetaInfo>
+					</Menu>
+
+					<Menu Key="Series" Display="시리즈">
+						<Url Controller="Series" Action="Index" />
+						<MetaInfo>
+							<Title></Title>
+							<Description>
+								<![CDATA[태그로 한눈에 보는 이슈 시리즈 기사, 줌인, 연재기사]]>
+							</Description>
+							<Keywords>
+								<![CDATA[뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 시리즈, 연재기사, 태그뉴스]]>
+							</Keywords>
+						</MetaInfo>
+					</Menu>
+
+					<Menu Key="Ranking" Display="랭킹" IsShowMegaMenu="false">
+						<Url Controller="Ranking" Action="Index" />
+						<MetaInfo>
+							<Title></Title>
+							<Description>
+								<![CDATA[당신에게 꼭 필요한 뉴스를 확인하세요.]]>
+							</Description>
+							<Keywords>
+								<![CDATA[뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 랭킹뉴스, 맞춤뉴스]]>
+							</Keywords>
+						</MetaInfo>
+					</Menu>
+          
+          <Menu Key="Election2020" Display="21대 국회의원 선거" IsShowMegaMenu="false">
+            <Section Type="Unique" />
+            <Url Link="/Election2020" />
+            <Children>
+              <Menu Key="Election2020Vote" Display="개표" />
+              <Menu Key="Election2020News" Display="뉴스" />
+              <Menu Key="Election2020Unboxing" Display="총선언박싱" />
+              <Menu Key="Election2020Poll" Display="여론조사" />
+              <Menu Key="Election2020Qna" Display="총선QnA" />
+            </Children>
+          </Menu>
+          
+				  <Menu Key="PyeongChang2018" Display="2018 평창" IsShowMegaMenu="false">
+					<Section Type="Unique" />
+					<Url Link="/PyeongChang2018" />
+					<Children>
+					  <Menu Key="PyeongChang2018Games" Display="평창 15종목" />
+					  <Menu Key="PyeongChang2018Lineup" Display="평창 라인업" />
+					  <Menu Key="PyeongChang2018Plus" Display="평창+" />
+					  <Menu Key="PyeongChang2018News" Display="평창 뉴스" />
+					  <Menu Key="PyeongChang2018Sketch" Display="평창 스케치" />
+					  <Menu Key="PyeongChang2018Aribawoo" Display="올림픽 아리바우길" />
+					  <Menu Key="PyeongChang2018Daily" Display="PyeongChang Olympics" />
+					  <Menu Key="PyeongChang2018Chinese" Display="平昌冬奥会" />
+						<Menu Key="PyeongChang2018Talk" Display="평창Talk" />
+						<Menu Key="PyeongChang2018Interview" Display="평창 인터뷰" />
+						<Menu Key="PyeongChang2018Poll" Display="사심(私心) 픽" />
+					</Children>
+				  </Menu>
+					
+					<Menu Key="Election2018" Display="제7회 지방선거" IsShowMegaMenu="false">
+						<Section Type="Unique" />
+						<Url Link="/Election2018" />
+						<Children>
+							<Menu Key="Election2018Now" Display="선거NOW" />
+							<Menu Key="Election2018BattleGround" Display="격전지뉴스" />
+							<Menu Key="Election2018JeaiBot" Display="JEAIBOT" />
+						</Children>
+					</Menu>
+
+          <Menu Key="Worldcup2018" Display="2018 러시아 월드컵" IsShowMegaMenu="false">
+            <Section Type="Unique" />
+            <Url Controller="Worldcup2018" Action="Index" />
+            <Children>
+              <Menu Key="Worldcup2018Schedule" Display="경기일정">
+                <Url Controller="Worldcup2018" Action="Schedule" />
+              </Menu>
+            </Children>
+          </Menu>
+					
+					<Menu Key="Trend" Display="트렌드">
+						<Url Controller="Trend" Action="Index" />
+						<MetaInfo>
+							<Title></Title>
+							<Description>
+								<![CDATA[실시간 트렌드, 주간 트렌드 뉴스 , 월간 트렌드 뉴스 , 지난 TOP 기사 - 뉴스를 보는 새로운 시각! 실제 기사 이용에 따라 분석된 중앙일보 트렌드 뉴스]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 트렌드 뉴스, 인기 뉴스, 뉴스레터]]>
+							</Keywords>
+						</MetaInfo>
+						<PartialUrl Controller="Trend" Action="Index">
+							<Parameters>
+								<Parameter Name="ispartial" Value="true" />
+							</Parameters>
+						</PartialUrl>
+					</Menu>
+
+          <Menu Key="Retirement" Display="더,오래">
+            <Section Type="Unique" SpecializedAction="Retirement">
+              <CategoryKeys>
+                <string>Retirement</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Retirement" Action="Index" />
+						<MetaInfo>
+							<Title></Title>
+							<Description>
+								<![CDATA[내일을 준비할 여유 '쉼표'를 찾는 곳]]>
+							</Description>
+							<Keywords>
+								<![CDATA[필진별, 더,오래란?, 필진 Pick, 전문필진, 일 더하기, 살 곳 찾기, 건강 챙기기, 시간 즐기기, 나 가꾸기, 재산 짓기, 어울리기, 내일을 준비, 인생 쉼표]]>
+							</Keywords>
+						</MetaInfo>
+            <Children>
+              <Menu Key="RetirementHome" Display="홈" IsShowTopMenu="true">
+                <Url Controller="Retirement" Action="" />
+              </Menu>
+              <Menu Key="RetirementCate" Display="주제별" IsShowTopMenu="true">
+                <Url Controller="Retirement" Action="Cate" />
+                <List CategoryKey="RetirementCate" />
+              </Menu>
+              <Menu Key="RetirementReporterList" Display="필진별" IsShowTopMenu="true">
+                <Url Controller="Retirement" Action="ReporterList" />
+              </Menu>
+              <Menu Key="RetirementSubscribe" Display="필진 Pick" IsShowTopMenu="true">
+                <Url Controller="Retirement" Action="Subscribe"></Url>
+              </Menu>
+              <Menu Key="RetirementIntro" Display="더,오래란?" IsShowTopMenu="true">
+                <Url Controller="Retirement" Action="About"></Url>
+              </Menu>
+              <Menu Key="RetirementCommon" Display="일더하기" IsShowTopMenu="false">
+                <List CategoryKey="RetirementCommon" />
+              </Menu>
+              <Menu Key="RetirementColumn" Display="재산짓기" IsShowTopMenu="false">
+                <List CategoryKey="RetirementColumn" />
+              </Menu>
+              <Menu Key="RetirementInvestment" Display="살곳찾기" IsShowTopMenu="false">
+                <List CategoryKey="RetirementInvestment" />
+              </Menu>
+              <Menu Key="RetirementHealthAndLife" Display="건강챙기기" IsShowTopMenu="false">
+                <List CategoryKey="RetirementHealthAndLife" />
+              </Menu>
+              <Menu Key="RetirementCareerRemodeling" Display="시간 즐기기" IsShowTopMenu="false">
+                <List CategoryKey="RetirementCareerRemodeling" />
+              </Menu>
+              <Menu Key="RetirementCountryHealing" Display="어울리기" IsShowTopMenu="false">
+                <List CategoryKey="RetirementCountryHealing" />
+              </Menu>
+              <Menu Key="RetirementReturnFarm" Display="나가꾸기" IsShowTopMenu="false">
+                <List CategoryKey="RetirementReturnFarm" />
+              </Menu>
+            </Children>
+          </Menu>
+
+					<Menu Key="FutureJob" Display="퓨처앤잡" IsShowMegaMenu="false">
+						<Url Controller="FutureJob" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[퓨처앤잡 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보 퓨처앤잡 - 미래, 직업, 할일, 근무환경, 일자리, 노동, 고용]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 미래직업 리포트, 퓨처앤잡, 퓨처앤톡, 직업, 근무환경, 일자리, 고용]]>
+							</Keywords>
+						</MetaInfo>
+					</Menu>
+
+					<Menu Key="TokTokEdu" Display="톡톡에듀" LogoImage="https://images.joins.com/ui_joongang/news/pc/list/t_talktalkedu.png" IsShowTopMenu="false" IsShowMegaMenu="false">
+						<Section Type="Unique">
+							<CategoryKeys>
+								<string>toktokedu</string>
+							</CategoryKeys>
+						</Section>
+						<Url Controller="TokTokEdu" Action="Index" />
+					</Menu>
+
+          <Menu Key="Trand" Display="Tran:D" IsShowTopMenu="false" IsShowMegaMenu="false">
+            <Section Type="Unique">
+              <CategoryKeys>
+                <string>Trand</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="tran_d" Action="Index" />
+						<Children>
+							<Menu Key="tran_d" Display="Tran:D" IsShowTopMenu="false">
+								<List CategoryKey="tran_d" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="tran_d" />
+										<Parameter Name="Keyword" Value="트랜D|인공지능|빅데이터|AI|클라우드" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="StartSearchDate" Value="2019-07-01" />
+									</Parameters>
+								</Url>
+								<MetaInfo></MetaInfo>
+							</Menu>
+						</Children>
+          </Menu>
+						
+					<Menu Key="ResetKorea" Display="리셋 코리아" IsShowMegaMenu="false">
+						<Section Type="Combination" SpecializedAction="ResetKorea">
+							<CategoryKeys>
+								<string>ResetKorea</string>
+							</CategoryKeys>
+						</Section>
+						<Url Controller="ResetKorea" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[리셋 코리아 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보 리셋 코리아 - '내가 바꾸는 대한민국' 집단 지성과 함께 진짜 대한민국이 해야하는 핵심 아젠다 제시]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 리셋코리아, 뉴스, 시민마이크, 평양오디세이, 아젠다, 핵심 정책, 도출]]>
+							</Keywords>
+						</MetaInfo>
+						<Children>
+							<Menu Key="ResetKoreaNews" Display="뉴스">
+								<List CategoryKey="ResetKoreaNews" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaNews" />
+										<Parameter Name="Keyword" Value="리셋 코리아" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+								<MetaInfo>
+									<Title>
+										<![CDATA[리셋 코리아 - 중앙일보]]>
+									</Title>
+								</MetaInfo>
+							</Menu>
+							<Menu Key="ResetKoreaEconomy" Display="경제분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaEconomy" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaEconomy" />
+										<Parameter Name="Keyword" Value="경제분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaEducation" Display="교육분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaEducation" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaEducation" />
+										<Parameter Name="Keyword" Value="교육분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaDefense" Display="국방분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaDefense" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaDefense" />
+										<Parameter Name="Keyword" Value="국방분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaRevolution" Display="4차산업혁명분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaRevolution" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaRevolution" />
+										<Parameter Name="Keyword" Value="4차산업혁명분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaCulture" Display="문화분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaCulture" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaCulture" />
+										<Parameter Name="Keyword" Value="문화분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaWelfare" Display="보건복지분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaWelfare" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaWelfare" />
+										<Parameter Name="Keyword" Value="보건복지분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaSecurity" Display="외교안보분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaSecurity" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaSecurity" />
+										<Parameter Name="Keyword" Value="외교안보분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaTrade" Display="통상분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaTrade" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaTrade" />
+										<Parameter Name="Keyword" Value="통상분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaPolitics" Display="정치분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaPolitics" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaPolitics" />
+										<Parameter Name="Keyword" Value="정치분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaCorporate" Display="기업지배구조분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaCorporate" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaCorporate" />
+										<Parameter Name="Keyword" Value="기업지배구조분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaCivil" Display="시민정치분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaCivil" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaCivil" />
+										<Parameter Name="Keyword" Value="시민정치분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaLabor" Display="고용노동분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaLabor" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaLabor" />
+										<Parameter Name="Keyword" Value="고용노동분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaUnification" Display="통일분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaUnification" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaUnification" />
+										<Parameter Name="Keyword" Value="통일분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaEnvironment" Display="환경분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaEnvironment" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaEnvironment" />
+										<Parameter Name="Keyword" Value="환경분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaLocal" Display="지방자치분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaLocal" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaLocal" />
+										<Parameter Name="Keyword" Value="지방자치분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaInvestigation" Display="수사구조개혁분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaInvestigation" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaInvestigation" />
+										<Parameter Name="Keyword" Value="수사구조개혁분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+							<Menu Key="ResetKoreaAmendment" Display="개헌특별분과" IsShowTopMenu="false" IsShowMegaMenu="false">
+								<List CategoryKey="ResetKoreaAmendment" Type="Search" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="Key" Value="ResetKoreaAmendment" />
+										<Parameter Name="Keyword" Value="개헌특별분과" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+						</Children>
+					</Menu>
+          
+					<Menu Key="Voomvoom" Display="voomvooom" IsShowTopMenu="false" IsShowMegaMenu="false">
+						<Section Type="Unique" SpecializedAction="Voomvoom">
+							<CategoryKeys>
+								<string>Voomvoom</string>
+							</CategoryKeys>
+						</Section>
+						<Url Controller="Voomvoom" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[VoomVooom - K-POP breaking news, photos, exclusives about Korean idols and celebs]]>
+							</Title>
+							<Description>
+								<![CDATA[Breaking news, gossip, episodes, photos, and exclusive content about the hottest K-Pop Idols, Korean stars and celebrities such as BTS, BLACKPINK, and RED VELVET, hardly known outside Korea]]>
+							</Description>
+							<Keywords>
+								<![CDATA[voomvoom, JoongAng Ilbo, breaking news, gossip, episodes, photos, exclusives, kpop, idol, star, celeb, bts, blackpink, red velvet]]>
+							</Keywords>
+						</MetaInfo>
+					</Menu>
+
+          <Menu Key="Gangnam" Display="강남통신" IsShowTopMenu="false" IsShowMegaMenu="false">
+            <Url Link="http://m.gangnam.joins.com/" />
+            <PartialUrl Link="http://m.gangnam.joins.com/default_in.aspx" />
+            <Children>
+              <Menu Key="CoverStory" Display="커버스토리">
+                <Url Link="http://m.gangnam.joins.com/news/list/list.aspx?sc=01" />
+              </Menu>
+              <Menu Key="Human" Display="사람人">
+                <Url Link="http://m.gangnam.joins.com/news/list/list.aspx?sc=02" />
+              </Menu>
+              <Menu Key="Rival" Display="맛있는 지도">
+                <Url Link="http://m.gangnam.joins.com/news/list/list.aspx?sc=03" />
+              </Menu>
+              <Menu Key="Cosmetic" Display="화장품썰전">
+                <Url Link="http://m.gangnam.joins.com/news/list/list.aspx?sc=04" />
+              </Menu>
+              <Menu Key="EducationReport" Display="해외대학리포트">
+                <Url Link="http://m.gangnam.joins.com/news/list/list.aspx?sc=05" />
+              </Menu>
+              <Menu Key="StressClinic" Display="스트레스 클리닉">
+                <Url Link="http://m.gangnam.joins.com/news/list/list.aspx?sc=06" />
+              </Menu>
+              <Menu Key="Performances" Display="공간과 삶">
+                <Url Link="http://m.gangnam.joins.com/news/list/list.aspx?sc=07" />
+              </Menu>
+              <Menu Key="Trend" Display="트렌드">
+                <Url Link="http://m.gangnam.joins.com/news/list/list.aspx?sc=08" />
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Tong" Display="TONG" IsShowMegaMenu="false">
+            <Url Link="http://tong.joins.com/" />
+          </Menu>
+
+					<Menu Key="Misezero" Display="미세제로" IsShowMegaMenu="false">
+						<Section Type="Unique"></Section>
+						<Url Controller="Road" Action="Misezero" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[미세제로 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[미세먼지, 미세zero, 대기오염, 환경, 날씨, 환경기사, 미세먼지수치, 지역별 미세먼지 수치 - 중앙일보와 함께라면, 미세먼지 걱정 제로!!]]>
+							</Description>
+							<Keywords>
+								<![CDATA[미세먼지, 미세zero, 대기오염, 환경, 날씨, 환경기사, 미세먼지수치, 지역별 미세먼지 수치]]>
+							</Keywords>
+						</MetaInfo>
+						<Children>
+							<Menu Key="MiseFactcheck" Display="미세먼지 팩트체크">
+								<List CategoryKey="MiseFactcheck" Type="General" IsDisplayFilterByDate="false" />
+								<Url Controller="Find" Action="List">
+									<Parameters>
+										<Parameter Name="key" Value="MiseFactcheck" />
+										<Parameter Name="Keyword" Value="미세먼지 팩트체크" />
+										<Parameter Name="SourceCode" Value="1,3,61" />
+										<Parameter Name="ListType" Value="General" />
+										<Parameter Name="ScopeType" Value="Keyword" />
+									</Parameters>
+								</Url>
+							</Menu>
+						</Children>
+					</Menu>
+
+          <Menu Key="Mgrg" Display="먼지알지">
+            <Url Link="https://mgrg.joins.com/" Target="_blank" />
+          </Menu>
+
+          <Menu Key="Welfaretotal" Display="복지토털">
+            <Url Link="https://welfaretotal.joins.com/" Target="_blank" />
+          </Menu>
+
+					<Menu Key="Mm" Display="Mr.밀리터리"  DisplayTitle="김민석의 Mr.밀리터리" IsDisplayTitle="true">
+            <Section Type="Unique" SpecializedAction="Mm">
+              <CategoryKeys>
+                <string>Mm</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Mm" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[Mr.밀리터리 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보 Mr.밀리터리 - 밀리터리, 무기이야기, watchcon, 밀담]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 밀리터리, 김민석, 무기이야기, watchcon, 군사안보, 이철재, 밀담, 북한]]>
+							</Keywords>
+						</MetaInfo>
+            <Children>
+              <Menu Key="Focusinside" Display="Focus 인사이드">
+                <List CategoryKey="MmFocusinside" Type="General" IsDisplayFilterByDate="false" />
+                <Url Controller="Mm" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Focusinside" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Hotnews" Display="Hot 뉴스">
+                <List CategoryKey="MmHotnews" Type="General" IsDisplayFilterByDate="false" />
+                <Url Controller="Mm" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Hotnews" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Watchcon" Display="김민석의 Watchcon">
+                <List CategoryKey="MmWatchcon" Type="General" IsDisplayFilterByDate="false" />
+                <Url Controller="Mm" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Watchcon" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Weaponstory" Display="무기이야기">
+                <List CategoryKey="MmWeaponstory" Type="General" IsDisplayFilterByDate="false" />
+                <Url Controller="Mm" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Weaponstory" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Interview" Display="김민석의 인터뷰">
+                <List CategoryKey="MmInterview" Type="General" IsDisplayFilterByDate="false" />
+                <Url Controller="Mm" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Interview" />
+                  </Parameters>
+                </Url>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Nk" Display="통일무지개" IsDisplayTitle="true">
+            <Section Type="Compact" SpecializedAction="Nk">
+              <CategoryKeys>
+                <string>Nk</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Nk" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[통일무지개 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보의 최신 평화 통일 뉴스 - 평양오디세요, possible 한반도, 북한~ing]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 평앙오디세이, possible 한반도, 북한~ing, 평양&, 사진 속 북한, 통일, 군사안보]]>
+							</Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="Nk" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+            <Children>
+              <Menu Key="Odyssey" Display="평양오디세이">
+                <List CategoryKey="PyongyangOdyssey" Type="General"></List>
+                <Url Controller="Nk" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Odyssey" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Unity" Display="Possible 한반도">
+                <List CategoryKey="NewUnifiedWealthofNations" Type="General"></List>
+                <Url Controller="Nk" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Unity" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Ing" Display="북한~ing">
+                <List CategoryKey="NkIng" Type="General"></List>
+                <Url Controller="Nk" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Ing" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Book" Display="평양&#38;">
+                <List CategoryKey="NkBook" Type="General"></List>
+                <Url Controller="Nk" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Book" />
+                  </Parameters>
+                </Url>
+              </Menu>
+							<Menu Key="Photo" Display="사진 속 북한">
+								<List CategoryKey="NkPhoto" Type="Image" />
+								<Url Controller="Nk" Action="Photolist">
+									<Parameters>
+										<Parameter Name="key" Value="Photo" />
+									</Parameters>
+								</Url>
+							</Menu>
+            </Children>
+          </Menu>
+
+					<Menu Key="Jpod" Display="J팟" DisplayTitle="J팟" IsDisplayTitle="true">
+						<Section Type="Unique"></Section>
+						<Url Controller="Jpod" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[J팟 - 중앙일보 기자들의 팟캐스트 공간]]>
+							</Title>
+							<Description>
+								<![CDATA[소소한 일상의 이치부터 미래 전망 인문학까지 각양각색의 팟캐스트를 지금 바로 들어보세요!]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보 팟캐스트, 팟캐스트, 기자 팟캐스트, 음성 컨텐츠, 오디오 컨텐츠, 번역기도 모르는 진짜 영어, 뉴요커가 읽어주는]]>
+							</Keywords>
+						</MetaInfo>
+					</Menu>
+
+          <Menu Key="Ramyeonroad" Display="라면로드" IsShowMegaMenu="false">
+            <Section Type="Unique"></Section>
+            <Url Controller="Ramyeonroad" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[라면로드 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보 라면로드 - 라면의 역사, 레시피, 라면 탐구생활, 라면 먹방]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 라면로드, 라면 역사, 라면 레시피, 라면 탐구생활, 라면 먹방]]>
+							</Keywords>
+						</MetaInfo>
+            <Children>
+              <Menu Key="Ramyeonhistory" Display="라면역사">
+                <List CategoryKey="Ramyeonhistory" Type="General" IsDisplayFilterByDate="false" />
+                <Url Controller="Find" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Ramyeonhistory" />
+                    <Parameter Name="Keyword" Value="라면역사" />
+                    <Parameter Name="SourceCode" Value="1,3,61" />
+                    <Parameter Name="ListType" Value="General" />
+                    <Parameter Name="ScopeType" Value="Keyword" />
+                  </Parameters>
+                </Url>
+              </Menu>
+
+              <Menu Key="Ramyeonresearch" Display="라면탐구생활">
+                <List CategoryKey="Ramyeonresearch" Type="General" IsDisplayFilterByDate="false" />
+                <Url Controller="Find" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Ramyeonresearch" />
+                    <Parameter Name="Keyword" Value="라면탐구생활" />
+                    <Parameter Name="SourceCode" Value="1,3,61" />
+                    <Parameter Name="ListType" Value="General" />
+                    <Parameter Name="ScopeType" Value="Keyword" />
+                  </Parameters>
+                </Url>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Kimchiroad" Display="김치로드" IsShowMegaMenu="false">
+            <Section Type="Unique"></Section>
+            <Url Controller="Road" Action="Kimchiroad" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[김치로드 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보 김치로드 - 김치의 역사, 레시피, 전국 김치, 김장]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 김치로드, 김치 역사, 김치 요리, 전국 김치, 김장]]>
+							</Keywords>
+						</MetaInfo>
+            <Children>
+              <Menu Key="Fermentation" Display="발효의 과학">
+                <List CategoryKey="Fermentation" Type="General" IsDisplayFilterByDate="false" />
+                <Url Controller="Find" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Fermentation" />
+                    <Parameter Name="Keyword" Value="김치발효의과학" />
+                    <Parameter Name="SourceCode" Value="1,3,61" />
+                    <Parameter Name="ListType" Value="General" />
+                    <Parameter Name="ScopeType" Value="Keyword" />
+                  </Parameters>
+                </Url>
+              </Menu>
+
+              <Menu Key="Paldokimchi" Display="8도 맛김치">
+                <List CategoryKey="Paldokimchi" Type="General" IsDisplayFilterByDate="false" />
+                <Url Controller="Find" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Paldokimchi" />
+                    <Parameter Name="Keyword" Value="8도맛김치" />
+                    <Parameter Name="SourceCode" Value="1,3,61" />
+                    <Parameter Name="ListType" Value="General" />
+                    <Parameter Name="ScopeType" Value="Keyword" />
+                  </Parameters>
+                </Url>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Quartz" Display="Quartz" IsShowMegaMenu="false">
+            <Section Type="Unique"></Section>
+            <Url Controller="Road" Action="Quartz" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[Quartz - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보 Quartz - 세계 경쟁 시대의 비즈니스맨을 위한 네이티브 뉴스 콘텐트]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, Quartz, 쿼츠, 중앙일보, 비즈니스]]>
+							</Keywords>
+						</MetaInfo>
+          </Menu>
+
+          <Menu Key="ChinaFocus" Display="중국포커스" IsShowMegaMenu="false">
+            <Section Type="Unique"></Section>
+            <Url Controller="ChinaFocus" Action="Index" />
+            <MetaInfo>
+              <Title>
+                <![CDATA[중국포커스 - 대한민국 No.1 종합 일간지 중앙일보]]>
+              </Title>
+              <Description>
+                <![CDATA[중앙일보의 중국포커스 최신 뉴스 - 중국 주요 지역 심층 뉴스, 중국정치, 중국문화, 중국산업, 중국지역, 중국산업단지, 중국관광]]>
+              </Description>
+              <Keywords>
+                <![CDATA[중국, 중국포커스, 中國FOCUS, 차이나포커스, 중국이슈, 중국스페셜, 중국정치, 중국문화, 중국산업, 중국경제, 중국관광, 칭다오, 옌타이, 장쑤성, 중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 랭킹뉴스, 맞춤뉴스]]>
+              </Keywords>
+            </MetaInfo>
+          </Menu>
+
+          <Menu Key="MagazineM" Display="매거진M" IsShowMegaMenu="false">
+            <Section Type="Catalog" SpecializedAction="MagazineM">
+              <CategoryKeys>
+                <string>MagazineM</string>
+                <string>MagazineMNews</string>
+                <string>MagazineMTheater</string>
+                <string>MagazineMInterview</string>
+                <string>MagazineMSpecialM</string>
+                <string>MagazineMReading</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="MagazineM" Action="Index" />
+            <PartialUrl Controller="MagazineM" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+          </Menu>
+
+					<Menu Key="Peoplemic" Display="시민마이크" IsShowMegaMenu="false">
+						<Url Link="http://peoplemic.joins.com/" />
+					</Menu>
+					
+          <Menu Key="OurHistory" Display="OurHistory" IsShowMegaMenu="false">
+            <Section Type="Unique">
+              <CategoryKeys>
+                <string>OurHistory</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="OurHistory" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[OurHistory - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보 아워히스토리 - 과거가 나에게 말을 건다. 신문 보도사진과 박물관 소장사진 등 지난 50년간의 사진을 매개로 지금 현재의 내 이야기를 공유합니다.]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 아워히스토리, 타임라인, 역사칼럼, 오늘의 역사]]>
+							</Keywords>
+						</MetaInfo>
+            <Widgets>
+              <Widget Type="Ad" Display="광고" Category="display_680" />
+              <Widget Type="HotArticles" Display="많이 본 기사" Category="" />
+            </Widgets>
+            <Children>
+              <Menu Key="CardNews" Display="카드뉴스">
+                <List CategoryKey="CardNews" Type="General" IsDisplayFilterByOnlyJoongang="false" IsDisplayFilterByDate="false" />
+                <Url Controller="OurHistory" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="CardNews" />
+                  </Parameters>
+                </Url>
+								<MetaInfo>
+									<Title>
+										<![CDATA[OurHistory - 중앙일보]]>
+									</Title>
+								</MetaInfo>
+              </Menu>
+              <Menu Key="Timeline" Display="타임라인">
+                <Url Controller="OurHistory" Action="Timeline"></Url>
+								<MetaInfo>
+									<Title>
+										<![CDATA[OurHistory - 중앙일보]]>
+									</Title>
+								</MetaInfo>
+              </Menu>
+              <Menu Key="HistoryColumn" Display="역사칼럼">
+                <List CategoryKey="HistoryColumn" Type="Search" />
+                <Url Controller="Find" Action="List">
+                  <Parameters>
+                    <Parameter Name="Key" Value="HistoryColumn" />
+                    <Parameter Name="Keyword" Value="역사칼럼" />
+                    <Parameter Name="ListType" Value="General" />
+                    <Parameter Name="ScopeType" Value="Keyword" />
+                    <Parameter Name="SourceCode" Value="1,3,d5" />
+                  </Parameters>
+                </Url>
+								<MetaInfo>
+									<Title>
+										<![CDATA[OurHistory - 중앙일보]]>
+									</Title>
+								</MetaInfo>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="University" Display="대학평가" IsShowMegaMenu="false">
+            <Section Type="Unique" SpecializedAction="University">
+              <CategoryKeys>
+                <string>University</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="University" Action="Index" />
+						<MetaInfo>
+							<Title>
+								<![CDATA[대학평가 - 중앙일보]]>
+							</Title>
+							<Description>
+								<![CDATA[중앙일보 대학평가 - 1994년 한국 최초의 대학평가. 다각도의 평가, 조사를 통해 한국 대학사회의 발전에 기여합니다.]]>
+							</Description>
+							<Keywords>
+								<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 대학평가, 대학NOW]]>
+							</Keywords>
+						</MetaInfo>
+            <PartialUrl Controller="University" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+            <Children>
+              <Menu Key="Evaluation" Display="올해의 대학평가">
+                <List CategoryKey="Evaluation" Type="General"></List>
+                <Url Controller="University" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="Evaluation" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="News" Display="대학 NOW">
+                <List CategoryKey="UniNews" Type="General"></List>
+                <Url Controller="University" Action="List">
+                  <Parameters>
+                    <Parameter Name="key" Value="News" />
+                  </Parameters>
+                </Url>
+              </Menu>
+            </Children>
+          </Menu>
+
+          <Menu Key="Cartoon" Display="카툰" IsShowMegaMenu="false">
+            <Section Type="Unique">
+              <CategoryKeys>
+                <string>Cartoon</string>
+              </CategoryKeys>
+            </Section>
+            <Url Controller="Cartoon" Action="Index" />
+            <PartialUrl Controller="Cartoon" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+            <Children>
+              <Menu Key="Editorial" Display="박용석 만평">
+                <Cartoon CategoryKey="Parkyongseok" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="Editorial" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="CartoonDiary" Display="카툰일기">
+                <Cartoon CategoryKey="CartoonDiary" IsShowTop="true" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="CartoonDiary" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="LivingThing" Display="산다는 건">
+                <Cartoon CategoryKey="LivingThing" IsShowTop="true" IsTopMember="true" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="LivingThing" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="LookLaugh" Display="웃어봐요">
+                <Cartoon CategoryKey="LookLaugh" IsShowTop="true" IsTopMember="true" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="LookLaugh" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="LoveIs" Display="사랑이란">
+                <Cartoon CategoryKey="LoveIs" IsShowTop="true" IsTopMember="true" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="LoveIs" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="OneCommas" Display="쉼표하나">
+                <Cartoon CategoryKey="OneCommas" IsShowTop="true" IsTopMember="true" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="OneCommas" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="WhatIthink" Display="어떤생각">
+                <Cartoon CategoryKey="WhatIthink" IsShowTop="true" IsTopMember="true" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="WhatIthink" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="CodingWorld" Display="코딩세계">
+                <Cartoon CategoryKey="CodingWorld" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="CodingWorld" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Huhyoungman" Display="허영만 연재">
+                <Cartoon CategoryKey="Huhyoungman" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="Huhyoungman" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Kimjaehoon" Display="김재훈 연재">
+                <Cartoon CategoryKey="Kimjaehoon" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="Kimjaehoon" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Schooled" Display="스쿨드">
+                <Cartoon CategoryKey="Schooled" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="Schooled" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="Sexpia" Display="섹스피아">
+                <Cartoon CategoryKey="Sexpia" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="Sexpia" />
+                  </Parameters>
+                </Url>
+              </Menu>
+              <Menu Key="WitchesDiary" Display="위치스 다이어리">
+                <Cartoon CategoryKey="WitchesDiary" />
+                <Url Controller="Cartoon" Action="CartoonList">
+                  <Parameters>
+                    <Parameter Name="name" Value="WitchesDiary" />
+                  </Parameters>
+                </Url>
+              </Menu>
+            </Children>
+          </Menu>
+
+        </Children>
+      </Menu>
+
+      <Menu Key="ServiceGroup" Display="서비스" IsDummy="true">
+        <Children>
+
+          <!-- Menu Key="Time7" Display="타임7">
+            <Url Controller="Time7" Action="Index" />
+            <PartialUrl Controller="Time7" Action="Index">
+              <Parameters>
+                <Parameter Name="ispartial" Value="true" />
+              </Parameters>
+            </PartialUrl>
+          </Menu -->
+
+          <Menu Key="JoongangMemberShip" Display="중앙 멤버십" IsShowMegaMenu="false">
+            <Url Link="https://jmembershipm.joins.com/" />
+          </Menu>
+          <Menu Key="TypeSetting" Display="전자판" IsShowMegaMenu="false">
+            <Url Link="https://m.joins.com/Media/Media.aspx?mseq=11" />
+          </Menu>
+          <Menu Key="JoinsSpider" Display="조인스 스파이더" IsShowMegaMenu="false" IsShowTopMenu="false">
+            <Url Link="http://m.mediaspider.joins.com/" />
+          </Menu>
+
+          <Menu Key="NewsLetter" Display="뉴스레터" IsShowMegaMenu="true" IsDisplayTitle="false">
+            <Section Type="Unique"></Section>
+            <Url Controller="NewsLetter" Action="Index" />
+            <MetaInfo>
+              <Title>
+                <![CDATA[뉴스레터 - 중앙일보]]>
+              </Title>
+              <Description>
+                <![CDATA[중앙일보 뉴스레터 - 스타기자, 연재기사, J팟, 브리핑까지 다양한 뉴스레터 구독신청하세요.]]>
+              </Description>
+              <Keywords>
+                <![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 뉴스레터, 구독신청, 스타기자, 연재기사, J팟, 브리핑]]>
+              </Keywords>
+            </MetaInfo>
+          </Menu>
+
+          <Menu Key="NewsDigest" Display="뉴스다이제스트" IsShowMegaMenu="true" IsDisplayTitle="false">
+            <Section Type="Unique"></Section>
+            <Url Controller="NewsDigest" Action="Index" />
+            <MetaInfo>
+              <Title>
+                <![CDATA[뉴스 다이제스트 - 중앙일보]]>
+              </Title>
+              <Description>
+                <![CDATA[중앙일보 뉴스 다이제스트 - 뉴스레터 구독신청하세요.]]>
+              </Description>
+              <Keywords>
+                <![CDATA[중앙일보, 뉴스레터, 뉴스다이제스트]]>
+              </Keywords>
+            </MetaInfo>
+          </Menu>
+        </Children>
+      </Menu>
+
+      <Menu Key="MyNews" Display="독자서비스" IsDummy="true">
+        <Children>
+          <Menu Key="MyScrap" Display="뉴스보관함" IsDisplayTitle="true">
+            <Url Controller="MyNews" Action="Scrap" />
+          </Menu>
+          <Menu Key="MyIssue" Display="구독이슈" IsDisplayTitle="true">
+            <Url Controller="MyNews" Action="Issue" />
+          </Menu>
+          <Menu Key="MyJournalist" Display="구독기자" IsDisplayTitle="true">
+            <Url Controller="MyNews" Action="Journalist" />
+          </Menu>
+          <Menu Key="MyComment" Display="나의댓글" IsDisplayTitle="true">
+            <Url Controller="MyNews" Action="Comment" />
+          </Menu>
+        </Children>
+      </Menu>
+
+      <Menu Key="AllianceGroup" Display="제휴그룹" IsDummy="true">
+        <Children>
+          <Menu Key="SNSChannel" Display="매칭찬스" AddCstmTagBfo="" AddCstmTagAfr="" IsShowMegaMenu="false" IsShowTopMenu="false">
+            <Url Link="http://matchingchance.joins.com/" />
+          </Menu>
+        </Children>
+      </Menu>
+
+      <Menu Key="Find" Display="통합검색">
+        <Url Controller="Find" Action="UnifiedSearch" />
+        <Children>
+          <Menu Key="Reporter" Display="기자">
+            <Url Controller="Find" Action="ReporterDetail" />
+          </Menu>
+          <Menu Key="Issue" Display="이슈">
+            <Url Controller="Find" Action="IssueDetail" />
+          </Menu>
+          <Menu Key="News" Display="기사">
+            <Url Controller="Find" Action="NewsDetail" />
+          </Menu>
+          <Menu Key="SpecialPage" Display="디지털스페셜">
+            <Url Controller="Find" Action="SpecialPageDetail" />
+          </Menu>
+        </Children>
+      </Menu>
+
+      <Menu Key="IssueKeyword" Display="이슈키워드" IsShowMegaMenu="false" IsShowTopMenu="false" IsDisplayTitle="true">
+        <Url Controller="Issue" Action="Keyword" />
+      </Menu>
+
+      <Menu Key="Reporter" Display="기자페이지" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Controller="Reporter" Action="Index" />
+      </Menu>
+
+      <Menu Key="JoongangMemberShip" Display="중앙 멤버십" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Link="https://jmembershipm.joins.com/" />
+      </Menu>
+
+      <Menu Key="Subscription" Display="구독 신청" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Link="https://www.joins.com/Special/Delivery.aspx" />
+        <!--PC Url 로 모바일 Url 이 있는지 확인 필요-->
+      </Menu>
+
+      <Menu Key="Jebo" Display="제보" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Controller="Jebo" Action="Index" />
+				<MetaInfo>
+					<Title>
+						<![CDATA[제보 - 중앙일보]]>
+					</Title>
+					<Description>
+						<![CDATA[중앙일보 뉴스 제보 - 부정부패와 비리 고발부터 따뜻한 미담까지 여로분의 제보를 기다립니다.]]>
+					</Description>
+					<Keywords>
+						<![CDATA[중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 사설, 뉴스레터, 구독신청, 스타기자, 연재기사, J팟, 브리핑]]>
+					</Keywords>
+				</MetaInfo>
+      </Menu>
+
+      <Menu Key="JMApp" Display="중앙그룹" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Controller="JMApp" Action="Index" />
+      </Menu>
+
+      <Menu Key="People" Display="인물 정보" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Link="http://people.joins.com/" />
+        <!--PC Url 로 모바일 Url 이 있는지 확인 필요-->
+      </Menu>
+
+      <Menu Key="CustomerCenter" Display="고객 센터" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Controller="CustomerCenter" Action="Index" />
+      </Menu>
+
+      <!--<Menu Key="CommentList" Display="댓글" IsShowTopMenu="false" IsShowMegaMenu="false">
+        <Url Controller="Comment" Action="Comments" />
+      </Menu>-->
+
+      <Menu Key="Notice" Display="공지/안내" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Controller="Notice" Action="index" />
+      </Menu>
+
+      <Menu Key="Menu" Display="메뉴편집" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Controller="Menu" Action="index" />
+      </Menu>
+      <Menu Key="Jtbc" Display="뉴스룸" IsShowMegaMenu="false" IsShowTopMenu="false">
+        <Url Controller="Jtbc" Action="index" />
+      </Menu>
+
+      <Menu Key="Election2016" Display="제20대 국회의원 선거">
+        <Url Link="https://mnews.joins.com//election2016" />
+        <Children>
+          <Menu Key="FactCheck" Display="팩트체크">
+            <Url Link="https://mnews.joins.com/election_2016/FactCheck" />
+          </Menu>
+          <Menu Key="DataNews" Display="데이터 뉴스">
+            <Url Link="https://mnews.joins.com/election_2016/DataNews" />
+          </Menu>
+        </Children>
+      </Menu>
+    </Children>
+  </Menu>
+</MenuConfig>

@@ -37,7 +37,6 @@ const GroupChildMemberAgGrid = ({ list, paging, total, page, size, onChangeSearc
             paging={paging}
             rowSelection="multiple"
             onSelectionChanged={handleSelectionChanged}
-            pageSizes={[1, 5, 10]}
         />
     );
 };

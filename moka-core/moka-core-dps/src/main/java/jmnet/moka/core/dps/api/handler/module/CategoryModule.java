@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 public class CategoryModule implements ModuleInterface {
     @Autowired
-    @Qualifier("pcCategoryParser")
+    @Qualifier("categoryParser")
     private CategoryParser categoryParser;
 
     private ApiRequestHandler apiRequestHandler;

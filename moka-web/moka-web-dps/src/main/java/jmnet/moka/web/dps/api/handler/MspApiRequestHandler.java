@@ -84,7 +84,6 @@ public class MspApiRequestHandler extends DefaultApiRequestHandler {
             String cachedString = ApiCacheHelper.getCachedString(apiContext, this.cacheManager);
 			ResponseEntity<?> responseEntity = null;
 			HttpHeaders responseHeaders = new HttpHeaders();
-			responseHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
 			if (accessControllAllowOrigin != null ) {
 				responseHeaders.set("Access-Control-Allow-Origin", accessControllAllowOrigin);
 			}
@@ -94,10 +93,19 @@ public class MspApiRequestHandler extends DefaultApiRequestHandler {
 			} else {
 				ApiResult apiResult = processApi(apiContext);
 				try {
-                    cachedString =
-                            ApiCacheHelper.setCache(apiContext, this.cacheManager, apiResult);
+					if ( apiContext.getApi().getContentType() != null) {
+						responseHeaders.set("Content-Type",apiContext.getApi().getContentType());
+						Object obj = apiResult.get(ApiResult.MAIN_DATA);
+						cachedString =
+								ApiCacheHelper.setCache(apiContext, this.cacheManager, obj);
+					} else {
+						responseHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+						cachedString =
+								ApiCacheHelper.setCache(apiContext, this.cacheManager, apiResult);
+					}
 				} catch (JsonProcessingException e) {
-					e.printStackTrace();
+					logger.error("api Request:{} {} : {}", apiContext.getApiPath(), apiContext.getApiId(), e.toString(), e);
+
 				}
 			}
 			responseEntity = ResponseEntity.ok().headers(responseHeaders).body(cachedString);

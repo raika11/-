@@ -33,7 +33,7 @@ import jmnet.moka.core.dps.api.model.Api;
 import jmnet.moka.core.dps.api.model.ApiConfig;
 import jmnet.moka.core.dps.api.model.DbRequest;
 import jmnet.moka.core.dps.api.model.DefaultApiConfig;
-import jmnet.moka.core.dps.api.model.EvalRequest;
+import jmnet.moka.core.dps.api.model.ScriptRequest;
 import jmnet.moka.core.dps.api.model.IpGroup;
 import jmnet.moka.core.dps.api.model.ModuleRequest;
 import jmnet.moka.core.dps.api.model.Parameter;
@@ -80,6 +80,7 @@ public class ApiParser {
     public static final String ATTR_API_ID = "apiId";
     public static final String ATTR_KEYS = "keys";
     public static final String ATTR_IP_GROUP = "ipGroup";
+    public static final String ATTR_CONTENT_TYPE = "contentType";
     public static final String ATTR_CORS = "cors";
 	public static final String PARAM_TYPE_NUMBER = "number";
 	public static final String PARAM_TYPE_STRING = "string";
@@ -159,7 +160,8 @@ public class ApiParser {
     	Node descriptionNode = getNode(apiEl, "./"+EL_DESCRIPTION);
     	String description = descriptionNode.getTextContent(); 
     	String cors =apiEl.getAttribute(ATTR_CORS);
-        Api api = new Api(apiConfig, id, expire, period, description, cors);
+    	String contentType =apiEl.getAttribute(ATTR_CONTENT_TYPE);
+        Api api = new Api(apiConfig, id, expire, period, description, contentType, cors);
     	setParameter(api, apiEl);
     	setRequestList(api, apiEl);
         setKeys(api, apiEl);
@@ -342,7 +344,7 @@ public class ApiParser {
 				String exclude = requestEl.getAttribute(ATTR_EXCLUDE);
 				api.addRequest(new UrlRequest(type, async, resultName, textContent, include, exclude, selector));
 			} else if ( type.equals(Request.TYPE_SCRIPT)) {
-				api.addRequest(new EvalRequest(type, async, resultName, textContent));
+				api.addRequest(new ScriptRequest(type, async, resultName, textContent));
             } else if (type.equals(Request.TYPE_PURGE)) {
                 String apiPath = requestEl.getAttribute(ATTR_API_PATH);
                 String apiId = requestEl.getAttribute(ATTR_API_ID);

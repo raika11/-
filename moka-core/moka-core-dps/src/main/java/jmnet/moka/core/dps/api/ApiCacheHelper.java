@@ -82,15 +82,20 @@ public class ApiCacheHelper {
     }
 
     public static String setCache(ApiContext apiContext, CacheManager cacheManager,
-            ApiResult result) throws JsonProcessingException {
+            Object result) throws JsonProcessingException {
         String cacheType = makeCacheType(apiContext);
         String cacheKey = makeCacheKey(apiContext);
-        String cachedString = MAPPER.writeValueAsString(result);
+        String cachedString;
+        if ( result instanceof String) {
+            cachedString = (String)result;
+        } else {
+            cachedString = MAPPER.writeValueAsString(result);
+        }
         Api api = apiContext.getApi();
         if (api.isExpireUndefined()) {
-            cacheManager.set(cacheType, cacheKey, MAPPER.writeValueAsString(result));
+            cacheManager.set(cacheType, cacheKey, cachedString);
         } else if (api.getExpire() > 0) { // expire가 0일 경우 캐시하지 않는다.
-            cacheManager.set(cacheType, cacheKey, MAPPER.writeValueAsString(result),
+            cacheManager.set(cacheType, cacheKey, cachedString,
                     api.getExpire());
         }
         return cachedString;

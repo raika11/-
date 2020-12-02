@@ -19,6 +19,7 @@ public class Api {
     private String id;
     private long expire;
     private String period;
+    private String contentType;
     private String cors;
     private boolean hasDbRequest = false;
     private boolean hasAsyncRequest = false;
@@ -27,15 +28,16 @@ public class Api {
     private List<String> keyList = ApiParser.EMPTY_TOKEN_LIST;
 
     public Api(ApiConfig apiConfig, String id) {
-        this(apiConfig, id, 0L, null, null, null);
+        this(apiConfig, id, 0L, null, null, null, null);
     }
 
-    public Api(ApiConfig apiConfig, String id, long expire, String period, String description, String cors) {
+    public Api(ApiConfig apiConfig, String id, long expire, String period, String description, String contentType, String cors) {
         this.apiConfig = apiConfig;
         this.id = id;
         this.period = period;
         this.expire = expire;
         this.description = description;
+        this.contentType = McpString.isNotEmpty(contentType)? contentType: null;
         this.cors = McpString.isNotEmpty(cors)? cors:null;
         this.parameterMap = new LinkedHashMap<String, Parameter>(16);
         this.requestList = new ArrayList<Request>(4);
@@ -99,6 +101,8 @@ public class Api {
     public String getDescription() {
         return this.description;
     }
+
+    public String getContentType() { return this.contentType; }
 
     public String getCors() { return this.cors; }
 

@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
-import columnDefs from './RelationInComponentListColums';
+import columnDefs from './RelationInComponentListColumns';
 import { ITEM_TP, ITEM_DS, ITEM_CP } from '@/constants';
 import { relationAgGridHeight, relationDSAgGridHeight } from '@pages/commons';
 

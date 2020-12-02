@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 // import { GET_DATASET_LIST, clearStore, getDatasetList, changeSearchOption } from '@store/dataset';
-import columnDefs from './ArticlePageListModalColums';
+import columnDefs from './ArticlePageListModalColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
 export const defaultSkinSearchType = [

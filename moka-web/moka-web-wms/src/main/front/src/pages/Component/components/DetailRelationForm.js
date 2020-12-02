@@ -7,7 +7,7 @@ import { DatasetListModal } from '@pages/Dataset/modals';
 import { TemplateListModal } from '@pages/Template/modals';
 
 const DetailRelationForm = (props) => {
-    const { component, setComponent, inputTag, invalidList } = props;
+    const { component, setComponent, inputTag, error } = props;
 
     // state
     const [templateModalShow, setTemplateModalShow] = useState(false);
@@ -84,14 +84,8 @@ const DetailRelationForm = (props) => {
     }, [component.componentSeq]);
 
     useEffect(() => {
-        if (invalidList.length > 0) {
-            invalidList.forEach((i) => {
-                if (i.field === 'template') {
-                    setTemplateError(true);
-                }
-            });
-        }
-    }, [invalidList]);
+        setTemplateError(error.template);
+    }, [error]);
 
     return (
         <Form>
@@ -139,11 +133,12 @@ const DetailRelationForm = (props) => {
                 </Col>
                 {component.dataType !== 'NONE' && (
                     <React.Fragment>
-                        {/* 자동/수동 셀렉트 */}
+                        {/* 자동/수동/폼 셀렉트 */}
                         <Col xs={2} className="d-flex p-0 pr-3">
                             <MokaInput as="select" value={component.dataType} onChange={handleChangeDataset}>
                                 <option value="DESK">편집</option>
                                 <option value="AUTO">자동</option>
+                                <option value="FORM">폼</option>
                             </MokaInput>
                         </Col>
 
@@ -156,6 +151,21 @@ const DetailRelationForm = (props) => {
                                     linkText={dataset.datasetSeq ? `ID: ${dataset.datasetSeq}` : 'ID'}
                                     inputList={{
                                         placeholder: '데이터셋 선택',
+                                        className: 'bg-white',
+                                        value: dataset.datasetName,
+                                        disabled: true,
+                                    }}
+                                    icon={<MokaIcon iconName="fal-search" />}
+                                    // 아이콘 클릭했을 때 데이터셋 팝업 열고, 데이터셋 선택하면 화면에 보여줌
+                                    onIconClick={() => setDatasetModalShow(true)}
+                                />
+                            )}
+                            {component.dataType === 'FORM' && (
+                                <MokaPrependLinkInput
+                                    to={dataset.datasetSeq ? `/dataset/${dataset.datasetSeq}` : undefined}
+                                    linkText={dataset.datasetSeq ? `ID: ${dataset.datasetSeq}` : 'ID'}
+                                    inputList={{
+                                        placeholder: '폼 선택',
                                         className: 'bg-white',
                                         value: dataset.datasetName,
                                         disabled: true,

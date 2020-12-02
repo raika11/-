@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import columnDefs from './ComponentAgGridColums';
+import columnDefs from './ComponentAgGridColumns';
 
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';

@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import { createRequestActionTypes } from '@store/commons/saga';
+import { createDeskingRequestSaga } from '../desking/deskingSaga';
 
 /**
  * 스토어 데이터 삭제
@@ -20,6 +21,12 @@ export const [GET_EDIT_FORM_LIST, GET_EDIT_FORM_LIST_SUCCESS, GET_EDIT_FORM_LIST
 export const [GET_EDIT_FORM, GET_EDIT_FORM_SUCCESS, GET_EDIT_FORM_FAILURE] = createRequestActionTypes('editForm/GET_EDIT_FORM');
 export const getEditFormList = createAction(GET_EDIT_FORM_LIST, (...actions) => actions);
 export const getEditForm = createAction(GET_EDIT_FORM, (partId) => partId);
+
+/**
+ * 데이터 조회 (모달에서 쓰는 일회용 데이터)
+ */
+export const GET_EDIT_FORM_LIST_MODAL = 'editForm/GET_EDIT_FORM_LIST_MODAL';
+export const getEditFormListModal = createAction(GET_EDIT_FORM_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
 
 /**
  * 데이터 변경

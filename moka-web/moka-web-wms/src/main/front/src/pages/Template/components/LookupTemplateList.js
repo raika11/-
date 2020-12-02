@@ -11,7 +11,7 @@ import { TemplateThumbTable } from '@pages/Template/components';
 import { defaultTemplateSearchType } from '@pages/commons';
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { getTemplateLookupList, changeLookupSearchOption, initialState, clearLookup, GET_TEMPLATE_LOOKUP_LIST } from '@store/template';
-import columnDefs from './LookupTemplateListColums';
+import columnDefs from './LookupTemplateListColumns';
 import { TemplateHtmlModal } from '@pages/Template/modals';
 
 const propTypes = {

@@ -18,7 +18,7 @@ import {
     GET_AREA_LIST_DEPTH1,
 } from '@store/area';
 import Depth2 from './AreaAgGridDepth2';
-import columnDefs from './AreaAgGridColums';
+import columnDefs from './AreaAgGridColumns';
 
 /**
  * 편집영역 > 첫번째 리스트

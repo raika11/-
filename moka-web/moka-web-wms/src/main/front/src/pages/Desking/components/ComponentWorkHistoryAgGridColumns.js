@@ -28,7 +28,7 @@ export default [
     {
         headerName: '불러오기',
         field: 'load',
-        width: 70,
+        width: 92,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;

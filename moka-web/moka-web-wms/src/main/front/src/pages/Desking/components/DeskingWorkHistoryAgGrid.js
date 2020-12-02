@@ -6,7 +6,7 @@ const DeskingWorkHistoryAgGrid = (props) => {
     const { loading, rowData } = props;
 
     const handleRowClicked = useCallback((row) => {
-        console.log(row);
+        // console.log(row);
     }, []);
 
     return (

@@ -29,7 +29,7 @@ const ContainerAgGrid = ({ onDelete }) => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClick = useCallback((container) => history.push(`/container/${container.containerSeq}`), [history]);
+    const handleRowClicked = useCallback((container) => history.push(`/container/${container.containerSeq}`), [history]);
 
     /**
      * 테이블에서 검색옵션 변경
@@ -71,7 +71,7 @@ const ContainerAgGrid = ({ onDelete }) => {
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(container) => container.containerSeq}
-                onRowClicked={handleRowClick}
+                onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}
                 page={search.page}

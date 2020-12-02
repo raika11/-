@@ -40,57 +40,8 @@ const DeskingHistoryList = (props) => {
     const [search, setSearch] = useState(initialState.history.search);
     const [rowData, setRowData] = useState([]);
 
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
-    useEffect(() => {
-        if (search.areaSeq !== area.areaSeq) {
-            if (selectedComponent.componentSeq) dispatch(clearSelectedComponent());
-            dispatch(
-                changeSearchOption({
-                    ...search,
-                    areaSeq: area.areaSeq,
-                    componentSeq: null,
-                }),
-            );
-            dispatch(clearHistoryList());
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search.areaSeq, area.areaSeq]);
-
-    useEffect(() => {
-        if (selectedComponent?.componentSeq) {
-            dispatch(
-                getComponentWorkHistory(
-                    changeSearchOption({
-                        ...search,
-                        areaSeq: area.areaSeq,
-                        componentSeq: selectedComponent.componentSeq,
-                    }),
-                ),
-            );
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedComponent]);
-
-    /**
-     * 마운트
-     */
-    useEffect(() => {
-        const date = new Date();
-        const regDt = search.regDt || moment(date).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).format(DB_DATEFORMAT);
-
-        dispatch(
-            changeSearchOption({
-                ...search,
-                areaSeq: area.areaSeq,
-                page: 0,
-                regDt,
-            }),
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const date = new Date();
+    const regDt = search.regDt || moment(date).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).format(DB_DATEFORMAT);
 
     /**
      * 테이블 검색옵션 변경
@@ -104,7 +55,7 @@ const DeskingHistoryList = (props) => {
     };
 
     /**
-     * 검색 버튼
+     * search 검색 버튼
      */
     const handleSearch = () => {
         dispatch(
@@ -117,13 +68,17 @@ const DeskingHistoryList = (props) => {
         );
     };
 
+    /**
+     * 컴포넌트 워크 히스토리 클릭 시 데스킹 워크 목록 조회
+     * @param {object} row row data
+     */
     const handleRowClicked = (row) => {
         setSearch({ ...search, componentHistorySeq: row.seq });
         dispatch(getDeskingWorkHistory(row.seq));
     };
 
     /**
-     * 로드 버튼 클릭
+     * 컴포넌트 워크 히스토리 테이블 로드 버튼 클릭
      * @param {object} data row data
      */
     const handleClickLoad = useCallback(
@@ -151,6 +106,26 @@ const DeskingHistoryList = (props) => {
     );
 
     useEffect(() => {
+        // local state => store search
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    /**
+     * 기본 날짜 셋팅
+     */
+    useEffect(() => {
+        dispatch(
+            changeSearchOption({
+                ...search,
+                areaSeq: area.areaSeq,
+                page: 0,
+                regDt,
+            }),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
         // 컴포넌트 히스토리 rowData 셋팅
         setRowData(
             componentWorkHistoryList.map((arr) => ({
@@ -160,9 +135,44 @@ const DeskingHistoryList = (props) => {
         );
     }, [handleClickLoad, componentWorkHistoryList]);
 
+    /**
+     * area 변경시 search, table, selectedComponent clear
+     */
+    useEffect(() => {
+        if (search.areaSeq !== area.areaSeq) {
+            if (selectedComponent.componentSeq) dispatch(clearSelectedComponent());
+            dispatch(
+                changeSearchOption({
+                    ...search,
+                    areaSeq: area.areaSeq,
+                    componentSeq: null,
+                    regDt,
+                }),
+            );
+            dispatch(clearHistoryList());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search.areaSeq, area.areaSeq]);
+
+    useEffect(() => {
+        // 컴포넌트 선택시 컴포넌트 워크 히스토리 목록 조회
+        if (selectedComponent?.componentSeq) {
+            dispatch(
+                getComponentWorkHistory(
+                    changeSearchOption({
+                        ...search,
+                        areaSeq: area.areaSeq,
+                        componentSeq: selectedComponent.componentSeq,
+                    }),
+                ),
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedComponent]);
+
     return (
         <MokaCard title="히스토리" className="w-100" bodyClassName="d-flex">
-            <div style={{ width: '456px' }} className="pr-2">
+            <div style={{ width: '456px' }} className="pr-3">
                 <Search search={search} setSearch={setSearch} list={componentList} onSearch={handleSearch} selectedComponent={selectedComponent} show={show} />
                 {/* search의 테이블 */}
                 <ComponentWorkAgGrid

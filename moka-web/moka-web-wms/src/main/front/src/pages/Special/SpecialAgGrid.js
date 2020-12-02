@@ -4,7 +4,7 @@ import { MokaTable } from '@components';
 import { columnDefs, rowData } from './SpecialAgGridColumns';
 
 const SpecialAgGrid = () => {
-    const handleRowClick = () => {};
+    const handleRowClicked = () => {};
 
     const handleChangeSearchOption = () => {};
 
@@ -14,7 +14,7 @@ const SpecialAgGrid = () => {
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(special) => special.cdSeq}
-            onRowClicked={handleRowClick}
+            onRowClicked={handleRowClicked}
             // loading={loading}
             total={0}
             page={0}

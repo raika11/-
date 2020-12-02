@@ -70,12 +70,17 @@ const DeskingHistorySearch = (props) => {
                         inputProps={{
                             timeFormat: null,
                         }}
-                        value={search.regDt}
+                        value={moment(search.regDt, DB_DATEFORMAT)}
                         onChange={(date) => {
                             if (typeof date === 'object') {
                                 setSearch({
                                     ...search,
                                     regDt: moment(date).format(DB_DATEFORMAT),
+                                });
+                            } else {
+                                setSearch({
+                                    ...search,
+                                    regDt: null,
                                 });
                             }
                         }}

@@ -44,27 +44,32 @@ const SnsMataEdit = () => {
             <hr />
 
             {/* 페이스북 */}
+            <Form.Row>
+                <Col xs={12} className="pb-4">
+                    <div className="d-flex">
+                        <MokaInputLabel label="Facebook" labelWidth={70} className="m-0 h5" as="none" />
+                        <div className="d-flex justify-content-center">
+                            <Button variant="positive" className="mr-05">
+                                FB 전송
+                            </Button>
+                            <Button variant="positive" className="mr-05">
+                                FB 캐시삭제
+                            </Button>
+                            <Button variant="negative" className="mr-05" onClick={(e) => handleClickFBTokenManage(e)}>
+                                토큰 관리
+                            </Button>
+                            <Button variant="negative" className="mr-05">
+                                공유
+                            </Button>
+                            <Button variant="searching" className="mr-05">
+                                TW로 복사
+                            </Button>
+                        </div>
+                    </div>
+                </Col>
+            </Form.Row>
+
             <Form className="mb-gutter">
-                <Form.Row xs={12} className="mb-2">
-                    <MokaInputLabel as="none" label="FaceBook" labelWidth={87} />
-                    <Col className="d-flex pr-1">
-                        <Button variant="positive">FB 전송</Button>
-                    </Col>
-                    <Col className="d-flex">
-                        <Button variant="searching">FB 캐시삭제</Button>
-                    </Col>
-                    <Col className="d-flex">
-                        <Button variant="searching" onClick={(e) => handleClickFBTokenManage(e)}>
-                            토큰 관리
-                        </Button>
-                    </Col>
-                    <Col className="d-flex">
-                        <Button variant="searching">공유</Button>
-                    </Col>
-                    <Col className="d-flex pr-0">
-                        <Button variant="searching">TW로 복사</Button>
-                    </Col>
-                </Form.Row>
                 <Form.Row>
                     <Col xs={12}>
                         <MokaInputLabel as="switch" name="status" id="status" label="사용유무" variant="positive" labelWidth={87} />
@@ -133,27 +138,32 @@ const SnsMataEdit = () => {
             <hr />
 
             {/* 트위터 */}
+            <Form.Row>
+                <Col xs={12} className="pb-4">
+                    <div className="d-flex">
+                        <MokaInputLabel label="Twitter" labelWidth={70} className="m-0 h5" as="none" />
+                        <Col className="d-flex justify-content-end">
+                            <div className="justify-content-end pr-2">
+                                <Button variant="positive" className="mr-05">
+                                    TW 전송
+                                </Button>
+                            </div>
+                            <div className="justify-content-end pr-2">
+                                <Button variant="positive" className="mr-05">
+                                    TW 캐시삭제
+                                </Button>
+                            </div>
+                            <div className="justify-content-end pr-2">
+                                <Button variant="searching" className="mr-05">
+                                    FB로 복사
+                                </Button>
+                            </div>
+                        </Col>
+                    </div>
+                </Col>
+            </Form.Row>
+
             <Form className="mb-gutter">
-                <Form.Row xs={12} className="mb-2">
-                    <MokaInputLabel as="none" label="Twitter" labelWidth={87} />
-                    <Col className="d-flex justify-content-end">
-                        <div className="justify-content-end pr-2">
-                            <Button variant="positive" className="p-2">
-                                TW 전송
-                            </Button>
-                        </div>
-                        <div className="justify-content-end pr-2">
-                            <Button variant="searching" className="p-2">
-                                TW 캐시삭제
-                            </Button>
-                        </div>
-                        <div className="justify-content-end pr-2">
-                            <Button variant="searching" className="p-2">
-                                FB로 복사
-                            </Button>
-                        </div>
-                    </Col>
-                </Form.Row>
                 <Form.Row>
                     <Col xs={12}>
                         <MokaInputLabel as="switch" name="status" id="status" label="사용유무" variant="positive" labelWidth={87} />

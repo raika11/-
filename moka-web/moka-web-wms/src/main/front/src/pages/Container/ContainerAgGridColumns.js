@@ -11,6 +11,7 @@ export default [
     {
         headerName: '컨테이너명',
         field: 'containerName',
+        flex: 1,
         width: 268,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'containerName',

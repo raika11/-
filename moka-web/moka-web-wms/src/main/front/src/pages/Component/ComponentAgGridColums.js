@@ -12,6 +12,7 @@ export default [
         headerName: '컴포넌트명',
         field: 'componentName',
         width: 178,
+        flex: 1,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'componentName',
     },

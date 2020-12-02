@@ -12,6 +12,7 @@ const columnDefs = [
         headerName: '컨테이너명',
         field: 'containerName',
         width: 240,
+        flex: 1,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'containerName',
     },

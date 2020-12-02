@@ -166,7 +166,7 @@ const DeskingWorkButtonGroup = (props) => {
 
     const iconButton = [
         { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => setHtmlEditModal(true) },
-        { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModal(true) },
+        // { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModal(true) },
         { title: '임시저장', iconName: 'fal-save', onClick: handleSaveComponentWork },
         { title: '전송', iconName: 'fal-share-square', onClick: handlePublishComponentWork },
     ];

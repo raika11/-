@@ -17,6 +17,7 @@ export const columnDefs = [
         headerName: '도메인명',
         field: 'domainName',
         width: 102,
+        flex: 1,
     },
     {
         headerName: '',

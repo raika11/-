@@ -109,7 +109,9 @@ const GroupChildGroupMemberEdit = () => {
     }, [dispatch, groupCd, groupOut.search]);
 
     useEffect(() => {
-        dispatch(getGroupInMemberList({ search: { groupCd, useTotal: 'N' } }));
+        if (groupCd) {
+            dispatch(getGroupInMemberList({ search: { groupCd, useTotal: 'N' } }));
+        }
     }, [dispatch, groupCd]);
 
     return (

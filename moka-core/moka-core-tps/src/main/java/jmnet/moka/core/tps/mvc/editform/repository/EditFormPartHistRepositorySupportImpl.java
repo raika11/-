@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.editform.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
+import java.util.Optional;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
@@ -54,5 +55,23 @@ public class EditFormPartHistRepositorySupportImpl extends QuerydslRepositorySup
                 .fetchResults();
 
         return new PageImpl<EditFormPartHist>(list.getResults(), pageable, list.getTotal());
+    }
+
+    @Override
+    public Optional<EditFormPartHist> findLast(EditFormPartHist editFormPartHist) {
+        QEditFormPartHist qPartHist = QEditFormPartHist.editFormPartHist;
+
+
+        JPQLQuery<EditFormPartHist> query = from(qPartHist);
+        query.where(qPartHist.partSeq
+                .eq(editFormPartHist.getPartSeq())
+                .and(qPartHist.status
+                        .eq(editFormPartHist.getStatus())
+                        .and(qPartHist.approvalYn.eq(editFormPartHist.getApprovalYn()))));
+        query
+                .orderBy(qPartHist.modDt.desc())
+                .orderBy(qPartHist.partSeq.desc());
+
+        return Optional.ofNullable(query.fetchFirst());
     }
 }

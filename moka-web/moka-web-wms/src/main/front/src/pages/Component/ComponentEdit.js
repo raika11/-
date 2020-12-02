@@ -46,6 +46,7 @@ const ComponentEdit = ({ onDelete }) => {
 
     // state
     const [temp, setTemp] = useState(initialState.component);
+    const [error, setError] = useState({});
     const componentNameRegex = /[^\s\t\n]+/;
 
     /**
@@ -194,6 +195,20 @@ const ComponentEdit = ({ onDelete }) => {
         }
     }, [dispatch, componentSeq]);
 
+    useEffect(() => {
+        if (invalidList) {
+            setError(
+                invalidList.reduce(
+                    (all, c) => ({
+                        ...all,
+                        [c.field]: true,
+                    }),
+                    {},
+                ),
+            );
+        }
+    }, [invalidList]);
+
     return (
         <MokaCard width={688} title={`컴포넌트 ${componentSeq ? '정보' : '등록'}`} className="flex-fill mr-gutter" loading={loading} bodyClassName="pb-0">
             <BasicForm
@@ -202,11 +217,11 @@ const ComponentEdit = ({ onDelete }) => {
                 componentNameRegex={componentNameRegex}
                 onClickSave={handleClickSave}
                 onClickDelete={() => onDelete(component)}
-                invalidList={invalidList}
+                error={error}
             />
             <hr className="divider mb-0" />
             <div className="custom-scroll component-padding-box py-3" style={{ height: 615 }}>
-                <DetailRelationForm component={temp} setComponent={setTemp} inputTag={inputTag} invalidList={invalidList} />
+                <DetailRelationForm component={temp} setComponent={setTemp} inputTag={inputTag} error={error} />
                 <hr className="divider" />
                 <DetailPeriodForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />
                 <hr className="divider" />

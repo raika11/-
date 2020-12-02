@@ -6,6 +6,7 @@ import java.util.Optional;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
@@ -33,6 +34,14 @@ public interface EditFormService {
      * @return 편집 폼목록
      */
     public Page<EditForm> findAllEditForm(EditFormSearchDTO search);
+
+    /**
+     * 편집 폼목록조회
+     *
+     * @param search 검색조건
+     * @return 편집 폼목록
+     */
+    public Page<EditFormPart> findAllEditFormPart(EditFormPartSearchDTO search);
 
     /**
      * 편집 폼목록 전체조회(페이징X)
@@ -158,11 +167,10 @@ public interface EditFormService {
     /**
      * 편집 폼 삭제
      *
-     * @param formSeq 편집 폼 일련번호
      * @param itemSeq 편집 폼 아이템 일련번호
      * @throws Exception 예외처리
      */
-    public int deleteEditFormPart(Long formSeq, Long itemSeq)
+    public int deleteEditFormPart(Long itemSeq)
             throws Exception;
 
 
@@ -205,4 +213,12 @@ public interface EditFormService {
      * @return 검색 결과
      */
     Optional<EditFormPartHist> findEditFormPartHistoryBySeq(Long seqNo);
+
+    /**
+     * 검색조건에 해당 하는 이력의 가장 마지막 정보 조회
+     *
+     * @param editFormPartHist 검색 조건
+     * @return 검색 결과
+     */
+    Optional<EditFormPartHist> findEditFormPartLastHistory(EditFormPartHist editFormPartHist);
 }

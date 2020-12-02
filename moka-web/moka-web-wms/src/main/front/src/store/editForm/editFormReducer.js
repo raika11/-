@@ -33,6 +33,12 @@ export const initialState = {
     historyModalShow: false,
     formImportModalShow: false,
     importForm: null,
+    searchTypeList: [
+        { id: 'all', name: '전체' },
+        { id: 'formName', name: '폼명' },
+        { id: 'partId', name: '파트ID' },
+        { id: 'partName', name: '파트명' },
+    ],
 };
 
 /**

@@ -1,7 +1,9 @@
 package jmnet.moka.core.tps.mvc.editform.repository;
 
 import java.util.Optional;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
+import org.springframework.data.domain.Page;
 
 /**
  * <pre>
@@ -16,5 +18,7 @@ import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
  * @since 2020-10-23 09:38
  */
 public interface EditFormPartRepositorySupport {
+    Page<EditFormPart> findAll(EditFormPartSearchDTO searchDTO);
+
     public Optional<EditFormPart> findEditFormPart(EditFormPart editFormPart);
 }

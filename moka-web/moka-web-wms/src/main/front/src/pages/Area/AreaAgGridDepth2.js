@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
 import { initialState, clearList, clearArea, changeSelectedDepth, getAreaDepth2, getAreaListDepth3, changeSearchOptionDepth3, GET_AREA_LIST_DEPTH2 } from '@store/area';
 import Depth3 from './AreaAgGridDepth3';
-import columnDefs from './AreaAgGridColums';
+import columnDefs from './AreaAgGridColumns';
 
 /**
  * 편집영역 > 두번째 리스트

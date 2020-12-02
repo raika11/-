@@ -102,6 +102,16 @@ export default handleActions(
             });
         },
         /**
+         * work status 변경
+         */
+        [act.CHANGE_WORK_STATUS]: (state, { payload }) => {
+            const { componentWorkSeq, status } = payload;
+
+            return produce(state, (draft) => {
+                draft.workStatus[componentWorkSeq] = status;
+            });
+        },
+        /**
          * 데이터 조회
          */
         [act.GET_COMPONENT_WORK_LIST_SUCCESS]: (state, { payload: { body } }) => {
@@ -109,15 +119,22 @@ export default handleActions(
                 const { area, desking } = body;
                 draft.list = desking;
                 draft.area = area;
+                draft.error = initialState.error;
                 if (!area.areaComps && !Array.isArray(area.areaComps)) {
                     draft.area.areaComps = [];
                 }
-                draft.error = initialState.error;
+
+                // selectedComponent 설정
+                let org = draft.selectedComponent.seq ? desking.find((d) => d.seq === draft.selectedComponent.seq) : null;
+                if (!org && desking.length > 0) {
+                    draft.selectedComponent = desking[0];
+                }
             });
         },
         [act.GET_COMPONENT_WORK_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.error = payload;
+                draft.selectedComponent = initialState.selectedComponent;
             });
         },
         /**

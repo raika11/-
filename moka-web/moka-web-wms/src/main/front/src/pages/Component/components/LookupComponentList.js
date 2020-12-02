@@ -9,7 +9,7 @@ import { ITEM_PG, ITEM_CT, ITEM_AP, ITEM_CP } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { getComponentLookupList, changeLookupSearchOption, initialState, clearLookup, GET_COMPONENT_LOOKUP_LIST } from '@store/component';
 import { getTpZone } from '@store/codeMgt';
-import columnDefs from './LookupComponentListColums';
+import columnDefs from './LookupComponentListColumns';
 import { defaultComponentSearchType } from '@pages/commons';
 import { TemplateHtmlModal } from '@pages/Template/modals';
 

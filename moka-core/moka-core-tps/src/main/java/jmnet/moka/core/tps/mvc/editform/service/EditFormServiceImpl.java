@@ -8,6 +8,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
@@ -57,6 +58,11 @@ public class EditFormServiceImpl implements EditFormService {
     @Override
     public Page<EditForm> findAllEditForm(EditFormSearchDTO search) {
         return editFormRepository.findAll(search.getPageable());
+    }
+
+    @Override
+    public Page<EditFormPart> findAllEditFormPart(EditFormPartSearchDTO search) {
+        return editFormPartRepository.findAll(search);
     }
 
     @Override
@@ -209,8 +215,10 @@ public class EditFormServiceImpl implements EditFormService {
                 // 예약 발송 아님
                 approvalYn = MokaConstants.YES;
             }
+        } else {
+            // 수정시에는 status가  PUBLISH이면 part 테이블에 저장하지 않는다.
+            editFormPart = editFormPartRepository.save(editFormPart);
         }
-        editFormPart = editFormPartRepository.save(editFormPart);
 
         EditFormPartHist partHist = editFormPartHistRepository.save(EditFormPartHist
                 .builder()
@@ -252,15 +260,19 @@ public class EditFormServiceImpl implements EditFormService {
     @Override
     public int deleteEditFormBySeq(Long formSeq)
             throws Exception {
-        return deleteEditFormPart(formSeq, 0L);
-    }
-
-    @Override
-    public int deleteEditFormPart(Long formSeq, Long partSeq)
-            throws Exception {
         return editFormPartMapper.delete(EditFormSearchDTO
                 .builder()
                 .formSeq(formSeq)
+                .partSeq(0L)
+                .build());
+    }
+
+    @Override
+    public int deleteEditFormPart(Long partSeq)
+            throws Exception {
+        return editFormPartMapper.delete(EditFormSearchDTO
+                .builder()
+                .formSeq(0L)
                 .partSeq(partSeq)
                 .build());
     }
@@ -292,6 +304,10 @@ public class EditFormServiceImpl implements EditFormService {
     @Override
     public Optional<EditFormPartHist> findEditFormPartHistoryBySeq(Long seqNo) {
         return editFormPartHistRepository.findById(seqNo);
+    }
+
+    public Optional<EditFormPartHist> findEditFormPartLastHistory(EditFormPartHist editFormPartHist) {
+        return editFormPartHistRepository.findLast(editFormPartHist);
     }
 
 }

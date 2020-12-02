@@ -106,7 +106,7 @@ const TemplateThumbTable = (props) => {
         <>
             <div className="mb-3 border" style={{ height: tableHeight }}>
                 {loading && <MokaLoader />}
-                <div className="d-flex flex-wrap align-content-start custom-scroll p-05 h-100 overflow-y-scroll">
+                <div className="d-flex flex-wrap align-content-start custom-scroll p-05 h-100">
                     {rowData.map((data) => (
                         <TemplateThumbCard
                             key={data.id}

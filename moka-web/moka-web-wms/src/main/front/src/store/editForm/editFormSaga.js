@@ -16,6 +16,11 @@ const getEditFormList = callApiAfterActions(editFormAction.GET_EDIT_FORM_LIST, e
 const getEditForm = createRequestSaga(editFormAction.GET_EDIT_FORM, editFormApi.getEditForm);
 
 /**
+ * 목록 (모달 데이터)
+ */
+const getEditFormListModal = createRequestSaga(editFormAction.GET_EDIT_FORM_LIST_MODAL, editFormApi.getEditFormList, false);
+
+/**
  * 등록/수정
  * @param {string} param0.payload.type insert|update
  * @param {array} param0.payload.actions 선처리 액션들
@@ -221,4 +226,5 @@ export default function* editSaga() {
     yield takeLatest(editFormAction.EXPORT_EDIT_FROM_PART_XML, exportEditFormPartXml);
     yield takeLatest(editFormAction.EXPORT_EDIT_FROM_PART_HISTORY_XML, exportEditFormPartHistoryXml);
     yield takeLatest(editFormAction.SAVE_EDIT_FORM_XML, importEditFormXmlFile);
+    yield takeLatest(editFormAction.GET_EDIT_FORM_LIST_MODAL, getEditFormListModal);
 }

@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 import { initialState, GET_DATASET_LIST_MODAL, getDatasetApiList } from '@store/dataset';
-import columnDefs from './DatasetApiListModalColums';
+import columnDefs from './DatasetApiListModalColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
 export const { searchTypeList } = initialState;

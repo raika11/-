@@ -6,7 +6,7 @@ import { MokaInputLabel } from '@components';
 import CopyModal from '../modals/ComponentCopyModal';
 
 const BasicForm = (props) => {
-    const { component, setComponent, componentNameRegex, onClickSave, onClickDelete, invalidList } = props;
+    const { component, setComponent, componentNameRegex, onClickSave, onClickDelete, error } = props;
 
     // state
     const [componentNameError, setComponentNameError] = useState(false);
@@ -14,15 +14,8 @@ const BasicForm = (props) => {
     const [copyModalShow, setCopyModalShow] = useState(false);
 
     useEffect(() => {
-        // invalidList 처리
-        if (invalidList.length > 0) {
-            invalidList.forEach((i) => {
-                if (i.field === 'componentName') {
-                    setComponentNameError(true);
-                }
-            });
-        }
-    }, [invalidList]);
+        setComponentNameError(error.componentName);
+    }, [error]);
 
     useEffect(() => {
         if (!component.componentSeq) {

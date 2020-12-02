@@ -14,7 +14,7 @@ function getRandomColor() {
 const EditThumbTable = (props) => {
     return (
         <React.Fragment>
-            <div className="border w-100 custom-scroll overflow-y-scroll mb-2" style={{ height: 364 }}>
+            <div className="border w-100 custom-scroll mb-2" style={{ height: 364 }}>
                 <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                     {[...Array(20)].map((x, idx) => (
                         <EditThumbCard key={idx} data={{ name: `${idx}-테스트`, id: idx, index: idx, color: getRandomColor() }} />

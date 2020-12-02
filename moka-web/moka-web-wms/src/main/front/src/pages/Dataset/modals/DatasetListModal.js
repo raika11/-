@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getDatasetListModal, GET_DATASET_LIST_MODAL } from '@store/dataset';
-import columnDefs from './DatasetListModalColums';
+import columnDefs from './DatasetListModalColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import { defaultDatasetSearchType } from '@pages/commons';
 
@@ -196,8 +196,6 @@ const DatsetListModal = (props) => {
                     {/* 검색 조건 */}
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInputLabel
-                            label="구분"
-                            labelWidth={45}
                             as="select"
                             className="mb-0"
                             value={search.searchType}

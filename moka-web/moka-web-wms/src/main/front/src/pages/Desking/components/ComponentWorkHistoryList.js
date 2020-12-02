@@ -3,7 +3,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import moment from 'moment';
 import { MokaCard } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
-import Search from './DeskingHistorySearch';
+import Search from './ComponentWorkHistorySearch';
 import ComponentWorkAgGrid from './ComponentWorkHistoryAgGrid';
 import DeskingWorkAgGrid from './DeskingWorkHistoryAgGrid';
 import toast from '@utils/toastUtil';
@@ -19,7 +19,7 @@ import {
     getDeskingWorkHistory,
 } from '@store/desking';
 
-const DeskingHistoryList = (props) => {
+const ComponentWorkHistoryList = (props) => {
     const { show } = props;
     const dispatch = useDispatch();
     const { area, search: storeSearch, loading, total, componentList, componentWorkHistoryList, deskingWorkHistoryList, selectedComponent } = useSelector(
@@ -135,10 +135,8 @@ const DeskingHistoryList = (props) => {
         );
     }, [handleClickLoad, componentWorkHistoryList]);
 
-    /**
-     * area 변경시 search, table, selectedComponent clear
-     */
     useEffect(() => {
+        // area 변경시 search, table, selectedComponent clear
         if (search.areaSeq !== area.areaSeq) {
             if (selectedComponent.componentSeq) dispatch(clearSelectedComponent());
             dispatch(
@@ -156,7 +154,7 @@ const DeskingHistoryList = (props) => {
 
     useEffect(() => {
         // 컴포넌트 선택시 컴포넌트 워크 히스토리 목록 조회
-        if (selectedComponent?.componentSeq) {
+        if (selectedComponent?.componentSeq && show) {
             dispatch(
                 getComponentWorkHistory(
                     changeSearchOption({
@@ -168,7 +166,7 @@ const DeskingHistoryList = (props) => {
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedComponent]);
+    }, [selectedComponent, show]);
 
     return (
         <MokaCard title="히스토리" className="w-100" bodyClassName="d-flex">
@@ -194,4 +192,4 @@ const DeskingHistoryList = (props) => {
     );
 };
 
-export default DeskingHistoryList;
+export default ComponentWorkHistoryList;

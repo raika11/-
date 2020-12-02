@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
 import toast from '@utils/toastUtil';
 import { changeSelectedDepth, clearArea, getAreaDepth3, GET_AREA_LIST_DEPTH3 } from '@store/area';
-import columnDefs from './AreaAgGridColums';
+import columnDefs from './AreaAgGridColumns';
 
 /**
  * 편집영역 > 세번째 리스트

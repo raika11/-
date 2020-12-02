@@ -68,7 +68,7 @@ public class MemberInfo extends BaseAudit {
     /**
      * J중앙I일간E기타M매거진A관리자D청백R기사수신
      */
-    @Column(name = "GROUP")
+    @Column(name = "GRP")
     @Builder.Default
     private String group = "J";
 

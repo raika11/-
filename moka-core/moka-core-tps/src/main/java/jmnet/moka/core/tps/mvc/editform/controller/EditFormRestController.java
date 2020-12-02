@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.editform.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,12 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.Downloader;
@@ -37,6 +41,7 @@ import jmnet.moka.core.tps.mvc.editform.dto.EditFormImportDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.dto.FieldGroupDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
@@ -142,6 +147,40 @@ public class EditFormRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
+    /**
+     * 편집 폼 Part 목록 조회
+     *
+     * @param search 검색 조건
+     * @return 검색 결과
+     */
+    @ApiOperation(value = "Edit Form Part 데이터 조회")
+    @GetMapping("/parts")
+    @ApiImplicitParams({@ApiImplicitParam(name = "formSeq", value = "폼 일련번호", required = false, dataType = "Long", paramType = "query"),
+                        @ApiImplicitParam(name = "partSeq", value = "파트 일련번호", required = false, dataType = "Long", paramType = "query"),
+                        @ApiImplicitParam(name = "searchType", value = "검색조건<br>all:전체<br>formId:폼ID<br>formName:폼명<br>partId:파트ID<br>partTitle:파트제목", required = false, dataType = "String", paramType = "query"),
+                        @ApiImplicitParam(name = "keyword", value = "검색어", required = false, dataType = "String", paramType = "query"),
+                        @ApiImplicitParam(name = "page", value = "페이지수", required = false, dataType = "int", paramType = "query", defaultValue =
+                                SearchDTO.DEFAULT_PAGE + ""),
+                        @ApiImplicitParam(name = "size", value = "페이지당 목록수", required = false, dataType = "int", paramType = "query", defaultValue =
+                                SearchDTO.DEFAULT_SIZE + ""),
+                        @ApiImplicitParam(name = "useTotal", value = "페이징처리여부", required = false, dataType = "String", paramType = "query", defaultValue = MokaConstants.YES)})
+    public ResponseEntity<?> getEditFormPartList(@SearchParam EditFormPartSearchDTO search) {
+
+        ResultListDTO<EditFormPartDTO> resultListMessage = new ResultListDTO<>();
+
+        // 조회
+        Page<EditFormPart> returnValue = editFormService.findAllEditFormPart(search);
+        List<EditFormPartDTO> resultDTOs = modelMapper.map(returnValue.getContent(), EditFormPartDTO.TYPE);
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
+        resultListMessage.setList(resultDTOs);
+
+        ResultDTO<ResultListDTO<EditFormPartDTO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(true);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
 
     /**
      * 편집 폼 조회
@@ -185,19 +224,18 @@ public class EditFormRestController extends AbstractCommonController {
         return editFormDTO;
     }
 
+
     /**
      * 편집 폼 아이템 조회
      *
-     * @param formSeq 편집 폼 일련번호
      * @param partSeq 아이템 일련번호
      * @return 편집 폼 아이템 정보
      * @throws NoDataException 데이터 없음 에러 처리
      * @throws IOException     json 처리 오류
      */
     @ApiOperation(value = "Edit Form 데이터 조회")
-    @GetMapping("/{formSeq}/parts/{partSeq}")
-    public ResponseEntity<?> getEditFormPart(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
-            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq)
+    @GetMapping("/parts/{partSeq}")
+    public ResponseEntity<?> getEditFormPart(@PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq)
             throws NoDataException, IOException {
 
         EditFormPart editFormPart = editFormService
@@ -256,14 +294,12 @@ public class EditFormRestController extends AbstractCommonController {
     /**
      * 편집 폼 Part xml export
      *
-     * @param formSeq 편집 폼 일련번호
      * @param partSeq 아이템 일련번호
      * @throws Exception 에러 처리 오류
      */
     @ApiOperation(value = "Edit Form 데이터 조회")
-    @GetMapping("/{formSeq}/parts/{partSeq}/export")
+    @GetMapping("/parts/{partSeq}/export")
     public void getEditFormPartXmlExport(HttpServletResponse response,
-            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq)
             throws Exception {
 
@@ -284,20 +320,17 @@ public class EditFormRestController extends AbstractCommonController {
     /**
      * 편집 폼 Part 이력 목록 조회
      *
-     * @param formSeq 편집 폼 일련번호
      * @param partSeq 아이템 일련번호
      * @return 편집 폼 아이템 정보
      */
     @ApiOperation(value = "Edit Form 데이터 조회")
-    @GetMapping("/{formSeq}/parts/{partSeq}/historys")
+    @GetMapping("/parts/{partSeq}/historys")
     public ResponseEntity<?> getEditFormPartHistoryList(
-            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
             @SearchParam EditFormPartHistSearchDTO search) {
 
         ResultListDTO<EditFormPartHistDTO> resultListMessage = new ResultListDTO<>();
 
-        search.setFormSeq(formSeq);
         search.setPartSeq(partSeq);
 
         Page<EditFormPartHist> editFormPartHistorys = editFormService.findAllEditFormPartHistory(search);
@@ -316,7 +349,6 @@ public class EditFormRestController extends AbstractCommonController {
     /**
      * 편집 폼 Part 이력 조회
      *
-     * @param formSeq 편집 폼 일련번호
      * @param partSeq 아이템 일련번호
      * @param seqNo   편집 폼 Part 이력 일련번호
      * @return 편집 폼 아이템 정보
@@ -324,9 +356,8 @@ public class EditFormRestController extends AbstractCommonController {
      * @throws IOException     json 처리 오류
      */
     @ApiOperation(value = "Edit Form 데이터 조회")
-    @GetMapping("/{formSeq}/parts/{partSeq}/historys/{seqNo}")
+    @GetMapping("/parts/{partSeq}/historys/{seqNo}")
     public ResponseEntity<?> getEditFormPartHistory(
-            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
             @PathVariable("seqNo") @Min(value = 0, message = "{tps.edit-form.error.min.seqNo}") Long seqNo)
             throws NoDataException, IOException {
@@ -344,19 +375,82 @@ public class EditFormRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
+
+
+    /**
+     * 폼의 가장 마지막 임시저장 Form part 정보
+     *
+     * @param partSeq 아이템 일련번호
+     * @return 편집 폼 아이템 정보
+     * @throws NoDataException 데이터 없음 에러 처리
+     * @throws IOException     json 처리 오류
+     */
+    @ApiOperation(value = "가장 마지막 임시저장 Form part 정보")
+    @GetMapping("/parts/{partSeq}/historys/lastest-saved")
+    public ResponseEntity<?> getEditFormPartLastSavedHistory(
+            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq)
+            throws NoDataException, IOException {
+
+        return getLastHistory(partSeq, EditStatusCode.SAVE, MokaConstants.NO);
+    }
+
+    /**
+     * 폼의 가장 마지막 퍼블리시 Form part 정보
+     *
+     * @param partSeq 아이템 일련번호
+     * @return 편집 폼 아이템 정보
+     * @throws NoDataException 데이터 없음 에러 처리
+     * @throws IOException     json 처리 오류
+     */
+    @ApiOperation(value = "가장 마지막 퍼블리시 Form part 정보")
+    @GetMapping("/parts/{partSeq}/historys/lastest-published")
+    public ResponseEntity<?> getEditFormPartLastPublishedHistory(
+            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq)
+            throws NoDataException, IOException {
+
+        return getLastHistory(partSeq, EditStatusCode.PUBLISH, MokaConstants.YES);
+    }
+
+    /**
+     * 마지막 편집 이력 조회
+     *
+     * @param partSeq    편집이력 일련번호
+     * @param statusCode 상태
+     * @return ResponseEntity
+     * @throws NoDataException 데이터 없음 에러처리
+     * @throws IOException     IO 에러처리
+     */
+    public ResponseEntity<?> getLastHistory(Long partSeq, EditStatusCode statusCode, String approvalYn)
+            throws NoDataException, IOException {
+        EditFormPartHist editFormPartHist = editFormService
+                .findEditFormPartLastHistory(EditFormPartHist
+                        .builder()
+                        .partSeq(partSeq)
+                        .status(statusCode)
+                        .approvalYn(approvalYn)
+                        .build())
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        EditFormPartHistDTO editFormPartExtDTO = modelMapper.map(editFormPartHist, EditFormPartHistDTO.class);
+
+        editFormPartExtDTO.setFieldGroups(objectMapper.readValue(editFormPartHist.getFormData(), collectionType));
+        editFormPartExtDTO.setFormData(null);
+
+        ResultDTO<EditFormPartHistDTO> resultDTO = new ResultDTO<>(editFormPartExtDTO);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
     /**
      * 편집 폼 Part 이력 조회
      *
-     * @param formSeq 편집 폼 일련번호
      * @param partSeq 아이템 일련번호
      * @param seqNo   편집 폼 Part 이력 일련번호
      * @throws NoDataException 데이터 없음 에러 처리
      * @throws IOException     json 처리 오류
      */
     @ApiOperation(value = "Edit Form 데이터 조회")
-    @GetMapping("/{formSeq}/parts/{partSeq}/historys/{seqNo}/export")
+    @GetMapping("/parts/{partSeq}/historys/{seqNo}/export")
     public void getEditFormPartHistoryExport(HttpServletResponse response,
-            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
             @PathVariable("seqNo") @Min(value = 0, message = "{tps.edit-form.error.min.seqNo}") Long seqNo)
             throws Exception {
@@ -375,29 +469,7 @@ public class EditFormRestController extends AbstractCommonController {
                 .getEditFormPart()
                 .getPartTitle() + "_" + editFormPartExtDTO.getSeqNo() + ".xml", editFormHelper.convertPartXml(editFormPartExtDTO));
     }
-/*
-    private ResponseEntity<?> getResponseEditFormDTO(String site, String formId, @RequestParam(value = "partId", required = false) String partId)
-            throws MokaException {
-        ResultDTO<?> resultDTO;
 
-        EditForm editForm = EditForm
-                .builder()
-                .formId(formId)
-                .build();
-        if (McpString.isNotEmpty(partId)) {
-            PartDTO partDTO = editFormHelper.getPart(site, formId, partId);
-            editFormService.findEditForm(editForm);
-            resultDTO = new ResultDTO<>(partDTO);
-        } else {
-            ChannelFormatDTO channelFormatDTO = editFormHelper.getChannelFormat(site, formId);
-            editFormService.findEditForm(editForm);
-            resultDTO = new ResultDTO<>(channelFormatDTO);
-        }
-
-        tpsLogger.success(ActionType.SELECT);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    }
-*/
 
     /**
      * legacy xml을 추출하여 db에 저장
@@ -444,6 +516,7 @@ public class EditFormRestController extends AbstractCommonController {
                 editForm.setEditFormParts(new HashSet<>());
 
                 if (editFormImport.getFormSeq() == null || editFormImport.getFormSeq() == 0) {
+                    editForm.setFormSeq(null);
                     EditForm newEditForm = editFormService.insertEditForm(editForm);
                     formSeq = newEditForm.getFormSeq();
                     editFormDTO
@@ -576,15 +649,13 @@ public class EditFormRestController extends AbstractCommonController {
     /**
      * 편집 폼 아이템 저장
      *
-     * @param formSeq         편집 폼 일련번호
      * @param editFormPartDTO 편집 폼 아이템 정보
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
     @ApiOperation(value = "Edit form part 저장")
-    @PostMapping("/{formSeq}/parts")
-    public ResponseEntity<?> postEditFormPart(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
-            @Valid EditFormPartDTO editFormPartDTO)
+    @PostMapping("/parts")
+    public ResponseEntity<?> postEditFormPart(@Valid EditFormPartDTO editFormPartDTO)
             throws MokaException {
 
         try {
@@ -606,7 +677,7 @@ public class EditFormRestController extends AbstractCommonController {
     }
 
     /**
-     * 편집 폼 아이템 수정
+     * 편집 폼 수정
      *
      * @param formSeq       편집 폼 일련번호
      * @param editFormDTO   편집 폼 정보
@@ -614,7 +685,7 @@ public class EditFormRestController extends AbstractCommonController {
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
-    @ApiOperation(value = "Edit form part 수정")
+    @ApiOperation(value = "Edit form 수정")
     @PutMapping("/{formSeq}")
     public ResponseEntity<?> putEditForm(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @Valid EditFormDTO editFormDTO, @RequestBody List<@Valid EditFormPartDTO> editFormParts)
@@ -674,16 +745,14 @@ public class EditFormRestController extends AbstractCommonController {
     /**
      * 편집 폼 아이템 수정
      *
-     * @param formSeq         편집 폼 일련번호
      * @param partSeq         아이템 일련번호
      * @param editFormPartDTO 편집 폼 아이템 정보
      * @return 저장 결과
      * @throws MokaException 공통 에러 처리
      */
     @ApiOperation(value = "Edit form part 수정")
-    @PutMapping("/{formSeq}/parts/{partSeq}")
-    public ResponseEntity<?> putEditFormPart(@PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
-            @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
+    @PutMapping("/parts/{partSeq}")
+    public ResponseEntity<?> putEditFormPart(@PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq,
             @Valid EditFormPartDTO editFormPartDTO)
             throws MokaException {
 
@@ -691,12 +760,12 @@ public class EditFormRestController extends AbstractCommonController {
             objectMapper.readValue(editFormPartDTO.getFormData(), collectionType);
             EditFormPart editFormPart = modelMapper.map(editFormPartDTO, EditFormPart.class);
 
-            editFormService
-                    .findEditFormPart(editFormPart)
+            EditFormPart oldEditFormPart = editFormService
+                    .findEditFormPartBySeq(partSeq)
                     .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
-            editFormPart.setFormSeq(formSeq);
-            editFormPart.setPartSeq(partSeq);
+            editFormPart.setFormSeq(oldEditFormPart.getFormSeq());
+            editFormPart.setPartSeq(oldEditFormPart.getPartSeq());
 
             editFormPart = editFormService.updateEditFormPart(editFormPart, editFormPartDTO.getStatus(), editFormPartDTO.getReserveDt());
 
@@ -751,7 +820,7 @@ public class EditFormRestController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE MENU] menuId: {} {}", formSeq, e.getMessage());
+            log.error("[FAIL TO DELETE FORM] menuId: {} {}", formSeq, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
             throw new Exception(msg("tps.edit-form.error.delete", request), e);
@@ -762,16 +831,14 @@ public class EditFormRestController extends AbstractCommonController {
      * 삭제
      *
      * @param request 요청
-     * @param formSeq 편집 폼 일련번호 (필수)
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
      * @throws NoDataException      삭제 할 메뉴 없음
      * @throws Exception            그 외 에러처리
      */
     @ApiOperation(value = "편집 폼 삭제")
-    @DeleteMapping("/{formSeq}/parts/{partSeq}")
+    @DeleteMapping("/parts/{partSeq}")
     public ResponseEntity<?> deleteEditFormPart(HttpServletRequest request,
-            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq,
             @PathVariable("partSeq") @Min(value = 0, message = "{tps.edit-form.error.min.partSeq}") Long partSeq)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -782,7 +849,7 @@ public class EditFormRestController extends AbstractCommonController {
         try {
 
             // 삭제
-            if (editFormService.deleteEditFormPart(formSeq, partSeq) > 0) {
+            if (editFormService.deleteEditFormPart(partSeq) > 0) {
                 success = true;
                 message = msg("tps.edit-form-part.success.delete", request);
             } else {
@@ -802,7 +869,7 @@ public class EditFormRestController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE MENU] menuId: {} {}", formSeq, e.getMessage());
+            log.error("[FAIL TO DELETE FORM PART] menuId: {} {}", partSeq, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
             throw new Exception(msg("tps.edit-form.error.delete", request), e);
@@ -842,7 +909,7 @@ public class EditFormRestController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE MENU] menuId: {} {}", formId, e.getMessage());
+            log.error("[FAIL TO SELECT FORM] menuId: {} {}", formId, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(e);
             throw new Exception(msg("tps.edit-form.error.select", formId), e);

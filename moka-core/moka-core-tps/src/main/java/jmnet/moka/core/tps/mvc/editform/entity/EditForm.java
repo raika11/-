@@ -81,7 +81,7 @@ public class EditForm extends BaseAudit implements Serializable {
      * 편집 폼 아이템 목록
      */
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "editForm", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "editForm", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @OrderBy("partSeq")
     private Set<EditFormPart> editFormParts = new LinkedHashSet<EditFormPart>();
 

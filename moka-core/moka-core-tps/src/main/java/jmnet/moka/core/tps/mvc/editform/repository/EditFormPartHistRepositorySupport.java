@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.editform.repository;
 
+import java.util.Optional;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPartHist;
 import org.springframework.data.domain.Page;
@@ -18,4 +19,7 @@ import org.springframework.data.domain.Page;
  */
 public interface EditFormPartHistRepositorySupport {
     Page<EditFormPartHist> findAll(EditFormPartHistSearchDTO editFormSearchDTO);
+
+
+    Optional<EditFormPartHist> findLast(EditFormPartHist editFormPartHist);
 }

@@ -11,7 +11,6 @@ import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
@@ -39,7 +38,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     protected final static MokaFunctions MOKA_FUNCTIONS = new MokaFunctions();
     private DomainItem domainItem;
     private DomainResolver domainResolver;
-    private String workerId;
+    private String regId;
 
     public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem, DomainResolver domainResolver,
             AbstractTemplateLoader templateLoader, DataLoader dataLoader) {
@@ -47,11 +46,11 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     }
 
     public MokaPreviewTemplateMerger(GenericApplicationContext appContext, DomainItem domainItem, DomainResolver domainResolver,
-            AbstractTemplateLoader templateLoader, DataLoader dataLoader, String workerId) {
+            AbstractTemplateLoader templateLoader, DataLoader dataLoader, String regId) {
         super(appContext, domainItem.getItemId(), templateLoader, dataLoader, false);
         this.domainResolver = domainResolver;
         this.domainItem = domainItem;
-        this.workerId = workerId;
+        this.regId = regId;
     }
 
     private void setBaseTag(String pagePath, MergeContext context, StringBuilder sb) {
@@ -95,8 +94,8 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
         mergeContext.getMergeOptions()
                     .setPreview(true);
-        if (this.workerId != null) {
-            mergeContext.set(MokaConstants.MERGE_CONTEXT_WORKER_ID, this.workerId);
+        if (this.regId != null) {
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_REG_ID, this.regId);
         }
         mergeContext.set(MokaConstants.MERGE_CONTEXT_DOMAIN, this.domainItem);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_PAGE, pageItem);
@@ -155,7 +154,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
         // 편집컴포넌트 미리보기일 경우 html 태그를 감싸준다.
         if (mergeContext.getMergeOptions()
-                        .isPreview() && this.workerId != null && htmlWrap) {
+                        .isPreview() && this.regId != null && htmlWrap) {
             sb = setHtmlWrap(itemType, itemId, sb);
         }
 

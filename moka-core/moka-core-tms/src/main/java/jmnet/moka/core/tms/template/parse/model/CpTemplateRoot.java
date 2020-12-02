@@ -139,10 +139,10 @@ public class CpTemplateRoot extends MokaTemplateRoot {
 
                 // Preview 모드 && WorkerId가 있을 경우 desking.work api를 호출한다.
                 boolean isDeskingWork = context.getMergeOptions()
-                                               .isPreview() && context.has(MokaConstants.MERGE_CONTEXT_WORKER_ID);
+                                               .isPreview() && context.has(MokaConstants.MERGE_CONTEXT_REG_ID);
                 String apiName = isDeskingWork ? ItemConstants.CP_DATA_TYPE_DESK_WORK_API : ItemConstants.CP_DATA_TYPE_DESK_API;
                 if (isDeskingWork) {
-                    datasetParam.put(MokaConstants.PARAM_WORKER_ID, context.get(MokaConstants.MERGE_CONTEXT_WORKER_ID));
+                    datasetParam.put(MokaConstants.PARAM_REG_ID, context.get(MokaConstants.MERGE_CONTEXT_REG_ID));
                 }
                 return loadDataSet((MokaTemplateMerger) merger, datasetItem, datasetParam, apiName, context);
             }

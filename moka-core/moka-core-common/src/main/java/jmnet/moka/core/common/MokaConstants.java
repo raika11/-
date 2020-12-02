@@ -87,7 +87,7 @@ public class MokaConstants {
     public static final String MERGE_CONTEXT_ARTICLE_ID = "articleId";
     public static final String MERGE_CONTEXT_DIGIAL_SPECIAL_ID = "ditalSpecialId";
     public static final String MERGE_CONTEXT_BODY = "body";
-    public static final String MERGE_CONTEXT_WORKER_ID = "workerId";
+    public static final String MERGE_CONTEXT_REG_ID = "regId";
     public static final String MERGE_CONTEXT_EDITION_SEQ = "editionSeq";
 
     /* Parameter & Component Paging */
@@ -96,7 +96,7 @@ public class MokaConstants {
     public static final String PARAM_SORT = Constants.PARAM_SORT;
     public static final String PARAM_CATEGORY = "category";
     public static final String PARAM_START = "start";
-    public static final String PARAM_WORKER_ID = "creator";
+    public static final String PARAM_REG_ID = "regId";
     public static final String PARAM_EDITION_SEQ = "editionSeq";
     public static final String COMPONENT_PAGING_TYPE_NUMBER = "N";
     public static final String COMPONENT_PAGING_TYPE_MORE = "M";
@@ -141,9 +141,8 @@ public class MokaConstants {
     }
 
     // thread-safe한 date formatter
-    public static final DateTimeFormatter dtf = DateTimeFormatter
-            .ofPattern(JSON_DATE_FORMAT)
-            .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
+    public static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(JSON_DATE_FORMAT)
+                                                                 .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
 
     public static final String now() {
         LocalDateTime now = LocalDateTime.now();

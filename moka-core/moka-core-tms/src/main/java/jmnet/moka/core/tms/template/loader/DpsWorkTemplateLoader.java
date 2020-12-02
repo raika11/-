@@ -32,15 +32,16 @@ import org.springframework.context.support.GenericApplicationContext;
  */
 public class DpsWorkTemplateLoader extends DpsTemplateLoader {
     public static final String ITEM_API_COMPONENT_WORK = "component.work";
-    private final String workerId;
+    private final String regId;
     private final List<String> componentIdList;
     private static final Logger logger = LoggerFactory.getLogger(DpsWorkTemplateLoader.class);
     private static final DpsItemFactory DPS_ITEM_FACTORY = new DpsItemFactory();
 
-    public DpsWorkTemplateLoader(GenericApplicationContext appContext,String domainId, HttpProxyDataLoader httpProxyDataLoader, String workerId, List<String> componentIdList)
+    public DpsWorkTemplateLoader(GenericApplicationContext appContext, String domainId, HttpProxyDataLoader httpProxyDataLoader, String regId,
+            List<String> componentIdList)
             throws TmsException {
         super(appContext, domainId, httpProxyDataLoader, false, 0L);
-        this.workerId = workerId;
+        this.regId = regId;
         this.componentIdList = componentIdList;
     }
 
@@ -56,12 +57,13 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
      * @throws TemplateParseException 템플릿 파싱 오류
      * @throws TemplateLoadException
      */
-    private MergeItem loadJson(String itemType, String itemId) throws TemplateParseException, TemplateLoadException {
+    private MergeItem loadJson(String itemType, String itemId)
+            throws TemplateParseException, TemplateLoadException {
         String api = DpsTemplateLoader.itemApiMap.get(itemType);
         // boolean isWorkComponent = this.workerId != null
         // && itemType.equals(MspConstants.ITEM_COMPONENT) && itemId.equals(this.componentId);
         boolean isWorkComponent = false;
-        if (this.workerId != null && itemType.equals(MokaConstants.ITEM_COMPONENT)) {
+        if (this.regId != null && itemType.equals(MokaConstants.ITEM_COMPONENT)) {
             if (this.componentIdList.size() == 0 || this.componentIdList.contains(itemId)) {
                 isWorkComponent = true;
             }
@@ -73,7 +75,7 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
         parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
         parameterMap.put(PARAM_ITEM_ID, itemId);
         if (isWorkComponent) {
-            parameterMap.put(MokaConstants.PARAM_WORKER_ID, this.workerId);
+            parameterMap.put(MokaConstants.PARAM_REG_ID, this.regId);
         }
 
         MergeItem item = null;
@@ -99,11 +101,13 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
         return item;
     }
 
-    public MergeItem getItem(String itemType, String itemId) throws TemplateParseException, TemplateLoadException {
+    public MergeItem getItem(String itemType, String itemId)
+            throws TemplateParseException, TemplateLoadException {
         return getItem(itemType, itemId, true);
     }
 
-    public MergeItem getItem(String itemType, String itemId, boolean force) throws TemplateParseException, TemplateLoadException {
+    public MergeItem getItem(String itemType, String itemId, boolean force)
+            throws TemplateParseException, TemplateLoadException {
 
         MergeItem item = this.loadJson(itemType, itemId);
         if (item == null) {

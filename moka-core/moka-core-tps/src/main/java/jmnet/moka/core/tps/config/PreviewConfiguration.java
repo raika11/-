@@ -115,7 +115,7 @@ public class PreviewConfiguration {
 
     @Bean
     @Scope("prototype")
-    public MokaPreviewTemplateMerger previewWorkTemplateMerger(DomainItem domainItem, String workerId, List<String> componentIdList)
+    public MokaPreviewTemplateMerger previewWorkTemplateMerger(DomainItem domainItem, String regId, List<String> componentIdList)
             throws IOException {
         // AbstractTemplateLoader assistantTemplateLoader =
         // this.appContext.getBean(AbstractTemplateLoader.class, defaultTemplateDomain);
@@ -126,10 +126,10 @@ public class PreviewConfiguration {
         // AbstractTemplateLoader templateLoader = this.appContext
         // .getBean(AbstractTemplateLoader.class, domainId, workerId, componentId);
         AbstractTemplateLoader templateLoader =
-                (AbstractTemplateLoader) this.appContext.getBean("workTemplateLoader", domainId, workerId, componentIdList);
+                (AbstractTemplateLoader) this.appContext.getBean("workTemplateLoader", domainId, regId, componentIdList);
         DomainResolver domainResolver = this.appContext.getBean(DomainResolver.class);
         MokaPreviewTemplateMerger ptm =
-                new MokaPreviewTemplateMerger(this.appContext, domainItem, domainResolver, templateLoader, httpProxyDataLoader, workerId);
+                new MokaPreviewTemplateMerger(this.appContext, domainItem, domainResolver, templateLoader, httpProxyDataLoader, regId);
         return ptm;
     }
 

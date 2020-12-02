@@ -100,7 +100,7 @@ where TOTAL_ID = #{totalId}
     statementType="CALLABLE">
 		 {call USP_WMS_DESKING_WORK_LIST_SEL(
 		  #{ids, mode=IN, jdbcType=VARCHAR, javaType=string},
-		  #{user, mode=IN, jdbcType=VARCHAR, javaType=string},
+		  #{regId, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
 			#{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
 			'Y',

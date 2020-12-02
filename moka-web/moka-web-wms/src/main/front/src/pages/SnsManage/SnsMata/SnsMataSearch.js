@@ -28,10 +28,10 @@ const SnsMataSearch = () => {
                         <option value="tempvalue4">직접입력</option>
                     </MokaInputLabel>
                 </Col>
-                <Col xs={1} className="p-0 pr-2">
+                <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="dateTimePicker" className="mb-0" name="viewSDate" value={null} onChange={handleChangeDate} inputProps={{ timeFormat: null }} disabled={null} />
                 </Col>
-                <Col xs={1} className="p-0 pr-2">
+                <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="dateTimePicker" className="mb-0" name="viewEDate" value={null} onChange={handleChangeDate} inputProps={{ timeFormat: null }} disabled={null} />
                 </Col>
                 <Col xs={1} className="p-0 pr-2">
@@ -40,15 +40,15 @@ const SnsMataSearch = () => {
                         <option value="title2">기사ID</option>
                     </MokaInput>
                 </Col>
-                <Col xs={3} className="p-0">
+                <Col xs={4} className="p-0 pr-2">
                     <MokaSearchInput name="keyword" value={''} onChange={handleChangeValue} onSearch={handleChangeValue} />
                 </Col>
                 {/* 초기화 버튼 */}
-                <div style={{ width: 85 }} className="d-flex justify-content-center">
-                    <Button variant="negative" onClick={handleSearchReset}>
+                <Col xs={1} className="p-0">
+                    <Button variant="outline-neutral" onClick={handleSearchReset}>
                         초기화
                     </Button>
-                </div>
+                </Col>
             </Form.Row>
         </Form>
     );

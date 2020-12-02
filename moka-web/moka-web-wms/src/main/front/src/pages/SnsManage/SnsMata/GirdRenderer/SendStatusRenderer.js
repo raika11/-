@@ -7,10 +7,10 @@ const StatusSend = ({ FaceBook, Twitter }) => {
     return (
         <>
             <div className="justify-content-between mr-3 p-1">
-                <MokaIcon iconName="fab-facebook" size="lg" width={20} height={20} className={FaceBook === 'Y' ? 'color-positive' : 'color-gray150'} />
+                <MokaIcon iconName="fab-facebook-square" size="2x" style={FaceBook === 'Y' ? { color: '3B5998' } : { color: 'ADB1BE' }} />
             </div>
             <div className="justify-content-between mr-3 p-1">
-                <MokaIcon iconName="fab-twitter" size="lg" width={20} height={20} className={Twitter === 'Y' ? 'color-positive' : 'color-gray150'} />
+                <MokaIcon iconName="fab-twitter-square" size="2x" style={Twitter === 'Y' ? { color: '00ACEE' } : { color: 'ADB1BE' }} />
             </div>
         </>
     );
@@ -23,7 +23,7 @@ const SendStatusRenderer = ({ value: { sendFlag, facebook, twitter } }) => {
 
     return (
         <>
-            <div className="d-flex py-1">
+            <div className="d-flex py-1 justify-content-center">
                 <div className="d-flex py-2">{sendFlag === 'Y' ? <StatusSend FaceBook={facebook} Twitter={twitter} /> : <StatusIdle />}</div>
             </div>
         </>

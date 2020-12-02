@@ -22,16 +22,21 @@ const SnsMataAgGrid = () => {
         setRowData(
             tempRowData.map((element) => {
                 let repId = element.repId;
+                let source = element.source;
                 let listOutDate = element.outDate && element.outDate.length > 10 ? element.outDate.substr(0, 10) : element.outDate;
-                let listRepImg = element.repImg && element.repImg.length > 0 ? element.repImg : 'http://pds.joins.com/news/search_direct_link/000.jpg';
+                let listRepImg = {
+                    image_url: element.repImg && element.repImg.length > 0 ? element.repImg : 'http://pds.joins.com/news/search_direct_link/000.jpg',
+                    new_flag: element.newflag,
+                };
                 let listTitle = {
                     repId: repId,
-                    article: element.articleTitle,
-                    sns: element.snsTitle,
+                    articleTitle: element.articleTitle,
+                    snsTitle: element.snsTitle,
+                    reservation: element.reservation,
                 };
                 let listArticleStatus = {
                     status: element.insStatus,
-                    senddate: element.sendDate,
+                    senddate: element.sendDate && element.sendDate.length > 16 ? element.sendDate.substr(0, 16) : element.sendDate,
                     sendflag: element.sendFlag,
                 };
                 let listOutStatus = {
@@ -42,6 +47,7 @@ const SnsMataAgGrid = () => {
 
                 return {
                     repId,
+                    source,
                     listOutDate,
                     listRepImg,
                     listTitle,
@@ -53,7 +59,7 @@ const SnsMataAgGrid = () => {
     }, []);
 
     return (
-        <React.Fragment>
+        <>
             <MokaTable
                 agGridHeight={650}
                 columnDefs={tempColumnDefs}
@@ -70,7 +76,7 @@ const SnsMataAgGrid = () => {
                 selected={null}
             />
             <MataModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={null} />
-        </React.Fragment>
+        </>
     );
 };
 

@@ -1,5 +1,7 @@
 import React from 'react';
-import { ListTitleRenderer, ImageRenderer, IArticleStatusRenderer, SendStatusRenderer } from './GirdRenderer';
+import { ListTitleRenderer, ImageRenderer, ButtonStatusRenderer, SendStatusRenderer } from './GirdRenderer';
+import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const tempColumnDefs = [
     {
@@ -11,12 +13,14 @@ export const tempColumnDefs = [
     {
         headerName: '\t출처',
         field: 'source',
+        wrapText: true,
         width: 100,
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', paddingLeft: '12px' },
     },
     {
         headerName: '\t출고일',
         field: 'listOutDate',
+        wrapText: true,
         width: 100,
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', paddingLeft: '12px' },
     },
@@ -24,14 +28,14 @@ export const tempColumnDefs = [
         headerName: '\t이미지',
         field: 'listRepImg',
         cellRendererFramework: (params) => <ImageRenderer {...params} />,
-        width: 100,
+        width: 80,
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '8px' },
     },
     {
         headerName: '\t\t\t\t\t기사제목\n\t\t\t\t\tSNS제목',
         field: 'listTitle',
         wrapText: true,
-        width: 300,
+        width: 250,
         flex: true,
         cellRendererFramework: (params) => <ListTitleRenderer {...params} />,
         cellStyle: { fontSize: '12px', lineHeight: '40px' },
@@ -39,15 +43,36 @@ export const tempColumnDefs = [
     {
         headerName: '\t전송상태',
         field: 'listOutStatus',
-        width: 150,
+        width: 120,
+        wrapText: true,
         cellRendererFramework: (params) => <SendStatusRenderer {...params} />,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
+
     {
-        headerName: '\t\tFB InstantArticle\n상태\t\t\t전송일\t\t\t전송',
-        field: 'listArticleStatus',
-        width: 250,
-        cellRendererFramework: (params) => <IArticleStatusRenderer {...params} />,
+        headerName: '상태',
+        field: 'insStatus',
+        width: 50,
+        wrapText: true,
+        cellRendererFramework: ({ value }) => {
+            let clazz = value === 'Y' ? 'color-primary' : 'color-gray150';
+            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
+        },
+        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', paddingLeft: '12px' },
+    },
+    {
+        headerName: '\t전송일',
+        field: 'senddate',
+        width: 130,
+        wrapText: true,
+        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', paddingLeft: '12px' },
+    },
+    {
+        headerName: '전송',
+        field: 'insStatus',
+        width: 80,
+        wrapText: true,
+        cellRendererFramework: (params) => <ButtonStatusRenderer {...params} />,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
 ];

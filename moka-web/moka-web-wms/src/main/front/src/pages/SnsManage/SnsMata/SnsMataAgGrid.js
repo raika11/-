@@ -23,7 +23,10 @@ const SnsMataAgGrid = () => {
             tempRowData.map((element) => {
                 let repId = element.repId;
                 let source = element.source;
+                let insStatus = element.insStatus;
                 let listOutDate = element.outDate && element.outDate.length > 10 ? element.outDate.substr(0, 10) : element.outDate;
+                let senddate = element.sendDate && element.sendDate.length > 16 ? element.sendDate.substr(0, 16) : element.sendDate;
+                let sendflag = element.sendFlag;
                 let listRepImg = {
                     image_url: element.repImg && element.repImg.length > 0 ? element.repImg : 'http://pds.joins.com/news/search_direct_link/000.jpg',
                     new_flag: element.newflag,
@@ -33,11 +36,6 @@ const SnsMataAgGrid = () => {
                     articleTitle: element.articleTitle,
                     snsTitle: element.snsTitle,
                     reservation: element.reservation,
-                };
-                let listArticleStatus = {
-                    status: element.insStatus,
-                    senddate: element.sendDate && element.sendDate.length > 16 ? element.sendDate.substr(0, 16) : element.sendDate,
-                    sendflag: element.sendFlag,
                 };
                 let listOutStatus = {
                     sendFlag: element.sendFlag,
@@ -51,7 +49,9 @@ const SnsMataAgGrid = () => {
                     listOutDate,
                     listRepImg,
                     listTitle,
-                    listArticleStatus,
+                    insStatus,
+                    sendflag,
+                    senddate,
                     listOutStatus,
                 };
             }),

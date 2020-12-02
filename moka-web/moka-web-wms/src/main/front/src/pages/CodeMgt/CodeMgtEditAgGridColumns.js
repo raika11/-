@@ -2,6 +2,7 @@ export default [
     {
         headerName: '코드그룹',
         field: 'grpCd',
+        flex: 1,
         width: 110,
     },
     {

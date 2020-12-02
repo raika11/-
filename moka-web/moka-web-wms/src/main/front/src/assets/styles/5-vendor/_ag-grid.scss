@@ -48,7 +48,7 @@
 
         .ag-body-viewport {
             @include custom-scroll;
-            overflow-y: scroll;
+            overflow-y: auto;
         }
 
         .ag-header {

@@ -12,6 +12,7 @@ export default [
         headerName: '컨테이너명',
         field: 'containerName',
         width: 276,
+        flex: 1,
         cellStyle: { fontSize: '12px' },
     },
     {

@@ -11,6 +11,7 @@ export default [
     {
         headerName: '컴포넌트명',
         field: 'componentName',
+        flex: 1,
         width: 276,
         cellStyle: { fontSize: '12px' },
     },

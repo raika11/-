@@ -6,6 +6,7 @@ export default [
         headerName: '기타코드',
         field: 'cdNm',
         width: 176,
+        flex: 1,
         tooltipField: 'cdNm',
     },
     {

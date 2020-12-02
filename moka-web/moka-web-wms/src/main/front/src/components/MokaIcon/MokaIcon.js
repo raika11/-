@@ -58,7 +58,7 @@ import {
 } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
-import { faFacebook as fabFacebook, faTwitter as fabTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faFacebook as fabFacebook, faTwitter as fabTwitter, faFacebookSquare as fabFacebookSquare, faTwitterSquare as fabTwitterSquare } from '@fortawesome/free-brands-svg-icons';
 
 // 아이콘 등록 (fal)
 library.add(falCoffee);
@@ -122,7 +122,9 @@ library.add(fadImage);
 
 // 아이콘 등록 (fab)
 library.add(fabFacebook);
+library.add(fabFacebookSquare);
 library.add(fabTwitter);
+library.add(fabTwitterSquare);
 
 const propTypes = {
     /**

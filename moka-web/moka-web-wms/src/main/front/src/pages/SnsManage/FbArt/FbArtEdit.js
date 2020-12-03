@@ -1,6 +1,6 @@
 import React from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { Container, Row, Col, Figure, Button } from 'react-bootstrap';
+import { Form, Container, Row, Col, Figure, Button } from 'react-bootstrap';
 
 const FbArtEdit = () => {
     const tempOnchange = (e) => {};
@@ -47,18 +47,20 @@ SK는 "김성현과 2+1년 최대 11억원에 계약했다. 세부 조건은 계
                         </Col>
                     </Row>
                     <Row xs={12}>
-                        <Col xs={5} className="d-flex p-0 m-0 pl-3" style={{ fontSize: '0.775rem' }}>{`SNS 이미지 (850*350 px)`}</Col>
+                        <Col xs={4} className="d-flex p-0 m-0 pl-3" style={{ fontSize: '0.775rem' }}>
+                            <Form.Label className="text-danger">{`SNS 이미지 (850*350 px)`}</Form.Label>
+                        </Col>
                         <MokaInputLabel
-                            labelClassName="d-flex mr-3"
-                            labelWidth={110}
-                            className="d-flex"
-                            as="switch"
+                            labelClassName="d-flex p-0 pl-3"
+                            label="사용유무"
+                            labelWidth={80}
+                            as="none"
                             name="temp-status"
                             id="temp-status"
-                            label="사용유무"
                             variant="positive"
-                            style={{}}
+                            style={{ paddingLeft: '15px' }}
                         />
+                        <MokaInputLabel labelClassName="d-flex" as="switch" name="temp-status" id="temp-status" variant="positive" />
                     </Row>
                     <Row xs={12}>
                         <Col xs={4}>

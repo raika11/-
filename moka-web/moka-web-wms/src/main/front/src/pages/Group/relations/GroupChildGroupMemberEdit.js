@@ -6,7 +6,7 @@ import { Col, Row } from 'react-bootstrap';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import GroupChildGroupMemberHeader from '@pages/Group/relations/GroupChildGroupMemberHeader';
 import GroupChildSearchMemberHeader from '@pages/Group/relations/GroupChildSearchMemberHeader';
-import { changeMemberSearchOption, getGroupInMemberList, getSearchMemberList, updateGroupInMember } from '@store/group';
+import { changeMemberSearchOption, clearGroupMember, clearGroupMenuAuth, getGroupInMemberList, getSearchMemberList, updateGroupInMember } from '@store/group';
 import toast, { messageBox } from '@utils/toastUtil';
 
 import * as action from '@store/group/groupAction';
@@ -106,6 +106,8 @@ const GroupChildGroupMemberEdit = () => {
         if (groupCd) {
             const search = { ...groupOut.search };
             dispatch(getSearchMemberList({ search }));
+        } else {
+            dispatch(clearGroupMember());
         }
     }, [agGridParam, dispatch, groupCd, groupOut.search]);
 

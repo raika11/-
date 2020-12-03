@@ -394,11 +394,11 @@ const GroupEdit = () => {
                     </Col>
                 </Form.Row>
                 <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                    <Button variant="primary" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
+                    <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
                         저장
                     </Button>
                     {groupCd && (
-                        <Button className="float-left mr-0 pr-20 pl-20" variant="gray150" onClick={handleClickDelete}>
+                        <Button variant="gray150" className="float-left mr-0 pr-20 pl-20" onClick={handleClickDelete}>
                             삭제
                         </Button>
                     )}

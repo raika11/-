@@ -19,10 +19,10 @@ const FbArtEdit = () => {
                         </Col>
                     </Row>
                     <Row xs={12}>
-                        <Col>
+                        <Col xs={4}>
                             <Figure.Image className="mb-0" src={'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/25ed1572-899d-4bb7-9f59-81059bea0e49.jpg'} />
                         </Col>
-                        <Col>
+                        <Col xs={7}>
                             <div className="d-flex mb-3 display-5 font-weight-bold text-left">{`프로야구 SK 내야수 김성현, 2021 FA 1호 계약`}</div>
                             <div className="d-flex">
                                 <MokaInput
@@ -62,10 +62,10 @@ SK는 "김성현과 2+1년 최대 11억원에 계약했다. 세부 조건은 계
                         </Col>
                     </Row>
                     <Row xs={12}>
-                        <Col xs={6}>
+                        <Col xs={4}>
                             <Figure.Image className="mb-0" src={'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/25ed1572-899d-4bb7-9f59-81059bea0e49.jpg'} />
                         </Col>
-                        <Col xs={6}>
+                        <Col xs={7}>
                             <MokaInputLabel onChange={(e) => tempOnchange(e)} />
                             <MokaInput as={'textarea'} className="resize-none" value={''} inputProps={{ rows: '5' }} onChange={(e) => tempOnchange(e)} />
                         </Col>
@@ -88,13 +88,10 @@ SK는 "김성현과 2+1년 최대 11억원에 계약했다. 세부 조건은 계
                 <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
                     <div className="d-flex justify-content-center">
                         <Button variant="positive" className="mr-05">
-                            전송
-                        </Button>
-                        <Button variant="positive" className="mr-05">
-                            임시저장
+                            저장
                         </Button>
                         <Button variant="negative" className="mr-05">
-                            미리보기
+                            취소
                         </Button>
                     </div>
                 </div>

@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import columnDefs from './EditFormListModalColumns';
+import columnDefs from './EditFormPartListModalColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import { initialState, getEditFormPartListModal, GET_EDIT_FORM_PART_LIST_MODAL } from '@store/editForm';
 
@@ -29,9 +29,9 @@ const propTypes = {
 const defaultProps = {};
 
 /**
- * 폼 리스트 공통 모달
+ * 폼의 파트 리스트 공통 모달
  */
-const EditFormListModal = (props) => {
+const EditFormPartListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
     const dispatch = useDispatch();
 
@@ -250,7 +250,7 @@ const EditFormListModal = (props) => {
     );
 };
 
-EditFormListModal.propTypes = propTypes;
-EditFormListModal.defaultProps = defaultProps;
+EditFormPartListModal.propTypes = propTypes;
+EditFormPartListModal.defaultProps = defaultProps;
 
-export default EditFormListModal;
+export default EditFormPartListModal;

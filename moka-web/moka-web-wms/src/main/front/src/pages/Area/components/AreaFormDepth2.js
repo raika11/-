@@ -7,8 +7,11 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
+import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
+import ComponentSelector from './ComponentSelector';
+import ContainerSelector from './ContainerSelector';
+import AreaComp from './AreaComp';
 import { GET_AREA_DEPTH2, GET_AREA_DEPTH3, SAVE_AREA, DELETE_AREA, saveArea, changeArea, changeInvalidList } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
@@ -55,6 +58,7 @@ const AreaFormDepth2 = (props) => {
 
     const [container, setContainer] = useState({}); // 선택한 컨테이너 담고 있는 state
     const [component, setComponent] = useState({}); // 선택한 컴포넌트 담고 있는 state
+    const [areaComp, setAreaComp] = useState({}); // areaDiv === ITEM_CP 일 때 areaComp 1개
     const [areaComps, setAreaComps] = useState([]); // areaDiv === ITEM_CT 일 때 DB에 저장되는 areaComp 리스트
     const [areaCompLoad, setAreaCompLoad] = useState({});
 
@@ -189,7 +193,7 @@ const AreaFormDepth2 = (props) => {
 
         let save = {
             ...temp,
-            page: page.pageSeq ? { pageSeq: page.pageSeq } : null,
+            page: page.pageSeq ? { pageSeq: page.pageSeq, pageName: page.pageName, pageUrl: page.pageUrl } : null,
             parent: parent.areaSeq ? { areaSeq: parent.areaSeq } : null,
             domain: domain,
         };
@@ -198,15 +202,12 @@ const AreaFormDepth2 = (props) => {
             save.container = null;
             save.areaComps = null;
             if (component.componentSeq) {
-                save.areaComp = { component, ordNo: 1 };
+                save.areaComp = { ...areaComp, component, ordNo: 1 };
             }
         } else {
             save.container = container;
             save.areaComp = null;
-            save.areaComps = areaComps.map((comp) => ({
-                ...comp,
-                ordNo: comp.component.relOrd + 1,
-            }));
+            save.areaComps = areaComps;
         }
 
         if (validate(save)) {
@@ -248,6 +249,7 @@ const AreaFormDepth2 = (props) => {
                                 body.list.map((b) => ({
                                     compAlign: AREA_COMP_ALIGN_LEFT,
                                     component: { ...b },
+                                    ordNo: b.relOrd + 1,
                                 })),
                             );
                             setAreaCompLoad({
@@ -294,6 +296,7 @@ const AreaFormDepth2 = (props) => {
                         setCompOptions(body.list || []);
 
                         if (compCnt < 1) {
+                            setAreaComp(origin.areaComp || {});
                             setComponent(origin.areaComp && origin.areaComp.component ? origin.areaComp.component : component || {});
                         } else {
                             setAreaCompLoad({
@@ -301,6 +304,7 @@ const AreaFormDepth2 = (props) => {
                                 byPage: false,
                                 byPageMessage: null,
                             });
+                            setAreaComp({});
                             setComponent({});
                         }
                         setCompCnt(compCnt + 1);
@@ -355,6 +359,7 @@ const AreaFormDepth2 = (props) => {
         // origin 데이터 가져오는 부분
         if (origin.areaDiv === ITEM_CP && origin.areaComp) {
             setComponent(origin.areaComp.component || {});
+            setAreaComp(origin.areaComp);
             setAreaComps([]);
         }
         // areaComps 셋팅
@@ -547,31 +552,17 @@ const AreaFormDepth2 = (props) => {
                         </Col>
 
                         {temp.areaDiv === ITEM_CP && (
-                            <Col xs={8} className="p-0 pl-2 pr-2">
-                                <MokaInput as="select" name="component" value={component.componentSeq} onChange={handleChangeValue} isInvalid={error.component}>
-                                    <option hidden>컴포넌트를 선택하세요</option>
-                                    {compOptions.map((com) => (
-                                        <option value={com.componentSeq} key={com.componentSeq}>
-                                            {com.componentName}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </Col>
+                            <ComponentSelector
+                                component={component}
+                                areaComp={areaComp}
+                                setAreaComp={setAreaComp}
+                                onChange={handleChangeValue}
+                                compOptions={compOptions}
+                                error={error}
+                            />
                         )}
 
-                        {temp.areaDiv === ITEM_CT && (
-                            <Col xs={8} className="p-0 pl-2 pr-2">
-                                <MokaInput as="select" name="container" value={container.containerSeq} onChange={handleChangeValue}>
-                                    <option hidden>컨테이너를 선택하세요</option>
-                                    <option value="">컨테이너를 선택하세요</option>
-                                    {contOptions.map((con) => (
-                                        <option value={con.containerSeq} key={con.containerSeq}>
-                                            {con.containerName}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </Col>
-                        )}
+                        {temp.areaDiv === ITEM_CT && <ContainerSelector container={container} onChange={handleChangeValue} contOptions={contOptions} />}
 
                         {/* 세로형/가로형 선택 */}
                         <Col xs={2} className="p-0">
@@ -627,27 +618,15 @@ const AreaFormDepth2 = (props) => {
                     {/* 컨테이너일 경우 하위 컴포넌트 나열 */}
                     {temp.areaDiv === ITEM_CT &&
                         areaComps.map((comp, idx) => (
-                            <Form.Row className="mb-2" key={comp.component.componentSeq}>
-                                <Col xs={2} className="p-0">
-                                    <MokaInput value="컴포넌트" disabled />
-                                </Col>
-                                <Col xs={8} className="p-0 pl-2 pr-2">
-                                    <MokaInput value={comp.component.componentName} inputProps={{ readOnly: true }} />
-                                </Col>
-                                <Col xs={2} className="p-0">
-                                    <MokaInput
-                                        as="select"
-                                        name="compAlign"
-                                        value={comp.compAlign}
-                                        onChange={(e) => handleChangeValue(e, idx)}
-                                        className="ft-12"
-                                        disabled={areaCompLoad.byContainer || areaCompLoad.byContainerComp || temp.areaAlign === AREA_ALIGN_V}
-                                    >
-                                        <option value={AREA_COMP_ALIGN_LEFT}>Left 영역</option>
-                                        <option value={AREA_COMP_ALIGN_RIGHT}>Right 영역</option>
-                                    </MokaInput>
-                                </Col>
-                            </Form.Row>
+                            <AreaComp
+                                key={idx}
+                                areaComp={comp}
+                                areaComps={areaComps}
+                                index={idx}
+                                onChange={handleChangeValue}
+                                disalbed={areaCompLoad.byContainer || areaCompLoad.byContainerComp || temp.areaAlign === AREA_ALIGN_V}
+                                setAreaComps={setAreaComps}
+                            />
                         ))}
 
                     {/* 미리보기 리소스 */}

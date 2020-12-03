@@ -1,6 +1,10 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { Suspense } from 'react';
+import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
+
+const FbArtList = React.lazy(() => import('./FbArtList'));
+const FbArtEdit = React.lazy(() => import('./FbArtEdit'));
 
 /**
  * FB전송기사
@@ -18,8 +22,21 @@ const FbArt = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={840} className="mr-gutter flex-fill" titleClassName="mb-0" header={false}>
-                <Suspense>리스트</Suspense>
+                <Suspense>
+                    <FbArtList />
+                </Suspense>
             </MokaCard>
+
+            {/* 등록/수정창 */}
+            <Route
+                path={[match.url, `${match.url}/:mataSeq`]}
+                exact
+                render={(props) => (
+                    <Suspense>
+                        <FbArtEdit {...props} />
+                    </Suspense>
+                )}
+            />
         </div>
     );
 };

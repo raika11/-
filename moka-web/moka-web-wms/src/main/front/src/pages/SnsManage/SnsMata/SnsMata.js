@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';

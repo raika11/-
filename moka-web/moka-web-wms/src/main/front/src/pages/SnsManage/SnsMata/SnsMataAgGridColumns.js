@@ -10,13 +10,13 @@ export const tempColumnDefs = [
         width: 50,
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px' },
     },
-    {
-        headerName: '\t출처',
-        field: 'source',
-        wrapText: true,
-        width: 130,
-        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', paddingLeft: '8px' },
-    },
+    // {
+    //     headerName: '\t출처',
+    //     field: 'source',
+    //     wrapText: true,
+    //     width: 130,
+    //     cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', paddingLeft: '8px' },
+    // },
     {
         headerName: '\t출고일',
         field: 'listOutDate',
@@ -35,7 +35,7 @@ export const tempColumnDefs = [
         headerName: '\t\t\t\t\t기사제목\n\t\t\t\t\tSNS제목',
         field: 'listTitle',
         wrapText: true,
-        width: 250,
+        width: 380,
         flex: true,
         cellRendererFramework: (params) => <ListTitleRenderer {...params} />,
         cellStyle: { fontSize: '12px', lineHeight: '40px' },
@@ -68,7 +68,7 @@ export const tempColumnDefs = [
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', paddingLeft: '12px' },
     },
     {
-        headerName: '전송',
+        headerName: '  전송',
         field: 'insStatus',
         width: 80,
         wrapText: true,
@@ -124,7 +124,7 @@ export const tempRowData = [
         twitter: 'N',
     },
     {
-        repId: 998,
+        repId: 997,
         source: '중앙선데이(조판)',
         outDate: '2020-10-25 13:40:05',
         repImg: 'http://pds.joins.com/news/search_direct_link/000.jpg',

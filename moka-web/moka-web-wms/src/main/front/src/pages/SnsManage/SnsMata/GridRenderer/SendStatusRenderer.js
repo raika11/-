@@ -1,7 +1,7 @@
 import React from 'react';
 import { MokaIcon } from '@components';
 
-const StatusIdle = () => <div className="justify-content-between mr-3 p-1">대기</div>;
+const StatusIdle = () => <div className="justify-content-between mr-3 p-1 pl-2">대기</div>;
 
 const StatusSend = ({ FaceBook, Twitter }) => {
     return (

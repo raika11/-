@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
 import { Form, Col } from 'react-bootstrap';
-import { MokaModal, MokaInputLabel, MokaInput, MokaSearchInput, MokaTable } from '@components';
+import { MokaModal, MokaInputLabel } from '@components';
 import Button from 'react-bootstrap/Button';
-import clsx from 'clsx';
 const propTypes = {
     show: PropTypes.bool,
     onHide: PropTypes.func,
@@ -55,5 +53,8 @@ const MataModal = (props) => {
         </MokaModal>
     );
 };
+
+MataModal.propTypes = propTypes;
+MataModal.defaultProps = defaultProps;
 
 export default MataModal;

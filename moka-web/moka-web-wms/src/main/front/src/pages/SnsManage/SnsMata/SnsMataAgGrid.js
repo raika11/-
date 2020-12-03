@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { tempColumnDefs, tempRowData } from './SnsMataAgGridColumns';
 import { MokaTable } from '@components';
-import MataModal from './modal/MataModal';
 
 const SnsMataAgGrid = () => {
+    // 임시
     const [rowData, setRowData] = useState([]);
 
+    // 임시
     const handleClickListRow = () => {
         console.log('handleClickListRow');
     };
+
+    // 임시
     const handleChangeSearchOption = () => {
         console.log('handleChangeSearchOption');
     };
-    const handleOnRowNodeId = () => {};
 
-    const [modalShow, setModalShow] = useState(false);
+    // 임시
+    const handleOnRowNodeId = () => {};
 
     // 최초 로딩.
     useEffect(() => {
-        // API 에서 어떻게 내려 오는지를 몰라서 아래 처럼 했습니다.
+        // API 에서 어떻게 내려 오는지 몰라서 아래 처럼 했습니다.
         setRowData(
             tempRowData.map((element) => {
                 let repId = element.repId;
@@ -75,7 +78,6 @@ const SnsMataAgGrid = () => {
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={null}
             />
-            <MataModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={null} />
         </>
     );
 };

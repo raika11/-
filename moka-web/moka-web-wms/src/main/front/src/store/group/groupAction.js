@@ -81,3 +81,6 @@ export const changeMemberSearchOption = createAction(CHANGE_MEMBER_SEARCH_OPTION
 
 export const UPDATE_GROUP_IN_MEMBER = 'group/UPDATE_GROUP_IN_MEMBER';
 export const updateGroupInMember = createAction(UPDATE_GROUP_IN_MEMBER);
+
+export const CLEAR_GROUP_MEMBER = 'group/CLEAR_GROUP_MEMBER';
+export const clearGroupMember = createAction(CLEAR_GROUP_MEMBER);

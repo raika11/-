@@ -219,7 +219,6 @@ function* updateGroupMenuAuth({ type, payload: { groupCd, changeMenuAuthList, ca
 }
 
 function* getGroupInMemberList({ type, payload: { search } }) {
-    console.log(type);
     yield put(startLoading(type));
     try {
         const response = yield call(memberAPI.getMemberList, { search });
@@ -271,12 +270,12 @@ function* getSearchMemberList({ type, payload: { name, search } }) {
 }
 
 function* updateGroupInMember({ type, payload: { groupCd, memberIds, useYn, callback } }) {
-    yield startLoading(type);
+    yield put(startLoading(type));
 
     const response = yield call(groupAPI.updateGroupInMember, groupCd, memberIds, useYn);
     callback(response.data);
 
-    yield finishLoading(type);
+    yield put(finishLoading(type));
 }
 
 function toSearchUserList(allMembers, groupUsers) {

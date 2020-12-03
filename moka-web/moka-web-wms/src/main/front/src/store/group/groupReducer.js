@@ -181,6 +181,12 @@ export default handleActions(
                 draft.member.groupOut.search[name] = value;
             });
         },
+
+        [act.CLEAR_GROUP_MEMBER]: (state) => {
+            return produce(state, (draft) => {
+                draft.member = initialState.member;
+            });
+        },
     },
     initialState,
 );

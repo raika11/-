@@ -65,6 +65,11 @@ public class AreaCompDTO implements Serializable {
     @Builder.Default
     private String compAlign = TpsConstants.AREA_COMP_ALIGN_LEFT;
 
+    /**
+     * 화면편집파트
+     */
+    private String deskingPart;
+
     public void setArea(AreaDTO area) {
         if (area == null) {
             return;

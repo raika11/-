@@ -79,6 +79,12 @@ public class AreaComp implements Serializable {
     @Builder.Default
     private String compAlign = TpsConstants.AREA_COMP_ALIGN_LEFT;
 
+    /**
+     * 화면편집파트
+     */
+    @Column(name = "DESKING_PART")
+    private String deskingPart;
+
     @PrePersist
     @PreUpdate
     public void prePersist() {

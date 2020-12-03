@@ -76,7 +76,7 @@ public class ComponentHistDTO implements Serializable {
     /**
      * 데이터유형:NONE, DESK, AUTO
      */
-    @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)]{4}$", message = "{tps.component.error.pattern.dataType}")
+    @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)|(FORM)]{4}$", message = "{tps.component.error.pattern.dataType}")
     @Builder.Default
     private String dataType = TpsConstants.DATATYPE_NONE;
 

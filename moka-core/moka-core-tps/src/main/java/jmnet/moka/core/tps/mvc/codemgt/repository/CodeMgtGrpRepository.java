@@ -35,4 +35,6 @@ public interface CodeMgtGrpRepository extends JpaRepository<CodeMgtGrp, Long> {
      * @return 코드그룹목록
      */
     Page<CodeMgtGrp> findBySecretYnAndUsedYn(String secretYn, String usedYn, Pageable pageable);
+
+    Page<CodeMgtGrp> findByUsedYn(String usedYn, Pageable pageable);
 }

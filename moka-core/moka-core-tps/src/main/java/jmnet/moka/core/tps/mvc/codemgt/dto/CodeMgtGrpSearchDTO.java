@@ -27,7 +27,7 @@ public class CodeMgtGrpSearchDTO extends SearchDTO {
     /**
      * 사용여부(Y:사용, N:미사용)
      */
-    @Pattern(regexp = "^[Y|N]?$", message = "{tps.codeMgtGrp.error.pattern.secretYn}")
+    @Pattern(regexp = "^[all|N]?$", message = "{tps.codeMgtGrp.error.pattern.search.secretYn}")
     @Builder.Default
     private String secretYn = MokaConstants.NO;
 

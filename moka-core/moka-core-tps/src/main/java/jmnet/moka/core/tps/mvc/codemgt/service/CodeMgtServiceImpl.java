@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
@@ -55,7 +56,11 @@ public class CodeMgtServiceImpl implements CodeMgtService {
 
     @Override
     public Page<CodeMgtGrp> findGrpList(Pageable pageable, String secretYn) {
-        return codeMgtGrpRepository.findBySecretYnAndUsedYn(secretYn, MokaConstants.YES, pageable);
+        if (secretYn.equals(TpsConstants.SEARCH_TYPE_ALL)) {
+            return codeMgtGrpRepository.findByUsedYn(MokaConstants.YES, pageable);
+        } else {
+            return codeMgtGrpRepository.findBySecretYnAndUsedYn(secretYn, MokaConstants.YES, pageable);
+        }
     }
 
     @Override

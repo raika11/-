@@ -23,6 +23,7 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -77,6 +78,13 @@ public class Component extends BaseAudit {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DATASET_SEQ", referencedColumnName = "DATASET_SEQ", nullable = true)
     private Dataset dataset;
+
+    /**
+     * 에디트폼 파트
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PART_SEQ", referencedColumnName = "PART_SEQ", nullable = true)
+    private EditFormPart editFormPart;
 
     /**
      * 컴포넌트명

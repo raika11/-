@@ -41,23 +41,26 @@ public class ComponentHistServiceImpl implements ComponentHistService {
             Object object = iterator.next();
             if (object.getClass() == Component.class) {
                 Component component = (Component) object;
-                histories.add(ComponentHist.builder()
-                                           .dataset(component.getDataset())
-                                           .dataType(component.getDataType())
-                                           .snapshotYn(component.getSnapshotYn())
-                                           .snapshotBody(component.getSnapshotBody())
-                                           .domainId(component.getDomain()
-                                                              .getDomainId())
-                                           .template(component.getTemplate())
-                                           .componentSeq(component.getComponentSeq())
-                                           .status(histPublishDTO.getStatus())
-                                           .approvalYn(histPublishDTO.getApprovalYn())
-                                           .reserveDt(histPublishDTO.getReserveDt())
-                                           .zone(component.getZone())
-                                           .matchZone(component.getMatchZone())
-                                           .viewYn(component.getViewYn())
-                                           .perPageCount(component.getPerPageCount())
-                                           .build());
+                histories.add(ComponentHist
+                        .builder()
+                        .dataset(component.getDataset())
+                        .editFormPart(component.getEditFormPart())
+                        .dataType(component.getDataType())
+                        .snapshotYn(component.getSnapshotYn())
+                        .snapshotBody(component.getSnapshotBody())
+                        .domainId(component
+                                .getDomain()
+                                .getDomainId())
+                        .template(component.getTemplate())
+                        .componentSeq(component.getComponentSeq())
+                        .status(histPublishDTO.getStatus())
+                        .approvalYn(histPublishDTO.getApprovalYn())
+                        .reserveDt(histPublishDTO.getReserveDt())
+                        .zone(component.getZone())
+                        .matchZone(component.getMatchZone())
+                        .viewYn(component.getViewYn())
+                        .perPageCount(component.getPerPageCount())
+                        .build());
             } else if (object.getClass() == ComponentHist.class) {
                 ComponentHist componentHist = (ComponentHist) object;
                 histories.add(componentHist);
@@ -69,23 +72,26 @@ public class ComponentHistServiceImpl implements ComponentHistService {
 
     public ComponentHist insertComponentHist(Component component, HistPublishDTO histPublishDTO)
             throws Exception {
-        ComponentHist history = ComponentHist.builder()
-                                             .dataset(component.getDataset())
-                                             .dataType(component.getDataType())
-                                             .domainId(component.getDomain()
-                                                                .getDomainId())
-                                             .template(component.getTemplate())
-                                             .componentSeq(component.getComponentSeq())
-                                             .snapshotYn(component.getSnapshotYn())
-                                             .snapshotBody(component.getSnapshotBody())
-                                             .status(histPublishDTO.getStatus())
-                                             .approvalYn(histPublishDTO.getApprovalYn())
-                                             .reserveDt(histPublishDTO.getReserveDt())
-                                             .zone(component.getZone())
-                                             .matchZone(component.getMatchZone())
-                                             .viewYn(component.getViewYn())
-                                             .perPageCount(component.getPerPageCount())
-                                             .build();
+        ComponentHist history = ComponentHist
+                .builder()
+                .dataset(component.getDataset())
+                .editFormPart(component.getEditFormPart())
+                .dataType(component.getDataType())
+                .domainId(component
+                        .getDomain()
+                        .getDomainId())
+                .template(component.getTemplate())
+                .componentSeq(component.getComponentSeq())
+                .snapshotYn(component.getSnapshotYn())
+                .snapshotBody(component.getSnapshotBody())
+                .status(histPublishDTO.getStatus())
+                .approvalYn(histPublishDTO.getApprovalYn())
+                .reserveDt(histPublishDTO.getReserveDt())
+                .zone(component.getZone())
+                .matchZone(component.getMatchZone())
+                .viewYn(component.getViewYn())
+                .perPageCount(component.getPerPageCount())
+                .build();
 
         ComponentHist componentHist = this.insertComponentHist(history);
         histPublishDTO.setSeq(componentHist.getSeq());  // 등록된 히스토리SEQ값을 세팅해 준다.

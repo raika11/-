@@ -6,9 +6,6 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -17,6 +14,7 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -69,6 +67,11 @@ public class ComponentHistDTO implements Serializable {
      */
     @NotNull(message = "{tps.template.error.notnull.templateSeq}")
     private TemplateSimpleDTO template;
+
+    /**
+     * 에디트폼 파트
+     */
+    private EditFormPartDTO editFormPart;
 
     /**
      * 데이터유형:NONE, DESK, AUTO

@@ -15,6 +15,7 @@ export const columnDefs = [
         // cellClass: 'ag-cell-center',
         cellStyle: { fontSize: '12px' },
         width: 214,
+        flex: 1,
     },
     {
         headerName: '',

@@ -12,6 +12,7 @@ import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.QComponent;
 import jmnet.moka.core.tps.mvc.dataset.entity.QDataset;
 import jmnet.moka.core.tps.mvc.domain.entity.QDomain;
+import jmnet.moka.core.tps.mvc.editform.entity.QEditFormPart;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.template.entity.QTemplate;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,7 @@ public class ComponentRepositorySupportImpl extends QuerydslRepositorySupport im
         QDomain domain = QDomain.domain;
         QTemplate template = QTemplate.template;
         QDataset dataset = QDataset.dataset;
+        QEditFormPart editFormPart = QEditFormPart.editFormPart;
 
         BooleanBuilder builder = new BooleanBuilder();
         String searchType = search.getSearchType();
@@ -53,21 +55,25 @@ public class ComponentRepositorySupportImpl extends QuerydslRepositorySupport im
             } else if (searchType.equals("templateSeq")) {
                 builder.and(component.template.templateSeq.eq(Long.valueOf(keyword)));
             } else if (searchType.equals("templateName")) {
-                builder.and(component.template.in(JPAExpressions.selectFrom(template)
-                                                                .where(template.templateName.contains(keyword))));
+                builder.and(component.template.in(JPAExpressions
+                        .selectFrom(template)
+                        .where(template.templateName.contains(keyword))));
             }
         }
 
         JPQLQuery<Component> query = queryFactory.selectFrom(component);
         query = getQuerydsl().applyPagination(pageable, query);
-        QueryResults<Component> list = query.leftJoin(component.domain, domain)
-                                            .fetchJoin()
-                                            .leftJoin(component.template, template)
-                                            .fetchJoin()
-                                            .leftJoin(component.dataset, dataset)
-                                            .fetchJoin()
-                                            .where(builder)
-                                            .fetchResults();
+        QueryResults<Component> list = query
+                .leftJoin(component.domain, domain)
+                .fetchJoin()
+                .leftJoin(component.template, template)
+                .fetchJoin()
+                .leftJoin(component.dataset, dataset)
+                .fetchJoin()
+                .leftJoin(component.editFormPart, editFormPart)
+                .fetchJoin()
+                .where(builder)
+                .fetchResults();
 
         return new PageImpl<Component>(list.getResults(), pageable, list.getTotal());
     }
@@ -78,14 +84,16 @@ public class ComponentRepositorySupportImpl extends QuerydslRepositorySupport im
         QDomain domain = QDomain.domain;
         QTemplate template = QTemplate.template;
         QDataset dataset = QDataset.dataset;
+        QEditFormPart editFormPart = QEditFormPart.editFormPart;
 
         BooleanBuilder builder = new BooleanBuilder();
         // String searchType = search.getSearchType();
         // String keyword = search.getKeyword();
 
         // 도메인ID 조건
-        if (!McpString.isNullOrEmpty(search.getDomainId()) && !search.getDomainId()
-                                                                     .equals(TpsConstants.SEARCH_TYPE_ALL)) {
+        if (!McpString.isNullOrEmpty(search.getDomainId()) && !search
+                .getDomainId()
+                .equals(TpsConstants.SEARCH_TYPE_ALL)) {
             builder.and(component.domain.domainId.eq(search.getDomainId()));
         }
         // 검색조건 (컴포넌트명, 컴포넌트ID)
@@ -101,14 +109,17 @@ public class ComponentRepositorySupportImpl extends QuerydslRepositorySupport im
 
         JPQLQuery<Component> query = queryFactory.selectFrom(component);
         query = getQuerydsl().applyPagination(pageable, query);
-        QueryResults<Component> list = query.leftJoin(component.domain, domain)
-                                            .fetchJoin()
-                                            .leftJoin(component.template, template)
-                                            .fetchJoin()
-                                            .leftJoin(component.dataset, dataset)
-                                            .fetchJoin()
-                                            .where(builder)
-                                            .fetchResults();
+        QueryResults<Component> list = query
+                .leftJoin(component.domain, domain)
+                .fetchJoin()
+                .leftJoin(component.template, template)
+                .fetchJoin()
+                .leftJoin(component.dataset, dataset)
+                .fetchJoin()
+                .leftJoin(component.editFormPart, editFormPart)
+                .fetchJoin()
+                .where(builder)
+                .fetchResults();
 
         return new PageImpl<Component>(list.getResults(), pageable, list.getTotal());
     }
@@ -119,14 +130,16 @@ public class ComponentRepositorySupportImpl extends QuerydslRepositorySupport im
         QDomain domain = QDomain.domain;
         QTemplate template = QTemplate.template;
         QDataset dataset = QDataset.dataset;
+        QEditFormPart editFormPart = QEditFormPart.editFormPart;
 
         BooleanBuilder builder = new BooleanBuilder();
         // String searchType = search.getSearchType();
         // String keyword = search.getKeyword();
 
         // 도메인ID 조건
-        if (!McpString.isNullOrEmpty(search.getDomainId()) && !search.getDomainId()
-                                                                     .equals(TpsConstants.SEARCH_TYPE_ALL)) {
+        if (!McpString.isNullOrEmpty(search.getDomainId()) && !search
+                .getDomainId()
+                .equals(TpsConstants.SEARCH_TYPE_ALL)) {
             builder.and(component.domain.domainId.eq(search.getDomainId()));
         }
         // 검색조건 (컴포넌트명, 컴포넌트ID)
@@ -142,14 +155,17 @@ public class ComponentRepositorySupportImpl extends QuerydslRepositorySupport im
 
         JPQLQuery<Component> query = queryFactory.selectFrom(component);
         query = getQuerydsl().applyPagination(pageable, query);
-        QueryResults<Component> list = query.leftJoin(component.domain, domain)
-                                            .fetchJoin()
-                                            .leftJoin(component.template, template)
-                                            .fetchJoin()
-                                            .leftJoin(component.dataset, dataset)
-                                            .fetchJoin()
-                                            .where(builder)
-                                            .fetchResults();
+        QueryResults<Component> list = query
+                .leftJoin(component.domain, domain)
+                .fetchJoin()
+                .leftJoin(component.template, template)
+                .fetchJoin()
+                .leftJoin(component.dataset, dataset)
+                .fetchJoin()
+                .leftJoin(component.editFormPart, editFormPart)
+                .fetchJoin()
+                .where(builder)
+                .fetchResults();
 
         return new PageImpl<Component>(list.getResults(), pageable, list.getTotal());
     }

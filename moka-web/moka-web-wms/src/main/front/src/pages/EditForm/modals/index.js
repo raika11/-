@@ -1,1 +1,1 @@
-export { default as EditFormListModal } from './EditFormListModal';
+export { default as EditFormPartListModal } from './EditFormPartListModal';

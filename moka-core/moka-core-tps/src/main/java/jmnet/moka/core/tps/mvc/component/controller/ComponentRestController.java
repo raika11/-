@@ -113,12 +113,13 @@ public class ComponentRestController {
             @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws Exception {
 
-        Component component = componentService.findComponentBySeq(componentSeq)
-                                              .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.common.error.no-data");
-                                                  tpsLogger.fail(message, true);
-                                                  return new NoDataException(message);
-                                              });
+        Component component = componentService
+                .findComponentBySeq(componentSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         ComponentDTO componentDTO = modelMapper.map(component, ComponentDTO.class);
 
@@ -152,15 +153,24 @@ public class ComponentRestController {
         // 데이터 유효성 검사
         validData(componentDTO, ActionType.INSERT);
 
-        if (componentDTO.getDataset() != null && componentDTO.getDataset()
-                                                             .getDatasetSeq() == null) {
+        if (componentDTO.getDataset() != null && componentDTO
+                .getDataset()
+                .getDatasetSeq() == null) {
             componentDTO.setDataset(null);
         }
 
+        if (componentDTO.getEditFormPart() != null && componentDTO
+                .getEditFormPart()
+                .getPartSeq() == null) {
+            componentDTO.setEditFormPart(null);
+        }
+
         // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
-        if (componentDTO.getDataType()
-                        .equals(TpsConstants.DATATYPE_DESK) || componentDTO.getDataType()
-                                                                           .equals(TpsConstants.DATATYPE_FORM)) {
+        if (componentDTO
+                .getDataType()
+                .equals(TpsConstants.DATATYPE_DESK) || componentDTO
+                .getDataType()
+                .equals(TpsConstants.DATATYPE_FORM)) {
             componentDTO.setViewYn(MokaConstants.NO);
         } else {
             componentDTO.setViewYn(MokaConstants.YES);
@@ -169,10 +179,11 @@ public class ComponentRestController {
         Component component = modelMapper.map(componentDTO, Component.class);
 
         try {
-            HistPublishDTO histPublishDTO = HistPublishDTO.builder()
-                                                          .status(EditStatusCode.PUBLISH)
-                                                          .approvalYn(MokaConstants.YES)
-                                                          .build();
+            HistPublishDTO histPublishDTO = HistPublishDTO
+                    .builder()
+                    .status(EditStatusCode.PUBLISH)
+                    .approvalYn(MokaConstants.YES)
+                    .build();
 
             // 등록
             Component returnVal = componentService.insertComponent(component, histPublishDTO);
@@ -212,9 +223,11 @@ public class ComponentRestController {
         for (ComponentDTO componentDTO : componentDTOs) {
             validData(componentDTO, ActionType.INSERT);
             // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
-            if (componentDTO.getDataType()
-                            .equals(TpsConstants.DATATYPE_DESK) || componentDTO.getDataType()
-                                                                               .equals(TpsConstants.DATATYPE_FORM)) {
+            if (componentDTO
+                    .getDataType()
+                    .equals(TpsConstants.DATATYPE_DESK) || componentDTO
+                    .getDataType()
+                    .equals(TpsConstants.DATATYPE_FORM)) {
                 componentDTO.setViewYn(MokaConstants.NO);
             } else {
                 componentDTO.setViewYn(MokaConstants.YES);
@@ -224,10 +237,11 @@ public class ComponentRestController {
         List<Component> components = modelMapper.map(componentDTOs, Component.TYPE);
 
         try {
-            HistPublishDTO histPublishDTO = HistPublishDTO.builder()
-                                                          .status(EditStatusCode.PUBLISH)
-                                                          .approvalYn(MokaConstants.YES)
-                                                          .build();
+            HistPublishDTO histPublishDTO = HistPublishDTO
+                    .builder()
+                    .status(EditStatusCode.PUBLISH)
+                    .approvalYn(MokaConstants.YES)
+                    .build();
 
             // 한번에 등록한다
             List<Component> returnVal = componentService.insertComponents(components, histPublishDTO);
@@ -271,22 +285,32 @@ public class ComponentRestController {
         validData(componentDTO, ActionType.UPDATE);
 
         // 원래 데이터 조회
-        Component orgComponent = componentService.findComponentBySeq(componentSeq)
-                                                 .orElseThrow(() -> {
-                                                     String message = messageByLocale.get("tps.common.error.no-data");
-                                                     tpsLogger.fail(ActionType.UPDATE, message, true);
-                                                     return new NoDataException(message);
-                                                 });
+        Component orgComponent = componentService
+                .findComponentBySeq(componentSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
-        if (componentDTO.getDataset() != null && componentDTO.getDataset()
-                                                             .getDatasetSeq() == null) {
+        if (componentDTO.getDataset() != null && componentDTO
+                .getDataset()
+                .getDatasetSeq() == null) {
             componentDTO.setDataset(null);
         }
 
+        if (componentDTO.getEditFormPart() != null && componentDTO
+                .getEditFormPart()
+                .getPartSeq() == null) {
+            componentDTO.setEditFormPart(null);
+        }
+
         // 컴포넌트가 DESK, FORM 일 경우, viewYn은 N를 기본으로 한다.
-        if (componentDTO.getDataType()
-                        .equals(TpsConstants.DATATYPE_DESK) || componentDTO.getDataType()
-                                                                           .equals(TpsConstants.DATATYPE_FORM)) {
+        if (componentDTO
+                .getDataType()
+                .equals(TpsConstants.DATATYPE_DESK) || componentDTO
+                .getDataType()
+                .equals(TpsConstants.DATATYPE_FORM)) {
             componentDTO.setViewYn(MokaConstants.NO);
         } else {
             componentDTO.setViewYn(MokaConstants.YES);
@@ -296,18 +320,20 @@ public class ComponentRestController {
             // 업데이트
             Component newComponent = modelMapper.map(componentDTO, Component.class);
 
-            HistPublishDTO histPublishDTO = HistPublishDTO.builder()
-                                                          .status(EditStatusCode.PUBLISH)
-                                                          .approvalYn(MokaConstants.YES)
-                                                          .build();
+            HistPublishDTO histPublishDTO = HistPublishDTO
+                    .builder()
+                    .status(EditStatusCode.PUBLISH)
+                    .approvalYn(MokaConstants.YES)
+                    .build();
 
             Component returnVal = componentService.updateComponent(newComponent, orgComponent, histPublishDTO);
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
             returnValDTO = this.setPrevDataset(returnValDTO);
 
             // purge 날림!!!!
-            purgeHelper.purgeTms(returnVal.getDomain()
-                                          .getDomainId(), MokaConstants.ITEM_COMPONENT, returnVal.getComponentSeq());
+            purgeHelper.purgeTms(returnVal
+                    .getDomain()
+                    .getDomainId(), MokaConstants.ITEM_COMPONENT, returnVal.getComponentSeq());
 
             // 리턴
             String message = messageByLocale.get("tps.common.success.update");
@@ -338,17 +364,19 @@ public class ComponentRestController {
             throws InvalidDataException, Exception {
 
         // 조회
-        Component component = componentService.findComponentBySeq(componentSeq)
-                                              .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.component.error.no-data");
-                                                  tpsLogger.fail(ActionType.INSERT, message, true);
-                                                  return new NoDataException(message);
-                                              });
+        Component component = componentService
+                .findComponentBySeq(componentSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.component.error.no-data");
+                    tpsLogger.fail(ActionType.INSERT, message, true);
+                    return new NoDataException(message);
+                });
 
         ComponentDTO componentDTO = modelMapper.map(component, ComponentDTO.class);
         // 수동형 데이터셋이면 새 데이터셋을 생성하게끔 null로 바꿔줌
-        if (componentDTO.getDataType()
-                        .equals(TpsConstants.DATATYPE_DESK)) {
+        if (componentDTO
+                .getDataType()
+                .equals(TpsConstants.DATATYPE_DESK)) {
             componentDTO.setDataset(null);
         }
         componentDTO.setComponentSeq(null);
@@ -370,8 +398,9 @@ public class ComponentRestController {
         try {
             List<ComponentHist> deskHistory = componentHistService.findLastHist(componentSeq, TpsConstants.DATATYPE_DESK);
             if (deskHistory.size() > 0) {
-                Dataset deskDataset = deskHistory.get(0)
-                                                 .getDataset();
+                Dataset deskDataset = deskHistory
+                        .get(0)
+                        .getDataset();
                 if (deskDataset != null) {
                     componentDTO.setPrevDeskDataset(modelMapper.map(deskDataset, DatasetDTO.class));
                 }
@@ -384,8 +413,9 @@ public class ComponentRestController {
         try {
             List<ComponentHist> autoHistory = componentHistService.findLastHist(componentSeq, TpsConstants.DATATYPE_AUTO);
             if (autoHistory.size() > 0) {
-                Dataset autoDataset = autoHistory.get(0)
-                                                 .getDataset();
+                Dataset autoDataset = autoHistory
+                        .get(0)
+                        .getDataset();
                 if (autoDataset != null) {
                     componentDTO.setPrevAutoDataset(modelMapper.map(autoDataset, DatasetDTO.class));
                 }
@@ -412,12 +442,13 @@ public class ComponentRestController {
             throws NoDataException, Exception {
 
         // 데이타 확인
-        Component component = componentService.findComponentBySeq(componentSeq)
-                                              .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.common.error.no-data");
-                                                  tpsLogger.fail(ActionType.DELETE, message, true);
-                                                  return new NoDataException(message);
-                                              });
+        Component component = componentService
+                .findComponentBySeq(componentSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
         // 관련아이템 확인
         Boolean hasRels = relationService.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
@@ -491,12 +522,13 @@ public class ComponentRestController {
             throws Exception {
 
         // 컴포넌트 확인
-        componentService.findComponentBySeq(componentSeq)
-                        .orElseThrow(() -> {
-                            String message = messageByLocale.get("tps.common.error.no-data");
-                            tpsLogger.fail(ActionType.SELECT, message, true);
-                            return new NoDataException(message);
-                        });
+        componentService
+                .findComponentBySeq(componentSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             Boolean chkRels = relationService.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
@@ -529,8 +561,9 @@ public class ComponentRestController {
 
         if (component != null) {
             // dataType이 AUTO 일 때는 반드시 dataseq가 존재
-            if (component.getDataType()
-                         .equals("AUTO")) {
+            if (component
+                    .getDataType()
+                    .equals("AUTO")) {
                 if (component.getDataset() == null) {
                     String message = messageByLocale.get("tps.dataset.error.notnull.datasetSeq");
                     invalidList.add(new InvalidDataDTO("dataset", message));

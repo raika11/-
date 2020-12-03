@@ -7,7 +7,6 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
@@ -78,20 +77,26 @@ public class ComponentServiceImpl implements ComponentService {
 
     @Override
     public List<ComponentVO> findAllComponent(ComponentSearchDTO search) {
-        if (search.getSearchType()
-                  .equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) { // 페이지에서 관련 컴포넌트 검색
+        if (search
+                .getSearchType()
+                .equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) { // 페이지에서 관련 컴포넌트 검색
             return componentMapper.findPageChildRelList(search);
-        } else if (search.getSearchType()
-                         .equals("skinSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 콘텐츠스킨에서 관련 컴포넌트 검색
+        } else if (search
+                .getSearchType()
+                .equals("skinSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 콘텐츠스킨에서 관련 컴포넌트 검색
             return componentMapper.findSkinChildRelList(search);
-        } else if (search.getSearchType()
-                         .equals("containerSeq") && McpString.isNotEmpty(search.getKeyword())) { // 컨테이너에서 관련 컴포넌트 검색
+        } else if (search
+                .getSearchType()
+                .equals("containerSeq") && McpString.isNotEmpty(search.getKeyword())) { // 컨테이너에서 관련 컴포넌트 검색
             return componentMapper.findContainerChildRelList(search);
         } else {
-            if (search.getSearchType()
-                      .equals("pageSeq") || search.getSearchType()
-                                                  .equals("skinSeq") || search.getSearchType()
-                                                                              .equals("containerSeq")) {
+            if (search
+                    .getSearchType()
+                    .equals("pageSeq") || search
+                    .getSearchType()
+                    .equals("skinSeq") || search
+                    .getSearchType()
+                    .equals("containerSeq")) {
                 search.clearSort();
                 search.addSort("componentSeq,desc");
             }
@@ -109,11 +114,13 @@ public class ComponentServiceImpl implements ComponentService {
             //            comp.setComponentAdList(componentAds);
 
             // 템플릿 위치그룹명 셋팅
-            Optional<CodeMgt> codeMgt = codeMgtSevice.findByDtlCd(comp.getTemplate()
-                                                                      .getTemplateGroup());
+            Optional<CodeMgt> codeMgt = codeMgtSevice.findByDtlCd(comp
+                    .getTemplate()
+                    .getTemplateGroup());
             codeMgt.ifPresent((c) -> {
-                comp.getTemplate()
-                    .setTemplateGroupName(c.getCdNm());
+                comp
+                        .getTemplate()
+                        .setTemplateGroupName(c.getCdNm());
             });
         }
         return component;
@@ -126,8 +133,9 @@ public class ComponentServiceImpl implements ComponentService {
         Component returnComp = null;
         //        Set<ComponentAd> ads = component.getComponentAdList();
 
-        if (component.getDataType()
-                     .equals(TpsConstants.DATATYPE_DESK)) {
+        if (component
+                .getDataType()
+                .equals(TpsConstants.DATATYPE_DESK)) {
             // insert
             returnComp = componentRepository.save(component);
             log.debug("[COMPONENT INSERT] seq: {}", returnComp.getComponentSeq());
@@ -163,22 +171,27 @@ public class ComponentServiceImpl implements ComponentService {
         entityManager.refresh(returnComp);
 
         // 템플릿 위치그룹명 셋팅
-        Optional<CodeMgt> codeMgt = codeMgtSevice.findByDtlCd(returnComp.getTemplate()
-                                                                        .getTemplateGroup());
+        Optional<CodeMgt> codeMgt = codeMgtSevice.findByDtlCd(returnComp
+                .getTemplate()
+                .getTemplateGroup());
         if (codeMgt.isPresent()) {
-            returnComp.getTemplate()
-                      .setTemplateGroupName(codeMgt.get()
-                                                   .getCdNm());
+            returnComp
+                    .getTemplate()
+                    .setTemplateGroupName(codeMgt
+                            .get()
+                            .getCdNm());
         }
 
         return returnComp;
     }
 
     @Override
-    public Component updateComponent(Component component, HistPublishDTO histPublishDTO) throws NoDataException, Exception {
+    public Component updateComponent(Component component, HistPublishDTO histPublishDTO)
+            throws NoDataException, Exception {
         String message = messageByLocale.get("tps.common.error.no-data");
-        Component orgComponent = this.findComponentBySeq(component.getComponentSeq())
-                                     .orElseThrow(() -> new NoDataException(message));
+        Component orgComponent = this
+                .findComponentBySeq(component.getComponentSeq())
+                .orElseThrow(() -> new NoDataException(message));
         return this.updateComponent(component, orgComponent, histPublishDTO);
     }
 
@@ -188,8 +201,9 @@ public class ComponentServiceImpl implements ComponentService {
             throws Exception {
 
         // DATASET_SEQ == null이고 DATA_TYPE == 'EDIT' 인 경우 데이터셋 생성하여 컴포넌트에 셋팅
-        if (newComponent.getDataset() == null && newComponent.getDataType()
-                                                             .equals(TpsConstants.DATATYPE_DESK)) {
+        if (newComponent.getDataset() == null && newComponent
+                .getDataType()
+                .equals(TpsConstants.DATATYPE_DESK)) {
             newComponent.setDataset(this.createNewDataset(newComponent));
         }
         entityManager.detach(orgComponent);
@@ -208,12 +222,15 @@ public class ComponentServiceImpl implements ComponentService {
         log.debug("[COMPONENT UPDATE] seq: {} History Insert success", component.getComponentSeq());
 
         // 템플릿 위치그룹명 셋팅
-        Optional<CodeMgt> codeMgt = codeMgtSevice.findByDtlCd(component.getTemplate()
-                                                                       .getTemplateGroup());
+        Optional<CodeMgt> codeMgt = codeMgtSevice.findByDtlCd(component
+                .getTemplate()
+                .getTemplateGroup());
         if (codeMgt.isPresent()) {
-            component.getTemplate()
-                     .setTemplateGroupName(codeMgt.get()
-                                                  .getCdNm());
+            component
+                    .getTemplate()
+                    .setTemplateGroupName(codeMgt
+                            .get()
+                            .getCdNm());
         }
 
         // 컨테이너의 관련아이템 업데이트(페이지,스킨,컨테이너)
@@ -231,17 +248,20 @@ public class ComponentServiceImpl implements ComponentService {
 
             // 도메인정보 조회
             String message = messageByLocale.get("tps.domain.error.notnull.domainId");
-            Domain domain = domainService.findDomainById(component.getDomain()
-                                                                  .getDomainId())
-                                         .orElseThrow(() -> new NoDataException(message));
+            Domain domain = domainService
+                    .findDomainById(component
+                            .getDomain()
+                            .getDomainId())
+                    .orElseThrow(() -> new NoDataException(message));
 
             // dataset 생성
-            Dataset dataset = Dataset.builder()
-                                     .dataApiHost(domain.getApiHost())
-                                     .dataApiPath(domain.getApiPath())
-                                     .datasetName(component.getComponentName())
-                                     .autoCreateYn("N")
-                                     .build();
+            Dataset dataset = Dataset
+                    .builder()
+                    .dataApiHost(domain.getApiHost())
+                    .dataApiPath(domain.getApiPath())
+                    .datasetName(component.getComponentName())
+                    .autoCreateYn("N")
+                    .build();
 
             Dataset returnDataset = datasetService.insertDataset(dataset);
             log.debug("[COMPONENT INSERT] seq: {} Dataset Insert success", component.getComponentSeq());
@@ -255,8 +275,9 @@ public class ComponentServiceImpl implements ComponentService {
     public void deleteComponent(Long seq)
             throws NoDataException, Exception {
         String message = messageByLocale.get("tps.component.error.no-data");
-        Component component = this.findComponentBySeq(seq)
-                                  .orElseThrow(() -> new NoDataException(message));
+        Component component = this
+                .findComponentBySeq(seq)
+                .orElseThrow(() -> new NoDataException(message));
         this.deleteComponent(component);
     }
 
@@ -267,11 +288,13 @@ public class ComponentServiceImpl implements ComponentService {
         Long seq = component.getComponentSeq();
 
         // DATA_TYPE == "EDIT" 이면 데이터셋을 지운다(삭제 로직은 데이터셋 서비스에서 처리)
-        if (component.getDataType()
-                     .equals(TpsConstants.DATATYPE_DESK)) {
+        if (component
+                .getDataType()
+                .equals(TpsConstants.DATATYPE_DESK)) {
             if (component.getDataset() != null) {
-                datasetService.deleteAfterCheckDataset(component.getDataset()
-                                                                .getDatasetSeq());
+                datasetService.deleteAfterCheckDataset(component
+                        .getDataset()
+                        .getDatasetSeq());
             }
         }
 
@@ -300,12 +323,14 @@ public class ComponentServiceImpl implements ComponentService {
 
     @Override
     public Page<Component> findAllComponentRel(RelationSearchDTO search, Pageable pageable) {
-        if (search.getRelSeqType()
-                  .equals(MokaConstants.ITEM_TEMPLATE)) {
+        if (search
+                .getRelSeqType()
+                .equals(MokaConstants.ITEM_TEMPLATE)) {
             // 템플릿
             return componentRepository.findListByTemplate(search, pageable);
-        } else if (search.getRelSeqType()
-                         .equals(MokaConstants.ITEM_DATASET)) {
+        } else if (search
+                .getRelSeqType()
+                .equals(MokaConstants.ITEM_DATASET)) {
             // 데이터셋
             return componentRepository.findListByDataset(search, pageable);
         }

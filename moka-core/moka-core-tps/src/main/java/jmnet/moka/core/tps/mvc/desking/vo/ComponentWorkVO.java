@@ -108,6 +108,9 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "ART_PAGE_SEQ")
     private Long artPageSeq;
 
+    @Column(name = "PART_SEQ")
+    private Long partSeq;
+
     /**
      * 서버기준 예약일자
      */

@@ -1,17 +1,22 @@
-package jmnet.moka.core.tps.mvc.naverbulk.entity;
+package jmnet.moka.core.tps.mvc.bulk.entity;
 
-import lombok.*;
-
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <pre>
  *
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.jpod.entity
- * ClassName : ArticlePK
+ * ClassName : BulkArticlePK
  * Created : 2020-11-09 ince
  * </pre>
  *
@@ -26,13 +31,13 @@ import java.io.Serializable;
 @Embeddable
 @ToString
 @EqualsAndHashCode
-public class ArticlePK implements Serializable {
+public class BulkArticlePK implements Serializable {
 
     /**
      * 클릭기사일련번호
      */
-    @Column(name = "CLICKART_SEQ", nullable = false)
-    private Long clickartSeq;
+    @Column(name = "BULKART_SEQ", nullable = false)
+    private Long bulkartSeq;
 
     /**
      * 정렬번호

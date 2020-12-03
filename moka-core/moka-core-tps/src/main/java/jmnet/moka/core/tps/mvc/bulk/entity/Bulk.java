@@ -1,14 +1,25 @@
-package jmnet.moka.core.tps.mvc.naverbulk.entity;
+package jmnet.moka.core.tps.mvc.bulk.entity;
 
-import jmnet.moka.core.tps.common.entity.RegAudit;
-import lombok.*;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.entity.RegAudit;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 /**
- * The persistent class for the TB_CLICK_ARTICLE table.
+ * The persistent class for the TB_BULK_ARTICLE table.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,25 +27,24 @@ import java.util.Date;
 @Getter
 @Builder
 @Entity
-@Table(name = "TB_CLICK_ARTICLE")
-@NamedQuery(name = "Article.findAll", query = "SELECT d FROM Article d")
-public class Article extends RegAudit {
+@Table(name = "TB_BULK_ARTICLE")
+public class Bulk extends RegAudit {
 
     private static final long serialVersionUID = -6113879344816610973L;
 
     /**
-    * int   10,0    NO  클릭기사일련번호
+     * int   10,0    NO  클릭기사일련번호
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CLICKART_SEQ")
-    Long clickartSeq;
+    @Column(name = "BULKART_SEQ")
+    Long bulkartSeq;
 
     /**
-     * char 1   NO  클릭기사구분 - H(아티클핫클릭) N(네이버벌크)
+     * char 1   NO  클릭기사구분 - H(아티클핫클릭) N(벌크)
      */
-    @Column(name = "CLICKART_DIV", nullable = false, length = 1)
-    String clickartDiv;
+    @Column(name = "BULKART_DIV", nullable = false, length = 1)
+    String bulkartDiv;
 
     /**
      * varchar  2   NO  출처 - 썬데이[60] 중앙일보[3]
@@ -45,8 +55,9 @@ public class Article extends RegAudit {
     /**
      * char 1   ('N')   NO  서비스여부
      */
+    @Builder.Default
     @Column(name = "USED_YN", nullable = false, length = 1)
-    String usedYn;
+    String usedYn = MokaConstants.NO;
 
     /**
      * varchar  10  YES 상태 - SAVE(임시) / PUBLISH(전송)

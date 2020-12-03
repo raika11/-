@@ -53,7 +53,7 @@ export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList)
  */
 export const SAVE_COMPONENT = 'component/SAVE_COMPONENT';
 export const SAVE_COMPONENT_LIST = 'component/SAVE_COMPONENT_LIST';
-export const saveComponent = createAction(SAVE_COMPONENT, ({ actions, callback }) => ({ actions, callback }));
+export const saveComponent = createAction(SAVE_COMPONENT, ({ component, actions, callback }) => ({ component, actions, callback }));
 export const saveComponentList = createAction(SAVE_COMPONENT_LIST, (componentList) => componentList);
 
 /**

@@ -1,6 +1,6 @@
 import React from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { Container, Row, Col, Figure, Button } from 'react-bootstrap';
+import { Form, Container, Row, Col, Figure, Button } from 'react-bootstrap';
 
 const FbArtEdit = () => {
     const tempOnchange = (e) => {};
@@ -11,7 +11,7 @@ const FbArtEdit = () => {
                 <hr />
                 <Container>
                     <Row xs={12}>
-                        <Col xs={2} className="pr-0">
+                        <Col xs={3} className="pr-0">
                             <div className="d-flex h4">원본 기사</div>
                         </Col>
                         <Col xs={4}>
@@ -22,7 +22,7 @@ const FbArtEdit = () => {
                         <Col xs={4}>
                             <Figure.Image className="mb-0" src={'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/25ed1572-899d-4bb7-9f59-81059bea0e49.jpg'} />
                         </Col>
-                        <Col xs={7}>
+                        <Col>
                             <div className="d-flex mb-3 display-5 font-weight-bold text-left">{`프로야구 SK 내야수 김성현, 2021 FA 1호 계약`}</div>
                             <div className="d-flex">
                                 <MokaInput
@@ -47,38 +47,39 @@ SK는 "김성현과 2+1년 최대 11억원에 계약했다. 세부 조건은 계
                         </Col>
                     </Row>
                     <Row xs={12}>
-                        <Col xs={6} className="d-flex">{`SNS 이미지 (850*350 px)`}</Col>
-                        <Col xs={6}>
-                            <MokaInputLabel
-                                labelClassName={'pr-5'}
-                                labelWidth={100}
-                                className="d-flex"
-                                as="switch"
-                                name="temp-status"
-                                id="temp-status"
-                                label="사용유무"
-                                variant="positive"
-                            />
+                        <Col xs={4} className="d-flex p-0 m-0 pl-3" style={{ fontSize: '0.775rem' }}>
+                            <Form.Label className="text-danger">{`SNS 이미지 (850*350 px)`}</Form.Label>
                         </Col>
+                        <MokaInputLabel
+                            labelClassName="d-flex p-0 pl-3"
+                            label="사용유무"
+                            labelWidth={80}
+                            as="none"
+                            name="temp-status"
+                            id="temp-status"
+                            variant="positive"
+                            style={{ paddingLeft: '15px' }}
+                        />
+                        <MokaInputLabel labelClassName="d-flex" as="switch" name="temp-status" id="temp-status" variant="positive" />
                     </Row>
                     <Row xs={12}>
                         <Col xs={4}>
                             <Figure.Image className="mb-0" src={'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/25ed1572-899d-4bb7-9f59-81059bea0e49.jpg'} />
+                            <div className="d-flex justify-content-end mb-0 pt-3">
+                                <div className="d-flex justify-content-end pr-2">
+                                    <Button variant="positive">신규 등록</Button>
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <Button variant="searching">편집</Button>
+                                </div>
+                            </div>
                         </Col>
-                        <Col xs={7}>
+                        <Col>
                             <MokaInputLabel onChange={(e) => tempOnchange(e)} />
                             <MokaInput as={'textarea'} className="resize-none" value={''} inputProps={{ rows: '5' }} onChange={(e) => tempOnchange(e)} />
                         </Col>
                     </Row>
                     <Row xs={12}>
-                        <Col className="d-flex justify-content-start pt-2">
-                            <div className="justify-content-start pr-2">
-                                <Button variant="positive">신규 등록</Button>
-                            </div>
-                            <div className="justify-content-start pr-2">
-                                <Button variant="searching">편집</Button>
-                            </div>
-                        </Col>
                         <Col className="d-flex justify-content-end align-items-end pt-3">
                             <div className="justify-content-end align-items-end pr-2">수정정보 2020-12-03 09:36:00 </div>
                         </Col>

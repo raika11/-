@@ -165,12 +165,13 @@ public class CodeMgtRestController {
         //        validGrpData(request, seqNo, null, principal, processStartTime, ActionType.SELECT);
 
 
-        CodeMgtGrp codeMgtGrp = codeMgtService.findByGrpCd(grpCd)
-                                              .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.common.error.no-data");
-                                                  tpsLogger.fail(ActionType.SELECT, message, true);
-                                                  return new NoDataException(message);
-                                              });
+        CodeMgtGrp codeMgtGrp = codeMgtService
+                .findByGrpCd(grpCd)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
 
         // 하위코드갯수 조회
         Long count = codeMgtService.countCodeMgtByGrpCd(codeMgtGrp.getGrpCd());
@@ -306,12 +307,13 @@ public class CodeMgtRestController {
         validGrpData(seqNo, codeMgtGrpDTO, ActionType.UPDATE);
 
         CodeMgtGrp newCodeMgtGrp = modelMapper.map(codeMgtGrpDTO, CodeMgtGrp.class);
-        CodeMgtGrp orgCodeMgtGrp = codeMgtService.findByGrpSeqNo(seqNo)
-                                                 .orElseThrow(() -> {
-                                                     String message = messageByLocale.get("tps.common.error.no-data");
-                                                     tpsLogger.fail(ActionType.SELECT, message, true);
-                                                     return new NoDataException(message);
-                                                 });
+        CodeMgtGrp orgCodeMgtGrp = codeMgtService
+                .findByGrpSeqNo(seqNo)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             // 수정
@@ -344,12 +346,13 @@ public class CodeMgtRestController {
     public ResponseEntity<?> deleteCodeMgtGrp(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.min.seqNo}") Long seqNo)
             throws NoDataException, Exception {
         // 1. 데이타 존재여부 검사
-        CodeMgtGrp codeMgtGrp = codeMgtService.findByGrpSeqNo(seqNo)
-                                              .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.common.error.no-data");
-                                                  tpsLogger.fail(ActionType.DELETE, message, true);
-                                                  return new NoDataException(message);
-                                              });
+        CodeMgtGrp codeMgtGrp = codeMgtService
+                .findByGrpSeqNo(seqNo)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
         // 2. 삭제
         try {
@@ -384,12 +387,13 @@ public class CodeMgtRestController {
         // 데이타유효성검사.
         validData(seqNo, null, ActionType.SELECT);
 
-        CodeMgt codeMgt = codeMgtService.findBySeqNo(seqNo)
-                                        .orElseThrow(() -> {
-                                            String message = messageByLocale.get("tps.common.error.no-data");
-                                            tpsLogger.fail(ActionType.SELECT, message, true);
-                                            return new NoDataException(message);
-                                        });
+        CodeMgt codeMgt = codeMgtService
+                .findBySeqNo(seqNo)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
 
         CodeMgtDTO dto = modelMapper.map(codeMgt, CodeMgtDTO.class);
         ResultDTO<CodeMgtDTO> resultDto = new ResultDTO<CodeMgtDTO>(dto);
@@ -420,8 +424,9 @@ public class CodeMgtRestController {
             }
 
             // 그룹의 grpSeqNo정보 검사
-            Long grpSeqNo = codeMgtDTO.getCodeMgtGrp()
-                                      .getSeqNo();
+            Long grpSeqNo = codeMgtDTO
+                    .getCodeMgtGrp()
+                    .getSeqNo();
             if (grpSeqNo == null || grpSeqNo < 0) {
                 String message = messageByLocale.get("tps.codeMgtGrp.error.min.seqNo");
                 tpsLogger.fail(actionType, message, true);
@@ -429,8 +434,9 @@ public class CodeMgtRestController {
             }
 
             // 그룹아이디 정보 검사
-            String grpCd = codeMgtDTO.getCodeMgtGrp()
-                                     .getGrpCd();
+            String grpCd = codeMgtDTO
+                    .getCodeMgtGrp()
+                    .getGrpCd();
             if (McpString.isEmpty(grpCd)) {
                 String message = messageByLocale.get("tps.codeMgtGrp.error.notnull.grpCd");
                 tpsLogger.fail(actionType, message, true);
@@ -445,9 +451,10 @@ public class CodeMgtRestController {
                     tpsLogger.fail(actionType, message, true);
                     invalidList.add(new InvalidDataDTO("grpCd", message));
                 } else {
-                    if (!codeMgtGrp.get()
-                                   .getGrpCd()
-                                   .equals(grpCd)) {
+                    if (!codeMgtGrp
+                            .get()
+                            .getGrpCd()
+                            .equals(grpCd)) {
                         String message = messageByLocale.get("tps.codeMgt.error.invalid.matchGrpCd");
                         tpsLogger.fail(actionType, message, true);
                         invalidList.add(new InvalidDataDTO("grpCd", message));
@@ -524,12 +531,13 @@ public class CodeMgtRestController {
 
         // 수정
         CodeMgt newCodeMgt = modelMapper.map(codeMgtDTO, CodeMgt.class);
-        CodeMgt orgCodeMgt = codeMgtService.findBySeqNo(seqNo)
-                                           .orElseThrow(() -> {
-                                               String message = messageByLocale.get("tps.common.error.no-data");
-                                               tpsLogger.fail(ActionType.UPDATE, message, true);
-                                               return new NoDataException(message);
-                                           });
+        CodeMgt orgCodeMgt = codeMgtService
+                .findBySeqNo(seqNo)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             CodeMgt returnValue = codeMgtService.updateCodeMgt(newCodeMgt);
@@ -564,12 +572,13 @@ public class CodeMgtRestController {
     public ResponseEntity<?> deleteCodeMgt(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo)
             throws InvalidDataException, NoDataException, Exception {
         // 1. 데이타 존재여부 검사
-        CodeMgt codeMgt = codeMgtService.findBySeqNo(seqNo)
-                                        .orElseThrow(() -> {
-                                            String message = messageByLocale.get("tps.common.error.no-data");
-                                            tpsLogger.fail(ActionType.DELETE, message, true);
-                                            return new NoDataException(message);
-                                        });
+        CodeMgt codeMgt = codeMgtService
+                .findBySeqNo(seqNo)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             // 2. 삭제
@@ -609,12 +618,14 @@ public class CodeMgtRestController {
         CodeMgtDtlDTO codeMgtDtlDTO = null;
 
         for (CodeMgt cc : returnValue) {
-            codeMgtDtlDTO = CodeMgtDtlDTO.builder()
-                                         .grpCd(cc.getCodeMgtGrp()
-                                                  .getGrpCd())
-                                         .dtlCd(cc.getDtlCd())
-                                         .cdNm(cc.getCdNm())
-                                         .build();
+            codeMgtDtlDTO = CodeMgtDtlDTO
+                    .builder()
+                    .grpCd(cc
+                            .getCodeMgtGrp()
+                            .getGrpCd())
+                    .dtlCd(cc.getDtlCd())
+                    .cdNm(cc.getCdNm())
+                    .build();
             break;
         }
         ResultDTO<CodeMgtDtlDTO> resultDto = new ResultDTO<>(codeMgtDtlDTO);
@@ -645,15 +656,16 @@ public class CodeMgtRestController {
         if (result.size() == 0) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(ActionType.UPDATE, message, true);
-            throw new Exception(message);
+            throw new NoDataException(message);
         }
 
         try {
 
             // 일련번호 추출
             //CodeMgt result = codeMgtService.findByDtlCd(grpCd, codeMgtDtlDTO.getDtlCd()).get(0);
-            codeMgtDtlDTO.setSeqNo(result.get(0)
-                                         .getSeqNo());
+            codeMgtDtlDTO.setSeqNo(result
+                    .get(0)
+                    .getSeqNo());
             CodeMgtDtlDTO returnValue = codeMgtService.updateCodeMgtDtl(codeMgtDtlDTO);
 
             // 결과리턴

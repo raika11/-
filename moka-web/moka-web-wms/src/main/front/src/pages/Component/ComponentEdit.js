@@ -4,18 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import {
-    initialState,
-    getComponent,
-    clearComponent,
-    changeComponent,
-    saveComponent,
-    hasRelationList,
-    changeInvalidList,
-    GET_COMPONENT,
-    SAVE_COMPONENT,
-    DELETE_COMPONENT,
-} from '@store/component';
+import { initialState, getComponent, clearComponent, saveComponent, hasRelationList, changeInvalidList, GET_COMPONENT, SAVE_COMPONENT, DELETE_COMPONENT } from '@store/component';
 import { DB_DATEFORMAT } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 
@@ -66,7 +55,7 @@ const ComponentEdit = ({ onDelete }) => {
             isInvalid = isInvalid || true;
         }
         // 템플릿 체크
-        if (!temp.template.templateSeq) {
+        if (!temp.template?.templateSeq) {
             errList.push({
                 field: 'template',
                 reason: '',
@@ -85,7 +74,7 @@ const ComponentEdit = ({ onDelete }) => {
     const saveCallback = (component) => {
         dispatch(
             saveComponent({
-                actions: [changeComponent(component)],
+                component,
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
@@ -151,10 +140,18 @@ const ComponentEdit = ({ onDelete }) => {
 
         if (!saveData.editFormPart?.partSeq) {
             saveData.editFormPart = null;
+        } else {
+            saveData.editFormPart = { partSeq: saveData.editFormPart.partSeq };
         }
 
         if (!saveData.dataset?.datasetSeq) {
             saveData.dataset = null;
+        } else {
+            saveData.dataset = { datasetSeq: saveData.dataset.datasetSeq };
+        }
+
+        if (saveData.template?.templateSeq) {
+            saveData.template = { templateSeq: saveData.template.templateSeq };
         }
 
         if (validate(saveData)) {

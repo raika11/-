@@ -23,6 +23,7 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.entity.RegAudit;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
+import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -82,6 +83,13 @@ public class ComponentHist extends RegAudit {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEMPLATE_SEQ", nullable = false)
     private Template template;
+
+    /**
+     * 에디트폼 파트
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PART_SEQ", referencedColumnName = "PART_SEQ", nullable = true)
+    private EditFormPart editFormPart;
 
     /**
      * 데이터유형:NONE, DESK, AUTO

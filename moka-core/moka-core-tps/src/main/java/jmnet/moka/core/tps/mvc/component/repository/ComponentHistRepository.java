@@ -17,7 +17,7 @@ public interface ComponentHistRepository extends JpaRepository<ComponentHist, Lo
      * @param pageable     Pageable
      * @return 히스토리 목록
      */
-    @EntityGraph(attributePaths = {"dataset", "template"})
+    @EntityGraph(attributePaths = {"dataset", "template", "editFormPart"})
     public Page<ComponentHist> findByComponentSeq(Long componentSeq, Pageable pageable);
 
     //    @EntityGraph(attributePaths = {"dataset", "template"})

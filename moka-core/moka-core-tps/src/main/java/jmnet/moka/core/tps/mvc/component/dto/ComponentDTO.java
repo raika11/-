@@ -16,6 +16,7 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,6 +63,11 @@ public class ComponentDTO implements Serializable {
      * 데이타셋
      */
     private DatasetDTO dataset;
+
+    /**
+     * 에디트폼 파트
+     */
+    private EditFormPartDTO editFormPart;
 
     /**
      * 컴포넌트명

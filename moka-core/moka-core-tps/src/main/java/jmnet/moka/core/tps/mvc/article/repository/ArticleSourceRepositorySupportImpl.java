@@ -42,10 +42,12 @@ public class ArticleSourceRepositorySupportImpl extends QuerydslRepositorySuppor
         builder.and(articleSource.joongangUse.eq(MokaConstants.YES));
         //        builder.or(articleSource.sourceCode.in(deskingSourceList));
 
-        JPQLQuery<ArticleSource> query = queryFactory.selectFrom(articleSource)
-                                                     .where(builder);
+        JPQLQuery<ArticleSource> query = queryFactory
+                .selectFrom(articleSource)
+                .where(builder);
         QueryResults<ArticleSource> list = query.fetchResults();
-        return query.fetchResults()
-                    .getResults();
+        return query
+                .fetchResults()
+                .getResults();
     }
 }

@@ -21,8 +21,8 @@ const ComponentWorkPreview = ({ show }) => {
     const iframeRef = useRef(null);
 
     const handleClickPreview = () => {
-        if (area.page.pageSeq) {
-            window.open(`${API_BASE_URL}/preview/desking/page?pageSeq=${area.page.pageSeq}`, '미리보기');
+        if (area.areaSeq) {
+            window.open(`${API_BASE_URL}/preview/desking/area?areaSeq=${area.areaSeq}`, '미리보기');
         }
     };
 

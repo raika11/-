@@ -191,4 +191,9 @@ public class TpsConstants {
      */
     public static final String DEFAULT_ART_TYPE = "B";
 
+    /**
+     * 미리보기용 날짜포맷
+     */
+    public static final String PREVIEW_DT_FORMAT = "yyyyMMddHHmmss";
+
 }

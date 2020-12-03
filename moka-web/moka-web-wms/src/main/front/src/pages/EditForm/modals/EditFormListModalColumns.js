@@ -9,7 +9,7 @@ export default [
     {
         headerName: '폼명',
         field: 'formName',
-        width: 200,
+        width: 150,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'formName',
     },

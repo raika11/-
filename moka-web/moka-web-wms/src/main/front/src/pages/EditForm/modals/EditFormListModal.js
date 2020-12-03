@@ -58,7 +58,12 @@ const EditFormListModal = (props) => {
      */
     const responseCallback = ({ header, body }) => {
         if (header.success) {
-            setRowData(body.list);
+            setRowData(
+                body.list.map((b) => ({
+                    ...b,
+                    formName: b.editForm?.formName,
+                })),
+            );
             setTotal(body.totalCnt);
             setError(initialState.error);
         } else {
@@ -153,7 +158,7 @@ const EditFormListModal = (props) => {
      */
     const handleRowClicked = useCallback((data) => {
         setSelectedEditForm(data);
-        setSelected(data.formSeq);
+        setSelected(data.partSeq);
     }, []);
 
     /**
@@ -163,9 +168,9 @@ const EditFormListModal = (props) => {
         (selectedNodes) => {
             if (selectedNodes.length > 0) {
                 const sd = selectedNodes[0].data;
-                if (sd.formSeq !== selected) {
+                if (sd.partSeq !== selected) {
                     setSelectedEditForm(sd);
-                    setSelected(sd.formSeq);
+                    setSelected(sd.partSeq);
                 }
             }
         },

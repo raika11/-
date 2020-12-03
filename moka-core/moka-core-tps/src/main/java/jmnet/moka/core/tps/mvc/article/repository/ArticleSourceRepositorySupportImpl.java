@@ -39,7 +39,7 @@ public class ArticleSourceRepositorySupportImpl extends QuerydslRepositorySuppor
                 builder.or(articleSource.sourceCode.eq(source));
             }
         }
-        builder.and(articleSource.usedYn.eq(MokaConstants.YES));
+        builder.and(articleSource.joongangUse.eq(MokaConstants.YES));
         //        builder.or(articleSource.sourceCode.in(deskingSourceList));
 
         JPQLQuery<ArticleSource> query = queryFactory.selectFrom(articleSource)

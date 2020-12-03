@@ -8,6 +8,7 @@ import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,6 +51,19 @@ public class CodeMgtGrpDTO implements Serializable {
     @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}")
     @Length(min = 1, max = 12, message = "{tps.codeMgtGrp.error.length.grpCd}")
     private String grpCd;
+
+    /**
+     * 사용여부
+     */
+    @Pattern(regexp = "^[Y|N]?$", message = "{tps.codeMgtGrp.error.pattern.usedYn}")
+    @Builder.Default
+    private String usedYn = MokaConstants.YES;
+
+    /**
+     * 숨김여부
+     */
+    @Pattern(regexp = "^[Y|N]?$", message = "{tps.codeMgtGrp.error.pattern.secretYn}")
+    private String secretYn = MokaConstants.NO;
 
     /**
      * 코드명

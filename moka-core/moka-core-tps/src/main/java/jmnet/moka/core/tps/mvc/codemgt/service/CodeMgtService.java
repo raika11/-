@@ -2,8 +2,6 @@ package jmnet.moka.core.tps.mvc.codemgt.service;
 
 import java.util.List;
 import java.util.Optional;
-
-import com.querydsl.core.QueryResults;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
@@ -49,9 +47,10 @@ public interface CodeMgtService {
      * </pre>
      *
      * @param pageable 페이징
+     * @param secretYn 숨김여부
      * @return 그룹 목록
      */
-    public Page<CodeMgtGrp> findGrpList(Pageable pageable);
+    public Page<CodeMgtGrp> findGrpList(Pageable pageable, String secretYn);
 
     /**
      * <pre>
@@ -141,7 +140,7 @@ public interface CodeMgtService {
      * @param grpCd 그룹아이디
      * @return 그룹갯수
      */
-    public Long countCodeMgtGrpByGrpCd(String grpCd);
+    int countCodeMgtGrpByGrpCd(String grpCd);
 
     /**
      * <pre>
@@ -152,7 +151,7 @@ public interface CodeMgtService {
      * @param dtlCd 코드아이디
      * @return 일치하는 코드갯수
      */
-    public Long countCodeMgtByDtlCd(String grpCd, String dtlCd);
+    public int countCodeMgtByDtlCd(String grpCd, String dtlCd);
 
     /**
      * <pre>
@@ -180,8 +179,24 @@ public interface CodeMgtService {
      * 코드정보수정
      *
      * @param codeMgtDtlDTO 코드정보
-     *
      * @return 코드정보
      */
     public CodeMgtDtlDTO updateCodeMgtDtl(CodeMgtDtlDTO codeMgtDtlDTO);
+
+    /**
+     * 그룹CD 중복검사
+     *
+     * @param grpCd 그룹ID
+     * @return 중복여부
+     */
+    boolean isDuplicatedGrpCd(String grpCd);
+
+    /**
+     * 코드 중복검사
+     *
+     * @param grpCd 그룹ID
+     * @param dtlCd 코드ID
+     * @return 중복여부
+     */
+    boolean isDuplicatedDtlCd(String grpCd, String dtlCd);
 }

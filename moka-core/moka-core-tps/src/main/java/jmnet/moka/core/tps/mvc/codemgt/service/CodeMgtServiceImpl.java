@@ -3,8 +3,7 @@ package jmnet.moka.core.tps.mvc.codemgt.service;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
-
-import com.querydsl.core.QueryResults;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
@@ -55,8 +54,8 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     }
 
     @Override
-    public Page<CodeMgtGrp> findGrpList(Pageable pageable) {
-        return codeMgtGrpRepository.findAll(pageable);
+    public Page<CodeMgtGrp> findGrpList(Pageable pageable, String secretYn) {
+        return codeMgtGrpRepository.findBySecretYnAndUsedYn(secretYn, MokaConstants.YES, pageable);
     }
 
     @Override
@@ -78,7 +77,9 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     public void deleteCodeMgtGrp(CodeMgtGrp codeMgtGrp) {
         log.info("[DELETE codeMgtGrp] seqNo : {}", codeMgtGrp.getSeqNo());
 
-        codeMgtGrpRepository.deleteById(codeMgtGrp.getSeqNo());
+        codeMgtGrp.setUsedYn(MokaConstants.NO);
+        codeMgtGrpRepository.save(codeMgtGrp);  // 그룹삭제는 없고, usedYn을 N로 수정한다.
+        //        codeMgtGrpRepository.deleteById(codeMgtGrp.getSeqNo());
     }
 
     @Override
@@ -112,12 +113,12 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     }
 
     @Override
-    public Long countCodeMgtGrpByGrpCd(String grpCd) {
+    public int countCodeMgtGrpByGrpCd(String grpCd) {
         return codeMgtGrpRepository.countByGrpCd(grpCd);
     }
 
     @Override
-    public Long countCodeMgtByDtlCd(String grpCd, String dtlCd) {
+    public int countCodeMgtByDtlCd(String grpCd, String dtlCd) {
         return codeMgtRepository.countByCodeMgtGrp_GrpCdAndDtlCd(grpCd, dtlCd);
     }
 
@@ -138,9 +139,20 @@ public class CodeMgtServiceImpl implements CodeMgtService {
 
 
     @Override
-    public CodeMgtDtlDTO updateCodeMgtDtl(CodeMgtDtlDTO codeMgtDtlDTO)
-    {
+    public CodeMgtDtlDTO updateCodeMgtDtl(CodeMgtDtlDTO codeMgtDtlDTO) {
         return codeMgtRepository.updateCodeMgtDtl(codeMgtDtlDTO);
+    }
+
+    @Override
+    public boolean isDuplicatedGrpCd(String grpCd) {
+        int count = codeMgtGrpRepository.countByGrpCd(grpCd);
+        return count > 0 ? true : false;
+    }
+
+    @Override
+    public boolean isDuplicatedDtlCd(String grpCd, String dtlCd) {
+        int count = codeMgtRepository.countByCodeMgtGrp_GrpCdAndDtlCd(grpCd, dtlCd);
+        return count > 0 ? true : false;
     }
 
 

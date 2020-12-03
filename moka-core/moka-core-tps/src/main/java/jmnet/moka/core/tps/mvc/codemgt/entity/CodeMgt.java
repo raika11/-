@@ -117,13 +117,8 @@ public class CodeMgt extends BaseAudit {
     private String usedYn = MokaConstants.YES;
 
     @PrePersist
-    public void prePersist() {
-        this.cdOrd = this.cdOrd == null ? 1 : this.cdOrd;
-        this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
-    }
-
     @PreUpdate
-    public void preUpdate() {
+    public void prePersist() {
         this.cdOrd = this.cdOrd == null ? 1 : this.cdOrd;
         this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
     }

@@ -1,8 +1,6 @@
 package jmnet.moka.core.tps.mvc.codemgt.controller;
 
-import com.querydsl.core.QueryResults;
 import io.swagger.annotations.ApiOperation;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +8,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -24,6 +21,7 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtGrpDTO;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtGrpSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
@@ -71,14 +69,14 @@ public class CodeMgtRestController {
     /**
      * 그룹 목록조회
      *
-     * @param search           검색조건
-     * @return 공통코드그룹 목록
+     * @param search 검색조건
+     * @return 공통코드그룹 목록sercret
      */
     @ApiOperation(value = "그룹 목록조회")
     @GetMapping
-    public ResponseEntity<?> getCodeMgtGrpList(@Valid @SearchParam SearchDTO search) {
+    public ResponseEntity<?> getCodeMgtGrpList(@Valid @SearchParam CodeMgtGrpSearchDTO search) {
         // 조회
-        Page<CodeMgtGrp> returnValue = codeMgtService.findGrpList(search.getPageable());
+        Page<CodeMgtGrp> returnValue = codeMgtService.findGrpList(search.getPageable(), search.getSecretYn());
 
         // 리턴값 설정
         ResultListDTO<CodeMgtGrpDTO> resultListMessage = new ResultListDTO<CodeMgtGrpDTO>();
@@ -94,15 +92,16 @@ public class CodeMgtRestController {
     /**
      * 코드 목록조회. 페이징있음.
      *
-     * @param grpCd            rmfnq코드
-     * @param search           검색조건
+     * @param grpCd  rmfnq코드
+     * @param search 검색조건
      * @return 코드 목록
      * @throws Exception
      * @throws InvalidDataException
      */
     @ApiOperation(value = "코드 목록조회")
     @GetMapping("/{grpCd}/codemgts")
-    public ResponseEntity<?> getCodeMgtList(@PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
+    public ResponseEntity<?> getCodeMgtList(
+            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
             @Valid @SearchParam CodeMgtSearchDTO search)
             throws InvalidDataException, Exception {
         // 데이타유효성검사.
@@ -125,14 +124,15 @@ public class CodeMgtRestController {
     /**
      * 사용중인 코드 목록조회. 페이징없음.
      *
-     * @param grpCd            그룹코드
+     * @param grpCd 그룹코드
      * @return 코드 목록
      * @throws Exception
      * @throws InvalidDataException
      */
     @ApiOperation(value = "사용중인 코드 목록조회")
     @GetMapping("/{grpCd}/use-codemgts")
-    public ResponseEntity<?> getUseCodeMgtList(@PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd){
+    public ResponseEntity<?> getUseCodeMgtList(
+            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd) {
 
         // 조회
         List<CodeMgt> returnValue = codeMgtService.findUseList(grpCd);
@@ -151,10 +151,10 @@ public class CodeMgtRestController {
     /**
      * 그룹 상세조회
      *
-     * @param grpCd            그룹코드 (필수)
+     * @param grpCd 그룹코드 (필수)
      * @return 공통코드그룹정보
-     * @throws NoDataException      공통코드그룹 정보가 없음
-     * @throws Exception            기타예외
+     * @throws NoDataException 공통코드그룹 정보가 없음
+     * @throws Exception       기타예외
      */
     @ApiOperation(value = "그룹 상세조회")
     @GetMapping("/{grpCd}")
@@ -186,9 +186,9 @@ public class CodeMgtRestController {
     /**
      * 그룹정보 유효성 검사
      *
-     * @param seqNo            공통코드그룹아이디. 0이면 등록일때 유효성 검사
-     * @param codeMgtGrpDTO    공통코드그룹정보
-     * @param actionType       작업구분(INSERT OR UPDATE)
+     * @param seqNo         공통코드그룹아이디. 0이면 등록일때 유효성 검사
+     * @param codeMgtGrpDTO 공통코드그룹정보
+     * @param actionType    작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성예외
      * @throws Exception            기타예외
      */
@@ -206,7 +206,7 @@ public class CodeMgtRestController {
             }
 
             // grpCd중복검사
-            Long countGrpCd = codeMgtService.countCodeMgtGrpByGrpCd(codeMgtGrpDTO.getGrpCd());
+            int countGrpCd = codeMgtService.countCodeMgtGrpByGrpCd(codeMgtGrpDTO.getGrpCd());
             if ((seqNo == 0 && countGrpCd > 0) || seqNo > 0 && countGrpCd > 1) {
                 String message = messageByLocale.get("tps.codeMgtGrp.error.invalid.dupGrpCd");
                 tpsLogger.fail(actionType, message, true);
@@ -253,13 +253,14 @@ public class CodeMgtRestController {
     /**
      * 그룹등록
      *
-     * @param codeMgtGrpDTO    등록할 코드그룹정보
+     * @param codeMgtGrpDTO 등록할 코드그룹정보
      * @return 등록된 예약어정보
      * @throws Exception
      */
     @ApiOperation(value = "그룹등록")
     @PostMapping
-    public ResponseEntity<?> postCodeMgtGrp(@Valid CodeMgtGrpDTO codeMgtGrpDTO) throws Exception {
+    public ResponseEntity<?> postCodeMgtGrp(@Valid CodeMgtGrpDTO codeMgtGrpDTO)
+            throws Exception {
 
         // 데이타유효성검사.
         validGrpData((long) 0, codeMgtGrpDTO, ActionType.INSERT);
@@ -288,8 +289,8 @@ public class CodeMgtRestController {
     /**
      * 그룹수정
      *
-     * @param seqNo            그룹순번
-     * @param codeMgtGrpDTO    수정할 그룹정보
+     * @param seqNo         그룹순번
+     * @param codeMgtGrpDTO 수정할 그룹정보
      * @return 수정된 그룹정보
      * @throws InvalidDataException 데이타 유효성오류
      * @throws NoDataException      데이타 없음
@@ -297,7 +298,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "그룹 수정")
     @PutMapping("/{seqNo}")
-    public ResponseEntity<?> putCodeMgtGrp(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.min.seqNo}") Long seqNo, @Valid CodeMgtGrpDTO codeMgtGrpDTO)
+    public ResponseEntity<?> putCodeMgtGrp(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.min.seqNo}") Long seqNo,
+            @Valid CodeMgtGrpDTO codeMgtGrpDTO)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이타유효성검사.
@@ -332,7 +334,7 @@ public class CodeMgtRestController {
     /**
      * 그룹삭제
      *
-     * @param seqNo            삭제 할 그룹순번 (필수)
+     * @param seqNo 삭제 할 그룹순번 (필수)
      * @return 삭제성공여부
      * @throws NoDataException 예약어정보 없음 오류
      * @throws Exception       기타예외
@@ -368,7 +370,7 @@ public class CodeMgtRestController {
     /**
      * 코드정보 조회
      *
-     * @param seqNo            코드순번 (필수)
+     * @param seqNo 코드순번 (필수)
      * @return 코드정보
      * @throws NoDataException      코드 정보가 없음
      * @throws InvalidDataException 코드 아이디 형식오류
@@ -398,9 +400,9 @@ public class CodeMgtRestController {
     /**
      * 코드정보 유효성 검사
      *
-     * @param seqNo            코드 순번. 0이면 등록일때 유효성 검사
-     * @param codeMgtDTO       코드정보
-     * @param actionType       작업구분(INSERT OR UPDATE)
+     * @param seqNo      코드 순번. 0이면 등록일때 유효성 검사
+     * @param codeMgtDTO 코드정보
+     * @param actionType 작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성예외
      * @throws Exception            기타예외
      */
@@ -418,7 +420,8 @@ public class CodeMgtRestController {
             }
 
             // 그룹의 grpSeqNo정보 검사
-            Long grpSeqNo = codeMgtDTO.getCodeMgtGrp().getSeqNo();
+            Long grpSeqNo = codeMgtDTO.getCodeMgtGrp()
+                                      .getSeqNo();
             if (grpSeqNo == null || grpSeqNo < 0) {
                 String message = messageByLocale.get("tps.codeMgtGrp.error.min.seqNo");
                 tpsLogger.fail(actionType, message, true);
@@ -453,7 +456,7 @@ public class CodeMgtRestController {
             }
 
             // dtlCd중복검사
-            Long countDtls = codeMgtService.countCodeMgtByDtlCd(grpCd, codeMgtDTO.getDtlCd());
+            int countDtls = codeMgtService.countCodeMgtByDtlCd(grpCd, codeMgtDTO.getDtlCd());
             if ((seqNo == 0 && countDtls > 0) || seqNo > 0 && countDtls > 1) {
                 String message = messageByLocale.get("tps.codeMgt.error.invalid.dupDtlCd");
                 tpsLogger.fail(actionType, message, true);
@@ -470,7 +473,7 @@ public class CodeMgtRestController {
     /**
      * 코드등록
      *
-     * @param codeMgtDTO       등록할 코드정보
+     * @param codeMgtDTO 등록할 코드정보
      * @return 등록된 코드정보
      * @throws Exception
      */
@@ -504,8 +507,8 @@ public class CodeMgtRestController {
     /**
      * 코드수정
      *
-     * @param seqNo            코드순
-     * @param codeMgtDTO       수정할 코드정보
+     * @param seqNo      코드순
+     * @param codeMgtDTO 수정할 코드정보
      * @return 수정된 코드정보
      * @throws InvalidDataException 데이타 유효성오류
      * @throws NoDataException      데이타 없음
@@ -513,10 +516,11 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "코드수정")
     @PutMapping("/codemgts/{seqNo}")
-    public ResponseEntity<?> putCodeMgt(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo, @Valid CodeMgtDTO codeMgtDTO)
+    public ResponseEntity<?> putCodeMgt(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo,
+            @Valid CodeMgtDTO codeMgtDTO)
             throws InvalidDataException, NoDataException, Exception {
         // 데이타유효성검사.
-        validData( seqNo, codeMgtDTO, ActionType.UPDATE);
+        validData(seqNo, codeMgtDTO, ActionType.UPDATE);
 
         // 수정
         CodeMgt newCodeMgt = modelMapper.map(codeMgtDTO, CodeMgt.class);
@@ -549,7 +553,7 @@ public class CodeMgtRestController {
     /**
      * 코드삭제
      *
-     * @param seqNo            삭제 할 코드순번 (필수)
+     * @param seqNo 삭제 할 코드순번 (필수)
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
      * @throws NoDataException      코드정보 없음 오류
@@ -595,17 +599,22 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "코드 목록조회")
     @GetMapping("/{grpCd}/special-char/{dtlCd}")
-    public ResponseEntity<?> getSpecialChar(@PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
-                                            @PathVariable("dtlCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.dtlCd}") String dtlCd
-    ) throws InvalidDataException, Exception {
+    public ResponseEntity<?> getSpecialChar(
+            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
+            @PathVariable("dtlCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.dtlCd}") String dtlCd)
+            throws InvalidDataException, Exception {
         // specialChar
         // 조회
         List<CodeMgt> returnValue = codeMgtService.findByDtlCd(grpCd, dtlCd);
         CodeMgtDtlDTO codeMgtDtlDTO = null;
 
-        for(CodeMgt cc : returnValue){
-            codeMgtDtlDTO = CodeMgtDtlDTO.builder().grpCd(cc.getCodeMgtGrp().getGrpCd())
-                    .dtlCd(cc.getDtlCd()).cdNm(cc.getCdNm()).build();
+        for (CodeMgt cc : returnValue) {
+            codeMgtDtlDTO = CodeMgtDtlDTO.builder()
+                                         .grpCd(cc.getCodeMgtGrp()
+                                                  .getGrpCd())
+                                         .dtlCd(cc.getDtlCd())
+                                         .cdNm(cc.getCdNm())
+                                         .build();
             break;
         }
         ResultDTO<CodeMgtDtlDTO> resultDto = new ResultDTO<>(codeMgtDtlDTO);
@@ -616,8 +625,8 @@ public class CodeMgtRestController {
     /**
      * 코드상세수정
      *
-     * @param grpCd                 코드순
-     * @param codeMgtDtlDTO       수정할 코드정보
+     * @param grpCd         코드순
+     * @param codeMgtDtlDTO 수정할 코드정보
      * @return 수정된 코드정보
      * @throws InvalidDataException 데이타 유효성오류
      * @throws NoDataException      데이타 없음
@@ -625,16 +634,15 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "코드수정")
     @PutMapping("/{grpCd}/special-char")
-    public ResponseEntity<?> putCodeMgtDtl(
-            @PathVariable("grpCd") @NotNull(message = "{tps.codeMgt.error.notnul.grpCd}") String grpCd
-            , @Valid CodeMgtDtlDTO codeMgtDtlDTO
-    )throws InvalidDataException, NoDataException, Exception {
+    public ResponseEntity<?> putCodeMgtDtl(@PathVariable("grpCd") @NotNull(message = "{tps.codeMgt.error.notnul.grpCd}") String grpCd,
+            @Valid CodeMgtDtlDTO codeMgtDtlDTO)
+            throws InvalidDataException, NoDataException, Exception {
 
 
         // 수정
         List<CodeMgt> result = codeMgtService.findByDtlCd(grpCd, codeMgtDtlDTO.getDtlCd());
 
-        if(result.size() == 0){
+        if (result.size() == 0) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(ActionType.UPDATE, message, true);
             throw new Exception(message);
@@ -644,7 +652,8 @@ public class CodeMgtRestController {
 
             // 일련번호 추출
             //CodeMgt result = codeMgtService.findByDtlCd(grpCd, codeMgtDtlDTO.getDtlCd()).get(0);
-            codeMgtDtlDTO.setSeqNo(result.get(0).getSeqNo());
+            codeMgtDtlDTO.setSeqNo(result.get(0)
+                                         .getSeqNo());
             CodeMgtDtlDTO returnValue = codeMgtService.updateCodeMgtDtl(codeMgtDtlDTO);
 
             // 결과리턴
@@ -660,6 +669,65 @@ public class CodeMgtRestController {
             throw new Exception(messageByLocale.get("tps.common.error.update"), e);
         }
 
+    }
+
+    /**
+     * 동일 그룹아이디 존재 여부
+     *
+     * @param grpCd 그룹ID
+     * @return 중복여부
+     */
+    @ApiOperation(value = "동일 그룹아이디 존재 여부")
+    @GetMapping("/{grpCd}/exists")
+    public ResponseEntity<?> duplicateCheckGrpCd(
+            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd)
+            throws Exception {
+
+        try {
+            boolean duplicated = codeMgtService.isDuplicatedGrpCd(grpCd);
+            String message = "";
+            if (duplicated) {
+                message = messageByLocale.get("tps.codeMgtGrp.error.duplicate.grpCd");
+            }
+
+            ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated, message);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO DUPLICATE GRPCD] : reservedId {} {}", grpCd, e.getMessage());
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO DUPLICATE GRPCD]", e, true);
+            throw new Exception(messageByLocale.get("tps.codeMgt.error.duplicate.dtlCd"));
+        }
+    }
+
+    /**
+     * 동일 아이디 존재 여부
+     *
+     * @param dtlCd 코드ID
+     * @return 중복여부
+     */
+    @ApiOperation(value = "동일 아이디 존재 여부")
+    @GetMapping("/{grpCd}/{dtlCd}/exists")
+    public ResponseEntity<?> duplicateCheckDtlCd(
+            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
+            @PathVariable("dtlCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgt.error.pattern.dtlCd}") String dtlCd)
+            throws Exception {
+
+        try {
+            boolean duplicated = codeMgtService.isDuplicatedDtlCd(grpCd, dtlCd);
+            String message = "";
+            if (duplicated) {
+                message = messageByLocale.get("tps.codeMgt.error.duplicate.dtlCd");
+            }
+
+            ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated, message);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO DUPLICATE DTLCD] : dtlCd {} {}", dtlCd, e.getMessage());
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO DUPLICATE DTLCD]", e, true);
+            throw new Exception(messageByLocale.get("tps.codeMgt.error.duplicate.dtlCd"));
+        }
     }
 }
 

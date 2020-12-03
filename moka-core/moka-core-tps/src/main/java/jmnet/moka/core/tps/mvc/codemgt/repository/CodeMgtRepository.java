@@ -2,8 +2,6 @@ package jmnet.moka.core.tps.mvc.codemgt.repository;
 
 import java.util.List;
 import java.util.Optional;
-
-import com.querydsl.core.QueryResults;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,7 +23,7 @@ public interface CodeMgtRepository extends JpaRepository<CodeMgt, Long>, CodeMgt
     public Long countByCodeMgtGrp_GrpCd(String grpCd);
 
     // 특정그룹에서 해당하는 dtlCd의 갯수(dtlCd가 중복되지 않게 하기 위해 조회함)
-    public Long countByCodeMgtGrp_GrpCdAndDtlCd(String grpCd, String dtlCd);
+    public int countByCodeMgtGrp_GrpCdAndDtlCd(String grpCd, String dtlCd);
 
     // dtlCd로 CodeMgt 조회
     public Optional<CodeMgt> findByDtlCd(String dtlCd);

@@ -15,7 +15,6 @@ import lombok.Setter;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 public class CodeMgtSearchDTO extends SearchDTO {
 

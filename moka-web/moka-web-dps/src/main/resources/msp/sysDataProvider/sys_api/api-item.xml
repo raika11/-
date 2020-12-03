@@ -56,8 +56,8 @@
   <api id="component.work" expire="0">
     <description>작업내용이 반영된 컴포넌트 정보를 반환한다.</description>
     <parameter>
-      <creator require="Y">[0-9|A-z]{1,20}</creator>
-      <id desc="컴포넌트 Id" require="Y">[0-9]{1,6}</id>
+      <regId require="Y">[0-9|A-z]{1,20}</regId>
+      <id desc="컴포넌트 work Id" require="Y">[0-9]{1,6}</id>
     </parameter>
     <request>dps.item.component_work</request>
     <keys>

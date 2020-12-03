@@ -2,10 +2,9 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT, HIST_PUBLISH, HIST_SAVE } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultHistorySearchType } from '@pages/commons';
-import { HIST_PUBLISH, HIST_SAVE } from '@/constants';
 
 const status = [
     { id: HIST_PUBLISH, name: '전송 기록' },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { MokaModal, MokaInputLabel } from '@components';
 
@@ -47,13 +47,13 @@ const CodeMgtListModal = (props) => {
      * 항목 값 셋팅
      */
     useEffect(() => {
-        if (data) {
+        if (show && data) {
             setGrpSeq(data.grpSeq);
             setGrpCd(data.grpCd);
             setCdNm(data.cdNm);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
+    }, [show, data]);
 
     /**
      * modal의 항목 값 변경
@@ -107,24 +107,33 @@ const CodeMgtListModal = (props) => {
     };
 
     /**
+     * 모달 닫기
+     */
+    const handleHide = () => {
+        setGrpCd('');
+        setCdNm('');
+        onHide();
+    };
+
+    /**
      * 저장
      */
-    const handleClickSave = useCallback(() => {
+    const handleClickSave = () => {
         if (validate(codeGrp)) {
             onSave(codeGrp);
-            onHide();
+            handleHide();
         }
-    }, [codeGrp, onHide, onSave]);
+    };
 
     /**
      * 삭제
      */
-    const handleClickDelete = useCallback(() => {
+    const handleClickDelete = () => {
         if (codeGrp) {
             onDelete(codeGrp);
-            onHide();
+            handleHide();
         }
-    }, [codeGrp, onDelete, onHide]);
+    };
 
     if (type === 'add') {
         return (
@@ -133,7 +142,7 @@ const CodeMgtListModal = (props) => {
                 size="md"
                 draggable
                 show={show}
-                onHide={onHide}
+                onHide={handleHide}
                 title="그룹 등록"
                 buttons={[
                     {
@@ -164,7 +173,7 @@ const CodeMgtListModal = (props) => {
                 size="md"
                 draggable
                 show={show}
-                onHide={onHide}
+                onHide={handleHide}
                 title="그룹 수정"
                 buttons={[
                     {

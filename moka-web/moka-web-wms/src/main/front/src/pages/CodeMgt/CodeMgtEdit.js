@@ -6,7 +6,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 import Search from './CodeMgtEditSearch';
 import AgGrid from './CodeMgtEditAgGrid';
 
-import { saveCodeMgt, deleteCodeMgt, changeCd, clearCd } from '@store/codeMgt';
+import { saveCodeMgt, deleteCodeMgt, changeCd, clearCd, getCodeMgtGrpDuplicateCheck } from '@store/codeMgt';
 
 /**
  * 기타코드 편집
@@ -22,7 +22,7 @@ const CodeMgtEdit = () => {
      * 코드 수정
      * @param {object} code 코드 데이터
      */
-    const updateGrp = (code) => {
+    const updateCode = (code) => {
         dispatch(
             saveCodeMgt({
                 type: 'update',
@@ -50,7 +50,7 @@ const CodeMgtEdit = () => {
      * 코드 등록
      * @param {object} code 코드 데이터
      */
-    const insertGrp = (code) => {
+    const insertCode = (code) => {
         dispatch(
             saveCodeMgt({
                 type: 'insert',
@@ -79,11 +79,11 @@ const CodeMgtEdit = () => {
      * @param {object} code 코드 데이터
      */
     const onClickSave = (code) => {
-        messageBox.confirm('적용하시겠습니까?', () => {
+        messageBox.confirm('등록하시겠습니까?', () => {
             if (!code.seqNo) {
-                insertGrp(code);
+                checkDuplicatedCodeMgt(code);
             } else {
-                updateGrp(code);
+                updateCode(code);
             }
         });
     };
@@ -108,6 +108,32 @@ const CodeMgtEdit = () => {
                 }),
             );
         });
+    };
+
+    /**
+     * 코드의 중복체크
+     */
+    const checkDuplicatedCodeMgt = (code) => {
+        dispatch(
+            getCodeMgtGrpDuplicateCheck({
+                grpCd: code.grpCd,
+                dtlCd: code.dtlCd,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 중복 없음
+                        if (!body) {
+                            insertCode(code, 'insert');
+                        }
+                        // 중복 있음
+                        else {
+                            toast.fail(header.message);
+                        }
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     return (

@@ -259,6 +259,58 @@ function createReadOnlySaga(actionType, rowName, grpCd) {
         yield put(finishLoading(actionType));
     };
 }
+
+/**
+ * 코드 그룹 중복체크
+ * @param {string} param0.payload.grpCd 코드 그룹 이름
+ * @param {string} param0.payload.callback callback
+ */
+function* getCodeMgtGrpDuplicateCheck({ payload: { grpCd, callback } }) {
+    const ACTION = act.GET_CODE_MGT_GRP_DUPLICATE_CHECK;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(api.getCodeMgtGrpDuplicateCheck, { grpCd, callback });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(true);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 코드 중복 체크
+ * @param {string} param0.payload.grpCd 코드 그룹 이름
+ * @param {string} param0.payload.dtlCd 코드 이름
+ * @param {string} param0.payload.callback callback
+ */
+function* getCodeMgtDuplicateCheck({ payload: { grpCd, dtlCd, callback } }) {
+    const ACTION = act.GET_CODE_MGT_DUPLICATE_CHECK;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(api.getCodeMgtDuplicateCheck, { grpCd, dtlCd, callback });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(true);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
 export const getTpSize = createReadOnlySaga(act.GET_TP_SIZE, 'tpSizeRows', CODETYPE_TP_SIZE);
 export const getTpZone = createReadOnlySaga(act.GET_TP_ZONE, 'tpZoneRows', CODETYPE_TP_ZONE);
 export const getLang = createReadOnlySaga(act.GET_LANG, 'langRows', CODETYPE_LANG);
@@ -278,6 +330,8 @@ export default function* codeMgt() {
     yield takeLatest(act.DELETE_CODE_MGT_GRP, deleteCodeMgtGrpSaga);
     yield takeLatest(act.SAVE_CODE_MGT, saveCodeMgtSaga);
     yield takeLatest(act.DELETE_CODE_MGT, deleteCodeMgtSaga);
+    yield takeLatest(act.GET_CODE_MGT_GRP_DUPLICATE_CHECK, getCodeMgtGrpDuplicateCheck);
+    yield takeLatest(act.GET_CODE_MGT_DUPLICATE_CHECK, getCodeMgtDuplicateCheck);
 
     yield takeLatest(act.GET_TP_SIZE, getTpSize);
     yield takeLatest(act.GET_TP_ZONE, getTpZone);

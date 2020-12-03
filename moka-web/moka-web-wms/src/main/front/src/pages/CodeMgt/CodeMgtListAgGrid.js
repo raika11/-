@@ -1,10 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Button from 'react-bootstrap/Button';
-
-import { MokaTable } from '@components';
+import { MokaInput, MokaInputLabel, MokaTable } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import {
     GET_CODE_MGT_GRP_LIST,
@@ -17,6 +15,7 @@ import {
     deleteCodeMgtGrp,
     saveCodeMgtGrp,
     changeGrp,
+    getCodeMgtGrpDuplicateCheck,
 } from '@store/codeMgt';
 import columnDefs from './CodeMgtListAgGridColumns';
 import CodeMgtListModal from './modals/CodeMgtListModal';
@@ -51,6 +50,13 @@ const CodeMgtListAgGrid = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        search.secretYn === 'all'
+            ? dispatch(getCodeMgtGrpList(changeGrpSearchOption({ ...search, secretYn: 'all' })))
+            : dispatch(getCodeMgtGrpList(changeGrpSearchOption({ ...search, secretYn: 'N' })));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search.secretYn]);
+
     /**
      * table
      */
@@ -69,7 +75,7 @@ const CodeMgtListAgGrid = () => {
         } else {
             setRowData([]);
         }
-    }, [dispatch, grpList]);
+    }, [grpList]);
 
     /**
      * 테이블 검색옵션 변경
@@ -160,9 +166,9 @@ const CodeMgtListAgGrid = () => {
      * @param {object} codeGrp 코드그룹 데이터
      */
     const onClickSave = (codeGrp) => {
-        messageBox.confirm('적용하시겠습니까?', () => {
+        messageBox.confirm('등록하시겠습니까?', () => {
             if (!codeGrp.grpSeq) {
-                insertGrp(codeGrp);
+                checkDuplicatedCodeMgtGrp(codeGrp);
             } else {
                 updateGrp(codeGrp);
             }
@@ -191,9 +197,49 @@ const CodeMgtListAgGrid = () => {
         });
     };
 
+    /**
+     * 코드 그룹의 중복체크
+     */
+    const checkDuplicatedCodeMgtGrp = (codeGrp) => {
+        dispatch(
+            getCodeMgtGrpDuplicateCheck({
+                grpCd: codeGrp.grpCd,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 중복 없음
+                        if (!body) {
+                            insertGrp(codeGrp, 'insert');
+                        }
+                        // 중복 있음
+                        else {
+                            toast.fail(header.message);
+                        }
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
     return (
         <>
-            <div className="d-flex justify-content-end mb-2">
+            <div className="d-flex align-content-center justify-content-between mb-2">
+                <div className="d-flex">
+                    <MokaInput
+                        as="checkbox"
+                        id="secret-check"
+                        value={search.secretYn}
+                        onChange={(e) => {
+                            if (e.target.checked) {
+                                setSearch({ ...search, secretYn: 'all' });
+                            } else {
+                                setSearch({ ...search, secretYn: 'N' });
+                            }
+                        }}
+                    />
+                    <MokaInputLabel as="none" label="숨김 코드" labelClassName="ft-12 d-flex justify-content-start" />
+                </div>
                 <Button variant="positive" onClick={handleAddClick}>
                     그룹 등록
                 </Button>

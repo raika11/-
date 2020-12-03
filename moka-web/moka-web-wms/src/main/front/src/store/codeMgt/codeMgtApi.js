@@ -91,3 +91,17 @@ export const getUseCodeMgtList = (grpCd) => {
         throw err;
     });
 };
+
+// 그룹 중복검사
+export const getCodeMgtGrpDuplicateCheck = ({ grpCd }) => {
+    return instance.get(`/api/codemgt-grps/${grpCd}/exists`).catch((err) => {
+        throw err;
+    });
+};
+
+// 코드 중복검사
+export const getCodeMgtDuplicateCheck = ({ grpCd, dtlCd }) => {
+    return instance.get(`/api/codemgt-grps/${grpCd}/${dtlCd}/exists`).catch((err) => {
+        throw err;
+    });
+};

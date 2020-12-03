@@ -60,6 +60,14 @@ export const deleteCodeMgtGrp = createAction(DELETE_CODE_MGT_GRP, ({ grpSeq, cal
 export const deleteCodeMgt = createAction(DELETE_CODE_MGT, (cdSeq) => cdSeq);
 
 /**
+ * 중복 검사
+ */
+export const GET_CODE_MGT_GRP_DUPLICATE_CHECK = 'codeMgt/GET_CODE_MGT_GRP_DUPLICATE_CHECK';
+export const GET_CODE_MGT_DUPLICATE_CHECK = 'codeMgt/GET_CODE_MGT_DUPLICATE_CHECK';
+export const getCodeMgtGrpDuplicateCheck = createAction(GET_CODE_MGT_GRP_DUPLICATE_CHECK, ({ grpCd, callback }) => ({ grpCd, callback }));
+export const getCodeMgtDuplicateCheck = createAction(GET_CODE_MGT_DUPLICATE_CHECK, ({ grpCd, dtlCd, callback }) => ({ grpCd, dtlCd, callback }));
+
+/**
  * 조회용 데이터 액션
  */
 export const READ_ONLY_SUCCESS = 'codeMgt/READ_ONLY_SUCCESS';

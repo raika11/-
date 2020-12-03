@@ -11,6 +11,7 @@ export const initialState = {
     grpSearch: {
         page: 0,
         size: 25,
+        secretYn: 'N',
         sort: undefined,
     },
     // 코드 그룹의 리스트 검색 조건

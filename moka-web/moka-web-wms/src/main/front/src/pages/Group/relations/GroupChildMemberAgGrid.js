@@ -8,14 +8,7 @@ const defaultProps = {
     list: [],
 };
 
-const GroupChildMemberAgGrid = ({ list, paging, total, page, size, onChangeSearchOption, onSelect, loading }) => {
-    /*const [selected, setSelected] = useState('');
-    const handleRowSelection = (data, params) => {
-        setSelected(data.memberId);
-        //params.api.setSuppressRowClickSelection(data);
-        console.log(params.api);
-    };*/
-
+const GroupChildMemberAgGrid = ({ list, paging, total, page, size, onChangeSearchOption, onSelect, loading, setGridInstance }) => {
     const handleSelectionChanged = (selectedNodes, rowSelection) => {
         if (onSelect instanceof Function) {
             onSelect(selectedNodes);
@@ -37,6 +30,7 @@ const GroupChildMemberAgGrid = ({ list, paging, total, page, size, onChangeSearc
             paging={paging}
             rowSelection="multiple"
             onSelectionChanged={handleSelectionChanged}
+            setGridInstance={setGridInstance}
         />
     );
 };

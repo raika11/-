@@ -7,6 +7,8 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/group';
 import GroupChildMenuAuth from '@pages/Group/relations/GroupChildMenuAuth';
+import { Col, Row } from 'react-bootstrap';
+
 // relations
 
 const MemberGroupList = React.lazy(() => import('./GroupList'));
@@ -63,18 +65,23 @@ const Group = () => {
                             <MokaIconTabs
                                 //expansion={expansionState[2]}
                                 //onExpansion={handleTabExpansion}
-                                tabWidth={1000}
+                                tabWidth={1050}
                                 height={CARD_DEFAULT_HEIGHT}
                                 tabs={[
                                     <Suspense>
-                                        <GroupEdit />
+                                        <MokaCard className="flex-fill w-100" titleClassName="mb-0" height={CARD_DEFAULT_HEIGHT}>
+                                            <Row>
+                                                <Col xs={6}>
+                                                    <GroupEdit />
+                                                </Col>
+                                                <Col xs={6}>
+                                                    <GroupChildMenuAuth />
+                                                </Col>
+                                            </Row>
+                                        </MokaCard>
                                     </Suspense>,
                                     <Suspense>
                                         <GroupChildGroupMemberEdit />
-                                    </Suspense>,
-
-                                    <Suspense>
-                                        <GroupChildMenuAuth />
                                     </Suspense>,
                                 ]}
                                 tabNavWidth={48}
@@ -82,7 +89,6 @@ const Group = () => {
                                 tabNavs={[
                                     { title: '그룹정보', text: 'Info' },
                                     { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
-                                    { title: '메뉴권한', icon: <MokaIcon iconName="fal-file-alt" /> },
                                 ]}
                             />
                         </>

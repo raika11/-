@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
@@ -60,12 +60,31 @@ const MokaInputLabel = forwardRef((props, ref) => {
     // MokaInput props
     const { value } = props;
 
+    // state
+    const [ln, setLn] = useState('');
+
+    useEffect(() => {
+        // label이 문자열이고 \n이 있으면 <br />로 변환
+        if (typeof label === 'string' && label.indexOf('\\n') > -1) {
+            setLn(
+                label.split('\\n').map((l) => (
+                    <React.Fragment>
+                        {l}
+                        <br />
+                    </React.Fragment>
+                )),
+            );
+        } else {
+            setLn(label);
+        }
+    }, [label]);
+
     return (
         <Form.Group className={clsx('d-flex', 'align-items-center', className)}>
             {label && (
                 <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'text-right', labelClassName)} style={{ width: labelWidth, minWidth: labelWidth }} htmlFor="none">
                     {required && <span className="required-text">*</span>}
-                    {label}
+                    {ln}
                 </Form.Label>
             )}
             {as !== 'none' && (

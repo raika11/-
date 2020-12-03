@@ -29,6 +29,10 @@ const propTypes = {
      * 컴포넌트 ag-grid 인스턴스 리스트 변경
      */
     setComponentAgGridInstances: PropTypes.func,
+    /**
+     * 편집영역에서 설정한 컴포넌트별 deskingPart
+     */
+    deskingPart: PropTypes.string,
 };
 const defaultProps = {
     component: {},
@@ -36,7 +40,7 @@ const defaultProps = {
 };
 
 const ComponentWork = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, deskingPart } = props;
     const dispatch = useDispatch();
 
     const { workStatus } = useSelector((store) => ({
@@ -45,14 +49,14 @@ const ComponentWork = (props) => {
 
     // state
     const [deskingWorkData, setDeskingWorkData] = useState({});
-    const [showDeskingWorkEditModal, setShowDeskingWorkEditModal] = useState(false);
+    const [editModalShow, setEditModalShow] = useState(false);
 
     /**
      * 목록에서 Row클릭
      */
     const handleRowClicked = (rowData) => {
         setDeskingWorkData(rowData);
-        setShowDeskingWorkEditModal(true);
+        setEditModalShow(true);
     };
 
     /**
@@ -110,7 +114,15 @@ const ComponentWork = (props) => {
                     onDelete={handleClickDelete}
                 />
             </div>
-            <DeskingWorkEditModal show={showDeskingWorkEditModal} onHide={() => setShowDeskingWorkEditModal(false)} data={deskingWorkData} onSave={handleClickSave} />
+
+            <DeskingWorkEditModal
+                show={editModalShow}
+                onHide={() => setEditModalShow(false)}
+                deskingWorkData={deskingWorkData}
+                component={component}
+                onSave={handleClickSave}
+                deskingPart={deskingPart}
+            />
         </React.Fragment>
     );
 };

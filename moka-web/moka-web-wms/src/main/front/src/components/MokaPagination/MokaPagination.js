@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
@@ -30,7 +30,7 @@ export const propTypes = {
      */
     size: PropTypes.number,
     /**
-     * 데이타 건수 옵션 목록
+     * 데이터 건수 옵션 목록
      * pageSizes == false이면 페이지사이즈 보이지 않음
      */
     pageSizes: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.bool]),
@@ -67,17 +67,34 @@ const MokaPagination = (props) => {
         [onChangeSearchOption],
     );
 
-    const viewPage = page + 1;
-    let endPage = Math.ceil(viewPage / displayPageNum) * displayPageNum;
-    const startPage = endPage - displayPageNum + 1;
-    const lastPage = Math.ceil(total / size);
+    const [viewPage, setViewPage] = useState(0);
+    const [startPage, setStartPage] = useState(0);
+    const [endPage, setEndPage] = useState(0);
+    const [pageList, setPageList] = useState([]);
+    const [prev, setPrev] = useState(false);
+    const [next, setNext] = useState(false);
 
-    if (endPage > lastPage) {
-        endPage = lastPage;
-    }
+    useEffect(() => {
+        const vp = page + 1;
+        const lastPage = Math.ceil(total / size);
+        let ep = Math.ceil(vp / displayPageNum) * displayPageNum;
+        const sp = ep - displayPageNum + 1;
 
-    const prev = startPage !== 1;
-    const next = !(endPage * size >= total || endPage === 0);
+        if (ep > lastPage) ep = lastPage;
+
+        // 보여질 페이징 목록
+        let pl = [];
+        for (let i = sp; i <= ep; i++) {
+            pl.push(i);
+        }
+
+        setViewPage(vp);
+        setStartPage(sp);
+        setEndPage(ep);
+        setPageList(pl);
+        setPrev(sp !== 1);
+        setNext(!(ep * size >= total || ep === 0));
+    }, [displayPageNum, page, size, total]);
 
     // 이전블럭
     const handleBackButtonClick = useCallback(() => {
@@ -93,17 +110,13 @@ const MokaPagination = (props) => {
 
     // 페이지
     const handlePageClick = useCallback(
-        (event, pageNum) => {
-            onChangeSearchOption({ key: 'page', value: pageNum });
+        (event, pageNum, isActive) => {
+            if (!isActive) {
+                onChangeSearchOption({ key: 'page', value: pageNum });
+            }
         },
         [onChangeSearchOption],
     );
-
-    // 보여질 페이징 목록
-    const pageList = [];
-    for (let i = startPage; i <= endPage; i++) {
-        pageList.push(i);
-    }
 
     return (
         <div className={clsx('d-flex', 'align-items-center', className)}>
@@ -121,7 +134,7 @@ const MokaPagination = (props) => {
                     <MokaIcon iconName="fas-angle-left" />
                 </Pagination.Prev>
                 {pageList.map((value) => (
-                    <Pagination.Item key={value} onClick={(e) => handlePageClick(e, value - 1)} active={value === viewPage}>
+                    <Pagination.Item key={value} onClick={(e) => handlePageClick(e, value - 1, value === viewPage)} active={value === viewPage}>
                         {value}
                     </Pagination.Item>
                 ))}

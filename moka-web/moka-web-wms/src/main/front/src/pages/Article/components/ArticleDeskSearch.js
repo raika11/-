@@ -191,7 +191,7 @@ const ArticleDeskSearch = (props) => {
                 <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
                 {/* 초기화 */}
-                <Button variant="outline-neutral" className="ft-12" onClick={handleClickReset}>
+                <Button variant="negative" className="ft-12" onClick={handleClickReset}>
                     초기화
                 </Button>
             </Form.Row>

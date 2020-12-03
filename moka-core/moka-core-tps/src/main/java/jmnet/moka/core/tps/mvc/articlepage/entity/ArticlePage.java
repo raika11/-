@@ -74,7 +74,7 @@ public class ArticlePage extends BaseAudit {
     /**
      * 서비스유형(기타코드)
      */
-    @Column(name = "ART_TYPE")
+    @Column(name = "ART_TYPE", columnDefinition = "char")
     private String artType;
 
     /**
@@ -123,25 +123,29 @@ public class ArticlePage extends BaseAudit {
      * @return 동일한게 있으면 true
      */
     public boolean isEqualRel(ArticlePageRel rel) {
-        Optional<ArticlePageRel> find = articlePageRels.stream()
-                                                       .filter(r -> {
-                                                           if (r.getRelType()
-                                                                .equals(rel.getRelType()) && r.getRelSeq()
-                                                                                              .equals(rel.getRelSeq())) {
-                                                               if (r.getRelParentSeq() == null && rel.getRelParentSeq() == null) {
-                                                                   return true;
-                                                               } else if (r.getRelParentSeq() == null && rel.getRelParentSeq() != null) {
-                                                                   return false;
-                                                               } else if (r.getRelParentSeq() != null && rel.getRelParentSeq() == null) {
-                                                                   return false;
-                                                               } else if (r.getRelParentSeq()
-                                                                           .equals(rel.getRelParentSeq())) {
-                                                                   return true;
-                                                               }
-                                                           }
-                                                           return false;
-                                                       })
-                                                       .findFirst();
+        Optional<ArticlePageRel> find = articlePageRels
+                .stream()
+                .filter(r -> {
+                    if (r
+                            .getRelType()
+                            .equals(rel.getRelType()) && r
+                            .getRelSeq()
+                            .equals(rel.getRelSeq())) {
+                        if (r.getRelParentSeq() == null && rel.getRelParentSeq() == null) {
+                            return true;
+                        } else if (r.getRelParentSeq() == null && rel.getRelParentSeq() != null) {
+                            return false;
+                        } else if (r.getRelParentSeq() != null && rel.getRelParentSeq() == null) {
+                            return false;
+                        } else if (r
+                                .getRelParentSeq()
+                                .equals(rel.getRelParentSeq())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .findFirst();
         if (find.isPresent()) {
             return true;
         }

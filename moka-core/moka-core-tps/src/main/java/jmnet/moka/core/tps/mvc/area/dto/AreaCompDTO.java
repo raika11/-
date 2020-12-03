@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 편집영역컴포넌트 DTO
@@ -68,6 +69,7 @@ public class AreaCompDTO implements Serializable {
     /**
      * 화면편집파트
      */
+    @Length(max = 512, message = "{tps.areaComp.error.length.deskingPart}")
     private String deskingPart;
 
     public void setArea(AreaDTO area) {

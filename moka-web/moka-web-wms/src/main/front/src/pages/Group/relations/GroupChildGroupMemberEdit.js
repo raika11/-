@@ -16,6 +16,8 @@ const GroupChildGroupMemberEdit = () => {
         add: [],
         delete: [],
     });
+    const [agGridParam, setAgGridParam] = useState({});
+
     const { groupCd, groupIn, groupOut } = useSelector(({ group, loading }) => {
         return {
             groupCd: group.group.groupCd,
@@ -36,7 +38,6 @@ const GroupChildGroupMemberEdit = () => {
     const dispatch = useDispatch();
 
     const handleSearch = (data) => {
-        console.log(data);
         dispatch(changeMemberSearchOption({ name: 'searchType', value: data.searchType }));
         dispatch(changeMemberSearchOption({ name: 'keyword', value: data.keyword }));
     };
@@ -103,19 +104,27 @@ const GroupChildGroupMemberEdit = () => {
 
     useEffect(() => {
         if (groupCd) {
-            const search = { ...groupOut.search, page: 0 };
+            const search = { ...groupOut.search };
             dispatch(getSearchMemberList({ search }));
         }
-    }, [dispatch, groupCd, groupOut.search]);
+    }, [agGridParam, dispatch, groupCd, groupOut.search]);
 
     useEffect(() => {
+        if (agGridParam.delete) {
+            agGridParam.delete.api.deselectAll();
+        }
+
+        if (agGridParam.add) {
+            agGridParam.add.api.deselectAll();
+        }
+
         if (groupCd) {
             dispatch(getGroupInMemberList({ search: { groupCd, useTotal: 'N' } }));
         }
-    }, [dispatch, groupCd]);
+    }, [agGridParam, dispatch, groupCd]);
 
     return (
-        <MokaCard title="사용자 목록" width={1000}>
+        <MokaCard title="사용자 목록" className="w-100">
             <Row>
                 <Col xs={6}>
                     <GroupChildGroupMemberHeader onClick={handleClickGroupMemberDelete} />
@@ -126,24 +135,28 @@ const GroupChildGroupMemberEdit = () => {
                             handleSelectMembers(selectedNodes, 'delete');
                         }}
                         loading={groupIn.loading}
+                        setGridInstance={(param) => {
+                            setAgGridParam({ ...agGridParam, delete: param });
+                        }}
                     />
                 </Col>
                 <Col xs={6}>
-                    <Suspense>
-                        <GroupChildSearchMemberHeader onSearch={handleSearch} onChange={handleChangeSearchOption} onClick={handleClickGroupMemberAdd} />
-                        <GroupChildSearchMemberList
-                            list={groupOut.list}
-                            total={groupOut.total}
-                            page={groupOut.search.page}
-                            size={groupOut.search.size}
-                            paging={true}
-                            loading={groupOut.loading}
-                            onChangeSearchOption={handleChangeSearchOption}
-                            onSelect={(selectedNodes) => {
-                                handleSelectMembers(selectedNodes, 'add');
-                            }}
-                        />
-                    </Suspense>
+                    <GroupChildSearchMemberHeader onSearch={handleSearch} onChange={handleChangeSearchOption} onClick={handleClickGroupMemberAdd} />
+                    <GroupChildSearchMemberList
+                        list={groupOut.list}
+                        total={groupOut.total}
+                        page={groupOut.search.page}
+                        size={groupOut.search.size}
+                        paging={true}
+                        loading={groupOut.loading}
+                        onChangeSearchOption={handleChangeSearchOption}
+                        onSelect={(selectedNodes) => {
+                            handleSelectMembers(selectedNodes, 'add');
+                        }}
+                        setGridInstance={(param) => {
+                            setAgGridParam({ ...agGridParam, add: param });
+                        }}
+                    />
                 </Col>
             </Row>
         </MokaCard>

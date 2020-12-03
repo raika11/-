@@ -22,17 +22,17 @@ export const columnDefs = [
         headerName: '이름',
         field: 'memberNm',
         //cellStyle: { textAlign: 'center' },
-        width: 95,
+        width: 80,
     },
     {
         headerName: '아이디',
         field: 'memberId',
-        width: 60,
+        width: 100,
     },
     {
         headerName: '부서',
         field: 'dept',
-        width: 135,
+        width: 130,
     },
     {
         headerName: '소속그룹',
@@ -52,7 +52,6 @@ export const columnDefs = [
                     }
                     switch (groupCode) {
                         case 'J':
-                            console.log('hhhh');
                             groupNm += '중앙일보';
                             break;
                         case 'I':

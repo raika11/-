@@ -19,6 +19,7 @@ import {
     clearGroupMenuAuth,
 } from '@store/group';
 import toast, { messageBox } from '@utils/toastUtil';
+import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 /**
  * 그룹 상세/수정/등록
@@ -331,30 +332,35 @@ const GroupEdit = () => {
         setRegDt(group.regDt || '');
     }, [group, memberNm]);
     return (
-        <MokaCard title="그룹정보" width={1000}>
+        <MokaCard title="그룹정보" className="w-100" height={CARD_DEFAULT_HEIGHT - 90}>
             <Form noValidate>
                 <Form.Row>
-                    <Col xs={6}>
+                    <Col xs={12}>
                         <MokaInputLabel
-                            label="그룹코드(G01, G02형식)"
+                            label="그룹코드"
                             required
-                            labelWidth={160}
+                            labelWidth={80}
                             name="groupCd"
                             value={groupCd}
                             onChange={handleChangeValue}
-                            placeholder="그룹코드를 입력해주세요."
+                            placeholder="그룹코드를 입력해주세요. (G1, G2 형식)"
                             disabled={group.groupCd && true}
                             isInvalid={groupCdError}
                         />
                     </Col>
-                    <Col xs={6}>* 한번입력하면 변경하실 수 없습니다. 신중히 입력하시기 바랍니다.</Col>
+                </Form.Row>
+                <Form.Row className="d-flex mb-10 text-align-center" style={{ marginLeft: '85px' }}>
+                    <Form.Label className="text-danger">
+                        <div>* 한번입력하면 변경하실 수 없습니다.</div>
+                        <div style={{ textIndent: '10px' }}>신중히 입력하시기 바랍니다.</div>
+                    </Form.Label>
                 </Form.Row>
                 <Form.Row>
-                    <Col xs={6}>
+                    <Col xs={12}>
                         <MokaInputLabel
                             label="그룹명"
                             required
-                            labelWidth={160}
+                            labelWidth={80}
                             name="groupNm"
                             value={groupNm}
                             onChange={handleChangeValue}
@@ -364,11 +370,11 @@ const GroupEdit = () => {
                     </Col>
                 </Form.Row>
                 <Form.Row>
-                    <Col xs={6}>
+                    <Col xs={12}>
                         <MokaInputLabel
                             label="그룹 한글명"
                             required
-                            labelWidth={160}
+                            labelWidth={80}
                             name="groupKorNm"
                             value={groupKorNm}
                             onChange={handleChangeValue}
@@ -378,13 +384,13 @@ const GroupEdit = () => {
                     </Col>
                 </Form.Row>
                 <Form.Row>
-                    <Col xs={6}>
-                        <MokaInputLabel label="등록자" labelWidth={160} disabled={true} name={regId} value={regId} />
+                    <Col xs={12}>
+                        <MokaInputLabel label="등록자" labelWidth={80} disabled={true} name={regId} value={regId} />
                     </Col>
                 </Form.Row>
                 <Form.Row>
-                    <Col xs={6}>
-                        <MokaInputLabel label="등록일시" labelWidth={160} disabled={true} name={regDt} value={group.regDt} />
+                    <Col xs={12}>
+                        <MokaInputLabel label="등록일시" labelWidth={80} disabled={true} name={regDt} value={group.regDt} />
                     </Col>
                 </Form.Row>
                 <Form.Group as={Row} className="d-flex pt-20 justify-content-center">

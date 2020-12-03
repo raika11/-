@@ -248,7 +248,7 @@ function* getSearchMemberList({ type, payload: { name, search } }) {
         const response = yield call(memberAPI.getMemberList, { search });
         const searchMembers = response.data.body.list;
         const total = response.data.body.totalCnt;
-        console.log(total);
+
         if (response.data.header.success) {
             yield put({
                 type: `${type}_SUCCESS`,

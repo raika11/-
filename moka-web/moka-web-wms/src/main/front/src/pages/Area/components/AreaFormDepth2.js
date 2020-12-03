@@ -154,8 +154,7 @@ const AreaFormDepth2 = (props) => {
     const handleSave = (save) => {
         dispatch(
             saveArea({
-                depth,
-                actions: [changeArea({ area: save, depth })],
+                area: save,
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
@@ -389,8 +388,7 @@ const AreaFormDepth2 = (props) => {
         setDomainId(areaDepth1.domain);
         setContCnt(0);
         setCompCnt(0);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [temp.areaSeq, areaDepth1, areaDepth2]);
+    }, [temp, areaDepth1, areaDepth2, setPage, depth]);
 
     useEffect(() => {
         // 모달한테 전달받은 page 변경 시, 혹은 areaDiv 변경 시 CP, CT 리스트 조회
@@ -403,7 +401,7 @@ const AreaFormDepth2 = (props) => {
             setContOptions([]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page.pageSeq, temp.areaDiv]);
+    }, [page, temp.areaDiv]);
 
     useEffect(() => {
         // 폼이 변경되면 CT, CP 리스트 날림

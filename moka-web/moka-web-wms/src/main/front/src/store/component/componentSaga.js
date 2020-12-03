@@ -33,9 +33,10 @@ const saveComponentList = createRequestSaga(act.SAVE_COMPONENT_LIST, api.postAll
 /**
  * 저장/수정
  * @param {array} param0.payload.actions 저장 전 액션리스트
+ * @param {object} param0.payload.component 저장할 컴포넌트 데이터
  * @param {func} param0.payload.callback 콜백
  */
-export function* saveComponent({ payload: { actions, callback } }) {
+export function* saveComponent({ payload: { component, actions, callback } }) {
     let ACTION = act.SAVE_COMPONENT;
     let response,
         callbackData = {};
@@ -52,9 +53,6 @@ export function* saveComponent({ payload: { actions, callback } }) {
                 });
             }
         }
-
-        // 컴포넌트 데이터
-        const component = yield select((state) => state.component.component);
 
         // 등록/수정 분기
         if (component.componentSeq) {

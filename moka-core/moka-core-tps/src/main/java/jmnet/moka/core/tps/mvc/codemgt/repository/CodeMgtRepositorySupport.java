@@ -4,12 +4,9 @@
 package jmnet.moka.core.tps.mvc.codemgt.repository;
 
 import java.util.List;
-
-import com.querydsl.core.QueryResults;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
-import jmnet.moka.core.tps.mvc.naverbulk.entity.Article;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

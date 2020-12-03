@@ -26,10 +26,11 @@ const getAreaDepth3 = createRequestSaga(act.GET_AREA_DEPTH3, api.getArea);
 
 /**
  * 저장/수정
+ * @param {object} param0.payload.area area 데이터
  * @param {array} param0.payload.actions 저장 전 액션리스트
  * @param {func} param0.payload.callback 콜백
  */
-export function* saveArea({ payload: { actions, callback, depth } }) {
+export function* saveArea({ payload: { area, actions, callback } }) {
     let ACTION = act.SAVE_AREA;
     let response,
         callbackData = {};
@@ -47,9 +48,6 @@ export function* saveArea({ payload: { actions, callback, depth } }) {
             }
         }
 
-        // 편집영역 데이터
-        const area = yield select((store) => store.area[`depth${depth}`].area);
-
         // 등록/수정 분기
         if (area.areaSeq) {
             response = yield call(api.putArea, { area });
@@ -60,7 +58,7 @@ export function* saveArea({ payload: { actions, callback, depth } }) {
         callbackData = response.data;
 
         if (response.data.header.success) {
-            if (depth === 1) {
+            if (area.depth === 1) {
                 // 수정 시 데이터 다시 로드...
                 if (area.areaSeq) {
                     yield put({
@@ -69,7 +67,7 @@ export function* saveArea({ payload: { actions, callback, depth } }) {
                     });
                 }
                 yield put({ type: act.GET_AREA_LIST_DEPTH1 });
-            } else if (depth === 2) {
+            } else if (area.depth === 2) {
                 if (area.areaSeq) {
                     yield put({
                         type: act.GET_AREA_DEPTH2,
@@ -77,7 +75,7 @@ export function* saveArea({ payload: { actions, callback, depth } }) {
                     });
                 }
                 yield put({ type: act.GET_AREA_LIST_DEPTH2 });
-            } else if (depth === 3) {
+            } else if (area.depth === 3) {
                 if (area.areaSeq) {
                     yield put({
                         type: act.GET_AREA_DEPTH3,

@@ -42,29 +42,23 @@ const SnsMataEdit = () => {
         console.log('tempHandleSendButton', e);
     };
 
+    const tempFooterButtonClick = (e) => {
+        console.log('tempFooterButtonClick', e);
+    };
+
     return (
         <MokaCard
             width={550}
             title={`메타 ${true ? '정보' : '등록'}`}
             titleClassName="mb-0"
             loading={null}
-            footerComponent={
-                <>
-                    <div className="d-flex justify-content-center">
-                        <div className="d-flex justify-content-center">
-                            <Button variant="positive" className="mr-05" onClick={(e) => tempHandleSendButton(e)}>
-                                전송
-                            </Button>
-                            <Button variant="positive" className="mr-05">
-                                임시저장
-                            </Button>
-                            <Button variant="negative" className="mr-05">
-                                미리보기
-                            </Button>
-                        </div>
-                    </div>
-                </>
-            }
+            footerClassName="justify-content-center"
+            footerButtons={[
+                { text: '전송', variant: 'positive', onClick: tempFooterButtonClick, className: 'mr-05' },
+                { text: '임시저장', variant: 'positive', onClick: tempFooterButtonClick, className: 'mr-05' },
+                { text: '미리보기', variant: 'negative', onClick: tempFooterButtonClick, className: 'mr-05' },
+            ]}
+            footer
         >
             <hr />
 

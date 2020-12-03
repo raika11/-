@@ -17,14 +17,14 @@ import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.exception.DataLoadException;
 
 
-public class DefaultDataLoader extends AbstractDataLoader {
-	private static final Logger logger = LoggerFactory.getLogger(DefaultDataLoader.class);
+public class SimpleDataLoader extends AbstractDataLoader {
+	private static final Logger logger = LoggerFactory.getLogger(SimpleDataLoader.class);
 	public static int DEFAULT_BUFFER_SIZE = 2048;
 	public static String DEFAULT_ENCODING = "UTF-8";
 	private String apiHost;
 	private String apiPath;
 	
-	public DefaultDataLoader(String apiHost, String apiPath) {
+	public SimpleDataLoader(String apiHost, String apiPath) {
 		this.apiHost = apiHost;
 		this.apiPath = apiPath;
 	}

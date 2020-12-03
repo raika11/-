@@ -22,9 +22,8 @@ import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
-import jmnet.moka.common.template.loader.DefaultDataLoader;
+import jmnet.moka.common.template.loader.SimpleDataLoader;
 import jmnet.moka.common.template.loader.FileTemplateLoader;
-import jmnet.moka.common.template.loader.TemplateLoader;
 import jmnet.moka.common.template.merge.element.ElementMerger;
 import jmnet.moka.common.template.parse.model.TemplateElement;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
@@ -52,7 +51,7 @@ public class DefaultTemplateMerger implements TemplateMerger<String> {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultTemplateMerger.class);
     
 	public DefaultTemplateMerger(String basePath, String apiHost, String apiPath) throws IOException {
-		this(basePath, new DefaultDataLoader(apiHost, apiPath), null);
+		this(basePath, new SimpleDataLoader(apiHost, apiPath), null);
 	}
 
 	public DefaultTemplateMerger(String basePath, DataLoader dataLoader, DataLoader defaultDataLoader)  {

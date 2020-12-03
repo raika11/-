@@ -39,7 +39,7 @@ public class DomainTemplateMergerTest {
 		File file = new File("C:\\GitHub\\ResearchInstitute\\MCP_prototype\\mcp-core\\mcp-core-template\\src\\test\\resources\\samples-domain");
 		String templatePath = file.getAbsolutePath();
 		
-		this.merger = new DefaultDomainTemplateMerger(templatePath,"http://localhost:8080","ssc_cms", null);
+		this.merger = new DefaultDomainTemplateMerger(templatePath,"http://localhost:8080","ssc_cms");
 		// 머지 옵션설정
 		this.defaultContext = new MergeContext();
 		this.defaultContext.getMergeOptions().setDebug(true);

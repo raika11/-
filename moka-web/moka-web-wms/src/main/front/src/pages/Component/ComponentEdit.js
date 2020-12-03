@@ -114,9 +114,7 @@ const ComponentEdit = ({ onDelete }) => {
                         else {
                             messageBox.confirm(
                                 '다른 곳에서 사용 중입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?',
-                                () => {
-                                    saveCallback(component);
-                                },
+                                () => saveCallback(component),
                                 () => {},
                             );
                         }
@@ -149,6 +147,14 @@ const ComponentEdit = ({ onDelete }) => {
             if (edt !== 'Invalid date') {
                 saveData.periodEndDt = edt;
             }
+        }
+
+        if (!saveData.editFormPart?.partSeq) {
+            saveData.editFormPart = null;
+        }
+
+        if (!saveData.dataset?.datasetSeq) {
+            saveData.dataset = null;
         }
 
         if (validate(saveData)) {

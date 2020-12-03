@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel, MokaInputGroup, MokaIcon, MokaPrependLinkInput, MokaCopyTextButton } from '@components';
 import { DatasetListModal } from '@pages/Dataset/modals';
 import { TemplateListModal } from '@pages/Template/modals';
-import { EditFormListModal } from '@pages/EditForm/modals';
+import { EditFormPartListModal } from '@pages/EditForm/modals';
 
 const DetailRelationForm = (props) => {
     const { component, setComponent, inputTag, error } = props;
@@ -18,6 +18,7 @@ const DetailRelationForm = (props) => {
 
     const [dataset, setDataset] = useState({});
     const [template, setTemplate] = useState({});
+    const [editFormPart, setEditFormPart] = useState({});
 
     /**
      * input 값 변경
@@ -79,6 +80,9 @@ const DetailRelationForm = (props) => {
         if (component.template) {
             setTemplate(component.template);
         }
+        if (component.editFormPart) {
+            setEditFormPart(component.editFormPart);
+        }
     }, [component]);
 
     useEffect(() => {
@@ -135,7 +139,7 @@ const DetailRelationForm = (props) => {
                 </Col>
                 {component.dataType !== 'NONE' && (
                     <React.Fragment>
-                        {/* 자동/수동/폼 셀렉트 */}
+                        {/* 자동/편집/폼 셀렉트 */}
                         <Col xs={2} className="d-flex p-0 pr-3">
                             <MokaInput as="select" value={component.dataType} onChange={handleChangeDataset}>
                                 <option value="DESK">편집</option>
@@ -144,7 +148,7 @@ const DetailRelationForm = (props) => {
                             </MokaInput>
                         </Col>
 
-                        {/* 자동/수동에 따른 input */}
+                        {/* 자동/편집/폼에 따른 input */}
                         <Col xs={7} className="p-0">
                             {component.dataType === 'DESK' && <MokaInput placeholder="ID" value={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : ''} disabled />}
                             {component.dataType === 'AUTO' && (
@@ -164,12 +168,12 @@ const DetailRelationForm = (props) => {
                             )}
                             {component.dataType === 'FORM' && (
                                 <MokaPrependLinkInput
-                                    to={dataset.datasetSeq ? `/dataset/${dataset.datasetSeq}` : undefined}
-                                    linkText={dataset.datasetSeq ? `ID: ${dataset.datasetSeq}` : 'ID'}
+                                    to={editFormPart.partSeq ? `/edit-form/${editFormPart.formSeq}` : undefined}
+                                    linkText={editFormPart.partSeq ? `ID: ${editFormPart.partSeq}` : 'ID'}
                                     inputList={{
                                         placeholder: '폼 선택',
                                         className: 'bg-white',
-                                        value: dataset.datasetName,
+                                        value: editFormPart.partTitle,
                                         disabled: true,
                                     }}
                                     icon={<MokaIcon iconName="fal-search" />}
@@ -236,7 +240,7 @@ const DetailRelationForm = (props) => {
             />
 
             {/* 폼 선택 팝업 */}
-            <EditFormListModal show={formModalShow} onHide={() => setFormModalShow(false)} />
+            <EditFormPartListModal show={formModalShow} onHide={() => setFormModalShow(false)} onClickSave={(editFormPart) => setComponent({ ...component, editFormPart })} />
         </Form>
     );
 };

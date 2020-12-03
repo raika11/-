@@ -7,9 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.loader.DataLoader;
-import jmnet.moka.common.template.loader.DefaultDataLoader;
-import jmnet.moka.common.template.loader.FileTemplateLoader;
-import jmnet.moka.common.template.loader.TemplateLoader;
+import jmnet.moka.common.template.loader.SimpleDataLoader;
 
 /**
  * <pre>
@@ -27,8 +25,8 @@ public class DefaultDomainTemplateMerger  {
 	private DataLoader dataLoader;
 	private HashMap<String,DataLoader> dataLoaderMap;
 	
-	public DefaultDomainTemplateMerger(String basePath, String apiHost, String apiPath, String defaultTemplateDomain) {
-		this(basePath, new DefaultDataLoader(apiHost, apiPath));
+	public DefaultDomainTemplateMerger(String basePath, String apiHost, String apiPath) {
+		this(basePath, new SimpleDataLoader(apiHost, apiPath));
 	}
 	
 	public DefaultDomainTemplateMerger(String basePath, DataLoader dataLoader) {

@@ -95,7 +95,7 @@ const propTypes = {
      */
     animateRows: PropTypes.bool,
     /**
-     * 쓰는 곳에서 grid Instnace를 state로 관리할 때, gridReady시 state 변경
+     * 쓰는 곳에서 grid Instance를 state로 관리할 때, gridReady시 state 변경
      */
     setGridInstance: PropTypes.func,
 };

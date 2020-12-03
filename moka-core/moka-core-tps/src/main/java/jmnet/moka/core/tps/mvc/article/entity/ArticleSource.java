@@ -102,8 +102,8 @@ public class ArticleSource extends BaseAudit {
     /**
      * 사용여부
      */
-    @Column(name = "USED_YN", columnDefinition = "char")
-    private String usedYn = MokaConstants.YES;
+    @Column(name = "RCV_USED_YN", columnDefinition = "char")
+    private String rcvUsedYn = MokaConstants.YES;
 
     /**
      * CP담당자

@@ -108,7 +108,15 @@ const ComponentWorkList = (props) => {
                         } else if (workStatus[component.seq] !== 'work' && component.viewYn === 'N') {
                             return null;
                         } else {
-                            return <ComponentWork key={`${area.areaSeq}-${areaComp.component.componentSeq}`} component={component} agGridIndex={targetIdx} {...props} />;
+                            return (
+                                <ComponentWork
+                                    key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
+                                    deskingPart={areaComp.deskingPart}
+                                    component={component}
+                                    agGridIndex={targetIdx}
+                                    {...props}
+                                />
+                            );
                         }
                     })}
                 </div>
@@ -128,7 +136,15 @@ const ComponentWorkList = (props) => {
                             } else if (workStatus[component.seq] !== 'work' && component.viewYn === 'N') {
                                 return null;
                             } else {
-                                return <ComponentWork key={`${area.areaSeq}-${areaComp.component.componentSeq}`} component={component} agGridIndex={targetIdx} {...props} />;
+                                return (
+                                    <ComponentWork
+                                        key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
+                                        deskingPart={areaComp.deskingPart}
+                                        component={component}
+                                        agGridIndex={targetIdx}
+                                        {...props}
+                                    />
+                                );
                             }
                         })}
                     </div>

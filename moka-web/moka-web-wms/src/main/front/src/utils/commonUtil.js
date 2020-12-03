@@ -222,6 +222,19 @@ const makeImgPreview = (src, ele, wrapperEle, loadFunc, errorFunc) => {
     };
 };
 
+/**
+ * 타이틀 byte 계산
+ * @param {String} text 타이틀
+ */
+const euckrBytes = (text) => {
+    const euckrLength = ((s, b = 0, i = 0, c = 0) => {
+        // eslint-disable-next-line no-cond-assign
+        for (i = 0; (c = s.charCodeAt(i++)); b += c >= 128 ? 2 : 1);
+        return b;
+    })(text);
+    return euckrLength;
+};
+
 export default {
     fileDownload,
     isEmpty,
@@ -230,4 +243,5 @@ export default {
     findParentNodeKeys,
     makeRCTreeData,
     makeImgPreview,
+    euckrBytes,
 };

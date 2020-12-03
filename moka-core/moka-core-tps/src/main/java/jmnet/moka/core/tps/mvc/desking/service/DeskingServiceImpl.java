@@ -258,7 +258,7 @@ public class DeskingServiceImpl implements DeskingService {
                                                       .approvalYn(MokaConstants.NO)
                                                       .build();
 
-        // 컴포넌트 히스토리 추가
+        // 컴포넌트 히스토리만 추가
         ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO);
 
         // 편집기사 히스토리 추가
@@ -277,7 +277,7 @@ public class DeskingServiceImpl implements DeskingService {
                                                       .build();
 
         // 컴포넌트 수정
-        Component component = updateComponent(componentWorkVO, regId, histPublishDTO);
+        Component component = this.updateComponent(componentWorkVO, regId, histPublishDTO);
 
         // 편집기사 등록
         updateDesking(component, componentWorkVO.getDeskingWorks(), regId, histPublishDTO);
@@ -295,7 +295,7 @@ public class DeskingServiceImpl implements DeskingService {
                                                       .reserveDt(reserveDt)
                                                       .build();
 
-        // 컴포넌트 히스토리 추가
+        // 컴포넌트 히스토리만 추가
         ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO);
 
         // 편집기사 히스토리 추가
@@ -310,17 +310,17 @@ public class DeskingServiceImpl implements DeskingService {
         Component component = componentService.findComponentBySeq(workVO.getComponentSeq())
                                               .orElseThrow(() -> new NoDataException(messageC));
 
-        String messageT = messageByLocale.get("tps.common.error.no-data");
-        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-                                           .orElseThrow(() -> new NoDataException(messageT));
+//        String messageT = messageByLocale.get("tps.common.error.no-data");
+//        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
+//                                           .orElseThrow(() -> new NoDataException(messageT));
 
         component.setSnapshotYn(workVO.getSnapshotYn());
         component.setSnapshotBody(workVO.getSnapshotBody());
-        component.setTemplate(template);
+//        component.setTemplate(template);
         component.setPerPageCount(workVO.getPerPageCount());
         component.setViewYn(workVO.getViewYn());
-        component.setZone(workVO.getZone());
-        component.setMatchZone(workVO.getMatchZone());
+//        component.setZone(workVO.getZone());
+//        component.setMatchZone(workVO.getMatchZone());
         component.setModDt(McpDate.now());
         component.setModId(regId);
 
@@ -338,17 +338,17 @@ public class DeskingServiceImpl implements DeskingService {
         Component component = componentService.findComponentBySeq(workVO.getComponentSeq())
                                               .orElseThrow(() -> new NoDataException(messageC));
 
-        String messageT = messageByLocale.get("tps.common.error.no-data");
-        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-                                           .orElseThrow(() -> new NoDataException(messageT));
+//        String messageT = messageByLocale.get("tps.common.error.no-data");
+//        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
+//                                           .orElseThrow(() -> new NoDataException(messageT));
 
         component.setSnapshotYn(workVO.getSnapshotYn());
         component.setSnapshotBody(workVO.getSnapshotBody());
-        component.setTemplate(template);
+//        component.setTemplate(template);
         component.setPerPageCount(workVO.getPerPageCount());
         component.setViewYn(workVO.getViewYn());
-        component.setZone(workVO.getZone());
-        component.setMatchZone(workVO.getMatchZone());
+//        component.setZone(workVO.getZone());
+//        component.setMatchZone(workVO.getMatchZone());
         component.setModDt(McpDate.now());
         component.setModId(regId);
 

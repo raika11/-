@@ -52,13 +52,13 @@ public class ComponentWorkServiceImpl implements jmnet.moka.core.tps.mvc.desking
         ComponentWork componentWork = this.findComponentWorkBySeq(workVO.getSeq())
                                           .orElseThrow(() -> new NoDataException(messageC));
 
-        String messageT = messageByLocale.get("tps.common.error.no-data");
-        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-                                           .orElseThrow(() -> new NoDataException(messageT));
+//        String messageT = messageByLocale.get("tps.common.error.no-data");
+//        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
+//                                           .orElseThrow(() -> new NoDataException(messageT));
 
-        componentWork.setTemplate(template);
-        componentWork.setZone(workVO.getZone());
-        componentWork.setMatchZone(workVO.getMatchZone());
+//        componentWork.setTemplate(template);
+//        componentWork.setZone(workVO.getZone());
+//        componentWork.setMatchZone(workVO.getMatchZone());
         componentWork.setViewYn(workVO.getViewYn());
         componentWork.setPerPageCount(workVO.getPerPageCount());
 
@@ -96,9 +96,9 @@ public class ComponentWorkServiceImpl implements jmnet.moka.core.tps.mvc.desking
 
         componentWork.setSnapshotYn(componentHist.getSnapshotYn());
         componentWork.setSnapshotBody(componentHist.getSnapshotBody());
-        componentWork.setTemplate(componentHist.getTemplate());
-        componentWork.setZone(componentHist.getZone());
-        componentWork.setMatchZone(componentHist.getMatchZone());
+//        componentWork.setTemplate(componentHist.getTemplate());
+//        componentWork.setZone(componentHist.getZone());
+//        componentWork.setMatchZone(componentHist.getMatchZone());
         componentWork.setViewYn(componentHist.getViewYn());
         componentWork.setPerPageCount(componentHist.getPerPageCount());
 

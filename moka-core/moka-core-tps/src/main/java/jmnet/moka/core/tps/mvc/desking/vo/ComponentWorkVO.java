@@ -62,14 +62,14 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "TEMPLATE_SEQ")
     private Long templateSeq;
 
-    @Column(name = "TEMPLATE_NAME")
-    private String templateName;
-
-    @Column(name = "TEMPLATE_WIDTH")
-    private Integer templateWidth;
-
-    @Column(name = "TEMPLATE_GROUP")
-    private String templateGroup;
+//    @Column(name = "TEMPLATE_NAME")
+//    private String templateName;
+//
+//    @Column(name = "TEMPLATE_WIDTH")
+//    private Integer templateWidth;
+//
+//    @Column(name = "TEMPLATE_GROUP")
+//    private String templateGroup;
 
     @Column(name = "DATASET_SEQ")
     private Long datasetSeq;
@@ -77,11 +77,11 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "DATA_TYPE")
     private String dataType;
 
-    @Column(name = "ZONE")
-    private String zone;
-
-    @Column(name = "MATCH_ZONE")
-    private String matchZone;
+//    @Column(name = "ZONE")
+//    private String zone;
+//
+//    @Column(name = "MATCH_ZONE")
+//    private String matchZone;
 
     @Column(name = "VIEW_YN")
     @Builder.Default
@@ -124,13 +124,12 @@ public class ComponentWorkVO implements Serializable {
     public ComponentItem toComponentItem() {
         ComponentItem componentItem = new ComponentItem();
         componentItem.put(ItemConstants.COMPONENT_ID, this.componentSeq);
-        // componentItem.put(ItemConstants.COMPONENT_DOMAIN_ID, this.domain.getDomainId());
-        componentItem.put(ItemConstants.COMPONENT_TEMPLATE_ID, this.getTemplateSeq());
+        //componentItem.put(ItemConstants.COMPONENT_TEMPLATE_ID, this.getTemplateSeq());
         componentItem.put(ItemConstants.COMPONENT_DATASET_ID, this.getDatasetSeq());
         componentItem.put(ItemConstants.COMPONENT_DATA_TYPE, this.dataType);
         componentItem.put(ItemConstants.COMPONENT_NAME, this.componentName);
-        componentItem.put(ItemConstants.COMPONENT_ZONE, this.zone);
-        componentItem.put(ItemConstants.COMPONENT_MATCH_ZONE, this.matchZone);
+        //componentItem.put(ItemConstants.COMPONENT_ZONE, this.zone);
+        //componentItem.put(ItemConstants.COMPONENT_MATCH_ZONE, this.matchZone);
         componentItem.put(ItemConstants.COMPONENT_VIEW_YN, this.viewYn);
         componentItem.put(ItemConstants.COMPONENT_PER_PAGE_COUNT, this.perPageCount);
         componentItem.put(ItemConstants.COMPONENT_SEARCH_CODE_ID, this.schCodeId);

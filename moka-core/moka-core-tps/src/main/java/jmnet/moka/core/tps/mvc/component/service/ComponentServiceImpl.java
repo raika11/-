@@ -212,11 +212,6 @@ public class ComponentServiceImpl implements ComponentService {
         Component component = componentRepository.save(newComponent);
         log.debug("[COMPONENT UPDATE] seq: {}", component.getComponentSeq());
 
-        // 컴포넌트 광고 업데이트
-        //        Set<ComponentAd> ads = componentAdService.updateComponentAdList(newComponent.getComponentAdList(), orgComponent.getComponentAdList());
-        //        component.setComponentAdList(ads);
-        //        log.debug("[COMPONENT UPDATE] seq: {} AdList Update success", component.getComponentSeq());
-
         // 히스토리 추가
         componentHistService.insertComponentHist(component, histPublishDTO);
         log.debug("[COMPONENT UPDATE] seq: {} History Insert success", component.getComponentSeq());

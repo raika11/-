@@ -23,7 +23,7 @@ import org.apache.ibatis.type.Alias;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Alias("DeskingHistGroupVO")
+@Alias("ComponentHistVO")
 public class ComponentHistVO implements Serializable {
 
     private static final long serialVersionUID = 4599769615811508579L;

@@ -1,18 +1,16 @@
 export const deskingPartList = [
     { index: 0, title: '약물', id: 'specialChar' },
     { index: 1, title: '이미지', id: 'thumbFileName' },
-    { index: 2, title: '아이콘', id: 'icon' },
-    { index: 3, title: 'Box 제목', id: 'boxTitle' },
-    { index: 4, title: 'Box URL', id: 'boxUrl' },
+    { index: 2, title: '아이콘', id: 'iconFileName' },
+    { index: 3, title: 'Box 제목', id: 'nameplate' },
+    { index: 4, title: 'Box URL', id: 'nameplateUrl' },
     { index: 5, title: '말머리', id: 'titlePrefix' },
-    { index: 6, title: '제목/부제위치', id: 'titlePosition' },
+    { index: 6, title: '제목/부제위치', id: 'titleLoc' },
     { index: 7, title: '제목', id: 'title' },
     { index: 8, title: '부제', id: 'subTitle' },
     { index: 9, title: '리드문', id: 'bodyHead' },
     { index: 10, title: 'URL', id: 'linkUrl' },
-    { index: 11, title: '영상', id: 'video' },
-    { index: 11, title: '라이브 제목', id: 'liveTitle' },
-    { index: 11, title: '라이브 URL', id: 'liveUrl' },
+    { index: 11, title: '영상', id: 'vodUrl' },
 ];
 
 export default {
@@ -28,9 +26,9 @@ export default {
         },
     },
     // box 제목
-    boxTitle: {
+    nameplate: {
         as: 'textarea',
-        field: 'boxTitle',
+        field: 'nameplate',
         label: 'Box 제목',
         inputProps: {
             className: 'resize-none custom-scroll',
@@ -38,12 +36,12 @@ export default {
         },
     },
     // box url
-    boxUrl: {
+    nameplateUrl: {
         as: 'input',
         type: 'text',
-        field: 'boxUrl',
+        field: 'nameplateUrl',
         label: 'Box URL',
-        placeholder: 'URL을 입력하세요',
+        placeholder: 'Box URL을 입력하세요',
     },
     // 부제
     subTitle: {
@@ -71,14 +69,6 @@ export default {
         type: 'text',
         field: 'linkUrl',
         label: 'URL',
-        placeholder: 'URL을 입력하세요',
-    },
-    // moreUrl
-    moreUrl: {
-        as: 'input',
-        type: 'text',
-        field: 'moreUrl',
-        label: '더보기 URL',
         placeholder: 'URL을 입력하세요',
     },
 };

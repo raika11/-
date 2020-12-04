@@ -126,7 +126,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                 className="article-list"
                 setGridInstance={setGridInstance}
                 headerHeight={50}
-                agGridHeight={623}
+                agGridHeight={614}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(article) => article.totalId}

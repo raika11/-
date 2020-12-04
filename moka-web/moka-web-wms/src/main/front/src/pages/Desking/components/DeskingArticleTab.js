@@ -44,7 +44,7 @@ const DeskingArticleTab = (props) => {
             if (nav === '기사') {
                 return (
                     <ArticleDeskList
-                        className="px-3 pb-3 pt-2"
+                        className="px-3 pb-3"
                         ref={articleRef}
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
@@ -57,7 +57,7 @@ const DeskingArticleTab = (props) => {
             else if (nav === '영상') {
                 return (
                     <ArticleDeskList
-                        className="px-3 pb-3 pt-2"
+                        className="px-3 pb-3"
                         ref={mediaRef}
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
@@ -71,7 +71,7 @@ const DeskingArticleTab = (props) => {
         });
     };
 
-    return <MokaCardTabs width={840} className="w-100" onSelectNav={(idx) => setNavIdx(idx)} fill tabs={createTabs()} tabNavs={tabNavs} />;
+    return <MokaCardTabs width={840} className="w-100" onSelectNav={(idx) => setNavIdx(idx)} tabs={createTabs()} tabNavs={tabNavs} />;
 };
 
 export default DeskingArticleTab;

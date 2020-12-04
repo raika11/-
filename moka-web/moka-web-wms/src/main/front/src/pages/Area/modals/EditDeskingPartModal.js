@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import produce from 'immer';
 import Col from 'react-bootstrap/Col';
@@ -13,25 +13,29 @@ const EditDeskingPartModal = (props) => {
     const { show, onHide, areaComp, onSave } = props;
 
     // state
-    const [deskingPart, setDeskingPart] = useState([]);
+    const [deskingPart, setDeskingPart] = useState({});
 
     /**
      * list -> 쉽게 파싱하기 위해서 object로 바꿈
-     * @param {array} list deskingPart 리스트
      */
-    const setDeskingPartObj = (list) => {
-        setDeskingPart(
-            list.reduce((all, dp) => {
-                const target = deskingPartList.find((d) => d.id === dp);
-                return target
-                    ? {
-                          ...all,
-                          [target.id]: target,
-                      }
-                    : all;
-            }, {}),
-        );
-    };
+    const setDeskingPartObj = useCallback(() => {
+        if (areaComp?.deskingPart) {
+            let list = areaComp.deskingPart.split(',');
+            setDeskingPart(
+                list.reduce((all, dp) => {
+                    const target = deskingPartList.find((d) => d.id === dp);
+                    return target
+                        ? {
+                              ...all,
+                              [target.id]: target,
+                          }
+                        : all;
+                }, {}),
+            );
+        } else {
+            setDeskingPart({});
+        }
+    }, [areaComp.deskingPart]);
 
     /**
      * 값 변경
@@ -70,17 +74,13 @@ const EditDeskingPartModal = (props) => {
      * 취소
      */
     const handleClickCancle = () => {
-        let list = areaComp.deskingPart.split(',');
-        setDeskingPartObj(list);
+        setDeskingPartObj();
         onHide();
     };
 
     useEffect(() => {
-        if (areaComp?.deskingPart) {
-            let list = areaComp.deskingPart.split(',');
-            setDeskingPartObj(list);
-        }
-    }, [areaComp]);
+        setDeskingPartObj();
+    }, [setDeskingPartObj]);
 
     return (
         <MokaModal

@@ -82,7 +82,7 @@ const defaultProps = {
 };
 
 /**
- * 아이콘 탭
+ * 아이콘 탭 (AppStack의 탭과 동일한 모양)
  * 아이콘 토글로 탭 변경
  */
 const MokaIconTabs = forwardRef((props, ref) => {

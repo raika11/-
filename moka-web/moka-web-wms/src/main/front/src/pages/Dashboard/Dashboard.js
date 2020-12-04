@@ -171,8 +171,9 @@ const Dashboard = () => {
 
                 <MokaCardTabs
                     className="mr-gutter"
+                    fill
                     tabs={[
-                        <Form className="p-3">
+                        <Form className="px-3">
                             <Form.Row className="mb-1">
                                 <Form.Label className="h4">1) Action Button</Form.Label>
                             </Form.Row>
@@ -380,7 +381,7 @@ const Dashboard = () => {
                                 </Form.Row>
                             ))}
                         </Form>,
-                        <Form className="p-3">
+                        <Form className="px-3">
                             {/* Form 예제 */}
                             {/* text input */}
                             <Form.Group>
@@ -491,7 +492,7 @@ const Dashboard = () => {
                                 {/* <MokaSearchInput variant="warning" onSearch={() => toast.success('성공')} /> */}
                             </Form.Group>
                         </Form>,
-                        <div className="p-3">
+                        <div className="px-3">
                             {/* 점보트론 */}
                             <Form.Label>11) Jumbotron</Form.Label>
                             <Jumbotron>
@@ -502,7 +503,7 @@ const Dashboard = () => {
                                 </p>
                             </Jumbotron>
                         </div>,
-                        <div className="p-3">
+                        <div className="px-3">
                             {/* 캐러셀 */}
                             <Form.Label>12) Carousel</Form.Label>
                             <Carousel>

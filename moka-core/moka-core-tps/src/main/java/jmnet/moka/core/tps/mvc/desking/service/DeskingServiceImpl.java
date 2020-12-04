@@ -115,6 +115,9 @@ public class DeskingServiceImpl implements DeskingService {
     @Autowired
     private FtpHelper ftpHelper;
 
+    @Value("${wimage.url}")
+    private String wimageUrl;
+
     @Autowired
     public DeskingServiceImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -953,10 +956,6 @@ public class DeskingServiceImpl implements DeskingService {
         String[] fileNames = {deskingWork.getContentId(), String.valueOf(deskingWork.getDatasetSeq()), nowTime};
         String fileName = String.join("_", fileNames) + "." + extension;
 
-        //        File uploadFile = new File(fileName);
-        //        thumbnail.transferTo(uploadFile);
-        //        ;
-
         // 경로 생성. 루트일경우 index, 그 외의 페이지는 2depth의 서비스명을 사용한다.
         String yyyyMM = McpDate.yearStr() + McpDate.monthStr();
         Optional<String> twoDepthName = Arrays
@@ -980,7 +979,8 @@ public class DeskingServiceImpl implements DeskingService {
         boolean upload = ftpHelper.upload(FtpHelper.WIMAGE, fileName, thumbnail.getInputStream(), remotePath);
         if (upload) {
             log.debug("SAVE DESKING WORK THUMBNAIL");
-            return remotePath + fileName;
+            String path = wimageUrl + remotePath + "/" + fileName;
+            return path;
         } else {
             log.debug("SAVE FAIL DESKING WORK THUMBNAIL");
         }

@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
@@ -83,28 +84,31 @@ public class DeskingRestController extends AbstractCommonController {
             throws Exception {
 
         try {
-            DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
-                                                              .areaSeq(areaSeq)
-                                                              .regId(principal.getName())
-                                                              .build();
+            DeskingWorkSearchDTO search = DeskingWorkSearchDTO
+                    .builder()
+                    .areaSeq(areaSeq)
+                    .regId(principal.getName())
+                    .build();
             search.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
 
             // work조회 : 임시저장(deskingWork)된 것을 조회
             List<ComponentWorkVO> returnValue = deskingService.findAllComponentWork(search);
 
             // area
-            Area area = areaService.findAreaBySeq(areaSeq)
-                                   .orElseThrow(() -> {
-                                       String message = msg("tps.common.error.no-data");
-                                       tpsLogger.fail(message, true);
-                                       return new NoDataException(message);
-                                   });
+            Area area = areaService
+                    .findAreaBySeq(areaSeq)
+                    .orElseThrow(() -> {
+                        String message = msg("tps.common.error.no-data");
+                        tpsLogger.fail(message, true);
+                        return new NoDataException(message);
+                    });
 
             AreaDTO areaDto = modelMapper.map(area, AreaDTO.class);
 
             // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
-            if (areaDto.getAreaDiv()
-                       .equals(MokaConstants.ITEM_COMPONENT)) {
+            if (areaDto
+                    .getAreaDiv()
+                    .equals(MokaConstants.ITEM_COMPONENT)) {
                 areaService.compsToComp(areaDto);
             }
 
@@ -428,7 +432,7 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "편집기사work 수정")
     @PutMapping("/components/{componentWorkSeq}/contents")
     public ResponseEntity<?> putDeskingWork(@Valid DeskingWorkDTO deskingWorkDTO, Principal principal,
-            @PathVariable("componentWorkSeq") Long componentWorkSeq)
+            @PathVariable("componentWorkSeq") Long componentWorkSeq, @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이터 검증
@@ -439,8 +443,9 @@ public class DeskingRestController extends AbstractCommonController {
         }
 
         // 오리진 데스킹워크 조회
-        DeskingWork orgDW = deskingService.findDeskingWorkBySeq(deskingWorkDTO.getSeq())
-                                          .orElseThrow(() -> new NoDataException(msg("tps.desking.error.work.noContent")));
+        DeskingWork orgDW = deskingService
+                .findDeskingWorkBySeq(deskingWorkDTO.getSeq())
+                .orElseThrow(() -> new NoDataException(msg("tps.desking.error.work.noContent")));
 
         // 오리진을 복사한 new데스킹워크 생성, dto 값 셋팅
         DeskingWork newDW = modelMapper.map(deskingWorkDTO, DeskingWork.class);
@@ -449,14 +454,19 @@ public class DeskingRestController extends AbstractCommonController {
         // 썸네일 파일 저장
         if (deskingWorkDTO.getThumbnailFile() != null) {
             MultipartFile mfile = deskingWorkDTO.getThumbnailFile();
-            String fileName = deskingService.saveDeskingWorkImage(newDW, mfile);
-            int[] imgInfo = uploadFileHelper.getImgFileSize(mfile);
+            String fileName = deskingService.saveDeskingWorkImage(areaSeq, newDW, mfile);
+            if (McpString.isNotEmpty(fileName)) {
+                int[] imgInfo = uploadFileHelper.getImgFileSize(mfile);
 
-            // 썸네일 정보 셋팅
-            newDW.setThumbFileName(fileName);
-            newDW.setThumbSize((int) mfile.getSize());
-            newDW.setThumbWidth(imgInfo[0]);
-            newDW.setThumbHeight(imgInfo[1]);
+                // 썸네일 정보 셋팅
+                newDW.setThumbFileName(fileName);
+                newDW.setThumbSize((int) mfile.getSize());
+                newDW.setThumbWidth(imgInfo[0]);
+                newDW.setThumbHeight(imgInfo[1]);
+            } else {
+                String message = msg("tps.desking.error.update.image-upload");
+                throw new InvalidDataException(invalidList, message);
+            }
         }
 
         try {
@@ -584,7 +594,8 @@ public class DeskingRestController extends AbstractCommonController {
     public ResponseEntity<?> postDeskingWork(HttpServletRequest request,
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
             @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
-            @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO, Principal principal)
+            @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq, @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO,
+            Principal principal)
             throws Exception {
 
         try {
@@ -596,8 +607,9 @@ public class DeskingRestController extends AbstractCommonController {
             }
 
             // 더미기사인지 체크
-            if (deskingWorkDTO.getContentType() != null && deskingWorkDTO.getContentType()
-                                                                         .equals("D")) {
+            if (deskingWorkDTO.getContentType() != null && deskingWorkDTO
+                    .getContentType()
+                    .equals("D")) {
                 // 컨텐츠아이디 생성
                 deskingWorkDTO.setContentId("D" + McpDate.dateStr(new Date(), "yyyyMMddHHmmss"));
             }
@@ -606,14 +618,19 @@ public class DeskingRestController extends AbstractCommonController {
             if (deskingWorkDTO.getThumbnailFile() != null) {
                 DeskingWork deskingWork = modelMapper.map(deskingWorkDTO, DeskingWork.class);
                 MultipartFile mfile = deskingWorkDTO.getThumbnailFile();
-                String fileName = deskingService.saveDeskingWorkImage(deskingWork, mfile);
-                int[] imgInfo = uploadFileHelper.getImgFileSize(mfile);
+                String fileName = deskingService.saveDeskingWorkImage(areaSeq, deskingWork, mfile);
+                if (McpString.isNotEmpty(fileName)) {
+                    int[] imgInfo = uploadFileHelper.getImgFileSize(mfile);
 
-                // 썸네일 정보 셋팅
-                deskingWorkDTO.setThumbFileName(fileName);
-                deskingWorkDTO.setThumbSize((int) mfile.getSize());
-                deskingWorkDTO.setThumbWidth(imgInfo[0]);
-                deskingWorkDTO.setThumbHeight(imgInfo[1]);
+                    // 썸네일 정보 셋팅
+                    deskingWorkDTO.setThumbFileName(fileName);
+                    deskingWorkDTO.setThumbSize((int) mfile.getSize());
+                    deskingWorkDTO.setThumbWidth(imgInfo[0]);
+                    deskingWorkDTO.setThumbHeight(imgInfo[1]);
+                } else {
+                    String message = msg("tps.desking.error.insert.image-upload");
+                    throw new InvalidDataException(invalidList, message);
+                }
             }
 
             // 스냅샷 수정

@@ -4,6 +4,7 @@
 package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,12 +18,15 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
+import jmnet.moka.core.tps.mvc.area.entity.Area;
+import jmnet.moka.core.tps.mvc.area.service.AreaService;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.component.service.ComponentHistService;
@@ -104,6 +108,12 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Value("${tps.desking.image.path}")
     private String deskingImagePath;
+
+    @Autowired
+    private AreaService areaService;
+
+    @Autowired
+    private FtpHelper ftpHelper;
 
     @Autowired
     public DeskingServiceImpl(EntityManager entityManager) {
@@ -927,35 +937,52 @@ public class DeskingServiceImpl implements DeskingService {
     }
 
     @Override
-    public String saveDeskingWorkImage(DeskingWork deskingWork, MultipartFile thumbnail)
+    public String saveDeskingWorkImage(Long areaSeq, DeskingWork deskingWork, MultipartFile thumbnail)
             throws Exception {
+
+        Area area = areaService
+                .findAreaBySeq(areaSeq)
+                .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
+
+        // 파일명 생성 : {contentId}_{datasetSeq}_{yyyyMMddHHmmss}.확장자
         String extension = McpFile
                 .getExtension(thumbnail.getOriginalFilename())
                 .toLowerCase();
 
-        // 볼륨 패스를 가져오기 위해 도메인을 찾는다
-        // 데이터셋을 쓰는 컴포넌트 찾기 -> 도메인 가져오기
-        Component component = componentService
-                .findComponentByDataTypeAndDataset_DatasetSeq(TpsConstants.DATATYPE_DESK, deskingWork.getDatasetSeq())
-                .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
-        //        String volumeId = component.getDomain().getVolumeId();
-        //        Volume volume = volumeService.findVolume(volumeId).orElseThrow(
-        //                () -> new NoDataException(messageByLocale.get("tps.volume.error.noContent")));
-
-        // 파일명 생성
-        String nowTime = McpDate.nowStr();
+        String nowTime = McpDate.dateStr(new Date(), "yyyyMMddHHmmss");
         String[] fileNames = {deskingWork.getContentId(), String.valueOf(deskingWork.getDatasetSeq()), nowTime};
         String fileName = String.join("_", fileNames) + "." + extension;
 
-        // 경로 생성
-        String[] paths = {"crop", nowTime.substring(0, 4), nowTime.substring(4, 6), nowTime.substring(6, 8), fileName};
-        String returnPath = String.join("/", paths);
-        String realPath = uploadFileHelper.getRealPath(deskingImagePath, returnPath);
+        //        File uploadFile = new File(fileName);
+        //        thumbnail.transferTo(uploadFile);
+        //        ;
+
+        // 경로 생성. 루트일경우 index, 그 외의 페이지는 2depth의 서비스명을 사용한다.
+        String yyyyMM = McpDate.yearStr() + McpDate.monthStr();
+        Optional<String> twoDepthName = Arrays
+                .stream(area
+                        .getPage()
+                        .getPageUrl()
+                        .split("/"))
+                .findFirst();
+        String serviceName = "index";
+        if (twoDepthName.isPresent()) {
+            serviceName = twoDepthName
+                    .get()
+                    .toString();
+        }
+
+        String remotePath = "/" + String.join("/", area
+                .getDomain()
+                .getDomainId(), serviceName, yyyyMM);
 
         // 파일 저장
-        if (uploadFileHelper.saveFile(realPath, thumbnail)) {
-            log.debug("Save desking work thumbnail");
-            return returnPath;
+        boolean upload = ftpHelper.upload(FtpHelper.WIMAGE, fileName, thumbnail.getInputStream(), remotePath);
+        if (upload) {
+            log.debug("SAVE DESKING WORK THUMBNAIL");
+            return remotePath + fileName;
+        } else {
+            log.debug("SAVE FAIL DESKING WORK THUMBNAIL");
         }
 
         return "";

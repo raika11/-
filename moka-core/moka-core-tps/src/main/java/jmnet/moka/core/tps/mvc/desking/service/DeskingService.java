@@ -315,12 +315,13 @@ public interface DeskingService {
     /**
      * 데스킹 워크 썸네일 사진 저장
      *
+     * @param areaSeq     편집영역순번
      * @param deskingWork 데스킹워크
      * @param thumbnail   멀티파트파일
      * @return 이미지 uri
      * @throws Exception 에러
      */
-    public String saveDeskingWorkImage(DeskingWork deskingWork, MultipartFile thumbnail)
+    public String saveDeskingWorkImage(Long areaSeq, DeskingWork deskingWork, MultipartFile thumbnail)
             throws Exception;
 
     /**

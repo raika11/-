@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaInputLabel, MokaTable } from '@components';
+import { MokaInput, MokaTable } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import {
     GET_CODE_MGT_GRP_LIST,
@@ -92,6 +93,7 @@ const CodeMgtListAgGrid = () => {
     );
 
     const handleAddClick = () => {
+        setSelectedData({});
         dispatch(clearGrp());
         dispatch(clearCdList());
         history.push('/codeMgt');
@@ -224,26 +226,26 @@ const CodeMgtListAgGrid = () => {
 
     return (
         <>
-            <div className="d-flex align-content-center justify-content-between mb-2">
-                <div className="d-flex">
-                    <MokaInput
-                        as="checkbox"
-                        id="secret-check"
-                        value={search.secretYn}
-                        onChange={(e) => {
-                            if (e.target.checked) {
-                                setSearch({ ...search, secretYn: 'all' });
-                            } else {
-                                setSearch({ ...search, secretYn: 'N' });
-                            }
-                        }}
-                    />
-                    <MokaInputLabel as="none" label="숨김 코드" labelClassName="ft-12 d-flex justify-content-start" />
-                </div>
+            <Form.Row className="d-flex align-items-center justify-content-between mb-2">
+                <MokaInput
+                    as="checkbox"
+                    id="secret-check"
+                    className="ft-12"
+                    style={{ lineHeight: '21px' }}
+                    value={search.secretYn}
+                    onChange={(e) => {
+                        if (e.target.checked) {
+                            setSearch({ ...search, secretYn: 'all' });
+                        } else {
+                            setSearch({ ...search, secretYn: 'N' });
+                        }
+                    }}
+                    inputProps={{ label: '숨김 코드', custom: true }}
+                />
                 <Button variant="positive" onClick={handleAddClick}>
                     그룹 등록
                 </Button>
-            </div>
+            </Form.Row>
             {/* table */}
             <MokaTable
                 agGridHeight={693}

@@ -37,7 +37,7 @@ const CodeMgtListModal = (props) => {
     const { show, onHide, type, onSave, onDelete, data } = props;
 
     // modal 항목 state
-    const [grpSeq, setGrpSeq] = useState(0);
+    const [grpSeq, setGrpSeq] = useState('');
     const [grpCd, setGrpCd] = useState('');
     const [cdNm, setCdNm] = useState('');
     const [grpCdError, setGrpCdError] = useState(false);

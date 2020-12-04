@@ -61,13 +61,15 @@ const DetailRelationForm = (props) => {
             } else {
                 result.dataset = {};
             }
+            result.editFormPart = {};
         } else if (value === 'DESK') {
             if (component.prevDeskDataset) {
                 result.dataset = component.prevDeskDataset;
             } else {
                 result.dataset = {};
             }
-        } else {
+            result.editFormPart = {};
+        } else if (value === 'FORM') {
             result.dataset = {};
         }
         setComponent({ ...component, ...result });
@@ -80,9 +82,7 @@ const DetailRelationForm = (props) => {
         if (component.template) {
             setTemplate(component.template);
         }
-        if (component.editFormPart) {
-            setEditFormPart(component.editFormPart);
-        }
+        setEditFormPart(component.editFormPart || {});
     }, [component]);
 
     useEffect(() => {
@@ -240,7 +240,12 @@ const DetailRelationForm = (props) => {
             />
 
             {/* 폼 선택 팝업 */}
-            <EditFormPartListModal show={formModalShow} onHide={() => setFormModalShow(false)} onClickSave={(editFormPart) => setComponent({ ...component, editFormPart })} />
+            <EditFormPartListModal
+                show={formModalShow}
+                onHide={() => setFormModalShow(false)}
+                onClickSave={(editFormPart) => setComponent({ ...component, editFormPart })}
+                selected={editFormPart.partSeq}
+            />
         </Form>
     );
 };

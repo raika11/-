@@ -20,12 +20,6 @@ import lombok.Setter;
 public class ArticleSnsShareSearchDTO extends SearchDTO {
 
     /**
-     * 기사ID
-     */
-    @Builder.Default
-    private Long totalId = 0l;
-
-    /**
      * 기간 검색 시작일
      */
     @Builder.Default

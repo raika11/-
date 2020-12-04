@@ -12,7 +12,9 @@ import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon, MokaOve
 import ComponentSelector from './ComponentSelector';
 import ContainerSelector from './ContainerSelector';
 import AreaComp from './AreaComp';
-import { GET_AREA_DEPTH2, GET_AREA_DEPTH3, SAVE_AREA, DELETE_AREA, saveArea, changeArea, changeInvalidList } from '@store/area';
+import ComponentLoadBox from './ComponentLoadBox';
+import ContainerLoadBox from './ContainerLoadBox';
+import { GET_AREA_DEPTH2, GET_AREA_DEPTH3, SAVE_AREA, DELETE_AREA, saveArea, changeInvalidList } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -572,45 +574,14 @@ const AreaFormDepth2 = (props) => {
                     </Form.Row>
 
                     {/* 컨테이너 리로드 문구 */}
-                    {origin.areaDiv === ITEM_CT && areaCompLoad.byContainer && (
-                        <Form.Row className="mb-2">
-                            <Col xs={2} className="p-0"></Col>
-                            <Col xs={8} className="p-0 pl-2">
-                                <p className="mb-0 text-danger" dangerouslySetInnerHTML={{ __html: areaCompLoad.byContainerMessage.replace('\n', '<br/>') }} />
-                            </Col>
-                            <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
-                                <MokaOverlayTooltipButton variant="outline-neutral" className="border" tooltipText="컨테이너 리로드" onClick={getContOptions}>
-                                    <MokaIcon iconName="far-redo-alt" />
-                                </MokaOverlayTooltipButton>
-                            </Col>
-                        </Form.Row>
-                    )}
-                    {/* 컴포넌트 리로드 문구 */}
-                    {origin.areaDiv === ITEM_CP && areaCompLoad.byPage && (
-                        <Form.Row className="mb-2">
-                            <Col xs={2} className="p-0"></Col>
-                            <Col xs={8} className="p-0 pl-2">
-                                <p className="mb-0 text-danger" dangerouslySetInnerHTML={{ __html: areaCompLoad.byPageMessage.replace('\n', '<br/>') }} />
-                            </Col>
-                            <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
-                                <MokaOverlayTooltipButton variant="outline-neutral" className="border" tooltipText="컴포넌트 리로드" onClick={getCompOptions}>
-                                    <MokaIcon iconName="far-redo-alt" />
-                                </MokaOverlayTooltipButton>
-                            </Col>
-                        </Form.Row>
-                    )}
+                    {origin.areaDiv === ITEM_CT && areaCompLoad.byContainer && <ContainerLoadBox message={areaCompLoad.byContainerMessage} onClick={getContOptions} />}
+
+                    {/* 컴포넌트 리로드 (페이지에 컴포넌트가 없어졌을 때) 문구 */}
+                    {origin.areaDiv === ITEM_CP && areaCompLoad.byPage && <ComponentLoadBox message={areaCompLoad.byPageMessage} onClick={getCompOptions} />}
+
+                    {/* 컴포넌트 리로드 (컨테이너에 컴포넌트가 없어졌을 때) 문구 */}
                     {origin.areaDiv === ITEM_CT && areaCompLoad.byContainerComp && (
-                        <Form.Row className="mb-2">
-                            <Col xs={2} className="p-0"></Col>
-                            <Col xs={8} className="p-0 pl-2">
-                                <p className="mb-0 text-danger" dangerouslySetInnerHTML={{ __html: areaCompLoad.byContainerCompMessage.replace('\n', '<br/>') }} />
-                            </Col>
-                            <Col xs={2} className="p-0 d-flex align-items-center justify-content-start">
-                                <MokaOverlayTooltipButton variant="outline-neutral" className="border" tooltipText="컴포넌트 리로드" onClick={() => handleCompLoad(container)}>
-                                    <MokaIcon iconName="far-redo-alt" />
-                                </MokaOverlayTooltipButton>
-                            </Col>
-                        </Form.Row>
+                        <ComponentLoadBox message={areaCompLoad.byContainerCompMessage} onClick={() => handleCompLoad(container)} />
                     )}
 
                     {/* 컨테이너일 경우 하위 컴포넌트 나열 */}

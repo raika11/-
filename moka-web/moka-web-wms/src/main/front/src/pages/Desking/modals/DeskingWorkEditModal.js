@@ -150,130 +150,124 @@ const DeskingWorkEditModal = (props) => {
                     { variant: 'negative', text: '취소', onClick: handleHide },
                 ]}
                 footerClassName="d-flex justify-content-center"
+                bodyClassName="custom-scroll"
                 loading={loading}
                 draggable
             >
-                <div className="d-flex justify-content-between">
-                    <Form className="flex-fill">
-                        {deskingPart.map((partKey) => {
-                            const mappingData = mapping[partKey];
-                            const isUrl = urlRegex.test(partKey);
+                <Form>
+                    {deskingPart.map((partKey) => {
+                        const mappingData = mapping[partKey];
+                        const isUrl = urlRegex.test(partKey);
 
-                            // 제목, 대표이미지, 아이콘, 말머리, 제목/부제위치, 영상, 라이브제목, 약물은 예외처리
-                            if (partKey === 'title') {
-                                const { as, field, label, errorCheck, ...mappingProps } = mappingData;
+                        // 제목, 대표이미지, 아이콘, 말머리, 제목/부제위치, 영상, 라이브제목, 약물은 예외처리
+                        if (partKey === 'title') {
+                            const { as, field, label, errorCheck, ...mappingProps } = mappingData;
 
-                                return (
-                                    <Form.Row key={partKey} className="mb-2">
-                                        <Col xs={11} className="p-0">
-                                            <MokaInputLabel
-                                                as={as}
-                                                label={
-                                                    <React.Fragment>
-                                                        {label}
-                                                        <MokaInput as="select" size="sm" name="fontSize" value={deskingData.fontSize} onChange={handleChangeValue}>
-                                                            {fontSizeList.map((font, idx) => (
-                                                                <option key={idx} value={font.size}>
-                                                                    {font.name}
-                                                                </option>
-                                                            ))}
-                                                        </MokaInput>
-                                                    </React.Fragment>
-                                                }
-                                                labelWidth={80}
-                                                labelClassName="ft-12 pr-3"
-                                                name={field}
-                                                className="mb-0 w-100"
-                                                value={deskingData[field]}
-                                                onChange={handleChangeValue}
-                                                isInvalid={errorCheck && error[field]}
-                                                {...mappingProps}
-                                            />
-                                        </Col>
-                                        <Col xs={1} className="p-0 pl-1 ft-12 d-flex align-items-end">
-                                            {deskingData[field] && util.euckrBytes(deskingData[field])}byte
-                                        </Col>
-                                    </Form.Row>
-                                );
-                            } else if (partKey === 'thumbFileName') {
-                                return (
-                                    <Form.Row key={partKey} className="mb-2 flex-column">
+                            return (
+                                <Form.Row key={partKey} className="mb-2">
+                                    <Col xs={11} className="p-0">
                                         <MokaInputLabel
-                                            ref={imgFileRef}
-                                            label="대표\n이미지"
+                                            as={as}
+                                            label={
+                                                <React.Fragment>
+                                                    {label}
+                                                    <MokaInput as="select" size="sm" name="fontSize" value={deskingData.fontSize} onChange={handleChangeValue}>
+                                                        {fontSizeList.map((font, idx) => (
+                                                            <option key={idx} value={font.size}>
+                                                                {font.name}
+                                                            </option>
+                                                        ))}
+                                                    </MokaInput>
+                                                </React.Fragment>
+                                            }
                                             labelWidth={80}
                                             labelClassName="ft-12 pr-3"
-                                            name="thumbnailFile"
-                                            as="imageFile"
-                                            className="mb-0"
-                                            inputProps={{ width: 216, height: 150, img: deskingData.thumbFileName, setFileValue }}
-                                        />
-                                        <div className="mt-2 d-flex justify-content-between" style={{ width: 216, marginLeft: 80 }}>
-                                            <Button variant="positive" size="sm" onClick={() => setShowModal(true)}>
-                                                신규등록
-                                            </Button>
-                                            <Button variant="outline-neutral" size="sm">
-                                                편집
-                                            </Button>
-                                        </div>
-                                    </Form.Row>
-                                );
-                            } else if (partKey === 'specialChar') {
-                                return (
-                                    <Form.Row key={partKey} className="mb-2">
-                                        <MokaInputLabel
-                                            label="약물"
-                                            labelWidth={80}
-                                            labelClassName="ft-12 pr-3"
+                                            name={field}
                                             className="mb-0 w-100"
-                                            value={specialChar}
-                                            inputProps={{ plaintext: true, readOnly: true }}
+                                            value={deskingData[field]}
+                                            onChange={handleChangeValue}
+                                            isInvalid={errorCheck && error[field]}
+                                            {...mappingProps}
                                         />
-                                    </Form.Row>
-                                );
-                            } else if (mappingData) {
-                                const { as, field, label, errorCheck, ...mappingProps } = mappingData;
+                                    </Col>
+                                    <Col xs={1} className="p-0 pl-1 ft-12 d-flex align-items-end">
+                                        {deskingData[field] && util.euckrBytes(deskingData[field])}byte
+                                    </Col>
+                                </Form.Row>
+                            );
+                        } else if (partKey === 'thumbFileName') {
+                            return (
+                                <Form.Row key={partKey} className="mb-2 flex-column">
+                                    <MokaInputLabel
+                                        ref={imgFileRef}
+                                        label="대표\n이미지"
+                                        labelWidth={80}
+                                        labelClassName="ft-12 pr-3"
+                                        name="thumbnailFile"
+                                        as="imageFile"
+                                        className="mb-0"
+                                        inputProps={{ width: 216, height: 150, img: deskingData.thumbFileName, setFileValue }}
+                                    />
+                                    <div className="mt-2 d-flex justify-content-between" style={{ width: 216, marginLeft: 80 }}>
+                                        <Button variant="positive" size="sm" onClick={() => setShowModal(true)}>
+                                            신규등록
+                                        </Button>
+                                        <Button variant="outline-neutral" size="sm">
+                                            편집
+                                        </Button>
+                                    </div>
+                                </Form.Row>
+                            );
+                        } else if (partKey === 'specialChar') {
+                            return (
+                                <Form.Row key={partKey} className="mb-2">
+                                    <MokaInputLabel
+                                        label="약물"
+                                        labelWidth={80}
+                                        labelClassName="ft-12 pr-3"
+                                        className="mb-0 w-100"
+                                        value={specialChar}
+                                        inputProps={{ plaintext: true, readOnly: true }}
+                                    />
+                                </Form.Row>
+                            );
+                        } else if (mappingData) {
+                            const { as, field, label, errorCheck, ...mappingProps } = mappingData;
 
-                                return (
-                                    <Form.Row key={partKey} className="mb-2">
-                                        <Col xs={isUrl ? 10 : 12} className={clsx('p-0', { 'pr-2': isUrl })}>
-                                            <MokaInputLabel
-                                                as={as}
-                                                label={label}
-                                                labelWidth={80}
-                                                labelClassName="ft-12 pr-3"
-                                                name={field}
-                                                className="mb-0 w-100"
-                                                value={deskingData[field]}
-                                                onChange={handleChangeValue}
-                                                isInvalid={errorCheck && error[field]}
-                                                {...mappingProps}
-                                            />
+                            return (
+                                <Form.Row key={partKey} className="mb-2">
+                                    <Col xs={isUrl ? 10 : 12} className={clsx('p-0', { 'pr-2': isUrl })}>
+                                        <MokaInputLabel
+                                            as={as}
+                                            label={label}
+                                            labelWidth={80}
+                                            labelClassName="ft-12 pr-3"
+                                            name={field}
+                                            className="mb-0 w-100"
+                                            value={deskingData[field]}
+                                            onChange={handleChangeValue}
+                                            isInvalid={errorCheck && error[field]}
+                                            {...mappingProps}
+                                        />
+                                    </Col>
+                                    {isUrl && (
+                                        <Col xs={2} className="p-0">
+                                            <MokaInput as="select" name={`${partKey}Target`} value={deskingData[`${partKey}Target`]} className="ft-12" onChange={handleChangeValue}>
+                                                {linkTargetList.map((target) => (
+                                                    <option key={target.id} value={target.id} className="ft-12">
+                                                        {target.name}
+                                                    </option>
+                                                ))}
+                                            </MokaInput>
                                         </Col>
-                                        {isUrl && (
-                                            <Col xs={2} className="p-0">
-                                                <MokaInput
-                                                    as="select"
-                                                    name={`${partKey}Target`}
-                                                    value={deskingData[`${partKey}Target`]}
-                                                    className="ft-12"
-                                                    onChange={handleChangeValue}
-                                                >
-                                                    {linkTargetList.map((target) => (
-                                                        <option key={target.id} value={target.id} className="ft-12">
-                                                            {target.name}
-                                                        </option>
-                                                    ))}
-                                                </MokaInput>
-                                            </Col>
-                                        )}
-                                    </Form.Row>
-                                );
-                            } else {
-                                return null;
-                            }
-                        })}
-                        {/* 
+                                    )}
+                                </Form.Row>
+                            );
+                        } else {
+                            return null;
+                        }
+                    })}
+                    {/* 
                             <MokaInputLabel label="말머리" labelWidth={80} as="none" />
                             <Col xs={5} className="p-0 d-flex align-items-center justify-content-between">
                                 <MokaInput className="mb-3 mr-2 ft-12" as="select" name="titlePrefix" value={deskingData.titlePrefix} onChange={handleChangeValue}>
@@ -315,8 +309,7 @@ const DeskingWorkEditModal = (props) => {
                                 <MokaSearchInput placeholder="url 입력해주세요" name="moreUrl" value={deskingData.moreUrl} onChange={handleChangeValue} />
                             </div>
                         </Form.Row> */}
-                    </Form>
-                </div>
+                </Form>
             </MokaModal>
             <EditThumbModal show={showModal} onHide={() => setShowModal(false)} />
         </>

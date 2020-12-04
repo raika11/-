@@ -65,9 +65,7 @@ public class JpodEpisodeRepositorySupportImpl extends QuerydslRepositorySupport 
         }
 
 
-        QueryResults<JpodEpisode> list = query
-                .fetchJoin()
-                .fetchResults();
+        QueryResults<JpodEpisode> list = query.fetchResults();
 
         return new PageImpl<JpodEpisode>(list.getResults(), search.getPageable(), list.getTotal());
     }

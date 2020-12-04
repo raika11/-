@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.sns.mapper.ArticleSnsShareMapper">
+
+  <select id="findAll" parameterType="ArticleSnsShareSearchDTO" resultType="ArticleSnsShareItemVO"
+    statementType="CALLABLE">
+    {call UPA_ARTICLE_SNS_META_LIST_SEL(
+    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+    #{endDt, mode=IN, jdbcType=INTEGER, javaType=java.util.Date},
+    <choose>
+      <when test="searchType == 'artTitle' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+    #{totalId, mode=IN, jdbcType=VARCHAR, javaType=Long},
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
+
+</mapper>

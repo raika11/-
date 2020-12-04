@@ -58,9 +58,7 @@ public class JpodChannelRepositorySupportImpl extends QuerydslRepositorySupport 
         }
 
 
-        QueryResults<JpodChannel> list = query
-                .fetchJoin()
-                .fetchResults();
+        QueryResults<JpodChannel> list = query.fetchResults();
 
         return new PageImpl<JpodChannel>(list.getResults(), search.getPageable(), list.getTotal());
     }

@@ -342,7 +342,7 @@ const GroupEdit = () => {
                 groupCd
                     ? [
                           { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
-                          { text: '삭제', variant: 'gray150', onClick: handleClickDelete, className: 'float-left mr-0 pr-20 pl-20' },
+                          { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'float-left mr-0 pr-20 pl-20' },
                       ]
                     : [{ text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' }]
             }

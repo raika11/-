@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
-import jmnet.moka.common.data.support.EnumValid;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -54,7 +53,7 @@ public class MemberDTO {
      * 상태(유효/정지)
      */
     @Builder.Default
-    @EnumValid(enumClass = MemberStatusCode.class, message = "{tps.member.error.pattern.status}")
+    //@EnumValid(enumClass = MemberStatusCode.class, message = "{tps.member.error.pattern.status}")
     private MemberStatusCode status = MemberStatusCode.D;
 
 

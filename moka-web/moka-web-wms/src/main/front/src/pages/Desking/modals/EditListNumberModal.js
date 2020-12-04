@@ -5,9 +5,9 @@ import { putComponentWork } from '@store/desking';
 import toast from '@utils/toastUtil';
 
 /**
- * 리스트 건수 모달
+ * 리스트 건수 변경 모달
  */
-const ListNumberEditModal = (props) => {
+const EditListNumberModal = (props) => {
     const { show, onHide, data } = props;
     const dispatch = useDispatch();
     const [number, setNumber] = useState(data.perPageCount);
@@ -20,11 +20,10 @@ const ListNumberEditModal = (props) => {
                     perPageCount: number,
                 },
                 callback: ({ header }) => {
-                    if (header.success) {
-                        toast.success(header.message);
-                        onHide();
-                    } else {
+                    if (!header.success) {
                         toast.fail(header.message);
+                    } else {
+                        onHide();
                     }
                 },
             }),
@@ -50,4 +49,4 @@ const ListNumberEditModal = (props) => {
     );
 };
 
-export default ListNumberEditModal;
+export default EditListNumberModal;

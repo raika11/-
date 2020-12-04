@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './ComponentWorkButtonGroup';
 import AgGrid from './DeskingWorkAgGrid';
-import { DeskingWorkEditModal } from '@pages/Desking/modals';
+import { EditDeskingWorkModal } from '@pages/Desking/modals';
 import toast from '@utils/toastUtil';
 
 const propTypes = {
@@ -130,7 +130,7 @@ const ComponentWork = (props) => {
                 />
             </div>
 
-            <DeskingWorkEditModal
+            <EditDeskingWorkModal
                 show={editModalShow}
                 onHide={() => setEditModalShow(false)}
                 deskingWorkData={deskingWorkData}

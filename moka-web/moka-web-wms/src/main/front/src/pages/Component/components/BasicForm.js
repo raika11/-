@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
-import CopyModal from '../modals/ComponentCopyModal';
+import CopyModal from '../modals/CopyModal';
 
 const BasicForm = (props) => {
     const { component, setComponent, componentNameRegex, onClickSave, onClickDelete, error } = props;

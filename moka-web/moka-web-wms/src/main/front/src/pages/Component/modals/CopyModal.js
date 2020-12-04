@@ -9,7 +9,7 @@ import toast from '@utils/toastUtil';
 /**
  * 컴포넌트 복사 Modal
  */
-const ComponentCopyModal = (props) => {
+const CopyModal = (props) => {
     const { show, onHide, componentSeq } = props;
     const dispatch = useDispatch();
     const history = useHistory();
@@ -79,4 +79,4 @@ const ComponentCopyModal = (props) => {
     );
 };
 
-export default ComponentCopyModal;
+export default CopyModal;

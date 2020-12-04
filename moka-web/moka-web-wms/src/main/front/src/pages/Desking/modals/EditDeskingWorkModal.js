@@ -26,7 +26,7 @@ const urlRegex = /[Uu]rl$/;
 /**
  * 데스킹 기사정보 편집 모달 컴포넌트
  */
-const DeskingWorkEditModal = (props) => {
+const EditDeskingWorkModal = (props) => {
     const { show, onHide, deskingWorkData, component, onSave, deskingPart: deskingPartStr } = props;
     const dispatch = useDispatch();
     const { bulkCharRows, loading } = useSelector((store) => ({
@@ -316,4 +316,4 @@ const DeskingWorkEditModal = (props) => {
     );
 };
 
-export default DeskingWorkEditModal;
+export default EditDeskingWorkModal;

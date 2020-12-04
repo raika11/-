@@ -11,12 +11,9 @@ import toast from '@utils/toastUtil';
 import { changeSearchOption, putComponentWork, postSaveComponentWork, postPublishComponentWork, postSavePublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 import ReserveComponentWork from './ReserveComponentWork';
-import HtmlEditModal from '../modals/HtmlEditModal';
 import TemplateListModal from '@pages/Template/modals/TemplateListModal';
 import TemplateHtmlModal from '@pages/Template/modals/TemplateHtmlModal';
-import AddSpaceModal from '../modals/AddSpaceModal';
-import RegisterModal from '../modals/RegisterModal';
-import ListNumberEditModal from '../modals/ListNumberEditModal';
+import { AddSpaceModal, RegisterModal, EditListNumberModal, EditHtmlModal } from '../modals';
 
 /**
  * 커스텀 토글
@@ -44,12 +41,12 @@ const ComponentWorkButtonGroup = (props) => {
     const [iconButton, setIconButton] = useState([]);
 
     // modal state
-    const [htmlEditModal, setHtmlEditModal] = useState(false);
-    const [templateModal, setTemplateModal] = useState(false);
-    const [templateHtmlModal, setTemplateHtmlModal] = useState(false);
-    const [addSpaceModal, setAddSpaceModal] = useState(false);
-    const [registerModal, setRegisterModal] = useState(false);
-    const [listNumberModal, setListNumberModal] = useState(false);
+    const [htmlModalShow, setHtmlModalShow] = useState(false);
+    const [templateModalShow, setTemplateModalShow] = useState(false);
+    const [temsModalShow, setTemsModalShow] = useState(false);
+    const [spaceModalShow, setSpaceModalShow] = useState(false);
+    const [registerModalShow, setRegisterModalShow] = useState(false);
+    const [listNumberModalShow, setListNumberModalShow] = useState(false);
 
     /**
      * 전송
@@ -104,7 +101,7 @@ const ComponentWorkButtonGroup = (props) => {
     /**
      * 공백추가
      */
-    const handleOpenAddSpace = () => setAddSpaceModal(true);
+    const handleOpenAddSpace = () => setSpaceModalShow(true);
 
     /**
      * 기사이동
@@ -112,13 +109,13 @@ const ComponentWorkButtonGroup = (props) => {
     const handleOpenRegister = () => {
         if (!componentAgGridInstances[agGridIndex]) return;
         const api = componentAgGridInstances[agGridIndex].api;
-        api.getSelectedRows().length < 1 ? toast.warning('기사를 선택해주세요') : setRegisterModal(true);
+        api.getSelectedRows().length < 1 ? toast.warning('기사를 선택해주세요') : setRegisterModalShow(true);
     };
 
     /**
      * 리스트 건수
      */
-    const handleOpenListNumber = () => setListNumberModal(true);
+    const handleOpenListNumber = () => setListNumberModalShow(true);
 
     /**
      * 전체삭제
@@ -168,7 +165,7 @@ const ComponentWorkButtonGroup = (props) => {
     const handleOpenTemplateTems = (templateData) => {
         if (templateData) {
             setSelectedTemplate(templateData?.templateSeq);
-            setTemplateHtmlModal(true);
+            setTemsModalShow(true);
         }
     };
 
@@ -198,8 +195,8 @@ const ComponentWorkButtonGroup = (props) => {
 
     useEffect(() => {
         let btns = [
-            { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => setHtmlEditModal(true) },
-            // { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModal(true) },
+            { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => setHtmlModalShow(true) },
+            // { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModalShow(true) },
             { title: '임시저장', iconName: 'fal-save', onClick: handleClickSave },
             { title: '전송', iconName: 'fal-share-square', onClick: handleClickPublish },
         ];
@@ -256,12 +253,12 @@ const ComponentWorkButtonGroup = (props) => {
             </Row>
 
             {/* HTML 수동 편집 */}
-            <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} data={component} />
+            <EditHtmlModal show={htmlModalShow} onHide={() => setHtmlModalShow(false)} data={component} />
 
             {/* 템플릿 */}
             <TemplateListModal
-                show={templateModal}
-                onHide={() => setTemplateModal(false)}
+                show={templateModalShow}
+                onHide={() => setTemplateModalShow(false)}
                 selected={component.templateSeq}
                 templateGroup={component.templateGroup}
                 templateWidth={component.templateWidth}
@@ -290,12 +287,12 @@ const ComponentWorkButtonGroup = (props) => {
             />
 
             {/* 템플릿 소스보기 */}
-            <TemplateHtmlModal show={templateHtmlModal} onHide={() => setTemplateHtmlModal(false)} templateSeq={selectedTemplate} editable={false} />
+            <TemplateHtmlModal show={temsModalShow} onHide={() => setTemsModalShow(false)} templateSeq={selectedTemplate} editable={false} />
 
             {/* 공백 추가 */}
             <AddSpaceModal
-                show={addSpaceModal}
-                onHide={() => setAddSpaceModal(false)}
+                show={spaceModalShow}
+                onHide={() => setSpaceModalShow(false)}
                 areaSeq={areaSeq}
                 component={component}
                 agGridIndex={agGridIndex}
@@ -304,15 +301,15 @@ const ComponentWorkButtonGroup = (props) => {
 
             {/* 기사 이동 */}
             <RegisterModal
-                show={registerModal}
-                onHide={() => setRegisterModal(false)}
+                show={registerModalShow}
+                onHide={() => setRegisterModalShow(false)}
                 agGridIndex={agGridIndex}
                 component={component}
                 componentAgGridInstances={componentAgGridInstances}
             />
 
             {/* 리스트 건수 */}
-            <ListNumberEditModal show={listNumberModal} onHide={() => setListNumberModal(false)} data={component} />
+            <EditListNumberModal show={listNumberModalShow} onHide={() => setListNumberModalShow(false)} data={component} />
         </div>
     );
 };

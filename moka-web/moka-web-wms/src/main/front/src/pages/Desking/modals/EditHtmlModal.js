@@ -8,9 +8,9 @@ import { previewComponentModal, PREVIEW_COMPONENT_MODAL } from '@store/merge';
 import toast, { messageBox } from '@utils/toastUtil';
 
 /**
- * Html 수동 편집 모달 컴포넌트
+ * Html 수동 편집 모달
  */
-const HtmlEditModal = (props) => {
+const EditHtmlModal = (props) => {
     const { show, onHide, data } = props;
     const dispatch = useDispatch();
     const { area, loading } = useSelector(
@@ -150,4 +150,4 @@ const HtmlEditModal = (props) => {
     );
 };
 
-export default HtmlEditModal;
+export default EditHtmlModal;

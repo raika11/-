@@ -56,7 +56,7 @@ const SnsMataEdit = () => {
             footerButtons={[
                 { text: '전송', variant: 'positive', onClick: tempFooterButtonClick, className: 'mr-05' },
                 { text: '임시저장', variant: 'positive', onClick: tempFooterButtonClick, className: 'mr-05' },
-                { text: '미리보기', variant: 'negative', onClick: tempFooterButtonClick, className: 'mr-05' },
+                { text: '미리보기', variant: 'outline-neutral', onClick: tempFooterButtonClick, className: 'mr-05' },
             ]}
             footer
         >
@@ -68,19 +68,19 @@ const SnsMataEdit = () => {
                     <div className="d-flex">
                         <MokaInputLabel label="Facebook" labelWidth={70} className="m-0 h5" as="none" />
                         <div className="d-flex justify-content-center">
-                            <Button variant="positive" className="mr-05">
+                            <Button variant="outline-neutral" className="mr-05">
                                 FB 전송
                             </Button>
-                            <Button variant="positive" className="mr-05">
+                            <Button variant="outline-neutral" className="mr-05">
                                 FB 캐시삭제
                             </Button>
-                            <Button variant="negative" className="mr-05" onClick={(e) => handleClickFBTokenManage(e)}>
+                            <Button variant="outline-neutral" className="mr-05" onClick={(e) => handleClickFBTokenManage(e)}>
                                 토큰 관리
                             </Button>
-                            <Button variant="negative" className="mr-05">
+                            <Button variant="outline-neutral" className="mr-05">
                                 공유
                             </Button>
-                            <Button variant="searching" className="mr-05">
+                            <Button variant="outline-neutral" className="mr-05">
                                 TW로 복사
                             </Button>
                         </div>
@@ -127,10 +127,10 @@ const SnsMataEdit = () => {
                     </Col>
                     <Col xs={2} className="pb-5 align-self-end">
                         <Col xs={2} className="pl-0 pb-1">
-                            <Button variant="positive">편집</Button>
+                            <Button variant="outline-neutral">편집</Button>
                         </Col>
                         <Col xs={2} className="pl-0">
-                            <Button variant="searching">신규 등록</Button>
+                            <Button variant="outline-neutral">신규 등록</Button>
                         </Col>
                     </Col>
                 </Form.Row>
@@ -163,17 +163,17 @@ const SnsMataEdit = () => {
                         <MokaInputLabel label="Twitter" labelWidth={70} className="m-0 h5" as="none" />
                         <Col className="d-flex justify-content-end">
                             <div className="justify-content-end pr-2">
-                                <Button variant="positive" className="mr-05">
+                                <Button variant="outline-neutral" className="mr-05">
                                     TW 전송
                                 </Button>
                             </div>
                             <div className="justify-content-end pr-2">
-                                <Button variant="positive" className="mr-05">
+                                <Button variant="outline-neutral" className="mr-05">
                                     TW 캐시삭제
                                 </Button>
                             </div>
                             <div className="justify-content-end pr-2">
-                                <Button variant="searching" className="mr-05">
+                                <Button variant="outline-neutral" className="mr-05">
                                     FB로 복사
                                 </Button>
                             </div>
@@ -221,10 +221,10 @@ const SnsMataEdit = () => {
                     </Col>
                     <Col xs={2} className="pb-5 align-self-end">
                         <Col xs={2} className="pl-0 pb-1">
-                            <Button variant="positive">편집</Button>
+                            <Button variant="outline-neutral">편집</Button>
                         </Col>
                         <Col xs={2} className="pl-0">
-                            <Button variant="searching">신규 등록</Button>
+                            <Button variant="outline-neutral">신규 등록</Button>
                         </Col>
                     </Col>
                 </Form.Row>

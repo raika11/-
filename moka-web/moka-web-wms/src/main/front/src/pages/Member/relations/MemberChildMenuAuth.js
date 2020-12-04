@@ -55,17 +55,20 @@ const MemberChildMenuAuth = () => {
     };
 
     return (
-        <MokaCard title="메뉴 권한">
-            <Row>
+        <MokaCard
+            title="메뉴 권한"
+            className="w-100"
+            footerClassName="justify-content-center"
+            footerButtons={
+                memberId && [
+                    { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
+                    { text: '취소', variant: 'gray150', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
+                ]
+            }
+            footer
+        >
+            <Row style={{ padding: '0 20px 0 20px' }}>
                 <MenuAuthTree menuAuthInfo={menuAuthInfo} onChange={handleChange} />
-            </Row>
-            <Row className="d-flex pt-20 justify-content-center">
-                <Button variant="positive" onClick={handleClickSave}>
-                    저장
-                </Button>
-                <Button variant="gray150" onClick={handleClickCancel}>
-                    취소
-                </Button>
             </Row>
         </MokaCard>
     );

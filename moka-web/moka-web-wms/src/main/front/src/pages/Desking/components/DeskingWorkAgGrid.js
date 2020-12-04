@@ -477,7 +477,8 @@ const DeskingWorkAgGrid = (props) => {
     }, []);
 
     return (
-        <div className="ag-theme-moka-desking-grid px-1">
+        <div className="ag-theme-moka-desking-grid position-relative px-1">
+            {component.viewYn === 'N' && <div className="opacity-box"></div>}
             <AgGridReact
                 immutableData
                 onGridReady={handleGridReady}

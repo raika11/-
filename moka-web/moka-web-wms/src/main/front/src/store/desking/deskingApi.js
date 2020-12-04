@@ -45,9 +45,10 @@ export const putSnapshotComponentWork = ({ componentWorkSeq, snapshotYn, snapsho
 };
 
 // 컴포넌트 워크의 편집기사 1개 수정 => 폼데이터로 전송(multipart)
-export const putDeskingWork = ({ componentWorkSeq, deskingWork }) => {
+export const putDeskingWork = ({ areaSeq, componentWorkSeq, deskingWork }) => {
+    const queryString = { areaSeq };
     return instance
-        .put(`/api/desking/components/${componentWorkSeq}/contents`, objectToFormData(deskingWork), {
+        .put(`/api/desking/components/${componentWorkSeq}/contents?${qs.stringify(queryString)}`, objectToFormData(deskingWork), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -70,10 +71,11 @@ export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
         });
 };
 
-// 공백 기사 추가=> payload
-export const postDeskingWork = ({ componentWorkSeq, datasetSeq, deskingWork }) => {
+// 더미 기사 추가=> payload
+export const postDeskingWork = ({ areaSeq, componentWorkSeq, datasetSeq, deskingWork }) => {
+    const queryString = { areaSeq };
     return instance
-        .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}`, objectToFormData(deskingWork), {
+        .post(`/api/desking/components/${componentWorkSeq}/contents/${datasetSeq}?${qs.stringify(queryString)}`, objectToFormData(deskingWork), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

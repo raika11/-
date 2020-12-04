@@ -55,7 +55,8 @@ export const putSnapshotComponentWork = createAction(PUT_SNAPSHOT_COMPONENT_WORK
  * 컴포넌트 워크의 데스킹 워크(편집기사) 리스트 저장
  */
 export const [POST_DESKING_WORK_LIST, POST_DESKING_WORK_LIST_SUCCESS, POST_DESKING_WORK_LIST_FAILURE] = createRequestActionTypes('desking/POST_DESKING_WORK_LIST');
-export const postDeskingWorkList = createAction(POST_DESKING_WORK_LIST, ({ componentWorkSeq, datasetSeq, list, callback }) => ({
+export const postDeskingWorkList = createAction(POST_DESKING_WORK_LIST, ({ areaSeq, componentWorkSeq, datasetSeq, list, callback }) => ({
+    areaSeq,
     componentWorkSeq,
     datasetSeq,
     list,
@@ -158,7 +159,7 @@ export const putDeskingWorkListSort = createAction(PUT_DESKING_WORK_LIST_SORT, (
  * 데스킹 워크(편집기사) 수정
  */
 export const PUT_DESKING_WORK = 'desking/PUT_DESKING_WORK';
-export const putDeskingWork = createAction(PUT_DESKING_WORK, ({ componentWorkSeq, deskingWork, callback }) => ({ componentWorkSeq, deskingWork, callback }));
+export const putDeskingWork = createAction(PUT_DESKING_WORK, ({ areaSeq, componentWorkSeq, deskingWork, callback }) => ({ areaSeq, componentWorkSeq, deskingWork, callback }));
 
 /**
  *  데스킹 워크(편집기사) 삭제

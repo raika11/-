@@ -2,7 +2,7 @@ import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import toastUtil from '@utils/toastUtil';
 import { MokaCard } from '@components';
-import { Button, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import MenuAuthTree from '@pages/Menu/component/MenuAuthTree';
 import { changeMemberMenuAuth, getMemberMenuAuth, updateMemberMenuAuth } from '@store/member';
 
@@ -23,15 +23,16 @@ const MemberChildMenuAuth = () => {
         const edited = menuAuthInfo.edited;
         const used = [...menuAuthInfo.used, ...menuAuthInfo.halfCheckedKeys];
 
-        let changeMenuAuthList = [];
+        /*let changeMenuAuthList = [];
         for (const menuId of used) {
             const usedYn = 'Y';
             const editYn = edited.includes(menuId) ? 'Y' : 'N';
             const viewYn = 'Y';
 
             changeMenuAuthList = [...changeMenuAuthList, { menuId, usedYn, editYn, viewYn }];
-        }
+        }*/
 
+        const changeMenuAuthList = nodeList(menuAuthInfo.list);
         dispatch(
             updateMemberMenuAuth({
                 memberId,
@@ -44,6 +45,23 @@ const MemberChildMenuAuth = () => {
                 },
             }),
         );
+
+        function nodeList(menuAuthInfos) {
+            let infos = [];
+            for (const info of menuAuthInfos) {
+                const menuId = info.key;
+                const usedYn = used.includes(menuId) ? 'Y' : 'N';
+                const editYn = usedYn === 'Y' && edited.includes(menuId) ? 'Y' : 'N';
+
+                infos.push({ menuId, usedYn, editYn });
+                const children = info.children;
+                if (children) {
+                    infos = [...infos, ...nodeList(children)];
+                }
+            }
+
+            return infos;
+        }
     };
 
     const handleClickCancel = () => {

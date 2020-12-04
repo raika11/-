@@ -1,0 +1,92 @@
+package jmnet.moka.core.tps.mvc.sns.dto;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.util.List;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * 기사 SNS메타
+ */
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class ArticleSnsShareDTO implements Serializable {
+
+    public static final Type TYPE = new TypeReference<List<ArticleSnsShareDTO>>() {
+    }.getType();
+
+    private ArticleSnsShareId id;
+
+    /**
+     * 기사 기본 정보
+     */
+    private ArticleBasicDTO articleBasic;
+
+
+
+    /**
+     * 사용여부
+     */
+    private String usedYn;
+
+    /**
+     * SNS 전송일시(업데이트시 수정됨)
+     */
+    private Timestamp snsInsDt;
+
+    /**
+     * SNS 등록일시
+     */
+    private Timestamp snsRegDt;
+
+    /**
+     * SNS 기사ID
+     */
+    private String snsArtId;
+
+    /**
+     * SNS 전송상태
+     */
+    private String snsArtSts;
+
+    /**
+     * 예약일시
+     */
+    private Timestamp reserveDt;
+
+    /**
+     * 포스트 메시지
+     */
+    private String snsPostMsg;
+
+    /**
+     * 이미지
+     */
+    private String imgUrl;
+
+    /**
+     * 기사제목
+     */
+    private String artTitle;
+
+    /**
+     * 메타데이터 추가 키워드
+     */
+    private String artKeyword;
+
+    /**
+     * 설명
+     */
+    private String artSummary;
+
+}

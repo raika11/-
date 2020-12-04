@@ -88,7 +88,7 @@ const Group = () => {
                                 tabNavPosition="right"
                                 tabNavs={[
                                     { title: '그룹정보', text: 'Info' },
-                                    { title: '페이지 검색', icon: <MokaIcon iconName="fal-file" /> },
+                                    { title: '사용자 목록', icon: <MokaIcon iconName="fal-file-alt" /> },
                                 ]}
                             />
                         </>

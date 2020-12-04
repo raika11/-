@@ -3,7 +3,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { GET_GROUP_MENU_AUTH, changeGroupMenuAuth, getGroupMenuAuth, updateGroupMenuAuth, UPDATE_GROUP_MENU_AUTH } from '@store/group';
 import toastUtil from '@utils/toastUtil';
 import MenuAuthTree from '@pages/Menu/component/MenuAuthTree';
-import { Button, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 

@@ -24,6 +24,8 @@ public class MokaEncryptTest {
     private String[] ftpStgAddress =
             {"stg-pds.joongang.co.kr", "stg-static.joongang.co.kr", "stg-images.joongang.co.kr", "stg-wimage.joongang.co.kr"};
 
+    private String[] localhost = {"localhost", "21", "ssc", "ssc#2020"};
+
     @Test
     public void encrypt() {
         for (String source : sources) {
@@ -34,6 +36,13 @@ public class MokaEncryptTest {
     @Test
     public void stgFtpEncrypt() {
         for (String source : ftpStgAddress) {
+            logger.debug("!!ENC source={} --> encrypted = {} ", source, mokaEncryptor.encrypt(source));
+        }
+    }
+
+    @Test
+    public void localFtpEncrypt() {
+        for (String source : localhost) {
             logger.debug("!!ENC source={} --> encrypted = {} ", source, mokaEncryptor.encrypt(source));
         }
     }

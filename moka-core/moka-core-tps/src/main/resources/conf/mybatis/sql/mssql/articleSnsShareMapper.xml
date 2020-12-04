@@ -24,7 +24,14 @@
         NULL,
       </otherwise>
     </choose>
-    #{totalId, mode=IN, jdbcType=VARCHAR, javaType=Long},
+    <choose>
+      <when test="searchType == 'totalId' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
     #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},

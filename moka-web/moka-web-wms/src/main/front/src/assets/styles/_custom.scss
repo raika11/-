@@ -101,17 +101,19 @@ body {
 }
 
 /* -----------------------
-* card-tab
+* card-tab (SSC 추가)
 * ---------------------- */
 .card-tab {
+    display: flex;
+    flex-direction: column;
     box-shadow: $card-shadow;
     background-color: $white;
     border-radius: $card-border-width solid $card-border-color;
     @include border-radius($card-border-radius);
 
     .nav-tabs {
-        padding: 0 map-get($spacers, 3);
         width: 100%;
+        border-bottom: 1px solid $gray-300;
     }
 
     .card-header-tabs {
@@ -120,13 +122,23 @@ body {
         margin-left: 0;
     }
 
-    .nav-item .nav-link {
-        border-bottom: 2px solid $gray-300;
-        border-radius: 0;
-        margin-bottom: 0;
+    .nav-item {
+        width: 80px;
+        text-align: center;
 
-        &.active {
-            border-color: $primary;
+        .nav-link {
+            padding: map-get($spacers, 3) 0;
+            border-radius: 0;
+            margin-bottom: 0;
+    
+            &.active {
+                color: $positive;
+                box-shadow: inset 0 -2px $positive;
+            }
+    
+            &:hover:not(.active) {
+                color: $secondary;
+            }
         }
     }
 
@@ -141,25 +153,6 @@ body {
         width: 100%;
     }
 }
-  
-/* -----------------------
-* card-toggle-tab
-* ---------------------- */
-.card-toggle-tab {
-    margin-bottom: 0px;
-
-    .tab-content {
-        .card {
-        width: 100%;
-        height: 100%;
-        }
-    }
-
-    >.card {
-        margin-bottom: 0px;
-        width: 48px;
-    }
-}
 
 /* -----------------------
 * icon-toggle-tab
@@ -169,7 +162,7 @@ body {
         box-shadow: unset;
     }
     
-    .nav-tabs {
+    > .nav-tabs {
         .nav-item {
             height: 44px;
         }

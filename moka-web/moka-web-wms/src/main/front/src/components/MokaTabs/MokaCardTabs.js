@@ -53,7 +53,7 @@ const defaultProps = {
 };
 
 /**
- * 카드모양 + 탭
+ * 카드 외형 + 상단에 탭이 달린 컴포넌트 (SSC 개발)
  */
 const MokaCardTabs = (props) => {
     const { className, fill, id, tabs, tabNavs, width, height, tabContentClass, tabContentWrapperClassName, onSelectNav } = props;
@@ -74,7 +74,7 @@ const MokaCardTabs = (props) => {
     return (
         <div className={clsx('tab', 'card-tab', 'flex-fill', className)} style={{ width, height }}>
             <Tab.Container id={id} defaultActiveKey={0}>
-                <div className="d-flex">
+                <div className="d-flex px-3">
                     <Nav fill={fill} activeKey={activeKey} variant="tabs" className="flex-row" onSelect={handleSelect}>
                         {tabNavs.map((nav, idx) => (
                             <Nav.Item key={idx}>
@@ -86,7 +86,7 @@ const MokaCardTabs = (props) => {
                     </Nav>
                 </div>
                 <div className={clsx('d-flex', 'custom-scroll', tabContentWrapperClassName)}>
-                    <Tab.Content className={clsx('p-0', tabContentClass)}>
+                    <Tab.Content className={clsx('px-0', 'pb-0', 'pt-3', tabContentClass)}>
                         {tabs.map((tab, idx) => (
                             <Tab.Pane key={idx} eventKey={idx}>
                                 {tab}

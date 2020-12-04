@@ -34,16 +34,23 @@ public class ArticleSnsShareRepositorySupportImpl extends QuerydslRepositorySupp
 
 
         JPQLQuery<ArticleSnsShare> query = from(qArticleSnsShare);
-
-        // 에피소드명
         if (McpString.isNotEmpty(search.getKeyword())) {
-            query.where(qArticleSnsShare.artTitle.contains(search.getKeyword()));
+            if (qArticleSnsShare.artTitle
+                    .getMetadata()
+                    .getName()
+                    .equals(search.getSearchType())) {
+                query.where(qArticleSnsShare.artTitle
+                        .contains(search.getKeyword())
+                        .or(qArticleSnsShare.articleBasic.artTitle.contains(search.getKeyword())));
+            }
+            if (qArticleSnsShare.id.totalId
+                    .getMetadata()
+                    .getName()
+                    .equals(search.getSearchType())) {
+                query.where(qArticleSnsShare.id.totalId.eq(Long.parseLong(search.getKeyword())));
+            }
         }
 
-        // 에피소드명
-        if (search.getTotalId() > 0) {
-            query.where(qArticleSnsShare.snsArtId.eq(String.valueOf(search.getTotalId())));
-        }
 
         if (McpString.isYes(search.getUseTotal())) {
             query = getQuerydsl().applyPagination(search.getPageable(), query);

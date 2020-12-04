@@ -105,8 +105,6 @@ const ComponentWork = (props) => {
             >
                 <ButtonGroup component={component} agGridIndex={agGridIndex} componentAgGridInstances={componentAgGridInstances} workStatus={workStatus[component.seq]} />
 
-                {component.viewYn === 'N' && <div className="opacity-box"></div>}
-
                 <AgGrid
                     component={component}
                     agGridIndex={agGridIndex}

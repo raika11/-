@@ -121,13 +121,17 @@ export const addNextRowStyle = (nextRow) => {
 /**
  * 데스킹 워크 ag-grid에 추가할 dropzone 을 생성해주는 함수 + 다른 dropzone에 드래그 시 화면 처리
  * @param {func} onDragStop drag stop 시 실행하는 함수
+ * @param {object} sourceGrid 드래그 아이템의 grid
  * @param {object} targetGrid drop target
  * @param {number} currentIndex 타겟 grid리스트에서 현재 넘어온 타겟 grid의 인덱스 (있으면 넘긴다)
  */
-export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) => {
+export const addDeskingWorkDropzone = (onDragStop, sourceGrid, targetGrid, currentIndex) => {
     const workElement = findWork(targetGrid.api.gridOptionsWrapper.layoutElements[0]); // .component-work
     if (!workElement) return null;
-    if (workElement.classList.contains('disabled')) return null;
+    if (workElement.classList.contains('disabled')) {
+        sourceGrid.api.removeRowDropZone({ getContainer: () => workElement });
+        return null;
+    }
 
     let next = { idx: -1, node: null };
     let hover = { idx: -1, node: null };
@@ -139,10 +143,10 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
             workElement.appendChild(hoverBox);
         },
         onDragLeave: () => {
+            clearWorkStyle(workElement);
             workElement.removeChild(hoverBox);
             clearHoverStyle(hover.node);
             clearNextStyle(next.node);
-            clearWorkStyle(workElement);
         },
         onDragging: (source) => {
             let draggingRow = getRow(source.event);
@@ -210,6 +214,8 @@ export const makeDeskingWorkDropzone = (onDragStop, targetGrid, currentIndex) =>
         },
     };
 
+    sourceGrid.api.removeRowDropZone(dropzone);
+    sourceGrid.api.addRowDropZone(dropzone);
     return dropzone;
 };
 

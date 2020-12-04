@@ -4,7 +4,7 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
-import { makeDeskingWorkDropzone } from '@utils/agGridUtil';
+import { addDeskingWorkDropzone } from '@utils/agGridUtil';
 import { GET_ARTICLE_LIST, getArticleList, changeSearchOption } from '@store/article';
 import columnDefs from './ArticleDeskAgGridColums';
 import GroupNumberRenderer from './GroupNumberRenderer';
@@ -108,19 +108,11 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
             if (Array.isArray(dropTargetAgGrid)) {
                 // 타겟이 리스트인 경우
                 dropTargetAgGrid.forEach((targetGrid, agGridIndex) => {
-                    const dropzone = makeDeskingWorkDropzone(onDragStop, targetGrid, agGridIndex);
-                    if (dropzone) {
-                        gridInstance.api.removeRowDropZone(dropzone);
-                        gridInstance.api.addRowDropZone(dropzone);
-                    }
+                    addDeskingWorkDropzone(onDragStop, gridInstance, targetGrid, agGridIndex);
                 });
             } else {
                 // 타겟이 1개인 경우
-                const dropzone = makeDeskingWorkDropzone(onDragStop, dropTargetAgGrid);
-                if (dropzone) {
-                    gridInstance.api.removeRowDropZone(dropzone);
-                    gridInstance.api.addRowDropZone(dropzone);
-                }
+                addDeskingWorkDropzone(onDragStop, gridInstance, dropTargetAgGrid);
             }
         }
 

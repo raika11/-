@@ -62,14 +62,14 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "TEMPLATE_SEQ")
     private Long templateSeq;
 
-//    @Column(name = "TEMPLATE_NAME")
-//    private String templateName;
-//
-//    @Column(name = "TEMPLATE_WIDTH")
-//    private Integer templateWidth;
-//
-//    @Column(name = "TEMPLATE_GROUP")
-//    private String templateGroup;
+    @Column(name = "TEMPLATE_NAME")
+    private String templateName;
+
+    //    @Column(name = "TEMPLATE_WIDTH")
+    //    private Integer templateWidth;
+    //
+    //    @Column(name = "TEMPLATE_GROUP")
+    //    private String templateGroup;
 
     @Column(name = "DATASET_SEQ")
     private Long datasetSeq;
@@ -77,11 +77,11 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "DATA_TYPE")
     private String dataType;
 
-//    @Column(name = "ZONE")
-//    private String zone;
-//
-//    @Column(name = "MATCH_ZONE")
-//    private String matchZone;
+    //    @Column(name = "ZONE")
+    //    private String zone;
+    //
+    //    @Column(name = "MATCH_ZONE")
+    //    private String matchZone;
 
     @Column(name = "VIEW_YN")
     @Builder.Default

@@ -6,7 +6,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 import Search from './CodeMgtEditSearch';
 import AgGrid from './CodeMgtEditAgGrid';
 
-import { saveCodeMgt, deleteCodeMgt, changeCd, clearCd, getCodeMgtGrpDuplicateCheck } from '@store/codeMgt';
+import { saveCodeMgt, deleteCodeMgt, changeCd, clearCd, getCodeMgtDuplicateCheck } from '@store/codeMgt';
 
 /**
  * 기타코드 편집
@@ -32,14 +32,13 @@ const CodeMgtEdit = () => {
                         ...code,
                     }),
                 ],
-                callback: (response) => {
-                    if (response.header.success) {
-                        const { body } = response;
+                callback: ({ header, body }) => {
+                    if (header.success) {
                         toast.success('수정하였습니다.');
                         history.push(`/codeMgt/${body.codeMgtGrp.grpCd}`);
                         dispatch(clearCd());
                     } else {
-                        toast.fail('실패하였습니다.');
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -60,14 +59,13 @@ const CodeMgtEdit = () => {
                         ...code,
                     }),
                 ],
-                callback: (response) => {
-                    if (response.header.success) {
-                        const { body } = response;
+                callback: ({ header, body }) => {
+                    if (header.success) {
                         toast.success('등록하였습니다.');
                         history.push(`/codeMgt/${body.codeMgtGrp.grpCd}`);
                         dispatch(clearCd());
                     } else {
-                        toast.fail('실패하였습니다.');
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -96,13 +94,13 @@ const CodeMgtEdit = () => {
         messageBox.confirm('코드를 삭제하시겠습니까?', () => {
             dispatch(
                 deleteCodeMgt({
-                    cdSeq: code.cdSeq,
-                    callback: (response) => {
-                        if (response.header.success) {
+                    cdSeq: code.seqNo,
+                    callback: ({ header }) => {
+                        if (header.success) {
                             toast.success('삭제하였습니다.');
                             history.push(`/codeMgt/${code.grpCd}`);
                         } else {
-                            toast.fail(response.header.message);
+                            toast.fail(header.message);
                         }
                     },
                 }),
@@ -115,7 +113,7 @@ const CodeMgtEdit = () => {
      */
     const checkDuplicatedCodeMgt = (code) => {
         dispatch(
-            getCodeMgtGrpDuplicateCheck({
+            getCodeMgtDuplicateCheck({
                 grpCd: code.grpCd,
                 dtlCd: code.dtlCd,
                 callback: ({ header, body }) => {

@@ -107,7 +107,6 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.reserved = initialState.reserved;
                 draft.reservedError = initialState.reservedError;
-                draft.invalidList = initialState.invalidList;
                 draft.latestReservedSeq = initialState.latestReservedSeq;
             });
         },

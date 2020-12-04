@@ -10,14 +10,20 @@ export const changeGrpSearchOption = createAction(CHANGE_GRP_SEARCH_OPTION, (sea
 export const changeCdSearchOption = createAction(CHANGE_CD_SEARCH_OPTION, (search) => search);
 
 /**
+ * 유효성 검사
+ */
+export const CHANGE_INVALID_LIST = 'codeMgt/CHANGE_INVALID_LIST';
+export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
+
+/**
  * 스토어 데이터 삭제 액션
  */
-export const CLEAR_CODE_MGT = 'codeMgt/CLEAR_CODE_MGT';
+export const CLEAR_STORE = 'codeMgt/CLEAR_STORE';
 export const CLEAR_GRP = 'codeMgt/CLEAR_GRP';
 export const CLEAR_CD = 'codeMgt/CLEAR_CD';
 export const CLEAR_GRP_LIST = 'codeMgt/CLEAR_GRP_LIST';
 export const CLEAR_CD_LIST = 'codeMgt/CLEAR_CD_LIST';
-export const clearCodeMgt = createAction(CLEAR_CODE_MGT, (payload) => payload);
+export const clearStore = createAction(CLEAR_STORE, (payload) => payload);
 export const clearGrp = createAction(CLEAR_GRP, (payload) => payload);
 export const clearCd = createAction(CLEAR_CD, (payload) => payload);
 export const clearGrpList = createAction(CLEAR_GRP_LIST, (payload) => payload);

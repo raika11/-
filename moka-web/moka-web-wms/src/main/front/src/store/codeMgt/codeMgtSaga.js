@@ -62,10 +62,15 @@ function* saveCodeMgtGrpSaga({ payload: { type, actions, callback } }) {
             // 목록 다시 검색
             yield put({ type: act.GET_CODE_MGT_GRP_LIST });
         } else {
-            yield put({
-                type: act.GET_CODE_MGT_GRP_FAILURE,
-                payload: response.data,
-            });
+            const { body } = response.data.body;
+
+            if (body && body.list && Array.isArray(body.list)) {
+                // invalidList 셋팅
+                yield put({
+                    type: act.CHANGE_INVALID_LIST,
+                    payload: response.data.body.list,
+                });
+            }
         }
     } catch (e) {
         callbackData = errorResponse(e);
@@ -103,11 +108,6 @@ export function* deleteCodeMgtGrpSaga({ payload: { grpSeq, callback } }) {
 
             // 목록 다시 검색
             yield put({ type: act.GET_CODE_MGT_GRP_LIST });
-        } else {
-            yield put({
-                type: act.DELETE_CODE_MGT_GRP_FAILURE,
-                payload: response.data,
-            });
         }
     } catch (e) {
         callbackData = errorResponse(e);
@@ -162,10 +162,15 @@ function* saveCodeMgtSaga({ payload: { type, actions, callback } }) {
             // 목록 다시 검색
             yield put({ type: act.GET_CODE_MGT_LIST });
         } else {
-            yield put({
-                type: act.GET_CODE_MGT_FAILURE,
-                payload: response.data,
-            });
+            const { body } = response.data.body;
+
+            if (body && body.list && Array.isArray(body.list)) {
+                // invalidList 셋팅
+                yield put({
+                    type: act.CHANGE_INVALID_LIST,
+                    payload: response.data.body.list,
+                });
+            }
         }
     } catch (e) {
         callbackData = errorResponse(e);
@@ -203,11 +208,6 @@ export function* deleteCodeMgtSaga({ payload: { cdSeq, callback } }) {
 
             // 목록 다시 검색
             yield put({ type: act.GET_CODE_MGT_LIST });
-        } else {
-            yield put({
-                type: act.DELETE_CODE_MGT_FAILURE,
-                payload: response.data,
-            });
         }
     } catch (e) {
         callbackData = errorResponse(e);

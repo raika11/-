@@ -106,7 +106,7 @@ const ComponentWorkHistoryList = (props) => {
     );
 
     useEffect(() => {
-        // local state => store search
+        // store search => local state
         setSearch(storeSearch);
     }, [storeSearch]);
 

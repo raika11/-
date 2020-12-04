@@ -31,6 +31,7 @@ export const initialState = {
     cd: {},
     cdTotal: 0,
     cdError: null,
+    invalidList: [],
     // 조회용 데이터
     tpSizeRows: [],
     tpZoneRows: [],
@@ -47,7 +48,7 @@ export default handleActions(
         /**
          * 스토어 클리어
          */
-        [act.CLEAR_CODE_MGT]: () => initialState,
+        [act.CLEAR_STORE]: () => initialState,
         [act.CLEAR_GRP]: (state) => {
             return produce(state, (draft) => {
                 draft.grp = initialState.grp;
@@ -72,6 +73,14 @@ export default handleActions(
                 draft.cdTotal = initialState.cdTotal;
                 draft.cdSearch = initialState.cdSearch;
                 draft.cdList = initialState.cdList;
+            });
+        },
+        /**
+         * 유효성 검사
+         */
+        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
             });
         },
         /**

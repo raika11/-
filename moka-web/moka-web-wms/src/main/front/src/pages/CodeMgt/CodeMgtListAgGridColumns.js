@@ -7,6 +7,7 @@ export default [
         field: 'cdNm',
         width: 176,
         flex: 1,
+        cellStyle: { fontSize: '12px' },
         tooltipField: 'cdNm',
     },
     {

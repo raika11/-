@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaTable } from '@components';
@@ -27,14 +27,17 @@ import CodeMgtListModal from './modals/CodeMgtListModal';
 const CodeMgtListAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { total, grpList, grp, search: storeSearch, cdSearch, loading } = useSelector((store) => ({
-        total: store.codeMgt.grpTotal,
-        grpList: store.codeMgt.grpList,
-        grp: store.codeMgt.grp,
-        search: store.codeMgt.grpSearch,
-        cdSearch: store.codeMgt.cdSearch,
-        loading: store.loading[GET_CODE_MGT_GRP_LIST],
-    }));
+    const { total, grpList, grp, search: storeSearch, cdSearch, loading } = useSelector(
+        (store) => ({
+            total: store.codeMgt.grpTotal,
+            grpList: store.codeMgt.grpList,
+            grp: store.codeMgt.grp,
+            search: store.codeMgt.grpSearch,
+            cdSearch: store.codeMgt.cdSearch,
+            loading: store.loading[GET_CODE_MGT_GRP_LIST],
+        }),
+        shallowEqual,
+    );
     const [rowData, setRowData] = useState([]);
     const [search, setSearch] = useState(initialState.grpSearch);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -126,11 +129,11 @@ const CodeMgtListAgGrid = () => {
                         ...codeGrp,
                     }),
                 ],
-                callback: (response) => {
-                    if (response.header.success) {
+                callback: ({ header }) => {
+                    if (header.success) {
                         toast.success('수정하였습니다.');
                     } else {
-                        toast.fail('실패하였습니다.');
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -151,12 +154,12 @@ const CodeMgtListAgGrid = () => {
                         ...codeGrp,
                     }),
                 ],
-                callback: (response) => {
-                    if (response.header.success) {
+                callback: ({ header }) => {
+                    if (header.success) {
                         toast.success('등록하였습니다.');
                         history.push(`/codeMgt/${codeGrp.grpCd}`);
                     } else {
-                        toast.fail('실패하였습니다.');
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -186,12 +189,12 @@ const CodeMgtListAgGrid = () => {
             dispatch(
                 deleteCodeMgtGrp({
                     grpSeq: codeGrp.grpSeq,
-                    callback: (response) => {
-                        if (response.header.success) {
+                    callback: ({ header }) => {
+                        if (header.success) {
                             toast.success('삭제하였습니다.');
                             history.push('/codeMgt');
                         } else {
-                            toast.fail(response.header.message);
+                            toast.fail(header.message);
                         }
                     },
                 }),

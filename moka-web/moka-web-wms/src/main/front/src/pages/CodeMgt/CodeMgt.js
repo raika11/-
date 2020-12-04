@@ -1,8 +1,9 @@
-import React, { Suspense } from 'react';
+import React, { useEffect, Suspense } from 'react';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
-
 import { MokaCard } from '@components';
+import { clearStore } from '@store/codeMgt';
 
 const CodeMgtList = React.lazy(() => import('./CodeMgtList'));
 const CodeMgtEdit = React.lazy(() => import('./CodeMgtEdit'));
@@ -11,6 +12,14 @@ const CodeMgtEdit = React.lazy(() => import('./CodeMgtEdit'));
  * 기타코드 관리 컴포넌트
  */
 const CodeMgt = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
+
     return (
         <>
             <div className="d-flex">

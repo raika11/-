@@ -1,33 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MokaModal, MokaInputLabel } from '@components';
+import { changeInvalidList } from '@store/codeMgt';
 
 const propTypes = {
-    /**
-     * show
-     */
-    show: PropTypes.bool.isRequired,
-    /**
-     * hide 함수
-     */
-    onHide: PropTypes.func.isRequired,
     /**
      * type 모달 type
      */
     type: PropTypes.string,
-    /**
-     * onSave 함수
-     */
-    onSave: PropTypes.func,
-    /**
-     * onDelete 함수
-     */
-    onDelete: PropTypes.func,
 };
 const defaultProps = {
     type: '',
-    onSave: null,
-    onDelete: null,
 };
 
 /**
@@ -35,13 +19,14 @@ const defaultProps = {
  */
 const CodeMgtListModal = (props) => {
     const { show, onHide, type, onSave, onDelete, data } = props;
+    const dispatch = useDispatch();
+    const invalidList = useSelector((store) => store.codeMgt.invalidList);
 
     // modal 항목 state
     const [grpSeq, setGrpSeq] = useState('');
     const [grpCd, setGrpCd] = useState('');
     const [cdNm, setCdNm] = useState('');
-    const [grpCdError, setGrpCdError] = useState(false);
-    const [cdNmError, setCdNmError] = useState(false);
+    const [error, setError] = useState({});
 
     /**
      * 항목 값 셋팅
@@ -70,40 +55,29 @@ const CodeMgtListModal = (props) => {
 
     /**
      * 입력된 그룹 validate체크
-     * @param {} obj
+     * @param {object} obj
      */
     const validate = (obj) => {
-        let totErr = [];
+        let isInvalid = false;
+        let errList = [];
 
-        if (!/^[A-Za-z0-9_-`/]+$/g.test(obj.grpCd)) {
-            let err = {
+        if (!/^[A-Za-z0-9_-`/]+$/g.test(obj.grpCd) || obj.grpCd.length > 12) {
+            errList.push({
                 field: 'grpCd',
-                reason: '코드그룹아이디를 확인해주세요',
-            };
-            totErr.push(err);
-            setGrpCdError(true);
+                reason: '코드 그룹 아이디를 확인해주세요',
+            });
+            isInvalid = isInvalid || true;
         }
         if (!/[^\s\t\n]+/g.test(obj.cdNm)) {
-            let err = {
+            errList.push({
                 field: 'cdNm',
-                reason: '코드그룹명을 확인해주세요',
-            };
-            totErr.push(err);
-            setCdNmError(true);
+                reason: '코드 그룹명을 확인해주세요',
+            });
+            isInvalid = isInvalid || true;
         }
-        if (totErr.length < 1) {
-            return true;
-        }
-        return false;
-    };
+        dispatch(changeInvalidList(errList));
 
-    /**
-     * data
-     */
-    const codeGrp = {
-        grpSeq,
-        grpCd,
-        cdNm,
+        return !isInvalid;
     };
 
     /**
@@ -112,6 +86,7 @@ const CodeMgtListModal = (props) => {
     const handleHide = () => {
         setGrpCd('');
         setCdNm('');
+        setError(false);
         onHide();
     };
 
@@ -119,6 +94,12 @@ const CodeMgtListModal = (props) => {
      * 저장
      */
     const handleClickSave = () => {
+        const codeGrp = {
+            grpSeq,
+            grpCd,
+            cdNm,
+        };
+
         if (validate(codeGrp)) {
             onSave(codeGrp);
             handleHide();
@@ -129,11 +110,32 @@ const CodeMgtListModal = (props) => {
      * 삭제
      */
     const handleClickDelete = () => {
+        const codeGrp = {
+            grpSeq,
+            grpCd,
+            cdNm,
+        };
+
         if (codeGrp) {
             onDelete(codeGrp);
             handleHide();
         }
     };
+
+    useEffect(() => {
+        // invalidList 처리
+        if (invalidList.length > 0) {
+            setError(
+                invalidList.reduce(
+                    (all, c) => ({
+                        ...all,
+                        [c.field]: true,
+                    }),
+                    {},
+                ),
+            );
+        }
+    }, [invalidList]);
 
     if (type === 'add') {
         return (
@@ -156,14 +158,14 @@ const CodeMgtListModal = (props) => {
             >
                 <MokaInputLabel
                     label="코드그룹"
-                    placeholder="코드 그룹 아이디(영문으로 작성하세요)"
+                    placeholder="코드 그룹 아이디는 12자리 이하의 영문으로 작성하세요"
                     value={grpCd}
                     name="grpCd"
                     onChange={handleChangeValue}
-                    isInvalid={grpCdError}
+                    isInvalid={error.grpCd}
                     required
                 />
-                <MokaInputLabel label="코드그룹명" placeholder="코드그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} required />
+                <MokaInputLabel label="코드그룹명" placeholder="코드그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={error.cdNm} required />
             </MokaModal>
         );
     } else if (type === 'edit') {
@@ -190,8 +192,8 @@ const CodeMgtListModal = (props) => {
                 footerClassName="justify-content-center"
                 centered
             >
-                <MokaInputLabel label="코드그룹" placeholder="코드 그룹 아이디(영문으로 작성하세요)" value={grpCd} name="grpCd" onChange={handleChangeValue} disabled />
-                <MokaInputLabel label="코드그룹명" placeholder="코드 그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} required />
+                <MokaInputLabel label="코드그룹" value={grpCd} name="grpCd" onChange={handleChangeValue} disabled />
+                <MokaInputLabel label="코드그룹명" placeholder="코드 그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={error.cdNm} required />
             </MokaModal>
         );
     }

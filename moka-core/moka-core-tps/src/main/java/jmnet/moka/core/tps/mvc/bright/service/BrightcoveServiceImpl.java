@@ -1,11 +1,15 @@
 package jmnet.moka.core.tps.mvc.bright.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.mvc.bright.dto.OvpSearchDTO;
+import jmnet.moka.core.tps.mvc.bright.dto.VideoDTO;
 import jmnet.moka.core.tps.mvc.bright.vo.BrightcoveCredentailVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,5 +121,27 @@ public class BrightcoveServiceImpl implements BrightcoveService {
         }
 
         return brightcoveCredentailVO;
+    }
+
+    public List<VideoDTO> findAllVideos(SearchDTO search) {
+
+        BrightcoveCredentailVO credentail = getClientCredentials();
+
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
+        headers.add(MokaConstants.AUTHORIZATION, String.format("%s %s", credentail.getTokenType(), credentail.getAccessToken()));
+        //headers.add("X-API-KEY", apiKey);
+
+        String requestUrl = String.format("%s/%s/videos", cmsBaseUrl, account);
+
+        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        params.add("limit", search.getSize());
+        params.add("offset", search.getPage() * search.getSize());
+        ResponseEntity<String> responseEntity = restTemplateHelper.get(requestUrl, params, headers);
+
+        List<VideoDTO> returnList = new ArrayList<>();
+        // responseEntity -> VideoDTO 로 변경작업 필요
+        
+        return returnList;
     }
 }

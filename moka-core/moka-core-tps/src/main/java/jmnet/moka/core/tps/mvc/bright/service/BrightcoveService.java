@@ -1,6 +1,9 @@
 package jmnet.moka.core.tps.mvc.bright.service;
 
+import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.bright.dto.OvpSearchDTO;
+import jmnet.moka.core.tps.mvc.bright.dto.VideoDTO;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -18,4 +21,6 @@ import org.springframework.http.ResponseEntity;
 public interface BrightcoveService {
 
     public ResponseEntity<?> findAllOvp(OvpSearchDTO searchDTO);
+
+    List<VideoDTO> findAllVideos(SearchDTO search);
 }

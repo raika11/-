@@ -4,11 +4,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
+import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.bright.dto.DataDto;
 import jmnet.moka.core.tps.mvc.bright.dto.OvpSearchDTO;
+import jmnet.moka.core.tps.mvc.bright.dto.VideoDTO;
 import jmnet.moka.core.tps.mvc.bright.service.BrightcoveService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -17,6 +26,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +37,10 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
+@Validated
+@Slf4j
 @RequestMapping("/api")
-public class BrightRestController {
+public class BrightRestController extends AbstractCommonController {
 
     @Value("${brightcove.jpod.folder-id}")
     private String jpodFolderId;
@@ -97,6 +109,28 @@ public class BrightRestController {
 
         return new ResponseEntity<>(brightcoveService.findAllOvp(ovpSearchDTO), HttpStatus.OK);
 
+    }
+
+    @ApiOperation(value = "OVP 동영상 조회")
+    @GetMapping("/bright/videos")
+    public ResponseEntity<?> getVideos(@Valid @SearchParam SearchDTO search)
+            throws Exception {
+        try {
+            List<VideoDTO> videoList = brightcoveService.findAllVideos(search);
+
+            ResultListDTO<VideoDTO> resultList = new ResultListDTO<VideoDTO>();
+            resultList.setList(videoList);
+            resultList.setTotalCnt(videoList.size());
+
+            ResultDTO<ResultListDTO<VideoDTO>> resultModel = new ResultDTO<ResultListDTO<VideoDTO>>(resultList);
+            tpsLogger.success(true);
+            return new ResponseEntity<>(resultModel, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FFAIL TO LOAD OVP LIST]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO LOAD OVP LIST]", e, true);
+            throw new Exception(msg("tps.bright.error.video"), e);
+        }
     }
 
 }

@@ -72,7 +72,7 @@ public class TestFtpController {
     public ResponseEntity<?> wimageUpload(@RequestParam(value = "file") MultipartFile file)
             throws InvalidDataException, Exception {
 
-        boolean success = ftpHelper.upload(FtpHelper.WIMAGE, file.getOriginalFilename(), file.getInputStream());
+        boolean success = ftpHelper.upload(FtpHelper.WIMAGE, "test.jsp", file.getInputStream());
 
         return new ResponseEntity<>(success, HttpStatus.OK);
 

@@ -182,7 +182,7 @@ const DeskingWorkButtonGroup = (props) => {
         dispatch(
             putComponentWork({
                 componentWork: { ...component, viewYn: viewN ? 'Y' : 'N' },
-                callbak: ({ header }) => {
+                callback: ({ header }) => {
                     if (!header.success) {
                         toast.fail(header.message);
                     }

@@ -39,7 +39,7 @@ export function createDeskingRequestSaga(actionType, api, status) {
             } else {
                 yield put({
                     type: act.COMPONENT_WORK_FAILURE,
-                    payload: { ...response.data, status },
+                    payload: { ...response.data },
                 });
             }
         } catch (e) {

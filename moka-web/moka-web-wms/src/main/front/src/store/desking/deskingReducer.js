@@ -154,11 +154,7 @@ export default handleActions(
         },
         [act.COMPONENT_WORK_FAILURE]: (state, { payload: componentError }) => {
             return produce(state, (draft) => {
-                if (draft.selectedComponent.seq) {
-                    let idx = draft.list.findIndex((l) => l.seq === draft.selectedComponent.seq);
-                    draft.list[idx] = initialState.selectedComponent;
-                }
-                draft.selectedComponent = initialState.selectedComponent;
+                // draft.selectedComponent = initialState.selectedComponent;
                 // draft.componentError = initialState.componentError;
             });
         },
@@ -183,11 +179,7 @@ export default handleActions(
         },
         [act.POST_DESKING_WORK_LIST_MOVE_FAILURE]: (state, { payload: componentError }) => {
             return produce(state, (draft) => {
-                if (draft.selectedComponent.seq) {
-                    let idx = draft.list.findIndex((l) => l.seq === draft.selectedComponent.seq);
-                    draft.list[idx] = initialState.selectedComponent;
-                }
-                draft.selectedComponent = initialState.selectedComponent;
+                // draft.selectedComponent = initialState.selectedComponent;
                 // draft.componentError = initialState.componentError;
             });
         },

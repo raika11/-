@@ -46,6 +46,7 @@ const defaultProps = {
     isInvalid: false,
     uncontrolled: false,
 };
+const newlineRegex = /[\n|\\n]/;
 
 /**
  * 라벨 + input
@@ -65,14 +66,17 @@ const MokaInputLabel = forwardRef((props, ref) => {
 
     useEffect(() => {
         // label이 문자열이고 \n이 있으면 <br />로 변환
-        if (typeof label === 'string' && label.indexOf('\\n') > -1) {
+        if (typeof label === 'string' && newlineRegex.test(label)) {
             setLn(
-                label.split('\\n').map((l) => (
-                    <React.Fragment>
-                        {l}
-                        <br />
-                    </React.Fragment>
-                )),
+                label.split(newlineRegex).map(
+                    (l, idx) =>
+                        l !== '' && (
+                            <React.Fragment key={idx}>
+                                {l}
+                                <br />
+                            </React.Fragment>
+                        ),
+                ),
             );
         } else {
             setLn(label);

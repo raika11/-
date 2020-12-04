@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import Col from 'react-bootstrap/Col';
@@ -10,12 +10,13 @@ import util from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 import EditThumbModal from './EditThumbModal';
 import { getBulkChar } from '@store/codeMgt';
+import { PUT_DESKING_WORK } from '@store/desking';
 import mapping from '../deskingPartMapping';
 
 // const titlePrefixList = [{ name: '속보' }, { name: '단독' }];
 // const prefixLocationList = [{ name: '제목 앞' }, { name: '제목 뒤' }, { name: '부제 앞' }, { name: '부제 뒤' }, { name: '리드문 앞' }, { name: '리드문 뒤' }];
 // const titleLocationList = [{ name: '상단' }, { name: '하단' }];
-// const fontSizeList = [{ name: '36px' }, { name: '41px' }, { name: '45px' }, { name: '48px' }];
+const fontSizeList = [{ name: '36px' }, { name: '41px' }, { name: '45px' }, { name: '48px' }];
 const linkTargetList = [
     { id: 'S', name: '본창' },
     { id: 'N', name: '새창' },
@@ -28,7 +29,11 @@ const urlRegex = /[Uu]rl$/;
 const DeskingWorkEditModal = (props) => {
     const { show, onHide, deskingWorkData, component, onSave, deskingPart: deskingPartStr } = props;
     const dispatch = useDispatch();
-    const bulkCharRows = useSelector((store) => store.codeMgt.bulkCharRows);
+    const { bulkCharRows, loading } = useSelector((store) => ({
+        bulkCharRows: store.codeMgt.bulkCharRows,
+        loading: store.loading[PUT_DESKING_WORK],
+    }));
+    const imgFileRef = useRef(null);
 
     // state
     const [deskingPart, setDeskingPart] = useState([]); // area의 deskingPart 리스트
@@ -36,7 +41,11 @@ const DeskingWorkEditModal = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [specialChar, setSpecialChar] = useState(''); // 약물
     const [deskingData, setDeskingData] = useState({}); // 데스킹워크 데이터
+    const [fileValue, setFileValue] = useState(null); // 파일
 
+    /**
+     * validate
+     */
     const validate = () => {
         const regex = /[^\s\t\n]+/;
         let invalid = false,
@@ -54,37 +63,11 @@ const DeskingWorkEditModal = (props) => {
     };
 
     /**
-     * modal의 항목 값 변경
+     * 값 변경
      */
     const handleChangeValue = ({ target }) => {
         const { name, value } = target;
-
         setDeskingData({ ...deskingData, [name]: value });
-        // if (name === 'thumbFileName') {
-        //     setDeskingData({ ...deskingData, thumbFileName: value });
-        // } else if (name === 'title') {
-        //     setDeskingData({ ...deskingData, title: value });
-        // } else if (name === 'nameplate') {
-        //     setDeskingData({ ...deskingData, nameplate: value });
-        // } else if (name === 'titlePrefix') {
-        //     setDeskingData({ ...deskingData, titlePrefix: value });
-        // } else if (name === 'prefixLocation') {
-        //     setDeskingData({ ...deskingData, prefixLocation: value });
-        // } else if (name === 'titleLocation') {
-        //     setDeskingData({ ...deskingData, titleLocation: value });
-        // } else if (name === 'fontSize') {
-        //     setDeskingData({ ...deskingData, fontSize: value });
-        // } else if (name === 'subTitle') {
-        //     setDeskingData({ ...deskingData, subTitle: value });
-        // } else if (name === 'bodyHead') {
-        //     setDeskingData({ ...deskingData, bodyHead: value });
-        // } else if (name === 'linkUrl') {
-        //     setDeskingData({ ...deskingData, linkUrl: value });
-        // } else if (name === 'linkTarget') {
-        //     setDeskingData({ ...deskingData, linkTarget: value });
-        // } else if (name === 'moreUrl') {
-        //     setDeskingData({ ...deskingData, moreUrl: value });
-        // }
     };
 
     /**
@@ -92,24 +75,19 @@ const DeskingWorkEditModal = (props) => {
      */
     const handleClickSave = () => {
         if (validate()) {
-            const deskingWork = {
-                ...deskingWorkData,
-                thumbFileName: deskingData.thumbFileName,
-                nameplate: deskingData.nameplate,
-                title: deskingData.title.length > 0 ? deskingData.title : null,
-                titlePrefix: deskingData.titlePrefix,
-                subTitle: deskingData.subTitle,
-                bodyHead: deskingData.bodyHead,
-            };
-            const callback = (response) => {
-                if (response.header) {
-                    toast.success(response.header.message);
-                    handleHide();
-                } else {
-                    toast.fail(response.header.message);
-                }
-            };
-            onSave(deskingWork, callback);
+            onSave(
+                {
+                    ...deskingWorkData,
+                    thumbnailFile: fileValue || null,
+                },
+                ({ header }) => {
+                    if (!header.success) {
+                        toast.fail(header.message);
+                    } else {
+                        handleHide();
+                    }
+                },
+            );
         }
     };
 
@@ -118,6 +96,9 @@ const DeskingWorkEditModal = (props) => {
      */
     const handleHide = () => {
         setDeskingData({});
+        if (imgFileRef.current) {
+            imgFileRef.current.deleteFile();
+        }
         onHide();
     };
 
@@ -167,9 +148,9 @@ const DeskingWorkEditModal = (props) => {
                 buttons={[
                     { variant: 'positive', text: '저장', onClick: handleClickSave },
                     { variant: 'negative', text: '취소', onClick: handleHide },
-                    { variant: 'negative', text: '리로드' },
                 ]}
                 footerClassName="d-flex justify-content-center"
+                loading={loading}
                 draggable
             >
                 <div className="d-flex justify-content-between">
@@ -178,20 +159,57 @@ const DeskingWorkEditModal = (props) => {
                             const mappingData = mapping[partKey];
                             const isUrl = urlRegex.test(partKey);
 
-                            // 대표이미지, 아이콘, 말머리, 제목/부제위치, 영상, 라이브제목, 약물은 예외처리
-                            if (partKey === 'thumbFileName') {
+                            // 제목, 대표이미지, 아이콘, 말머리, 제목/부제위치, 영상, 라이브제목, 약물은 예외처리
+                            if (partKey === 'title') {
+                                const { as, field, label, errorCheck, ...mappingProps } = mappingData;
+
+                                return (
+                                    <Form.Row key={partKey} className="mb-2">
+                                        <Col xs={11} className="p-0">
+                                            <MokaInputLabel
+                                                as={as}
+                                                label={
+                                                    <React.Fragment>
+                                                        {label}
+                                                        <MokaInput as="select" size="sm" name="fontSize" value={deskingData.fontSize} onChange={handleChangeValue}>
+                                                            {fontSizeList.map((font, idx) => (
+                                                                <option key={idx} value={font.size}>
+                                                                    {font.name}
+                                                                </option>
+                                                            ))}
+                                                        </MokaInput>
+                                                    </React.Fragment>
+                                                }
+                                                labelWidth={80}
+                                                labelClassName="ft-12 pr-3"
+                                                name={field}
+                                                className="mb-0 w-100"
+                                                value={deskingData[field]}
+                                                onChange={handleChangeValue}
+                                                isInvalid={errorCheck && error[field]}
+                                                {...mappingProps}
+                                            />
+                                        </Col>
+                                        <Col xs={1} className="p-0 pl-1 ft-12 d-flex align-items-end">
+                                            {deskingData[field] && util.euckrBytes(deskingData[field])}byte
+                                        </Col>
+                                    </Form.Row>
+                                );
+                            } else if (partKey === 'thumbFileName') {
                                 return (
                                     <Form.Row key={partKey} className="mb-2 flex-column">
                                         <MokaInputLabel
-                                            name="thumbFileName"
-                                            as="imageFile"
+                                            ref={imgFileRef}
                                             label="대표\n이미지"
+                                            labelWidth={80}
                                             labelClassName="ft-12 pr-3"
+                                            name="thumbnailFile"
+                                            as="imageFile"
                                             className="mb-0"
-                                            inputProps={{ width: 150, height: 150 }}
+                                            inputProps={{ width: 216, height: 150, img: deskingData.thumbFileName, setFileValue }}
                                         />
-                                        <div className="mt-2 d-flex justify-content-between" style={{ width: 150, marginLeft: 70 }}>
-                                            <Button variant="outline-neutral" size="sm" onClick={() => setShowModal(true)}>
+                                        <div className="mt-2 d-flex justify-content-between" style={{ width: 216, marginLeft: 80 }}>
+                                            <Button variant="positive" size="sm" onClick={() => setShowModal(true)}>
                                                 신규등록
                                             </Button>
                                             <Button variant="outline-neutral" size="sm">
@@ -205,6 +223,7 @@ const DeskingWorkEditModal = (props) => {
                                     <Form.Row key={partKey} className="mb-2">
                                         <MokaInputLabel
                                             label="약물"
+                                            labelWidth={80}
                                             labelClassName="ft-12 pr-3"
                                             className="mb-0 w-100"
                                             value={specialChar}
@@ -221,6 +240,7 @@ const DeskingWorkEditModal = (props) => {
                                             <MokaInputLabel
                                                 as={as}
                                                 label={label}
+                                                labelWidth={80}
                                                 labelClassName="ft-12 pr-3"
                                                 name={field}
                                                 className="mb-0 w-100"
@@ -253,26 +273,7 @@ const DeskingWorkEditModal = (props) => {
                                 return null;
                             }
                         })}
-                        {/* <MokaInputLabel label="어깨제목" labelWidth={80} inputClassName="ft-12" name="nameplate" value={deskingData.nameplate} onChange={handleChangeValue} />
-                        <MokaInputLabel
-                                label="약물"
-                                labelWidth={50}
-                                labelClassName="d-flex justify-content-start"
-                                value={specialChar}
-                                inputProps={{ plaintext: true, readOnly: true }}
-                            />
-                            <div>
-                                <MokaImageInput width={150} height={150} img={deskingData.thumbFileName} alt="기사 사진" name="thumbFileName" />
-                                <div className="mt-2 px-1 d-flex justify-content-between">
-                                    <Button variant="outline-neutral" size="sm" onClick={() => setShowModal(true)}>
-                                        대표사진변경
-                                    </Button>
-                                    <Button variant="outline-neutral" size="sm">
-                                        편집
-                                    </Button>
-                                </div>
-                            </div>
-                        <Form.Row>
+                        {/* 
                             <MokaInputLabel label="말머리" labelWidth={80} as="none" />
                             <Col xs={5} className="p-0 d-flex align-items-center justify-content-between">
                                 <MokaInput className="mb-3 mr-2 ft-12" as="select" name="titlePrefix" value={deskingData.titlePrefix} onChange={handleChangeValue}>
@@ -307,65 +308,6 @@ const DeskingWorkEditModal = (props) => {
                                     ))}
                                 </MokaInputLabel>
                             </div>
-                        </Form.Row>
-                        <Form.Row>
-                            <div className="w-100 p-0">
-                                <MokaInputLabel
-                                    label={
-                                        <React.Fragment>
-                                            Web제목 <br />
-                                            <MokaInput as="select" size="sm" name="fontSize" value={deskingData.fontSize} onChange={handleChangeValue}>
-                                                {fontSizeList.map((font, idx) => (
-                                                    <option key={idx} value={font.size}>
-                                                        {font.name}
-                                                    </option>
-                                                ))}
-                                            </MokaInput>
-                                        </React.Fragment>
-                                    }
-                                    labelWidth={80}
-                                    inputClassName="ft-12 resize-none"
-                                    name="title"
-                                    value={deskingData.title}
-                                    as="textarea"
-                                    inputProps={{ rows: 3 }}
-                                    onChange={handleChangeValue}
-                                    isInvalid={error.title}
-                                />
-                            </div>
-                            <Col xs={1} className="w-100 p-0 d-flex align-items-end">
-                                <div className="mb-3 pl-1 ft-12">{deskingData.title && util.euckrBytes(deskingData.title)}byte</div>
-                            </Col>
-                        </Form.Row>
-                        <MokaInputLabel label="부제" labelWidth={80} inputClassName="ft-12" name="subTitle" value={deskingData.subTitle} onChange={handleChangeValue} />
-                        <MokaInputLabel
-                            label="리드문"
-                            labelWidth={80}
-                            inputClassName="ft-12 resize-none"
-                            name="bodyHead"
-                            as="textarea"
-                            inputProps={{ rows: 5 }}
-                            value={deskingData.bodyHead}
-                            onChange={handleChangeValue}
-                        />
-                        <Form.Row className="d-flex align-items-center">
-                            <Col xs={9} className="p-0">
-                                <MokaInputLabel
-                                    label="url"
-                                    labelWidth={80}
-                                    placeholder="url 입력해주세요"
-                                    name="linkUrl"
-                                    value={deskingData.linkUrl}
-                                    onChange={handleChangeValue}
-                                />
-                            </Col>
-                            <MokaInput className="mb-3 ml-2" as="select" name="linkTarget" value={deskingData.linkTarget} onChange={handleChangeValue}>
-                                {linkTargetList.map((target) => (
-                                    <option key={target.id} value={target.id} className="ft-12">
-                                        {target.name}
-                                    </option>
-                                ))}
-                            </MokaInput>
                         </Form.Row>
                         <Form.Row className="d-flex align-items-center">
                             <MokaInputLabel label="영상" labelWidth={80} className="m-0" onChange={handleChangeValue} as="none" />

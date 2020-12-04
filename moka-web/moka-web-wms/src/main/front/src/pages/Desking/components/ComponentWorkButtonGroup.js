@@ -30,10 +30,10 @@ const customToggle = forwardRef(({ onClick, id }, ref) => {
 });
 
 /**
- * 데스킹 워크 버튼 그룹 컴포넌트
+ * 컴포넌트 워크 버튼 그룹 컴포넌트
  */
-const DeskingWorkButtonGroup = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, workStatus } = props;
+const ComponentWorkButtonGroup = (props) => {
+    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus } = props;
     const dispatch = useDispatch();
     const { search } = useSelector((store) => store.desking.history.search);
 
@@ -112,12 +112,7 @@ const DeskingWorkButtonGroup = (props) => {
     const handleOpenRegister = () => {
         if (!componentAgGridInstances[agGridIndex]) return;
         const api = componentAgGridInstances[agGridIndex].api;
-
-        if (api.getSelectedRows().length < 1) {
-            toast.warning('기사를 선택해주세요');
-        } else {
-            setRegisterModal(true);
-        }
+        api.getSelectedRows().length < 1 ? toast.warning('기사를 선택해주세요') : setRegisterModal(true);
     };
 
     /**
@@ -129,8 +124,12 @@ const DeskingWorkButtonGroup = (props) => {
      * 전체삭제
      */
     const handleClickDelete = () => {
-        if (component.deskingWorks.length > 0) {
-            const option = {
+        if (component.deskingWorks.length < 1) {
+            toast.warning('삭제할 기사가 없습니다');
+            return;
+        }
+        dispatch(
+            deleteDeskingWorkList({
                 componentWorkSeq: component.seq,
                 datasetSeq: component.datasetSeq,
                 list: component.deskingWorks,
@@ -139,9 +138,8 @@ const DeskingWorkButtonGroup = (props) => {
                         toast.error(header.message);
                     }
                 },
-            };
-            dispatch(deleteDeskingWorkList(option));
-        }
+            }),
+        );
     };
 
     /**
@@ -152,7 +150,6 @@ const DeskingWorkButtonGroup = (props) => {
             toast.warning('선택된 템플릿이 없습니다');
             return;
         }
-
         dispatch(
             putComponentWork({
                 componentWork: { ...component, templateSeq: templateData.templateSeq },
@@ -212,55 +209,51 @@ const DeskingWorkButtonGroup = (props) => {
     }, [handleClickSave, handleClickPublish, handleClickSavePublish, viewN]);
 
     return (
-        <>
-            <div className="px-2 py-1">
-                <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
-                    {/* 예약 + 타이틀 */}
-                    <Col className="d-flex align-items-center p-0 position-static" xs={7}>
-                        <ReserveComponentWork component={component} workStatus={workStatus} />
-                        <OverlayTrigger
-                            overlay={<Tooltip>{`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}, 템플릿ID: ${component.templateSeq}`}</Tooltip>}
-                        >
-                            <p className="ft-12 mb-0 component-title text-truncate">{title}</p>
-                        </OverlayTrigger>
-                    </Col>
+        <div className="px-2 py-1">
+            <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
+                {/* 예약 + 타이틀 */}
+                <Col className="d-flex align-items-center p-0 position-static" xs={7}>
+                    <ReserveComponentWork component={component} workStatus={workStatus} />
+                    <OverlayTrigger overlay={<Tooltip>{`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}, 템플릿ID: ${component.templateSeq}`}</Tooltip>}>
+                        <p className="ft-12 mb-0 component-title text-truncate">{title}</p>
+                    </OverlayTrigger>
+                </Col>
 
-                    {/* 기능 버튼 + 드롭다운 메뉴 */}
-                    <Col className="p-0 d-flex align-items-center justify-content-end" xs={5}>
-                        {iconButton.map((icon, idx) => (
-                            <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-1 py-0 mr-1" onClick={icon.onClick}>
-                                <MokaIcon iconName={icon.iconName} />
-                            </MokaOverlayTooltipButton>
-                        ))}
-                        <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
-                            <Dropdown>
-                                <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
-                                <Dropdown.Menu className="ft-12">
-                                    {!viewN && (
-                                        <React.Fragment>
-                                            <Dropdown.Item eventKey="1" onClick={handleOpenAddSpace} date={component}>
-                                                공백 추가
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="2" onClick={handleClickDelete}>
-                                                전체 삭제
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="3" onClick={handleOpenRegister}>
-                                                기사 이동
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="4" onClick={handleOpenListNumber}>
-                                                리스트 건수
-                                            </Dropdown.Item>
-                                        </React.Fragment>
-                                    )}
-                                    <Dropdown.Item eventKey="5" onClick={handleClickViewYn}>
-                                        {viewN ? '영역 노출' : '영역 비노출'}
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
+                {/* 기능 버튼 + 드롭다운 메뉴 */}
+                <Col className="p-0 d-flex align-items-center justify-content-end" xs={5}>
+                    {iconButton.map((icon, idx) => (
+                        <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-1 py-0 mr-1" onClick={icon.onClick}>
+                            <MokaIcon iconName={icon.iconName} />
                         </MokaOverlayTooltipButton>
-                    </Col>
-                </Row>
-            </div>
+                    ))}
+                    <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
+                        <Dropdown>
+                            <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
+                            <Dropdown.Menu className="ft-12">
+                                {!viewN && (
+                                    <React.Fragment>
+                                        <Dropdown.Item eventKey="1" onClick={handleOpenAddSpace}>
+                                            공백 추가
+                                        </Dropdown.Item>
+                                        <Dropdown.Item eventKey="2" onClick={handleClickDelete}>
+                                            전체 삭제
+                                        </Dropdown.Item>
+                                        <Dropdown.Item eventKey="3" onClick={handleOpenRegister}>
+                                            기사 이동
+                                        </Dropdown.Item>
+                                        <Dropdown.Item eventKey="4" onClick={handleOpenListNumber}>
+                                            리스트 건수
+                                        </Dropdown.Item>
+                                    </React.Fragment>
+                                )}
+                                <Dropdown.Item eventKey="5" onClick={handleClickViewYn}>
+                                    {viewN ? '영역 노출' : '영역 비노출'}
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </MokaOverlayTooltipButton>
+                </Col>
+            </Row>
 
             {/* HTML 수동 편집 */}
             <HtmlEditModal show={htmlEditModal} onHide={() => setHtmlEditModal(false)} data={component} />
@@ -303,7 +296,8 @@ const DeskingWorkButtonGroup = (props) => {
             <AddSpaceModal
                 show={addSpaceModal}
                 onHide={() => setAddSpaceModal(false)}
-                data={component}
+                areaSeq={areaSeq}
+                component={component}
                 agGridIndex={agGridIndex}
                 componentAgGridInstances={componentAgGridInstances}
             />
@@ -319,8 +313,8 @@ const DeskingWorkButtonGroup = (props) => {
 
             {/* 리스트 건수 */}
             <ListNumberEditModal show={listNumberModal} onHide={() => setListNumberModal(false)} data={component} />
-        </>
+        </div>
     );
 };
 
-export default DeskingWorkButtonGroup;
+export default ComponentWorkButtonGroup;

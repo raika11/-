@@ -1,5 +1,5 @@
 export default {
-    // 타이틀
+    // 제목
     title: {
         as: 'textarea',
         field: 'title',
@@ -25,8 +25,8 @@ export default {
         as: 'input',
         type: 'text',
         field: 'boxUrl',
-        label: 'Box url',
-        placeholder: 'url을 입력하세요',
+        label: 'Box URL',
+        placeholder: 'URL을 입력하세요',
     },
     // 부제
     subTitle: {
@@ -45,7 +45,7 @@ export default {
         label: '리드문',
         inputProps: {
             className: 'resize-none custom-scroll',
-            rows: 2,
+            rows: 5,
         },
     },
     // linkUrl
@@ -53,15 +53,15 @@ export default {
         as: 'input',
         type: 'text',
         field: 'linkUrl',
-        label: 'url',
-        placeholder: 'url을 입력하세요',
+        label: 'URL',
+        placeholder: 'URL을 입력하세요',
     },
     // moreUrl
     moreUrl: {
         as: 'input',
         type: 'text',
         field: 'moreUrl',
-        label: '더보기 url',
-        placeholder: 'url을 입력하세요',
+        label: '더보기 URL',
+        placeholder: 'URL을 입력하세요',
     },
 };

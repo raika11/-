@@ -112,6 +112,7 @@ const ComponentWorkList = (props) => {
                                 <ComponentWork
                                     key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
                                     deskingPart={areaComp.deskingPart}
+                                    areaSeq={area.areaSeq}
                                     component={component}
                                     agGridIndex={targetIdx}
                                     {...props}
@@ -139,6 +140,7 @@ const ComponentWorkList = (props) => {
                                 return (
                                     <ComponentWork
                                         key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
+                                        areaSeq={area.areaSeq}
                                         deskingPart={areaComp.deskingPart}
                                         component={component}
                                         agGridIndex={targetIdx}

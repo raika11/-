@@ -24,7 +24,7 @@ const DeskingWorkAgGrid = (props) => {
 
     // state
     const [rowData, setRowData] = useState([]);
-    const [gridInstance, setGridInstance] = useState(null);
+    const [, setGridInstance] = useState(null);
     const [hoverNode, setHoverNode] = useState(null);
     const [nextNode, setNextNode] = useState(null);
     const [draggingNodeData, setDraggingNodeData] = useState(null);

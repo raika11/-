@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaImageInput, MokaInput, MokaInputLabel, MokaModal } from '@components';
+import util from '@utils/commonUtil';
 
 import { postDeskingWork } from '@store/desking';
 import toast from '@utils/toastUtil';
@@ -18,7 +19,7 @@ const linkTargetList = [
  * 공백기사 컴포넌트
  */
 const AddSpaceModal = (props) => {
-    const { show, onHide, data } = props;
+    const { show, onHide, areaSeq, component } = props;
     const dispatch = useDispatch();
 
     // 데스킹 정보
@@ -27,19 +28,6 @@ const AddSpaceModal = (props) => {
     const [bodyHead, setBodyHead] = useState('');
     const [linkUrl, setLinkUrl] = useState('');
     const [linkTarget, setLinkTarget] = useState('');
-
-    /**
-     * 타이틀 byte 계산
-     * @param {String} text 타이틀
-     */
-    const euckrBytes = (text) => {
-        const euckrLength = ((s, b = 0, i = 0, c = 0) => {
-            // eslint-disable-next-line no-cond-assign
-            for (i = 0; (c = s.charCodeAt(i++)); b += c >= 128 ? 2 : 1);
-            return b;
-        })(text);
-        return euckrLength;
-    };
 
     /**
      * modal의 항목 값 변경
@@ -51,9 +39,6 @@ const AddSpaceModal = (props) => {
             setThumbFileName(value);
         } else if (name === 'title') {
             setTitle(value);
-            if (value !== title && name === 'titleLength') {
-                euckrBytes(value);
-            }
         } else if (name === 'bodyHead') {
             setBodyHead(value);
         } else if (name === 'linkUrl') {
@@ -67,28 +52,29 @@ const AddSpaceModal = (props) => {
      * 저장
      */
     const handleSaveDeskingWork = () => {
-        const option = {
-            componentWorkSeq: data.seq,
-            datasetSeq: data.datasetSeq,
-            deskingWork: {
-                contentOrd: 1,
-                contentType: 'D',
-                thumbFileName,
-                title,
-                bodyHead,
-                linkUrl,
-                linkTarget,
-            },
-            callback: ({ header }) => {
-                if (header.success) {
-                    toast.success(header.message);
-                    handleHide();
-                } else {
-                    toast.error(header.message);
-                }
-            },
-        };
-        dispatch(postDeskingWork(option));
+        dispatch(
+            postDeskingWork({
+                areaSeq,
+                componentWorkSeq: component.seq,
+                datasetSeq: component.datasetSeq,
+                deskingWork: {
+                    contentOrd: 1,
+                    contentType: 'D',
+                    thumbFileName,
+                    title,
+                    bodyHead,
+                    linkUrl,
+                    linkTarget,
+                },
+                callback: ({ header }) => {
+                    if (header.success) {
+                        handleHide();
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     /**
@@ -144,9 +130,7 @@ const AddSpaceModal = (props) => {
                             />
                         </div>
                         <Col xs={1} className="w-100 p-0 d-flex align-items-end">
-                            <div className="mb-3 pl-1 ft-12" name="titleLength" onChange={handleChangeValue}>
-                                {euckrBytes(title)}byte
-                            </div>
+                            <div className="mb-3 pl-1 ft-12">{util.euckrBytes(title)}byte</div>
                         </Col>
                     </Form.Row>
                     <MokaInputLabel

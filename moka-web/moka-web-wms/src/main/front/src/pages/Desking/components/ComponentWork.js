@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
-import ButtonGroup from './DeskingWorkButtonGroup';
+import ButtonGroup from './ComponentWorkButtonGroup';
 import AgGrid from './DeskingWorkAgGrid';
 import { DeskingWorkEditModal } from '@pages/Desking/modals';
 import toast from '@utils/toastUtil';
@@ -40,7 +40,7 @@ const defaultProps = {
 };
 
 const ComponentWork = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, deskingPart } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
     const dispatch = useDispatch();
 
     const { workStatus } = useSelector((store) => ({
@@ -65,10 +65,16 @@ const ComponentWork = (props) => {
      * @param {func} callback 저장 후 실행
      */
     const handleClickSave = (deskingWork, callback) => {
+        let saveData = deskingWork;
+        delete saveData.onRowClicked;
+        delete saveData.onSave;
+        delete saveData.onDelete;
+
         dispatch(
             putDeskingWork({
                 componentWorkSeq: component.seq,
-                deskingWork,
+                areaSeq,
+                deskingWork: saveData,
                 callback,
             }),
         );
@@ -103,8 +109,16 @@ const ComponentWork = (props) => {
                 })}
                 id={`agGrid-${component.seq}`}
             >
-                <ButtonGroup component={component} agGridIndex={agGridIndex} componentAgGridInstances={componentAgGridInstances} workStatus={workStatus[component.seq]} />
+                {/* 컴포넌트 워크의 버튼 그룹 */}
+                <ButtonGroup
+                    areaSeq={areaSeq}
+                    component={component}
+                    agGridIndex={agGridIndex}
+                    componentAgGridInstances={componentAgGridInstances}
+                    workStatus={workStatus[component.seq]}
+                />
 
+                {/* 데스킹 워크 리스트 */}
                 <AgGrid
                     component={component}
                     agGridIndex={agGridIndex}

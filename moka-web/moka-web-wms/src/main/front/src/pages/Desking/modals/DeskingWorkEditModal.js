@@ -106,7 +106,7 @@ const DeskingWorkEditModal = (props) => {
                     toast.success(response.header.message);
                     handleHide();
                 } else {
-                    toast.warning(response.header.message);
+                    toast.fail(response.header.message);
                 }
             };
             onSave(deskingWork, callback);

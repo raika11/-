@@ -52,7 +52,7 @@ const Component = ({ match }) => {
                                 }
                                 // 삭제 실패
                                 else {
-                                    toast.warning(header.message);
+                                    toast.fail(header.message);
                                 }
                             },
                         }),
@@ -83,7 +83,7 @@ const Component = ({ match }) => {
                                 messageBox.alert('사용 중인 컴포넌트입니다.\n삭제할 수 없습니다.');
                             }
                         } else {
-                            toast.warning(header.message);
+                            toast.fail(header.message);
                         }
                     },
                 }),

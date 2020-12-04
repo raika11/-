@@ -158,7 +158,7 @@ const DeskingWorkButtonGroup = (props) => {
                 componentWork: { ...component, templateSeq: templateData.templateSeq },
                 callback: ({ header }) => {
                     if (!header.success) {
-                        toast.error(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),

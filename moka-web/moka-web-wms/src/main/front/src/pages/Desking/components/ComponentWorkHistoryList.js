@@ -96,7 +96,7 @@ const ComponentWorkHistoryList = (props) => {
                         if (response.header) {
                             toast.success(response.header.message);
                         } else {
-                            toast.warning(response.header.message);
+                            toast.fail(response.header.message);
                         }
                     },
                 }),

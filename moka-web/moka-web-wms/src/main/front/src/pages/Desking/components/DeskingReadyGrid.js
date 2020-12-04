@@ -33,7 +33,7 @@ const DeskingReadyGrid = (props) => {
                         tgtComponent: comp,
                         callback: ({ header }) => {
                             if (!header.success) {
-                                toast.warning(header.message);
+                                toast.fail(header.message);
                             } else {
                                 componentAgGridInstances[sourceIdx].api.deselectAll();
                             }

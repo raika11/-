@@ -76,7 +76,7 @@ const AddComponentModal = (props) => {
                             toast.success(header.message);
                             handleHide();
                         } else {
-                            toast.warning(header.message);
+                            toast.fail(header.message);
                         }
                     },
                 }),

@@ -184,7 +184,7 @@ const DomainEditTest = ({ history, onDelete }) => {
                             }),
                         );
                     } else {
-                        toast.warning('중복된 도메인아이디가 존재합니다.');
+                        toast.fail('중복된 도메인아이디가 존재합니다.');
                     }
                 },
             }),

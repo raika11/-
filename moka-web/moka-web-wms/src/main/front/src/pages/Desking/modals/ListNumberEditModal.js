@@ -24,7 +24,7 @@ const ListNumberEditModal = (props) => {
                         toast.success(header.message);
                         onHide();
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),

@@ -34,7 +34,7 @@ const HtmlEditModal = (props) => {
                 componentWorkSeq,
                 callback: ({ header }) => {
                     if (!header.success) {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     } else {
                         toast.success(header.message);
                     }
@@ -59,7 +59,7 @@ const HtmlEditModal = (props) => {
                             if (header.success) {
                                 saveCallback({ componentWorkSeq: data.seq });
                             } else {
-                                toast.warning(header.message);
+                                toast.fail(header.message);
                             }
                         },
                     }),
@@ -83,7 +83,7 @@ const HtmlEditModal = (props) => {
                         let win = window.open('', '스냅샷 미리보기');
                         win.document.body.innerHTML = body;
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),

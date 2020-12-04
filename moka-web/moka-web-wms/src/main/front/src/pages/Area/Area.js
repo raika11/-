@@ -46,7 +46,7 @@ const Area = ({ match }) => {
                             dispatch(clearArea(1));
                         }
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -87,7 +87,7 @@ const Area = ({ match }) => {
                                 );
                             }
                         } else {
-                            toast.warning(header.message);
+                            toast.fail(header.message);
                         }
                     },
                 }),

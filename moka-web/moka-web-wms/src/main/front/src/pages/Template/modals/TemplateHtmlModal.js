@@ -52,7 +52,7 @@ const TemplateHtmlModal = (props) => {
                         toast.success(header.message);
                         handleHide();
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -81,7 +81,7 @@ const TemplateHtmlModal = (props) => {
                             );
                         }
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),

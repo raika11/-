@@ -50,7 +50,7 @@ const ContainerHtmlModal = (props) => {
                         toast.success(header.message);
                         handleHide();
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -72,7 +72,7 @@ const ContainerHtmlModal = (props) => {
                         messageBox.confirm('다른 곳에서 사용 중입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?', () => submitContainer());
                     }
                 } else {
-                    toast.warning(header.message);
+                    toast.fail(header.message);
                 }
             },
         };

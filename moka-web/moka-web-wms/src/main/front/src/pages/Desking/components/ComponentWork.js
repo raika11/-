@@ -85,7 +85,7 @@ const ComponentWork = (props) => {
             list: [deskingWork],
             callback: ({ header }) => {
                 if (!header.success) {
-                    toast.warning(header.message);
+                    toast.fail(header.message);
                 }
             },
         };

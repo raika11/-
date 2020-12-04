@@ -58,7 +58,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
                 reserveDt: moment(reserveDt).format(DB_DATEFORMAT),
                 callback: ({ header }) => {
                     if (!header.success) {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     } else {
                         toast.success(header.message);
                         setOpenReserve(false);

@@ -42,7 +42,7 @@ const ChangeArtGroupModal = (props) => {
                         toast.success(header.message);
                         dispatch(getArticleList());
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),

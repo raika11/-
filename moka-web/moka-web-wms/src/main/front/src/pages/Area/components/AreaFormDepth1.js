@@ -57,7 +57,7 @@ const AreaFormDepth1 = ({ onDelete }) => {
                         toast.success(header.message);
                         history.push(`/area/${body.areaSeq}`);
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),

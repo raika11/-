@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
 import { previewAreaModal, PREVIEW_AREA_MODAL } from '@store/merge';
+import toast from '@utils/toastUtil';
 import { MokaLoader } from '@components';
 
 /**
@@ -41,6 +42,7 @@ const ComponentWorkPreview = ({ show }) => {
                         setPreviewContent(body);
                     } else {
                         setPreviewContent(null);
+                        toast.fail(header.message);
                     }
                 },
             }),

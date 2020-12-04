@@ -80,7 +80,7 @@ const ComponentEdit = ({ onDelete }) => {
                         toast.success(header.message);
                         history.push(`/component/${body.componentSeq}`);
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),

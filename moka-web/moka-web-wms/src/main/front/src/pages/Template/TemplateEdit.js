@@ -116,7 +116,7 @@ const TemplateEdit = ({ onDelete }) => {
                         toast.success(header.message);
                         history.push(`/template/${body.templateSeq}`);
                     } else {
-                        toast.warning(header.message);
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -217,7 +217,7 @@ const TemplateEdit = ({ onDelete }) => {
                             toast.success(header.message);
                             history.push(`/template/${body.templateSeq}`);
                         } else {
-                            toast.warning(header.message);
+                            toast.fail(header.message);
                         }
                     },
                 }),

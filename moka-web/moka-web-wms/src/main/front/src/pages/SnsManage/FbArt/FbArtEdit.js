@@ -67,10 +67,10 @@ SK는 "김성현과 2+1년 최대 11억원에 계약했다. 세부 조건은 계
                             <Figure.Image className="mb-0" src={'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/25ed1572-899d-4bb7-9f59-81059bea0e49.jpg'} />
                             <div className="d-flex justify-content-end mb-0 pt-3">
                                 <div className="d-flex justify-content-end pr-2">
-                                    <Button variant="positive">신규 등록</Button>
+                                    <Button variant="outline-neutral">신규 등록</Button>
                                 </div>
                                 <div className="d-flex justify-content-end">
-                                    <Button variant="searching">편집</Button>
+                                    <Button variant="outline-neutral">편집</Button>
                                 </div>
                             </div>
                         </Col>

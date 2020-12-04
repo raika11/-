@@ -122,22 +122,52 @@ public class DeskingWorkVO implements Serializable {
     private String title;
 
     /**
+     * 제목/부제목 위치
+     */
+    @Column(name = "TITLE_LOC")
+    private String titleLoc;
+
+    /**
+     * 제목크기
+     */
+    @Column(name = "TITLE_SIZE")
+    private String titleSize;
+
+    /**
      * 부제목
      */
     @Column(name = "SUB_TITLE")
     private String subTitle;
 
     /**
-     * 어깨제목
+     * Box 제목
      */
     @Column(name = "NAMEPLATE")
     private String nameplate;
+
+    /**
+     * Box Url
+     */
+    @Column(name = "NAMEPLATE_URL")
+    private String nameplateUrl;
+
+    /**
+     * Box target
+     */
+    @Column(name = "NAMEPLATE_TARGET")
+    private String nameplateTarget;
 
     /**
      * 말머리
      */
     @Column(name = "TITLE_PREFIX")
     private String titlePrefix;
+
+    /**
+     * 말머리 위치
+     */
+    @Column(name = "TITLE_PREFIX_LOC")
+    private String titlePrefixLoc;
 
     /**
      * 발췌문
@@ -156,18 +186,6 @@ public class DeskingWorkVO implements Serializable {
      */
     @Column(name = "LINK_TARGET")
     private String linkTarget;
-
-    /**
-     * 더보기URL
-     */
-    @Column(name = "MORE_URL")
-    private String moreUrl;
-
-    /**
-     * 더보기TARGET
-     */
-    @Column(name = "MORE_TARGET")
-    private String moreTarget;
 
     /**
      * 썸네일파일명

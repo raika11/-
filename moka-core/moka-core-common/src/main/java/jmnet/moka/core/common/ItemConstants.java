@@ -59,6 +59,7 @@ public class ItemConstants {
     public static String COMPONENT_DOMAIN_ID = "domainId";
     public static String COMPONENT_TEMPLATE_ID = "templateId";
     public static String COMPONENT_DATASET_ID = "datasetId";
+    public static String COMPONENT_PART_ID = "partId";
     public static String COMPONENT_NAME = "name";
     public static String COMPONENT_DESCRIPTION = "description";
     public static String COMPONENT_PERIOD_YN = "periodYn";
@@ -223,6 +224,7 @@ public class ItemConstants {
         public static String COMPONENT_DOMAIN_ID = "DOMAIN_ID";
         public static String COMPONENT_TEMPLATE_ID = "TEMPLATE_SEQ";
         public static String COMPONENT_DATASET_ID = "DATASET_SEQ";
+        public static String COMPONENT_PART_ID = "PART_SEQ";
         public static String COMPONENT_NAME = "COMPONENT_NAME";
         public static String COMPONENT_DESCRIPTION = "DESCRIPTION";
         public static String COMPONENT_PERIOD_YN = "PERIOD_YN";

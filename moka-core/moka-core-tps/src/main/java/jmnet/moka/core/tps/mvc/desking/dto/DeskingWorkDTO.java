@@ -110,19 +110,44 @@ public class DeskingWorkDTO implements Serializable {
     private String title;
 
     /**
+     * 제목/부제목 위치
+     */
+    private String titleLoc;
+
+    /**
+     * 제목크기
+     */
+    private String titleSize;
+
+    /**
      * 부제목
      */
     private String subTitle;
 
     /**
-     * 어깨제목
+     * Box 제목
      */
     private String nameplate;
+
+    /**
+     * Box Url
+     */
+    private String nameplateUrl;
+
+    /**
+     * Box target
+     */
+    private String nameplateTarget;
 
     /**
      * 말머리
      */
     private String titlePrefix;
+
+    /**
+     * 말머리 위치
+     */
+    private String titlePrefixLoc;
 
     /**
      * 발췌문
@@ -138,16 +163,6 @@ public class DeskingWorkDTO implements Serializable {
      * 링크TARGET
      */
     private String linkTarget;
-
-    /**
-     * 더보기URL
-     */
-    private String moreUrl;
-
-    /**
-     * 더보기TARGET
-     */
-    private String moreTarget;
 
     /**
      * 썸네일파일명

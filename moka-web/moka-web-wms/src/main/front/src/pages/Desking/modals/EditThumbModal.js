@@ -35,7 +35,7 @@ const EditThumbModal = (props) => {
                     className="shadow-none w-100"
                     tabs={[
                         <React.Fragment>
-                            <div className="px-3 py-2">
+                            <div className="px-3 pt-0 pb-2">
                                 <EditThumbSearch />
                                 <EditThumbTable />
                             </div>

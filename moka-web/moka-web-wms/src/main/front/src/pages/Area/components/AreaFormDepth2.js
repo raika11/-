@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
-import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
+import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
 import ComponentSelector from './ComponentSelector';
 import ContainerSelector from './ContainerSelector';
 import AreaComp from './AreaComp';

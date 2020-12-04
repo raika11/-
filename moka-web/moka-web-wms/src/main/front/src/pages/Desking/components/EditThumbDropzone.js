@@ -66,7 +66,7 @@ const EditThumbDropzone = ({ collapse, setCollapse }) => {
                 <div style={{ width: 120 }} className="mr-1">
                     <MokaInputLabel label="간격" labelWidth={45} className="mb-0" disabled />
                 </div>
-                <p className="mb-0 mr-3">sce</p>
+                <p className="mb-0 mr-3">sec</p>
                 <Button
                     variant="searching"
                     className="px-2"

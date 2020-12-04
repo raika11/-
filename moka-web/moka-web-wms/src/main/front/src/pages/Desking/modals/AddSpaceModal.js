@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaImageInput, MokaInput, MokaInputLabel, MokaModal } from '@components';
-import util from '@utils/commonUtil';
-
 import { postDeskingWork } from '@store/desking';
+import util from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
-
-const linkTargetList = [
-    { id: 'S', name: '본창' },
-    { id: 'N', name: '새창' },
-];
 
 /**
  * 공백기사 컴포넌트
@@ -148,11 +141,12 @@ const AddSpaceModal = (props) => {
                             <MokaInputLabel label="url" labelWidth={80} placeholder="url 입력해주세요" name="linkUrl" value={linkUrl} onChange={handleChangeValue} />
                         </Col>
                         <MokaInput className="mb-3 ml-2" as="select" name="linkTarget" value={linkTarget} onChange={handleChangeValue}>
-                            {linkTargetList.map((target) => (
-                                <option key={target.id} value={target.id} className="ft-12">
-                                    {target.name}
-                                </option>
-                            ))}
+                            <option value="_self" className="ft-12">
+                                본창
+                            </option>
+                            <option value="_blank" className="ft-12">
+                                새창
+                            </option>
                         </MokaInput>
                     </Form.Row>
                 </Form>

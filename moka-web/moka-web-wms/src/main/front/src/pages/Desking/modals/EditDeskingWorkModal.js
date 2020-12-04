@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
 import { MokaInput, MokaInputLabel, MokaModal } from '@components';
 import util from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
@@ -16,10 +15,6 @@ import mapping, { fontSizeObj } from '../deskingPartMapping';
 // const titlePrefixList = [{ name: '속보' }, { name: '단독' }];
 // const prefixLocationList = [{ name: '제목 앞' }, { name: '제목 뒤' }, { name: '부제 앞' }, { name: '부제 뒤' }, { name: '리드문 앞' }, { name: '리드문 뒤' }];
 // const titleLocationList = [{ name: '상단' }, { name: '하단' }];
-const linkTargetList = [
-    { id: '_self', name: '본창' },
-    { id: '_blank', name: '새창' },
-];
 const urlRegex = /[Uu]rl$/;
 
 /**
@@ -36,12 +31,12 @@ const EditDeskingWorkModal = (props) => {
 
     // state
     const [deskingPart, setDeskingPart] = useState([]); // area의 deskingPart 리스트
+    const [fileValue, setFileValue] = useState(null); // 파일
     const [fontListType, setFontListType] = useState(''); // 제목의 폰트 타입
     const [error, setError] = useState({});
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(false); // 새이미지 등록 팝업 모달
     const [specialChar, setSpecialChar] = useState(''); // 약물
     const [deskingData, setDeskingData] = useState({}); // 데스킹워크 데이터
-    const [fileValue, setFileValue] = useState(null); // 파일
 
     /**
      * validate
@@ -166,7 +161,6 @@ const EditDeskingWorkModal = (props) => {
                 <Form>
                     {deskingPart.map((partKey) => {
                         const mappingData = mapping[partKey];
-                        const isUrl = urlRegex.test(partKey);
 
                         // 약물(기타코드), 대표이미지, 아이콘(기타코드), 말머리(기타코드), 제목/부제위치(기타코드), 제목(기타코드), 영상은 예외처리
                         if (partKey === 'TITLE') {
@@ -245,6 +239,7 @@ const EditDeskingWorkModal = (props) => {
                             );
                         } else if (mappingData) {
                             const { as, field, label, errorCheck, ...mappingProps } = mappingData;
+                            const isUrl = urlRegex.test(field);
 
                             return (
                                 <Form.Row key={partKey} className="mb-2">
@@ -265,11 +260,12 @@ const EditDeskingWorkModal = (props) => {
                                     {isUrl && (
                                         <Col xs={2} className="p-0">
                                             <MokaInput as="select" name={`${field}Target`} value={deskingData[`${field}Target`]} className="ft-12" onChange={handleChangeValue}>
-                                                {linkTargetList.map((target) => (
-                                                    <option key={target.id} value={target.id} className="ft-12">
-                                                        {target.name}
-                                                    </option>
-                                                ))}
+                                                <option value="_self" className="ft-12">
+                                                    본창
+                                                </option>
+                                                <option value="_blank" className="ft-12">
+                                                    새창
+                                                </option>
                                             </MokaInput>
                                         </Col>
                                     )}

@@ -11,15 +11,14 @@ import toast from '@utils/toastUtil';
 import EditThumbModal from './EditThumbModal';
 import { getBulkChar } from '@store/codeMgt';
 import { PUT_DESKING_WORK } from '@store/desking';
-import mapping from '../deskingPartMapping';
+import mapping, { fontSizeObj } from '../deskingPartMapping';
 
 // const titlePrefixList = [{ name: '속보' }, { name: '단독' }];
 // const prefixLocationList = [{ name: '제목 앞' }, { name: '제목 뒤' }, { name: '부제 앞' }, { name: '부제 뒤' }, { name: '리드문 앞' }, { name: '리드문 뒤' }];
 // const titleLocationList = [{ name: '상단' }, { name: '하단' }];
-const fontSizeList = [{ name: '36px' }, { name: '41px' }, { name: '45px' }, { name: '48px' }];
 const linkTargetList = [
-    { id: 'S', name: '본창' },
-    { id: 'N', name: '새창' },
+    { id: '_self', name: '본창' },
+    { id: '_blank', name: '새창' },
 ];
 const urlRegex = /[Uu]rl$/;
 
@@ -37,6 +36,7 @@ const EditDeskingWorkModal = (props) => {
 
     // state
     const [deskingPart, setDeskingPart] = useState([]); // area의 deskingPart 리스트
+    const [fontListType, setFontListType] = useState(''); // 제목의 폰트 타입
     const [error, setError] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [specialChar, setSpecialChar] = useState(''); // 약물
@@ -103,7 +103,16 @@ const EditDeskingWorkModal = (props) => {
     };
 
     useEffect(() => {
-        deskingPartStr?.length > 0 && setDeskingPart(deskingPartStr.split(','));
+        if (deskingPartStr === '') return;
+
+        const list = deskingPartStr.split(',');
+        const filtered = list.filter((part) => !fontSizeObj[part]);
+        setDeskingPart(filtered);
+
+        if (list.length !== filtered.length) {
+            const fontPart = list.find((part) => fontSizeObj[part]);
+            setFontListType(fontPart);
+        }
     }, [deskingPartStr]);
 
     useEffect(() => {
@@ -159,8 +168,8 @@ const EditDeskingWorkModal = (props) => {
                         const mappingData = mapping[partKey];
                         const isUrl = urlRegex.test(partKey);
 
-                        // 제목, 대표이미지, 아이콘, 말머리, 제목/부제위치, 영상, 라이브제목, 약물은 예외처리
-                        if (partKey === 'title') {
+                        // 약물(기타코드), 대표이미지, 아이콘(기타코드), 말머리(기타코드), 제목/부제위치(기타코드), 제목(기타코드), 영상은 예외처리
+                        if (partKey === 'TITLE') {
                             const { as, field, label, errorCheck, ...mappingProps } = mappingData;
 
                             return (
@@ -171,13 +180,16 @@ const EditDeskingWorkModal = (props) => {
                                             label={
                                                 <React.Fragment>
                                                     {label}
-                                                    <MokaInput as="select" size="sm" name="fontSize" value={deskingData.fontSize} onChange={handleChangeValue}>
-                                                        {fontSizeList.map((font, idx) => (
+                                                    {fontListType && (
+                                                        <MokaInput as="select" size="sm" name="fontSize" value={deskingData.fontSize} onChange={handleChangeValue}>
+                                                            <option hidden>테스트</option>
+                                                            {/* {fontSizeList.map((font, idx) => (
                                                             <option key={idx} value={font.size}>
                                                                 {font.name}
                                                             </option>
-                                                        ))}
-                                                    </MokaInput>
+                                                        ))} */}
+                                                        </MokaInput>
+                                                    )}
                                                 </React.Fragment>
                                             }
                                             labelWidth={80}
@@ -195,7 +207,7 @@ const EditDeskingWorkModal = (props) => {
                                     </Col>
                                 </Form.Row>
                             );
-                        } else if (partKey === 'thumbFileName') {
+                        } else if (partKey === 'THUMB_FILE_NAME') {
                             return (
                                 <Form.Row key={partKey} className="mb-2 flex-column">
                                     <MokaInputLabel
@@ -218,7 +230,7 @@ const EditDeskingWorkModal = (props) => {
                                     </div>
                                 </Form.Row>
                             );
-                        } else if (partKey === 'specialChar') {
+                        } else if (partKey === 'SPECIAL_CHAR') {
                             return (
                                 <Form.Row key={partKey} className="mb-2">
                                     <MokaInputLabel
@@ -252,7 +264,7 @@ const EditDeskingWorkModal = (props) => {
                                     </Col>
                                     {isUrl && (
                                         <Col xs={2} className="p-0">
-                                            <MokaInput as="select" name={`${partKey}Target`} value={deskingData[`${partKey}Target`]} className="ft-12" onChange={handleChangeValue}>
+                                            <MokaInput as="select" name={`${field}Target`} value={deskingData[`${field}Target`]} className="ft-12" onChange={handleChangeValue}>
                                                 {linkTargetList.map((target) => (
                                                     <option key={target.id} value={target.id} className="ft-12">
                                                         {target.name}

@@ -44,6 +44,10 @@ export const CODETYPE_ART_GROUP = 'ART_GROUP';
 export const CODETYPE_ART_GROUP_NAME = 'ART_GROUP_NUM';
 // 공통코드 : 네이버 벌크 약물
 export const CODETYPE_SPECIALCHAR = 'specialChar';
+// 공통코드 : 페이지편집폼 제목글자사이즈(Image type1-기본, Image type1-와이드, Vod type1-기본)
+export const CODETYPE_DS_FONT_IMGD = 'DS_FONT_IMGD';
+export const CODETYPE_DS_FONT_IMGW = 'DS_FONT_IMGW';
+export const CODETYPE_DS_FONT_VODD = 'DS_FONT_VODD';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

@@ -4,7 +4,7 @@ import produce from 'immer';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { MokaModal, MokaInput } from '@components';
-import { deskingPartList } from '@pages/Desking/deskingPartMapping';
+import { deskingPartList, fontSizeList } from '@pages/Desking/deskingPartMapping';
 
 /**
  * 편집파트 변경 모달
@@ -12,11 +12,13 @@ import { deskingPartList } from '@pages/Desking/deskingPartMapping';
 const EditDeskingPartModal = (props) => {
     const { show, onHide, areaComp, onSave } = props;
 
-    // state
+    // 체크된 데이터를 저장하는 state
     const [deskingPart, setDeskingPart] = useState({});
+    const [fontSize, setFontSize] = useState({});
 
     /**
-     * list -> 쉽게 파싱하기 위해서 object로 바꿈
+     * DB의 deskingPart 문자열을 리스트로 파싱하고,
+     * 체크 표시를 하기 위해 object로 바꿈
      */
     const setDeskingPartObj = useCallback(() => {
         if (areaComp?.deskingPart) {
@@ -32,28 +34,39 @@ const EditDeskingPartModal = (props) => {
                         : all;
                 }, {}),
             );
+            setFontSize(
+                list.reduce((all, dp) => {
+                    const target = fontSizeList.find((d) => d.id === dp);
+                    return target ? target : all;
+                }, {}),
+            );
         } else {
             setDeskingPart({});
+            setFontSize({});
         }
     }, [areaComp.deskingPart]);
 
     /**
-     * 값 변경
+     * 데스킹폼 값 변경
      * @param {object} e 이벤트
      */
     const handleChangeValue = (e) => {
-        const { checked, id } = e.target;
+        const { checked, id, name } = e.target;
 
-        setDeskingPart(
-            produce(deskingPart, (draft) => {
-                if (checked) {
-                    const nt = deskingPartList.find((d) => d.id === id);
-                    draft[id] = nt;
-                } else {
-                    delete draft[id];
-                }
-            }),
-        );
+        if (name === 'deskingPart') {
+            const nt = deskingPartList.find((d) => d.id === id);
+            setDeskingPart(
+                produce(deskingPart, (draft) => {
+                    checked ? (draft[id] = nt) : delete draft[id];
+                }),
+            );
+        } else if (name === 'fontSize') {
+            if (fontSize.id === id) {
+                setFontSize({});
+            } else {
+                setFontSize(fontSizeList.find((d) => d.id === id));
+            }
+        }
     };
 
     /**
@@ -65,7 +78,10 @@ const EditDeskingPartModal = (props) => {
                 return a.index - b.index;
             });
             let idList = sortList.map((list) => list.id);
-            onSave({ ...areaComp, deskingPart: idList.join(',') });
+            let dp = idList.join(',');
+            // 폰트사이즈는 별도로 붙여줌
+            if (fontSize?.id) dp = dp + `,${fontSize.id}`;
+            onSave({ ...areaComp, deskingPart: dp });
         }
         onHide();
     };
@@ -119,6 +135,36 @@ const EditDeskingPartModal = (props) => {
                     </Col>
                 ))}
             </Form.Row>
+
+            {/* 제목의 폰트 사이즈 설정 */}
+            {deskingPart.TITLE && (
+                <React.Fragment>
+                    <hr className="divider" />
+                    <p className="h5 mb-3">제목 폰트 사이즈</p>
+                    <Form.Row className="flex-wrap">
+                        {fontSizeList.map((part, idx) => (
+                            <Col
+                                xs={6}
+                                key={idx}
+                                className={clsx('mb-2', 'py-0', {
+                                    'pl-0': idx % 2 === 0,
+                                    'pl-2': idx % 2 === 1,
+                                    'pr-0': idx % 2 === 1,
+                                    'pr-2': idx % 2 === 0,
+                                })}
+                            >
+                                <MokaInput
+                                    as="checkbox"
+                                    name="fontSize"
+                                    id={part.id}
+                                    onChange={handleChangeValue}
+                                    inputProps={{ label: part.title, custom: true, checked: fontSize.id === part.id ? true : false }}
+                                />
+                            </Col>
+                        ))}
+                    </Form.Row>
+                </React.Fragment>
+            )}
         </MokaModal>
     );
 };

@@ -6,8 +6,8 @@ import { Col, Row } from 'react-bootstrap';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import GroupChildGroupMemberHeader from '@pages/Group/relations/GroupChildGroupMemberHeader';
 import GroupChildSearchMemberHeader from '@pages/Group/relations/GroupChildSearchMemberHeader';
-import { changeMemberSearchOption, clearGroupMember, clearGroupMenuAuth, getGroupInMemberList, getSearchMemberList, updateGroupInMember } from '@store/group';
-import toast, { messageBox } from '@utils/toastUtil';
+import { changeMemberSearchOption, clearGroupMember, getGroupInMemberList, getSearchMemberList, updateGroupInMember } from '@store/group';
+import toast from '@utils/toastUtil';
 
 import * as action from '@store/group/groupAction';
 

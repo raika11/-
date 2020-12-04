@@ -57,11 +57,24 @@ const GroupChildMenuAuth = () => {
     };
 
     return (
-        <MokaCard title="메뉴 권한" className="w-100" height={CARD_DEFAULT_HEIGHT - 90} loading={loading}>
+        <MokaCard
+            title="메뉴 권한"
+            className="w-100"
+            height={CARD_DEFAULT_HEIGHT - 90}
+            loading={loading}
+            footerClassName="justify-content-center"
+            footerButtons={
+                groupCd && [
+                    { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
+                    { text: '취소', variant: 'gray150', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
+                ]
+            }
+            footer
+        >
             <Row style={{ padding: '0 20px 0 20px' }}>
                 <MenuAuthTree menuAuthInfo={menuAuthInfo} onChange={handleChange} />
             </Row>
-            {groupCd && (
+            {/*{groupCd && (
                 <Row className="d-flex pt-20 justify-content-center">
                     <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
                         저장
@@ -70,7 +83,7 @@ const GroupChildMenuAuth = () => {
                         취소
                     </Button>
                 </Row>
-            )}
+            )}*/}
         </MokaCard>
     );
 };

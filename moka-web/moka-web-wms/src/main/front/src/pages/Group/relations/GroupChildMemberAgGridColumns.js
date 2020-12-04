@@ -1,13 +1,3 @@
-import React from 'react';
-const cellClassRules = {
-    'ag-rel-cell': (params) => params.data.rel === true,
-    'ag-edit-cell': (params) => params.colDef.editable,
-};
-
-export const rowClassRules = {
-    'ag-rel-row': (params) => params.data.rel === true,
-};
-
 export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 export const columnDefs = [
     {

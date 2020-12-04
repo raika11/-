@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MokaTable } from '@components';
 import { columnDefs } from '@pages/Group/relations/GroupChildMemberAgGridColumns';
 

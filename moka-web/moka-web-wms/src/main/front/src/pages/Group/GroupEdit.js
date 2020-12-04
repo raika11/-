@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Form, Button, Row } from 'react-bootstrap';
+import { Col, Form } from 'react-bootstrap';
 import { MokaCard, MokaInputLabel } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
@@ -331,8 +331,23 @@ const GroupEdit = () => {
         setRegId(memberNm || '');
         setRegDt(group.regDt || '');
     }, [group, memberNm]);
+
     return (
-        <MokaCard title="그룹정보" className="w-100" height={CARD_DEFAULT_HEIGHT - 90}>
+        <MokaCard
+            title="그룹정보"
+            className="w-100"
+            height={CARD_DEFAULT_HEIGHT - 90}
+            footerClassName="justify-content-center"
+            footerButtons={
+                groupCd
+                    ? [
+                          { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
+                          { text: '삭제', variant: 'gray150', onClick: handleClickDelete, className: 'float-left mr-0 pr-20 pl-20' },
+                      ]
+                    : [{ text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' }]
+            }
+            footer
+        >
             <Form noValidate>
                 <Form.Row>
                     <Col xs={12}>
@@ -393,7 +408,7 @@ const GroupEdit = () => {
                         <MokaInputLabel label="등록일시" labelWidth={80} disabled={true} name={regDt} value={group.regDt} />
                     </Col>
                 </Form.Row>
-                <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
+                {/*<Form.Group as={Row} className="d-flex pt-20 justify-content-center">
                     <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
                         저장
                     </Button>
@@ -402,7 +417,7 @@ const GroupEdit = () => {
                             삭제
                         </Button>
                     )}
-                </Form.Group>
+                </Form.Group>*/}
             </Form>
         </MokaCard>
     );

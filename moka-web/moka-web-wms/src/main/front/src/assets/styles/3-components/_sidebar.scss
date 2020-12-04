@@ -53,7 +53,8 @@ a.sidebar-link {
   svg {
     margin-right: .75rem;
     color: $sidebar-link-icon-color;
-    opacity: .3;
+    opacity: .5;
+    font-size: 1rem;
   }
 }
 
@@ -83,7 +84,7 @@ a.sidebar-link {
   i,
   svg {
     color: $sidebar-link-icon-hover-color;
-    opacity: .5;
+    opacity: .7;
   }
 }
 

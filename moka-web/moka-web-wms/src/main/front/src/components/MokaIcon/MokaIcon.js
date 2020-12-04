@@ -44,6 +44,9 @@ import {
     faAlarmClock as falAlarmClock,
     faQuestionCircle as falQuestionCircle,
     faInfoCircle as falInfoCircle,
+    faSlidersH as falSlidersH, // 메뉴 아이콘
+    faTachometerSlow as falTachometerSlow, // 메뉴 아이콘
+    faShieldCheck as falShieldCheck, // 메뉴 아이콘
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -102,6 +105,9 @@ library.add(falPencil);
 library.add(falAlarmClock);
 library.add(falQuestionCircle);
 library.add(falInfoCircle);
+library.add(falSlidersH);
+library.add(falTachometerSlow);
+library.add(falShieldCheck);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

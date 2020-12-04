@@ -44,7 +44,6 @@ import jmnet.moka.core.tps.mvc.desking.repository.DeskingWorkRepository;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
-import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -131,42 +130,50 @@ public class DeskingServiceImpl implements DeskingService {
         List<List<Object>> listMap = componentWorkMapper.findAllComponentWork(search);
 
         // 컴포넌트에 관련기사정보 연결
-        if (search.getReturnValue()
-                  .intValue() > 0) {
+        if (search
+                .getReturnValue()
+                .intValue() > 0) {
 
             List<ComponentWorkVO> componentList = modelMapper.map(listMap.get(0), ComponentWorkVO.TYPE);
             List<DeskingWorkVO> deskingAllList = modelMapper.map(listMap.get(1), DeskingWorkVO.TYPE);
 
             if (componentList.size() > 0) {
                 for (int i = 0; i < componentList.size(); i++) {
-                    Long datasetSeq = componentList.get(i)
-                                                   .getDatasetSeq();
-                    Long componentSeq = componentList.get(i)
-                                                     .getComponentSeq();
-                    List<DeskingWorkVO> deskingList = deskingAllList.stream()
-                                                                    .filter(d -> d.getDatasetSeq()
-                                                                                  .equals(datasetSeq))
-                                                                    .sorted((prev, next) -> {
-                                                                        //정렬순서: contentOrd asc, relOrd asc
-                                                                        if (prev.getContentOrd()
-                                                                                .equals(next.getContentOrd())) {
-                                                                            return (int) (long) (prev.getRelOrd() - next.getRelOrd());
-                                                                        } else {
-                                                                            return prev.getContentOrd() - next.getContentOrd();
-                                                                        }
-                                                                    })
-                                                                    .collect(Collectors.toList());
+                    Long datasetSeq = componentList
+                            .get(i)
+                            .getDatasetSeq();
+                    Long componentSeq = componentList
+                            .get(i)
+                            .getComponentSeq();
+                    List<DeskingWorkVO> deskingList = deskingAllList
+                            .stream()
+                            .filter(d -> d
+                                    .getDatasetSeq()
+                                    .equals(datasetSeq))
+                            .sorted((prev, next) -> {
+                                //정렬순서: contentOrd asc, relOrd asc
+                                if (prev
+                                        .getContentOrd()
+                                        .equals(next.getContentOrd())) {
+                                    return (int) (long) (prev.getRelOrd() - next.getRelOrd());
+                                } else {
+                                    return prev.getContentOrd() - next.getContentOrd();
+                                }
+                            })
+                            .collect(Collectors.toList());
 
                     // 편집기사에 관련기사정보 세팅(rel,relSeqs)
                     deskingList = updateRelArticle(deskingList);
 
                     // 편집기사에 componentSeq세팅
-                    deskingList.stream()
-                               .forEach(desking -> desking.setComponentSeq(componentSeq));
+                    deskingList
+                            .stream()
+                            .forEach(desking -> desking.setComponentSeq(componentSeq));
 
                     // 컴포넌트에 편집기사 연결
-                    componentList.get(i)
-                                 .setDeskingWorks(deskingList);
+                    componentList
+                            .get(i)
+                            .setDeskingWorks(deskingList);
                 }
             }
 
@@ -184,25 +191,30 @@ public class DeskingServiceImpl implements DeskingService {
      */
     private List<DeskingWorkVO> updateRelArticle(List<DeskingWorkVO> deskingList) {
         for (int idx = 0; idx < deskingList.size(); idx++) {
-            String parentContentId = deskingList.get(idx)
-                                                .getParentContentId();
+            String parentContentId = deskingList
+                    .get(idx)
+                    .getParentContentId();
             if (McpString.isNotEmpty(parentContentId)) {
 
                 // 관련기사여부 설정
-                deskingList.get(idx)
-                           .setRel(true);
+                deskingList
+                        .get(idx)
+                        .setRel(true);
             } else {
                 // 자식목록 설정
-                String thisContentId = deskingList.get(idx)
-                                                  .getContentId();
-                List<Long> relSeqs = deskingList.stream()
-                                                .filter(d -> d.getParentContentId() != null && thisContentId.equals(d.getParentContentId()))
-                                                .sorted(Comparator.comparingInt(DeskingWorkVO::getRelOrd))
-                                                .map(DeskingWorkVO::getSeq)
-                                                .collect(Collectors.toList());
+                String thisContentId = deskingList
+                        .get(idx)
+                        .getContentId();
+                List<Long> relSeqs = deskingList
+                        .stream()
+                        .filter(d -> d.getParentContentId() != null && thisContentId.equals(d.getParentContentId()))
+                        .sorted(Comparator.comparingInt(DeskingWorkVO::getRelOrd))
+                        .map(DeskingWorkVO::getSeq)
+                        .collect(Collectors.toList());
                 if (relSeqs.size() > 0) {
-                    deskingList.get(idx)
-                               .setRelSeqs(relSeqs);
+                    deskingList
+                            .get(idx)
+                            .setRelSeqs(relSeqs);
                 }
             }
         }
@@ -223,8 +235,9 @@ public class DeskingServiceImpl implements DeskingService {
             deskingVOList = updateRelArticle(deskingVOList);
 
             // 편집기사에 componentSeq세팅
-            deskingVOList.stream()
-                         .forEach(desking -> desking.setComponentSeq(componentWorkVO.getComponentSeq()));
+            deskingVOList
+                    .stream()
+                    .forEach(desking -> desking.setComponentSeq(componentWorkVO.getComponentSeq()));
 
             // 컴포넌트에 편집기사 연결
             componentWorkVO.setDeskingWorks(deskingVOList);
@@ -235,10 +248,11 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     public List<DeskingWorkVO> findAllDeskingWork(Long datasetSeq, String regId) {
-        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
-                                                          .datasetSeq(datasetSeq)
-                                                          .regId(regId)
-                                                          .build();
+        DeskingWorkSearchDTO search = DeskingWorkSearchDTO
+                .builder()
+                .datasetSeq(datasetSeq)
+                .regId(regId)
+                .build();
         List<DeskingWork> deskingList = deskingWorkRepository.findAllDeskingWork(search);
         List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE);
 
@@ -253,10 +267,11 @@ public class DeskingServiceImpl implements DeskingService {
     public void save(ComponentWorkVO componentWorkVO, String regId)
             throws Exception {
 
-        HistPublishDTO histPublishDTO = HistPublishDTO.builder()
-                                                      .status(EditStatusCode.SAVE)
-                                                      .approvalYn(MokaConstants.NO)
-                                                      .build();
+        HistPublishDTO histPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.SAVE)
+                .approvalYn(MokaConstants.NO)
+                .build();
 
         // 컴포넌트 히스토리만 추가
         ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO);
@@ -271,10 +286,11 @@ public class DeskingServiceImpl implements DeskingService {
     public void publish(ComponentWorkVO componentWorkVO, String regId)
             throws Exception {
 
-        HistPublishDTO histPublishDTO = HistPublishDTO.builder()
-                                                      .status(EditStatusCode.PUBLISH)
-                                                      .approvalYn(MokaConstants.YES)
-                                                      .build();
+        HistPublishDTO histPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.PUBLISH)
+                .approvalYn(MokaConstants.YES)
+                .build();
 
         // 컴포넌트 수정
         Component component = this.updateComponent(componentWorkVO, regId, histPublishDTO);
@@ -289,11 +305,12 @@ public class DeskingServiceImpl implements DeskingService {
     public void reserve(ComponentWorkVO componentWorkVO, String regId, Date reserveDt)
             throws Exception {
 
-        HistPublishDTO histPublishDTO = HistPublishDTO.builder()
-                                                      .status(EditStatusCode.PUBLISH)
-                                                      .approvalYn(MokaConstants.NO)
-                                                      .reserveDt(reserveDt)
-                                                      .build();
+        HistPublishDTO histPublishDTO = HistPublishDTO
+                .builder()
+                .status(EditStatusCode.PUBLISH)
+                .approvalYn(MokaConstants.NO)
+                .reserveDt(reserveDt)
+                .build();
 
         // 컴포넌트 히스토리만 추가
         ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO);
@@ -307,20 +324,21 @@ public class DeskingServiceImpl implements DeskingService {
     public ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO)
             throws Exception {
         String messageC = messageByLocale.get("tps.common.error.no-data");
-        Component component = componentService.findComponentBySeq(workVO.getComponentSeq())
-                                              .orElseThrow(() -> new NoDataException(messageC));
+        Component component = componentService
+                .findComponentBySeq(workVO.getComponentSeq())
+                .orElseThrow(() -> new NoDataException(messageC));
 
-//        String messageT = messageByLocale.get("tps.common.error.no-data");
-//        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-//                                           .orElseThrow(() -> new NoDataException(messageT));
+        //        String messageT = messageByLocale.get("tps.common.error.no-data");
+        //        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
+        //                                           .orElseThrow(() -> new NoDataException(messageT));
 
         component.setSnapshotYn(workVO.getSnapshotYn());
         component.setSnapshotBody(workVO.getSnapshotBody());
-//        component.setTemplate(template);
+        //        component.setTemplate(template);
         component.setPerPageCount(workVO.getPerPageCount());
         component.setViewYn(workVO.getViewYn());
-//        component.setZone(workVO.getZone());
-//        component.setMatchZone(workVO.getMatchZone());
+        //        component.setZone(workVO.getZone());
+        //        component.setMatchZone(workVO.getMatchZone());
         component.setModDt(McpDate.now());
         component.setModId(regId);
 
@@ -335,20 +353,21 @@ public class DeskingServiceImpl implements DeskingService {
     public Component updateComponent(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO)
             throws Exception {
         String messageC = messageByLocale.get("tps.common.error.no-data");
-        Component component = componentService.findComponentBySeq(workVO.getComponentSeq())
-                                              .orElseThrow(() -> new NoDataException(messageC));
+        Component component = componentService
+                .findComponentBySeq(workVO.getComponentSeq())
+                .orElseThrow(() -> new NoDataException(messageC));
 
-//        String messageT = messageByLocale.get("tps.common.error.no-data");
-//        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-//                                           .orElseThrow(() -> new NoDataException(messageT));
+        //        String messageT = messageByLocale.get("tps.common.error.no-data");
+        //        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
+        //                                           .orElseThrow(() -> new NoDataException(messageT));
 
         component.setSnapshotYn(workVO.getSnapshotYn());
         component.setSnapshotBody(workVO.getSnapshotBody());
-//        component.setTemplate(template);
+        //        component.setTemplate(template);
         component.setPerPageCount(workVO.getPerPageCount());
         component.setViewYn(workVO.getViewYn());
-//        component.setZone(workVO.getZone());
-//        component.setMatchZone(workVO.getMatchZone());
+        //        component.setZone(workVO.getZone());
+        //        component.setMatchZone(workVO.getMatchZone());
         component.setModDt(McpDate.now());
         component.setModId(regId);
 
@@ -360,8 +379,9 @@ public class DeskingServiceImpl implements DeskingService {
     @Transactional
     public void insertDeskingHist(ComponentHist componentHist, List<DeskingWorkVO> deskingWorkList, String regId) {
 
-        Long datasetSeq = componentHist.getDataset()
-                                       .getDatasetSeq();
+        Long datasetSeq = componentHist
+                .getDataset()
+                .getDatasetSeq();
         Dataset dataset = componentHist.getDataset();
         Date sendDt = McpDate.now();   // 전송시간
 
@@ -373,8 +393,8 @@ public class DeskingServiceImpl implements DeskingService {
             DeskingHist deskingHist = modelMapper.map(deskingVO, DeskingHist.class);
             deskingHist.setComponentHist(componentHist);    // 컴포넌트 히스토리와 연결
             deskingHist.setDeskingSeq(deskingVO.getDeskingSeq() == null
-                                              ? deskingVO.getSeq()
-                                              : deskingVO.getDeskingSeq());  // desking.deskingSeq = desking_work.seq로 설정?
+                    ? deskingVO.getSeq()
+                    : deskingVO.getDeskingSeq());  // desking.deskingSeq = desking_work.seq로 설정?
             deskingHist.setDatasetSeq(dataset.getDatasetSeq());
             deskingHist.setRegDt(sendDt); // 전송시간
             deskingHist.setDeskingDt(deskingVO.getRegDt()); // 작업자의 편집시간.
@@ -392,8 +412,9 @@ public class DeskingServiceImpl implements DeskingService {
     @Override
     @Transactional
     public void updateDesking(Component component, List<DeskingWorkVO> deskingWorkList, String regId, HistPublishDTO histPublishDTO) {
-        Long datasetSeq = component.getDataset()
-                                   .getDatasetSeq();
+        Long datasetSeq = component
+                .getDataset()
+                .getDatasetSeq();
         Dataset dataset = component.getDataset();
         Date sendDt = McpDate.now();   // 전송시간
 
@@ -506,8 +527,9 @@ public class DeskingServiceImpl implements DeskingService {
     public void insertDeskingWorkList(List<DeskingWorkDTO> insertdeskingList, Long datasetSeq, String regId) {
         boolean rel = false;
         if (insertdeskingList.size() > 0) {
-            String parentContentId = insertdeskingList.get(0)
-                                                      .getParentContentId();
+            String parentContentId = insertdeskingList
+                    .get(0)
+                    .getParentContentId();
             rel = McpString.isNotEmpty(parentContentId);
         }
 
@@ -541,46 +563,53 @@ public class DeskingServiceImpl implements DeskingService {
             // 관련기사
             Integer minRelOrd = 1;
             String parentContentId = null;
-            Optional<DeskingWorkDTO> findMin = insertdeskingList.stream()
-                                                                .min(Comparator.comparing(DeskingWorkDTO::getRelOrd));
+            Optional<DeskingWorkDTO> findMin = insertdeskingList
+                    .stream()
+                    .min(Comparator.comparing(DeskingWorkDTO::getRelOrd));
             if (findMin.isPresent()) {
-                minRelOrd = findMin.get()
-                                   .getRelOrd();
-                parentContentId = findMin.get()
-                                         .getParentContentId();
+                minRelOrd = findMin
+                        .get()
+                        .getRelOrd();
+                parentContentId = findMin
+                        .get()
+                        .getParentContentId();
             }
 
             for (DeskingWorkVO vo : deskingVOList) {
                 Integer relOrd = vo.getRelOrd();
                 if (parentContentId.equals(vo.getParentContentId()) && minRelOrd <= relOrd) {
-                    DeskingOrdDTO ord = DeskingOrdDTO.builder()
-                                                     .seq(vo.getSeq())
-                                                     .contentOrd(vo.getContentOrd())
-                                                     .relOrd(relOrd + insertdeskingList.size())
-                                                     .title(vo.getTitle())
-                                                     .build();
+                    DeskingOrdDTO ord = DeskingOrdDTO
+                            .builder()
+                            .seq(vo.getSeq())
+                            .contentOrd(vo.getContentOrd())
+                            .relOrd(relOrd + insertdeskingList.size())
+                            .title(vo.getTitle())
+                            .build();
                     returnOrdList.add(ord);
                 }
             }
         } else {
             // 주기사
             Integer minContentOrd = 1;
-            Optional<DeskingWorkDTO> findMin = insertdeskingList.stream()
-                                                                .min(Comparator.comparing(DeskingWorkDTO::getContentOrd));
+            Optional<DeskingWorkDTO> findMin = insertdeskingList
+                    .stream()
+                    .min(Comparator.comparing(DeskingWorkDTO::getContentOrd));
             if (findMin.isPresent()) {
-                minContentOrd = findMin.get()
-                                       .getContentOrd();
+                minContentOrd = findMin
+                        .get()
+                        .getContentOrd();
             }
 
             for (DeskingWorkVO vo : deskingVOList) {
                 Integer contentOrd = vo.getContentOrd();
                 if (minContentOrd <= contentOrd) {
-                    DeskingOrdDTO ord = DeskingOrdDTO.builder()
-                                                     .seq(vo.getSeq())
-                                                     .contentOrd(contentOrd + insertdeskingList.size())
-                                                     .relOrd(vo.getRelOrd())
-                                                     .title(vo.getTitle())
-                                                     .build();
+                    DeskingOrdDTO ord = DeskingOrdDTO
+                            .builder()
+                            .seq(vo.getSeq())
+                            .contentOrd(contentOrd + insertdeskingList.size())
+                            .relOrd(vo.getRelOrd())
+                            .title(vo.getTitle())
+                            .build();
                     returnOrdList.add(ord);
                 }
             }
@@ -593,14 +622,18 @@ public class DeskingServiceImpl implements DeskingService {
         for (DeskingOrdDTO dto : ordDTOList) {
             Optional<DeskingWork> deskingWork = deskingWorkRepository.findById(dto.getSeq());
             if (deskingWork.isPresent()) {
-                deskingWork.get()
-                           .setContentOrd(dto.getContentOrd());
-                deskingWork.get()
-                           .setRelOrd(dto.getRelOrd());
-                deskingWork.get()
-                           .setRegId(regId);
-                deskingWork.get()
-                           .setRegDt(McpDate.now());
+                deskingWork
+                        .get()
+                        .setContentOrd(dto.getContentOrd());
+                deskingWork
+                        .get()
+                        .setRelOrd(dto.getRelOrd());
+                deskingWork
+                        .get()
+                        .setRegId(regId);
+                deskingWork
+                        .get()
+                        .setRegDt(McpDate.now());
                 deskingWorkRepository.save(deskingWork.get());
             }
         }
@@ -609,14 +642,22 @@ public class DeskingServiceImpl implements DeskingService {
     @Override
     @Transactional
     public void deleteDeskingWorkList(List<DeskingWorkVO> deleteDeksingList, Long datasetSeq, String regId) {
+        List<Long> deleteIdList = deleteDeksingList
+                .stream()
+                .map(DeskingWorkVO::getSeq)
+                .collect(Collectors.toList());
+
         // 삭제
         if (deleteDeksingList != null && deleteDeksingList.size() > 0) {
             for (DeskingWorkVO vo : deleteDeksingList) {
                 // 주기사삭제시, 관련기사도 삭제
-                if (vo.getRelSeqs() != null && vo.getRelSeqs()
-                                                 .size() > 0) {
+                if (vo.getRelSeqs() != null && vo
+                        .getRelSeqs()
+                        .size() > 0) {
                     for (Long relSeq : vo.getRelSeqs()) {
-                        deskingWorkRepository.deleteById(relSeq);
+                        if (!deleteIdList.contains(relSeq)) {
+                            deskingWorkRepository.deleteById(relSeq);
+                        }
                     }
                 }
                 deskingWorkRepository.deleteById(vo.getSeq());
@@ -651,8 +692,9 @@ public class DeskingServiceImpl implements DeskingService {
             }
 
             // 주기사의 오더가 잘못됐다면
-            if (!vo.getContentOrd()
-                   .equals(contentOrd)) {
+            if (!vo
+                    .getContentOrd()
+                    .equals(contentOrd)) {
                 vo.setContentOrd(contentOrd);
                 updateList.add(vo.getSeq());    // 순번수정
             }
@@ -669,10 +711,12 @@ public class DeskingServiceImpl implements DeskingService {
             rel = McpString.isNotEmpty(vo.getParentContentId());
 
             // 같은 부모이고, 관련기사 순번이 안 맞을 경우
-            if (rel && vo.getParentContentId()
-                         .equals(prevParentContentId)) {
-                if (!vo.getRelOrd()
-                       .equals(relOrd)) {
+            if (rel && vo
+                    .getParentContentId()
+                    .equals(prevParentContentId)) {
+                if (!vo
+                        .getRelOrd()
+                        .equals(relOrd)) {
                     vo.setRelOrd(relOrd);
                     updateList.add(vo.getSeq());    // 순번수정
                 }
@@ -694,20 +738,25 @@ public class DeskingServiceImpl implements DeskingService {
         for (DeskingWorkVO orgVO : deskingVOList) {
             DeskingWork deskingWork = modelMapper.map(orgVO, DeskingWork.class);
             Long orgSeq = deskingWork.getSeq();
-            Optional<DeskingWorkVO> newVo = relOrdList.stream()
-                                                      .filter(d -> d.getSeq()
-                                                                    .equals(orgSeq))
-                                                      .findFirst();
+            Optional<DeskingWorkVO> newVo = relOrdList
+                    .stream()
+                    .filter(d -> d
+                            .getSeq()
+                            .equals(orgSeq))
+                    .findFirst();
             if (newVo.isPresent()) {
                 // contentOrd, relOrd가 다를 경우 추가
                 if (updateList.contains(orgSeq)) {
-                    DeskingOrdDTO ord = DeskingOrdDTO.builder()
-                                                     .seq(deskingWork.getSeq())
-                                                     .contentOrd(newVo.get()
-                                                                      .getContentOrd())
-                                                     .relOrd(newVo.get()
-                                                                  .getRelOrd())
-                                                     .build();
+                    DeskingOrdDTO ord = DeskingOrdDTO
+                            .builder()
+                            .seq(deskingWork.getSeq())
+                            .contentOrd(newVo
+                                    .get()
+                                    .getContentOrd())
+                            .relOrd(newVo
+                                    .get()
+                                    .getRelOrd())
+                            .build();
                     returnOrdList.add(ord);
                 }
             }
@@ -880,13 +929,15 @@ public class DeskingServiceImpl implements DeskingService {
     @Override
     public String saveDeskingWorkImage(DeskingWork deskingWork, MultipartFile thumbnail)
             throws Exception {
-        String extension = McpFile.getExtension(thumbnail.getOriginalFilename())
-                                  .toLowerCase();
+        String extension = McpFile
+                .getExtension(thumbnail.getOriginalFilename())
+                .toLowerCase();
 
         // 볼륨 패스를 가져오기 위해 도메인을 찾는다
         // 데이터셋을 쓰는 컴포넌트 찾기 -> 도메인 가져오기
-        Component component = componentService.findComponentByDataTypeAndDataset_DatasetSeq(TpsConstants.DATATYPE_DESK, deskingWork.getDatasetSeq())
-                                              .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
+        Component component = componentService
+                .findComponentByDataTypeAndDataset_DatasetSeq(TpsConstants.DATATYPE_DESK, deskingWork.getDatasetSeq())
+                .orElseThrow(() -> new NoDataException(messageByLocale.get("tps.common.error.no-data")));
         //        String volumeId = component.getDomain().getVolumeId();
         //        Volume volume = volumeService.findVolume(volumeId).orElseThrow(
         //                () -> new NoDataException(messageByLocale.get("tps.volume.error.noContent")));
@@ -930,8 +981,9 @@ public class DeskingServiceImpl implements DeskingService {
         if (componentHist.isPresent()) {
             ComponentWork componentWork = componentWorkService.updateComponentWork(componentWorkSeq, componentHist.get());
 
-            Long datasetSeq = componentWork.getDataset()
-                                           .getDatasetSeq();
+            Long datasetSeq = componentWork
+                    .getDataset()
+                    .getDatasetSeq();
 
             // desking work 삭제 및  등록
             Map<String, Object> paramMap = new HashMap<String, Object>();

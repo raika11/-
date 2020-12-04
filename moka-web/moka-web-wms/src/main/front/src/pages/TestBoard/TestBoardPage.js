@@ -12,7 +12,7 @@ import MokaTabComponent from './MokaTabComponent';
 import AccordionComponent from './AccordionComponent';
 import BreadcrumbComponent from './BreadcrumbComponent';
 import ImageComponent from './ImageComponent';
-import avatar from './img/avatars/logo192.png';
+// import avatar from './img/avatars/logo192.png';
 import PopoverComponent from './PopoverComponent';
 import TooltipComponent from './TooltipComponent';
 import BadgeComponent from './BadgeComponent';
@@ -113,9 +113,9 @@ const TestBoardPgae = () => {
                     </Card>
                     <Card>
                         <Card.Header className="mb-0">Images</Card.Header>
-                        <Card.Body>
+                        {/* <Card.Body>
                             <ImageComponent src={avatar} thumbnail />
-                        </Card.Body>
+                        </Card.Body> */}
                     </Card>
                     <Card>
                         <Card.Header className="mb-0">Popover</Card.Header>

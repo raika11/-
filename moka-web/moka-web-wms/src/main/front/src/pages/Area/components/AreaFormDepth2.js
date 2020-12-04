@@ -357,29 +357,32 @@ const AreaFormDepth2 = (props) => {
     }, [setInit]);
 
     useEffect(() => {
-        // origin 데이터 가져오는 부분
+        /**
+         * origin 데이터로 초기값 설정
+         * 1) areaComp, areaComps 셋팅
+         * 2) page 셋팅
+         */
         if (origin.areaDiv === ITEM_CP && origin.areaComp) {
             setComponent(origin.areaComp.component || {});
             setAreaComp(origin.areaComp);
             setAreaComps([]);
         }
-        // areaComps 셋팅
         if (origin.areaDiv === ITEM_CT && Array.isArray(origin.areaComps)) {
             setAreaComps(origin.areaComps);
         }
-    }, [origin]);
+        origin.page && setPage(origin.page);
+    }, [origin, setPage]);
 
     useEffect(() => {
         /**
-         * areaSeq가 변경될 때 초기화!!!!
-         * 1) page, parent, domain 데이터 변경
+         * temp 데이터 변경 시
+         * 1) parent, domain 데이터 변경
          * 2) cnt 0으로 셋팅
          */
         if (!temp.areaSeq) {
             setComponent({});
             setContainer({});
         }
-        temp.page ? setPage(temp.page) : setParent({});
         if (temp.parent?.areaSeq) {
             setParent(temp.parent);
         } else if (depth === 2) {

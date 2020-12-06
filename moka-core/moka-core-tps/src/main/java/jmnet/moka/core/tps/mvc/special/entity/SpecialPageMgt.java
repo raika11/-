@@ -9,7 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,19 +60,19 @@ public class SpecialPageMgt extends BaseAudit {
      * 회차
      */
     @Column(name = "ORDINAL", nullable = false)
-    private Integer ordinal = 0;
+    private Integer ordinal = 1;
 
     /**
      * 리스트여부
      */
     @Column(name = "LIST_YN")
-    private String listYn = "Y";
+    private String listYn = MokaConstants.YES;
 
     /**
      * 검색여부
      */
     @Column(name = "SCH_YN")
-    private String schYn = "Y";
+    private String schYn = MokaConstants.YES;
 
     /**
      * 검색키워드
@@ -78,19 +82,19 @@ public class SpecialPageMgt extends BaseAudit {
     private String schKwd;
 
     /**
-     * 페이지 태그(TB_15RE_CODE_MGT GRP_CD = PT 참조)
+     * 페이지 태그(TB_15RE_CODE_MGT GRP_CD = PAGE_CD 참조)
      */
     @Column(name = "PAGE_CD")
     private String pageCd;
 
     /**
-     * 페이지 서비스 시작일
+     * 페이지 서비스 시작일(yyyyMMdd)
      */
     @Column(name = "PAGE_SDATE")
     private String pageSdate;
 
     /**
-     * 페이지 서비스 종료일
+     * 페이지 서비스 종료일(yyyyMMdd)
      */
     @Column(name = "PAGE_EDATE")
     private String pageEdate;
@@ -168,5 +172,14 @@ public class SpecialPageMgt extends BaseAudit {
      */
     @Column(name = "JOINSAD_TAG_MOB")
     private String joinsadTagMob;
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.cdNo = this.cdNo == null ? 0 : this.cdNo;
+        this.ordinal = this.ordinal == null ? 1 : this.ordinal;
+        this.listYn = McpString.defaultValue(this.listYn, MokaConstants.YES);
+        this.schYn = McpString.defaultValue(this.schYn, MokaConstants.YES);
+    }
 
 }

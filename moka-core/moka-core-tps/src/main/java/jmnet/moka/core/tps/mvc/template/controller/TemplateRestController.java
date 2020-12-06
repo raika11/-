@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
@@ -36,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,12 +43,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 템플릿 API
  */
-@Controller
+@RestController
 @Validated
 @Slf4j
 @RequestMapping("/api/templates")
@@ -150,6 +149,7 @@ public class TemplateRestController {
             // 등록(이미지 등록에 seq가 필요해서 템플릿을 먼저 저장함)
             Template returnVal = templateService.insertTemplate(template);
 
+            // 이미지등록
             if (templateThumbnailFile != null && !templateThumbnailFile.isEmpty()) {
                 // 이미지파일 저장(multipartFile)
                 String imgPath = templateService.saveTemplateImage(returnVal, templateThumbnailFile);
@@ -157,7 +157,7 @@ public class TemplateRestController {
                 returnVal.setTemplateThumb(imgPath);
 
                 // 썸네일경로 업데이트(히스토리 생성X)
-                returnVal = templateService.updateTemplate(template, false);
+                returnVal = templateService.updateTemplate(returnVal, false);
 
             } else if (McpString.isNotEmpty(templateDTO.getTemplateThumb())) {
                 /*
@@ -169,7 +169,7 @@ public class TemplateRestController {
                 returnVal.setTemplateThumb(imgPath);
 
                 // 썸네일경로 업데이트(히스토리 생성X)
-                returnVal = templateService.updateTemplate(template, false);
+                returnVal = templateService.updateTemplate(returnVal, false);
             }
 
             TemplateDTO returnValDTO = modelMapper.map(returnVal, TemplateDTO.class);

@@ -322,7 +322,7 @@ public class PageRestController {
             throws InvalidDataException, NoDataException, Exception {
 
         // 1.1 아이디체크
-        validData(pageSeq, null, ActionType.DELETE);
+        //validData(pageSeq, null, ActionType.DELETE);
 
         // 1.2. 데이타 존재여부 검사
         Page page = pageService.findPageBySeq(pageSeq)

@@ -1,11 +1,13 @@
 package jmnet.moka.core.tps.mvc.bright.dto;
 
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 /**
  * <pre>

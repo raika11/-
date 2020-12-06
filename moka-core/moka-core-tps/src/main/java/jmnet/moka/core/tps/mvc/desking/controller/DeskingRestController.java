@@ -456,6 +456,8 @@ public class DeskingRestController extends AbstractCommonController {
             MultipartFile mfile = deskingWorkDTO.getThumbnailFile();
             String fileName = deskingService.saveDeskingWorkImage(areaSeq, newDW, mfile);
             if (McpString.isNotEmpty(fileName)) {
+                tpsLogger.success(ActionType.UPLOAD, true);
+
                 int[] imgInfo = uploadFileHelper.getImgFileSize(mfile);
 
                 // 썸네일 정보 셋팅
@@ -465,6 +467,7 @@ public class DeskingRestController extends AbstractCommonController {
                 newDW.setThumbHeight(imgInfo[1]);
             } else {
                 String message = msg("tps.desking.error.update.image-upload");
+                tpsLogger.fail(message, true);
                 throw new InvalidDataException(invalidList, message);
             }
         }
@@ -620,6 +623,7 @@ public class DeskingRestController extends AbstractCommonController {
                 MultipartFile mfile = deskingWorkDTO.getThumbnailFile();
                 String fileName = deskingService.saveDeskingWorkImage(areaSeq, deskingWork, mfile);
                 if (McpString.isNotEmpty(fileName)) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
                     int[] imgInfo = uploadFileHelper.getImgFileSize(mfile);
 
                     // 썸네일 정보 셋팅
@@ -629,6 +633,7 @@ public class DeskingRestController extends AbstractCommonController {
                     deskingWorkDTO.setThumbHeight(imgInfo[1]);
                 } else {
                     String message = msg("tps.desking.error.insert.image-upload");
+                    tpsLogger.fail(message, true);
                     throw new InvalidDataException(invalidList, message);
                 }
             }

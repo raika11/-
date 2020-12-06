@@ -51,7 +51,7 @@ public class EditLogServiceImpl implements EditLogService {
     @Override
     @Transactional
     public EditLog insertEditLog(EditLog editLog) {
-        log.debug("[INSERT DOMAIN] insert editLog, {}", editLog);
+        log.debug("[INSERT EDITLOG] insert editLog, {}", editLog);
         editLog.setErrMsg(McpString.byteSubstring(editLog.getErrMsg(), 1000));
         return editLogRepository.save(editLog);
     }
@@ -60,14 +60,14 @@ public class EditLogServiceImpl implements EditLogService {
     public EditLog updateEditLog(EditLog editLog) {
         editLog.setErrMsg(McpString.byteSubstring(editLog.getErrMsg(), 1000));
         EditLog returnVal = editLogRepository.save(editLog);
-        log.debug("[UPDATE DOMAIN] Edit Log SeqNo : {}", returnVal.getSeqNo());
+        log.debug("[UPDATE EDITLOG] Edit Log SeqNo : {}", returnVal.getSeqNo());
         return returnVal;
     }
 
     @Override
     public void deleteEditLogBySeqNo(Long seqNo) {
         editLogRepository.deleteById(seqNo);
-        log.debug("[DELETE DOMAIN] Edit Log seqNo : {}", seqNo);
+        log.debug("[DELETE EDITLOG] Edit Log seqNo : {}", seqNo);
     }
 
     @Override

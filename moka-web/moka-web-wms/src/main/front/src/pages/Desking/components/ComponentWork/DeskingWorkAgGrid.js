@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import produce from 'immer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AgGridReact } from 'ag-grid-react';
 
 import { MokaTableImageRenderer } from '@components';
@@ -22,6 +22,10 @@ const DeskingWorkAgGrid = (props) => {
     const { deskingWorks } = component;
     const dispatch = useDispatch();
 
+    const { IR_URL } = useSelector((store) => ({
+        IR_URL: store.app.IR_URL,
+    }));
+
     // state
     const [rowData, setRowData] = useState([]);
     const [, setGridInstance] = useState(null);
@@ -39,6 +43,10 @@ const DeskingWorkAgGrid = (props) => {
                 let escapeTitle = desking.title;
                 if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
 
+                // 이미지 IR_URL
+                let irThumbFileName = '';
+                if (desking.thumbFileName) irThumbFileName = `${IR_URL}?t=k&w=100&h=100u=//${desking.thumbFileName}`;
+
                 return {
                     ...desking,
                     gridType: 'DESKING',
@@ -46,6 +54,7 @@ const DeskingWorkAgGrid = (props) => {
                     title: escapeTitle,
                     contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
                     relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
+                    irThumbFileName,
                     onRowClicked,
                     onSave,
                     onDelete,

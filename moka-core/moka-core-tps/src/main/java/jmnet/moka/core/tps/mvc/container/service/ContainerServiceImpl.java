@@ -61,16 +61,20 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public List<ContainerVO> findAllContainer(ContainerSearchDTO search) {
 
-        if (search.getSearchType()
-                  .equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) { // 페이지에서 관련 컨테이너 검색
+        if (search
+                .getSearchType()
+                .equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) { // 페이지에서 관련 컨테이너 검색
             return containerMapper.findPageChildRelList(search);
-        } else if (search.getSearchType()
-                         .equals("skinSeq") && McpString.isNotEmpty(search.getKeyword())) { // 콘텐츠스킨에서 관련 컨테이너 검색
-            return containerMapper.findSkinChildRelList(search);
+        } else if (search
+                .getSearchType()
+                .equals("artPageSeq") && McpString.isNotEmpty(search.getKeyword())) { // 기사페이지에서 관련 컨테이너 검색
+            return containerMapper.findArticlePageChildRelList(search);
         } else { // 컨테이너목록 조회
-            if (search.getSearchType()
-                      .equals("pageSeq") || search.getSearchType()
-                                                  .equals("skinSeq")) {
+            if (search
+                    .getSearchType()
+                    .equals("pageSeq") || search
+                    .getSearchType()
+                    .equals("artPageSeq")) {
                 search.clearSort();
                 search.addSort("containerSeq,desc");
             }
@@ -112,9 +116,10 @@ public class ContainerServiceImpl implements ContainerService {
             throws UnsupportedEncodingException, IOException, TemplateParseException {
 
         List<ParsedItemDTO> parsedItemDTOList = TemplateParserHelper.getItemList(container.getContainerBody());
-        List<ItemDTO> itemDTOList = ResourceMapper.getDefaultObjectMapper()
-                                                  .convertValue(parsedItemDTOList, new TypeReference<List<ItemDTO>>() {
-                                                  });
+        List<ItemDTO> itemDTOList = ResourceMapper
+                .getDefaultObjectMapper()
+                .convertValue(parsedItemDTOList, new TypeReference<List<ItemDTO>>() {
+                });
         for (ItemDTO item : itemDTOList) {
             ContainerRel relation = new ContainerRel();
             relation.setRelType(item.getNodeName());
@@ -131,7 +136,8 @@ public class ContainerServiceImpl implements ContainerService {
                 // container.addContainerRel(relation);
             }
 
-            if (item.getNodeName()
+            if (item
+                    .getNodeName()
                     .equals(MokaConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
                 // 추가한다.
                 Optional<Component> component = componentService.findComponentBySeq(Long.parseLong(item.getId()));
@@ -141,12 +147,14 @@ public class ContainerServiceImpl implements ContainerService {
                     // template 아이템 추가
                     ContainerRel relationTP = new ContainerRel();
                     relationTP.setRelType(MokaConstants.ITEM_TEMPLATE);
-                    relationTP.setRelSeq(component.get()
-                                                  .getTemplate()
-                                                  .getTemplateSeq());
+                    relationTP.setRelSeq(component
+                            .get()
+                            .getTemplate()
+                            .getTemplateSeq());
                     relationTP.setRelParentType(MokaConstants.ITEM_COMPONENT);
-                    relationTP.setRelParentSeq(component.get()
-                                                        .getComponentSeq());
+                    relationTP.setRelParentSeq(component
+                            .get()
+                            .getComponentSeq());
                     relationTP.setRelOrd(item.getOrder());
 
                     if (!container.isEqualRel(relationTP)) {
@@ -156,16 +164,19 @@ public class ContainerServiceImpl implements ContainerService {
                     }
 
                     // data 아이템 추가
-                    if (component.get()
-                                 .getDataset() != null) {
+                    if (component
+                            .get()
+                            .getDataset() != null) {
                         ContainerRel relatioDS = new ContainerRel();
                         relatioDS.setRelType(MokaConstants.ITEM_DATASET);
-                        relatioDS.setRelSeq(component.get()
-                                                     .getDataset()
-                                                     .getDatasetSeq());
+                        relatioDS.setRelSeq(component
+                                .get()
+                                .getDataset()
+                                .getDatasetSeq());
                         relatioDS.setRelParentType(MokaConstants.ITEM_COMPONENT);
-                        relatioDS.setRelParentSeq(component.get()
-                                                           .getComponentSeq());
+                        relatioDS.setRelParentSeq(component
+                                .get()
+                                .getComponentSeq());
                         relatioDS.setRelOrd(item.getOrder());
 
                         if (!container.isEqualRel(relatioDS)) {
@@ -236,8 +247,9 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public void deleteContainer(Container container, String name) {
 
-        log.info("[DELETE Container] domainId : {} containerSeq : {}", container.getDomain()
-                                                                                .getDomainId(), container.getContainerSeq());
+        log.info("[DELETE Container] domainId : {} containerSeq : {}", container
+                .getDomain()
+                .getDomainId(), container.getContainerSeq());
 
         // 히스토리저장
         insertHist(container, TpsConstants.WORKTYPE_DELETE, name);
@@ -256,24 +268,29 @@ public class ContainerServiceImpl implements ContainerService {
     public void updateRelItems(Component newComponent, Component orgComponent) {
 
         // 템플릿 업데이트
-        if (!newComponent.getTemplate()
-                         .getTemplateSeq()
-                         .equals(orgComponent.getTemplate()
-                                             .getTemplateSeq())) {
+        if (!newComponent
+                .getTemplate()
+                .getTemplateSeq()
+                .equals(orgComponent
+                        .getTemplate()
+                        .getTemplateSeq())) {
             containerRelRepository.updateRelTemplates(newComponent);
         }
 
         // 데이타셋 업데이트
         boolean updateDS = false;
-        if (!newComponent.getDataType()
-                         .equals(orgComponent.getDataType())) {
+        if (!newComponent
+                .getDataType()
+                .equals(orgComponent.getDataType())) {
             updateDS = true;
         }
         if (newComponent.getDataset() != null && orgComponent.getDataset() != null) {
-            if (!newComponent.getDataset()
-                             .getDatasetSeq()
-                             .equals(orgComponent.getDataset()
-                                                 .getDatasetSeq())) {
+            if (!newComponent
+                    .getDataset()
+                    .getDatasetSeq()
+                    .equals(orgComponent
+                            .getDataset()
+                            .getDatasetSeq())) {
                 updateDS = true;
             }
         }
@@ -287,23 +304,27 @@ public class ContainerServiceImpl implements ContainerService {
 
         if (updateDS) {
             // datasetSeq가 추가된 경우: select -> insert. querydsl에서 insert는 안되므로 여기서 처리
-            if (!newComponent.getDataType()
-                             .equals(TpsConstants.DATATYPE_NONE) && orgComponent.getDataType()
-                                                                                .equals(TpsConstants.DATATYPE_NONE)) {
+            if (!newComponent
+                    .getDataType()
+                    .equals(TpsConstants.DATATYPE_NONE) && orgComponent
+                    .getDataType()
+                    .equals(TpsConstants.DATATYPE_NONE)) {
 
                 List<ContainerRel> relList = containerRelRepository.findList(MokaConstants.ITEM_COMPONENT, newComponent.getComponentSeq());
 
                 for (ContainerRel rel : relList) {
-                    ContainerRel newRel = ContainerRel.builder()
-                                                      .container(rel.getContainer())
-                                                      .domain(rel.getDomain())
-                                                      .relType(MokaConstants.ITEM_DATASET)
-                                                      .relSeq(newComponent.getDataset()
-                                                                          .getDatasetSeq())
-                                                      .relParentType(MokaConstants.ITEM_COMPONENT)
-                                                      .relParentSeq(newComponent.getComponentSeq())
-                                                      .relOrd(rel.getRelOrd())
-                                                      .build();
+                    ContainerRel newRel = ContainerRel
+                            .builder()
+                            .container(rel.getContainer())
+                            .domain(rel.getDomain())
+                            .relType(MokaConstants.ITEM_DATASET)
+                            .relSeq(newComponent
+                                    .getDataset()
+                                    .getDatasetSeq())
+                            .relParentType(MokaConstants.ITEM_COMPONENT)
+                            .relParentSeq(newComponent.getComponentSeq())
+                            .relOrd(rel.getRelOrd())
+                            .build();
                     containerRelRepository.save(newRel);
                 }
             } else {

@@ -83,8 +83,8 @@ public class ComponentServiceImpl implements ComponentService {
             return componentMapper.findPageChildRelList(search);
         } else if (search
                 .getSearchType()
-                .equals("skinSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 콘텐츠스킨에서 관련 컴포넌트 검색
-            return componentMapper.findSkinChildRelList(search);
+                .equals("artPageSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 기사페이지에서 관련 컴포넌트 검색
+            return componentMapper.findArticlePageChildRelList(search);
         } else if (search
                 .getSearchType()
                 .equals("containerSeq") && McpString.isNotEmpty(search.getKeyword())) { // 컨테이너에서 관련 컴포넌트 검색
@@ -94,7 +94,7 @@ public class ComponentServiceImpl implements ComponentService {
                     .getSearchType()
                     .equals("pageSeq") || search
                     .getSearchType()
-                    .equals("skinSeq") || search
+                    .equals("artPageSeq") || search
                     .getSearchType()
                     .equals("containerSeq")) {
                 search.clearSort();

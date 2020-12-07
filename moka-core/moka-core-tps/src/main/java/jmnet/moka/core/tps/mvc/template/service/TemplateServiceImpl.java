@@ -55,20 +55,26 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public List<TemplateVO> findAllTemplate(TemplateSearchDTO search) {
-        if (search.getSearchType()
-                  .equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 페이지에서 관련 템플릿 검색
+        if (search
+                .getSearchType()
+                .equals("pageSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 페이지에서 관련 템플릿 검색
             return templateMapper.findPageChildRelList(search);
-        } else if (search.getSearchType()
-                         .equals("skinSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 콘텐츠스킨에서 관련 템플릿 검색
-            return templateMapper.findSkinChildRelList(search);
-        } else if (search.getSearchType()
-                         .equals("containerSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 컨테이너에서 관련 템플릿 검색
+        } else if (search
+                .getSearchType()
+                .equals("artPageSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 기사페이지에서 관련 템플릿 검색
+            return templateMapper.findArticlePageChildRelList(search);
+        } else if (search
+                .getSearchType()
+                .equals("containerSeq") && McpString.isNotEmpty(search.getKeyword())) {    // 컨테이너에서 관련 템플릿 검색
             return templateMapper.findContainerChildRelList(search);
         } else {
-            if (search.getSearchType()
-                      .equals("pageSeq") || search.getSearchType()
-                                                  .equals("skinSeq") || search.getSearchType()
-                                                                              .equals("containerSeq")) {
+            if (search
+                    .getSearchType()
+                    .equals("pageSeq") || search
+                    .getSearchType()
+                    .equals("artPageSeq") || search
+                    .getSearchType()
+                    .equals("containerSeq")) {
                 search.clearSort();
                 search.addSort("templateSeq,desc");
             }
@@ -104,13 +110,15 @@ public class TemplateServiceImpl implements TemplateService {
         log.debug("Update Template {}", template.getTemplateSeq());
 
         // 히스토리 생성
-        TemplateHist hist = TemplateHist.builder()
-                                        .templateBody(template.getTemplateBody())
-                                        .template(template)
-                                        .build();
+        TemplateHist hist = TemplateHist
+                .builder()
+                .templateBody(template.getTemplateBody())
+                .template(template)
+                .build();
         if (template.getDomain() != null) {
-            hist.setDomainId(template.getDomain()
-                                     .getDomainId());
+            hist.setDomainId(template
+                    .getDomain()
+                    .getDomainId());
         }
         templateHistService.insertTemplateHist(hist);
         log.debug("Insert Template History {}", returnVal.getTemplateSeq());
@@ -164,16 +172,19 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public String saveTemplateImage(Template template, MultipartFile thumbnail)
             throws Exception {
-        String extension = McpFile.getExtension(thumbnail.getOriginalFilename())
-                                  .toLowerCase();
+        String extension = McpFile
+                .getExtension(thumbnail.getOriginalFilename())
+                .toLowerCase();
         String newFilename = String.valueOf(template.getTemplateSeq()) + "." + extension;
         // 이미지를 저장할 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template.getDomain()
-                                                                                                    .getDomainId(), newFilename);
+        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template
+                .getDomain()
+                .getDomainId(), newFilename);
 
         if (uploadFileHelper.saveImage(imageRealPath, thumbnail.getBytes())) {
-            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template.getDomain()
-                                                                                           .getDomainId(), newFilename);
+            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template
+                    .getDomain()
+                    .getDomainId(), newFilename);
             return uri;
         } else {
             return "";
@@ -183,19 +194,22 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public String copyTemplateImage(Template template, String copyTargetImgPath)
             throws Exception {
-        String extension = McpFile.getExtension(copyTargetImgPath)
-                                  .toLowerCase();
+        String extension = McpFile
+                .getExtension(copyTargetImgPath)
+                .toLowerCase();
         String newFilename = String.valueOf(template.getTemplateSeq()) + "." + extension;
         // 이미지를 저장할 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template.getDomain()
-                                                                                                    .getDomainId(), newFilename);
+        String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, template
+                .getDomain()
+                .getDomainId(), newFilename);
 
         // copy할 파일 실제 경로 구함
         //        String targetRealPath = uploadFileHelper.getRealPath(TpsConstants.TEMPLATE_BUSINESS, copyTargetImgPath);
 
         if (uploadFileHelper.copyFile(imageRealPath, copyTargetImgPath)) {
-            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template.getDomain()
-                                                                                           .getDomainId(), newFilename);
+            String uri = uploadFileHelper.getDbUri(TpsConstants.TEMPLATE_BUSINESS, template
+                    .getDomain()
+                    .getDomainId(), newFilename);
             return uri;
         } else {
             return "";

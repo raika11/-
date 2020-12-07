@@ -48,3 +48,10 @@ export const deleteSpecial = ({ seqNo }) => {
         throw err;
     });
 };
+
+// 디지털스페셜 부서조회
+export const getDeptList = () => {
+    return instance.get(`/api/specials/depts`).catch((err) => {
+        throw err;
+    });
+};

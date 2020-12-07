@@ -26,7 +26,6 @@ export default [
         tooltipField: 'linkTitle',
         width: 120,
         cellStyle: { fontSize: '12px', lineHeight: '50px' },
-        wrapText: true,
         flex: 1,
         autoHeight: false,
     },
@@ -36,7 +35,6 @@ export default [
         tooltipField: 'linkUrl',
         width: 150,
         cellStyle: { fontSize: '12px', lineHeight: '50px' },
-        wrapText: true,
         flex: 1,
         autoHeight: false,
     },
@@ -46,7 +44,6 @@ export default [
         tooltipField: 'linkContent',
         width: 200,
         cellStyle: { fontSize: '12px', lineHeight: '50px' },
-        // wrapText: true,
         autoHeight: false,
     },
     {
@@ -56,7 +53,6 @@ export default [
         width: 80,
         flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '50px' },
-        wrapText: true,
         autoHeight: false,
     },
     {
@@ -65,7 +61,6 @@ export default [
         width: 80,
         flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '50px' },
-        wrapText: true,
         autoHeight: false,
     },
     {
@@ -75,7 +70,6 @@ export default [
         width: 80,
         flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '50px' },
-        wrapText: true,
         autoHeight: false,
     },
     {
@@ -84,7 +78,6 @@ export default [
         width: 80,
         flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '50px' },
-        wrapText: true,
         autoHeight: false,
     },
     {

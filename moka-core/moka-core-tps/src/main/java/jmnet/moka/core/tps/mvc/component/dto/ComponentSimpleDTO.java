@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
+import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartDTO;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,4 +65,9 @@ public class ComponentSimpleDTO implements Serializable {
      */
     @NotNull(message = "{tps.template.error.notnull.templateSeq}")
     private TemplateSimpleDTO template;
+
+    /**
+     * 에디트폼 파트
+     */
+    private EditFormPartDTO editFormPart;
 }

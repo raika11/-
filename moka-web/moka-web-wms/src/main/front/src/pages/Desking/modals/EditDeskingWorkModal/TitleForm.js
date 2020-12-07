@@ -10,7 +10,7 @@ import util from '@utils/commonUtil';
 /**
  * 타이틀 + 폰트사이즈 폼
  */
-const DeskingWorkTitleForm = ({ show, mappingData, temp, onChange, titleListType, error }) => {
+const TitleForm = ({ show, mappingData, temp, onChange, titleListType, error }) => {
     const { as, field, label, errorCheck, ...mappingProps } = mappingData;
     const dispatch = useDispatch();
     const [titleList, setTitleList] = useState([]);
@@ -76,4 +76,4 @@ const DeskingWorkTitleForm = ({ show, mappingData, temp, onChange, titleListType
     );
 };
 
-export default DeskingWorkTitleForm;
+export default TitleForm;

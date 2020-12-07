@@ -50,6 +50,12 @@ export const CODETYPE_DS_FONT_IMGW = 'DS_FONT_IMGW';
 export const CODETYPE_DS_FONT_VODD = 'DS_FONT_VODD';
 // 공통코드 : 페이지편집폼 제목/부제목 위치
 export const CODETYPE_DS_TITLE_LOC = 'DS_TITLE_LOC';
+// 공통코드 : 페이지편집폼 말머리
+export const CODETYPE_DS_PRE = 'DS_PRE';
+// 공통코드 : 페이지편집폼 말머리 위치
+export const CODETYPE_DS_PRE_LOC = 'DS_PRE_LOC';
+// 공통코드 : 페이지편집폼 아이콘
+export const CODETYPE_DS_ICON = 'DS_ICON';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

@@ -9,7 +9,7 @@ import { MokaInput, MokaInputLabel } from '@components';
  * 링크는 타겟 셀렉트 박스 자동 생성
  * 링크타겟을 받는 DTO 필드는 ~Target으로 고정
  */
-const DeskingWorkTextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
+const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
     const { as, field, label, errorCheck, ...mappingProps } = mappingData;
     const isUrl = urlRegex.test(field);
 
@@ -45,4 +45,4 @@ const DeskingWorkTextForm = ({ mappingData, urlRegex, temp, onChange, error }) =
     );
 };
 
-export default DeskingWorkTextForm;
+export default TextForm;

@@ -2,18 +2,19 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { MokaInputLabel, MokaModal } from '@components';
 import toast from '@utils/toastUtil';
-import EditThumbModal from './EditThumbModal';
 import { getBulkChar } from '@store/codeMgt';
 import { PUT_DESKING_WORK } from '@store/desking';
-import TitleForm from './components/DeskingWorkTitleForm';
-import TextForm from './components/DeskingWorkTextForm';
-import mapping, { fontSizeObj } from '../deskingPartMapping';
+import { MokaInputLabel, MokaModal } from '@components';
+import IconForm from './IconForm';
+import TitleForm from './TitleForm';
+import TextForm from './TextForm';
+import TitleLocForm from './TitleLocForm';
+import TitlePrefixForm from './TitlePrefixForm';
+import VodUrlForm from './VodUrlForm';
+import EditThumbModal from '@pages/Desking/modals/EditThumbModal';
+import mapping, { fontSizeObj } from '@pages/Desking/deskingPartMapping';
 
-// const titlePrefixList = [{ name: '속보' }, { name: '단독' }];
-// const prefixLocationList = [{ name: '제목 앞' }, { name: '제목 뒤' }, { name: '부제 앞' }, { name: '부제 뒤' }, { name: '리드문 앞' }, { name: '리드문 뒤' }];
-// const titleLocationList = [{ name: '상단' }, { name: '하단' }];
 const urlRegex = /[Uu]rl$/;
 
 /**
@@ -214,57 +215,19 @@ const EditDeskingWorkModal = (props) => {
                                 </Form.Row>
                             );
                         } else if (partKey === 'ICON_FILE_NAME') {
+                            return <IconForm show={show} key={partKey} temp={temp} setTemp={setTemp} onChange={handleChangeValue} />;
                         } else if (partKey === 'TITLE_PREFIX') {
+                            return <TitlePrefixForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
                         } else if (partKey === 'TITLE_LOC') {
+                            return <TitleLocForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
                         } else if (partKey === 'VOD_URL') {
+                            return <VodUrlForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
                         } else if (mappingData) {
                             return <TextForm key={partKey} mappingData={mappingData} temp={temp} urlRegex={urlRegex} onChange={handleChangeValue} error={error} />;
                         } else {
                             return null;
                         }
                     })}
-                    {/* 
-                            <MokaInputLabel label="말머리" labelWidth={80} as="none" />
-                            <Col xs={5} className="p-0 d-flex align-items-center justify-content-between">
-                                <MokaInput className="mb-3 mr-2 ft-12" as="select" name="titlePrefix" value={temp.titlePrefix} onChange={handleChangeValue}>
-                                    {titlePrefixList.map((prefix, idx) => (
-                                        <option key={idx} value={idx} className="ft-12">
-                                            {prefix.name}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                                <MokaInput className="mb-3 mr-2 ft-12" as="select" name="prefixLocation" value={temp.prefixLocation} onChange={handleChangeValue}>
-                                    {prefixLocationList.map((prefixLocation, idx) => (
-                                        <option key={idx} value={idx} className="ft-12">
-                                            {prefixLocation.name}
-                                        </option>
-                                    ))}
-                                </MokaInput>
-                            </Col>
-                            <div className="w-100">
-                                <MokaInputLabel
-                                    inputClassName="ft-12"
-                                    label="제목/부제위치"
-                                    labelWidth={90}
-                                    as="select"
-                                    name="titleLocation"
-                                    value={temp.titleLocation}
-                                    onChange={handleChangeValue}
-                                >
-                                    {titleLocationList.map((titleLocation, idx) => (
-                                        <option key={idx} value={idx} className="ft-12">
-                                            {titleLocation.name}
-                                        </option>
-                                    ))}
-                                </MokaInputLabel>
-                            </div>
-                        </Form.Row>
-                        <Form.Row className="d-flex align-items-center">
-                            <MokaInputLabel label="영상" labelWidth={80} className="m-0" onChange={handleChangeValue} as="none" />
-                            <div className="w-100">
-                                <MokaSearchInput placeholder="url 입력해주세요" name="moreUrl" value={temp.moreUrl} onChange={handleChangeValue} />
-                            </div>
-                        </Form.Row> */}
                 </Form>
             </MokaModal>
             <EditThumbModal show={showModal} onHide={() => setShowModal(false)} />

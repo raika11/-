@@ -322,6 +322,9 @@ export const getDsFontImgD = createReadOnlySaga(act.GET_DS_FONT_IMGD, 'dsFontImg
 export const getDsFontImgW = createReadOnlySaga(act.GET_DS_FONT_IMGW, 'dsFontImgWRows', constants.CODETYPE_DS_FONT_IMGW);
 export const getDsFontVodD = createReadOnlySaga(act.GET_DS_FONT_VODD, 'dsFontVodDRows', constants.CODETYPE_DS_FONT_VODD);
 export const getDsTitleLoc = createReadOnlySaga(act.GET_DS_TITLE_LOC, 'dsTitleLocRows', constants.CODETYPE_DS_TITLE_LOC);
+export const getDsPre = createReadOnlySaga(act.GET_DS_PRE, 'dsPreRows', constants.CODETYPE_DS_PRE);
+export const getDsPreLoc = createReadOnlySaga(act.GET_DS_PRE_LOC, 'dsPreLocRows', constants.CODETYPE_DS_PRE_LOC);
+export const getDsIcon = createReadOnlySaga(act.GET_DS_ICON, 'dsIconRows', constants.CODETYPE_DS_ICON);
 
 /** saga */
 export default function* codeMgt() {
@@ -348,4 +351,7 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_DS_FONT_IMGW, getDsFontImgW);
     yield takeLatest(act.GET_DS_FONT_VODD, getDsFontVodD);
     yield takeLatest(act.GET_DS_TITLE_LOC, getDsTitleLoc);
+    yield takeLatest(act.GET_DS_PRE, getDsPre);
+    yield takeLatest(act.GET_DS_PRE_LOC, getDsPreLoc);
+    yield takeLatest(act.GET_DS_ICON, getDsIcon);
 }

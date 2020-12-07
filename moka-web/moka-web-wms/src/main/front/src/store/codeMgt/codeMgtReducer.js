@@ -200,7 +200,7 @@ export default handleActions(
         },
         [act.READ_ONLY_FAILURE]: (state, { payload: { rowName } }) => {
             return produce(state, (draft) => {
-                draft[rowName] = initialState[rowName];
+                draft[rowName] = [];
             });
         },
     },

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaInputLabel } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { putArticleEditTitle, PUT_ARTICLE_EDIT_TITLE } from '@store/article';
 
 /**
@@ -25,7 +26,7 @@ const ChangeArtGroupModal = (props) => {
     const [error, setError] = useState({});
 
     const validate = () => {
-        const regex = /[^\s\t\n]+/;
+        const regex = REQUIRED_REGEX;
         let invalid = false,
             ne = {};
 

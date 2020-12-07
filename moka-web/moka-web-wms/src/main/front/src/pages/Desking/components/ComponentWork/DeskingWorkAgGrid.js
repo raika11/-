@@ -5,7 +5,7 @@ import { AgGridReact } from 'ag-grid-react';
 
 import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
-import DeskingReadyGrid from './DeskingReadyGrid';
+import DeskingReadyGrid from '@pages/Desking/components/DeskingReadyGrid';
 import DeskingEditorRenderer from './DeskingEditorRenderer';
 import { unescapeHtml } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';

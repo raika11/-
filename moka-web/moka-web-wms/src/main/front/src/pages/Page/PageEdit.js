@@ -5,12 +5,12 @@ import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
 import { getPageType } from '@store/codeMgt';
 import { previewPage, w3cPage } from '@store/merge';
 import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
 import toast from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/Page/modals';
 
@@ -113,12 +113,12 @@ const PageEdit = ({ onDelete }) => {
             let url = '';
             if (name === 'pageServiceName') {
                 url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${value}`;
-                if (/[^\s\t\n]+/.test(temp.urlParam)) {
+                if (REQUIRED_REGEX.test(temp.urlParam)) {
                     url = `${url}/*`;
                 }
             } else if (name === 'urlParam') {
                 url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${temp.pageServiceName}`;
-                if (/[^\s\t\n]+/.test(value)) {
+                if (REQUIRED_REGEX.test(value)) {
                     url = `${url}/*`;
                 }
             } else {
@@ -140,7 +140,7 @@ const PageEdit = ({ onDelete }) => {
                 setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
             } else if (name === 'pageName') {
                 setTemp({ ...temp, pageName: value });
-                if (/[^\s\t\n]+/.test(value)) {
+                if (REQUIRED_REGEX.test(value)) {
                     setError({ ...error, pageName: false });
                 }
             } else if (name === 'pageServiceName') {
@@ -193,7 +193,7 @@ const PageEdit = ({ onDelete }) => {
             const bRoot = !(page.parent && page.parent.pageSeq);
 
             // 페이지명 체크
-            if (!/[^\s\t\n]+/.test(page.pageName)) {
+            if (!REQUIRED_REGEX.test(page.pageName)) {
                 errList.push({
                     field: 'pageName',
                     reason: '페이지명을 입력하세요',
@@ -202,7 +202,7 @@ const PageEdit = ({ onDelete }) => {
             }
 
             // 서비스명 입력체크
-            if (!bRoot && !/[^\s\t\n]+/.test(page.pageServiceName)) {
+            if (!bRoot && !REQUIRED_REGEX.test(page.pageServiceName)) {
                 errList.push({
                     field: 'pageServiceName',
                     reason: '서비스명을 입력하세요.',
@@ -229,7 +229,7 @@ const PageEdit = ({ onDelete }) => {
             }
 
             // 페이지순서 체크
-            if (!/[^\s\t\n]+/.test(page.pageOrd)) {
+            if (!REQUIRED_REGEX.test(page.pageOrd)) {
                 errList.push({
                     field: 'pageOrd',
                     reason: '페이지순서를 입력하세요',
@@ -247,7 +247,7 @@ const PageEdit = ({ onDelete }) => {
             }
 
             // 페이지순서 체크
-            if (page.moveYn === 'Y' && !/[^\s\t\n]+/.test(page.moveUrl)) {
+            if (page.moveYn === 'Y' && !REQUIRED_REGEX.test(page.moveUrl)) {
                 errList.push({
                     field: 'moveUrl',
                     reason: '이동URL을 입력하세요',

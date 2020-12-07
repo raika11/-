@@ -18,6 +18,7 @@ import { GET_AREA_DEPTH2, GET_AREA_DEPTH3, SAVE_AREA, DELETE_AREA, saveArea, cha
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
 import toast, { messageBox } from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 
 const AreaFormDepth2 = (props) => {
     const { onShowModal, page, setPage, onChangeModalDomainId, depth, onDelete } = props;
@@ -137,7 +138,7 @@ const AreaFormDepth2 = (props) => {
         let isInvalid = false;
         let errList = [];
 
-        if (!/[^\s\t\n]+/.test(saveObj.areaNm)) {
+        if (!REQUIRED_REGEX.test(saveObj.areaNm)) {
             errList.push({
                 field: 'areaNm',
                 reason: '',

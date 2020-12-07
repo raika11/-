@@ -7,6 +7,7 @@ import { changeLatestDomainId } from '@store/auth';
 import { initialState, getComponent, clearComponent, saveComponent, hasRelationList, changeInvalidList, GET_COMPONENT, SAVE_COMPONENT, DELETE_COMPONENT } from '@store/component';
 import { DB_DATEFORMAT } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 
 import BasicForm from './components/BasicForm';
 import DetailRelationForm from './components/DetailRelationForm';
@@ -36,7 +37,6 @@ const ComponentEdit = ({ onDelete }) => {
     // state
     const [temp, setTemp] = useState(initialState.component);
     const [error, setError] = useState({});
-    const componentNameRegex = /[^\s\t\n]+/;
 
     /**
      * 유효성 검사
@@ -47,7 +47,7 @@ const ComponentEdit = ({ onDelete }) => {
         let errList = [];
 
         // 컴포넌트명 체크
-        if (!temp.componentName || !componentNameRegex.test(temp.componentName)) {
+        if (!temp.componentName || !REQUIRED_REGEX.test(temp.componentName)) {
             errList.push({
                 field: 'componentName',
                 reason: '',
@@ -217,7 +217,7 @@ const ComponentEdit = ({ onDelete }) => {
             <BasicForm
                 component={temp}
                 setComponent={setTemp}
-                componentNameRegex={componentNameRegex}
+                componentNameRegex={REQUIRED_REGEX}
                 onClickSave={handleClickSave}
                 onClickDelete={() => onDelete(component)}
                 error={error}

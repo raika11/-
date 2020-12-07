@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
 import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
 /**
@@ -45,8 +44,7 @@ const ContainerEdit = ({ onDelete }) => {
 
         if (name === 'containerName') {
             setContainerName(value);
-            const regex = /[^\s\t\n]+/;
-            if (regex.test(value)) {
+            if (REQUIRED_REGEX.test(value)) {
                 setContainerNameError(false);
             }
         }
@@ -61,7 +59,7 @@ const ContainerEdit = ({ onDelete }) => {
         let errList = [];
 
         // 컨테이너명 체크
-        if (!/[^\s\t\n]+/.test(container.containerName)) {
+        if (!REQUIRED_REGEX.test(container.containerName)) {
             errList.push({
                 field: 'containerName',
                 reason: '',

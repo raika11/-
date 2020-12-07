@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import toast, { messageBox } from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { MokaInputLabel } from '@components';
 import { deleteReserved, getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
 
@@ -89,7 +88,7 @@ const ReservedEdit = () => {
             });
             isInvalid = isInvalid | true;
         }
-        if (!/[^\s\t\n]+/g.test(reserved.reservedValue)) {
+        if (!REQUIRED_REGEX.test(reserved.reservedValue)) {
             errList.push({
                 field: 'reservedValue',
                 reason: '예약어 값을 확인해주세요',

@@ -5,12 +5,12 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
 import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, copyTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { DefaultInputModal } from '@pages/commons';
 import AddComponentModal from './modals/AddComponentModal';
 
@@ -65,8 +65,7 @@ const TemplateEdit = ({ onDelete }) => {
 
         if (name === 'templateName') {
             setTemplateName(value);
-            const regex = /[^\s\t\n]+/;
-            if (regex.test(value)) {
+            if (REQUIRED_REGEX.test(value)) {
                 setTemplateNameError(false);
             }
         } else if (name === 'templateWidth') {
@@ -91,7 +90,7 @@ const TemplateEdit = ({ onDelete }) => {
         let errList = [];
 
         // 템플릿명 체크
-        if (!/[^\s\t\n]+/.test(template.templateName)) {
+        if (!REQUIRED_REGEX.test(template.templateName)) {
             errList.push({
                 field: 'templateName',
                 reason: '',

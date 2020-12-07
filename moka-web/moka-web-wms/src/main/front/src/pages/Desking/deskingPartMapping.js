@@ -1,4 +1,5 @@
 import { CODETYPE_DS_FONT_IMGD, CODETYPE_DS_FONT_IMGW, CODETYPE_DS_FONT_VODD } from '@/constants';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 
 // 편집영역에서 사용하는 partList
 export const deskingPartList = [
@@ -31,6 +32,7 @@ export default {
         field: 'title',
         label: '제목',
         errorCheck: true,
+        regex: REQUIRED_REGEX,
         inputProps: {
             className: 'resize-none custom-scroll',
             rows: 2,

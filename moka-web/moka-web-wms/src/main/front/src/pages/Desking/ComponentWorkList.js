@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInput } from '@components';
 import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, API_BASE_URL } from '@/constants';
 import { GET_COMPONENT_WORK_LIST, changeWorkStatus } from '@store/desking';
-import ComponentWork from './components/ComponentWork';
+import { ComponentWork } from './components';
 
 /**
  * 컴포넌트의 워크 리스트

@@ -13,7 +13,7 @@ import { changeSearchOption, putComponentWork, postSaveComponentWork, postPublis
 import ReserveComponentWork from './ReserveComponentWork';
 import TemplateListModal from '@pages/Template/modals/TemplateListModal';
 import TemplateHtmlModal from '@pages/Template/modals/TemplateHtmlModal';
-import { AddSpaceModal, RegisterModal, EditListNumberModal, EditHtmlModal } from '../modals';
+import { AddSpaceModal, RegisterModal, EditListNumberModal, EditHtmlModal } from '@pages/Desking/modals';
 
 /**
  * 커스텀 토글

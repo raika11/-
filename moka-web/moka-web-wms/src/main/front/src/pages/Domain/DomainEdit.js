@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import toast from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, changeInvalidList } from '@store/domain';
 import { getApi, getLang } from '@store/codeMgt';
 import { MokaInput, MokaInputLabel } from '@components';
@@ -105,7 +104,7 @@ const DomainEdit = ({ history, onDelete }) => {
         }
 
         // 도메인명 체크
-        if (!/[^\s\t\n]+/.test(domain.domainName)) {
+        if (!REQUIRED_REGEX.test(domain.domainName)) {
             errList.push({
                 field: 'domainName',
                 reason: '',
@@ -114,7 +113,7 @@ const DomainEdit = ({ history, onDelete }) => {
         }
 
         // 도메인url 체크
-        if (!/[^\s\t\n]+/.test(domain.domainUrl)) {
+        if (!REQUIRED_REGEX.test(domain.domainUrl)) {
             errList.push({
                 field: 'domainUrl',
                 reason: '',

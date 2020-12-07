@@ -111,6 +111,7 @@ const AreaFormDepth2 = (props) => {
             setAreaComps([]);
             setAreaComp({});
         } else if (name === 'component') {
+            // ComponentSelector에서 option이 변경될 때 (areaComps를 제거하고, areaComp의 deskingPart를 초기화)
             const { datatype } = selectedOptions[0].dataset;
             setComponent({ componentSeq: value, dataType: datatype });
             setAreaComps([]);
@@ -118,6 +119,7 @@ const AreaFormDepth2 = (props) => {
         } else if (name === 'areaAlign') {
             setTemp({ ...temp, areaAlign: value });
         } else if (name === 'container') {
+            // ContainerSelector에서 option이 변경될 때
             setContainer({ containerSeq: value });
             handleCompLoad({ containerSeq: value });
             setError({ ...error, container: false });

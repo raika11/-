@@ -9,9 +9,6 @@ import Page403 from '@pages/Auth/Page403';
 // page
 const Dashboard = React.lazy(() => import('@pages/Dashboard'));
 const Desking = React.lazy(() => import('@pages/Desking'));
-const TestBoard = React.lazy(() => import('@pages/TestBoard'));
-const Task = React.lazy(() => import('@pages/Task'));
-const EmbedVideo = React.lazy(() => import('@pages/EmbedVideo'));
 const AgGrid = React.lazy(() => import('@pages/AgGrid'));
 const Page = React.lazy(() => import('@pages/Page'));
 const Domain = React.lazy(() => import('@pages/Domain'));
@@ -68,37 +65,10 @@ const routes = [
         layout: NoFrameLayout,
     },
     {
-        path: '/test',
-        name: 'Test',
-        displayName: '테스트페이지',
-        component: TestBoard,
-        layout: SidebarOpenLayout,
-        nonResponsive: false,
-        exact: true,
-    },
-    {
         path: '/aggrid',
         name: 'AgGrid',
         displayName: 'AgGrid',
         component: AgGrid,
-        layout: SidebarOpenLayout,
-        nonResponsive: false,
-        exact: true,
-    },
-    {
-        path: '/tasks',
-        name: 'Task',
-        displayName: 'Task',
-        component: Task,
-        layout: SidebarOpenLayout,
-        nonResponsive: false,
-        exact: true,
-    },
-    {
-        path: '/embed-video',
-        name: 'EmbedVideo',
-        displayName: 'EmbedVideo',
-        component: EmbedVideo,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: true,

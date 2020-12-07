@@ -11,7 +11,7 @@ import AlertComponet from './AlertComponent';
 import MokaTabComponent from './MokaTabComponent';
 import AccordionComponent from './AccordionComponent';
 import BreadcrumbComponent from './BreadcrumbComponent';
-import ImageComponent from './ImageComponent';
+// import ImageComponent from './ImageComponent';
 // import avatar from './img/avatars/logo192.png';
 import PopoverComponent from './PopoverComponent';
 import TooltipComponent from './TooltipComponent';

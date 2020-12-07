@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import toast from '@utils/toastUtil';
-import { getBulkChar } from '@store/codeMgt';
+import { getBulkChar, GET_BULK_CHAR, GET_DS_FONT_IMGD, GET_DS_FONT_IMGW, GET_DS_FONT_VODD, GET_DS_ICON, GET_DS_PRE, GET_DS_PRE_LOC, GET_DS_TITLE_LOC } from '@store/codeMgt';
 import { PUT_DESKING_WORK } from '@store/desking';
 import { MokaInputLabel, MokaModal } from '@components';
 import IconForm from './IconForm';
@@ -25,7 +25,16 @@ const EditDeskingWorkModal = (props) => {
     const dispatch = useDispatch();
     const { bulkCharRows, IR_URL, loading } = useSelector((store) => ({
         bulkCharRows: store.codeMgt.bulkCharRows,
-        loading: store.loading[PUT_DESKING_WORK],
+        loading:
+            store.loading[PUT_DESKING_WORK] ||
+            store.loading[GET_BULK_CHAR] ||
+            store.loading[GET_DS_FONT_IMGD] ||
+            store.loading[GET_DS_FONT_IMGW] ||
+            store.loading[GET_DS_FONT_VODD] ||
+            store.loading[GET_DS_ICON] ||
+            store.loading[GET_DS_PRE] ||
+            store.loading[GET_DS_PRE_LOC] ||
+            store.loading[GET_DS_TITLE_LOC],
         IR_URL: store.app.IR_URL,
     }));
     const imgFileRef = useRef(null);
@@ -43,16 +52,23 @@ const EditDeskingWorkModal = (props) => {
      * validate
      */
     const validate = () => {
-        const regex = /[^\s\t\n]+/;
         let invalid = false,
             obj = {};
+        const mappingList = Object.values(mapping);
 
-        if (!regex.test(temp.title)) {
-            obj.title = true;
-            invalid = invalid || true;
-        } else {
-            obj.title = false;
-        }
+        // temp -> 리스트 변환 후 루프돌며 mapping의 regex에 따라 error 처리
+        Object.keys(temp).forEach((camelKey) => {
+            const mappingData = mappingList.find((m) => m.field === camelKey);
+            if (!mappingData) return false;
+
+            const { errorCheck, regex } = mappingData;
+            if (errorCheck) {
+                if (!regex.test(temp[camelKey])) {
+                    invalid = invalid || true;
+                    obj[camelKey] = true;
+                }
+            }
+        });
 
         setError({ ...obj });
         return !invalid;
@@ -95,6 +111,7 @@ const EditDeskingWorkModal = (props) => {
         if (imgFileRef.current) {
             imgFileRef.current.deleteFile();
         }
+        setError({});
         onHide();
     };
 

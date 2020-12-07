@@ -25,6 +25,7 @@ export const fontSizeList = [
 ];
 export const fontSizeObj = fontSizeList.reduce((all, ft) => ({ ...all, [ft.id]: ft }), {});
 
+// regex가 여러개일 때 리스트로 변경 -> 추후 필요시 작업
 export default {
     // 제목
     TITLE: {

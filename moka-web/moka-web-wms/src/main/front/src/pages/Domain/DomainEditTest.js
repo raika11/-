@@ -60,13 +60,13 @@ const DomainEditTest = ({ history, onDelete }) => {
                 setValue('usedYn', domain[key] === 'Y' ? true : false);
             } else if (key === 'lang') {
                 if (!domain[key]) {
-                    if (langRows.length > 0) {
+                    if (langRows && langRows.length > 0) {
                         setValue('lang', langRows[0].dtlCd);
                     }
                 }
             } else if (key === 'apiCodeId') {
                 if (!domain[key]) {
-                    if (apiRows.length > 0) {
+                    if (apiRows && apiRows.length > 0) {
                         setValue('apiCodeId', apiRows[0].dtlCd);
                     }
                 }

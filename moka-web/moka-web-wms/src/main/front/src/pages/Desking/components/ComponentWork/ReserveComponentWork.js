@@ -6,7 +6,7 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
 import { postReserveComponentWork } from '@store/desking';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 /**
  * 컴포넌트 워크 예약
@@ -52,20 +52,22 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             return;
         }
 
-        dispatch(
-            postReserveComponentWork({
-                componentWorkSeq: component.seq,
-                reserveDt: moment(reserveDt).format(DB_DATEFORMAT),
-                callback: ({ header }) => {
-                    if (!header.success) {
-                        toast.fail(header.message);
-                    } else {
-                        toast.success(header.message);
-                        setOpenReserve(false);
-                    }
-                },
-            }),
-        );
+        messageBox.confirm('예약하시겠습니까?', () => {
+            dispatch(
+                postReserveComponentWork({
+                    componentWorkSeq: component.seq,
+                    reserveDt: moment(reserveDt).format(DB_DATEFORMAT),
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            toast.fail(header.message);
+                        } else {
+                            toast.success(header.message);
+                            setOpenReserve(false);
+                        }
+                    },
+                }),
+            );
+        });
     };
 
     /**

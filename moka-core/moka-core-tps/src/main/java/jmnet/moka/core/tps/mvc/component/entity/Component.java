@@ -122,7 +122,7 @@ public class Component extends BaseAudit {
     private Date periodEndDt;
 
     /**
-     * 데이터유형:NONE, DESK, AUTO
+     * 데이터유형:NONE, DESK, AUTO, FORM
      */
     @Column(name = "DATA_TYPE")
     @Builder.Default

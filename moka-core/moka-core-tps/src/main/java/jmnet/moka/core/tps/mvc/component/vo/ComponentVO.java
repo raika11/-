@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -60,4 +61,10 @@ public class ComponentVO implements Serializable {
     @Builder.Default
     private Integer relOrd = 1;
 
+    /**
+     * 데이터유형:NONE, DESK, AUTO, FORM
+     */
+    @Column(name = "DATA_TYPE")
+    @Builder.Default
+    private String dataType = TpsConstants.DATATYPE_NONE;
 }

@@ -103,7 +103,7 @@ public class ComponentDTO implements Serializable {
     private Date periodEndDt;
 
     /**
-     * 데이터유형:NONE, DESK, AUTO
+     * 데이터유형:NONE, DESK, AUTO, FORM
      */
     @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)|(FORM)]{4}$", message = "{tps.component.error.pattern.dataType}")
     @Builder.Default

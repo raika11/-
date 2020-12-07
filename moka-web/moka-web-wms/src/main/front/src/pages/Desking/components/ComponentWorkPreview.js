@@ -58,7 +58,9 @@ const ComponentWorkPreview = ({ show }) => {
         if (previewContent) {
             let style = document.createElement('style');
             style.textContent = 'body { margin: 0px !important; }';
-            doc.head.appendChild(style);
+            setTimeout(function () {
+                doc.head && doc.head.appendChild(style);
+            }, 300);
         }
         doc.close();
     }, [previewContent]);

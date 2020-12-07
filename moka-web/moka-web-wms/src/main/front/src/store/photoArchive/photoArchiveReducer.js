@@ -17,13 +17,38 @@ export const initialState = {
         finishdate: null,
         searchKey: '',
         searchValue: '',
-        imageType: '',
+        imageType: [],
     },
+    imageTypeList: [],
     photo: {},
 };
 
 export default handleActions(
     {
+        /**
+         * 스토어 데이터 초기화
+         */
+        [act.CLEAR_STORE]: () => initialState,
+        [act.CLEAR_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.total = initialState.total;
+                draft.list = initialState.list;
+                draft.error = initialState.error;
+            });
+        },
+        [act.CLEAR_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.search = initialState.search;
+            });
+        },
+        /**
+         * 검색조건 변경
+         */
+        [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.search = payload;
+            });
+        },
         /**
          * 목록 조회
          */
@@ -39,6 +64,19 @@ export default handleActions(
                 draft.list = initialState.list;
                 draft.total = initialState.totalCnt;
                 draft.error = payload;
+            });
+        },
+        /**
+         * 사진 유형 목록 조회
+         */
+        [act.GET_PHOTO_TYPES_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.imageTypeList = body.list;
+            });
+        },
+        [act.GET_PHOTO_TYPES_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.imageTypeList = initialState.imageTypeList;
             });
         },
         /**

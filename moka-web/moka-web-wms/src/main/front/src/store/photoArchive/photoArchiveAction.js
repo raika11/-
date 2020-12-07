@@ -2,6 +2,22 @@ import { createAction } from 'redux-actions';
 import { createRequestActionTypes } from '@store/commons/saga';
 
 /**
+ * 검색조건 변경
+ */
+export const CHANGE_SEARCH_OPTION = 'photoArchive/CHANGE_SEARCH_OPTION';
+export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
+
+/**
+ * 스토어 데이터 삭제
+ */
+export const CLEAR_STORE = 'photoArchive/CLEAR_STORE';
+export const CLEAR_LIST = 'photoArchive/CLEAR_LIST';
+export const CLEAR_SEARCH = 'photoArchive/CLEAR_SEARCH';
+export const clearStore = createAction(CLEAR_STORE);
+export const clearList = createAction(CLEAR_LIST);
+export const clearSearch = createAction(CLEAR_SEARCH);
+
+/**
  * 포토 아카이브 사진 목록 조회
  */
 export const [GET_PHOTO_LIST, GET_PHOTO_LIST_SUCCESS, GET_PHOTO_LIST_FAILURE] = createRequestActionTypes('photoArchive/GET_PHOTO_LIST');
@@ -16,8 +32,8 @@ export const getPhotoOrigins = createAction(GET_PHOTO_ORIGINS, (payload) => payl
 /**
  * 포토 아카이브 사진 유형 목록 조회
  */
-export const GET_PHOTO_TYPES = 'photoArchive/GET_PHOTO_TYPES';
-export const getPhotoTypes = createAction(GET_PHOTO_TYPES, (payload) => payload);
+export const [GET_PHOTO_TYPES, GET_PHOTO_TYPES_SUCCESS, GET_PHOTO_TYPES_FAILURE] = createRequestActionTypes('photoArchive/GET_PHOTO_TYPES');
+export const getPhotoTypes = createAction(GET_PHOTO_TYPES, () => ({}));
 
 /**
  * 포토 아카이브 사진 정보 조회

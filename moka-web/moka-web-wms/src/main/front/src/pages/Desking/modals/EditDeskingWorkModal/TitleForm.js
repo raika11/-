@@ -69,7 +69,7 @@ const TitleForm = ({ show, mappingData, temp, onChange, titleListType, error }) 
                     {...mappingProps}
                 />
             </Col>
-            <Col xs={1} className="p-0 pl-1 ft-12 d-flex align-items-end">
+            <Col xs={1} className="p-0 pl-1 ft-12 d-flex align-items-end flex-nowrap text-break">
                 {temp[field] && util.euckrBytes(temp[field])}byte
             </Col>
         </Form.Row>

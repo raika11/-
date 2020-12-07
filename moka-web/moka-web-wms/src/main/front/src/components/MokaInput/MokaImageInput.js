@@ -1,4 +1,5 @@
 import React, { useState, useCallback, forwardRef, useRef, useEffect, useImperativeHandle } from 'react';
+import clsx from 'clsx';
 import Dropzone from 'react-dropzone';
 import PropTypes from 'prop-types';
 import Figure from 'react-bootstrap/Figure';
@@ -8,6 +9,10 @@ import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 import { MokaAlert, MokaIcon } from '@components';
 
 const propTypes = {
+    /**
+     * className
+     */
+    className: PropTypes.string,
     /**
      * width
      */
@@ -63,7 +68,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt, selectAccept } = props;
+    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -194,7 +199,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                 return (
                     <Figure
                         {...getRootProps()}
-                        className="d-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white"
+                        className={clsx('d-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white', className)}
                         style={{ width, height }}
                         ref={wrapRef}
                         as="div"

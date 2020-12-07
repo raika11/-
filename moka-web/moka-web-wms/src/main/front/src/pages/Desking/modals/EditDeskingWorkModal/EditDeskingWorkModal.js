@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import toast from '@utils/toastUtil';
 import { getBulkChar, GET_BULK_CHAR, GET_DS_FONT_IMGD, GET_DS_FONT_IMGW, GET_DS_FONT_VODD, GET_DS_ICON, GET_DS_PRE, GET_DS_PRE_LOC, GET_DS_TITLE_LOC } from '@store/codeMgt';
 import { PUT_DESKING_WORK } from '@store/desking';
-import { MokaInputLabel, MokaModal } from '@components';
+import { MokaInputLabel, MokaImage, MokaModal } from '@components';
 import IconForm from './IconForm';
 import TitleForm from './TitleForm';
 import TextForm from './TextForm';
@@ -41,7 +41,7 @@ const EditDeskingWorkModal = (props) => {
 
     // state
     const [deskingPart, setDeskingPart] = useState([]); // area의 deskingPart 리스트
-    const [fileValue, setFileValue] = useState(null); // 파일
+    const [fileValue] = useState(null); // 파일
     const [titleListType, setTitleListType] = useState(''); // 제목의 폰트 타입
     const [error, setError] = useState({});
     const [showModal, setShowModal] = useState(false); // 새이미지 등록 팝업 모달
@@ -198,16 +198,10 @@ const EditDeskingWorkModal = (props) => {
                         } else if (partKey === 'THUMB_FILE_NAME') {
                             return (
                                 <Form.Row key={partKey} className="mb-2 flex-column">
-                                    <MokaInputLabel
-                                        ref={imgFileRef}
-                                        label="대표\n이미지"
-                                        labelWidth={80}
-                                        labelClassName="ft-12 pr-3"
-                                        name="thumbnailFile"
-                                        as="imageFile"
-                                        className="mb-0"
-                                        inputProps={{ width: 216, height: 150, img: temp.irImg, setFileValue }}
-                                    />
+                                    <div className="d-flex">
+                                        <MokaInputLabel as="none" label="대표\n이미지" labelWidth={80} labelClassName="ft-12 pr-3" className="mb-0" />
+                                        <MokaImage img={temp.irImg} width={216} height={150} />
+                                    </div>
                                     <div className="mt-2 d-flex justify-content-between" style={{ width: 216, marginLeft: 80 }}>
                                         <Button variant="positive" size="sm" onClick={() => setShowModal(true)}>
                                             신규등록

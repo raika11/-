@@ -12,7 +12,7 @@ import TextForm from './TextForm';
 import TitleLocForm from './TitleLocForm';
 import TitlePrefixForm from './TitlePrefixForm';
 import VodUrlForm from './VodUrlForm';
-import EditThumbModal from '@pages/Desking/modals/EditThumbModal';
+import { EditThumbModal } from '@pages/Desking/modals';
 import mapping, { fontSizeObj } from '@pages/Desking/deskingPartMapping';
 
 const urlRegex = /[Uu]rl$/;

@@ -3,7 +3,9 @@ import clsx from 'clsx';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MokaModal, MokaCardTabs } from '@components';
-import { EditThumbSearch, EditThumbTable, EditThumbDropzone } from '../components';
+import EditThumbSearch from './EditThumbSearch';
+import EditThumbTable from './EditThumbTable';
+import EditThumbDropzone from './EditThumbDropzone';
 
 /**
  * 대표이미지 편집 모달 ====> 데스킹워크 저장 후 나중에 작업

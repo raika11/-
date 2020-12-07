@@ -67,8 +67,7 @@ const AreaFormDepth2 = (props) => {
 
     const [contOptions, setContOptions] = useState([]); // 컨테이너 options
     const [compOptions, setCompOptions] = useState([]); // 컴포넌트 options
-    const [contCnt, setContCnt] = useState(0); // 컨테이너 load 카운트
-    const [compCnt, setCompCnt] = useState(0); // 컴포넌트 load 카운트
+    const [loadCnt, setLoadCnt] = useState(0); // CP, CT options load 카운트
     const [error, setError] = useState({ areaNm: false, page: false });
 
     /**
@@ -110,9 +109,12 @@ const AreaFormDepth2 = (props) => {
         } else if (name === 'areaDiv') {
             setTemp({ ...temp, areaDiv: value });
             setAreaComps([]);
+            setAreaComp({});
         } else if (name === 'component') {
-            setComponent({ componentSeq: value });
+            const { datatype } = selectedOptions[0].dataset;
+            setComponent({ componentSeq: value, dataType: datatype });
             setAreaComps([]);
+            setAreaComp({ ...areaComp, deskingPart: null });
         } else if (name === 'areaAlign') {
             setTemp({ ...temp, areaAlign: value });
         } else if (name === 'container') {
@@ -252,6 +254,7 @@ const AreaFormDepth2 = (props) => {
                                     compAlign: AREA_COMP_ALIGN_LEFT,
                                     component: { ...b },
                                     ordNo: b.relOrd + 1,
+                                    deskingPart: null,
                                 })),
                             );
                             setAreaCompLoad({
@@ -297,7 +300,7 @@ const AreaFormDepth2 = (props) => {
                     callback: ({ body }) => {
                         setCompOptions(body.list || []);
 
-                        if (compCnt < 1) {
+                        if (loadCnt < 1) {
                             setAreaComp(origin.areaComp || {});
                             setComponent(origin.areaComp && origin.areaComp.component ? origin.areaComp.component : component || {});
                         } else {
@@ -309,13 +312,13 @@ const AreaFormDepth2 = (props) => {
                             setAreaComp({});
                             setComponent({});
                         }
-                        setCompCnt(compCnt + 1);
+                        setLoadCnt(loadCnt + 1);
                     },
                 }),
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [areaCompLoad, compCnt, error, page]);
+    }, [areaCompLoad, loadCnt, error, page]);
 
     /**
      * 페이지의 컨테이너 options 조회
@@ -335,7 +338,7 @@ const AreaFormDepth2 = (props) => {
                 callback: ({ body }) => {
                     setContOptions(body.list || []);
 
-                    if (contCnt < 1) {
+                    if (loadCnt < 1) {
                         setContainer(origin.container || {});
                     } else {
                         setAreaCompLoad({
@@ -346,12 +349,12 @@ const AreaFormDepth2 = (props) => {
                         setContainer({});
                         setAreaComps([]);
                     }
-                    setContCnt(contCnt + 1);
+                    setLoadCnt(loadCnt + 1);
                 },
             }),
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [areaCompLoad, contCnt, page]);
+    }, [areaCompLoad, loadCnt, page]);
 
     useEffect(() => {
         setInit();
@@ -392,8 +395,7 @@ const AreaFormDepth2 = (props) => {
             setParent(areaDepth2);
         }
         setDomainId(areaDepth1.domain);
-        setContCnt(0);
-        setCompCnt(0);
+        setLoadCnt(0);
     }, [temp, areaDepth1, areaDepth2, setPage, depth]);
 
     useEffect(() => {

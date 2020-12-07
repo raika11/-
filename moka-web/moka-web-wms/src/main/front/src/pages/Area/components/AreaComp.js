@@ -35,14 +35,16 @@ const AreaComp = ({ areaComp, areaComps, index, onChange, disabled, setAreaComps
             <Col xs={2} className="p-0">
                 <MokaInput value="컴포넌트" disabled />
             </Col>
-            <Col xs={6} className="p-0 pl-2 pr-2">
+            <Col xs={areaComp.component?.dataType === 'DESK' ? 6 : 8} className="p-0 pl-2 pr-2">
                 <MokaInput value={areaComp.component.componentName} inputProps={{ readOnly: true }} />
             </Col>
-            <Col xs={2} className="p-0 pr-2">
-                <Button variant="outline-neutral" className="p-0 w-100 h-100 ft-12" onClick={handleOpenModal}>
-                    편집파트 수정
-                </Button>
-            </Col>
+            {areaComp.component?.dataType === 'DESK' && (
+                <Col xs={2} className="p-0 pr-2">
+                    <Button variant="outline-neutral" className="p-0 w-100 h-100 ft-12" onClick={handleOpenModal}>
+                        편집파트 수정
+                    </Button>
+                </Col>
+            )}
             <Col xs={2} className="p-0">
                 <MokaInput as="select" name="compAlign" value={areaComp.compAlign} onChange={(e) => onChange(e, index)} className="ft-12" disabled={disabled}>
                     <option value={AREA_COMP_ALIGN_LEFT}>Left 영역</option>

@@ -73,7 +73,6 @@ export const columnDefs = [
         width: 300,
         // autoHeight: true,
         editable: true,
-        wrapText: true,
         cellRendererFramework: (params) => {
             return (
                 <div

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // layout
-import { NoFrameLayout, SidebarOpenLayout } from '@layout';
+import { NoFrameLayout, SidebarCloseLayout, SidebarOpenLayout } from '@layout';
 import Page404 from '@pages/Auth/Page404';
 import ComponentDashboard from '@pages/Dashboard/ComponentDashboard';
 import Page403 from '@pages/Auth/Page403';
@@ -39,8 +39,7 @@ const routes = [
         name: 'Desking',
         displayName: '페이지편집',
         component: Desking,
-        // layout: SidebarCloseLayout,
-        layout: SidebarOpenLayout,
+        layout: SidebarCloseLayout,
         nonResponsive: true,
         exact: false,
         strict: true,

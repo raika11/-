@@ -7,6 +7,7 @@ import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 
 /**
  * Article 서비스
@@ -47,4 +48,7 @@ public interface ArticleService {
      * @param articleTitleDTO 편집제목(pc,모바일)
      */
     void saveArticleTitle(ArticleBasic articleBasic, ArticleTitleDTO articleTitleDTO);
+
+
+    Optional<ArticleDetailVO> findArticleDetailById(Long totalId);
 }

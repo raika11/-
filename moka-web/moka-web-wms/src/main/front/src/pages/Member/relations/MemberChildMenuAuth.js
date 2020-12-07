@@ -2,7 +2,7 @@ import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import toastUtil from '@utils/toastUtil';
 import { MokaCard } from '@components';
-import { Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import MenuAuthTree from '@pages/Menu/component/MenuAuthTree';
 import { changeMemberMenuAuth, getMemberMenuAuth, updateMemberMenuAuth } from '@store/member';
 
@@ -74,7 +74,24 @@ const MemberChildMenuAuth = () => {
 
     return (
         <MokaCard
-            title="메뉴 권한"
+            title={
+                <>
+                    메뉴권한
+                    <Row className="rc-tree-header" style={{ marginTop: '20px' }}>
+                        <Col xs={6} style={{ fontWeight: '700' }} style={{ paddingLeft: '40px' }}>
+                            메뉴명
+                        </Col>
+                        <Col xs={3} style={{ fontWeight: '700', textAlign: 'right' }}>
+                            조회권한
+                        </Col>
+                        <Col xs={3} style={{ fontWeight: '700', textAlign: 'right' }}>
+                            수정권한
+                        </Col>
+                    </Row>
+                </>
+            }
+            headerClassName="rc-tree-card-header"
+            bodyClassName="rc-tree-card-body member"
             className="w-100"
             footerClassName="justify-content-center"
             footerButtons={

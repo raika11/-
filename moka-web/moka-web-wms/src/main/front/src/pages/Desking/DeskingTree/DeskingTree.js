@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 
 import { GET_AREA_TREE, getAreaTree, clearTree } from '@store/area/areaAction';
 import { getComponentWorkList, changeArea, clearList } from '@store/desking/deskingAction';
 
-import DeskingTreeView from './components/DeskingTreeView';
+import DeskingTreeView from './DeskingTreeView';
 
 /**
  * Desking Tree 컴포넌트
  */
 const DeskingTree = () => {
-    const { areaSeq: paramAreaSeq } = useParams();
+    // const { areaSeq: paramAreaSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
 

@@ -34,7 +34,7 @@ const EditListNumberModal = (props) => {
         <MokaModal
             title="주요 뉴스 리스트 건수"
             size="sm"
-            width={303}
+            width={400}
             show={show}
             onHide={onHide}
             buttons={[
@@ -43,8 +43,9 @@ const EditListNumberModal = (props) => {
             ]}
             footerClassName="d-flex justify-content-center"
             draggable
+            centered
         >
-            <MokaInputLabel label="주요 뉴스 리스트 건수" labelWidth={150} className="m-0 px-3" value={number} onChange={(e) => setNumber(e.target.value)} />
+            <MokaInputLabel label="주요 뉴스 리스트 건수" labelWidth={138} className="m-0" value={number} onChange={(e) => setNumber(e.target.value)} />
         </MokaModal>
     );
 };

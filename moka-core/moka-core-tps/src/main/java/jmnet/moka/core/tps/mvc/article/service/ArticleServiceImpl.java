@@ -13,8 +13,11 @@ import jmnet.moka.core.tps.mvc.article.repository.ArticleBasicRepository;
 import jmnet.moka.core.tps.mvc.article.repository.ArticleSourceRepository;
 import jmnet.moka.core.tps.mvc.article.repository.ArticleTitleRepository;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleCodeVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentRelVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
+import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,17 +29,21 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
-    @Autowired
-    private ArticleBasicRepository articleBasicRepository;
+    private final ArticleBasicRepository articleBasicRepository;
 
-    @Autowired
-    private ArticleSourceRepository articleSourceRepository;
+    private final ArticleSourceRepository articleSourceRepository;
 
-    @Autowired
-    private ArticleTitleRepository articleTitleRepository;
+    private final ArticleTitleRepository articleTitleRepository;
 
-    @Autowired
-    private ArticleMapper articleMapper;
+    private final ArticleMapper articleMapper;
+
+    public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleSourceRepository articleSourceRepository,
+            ArticleTitleRepository articleTitleRepository, ArticleMapper articleMapper) {
+        this.articleBasicRepository = articleBasicRepository;
+        this.articleSourceRepository = articleSourceRepository;
+        this.articleTitleRepository = articleTitleRepository;
+        this.articleMapper = articleMapper;
+    }
 
     @Override
     public List<ArticleBasicVO> findAllArticleBasic(ArticleSearchDTO search) {
@@ -101,6 +108,41 @@ public class ArticleServiceImpl implements ArticleService {
                 articleTitleRepository.save(newTitle);
             }
         }
+    }
+
+    @Override
+    public Optional<ArticleDetailVO> findArticleDetailById(Long totalId) {
+        List<List<Object>> articleInfoList = articleMapper.findByIdForMapList(totalId);
+        ArticleDetailVO articleDetailVO = null;
+        if (articleInfoList != null && articleInfoList.size() > 0) {
+            if (articleInfoList.get(0) != null && articleInfoList
+                    .get(0)
+                    .size() > 0) {
+                articleDetailVO = (ArticleDetailVO) articleInfoList
+                        .get(0)
+                        .get(0);
+            }
+            if (articleInfoList.size() > 1) {
+                for (Object obj : articleInfoList.get(1)) {
+                    assert articleDetailVO != null;
+                    articleDetailVO.addCode((ArticleCodeVO) obj);
+                }
+            }
+            if (articleInfoList.size() > 2) {
+                for (Object obj : articleInfoList.get(2)) {
+                    assert articleDetailVO != null;
+                    articleDetailVO.addReporter((ReporterVO) obj);
+                }
+            }
+            if (articleInfoList.size() > 3) {
+                for (Object obj : articleInfoList.get(3)) {
+                    assert articleDetailVO != null;
+                    articleDetailVO.addComponentRel((ArticleComponentRelVO) obj);
+                }
+            }
+        }
+
+        return Optional.ofNullable(articleDetailVO);
     }
 
 }

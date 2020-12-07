@@ -7,7 +7,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import { HIST_SAVE, HIST_PUBLISH } from '@/constants';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { changeSearchOption, putComponentWork, postSaveComponentWork, postPublishComponentWork, postSavePublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
 import ReserveComponentWork from './ReserveComponentWork';
@@ -52,18 +52,21 @@ const ComponentWorkButtonGroup = (props) => {
      * 전송
      */
     const handleClickPublish = useCallback(() => {
-        const option = {
-            componentWorkSeq: component.seq,
-            callback: ({ header }) => {
-                if (header.success) {
-                    toast.success(header.message);
-                } else {
-                    toast.error(header.message);
-                }
-            },
-        };
-        dispatch(changeSearchOption({ ...search, status: HIST_PUBLISH }));
-        dispatch(postPublishComponentWork(option));
+        messageBox.confirm('전송하시겠습니까?', () => {
+            dispatch(changeSearchOption({ ...search, status: HIST_PUBLISH }));
+            dispatch(
+                postPublishComponentWork({
+                    componentWorkSeq: component.seq,
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                        } else {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
+        });
     }, [component.seq, dispatch, search]);
 
     /**
@@ -76,7 +79,7 @@ const ComponentWorkButtonGroup = (props) => {
                 if (header.success) {
                     toast.success(header.message);
                 } else {
-                    toast.error(header.message);
+                    toast.fail(header.message);
                 }
             },
         };
@@ -85,17 +88,19 @@ const ComponentWorkButtonGroup = (props) => {
     }, [component.seq, dispatch, search]);
 
     /**
-     * 임시저장 + 전송
+     * 임시저장 + 전송 (영역 미노출 상태를 저장할 때)
      */
     const handleClickSavePublish = useCallback(() => {
-        dispatch(
-            postSavePublishComponentWork({
-                componentWorkSeq: component.seq,
-                callback: ({ header }) => {
-                    if (!header.success) toast.fail(header.message);
-                },
-            }),
-        );
+        messageBox.confirm('영역 비노출 상태를 저장하시겠습니까?\n(즉시 전송되어 서비스 화면에 반영됩니다.)', () => {
+            dispatch(
+                postSavePublishComponentWork({
+                    componentWorkSeq: component.seq,
+                    callback: ({ header }) => {
+                        if (!header.success) toast.fail(header.message);
+                    },
+                }),
+            );
+        });
     }, [component.seq, dispatch]);
 
     /**

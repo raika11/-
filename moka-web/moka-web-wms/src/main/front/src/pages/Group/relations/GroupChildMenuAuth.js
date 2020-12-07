@@ -3,7 +3,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { GET_GROUP_MENU_AUTH, changeGroupMenuAuth, getGroupMenuAuth, updateGroupMenuAuth, UPDATE_GROUP_MENU_AUTH } from '@store/group';
 import toastUtil from '@utils/toastUtil';
 import MenuAuthTree from '@pages/Menu/component/MenuAuthTree';
-import { Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
@@ -58,7 +58,24 @@ const GroupChildMenuAuth = () => {
 
     return (
         <MokaCard
-            title="메뉴 권한"
+            title={
+                <>
+                    메뉴권한
+                    <Row className="rc-tree-header" style={{ marginTop: '20px' }}>
+                        <Col xs={6} style={{ fontWeight: '700' }} style={{ paddingLeft: '40px' }}>
+                            메뉴명
+                        </Col>
+                        <Col xs={3} style={{ fontWeight: '700', textAlign: 'right' }}>
+                            조회권한
+                        </Col>
+                        <Col xs={3} style={{ fontWeight: '700', textAlign: 'right' }}>
+                            수정권한
+                        </Col>
+                    </Row>
+                </>
+            }
+            headerClassName="rc-tree-card-header"
+            bodyClassName="rc-tree-card-body group"
             className="w-100"
             height={CARD_DEFAULT_HEIGHT - 90}
             loading={loading}
@@ -71,7 +88,7 @@ const GroupChildMenuAuth = () => {
             }
             footer
         >
-            <Row style={{ padding: '0 20px 0 20px' }}>
+            <Row style={{ padding: '0 20px 0 20px' }} className="rc-tree-group">
                 <MenuAuthTree menuAuthInfo={menuAuthInfo} onChange={handleChange} />
             </Row>
             {/*{groupCd && (

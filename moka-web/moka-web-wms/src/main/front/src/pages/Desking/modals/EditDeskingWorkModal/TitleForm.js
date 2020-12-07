@@ -52,7 +52,7 @@ const TitleForm = ({ show, mappingData, temp, onChange, titleListType, error }) 
                                     <option hidden>선택</option>
                                     {titleList.map((font, idx) => (
                                         <option key={idx} value={font.id}>
-                                            {font.cdNmEtc1}
+                                            {font.name}
                                         </option>
                                     ))}
                                 </MokaInput>

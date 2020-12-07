@@ -31,7 +31,7 @@ const ComponentWorkHistorySearch = (props) => {
                 }}
                 value={search.componentSeq || undefined}
             >
-                <option value="null">컴포넌트 명</option>
+                <option hidden>컴포넌트 명</option>
                 {list.map((comp) => (
                     <option key={comp.componentSeq} value={comp.componentSeq}>
                         {comp.componentName}

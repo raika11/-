@@ -10,20 +10,60 @@
     background-position: -14px 0;
 }
 
+
 .rc-tree .rc-tree-treenode span.rc-tree-checkbox {
     position:absolute;
-    left: 300px
 }
 
-.rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-1{
+// 사용자 메뉴권한 체크박스 위치
+.rc-tree-card-body.member .rc-tree .rc-tree-treenode span.rc-tree-checkbox {
+    left: 300px
+}
+.rc-tree-card-body.member .rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-1{
     left:400px
 }
-.rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-2{
+.rc-tree-card-body.member .rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-2{
     left:384px
 }
-.rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-3{
+.rc-tree-card-body.member .rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-3{
     left:368px
 }
-.rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-4{
+.rc-tree-card-body.member .rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-4{
     left:352px
+}
+
+// 그룹 메뉴권한 체크박스 위치
+.rc-tree-card-body.group .rc-tree .rc-tree-treenode span.rc-tree-checkbox {
+    left: 277px
+}
+.rc-tree-card-body.group .rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-1{
+    left:372px
+}
+.rc-tree-card-body.group .rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-2{
+    left:356px
+}
+.rc-tree-card-body.group .rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-3{
+    left:340px
+}
+.rc-tree-card-body.group .rc-tree .rc-tree-treenode span.rc-tree-checkbox.edit-checkbox.rc-tree-use-checkbox-4{
+    left:324px
+}
+
+
+
+.rc-tree-card-header {
+    padding-bottom: 0;
+}
+.rc-tree-card-body {
+    padding-top: 0;
+}
+.rc-tree-header {
+    border-top: solid 1px;
+    border-bottom: solid 2px;
+    border-color: #E1E3EB;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom:10px;
+    font-size: 13px;
+    padding: 10px 0 5px 0;
 }

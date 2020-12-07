@@ -214,4 +214,17 @@ public interface BaseMapper<T, P> {
      * @return List
      */
     List<Map<String, Object>> findAllForMap(Map<String, Object> map, RowBounds bounds);
+
+
+    /**
+     * <pre>
+     * 조회 조건에 해당하는 Map 데이타 조회
+     * </pre>
+     *
+     * @param id
+     * @return Map<String, Object>
+     * @throws RuntimeException
+     */
+    List<List<Object>> findByIdForMapList(Object id)
+            throws RuntimeException;
 }

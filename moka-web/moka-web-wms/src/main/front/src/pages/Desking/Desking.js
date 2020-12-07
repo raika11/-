@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/desking';
 
-const DeskingList = React.lazy(() => import('./DeskingList'));
+const DeskingTree = React.lazy(() => import('./DeskingTree'));
 const ComponentWorkList = React.lazy(() => import('./ComponentWorkList'));
 const DeskingTab = React.lazy(() => import('./DeskingTab'));
 
@@ -33,7 +33,7 @@ const Desking = ({ match }) => {
 
             {/* 데스킹 트리 */}
             <Switch>
-                <Route path={[match.url, `${match.url}/:areaSeq`]} exact render={() => <DeskingList />} />
+                <Route path={[match.url, `${match.url}/:areaSeq`]} exact render={() => <DeskingTree />} />
             </Switch>
 
             {/* 워크 */}

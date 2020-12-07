@@ -51,6 +51,10 @@ public class ArticleSnsShareRepositorySupportImpl extends QuerydslRepositorySupp
             }
         }
 
+        if (McpString.isNotEmpty(search.getSnsType())) {
+            query.where(qArticleSnsShare.id.snsType.eq(search.getSnsType()));
+        }
+
 
         if (McpString.isYes(search.getUseTotal())) {
             query = getQuerydsl().applyPagination(search.getPageable(), query);

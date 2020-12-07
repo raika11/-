@@ -108,4 +108,98 @@
     ) }
   </select>
 
+  <resultMap type="ArticleDetailVO" id="ArticleDetailMap">
+    <id property="totalId" column="TOTAL_ID"/>
+    <result property="artType" column="ART_TYPE"/>
+    <result property="trendRank" column="TREND_RANK"/>
+    <result property="aid" column="AID"/>
+    <result property="artTitle" column="ART_Title"/>
+    <result property="mobTitle" column="MOB_TITLE"/>
+    <result property="jiTitle" column="JI_TITLE"/>
+    <result property="artSubTitle" column="ART_SUB_TITLE"/>
+    <result property="artSummary" column="ART_Summary"/>
+    <result property="artThumb" column="ART_THUMB"/>
+    <result property="artRegDt" column="ART_REG_DT"/>
+    <result property="artModDt" column="ART_MOD_DT"/>
+    <result property="sourceCode" column="Source_Code"/>
+    <result property="sourceBaseUrl" column="Source_BaseUrl"/>
+    <result property="sourceEtc" column="Source_Etc"/>
+    <result property="sourceName" column="Source_Name"/>
+    <result property="shrFcnt" column="SHR_FCNT"/>
+    <result property="shrTcnt" column="SHR_TCNT"/>
+    <result property="shrIcnt" column="SHR_ICNT"/>
+    <result property="shrGcnt" column="SHR_GCNT"/>
+    <result property="shrKscnt" column="SHR_KSCNT"/>
+    <result property="shrKcnt" column="SHR_KCNT"/>
+    <result property="shrPcnt" column="SHR_PCNT"/>
+    <result property="emailCnt" column="EMAIL_CNT"/>
+    <result property="likeCnt" column="LIKE_CNT"/>
+    <result property="hateCnt" column="HATE_CNT"/>
+    <result property="clickCnt" column="CLICK_CNT"/>
+    <result property="replyCnt" column="REPLY_CNT"/>
+    <result property="pressPan" column="PRESS_MYUN"/>
+    <result property="pressMyun" column="PRESS_PAN"/>
+    <result property="pressCategory" column="PRESS_CATEGORY"/>
+    <result property="pressNumber" column="PRESS_NUMBER"/>
+    <result property="pressDate" column="PRESS_DATE"/>
+    <result property="artContent" column="ART_Content"/>
+    <result property="orgId" column="ORG_ID"/>
+    <result property="joongangUse" column="Joongang_USE"/>
+    <result property="keywords" column="Keywords"/>
+    <result property="adultFlag" column="Adult_Flag"/>
+    <result property="loginFlag" column="Login_Flag"/>
+    <result property="multiLink" column="MULTI_LINK"/>
+    <result property="varcharKey" column="VARCHAR_KEY"/>
+    <result property="multiLinkMobile" column="MULTI_LINK_MOBILE"/>
+    <result property="fbMetaTitle" column="FB_META_TITLE"/>
+    <result property="fbMetaImage" column="FB_META_IMAGE"/>
+    <result property="fbMetaSummary" column="FB_META_SUMMARY"/>
+    <result property="twMetaTitle" column="TW_META_TITLE"/>
+    <result property="twMetaImage" column="TW_META_IMAGE"/>
+    <result property="twMetaSummary" column="TW_META_SUMMARY"/>
+    <result property="jaMetaTitle" column="JA_META_TITLE"/>
+    <result property="jaMetaSummary" column="JA_META_SUMMARY"/>
+    <result property="jaMetaKeyword" column="JA_META_KEYWORD"/>
+    <result property="headerKey" column="HEADER_KEY"/>
+
+  </resultMap>
+
+  <resultMap id="ArticleCodeMap" type="ArticleCodeVO">
+    <id property="serviceCode" column="SERVICE_CODE"/>
+    <result property="totalId" column="TOTAL_ID"/>
+    <result property="masterCode" column="MASTER_CODE"/>
+    <result property="contentKorName" column="Content_KorName"/>
+  </resultMap>
+  <resultMap id="ArticleReporterMap" type="ReporterVO">
+    <id property="repSeq" column="REP_SEQ"/>
+    <result property="repName" column="REP_NAME"/>
+    <result property="jplusRepDiv" column="JPLUS_REP_DIV"/>
+    <result property="repPhoto" column="REP_PHOTO"/>
+    <result property="repName" column="CMP_NM"/>
+    <result property="jplusJobInfo" column="JPLUS_JOB_INFO"/>
+    <result property="repEmail1" column="REP_EMAIL1"/>
+    <result property="repTalk" column="REP_TALK"/>
+  </resultMap>
+  <resultMap id="ArticleComponentRelMap"
+    type="ArticleComponentRelVO">
+    <id property="compOrd" column="COMP_ORD"/>
+    <result property="totalId" column="TOTAL_ID"/>
+    <result property="compType" column="COMP_TYPE"/>
+    <result property="compFileTitle" column="COMP_FILE_TITLE"/>
+    <result property="compFileDesc" column="COMP_FILE_DESC"/>
+    <result property="artTitle" column="ART_TITLE"/>
+    <result property="artSummary" column="ART_SUMMARY"/>
+    <result property="artThumb" column="ART_THUMB"/>
+    <result property="artRegDt" column="ART_REG_DT"/>
+    <result property="artModDt" column="ART_MOD_DT"/>
+  </resultMap>
+
+  <select id="findByIdForMapList" parameterType="Long"
+    resultMap="ArticleDetailMap,ArticleCodeMap,ArticleReporterMap,ArticleComponentRelMap"
+    statementType="CALLABLE">
+		 {call UPU_15RE_ARTICLE_SEL(
+			#{value, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+  	</select>
+
 </mapper>

@@ -19,6 +19,9 @@ import lombok.Setter;
 @Builder
 public class ArticleSnsShareSearchDTO extends SearchDTO {
 
+    @Builder.Default
+    private String snsType = "FB";
+
     /**
      * 기간 검색 시작일
      */

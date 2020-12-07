@@ -28,6 +28,8 @@ const ReserveComponentWork = ({ component, workStatus }) => {
         if (typeof date === 'object') {
             setReserveDt(date);
             setError(false);
+        } else {
+            setReserveDt(null);
         }
     };
 
@@ -107,6 +109,11 @@ const ReserveComponentWork = ({ component, workStatus }) => {
                         <Button variant="negative" size="sm" onClick={handleClickCancle}>
                             취소
                         </Button>
+                        {reservation && (
+                            <Button variant="negative" size="sm" className="ml-2">
+                                삭제
+                            </Button>
+                        )}
                     </div>
                 </div>
             )}

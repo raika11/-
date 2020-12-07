@@ -141,8 +141,9 @@ public class MokaConstants {
     }
 
     // thread-safe한 date formatter
-    public static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(JSON_DATE_FORMAT)
-                                                                 .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
+    public static final DateTimeFormatter dtf = DateTimeFormatter
+            .ofPattern(JSON_DATE_FORMAT)
+            .withZone(ZoneId.of(JSON_DATE_TIME_ZONE));
 
     public static final String now() {
         LocalDateTime now = LocalDateTime.now();
@@ -160,6 +161,7 @@ public class MokaConstants {
 
     public static final String YES = McpString.YES;
     public static final String NO = McpString.NO;
+    public static final String DELETE = McpString.DELETE;
 
     /* codes for service & parameter */
     public static final String MASTER_CODE_LIST = "masterCode";

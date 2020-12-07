@@ -449,6 +449,7 @@ const DeskingWorkAgGrid = (props) => {
      */
     const handleRowDataUpdated = useCallback(
         (params) => {
+            params.api.refreshCells({ force: true });
             if (draggingNodeData) {
                 let arr = [];
                 params.api.forEachNode((node) => {
@@ -462,8 +463,6 @@ const DeskingWorkAgGrid = (props) => {
                 setNextNode(null);
                 setDraggingNodeData(null);
             }
-
-            // params.api.refreshCells({ force: true, columns: ['relOrdEx', 'relTitle', 'contentOrdEx', 'title', 'thumbFileName'] });
         },
         [draggingNodeData],
     );

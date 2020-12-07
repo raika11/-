@@ -135,6 +135,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                 imageShow();
             },
             () => {
+                setImgSrc(src);
                 imageShow();
             },
         );

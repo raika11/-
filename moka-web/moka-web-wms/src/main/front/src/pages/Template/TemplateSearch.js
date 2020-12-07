@@ -97,8 +97,8 @@ const TemplateSearch = () => {
     }, [dispatch, latestDomainId, search]);
 
     useEffect(() => {
-        if (tpSizeRows.length < 1) dispatch(getTpSize());
-        if (tpZoneRows.length < 1) dispatch(getTpZone());
+        if (!tpSizeRows) dispatch(getTpSize());
+        if (!tpZoneRows) dispatch(getTpZone());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -136,22 +136,24 @@ const TemplateSearch = () => {
                         }}
                     >
                         <option value="all">위치그룹 전체</option>
-                        {tpZoneRows.map((cd) => (
-                            <option key={cd.dtlCd} value={cd.dtlCd}>
-                                {cd.cdNm}
-                            </option>
-                        ))}
+                        {tpZoneRows &&
+                            tpZoneRows.map((cd) => (
+                                <option key={cd.dtlCd} value={cd.dtlCd}>
+                                    {cd.cdNm}
+                                </option>
+                            ))}
                     </MokaInput>
                 </Col>
                 {/* 템플릿 사이즈 */}
                 <Col xs={5} className="p-0">
                     <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize}>
                         <option value="all">사이즈 전체</option>
-                        {tpSizeRows.map((cd) => (
-                            <option key={cd.dtlCd} value={cd.dtlCd} data-widthmin={cd.cdNmEtc1} data-widthmax={cd.cdNmEtc2}>
-                                {cd.cdNm}
-                            </option>
-                        ))}
+                        {tpSizeRows &&
+                            tpSizeRows.map((cd) => (
+                                <option key={cd.dtlCd} value={cd.dtlCd} data-widthmin={cd.cdNmEtc1} data-widthmax={cd.cdNmEtc2}>
+                                    {cd.cdNm}
+                                </option>
+                            ))}
                     </MokaInput>
                 </Col>
             </Form.Row>

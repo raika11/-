@@ -59,19 +59,17 @@ const ChangeArtGroupModal = (props) => {
 
     useEffect(() => {
         if (show) {
-            if (artGroupRows.length < 1) {
+            if (!artGroupRows) {
                 dispatch(getArtGroup());
+            } else {
+                const code = artGroupRows.find((a) => a.dtlCd === CODETYPE_ART_GROUP_NAME);
+                if (code) {
+                    dispatch(getCodeMgtGrp(CODETYPE_ART_GROUP));
+                    dispatch(getCodeMgt(code.seqNo));
+                }
             }
         }
-    }, [artGroupRows.length, dispatch, show]);
-
-    useEffect(() => {
-        const code = artGroupRows.find((a) => a.dtlCd === CODETYPE_ART_GROUP_NAME);
-        if (code) {
-            dispatch(getCodeMgtGrp(CODETYPE_ART_GROUP));
-            dispatch(getCodeMgt(code.seqNo));
-        }
-    }, [artGroupRows, dispatch]);
+    }, [artGroupRows, dispatch, show]);
 
     useEffect(() => {
         if (show) {

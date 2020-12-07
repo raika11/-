@@ -110,11 +110,8 @@ const LookupComponentList = (props) => {
     };
 
     useEffect(() => {
-        if (tpZoneRows.length < 1) {
-            dispatch(getTpZone());
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch]);
+        if (!tpZoneRows) dispatch(getTpZone());
+    }, [dispatch, tpZoneRows]);
 
     useEffect(() => {
         return () => {
@@ -165,11 +162,12 @@ const LookupComponentList = (props) => {
                         }}
                     >
                         <option value="all">위치그룹 전체</option>
-                        {tpZoneRows.map((cd) => (
-                            <option key={cd.dtlCd} value={cd.dtlCd}>
-                                {cd.cdNm}
-                            </option>
-                        ))}
+                        {tpZoneRows &&
+                            tpZoneRows.map((cd) => (
+                                <option key={cd.dtlCd} value={cd.dtlCd}>
+                                    {cd.cdNm}
+                                </option>
+                            ))}
                     </MokaInput>
                     {/* 검색조건, 키워드 */}
                     <Form.Row>

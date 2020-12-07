@@ -20,7 +20,7 @@ import AddComponentModal from './modals/AddComponentModal';
 const TemplateEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { template, inputTag, tpZoneRows, latestDomainId, invalidList, UPLOAD_PATH_URL, loading } = useSelector((store) => ({
+    const { template, inputTag, tpZoneRows = [], latestDomainId, invalidList, UPLOAD_PATH_URL, loading } = useSelector((store) => ({
         template: store.template.template,
         inputTag: store.template.inputTag,
         tpZoneRows: store.codeMgt.tpZoneRows,

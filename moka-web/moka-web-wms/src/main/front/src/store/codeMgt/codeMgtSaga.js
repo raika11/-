@@ -1,8 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { CODETYPE_LANG, CODETYPE_SERVICE_TYPE, CODETYPE_PAGE_TYPE, CODETYPE_TP_SIZE, CODETYPE_TP_ZONE, CODETYPE_API, CODETYPE_ART_GROUP, CODETYPE_SPECIALCHAR } from '@/constants';
-
+import * as constants from '@/constants';
 import * as api from './codeMgtApi';
 import * as act from './codeMgtAction';
 
@@ -311,14 +310,18 @@ function* getCodeMgtDuplicateCheck({ payload: { grpCd, dtlCd, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-export const getTpSize = createReadOnlySaga(act.GET_TP_SIZE, 'tpSizeRows', CODETYPE_TP_SIZE);
-export const getTpZone = createReadOnlySaga(act.GET_TP_ZONE, 'tpZoneRows', CODETYPE_TP_ZONE);
-export const getLang = createReadOnlySaga(act.GET_LANG, 'langRows', CODETYPE_LANG);
-export const getServiceType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'serviceTypeRows', CODETYPE_SERVICE_TYPE);
-export const getPageType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'pageTypeRows', CODETYPE_PAGE_TYPE);
-export const getApi = createReadOnlySaga(act.GET_API, 'apiRows', CODETYPE_API);
-export const getArtGroup = createReadOnlySaga(act.GET_ART_GROUP, 'artGroupRows', CODETYPE_ART_GROUP);
-export const getBulkChar = createReadOnlySaga(act.GET_BULK_CHAR, 'bulkCharRows', CODETYPE_SPECIALCHAR);
+export const getTpSize = createReadOnlySaga(act.GET_TP_SIZE, 'tpSizeRows', constants.CODETYPE_TP_SIZE);
+export const getTpZone = createReadOnlySaga(act.GET_TP_ZONE, 'tpZoneRows', constants.CODETYPE_TP_ZONE);
+export const getLang = createReadOnlySaga(act.GET_LANG, 'langRows', constants.CODETYPE_LANG);
+export const getServiceType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'serviceTypeRows', constants.CODETYPE_SERVICE_TYPE);
+export const getPageType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'pageTypeRows', constants.CODETYPE_PAGE_TYPE);
+export const getApi = createReadOnlySaga(act.GET_API, 'apiRows', constants.CODETYPE_API);
+export const getArtGroup = createReadOnlySaga(act.GET_ART_GROUP, 'artGroupRows', constants.CODETYPE_ART_GROUP);
+export const getBulkChar = createReadOnlySaga(act.GET_BULK_CHAR, 'bulkCharRows', constants.CODETYPE_SPECIALCHAR);
+export const getDsFontImgD = createReadOnlySaga(act.GET_DS_FONT_IMGD, 'dsFontImgDRows', constants.CODETYPE_DS_FONT_IMGD);
+export const getDsFontImgW = createReadOnlySaga(act.GET_DS_FONT_IMGW, 'dsFontImgWRows', constants.CODETYPE_DS_FONT_IMGW);
+export const getDsFontVodD = createReadOnlySaga(act.GET_DS_FONT_VODD, 'dsFontVodDRows', constants.CODETYPE_DS_FONT_VODD);
+export const getDsTitleLoc = createReadOnlySaga(act.GET_DS_TITLE_LOC, 'dsTitleLocRows', constants.CODETYPE_DS_TITLE_LOC);
 
 /** saga */
 export default function* codeMgt() {
@@ -341,4 +344,8 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_API, getApi);
     yield takeLatest(act.GET_ART_GROUP, getArtGroup);
     yield takeLatest(act.GET_BULK_CHAR, getBulkChar);
+    yield takeLatest(act.GET_DS_FONT_IMGD, getDsFontImgD);
+    yield takeLatest(act.GET_DS_FONT_IMGW, getDsFontImgW);
+    yield takeLatest(act.GET_DS_FONT_VODD, getDsFontVodD);
+    yield takeLatest(act.GET_DS_TITLE_LOC, getDsTitleLoc);
 }

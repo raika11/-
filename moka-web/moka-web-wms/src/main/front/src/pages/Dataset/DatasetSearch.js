@@ -74,7 +74,7 @@ const DatasetSearch = () => {
 
     useEffect(() => {
         let apiCodeId = search.apiCodeId;
-        if (apiRows.length > 0 && apiCodeId !== apiRows[0].dtlCd) {
+        if (apiRows && apiRows.length > 0 && apiCodeId !== apiRows[0].dtlCd) {
             apiCodeId = apiRows[0].dtlCd;
             dispatch(
                 getDatasetList(

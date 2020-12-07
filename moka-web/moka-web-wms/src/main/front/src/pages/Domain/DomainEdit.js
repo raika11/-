@@ -127,10 +127,9 @@ const DomainEdit = ({ history, onDelete }) => {
     };
 
     useEffect(() => {
-        dispatch(getLang());
-        dispatch(getApi());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        if (!langRows) dispatch(getLang());
+        if (!apiRows) dispatch(getApi());
+    }, [apiRows, dispatch, langRows]);
 
     useEffect(() => {
         if (paramId) {

@@ -290,11 +290,10 @@ const TemplateListModal = (props) => {
 
     useEffect(() => {
         if (show) {
-            if (tpSizeRows.length < 1) dispatch(getTpSize());
-            if (tpZoneRows.length < 1) dispatch(getTpZone());
+            if (!tpSizeRows) dispatch(getTpSize());
+            if (!tpZoneRows) dispatch(getTpZone());
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]);
+    }, [dispatch, show, tpSizeRows, tpZoneRows]);
 
     return (
         <MokaModal
@@ -327,11 +326,12 @@ const TemplateListModal = (props) => {
                     <Col xs={5} className="p-0">
                         <MokaInput as="select" value={search.templateGroup} name="templateGroup" onChange={handleChangeValue}>
                             <option value="all">위치그룹 전체</option>
-                            {tpZoneRows.map((cd) => (
-                                <option key={cd.dtlCd} value={cd.dtlCd}>
-                                    {cd.cdNm}
-                                </option>
-                            ))}
+                            {tpZoneRows &&
+                                tpZoneRows.map((cd) => (
+                                    <option key={cd.dtlCd} value={cd.dtlCd}>
+                                        {cd.cdNm}
+                                    </option>
+                                ))}
                         </MokaInput>
                     </Col>
                 </Form.Row>
@@ -340,11 +340,12 @@ const TemplateListModal = (props) => {
                     <Col xs={3} className="p-0 pr-2">
                         <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize} className="ft-12">
                             <option value="all">사이즈 전체</option>
-                            {tpSizeRows.map((cd) => (
-                                <option key={cd.dtlCd} value={cd.dtlCd} data-widthmin={cd.cdNmEtc1} data-widthmax={cd.cdNmEtc2}>
-                                    {cd.cdNm}
-                                </option>
-                            ))}
+                            {tpSizeRows &&
+                                tpSizeRows.map((cd) => (
+                                    <option key={cd.dtlCd} value={cd.dtlCd} data-widthmin={cd.cdNmEtc1} data-widthmax={cd.cdNmEtc2}>
+                                        {cd.cdNm}
+                                    </option>
+                                ))}
                         </MokaInput>
                     </Col>
                     {/* 검색조건 */}

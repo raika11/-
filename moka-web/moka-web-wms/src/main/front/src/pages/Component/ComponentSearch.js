@@ -64,9 +64,8 @@ const ComponentSearch = () => {
     }, [dispatch, latestDomainId, search]);
 
     useEffect(() => {
-        dispatch(getTpZone());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        if (!tpZoneRows) dispatch(getTpZone());
+    }, [dispatch, tpZoneRows]);
 
     return (
         <Form className="mb-10">
@@ -100,11 +99,12 @@ const ComponentSearch = () => {
                     }}
                 >
                     <option value="all">위치그룹 전체</option>
-                    {tpZoneRows.map((cd) => (
-                        <option key={cd.dtlCd} value={cd.dtlCd}>
-                            {cd.cdNm}
-                        </option>
-                    ))}
+                    {tpZoneRows &&
+                        tpZoneRows.map((cd) => (
+                            <option key={cd.dtlCd} value={cd.dtlCd}>
+                                {cd.cdNm}
+                            </option>
+                        ))}
                 </MokaInput>
             </Form.Row>
             <Form.Group as={Row} className="mb-2">

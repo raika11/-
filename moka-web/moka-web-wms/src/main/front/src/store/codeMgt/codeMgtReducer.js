@@ -32,15 +32,6 @@ export const initialState = {
     cdTotal: 0,
     cdError: null,
     invalidList: [],
-    // 조회용 데이터
-    tpSizeRows: [],
-    tpZoneRows: [],
-    langRows: [],
-    serviceTypeRows: [],
-    pageTypeRows: [],
-    apiRows: [],
-    artGroupRows: [],
-    bulkCharRows: [],
 };
 
 export default handleActions(

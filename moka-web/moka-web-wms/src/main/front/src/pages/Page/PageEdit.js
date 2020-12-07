@@ -54,9 +54,7 @@ const PageEdit = ({ onDelete }) => {
     const [moveModalShow, setMoveModalShow] = useState(false);
 
     useEffect(() => {
-        if (!pageTypeRows || pageTypeRows.length <= 0) {
-            dispatch(getPageType());
-        }
+        if (!pageTypeRows) dispatch(getPageType());
 
         // url로 다이렉트로 페이지 조회하는 경우
         if (paramPageSeq && paramPageSeq !== page.pageSeq) {
@@ -71,7 +69,7 @@ const PageEdit = ({ onDelete }) => {
             dispatch(getPage(option));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [pageTypeRows]);
 
     useEffect(() => {
         if (paramPageSeq) {
@@ -90,7 +88,7 @@ const PageEdit = ({ onDelete }) => {
 
     useEffect(() => {
         // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
-        if (temp.pageType === '' && pageTypeRows.length > 0) {
+        if (temp.pageType === '' && pageTypeRows?.length > 0) {
             setTemp({ ...temp, pageType: pageTypeRows[0].dtlCd });
         }
     }, [temp, pageTypeRows]);

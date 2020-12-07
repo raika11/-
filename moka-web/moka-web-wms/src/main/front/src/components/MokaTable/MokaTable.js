@@ -258,11 +258,15 @@ const MokaTable = forwardRef((props, ref) => {
     /**
      * row 데이터 업데이트 시 실행
      */
-    const handleRowDataUpdated = useCallback(() => {
-        setTimeout(function () {
-            handleSelected();
-        });
-    }, [handleSelected]);
+    const handleRowDataUpdated = useCallback(
+        (params) => {
+            setTimeout(function () {
+                handleSelected();
+            });
+            params.api.refreshCells({ force: true });
+        },
+        [handleSelected],
+    );
 
     useEffect(() => {
         handleSelected();

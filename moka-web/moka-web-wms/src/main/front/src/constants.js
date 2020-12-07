@@ -48,6 +48,8 @@ export const CODETYPE_SPECIALCHAR = 'specialChar';
 export const CODETYPE_DS_FONT_IMGD = 'DS_FONT_IMGD';
 export const CODETYPE_DS_FONT_IMGW = 'DS_FONT_IMGW';
 export const CODETYPE_DS_FONT_VODD = 'DS_FONT_VODD';
+// 공통코드 : 페이지편집폼 제목/부제목 위치
+export const CODETYPE_DS_TITLE_LOC = 'DS_TITLE_LOC';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

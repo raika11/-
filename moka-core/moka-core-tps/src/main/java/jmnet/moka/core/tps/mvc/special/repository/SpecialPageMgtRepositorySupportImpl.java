@@ -12,6 +12,8 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -54,7 +56,7 @@ public class SpecialPageMgtRepositorySupportImpl extends QuerydslRepositorySuppo
         if (McpString.isNotEmpty(search.getUsedYn())) {
             builder.and(specialPageMgt.usedYn.eq(search.getUsedYn()));
         }
-        
+
         if (McpString.isNotEmpty(searchType) && McpString.isNotEmpty(keyword)) {
             if (searchType.equals("devName")) {
                 builder.and(specialPageMgt.devName.contains(keyword));
@@ -77,5 +79,28 @@ public class SpecialPageMgtRepositorySupportImpl extends QuerydslRepositorySuppo
 
         return new PageImpl<>(list.getResults(), search.getPageable(), list.getTotal());
 
+    }
+
+    @Override
+    public List<String> findAllDeptName() {
+        QSpecialPageMgt specialPageMgt = QSpecialPageMgt.specialPageMgt;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(specialPageMgt.usedYn.eq(MokaConstants.YES));
+        builder.and(specialPageMgt.repDeptName.isNotNull());
+        builder.and(specialPageMgt.repDeptName
+                .length()
+                .gt(0));
+
+        List<String> returnList = queryFactory
+                .select(specialPageMgt.devName)
+                .from(specialPageMgt)
+                .where(builder)
+                .groupBy(specialPageMgt.devName)
+                .fetch()
+                .stream()
+                .collect(Collectors.toList());
+
+        return returnList;
     }
 }

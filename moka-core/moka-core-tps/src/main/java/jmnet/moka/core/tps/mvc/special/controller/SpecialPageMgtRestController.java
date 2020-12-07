@@ -127,34 +127,28 @@ public class SpecialPageMgtRestController extends AbstractCommonController {
         SpecialPageMgt specialPageMgt = modelMapper.map(specialPageMgtDTO, SpecialPageMgt.class);
 
         try {
-            // 등록(이미지 등록에 seq가 필요해서 디지털스페셜을 먼저 저장함)
-            SpecialPageMgt returnVal = specialPageMgtService.insertSpecialPageMgt(specialPageMgt);
-
             // 이미지등록
-            boolean bImageUpload = true;
             if (specialPageMgtDTO.getThumbnailFile() != null) {
                 MultipartFile mfile = specialPageMgtDTO.getThumbnailFile();
-                String fileName = specialPageMgtService.saveImage(returnVal, mfile);
-                if (McpString.isNotEmpty(fileName)) {
+                String imgUrl = specialPageMgtService.saveImage(mfile);
+                if (McpString.isNotEmpty(imgUrl)) {
                     tpsLogger.success(ActionType.UPLOAD, true);
-                    returnVal.setImgUrl(fileName);
-
-                    // 썸네일경로 업데이트
-                    returnVal = specialPageMgtService.updateSpecialPageMgt(returnVal);
+                    specialPageMgt.setImgUrl(imgUrl);
                 } else {
-                    tpsLogger.fail(msg("tps.specialPageMgt.error.image-upload"), true);
-                    bImageUpload = false;
+                    String message = msg("tps.specialPageMgt.error.image-upload");
+                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+                    invalidList.add(new InvalidDataDTO("imgUrl", message));
+                    tpsLogger.fail(ActionType.INSERT, message, true);
+                    throw new InvalidDataException(invalidList, message);
                 }
             }
 
+            // 등록
+            SpecialPageMgt returnVal = specialPageMgtService.insertSpecialPageMgt(specialPageMgt);
+
             // 리턴값 조회.
-            // 이미지업로드가 실패할경우는, 등록은 성공으로 보내고, 메세지만 이미지업로드 실패로 보낸다.
-            String message = msg("tps.common.success.insert");
-            if (!bImageUpload) {
-                message = msg("tps.specialPageMgt.error.image-upload");
-            }
             SpecialPageMgtDTO returnValDTO = modelMapper.map(returnVal, SpecialPageMgtDTO.class);
-            ResultDTO<SpecialPageMgtDTO> resultDTO = new ResultDTO<SpecialPageMgtDTO>(returnValDTO, message);
+            ResultDTO<SpecialPageMgtDTO> resultDTO = new ResultDTO<SpecialPageMgtDTO>(returnValDTO, msg("tps.common.success.insert"));
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
@@ -194,6 +188,13 @@ public class SpecialPageMgtRestController extends AbstractCommonController {
                     tpsLogger.fail(actionType, message, true);
                 }
             }
+
+            // 이미지선택했는지 확인
+            if (specialPageMgtDTO.getThumbnailFile() == null && McpString.isEmpty(specialPageMgtDTO.getImgUrl())) {
+                String message = messageByLocale.get("tps.specialPageMgt.error.notnull.image-upload");
+                invalidList.add(new InvalidDataDTO("imgUrl", message));
+                tpsLogger.fail(actionType, message, true);
+            }
         }
 
         if (invalidList.size() > 0) {
@@ -224,42 +225,41 @@ public class SpecialPageMgtRestController extends AbstractCommonController {
                 .findSpecialPageMgtBySeq(seqNo)
                 .orElseThrow(() -> {
                     String message = messageByLocale.get("tps.common.error.no-data");
-                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
                     return new NoDataException(message);
                 });
 
-        SpecialPageMgt specialPageMgt = modelMapper.map(specialPageMgtDTO, SpecialPageMgt.class);
 
         try {
             // 이미지등록
-            boolean bImageUpload = true;
             if (specialPageMgtDTO.getThumbnailFile() != null) {
                 MultipartFile mfile = specialPageMgtDTO.getThumbnailFile();
-                String fileName = specialPageMgtService.saveImage(specialPageMgt, mfile);
-                if (McpString.isNotEmpty(fileName)) {
+                String imgUrl = specialPageMgtService.saveImage(mfile);
+                if (McpString.isNotEmpty(imgUrl)) {
                     tpsLogger.success(ActionType.UPLOAD, true);
+                    specialPageMgtDTO.setImgUrl(imgUrl);
                 } else {
-                    tpsLogger.fail(msg("tps.specialPageMgt.error.image-upload"), true);
-                    bImageUpload = false;
+                    String message = msg("tps.specialPageMgt.error.image-upload");
+                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+                    invalidList.add(new InvalidDataDTO("imgUrl", message));
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    throw new InvalidDataException(invalidList, message);
                 }
             }
 
+            SpecialPageMgt specialPageMgt = modelMapper.map(specialPageMgtDTO, SpecialPageMgt.class);
             SpecialPageMgt returnValue = specialPageMgtService.updateSpecialPageMgt(specialPageMgt);
 
             // 결과리턴
-            // 이미지업로드가 실패할경우는, 수정은 성공으로 보내고, 메세지만 이미지업로드 실패로 보낸다.
             String message = msg("tps.common.success.update");
-            if (!bImageUpload) {
-                message = msg("tps.specialPageMgt.error.image-upload");
-            }
             SpecialPageMgtDTO returnValDTO = modelMapper.map(returnValue, SpecialPageMgtDTO.class);
             ResultDTO<SpecialPageMgtDTO> resultDTO = new ResultDTO<SpecialPageMgtDTO>(returnValDTO, message);
-            tpsLogger.success(ActionType.INSERT, true);
+            tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE SPECIAL_PAGE_MGT]", e);
-            tpsLogger.error(ActionType.INSERT, "[FAIL TO UPDATE SPECIAL_PAGE_MGT]", e, true);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE SPECIAL_PAGE_MGT]", e, true);
             throw new Exception(msg("tps.common.error.update"), e);
         }
     }
@@ -293,6 +293,29 @@ public class SpecialPageMgtRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE SPECIAL_PAGE_MGT]", e, true);
             throw new Exception(messageByLocale.get("tps.common.error.delete"), e);
         }
+    }
+
+    /**
+     * 디지털스페셜 부서목록 조회
+     *
+     * @return 부서목록
+     */
+    @ApiOperation(value = "디지털스페셜 부서조회")
+    @GetMapping("/depts")
+    public ResponseEntity<?> getDeptList() {
+
+        // 조회
+        List<String> returnValue = specialPageMgtService.findAllDeptBySpecialPageMgt();
+
+        // 리턴값 설정
+        ResultListDTO<String> resultList = new ResultListDTO<>();
+
+        resultList.setTotalCnt(returnValue.size());
+        resultList.setList(returnValue);
+
+        ResultDTO<ResultListDTO<String>> resultDTO = new ResultDTO<ResultListDTO<String>>(resultList);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
 }

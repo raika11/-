@@ -7,15 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.bright.dto.DataDto;
 import jmnet.moka.core.tps.mvc.bright.dto.OvpSearchDTO;
 import jmnet.moka.core.tps.mvc.bright.service.BrightcoveService;
@@ -31,7 +27,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
@@ -117,7 +112,7 @@ public class BrightRestController extends AbstractCommonController {
 
     @ApiOperation(value = "OVP 동영상 조회")
     @GetMapping("/bright/videos")
-    public ResponseEntity<?> getVideos(@Valid @SearchParam OvpSearchDTO search)
+    public ResponseEntity<?> getVideoList(@Valid @SearchParam OvpSearchDTO search)
             throws Exception {
         try {
             List<OvpVO> returnValue = brightcoveService.findAllVideo(search);
@@ -127,7 +122,7 @@ public class BrightRestController extends AbstractCommonController {
             resultList.setTotalCnt(returnValue.size());
 
             ResultDTO<ResultListDTO<OvpVO>> resultModel = new ResultDTO<ResultListDTO<OvpVO>>(resultList);
-            tpsLogger.success(ActionType.SELECT,true);
+            tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultModel, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -139,7 +134,7 @@ public class BrightRestController extends AbstractCommonController {
 
     @ApiOperation(value = "LIVE 영상 목록조회")
     @GetMapping("/bright/lives")
-    public ResponseEntity<?> getLives()
+    public ResponseEntity<?> getLiveList()
             throws Exception {
         try {
             List<OvpVO> returnValue = brightcoveService.findAllLive();
@@ -149,7 +144,7 @@ public class BrightRestController extends AbstractCommonController {
             resultList.setTotalCnt(returnValue.size());
 
             ResultDTO<ResultListDTO<OvpVO>> resultModel = new ResultDTO<ResultListDTO<OvpVO>>(resultList);
-            tpsLogger.success(ActionType.SELECT,true);
+            tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultModel, HttpStatus.OK);
 
         } catch (Exception e) {

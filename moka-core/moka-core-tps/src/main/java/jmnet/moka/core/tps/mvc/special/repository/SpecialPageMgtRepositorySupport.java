@@ -8,6 +8,7 @@
 
 package jmnet.moka.core.tps.mvc.special.repository;
 
+import java.util.List;
 import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.special.entity.SpecialPageMgt;
 import org.springframework.data.domain.Page;
@@ -20,9 +21,17 @@ import org.springframework.data.domain.Page;
  */
 public interface SpecialPageMgtRepositorySupport {
     /**
-     * 디지털 스페셜 목록 조회
-     * @param search    검색조건
-     * @return          디지털 스페셜 목록
+     * 디지털스페셜 목록 조회
+     *
+     * @param search 검색조건
+     * @return 디지털 스페셜 목록
      */
     Page<SpecialPageMgt> findAllSpecialPageMgt(SpecialPageMgtSearchDTO search);
+
+    /**
+     * 디지털스페셜 부서목록 조회
+     *
+     * @return 부서목록
+     */
+    List<String> findAllDeptName();
 }

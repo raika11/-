@@ -8,9 +8,9 @@
 
 package jmnet.moka.core.tps.mvc.special.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtDTO;
 import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.special.entity.SpecialPageMgt;
 import org.springframework.data.domain.Page;
@@ -26,46 +26,55 @@ public interface SpecialPageMgtService {
     /**
      * 디지털스페셜 목록조회
      *
-     * @param search    검색조건
-     * @return          디지털스페셜 목록
+     * @param search 검색조건
+     * @return 디지털스페셜 목록
      */
     Page<SpecialPageMgt> findAllSpecialPageMgt(SpecialPageMgtSearchDTO search);
 
     /**
      * 디지털스페셜 상세조회
      *
-     * @param seqNo     검색조건
-     * @return          디지털스페셜 정보
+     * @param seqNo 검색조건
+     * @return 디지털스페셜 정보
      */
     Optional<SpecialPageMgt> findSpecialPageMgtBySeq(Long seqNo);
 
     /**
      * 디지털스페셜 등록
      *
-     * @param specialPageMgt    디지털스페셜 정보
-     * @return                  디지털스페셜 정보
+     * @param specialPageMgt 디지털스페셜 정보
+     * @return 디지털스페셜 정보
      */
     SpecialPageMgt insertSpecialPageMgt(SpecialPageMgt specialPageMgt);
 
     /**
      * 디지털스페셜 수정
      *
-     * @param specialPageMgt    수정할 디지털스페셜 정보
-     * @return                  수정된 디지털스페셜 정보
+     * @param specialPageMgt 수정할 디지털스페셜 정보
+     * @return 수정된 디지털스페셜 정보
      */
     SpecialPageMgt updateSpecialPageMgt(SpecialPageMgt specialPageMgt);
 
     /**
      * 이미지 저장
-     * @param specialPageMgt    디지털스페셜 정보
-     * @param thumbnail         이미지파일
-     * @return                  이미지경로(전체경로)
+     *
+     * @param thumbnail 이미지파일
+     * @return 이미지경로(전체경로)
      */
-    String saveImage(SpecialPageMgt specialPageMgt, MultipartFile thumbnail);
+    String saveImage(MultipartFile thumbnail)
+            throws IOException;
 
     /**
      * 디지털스페셜 삭제
-     * @param specialPageMgt    삭제할 디지털스페셜
+     *
+     * @param specialPageMgt 삭제할 디지털스페셜
      */
     void deleteSpecialPageMgt(SpecialPageMgt specialPageMgt);
+
+    /**
+     * 디지털스페셜에서 등록한 부서목록 조회
+     *
+     * @return 부서목록
+     */
+    List<String> findAllDeptBySpecialPageMgt();
 }

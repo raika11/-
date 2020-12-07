@@ -70,7 +70,7 @@ public class ArticleSnsShareController extends AbstractCommonController {
      * @param search 검색 조건
      * @return 검색 결과
      */
-    @ApiOperation(value = "SNS 전송 기사 목록 조회(FB)")
+    @ApiOperation(value = "SNS 메타 목록 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "searchType", value = "검색조건<br>all:전체<br>artTitle:제목<br>totalId:기사ID", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "keyword", value = "검색어", dataType = "String", paramType = "query"),
@@ -100,7 +100,7 @@ public class ArticleSnsShareController extends AbstractCommonController {
      * @param search 검색 조건
      * @return 검색 결과
      */
-    @ApiOperation(value = "SNS 메타 목록 조회")
+    @ApiOperation(value = "SNS 전송 기사 목록 조회(FB)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "searchType", value = "검색조건<br>all:전체<br>artTitle:제목<br>totalId:기사ID", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "keyword", value = "검색어", dataType = "String", paramType = "query"),

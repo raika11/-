@@ -42,6 +42,8 @@ public class ArticleSnsShareItemVO implements Serializable {
     @DTODateTimeFormat
     private Date serviceDt;
 
+    private String artTitle;
+
     private String sendSnsType;
 
     private String fbSendSnsArtId;

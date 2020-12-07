@@ -28,7 +28,7 @@ public class ArticleSnsShareId {
     /**
      * 서비스기사아이디
      */
-    private Integer totalId;
+    private Long totalId;
 
     /**
      * SNS 타입{FB:페이스북, TW:트위터}

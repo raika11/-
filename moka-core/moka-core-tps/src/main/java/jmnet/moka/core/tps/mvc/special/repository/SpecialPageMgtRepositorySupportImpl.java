@@ -93,10 +93,10 @@ public class SpecialPageMgtRepositorySupportImpl extends QuerydslRepositorySuppo
                 .gt(0));
 
         List<String> returnList = queryFactory
-                .select(specialPageMgt.devName)
+                .select(specialPageMgt.repDeptName)
                 .from(specialPageMgt)
                 .where(builder)
-                .groupBy(specialPageMgt.devName)
+                .groupBy(specialPageMgt.repDeptName)
                 .fetch()
                 .stream()
                 .collect(Collectors.toList());

@@ -11,7 +11,6 @@ package jmnet.moka.core.tps.mvc.special.dto;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -37,6 +36,11 @@ public class SpecialPageMgtSearchDTO extends SearchDTO {
      * 페이지코드
      */
     private String pageCd;
+
+    /**
+     * 사용여부
+     */
+    private String usedYn;
 
     /**
      * 생성자: 검색 조건의 기본값을 설정

@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -58,13 +57,8 @@ public class SpecialPageMgtDTO implements Serializable {
      * 사용여부(Y:사용, N:미사용)
      */
     @Pattern(regexp = "^[Y|N]?$", message = "{tps.specialPageMgt.error.pattern.usedYn}")
-    private String usedYn;
-
-    /**
-     * 페이지코드
-     */
     @Builder.Default
-    private Integer cdNo = 0;
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 회차
@@ -97,6 +91,7 @@ public class SpecialPageMgtDTO implements Serializable {
     /**
      * 페이지 태그(TB_15RE_CODE_MGT GRP_CD = PAGE_CD 참조)
      */
+    @NotNull(message = "{tps.specialPageMgt.error.notnull.pageCd}")
     private String pageCd;
 
     /**
@@ -120,12 +115,14 @@ public class SpecialPageMgtDTO implements Serializable {
     /**
      * PC URL
      */
+    @NotNull(message = "{tps.specialPageMgt.error.notnull.pcUrl}")
     @Length(max = 200, message = "{tps.specialPageMgt.error.length.pcUrl}")
     private String pcUrl;
 
     /**
      * MOBILE URL
      */
+    @NotNull(message = "{tps.specialPageMgt.error.notnull.mobUrl}")
     @Length(max = 200, message = "{tps.specialPageMgt.error.length.mobUrl}")
     private String mobUrl;
 

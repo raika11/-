@@ -8,13 +8,9 @@
 
 package jmnet.moka.core.tps.mvc.special.service;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
-import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtDTO;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.special.entity.SpecialPageMgt;
 import jmnet.moka.core.tps.mvc.special.repository.SpecialPageMgtRepository;
@@ -61,13 +57,16 @@ public class SpecialPageMgtServiceImpl implements SpecialPageMgtService {
         String extension = McpFile
                 .getExtension(thumbnail.getOriginalFilename())
                 .toLowerCase();
-        String fileName = specialPageMgt.getSeqNo().toString() + "." + extension;
+        String fileName = specialPageMgt
+                .getSeqNo()
+                .toString() + "." + extension;
 
         return "";
     }
 
     @Override
     public void deleteSpecialPageMgt(SpecialPageMgt specialPageMgt) {
-        specialPageMgtRepository.deleteById(specialPageMgt.getSeqNo());
+        specialPageMgt.setUsedYn(MokaConstants.DELETE);
+        specialPageMgtRepository.save(specialPageMgt);
     }
 }

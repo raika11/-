@@ -51,12 +51,6 @@ public class SpecialPageMgt extends BaseAudit {
     private String usedYn;
 
     /**
-     * CD번호
-     */
-    @Column(name = "CD_NO", nullable = false)
-    private Integer cdNo = 0;
-
-    /**
      * 회차
      */
     @Column(name = "ORDINAL", nullable = false)
@@ -82,9 +76,9 @@ public class SpecialPageMgt extends BaseAudit {
     private String schKwd;
 
     /**
-     * 페이지 태그(TB_15RE_CODE_MGT GRP_CD = PAGE_CD 참조)
+     * 페이지 태그(TB_15RE_CODE_MGT GRP_CD = PT 참조)
      */
-    @Column(name = "PAGE_CD")
+    @Column(name = "PAGE_CD", nullable = false)
     private String pageCd;
 
     /**
@@ -109,13 +103,13 @@ public class SpecialPageMgt extends BaseAudit {
     /**
      * PC URL
      */
-    @Column(name = "PC_URL")
+    @Column(name = "PC_URL", nullable = false)
     private String pcUrl;
 
     /**
      * MOBILE URL
      */
-    @Column(name = "MOB_URL")
+    @Column(name = "MOB_URL", nullable = false)
     private String mobUrl;
 
     /**
@@ -176,10 +170,9 @@ public class SpecialPageMgt extends BaseAudit {
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        this.cdNo = this.cdNo == null ? 0 : this.cdNo;
+        this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
         this.ordinal = this.ordinal == null ? 1 : this.ordinal;
         this.listYn = McpString.defaultValue(this.listYn, MokaConstants.YES);
         this.schYn = McpString.defaultValue(this.schYn, MokaConstants.YES);
     }
-
 }

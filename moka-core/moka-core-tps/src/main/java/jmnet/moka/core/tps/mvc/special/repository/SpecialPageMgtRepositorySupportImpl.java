@@ -13,10 +13,8 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
-import jmnet.moka.core.tps.mvc.jpod.repository.JpodChannelRepositorySupport;
-import jmnet.moka.core.tps.mvc.reserved.entity.Reserved;
 import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.special.entity.QSpecialPageMgt;
 import jmnet.moka.core.tps.mvc.special.entity.SpecialPageMgt;
@@ -46,23 +44,38 @@ public class SpecialPageMgtRepositorySupportImpl extends QuerydslRepositorySuppo
         BooleanBuilder builder = new BooleanBuilder();
         String searchType = search.getSearchType();
         String keyword = search.getKeyword();
+
+        builder.and(specialPageMgt.usedYn.ne(MokaConstants.DELETE));    // 삭제된 디지털스페셜은 제외
+
+        if (McpString.isNotEmpty(search.getPageCd())) {
+            builder.and(specialPageMgt.pageCd.eq(search.getPageCd()));
+        }
+
+        if (McpString.isNotEmpty(search.getUsedYn())) {
+            builder.and(specialPageMgt.usedYn.eq(search.getUsedYn()));
+        }
+        
         if (McpString.isNotEmpty(searchType) && McpString.isNotEmpty(keyword)) {
             if (searchType.equals("devName")) {
                 builder.and(specialPageMgt.devName.contains(keyword));
             } else if (searchType.equals("pageTitle")) {
                 builder.and(specialPageMgt.pageTitle.contains(keyword));
+            } else if (searchType.equals("seqNo")) {
+                builder.and(specialPageMgt.seqNo.eq(Long.parseLong(keyword)));
             } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
-                builder.and(specialPageMgt.devName.contains(keyword)
-                                               .or(specialPageMgt.pageTitle.contains(keyword)));
+                builder.and(specialPageMgt.devName
+                        .contains(keyword)
+                        .or(specialPageMgt.pageTitle.contains(keyword)));
             }
         }
 
         JPQLQuery<SpecialPageMgt> query = queryFactory.selectFrom(specialPageMgt);
         query = getQuerydsl().applyPagination(search.getPageable(), query);
-        QueryResults<SpecialPageMgt> list = query.where(builder)
-                                           .fetchResults();
+        QueryResults<SpecialPageMgt> list = query
+                .where(builder)
+                .fetchResults();
 
-        return new PageImpl<SpecialPageMgt>(list.getResults(), search.getPageable(), list.getTotal());
+        return new PageImpl<>(list.getResults(), search.getPageable(), list.getTotal());
 
     }
 }

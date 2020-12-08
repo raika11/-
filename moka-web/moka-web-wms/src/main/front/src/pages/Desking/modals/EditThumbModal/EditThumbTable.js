@@ -12,7 +12,7 @@ const EditThumbTable = (props) => {
             <div className="border w-100 custom-scroll mb-2" style={{ height: 346 }}>
                 <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                     {data.map((p) => (
-                        <EditThumbCard key={p.nid} img={p.imageThumPath} data={{ ...p, date: moment(p.date).format('YYYY-MM-DD') }} />
+                        <EditThumbCard key={p.nid} img={p.imageThumPath} data={{ ...p, date: moment(p.date).format('YYYY-MM-DD') }} onClick={(p) => console.log(p)} />
                     ))}
                 </div>
             </div>

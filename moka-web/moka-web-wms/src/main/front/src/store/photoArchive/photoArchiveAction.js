@@ -39,4 +39,4 @@ export const getPhotoTypes = createAction(GET_PHOTO_TYPES, () => ({}));
  * 포토 아카이브 사진 정보 조회
  */
 export const [GET_PHOTO, GET_PHOTO_SUCCESS, GET_PHOTO_FAILURE] = createRequestActionTypes('photoArchive/GET_PHOTO');
-export const getPhoto = createAction(GET_PHOTO, (payload) => payload);
+export const getPhoto = createAction(GET_PHOTO, (photoId) => photoId);

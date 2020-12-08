@@ -24,7 +24,7 @@ export const getPhotoTypes = () => {
 };
 
 // 포토 아카이브 사진 정보 조회
-export const getPhoto = ({ photoId }) => {
+export const getPhoto = (photoId) => {
     return instance.get(`/api/achive/photos/${photoId}`).catch((err) => {
         throw err;
     });

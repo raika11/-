@@ -88,7 +88,7 @@ export default handleActions(
                 draft.error = body.error;
             });
         },
-        [act.GET_PHOTO_SUCCESS]: (state, { payload: { payload } }) => {
+        [act.GET_PHOTO_FAILURE]: (state, { payload: { payload } }) => {
             return produce(state, (draft) => {
                 draft.photo = initialState.photo;
                 draft.error = payload;

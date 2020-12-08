@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.core.common.MokaConstants;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JxltEngine.Template;
@@ -165,6 +166,11 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
 
     public void loadUri() throws TmsException {
         this.templateLoader.loadUri();
+    }
+
+    public String getArticlePageId(String domainId, String articleType)
+            throws DataLoadException {
+        return this.templateLoader.getArticlePageId(domainId, articleType);
     }
 
     public Map<String, String> getUri2ItemMap() {
@@ -356,9 +362,10 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     @Override
     public StringBuilder merge(String itemType, String itemId, MergeContext context)
             throws TemplateMergeException {
-        StringBuilder sb = new StringBuilder(1024);
+        StringBuilder sb;
         try {
             TemplateRoot templateRoot = getParsedTemplate(itemType, itemId);
+            sb = new StringBuilder(templateRoot.getTemplateSize()*2);
             templateRoot.merge(this, context, sb);
             if (context.getMergeOptions().getShowItem() != null) {
                 addShowItemStyle(sb, context);
@@ -367,7 +374,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
             throw new TemplateMergeException("Template Merge Fail : " + itemType + ", " + itemId,
                     e);
         }
-        return sb;
+        return sb == null? new StringBuilder(1024) : sb;
     }
 
     @Override

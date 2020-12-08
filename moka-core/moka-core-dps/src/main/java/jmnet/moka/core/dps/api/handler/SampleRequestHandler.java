@@ -41,6 +41,7 @@ public class SampleRequestHandler implements RequestHandler {
 			mainResult.addApiResult(ApiResult.MAIN_TOTAL, ApiResult.createApiResult(startTime, endTime, total, true, null));
 			return mainResult;
 		} catch (IOException e) {
+			logger.error("Sample Request Error: api = {}", apiContext.getApiId(), e);
 			return ApiResult.createApiErrorResult(e);
 		}
 	}

@@ -75,6 +75,28 @@
       id
     </keys>
   </api>
+  <api id="articlePage" expire="0">
+    <description>기사페이지 정보를 반환한다.</description>
+    <parameter>
+      <id desc="기사페이지 Id" require="Y">[0-9]{1,6}</id>
+    </parameter>
+    <request>dps.item.articlePage</request>
+    <keys>
+      id
+    </keys>
+  </api>
+  <api id="articlePageId" expire="0">
+    <description>기사타입에 해당하는 기사페이지 Id를 반환한다.</description>
+    <parameter>
+      <domainId desc="도메인 Id">[0-9]{4}</domainId>
+      <artType desc="기사타입 Id">[A-z0-9]{1,2}</artType>
+    </parameter>
+    <request>dps.item.articlePageId</request>
+    <keys>
+      domainId
+      artType
+    </keys>
+  </api>
   <api id="dataset" expire="0">
     <description>데이터셋 정보를 반환한다.</description>
     <parameter>

@@ -72,6 +72,7 @@ public class DbRequestHandler implements RequestHandler {
 				return apiResult;
 			}
 		} catch ( Exception e) {
+			logger.error("Procedure Call Error: api = {}", apiContext.getApiId(), e);
 			return ApiResult.createApiErrorResult("Procedure Call Error",e);
 		}
 	}

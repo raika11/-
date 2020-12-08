@@ -12,7 +12,7 @@ public class ArticlePageItem extends MergeItem {
     }
 
     public String getItemId() {
-        return this.get(ItemConstants.ATICLE_PAGE_ID).toString();
+        return this.get(ItemConstants.ARTICLE_PAGE_ID).toString();
     }
 
 }

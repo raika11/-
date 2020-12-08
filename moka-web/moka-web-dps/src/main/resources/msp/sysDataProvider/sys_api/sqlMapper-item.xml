@@ -188,6 +188,25 @@
 	WHERE TEMPLATE_SEQ = #{id}
   </select>
 
+  <select id="articlePage" parameterType="hashmap" resultType="map">
+    SELECT [ART_PAGE_SEQ]
+      ,[DOMAIN_ID]
+      ,[ART_TYPE]
+      ,[ART_PAGE_NAME]
+      ,[ART_PAGE_BODY]
+      ,[REG_DT]
+      ,[REG_ID]
+      ,[MOD_DT]
+      ,[MOD_ID] FROM TB_WMS_ARTICLE_PAGE
+    WHERE ART_PAGE_SEQ = #{id}
+  </select>
+
+  <select id="articlePageId" parameterType="hashmap" resultType="map">
+    SELECT [ART_PAGE_SEQ]
+    FROM TB_WMS_ARTICLE_PAGE
+    WHERE DOMAIN_ID= #{domainId} AND ART_TYPE = #{artType}
+  </select>
+
   <select id="dataset" parameterType="hashmap" resultType="map">
     SELECT [DATASET_SEQ]
       ,[DATASET_NAME]

@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.cache.HazelcastCache;
+import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.TemplateLoader;
@@ -16,17 +17,20 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.item.AdItem;
+import jmnet.moka.core.tms.merge.item.ArticlePageItem;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.ContainerItem;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tms.merge.item.TemplateItem;
 import jmnet.moka.core.tms.template.parse.model.AdTemplateRoot;
+import jmnet.moka.core.tms.template.parse.model.ApTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.CpTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.CtTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.MokaTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.PgTemplateRoot;
 import jmnet.moka.core.tms.template.parse.model.TpTemplateRoot;
+import org.apache.commons.net.nntp.Article;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.GenericApplicationContext;
@@ -84,6 +88,9 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
 
     public abstract void loadUri()
             throws TmsException;
+
+    public abstract String getArticlePageId(String domainId, String articleType)
+            throws DataLoadException;
 
     public Map<String, String> getUri2ItemMap() {
         return this.uri2ItemMap;
@@ -180,7 +187,9 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         MokaTemplateRoot templateRoot = null;
         if (item instanceof PageItem) {
             templateRoot = new PgTemplateRoot((PageItem) item);
-        } else if (item instanceof ComponentItem) {
+        } else if (item instanceof ArticlePageItem)
+            templateRoot = new ApTemplateRoot((ArticlePageItem) item);
+        else if (item instanceof ComponentItem) {
             templateRoot = new CpTemplateRoot((ComponentItem) item, this);
         } else if (item instanceof ContainerItem) {
             templateRoot = new CtTemplateRoot((ContainerItem) item);

@@ -84,10 +84,10 @@ public class ArticlePageDTO implements Serializable {
 
     public ArticlePageItem toArticlePageItem() {
         ArticlePageItem item = new ArticlePageItem();
-        item.put(ItemConstants.ATICLE_PAGE_ID, this.artPageSeq);
-        item.put(ItemConstants.ATICLE_PAGE_DOMAIN_ID, this.domain.getDomainId());
-        item.put(ItemConstants.ATICLE_PAGE_TYPE, this.artType);
-        item.put(ItemConstants.ATICLE_PAGE_NAME, this.artPageName);
+        item.put(ItemConstants.ARTICLE_PAGE_ID, this.artPageSeq);
+        item.put(ItemConstants.ARTICLE_PAGE_DOMAIN_ID, this.domain.getDomainId());
+        item.put(ItemConstants.ARTICLE_PAGE_TYPE, this.artType);
+        item.put(ItemConstants.ARTICLE_PAGE_NAME, this.artPageName);
         item.put(ItemConstants.ARTICLE_PAGE_BODY, this.artPageBody);
         return item;
     }

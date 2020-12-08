@@ -43,11 +43,16 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
     public static final String ITEM_API_DATASET = "dataset";
     public static final String ITEM_API_AD = "ad";
     public static final String ITEM_API_ARTICLE_PAGE = "articlePage";
+    public static final String ITEM_API_ARTICLE_PAGE_ID = "articlePageId";
     public static final String PARAM_DOMAIN_ID = "domainId";
     public static final String PARAM_ITEM_ID = "id";
     public static final String PARAM_TBODY = "tBody";
+    public static final String PARAM_ARTICLE_TYPE = "artType";
+    public static final String VALUE_ARTICLE_PAGE_SEQ = "ART_PAGE_SEQ";
+    private static final String DEFAULT_ARTICLE_TYPE = "B";
 
     protected static Map<String, String> itemApiMap = new HashMap<String, String>();
+    private static Map<String, String> artTypeToArticlePageIdMap = new HashMap<>();
 
     static {
         itemApiMap.put(MokaConstants.ITEM_DOMAIN, ITEM_API_DOMAIN);
@@ -74,12 +79,15 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         try {
             this.httpProxyDataLoader = httpProxyDataLoader;
             loadUri();
+            // 기본 article 페이지를 로딩한다.
+            getArticlePageId(this.domainId,DEFAULT_ARTICLE_TYPE);
         } catch (Exception e) {
             logger.warn("TemplateLoader Creation failed: {}", e.getMessage());
         }
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void loadUri() throws TmsException {
 
         try {
@@ -114,6 +122,31 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         } catch (Exception e) {
             throw new TmsException("Url load fail from DPS", e);
         }
+    }
+
+    @Override
+    public String getArticlePageId(String domainId, String articleType)
+            throws DataLoadException {
+        // 이미 존재하는 경우
+        if ( this.artTypeToArticlePageIdMap.containsKey(articleType)) {
+            return this.artTypeToArticlePageIdMap.get(articleType);
+        }
+        // 없는 경우 DPS에서 가져온다.
+        Map<String, Object> parameterMap = new LinkedHashMap<String, Object>();
+        parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
+        parameterMap.put(PARAM_ARTICLE_TYPE, articleType);
+        JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(ITEM_API_ARTICLE_PAGE_ID, parameterMap, true);
+        Object jsonArray = jsonResult.getDataList();
+        if ( jsonArray instanceof List) {
+            List list = (List)jsonArray;
+            if ( list.size() >= 1) {
+              Map map = (Map)(list.get(0));
+              String articlePageId =  map.get(VALUE_ARTICLE_PAGE_SEQ).toString();
+              this.artTypeToArticlePageIdMap.put(articleType, articlePageId);
+              return articlePageId;
+            }
+        }
+        return this.artTypeToArticlePageIdMap.get(DEFAULT_ARTICLE_TYPE);
     }
 
     /**

@@ -2,29 +2,23 @@ package jmnet.moka.core.tms.mvc.view;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import jmnet.moka.common.ApiResult;
 import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.cache.CacheManager;
-import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
-import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,12 +49,12 @@ public class ArticleView extends AbstractView {
     @Autowired(required = false)
     private CacheManager cacheManager;
 
+    private MokaFunctions functions = new MokaFunctions();
+
     @Override
     protected boolean generatesDownloadContent() {
         return false;
     }
-
-    private MokaFunctions functions = new MokaFunctions();
 
     /**
      * <pre>
@@ -103,7 +97,8 @@ public class ArticleView extends AbstractView {
             StringBuilder sb;
             try {
                 writer = response.getWriter();
-                sb = templateMerger.merge("PG",this.getArticlePage(articleInfo),mergeContext);
+                sb = templateMerger.merge(MokaConstants.ITEM_ARTICLE_PAGE,
+                        this.getArticlePageId(templateMerger, domainId, articleInfo), mergeContext);
                 writer.write(sb.toString());
             } catch (Exception e) {
                 logger.error("Request:{}, Exception: {}", request.getRequestURI(), e.toString());
@@ -161,16 +156,10 @@ public class ArticleView extends AbstractView {
         }
     }
 
-    private String getArticlePage(Map<String,Object> articleInfo) {
+    private String getArticlePageId(MokaTemplateMerger templateMerger, String domainId, Map<String,Object> articleInfo)
+            throws DataLoadException {
         Map<String,Object> basic = (Map<String,Object>)articleInfo.get("basic");
         String articleType = (String)basic.get("ART_TYPE");
-        if ( articleType.equalsIgnoreCase("B")) {
-            return "68";
-        } else if ( articleType.equalsIgnoreCase("C")) {
-            return "70";
-        }
-        return "70";
+        return templateMerger.getArticlePageId(domainId, articleType);
     }
-
-
 }

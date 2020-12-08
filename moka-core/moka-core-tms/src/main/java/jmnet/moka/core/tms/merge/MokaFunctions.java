@@ -6,6 +6,7 @@ import java.util.Map;
 import jmnet.moka.common.template.merge.Functions;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
+import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 
 /**
@@ -25,11 +26,11 @@ public class MokaFunctions extends Functions {
 	 * @param componentItem
 	 * @return
 	 */
-	public String cloc(String url, PageItem pageItem, ComponentItem componentItem) {
+	public String cloc(String url, Object pageItem, Object componentItem) {
 		if ( url == null || url.length() == 0) return "";
 		String cloc = "joongang-" +
-				(pageItem==null?"none":pageItem.getItemId()) + "-" +
-				(componentItem==null?"none":componentItem.getItemId());
+				(pageItem==null?"none":((MergeItem)pageItem).getItemId()) + "-" +
+				(componentItem==null?"none":((MergeItem)componentItem).getItemId());
 		if ( url.contains("?")) {
 			return  url + "&cloc=" + cloc;
 		} else {

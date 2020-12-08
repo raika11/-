@@ -22,11 +22,12 @@ import {
 const ComponentWorkHistoryList = (props) => {
     const { show } = props;
     const dispatch = useDispatch();
-    const { area, search: storeSearch, loading, total, componentList, componentWorkHistoryList, deskingWorkHistoryList, selectedComponent } = useSelector(
+    const { area, storeSearch, componentWorkLoading, deskingWorkLoading, total, componentList, componentWorkHistoryList, deskingWorkHistoryList, selectedComponent } = useSelector(
         (store) => ({
             area: store.desking.area,
-            search: store.desking.history.search,
-            loading: store.loading[GET_COMPONENT_WORK_HISTORY] || store.loading[GET_DESKING_WORK_HISTORY],
+            storeSearch: store.desking.history.search,
+            componentWorkLoading: store.loading[GET_COMPONENT_WORK_HISTORY],
+            deskingWorkLoading: store.loading[GET_DESKING_WORK_HISTORY],
             total: store.desking.history.total,
             componentList: store.desking.list,
             componentWorkHistoryList: store.desking.history.componentWorkHistory.list,
@@ -39,9 +40,6 @@ const ComponentWorkHistoryList = (props) => {
     // state
     const [search, setSearch] = useState(initialState.history.search);
     const [rowData, setRowData] = useState([]);
-
-    const date = new Date();
-    const regDt = search.regDt || moment(date).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).format(DB_DATEFORMAT);
 
     /**
      * 테이블 검색옵션 변경
@@ -106,24 +104,20 @@ const ComponentWorkHistoryList = (props) => {
     );
 
     useEffect(() => {
-        // store search => local state
         setSearch(storeSearch);
     }, [storeSearch]);
 
-    /**
-     * 기본 날짜 셋팅
-     */
     useEffect(() => {
-        dispatch(
-            changeSearchOption({
-                ...search,
-                areaSeq: area.areaSeq,
-                page: 0,
-                regDt,
-            }),
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        // 기본 날짜 셋팅
+        if (!search.regDt) {
+            dispatch(
+                changeSearchOption({
+                    ...initialState.history.search,
+                    regDt: moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).format(DB_DATEFORMAT),
+                }),
+            );
+        }
+    }, [dispatch, search.regDt]);
 
     useEffect(() => {
         // 컴포넌트 히스토리 rowData 셋팅
@@ -144,13 +138,12 @@ const ComponentWorkHistoryList = (props) => {
                     ...search,
                     areaSeq: area.areaSeq,
                     componentSeq: null,
-                    regDt,
                 }),
             );
             dispatch(clearHistoryList());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search.areaSeq, area.areaSeq]);
+    }, [search.areaSeq, search.regDt, area.areaSeq]);
 
     useEffect(() => {
         // 컴포넌트 선택시 컴포넌트 워크 히스토리 목록 조회
@@ -174,7 +167,7 @@ const ComponentWorkHistoryList = (props) => {
                 <Search search={search} setSearch={setSearch} list={componentList} onSearch={handleSearch} selectedComponent={selectedComponent} show={show} />
                 {/* search의 테이블 */}
                 <ComponentWorkAgGrid
-                    loading={loading}
+                    loading={componentWorkLoading}
                     search={search}
                     setSearch={setSearch}
                     total={total}
@@ -186,7 +179,7 @@ const ComponentWorkHistoryList = (props) => {
             </div>
             <div className="flex-fill">
                 {/* 데스킹 히스토리 목록 테이블 */}
-                <DeskingWorkAgGrid loading={loading} search={search} setSearch={setSearch} total={total} rowData={deskingWorkHistoryList} />
+                <DeskingWorkAgGrid loading={deskingWorkLoading} search={search} setSearch={setSearch} total={total} rowData={deskingWorkHistoryList} />
             </div>
         </MokaCard>
     );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MokaIconTabs, MokaIcon } from '@components';
-import { ComponentWorkHistoryList, DeskingArticleTab, ComponentWorkPreview } from './components';
+import { DeskingArticleTab, ComponentWorkPreview, HistoryList } from './components';
 
 const DeskingTabs = ({ componentAgGridInstances }) => {
     const { componentList } = useSelector((store) => ({
@@ -32,7 +32,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                     /**
                      * 히스토리
                      */
-                    <ComponentWorkHistoryList show={activeTabIdx === 2} />,
+                    <HistoryList show={activeTabIdx === 2} />,
                 ]}
                 tabNavWidth={48}
                 tabNavPosition="right"

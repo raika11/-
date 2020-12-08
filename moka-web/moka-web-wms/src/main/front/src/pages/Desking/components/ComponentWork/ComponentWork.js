@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { DATA_TYPE_DESK } from '@/constants';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './ComponentWorkButtonGroup';
 import AgGrid from './DeskingWorkAgGrid';
@@ -40,7 +41,7 @@ const defaultProps = {
 };
 
 const ComponentWork = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart, editFormPart } = props;
     const dispatch = useDispatch();
 
     const { workStatus } = useSelector((store) => ({
@@ -118,16 +119,18 @@ const ComponentWork = (props) => {
                     workStatus={workStatus[component.seq]}
                 />
 
-                {/* 데스킹 워크 리스트 */}
-                <AgGrid
-                    component={component}
-                    agGridIndex={agGridIndex}
-                    componentAgGridInstances={componentAgGridInstances}
-                    setComponentAgGridInstances={setComponentAgGridInstances}
-                    onRowClicked={handleRowClicked}
-                    onSave={handleClickSave}
-                    onDelete={handleClickDelete}
-                />
+                {/* 데스킹 워크 리스트 (dataType === DESK) */}
+                {component.dataType === DATA_TYPE_DESK && (
+                    <AgGrid
+                        component={component}
+                        agGridIndex={agGridIndex}
+                        componentAgGridInstances={componentAgGridInstances}
+                        setComponentAgGridInstances={setComponentAgGridInstances}
+                        onRowClicked={handleRowClicked}
+                        onSave={handleClickSave}
+                        onDelete={handleClickDelete}
+                    />
+                )}
             </div>
 
             <EditDeskingWorkModal

@@ -11,7 +11,7 @@ import toast, { messageBox } from '@utils/toastUtil';
  * Html 수동 편집 모달
  */
 const EditHtmlModal = (props) => {
-    const { show, onHide, data } = props;
+    const { show, onHide, component } = props;
     const dispatch = useDispatch();
     const { area, loading } = useSelector(
         (store) => ({
@@ -52,12 +52,12 @@ const EditHtmlModal = (props) => {
             () => {
                 dispatch(
                     putSnapshotComponentWork({
-                        componentWorkSeq: data.seq,
+                        componentWorkSeq: component.seq,
                         snapshotYn: 'Y',
                         snapshotBody: body,
                         callback: ({ header }) => {
                             if (header.success) {
-                                saveCallback({ componentWorkSeq: data.seq });
+                                saveCallback({ componentWorkSeq: component.seq });
                             } else {
                                 toast.fail(header.message);
                             }
@@ -76,7 +76,7 @@ const EditHtmlModal = (props) => {
         dispatch(
             previewComponentModal({
                 area: area.areaSeq,
-                componentWorkSeq: data.seq,
+                componentWorkSeq: component.seq,
                 resourceYn: 'Y',
                 callback: ({ header, body }) => {
                     if (header.success) {
@@ -100,23 +100,23 @@ const EditHtmlModal = (props) => {
     };
 
     useEffect(() => {
-        if (show) {
-            dispatch(
-                previewComponentModal({
-                    areaSeq: area.areaSeq,
-                    componentWorkSeq: data.seq,
-                    resourceYn: 'N',
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            setBody(body);
-                            setDefaultValue(body);
-                        }
-                    },
-                }),
-            );
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, area]);
+        if (!show) return;
+        dispatch(
+            previewComponentModal({
+                areaSeq: area.areaSeq,
+                componentWorkSeq: component.seq,
+                resourceYn: 'N',
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        setBody(body);
+                        setDefaultValue(body);
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+    }, [show, area, dispatch, component.seq]);
 
     return (
         <MokaModal
@@ -143,7 +143,7 @@ const EditHtmlModal = (props) => {
                 labelClassName="ft-12 font-weight-bold mr-3"
                 inputClassName="ft-12"
                 inputProps={{ readOnly: true, plaintext: true }}
-                value={`${data.componentName}`}
+                value={component.componentName}
             />
             <MokaEditor defaultValue={defaultValue} value={body} onBlur={(value) => setBody(value)} />
         </MokaModal>

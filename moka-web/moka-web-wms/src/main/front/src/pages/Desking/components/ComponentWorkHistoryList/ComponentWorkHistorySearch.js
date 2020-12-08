@@ -2,13 +2,13 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
-import { DB_DATEFORMAT, HIST_PUBLISH, HIST_SAVE } from '@/constants';
+import { DB_DATEFORMAT, DESK_HIST_PUBLISH, DESK_HIST_SAVE } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultHistorySearchType } from '@pages/commons';
 
 const status = [
-    { id: HIST_PUBLISH, name: '전송 기록' },
-    { id: HIST_SAVE, name: '임시저장 기록' },
+    { id: DESK_HIST_PUBLISH, name: '전송 기록' },
+    { id: DESK_HIST_SAVE, name: '임시저장 기록' },
 ];
 
 /**

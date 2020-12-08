@@ -1,6 +1,6 @@
 import React from 'react';
 import { MokaTableLoadButton } from '@components';
-import { HIST_PUBLISH } from '@/constants';
+import { DESK_HIST_PUBLISH } from '@/constants';
 
 export default [
     {
@@ -8,27 +8,33 @@ export default [
         field: 'seq',
         width: 50,
         tooltipField: 'seq',
-        cellStyle: { fontSize: '12px' },
+        cellClassRules: {
+            'ft-12': () => true,
+        },
     },
     {
         headerName: '작업일시',
         field: 'regDt',
         width: 200,
-        cellStyle: (row) => {
-            const { data } = row;
-            return data.approvalYn === 'N' && data.status === HIST_PUBLISH ? { fontSize: '12px', color: 'red' } : { fontSize: '12px' };
+        cellClassRules: {
+            'text-positive': ({ data }) => data.approvalYn === 'N' && data.status === DESK_HIST_PUBLISH,
+            'ft-12': () => true,
         },
     },
     {
         headerName: '작업자',
         field: 'regId',
         width: 90,
+        flex: 1,
         tooltipField: 'regId',
+        cellClassRules: {
+            'ft-12': () => true,
+        },
     },
     {
         headerName: '불러오기',
         field: 'load',
-        width: 92,
+        width: 65,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;

@@ -8,7 +8,7 @@ import { addDeskingWorkDropzone } from '@utils/agGridUtil';
 import { GET_ARTICLE_LIST, getArticleList, changeSearchOption } from '@store/article';
 import columnDefs from './ArticleDeskAgGridColums';
 import GroupNumberRenderer from './GroupNumberRenderer';
-import ChangeArtTitleModal from '../modals/ChangeArtTitleModal';
+import ChangeArtTitleModal from '@pages/Article/modals/ChangeArtTitleModal';
 
 /**
  * 기사관리 ag-grid 컴포넌트 (페이지편집)

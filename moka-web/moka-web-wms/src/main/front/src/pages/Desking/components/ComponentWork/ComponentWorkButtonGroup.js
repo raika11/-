@@ -5,8 +5,9 @@ import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { HIST_SAVE, HIST_PUBLISH } from '@/constants';
+import { DESK_HIST_SAVE, DESK_HIST_PUBLISH, DATA_TYPE_DESK, DATA_TYPE_FORM } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { changeSearchOption, putComponentWork, postSaveComponentWork, postPublishComponentWork, postSavePublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 
@@ -38,6 +39,7 @@ const ComponentWorkButtonGroup = (props) => {
     const [title, setTitle] = useState('');
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [viewN, setViewN] = useState(false);
+    const [tooltipText, setTooltipText] = useState('');
     const [iconButton, setIconButton] = useState([]);
 
     // modal state
@@ -53,7 +55,7 @@ const ComponentWorkButtonGroup = (props) => {
      */
     const handleClickPublish = useCallback(() => {
         messageBox.confirm('전송하시겠습니까?', () => {
-            dispatch(changeSearchOption({ ...search, status: HIST_PUBLISH }));
+            dispatch(changeSearchOption({ ...search, status: DESK_HIST_PUBLISH }));
             dispatch(
                 postPublishComponentWork({
                     componentWorkSeq: component.seq,
@@ -83,7 +85,7 @@ const ComponentWorkButtonGroup = (props) => {
                 }
             },
         };
-        dispatch(changeSearchOption({ ...search, status: HIST_SAVE }));
+        dispatch(changeSearchOption({ ...search, status: DESK_HIST_SAVE }));
         dispatch(postSaveComponentWork(option));
     }, [component.seq, dispatch, search]);
 
@@ -199,6 +201,14 @@ const ComponentWorkButtonGroup = (props) => {
     }, [component.viewYn]);
 
     useEffect(() => {
+        if (component.dataType === DATA_TYPE_DESK) {
+            setTooltipText(`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}, 템플릿ID: ${component.templateSeq}`);
+        } else if (component.dataType === DATA_TYPE_FORM) {
+            setTooltipText(`컴포넌트ID: ${component.componentSeq}, 파트ID: ${component.partSeq}, 템플릿ID: ${component.templateSeq}`);
+        }
+    }, [component.componentSeq, component.dataType, component.datasetSeq, component.partSeq, component.templateSeq]);
+
+    useEffect(() => {
         let btns = [
             { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => setHtmlModalShow(true) },
             // { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModalShow(true) },
@@ -207,22 +217,23 @@ const ComponentWorkButtonGroup = (props) => {
         ];
 
         if (viewN) btns = [{ title: '저장', iconName: 'fal-save', onClick: handleClickSavePublish }];
+        if (component.dataType === DATA_TYPE_FORM) btns = [];
         setIconButton(btns);
-    }, [handleClickSave, handleClickPublish, handleClickSavePublish, viewN]);
+    }, [handleClickSave, handleClickPublish, handleClickSavePublish, viewN, component.dataType]);
 
     return (
         <div className="px-2 py-1">
             <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
                 {/* 예약 + 타이틀 */}
-                <Col className="d-flex align-items-center p-0 position-static" xs={7}>
+                <Col className="d-flex align-items-center p-0 position-static" xs={8}>
                     <ReserveComponentWork component={component} workStatus={workStatus} />
-                    <OverlayTrigger overlay={<Tooltip>{`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}, 템플릿ID: ${component.templateSeq}`}</Tooltip>}>
+                    <OverlayTrigger overlay={<Tooltip>{tooltipText}</Tooltip>}>
                         <p className="ft-12 mb-0 component-title text-truncate">{title}</p>
                     </OverlayTrigger>
                 </Col>
 
                 {/* 기능 버튼 + 드롭다운 메뉴 */}
-                <Col className="p-0 d-flex align-items-center justify-content-end" xs={5}>
+                <Col className="p-0 d-flex align-items-center justify-content-end" xs={4}>
                     {iconButton.map((icon, idx) => (
                         <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-1 py-0 mr-1" onClick={icon.onClick}>
                             <MokaIcon iconName={icon.iconName} />
@@ -232,22 +243,27 @@ const ComponentWorkButtonGroup = (props) => {
                         <Dropdown>
                             <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
                             <Dropdown.Menu className="ft-12">
-                                {!viewN && (
-                                    <React.Fragment>
-                                        <Dropdown.Item eventKey="1" onClick={handleOpenAddSpace}>
-                                            공백 추가
-                                        </Dropdown.Item>
-                                        <Dropdown.Item eventKey="2" onClick={handleClickDelete}>
-                                            전체 삭제
-                                        </Dropdown.Item>
-                                        <Dropdown.Item eventKey="3" onClick={handleOpenRegister}>
-                                            기사 이동
-                                        </Dropdown.Item>
-                                        <Dropdown.Item eventKey="4" onClick={handleOpenListNumber}>
-                                            리스트 건수
-                                        </Dropdown.Item>
-                                    </React.Fragment>
-                                )}
+                                {!viewN &&
+                                    (component.dataType === DATA_TYPE_DESK ? (
+                                        <React.Fragment>
+                                            <Dropdown.Item eventKey="1" onClick={handleOpenAddSpace}>
+                                                공백 추가
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="2" onClick={handleClickDelete}>
+                                                전체 삭제
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="3" onClick={handleOpenRegister}>
+                                                기사 이동
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="4" onClick={handleOpenListNumber}>
+                                                리스트 건수
+                                            </Dropdown.Item>
+                                        </React.Fragment>
+                                    ) : (
+                                        <Button variant="outline-neutral" size="sm">
+                                            폼 편집
+                                        </Button>
+                                    ))}
                                 <Dropdown.Item eventKey="5" onClick={handleClickViewYn}>
                                     {viewN ? '영역 노출' : '영역 비노출'}
                                 </Dropdown.Item>

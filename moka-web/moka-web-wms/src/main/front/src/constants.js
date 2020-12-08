@@ -96,6 +96,11 @@ export const MAX_GROUP_NUMBER = 8;
 // 편집기사 기본언어
 export const DEFAULT_LANG = 'KR';
 
-// 편집상태
-export const HIST_SAVE = 'SAVE'; // 임시저장
-export const HIST_PUBLISH = 'PUBLISH'; // 전송
+// 페이지편집의 편집상태
+export const DESK_HIST_SAVE = 'SAVE'; // 임시저장
+export const DESK_HIST_PUBLISH = 'PUBLISH'; // 전송
+
+// 컴포넌트 데이터타입
+export const DATA_TYPE_DESK = 'DESK';
+export const DATA_TYPE_AUTO = 'AUTO';
+export const DATA_TYPE_FORM = 'FORM';

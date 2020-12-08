@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './deskingAction';
-import { PAGESIZE_OPTIONS, HIST_PUBLISH } from '@/constants';
+import { PAGESIZE_OPTIONS, DESK_HIST_PUBLISH } from '@/constants';
 
 /**
  * initialState
@@ -47,7 +47,7 @@ export const initialState = {
             componentSeq: null,
             componentHistorySeq: null,
             regDt: null,
-            status: HIST_PUBLISH,
+            status: DESK_HIST_PUBLISH,
             searchType: 'all', // all/regId/regNm
             keyword: '',
         },

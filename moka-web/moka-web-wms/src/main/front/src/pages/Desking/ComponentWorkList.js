@@ -47,6 +47,36 @@ const ComponentWorkList = (props) => {
         );
     };
 
+    /**
+     * 컴포넌트 워크 render
+     */
+    const render = React.useCallback(
+        (areaComp) => {
+            const { componentSeq } = areaComp.component;
+            const targetIdx = componentWorkList.findIndex((comp) => comp.componentSeq === componentSeq);
+            const component = componentWorkList[targetIdx];
+
+            if (!component) {
+                return null;
+            } else if (workStatus[component.seq] !== 'work' && component.viewYn === 'N') {
+                return null;
+            } else {
+                return (
+                    <ComponentWork
+                        key={`${area.areaSeq}-${componentSeq}`}
+                        deskingPart={areaComp.deskingPart}
+                        areaSeq={area.areaSeq}
+                        component={component}
+                        editFormPart={areaComp.editFormPart}
+                        agGridIndex={targetIdx}
+                        {...props}
+                    />
+                );
+            }
+        },
+        [area.areaSeq, componentWorkList, props, workStatus],
+    );
+
     useEffect(() => {
         // 왼쪽, 오른쪽 리스트
         if (area.areaDiv === ITEM_CP) {
@@ -99,27 +129,7 @@ const ComponentWorkList = (props) => {
                 </div>
 
                 <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
-                    {leftList.map((areaComp) => {
-                        const targetIdx = componentWorkList.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
-                        const component = componentWorkList[targetIdx];
-
-                        if (!component) {
-                            return null;
-                        } else if (workStatus[component.seq] !== 'work' && component.viewYn === 'N') {
-                            return null;
-                        } else {
-                            return (
-                                <ComponentWork
-                                    key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
-                                    deskingPart={areaComp.deskingPart}
-                                    areaSeq={area.areaSeq}
-                                    component={component}
-                                    agGridIndex={targetIdx}
-                                    {...props}
-                                />
-                            );
-                        }
-                    })}
+                    {leftList.map((areaComp) => render(areaComp))}
                 </div>
             </MokaCard>
 
@@ -128,27 +138,7 @@ const ComponentWorkList = (props) => {
                     <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 45 }}></div>
 
                     <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
-                        {rightList.map((areaComp) => {
-                            const targetIdx = componentWorkList.findIndex((comp) => comp.componentSeq === areaComp.component.componentSeq);
-                            const component = componentWorkList[targetIdx];
-
-                            if (!component) {
-                                return null;
-                            } else if (workStatus[component.seq] !== 'work' && component.viewYn === 'N') {
-                                return null;
-                            } else {
-                                return (
-                                    <ComponentWork
-                                        key={`${area.areaSeq}-${areaComp.component.componentSeq}`}
-                                        areaSeq={area.areaSeq}
-                                        deskingPart={areaComp.deskingPart}
-                                        component={component}
-                                        agGridIndex={targetIdx}
-                                        {...props}
-                                    />
-                                );
-                            }
-                        })}
+                        {rightList.map((areaComp) => render(areaComp))}
                     </div>
                 </MokaCard>
             )}

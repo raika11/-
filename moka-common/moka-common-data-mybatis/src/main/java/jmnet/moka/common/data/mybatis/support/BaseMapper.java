@@ -23,10 +23,10 @@ public interface BaseMapper<T, P> {
      * 신규 데이타 생성 또는 기존 데이타 갱신 처리
      * </pre>
      *
-     * @param model
+     * @param model 입력값
      * @throws RuntimeException
      */
-    void save(P model)
+    int save(T model)
             throws RuntimeException;
 
     /**
@@ -34,10 +34,10 @@ public interface BaseMapper<T, P> {
      * 신규 데이타 생성 처리
      * </pre>
      *
-     * @param model
+     * @param model 입력값
      * @throws RuntimeException
      */
-    int add(P model)
+    int add(T model)
             throws RuntimeException;
 
     /**
@@ -45,10 +45,10 @@ public interface BaseMapper<T, P> {
      * 데이타 갱신 처리
      * </pre>
      *
-     * @param model
+     * @param model 입력값
      * @throws RuntimeException
      */
-    int modify(P model)
+    int modify(T model)
             throws RuntimeException;
 
     /**

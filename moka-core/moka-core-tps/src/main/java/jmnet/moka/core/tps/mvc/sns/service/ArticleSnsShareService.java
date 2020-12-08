@@ -50,6 +50,8 @@ public interface ArticleSnsShareService {
 
     ArticleSnsShare insertArticleSnsShare(ArticleSnsShare entity);
 
+    int insertFbInstanceArticle(ArticleSnsShareItemVO vo);
+
     ArticleSnsShare updateArticleSnsShare(ArticleSnsShare entity);
 
     void deleteArticleSnsShare(ArticleSnsShare entity);

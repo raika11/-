@@ -21,8 +21,12 @@ import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.InstanceArticleSaveDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.service.ArticleSnsShareService;
+import jmnet.moka.core.tps.mvc.sns.service.SnsApiService;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
@@ -53,15 +57,18 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/sns")
-public class ArticleSnsShareController extends AbstractCommonController {
+public class ArticleSnsShareRestController extends AbstractCommonController {
 
     private final ArticleSnsShareService articleSnsShareService;
 
     private final ArticleService articleService;
 
-    public ArticleSnsShareController(ArticleSnsShareService articleSnsShareService, ArticleService articleService) {
+    private final SnsApiService snsApiService;
+
+    public ArticleSnsShareRestController(ArticleSnsShareService articleSnsShareService, ArticleService articleService, SnsApiService snsApiService) {
         this.articleSnsShareService = articleSnsShareService;
         this.articleService = articleService;
+        this.snsApiService = snsApiService;
     }
 
     /**
@@ -199,10 +206,45 @@ public class ArticleSnsShareController extends AbstractCommonController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO INSERT DOMAIN]", e);
+            log.error("[FAIL TO INSERT SNS]", e);
             // 액션 로그에 오류 내용 출력
             tpsLogger.error(ActionType.INSERT, e);
             throw new Exception(msg("tps.sns.error.save"), e);
+        }
+    }
+
+    /**
+     * FB Instance Article 등록
+     *
+     * @param instanceArticle 등록할 페이스북 article 정보
+     * @return 성공여부
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "Facebook Instance Article 등록")
+    @PostMapping("/fb-instance-article")
+    public ResponseEntity<?> postArticleSnsMetaFbIA(@Valid InstanceArticleSaveDTO instanceArticle)
+            throws InvalidDataException, Exception {
+
+        try {
+            // insert
+            int result = articleSnsShareService.insertFbInstanceArticle(modelMapper.map(instanceArticle, ArticleSnsShareItemVO.class));
+
+
+            // 결과리턴
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(result > 0,
+                    result > 0 ? msg("tps.sns.success.save.facebook-instance-article") : msg("tps.sns.error.save.facebook-instance-article"));
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.INSERT);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT FACEBOOK INSTANCE ARTICLE]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(msg("tps.sns.error.save.facebook-instance-article"), e);
         }
     }
 
@@ -253,7 +295,7 @@ public class ArticleSnsShareController extends AbstractCommonController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE DOMAIN]", e);
+            log.error("[FAIL TO UPDATE SNS]", e);
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, e);
             throw new Exception(msg("tps.sns.error.save"), e);
@@ -316,7 +358,78 @@ public class ArticleSnsShareController extends AbstractCommonController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE DOMAIN] totalId: {} {}", totalId, e.getMessage());
+            log.error("[FAIL TO DELETE SNS] totalId: {} {}", totalId, e.getMessage());
+            // 액션 로그에 실패 로그 출력
+            tpsLogger.error(ActionType.DELETE, e.toString());
+            throw new Exception(msg("tps.sns.error.delete"), e);
+        }
+    }
+
+
+    /**
+     * SNS Feed 기사 퍼블리시
+     *
+     * @param snsPublish 등록할 페이스북 article 정보
+     * @return 성공여부
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "Facebook Instance Article 등록")
+    @PostMapping("feed-publish")
+    public ResponseEntity<?> postSnsFeed(@Valid SnsPublishDTO snsPublish)
+            throws InvalidDataException, Exception {
+
+        try {
+            // insert
+            snsApiService.publish(snsPublish);
+
+
+            // 결과리턴
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.sns.success.save.facebook-instance-article"));
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.INSERT);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT FACEBOOK INSTANCE ARTICLE]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(msg("tps.sns.error.save.facebook-instance-article"), e);
+        }
+    }
+
+
+    /**
+     * SNS Feed 기사 삭제
+     *
+     * @param snsDelete 삭제 할 SNS아이디 (필수)
+     * @return 삭제성공여부
+     * @throws InvalidDataException 데이타유효성오류
+     * @throws NoDataException      삭제 할 SNS 없음
+     * @throws Exception            그 외 에러처리
+     */
+    @ApiOperation(value = "SNS 삭제")
+    @DeleteMapping("/feed-delete")
+    public ResponseEntity<?> deleteSnsFeed(SnsDeleteDTO snsDelete)
+            throws InvalidDataException, NoDataException, Exception {
+
+
+        try {
+            // 삭제
+            snsApiService.delete(snsDelete);
+
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.DELETE);
+
+            // 결과리턴
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.sns.success.delete"));
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE SNS] totalId: {} {}", snsDelete.getTotalId(), e.getMessage());
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
             throw new Exception(msg("tps.sns.error.delete"), e);

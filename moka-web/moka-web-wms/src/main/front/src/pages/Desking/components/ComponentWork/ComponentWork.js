@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { DATA_TYPE_DESK } from '@/constants';
+import { DATA_TYPE_DESK, DATA_TYPE_FORM } from '@/constants';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
-import ButtonGroup from './ComponentWorkButtonGroup';
+import ButtonGroup from './ButtonGroup';
 import AgGrid from './DeskingWorkAgGrid';
 import { EditDeskingWorkModal } from '@pages/Desking/modals';
+// import ComponentWorkForm from '@pages/Desking/components/ComponentWorkForm';
 import toast from '@utils/toastUtil';
 
 const propTypes = {
@@ -51,9 +52,10 @@ const ComponentWork = (props) => {
     // state
     const [deskingWorkData, setDeskingWorkData] = useState({});
     const [editModalShow, setEditModalShow] = useState(false);
+    // const [formShow, setFormShow] = useState(false);
 
     /**
-     * 목록에서 Row클릭
+     * 편집기사 목록에서 Row클릭
      */
     const handleRowClicked = (rowData) => {
         setDeskingWorkData(rowData);
@@ -61,8 +63,8 @@ const ComponentWork = (props) => {
     };
 
     /**
-     * 데스킹워크 저장 (put)
-     * @param {object} deskingWork 저장할 데스킹워크 데이터
+     * 편집기사 저장 (put)
+     * @param {object} deskingWork 저장할 편집기사 데이터
      * @param {func} callback 저장 후 실행
      */
     const handleClickSave = (deskingWork, callback) => {
@@ -82,8 +84,8 @@ const ComponentWork = (props) => {
     };
 
     /**
-     * 데스킹워크 삭제 (delete)
-     * @param {object} deskingWork 삭제할 데스킹워크 데이터
+     * 편집기사 삭제 (delete)
+     * @param {object} deskingWork 삭제할 편집기사 데이터
      */
     const handleClickDelete = (deskingWork) => {
         const option = {
@@ -100,48 +102,55 @@ const ComponentWork = (props) => {
     };
 
     return (
-        <React.Fragment>
-            <div
-                className={clsx('component-work', 'border-top', {
-                    disabled: component.viewYn === 'N',
-                    work: workStatus[component.seq] === 'work',
-                    save: workStatus[component.seq] === undefined || workStatus[component.seq] === 'save',
-                    publish: workStatus[component.seq] === 'publish',
-                })}
-                id={`agGrid-${component.seq}`}
-            >
-                {/* 컴포넌트 워크의 버튼 그룹 */}
-                <ButtonGroup
-                    areaSeq={areaSeq}
+        <div
+            className={clsx('component-work', 'border-top', {
+                disabled: component.viewYn === 'N',
+                work: workStatus[component.seq] === 'work',
+                save: workStatus[component.seq] === undefined || workStatus[component.seq] === 'save',
+                publish: workStatus[component.seq] === 'publish',
+            })}
+            id={`agGrid-${component.seq}`}
+        >
+            {/* 컴포넌트 워크의 버튼 그룹 */}
+            <ButtonGroup
+                areaSeq={areaSeq}
+                component={component}
+                agGridIndex={agGridIndex}
+                componentAgGridInstances={componentAgGridInstances}
+                workStatus={workStatus[component.seq]}
+                // handleForm={() => setFormShow(true)}
+            />
+
+            {/* 편집기사 리스트 */}
+            {component.dataType === DATA_TYPE_DESK && (
+                <AgGrid
                     component={component}
                     agGridIndex={agGridIndex}
                     componentAgGridInstances={componentAgGridInstances}
-                    workStatus={workStatus[component.seq]}
+                    setComponentAgGridInstances={setComponentAgGridInstances}
+                    onRowClicked={handleRowClicked}
+                    onSave={handleClickSave}
+                    onDelete={handleClickDelete}
                 />
+            )}
 
-                {/* 데스킹 워크 리스트 (dataType === DESK) */}
-                {component.dataType === DATA_TYPE_DESK && (
-                    <AgGrid
-                        component={component}
-                        agGridIndex={agGridIndex}
-                        componentAgGridInstances={componentAgGridInstances}
-                        setComponentAgGridInstances={setComponentAgGridInstances}
-                        onRowClicked={handleRowClicked}
-                        onSave={handleClickSave}
-                        onDelete={handleClickDelete}
-                    />
-                )}
-            </div>
+            {/* 폼편집 수정창 2020.12.08 주석처리 */}
+            {/* {component.dataType === DATA_TYPE_FORM && formShow && (
+                <ComponentWorkForm show={formShow} editFormPart={editFormPart} component={component} onHide={() => setFormShow(false)} />
+            )} */}
 
-            <EditDeskingWorkModal
-                show={editModalShow}
-                onHide={() => setEditModalShow(false)}
-                deskingWorkData={deskingWorkData}
-                component={component}
-                onSave={handleClickSave}
-                deskingPart={deskingPart}
-            />
-        </React.Fragment>
+            {/* 편집기사 수정 모달 */}
+            {component.dataType === DATA_TYPE_DESK && (
+                <EditDeskingWorkModal
+                    show={editModalShow}
+                    onHide={() => setEditModalShow(false)}
+                    deskingWorkData={deskingWorkData}
+                    component={component}
+                    onSave={handleClickSave}
+                    deskingPart={deskingPart}
+                />
+            )}
+        </div>
     );
 };
 

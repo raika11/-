@@ -2,14 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
-
 import { GET_AREA_TREE, getAreaTree, clearTree } from '@store/area/areaAction';
 import { getComponentWorkList, changeArea, clearList } from '@store/desking/deskingAction';
-
 import DeskingTreeView from './DeskingTreeView';
 
 /**
- * Desking Tree 컴포넌트
+ * Desking Tree
  */
 const DeskingTree = () => {
     // const { areaSeq: paramAreaSeq } = useParams();
@@ -26,20 +24,20 @@ const DeskingTree = () => {
     }));
 
     useEffect(() => {
-        if (!tree) {
-            dispatch(getAreaTree({ search: null, callback: null }));
-        }
+        dispatch(getAreaTree({ search: null, callback: null }));
+    }, [dispatch]);
+
+    useEffect(() => {
         return () => {
-            // unmount
             dispatch(clearTree());
             dispatch(clearList());
         };
+    }, [dispatch]);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // 부모노드 찾기(재귀함수)
-    // 리턴: {findSeq: page.areaSeq,node: null,path: [String(DeskingTree.areaSeq)]};
+    /**
+     * 부모노드 찾기(재귀함수)
+     * 리턴: { findSeq: page.areaSeq, node: null, path: [String(DeskingTree.areaSeq)] };
+     */
     const findNode = useCallback((findInfo, rootNode) => {
         if (rootNode.areaSeq === findInfo.findSeq) {
             return produce(findInfo, (draft) => draft);
@@ -67,17 +65,18 @@ const DeskingTree = () => {
      */
     const handleClick = useCallback(
         (item) => {
-            const option = {
-                areaSeq: item.areaSeq,
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        setSelected(String(item.areaSeq));
-                        history.push(`/desking/${item.areaSeq}`);
-                        dispatch(changeArea(body.area));
-                    }
-                },
-            };
-            dispatch(getComponentWorkList(option));
+            dispatch(
+                getComponentWorkList({
+                    areaSeq: item.areaSeq,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            setSelected(String(item.areaSeq));
+                            history.push(`/desking/${item.areaSeq}`);
+                            dispatch(changeArea(body.area));
+                        }
+                    },
+                }),
+            );
         },
         [dispatch, history],
     );

@@ -9,7 +9,7 @@ import { defaultHistorySearchType } from './index';
 import { MokaCard, MokaTable, MokaSearchInput, MokaInput, MokaInputLabel } from '@components';
 import { initialState, changeSearchOption, getHistoryList, GET_HISTORY_LIST, clearStore, getHistory } from '@store/history';
 import toast from '@utils/toastUtil';
-import columDefs from './HistoryListColums';
+import columDefs from './HistoryListColumns';
 
 const propTypes = {
     /**
@@ -56,6 +56,17 @@ const HistoryList = (props) => {
     useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
+
+    /**
+     * 날짜 변경
+     */
+    const handleDate = (date) => {
+        if (typeof date === 'object') {
+            setSearch({ ...search, regDt: moment(date).format(DB_DATEFORMAT) });
+        } else if (date === '') {
+            setSearch({ ...search, regDt: null });
+        }
+    };
 
     /**
      * 검색 버튼
@@ -170,19 +181,7 @@ const HistoryList = (props) => {
                             timeFormat: null,
                         }}
                         value={moment(search.regDt, DB_DATEFORMAT)}
-                        onChange={(date) => {
-                            if (typeof date === 'object') {
-                                setSearch({
-                                    ...search,
-                                    regDt: moment(date).format(DB_DATEFORMAT),
-                                });
-                            } else {
-                                setSearch({
-                                    ...search,
-                                    regDt: null,
-                                });
-                            }
-                        }}
+                        onChange={handleDate}
                     />
                 </Form.Row>
                 <Form.Row className="mb-2">

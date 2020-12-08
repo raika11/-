@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { DESK_HIST_SAVE, DESK_HIST_PUBLISH, DATA_TYPE_DESK, DATA_TYPE_FORM } from '@/constants';
+import { DATA_TYPE_DESK, DATA_TYPE_FORM } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
-import { changeSearchOption, putComponentWork, postSaveComponentWork, postPublishComponentWork, postSavePublishComponentWork, deleteDeskingWorkList } from '@store/desking';
+import { putComponentWork, postSaveComponentWork, postPublishComponentWork, postSavePublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 import DropdownToggle from './DropdownToggle';
 import ReserveComponentWork from './ReserveComponentWork';
 // import TemplateListModal from '@pages/Template/modals/TemplateListModal';
@@ -17,12 +16,11 @@ import ReserveComponentWork from './ReserveComponentWork';
 import { AddSpaceModal, RegisterModal, EditListNumberModal, EditHtmlModal } from '@pages/Desking/modals';
 
 /**
- * 컴포넌트 워크 버튼 그룹 컴포넌트
+ * 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
-const ComponentWorkButtonGroup = (props) => {
+const ButtonGroup = (props) => {
     const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus } = props;
     const dispatch = useDispatch();
-    const { search } = useSelector((store) => store.desking.history.search);
 
     // state
     const [title, setTitle] = useState('');
@@ -53,7 +51,6 @@ const ComponentWorkButtonGroup = (props) => {
      */
     const handleClickPublish = useCallback(() => {
         messageBox.confirm('전송하시겠습니까?', () => {
-            dispatch(changeSearchOption({ ...search, status: DESK_HIST_PUBLISH }));
             dispatch(
                 postPublishComponentWork({
                     componentWorkSeq: component.seq,
@@ -67,25 +64,25 @@ const ComponentWorkButtonGroup = (props) => {
                 }),
             );
         });
-    }, [component.seq, dispatch, search]);
+    }, [component.seq, dispatch]);
 
     /**
      * 임시저장
      */
     const handleClickSave = useCallback(() => {
-        const option = {
-            componentWorkSeq: component.seq,
-            callback: ({ header }) => {
-                if (header.success) {
-                    toast.success(header.message);
-                } else {
-                    toast.fail(header.message);
-                }
-            },
-        };
-        dispatch(changeSearchOption({ ...search, status: DESK_HIST_SAVE }));
-        dispatch(postSaveComponentWork(option));
-    }, [component.seq, dispatch, search]);
+        dispatch(
+            postSaveComponentWork({
+                componentWorkSeq: component.seq,
+                callback: ({ header }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+    }, [component.seq, dispatch]);
 
     /**
      * 임시저장 + 전송 (영역 미노출 상태를 저장할 때)
@@ -106,26 +103,26 @@ const ComponentWorkButtonGroup = (props) => {
     /**
      * 공백추가
      */
-    const handleOpenAddSpace = () => handleModalShow('space', true);
+    const handleOpenAddSpace = useCallback(() => handleModalShow('space', true), [handleModalShow]);
 
     /**
      * 기사이동
      */
-    const handleOpenRegister = () => {
+    const handleOpenRegister = useCallback(() => {
         if (!componentAgGridInstances[agGridIndex]) return;
         const api = componentAgGridInstances[agGridIndex].api;
         api.getSelectedRows().length < 1 ? toast.warning('기사를 선택해주세요') : handleModalShow('register', true);
-    };
+    }, [agGridIndex, componentAgGridInstances, handleModalShow]);
 
     /**
      * 리스트 건수
      */
-    const handleOpenListNumber = () => handleModalShow('listNumber', true);
+    const handleOpenListNumber = useCallback(() => handleModalShow('listNumber', true), [handleModalShow]);
 
     /**
      * 전체삭제
      */
-    const handleClickDelete = () => {
+    const handleClickDelete = useCallback(() => {
         if (component.deskingWorks.length < 1) {
             toast.warning('삭제할 기사가 없습니다');
             return;
@@ -142,7 +139,7 @@ const ComponentWorkButtonGroup = (props) => {
                 },
             }),
         );
-    };
+    }, [component.datasetSeq, component.deskingWorks, component.seq, dispatch]);
 
     /**
      * 템플릿 변경
@@ -177,7 +174,7 @@ const ComponentWorkButtonGroup = (props) => {
     /**
      * 영역 노출, 비노출
      */
-    const handleClickViewYn = () => {
+    const handleClickViewYn = useCallback(() => {
         dispatch(
             putComponentWork({
                 componentWork: { ...component, viewYn: viewN ? 'Y' : 'N' },
@@ -188,7 +185,33 @@ const ComponentWorkButtonGroup = (props) => {
                 },
             }),
         );
-    };
+    }, [component, dispatch, viewN]);
+
+    /**
+     * 드롭다운 아이템 생성
+     */
+    const createDropdownItem = useCallback(() => {
+        const items = [
+            { text: '공백 기사 추가', viewN: false, onClick: handleOpenAddSpace },
+            { text: '전체 삭제', viewN: false, onClick: handleClickDelete },
+            { text: '기사 이동', viewN: false, onClick: handleOpenRegister },
+            { text: '리스트 건수 변경', viewN: false, onClick: handleOpenListNumber },
+            { text: '영역 노출', viewN: true, onClick: handleClickViewYn },
+            { text: '영역 비노출', viewN: false, onClick: handleClickViewYn },
+        ];
+
+        return (
+            <React.Fragment>
+                {items
+                    .filter((i) => i.viewN === viewN)
+                    .map((i, idx) => (
+                        <Dropdown.Item key={idx} eventKey={idx} onClick={i.onClick}>
+                            {i.text}
+                        </Dropdown.Item>
+                    ))}
+            </React.Fragment>
+        );
+    }, [handleClickDelete, handleClickViewYn, handleOpenAddSpace, handleOpenListNumber, handleOpenRegister, viewN]);
 
     useEffect(() => {
         if (component.componentSeq) setTitle(component.componentName);
@@ -230,42 +253,26 @@ const ComponentWorkButtonGroup = (props) => {
                     </OverlayTrigger>
                 </Col>
 
-                {/* 기능 버튼 + 드롭다운 메뉴 */}
                 <Col className="p-0 d-flex align-items-center justify-content-end" xs={4}>
+                    {/* 기능 버튼 */}
                     {iconButton.map((icon, idx) => (
                         <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-1 py-0 mr-1" onClick={icon.onClick}>
                             <MokaIcon iconName={icon.iconName} />
                         </MokaOverlayTooltipButton>
                     ))}
+
+                    {/* 폼일 경우 폼 편집 버튼 노출 2020.12.08 폼관련 주석처리, 추후 진행 */}
+                    {/* {component.dataType === DATA_TYPE_FORM && (
+                        <Button variant="outline-info" size="sm" className="mr-2" onClick={handleForm}>
+                            폼 편집
+                        </Button>
+                    )} */}
+
+                    {/* 드롭다운 메뉴 */}
                     <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
                         <Dropdown>
                             <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
-                            <Dropdown.Menu className="ft-12">
-                                {!viewN &&
-                                    (component.dataType === DATA_TYPE_DESK ? (
-                                        <React.Fragment>
-                                            <Dropdown.Item eventKey="1" onClick={handleOpenAddSpace}>
-                                                공백 추가
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="2" onClick={handleClickDelete}>
-                                                전체 삭제
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="3" onClick={handleOpenRegister}>
-                                                기사 이동
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="4" onClick={handleOpenListNumber}>
-                                                리스트 건수
-                                            </Dropdown.Item>
-                                        </React.Fragment>
-                                    ) : (
-                                        <Button variant="outline-neutral" size="sm">
-                                            폼 편집
-                                        </Button>
-                                    ))}
-                                <Dropdown.Item eventKey="5" onClick={handleClickViewYn}>
-                                    {viewN ? '영역 노출' : '영역 비노출'}
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
+                            <Dropdown.Menu className="ft-12">{createDropdownItem()}</Dropdown.Menu>
                         </Dropdown>
                     </MokaOverlayTooltipButton>
                 </Col>
@@ -333,4 +340,4 @@ const ComponentWorkButtonGroup = (props) => {
     );
 };
 
-export default ComponentWorkButtonGroup;
+export default ButtonGroup;

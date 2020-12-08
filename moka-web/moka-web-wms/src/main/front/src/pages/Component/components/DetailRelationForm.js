@@ -135,7 +135,7 @@ const DetailRelationForm = (props) => {
                             <MokaInput as="select" value={component.dataType} onChange={handleChangeDataset}>
                                 <option value="DESK">편집</option>
                                 <option value="AUTO">자동</option>
-                                <option value="FORM">폼</option>
+                                {/* <option value="FORM">폼</option> */}
                             </MokaInput>
                         </Col>
 

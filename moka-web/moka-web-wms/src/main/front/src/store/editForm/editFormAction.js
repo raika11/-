@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions';
 import { createRequestActionTypes } from '@store/commons/saga';
-import { createDeskingRequestSaga } from '../desking/deskingSaga';
 
 /**
  * 스토어 데이터 삭제

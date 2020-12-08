@@ -9,10 +9,23 @@ export const postSyntax = ({ content }) => {
     });
 };
 
-// 미리보기
+// 페이지 미리보기
 export const postPreviewPG = ({ page }) => {
     return instance
         .post('/api/merge/previewPG', page, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 기사페이지 미리보기
+export const postPreviewAP = ({ articlePage, totalId }) => {
+    return instance
+        .post(`/api/merge/previewAP/${totalId}`, articlePage, {
             headers: {
                 'Content-Type': 'application/json',
             },

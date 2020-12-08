@@ -57,11 +57,22 @@ export const CLEAR_STORE = 'merge/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 
 /**
- * W3C검사. syntax 체크 -> 머지결과 -> HTML검사
+ * 페이지 W3C검사. syntax 체크 -> 머지결과 -> HTML검사
  */
 export const W3C_PAGE = 'merge/W3C_PAGE';
 export const w3cPage = createAction(W3C_PAGE, ({ content, page, callback }) => ({
     content,
     page,
+    callback,
+}));
+
+/**
+ * 기사페이지 W3C검사. syntax 체크 -> 머지결과 -> HTML검사
+ */
+export const W3C_ARTICLE_PAGE = 'merge/W3C_ARTICLE_PAGE';
+export const w3cArticlePage = createAction(W3C_ARTICLE_PAGE, ({ content, articlePage, totalId, callback }) => ({
+    content,
+    articlePage,
+    totalId,
     callback,
 }));

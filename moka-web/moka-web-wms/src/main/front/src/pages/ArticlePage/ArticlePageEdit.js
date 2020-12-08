@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInputLabel } from '@components';
 import { changeLatestDomainId } from '@store/auth/authAction';
-import { previewPage, w3cPage } from '@store/merge';
+import { previewPage, w3cArticlePage } from '@store/merge';
 import { initialState, getArticlePage, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
@@ -258,9 +258,12 @@ const ArticlePageEdit = ({ onDelete }) => {
             content: artPageBody,
             callback: ({ header, body }) => {
                 if (header.success) {
-                    const item = produce(articlePage, (draft) => {
-                        draft.artPageBody = artPageBody;
-                    });
+                    const item = {
+                        ...produce(articlePage, (draft) => {
+                            draft.artPageBody = artPageBody;
+                        }),
+                        totalId: previewTotalId,
+                    };
                     popupPreview('/preview/article-page', item);
                 } else {
                     toast.fail(header.message || '미리보기에 실패하였습니다');
@@ -268,7 +271,7 @@ const ArticlePageEdit = ({ onDelete }) => {
             },
         };
         dispatch(previewPage(option));
-    }, [articlePage, artPageBody, dispatch]);
+    }, [articlePage, artPageBody, dispatch, previewTotalId]);
 
     /**
      * 미리보기 팝업띄움.
@@ -320,7 +323,8 @@ const ArticlePageEdit = ({ onDelete }) => {
 
         const option = {
             content: artPageBody,
-            page: tempPage,
+            articlePage: tempPage,
+            totalId: previewTotalId,
             callback: ({ header, body }) => {
                 if (header.success) {
                     popupW3C(body);
@@ -329,8 +333,8 @@ const ArticlePageEdit = ({ onDelete }) => {
                 }
             },
         };
-        dispatch(w3cPage(option));
-    }, [articlePage, artPageBody, dispatch]);
+        dispatch(w3cArticlePage(option));
+    }, [articlePage, artPageBody, dispatch, previewTotalId]);
 
     /**
      * W3C 팝업띄움.

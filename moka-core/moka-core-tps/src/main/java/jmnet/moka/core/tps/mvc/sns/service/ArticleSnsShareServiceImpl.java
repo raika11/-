@@ -3,6 +3,8 @@ package jmnet.moka.core.tps.mvc.sns.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.code.SnsTypeCode;
+import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
@@ -38,7 +40,7 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
     }
 
     @Override
-    public Page<ArticleSnsShare> findAllArticleSnsShare(ArticleSnsShareSearchDTO searchDTO) {
+    public Page<ArticleSnsShare> findAllArticleSnsShare(ArticleSnsShareMetaSearchDTO searchDTO) {
         return articleSnsShareRepository.findAllArticleSnsShare(searchDTO);
     }
 
@@ -53,7 +55,7 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
     }
 
     @Override
-    public Optional<ArticleSnsShare> findArticleSnsShareById(Long totalId, String type) {
+    public Optional<ArticleSnsShare> findArticleSnsShareById(Long totalId, SnsTypeCode type) {
         if (McpString.isNotEmpty(type)) {
             return articleSnsShareRepository.findById(ArticleSnsSharePK
                     .builder()
@@ -91,7 +93,7 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
     }
 
     @Override
-    public void deleteArticleSnsShareById(Long totalId, String snsType) {
+    public void deleteArticleSnsShareById(Long totalId, SnsTypeCode snsType) {
         articleSnsShareRepository.deleteById(ArticleSnsSharePK
                 .builder()
                 .totalId(totalId)

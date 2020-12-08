@@ -1,7 +1,9 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +19,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ArticleSnsShareSearchDTO extends SearchDTO {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ArticleSnsShareMetaSearchDTO extends SearchDTO {
+
+    @Builder.Default
+    private SnsTypeCode snsType = SnsTypeCode.FB;
 
     /**
      * 기간 검색 시작일

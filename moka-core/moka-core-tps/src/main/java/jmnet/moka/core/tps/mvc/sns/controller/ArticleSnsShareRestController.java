@@ -14,12 +14,14 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.InstanceArticleSaveDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
@@ -115,7 +117,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             @ApiImplicitParam(name = "size", value = "페이지당 목록수", dataType = "int", paramType = "query", defaultValue = SearchDTO.DEFAULT_SIZE + ""),
             @ApiImplicitParam(name = "useTotal", value = "페이징처리여부", dataType = "String", paramType = "query", defaultValue = MokaConstants.YES)})
     @GetMapping("/send-articles")
-    public ResponseEntity<?> getArticleSnsShareSendList(@SearchParam ArticleSnsShareSearchDTO search) {
+    public ResponseEntity<?> getArticleSnsShareSendList(@SearchParam ArticleSnsShareMetaSearchDTO search) {
 
         ResultListDTO<ArticleSnsShareDTO> resultListMessage = new ResultListDTO<>();
 
@@ -145,7 +147,8 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             SearchDTO.DEFAULT_SIZE + ""), @ApiImplicitParam(name = "snsType", value = "SNS유형", dataType = "String")})
     @GetMapping("/{totalId}")
     public ResponseEntity<?> getArticleSnsShare(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
-            @RequestParam(value = "snsType", required = false) @Length(max = 2, message = "{tps.article-page.error.length.artType}") String snsType)
+            @RequestParam(value = "snsType", required = false)
+            @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType)
             throws NoDataException {
 
         // 조회
@@ -311,7 +314,8 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     @ApiOperation(value = "SNS 동일 정보 존재 여부 확인")
     @GetMapping("/{totalId}/exists")
     public ResponseEntity<?> exists(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
-            @RequestParam(value = "snsType", required = false) @Length(max = 2, message = "{tps.article-page.error.length.artType}") String snsType) {
+            @RequestParam(value = "snsType", required = false)
+            @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType) {
 
         String message = msg("tps.common.success.exists");
         Optional<ArticleSnsShare> articleSnsShare = articleSnsShareService.findArticleSnsShareById(totalId, snsType);
@@ -333,7 +337,8 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     @ApiOperation(value = "SNS 삭제")
     @DeleteMapping("/{totalId}")
     public ResponseEntity<?> deleteArticleSnsShare(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
-            @RequestParam(value = "snsType", required = false) @Length(max = 2, message = "{tps.article-page.error.length.artType}") String snsType)
+            @RequestParam(value = "snsType", required = false)
+            @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType)
             throws InvalidDataException, NoDataException, Exception {
 
 
@@ -369,19 +374,25 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     /**
      * SNS Feed 기사 퍼블리시
      *
-     * @param snsPublish 등록할 페이스북 article 정보
      * @return 성공여부
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "Facebook Instance Article 등록")
-    @PostMapping("feed-publish")
-    public ResponseEntity<?> postSnsFeed(@Valid SnsPublishDTO snsPublish)
+    @PostMapping("/{totalId}/{snsType}/feeds")
+    public ResponseEntity<?> postSnsFeed(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
+            @PathVariable(value = "snsType") @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType,
+            @RequestParam(value = "message") String message)
             throws InvalidDataException, Exception {
 
         try {
             // insert
-            snsApiService.publish(snsPublish);
+            snsApiService.publish(SnsPublishDTO
+                    .builder()
+                    .totalId(totalId)
+                    .snsType(snsType)
+                    .message(message)
+                    .build());
 
 
             // 결과리턴
@@ -404,21 +415,27 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     /**
      * SNS Feed 기사 삭제
      *
-     * @param snsDelete 삭제 할 SNS아이디 (필수)
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
      * @throws NoDataException      삭제 할 SNS 없음
      * @throws Exception            그 외 에러처리
      */
     @ApiOperation(value = "SNS 삭제")
-    @DeleteMapping("/feed-delete")
-    public ResponseEntity<?> deleteSnsFeed(SnsDeleteDTO snsDelete)
+    @DeleteMapping("/{totalId}/{snsType}/feeds/{snsId}")
+    public ResponseEntity<?> deleteSnsFeed(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
+            @PathVariable(value = "snsType") @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType,
+            @PathVariable(value = "snsId") String snsId)
             throws InvalidDataException, NoDataException, Exception {
 
 
         try {
             // 삭제
-            snsApiService.delete(snsDelete);
+            snsApiService.delete(SnsDeleteDTO
+                    .builder()
+                    .snsId(snsId)
+                    .totalId(totalId)
+                    .snsType(snsType)
+                    .build());
 
 
             // 액션 로그에 성공 로그 출력
@@ -429,7 +446,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE SNS] totalId: {} {}", snsDelete.getTotalId(), e.getMessage());
+            log.error("[FAIL TO DELETE SNS] totalId: {} {}", totalId, e.getMessage());
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
             throw new Exception(msg("tps.sns.error.delete"), e);

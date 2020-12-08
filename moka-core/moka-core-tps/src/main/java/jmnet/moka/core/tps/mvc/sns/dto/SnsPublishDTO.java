@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
 import java.io.Serializable;
+import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,6 @@ public class SnsPublishDTO implements Serializable {
     private String message;
 
     @Builder.Default
-    private String snsType = "FB";
+    private SnsTypeCode snsType = SnsTypeCode.FB;
 
 }

@@ -3,6 +3,9 @@ package jmnet.moka.core.tps.mvc.sns.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -42,5 +45,6 @@ public class ArticleSnsSharePK implements Serializable {
      * SNS 타입{FB:페이스북, TW:트위터}
      */
     @Column(name = "SNS_TYPE", nullable = false)
-    private String snsType = "FB";
+    @Enumerated(value = EnumType.STRING)
+    private SnsTypeCode snsType = SnsTypeCode.FB;
 }

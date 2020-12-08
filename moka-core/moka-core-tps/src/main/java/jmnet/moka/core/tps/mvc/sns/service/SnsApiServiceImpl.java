@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.service;
 
+import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +47,12 @@ public class SnsApiServiceImpl implements SnsApiService {
 
     @Value("${sns.twitter.access-token-secret}")
     private String twitterAccessTokenSecret;
+
+    private final RestTemplateHelper restTemplateHelper;
+
+    public SnsApiServiceImpl(RestTemplateHelper restTemplateHelper) {
+        this.restTemplateHelper = restTemplateHelper;
+    }
 
 
 

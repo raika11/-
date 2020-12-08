@@ -1,6 +1,8 @@
 package jmnet.moka.core.tps.mvc.sns.service;
 
 import java.util.Optional;
+import jmnet.moka.core.tps.common.code.SnsTypeCode;
+import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
@@ -27,7 +29,7 @@ public interface ArticleSnsShareService {
      * @param searchDTO 검색 조건
      * @return 검색 결과
      */
-    Page<ArticleSnsShare> findAllArticleSnsShare(ArticleSnsShareSearchDTO searchDTO);
+    Page<ArticleSnsShare> findAllArticleSnsShare(ArticleSnsShareMetaSearchDTO searchDTO);
 
     /**
      * 상세 조회
@@ -44,7 +46,7 @@ public interface ArticleSnsShareService {
      * @param type
      * @return
      */
-    Optional<ArticleSnsShare> findArticleSnsShareById(Long totalId, String type);
+    Optional<ArticleSnsShare> findArticleSnsShareById(Long totalId, SnsTypeCode type);
 
     Optional<ArticleSnsShare> findArticleSnsShareById(ArticleSnsSharePK id);
 
@@ -56,7 +58,7 @@ public interface ArticleSnsShareService {
 
     void deleteArticleSnsShare(ArticleSnsShare entity);
 
-    void deleteArticleSnsShareById(Long totalId, String snsType);
+    void deleteArticleSnsShareById(Long totalId, SnsTypeCode snsType);
 
     /**
      * 기사 목록 조회

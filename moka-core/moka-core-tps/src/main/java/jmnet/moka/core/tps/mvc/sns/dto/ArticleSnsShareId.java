@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
+import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,5 +35,5 @@ public class ArticleSnsShareId {
      * SNS 타입{FB:페이스북, TW:트위터}
      */
     @Builder.Default
-    private String snsType = "FB";
+    private SnsTypeCode snsType = SnsTypeCode.FB;
 }

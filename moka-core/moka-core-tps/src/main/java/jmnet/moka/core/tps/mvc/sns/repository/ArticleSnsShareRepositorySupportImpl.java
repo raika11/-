@@ -3,11 +3,12 @@ package jmnet.moka.core.tps.mvc.sns.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.QArticleSnsShare;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
@@ -29,7 +30,8 @@ public class ArticleSnsShareRepositorySupportImpl extends QuerydslRepositorySupp
     }
 
     @Override
-    public Page<ArticleSnsShare> findAllArticleSnsShare(ArticleSnsShareSearchDTO search) {
+    @EntityGraph(attributePaths = {"articleBasic"}, type = EntityGraph.EntityGraphType.LOAD)
+    public Page<ArticleSnsShare> findAllArticleSnsShare(ArticleSnsShareMetaSearchDTO search) {
         QArticleSnsShare qArticleSnsShare = QArticleSnsShare.articleSnsShare;
 
 
@@ -61,7 +63,10 @@ public class ArticleSnsShareRepositorySupportImpl extends QuerydslRepositorySupp
         }
 
 
-        QueryResults<ArticleSnsShare> list = query.fetchResults();
+        QueryResults<ArticleSnsShare> list = query
+                .join(qArticleSnsShare.articleBasic)
+                .fetchJoin()
+                .fetchResults();
 
         return new PageImpl<ArticleSnsShare>(list.getResults(), search.getPageable(), list.getTotal());
     }

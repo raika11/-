@@ -1,6 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.repository;
 
-import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import org.springframework.data.domain.Page;
 
@@ -18,5 +18,5 @@ import org.springframework.data.domain.Page;
  */
 public interface ArticleSnsShareRepositorySupport {
 
-    Page<ArticleSnsShare> findAllArticleSnsShare(ArticleSnsShareSearchDTO searchDTO);
+    Page<ArticleSnsShare> findAllArticleSnsShare(ArticleSnsShareMetaSearchDTO searchDTO);
 }

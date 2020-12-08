@@ -17,7 +17,9 @@ import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
  */
 public interface SnsApiService {
 
-    void publish(SnsPublishDTO snsPublish);
+    void publish(SnsPublishDTO snsPublish)
+            throws Exception;
 
-    void delete(SnsDeleteDTO snsDelete);
+    void delete(SnsDeleteDTO snsDelete)
+            throws Exception;
 }

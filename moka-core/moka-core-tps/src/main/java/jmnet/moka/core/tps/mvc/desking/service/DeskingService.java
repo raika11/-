@@ -102,6 +102,25 @@ public interface DeskingService {
             throws NoDataException, Exception;
 
     /**
+     * 컴포넌트 예약삭제
+     *
+     * @param componentWorkVO work컴포넌트정보
+     * @throws NoDataException 데이터없음 예외
+     * @throws Exception       기타예외
+     */
+    void deleteReserve(ComponentWorkVO componentWorkVO)
+            throws NoDataException, Exception;
+
+    //    /**
+    //     * 컴포넌트 예약여부 조회
+    //     *
+    //     * @param workVO work컴포넌트정보
+    //     * @return 예약여부. 예약된게 있으면 true
+    //     */
+    //    boolean existReserve(ComponentWorkVO workVO);
+
+
+    /**
      * 컴포넌트 히스토리 등록
      *
      * @param workVO         work컴포넌트정보

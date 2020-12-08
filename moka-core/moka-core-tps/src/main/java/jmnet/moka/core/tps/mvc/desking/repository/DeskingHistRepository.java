@@ -17,5 +17,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface DeskingHistRepository extends JpaRepository<DeskingHist, Long>, DeskingHistRepositorySupport {
 
+    /**
+     * 데이타셋에 해당하는 편집기사목록갯수. 데이타셋에 해당하는 편집기사가 있는지 조사하기 위해 사용
+     *
+     * @param datasetSeq 데이타셋 Seq
+     * @return 편집기사갯수
+     */
     Long countByDatasetSeq(Long datasetSeq);
+
 }

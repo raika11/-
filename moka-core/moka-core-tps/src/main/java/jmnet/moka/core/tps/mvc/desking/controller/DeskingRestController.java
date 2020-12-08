@@ -41,6 +41,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -251,6 +252,72 @@ public class DeskingRestController extends AbstractCommonController {
             throw new Exception(msg("tps.desking.error.reserve"), e);
         }
     }
+
+    /**
+     * 컴포넌트 예약
+     *
+     * @param componentWorkSeq 컴포넌트work SEQ
+     * @param principal        로그인사용자 세션
+     * @return 등록된 편집 컴포넌트정보
+     * @throws Exception
+     */
+    @ApiOperation(value = "컴포넌트 예약 삭제")
+    @DeleteMapping("/components/reserve/{componentWorkSeq}")
+    public ResponseEntity<?> deleteReserveComponentWork(
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            Principal principal)
+            throws Exception {
+
+        try {
+            // 컴포넌트work 조회(편집기사work포함)
+            ComponentWorkVO updateValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+
+            // 컴포넌트 예약, 편집기사 예약
+            deskingService.deleteReserve(updateValue);
+
+            // 수정된 결과 재조회
+            ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+
+            // work를 그대로 리턴
+            String message = msg("tps.desking.success.reserve");
+            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, message);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO RESERVE DESKING]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO RESERVE DESKING]", e, true);
+            throw new Exception(msg("tps.desking.error.reserve"), e);
+        }
+    }
+
+    //    @ApiOperation(value = "컴포넌트 예약 존재여부")
+    //    @GetMapping("/components/reserve/{componentWorkSeq}/exists")
+    //    public ResponseEntity<?> getExistReserveComponentWork(
+    //            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+    //            Principal principal, Date reserveDt)
+    //            throws Exception {
+    //
+    //        try {
+    //            // 컴포넌트work 조회(편집기사work포함)
+    //            ComponentWorkVO updateValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+    //
+    //            // 컴포넌트 예약, 편집기사 예약
+    //            boolean exist = deskingService.existReserve(updateValue);
+    //
+    //            String message = "";
+    //            if (exist) {
+    //                message = messageByLocale.get("tps.desking.success.select.reserve-exist");
+    //            }
+    //            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(exist, message);
+    //            tpsLogger.success(ActionType.SELECT, true);
+    //            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    //
+    //        } catch (Exception e) {
+    //            log.error("[FAIL TO CHECK RESERVE DESKING]", e);
+    //            tpsLogger.error(ActionType.SELECT, "[FAIL TO CECHK RESERVE DESKING]", e, true);
+    //            throw new Exception(msg("tps.desking.error.reserve-exist"), e);
+    //        }
+    //    }
 
     /**
      * 컴포넌트work 수정

@@ -59,4 +59,30 @@ public class ComponentHistRepositorySupportImpl extends QuerydslRepositorySuppor
 
         return query.fetch();
     }
+
+    //    @Override
+    //    public boolean existsReserveComponentSeq(Long componentSeq) {
+    //        QComponentHist componentHist = QComponentHist.componentHist;
+    //        QTemplate template = QTemplate.template;
+    //        QDataset dataset = QDataset.dataset;
+    //        QEditFormPart editFormPart = QEditFormPart.editFormPart;
+    //
+    //        BooleanBuilder builder = new BooleanBuilder();
+    //
+    //        builder.and(componentHist.componentSeq.eq(componentSeq));
+    //        builder.and(componentHist.approvalYn.eq(MokaConstants.NO));
+    //        builder.and(componentHist.status.eq(EditStatusCode.PUBLISH));
+    //        builder.and(componentHist.reserveDt.gt(new Date()));
+    //
+    //        return queryFactory
+    //                .selectFrom(componentHist)
+    //                .leftJoin(componentHist.template, template)
+    //                .fetchJoin()
+    //                .leftJoin(componentHist.dataset, dataset)
+    //                .fetchJoin()
+    //                .leftJoin(componentHist.editFormPart, editFormPart)
+    //                .fetchJoin()
+    //                .where(builder)
+    //                .fetchCount() > 0;
+    //    }
 }

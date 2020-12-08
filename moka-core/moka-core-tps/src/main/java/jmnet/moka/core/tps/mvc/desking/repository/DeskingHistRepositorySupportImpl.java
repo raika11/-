@@ -5,17 +5,12 @@
 package jmnet.moka.core.tps.mvc.desking.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.QComponentHist;
-import jmnet.moka.core.tps.mvc.desking.dto.DeskingHistSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.QDeskingHist;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
@@ -41,12 +36,31 @@ public class DeskingHistRepositorySupportImpl extends QuerydslRepositorySupport 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(componentHist.seq.eq(componentHistSeq));
 
-        JPQLQuery<DeskingHist> query = queryFactory.selectFrom(deskingHist)
-                                                   .innerJoin(deskingHist.componentHist, componentHist)
-                                                  .fetchJoin()
-                                                  .where(builder)
-                                                  .orderBy(deskingHist.contentOrd.asc(), deskingHist.relOrd.asc());
+        JPQLQuery<DeskingHist> query = queryFactory
+                .selectFrom(deskingHist)
+                .innerJoin(deskingHist.componentHist, componentHist)
+                .fetchJoin()
+                .where(builder)
+                .orderBy(deskingHist.contentOrd.asc(), deskingHist.relOrd.asc());
 
         return query.fetch();
     }
+
+    //    @Override
+    //    public boolean existsReserveDatasetSeq(Long datasetSeq) {
+    //        QDeskingHist deskingHist = QDeskingHist.deskingHist;
+    //
+    //        BooleanBuilder builder = new BooleanBuilder();
+    //        builder.and(deskingHist.datasetSeq.eq(datasetSeq));
+    //        builder.and(deskingHist.approvalYn.eq(MokaConstants.NO));
+    //        builder.and(deskingHist.status.eq(EditStatusCode.PUBLISH));
+    //        builder.and(deskingHist.reserveDt.gt(new Date()));
+    //
+    //        return queryFactory
+    //                .selectFrom(deskingHist)
+    //                .fetchJoin()
+    //                .where(builder)
+    //                .fetchCount() > 0;
+    //    }
+
 }

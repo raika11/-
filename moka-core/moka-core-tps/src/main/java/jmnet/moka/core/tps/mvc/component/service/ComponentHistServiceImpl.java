@@ -1,13 +1,18 @@
 package jmnet.moka.core.tps.mvc.component.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
+import jmnet.moka.core.tps.mvc.component.mapper.ComponentMapper;
 import jmnet.moka.core.tps.mvc.component.repository.ComponentHistRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,10 +20,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class ComponentHistServiceImpl implements ComponentHistService {
 
     @Autowired
     private ComponentHistRepository componentHistRepository;
+
+    @Autowired
+    private ComponentMapper componentMapper;
 
     @Override
     public ComponentHist insertComponentHist(ComponentHist history)
@@ -107,5 +116,24 @@ public class ComponentHistServiceImpl implements ComponentHistService {
     @Override
     public Optional<ComponentHist> findComponentHistBySeq(Long seq) {
         return componentHistRepository.findById(seq);
+    }
+
+    //    @Override
+    //    public boolean existsReserveComponentSeq(Long componentSeq) {
+    //        return componentHistRepository.existsReserveComponentSeq(componentSeq);
+    //    }
+
+    @Override
+    public void deleteByReserveComponentSeq(Long componentSeq)
+            throws Exception {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        paramMap.put("componentSeq", componentSeq);
+        paramMap.put("returnValue", returnValue);
+        componentMapper.deleteByReserveComponentSeq(paramMap);
+        if ((int) paramMap.get("returnValue") < 0) {
+            log.debug("DELETE FAIL RESERVE COMPONENT : {} ", returnValue);
+            throw new Exception("Failed to delete RESERVE COMPONENT error code: " + returnValue);
+        }
     }
 }

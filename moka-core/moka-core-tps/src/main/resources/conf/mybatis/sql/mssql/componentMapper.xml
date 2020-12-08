@@ -166,4 +166,13 @@
     #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
     ) }
   </select>
+
+  <!--히스토리에서 예약된 기사 삭제-->
+  <select id="deleteByReserveComponentSeq"
+    parameterType="hashMap" resultType="java.lang.Long" statementType="CALLABLE">
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_COMPONENT_HIST_DEL_BY_RESERVE(
+			#{componentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+  </select>
+
 </mapper>

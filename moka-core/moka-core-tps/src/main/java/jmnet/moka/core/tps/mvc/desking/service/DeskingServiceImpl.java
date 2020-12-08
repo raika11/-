@@ -325,6 +325,9 @@ public class DeskingServiceImpl implements DeskingService {
                 .reserveDt(reserveDt)
                 .build();
 
+        // 기존예약 삭제
+        deleteReserveHist(componentWorkVO);
+
         // 컴포넌트 히스토리만 추가
         ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO);
 
@@ -332,6 +335,41 @@ public class DeskingServiceImpl implements DeskingService {
         insertDeskingHist(componentHist, componentWorkVO.getDeskingWorks(), regId);
 
     }
+
+    private void deleteReserveHist(ComponentWorkVO workVO)
+            throws Exception {
+        // 예약 편집기사 삭제
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        paramMap.put("datasetSeq", workVO.getDatasetSeq());
+        paramMap.put("returnValue", returnValue);
+        deskingMapper.deleteByReserveDatasetSeq(paramMap);
+        if ((int) paramMap.get("returnValue") < 0) {
+            log.debug("DELETE FAIL RESERVE DATASET : {} ", returnValue);
+            throw new Exception("Failed to delete RESERVE DATASET error code: " + returnValue);
+        }
+
+        // 예약 컴포넌트 삭제제
+        componentHistService.deleteByReserveComponentSeq(workVO.getComponentSeq());
+    }
+
+    @Override
+    @Transactional
+    public void deleteReserve(ComponentWorkVO componentWorkVO)
+            throws Exception {
+        // 기존예약 삭제
+        deleteReserveHist(componentWorkVO);
+    }
+
+    //    @Override
+    //    public boolean existReserve(ComponentWorkVO workVO) {
+    //        // 컴포넌트 히스토리 예약여부
+    //        boolean exist = componentHistService.existsReserveComponentSeq(workVO.getComponentSeq());
+    //        if (!exist) {
+    //            exist = deskingHistRepository.existsReserveDatasetSeq(workVO.getDatasetSeq());
+    //        }
+    //        return exist;
+    //    }
 
     @Override
     public ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO)

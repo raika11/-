@@ -108,27 +108,6 @@ const ArticlePageEdit = ({ onDelete }) => {
         }
     }, [invalidList]);
 
-    const makePageUrl = useCallback(
-        (name, value) => {
-            let url = '';
-            if (name === 'pageServiceName') {
-                url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${value}`;
-                if (/[^\s\t\n]+/.test(temp.urlParam)) {
-                    url = `${url}/*`;
-                }
-            } else if (name === 'urlParam') {
-                url = `${temp.parent.pageUrl === '/' ? '' : temp.parent.pageUrl}/${temp.pageServiceName}`;
-                if (/[^\s\t\n]+/.test(value)) {
-                    url = `${url}/*`;
-                }
-            } else {
-                url = temp.pageUrl;
-            }
-            return url;
-        },
-        [temp],
-    );
-
     /**
      * 각 항목별 값 변경
      */

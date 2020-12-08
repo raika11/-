@@ -28,6 +28,7 @@ import desking from '@store/desking/deskingReducer';
 import member from '@store/member/memberReducer';
 import columnist from '@store/columnist/columnistReducer';
 import photoArchive from '@store/photoArchive/photoArchiveReducer';
+import articlePage from '@store/articlePage/articlePageReducer';
 
 export default combineReducers({
     toastr,
@@ -58,4 +59,5 @@ export default combineReducers({
     member,
     columnist,
     photoArchive,
+    articlePage,
 });

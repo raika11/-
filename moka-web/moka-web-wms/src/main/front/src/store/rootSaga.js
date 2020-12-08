@@ -25,6 +25,7 @@ import memberSaga from '@store/member/memberSaga';
 import directLinkSaga from '@store/directLink/directLinkSaga';
 import columnistSaga from '@store/columnist/columnistSaga';
 import photoArchiveSaga from '@store/photoArchive/photoArchiveSaga';
+import articlePageSaga from '@/store/articlePage/articlePageSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -53,5 +54,6 @@ export default function* rootSaga() {
         directLinkSaga(),
         columnistSaga(),
         photoArchiveSaga(),
+        articlePageSaga(),
     ]);
 }

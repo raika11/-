@@ -32,6 +32,8 @@ export const ITEM_DS = 'DS';
 export const CODETYPE_API = 'API';
 // 공통코드 : 페이지타입
 export const CODETYPE_PAGE_TYPE = 'PAGE_TYPE';
+// 공통코드 : 기사타입
+export const CODETYPE_ARTICLE_TYPE = 'AT';
 // 공통코드 : 템플릿사이즈, 템플릿위치그룹
 export const CODETYPE_TP_SIZE = 'TP_SIZE';
 export const CODETYPE_TP_ZONE = 'TP_ZONE';

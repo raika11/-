@@ -29,6 +29,7 @@ const Member = React.lazy(() => import('@pages/Member'));
 const Columnist = React.lazy(() => import('@pages/Columnist'));
 const SnsMata = React.lazy(() => import('@pages/SnsManage/SnsMata'));
 const FbArt = React.lazy(() => import('@pages/SnsManage/FbArt'));
+const ArticlePage = React.lazy(() => import('@pages/ArticlePage'));
 
 const routes = [
     {
@@ -277,6 +278,16 @@ const routes = [
         name: 'fb-art',
         displayName: 'FB전송기사 관리',
         component: FbArt,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/article-page',
+        name: 'article-page',
+        displayName: '기사페이지 관리',
+        component: ArticlePage,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

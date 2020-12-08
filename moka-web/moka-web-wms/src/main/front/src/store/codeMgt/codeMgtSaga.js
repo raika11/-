@@ -325,6 +325,7 @@ export const getDsTitleLoc = createReadOnlySaga(act.GET_DS_TITLE_LOC, 'dsTitleLo
 export const getDsPre = createReadOnlySaga(act.GET_DS_PRE, 'dsPreRows', constants.CODETYPE_DS_PRE);
 export const getDsPreLoc = createReadOnlySaga(act.GET_DS_PRE_LOC, 'dsPreLocRows', constants.CODETYPE_DS_PRE_LOC);
 export const getDsIcon = createReadOnlySaga(act.GET_DS_ICON, 'dsIconRows', constants.CODETYPE_DS_ICON);
+export const getArticleType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'articleTypeRows', constants.CODETYPE_ARTICLE_TYPE);
 
 /** saga */
 export default function* codeMgt() {
@@ -354,4 +355,5 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_DS_PRE, getDsPre);
     yield takeLatest(act.GET_DS_PRE_LOC, getDsPreLoc);
     yield takeLatest(act.GET_DS_ICON, getDsIcon);
+    yield takeLatest(act.GET_ARTICLE_TYPE, getArticleType);
 }

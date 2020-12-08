@@ -14,7 +14,11 @@ const SnsMataSearch = ({ searchOptions }) => {
     const [dateType, setDateType] = useState('today');
     const [disabled, setDisabled] = useState({ date: true });
     const dateFormat = 'yyyy-MM-dd';
-    const today = commonUtil.dateFormat(new Date(), dateFormat);
+
+    // 에러 나서 수정 해놨습니다.
+    // const today = commonUtil.dateFormat(new Date(), dateFormat);
+    const today = new Date();
+
     //const [values, setValues] = useState({ dateType: 'today', startDt: today, endDt: today });
     const [options, setOptions] = useState(searchOptions);
     const dispatch = useDispatch();

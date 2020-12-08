@@ -6,10 +6,10 @@ const StatusIdle = () => <div className="justify-content-between mr-3 p-1 pl-2">
 const StatusSend = ({ faceBook, twitter }) => {
     return (
         <>
-            <div className="d-flex justify-content-between p-1">
+            <div className="d-flex">
                 <MokaIcon iconName="fab-facebook-square" size="2x" style={faceBook === 'Y' ? { color: '3B5998' } : { color: 'ADB1BE' }} />
             </div>
-            <div className="d-flex justify-content-between p-1">
+            <div className="d-flex">
                 <MokaIcon iconName="fab-twitter-square" size="2x" style={twitter === 'Y' ? { color: '00ACEE' } : { color: 'ADB1BE' }} />
             </div>
         </>
@@ -23,8 +23,8 @@ const SendStatusRenderer = ({ sendFlag, facebook, twitter }) => {
 
     return (
         <>
-            <div className="d-flex py-1 justify-content-center">
-                <div className="d-flex py-2">{sendFlag === 'Y' ? <StatusSend faceBook={facebook} twitter={twitter} /> : <StatusIdle />}</div>
+            <div className="d-flex">
+                <div className="d-flex">{sendFlag === 'Y' ? <StatusSend faceBook={facebook} twitter={twitter} /> : <StatusIdle />}</div>
             </div>
         </>
     );

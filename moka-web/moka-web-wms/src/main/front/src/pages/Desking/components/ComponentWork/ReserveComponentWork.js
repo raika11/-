@@ -28,8 +28,10 @@ const ReserveComponentWork = ({ component, workStatus }) => {
         if (typeof date === 'object') {
             setReserveDt(date);
             setError(false);
-        } else {
+        } else if (date === '') {
             setReserveDt(null);
+        } else {
+            setError(true);
         }
     };
 

@@ -103,15 +103,15 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
         return (
             <InputGroup style={{ width }} size={size}>
                 <InputMask
-                    {...props}
-                    onFocus={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }}
+                    onChange={props.onChange}
+                    onKeyDown={props.onKeyDown}
+                    value={props.value}
                     className={clsx(props.className, inputClassName, { 'is-invalid': isInvalid })}
-                    mask={dateTimeFormat.replace(/y|m|d|h|s/gi, '9')}
                     placeholder={placeholder}
                     disabled={disabled}
+                    mask={dateTimeFormat.replace(/y|m|d|h|s/gi, '9')}
+                    alwaysShowMask={false}
+                    maskChar={null}
                 />
                 <InputGroup.Append>
                     <Button variant="searching" disabled={disabled} onClick={openCalendar}>

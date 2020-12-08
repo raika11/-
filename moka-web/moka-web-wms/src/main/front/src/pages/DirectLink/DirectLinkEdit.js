@@ -77,6 +77,8 @@ const DirectLinkEdit = ({ history }) => {
     const handleSDate = (date) => {
         if (typeof date === 'object') {
             setTemp({ ...temp, viewSDate: date });
+        } else if (date === '') {
+            setTemp({ ...temp, viewSDate: null });
         }
     };
 
@@ -87,6 +89,8 @@ const DirectLinkEdit = ({ history }) => {
     const handleEDate = (date) => {
         if (typeof date === 'object') {
             setTemp({ ...temp, viewEDate: date });
+        } else if (date === '') {
+            setTemp({ ...temp, viewEDate: null });
         }
     };
 

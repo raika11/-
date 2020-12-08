@@ -45,6 +45,14 @@ const ComponentEdit = ({ onDelete }) => {
     const validate = (temp) => {
         let isInvalid = false;
         let errList = [];
+        errList = errList.concat(
+            Object.keys(error)
+                .filter((e) => error[e])
+                .map((e) => ({ field: e, reason: '' })),
+        );
+        if (errList.length > 0) {
+            isInvalid = true;
+        }
 
         // 컴포넌트명 체크
         if (!temp.componentName || !REQUIRED_REGEX.test(temp.componentName)) {
@@ -221,12 +229,13 @@ const ComponentEdit = ({ onDelete }) => {
                 onClickSave={handleClickSave}
                 onClickDelete={() => onDelete(component)}
                 error={error}
+                setError={setError}
             />
             <hr className="divider mb-0" />
             <div className="custom-scroll component-padding-box py-3" style={{ height: 615 }}>
-                <DetailRelationForm component={temp} setComponent={setTemp} inputTag={inputTag} error={error} />
+                <DetailRelationForm component={temp} setComponent={setTemp} inputTag={inputTag} error={error} setError={setError} />
                 <hr className="divider" />
-                <DetailPeriodForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />
+                <DetailPeriodForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} error={error} setError={setError} />
                 <hr className="divider" />
                 <DetailSchForm component={temp} setComponent={setTemp} available={temp.dataType !== 'NONE'} />
                 <hr className="divider" />

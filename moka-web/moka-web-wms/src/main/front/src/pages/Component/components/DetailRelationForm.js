@@ -8,13 +8,12 @@ import { TemplateListModal } from '@pages/Template/modals';
 import { EditFormPartListModal } from '@pages/EditForm/modals';
 
 const DetailRelationForm = (props) => {
-    const { component, setComponent, inputTag, error } = props;
+    const { component, setComponent, inputTag, error, setError } = props;
 
     // state
     const [templateModalShow, setTemplateModalShow] = useState(false);
     const [datasetModalShow, setDatasetModalShow] = useState(false);
     const [formModalShow, setFormModalShow] = useState(false);
-    const [templateError, setTemplateError] = useState(false);
 
     const [dataset, setDataset] = useState({});
     const [template, setTemplate] = useState({});
@@ -85,14 +84,6 @@ const DetailRelationForm = (props) => {
         setEditFormPart(component.editFormPart || {});
     }, [component]);
 
-    useEffect(() => {
-        setTemplateError(false);
-    }, [component.componentSeq]);
-
-    useEffect(() => {
-        setTemplateError(error.template);
-    }, [error]);
-
     return (
         <Form>
             {/* 템플릿 */}
@@ -121,7 +112,7 @@ const DetailRelationForm = (props) => {
                     icon: <MokaIcon iconName="fal-search" />,
                     onIconClick: () => setTemplateModalShow(true),
                 }}
-                isInvalid={templateError}
+                isInvalid={error.template}
                 required
             />
             {/* 데이터셋 */}
@@ -224,7 +215,7 @@ const DetailRelationForm = (props) => {
                         template,
                     });
                     if (template.templateSeq) {
-                        setTemplateError(false);
+                        setError({ ...error, template: false });
                     }
                 }}
                 selected={template.templateSeq}

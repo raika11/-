@@ -6,16 +6,11 @@ import { MokaInputLabel } from '@components';
 import CopyModal from '../modals/CopyModal';
 
 const BasicForm = (props) => {
-    const { component, setComponent, componentNameRegex, onClickSave, onClickDelete, error } = props;
+    const { component, setComponent, componentNameRegex, onClickSave, onClickDelete, error, setError } = props;
 
     // state
-    const [componentNameError, setComponentNameError] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
     const [copyModalShow, setCopyModalShow] = useState(false);
-
-    useEffect(() => {
-        setComponentNameError(error.componentName);
-    }, [error]);
 
     useEffect(() => {
         if (!component.componentSeq) {
@@ -23,7 +18,6 @@ const BasicForm = (props) => {
         } else {
             setBtnDisabled(false);
         }
-        setComponentNameError(false);
     }, [component.componentSeq]);
 
     return (
@@ -63,10 +57,10 @@ const BasicForm = (props) => {
                                 componentName: e.target.value,
                             });
                             if (componentNameRegex.test(e.target.value)) {
-                                setComponentNameError(false);
+                                setError({ ...error, componentName: false });
                             }
                         }}
-                        isInvalid={componentNameError}
+                        isInvalid={error.componentName}
                         required
                     />
                 </Col>

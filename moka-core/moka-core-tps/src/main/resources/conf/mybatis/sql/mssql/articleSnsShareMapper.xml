@@ -40,6 +40,7 @@
     ) }
   </select>
 
+  <!-- facebook instance article 등록 -->
   <select id="insertFbInstanceArticle" parameterType="ArticleSnsShareItemVO" resultType="Integer"
     statementType="CALLABLE">
     {call UPA_FB_INSTANT_ARTICLE_INS(

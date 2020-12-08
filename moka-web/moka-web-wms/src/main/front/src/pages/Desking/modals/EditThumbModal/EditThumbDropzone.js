@@ -11,8 +11,13 @@ const EditThumbDropzone = ({ collapse, setCollapse }) => {
     const [addIndex, setAddIndex] = useState(-1);
     const cardRef = useRef(null);
 
+    /**
+     * 드롭존으로 사용하기 위한 hook
+     */
     const [{ isOver }, drop] = useDrop({
+        // 지정된 유형 소스에 의해 생성된 항목에만 반응
         accept: ItemTypes.GIF,
+
         drop: (item, monitor) => {
             // 새 아이템만 등록
             if (item.move) return;

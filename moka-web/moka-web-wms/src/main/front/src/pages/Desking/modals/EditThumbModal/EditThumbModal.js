@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import clsx from 'clsx';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MokaModal, MokaCardTabs } from '@components';
+import { initialState, getPhotoList, getPhotoTypes, changeSearchOption, clearStore } from '@store/photoArchive';
 import EditThumbSearch from './EditThumbSearch';
 import EditThumbTable from './EditThumbTable';
 import EditThumbDropzone from './EditThumbDropzone';
@@ -12,7 +14,49 @@ import EditThumbDropzone from './EditThumbDropzone';
  */
 const EditThumbModal = (props) => {
     const { show, onHide } = props;
+    const dispatch = useDispatch();
+    const { total, list, storeSearch, imageTypeList, photo } = useSelector(
+        (store) => ({
+            total: store.photoArchive.total,
+            list: store.photoArchive.list,
+            storeSearch: store.photoArchive.search,
+            imageTypeList: store.photoArchive.search.imageTypeList,
+            photo: store.photoArchive.photo,
+        }),
+        shallowEqual,
+    );
+
+    const [search, setSearch] = useState(initialState.search);
     const [collapse, setCollapse] = useState(true);
+
+    useEffect(() => {
+        // 스토어의 search 객체 변경시 로컬의 search 변경
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    /**
+     * 모달 show 포토아카이브 목록 셋팅
+     */
+    useEffect(() => {
+        if (show) {
+            dispatch(getPhotoList());
+            dispatch(getPhotoTypes());
+        } else if (onHide) {
+            dispatch(clearStore());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show]);
+
+    /**
+     * 테이블에서 검색옵션 변경
+     */
+    const handleChangeSearchOption = ({ key, value }) => {
+        let temp = { ...search, [key]: value };
+        if (key !== 'page') {
+            temp['page'] = 0;
+        }
+        dispatch(getPhotoList(changeSearchOption(temp)));
+    };
 
     return (
         <MokaModal
@@ -37,9 +81,9 @@ const EditThumbModal = (props) => {
                     className="shadow-none w-100"
                     tabs={[
                         <React.Fragment>
-                            <div className="px-3 pt-0 pb-2">
-                                <EditThumbSearch />
-                                <EditThumbTable />
+                            <div className="px-3 py-2">
+                                <EditThumbSearch search={search} setSearch={setSearch} imageTypeList={imageTypeList} />
+                                <EditThumbTable total={total} page={search.page} size={search.pageCount} data={list} onChangeSearchOption={handleChangeSearchOption} />
                             </div>
                         </React.Fragment>,
                     ]}

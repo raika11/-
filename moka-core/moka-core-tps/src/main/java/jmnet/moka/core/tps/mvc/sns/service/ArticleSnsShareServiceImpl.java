@@ -9,14 +9,13 @@ import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.core.tps.mvc.sns.mapper.ArticleSnsShareMapper;
 import jmnet.moka.core.tps.mvc.sns.repository.ArticleSnsShareRepository;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 /**
  * <pre>
- *
+ * SNS 기사 Service Implementation
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.sns.service
  * ClassName : ArticleSnsShareServiceImpl
@@ -29,13 +28,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
-    @Autowired
-    private ArticleSnsShareRepository articleSnsShareRepository;
+    private final ArticleSnsShareRepository articleSnsShareRepository;
 
-    @Autowired
-    private ArticleSnsShareMapper articleSnsShareMapper;
+    private final ArticleSnsShareMapper articleSnsShareMapper;
 
-
+    public ArticleSnsShareServiceImpl(ArticleSnsShareRepository articleSnsShareRepository, ArticleSnsShareMapper articleSnsShareMapper) {
+        this.articleSnsShareRepository = articleSnsShareRepository;
+        this.articleSnsShareMapper = articleSnsShareMapper;
+    }
 
     @Override
     public Page<ArticleSnsShare> findAllArticleSnsShare(ArticleSnsShareSearchDTO searchDTO) {
@@ -76,6 +76,11 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
     }
 
     @Override
+    public int insertFbInstanceArticle(ArticleSnsShareItemVO vo) {
+        return articleSnsShareMapper.insertFbInstanceArticle(vo);
+    }
+
+    @Override
     public ArticleSnsShare updateArticleSnsShare(ArticleSnsShare entity) {
         return articleSnsShareRepository.save(entity);
     }
@@ -97,6 +102,6 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
     @Override
     public Page<ArticleSnsShareItemVO> findAllSendArticle(ArticleSnsShareSearchDTO searchDTO) {
         List<ArticleSnsShareItemVO> articleSnsShareList = articleSnsShareMapper.findAll(searchDTO);
-        return new PageImpl<ArticleSnsShareItemVO>(articleSnsShareList, searchDTO.getPageable(), searchDTO.getTotal());
+        return new PageImpl<>(articleSnsShareList, searchDTO.getPageable(), searchDTO.getTotal());
     }
 }

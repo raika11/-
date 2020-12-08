@@ -199,10 +199,45 @@ public class ArticleSnsShareController extends AbstractCommonController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO INSERT DOMAIN]", e);
+            log.error("[FAIL TO INSERT SNS]", e);
             // 액션 로그에 오류 내용 출력
             tpsLogger.error(ActionType.INSERT, e);
             throw new Exception(msg("tps.sns.error.save"), e);
+        }
+    }
+
+    /**
+     * FB Instance Article 등록
+     *
+     * @param articleSnsShareItemVO 등록할 페이스북 article 정보
+     * @return 성공여부
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "Facebook Instance Article 등록")
+    @PostMapping("/fb-instance-article")
+    public ResponseEntity<?> postArticleSnsMetaFbIA(@Valid ArticleSnsShareItemVO articleSnsShareItemVO)
+            throws InvalidDataException, Exception {
+
+        try {
+            // insert
+            int result = articleSnsShareService.insertFbInstanceArticle(articleSnsShareItemVO);
+
+
+            // 결과리턴
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(result > 0,
+                    result > 0 ? msg("tps.sns.success.save.facebook-instance-article") : msg("tps.sns.error.save.facebook-instance-article"));
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.INSERT);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT FACEBOOK INSTANCE ARTICLE]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(msg("tps.sns.error.save.facebook-instance-article"), e);
         }
     }
 
@@ -253,7 +288,7 @@ public class ArticleSnsShareController extends AbstractCommonController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE DOMAIN]", e);
+            log.error("[FAIL TO UPDATE SNS]", e);
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, e);
             throw new Exception(msg("tps.sns.error.save"), e);
@@ -316,7 +351,7 @@ public class ArticleSnsShareController extends AbstractCommonController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE DOMAIN] totalId: {} {}", totalId, e.getMessage());
+            log.error("[FAIL TO DELETE SNS] totalId: {} {}", totalId, e.getMessage());
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
             throw new Exception(msg("tps.sns.error.delete"), e);

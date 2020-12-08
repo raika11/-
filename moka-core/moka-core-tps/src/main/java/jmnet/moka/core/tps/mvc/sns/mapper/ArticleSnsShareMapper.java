@@ -17,4 +17,7 @@ import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
  * @since 2020-12-04 09:41
  */
 public interface ArticleSnsShareMapper extends BaseMapper<ArticleSnsShareItemVO, ArticleSnsShareSearchDTO> {
+
+    int insertFbInstanceArticle(ArticleSnsShareItemVO vo);
+
 }

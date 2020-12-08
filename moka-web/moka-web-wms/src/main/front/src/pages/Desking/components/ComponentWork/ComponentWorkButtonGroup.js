@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -10,22 +10,11 @@ import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import { DESK_HIST_SAVE, DESK_HIST_PUBLISH, DATA_TYPE_DESK, DATA_TYPE_FORM } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { changeSearchOption, putComponentWork, postSaveComponentWork, postPublishComponentWork, postSavePublishComponentWork, deleteDeskingWorkList } from '@store/desking';
-
+import DropdownToggle from './DropdownToggle';
 import ReserveComponentWork from './ReserveComponentWork';
-import TemplateListModal from '@pages/Template/modals/TemplateListModal';
-import TemplateHtmlModal from '@pages/Template/modals/TemplateHtmlModal';
+// import TemplateListModal from '@pages/Template/modals/TemplateListModal';
+// import TemplateHtmlModal from '@pages/Template/modals/TemplateHtmlModal';
 import { AddSpaceModal, RegisterModal, EditListNumberModal, EditHtmlModal } from '@pages/Desking/modals';
-
-/**
- * 커스텀 토글
- */
-const customToggle = forwardRef(({ onClick, id }, ref) => {
-    return (
-        <div ref={ref} className="px-2" onClick={onClick} id={id}>
-            <MokaIcon iconName="fal-ellipsis-v-alt" />
-        </div>
-    );
-});
 
 /**
  * 컴포넌트 워크 버튼 그룹 컴포넌트
@@ -37,18 +26,27 @@ const ComponentWorkButtonGroup = (props) => {
 
     // state
     const [title, setTitle] = useState('');
-    const [selectedTemplate, setSelectedTemplate] = useState(null);
+    // const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [viewN, setViewN] = useState(false);
     const [tooltipText, setTooltipText] = useState('');
     const [iconButton, setIconButton] = useState([]);
 
     // modal state
-    const [htmlModalShow, setHtmlModalShow] = useState(false);
-    const [templateModalShow, setTemplateModalShow] = useState(false);
-    const [temsModalShow, setTemsModalShow] = useState(false);
-    const [spaceModalShow, setSpaceModalShow] = useState(false);
-    const [registerModalShow, setRegisterModalShow] = useState(false);
-    const [listNumberModalShow, setListNumberModalShow] = useState(false);
+    const [modalShow, setModalShow] = useState({
+        html: false,
+        template: false,
+        tems: false,
+        space: false,
+        register: false,
+        listNumber: false,
+    });
+
+    const handleModalShow = useCallback(
+        (key, showOrClose) => {
+            setModalShow({ ...modalShow, [key]: showOrClose });
+        },
+        [modalShow],
+    );
 
     /**
      * 전송
@@ -108,7 +106,7 @@ const ComponentWorkButtonGroup = (props) => {
     /**
      * 공백추가
      */
-    const handleOpenAddSpace = () => setSpaceModalShow(true);
+    const handleOpenAddSpace = () => handleModalShow('space', true);
 
     /**
      * 기사이동
@@ -116,13 +114,13 @@ const ComponentWorkButtonGroup = (props) => {
     const handleOpenRegister = () => {
         if (!componentAgGridInstances[agGridIndex]) return;
         const api = componentAgGridInstances[agGridIndex].api;
-        api.getSelectedRows().length < 1 ? toast.warning('기사를 선택해주세요') : setRegisterModalShow(true);
+        api.getSelectedRows().length < 1 ? toast.warning('기사를 선택해주세요') : handleModalShow('register', true);
     };
 
     /**
      * 리스트 건수
      */
-    const handleOpenListNumber = () => setListNumberModalShow(true);
+    const handleOpenListNumber = () => handleModalShow('listNumber', true);
 
     /**
      * 전체삭제
@@ -149,32 +147,32 @@ const ComponentWorkButtonGroup = (props) => {
     /**
      * 템플릿 변경
      */
-    const handleChangeTemplate = (templateData) => {
-        if (!templateData.templateSeq) {
-            toast.warning('선택된 템플릿이 없습니다');
-            return;
-        }
-        dispatch(
-            putComponentWork({
-                componentWork: { ...component, templateSeq: templateData.templateSeq },
-                callback: ({ header }) => {
-                    if (!header.success) {
-                        toast.fail(header.message);
-                    }
-                },
-            }),
-        );
-    };
+    // const handleChangeTemplate = (templateData) => {
+    //     if (!templateData.templateSeq) {
+    //         toast.warning('선택된 템플릿이 없습니다');
+    //         return;
+    //     }
+    //     dispatch(
+    //         putComponentWork({
+    //             componentWork: { ...component, templateSeq: templateData.templateSeq },
+    //             callback: ({ header }) => {
+    //                 if (!header.success) {
+    //                     toast.fail(header.message);
+    //                 }
+    //             },
+    //         }),
+    //     );
+    // };
 
     /**
      * 템플릿 썸네일테이블 -> tems 소스보기
      */
-    const handleOpenTemplateTems = (templateData) => {
-        if (templateData) {
-            setSelectedTemplate(templateData?.templateSeq);
-            setTemsModalShow(true);
-        }
-    };
+    // const handleOpenTemplateTems = (templateData) => {
+    //     if (templateData) {
+    //         setSelectedTemplate(templateData?.templateSeq);
+    //         handleModalShow('tems', true);
+    //     }
+    // };
 
     /**
      * 영역 노출, 비노출
@@ -210,16 +208,16 @@ const ComponentWorkButtonGroup = (props) => {
 
     useEffect(() => {
         let btns = [
-            { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => setHtmlModalShow(true) },
+            { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => handleModalShow('html', true) },
             // { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModalShow(true) },
             { title: '임시저장', iconName: 'fal-save', onClick: handleClickSave },
             { title: '전송', iconName: 'fal-share-square', onClick: handleClickPublish },
         ];
-
         if (viewN) btns = [{ title: '저장', iconName: 'fal-save', onClick: handleClickSavePublish }];
         if (component.dataType === DATA_TYPE_FORM) btns = [];
+
         setIconButton(btns);
-    }, [handleClickSave, handleClickPublish, handleClickSavePublish, viewN, component.dataType]);
+    }, [handleClickSave, handleClickPublish, handleClickSavePublish, viewN, component.dataType, handleModalShow]);
 
     return (
         <div className="px-2 py-1">
@@ -241,7 +239,7 @@ const ComponentWorkButtonGroup = (props) => {
                     ))}
                     <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
                         <Dropdown>
-                            <Dropdown.Toggle as={customToggle} id="dropdown-desking-edit" />
+                            <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
                             <Dropdown.Menu className="ft-12">
                                 {!viewN &&
                                     (component.dataType === DATA_TYPE_DESK ? (
@@ -274,12 +272,12 @@ const ComponentWorkButtonGroup = (props) => {
             </Row>
 
             {/* HTML 수동 편집 */}
-            <EditHtmlModal show={htmlModalShow} onHide={() => setHtmlModalShow(false)} data={component} />
+            <EditHtmlModal show={modalShow.html} onHide={() => handleModalShow('html', false)} component={component} />
 
-            {/* 템플릿 */}
-            <TemplateListModal
-                show={templateModalShow}
-                onHide={() => setTemplateModalShow(false)}
+            {/* 템플릿(보여주지 않음) */}
+            {/* <TemplateListModal
+                show={modalShow.template}
+                onHide={() => handleModalShow('template', false)}
                 selected={component.templateSeq}
                 templateGroup={component.templateGroup}
                 templateWidth={component.templateWidth}
@@ -305,15 +303,15 @@ const ComponentWorkButtonGroup = (props) => {
                         </div>
                     </div>
                 }
-            />
+            /> */}
 
-            {/* 템플릿 소스보기 */}
-            <TemplateHtmlModal show={temsModalShow} onHide={() => setTemsModalShow(false)} templateSeq={selectedTemplate} editable={false} />
+            {/* 템플릿 소스보기 (보여주지 않음) */}
+            {/* <TemplateHtmlModal show={modalShow.tems} onHide={() => handleModalShow('tems', false)} templateSeq={selectedTemplate} editable={false} /> */}
 
             {/* 공백 추가 */}
             <AddSpaceModal
-                show={spaceModalShow}
-                onHide={() => setSpaceModalShow(false)}
+                show={modalShow.space}
+                onHide={() => handleModalShow('space', false)}
                 areaSeq={areaSeq}
                 component={component}
                 agGridIndex={agGridIndex}
@@ -322,15 +320,15 @@ const ComponentWorkButtonGroup = (props) => {
 
             {/* 기사 이동 */}
             <RegisterModal
-                show={registerModalShow}
-                onHide={() => setRegisterModalShow(false)}
+                show={modalShow.register}
+                onHide={() => handleModalShow('register', false)}
                 agGridIndex={agGridIndex}
                 component={component}
                 componentAgGridInstances={componentAgGridInstances}
             />
 
             {/* 리스트 건수 */}
-            <EditListNumberModal show={listNumberModalShow} onHide={() => setListNumberModalShow(false)} data={component} />
+            <EditListNumberModal show={modalShow.listNumber} onHide={() => handleModalShow('listNumber', false)} data={component} />
         </div>
     );
 };

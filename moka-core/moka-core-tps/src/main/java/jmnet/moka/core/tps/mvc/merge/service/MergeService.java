@@ -8,6 +8,7 @@ import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 
 /**
@@ -28,4 +29,8 @@ public interface MergeService {
 
     String getMergeAreaWork(Long areaSeq, String regId)
             throws Exception;
+
+    String getMergeArticlePage(ArticlePageDTO articlePageDto, Long totalId)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
+
 }

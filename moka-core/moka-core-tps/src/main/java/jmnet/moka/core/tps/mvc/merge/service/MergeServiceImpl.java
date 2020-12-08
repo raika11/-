@@ -18,6 +18,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
+import jmnet.moka.core.tms.merge.item.ArticlePageItem;
 import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.ContainerItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
@@ -26,6 +27,7 @@ import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.service.AreaService;
+import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
@@ -381,5 +383,38 @@ public class MergeServiceImpl implements MergeService {
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
             throw new Exception(messageByLocale.get("tps.merge.error.area"), e);
         }
+    }
+
+    @Override
+    public String getMergeArticlePage(ArticlePageDTO articlePageDto, Long totalId)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
+        // 도메인
+        Domain domainInfo = domainService
+                .findDomainById(articlePageDto
+                        .getDomain()
+                        .getDomainId())
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
+        DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
+        DomainItem domainItem = domainDto.toDomainItem();
+
+        // 기사사페이지
+        ArticlePageItem articlePageItem = articlePageDto.toArticlePageItem();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+        articlePageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
+                .now()
+                .format(df));
+
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+
+        // 랜더링
+        StringBuilder sb = dtm.merge(articlePageItem, totalId);
+
+        String content = sb.toString();
+
+        return content;
     }
 }

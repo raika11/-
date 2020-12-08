@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
@@ -13,6 +14,7 @@ import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.exception.InvalidDataException;
+import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.merge.service.MergeService;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -150,6 +153,32 @@ public class MergeRestController extends AbstractCommonController {
             log.error("[FAIL TO MERGE] areaSeq: {} {}", areaSeq, e.getMessage());
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
             throw new Exception(messageByLocale.get("tps.merge.error.area", request), e);
+        }
+    }
+
+    /**
+     * 기사페이지 미리보기
+     *
+     * @param request        요청
+     * @param articlePageDto 기사페이지정보
+     * @param totalId        기사키
+     * @return 기사페이지 랜더링된 HTML소스
+     * @throws Exception 예외
+     */
+    @ApiOperation(value = "기사페이지 미리보기")
+    @PostMapping(value = "/previewAP/{totalId}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> postPreviewAP(HttpServletRequest request, @RequestBody @Valid ArticlePageDTO articlePageDto,
+            @PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId)
+            throws Exception {
+        try {
+            String html = mergeService.getMergeArticlePage(articlePageDto, totalId);
+            ResultDTO<String> resultDto = new ResultDTO<String>(HttpStatus.OK, html);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO MERGE] artPageSeq: {} {}", articlePageDto.getArtPageSeq(), e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
+            throw new Exception(messageByLocale.get("tps.merge.error.article-page", request), e);
         }
     }
 }

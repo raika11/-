@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
@@ -11,6 +11,8 @@ const SnsMataEdit = React.lazy(() => import('./SnsMataEdit'));
  */
 const SnsMata = ({ match }) => {
     // FIXME 클린 함수 생성.
+
+    useEffect(() => {});
 
     return (
         <div className="d-flex">

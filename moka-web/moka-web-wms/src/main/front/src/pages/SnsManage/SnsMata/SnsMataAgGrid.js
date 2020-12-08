@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { tempColumnDefs, tempRowData } from './SnsMataAgGridColumns';
+import { tempColumnDefs } from './SnsMataAgGridColumns';
 import { MokaTable } from '@components';
+import { useDispatch } from 'react-redux';
+import { changeSNSMetaSearchOptions } from '@store/snsManage/snsAction';
 
-const SnsMataAgGrid = () => {
+const SnsMataAgGrid = ({ rows, total, searchOptions, loading }) => {
+    const dispatch = useDispatch();
     // 임시
     const [rowData, setRowData] = useState([]);
 
@@ -12,8 +15,8 @@ const SnsMataAgGrid = () => {
     };
 
     // 임시
-    const handleChangeSearchOption = () => {
-        console.log('handleChangeSearchOption');
+    const handleChangeSearchOption = (option) => {
+        dispatch(changeSNSMetaSearchOptions({ ...searchOptions, [option.key]: option.value }));
     };
 
     // 임시
@@ -22,9 +25,32 @@ const SnsMataAgGrid = () => {
     // 최초 로딩.
     useEffect(() => {
         // API 에서 어떻게 내려 오는지 몰라서 아래 처럼 했습니다.
-        setRowData(
-            tempRowData.map((element) => {
-                let repId = element.repId;
+
+        const viewRows = rows.map((viewRow) => {
+            console.log(viewRow);
+            /*const { articleBasic } = viewRow;
+
+            const id = `${viewRow.id.snsType}-${viewRow.id.totalId}`;
+            const date = articleBasic.pressDate;
+            const year = date.substring(0, 4);
+            const month = date.substring(4, 6);
+            const day = date.substring(6, 8);
+            const pressDate = `${year}-${month}-${day}`;
+
+            const snsType = viewRow.id.snsType;
+            const sendFb = snsType === 'FB' ? 'Y' : 'N';
+            const sendTw = snsType === 'TW' ? 'Y' : 'N';
+            const sendStatus = viewRow.snsArtSts;
+            console.log(id, viewRow);
+
+            return { ...articleBasic, pressDate, id, sendFb, sendTw, sendStatus };*/
+        });
+        console.log(viewRows);
+        setRowData(rows);
+
+        /*setRowData(
+            rows.map((element) => {
+                let repId = element.id.totalId;
                 let source = element.source;
                 let insStatus = element.insStatus;
                 let listOutDate = element.outDate && element.outDate.length > 10 ? element.outDate.substr(0, 10) : element.outDate;
@@ -58,8 +84,8 @@ const SnsMataAgGrid = () => {
                     listOutStatus,
                 };
             }),
-        );
-    }, []);
+        );*/
+    }, [rows]);
 
     return (
         <>
@@ -68,15 +94,16 @@ const SnsMataAgGrid = () => {
                 columnDefs={tempColumnDefs}
                 rowData={rowData}
                 rowHeight={65}
-                onRowNodeId={handleOnRowNodeId}
+                onRowNodeId={(row) => row.totalId}
                 onRowClicked={handleClickListRow}
-                loading={null}
-                total={tempRowData.length}
-                page={1}
-                size={10}
-                displayPageNum={3}
+                loading={loading}
+                total={total}
+                page={searchOptions.page}
+                size={searchOptions.size}
                 onChangeSearchOption={handleChangeSearchOption}
-                selected={null}
+                selected={(data) => {
+                    console.log(data);
+                }}
             />
         </>
     );

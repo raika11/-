@@ -29,6 +29,7 @@ import member from '@store/member/memberReducer';
 import columnist from '@store/columnist/columnistReducer';
 import photoArchive from '@store/photoArchive/photoArchiveReducer';
 import articlePage from '@store/articlePage/articlePageReducer';
+import sns from '@store/snsManage/snsReducer';
 
 export default combineReducers({
     toastr,
@@ -60,4 +61,5 @@ export default combineReducers({
     columnist,
     photoArchive,
     articlePage,
+    sns,
 });

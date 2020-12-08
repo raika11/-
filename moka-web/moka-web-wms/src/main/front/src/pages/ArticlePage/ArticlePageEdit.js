@@ -355,7 +355,7 @@ const ArticlePageEdit = ({ onDelete }) => {
     };
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`페이지 ${articlePage.artPageSeq ? '정보' : '등록'}`} loading={loading}>
+        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`기사페이지 ${articlePage.artPageSeq ? '정보' : '등록'}`} loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
@@ -377,7 +377,7 @@ const ArticlePageEdit = ({ onDelete }) => {
                     </div>
                 </Form.Group>
                 {/* 기사페이지ID */}
-                {paramId ? (
+                {articlePage.artPageSeq ? (
                     <Form.Row className="mb-2">
                         <MokaInputLabel
                             label="기사페이지ID"
@@ -386,8 +386,9 @@ const ArticlePageEdit = ({ onDelete }) => {
                             onChange={handleChangeValue}
                             className="mb-0 w-100"
                             labelWidth={84}
-                            placeholder="기사페이지명을 입력하세요"
+                            placeholder="기사페이지ID를 입력하세요"
                             isInvalid={error.artPageName}
+                            inputProps={{ plaintext: true, readOnly: true }}
                             required
                         />
                     </Form.Row>

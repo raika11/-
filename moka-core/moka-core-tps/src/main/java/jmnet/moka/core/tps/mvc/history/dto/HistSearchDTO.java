@@ -46,9 +46,9 @@ public class HistSearchDTO extends SearchDTO {
     private Long seq;
 
     /**
-     * SEQ의 유형 (PG:페이지, CS: 기사타입, TP:템플릿, CT:컨테이너)
+     * SEQ의 유형 (PG:페이지, AP: 기사페이지, TP:템플릿, CT:컨테이너)
      */
-    @Pattern(regexp = "^(PG)|(CS)|(CT)|(TP)|()$", message = "{tps.history.error.pattern.seqType}")
+    @Pattern(regexp = "^(PG)|(AP)|(CT)|(TP)|()$", message = "{tps.history.error.pattern.seqType}")
     private String seqType;
 
     /**
@@ -67,6 +67,7 @@ public class HistSearchDTO extends SearchDTO {
 
     /**
      * 작업시작일자(프로시져용)
+     *
      * @return 작업시작일자
      */
     public String getStartRegDt() {
@@ -78,6 +79,7 @@ public class HistSearchDTO extends SearchDTO {
 
     /**
      * 작업종료일자(프로시져용)
+     *
      * @return 작업종료일자
      */
     public String getEndRegDt() {

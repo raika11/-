@@ -5,8 +5,6 @@
 package jmnet.moka.core.tps.mvc.relation.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -15,10 +13,8 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Pageable;
 
@@ -42,7 +38,7 @@ public class RelationSearchDTO extends SearchDTO {
     /**
      * 리턴 될 관련유형 (TP:템플릿, CP: 컴포넌트, AD:광고, CT:컨테이너, DS: 데이타셋)
      */
-    @Pattern(regexp = "^(PG)|(CT)|(CP)|(TP)|(CS)|(AD)|(TP)|(RS)$", message = "{tps.relation.error.pattern.relType}")
+    @Pattern(regexp = "^(PG)|(CT)|(CP)|(TP)|(AP)|(AD)|(TP)|(RS)$", message = "{tps.relation.error.pattern.relType}")
     private String relType;
 
     /**

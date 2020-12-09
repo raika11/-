@@ -145,7 +145,6 @@ const SnsMataSearch = ({ searchOptions }) => {
                             handleChangeValue(name, value);
                         }}
                     >
-                        <option value="all">전체</option>
                         <option value="artTitle">제목</option>
                         <option value="totalId">기사ID</option>
                     </MokaInput>

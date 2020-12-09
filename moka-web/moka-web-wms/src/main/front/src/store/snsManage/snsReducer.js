@@ -14,7 +14,7 @@ export const initialState = {
             //endDt: moment().format(DB_DATEFORMAT),
             startDt: moment(new Date(2020, 7, 21, 0, 0, 0)).format(DB_DATEFORMAT),
             endDt: moment(new Date(2020, 7, 21, 23, 59, 59)).format(DB_DATEFORMAT),
-            searchType: 'all',
+            searchType: 'artTitle',
             keyword: '',
             page: 0,
             size: PAGESIZE_OPTIONS[0],

@@ -104,3 +104,5 @@ export const DESK_HIST_PUBLISH = 'PUBLISH'; // 전송
 export const DATA_TYPE_DESK = 'DESK';
 export const DATA_TYPE_AUTO = 'AUTO';
 export const DATA_TYPE_FORM = 'FORM';
+
+export const IMAGE_DEFAULT_URL = 'http://pds.joins.com';

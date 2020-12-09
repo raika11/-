@@ -8,7 +8,7 @@ import Card from 'react-bootstrap/Card';
 
 import toast, { messageBox } from '@utils/toastUtil';
 import { MokaInputLabel, MokaCard } from '@components';
-import { saveArea, changeArea, GET_AREA_DEPTH1, DELETE_AREA, SAVE_AREA } from '@store/area';
+import { saveArea, GET_AREA_DEPTH1, DELETE_AREA, SAVE_AREA } from '@store/area';
 
 const AreaFormDepth1 = ({ onDelete }) => {
     const dispatch = useDispatch();
@@ -48,10 +48,13 @@ const AreaFormDepth1 = ({ onDelete }) => {
      * @param {object} save area데이터
      */
     const handleSave = (save) => {
+        let as = save;
+        delete as.areaComp;
+        delete as.areaComps;
+
         dispatch(
             saveArea({
-                depth: 1,
-                actions: [changeArea({ area: save, depth: 1 })],
+                area: as,
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);

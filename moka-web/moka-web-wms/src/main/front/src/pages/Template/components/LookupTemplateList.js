@@ -175,7 +175,7 @@ const LookupTemplateList = (props) => {
                     changeLookupSearchOption({
                         ...initialState.lookup.search,
                         keyword: seq,
-                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_AP ? 'skinSeq' : seqType === ITEM_CT ? 'containerSeq' : '',
+                        searchType: seqType === ITEM_PG ? 'pageSeq' : seqType === ITEM_AP ? 'artPageSeq' : seqType === ITEM_CT ? 'containerSeq' : '',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -241,7 +241,7 @@ const LookupTemplateList = (props) => {
                                 }}
                             >
                                 {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {seqType === ITEM_AP && <option value="skinSeq">기사페이지ID</option>}
+                                {seqType === ITEM_AP && <option value="artPageSeq">기사페이지ID</option>}
                                 {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
                                 {defaultTemplateSearchType.map((type) => (
                                     <option key={type.id} value={type.id}>

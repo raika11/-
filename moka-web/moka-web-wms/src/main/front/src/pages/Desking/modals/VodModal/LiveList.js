@@ -6,7 +6,7 @@ import { MokaLoader } from '@components';
 const LiveList = ({ show }) => {
     const dispatch = useDispatch();
 
-    const { loading, liveList } = useSelector((store) => ({
+    const { loading } = useSelector((store) => ({
         loading: store.loading[GET_LIVE_LIST],
         liveList: store.bright.live.list,
     }));
@@ -17,7 +17,7 @@ const LiveList = ({ show }) => {
         }
     }, [dispatch, show]);
 
-    return <div className="positive-relative h-100 w-100">{loading && <MokaLoader />}</div>;
+    return <div className="positive-relative h-100 w-100 px-3">{loading && <MokaLoader />}</div>;
 };
 
 export default LiveList;

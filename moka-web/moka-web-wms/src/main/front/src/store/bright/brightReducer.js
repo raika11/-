@@ -48,7 +48,7 @@ export default handleActions(
          */
         [act.GET_OVP_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.ovp.list = payload.list;
+                draft.ovp.list = payload.body.list;
                 draft.ovp.error = initialState.ovp.error;
             });
         },
@@ -60,7 +60,7 @@ export default handleActions(
         },
         [act.GET_LIVE_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.live.list = payload.list;
+                draft.live.list = payload.body.list;
                 draft.live.error = initialState.live.error;
             });
         },

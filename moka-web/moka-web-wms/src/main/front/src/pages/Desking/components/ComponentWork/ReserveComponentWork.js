@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { postReserveComponentWork } from '@store/desking';
+import { postReserveComponentWork, deleteReserveComponentWork } from '@store/desking';
 import toast, { messageBox } from '@utils/toastUtil';
 
 /**
@@ -56,7 +56,9 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             return;
         }
 
-        messageBox.confirm('예약하시겠습니까?', () => {
+        let message = reservation === true ? '예약을 변경하시겠습니까?' : '예약하시겠습니까?';
+
+        messageBox.confirm(message, () => {
             dispatch(
                 postReserveComponentWork({
                     componentWorkSeq: component.seq,
@@ -82,6 +84,31 @@ const ReserveComponentWork = ({ component, workStatus }) => {
         setReserveDt(originReDt || null);
     };
 
+    /**
+     * 예약 삭제
+     */
+    const handleClickDelete = () => {
+        messageBox.confirm(
+            '예약을 삭제하시겠습니까?',
+            () => {
+                dispatch(
+                    deleteReserveComponentWork({
+                        componentWorkSeq: component.seq,
+                        callback: ({ header }) => {
+                            if (header.success) {
+                                toast.success(header.message);
+                                setOpenReserve(false);
+                            } else {
+                                toast.fail(header.message);
+                            }
+                        },
+                    }),
+                );
+            },
+            () => {},
+        );
+    };
+
     useEffect(() => {
         if (component.reserveDt) {
             let rd = moment(component.reserveDt, DB_DATEFORMAT);
@@ -90,6 +117,10 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             if (rd > moment()) {
                 setReservation(true);
             }
+        } else {
+            setOriginReDt(null);
+            setReserveDt(null);
+            setReservation(false);
         }
     }, [component]);
 
@@ -101,7 +132,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
 
             {openReserve && (
                 <div className="d-flex align-items-center justify-content-between position-absolute bg-white" style={{ left: 27, right: 0, zIndex: 1 }}>
-                    <div style={{ width: 160 }}>
+                    <div style={{ width: 168 }}>
                         <MokaInput as="dateTimePicker" inputClassName="ft-12" size="sm" value={reserveDt} onChange={handleDate} isInvalid={error} />
                     </div>
                     <div className="d-flex align-items-center">
@@ -112,7 +143,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
                             취소
                         </Button>
                         {reservation && (
-                            <Button variant="negative" size="sm" className="ml-2">
+                            <Button variant="negative" size="sm" className="ml-2" onClick={handleClickDelete}>
                                 삭제
                             </Button>
                         )}

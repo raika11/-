@@ -8,7 +8,8 @@
             color: $input-focus-color;
             background-color: $input-focus-bg;
             border-color: $input-focus-border-color;
-            box-shadow: $input-box-shadow, $input-focus-box-shadow;
+            // box-shadow: $input-box-shadow, $input-focus-box-shadow;
+            box-shadow: unset;
         }
     }
 

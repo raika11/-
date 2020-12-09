@@ -130,6 +130,7 @@ const DatsetListModal = (props) => {
             temp['page'] = 0;
         }
         setSearch(temp);
+        dispatch(getDatasetListModal({ search: temp, callback: responseCallback }));
     };
 
     /**

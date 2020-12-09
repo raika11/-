@@ -41,7 +41,7 @@ const EditDeskingWorkModal = (props) => {
 
     // state
     const [deskingPart, setDeskingPart] = useState([]); // area의 deskingPart 리스트
-    const [fileValue] = useState(null); // 파일
+    const [fileValue, setFileValue] = useState(null); // 파일
     const [titleListType, setTitleListType] = useState(''); // 제목의 폰트 타입
     const [error, setError] = useState({});
     const [showModal, setShowModal] = useState(false); // 새이미지 등록 팝업 모달
@@ -176,6 +176,7 @@ const EditDeskingWorkModal = (props) => {
                 footerClassName="d-flex justify-content-center"
                 bodyClassName="custom-scroll"
                 loading={loading}
+                id={`cid-${deskingWorkData.contentId}`}
                 draggable
             >
                 <Form>
@@ -232,7 +233,7 @@ const EditDeskingWorkModal = (props) => {
                         } else if (partKey === 'TITLE_LOC') {
                             return <TitleLocForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
                         } else if (partKey === 'VOD_URL') {
-                            return <VodUrlForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
+                            return <VodUrlForm show={show} key={partKey} temp={temp} setTemp={setTemp} />;
                         } else if (mappingData) {
                             return <TextForm key={partKey} mappingData={mappingData} temp={temp} urlRegex={urlRegex} onChange={handleChangeValue} error={error} />;
                         } else {
@@ -241,7 +242,7 @@ const EditDeskingWorkModal = (props) => {
                     })}
                 </Form>
             </MokaModal>
-            <EditThumbModal show={showModal} onHide={() => setShowModal(false)} />
+            <EditThumbModal show={showModal} onHide={() => setShowModal(false)} fileValue={fileValue} setFileValue={setFileValue} />
         </>
     );
 };

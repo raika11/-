@@ -133,6 +133,13 @@ export const postReserveComponentWork = ({ componentWorkSeq, reserveDt }) => {
     });
 };
 
+// 컴포넌트 워크 예약 삭제
+export const deleteReserveComponentWork = ({ componentWorkSeq }) => {
+    return instance.delete(`/api/desking/components/reserve/${componentWorkSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
 // work편집기사 삭제 : payload
 export const deleteDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
     return instance

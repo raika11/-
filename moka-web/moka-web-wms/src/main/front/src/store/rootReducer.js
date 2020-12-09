@@ -30,6 +30,7 @@ import columnist from '@store/columnist/columnistReducer';
 import photoArchive from '@store/photoArchive/photoArchiveReducer';
 import articlePage from '@store/articlePage/articlePageReducer';
 import sns from '@store/snsManage/snsReducer';
+import bright from '@store/bright/brightReducer';
 
 export default combineReducers({
     toastr,
@@ -38,28 +39,29 @@ export default combineReducers({
     layout,
     auth,
     article,
+    photoArchive,
+    bright,
     domain,
-    template,
     code,
     codeMgt,
     reserved,
+    page,
+    articlePage,
+    template,
     dataset,
     component,
     container,
-    page,
-    area,
     editForm,
     relation,
     history,
-    merge,
     menu,
     group,
     reporter,
     directLink,
+    area,
     desking,
+    merge,
     member,
     columnist,
-    photoArchive,
-    articlePage,
     sns,
 });

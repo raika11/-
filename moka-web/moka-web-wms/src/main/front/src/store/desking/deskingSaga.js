@@ -1,5 +1,5 @@
 import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
-import { createRequestSaga, errorResponse, callApiAfterActions } from '@store/commons/saga';
+import { createRequestSaga, errorResponse } from '@store/commons/saga';
 import { getRowIndex, getMoveMode } from '@utils/agGridUtil';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 
@@ -420,9 +420,14 @@ function* postSavePublishComponentWork({ payload }) {
 }
 
 /**
- * Work컴포넌트 예약
+ * 컴포넌트 워크 예약
  */
 const postReserveComponentWork = createDeskingRequestSaga(act.POST_RESERVE_COMPONENT_WORK, api.postReserveComponentWork);
+
+/**
+ * 컴포넌트 워크 예약 삭제
+ */
+const deleteReserveComponentWork = createDeskingRequestSaga(act.DELETE_RESERVE_COMPONENT_WORK, api.deleteReserveComponentWork);
 
 /**
  * 컴포넌트 워크에 편집기사 리스트 등록 => 성공 결과) 컴포넌트 워크 데이터가 리턴됨
@@ -516,8 +521,9 @@ export default function* saga() {
 
     yield takeLatest(act.POST_SAVE_COMPONENT_WORK, postSaveComponentWork);
     yield takeLatest(act.POST_PUBLISH_COMPONENT_WORK, postPublishComponentWork);
-    yield takeLatest(act.POST_RESERVE_COMPONENT_WORK, postReserveComponentWork);
     yield takeLatest(act.POST_SAVE_PUBLISH_COMPONENT_WORK, postSavePublishComponentWork);
+    yield takeLatest(act.POST_RESERVE_COMPONENT_WORK, postReserveComponentWork);
+    yield takeLatest(act.DELETE_RESERVE_COMPONENT_WORK, deleteReserveComponentWork);
     // yield takeLatest(act.POST_COMPONENT_WORK, postComponentWorkSaga);
     // yield takeLatest(act.HAS_OTHER_SAVED, hasOtherSavedSaga);
 

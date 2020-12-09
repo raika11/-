@@ -9,6 +9,10 @@ import { MokaLoader } from '@components';
 
 const propTypes = {
     /**
+     * 핸들에 추가되는 id string (modal이 여러개인 경우 필수적으로 넘겨 중복 id 생성을 막는다)
+     */
+    id: PropTypes.string,
+    /**
      * width
      */
     width: PropTypes.number,
@@ -81,6 +85,7 @@ const defaultProps = {
     draggable: false,
     centered: false,
     loading: false,
+    id: '',
 };
 
 /**
@@ -104,6 +109,7 @@ const MokaModal = (props) => {
         bodyClassName,
         footerClassName,
         loading,
+        id,
         ...rest
     } = props;
 
@@ -117,19 +123,19 @@ const MokaModal = (props) => {
                     'align-items-center': centered,
                 })}
             >
-                <Draggable handle="#draggable-handle" allowAnyClick={true} bounds="parent">
+                <Draggable handle={`#draggable-handle-${id}`} allowAnyClick={true} bounds="parent">
                     <ModalDialog style={{ width, height }} className={className} {...props} />
                 </Draggable>
             </div>
         ),
-        [centered, className, height, width],
+        [centered, className, height, id, width],
     );
 
     return (
         <Modal aria-labelledby={title} show={show} onHide={onHide} backdrop={false} animation={false} scrollable="true" dialogAs={DraggableModal} enforceFocus={false} {...rest}>
             {/* 타이틀 */}
             <Modal.Header className={headerClassName} id="draggable-modal-title" data-drag-on={draggable} closeButton>
-                {draggable && <div id="draggable-handle" />}
+                {draggable && <div id={`draggable-handle-${id}`} data-drag-handle="true" />}
                 {titleAs ? titleAs : <Modal.Title>{title}</Modal.Title>}
             </Modal.Header>
 

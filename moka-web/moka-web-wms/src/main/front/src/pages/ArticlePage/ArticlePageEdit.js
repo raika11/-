@@ -113,7 +113,7 @@ const ArticlePageEdit = ({ onDelete }) => {
                     callback: (response) => {
                         if (response.header.success) {
                             if (response.body === null) {
-                                toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
+                                toast.error('미리보기용 기사ID가 존재하지 않습니다.');
                             }
                             setPreviewTotalId(response.body);
                         } else {

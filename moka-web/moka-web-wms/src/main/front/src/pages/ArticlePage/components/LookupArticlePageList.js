@@ -124,7 +124,7 @@ const LookupArticlePageList = (props) => {
                     callback: (response) => {
                         if (response.header.success) {
                             if (response.body === null) {
-                                toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
+                                toast.error('미리보기용 기사ID가 존재하지 않습니다.');
                             } else {
                                 const option = {
                                     content: data.artPageBody,
@@ -137,7 +137,7 @@ const LookupArticlePageList = (props) => {
                                             console.log(item);
                                             popupPreview('/preview/article-page', item);
                                         } else {
-                                            toast.fail(header.message || '미리보기에 실패하였습니다');
+                                            toast.error(header.message || '미리보기에 실패하였습니다');
                                         }
                                     },
                                 };

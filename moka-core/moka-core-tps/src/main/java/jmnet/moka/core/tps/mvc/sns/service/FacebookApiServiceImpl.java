@@ -28,8 +28,8 @@ import org.springframework.stereotype.Service;
  * @since 2020-12-08 12:01
  */
 @Slf4j
-@Service
-public class SnsApiServiceImpl implements SnsApiService {
+@Service("facebookApiService")
+public class FacebookApiServiceImpl implements SnsApiService {
 
     @Value("${sns.share.article-url}")
     private String articleUrl;
@@ -46,26 +46,13 @@ public class SnsApiServiceImpl implements SnsApiService {
     @Value("${sns.facebook.token-code}")
     private String facebookTokenCode;
 
-    @Value("${sns.twitter.api-url}")
-    private String twitterApiUrl;
-
-    @Value("${sns.twitter.consumer-key}")
-    private String twitterConsumerKey;
-
-    @Value("${sns.twitter.consumer-key-secret}")
-    private String twitterConsumerKeySecret;
-
-    @Value("${sns.twitter.access-token}")
-    private String twitterAccessToken;
-
-    @Value("${sns.twitter.access-token-secret}")
-    private String twitterAccessTokenSecret;
+    
 
     private final RestTemplateHelper restTemplateHelper;
 
     private final CodeMgtService codeMgtService;
 
-    public SnsApiServiceImpl(RestTemplateHelper restTemplateHelper, CodeMgtService codeMgtService) {
+    public FacebookApiServiceImpl(RestTemplateHelper restTemplateHelper, CodeMgtService codeMgtService) {
         this.restTemplateHelper = restTemplateHelper;
         this.codeMgtService = codeMgtService;
     }

@@ -140,11 +140,25 @@ public class ArticleDetailVO {
 
     private String fbMetaSummary;
 
+    private String fbMetaUsedYn;
+
+    @DTODateTimeFormat
+    private Date fbMetaReserveDt;
+
+    private String fbMetaPostMsg;
+
     private String twMetaTitle;
 
     private String twMetaImage;
 
     private String twMetaSummary;
+
+    private String twMetaUsedYn;
+
+    @DTODateTimeFormat
+    private Date twMetaReserveDt;
+
+    private String twMetaPostMsg;
 
     private String jaMetaTitle;
 

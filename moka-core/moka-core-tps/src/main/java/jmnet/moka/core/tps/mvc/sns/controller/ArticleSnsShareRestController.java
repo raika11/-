@@ -29,7 +29,6 @@ import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.service.ArticleSnsShareService;
-import jmnet.moka.core.tps.mvc.sns.service.SnsApiService;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
@@ -66,12 +65,9 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
 
     private final ArticleService articleService;
 
-    private final SnsApiService snsApiService;
-
-    public ArticleSnsShareRestController(ArticleSnsShareService articleSnsShareService, ArticleService articleService, SnsApiService snsApiService) {
+    public ArticleSnsShareRestController(ArticleSnsShareService articleSnsShareService, ArticleService articleService) {
         this.articleSnsShareService = articleSnsShareService;
         this.articleService = articleService;
-        this.snsApiService = snsApiService;
     }
 
     /**
@@ -180,7 +176,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     @PostMapping
     public ResponseEntity<?> postArticleSnsShare(@Valid ArticleSnsShareDTO articleSnsShareDTO)
             throws InvalidDataException, Exception {
-        
+
         ArticleSnsShare articleSnsShare = modelMapper.map(articleSnsShareDTO, ArticleSnsShare.class);
 
         // 기사 정보 없을 경우 에러 처리

@@ -19,6 +19,7 @@ import jmnet.moka.core.tps.mvc.sns.mapper.ArticleSnsShareMapper;
 import jmnet.moka.core.tps.mvc.sns.repository.ArticleSnsShareRepository;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.scheduling.annotation.Async;
@@ -44,13 +45,16 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
     private final ArticleSnsShareMapper articleSnsShareMapper;
 
-    private final SnsApiService snsApiService;
+    private final SnsApiService facebookApiService;
+
+    private final SnsApiService twitterApiService;
 
     public ArticleSnsShareServiceImpl(ArticleSnsShareRepository articleSnsShareRepository, ArticleSnsShareMapper articleSnsShareMapper,
-            SnsApiService snsApiService) {
+            @Qualifier("facebookApiService") SnsApiService facebookApiService, @Qualifier("twitterApiService") SnsApiService twitterApiService) {
         this.articleSnsShareRepository = articleSnsShareRepository;
         this.articleSnsShareMapper = articleSnsShareMapper;
-        this.snsApiService = snsApiService;
+        this.facebookApiService = facebookApiService;
+        this.twitterApiService = twitterApiService;
     }
 
     @Override
@@ -144,7 +148,7 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
         ArticleSnsShare share = null;
         // insert
-        Map<String, Object> result = snsApiService.publish(SnsPublishDTO
+        Map<String, Object> result = facebookApiService.publish(SnsPublishDTO
                 .builder()
                 .totalId(snsPublish.getTotalId())
                 .snsType(snsPublish.getSnsType())
@@ -172,7 +176,7 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
         ArticleSnsShare share = null;
 
         // 삭제
-        Map<String, Object> result = snsApiService.delete(SnsDeleteDTO
+        Map<String, Object> result = facebookApiService.delete(SnsDeleteDTO
                 .builder()
                 .snsId(snsDelete.getSnsId())
                 .snsType(snsDelete.getSnsType())

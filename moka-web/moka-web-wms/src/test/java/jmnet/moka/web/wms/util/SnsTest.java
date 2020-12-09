@@ -1,5 +1,6 @@
 package jmnet.moka.web.wms.util;
 
+import javax.annotation.Resource;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
@@ -35,7 +36,7 @@ public class SnsTest {
     @Autowired
     private RestTemplateHelper restTemplateHelper;
 
-    @Autowired
+    @Resource(name = "twitterApiService")
     private SnsApiService snsApiService;
 
     @Test

@@ -63,6 +63,9 @@ public class AppRestController {
     @Value("brightcove.preview.url")
     private String ovpPreviewUrl;
 
+    @Value("photo.archive.url")
+    private String photoArchiveUrl;
+
     @Autowired
     private TpsLogger tpsLogger;
 
@@ -93,6 +96,7 @@ public class AppRestController {
                 .add("WIMAGE_URL", wimageUrl)                                        // wimage Url
                 .add("IR_URL", irUrl)                                                // ir Url
                 .add("OVP_PREVIEW_URL", ovpPreviewUrl)                               // ovp 미리보기 url
+                .add("PHOTO_ARCHIVE_URL", photoArchiveUrl)                           // 포토아카이브 url
                 .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());

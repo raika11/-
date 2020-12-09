@@ -6,8 +6,19 @@ import Col from 'react-bootstrap/Col';
 
 import { ITEM_AP } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
-import { initialState, getArticlePageLookupList, getArticlePageLookup, changeLookupSearchOption, clearLookup, GET_ARTICLE_PAGE_LOOKUP_LIST } from '@store/articlePage';
+import {
+    initialState,
+    getArticlePageLookupList,
+    getArticlePageLookup,
+    changeLookupSearchOption,
+    getPreviewTotalId,
+    clearLookup,
+    GET_ARTICLE_PAGE_LOOKUP_LIST,
+} from '@store/articlePage';
 import columnDefs from './LookupArticlePageListColumns';
+import { previewPage } from '@store/merge';
+import { API_BASE_URL } from '@/constants';
+import toast from '@utils/toastUtil';
 
 const propTypes = {
     /**
@@ -23,13 +34,9 @@ const propTypes = {
      */
     show: PropTypes.bool,
     /**
-     * row의 append 버튼 클릭 이벤트
+     * row의 load 버튼 클릭 이벤트
      */
-    onAppend: PropTypes.func,
-    /**
-     * row의 append 버튼 클릭 이벤트
-     */
-    onPreview: PropTypes.func,
+    onLoad: PropTypes.func,
 };
 const defaultProps = {
     show: true,
@@ -39,9 +46,8 @@ const defaultProps = {
  * seq, seqType을 검색조건으로 사용하는 Lookup 기사페이지 리스트
  */
 const LookupArticlePageList = (props) => {
-    const { seq, seqType, show, onLoad, onPreview } = props;
+    const { seq, seqType, show, onLoad } = props;
     const dispatch = useDispatch();
-
     const { list, search: storeSearch, total, loading, latestDomainId, searchTypeList } = useSelector((store) => ({
         list: store.articlePage.lookup.list,
         search: store.articlePage.lookup.search,
@@ -107,17 +113,84 @@ const LookupArticlePageList = (props) => {
     );
 
     /**
-     * 태그 삽입 버튼 클릭
+     * 미리보기 버튼 클릭
      * @param {object} data row data
      */
     const handleClickPreview = useCallback(
         (data) => {
-            if (onPreview) {
-                onPreview(data, ITEM_AP);
-            }
+            dispatch(
+                getPreviewTotalId({
+                    artType: data.artType,
+                    callback: (response) => {
+                        if (response.header.success) {
+                            if (response.body === null) {
+                                toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
+                            } else {
+                                const option = {
+                                    content: data.artPageBody,
+                                    callback: ({ header, body }) => {
+                                        if (header.success) {
+                                            const item = {
+                                                ...data,
+                                                totalId: response.body,
+                                            };
+                                            console.log(item);
+                                            popupPreview('/preview/article-page', item);
+                                        } else {
+                                            toast.fail(header.message || '미리보기에 실패하였습니다');
+                                        }
+                                    },
+                                };
+                                dispatch(previewPage(option));
+                            }
+                        } else {
+                            toast.error('미리보기용 기사ID 조회에 실패하였습니다.');
+                        }
+                    },
+                }),
+            );
         },
-        [onPreview],
+        [dispatch],
     );
+    /**
+     * 미리보기 팝업띄움.
+     */
+    const popupPreview = (url, item) => {
+        const targetUrl = `${API_BASE_URL}${url}`;
+
+        // 폼 생성
+        const f = document.createElement('form');
+        f.setAttribute('method', 'post');
+        f.setAttribute('action', targetUrl);
+        f.setAttribute('target', '_blank');
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const propName in item) {
+            if (typeof item[propName] === 'object') {
+                const subObject = item[propName];
+                // eslint-disable-next-line no-restricted-syntax
+                for (const inPropName in subObject) {
+                    if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = `${propName}.${inPropName}`;
+                        input.value = item[propName][inPropName];
+                        f.appendChild(input);
+                    }
+                }
+            } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = propName;
+                input.value = item[propName];
+                f.appendChild(input);
+            }
+        }
+
+        document.getElementsByTagName('body')[0].appendChild(f);
+        f.submit();
+        f.remove();
+    };
 
     useEffect(() => {
         return () => {

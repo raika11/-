@@ -4,14 +4,13 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
 import { MokaCard, MokaInputLabel } from '@components';
-import { w3cArticlePage } from '@store/merge';
+import { previewPage, w3cArticlePage } from '@store/merge';
 import { initialState, getArticlePage, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
-import { W3C_URL } from '@/constants';
+import { API_BASE_URL, W3C_URL } from '@/constants';
 
-const ArticlePageEdit = ({ onDelete, onPreview }) => {
+const ArticlePageEdit = ({ onDelete }) => {
     const { artPageSeq: paramId } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -44,9 +43,7 @@ const ArticlePageEdit = ({ onDelete, onPreview }) => {
 
     useEffect(() => {
         // url로 다이렉트로 페이지 조회하는 경우
-        if (!articlePage.artPageSeq) {
-            changeArtType(initialState.articlePage.artType);
-        } else if (paramId && paramId !== articlePage.artPageSeq) {
+        if (paramId && paramId !== articlePage.artPageSeq) {
             const option = {
                 artPageSeq: paramId,
                 callback: (result) => {
@@ -57,16 +54,16 @@ const ArticlePageEdit = ({ onDelete, onPreview }) => {
             };
             dispatch(getArticlePage(option));
         }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [articlePage, articlePage.artPageSeq, dispatch, history, paramId]);
 
     useEffect(() => {
         if (articlePage.artPageSeq) {
             setBtnDisabled(false);
         } else {
+            changeArtType(initialState.articlePage.artType);
             setBtnDisabled(true);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, articlePage.artPageSeq]);
 
     useEffect(() => {
@@ -75,14 +72,7 @@ const ArticlePageEdit = ({ onDelete, onPreview }) => {
         });
         setPreviewTotalId(articlePage.previewTotalId);
     }, [articlePage]);
-    /*
-    useEffect(() => {
-        // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
-        if (temp.pageType === '' && pageTypeRows.length > 0) {
-            setTemp({ ...temp, pageType: pageTypeRows[0].dtlCd });
-        }
-    }, [temp]);
-*/
+
     useEffect(() => {
         // invalidList 처리
         if (invalidList.length > 0) {
@@ -115,23 +105,26 @@ const ArticlePageEdit = ({ onDelete, onPreview }) => {
         [error, temp],
     );
 
-    const changeArtType = (artType) => {
-        dispatch(
-            getPreviewTotalId({
-                artType: artType,
-                callback: (response) => {
-                    if (response.header.success) {
-                        if (response.body === null) {
-                            toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
+    const changeArtType = useCallback(
+        (artType) => {
+            dispatch(
+                getPreviewTotalId({
+                    artType: artType,
+                    callback: (response) => {
+                        if (response.header.success) {
+                            if (response.body === null) {
+                                toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
+                            }
+                            setPreviewTotalId(response.body);
+                        } else {
+                            toast.error('미리보기용 기사ID 조회에 실패하였습니다.');
                         }
-                        setPreviewTotalId(response.body);
-                    } else {
-                        toast.error('미리보기용 기사ID 조회에 실패하였습니다.');
-                    }
-                },
-            }),
-        );
-    };
+                    },
+                }),
+            );
+        },
+        [dispatch],
+    );
 
     const handleChangeArtType = ({ target }) => {
         const { value } = target;
@@ -243,14 +236,68 @@ const ArticlePageEdit = ({ onDelete, onPreview }) => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = useCallback(() => {
-        if (onPreview) {
-            if (previewTotalId) {
-                onPreview(previewTotalId);
-            } else {
-                toast.error('기사ID를 입력해 주세요.');
+        if (previewTotalId) {
+            const option = {
+                content: artPageBody,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        const item = {
+                            ...produce(articlePage, (draft) => {
+                                draft.artPageBody = artPageBody;
+                            }),
+                            totalId: previewTotalId,
+                        };
+                        popupPreview('/preview/article-page', item);
+                    } else {
+                        toast.fail(header.message || '미리보기에 실패하였습니다');
+                    }
+                },
+            };
+            dispatch(previewPage(option));
+        } else {
+            toast.error('기사ID를 입력해 주세요.');
+        }
+    }, [artPageBody, articlePage, dispatch, previewTotalId]);
+
+    /**
+     * 미리보기 팝업띄움.
+     */
+    const popupPreview = (url, item) => {
+        const targetUrl = `${API_BASE_URL}${url}`;
+
+        // 폼 생성
+        const f = document.createElement('form');
+        f.setAttribute('method', 'post');
+        f.setAttribute('action', targetUrl);
+        f.setAttribute('target', '_blank');
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const propName in item) {
+            if (typeof item[propName] === 'object') {
+                const subObject = item[propName];
+                // eslint-disable-next-line no-restricted-syntax
+                for (const inPropName in subObject) {
+                    if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = `${propName}.${inPropName}`;
+                        input.value = item[propName][inPropName];
+                        f.appendChild(input);
+                    }
+                }
+            } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = propName;
+                input.value = item[propName];
+                f.appendChild(input);
             }
         }
-    }, [onPreview, previewTotalId]);
+
+        document.getElementsByTagName('body')[0].appendChild(f);
+        f.submit();
+        f.remove();
+    };
 
     /**
      * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사

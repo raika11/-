@@ -11,8 +11,6 @@ import { ITEM_AP, ITEM_CT, ITEM_CP, ITEM_TP, TEMS_PREFIX } from '@/constants';
 import { getArticleType } from '@store/codeMgt';
 import { clearStore, deleteArticlePage, appendTag, changeArticlePageBody } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
-import { previewPage } from '@store/merge';
-import { API_BASE_URL } from '@/constants';
 
 import ArticlePageEditor from './ArticlePageEditor';
 const ArticlePageList = React.lazy(() => import('./ArticlePageList'));
@@ -171,69 +169,6 @@ const ArticlePage = ({ match }) => {
         [dispatch],
     );
 
-    const handlePreview = useCallback(
-        (previewTotalId) => {
-            const option = {
-                content: artPageBody,
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        const item = {
-                            ...produce(articlePage, (draft) => {
-                                draft.artPageBody = artPageBody;
-                            }),
-                            totalId: previewTotalId,
-                        };
-                        popupPreview('/preview/article-page', item);
-                    } else {
-                        toast.fail(header.message || '미리보기에 실패하였습니다');
-                    }
-                },
-            };
-            dispatch(previewPage(option));
-        },
-        [artPageBody, articlePage, dispatch],
-    );
-
-    /**
-     * 미리보기 팝업띄움.
-     */
-    const popupPreview = (url, item) => {
-        const targetUrl = `${API_BASE_URL}${url}`;
-
-        // 폼 생성
-        const f = document.createElement('form');
-        f.setAttribute('method', 'post');
-        f.setAttribute('action', targetUrl);
-        f.setAttribute('target', '_blank');
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const propName in item) {
-            if (typeof item[propName] === 'object') {
-                const subObject = item[propName];
-                // eslint-disable-next-line no-restricted-syntax
-                for (const inPropName in subObject) {
-                    if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = `${propName}.${inPropName}`;
-                        input.value = item[propName][inPropName];
-                        f.appendChild(input);
-                    }
-                }
-            } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = propName;
-                input.value = item[propName];
-                f.appendChild(input);
-            }
-        }
-
-        document.getElementsByTagName('body')[0].appendChild(f);
-        f.submit();
-        f.remove();
-    };
-
     return (
         <div className="d-flex">
             <Helmet>
@@ -260,17 +195,11 @@ const ArticlePage = ({ match }) => {
                 tabWidth={412}
                 tabs={[
                     <Suspense>
-                        <ArticlePageEdit show={activeTabIdx === 0} onDelete={handleClickDelete} onPreview={handlePreview} />
+                        <ArticlePageEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
                     </Suspense>,
 
                     <Suspense>
-                        <LookupArticlePageList
-                            show={activeTabIdx === 1}
-                            seqType={ITEM_AP}
-                            seq={articlePage.artPageSeq}
-                            onLoad={handleClickArticlePageLoad}
-                            onPreview={handlePreview}
-                        />
+                        <LookupArticlePageList show={activeTabIdx === 1} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickArticlePageLoad} />
                     </Suspense>,
 
                     <Suspense>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListTitleRenderer, ImageRenderer, ButtonStatusRenderer, SendStatusRenderer } from './GridRenderer';
+import { ListTitleRenderer, ImageRenderer, ButtonStatusRenderer, SendStatusRenderer } from './component';
 
 export const tempColumnDefs = [
     {
@@ -108,7 +108,7 @@ export const tempColumnDefs = [
 //     {
 //         headerName: '\t이미지',
 //         field: 'listRepImg',
-//         cellRendererFramework: (params) => <ImageRenderer src={`http://pds.joins.com/${params.data.artThumb}`} />,
+//         cellRendererFramework: (params) => <AgGridThumbnailComponent src={`http://pds.joins.com/${params.data.artThumb}`} />,
 //         width: 80,
 //         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '8px' },
 //     },
@@ -117,7 +117,7 @@ export const tempColumnDefs = [
 //         field: 'listTitle',
 //         width: 380,
 //         flex: true,
-//         //cellRendererFramework: (params) => <ListTitleRenderer title={params.data.artTitle} summary={params.data.artSummary} />,
+//         //cellRendererFramework: (params) => <AggridTitleAndSummaryComponent title={params.data.artTitle} summary={params.data.artSummary} />,
 //         cellStyle: { fontSize: '12px', lineHeight: '40px' },
 //         children: [
 //             {
@@ -125,7 +125,7 @@ export const tempColumnDefs = [
 //                 field: 'listTitle',
 //                 width: 380,
 //                 flex: true,
-//                 cellRendererFramework: (params) => <ListTitleRenderer title={params.data.artTitle} summary={params.data.artSummary} />,
+//                 cellRendererFramework: (params) => <AggridTitleAndSummaryComponent title={params.data.artTitle} summary={params.data.artSummary} />,
 //                 cellStyle: { fontSize: '12px', lineHeight: '40px' },
 //             },
 //         ],
@@ -135,7 +135,7 @@ export const tempColumnDefs = [
 //         field: 'sendStatus',
 //         width: 120,
 //         wrapText: true,
-//         cellRendererFramework: (params) => <SendStatusRenderer sendFlag={params.data.serviceFlag} facebook={params.data.sendFb} twitter={params.data.sendTw} />,
+//         cellRendererFramework: (params) => <SendStatusComponent sendFlag={params.data.serviceFlag} facebook={params.data.sendFb} twitter={params.data.sendTw} />,
 //         cellStyle: { fontSize: '12px', lineHeight: '23px' },
 //     },
 
@@ -162,7 +162,7 @@ export const tempColumnDefs = [
 //         field: 'insStatus',
 //         width: 80,
 //         wrapText: true,
-//         cellRendererFramework: (params) => <ButtonStatusRenderer {...params} />,
+//         cellRendererFramework: (params) => <ButtonStatusComponent {...params} />,
 //         cellStyle: { fontSize: '12px', lineHeight: '23px' },
 //     },
 // ];

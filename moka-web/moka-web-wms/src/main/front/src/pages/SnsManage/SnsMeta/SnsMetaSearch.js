@@ -10,7 +10,7 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { initialState } from '@store/snsManage/snsReducer';
 
-const SnsMataSearch = ({ searchOptions }) => {
+const SnsMetaSearch = ({ searchOptions }) => {
     const [dateType, setDateType] = useState('today');
     const [disabled, setDisabled] = useState({ date: true });
 
@@ -23,6 +23,8 @@ const SnsMataSearch = ({ searchOptions }) => {
     const dispatch = useDispatch();
 
     const handleSearchReset = () => {
+        setDateType('today');
+        setDisabled({ date: true });
         setOptions(initialState.meta.search);
         dispatch(changeSNSMetaSearchOptions(initialState.meta.search));
     };
@@ -173,4 +175,4 @@ const SnsMataSearch = ({ searchOptions }) => {
     );
 };
 
-export default SnsMataSearch;
+export default SnsMetaSearch;

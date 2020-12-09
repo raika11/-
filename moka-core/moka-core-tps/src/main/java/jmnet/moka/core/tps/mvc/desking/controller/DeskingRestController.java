@@ -279,14 +279,14 @@ public class DeskingRestController extends AbstractCommonController {
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // work를 그대로 리턴
-            String message = msg("tps.desking.success.reserve");
+            String message = msg("tps.desking.success.delete-reserve");
             ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, message);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO RESERVE DESKING]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO RESERVE DESKING]", e, true);
-            throw new Exception(msg("tps.desking.error.reserve"), e);
+            throw new Exception(msg("tps.desking.error.delete-reserve"), e);
         }
     }
 

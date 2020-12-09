@@ -23,7 +23,7 @@ const StatusSend = ({ faceBook, twitter }) => {
     );
 };
 
-const SendStatusRenderer = ({ sendFlag, facebook, twitter }) => {
+const SendStatusComponent = ({ sendFlag, facebook, twitter }) => {
     // sendFlag Y : 보낸기사, N: 보내지 않은 기사.
     // facebook Y: 페이스북 보낸기사. N : 보내지 않은 기사.
     // twitter Y: 트위터 보낸기사. N : 보내지 않은 기사.
@@ -37,4 +37,4 @@ const SendStatusRenderer = ({ sendFlag, facebook, twitter }) => {
     );
 };
 
-export default SendStatusRenderer;
+export default SendStatusComponent;

@@ -2,7 +2,7 @@ import React from 'react';
 import Figure from 'react-bootstrap/Figure';
 import { NewIcon } from '@components';
 
-const ImageRenderer = ({ src, isNew }) => {
+const AgGridThumbnailComponent = ({ src, isNew }) => {
     return (
         <>
             {isNew && (
@@ -17,4 +17,4 @@ const ImageRenderer = ({ src, isNew }) => {
     );
 };
 
-export default ImageRenderer;
+export default AgGridThumbnailComponent;

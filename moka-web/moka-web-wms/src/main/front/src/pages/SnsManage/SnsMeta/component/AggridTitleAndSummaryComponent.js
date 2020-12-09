@@ -3,7 +3,7 @@ import { MokaIcon } from '@components';
 
 // fal-alarm-clock
 
-const ListTitleRenderer = ({ title, summary, reservation }) => {
+const AggridTitleAndSummaryComponent = ({ title, summary, reservation }) => {
     return (
         <>
             <div className="pt-01" style={{ minHeight: 55, textAlign: 'left' }}>
@@ -25,4 +25,4 @@ const ListTitleRenderer = ({ title, summary, reservation }) => {
     );
 };
 
-export default ListTitleRenderer;
+export default AggridTitleAndSummaryComponent;

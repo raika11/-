@@ -27,7 +27,7 @@ const defaultProps = {};
 /**
  * 데이터셋 리스트 공통 모달
  */
-const MataModal = (props) => {
+const SnsMetaModal = (props) => {
     const tempHandleChange = () => {};
 
     return (
@@ -54,7 +54,7 @@ const MataModal = (props) => {
     );
 };
 
-MataModal.propTypes = propTypes;
-MataModal.defaultProps = defaultProps;
+SnsMetaModal.propTypes = propTypes;
+SnsMetaModal.defaultProps = defaultProps;
 
-export default MataModal;
+export default SnsMetaModal;

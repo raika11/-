@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan. 
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna. 
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus. 
- * Vestibulum commodo. Ut rhoncus gravida arcu. 
+ * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 package jmnet.moka.core.tps.mvc.articlepage.vo;
@@ -14,7 +14,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 import javax.persistence.Column;
 import jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO;
-import jmnet.moka.core.tps.mvc.page.vo.PageVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +37,8 @@ import org.apache.ibatis.type.Alias;
 public class ArticlePageVO {
     private static final long serialVersionUID = 1L;
 
-    public static final Type TYPE = new TypeReference<List<ArticlePageVO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<ArticlePageVO>>() {
+    }.getType();
 
     @Column(name = "ART_PAGE_SEQ")
     private Long artPageSeq;
@@ -53,4 +53,8 @@ public class ArticlePageVO {
 
     @Column(name = "ART_TYPE_NAME")
     private String artTypeName;
+
+    @Column(name = "TOTAL_ID")
+    private Long totalId;
+
 }

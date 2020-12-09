@@ -10,18 +10,16 @@ import { MokaSearchInput, MokaInput } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { getArticlePageList, changeSearchOption, initialState } from '@store/articlePage';
 /**
- * 템플릿 검색 컴포넌트
+ * 관련 기사페이지 검색 컴포넌트
  */
 const ArticlePageSearch = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, domainList, search: storeSearch, tpSizeRows, tpZoneRows, searchTypeList } = useSelector(
+    const { latestDomainId, domainList, search: storeSearch, searchTypeList } = useSelector(
         (store) => ({
             latestDomainId: store.auth.latestDomainId,
             domainList: store.auth.domainList,
             search: store.articlePage.search,
-            tpSizeRows: store.codeMgt.tpSizeRows,
-            tpZoneRows: store.codeMgt.tpZoneRows,
             searchTypeList: store.articlePage.searchTypeList,
         }),
         shallowEqual,
@@ -49,7 +47,6 @@ const ArticlePageSearch = () => {
 
     useEffect(() => {
         // latestDomainId 변경 => 템플릿의 search.domainId 변경
-        console.log(latestDomainId, search.domainId);
         if (latestDomainId !== search.domainId) {
             dispatch(
                 getArticlePageList(

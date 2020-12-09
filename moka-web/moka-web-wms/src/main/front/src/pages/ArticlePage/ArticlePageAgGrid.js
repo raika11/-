@@ -29,8 +29,8 @@ const ArticlePageAgGrid = ({ onDelete }) => {
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
             let temp = { ...search, [key]: value };
-            if (key !== 'articlePage') {
-                temp['articlePage'] = 0;
+            if (key !== 'page') {
+                temp['page'] = 0;
             }
             dispatch(getArticlePageList(changeSearchOption(temp)));
         },
@@ -70,7 +70,7 @@ const ArticlePageAgGrid = ({ onDelete }) => {
 
             {/* ag-grid table */}
             <MokaTable
-                agGridHeight={523}
+                agGridHeight={564}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(rowData) => rowData.artPageSeq}

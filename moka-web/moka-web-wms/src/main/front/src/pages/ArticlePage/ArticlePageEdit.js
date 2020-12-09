@@ -7,12 +7,12 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInputLabel } from '@components';
 import { changeLatestDomainId } from '@store/auth/authAction';
-import { previewPage, w3cArticlePage } from '@store/merge';
+import { w3cArticlePage } from '@store/merge';
 import { initialState, getArticlePage, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
-import { API_BASE_URL, W3C_URL } from '@/constants';
+import { W3C_URL } from '@/constants';
 
-const ArticlePageEdit = ({ onDelete }) => {
+const ArticlePageEdit = ({ onDelete, onPreview }) => {
     const { artPageSeq: paramId } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -56,18 +56,11 @@ const ArticlePageEdit = ({ onDelete }) => {
                     }
                 },
             };
-
-            if (Object.prototype.hasOwnProperty.call(articlePage, 'domain')) {
-                const domainId = articlePage.domain.domainId;
-                if (latestDomainId !== domainId) {
-                    dispatch(changeLatestDomainId(domainId));
-                }
-            }
             dispatch(getArticlePage(option));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [articlePage, articlePage.artPageSeq, dispatch, history, latestDomainId, paramId]);
+    }, [articlePage, articlePage.artPageSeq, dispatch, history, paramId]);
 
     useEffect(() => {
         if (articlePage.artPageSeq) {
@@ -82,7 +75,6 @@ const ArticlePageEdit = ({ onDelete }) => {
             ...articlePage,
         });
         setPreviewTotalId(articlePage.previewTotalId);
-        console.log(articlePage);
     }, [articlePage]);
     /*
     useEffect(() => {
@@ -114,17 +106,17 @@ const ArticlePageEdit = ({ onDelete }) => {
     const handleChangeValue = useCallback(
         ({ target }) => {
             const { name, value } = target;
-
             if (name === 'artPageName') {
                 setTemp({ ...temp, artPageName: value });
                 setError({ ...error, artPageName: false });
+            } else if (name === 'previewTotalId') {
+                setPreviewTotalId(value);
             }
         },
         [error, temp],
     );
 
     const changeArtType = (artType) => {
-        console.log(artType);
         dispatch(
             getPreviewTotalId({
                 artType: artType,
@@ -134,7 +126,6 @@ const ArticlePageEdit = ({ onDelete }) => {
                             toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
                         }
                         setPreviewTotalId(response.body);
-                        console.log(response.body);
                     } else {
                         toast.error('미리보기용 기사ID 조회에 실패하였습니다.');
                     }
@@ -254,64 +245,14 @@ const ArticlePageEdit = ({ onDelete }) => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = useCallback(() => {
-        const option = {
-            content: artPageBody,
-            callback: ({ header, body }) => {
-                if (header.success) {
-                    const item = {
-                        ...produce(articlePage, (draft) => {
-                            draft.artPageBody = artPageBody;
-                        }),
-                        totalId: previewTotalId,
-                    };
-                    popupPreview('/preview/article-page', item);
-                } else {
-                    toast.fail(header.message || '미리보기에 실패하였습니다');
-                }
-            },
-        };
-        dispatch(previewPage(option));
-    }, [articlePage, artPageBody, dispatch, previewTotalId]);
-
-    /**
-     * 미리보기 팝업띄움.
-     */
-    const popupPreview = (url, item) => {
-        const targetUrl = `${API_BASE_URL}${url}`;
-
-        // 폼 생성
-        const f = document.createElement('form');
-        f.setAttribute('method', 'post');
-        f.setAttribute('action', targetUrl);
-        f.setAttribute('target', '_blank');
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const propName in item) {
-            if (typeof item[propName] === 'object') {
-                const subObject = item[propName];
-                // eslint-disable-next-line no-restricted-syntax
-                for (const inPropName in subObject) {
-                    if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = `${propName}.${inPropName}`;
-                        input.value = item[propName][inPropName];
-                        f.appendChild(input);
-                    }
-                }
-            } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = propName;
-                input.value = item[propName];
-                f.appendChild(input);
+        if (onPreview) {
+            if (previewTotalId) {
+                onPreview(articlePage, previewTotalId);
+            } else {
+                toast.error('기사ID를 입력해 주세요.');
             }
         }
-
-        document.getElementsByTagName('body')[0].appendChild(f);
-        f.submit();
-        f.remove();
-    };
+    }, [articlePage, onPreview, previewTotalId]);
 
     /**
      * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사
@@ -440,12 +381,11 @@ const ArticlePageEdit = ({ onDelete }) => {
                     <MokaInputLabel
                         label="기사ID"
                         value={previewTotalId}
-                        name="articleId"
+                        name="previewTotalId"
                         onChange={handleChangeValue}
                         className="mb-0 w-100"
                         labelWidth={84}
                         placeholder="기사ID를 입력하세요."
-                        required
                     />
                 </Form.Row>
             </Form>

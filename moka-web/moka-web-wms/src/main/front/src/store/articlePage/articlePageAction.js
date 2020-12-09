@@ -39,8 +39,8 @@ export const [GET_ARTICLE_PAGE_LOOKUP_LIST, GET_ARTICLE_PAGE_LOOKUP_LIST_SUCCESS
     'articlePage/GET_ARTICLE_PAGE_LOOKUP_LIST',
 );
 export const [GET_ARTICLE_PAGE_LOOKUP, GET_ARTICLE_PAGE_LOOKUP_SUCCESS, GET_ARTICLE_PAGE_LOOKUP_FAILURE] = createRequestActionTypes('articlePage/GET_ARTICLE_PAGE_LOOKUP');
-export const getPageLookupList = createAction(GET_ARTICLE_PAGE_LOOKUP_LIST, (...actions) => actions);
-export const getPageLookup = createAction(GET_ARTICLE_PAGE_LOOKUP, ({ artPageSeq, callback }) => ({ artPageSeq, callback }));
+export const getArticlePageLookupList = createAction(GET_ARTICLE_PAGE_LOOKUP_LIST, (...actions) => actions);
+export const getArticlePageLookup = createAction(GET_ARTICLE_PAGE_LOOKUP, ({ artPageSeq, callback }) => ({ artPageSeq, callback }));
 
 export const EXISTS_ARTICLE_TYPE = 'articlePage/EXISTS_ARTICLE_TYPE';
 export const existsArtType = createAction(EXISTS_ARTICLE_TYPE, ({ payload, callback }) => ({ payload, callback }));

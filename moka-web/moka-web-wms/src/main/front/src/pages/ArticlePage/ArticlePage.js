@@ -7,31 +7,32 @@ import { Helmet } from 'react-helmet';
 
 import { MokaCard, MokaIcon } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
-import { ITEM_AP } from '@/constants';
+import { ITEM_AP, ITEM_CT, ITEM_CP, ITEM_TP, TEMS_PREFIX } from '@/constants';
 import { getArticleType } from '@store/codeMgt';
-import { clearStore, deleteArticlePage, changeArticlePageBody } from '@store/articlePage';
+import { clearStore, deleteArticlePage, appendTag, changeArticlePageBody } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
+import { previewPage } from '@store/merge';
+import { API_BASE_URL } from '@/constants';
 
 import ArticlePageEditor from './ArticlePageEditor';
 const ArticlePageList = React.lazy(() => import('./ArticlePageList'));
 const ArticlePageEdit = React.lazy(() => import('./ArticlePageEdit'));
-
-const LookupArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/LookupArticlePageList'));
 // relations
-/*
-const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
-const RelationInContainerList = React.lazy(() => import('@pages/Container/components/RelationInContainerList'));
-const RelationInComponentList = React.lazy(() => import('@pages/Component/components/RelationInComponentList'));
+const LookupArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/LookupArticlePageList'));
+const LookupContainerList = React.lazy(() => import('@pages/Container/components/LookupContainerList'));
+const LookupComponentList = React.lazy(() => import('@pages/Component/components/LookupComponentList'));
+const LookupTemplateList = React.lazy(() => import('@pages/Template/components/LookupTemplateList'));
+const PageChildAdList = React.lazy(() => import('@pages/Page/relations/PageChildAdList'));
 const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
-*/
 /**
  * 템플릿 관리
  */
 const ArticlePage = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { articlePage, articleTypeRows } = useSelector((store) => ({
+    const { articlePage, artPageBody, articleTypeRows } = useSelector((store) => ({
         articlePage: store.articlePage.articlePage,
+        artPageBody: store.articlePage.artPageBody,
         articleTypeRows: store.codeMgt.articleTypeRows,
     }));
 
@@ -137,6 +138,116 @@ const ArticlePage = ({ match }) => {
         }
     }, [articleTypeRows, dispatch]);
 
+    /**
+     * 히스토리 로드 버튼 이벤트
+     */
+    const handleClickHistLoad = ({ header, body }) => {
+        if (header.success) {
+            messageBox.confirm('현재 작업된 소스가 히스토리 내용으로 변경됩니다.\n변경하시겠습니까?', () => {
+                dispatch(changeArticlePageBody(body.body));
+            });
+        } else {
+            toast.error(header.message);
+        }
+    };
+
+    /**
+     * 기사페이지 로드 버튼 이벤트
+     */
+    const handleClickArticlePageLoad = useCallback(
+        ({ header, body }) => {
+            if (header.success) {
+                messageBox.confirm('현재 작업된 소스가 변경됩니다.\n변경하시겠습니까?', () => {
+                    dispatch(changeArticlePageBody(body.artPageBody));
+                });
+            } else {
+                toast.error(header.message);
+            }
+        },
+        [dispatch],
+    );
+
+    /**
+     * tems태그 삽입
+     */
+    const handleAppendTag = useCallback(
+        (data, itemType) => {
+            let tag = null;
+            if (itemType === ITEM_CT) {
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.containerSeq}" name="${data.containerName}"/>\n`;
+            } else if (itemType === ITEM_CP) {
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.componentSeq}" name="${data.componentName}"/>\n`;
+            } else if (itemType === ITEM_TP) {
+                tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${data.templateSeq}" name="${data.templateName}"/>\n`;
+            }
+            dispatch(appendTag(tag));
+        },
+        [dispatch],
+    );
+
+    const handlePreview = useCallback(
+        (previewTotalId) => {
+            const option = {
+                content: artPageBody,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        const item = {
+                            ...produce(articlePage, (draft) => {
+                                draft.artPageBody = artPageBody;
+                            }),
+                            totalId: previewTotalId,
+                        };
+                        popupPreview('/preview/article-page', item);
+                    } else {
+                        toast.fail(header.message || '미리보기에 실패하였습니다');
+                    }
+                },
+            };
+            dispatch(previewPage(option));
+        },
+        [artPageBody, articlePage, dispatch],
+    );
+
+    /**
+     * 미리보기 팝업띄움.
+     */
+    const popupPreview = (url, item) => {
+        const targetUrl = `${API_BASE_URL}${url}`;
+
+        // 폼 생성
+        const f = document.createElement('form');
+        f.setAttribute('method', 'post');
+        f.setAttribute('action', targetUrl);
+        f.setAttribute('target', '_blank');
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const propName in item) {
+            if (typeof item[propName] === 'object') {
+                const subObject = item[propName];
+                // eslint-disable-next-line no-restricted-syntax
+                for (const inPropName in subObject) {
+                    if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = `${propName}.${inPropName}`;
+                        input.value = item[propName][inPropName];
+                        f.appendChild(input);
+                    }
+                }
+            } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = propName;
+                input.value = item[propName];
+                f.appendChild(input);
+            }
+        }
+
+        document.getElementsByTagName('body')[0].appendChild(f);
+        f.submit();
+        f.remove();
+    };
+
     return (
         <div className="d-flex">
             <Helmet>
@@ -163,34 +274,46 @@ const ArticlePage = ({ match }) => {
                 tabWidth={412}
                 tabs={[
                     <Suspense>
-                        <ArticlePageEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
+                        <ArticlePageEdit show={activeTabIdx === 0} onDelete={handleClickDelete} onPreview={handlePreview} />
                     </Suspense>,
 
                     <Suspense>
-                        <LookupArticlePageList show={activeTabIdx === 1} seqType={ITEM_AP} seq={articlePage.artPageSeq} /* onAppend={handleAppendTag}*/ />
+                        <LookupArticlePageList
+                            show={activeTabIdx === 1}
+                            seqType={ITEM_AP}
+                            seq={articlePage.artPageSeq}
+                            onLoad={handleClickArticlePageLoad}
+                            onPreview={handlePreview}
+                        />
                     </Suspense>,
-                    /*
-                                    <Suspense>
-                                        <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
-                    */
+
+                    <Suspense>
+                        <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
+                    </Suspense>,
+                    <Suspense>
+                        <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
+                    </Suspense>,
+                    <Suspense>
+                        <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
+                    </Suspense>,
+                    <Suspense>
+                        <PageChildAdList show={activeTabIdx === 5} seqType={ITEM_AP} />
+                    </Suspense>,
+                    <Suspense>
+                        <HistoryList show={activeTabIdx === 6} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickHistLoad} />
+                    </Suspense>,
                 ]}
                 tabNavWidth={48}
                 tabNavPosition="right"
                 tabNavs={[
                     { title: '기사페이지 정보', text: 'Info' },
 
-                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                    /* { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
+                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-money-check" /> },
                     { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                     { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
+                    { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },
+                    { title: '관련 광고', icon: <MokaIcon iconName="fal-ad" /> },
                     { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
-                    */
                 ]}
             />
         </div>

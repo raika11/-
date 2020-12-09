@@ -1,5 +1,5 @@
 import React from 'react';
-import { MokaTableLinkButton } from '@components';
+import { MokaTableLoadButton, MokaTablePreviewButton } from '@components';
 
 export const columnDefs = [
     {
@@ -10,18 +10,27 @@ export const columnDefs = [
     },
     {
         headerName: '기사페이지명',
-        field: 'skinName',
-        width: 276,
+        field: 'artPageName',
+        flex: 1,
         cellStyle: { fontSize: '12px' },
-        tooltipField: 'skinName',
+        tooltipField: 'artPageName',
     },
     {
         headerName: '',
-        field: 'link',
+        field: 'load',
         width: 36,
         cellRendererFramework: (row) => {
             const { data } = row;
-            return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;
+            return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;
+        },
+    },
+    {
+        headerName: '',
+        field: 'preview',
+        width: 36,
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTablePreviewButton {...row} onClick={data.handleClickPreview} />;
         },
     },
 ];

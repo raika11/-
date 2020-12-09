@@ -191,7 +191,6 @@ const ArticlePageEdit = ({ onDelete, onPreview }) => {
                             artType: tmp.artType,
                         },
                         callback: (response) => {
-                            console.log(response);
                             const { header, body } = response;
                             if (body) {
                                 setError({ ...error, artType: true });

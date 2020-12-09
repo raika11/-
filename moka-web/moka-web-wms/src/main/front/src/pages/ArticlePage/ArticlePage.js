@@ -25,7 +25,7 @@ const LookupTemplateList = React.lazy(() => import('@pages/Template/components/L
 const PageChildAdList = React.lazy(() => import('@pages/Page/relations/PageChildAdList'));
 const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 /**
- * 템플릿 관리
+ * 기사페이지 관리
  */
 const ArticlePage = ({ match }) => {
     const history = useHistory();
@@ -112,20 +112,6 @@ const ArticlePage = ({ match }) => {
         [dispatch, history],
     );
 
-    /**
-     * 히스토리 로드 버튼 이벤트
-     */
-    /*    
-    const handleClickLoad = ({ header, body }) => {
-        if (header.success) {
-            messageBox.confirm('현재 작업된 소스가 히스토리 내용으로 변경됩니다.\n변경하시겠습니까?', () => {
-                dispatch(changeArticlePageBody(body.body));
-            });
-        } else {
-            toast.error(header.message);
-        }
-    };
-*/
     useEffect(() => {
         return () => {
             dispatch(clearStore());

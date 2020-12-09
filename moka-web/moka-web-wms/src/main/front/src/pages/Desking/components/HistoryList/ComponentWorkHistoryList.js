@@ -1,187 +1,104 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import moment from 'moment';
-import { MokaCard } from '@components';
-import { DB_DATEFORMAT } from '@/constants';
-import Search from './ComponentWorkHistorySearch';
-import ComponentWorkAgGrid from './ComponentWorkHistoryAgGrid';
-import DeskingWorkAgGrid from './DeskingWorkHistoryAgGrid';
-import toast from '@utils/toastUtil';
-import {
-    initialState,
-    clearHistoryList,
-    clearSelectedComponent,
-    GET_COMPONENT_WORK_HISTORY,
-    GET_DESKING_WORK_HISTORY,
-    getComponentWorkHistory,
-    changeSearchOption,
-    putDeskingWorkHistory,
-    getDeskingWorkHistory,
-} from '@store/desking';
+import React from 'react';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import { DESK_HIST_PUBLISH, DESK_HIST_SAVE } from '@/constants';
+import { MokaTable, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
+import { defaultHistorySearchType } from '@pages/commons';
+import columnDefs from './ComponentWorkHistoryListColumns';
 
 const ComponentWorkHistoryList = (props) => {
-    const { show } = props;
-    const dispatch = useDispatch();
-    const { area, storeSearch, componentWorkLoading, deskingWorkLoading, total, componentList, componentWorkHistoryList, deskingWorkHistoryList, selectedComponent } = useSelector(
-        (store) => ({
-            area: store.desking.area,
-            storeSearch: store.desking.history.search,
-            componentWorkLoading: store.loading[GET_COMPONENT_WORK_HISTORY],
-            deskingWorkLoading: store.loading[GET_DESKING_WORK_HISTORY],
-            total: store.desking.history.total,
-            componentList: store.desking.list,
-            componentWorkHistoryList: store.desking.history.componentWorkHistory.list,
-            deskingWorkHistoryList: store.desking.history.deskingWorkHistory.list,
-            selectedComponent: store.desking.selectedComponent,
-        }),
-        shallowEqual,
-    );
+    const { search, setSearch, componentList, total, loading, rowData, onChange, onRowClick, onSearch } = props;
 
-    // state
-    const [search, setSearch] = useState(initialState.history.search);
-    const [rowData, setRowData] = useState([]);
-
-    /**
-     * 테이블 검색옵션 변경
-     */
-    const handleChangeSearchOption = ({ key, value }) => {
-        let temp = { ...search, [key]: value };
-        if (key !== 'page') {
-            temp['page'] = 0;
-        }
-        dispatch(getComponentWorkHistory(changeSearchOption(temp)));
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
+        setSearch({
+            ...search,
+            [name]: value,
+        });
     };
 
-    /**
-     * search 검색 버튼
-     */
-    const handleSearch = () => {
-        dispatch(
-            getComponentWorkHistory(
-                changeSearchOption({
-                    ...search,
-                    page: 0,
-                }),
-            ),
-        );
+    const handleDate = (date) => {
+        if (typeof date === 'object') {
+            setSearch({ ...search, regDt: date });
+        } else if (date === '') {
+            setSearch({ ...search, regDt: null });
+        }
     };
-
-    /**
-     * 컴포넌트 워크 히스토리 클릭 시 데스킹 워크 목록 조회
-     * @param {object} row row data
-     */
-    const handleRowClicked = (row) => {
-        setSearch({ ...search, componentHistorySeq: row.seq });
-        dispatch(getDeskingWorkHistory(row.seq));
-    };
-
-    /**
-     * 컴포넌트 워크 히스토리 테이블 로드 버튼 클릭
-     * @param {object} data row data
-     */
-    const handleClickLoad = useCallback(
-        (data) => {
-            let compWork = componentList.find((c) => String(c.componentSeq) === search.componentSeq);
-
-            if (!compWork) return;
-
-            // 컴포넌트 히스토리의 데스킹 기사를 편집기사 워크로 등록
-            dispatch(
-                putDeskingWorkHistory({
-                    componentWorkSeq: compWork.seq,
-                    componentHistSeq: data.seq,
-                    callback: (response) => {
-                        if (response.header) {
-                            toast.success(response.header.message);
-                        } else {
-                            toast.fail(response.header.message);
-                        }
-                    },
-                }),
-            );
-        },
-        [componentList, dispatch, search.componentSeq],
-    );
-
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
-    useEffect(() => {
-        // 기본 날짜 셋팅
-        if (!search.regDt) {
-            dispatch(
-                changeSearchOption({
-                    ...initialState.history.search,
-                    regDt: moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).format(DB_DATEFORMAT),
-                }),
-            );
-        }
-    }, [dispatch, search.regDt]);
-
-    useEffect(() => {
-        // 컴포넌트 히스토리 rowData 셋팅
-        setRowData(
-            componentWorkHistoryList.map((arr) => ({
-                ...arr,
-                handleClickLoad,
-            })),
-        );
-    }, [handleClickLoad, componentWorkHistoryList]);
-
-    useEffect(() => {
-        // area 변경시 search, table, selectedComponent clear
-        if (search.areaSeq !== area.areaSeq) {
-            if (selectedComponent.componentSeq) dispatch(clearSelectedComponent());
-            dispatch(
-                changeSearchOption({
-                    ...search,
-                    areaSeq: area.areaSeq,
-                    componentSeq: null,
-                }),
-            );
-            dispatch(clearHistoryList());
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search.areaSeq, search.regDt, area.areaSeq]);
-
-    useEffect(() => {
-        // 컴포넌트 선택시 컴포넌트 워크 히스토리 목록 조회
-        if (selectedComponent?.componentSeq && show) {
-            dispatch(
-                getComponentWorkHistory(
-                    changeSearchOption({
-                        ...search,
-                        areaSeq: area.areaSeq,
-                        componentSeq: selectedComponent.componentSeq,
-                    }),
-                ),
-            );
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedComponent, show]);
 
     return (
-        <MokaCard title="히스토리" className="w-100" bodyClassName="d-flex">
-            <div style={{ width: '456px' }} className="pr-3">
-                <Search search={search} setSearch={setSearch} list={componentList} onSearch={handleSearch} selectedComponent={selectedComponent} show={show} />
-                {/* search의 테이블 */}
-                <ComponentWorkAgGrid
-                    loading={componentWorkLoading}
-                    search={search}
-                    setSearch={setSearch}
-                    total={total}
-                    rowData={rowData}
-                    onChange={handleChangeSearchOption}
-                    onRowClick={handleRowClicked}
-                    onLoad={handleClickLoad}
-                />
-            </div>
-            <div className="flex-fill">
-                {/* 데스킹 히스토리 목록 테이블 */}
-                <DeskingWorkAgGrid loading={deskingWorkLoading} search={search} setSearch={setSearch} total={total} rowData={deskingWorkHistoryList} />
-            </div>
-        </MokaCard>
+        <div style={{ width: 400 }} className="pr-3">
+            <Form>
+                {/* 컴포넌트 명 */}
+                <MokaInput as="select" className="mb-2 ft-12" onChange={handleChangeValue} name="componentSeq" value={search.componentSeq}>
+                    <option hidden>컴포넌트 명</option>
+                    {componentList.map((comp) => (
+                        <option key={comp.componentSeq} value={comp.componentSeq}>
+                            {comp.componentName}
+                        </option>
+                    ))}
+                </MokaInput>
+                {/* 날짜 검색 */}
+                <Form.Row className="mb-2">
+                    <Col xs={4} className="p-0 pr-2">
+                        <MokaInput as="select" className="mb-0 ft-12" value={search.status} name="status" onChange={handleChangeValue}>
+                            <option value={DESK_HIST_PUBLISH}>전송 기록</option>
+                            <option value={DESK_HIST_SAVE}>임시저장 기록</option>
+                        </MokaInput>
+                    </Col>
+                    <Col xs={8} className="p-0">
+                        <MokaInputLabel
+                            label="날짜"
+                            as="dateTimePicker"
+                            labelWidth={28}
+                            className="mb-0 w-100"
+                            inputProps={{
+                                timeFormat: null,
+                                inputClassName: 'ft-12',
+                            }}
+                            value={search.regDt}
+                            onChange={handleDate}
+                        />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    {/* 검색조건 */}
+                    <Col xs={4} className="p-0 pr-2">
+                        <MokaInput as="select" className="mb-0 ft-12" value={search.searchType} name="keyword" onChange={handleChangeValue}>
+                            {defaultHistorySearchType.map((searchType) => (
+                                <option value={searchType.id} key={searchType.id}>
+                                    {searchType.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </Col>
+                    {/* 키워드 */}
+                    <Col xs={8} className="p-0 mb-0">
+                        <MokaSearchInput
+                            value={search.keyword}
+                            name="keyword"
+                            onChange={handleChangeValue}
+                            onSearch={() => onSearch(search)}
+                            buttonDisabled={!search.componentSeq}
+                        />
+                    </Col>
+                </Form.Row>
+            </Form>
+
+            {/* search의 테이블 */}
+            <MokaTable
+                columnDefs={columnDefs}
+                rowData={rowData}
+                onRowNodeId={(history) => history.seq}
+                agGridHeight={558}
+                onRowClicked={onRowClick}
+                loading={loading}
+                total={total}
+                page={search.page}
+                size={search.size}
+                onChangeSearchOption={onChange}
+                preventRowClickCell={['load']}
+            />
+        </div>
     );
 };
 

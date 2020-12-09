@@ -38,21 +38,19 @@ export const initialState = {
         deskingWorks: [],
     },
     history: {
-        total: 0,
-        search: {
-            areaSeq: null,
-            page: 0,
-            size: PAGESIZE_OPTIONS[0],
-            sort: 'seq,desc',
-            componentSeq: null,
-            componentHistorySeq: null,
-            regDt: null,
-            status: DESK_HIST_PUBLISH,
-            searchType: 'all', // all/regId/regNm
-            keyword: '',
-        },
         componentWorkHistory: {
             list: [],
+            total: 0,
+            search: {
+                areaSeq: null,
+                page: 0,
+                size: PAGESIZE_OPTIONS[0],
+                sort: 'seq,desc',
+                regDt: null,
+                status: DESK_HIST_PUBLISH,
+                searchType: 'all', // all/regId/regNm
+                keyword: '',
+            },
         },
         deskingWorkHistory: {
             list: [],
@@ -75,14 +73,16 @@ export default handleActions(
                 draft.error = initialState.error;
             });
         },
-        /**
-         * 히스토리 데이터 초기화
-         */
         [act.CLEAR_HISTORY_LIST]: (state) => {
             return produce(state, (draft) => {
                 draft.history.componentWorkHistory.list = initialState.history.componentWorkHistory.list;
                 draft.history.deskingWorkHistory.list = initialState.history.deskingWorkHistory.list;
                 draft.error = initialState.error;
+            });
+        },
+        [act.CLEAR_DESKING_HISTORY_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.history.deskingWorkHistory.list = initialState.history.deskingWorkHistory.list;
             });
         },
         /**
@@ -96,9 +96,9 @@ export default handleActions(
         /**
          * 검색 옵션 변경
          */
-        [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CHANGE_HISTORY_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.history.search = payload;
+                draft.history.componentWorkHistory.search = payload;
             });
         },
         /**

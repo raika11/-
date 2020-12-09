@@ -7,17 +7,19 @@ import { createRequestActionTypes } from '@store/commons/saga';
 export const CLEAR_STORE = 'desking/CLEAR_STORE';
 export const CLEAR_LIST = 'desking/CLEAR_LIST';
 export const CLEAR_HISTORY_LIST = 'desking/CLEAR_LIST';
+export const CLEAR_DESKING_HISTORY_LIST = 'desking/CLEAR_DESKING_HISTORY_LIST';
 export const CLEAR_SELECTED_COMPONENT = 'desking/CLEAR_SELECTED_COMPONENT';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearList = createAction(CLEAR_LIST);
 export const clearHistoryList = createAction(CLEAR_HISTORY_LIST);
+export const clearDeskingHistoryList = createAction(CLEAR_DESKING_HISTORY_LIST);
 export const clearSelectedComponent = createAction(CLEAR_SELECTED_COMPONENT);
 
 /**
  * 검색조건 변경
  */
-export const CHANGE_SEARCH_OPTION = 'desking/CHANGE_SEARCH_OPTION';
-export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
+export const CHANGE_HISTORY_SEARCH_OPTION = 'desking/CHANGE_HISTORY_SEARCH_OPTION';
+export const changeHistorySearchOption = createAction(CHANGE_HISTORY_SEARCH_OPTION, (search) => search);
 
 /**
  * 컴포넌트 워크 목록 조회
@@ -202,8 +204,8 @@ export const deskingSortGrid = createAction(DESKING_SORT_GRID, ({ grid, componen
 export const [GET_COMPONENT_WORK_HISTORY, GET_COMPONENT_WORK_HISTORY_SUCCESS, GET_COMPONENT_WORK_HISTORY_FAILURE] = createRequestActionTypes('desking/GET_COMPONENT_WORK_HISTORY');
 export const [GET_DESKING_WORK_HISTORY, GET_DESKING_WORK_HISTORY_SUCCESS, GET_DESKING_WORK_HISTORY_FAILURE] = createRequestActionTypes('desking/GET_DESKING_WORK_HISTORY');
 export const PUT_DESKING_WORK_HISTORY = 'desking/PUT_DESKING_WORK_HISTORY';
-export const getComponentWorkHistory = createAction(GET_COMPONENT_WORK_HISTORY, (...actions) => actions);
-export const getDeskingWorkHistory = createAction(GET_DESKING_WORK_HISTORY, (seq) => seq);
+export const getComponentWorkHistory = createAction(GET_COMPONENT_WORK_HISTORY, ({ search, callback }) => ({ search, callback }));
+export const getDeskingWorkHistory = createAction(GET_DESKING_WORK_HISTORY, ({ componentHistSeq }) => ({ componentHistSeq }));
 export const putDeskingWorkHistory = createAction(PUT_DESKING_WORK_HISTORY, ({ componentWorkSeq, componentHistSeq, callback }) => ({
     componentWorkSeq,
     componentHistSeq,

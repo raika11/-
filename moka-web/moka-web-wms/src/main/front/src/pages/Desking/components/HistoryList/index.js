@@ -1,1 +1,1 @@
-export { default } from './ComponentWorkHistoryList';
+export { default } from './HistoryList';

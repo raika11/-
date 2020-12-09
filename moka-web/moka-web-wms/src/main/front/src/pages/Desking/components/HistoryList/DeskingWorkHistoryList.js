@@ -1,13 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { MokaTable } from '@components';
-import columnDefs from './DeskingWorkHistoryAgGridColumns';
+import columnDefs from './DeskingWorkHistoryListColumns';
 
-const DeskingWorkHistoryAgGrid = (props) => {
+const DeskingWorkHistoryList = (props) => {
     const { loading, rowData } = props;
-
-    const handleRowClicked = useCallback((row) => {
-        // console.log(row);
-    }, []);
 
     return (
         <MokaTable
@@ -15,11 +11,11 @@ const DeskingWorkHistoryAgGrid = (props) => {
             rowData={rowData}
             onRowNodeId={(history) => history.histSeq}
             agGridHeight={721}
-            onRowClicked={handleRowClicked}
+            onRowClicked={() => {}}
             loading={loading}
             paging={false}
         />
     );
 };
 
-export default DeskingWorkHistoryAgGrid;
+export default DeskingWorkHistoryList;

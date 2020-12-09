@@ -494,7 +494,7 @@ const deleteDeskingWorkList = createDeskingRequestSaga(act.DELETE_DESKING_WORK_L
 /**
  * 히스토리 조회(컴포넌트 별)
  */
-const getComponentHistory = callApiAfterActions(act.GET_COMPONENT_WORK_HISTORY, api.getComponentHistoryList, (store) => store.desking.history);
+const getComponentHistory = createRequestSaga(act.GET_COMPONENT_WORK_HISTORY, api.getComponentHistoryList);
 
 /**
  * 히스토리 상세조회(컴포넌트 히스토리 seq의 데스킹 기사 조회)

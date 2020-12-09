@@ -60,6 +60,9 @@ public class AppRestController {
     @Value("${ir.url}")
     private String irUrl;
 
+    @Value("brightcove.preview.url")
+    private String ovpPreviewUrl;
+
     @Autowired
     private TpsLogger tpsLogger;
 
@@ -75,20 +78,22 @@ public class AppRestController {
     @GetMapping("/init")
     public ResponseEntity<?> getAppInitData(HttpServletRequest request) {
 
-        Map<String, Object> result = MapBuilder.getInstance()
-                                               .add("UPLOAD_PATH_URL", uploadPathUrl)                               // 파일 서비스 prefix
-                                               .add("PER_PAGE_COUNT", TpsConstants.PER_PAGE_COUNT)                  // 페이지당 건수
-                                               .add("MAX_PAGE_COUNT", TpsConstants.MAX_PAGE_COUNT)                  // 최대 페이지수
-                                               .add("DISP_PAGE_COUNT", TpsConstants.DISP_PAGE_COUNT)                // 표출 페이지수
-                                               .add("MORE_COUNT", TpsConstants.MORE_COUNT)                          // 더보기 건수
-                                               .add("EXCLUDE_PAGE_SERVICE_NAME_LIST", excludePageServiceName)       // 페이지서비스명 제외명칭
-                                               .add("PAGE_TYPE_HTML", TpsConstants.PAGE_TYPE_HTML)                  // 페이지 기본타입
-                                               .add("DESKING_TITLE_WIDTH", deskingTitleWidth)                       // pc title width
-                                               .add("DESKING_MTITLE_WIDTH", deskingMTitleWidth)                     // mobile title width
-                                               .add("PDS_URL", pdsUrl)                                              // pds Url
-                                               .add("WIMAGE_URL", wimageUrl)                                        // wimage Url
-                                               .add("IR_URL", irUrl)                                                // ir Url
-                                               .getMap();
+        Map<String, Object> result = MapBuilder
+                .getInstance()
+                .add("UPLOAD_PATH_URL", uploadPathUrl)                               // 파일 서비스 prefix
+                .add("PER_PAGE_COUNT", TpsConstants.PER_PAGE_COUNT)                  // 페이지당 건수
+                .add("MAX_PAGE_COUNT", TpsConstants.MAX_PAGE_COUNT)                  // 최대 페이지수
+                .add("DISP_PAGE_COUNT", TpsConstants.DISP_PAGE_COUNT)                // 표출 페이지수
+                .add("MORE_COUNT", TpsConstants.MORE_COUNT)                          // 더보기 건수
+                .add("EXCLUDE_PAGE_SERVICE_NAME_LIST", excludePageServiceName)       // 페이지서비스명 제외명칭
+                .add("PAGE_TYPE_HTML", TpsConstants.PAGE_TYPE_HTML)                  // 페이지 기본타입
+                .add("DESKING_TITLE_WIDTH", deskingTitleWidth)                       // pc title width
+                .add("DESKING_MTITLE_WIDTH", deskingMTitleWidth)                     // mobile title width
+                .add("PDS_URL", pdsUrl)                                              // pds Url
+                .add("WIMAGE_URL", wimageUrl)                                        // wimage Url
+                .add("IR_URL", irUrl)                                                // ir Url
+                .add("OVP_PREVIEW_URL", ovpPreviewUrl)                               // ovp 미리보기 url
+                .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());
 

@@ -206,7 +206,7 @@ const LookupArticlePageList = (props) => {
                     size={search.size}
                     displayPageNum={3}
                     onChangeSearchOption={handleChangeSearchOption}
-                    preventRowClickCell={['append', 'preview']}
+                    preventRowClickCell={['load', 'preview']}
                     selected={selected.artPageSeq}
                 />
             </MokaCard>

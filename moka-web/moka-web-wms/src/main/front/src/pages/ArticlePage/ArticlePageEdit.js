@@ -6,7 +6,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 import { MokaCard, MokaInputLabel } from '@components';
-import { changeLatestDomainId } from '@store/auth/authAction';
 import { w3cArticlePage } from '@store/merge';
 import { initialState, getArticlePage, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -246,12 +245,12 @@ const ArticlePageEdit = ({ onDelete, onPreview }) => {
     const handleClickPreviewOpen = useCallback(() => {
         if (onPreview) {
             if (previewTotalId) {
-                onPreview(articlePage, previewTotalId);
+                onPreview(previewTotalId);
             } else {
                 toast.error('기사ID를 입력해 주세요.');
             }
         }
-    }, [articlePage, onPreview, previewTotalId]);
+    }, [onPreview, previewTotalId]);
 
     /**
      * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사

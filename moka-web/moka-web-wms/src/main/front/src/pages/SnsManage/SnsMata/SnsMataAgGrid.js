@@ -27,7 +27,7 @@ const SnsMataAgGrid = ({ rows, total, searchOptions, loading }) => {
         // API 에서 어떻게 내려 오는지 몰라서 아래 처럼 했습니다.
 
         const viewRows = rows.map((viewRow) => {
-            console.log(viewRow);
+            //console.log(viewRow);
             /*const { articleBasic } = viewRow;
 
             const id = `${viewRow.id.snsType}-${viewRow.id.totalId}`;
@@ -45,7 +45,7 @@ const SnsMataAgGrid = ({ rows, total, searchOptions, loading }) => {
 
             return { ...articleBasic, pressDate, id, sendFb, sendTw, sendStatus };*/
         });
-        console.log(viewRows);
+        //console.log(viewRows);
         setRowData(rows);
 
         /*setRowData(
@@ -94,7 +94,7 @@ const SnsMataAgGrid = ({ rows, total, searchOptions, loading }) => {
                 columnDefs={tempColumnDefs}
                 rowData={rowData}
                 rowHeight={65}
-                onRowNodeId={(row) => row.totalId}
+                onRowNodeId={(row) => row.id}
                 onRowClicked={handleClickListRow}
                 loading={loading}
                 total={total}
@@ -104,6 +104,7 @@ const SnsMataAgGrid = ({ rows, total, searchOptions, loading }) => {
                 selected={(data) => {
                     console.log(data);
                 }}
+                className="sns-meta-ag-grid"
             />
         </>
     );

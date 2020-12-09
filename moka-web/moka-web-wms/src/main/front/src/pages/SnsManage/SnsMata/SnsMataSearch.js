@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel, MokaInput, MokaSearchInput } from '@components';
-import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 import { useDispatch } from 'react-redux';
-import { changeSNSMetaSearchOptions, getSNSMetaList } from '@store/snsManage/snsAction';
+import { changeSNSMetaSearchOptions } from '@store/snsManage/snsAction';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
+import { initialState } from '@store/snsManage/snsReducer';
 
 const SnsMataSearch = ({ searchOptions }) => {
     const [dateType, setDateType] = useState('today');
     const [disabled, setDisabled] = useState({ date: true });
-    const dateFormat = 'yyyy-MM-dd';
 
     // 에러 나서 수정 해놨습니다.
     // const today = commonUtil.dateFormat(new Date(), dateFormat);
@@ -24,7 +23,8 @@ const SnsMataSearch = ({ searchOptions }) => {
     const dispatch = useDispatch();
 
     const handleSearchReset = () => {
-        console.log('handleSearchReset');
+        setOptions(initialState.meta.search);
+        dispatch(changeSNSMetaSearchOptions(initialState.meta.search));
     };
 
     const handleClickSearch = () => {
@@ -33,7 +33,6 @@ const SnsMataSearch = ({ searchOptions }) => {
     };
 
     const handleChangeValue = (name, value) => {
-        console.log(value);
         if (name === 'startDt') {
             const startDt = new Date(value);
             const endDt = new Date(options.endDt);
@@ -57,16 +56,17 @@ const SnsMataSearch = ({ searchOptions }) => {
 
     const handleChangeDateType = (name, value) => {
         let startDt = options.startDt;
+        let endDt = moment().format(DB_DATEFORMAT);
         setDisabled({ ...disabled, date: true });
         switch (value) {
             case 'today':
                 startDt = today;
                 break;
             case 'thisWeek':
-                startDt = commonUtil.dateFormat(new Date(new Date().getTime() - new Date().getDay() * 24 * 60 * 60 * 1000), dateFormat);
+                startDt = moment(new Date(new Date().getTime() - new Date().getDay() * 24 * 60 * 60 * 1000)).format(DB_DATEFORMAT);
                 break;
             case 'thisMonth':
-                startDt = commonUtil.dateFormat(new Date(new Date().setDate(1)), dateFormat);
+                startDt = moment(new Date(new Date().setDate(1))).format(DB_DATEFORMAT);
                 break;
             case 'direct':
                 setDisabled({ ...disabled, date: false });
@@ -75,7 +75,7 @@ const SnsMataSearch = ({ searchOptions }) => {
                 break;
         }
         setDateType(value);
-        setOptions({ ...options, startDt });
+        setOptions({ ...options, startDt, endDt });
     };
 
     return (

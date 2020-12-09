@@ -12,7 +12,7 @@ const ImageRenderer = ({ src, isNew }) => {
                     </div>
                 </div>
             )}
-            <Figure.Image className="mb-0" src={src} />
+            <Figure.Image className="mb-0" src={src} style={{ width: 60, height: 50 }} />
         </>
     );
 };

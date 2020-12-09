@@ -73,7 +73,7 @@ public class SnsApiServiceImpl implements SnsApiService {
 
 
     @Override
-    public void publish(SnsPublishDTO snsPublish)
+    public Map<String, Object> publish(SnsPublishDTO snsPublish)
             throws Exception {
         String articleServiceUrl = articleUrl + snsPublish.getTotalId();
 
@@ -103,13 +103,33 @@ public class SnsApiServiceImpl implements SnsApiService {
                 .readValue(response, new TypeReference<Map<String, Object>>() {
                 });
 
-        log.debug(response);
+        return map;
 
     }
 
     @Override
-    public void delete(SnsDeleteDTO snsDelete)
+    public Map<String, Object> delete(SnsDeleteDTO snsDelete)
             throws Exception {
 
+        CodeMgt tokenCode = codeMgtService
+                .findByDtlCd(facebookTokenCode)
+                .orElseThrow(() -> new NoDataException("Not Found Facebook Token"));
+
+        String url = new StringBuilder(facebookApiUrl)
+                .append("/")
+                .append(snsDelete.getSnsId())
+                .append("?access_token=")
+                .append(tokenCode)
+                .toString();
+        ResponseEntity<String> responseEntity = restTemplateHelper.delete(url);
+
+
+        String response = responseEntity.getBody();
+        Map<String, Object> map = ResourceMapper
+                .getDefaultObjectMapper()
+                .readValue(response, new TypeReference<Map<String, Object>>() {
+                });
+
+        return map;
     }
 }

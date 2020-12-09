@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.service;
 
+import java.util.Map;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 
@@ -17,9 +18,9 @@ import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
  */
 public interface SnsApiService {
 
-    void publish(SnsPublishDTO snsPublish)
+    Map<String, Object> publish(SnsPublishDTO snsPublish)
             throws Exception;
 
-    void delete(SnsDeleteDTO snsDelete)
+    Map<String, Object> delete(SnsDeleteDTO snsDelete)
             throws Exception;
 }

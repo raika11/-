@@ -2,8 +2,11 @@ package jmnet.moka.core.tps.mvc.sns.service;
 
 import java.util.Optional;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
+import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
@@ -56,6 +59,9 @@ public interface ArticleSnsShareService {
 
     ArticleSnsShare updateArticleSnsShare(ArticleSnsShare entity);
 
+    ArticleSnsShare updateArticleSnsShareStatus(ArticleSnsShare entity)
+            throws NoDataException;
+
     void deleteArticleSnsShare(ArticleSnsShare entity);
 
     void deleteArticleSnsShareById(Long totalId, SnsTypeCode snsType);
@@ -67,4 +73,42 @@ public interface ArticleSnsShareService {
      * @return 검색 결과
      */
     Page<ArticleSnsShareItemVO> findAllSendArticle(ArticleSnsShareSearchDTO searchDTO);
+
+    /**
+     * sns에 수신하고 수신 결과를 DB에 저장 후 리턴한다.
+     *
+     * @param snsPublish SNS 공유
+     * @return
+     */
+    ArticleSnsShare publishSnsArticleSnsShare(SnsPublishDTO snsPublish)
+            throws Exception;
+
+    /**
+     * sns에 수신하고 수신 결과를 DB에 저장 후 리턴한다.
+     *
+     * @param snsDelete SNS 공유 제거
+     * @return
+     */
+    ArticleSnsShare deleteSnsArticleSnsShare(SnsDeleteDTO snsDelete)
+            throws Exception;
+
+    /**
+     * sns에 수신하고 수신 결과를 DB에 저장 후 리턴한다.
+     *
+     * @param snsPublish SNS 공유
+     * @return
+     */
+    void reservePublishSnsArticleSnsShare(SnsPublishDTO snsPublish)
+            throws Exception;
+
+    /**
+     * sns에 수신하고 수신 결과를 DB에 저장 후 리턴한다.
+     *
+     * @param snsDelete SNS 공유 제거
+     * @return
+     */
+    void reserveDeleteSnsArticleSnsShare(SnsDeleteDTO snsDelete)
+            throws Exception;
+
+
 }

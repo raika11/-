@@ -3,7 +3,7 @@ package jmnet.moka.core.tps.mvc.sns.dto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.List;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import lombok.AllArgsConstructor;
@@ -42,12 +42,12 @@ public class ArticleSnsShareDTO implements Serializable {
     /**
      * SNS 전송일시(업데이트시 수정됨)
      */
-    private Timestamp snsInsDt;
+    private Date snsInsDt;
 
     /**
      * SNS 등록일시
      */
-    private Timestamp snsRegDt;
+    private Date snsRegDt;
 
     /**
      * SNS 기사ID
@@ -62,7 +62,7 @@ public class ArticleSnsShareDTO implements Serializable {
     /**
      * 예약일시
      */
-    private Timestamp reserveDt;
+    private Date reserveDt;
 
     /**
      * 포스트 메시지

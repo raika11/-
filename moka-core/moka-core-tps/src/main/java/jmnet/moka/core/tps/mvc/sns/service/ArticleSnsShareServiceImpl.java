@@ -1,18 +1,27 @@
 package jmnet.moka.core.tps.mvc.sns.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.exception.MokaException;
+import jmnet.moka.core.tps.common.code.SnsStatusCode;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
+import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.core.tps.mvc.sns.mapper.ArticleSnsShareMapper;
 import jmnet.moka.core.tps.mvc.sns.repository.ArticleSnsShareRepository;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,6 +36,7 @@ import org.springframework.stereotype.Service;
  * @author ince
  * @since 2020-12-04 11:17
  */
+@Slf4j
 @Service
 public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
@@ -34,9 +44,13 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
     private final ArticleSnsShareMapper articleSnsShareMapper;
 
-    public ArticleSnsShareServiceImpl(ArticleSnsShareRepository articleSnsShareRepository, ArticleSnsShareMapper articleSnsShareMapper) {
+    private final SnsApiService snsApiService;
+
+    public ArticleSnsShareServiceImpl(ArticleSnsShareRepository articleSnsShareRepository, ArticleSnsShareMapper articleSnsShareMapper,
+            SnsApiService snsApiService) {
         this.articleSnsShareRepository = articleSnsShareRepository;
         this.articleSnsShareMapper = articleSnsShareMapper;
+        this.snsApiService = snsApiService;
     }
 
     @Override
@@ -88,6 +102,23 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
     }
 
     @Override
+    public ArticleSnsShare updateArticleSnsShareStatus(ArticleSnsShare entity)
+            throws NoDataException {
+        ArticleSnsShare share = findArticleSnsShareById(entity.getId()).orElseThrow(() -> new NoDataException());
+
+        share.setSnsArtId(entity.getSnsArtId());
+        share.setSnsArtSts(entity.getSnsArtSts());
+        share.setSnsInsDt(McpDate.now());
+
+        if (entity
+                .getSnsArtSts()
+                .equals(SnsStatusCode.I.getCode())) {
+            share.setSnsRegDt(McpDate.now());
+        }
+        return articleSnsShareRepository.save(share);
+    }
+
+    @Override
     public void deleteArticleSnsShare(ArticleSnsShare entity) {
         articleSnsShareRepository.delete(entity);
     }
@@ -105,5 +136,98 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
     public Page<ArticleSnsShareItemVO> findAllSendArticle(ArticleSnsShareSearchDTO searchDTO) {
         List<ArticleSnsShareItemVO> articleSnsShareList = articleSnsShareMapper.findAll(searchDTO);
         return new PageImpl<>(articleSnsShareList, searchDTO.getPageable(), searchDTO.getTotal());
+    }
+
+    @Override
+    public ArticleSnsShare publishSnsArticleSnsShare(SnsPublishDTO snsPublish)
+            throws Exception {
+
+        ArticleSnsShare share = null;
+        // insert
+        Map<String, Object> result = snsApiService.publish(SnsPublishDTO
+                .builder()
+                .totalId(snsPublish.getTotalId())
+                .snsType(snsPublish.getSnsType())
+                .message(snsPublish.getMessage())
+                .build());
+
+        if (McpString.isNotEmpty(result.getOrDefault("id", ""))) {
+            share = updateArticleSnsShare(ArticleSnsShare
+                    .builder()
+                    .id(ArticleSnsSharePK
+                            .builder()
+                            .totalId(snsPublish.getTotalId())
+                            .snsType(snsPublish.getSnsType())
+                            .build())
+                    .snsArtId(String.valueOf(result.get("id")))
+                    .snsArtSts(SnsStatusCode.I.getCode())
+                    .build());
+        }
+        return share;
+    }
+
+    @Override
+    public ArticleSnsShare deleteSnsArticleSnsShare(SnsDeleteDTO snsDelete)
+            throws Exception {
+        ArticleSnsShare share = null;
+
+        // 삭제
+        Map<String, Object> result = snsApiService.delete(SnsDeleteDTO
+                .builder()
+                .snsId(snsDelete.getSnsId())
+                .snsType(snsDelete.getSnsType())
+                .totalId(snsDelete.getTotalId())
+                .build());
+
+        if (McpString.isNotEmpty(result.getOrDefault("id", ""))) {
+            share = updateArticleSnsShare(ArticleSnsShare
+                    .builder()
+                    .id(ArticleSnsSharePK
+                            .builder()
+                            .totalId(snsDelete.getTotalId())
+                            .snsType(snsDelete.getSnsType())
+                            .build())
+                    .snsArtId(snsDelete.getSnsId())
+                    .snsArtSts(SnsStatusCode.D.getCode())
+                    .build());
+
+        }
+
+        return share;
+    }
+
+
+    /**
+     * 예약 배포 처리
+     *
+     * @param snsPublish SNS 공유 정보
+     * @throws MokaException
+     */
+    @Async
+    public void reservePublishSnsArticleSnsShare(SnsPublishDTO snsPublish)
+            throws Exception {
+        try {
+            Thread.sleep(McpDate.term(snsPublish.getReserveDt()));
+            publishSnsArticleSnsShare(snsPublish);
+        } catch (InterruptedException ie) {
+            log.error("SNS Share publish failed : {}", snsPublish.getTotalId(), ie);
+        }
+    }
+
+    /**
+     * 예약 배포 처리
+     *
+     * @param snsDelete SNS 삭제 정보
+     * @throws MokaException
+     */
+    @Async
+    public void reserveDeleteSnsArticleSnsShare(SnsDeleteDTO snsDelete)
+            throws Exception {
+        try {
+            Thread.sleep(McpDate.term(snsDelete.getReserveDt()));
+            deleteSnsArticleSnsShare(snsDelete);
+        } catch (InterruptedException ie) {
+            log.error("SNS Share delete failed : {}", snsDelete.getSnsId(), ie);
+        }
     }
 }

@@ -10,15 +10,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 기사 SNS메타
  */
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "TB_ARTICLE_SNS_SHARE")
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = true)
 public class ArticleSnsShare extends jmnet.moka.core.tps.common.entity.BaseAudit implements Serializable {
 

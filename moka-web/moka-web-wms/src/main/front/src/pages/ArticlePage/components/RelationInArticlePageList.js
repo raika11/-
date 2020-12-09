@@ -74,7 +74,7 @@ const RelationInArticlePageList = (props) => {
      * @param {object} data row 데이터
      */
     const handleClickLink = (data) => {
-        window.open(`/skin/${data.skinSeq}`);
+        window.open(`/article-page/${data.artPageSeq}`);
     };
 
     /**
@@ -82,7 +82,7 @@ const RelationInArticlePageList = (props) => {
      * @param {object} data row data
      */
     const handleClickPreview = (data) => {
-        // window.open(`//${data.domain.domainUrl}${data.pageUrl}`);
+        window.open(`//${data.domain.domainUrl}/article/${data.totalId}`);
     };
 
     useEffect(() => {
@@ -109,7 +109,7 @@ const RelationInArticlePageList = (props) => {
                         ...initialState.search,
                         relSeq,
                         relSeqType,
-                        relType: 'SK',
+                        relType: 'AP',
                         domainId: latestDomainId,
                     }),
                 ),
@@ -141,7 +141,7 @@ const RelationInArticlePageList = (props) => {
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="positive" onClick={() => history.push('/skin')}>
+                <Button variant="positive" onClick={() => history.push('/article-page')}>
                     기사페이지 등록
                 </Button>
             </div>
@@ -151,7 +151,7 @@ const RelationInArticlePageList = (props) => {
                 agGridHeight={relSeqType === ITEM_DS ? relationDSAgGridHeight : relationAgGridHeight}
                 columnDefs={columnDefs}
                 rowData={rowData}
-                onRowNodeId={(data) => data.skinSeq}
+                onRowNodeId={(data) => data.artPageSeq}
                 onRowClicked={() => {}}
                 loading={loading}
                 error={error}

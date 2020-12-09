@@ -28,9 +28,8 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 const ArticlePage = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { articlePage, artPageBody, articleTypeRows } = useSelector((store) => ({
+    const { articlePage, articleTypeRows } = useSelector((store) => ({
         articlePage: store.articlePage.articlePage,
-        artPageBody: store.articlePage.artPageBody,
         articleTypeRows: store.codeMgt.articleTypeRows,
     }));
 

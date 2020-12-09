@@ -116,6 +116,12 @@ public class AreaDTO implements Serializable {
     private String areaNm;
 
     /**
+     * 후속API 또는 함수
+     */
+    @Length(max = 256, message = "{tps.area.error.length.afterApi}")
+    private String afterApi;
+
+    /**
      * 미리보기리소스
      */
     @Length(max = 2000, message = "{tps.area.error.length.previewRsrc}")

@@ -136,6 +136,12 @@ public class Area extends BaseAudit {
     private String areaNm;
 
     /**
+     * 후속API 또는 함수
+     */
+    @Column(name = "AFTER_API")
+    private String afterApi;
+
+    /**
      * 미리보기리소스
      */
     @Column(name = "PREVIEW_RSRC")
@@ -181,17 +187,20 @@ public class Area extends BaseAudit {
      * @return 동일한게 있으면 true
      */
     public boolean isEqualComp(AreaComp comp) {
-        Optional<AreaComp> find = areaComps.stream()
-                                           .filter(c -> {
-                                               if (c.getComponent()
-                                                    .getComponentSeq() == comp.getComponent()
-                                                                              .getComponentSeq()) {
-                                                   return true;
-                                               } else {
-                                                   return false;
-                                               }
-                                           })
-                                           .findFirst();
+        Optional<AreaComp> find = areaComps
+                .stream()
+                .filter(c -> {
+                    if (c
+                            .getComponent()
+                            .getComponentSeq() == comp
+                            .getComponent()
+                            .getComponentSeq()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })
+                .findFirst();
         if (find.isPresent()) {
             return true;
         }

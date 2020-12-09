@@ -264,8 +264,8 @@ const routes = [
         strict: true,
     },
     {
-        path: '/sns-mata',
-        name: 'sns-mata',
+        path: '/sns-meta',
+        name: 'sns-meta',
         displayName: 'FB & TW 관리',
         component: SnsMata,
         layout: SidebarOpenLayout,

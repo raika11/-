@@ -1,18 +1,16 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 
-const SnsMataList = React.lazy(() => import('./SnsMataList'));
-const SnsMataEdit = React.lazy(() => import('./SnsMataEdit'));
+const SnsMetaList = React.lazy(() => import('./SnsMetaList'));
+const SnsMetaEdit = React.lazy(() => import('./SnsMetaEdit'));
 
 /**
  * FB & TW
  */
-const SnsMata = ({ match }) => {
+const SnsMeta = ({ match }) => {
     // FIXME 클린 함수 생성.
-
-    useEffect(() => {});
 
     return (
         <div className="d-flex">
@@ -25,7 +23,7 @@ const SnsMata = ({ match }) => {
             {/* 리스트 */}
             <MokaCard width={450} className="mr-gutter flex-fill" titleClassName="mb-0" header={false}>
                 <Suspense>
-                    <SnsMataList />
+                    <SnsMetaList />
                 </Suspense>
             </MokaCard>
 
@@ -35,7 +33,7 @@ const SnsMata = ({ match }) => {
                 exact
                 render={(props) => (
                     <Suspense>
-                        <SnsMataEdit {...props} />
+                        <SnsMetaEdit {...props} />
                     </Suspense>
                 )}
             />
@@ -43,4 +41,4 @@ const SnsMata = ({ match }) => {
     );
 };
 
-export default SnsMata;
+export default SnsMeta;

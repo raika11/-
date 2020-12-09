@@ -27,7 +27,7 @@ const Special = React.lazy(() => import('@pages/Special'));
 const DirectLink = React.lazy(() => import('@pages/DirectLink'));
 const Member = React.lazy(() => import('@pages/Member'));
 const Columnist = React.lazy(() => import('@pages/Columnist'));
-const SnsMata = React.lazy(() => import('@pages/SnsManage/SnsMata'));
+const SnsMeta = React.lazy(() => import('@pages/SnsManage/SnsMeta'));
 const FbArt = React.lazy(() => import('@pages/SnsManage/FbArt'));
 const ArticlePage = React.lazy(() => import('@pages/ArticlePage'));
 
@@ -267,7 +267,7 @@ const routes = [
         path: '/sns-meta',
         name: 'sns-meta',
         displayName: 'FB & TW 관리',
-        component: SnsMata,
+        component: SnsMeta,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

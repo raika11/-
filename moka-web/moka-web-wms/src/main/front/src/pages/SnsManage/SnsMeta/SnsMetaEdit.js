@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Col, Button, Figure } from 'react-bootstrap';
-import MataModal from './modal/MataModal';
+import SnsMetaModal from './modal/SnsMetaModal';
 
-const SnsMataEdit = () => {
+const SnsMetaEdit = () => {
     const [modalShow, setModalShow] = useState(false);
 
     // 임시 예약 노출 클릭시 dateTimePicker disabled 처리.
@@ -248,9 +248,9 @@ const SnsMataEdit = () => {
                 </Form.Row>
             </Form>
 
-            <MataModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={null} />
+            <SnsMetaModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={null} />
         </MokaCard>
     );
 };
 
-export default SnsMataEdit;
+export default SnsMetaEdit;

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import Search from './SnsMataSearch';
-import AgGrid from './SnsMataAgGrid';
+import Search from './SnsMetaSearch';
+import AgGrid from './SnsMetaAgGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSNSMetaList } from '@store/snsManage/snsAction';
 import { GET_SNS_META_LIST } from '@store/snsManage';
 
-const SnsMataList = () => {
+const SnsMetaList = () => {
     const dispatch = useDispatch();
     const { search, list, total, loading } = useSelector((store) => ({
         search: store.sns.meta.search,
@@ -26,4 +26,4 @@ const SnsMataList = () => {
     );
 };
 
-export default SnsMataList;
+export default SnsMetaList;

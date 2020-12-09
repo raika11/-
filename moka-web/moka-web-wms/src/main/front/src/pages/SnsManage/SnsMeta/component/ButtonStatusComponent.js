@@ -2,7 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import clsx from 'clsx';
 
-const ButtonStatusRenderer = ({ hasButtons }) => {
+const ButtonStatusComponent = ({ hasButtons }) => {
     const handleClickSaveButton = () => {};
 
     return (
@@ -44,4 +44,4 @@ const ButtonStatusRenderer = ({ hasButtons }) => {
     );
 };
 
-export default ButtonStatusRenderer;
+export default ButtonStatusComponent;

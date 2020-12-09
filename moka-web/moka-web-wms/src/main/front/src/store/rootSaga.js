@@ -27,7 +27,6 @@ import columnistSaga from '@store/columnist/columnistSaga';
 import photoArchiveSaga from '@store/photoArchive/photoArchiveSaga';
 import articlePageSaga from '@/store/articlePage/articlePageSaga';
 import snsSaga from '@store/snsManage/snsSaga';
-import brightSaga from '@store/bright/brightSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -58,6 +57,5 @@ export default function* rootSaga() {
         photoArchiveSaga(),
         articlePageSaga(),
         snsSaga(),
-        brightSaga(),
     ]);
 }

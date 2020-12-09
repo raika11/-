@@ -215,7 +215,7 @@ const makeImgPreview = (src, ele, wrapperEle, loadFunc, errorFunc) => {
             ele.className = 'portrait';
         }
 
-        if (typeof loadFunc === 'function') loadFunc(imgProps);
+        if (typeof loadFunc === 'function') loadFunc();
     };
     image.onerror = () => {
         if (typeof errorFunc === 'function') errorFunc();

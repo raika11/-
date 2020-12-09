@@ -148,8 +148,7 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
         ArticleSnsShare share = null;
         // insert
-
-        Map<String, Object> result = getSnsAipService(snsPublish.getSnsType()).publish(SnsPublishDTO
+        Map<String, Object> result = facebookApiService.publish(SnsPublishDTO
                 .builder()
                 .totalId(snsPublish.getTotalId())
                 .snsType(snsPublish.getSnsType())
@@ -177,7 +176,7 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
         ArticleSnsShare share = null;
 
         // 삭제
-        Map<String, Object> result = getSnsAipService(snsDelete.getSnsType()).delete(SnsDeleteDTO
+        Map<String, Object> result = facebookApiService.delete(SnsDeleteDTO
                 .builder()
                 .snsId(snsDelete.getSnsId())
                 .snsType(snsDelete.getSnsType())
@@ -234,9 +233,5 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
         } catch (InterruptedException ie) {
             log.error("SNS Share delete failed : {}", snsDelete.getSnsId(), ie);
         }
-    }
-
-    private SnsApiService getSnsAipService(SnsTypeCode snsTypeCode) {
-        return snsTypeCode == SnsTypeCode.FB ? facebookApiService : twitterApiService;
     }
 }

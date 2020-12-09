@@ -1,5 +1,6 @@
-import { takeLatest } from 'redux-saga/effects';
-import { callApiAfterActions, createRequestSaga } from '../commons/saga';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
+import { startLoading, finishLoading } from '@store/loading/loadingAction';
 
 import * as api from './photoArchiveApi';
 import * as act from './photoArchiveAction';

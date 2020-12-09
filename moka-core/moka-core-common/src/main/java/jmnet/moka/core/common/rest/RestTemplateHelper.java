@@ -145,7 +145,11 @@ public class RestTemplateHelper {
     }
 
     /**
+     * <pre>
      * RestTemplate을 이용하여 외부 서버와 데이터를 주고 받는다.
+     * MultiValueMap에 파라미터를 담아 전달
+     * MultiValueMap에 헤더 정보를 담아 전달
+     * </pre>
      *
      * @param url 요청 url
      * @return ResponseEntity
@@ -160,6 +164,7 @@ public class RestTemplateHelper {
      * <pre>
      * RestTemplate을 이용하여 외부 서버와 데이터를 주고 받는다.
      * MultiValueMap에 파라미터를 담아 전달
+     * MultiValueMap에 헤더 정보를 담아 전달
      * </pre>
      *
      * @param url    요청 url
@@ -169,23 +174,6 @@ public class RestTemplateHelper {
     public ResponseEntity<String> delete(String url, MultiValueMap<String, Object> params) {
 
         return request(url, HttpMethod.DELETE, params, null);
-    }
-
-    /**
-     * <pre>
-     * RestTemplate을 이용하여 외부 서버와 데이터를 주고 받는다.
-     * MultiValueMap에 파라미터를 담아 전달
-     * MultiValueMap에 헤더 정보를 담아 전달
-     * </pre>
-     *
-     * @param url     요청 url
-     * @param params  param map
-     * @param headers 헤더
-     * @return ResponseEntity
-     */
-    public ResponseEntity<String> delete(String url, MultiValueMap<String, Object> params, MultiValueMap<String, String> headers) {
-
-        return request(url, HttpMethod.DELETE, params, headers);
     }
 
 

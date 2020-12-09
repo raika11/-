@@ -50,7 +50,7 @@ export default handleActions(
             });
         },
         /**
-         * 사진 목록 조회
+         * 목록 조회
          */
         [act.GET_PHOTO_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {

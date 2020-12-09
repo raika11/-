@@ -18,4 +18,4 @@ export const getOvpList = createAction(GET_OVP_LIST, ({ search, callback }) => (
  * LIVE 영상 목록 조회
  */
 export const [GET_LIVE_LIST, GET_LIVE_LIST_SUCCESS, GET_LIVE_LIST_FAILURE] = createRequestActionTypes('bright/GET_LIVE_LIST');
-export const getLiveList = createAction(GET_LIVE_LIST, () => ({}));
+export const getLiveList = createAction(GET_LIVE_LIST);

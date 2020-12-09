@@ -374,7 +374,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
-    @ApiOperation(value = "SNS에 배포 등록")
+    @ApiOperation(value = "Facebook Instance Article 등록")
     @PostMapping("/feeds")
     public ResponseEntity<?> postSnsFeed(@Valid SnsPublishDTO snsPublish)
             throws InvalidDataException, Exception {
@@ -421,7 +421,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @throws NoDataException      삭제 할 SNS 없음
      * @throws Exception            그 외 에러처리
      */
-    @ApiOperation(value = "SNS에 배포 된 기사 삭제")
+    @ApiOperation(value = "SNS 삭제")
     @DeleteMapping("/feeds")
     public ResponseEntity<?> deleteSnsFeed(@Valid SnsDeleteDTO snsDelete)
             throws InvalidDataException, NoDataException, Exception {

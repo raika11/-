@@ -85,11 +85,11 @@ public class TwitterApiServiceImpl implements SnsApiService {
                     .replaceAll("\\*", "\\＊")
                     .replaceAll("!", "！");
 
-            message += " " + articleUrl + snsPublish.getTotalId();
+            message += articleUrl + snsPublish.getTotalId();
         }
         MultiValueMap<String, Object> params = MapBuilder
                 .getInstance()
-                .add("status", message)
+                .add("status", snsPublish.getMessage())
                 .add("trim_user", "1")
                 .getMultiValueMap();
         ResponseEntity<String> content = restTemplateHelper.post(articleServiceUrl, params, makeOauthHeaderMap(articleServiceUrl, params));
@@ -113,14 +113,7 @@ public class TwitterApiServiceImpl implements SnsApiService {
                 .append("/")
                 .append(snsDelete.getSnsId())
                 .toString();
-
-        MultiValueMap<String, Object> params = MapBuilder
-                .getInstance()
-                .add("id", snsDelete.getSnsId())
-                .add("trim_user", "1")
-                .getMultiValueMap();
-
-        ResponseEntity<String> responseEntity = restTemplateHelper.delete(url, params, makeOauthHeaderMap(articleServiceUrl, params));
+        ResponseEntity<String> responseEntity = restTemplateHelper.delete(url);
 
 
         String response = responseEntity.getBody();
@@ -149,7 +142,6 @@ public class TwitterApiServiceImpl implements SnsApiService {
                 .entrySet()
                 .stream()
                 .map(entry -> urlEncoding(entry.getKey()) + "=" + urlEncoding(entry.getValue()))
-                .sorted()
                 .collect(Collectors.joining("&"));
 
         String paramStr = params
@@ -158,20 +150,18 @@ public class TwitterApiServiceImpl implements SnsApiService {
                 .map(entry -> urlEncoding(entry.getKey()) + "=" + urlEncoding(String.valueOf(entry
                         .getValue()
                         .get(0))))
-                .sorted()
                 .collect(Collectors.joining("&"));
         if (McpString.isNotEmpty(paramStr)) {
             result += "&" + paramStr;
         }
 
-        String encodeSignatureBase = "POST&" + encode(url) + "&" + encode(result);
+        String encodeSignatureBase = "POST&" + URLEncoder.encode(url, "UTF-8") + "&" + URLEncoder.encode(result, "UTF-8");
         twitterOauthMap.put("oauth_signature", generateSignature(encodeSignatureBase));
 
         result = twitterOauthMap
                 .entrySet()
                 .stream()
                 .map(entry -> urlEncoding(entry.getKey()) + "=\"" + urlEncoding(entry.getValue()) + "\"")
-                .sorted()
                 .collect(Collectors.joining(", "));
 
         MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
@@ -197,12 +187,12 @@ public class TwitterApiServiceImpl implements SnsApiService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Base64Utils.encodeToUrlSafeString(byteHMAC);
+        return Base64Utils.encodeToString(byteHMAC);
     }
 
     private String urlEncoding(String value) {
         try {
-            return encode(value);
+            return URLEncoder.encode(value, "UTF-8");
         } catch (Exception ex) {
             return value;
         }

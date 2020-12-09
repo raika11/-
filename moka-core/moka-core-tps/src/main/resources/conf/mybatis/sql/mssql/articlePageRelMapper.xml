@@ -15,6 +15,7 @@
     <id property="artPageSeq" column="ART_PAGE_SEQ"/>
     <result property="artPageName" column="ART_PAGE_NAME"/>
     <result property="artTypeName" column="ART_TYPE_NAME"/>
+    <result property="totalId" column="TOTAL_ID"/>
     <association property="domain" javaType="jmnet.moka.core.tps.mvc.domain.dto.DomainSimpleDTO">
       <result property="domainId" column="DOMAIN_ID"/>
       <result property="domainName" column="DOMAIN_NAME"/>

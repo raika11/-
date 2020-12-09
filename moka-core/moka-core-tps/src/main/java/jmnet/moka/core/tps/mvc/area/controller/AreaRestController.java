@@ -118,12 +118,13 @@ public class AreaRestController {
     public ResponseEntity<?> getArea(@PathVariable("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
             throws Exception {
 
-        Area area = areaService.findAreaBySeq(areaSeq)
-                               .orElseThrow(() -> {
-                                   String message = messageByLocale.get("tps.common.error.no-data");
-                                   tpsLogger.fail(message, true);
-                                   return new NoDataException(message);
-                               });
+        Area area = areaService
+                .findAreaBySeq(areaSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
 
 
@@ -152,8 +153,9 @@ public class AreaRestController {
             }
 
             // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
-            if (areaDTO.getAreaDiv()
-                       .equals(MokaConstants.ITEM_COMPONENT)) {
+            if (areaDTO
+                    .getAreaDiv()
+                    .equals(MokaConstants.ITEM_COMPONENT)) {
                 areaService.compsToComp(areaDTO);
             }
 
@@ -186,27 +188,32 @@ public class AreaRestController {
         validData(areaDTO, ActionType.INSERT);
 
         // 빈 객체로 올 경우 null 처리
-        if (areaDTO.getContainer() != null && areaDTO.getContainer()
-                                                     .getContainerSeq() == null) {
+        if (areaDTO.getContainer() != null && areaDTO
+                .getContainer()
+                .getContainerSeq() == null) {
             areaDTO.setContainer(null);
         }
-        if (areaDTO.getAreaComps() != null && areaDTO.getAreaComps()
-                                                     .size() > 0) {
+        if (areaDTO.getAreaComps() != null && areaDTO
+                .getAreaComps()
+                .size() > 0) {
 
-            areaDTO.getAreaComps()
-                   .stream()
-                   .forEach((comp) -> {
-                       comp.setArea(areaDTO);
-                       if (comp.getComponent() != null && comp.getComponent()
-                                                              .getComponentSeq() == null) {
-                           comp.setComponent(null);
-                       }
-                   });
+            areaDTO
+                    .getAreaComps()
+                    .stream()
+                    .forEach((comp) -> {
+                        comp.setArea(areaDTO);
+                        if (comp.getComponent() != null && comp
+                                .getComponent()
+                                .getComponentSeq() == null) {
+                            comp.setComponent(null);
+                        }
+                    });
         }
 
         // 컴포넌트타입일 경우, areaComp-> areaComps로 컴포넌트 정보 이동
-        if (areaDTO.getAreaDiv()
-                   .equals(MokaConstants.ITEM_COMPONENT)) {
+        if (areaDTO
+                .getAreaDiv()
+                .equals(MokaConstants.ITEM_COMPONENT)) {
             areaService.compToComps(areaDTO);
         }
 
@@ -223,8 +230,9 @@ public class AreaRestController {
             }
 
             // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
-            if (returnValDTO.getAreaDiv()
-                            .equals(MokaConstants.ITEM_COMPONENT)) {
+            if (returnValDTO
+                    .getAreaDiv()
+                    .equals(MokaConstants.ITEM_COMPONENT)) {
                 areaService.compsToComp(returnValDTO);
             }
 
@@ -259,35 +267,41 @@ public class AreaRestController {
 
         // 수정
         Area newArea = modelMapper.map(areaDTO, Area.class);
-        Area orgArea = areaService.findAreaBySeq(areaSeq)
-                                  .orElseThrow(() -> {
-                                      String message = messageByLocale.get("tps.area.error.no-data");
-                                      tpsLogger.fail(ActionType.UPDATE, message, true);
-                                      return new NoDataException(message);
-                                  });
+        Area orgArea = areaService
+                .findAreaBySeq(areaSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.area.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
         // 빈 객체로 올 경우 null 처리
-        if (areaDTO.getContainer() != null && areaDTO.getContainer()
-                                                     .getContainerSeq() == null) {
+        if (areaDTO.getContainer() != null && areaDTO
+                .getContainer()
+                .getContainerSeq() == null) {
             areaDTO.setContainer(null);
         }
-        if (areaDTO.getAreaComps() != null && areaDTO.getAreaComps()
-                                                     .size() > 0) {
+        if (areaDTO.getAreaComps() != null && areaDTO
+                .getAreaComps()
+                .size() > 0) {
 
-            areaDTO.getAreaComps()
-                   .stream()
-                   .forEach((comp) -> {
-                       comp.setArea(areaDTO);
-                       if (comp.getComponent() != null && comp.getComponent()
-                                                              .getComponentSeq() == null) {
-                           comp.setComponent(null);
-                       }
-                   });
+            areaDTO
+                    .getAreaComps()
+                    .stream()
+                    .forEach((comp) -> {
+                        comp.setArea(areaDTO);
+                        if (comp.getComponent() != null && comp
+                                .getComponent()
+                                .getComponentSeq() == null) {
+                            comp.setComponent(null);
+                        }
+                    });
         }
 
         // 컴포넌트타입일 경우, areaComp-> areaComps로 컴포넌트 정보 이동
-        if (areaDTO.getAreaDiv()
-                   .equals(MokaConstants.ITEM_COMPONENT)) {
+        if (areaDTO
+                .getAreaDiv()
+                .equals(MokaConstants.ITEM_COMPONENT)) {
             areaService.compToComps(areaDTO);
         }
 
@@ -304,8 +318,9 @@ public class AreaRestController {
             }
 
             // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
-            if (returnValDTO.getAreaDiv()
-                            .equals(MokaConstants.ITEM_COMPONENT)) {
+            if (returnValDTO
+                    .getAreaDiv()
+                    .equals(MokaConstants.ITEM_COMPONENT)) {
                 areaService.compsToComp(returnValDTO);
             }
 
@@ -343,6 +358,28 @@ public class AreaRestController {
                 }
             }
 
+            // 컴포넌트가 없으면 에러
+            if (area
+                    .getAreaDiv()
+                    .equals(MokaConstants.ITEM_COMPONENT) && area
+                    .getAreaComps()
+                    .size() <= 0) {
+                String message = messageByLocale.get("tps.area.error.notnull.areaComp");
+                invalidList.add(new InvalidDataDTO("areaComp", message));
+                tpsLogger.fail(actionType, message, true);
+            }
+
+            // 컨테이너에 컴포넌트가 없으면 에러
+            if (area
+                    .getAreaDiv()
+                    .equals(MokaConstants.ITEM_CONTAINER) && area
+                    .getAreaComps()
+                    .size() <= 0) {
+                String message = messageByLocale.get("tps.area.error.notnull.areaComp");
+                invalidList.add(new InvalidDataDTO("areaComps", message));
+                tpsLogger.fail(actionType, message, true);
+            }
+
         }
 
         if (invalidList.size() > 0) {
@@ -366,12 +403,13 @@ public class AreaRestController {
             throws InvalidDataException, NoDataException, Exception {
 
         // 1. 데이타 존재여부 검사
-        Area area = areaService.findAreaBySeq(areaSeq)
-                               .orElseThrow(() -> {
-                                   String message = messageByLocale.get("tps.area.error.no-data");
-                                   tpsLogger.fail(ActionType.DELETE, message, true);
-                                   return new NoDataException(message);
-                               });
+        Area area = areaService
+                .findAreaBySeq(areaSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.area.error.no-data");
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             // 2. 삭제

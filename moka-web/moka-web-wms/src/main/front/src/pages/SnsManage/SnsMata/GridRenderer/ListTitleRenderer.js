@@ -8,7 +8,7 @@ const ListTitleRenderer = ({ title, summary, reservation }) => {
         <>
             <div className="pt-01" style={{ minHeight: 55, textAlign: 'left' }}>
                 <div className="d-flex">
-                    <p className="pt-01 pl-01 mb-0 flex-fill text-truncate">{title}</p>
+                    <p className="pt-01 pl-01 mb-0 flex-fill text-truncate" dangerouslySetInnerHTML={{ __html: title }} />
                 </div>
                 <div className="d-flex">
                     {reservation === true && (
@@ -17,7 +17,7 @@ const ListTitleRenderer = ({ title, summary, reservation }) => {
                         </div>
                     )}
                     <div className="d-flex text-truncate">
-                        <p className="pt-01 pl-02 mb-0 flex-fill h5 text-truncate">{summary}</p>
+                        <p className="pt-01 pl-02 mb-0 flex-fill h5 text-truncate" dangerouslySetInnerHTML={{ __html: summary }} />
                     </div>
                 </div>
             </div>

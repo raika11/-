@@ -235,6 +235,75 @@ const euckrBytes = (text) => {
     return euckrLength;
 };
 
+const dateFormat = (date, format) => {
+    if (!date.valueOf()) return '';
+
+    const weekKorName = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+    const weekKorShortName = ['일', '월', '화', '수', '목', '금', '토'];
+    const weekEngName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const weekEngShortName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    return format.replace(/(yyyy|yy|MM|dd|KS|KL|ES|EL|HH|hh|mm|ss|a\/p)/gi, function (formatter) {
+        switch (formatter) {
+            case 'yyyy':
+                return date.getFullYear(); // 년 (4자리)
+            case 'yy':
+                return String(date.getFullYear() % 1000).padStart(2, '0'); // 년 (2자리)
+            case 'MM':
+                return String(date.getMonth() + 1).padStart(2, '0'); // 월 (2자리)
+            case 'dd':
+                return String(date.getDate()).padStart(2, '0'); // 일 (2자리)
+            case 'KS':
+                return weekKorShortName[date.getDay()]; // 요일 (짧은 한글)
+            case 'KL':
+                return weekKorName[date.getDay()]; // 요일 (긴 한글)
+            case 'ES':
+                return weekEngShortName[date.getDay()]; // 요일 (짧은 영어)
+            case 'EL':
+                return weekEngName[date.getDay()]; // 요일 (긴 영어)
+            case 'HH':
+                return date.getHours().padStart(2, '0'); // 시간 (24시간 기준, 2자리)
+            case 'hh':
+                return String(date.getHours() % 12 ? date.getHours() % 12 : 12).padStart(2, '0'); // 시간 (12시간 기준, 2자리)
+            case 'mm':
+                return String(date.getMinutes()).padStart(2, '0'); // 분 (2자리)
+            case 'ss':
+                return String(date.getSeconds()).padStart(2, '0'); // 초 (2자리)
+            case 'a/p':
+                return date.getHours() < 12 ? '오전' : '오후'; // 오전/오후 구분
+            default:
+                return formatter;
+        }
+    });
+};
+
+const stringUtil = {
+    isNullOrEmpty: function (string) {
+        return string === undefined || string === null || string !== '';
+    },
+    isNotNullAndNotEmpty: function (string) {
+        return string !== undefined && string !== null && string !== '';
+    },
+    isNull: function (string) {
+        return string === null;
+    },
+    isNotNull: function (string) {
+        return string !== null;
+    },
+    isEmpty: function (string) {
+        return string === '';
+    },
+    isNotEmpty: function (string) {
+        return string !== '';
+    },
+    isUndefined: function (string) {
+        return string === undefined;
+    },
+    isNotUndefined: function (string) {
+        return string !== undefined;
+    },
+};
+
 export default {
     fileDownload,
     isEmpty,
@@ -244,4 +313,6 @@ export default {
     makeRCTreeData,
     makeImgPreview,
     euckrBytes,
+    dateFormat,
+    stringUtil,
 };

@@ -69,7 +69,6 @@ const OvpList = ({ show, videoId, options }) => {
 
             <MokaTable
                 agGridHeight={378}
-                rowHeight={66}
                 onRowNodeId={(data) => data.id}
                 columnDefs={columnDefs}
                 rowData={rowData}

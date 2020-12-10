@@ -39,7 +39,6 @@ const propTypes = {
 const defaultProps = {
     label: null,
     labelWidth: 70,
-    labelClassName: 'mr-3',
     as: 'input',
     required: false,
     inputProps: {},
@@ -86,7 +85,11 @@ const MokaInputLabel = forwardRef((props, ref) => {
     return (
         <Form.Group className={clsx('d-flex', 'align-items-center', className)}>
             {label && (
-                <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'text-right', labelClassName)} style={{ width: labelWidth, minWidth: labelWidth }} htmlFor="none">
+                <Form.Label
+                    className={clsx('px-0', 'mb-0', 'position-relative', 'text-left', labelClassName)}
+                    style={{ width: labelWidth, minWidth: labelWidth, marginRight: 12 }}
+                    htmlFor="none"
+                >
                     {required && <span className="required-text">*</span>}
                     {ln}
                 </Form.Label>

@@ -398,7 +398,7 @@ const TemplateEdit = ({ onDelete }) => {
                             </Button>
                         </>
                     }
-                    labelClassName="justify-content-end mr-3"
+                    labelClassName="justify-content-end"
                     inputProps={{ width: 284, height: 280, img: thumbSrc, alt: templateName, setFileValue }}
                     className="mb-2"
                 />

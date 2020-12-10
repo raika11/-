@@ -63,6 +63,7 @@ export default [
         cellStyle: {
             lineHeight: '22px',
             fontSize: '12px',
+            height: '66px',
         },
     },
 ];

@@ -9,7 +9,11 @@ export const Label = (props) => {
 
     return (
         <Form.Group className={clsx('d-flex', 'align-items-center', className)}>
-            <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'text-right', labelClassName)} style={{ width: labelWidth, minWidth: labelWidth }} htmlFor="none">
+            <Form.Label
+                className={clsx('px-0', 'mb-0', 'position-relative', 'text-left', labelClassName)}
+                style={{ width: labelWidth, minWidth: labelWidth, marginRight: 12 }}
+                htmlFor="none"
+            >
                 {required && <span className="required-text">*</span>}
                 {label}
             </Form.Label>

@@ -15,7 +15,6 @@ const SnsMetaEdit = React.lazy(() => import('./SnsMetaEdit'));
 const SnsMeta = ({ match }) => {
     const dispatch = useDispatch();
     useEffect(() => {
-        console.log('들어옴');
         return () => {
             dispatch(clearMetaStore());
         };

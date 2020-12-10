@@ -7,3 +7,9 @@ export const getSNSMetaList = ({ search }) => {
         throw err;
     });
 };
+
+export const getSnsMeta = (totalId) => {
+    return instance.get(`/api/sns/${totalId}`).catch((err) => {
+        throw err;
+    });
+};

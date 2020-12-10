@@ -2,6 +2,8 @@ import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
+import { useSelector } from 'react-redux';
+import commonUtil from '@utils/commonUtil';
 
 const SnsMetaList = React.lazy(() => import('./SnsMetaList'));
 const SnsMetaEdit = React.lazy(() => import('./SnsMetaEdit'));
@@ -11,6 +13,7 @@ const SnsMetaEdit = React.lazy(() => import('./SnsMetaEdit'));
  */
 const SnsMeta = ({ match }) => {
     // FIXME 클린 함수 생성.
+    const { totalId } = useSelector((store) => ({ totalId: store.sns.meta.meta.totalId }));
 
     return (
         <div className="d-flex">
@@ -29,11 +32,13 @@ const SnsMeta = ({ match }) => {
 
             {/* 등록/수정창 */}
             <Route
-                path={[match.url, `${match.url}/:mataSeq`]}
+                path={[match.url, `${match.url}/:totalId`]}
                 exact
                 render={(props) => (
                     <Suspense>
-                        <SnsMetaEdit {...props} />
+                        <div style={!commonUtil.isEmpty(totalId) ? { display: 'block' } : { display: 'none' }}>
+                            <SnsMetaEdit {...props} />
+                        </div>
                     </Suspense>
                 )}
             />

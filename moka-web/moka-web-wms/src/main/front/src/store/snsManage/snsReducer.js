@@ -3,11 +3,31 @@ import { handleActions } from 'redux-actions';
 import * as action from '@store/snsManage/snsAction';
 import produce from 'immer';
 import moment from 'moment';
-const today = new Date();
 
 export const initialState = {
     meta: {
         list: [],
+        meta: {
+            totalId: '',
+            fb: {
+                usedYn: false,
+                title: '',
+                summary: '',
+                postMessage: '',
+                metaImage: '',
+                isReserve: 'N',
+                reserveDt: null,
+            },
+            tw: {
+                usedYn: false,
+                title: '',
+                summary: '',
+                postMessage: '',
+                metaImage: '',
+                isReserve: 'N',
+                reserveDt: null,
+            },
+        },
         total: 0,
         search: {
             //startDt: moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)).format(DB_DATEFORMAT),
@@ -34,6 +54,17 @@ export default handleActions(
         [action.CHANGE_SNS_META_SEARCH_OPTIONS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.meta.search = payload;
+            });
+        },
+        [action.GET_SNS_META_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.meta.meta = payload;
+            });
+        },
+        [action.GET_SNS_META_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.meta.meta = initialState.meta.meta;
+                draft.meta.errors = payload;
             });
         },
     },

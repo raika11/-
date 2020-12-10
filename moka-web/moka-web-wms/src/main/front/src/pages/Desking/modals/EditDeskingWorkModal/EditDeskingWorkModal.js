@@ -115,6 +115,13 @@ const EditDeskingWorkModal = (props) => {
         onHide();
     };
 
+    /**
+     * 대표 이미지 thumbName
+     */
+    const handleThumbFileName = (data) => {
+        setTemp({ ...temp, thumbFileName: data });
+    };
+
     useEffect(() => {
         // deskingPart 안에서 폰트사이즈 분리
         if (!deskingPartStr || deskingPartStr === '') return;
@@ -242,7 +249,13 @@ const EditDeskingWorkModal = (props) => {
                     })}
                 </Form>
             </MokaModal>
-            <EditThumbModal show={showModal} onHide={() => setShowModal(false)} fileValue={fileValue} setFileValue={setFileValue} />
+            <EditThumbModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                setFileValue={setFileValue}
+                thumbFileName={temp.thumbFileName}
+                setThumbFileName={handleThumbFileName}
+            />
         </>
     );
 };

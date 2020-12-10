@@ -8,12 +8,16 @@ import { initialState, getPhotoList, getPhotoTypes, changeSearchOption, clearSto
 import EditThumbSearch from './EditThumbSearch';
 import EditThumbTable from './EditThumbTable';
 import EditThumbDropzone from './EditThumbDropzone';
+import EditThumbCard from './EditThumbCard';
 
 /**
  * 대표이미지 편집 모달 ====> 데스킹워크 저장 후 나중에 작업
  */
 const EditThumbModal = (props) => {
+    // modal props
     const { show, onHide } = props;
+    // 대표 이미지 props
+    const { setFileValue, thumbFileName, setThumbFileName } = props;
     const dispatch = useDispatch();
     const { total, list, storeSearch, imageTypeList, photo } = useSelector(
         (store) => ({
@@ -28,6 +32,15 @@ const EditThumbModal = (props) => {
 
     const [search, setSearch] = useState(initialState.search);
     const [collapse, setCollapse] = useState(true);
+    const [repPhoto, setRepPhoto] = useState({
+        type: '',
+        id: '',
+        path: {
+            orgPath: '',
+            thumbPath: '',
+        },
+        imgProps: {},
+    });
 
     useEffect(() => {
         // 스토어의 search 객체 변경시 로컬의 search 변경
@@ -83,7 +96,15 @@ const EditThumbModal = (props) => {
                         <React.Fragment>
                             <div className="px-3 py-2">
                                 <EditThumbSearch search={search} setSearch={setSearch} imageTypeList={imageTypeList} />
-                                <EditThumbTable total={total} page={search.page} size={search.pageCount} data={list} onChangeSearchOption={handleChangeSearchOption} />
+                                <EditThumbTable
+                                    total={total}
+                                    page={search.page}
+                                    size={search.pageCount}
+                                    data={list}
+                                    onChangeSearchOption={handleChangeSearchOption}
+                                    setThumbFileName={setThumbFileName}
+                                    setRepPhoto={setRepPhoto}
+                                />
                             </div>
                         </React.Fragment>,
                     ]}
@@ -92,7 +113,7 @@ const EditThumbModal = (props) => {
                 />
                 <div className={clsx('deskthumb-gif-list', 'd-flex', 'justify-content-between', 'overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>
                     <div className="deskthumb-main" style={{ width: 202 }}>
-                        대표이미지창
+                        {thumbFileName && <EditThumbCard img={thumbFileName} setrepresent />}
                     </div>
                     <EditThumbDropzone collapse={collapse} setCollapse={setCollapse} />
                 </div>

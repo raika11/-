@@ -60,9 +60,9 @@ public class SnsTest {
 
         snsApiService.publish(SnsPublishDTO
                 .builder()
-                .totalId(23940560l)
-                .snsType(SnsTypeCode.FB)
-                .message("ㅇㅋ")
+                .totalId(22111L)
+                .snsType(SnsTypeCode.TW)
+                .message("테스트")
                 .build());
     }
 }

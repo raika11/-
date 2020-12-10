@@ -236,7 +236,7 @@ const EditDeskingWorkModal = (props) => {
                         } else if (partKey === 'ICON_FILE_NAME') {
                             return <IconForm show={show} key={partKey} temp={temp} setTemp={setTemp} onChange={handleChangeValue} />;
                         } else if (partKey === 'TITLE_PREFIX') {
-                            return <TitlePrefixForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
+                            return <TitlePrefixForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} deskingPartStr={deskingPartStr} />;
                         } else if (partKey === 'TITLE_LOC') {
                             return <TitleLocForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
                         } else if (partKey === 'VOD_URL') {

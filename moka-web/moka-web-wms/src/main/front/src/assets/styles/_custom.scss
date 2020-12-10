@@ -56,8 +56,6 @@ body {
     font-size: 12px;
 }
 
-@include toast-footer;
-
 /* -----------------------
 * sidebar
 * ---------------------- */
@@ -233,6 +231,10 @@ body {
 
 .modal-header .close {
     text-overflow: clip;
+}
+
+.modal-dialog {
+    @include toast-footer;
 }
 
 /* -----------------------

@@ -30,6 +30,7 @@ const Columnist = React.lazy(() => import('@pages/Columnist'));
 const SnsMeta = React.lazy(() => import('@pages/SnsManage/SnsMeta'));
 const FbArt = React.lazy(() => import('@pages/SnsManage/FbArt'));
 const ArticlePage = React.lazy(() => import('@pages/ArticlePage'));
+const Bulks = React.lazy(() => import('@pages/Bulks'));
 
 const routes = [
     {
@@ -288,6 +289,36 @@ const routes = [
         name: 'article-page',
         displayName: '기사페이지 관리',
         component: ArticlePage,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/bulkn-ja',
+        name: 'bulkn-ja',
+        displayName: '네이버 벌크 문구 관리',
+        component: Bulks,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/bulkh-ja',
+        name: 'bulkh-ja',
+        displayName: '아티클 핫클릭',
+        component: Bulks,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/bulkn-su',
+        name: 'bulkn-su',
+        displayName: '선데이 네이버 벌크 문구 관리',
+        component: Bulks,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

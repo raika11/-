@@ -31,6 +31,7 @@ import photoArchive from '@store/photoArchive/photoArchiveReducer';
 import articlePage from '@store/articlePage/articlePageReducer';
 import sns from '@store/snsManage/snsReducer';
 import bright from '@store/bright/brightReducer';
+import bulks from '@store/bulks/bulksReducer';
 
 export default combineReducers({
     toastr,
@@ -64,4 +65,5 @@ export default combineReducers({
     member,
     columnist,
     sns,
+    bulks,
 });

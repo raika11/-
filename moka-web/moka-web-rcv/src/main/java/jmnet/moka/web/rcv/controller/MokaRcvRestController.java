@@ -76,19 +76,6 @@ public class MokaRcvRestController {
     public Map<String, Object> doListTask() {
         log.info("doListTask");
 
-        /*
-        final String fileName =
-                "C:\\중앙일보\\JAM 수신 소스\\JAM 소스\\Joongang.JCMS.Receive.Web\\ReceiveData\\Joongang_Jopan\\Comp\\202009\\08\\1_820114_20200908050028.xml";
-        File file = new File(fileName);
-        try {
-            JamArticleVo jamArticleVo = (JamArticleVo) JaxbObjectManager.getBasicVoFromXml(file, JamArticleVo.class);
-            jamXmlRcvService.insertReceiveJobStep(jamArticleVo);
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-*/
         Map<String, Object> responseMap = new HashMap<>();
         try {
             this.taskManager.operation(OpCode.LISTTASK, "", responseMap);

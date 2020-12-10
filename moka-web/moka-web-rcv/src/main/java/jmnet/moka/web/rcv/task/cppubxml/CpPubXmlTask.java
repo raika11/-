@@ -9,6 +9,7 @@ import jmnet.moka.web.rcv.common.taskinput.TaskInput;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
 import jmnet.moka.web.rcv.exception.RcvException;
 import jmnet.moka.web.rcv.task.base.TaskGroup;
+import jmnet.moka.web.rcv.task.cppubxml.service.CpPubXmlService;
 import jmnet.moka.web.rcv.task.cppubxml.vo.CpPubNewsMLTotalVo;
 import jmnet.moka.web.rcv.task.cppubxml.vo.CpPubNewsMLVo;
 import jmnet.moka.web.rcv.taskinput.FileTaskInput;
@@ -33,10 +34,10 @@ import org.w3c.dom.Node;
  * @since 2020-11-10 010 오후 4:59
  */
 @Slf4j
-public class CpPubXmlRcvTask extends Task<FileTaskInputData<CpPubNewsMLTotalVo, CpPubNewsMLVo>> {
+public class CpPubXmlTask extends Task<FileTaskInputData<CpPubNewsMLTotalVo, CpPubNewsMLVo>> {
     private String sourceCode;
 
-    public CpPubXmlRcvTask(TaskGroup parent, Node node, XMLUtil xu)
+    public CpPubXmlTask(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, RcvException {
         super(parent, node, xu);
     }
@@ -100,14 +101,8 @@ public class CpPubXmlRcvTask extends Task<FileTaskInputData<CpPubNewsMLTotalVo, 
                 .getIdentification()
                 .getNewsIdentifier()
                 .getNewsItemId());
-        if (newsMLTotal
-                .getArticleItemId()
-                .length() > 7) {
-            newsMLTotal.setArticleItemId(newsMLTotal
-                    .getArticleItemId()
-                    .substring(newsMLTotal
-                            .getArticleItemId()
-                            .length() - 7));
+        if (newsMLTotal.getArticleItemId().length() > 7) {
+            newsMLTotal.setArticleItemId(newsMLTotal.getArticleItemId().substring(newsMLTotal.getArticleItemId().length() - 7));
         }
 
         String[] split = newsML
@@ -120,17 +115,12 @@ public class CpPubXmlRcvTask extends Task<FileTaskInputData<CpPubNewsMLTotalVo, 
             newsMLTotal.setArticleIssue(split[0]);
         }
 
-        if (newsML
-                .getNewsItem()
+        if (newsML.getNewsItem()
                 .getNewsComponents()
                 .getEquivalentsList()
                 .length() == 0) {
-            newsMLTotal
-                    .getXmlFileName()
-                    .setPassProcess(true);
-            newsMLTotal
-                    .getXmlFileName()
-                    .setPassReason("NewsComponent 가 하나도 없는 데이터이다.");
+            newsMLTotal.getXmlFileName().setPassProcess(true);
+            newsMLTotal.getXmlFileName().setPassReason("NewsComponent 가 하나도 없는 데이터이다.");
         }
 
         return true;
@@ -140,29 +130,23 @@ public class CpPubXmlRcvTask extends Task<FileTaskInputData<CpPubNewsMLTotalVo, 
     protected void doProcess(FileTaskInputData<CpPubNewsMLTotalVo, CpPubNewsMLVo> taskInputData)
             throws RcvDataAccessException {
         final CpPubNewsMLTotalVo newsMLTotal = taskInputData.getTotalData();
-        if (newsMLTotal
-                .getXmlFileName()
-                .isPassProcess()) {
-            newsMLTotal.logInfo("해당 파일은 처리 대상 xml 이 아닙니다. {} {}", taskInputData.getFile(), newsMLTotal
-                    .getXmlFileName()
-                    .getPassReason());
+        if (newsMLTotal.getXmlFileName().isPassProcess()) {
+            newsMLTotal.logInfo("해당 파일은 처리 대상 xml 이 아닙니다. {} {}", taskInputData.getFile(), newsMLTotal.getXmlFileName().getPassReason());
             taskInputData.setSuccess(true);
             return;
         }
         newsMLTotal.setSourceCode(this.sourceCode);
-        newsMLTotal.setXmlBody(taskInputData
-                .getTaskInput()
-                .getSourceBuffer());
+        newsMLTotal.setXmlBody(taskInputData.getTaskInput().getSourceBuffer());
 
-        final CpPubXmlRcvService cpPubXmlRcvService = getTaskManager().getCpPubXmlRcvService();
-        Map<String, String> ret = cpPubXmlRcvService.doInsertUpdateArticleData(newsMLTotal);
+        final CpPubXmlService cpPubXmlService = getTaskManager().getCpPubXmlService();
+        Map<String, String> ret = cpPubXmlService.doInsertUpdateArticleData(newsMLTotal);
 
         String retValue = "";
         if (ret != null) {
             retValue = ret.get("RET_VALUE");
         }
 
-        if (McpString.isNullOrEmpty(retValue) || retValue.compareTo("SU") != 0) {
+        if (McpString.isNullOrEmpty(retValue) || !retValue.equals("SU")) {
             newsMLTotal.logError("Xml Database Insert/Update Error [{}] {}", retValue, taskInputData.getFile());
         } else {
             taskInputData.setSuccess(true);

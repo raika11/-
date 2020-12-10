@@ -19,6 +19,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Mapper
-public interface CpPubXmlRcvMapper {
+public interface CpPubXmlMapper {
     Map<String, String> callUspRcvArticleJiXmlIns(CpPubNewsMLTotalVo cpArticleTotal);
 }

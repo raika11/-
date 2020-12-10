@@ -20,9 +20,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Mapper
-public interface JamXmlRcvMapper {
-    Map<String, String> callUpaJamMasterCodeSel( JamArticleTotalVo jamArticle);
-    List<Map<String, String>> callUpaIssueSeriesReporterSelByRepseq( Map<String, String> hashMap );
+public interface JamXmlMapper {
+    Integer callUpaArticleSourceSelByJamLoad( String sourceCode );
+    List<Map<String, String>> callUpaIssueSeriesReporterSelByRepseq(Map<String, String> hashMap);
 
     void callUpaJamRcvArtHistIns(JamArticleTotalVo jamArticle);
     void callUpaJamRcvArtHistUpd(JamArticleTotalVo jamArticle);

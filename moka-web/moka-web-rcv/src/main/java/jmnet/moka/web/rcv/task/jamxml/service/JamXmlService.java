@@ -1,4 +1,4 @@
-package jmnet.moka.web.rcv.task.jamxml;
+package jmnet.moka.web.rcv.task.jamxml.service;
 
 import java.util.List;
 import java.util.Map;
@@ -18,19 +18,13 @@ import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
  * @since 2020-11-02 002 오후 2:28
  */
 
-public interface JamXmlRcvService {
-    Map<String, String> selectSectCodeByContCode( JamArticleTotalVo jamArticle)
-            throws RcvDataAccessException;
+public interface JamXmlService {
     List<Map<String, String>> selectIssueSeriesReporter(String tmpRepList, String tmpKwdList)
             throws RcvDataAccessException;
 
-    void insertReceiveJobStep( JamArticleTotalVo jamArticle )
+    void insertReceiveJobStep( JamArticleTotalVo articleTotal, String errorMessage )
             throws RcvDataAccessException;
 
-    void updateReceiveJobStep(JamArticleTotalVo jamArticleTotalVo, int jobSeq, int jobStep)
-        throws RcvDataAccessException;
-
-    void doInsertUpdateArticleData(JamArticleTotalVo jamArticleTotalVo)
-        throws RcvDataAccessException;
+    boolean canLoadJamXmlRcvTask(String sourceCode);
 }
 

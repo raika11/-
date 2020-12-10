@@ -1,4 +1,4 @@
-package jmnet.moka.web.rcv.task.cppubxml;
+package jmnet.moka.web.rcv.task.cppubxml.service;
 
 import java.util.Map;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
@@ -16,7 +16,7 @@ import jmnet.moka.web.rcv.task.cppubxml.vo.CpPubNewsMLTotalVo;
  * @author sapark
  * @since 2020-11-12 012 오전 9:48
  */
-public interface CpPubXmlRcvService {
+public interface CpPubXmlService {
     Map<String, String> doInsertUpdateArticleData( CpPubNewsMLTotalVo newsMLTotal )
         throws RcvDataAccessException;
 }

@@ -1,5 +1,6 @@
 package jmnet.moka.web.rcv.task.jamxml.vo;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -11,6 +12,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ArticleIdVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ArticlePropVo;
+import jmnet.moka.web.rcv.task.jamxml.vo.sub.BulkFlagVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.CategoryVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ContentsVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.CoverImgVo;
@@ -108,9 +110,28 @@ public class JamArticleVo extends BasicVo {
     @XmlElement(name = "worker_info")
     private WorkerInfoVo workerInfo;
 
+    public void initMembers(){
+        setMediaCode(new MediaCodeVo());
+        setId(new ArticleIdVo());
+        setContents(new ContentsVo());
+        getContents().setItems(new ArrayList<>());
+        setCoverImg(new CoverImgVo());
+        setArticleProp(new ArticlePropVo());
+        getArticleProp().setBulkFlag(new BulkFlagVo());
+        setPaperProp(new PaperPropVo());
+        setEtcInfo(new EtcInfoVo());
+        setReporters(new ArrayList<>());
+        setCategoies( new ArrayList<>());
+        getCategoies().add(new CategoryVo());
+        setKeywords(new ArrayList<>());
+        setWorkerInfo(new WorkerInfoVo());
+    }
+
     public String getReporterJcmsRepSeqList() {
         String sRet = "";
         for (ReporterVo report : reporters) {
+            if( McpString.isNullOrEmpty(report.getJcmsRepSeq()))
+                continue;
             if (!McpString.isNullOrEmpty(sRet)) {
                 sRet = sRet.concat(",");
             }
@@ -126,6 +147,17 @@ public class JamArticleVo extends BasicVo {
                 sRet = sRet.concat(",");
             }
             sRet = sRet.concat(tag);
+        }
+        return sRet;
+    }
+
+    public String getReporterNameList() {
+        String sRet = "";
+        for (ReporterVo report : reporters) {
+            if (!McpString.isNullOrEmpty(sRet)) {
+                sRet = sRet.concat(".");
+            }
+            sRet = sRet.concat(report.getName());
         }
         return sRet;
     }

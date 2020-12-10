@@ -12,9 +12,13 @@ import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
-import jmnet.moka.web.rcv.task.cppubxml.CpPubXmlRcvService;
-import jmnet.moka.web.rcv.task.cpxml.CpXmlRcvService;
-import jmnet.moka.web.rcv.task.jamxml.JamXmlRcvService;
+import jmnet.moka.web.rcv.task.artafteriud.service.ArtAfterIudService;
+import jmnet.moka.web.rcv.task.calljamapi.service.CallJamApiService;
+import jmnet.moka.web.rcv.task.cppubxml.service.CpPubXmlService;
+import jmnet.moka.web.rcv.task.cpxml.service.CpXmlService;
+import jmnet.moka.web.rcv.task.jamxml.service.JamXmlService;
+import jmnet.moka.web.rcv.task.jamxml.service.XmlGenService;
+import jmnet.moka.web.rcv.task.rcvartreg.service.RcvArtRegService;
 import jmnet.moka.web.rcv.util.RcvUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.Getter;
@@ -45,13 +49,25 @@ public class TaskManager {
     private List<TaskGroup> taskGroups;
 
     @Autowired
-    JamXmlRcvService jamXmlRcvService;
+    JamXmlService jamXmlService;
 
     @Autowired
-    CpXmlRcvService cpXmlRcvService;
+    XmlGenService xmlGenService;
 
     @Autowired
-    CpPubXmlRcvService cpPubXmlRcvService;
+    CpXmlService cpXmlService;
+
+    @Autowired
+    CpPubXmlService cpPubXmlService;
+
+    @Autowired
+    RcvArtRegService rcvArtRegService;
+
+    @Autowired
+    CallJamApiService callJamApiService;
+
+    @Autowired
+    ArtAfterIudService artAfterIudService;
 
     public TaskManager(MokaRcvConfiguration rcvConfiguration) {
         this.rcvConfiguration = rcvConfiguration;
@@ -114,13 +130,13 @@ public class TaskManager {
             XMLUtil xu = new XMLUtil();
             Document doc = xu.getDocument(file);
 
-            if( xu.getString( doc, "./SmsSendList/@sendYn", "N" ).compareTo("Y") != 0 )
+            if( !xu.getString( doc, "./SmsSendList/@sendYn", "N" ).equals("Y") )
                 return;
 
             final String sendMsg = message + "\n로그 : https://joongang.co.kr/8nep";
             NodeList nl = xu.getNodeList(doc, "//User");
             for (int i = 0; i < nl.getLength(); i++) {
-                if( xu.getString(nl.item(i), "./@sendYn", "N" ).compareTo("Y") != 0 )
+                if( !xu.getString(nl.item(i), "./@sendYn", "N" ).equals("Y")  )
                     continue;
 
                 final String phoneNumber = xu.getString(nl.item(i), "./@phone", "" );

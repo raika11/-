@@ -40,7 +40,7 @@ public class ContentsVo implements Serializable {
 
     public ItemVo getItemsByType( String type ) {
         for( ItemVo item : items ){
-            if( item.getType().compareTo(type) == 0 )
+            if( item.getType().equals(type) )
                 return item;
         }
         return null;

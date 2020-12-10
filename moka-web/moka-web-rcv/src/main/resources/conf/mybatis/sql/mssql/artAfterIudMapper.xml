@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.rcv.task.artafteriud.mapper.ArtAfterIudMapper">
+  <select id="callUspArticleIudListSel" resultType="HashMap" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_ARTICLE_IUD_SEL(
+      )
+      }
+    ]]>
+  </select>
+  <delete id="callUspArticleIudDel" parameterType="HashMap" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_ARTICLE_IUD_DEL(
+      #{IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{IUD_TOTAL_ID, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </delete>
+  <insert id="callUpaCpRcvArtHistIns" parameterType="HashMap" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_CP_RCV_ART_HIST_INS(
+      #{IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
+      3,
+      #{SOURCE_CODE, mode=IN, jdbcType=VARCHAR, javaType=string},
+      '0',
+      #{RID, mode=IN, jdbcType=INTEGER, javaType=int},
+      NULL,
+      NULL
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUpaJamRcvArtHistSuccIns" parameterType="HashMap" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_JAM_RCV_ART_HIST_SUCC_INS(
+      #{IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{SOURCE_CODE, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{JAM_ID, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </insert>
+
+</mapper>
+

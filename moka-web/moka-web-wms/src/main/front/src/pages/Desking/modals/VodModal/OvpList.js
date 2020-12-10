@@ -45,16 +45,11 @@ const OvpList = ({ show }) => {
 
     useEffect(() => {
         setRowData(
-            ovpList.map((ovp) => {
-                // let regDt = moment(ovp.regDt, DB_DATEFORMAT);
-                // let regDtText = `${regDt.format('YYYY-MM-DD\nLT')}\n${regDt.toLocaleTimeString()}`;
-
-                return {
-                    ...ovp,
-                    stateText: ovp.state === 'ACTIVE' ? '정상' : '대기',
-                    regDt: moment(ovp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD\nLT'),
-                };
-            }),
+            ovpList.map((ovp) => ({
+                ...ovp,
+                stateText: ovp.state === 'ACTIVE' ? '정상' : '대기',
+                regDt: moment(ovp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD\nLTS'),
+            })),
         );
     }, [ovpList]);
 

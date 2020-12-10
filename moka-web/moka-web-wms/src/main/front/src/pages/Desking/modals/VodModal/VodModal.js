@@ -19,7 +19,7 @@ const VodModal = (props) => {
             bodyClassName="p-0"
             buttons={[
                 { text: '등록', onClick: onSave, variant: 'positive' },
-                { text: '취소', onClick: () => {}, variant: 'negative' },
+                { text: '취소', onClick: onHide, variant: 'negative' },
             ]}
             id="vod"
             centered

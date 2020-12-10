@@ -32,7 +32,9 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
      * 이미지 프리뷰 생성
      */
     const previewImg = useCallback((src) => {
-        util.makeImgPreview(src, imgRef.current, boxRef.current);
+        util.makeImgPreview(src, imgRef.current, boxRef.current, null, () => {
+            imgRef.current.src = src;
+        });
     }, []);
 
     useEffect(() => {

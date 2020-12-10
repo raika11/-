@@ -99,10 +99,6 @@ const AreaFormDepth2 = (props) => {
         } else if (name === 'parent') {
             const { areanm } = selectedOptions[0].dataset;
             setParent({ areaSeq: value, areanm });
-        } else if (name === 'areaNm') {
-            setTemp({ ...temp, areaNm: value });
-        } else if (name === 'previewRsrc') {
-            setTemp({ ...temp, previewRsrc: value });
         } else if (name === 'domain') {
             setDomainId({ domainId: e.target.value });
             onChangeModalDomainId(e.target.value);
@@ -116,8 +112,6 @@ const AreaFormDepth2 = (props) => {
             setComponent({ componentSeq: value, dataType: datatype });
             setAreaComps([]);
             setAreaComp({ ...areaComp, deskingPart: null });
-        } else if (name === 'areaAlign') {
-            setTemp({ ...temp, areaAlign: value });
         } else if (name === 'container') {
             // ContainerSelector에서 option이 변경될 때
             setContainer({ containerSeq: value });
@@ -131,6 +125,8 @@ const AreaFormDepth2 = (props) => {
                 });
             });
             setAreaComps(newComps);
+        } else {
+            setTemp({ ...temp, [name]: value });
         }
     };
 
@@ -550,6 +546,9 @@ const AreaFormDepth2 = (props) => {
                         />
                     </Form.Row>
 
+                    {/* api 입력 */}
+                    <MokaInputLabel name="afterApi" label="API" className="mb-2" labelWidth={87} value={temp.afterApi} onChange={handleChangeValue} />
+
                     {/* 컴포넌트/컨테이너 선택 */}
                     <Form.Row className="mb-2">
                         <Col xs={2} className="p-0">
@@ -610,13 +609,7 @@ const AreaFormDepth2 = (props) => {
                     <MokaInputLabel
                         as="textarea"
                         name="previewRsrc"
-                        label={
-                            <>
-                                미리보기
-                                <br />
-                                리소스
-                            </>
-                        }
+                        label="미리보기\n리소스"
                         labelWidth={87}
                         inputClassName="resize-none"
                         inputProps={{ rows: 5 }}

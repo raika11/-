@@ -196,6 +196,8 @@ function makeRCTreeData(serverData) {
  * @param {func} errorFunc onerror 실행
  */
 const makeImgPreview = (src, ele, wrapperEle, loadFunc, errorFunc) => {
+    if (ele && ele.src === src) return;
+
     let image = new Image();
     image.src = src;
     image.onload = (imgProps) => {

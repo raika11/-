@@ -90,7 +90,7 @@ public class FileTaskInput<P, C> extends TaskInput {
             return;
         }
         for (int i = 0; i < nl.getLength(); i++) {
-            if( nl.item(i).getNodeName().compareTo("inputFilter") != 0 )
+            if( !nl.item(i).getNodeName().equals("inputFilter")  )
                 continue;
 
             String cls = "";

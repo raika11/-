@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <TaskGroup>
-  <Task class="jmnet.moka.web.rcv.task.cpxml.CpXmlRcvTask"
+  <Task class="jmnet.moka.web.rcv.task.cpxml.CpXmlTask"
     name="Join:D"
     idx="163"
-    sourceCode="11"
+    sourceCode="l1"
     receiveImage="N"
     retryCount="3"
     pdsUploadKeyTitle="joind_news"

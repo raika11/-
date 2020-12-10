@@ -7,9 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSnsMeta, GET_SNS_META, initialState } from '@store/snsManage';
 import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
+import SnsPreviewModal from '@pages/SnsManage/SnsMeta/modal/SnsPreviewModal';
 
 const SnsMetaEdit = () => {
     const [modalShow, setModalShow] = useState(false);
+    const [previewModalShow, setPreviewModalShow] = useState(false);
     const [edit, setEdit] = useState(initialState.meta.meta);
     const { totalId } = useParams();
     const dispatch = useDispatch();
@@ -39,6 +41,7 @@ const SnsMetaEdit = () => {
     };
 
     const tempFooterButtonClick = (e) => {
+        setPreviewModalShow(true);
         console.log('tempFooterButtonClick', e);
     };
 
@@ -310,6 +313,13 @@ const SnsMetaEdit = () => {
             </Form>
 
             <SnsMetaModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={null} />
+            <SnsPreviewModal
+                show={previewModalShow}
+                onHide={() => {
+                    setPreviewModalShow(false);
+                }}
+                totalId={totalId}
+            />
         </MokaCard>
     );
 };

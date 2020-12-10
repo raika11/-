@@ -109,5 +109,25 @@
       "name": "rcv.ImageWebSvrUrl",
       "type": "java.lang.String",
       "description": "Description for rcv.ImageWebSvrUrl."
+    },
+    {
+      "name": "rcv.stagePdsUse",
+      "type": "java.lang.String",
+      "description": "Description for rcv.stagePdsUse."
+    },
+    {
+      "name": "rcv.uploadToServiceImage",
+      "type": "java.lang.String",
+      "description": "Description for rcv.uploadToServiceImage."
+    },
+    {
+      "name": "rcv.jamapiurl.jai",
+      "type": "java.lang.String",
+      "description": "Description for rcv.jamapiurl.jai."
+    },
+    {
+      "name": "rcv.jamapiurl.ilg",
+      "type": "java.lang.String",
+      "description": "Description for rcv.jamapiurl.ilg."
     }
   ] }

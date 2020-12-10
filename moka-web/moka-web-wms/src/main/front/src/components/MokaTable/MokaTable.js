@@ -114,7 +114,7 @@ const defaultProps = {
     preventRowClickCell: [],
     rowSelection: 'single',
     headerHeight: 35,
-    animateRows: true,
+    animateRows: false,
 };
 
 /**
@@ -142,6 +142,8 @@ const MokaTable = forwardRef((props, ref) => {
         animateRows,
         setGridInstance: setParentGridInstance,
     } = props;
+
+    console.log(rowHeight);
 
     // drag props
     const { dragManaged, onRowDragMove, onRowDragEnd } = props;
@@ -262,11 +264,7 @@ const MokaTable = forwardRef((props, ref) => {
         (params) => {
             setTimeout(function () {
                 handleSelected();
-            });
-
-            setTimeout(function () {
                 params.api.refreshCells({ force: true });
-                // getRowClass, getRowStyle을 초기화하기 위해 redrawRows 실행
             });
         },
         [handleSelected],

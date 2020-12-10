@@ -7,6 +7,7 @@ import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
+import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.group.repository.GroupMemberRepository;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
@@ -100,39 +101,32 @@ public class MemberServiceImpl implements MemberService {
         return updateMemberLoginInfo(memberId, loginDate, loginIp, null);
     }
 
-    @Override
-    public MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt) {
-        return updateMemberLoginInfo(memberId, loginDate, loginIp, expireDt, 0);
-    }
 
     @Override
-    public MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt, Integer errCnt) {
+    public MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, UserDTO userDTO) {
         Optional<MemberInfo> optionalMember = this.findMemberById(memberId);
         return optionalMember
-                .map(value -> updateMemberLoginInfo(value, loginDate, loginIp, expireDt, errCnt))
+                .map(value -> {
+                    value.setLastLoginDt(loginDate);
+                    value.setLastLoginIp(loginIp);
+                    value.setErrCnt(0);
+                    if (userDTO != null) {
+                        value.setCompanyPhone(userDTO.getPhoneNo());
+                        value.setMemberNm(userDTO.getUserName());
+                        value.setMobilePhone(userDTO.getCellPhoneNo());
+                        value.setDept(userDTO.getDept());
+                        value.setEmail(userDTO.getEmailaddress());
+                        value.setMemberId(value.getMemberId());
+                        if (userDTO.getExpireDt() != null) {
+                            value.setExpireDt(userDTO.getExpireDt());
+                        }
+                    }
+                    return updateMember(value);
+                })
                 .orElse(null);
     }
 
-    @Override
-    public MemberInfo updateMemberLoginInfo(MemberInfo member, Date loginDate, String loginIp) {
-        return updateMemberLoginInfo(member, loginDate, loginIp, null, 0);
-    }
 
-    @Override
-    public MemberInfo updateMemberLoginInfo(MemberInfo member, Date loginDate, String loginIp, Date expireDt) {
-        return updateMemberLoginInfo(member, loginDate, loginIp, expireDt, 0);
-    }
-
-    @Override
-    public MemberInfo updateMemberLoginInfo(MemberInfo member, Date loginDate, String loginIp, Date expireDt, Integer errCnt) {
-        member.setLastLoginDt(loginDate);
-        member.setLastLoginIp(loginIp);
-        member.setErrCnt(errCnt);
-        if (expireDt != null) {
-            member.setExpireDt(expireDt);
-        }
-        return updateMember(member);
-    }
 
     @Override
     public MemberInfo updateMemberLoginErrorCount(String memberId, Integer errorCnt) {

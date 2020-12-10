@@ -61,6 +61,8 @@ public class UserDTO implements UserDetails {
 
     private String notify;
 
+    private String group;
+
     @JsonIgnore
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -68,13 +70,13 @@ public class UserDTO implements UserDetails {
     }
 
     public UserDTO(String userId, String allowMediaIds, String cellPhoneNo, String dept, String emailaddress, String password, String phoneNo,
-            String photo, String position, String userLevel, String userName, String workYn, Collection<? extends GrantedAuthority> authorities,
+            String photo, String group, String userLevel, String userName, String workYn, Collection<? extends GrantedAuthority> authorities,
             MemberStatusCode status, Integer errorCnt, Date expireDt, Date passwordModDt, Date lastLoginDt) {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
         this.dept = dept;
-        this.position = position;
+        this.group = group;
         this.emailaddress = emailaddress;
         this.phoneNo = phoneNo;
         this.cellPhoneNo = cellPhoneNo;
@@ -160,6 +162,14 @@ public class UserDTO implements UserDetails {
 
     public void setCellPhoneNo(String cellPhoneNo) {
         this.cellPhoneNo = cellPhoneNo;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getGroup() {
+        return this.group;
     }
 
     // public String getCreateYmdt() {

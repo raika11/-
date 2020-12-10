@@ -1,6 +1,7 @@
-.wrapper{
+.wrapper {
   align-items: stretch;
   display: flex;
+  min-width: $min-width;
   width: 100%;
   height: 100%;
 }

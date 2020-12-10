@@ -44,6 +44,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading }) => {
                 selected={(data) => {
                     console.log(data);
                 }}
+                preventRowClickCell={['insStatus', 'sendType']}
                 className="sns-meta-ag-grid"
             />
         </>

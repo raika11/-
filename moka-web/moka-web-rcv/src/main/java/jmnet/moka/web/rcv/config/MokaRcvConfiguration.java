@@ -48,14 +48,23 @@ public class MokaRcvConfiguration {
     private String tempDir;
     @Value("${rcv.taskmanager.smsListEnvFile}")
     private String smsListEnvFile;
+    @Value("${rcv.stagePdsUse}")
+    private String stagePds;
+    @Value("${rcv.uploadToServiceImage}")
+    private String uploadToServiceImage;
+
+    @Value("${rcv.jamapiurl.jai}")
+    private String jamApiUrlJai;
+    @Value("${rcv.jamapiurl.ilg}")
+    private String jamApiUrlIlg;
 
     @Bean
     @ConfigurationProperties(prefix = "rcv.pds.ftp")
     public FtpConfig getPdsFtpConfig() { return new FtpConfig(); }
 
-    @Bean
-    @ConfigurationProperties(prefix = "rcv.pdsback.ftp")
-    public FtpConfig getPdsBackFtpConfig() { return new FtpConfig(); }
+//    @Bean
+//    @ConfigurationProperties(prefix = "rcv.pdsback.ftp")
+//    public FtpConfig getPdsBackFtpConfig() { return new FtpConfig(); }
 
     @Primary
     @Bean

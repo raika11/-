@@ -64,4 +64,12 @@ public class ItemVo implements Serializable {
 
     @XmlElement(name = "poster")
     private String poster;
+
+    private String title;
+    private String artThumb;
+    private String compId;
+    private String varcharKey;
+    private String link;
+    private String thumbImg;
+    private String etc;
 }

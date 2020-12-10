@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
+import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
 import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
@@ -91,16 +92,6 @@ public interface MemberService {
      */
     MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp);
 
-    /**
-     * 멤버 로그인 정보 수정
-     *
-     * @param memberId  멤버 ID
-     * @param loginDate 로그인 일시
-     * @param loginIp   로그인 아이피
-     * @param expireDt  계정만료일
-     * @return 멤버 정보
-     */
-    MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt);
 
     /**
      * 멤버 로그인 정보 수정
@@ -108,44 +99,11 @@ public interface MemberService {
      * @param memberId  멤버 ID
      * @param loginDate 로그인 일시
      * @param loginIp   로그인 아이피
-     * @param expireDt  계정만료일
-     * @param errCnt    비밀번호 오류 건수
+     * @param userDTO   사용자 변경 정보
      * @return 멤버 정보
      */
-    MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, Date expireDt, Integer errCnt);
+    MemberInfo updateMemberLoginInfo(String memberId, Date loginDate, String loginIp, UserDTO userDTO);
 
-    /**
-     * 멤버 로그인 정보 수정
-     *
-     * @param member    멤버 정보
-     * @param loginDate 로그인 일시
-     * @param loginIp   로그인 아이피
-     * @return 멤버 정보
-     */
-    MemberInfo updateMemberLoginInfo(MemberInfo member, Date loginDate, String loginIp);
-
-    /**
-     * 멤버 로그인 정보 수정
-     *
-     * @param member    멤버 정보
-     * @param loginDate 로그인 일시
-     * @param loginIp   로그인 아이피
-     * @param expireDt  계정만료일
-     * @return 멤버 정보
-     */
-    MemberInfo updateMemberLoginInfo(MemberInfo member, Date loginDate, String loginIp, Date expireDt);
-
-    /**
-     * 멤버 로그인 정보 수정
-     *
-     * @param member    멤버 정보
-     * @param loginDate 로그인 일시
-     * @param loginIp   로그인 아이피
-     * @param expireDt  계정만료일
-     * @param errCnt    비밀번호 오류 건수
-     * @return 멤버 정보
-     */
-    MemberInfo updateMemberLoginInfo(MemberInfo member, Date loginDate, String loginIp, Date expireDt, Integer errCnt);
 
     /**
      * 로그인 실패 정보 수정

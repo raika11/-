@@ -65,10 +65,7 @@ public class CpPubXmlFileName implements Serializable {
             }
             this.pan = split[2].substring(0, 2);
             this.type = split[2].substring(2, 4);
-            this.myun = split[2]
-                    .substring(4, 7)
-                    .substring(1, 3);
-
+            this.myun = split[2].substring(4, 7).substring(1, 3);
             this.local = split[3];
             if (split.length > 4) {
                 this.revision = split[4];
@@ -95,7 +92,7 @@ public class CpPubXmlFileName implements Serializable {
     @SuppressWarnings("SameReturnValue")
     private boolean doFilenameParseJoongangSunday() {
         // 중앙선데이만 처리한다. 이외것들은 로그남기고 완료폴더로 이동한다.
-        if (media.compareTo("W005") != 0) {
+        if ( !media.equals("W005") ) {
             this.passProcess = true;
             setPassReason("중앙선데이만 처리한다. 이외것들은 로그남기고 완료폴더로 이동한다.");
             return true;
@@ -152,15 +149,15 @@ public class CpPubXmlFileName implements Serializable {
         // If (sArticleMetaMedia = "D001" And sArticleMetaLocal <> "D1018" And sArticleMetaPan <> "05") Or (sArticleMetaMedia = "W006" And (sArticleMetaMyun = "01" And sArticleMetaPan = "42") Or (sArticleMetaMyun <> "01" And sArticleMetaPan = "41")) Then
         // 위 라이프트랜드 1면이 안들어온다는 문의가 자주와서 위 라이프트랜드 조건 없애버렸다 (20160404 : jaeils)
 
-        if (!((this.media.compareTo("D001") == 0 && this.local.compareTo("D1018") != 0 && this.pan.compareTo("05") != 0) || (
-                this.media.compareTo("W006") == 0))) {
+        if (!((this.media.equals("D001") && !this.local.equals("D1018") && !this.pan.equals("05") ) || (
+                this.media.equals("W006") ))) {
             this.passProcess = true;
             setPassReason("중앙일보 조판이면서, 제주기사가 아닌것만 처리한다. 이외것들은 로그남기고 완료폴더로 이동한다.");
             return true;
         }
 
         // 중앙일보 10판 이상, 서울/수도권
-        if(!(this.media.compareTo("D001") == 0 && (this.local.compareTo("D1001") == 0 || this.local.compareTo("D1002") == 0)
+        if(!(this.media.equals("D001") && (this.local.equals("D1001")  || this.local.equals("D1002") )
                 && this.pan.compareTo("05") != 0)) {
             this.passProcess = true;
             setPassReason("중앙일보 10판 이상, 서울/수도권만 처리한다. 이외것들은 로그남기고 완료폴더로 이동한다.");

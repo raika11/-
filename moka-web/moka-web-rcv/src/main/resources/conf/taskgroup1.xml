@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <TaskGroup>
-  <Task class="jmnet.moka.web.rcv.task.jamxml.JamXmlRcvTask"
+  <Task class="jmnet.moka.web.rcv.task.jamxml.JamXmlTask"
     name="중앙일보(조판)"
     sourceCode="1"
     retryCount="3"
@@ -13,7 +13,7 @@
       fileWaitTime="3s"
       retryCount="3"/>
   </Task>
-  <Task class="jmnet.moka.web.rcv.task.jamxml.JamXmlRcvTask"
+  <Task class="jmnet.moka.web.rcv.task.jamxml.JamXmlTask"
     name="중앙일보(속보)"
     sourceCode="3"
     retryCount="3"

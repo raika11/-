@@ -15,7 +15,7 @@ import { DefaultInputModal } from '@pages/commons';
 import AddComponentModal from './modals/AddComponentModal';
 
 /**
- * 템플릿 정보/수정 컴포넌트
+ * 템플릿 등록/수정 컴포넌트
  */
 const TemplateEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
@@ -296,7 +296,7 @@ const TemplateEdit = ({ onDelete }) => {
     }, [invalidList]);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`템플릿 ${template.templateSeq ? '정보' : '등록'}`} loading={loading}>
+        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`템플릿 ${template.templateSeq ? '수정' : '등록'}`} loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
@@ -312,12 +312,14 @@ const TemplateEdit = ({ onDelete }) => {
                         <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="negative" className="mr-05" onClick={handleClickCancle}>
+                        <Button variant="negative" onClick={handleClickCancle}>
                             취소
                         </Button>
-                        <Button variant="negative" disabled={btnDisabled} onClick={handleClickDelete}>
-                            삭제
-                        </Button>
+                        {!btnDisabled && (
+                            <Button variant="negative" className="ml-05" onClick={handleClickDelete}>
+                                삭제
+                            </Button>
+                        )}
                     </div>
                 </Form.Group>
                 {/* 템플릿ID */}

@@ -2,12 +2,11 @@
 * body
 * ---------------------- */
 body {
-    min-width: $min-width;
     height: 100vh;
     overflow: hidden;
     overflow-x: auto;
     letter-spacing: -0.5px;
-    color: $gray600;
+    color: $gray-600;
     font-size: 13px;
 }
 

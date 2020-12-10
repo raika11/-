@@ -220,7 +220,7 @@ const EditDeskingWorkModal = (props) => {
                                         <MokaInputLabel as="none" label="대표\n이미지" labelWidth={80} labelClassName="ft-12 pr-3" className="mb-0" />
                                         <MokaImage img={temp.irImg} width={216} height={150} />
                                     </div>
-                                    <div className="mt-2 d-flex justify-content-between" style={{ width: 216, marginLeft: 80 }}>
+                                    <div className="mt-2 d-flex justify-content-between" style={{ width: 216, marginLeft: 92 }}>
                                         <Button variant="positive" size="sm" onClick={() => setShowModal(true)}>
                                             신규등록
                                         </Button>

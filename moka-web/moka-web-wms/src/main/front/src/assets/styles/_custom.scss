@@ -57,13 +57,6 @@ body {
 }
 
 /* -----------------------
-* sidebar
-* ---------------------- */
-.sidebar-sticky .sidebar-content {
-    position: absolute;
-}
-
-/* -----------------------
 * card
 * ---------------------- */
 .card {
@@ -130,6 +123,7 @@ body {
             padding: map-get($spacers, 3) 0;
             border-radius: 0;
             margin-bottom: 0;
+            letter-spacing: -1.4px;
     
             &.active {
                 color: $positive;
@@ -191,7 +185,7 @@ body {
 }
 
 /* -----------------------
-* modal
+* modal (react-draggable-container, 기존 modal override)
 * ---------------------- */
 .react-draggable-container {
     height: 100vh;
@@ -229,8 +223,26 @@ body {
     }
 }
 
-.modal-header .close {
-    text-overflow: clip;
+.modal-header {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 0;
+
+    .modal-title {
+        margin-right: 1.5rem;
+        font-size: 16px;
+        letter-spacing: -1px;
+    }
+    
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        outline: none;
+        text-overflow: clip;
+    }
 }
 
 .modal-dialog {

@@ -8,6 +8,89 @@ body {
     letter-spacing: -0.5px;
     color: $gray-600;
     font-size: 13px;
+
+    .signin-main{
+        color:$white;
+            
+        h1{
+            color:$white;
+        }
+        .card{ 
+            width: 480px !important;
+            background-color: transparent;
+            box-shadow: 0 0 0;
+        }
+        .form-group{
+            border-bottom: 1px solid $white;
+            &:first-child{
+                margin-bottom: 45px !important;
+            }
+            label{
+                font-size: 1.5em;
+            }
+            input{
+                border:0;
+                color: $white;
+                background-color: transparent;
+                display: inline-block;
+                width: calc(100% - 1.5em);
+                &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                    color: $white;
+                    opacity: 1; /* Firefox */
+                    }
+            }
+        }
+        .signin-btn{
+            margin-top: 60px;
+            margin-bottom: 40px;
+            button{
+                padding: 13px !important;
+                font-size: 15px;
+            }
+        }
+        .etc-btn{
+            font-size: 15px;
+            label{
+                cursor: pointer;
+                span{
+                    color: #FFB495;
+                }
+            }
+        }
+        input[type=checkbox]:after {
+            width: 15px;
+            height: 15px;
+            top: -2px;
+            left: -1px;
+            position: relative;
+            background-color: #FF3907;
+            content: 'V';
+            display: inline-block;
+            visibility: visible;
+            border: 1px solid #FF3907;
+            box-shadow: none !important;
+            color: #fff !important;
+            font-weight: bold;
+            text-align: center;
+            line-height: 15px;
+        }
+            
+        input[type=checkbox]:checked:after {
+            width: 15px;
+            height: 15px;
+            top: -2px;
+            left: -1px;
+            position: relative;
+            content: '';
+            display: inline-block;
+            visibility: visible;
+            background-color: #fff;
+            border: 1px solid #FF3907;
+            box-shadow: none !important;
+            line-height: 15px;
+        }
+    }
+    
 }
 
 .gap {

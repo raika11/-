@@ -1,13 +1,14 @@
-package jmnet.moka.web.rcv.task.cpxml;
+package jmnet.moka.web.rcv.task.cpxml.service;
 
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
-import jmnet.moka.web.rcv.task.cpxml.mapper.CpXmlRcvMapper;
+import jmnet.moka.web.rcv.task.cpxml.mapper.CpXmlMapper;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleTotalVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpCategoryVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpComponentVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpReporterVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,14 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Slf4j
-public class CpXmlRcvServiceImpl implements CpXmlRcvService {
-    private final CpXmlRcvMapper cpXmlRcvMapper;
+public class CpXmlServiceImpl implements CpXmlService {
+    private final CpXmlMapper cpXmlMapper;
 
     private static final int ErrCode_Rid_Basic = -800;
     private static final int ErrCode_Rid_Etc = -900;
 
-    public CpXmlRcvServiceImpl(CpXmlRcvMapper cpXmlRcvMapper) {
-        this.cpXmlRcvMapper = cpXmlRcvMapper;
+    public CpXmlServiceImpl(CpXmlMapper cpXmlMapper) {
+        this.cpXmlMapper = cpXmlMapper;
     }
 
     private boolean isReturnErr(Integer ret) {
@@ -49,40 +50,42 @@ public class CpXmlRcvServiceImpl implements CpXmlRcvService {
 
         final CpArticleVo article = cpArticleTotal.getCurArticle();
 
-        final Integer rid = cpXmlRcvMapper.callUspRcvArticleBasicIns(cpArticleTotal);
+        final Integer rid = cpXmlMapper.callUspRcvArticleBasicIns(cpArticleTotal);
         if (isReturnErr(rid)) {
             throw new RcvDataAccessException("기사 기본 정보 입력 오류");
         }
         cpArticleTotal.setRid(rid);
 
-        if (article
-                .getIud()
-                .compareTo("D") == 0) {
+        if (article.getIud().equals("D")) {
             return;
         }
 
-        if (isReturnErr(cpXmlRcvMapper.callUspRcvArticleComponentDel(cpArticleTotal))) {
+        if (isReturnErr(cpXmlMapper.callUspRcvArticleComponentDel(cpArticleTotal))) {
             throw new RcvDataAccessException("기사 기존 Component 정보 삭제 오류");
         }
 
-        if (isReturnErr(cpXmlRcvMapper.callUspRcvArticleReporterDel(cpArticleTotal))) {
+        if (isReturnErr(cpXmlMapper.callUspRcvArticleReporterDel(cpArticleTotal))) {
             throw new RcvDataAccessException("기사 기존 Reporter 정보 삭제 오류");
         }
 
-        if (isReturnErr(cpXmlRcvMapper.callUspRcvArticleCodeDel(cpArticleTotal))) {
+        if (isReturnErr(cpXmlMapper.callUspRcvArticleCodeDel(cpArticleTotal))) {
             throw new RcvDataAccessException("기사 기존 Code 정보 삭제 오류");
+        }
+
+        if (isReturnErr(cpXmlMapper.callUspRcvArticleKeywordDel(cpArticleTotal))) {
+            throw new RcvDataAccessException("기사 기존 Keyword 정보 삭제 오류");
         }
 
         for (CpComponentVo component : article.getComponents()) {
             cpArticleTotal.setCurComponent(component);
-            if (isReturnErr(cpXmlRcvMapper.callUspRcvArticleComponentIns(cpArticleTotal))) {
+            if (isReturnErr(cpXmlMapper.callUspRcvArticleComponentIns(cpArticleTotal))) {
                 throw new RcvDataAccessException("기사 Component 정보 입력 오류");
             }
         }
 
         for(CpReporterVo reporter : article.getReporters() ){
             cpArticleTotal.setCurReporter(reporter);
-            if (isReturnErr(cpXmlRcvMapper.callUspRcvArticleReporterIns(cpArticleTotal))) {
+            if (isReturnErr(cpXmlMapper.callUspRcvArticleReporterIns(cpArticleTotal))) {
                 throw new RcvDataAccessException("기사 Reporter 정보 입력 오류");
             }
         }
@@ -91,9 +94,32 @@ public class CpXmlRcvServiceImpl implements CpXmlRcvService {
         for(CpCategoryVo category : article.getCategoies()){
             cpArticleTotal.setCurCategory(category);
             cpArticleTotal.setCurIndex(Integer.toString(curIndex++));
-            if (isReturnErr(cpXmlRcvMapper.callUspRcvArticleCodeIns(cpArticleTotal))) {
+            if (isReturnErr(cpXmlMapper.callUspRcvArticleCodeIns(cpArticleTotal))) {
                 throw new RcvDataAccessException("기사 Code 정보 입력 오류");
             }
+        }
+
+        for(String tag : article.getTags()){
+            cpArticleTotal.setCurKeyword(tag);
+            cpArticleTotal.setCurIndex(Integer.toString(curIndex++));
+            if (isReturnErr(cpXmlMapper.callUspRcvArticleKeywordIns(cpArticleTotal))) {
+                throw new RcvDataAccessException("기사 Keyword 정보 입력 오류");
+            }
+        }
+    }
+
+    @Override
+    public void insertReceiveJobStep(CpArticleTotalVo articleTotal, String errorMessage)
+            throws RcvDataAccessException {
+        try {
+            articleTotal.setErrorMessage(errorMessage);
+            if( articleTotal.getArtHistoryId() == 0 )
+                this.cpXmlMapper.callUpaCpRcvArtHistIns(articleTotal);
+            else
+                this.cpXmlMapper.callUpaCpRcvArtHistUpd(articleTotal);
+
+        } catch (DataAccessException e) {
+            throw new RcvDataAccessException(e.getCause());
         }
     }
 }

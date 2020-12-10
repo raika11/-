@@ -11,6 +11,7 @@ import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
 import jmnet.moka.web.rcv.exception.RcvException;
 import jmnet.moka.web.rcv.task.base.TaskGroup;
+import jmnet.moka.web.rcv.task.cpxml.service.CpXmlService;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleListVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleTotalVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleVo;
@@ -38,13 +39,13 @@ import org.w3c.dom.Node;
  * @since 2020-11-10 010 오후 4:59
  */
 @Slf4j
-public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticleListVo>> {
+public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticleListVo>> {
     private String sourceCode;
     private String receiveImage;
     private String pdsUploadKeyTitle;
     private String editYn;
 
-    public CpXmlRcvTask(TaskGroup parent, Node node, XMLUtil xu)
+    public CpXmlTask(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, RcvException {
         super(parent, node, xu);
     }
@@ -103,14 +104,31 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
 
         cpArticleTotalVo.setSourceCode(this.sourceCode);
         cpArticleTotalVo.setEditYn(this.editYn);
+        cpArticleTotalVo.setXmlFileNM(taskInputData.getFile().toPath().getFileName().toString());
+        
+        final CpXmlService cpXmlService = getTaskManager().getCpXmlService();
 
         final CpArticleListVo articleList = cpArticleTotalVo.getMainData();
         for (CpArticleVo article : articleList.getArticles()) {
             cpArticleTotalVo.setCurArticle(article);
-            article.doReplaceInsertData(this.sourceCode);
 
-            doProcessChild(taskInputData, cpArticleTotalVo);
+            cpArticleTotalVo.setArtHistoryStep(1);
+            cpXmlService.insertReceiveJobStep( cpArticleTotalVo, "");
+            cpArticleTotalVo.setArtHistoryStep(2);
+
+            article.doReplaceInsertData(this.sourceCode);
+            cpArticleTotalVo.setPressDT( RcvUtil.getDateFromJamDateString(article.getPressDateTime())  );
+
+            try {
+                doProcessChild(taskInputData, cpArticleTotalVo);
+                cpXmlService.insertReceiveJobStep( cpArticleTotalVo, "");
+            }catch ( Exception e ) {
+                cpArticleTotalVo.logError("예외 발생");
+                cpXmlService.insertReceiveJobStep( cpArticleTotalVo, cpArticleTotalVo.getErrorMessageList());
+                throw new RcvDataAccessException( e.getMessage() );
+            }
         }
+        taskInputData.setSuccess(true);
     }
 
     private void doProcessChild(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData, CpArticleTotalVo cpArticleTotalVo)
@@ -119,9 +137,7 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
         final MokaRcvConfiguration rcvConfiguration = getTaskManager().getRcvConfiguration();
 
         for (CpComponentVo component : article.getComponents()) {
-            if (component
-                    .getType()
-                    .compareTo("I") != 0) {
+            if (!component.getType().equals("I")) {
                 continue;
             }
             if (McpString.isNullOrEmpty(component.getUrl())) {
@@ -130,18 +146,10 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
 
             String localFilePath;
             String imageFileName;
-            if (this.receiveImage.compareTo("Y") == 0) {
+            if (this.receiveImage.equals("Y")) {
                 // 로컬이미지 다운로드(FTP 에 이미지파일도 함께 올려주는 경우)
-                imageFileName = Path
-                        .of(component.getUrl())
-                        .getFileName()
-                        .toString();
-                localFilePath = Path
-                        .of(taskInputData
-                                .getTaskInput()
-                                .getDirScan()
-                                .getPath(), imageFileName)
-                        .toString();
+                imageFileName = Path.of(component.getUrl()).getFileName().toString();
+                localFilePath = Path.of(taskInputData.getTaskInput().getDirScan().getPath(), imageFileName).toString();
                 log.info("local file {}, {}", imageFileName, localFilePath);
             } else {
                 final int equalPos = component
@@ -180,11 +188,14 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
                         .concat("/")
                         .concat(McpDate.dateStr(new Date(), "yyyyMM/dd/"));
 
+                /*
+                PDS Bak 에는 Upload 하지 않는 걸로..
                 if (!FtpUtil.uploadFle(rcvConfiguration.getPdsBackFtpConfig(), localFilePath, uploadPath, imageFileName)) {
                     log.error("PDS Back Image Upload Failed !! {} {}", uploadPath, imageFileName);
                 } else {
                     log.info("PDS Back Image Upload Success !! {} {}", uploadPath, imageFileName);
                 }
+                 */
 
                 if (!FtpUtil.uploadFle(rcvConfiguration.getPdsFtpConfig(), localFilePath, uploadPath, imageFileName)) {
                     log.error("PDS Image Upload Failed !! {} {}", uploadPath, imageFileName);
@@ -197,7 +208,7 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
                     log.info("PDS  Image Upload Success !! {} {} {}", serviceImageUrl, uploadPath, imageFileName);
 
                     // 본문에 이미지태그가 안들어오는 기사들은 상단에 가운데정렬 이미지로 추가한다.
-                    if (this.sourceCode.compareTo("j4") == 0) {
+                    if (this.sourceCode.equals("j4") ) {
                         String ImageTag = "<div><!--@img_tag_s@--><div class=\"html_photo_center\"><img src=\""
                                 .concat(serviceImageUrl)
                                 .concat("\" />");
@@ -222,8 +233,8 @@ public class CpXmlRcvTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArt
             }
         }
 
-        final CpXmlRcvService cpXmlRcvService = getTaskManager().getCpXmlRcvService();
-        cpXmlRcvService.doInsertUpdateArticleData(cpArticleTotalVo);
+        final CpXmlService cpXmlService = getTaskManager().getCpXmlService();
+        cpXmlService.doInsertUpdateArticleData(cpArticleTotalVo);
     }
 
     @Override

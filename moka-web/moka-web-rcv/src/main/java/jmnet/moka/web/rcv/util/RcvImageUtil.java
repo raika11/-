@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import javax.imageio.ImageIO;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -22,6 +23,7 @@ import javax.imageio.ImageIO;
  * @author sapark
  * @since 2020-11-05 005 오전 11:11
  */
+@Slf4j
 public class RcvImageUtil {
     public static boolean combineWatermarkImage(String targetImage, String imageUrl, String watermarkUrl) {
         try {
@@ -77,6 +79,44 @@ public class RcvImageUtil {
             } catch (IOException e) {
                 // no
             }
+        }
+    }
+
+    public static boolean resizeMaxWidthHeight(String targetImage, String sourceUrl, int maxWidth, int maxHeight) {
+        try {
+            File file = new File(targetImage);
+            if (file.exists()) {
+                if (!file.delete()) {
+                    return false;
+                }
+            }
+            BufferedImage image = ImageIO.read(new URL(sourceUrl));
+
+            final double ratioWidth = (double) maxWidth / image.getWidth();
+            final double ratioHeight = (double) maxHeight / image.getHeight();
+
+            int newWidth;
+            int newHeight;
+            if (ratioWidth < ratioHeight) {
+                newWidth = maxWidth;
+                newHeight = (int) (image.getHeight() * ratioWidth + 0.5);
+            } else {
+                newWidth = (int) (image.getWidth() * ratioHeight + 0.5);
+                newHeight = maxHeight;
+            }
+
+            BufferedImage output = new BufferedImage(newWidth, newHeight, image.getType());
+
+            Graphics g = output.createGraphics();
+            g.drawImage(image, 0, 0, newWidth, newHeight, null);
+            g.dispose();
+
+            ImageIO.write(output, "JPG", file);
+            return true;
+
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return false;
         }
     }
 }

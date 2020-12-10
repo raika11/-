@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.rcv.task.calljamapi.mapper.CallJamApiMapper">
+  <select id="callUpaJamRcvArtHistListSel" resultType="HashMap" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_JAM_RCV_ART_HIST_LIST_SEL(
+          '1'
+      )
+      }
+    ]]>
+  </select>
+
+  <insert id="callUpaCpRcvArtHistUpd" parameterType="HashMap" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_JAM_RCV_ART_HIST_UPD(
+      #{JOB_IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
+      3,
+      #{SOURCE_CODE, mode=IN, jdbcType=VARCHAR, javaType=string},
+      0,
+      #{JAM_ART_ID, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{XML_FILE, mode=IN, jdbcType=VARCHAR, javaType=string},
+      ''
+      )
+      }
+    ]]>
+  </insert>
+
+  <delete id="callUpaCpRcvArtHistDel" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_JAM_RCV_ART_HIST_DEL(
+      )
+      }
+    ]]>
+  </delete>
+</mapper>
+

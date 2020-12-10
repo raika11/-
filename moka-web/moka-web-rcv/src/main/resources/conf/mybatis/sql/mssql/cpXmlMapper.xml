@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="jmnet.moka.web.rcv.task.cpxml.mapper.CpXmlRcvMapper">
-  <select id="callUspRcvArticleBasicIns" parameterType="JamArticleTotalVo" resultType="Integer"
+<mapper namespace="jmnet.moka.web.rcv.task.cpxml.mapper.CpXmlMapper">
+  <select id="callUspRcvArticleBasicIns" parameterType="CpArticleTotalVo" resultType="Integer"
     statementType="CALLABLE">
     <![CDATA[
     {
@@ -14,8 +14,8 @@
       #{curArticle.title, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{curArticle.subTitle, mode=IN, jdbcType=VARCHAR, javaType=string},
       '', /* Depart */
-      #{curArticle.pressDateTime, mode=IN, jdbcType=VARCHAR, javaType=string},
-      '', /* Embargo */
+      #{pressDT, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+      NULL, /* Embargo */
       #{curArticle.myun, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{curArticle.pan, mode=IN, jdbcType=VARCHAR, javaType=string},
       '', /* Urgency */
@@ -25,14 +25,14 @@
       '', /* Section */
       #{curArticle.copyright, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{curArticle.serviceUrl, mode=IN, jdbcType=VARCHAR, javaType=string},
-      '', /* UsedYN */
+      'Y', /* UsedYN */
       #{editYn, mode=IN, jdbcType=VARCHAR, javaType=string},
-      '' /* PhotoYN */
+      'N' /* PhotoYN */
       )
       }
     ]]>
   </select>
-  <select id="callUspRcvArticleComponentIns" parameterType="JamArticleTotalVo" resultType="Integer"
+  <select id="callUspRcvArticleComponentIns" parameterType="CpArticleTotalVo" resultType="Integer"
     statementType="CALLABLE">
     <![CDATA[
     {
@@ -51,7 +51,7 @@
       }
     ]]>
   </select>
-  <select id="callUspRcvArticleComponentDel" parameterType="JamArticleTotalVo" resultType="Integer"
+  <select id="callUspRcvArticleComponentDel" parameterType="CpArticleTotalVo" resultType="Integer"
     statementType="CALLABLE">
     <![CDATA[
     {
@@ -63,7 +63,7 @@
       }
     ]]>
   </select>
-  <select id="callUspRcvArticleReporterIns" parameterType="JamArticleTotalVo" resultType="Integer"
+  <select id="callUspRcvArticleReporterIns" parameterType="CpArticleTotalVo" resultType="Integer"
     statementType="CALLABLE">
     <![CDATA[
     {
@@ -79,7 +79,7 @@
       }
     ]]>
   </select>
-  <select id="callUspRcvArticleReporterDel" parameterType="JamArticleTotalVo" resultType="Integer"
+  <select id="callUspRcvArticleReporterDel" parameterType="CpArticleTotalVo" resultType="Integer"
     statementType="CALLABLE">
     <![CDATA[
     {
@@ -91,7 +91,7 @@
       }
     ]]>
   </select>
-  <select id="callUspRcvArticleCodeIns" parameterType="JamArticleTotalVo" resultType="Integer"
+  <select id="callUspRcvArticleCodeIns" parameterType="CpArticleTotalVo" resultType="Integer"
     statementType="CALLABLE">
     <![CDATA[
     {
@@ -107,7 +107,7 @@
       }
     ]]>
   </select>
-  <select id="callUspRcvArticleCodeDel" parameterType="JamArticleTotalVo" resultType="Integer"
+  <select id="callUspRcvArticleCodeDel" parameterType="CpArticleTotalVo" resultType="Integer"
     statementType="CALLABLE">
     <![CDATA[
     {
@@ -119,4 +119,62 @@
       }
     ]]>
   </select>
+  <select id="callUspRcvArticleKeywordIns" parameterType="CpArticleTotalVo" resultType="Integer"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_RCV_ARTICLE_KEYWORD_INS(
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curArticle.id, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curKeyword, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+  <select id="callUspRcvArticleKeywordDel" parameterType="CpArticleTotalVo" resultType="Integer"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_RCV_ARTICLE_KEYWORD_DEL(
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curArticle.id, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+
+  <insert id="callUpaCpRcvArtHistIns" parameterType="CpArticleTotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_CP_RCV_ART_HIST_INS(
+      #{curArticle.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{artHistoryStep, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curArticle.id, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{xmlFileNM, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{artHistoryId, mode=OUT, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUpaCpRcvArtHistUpd" parameterType="CpArticleTotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_CP_RCV_ART_HIST_UPD(
+      #{curArticle.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{artHistoryStep, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{artHistoryId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curArticle.id, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{xmlFileNM, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{errorMessage, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
 </mapper>

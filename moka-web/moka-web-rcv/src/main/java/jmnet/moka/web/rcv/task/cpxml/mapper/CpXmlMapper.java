@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Mapper
-public interface CpXmlRcvMapper {
+public interface CpXmlMapper {
     Integer callUspRcvArticleBasicIns(CpArticleTotalVo cpArticleTotal);
 
     Integer callUspRcvArticleComponentIns(CpArticleTotalVo cpArticleTotal);
@@ -29,4 +29,10 @@ public interface CpXmlRcvMapper {
 
     Integer callUspRcvArticleCodeIns(CpArticleTotalVo cpArticleTotal);
     Integer callUspRcvArticleCodeDel(CpArticleTotalVo cpArticleTotal);
+
+    Integer callUspRcvArticleKeywordIns(CpArticleTotalVo cpArticleTotal);
+    Integer callUspRcvArticleKeywordDel(CpArticleTotalVo cpArticleTotal);
+
+    void callUpaCpRcvArtHistIns(CpArticleTotalVo cpArticleTotal);
+    void callUpaCpRcvArtHistUpd(CpArticleTotalVo cpArticleTotal);
 }

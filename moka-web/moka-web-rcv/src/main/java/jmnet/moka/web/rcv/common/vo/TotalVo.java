@@ -32,17 +32,17 @@ import lombok.extern.slf4j.Slf4j;
 public class TotalVo <T> extends BasicVo {
     private static final long serialVersionUID = -496382951869605085L;
     protected final T mainData;
-    protected List<String> errorMessage = new ArrayList<>();
-    protected List<String> infoMessage = new ArrayList<>();
+    protected List<String> errorMessageList = new ArrayList<>();
+    protected List<String> infoMessageList = new ArrayList<>();
 
     public TotalVo(T mainData) {
         this.mainData = mainData;
     }
 
     @SuppressWarnings("unused")
-    public String getErrorMessage(){
+    public String getErrorMessageList(){
         String ret = "";
-        for( String s : this.errorMessage ) {
+        for( String s : this.errorMessageList) {
             if( !McpString.isNullOrEmpty( ret ) )
                 ret = ret.concat("\n");
             ret = ret.concat(s);
@@ -52,7 +52,7 @@ public class TotalVo <T> extends BasicVo {
 
     public void logError( String errorMessage ) {
         log.error(errorMessage);
-        this.errorMessage.add(errorMessage);
+        this.errorMessageList.add(errorMessage);
     }
 
     public void logError(String s, Object...message) {
@@ -61,7 +61,7 @@ public class TotalVo <T> extends BasicVo {
 
     public void logInfo( String infoMessage ) {
         log.info(infoMessage);
-        this.infoMessage.add( infoMessage );
+        this.infoMessageList.add( infoMessage );
     }
     public void logInfo(String s, Object...message) {
         logInfo(RcvStringUtil.format(s, message));

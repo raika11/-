@@ -1,8 +1,8 @@
-package jmnet.moka.web.rcv.task.cppubxml;
+package jmnet.moka.web.rcv.task.cppubxml.service;
 
 import java.util.Map;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
-import jmnet.moka.web.rcv.task.cppubxml.mapper.CpPubXmlRcvMapper;
+import jmnet.moka.web.rcv.task.cppubxml.mapper.CpPubXmlMapper;
 import jmnet.moka.web.rcv.task.cppubxml.vo.CpPubNewsMLTotalVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -22,18 +22,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class CpPubXmlRcvServiceImpl implements CpPubXmlRcvService {
-    private final CpPubXmlRcvMapper cpPubXmlRcvMapper;
+public class CpPubXmlServiceImpl implements CpPubXmlService {
+    private final CpPubXmlMapper cpPubXmlMapper;
 
-    public CpPubXmlRcvServiceImpl(CpPubXmlRcvMapper cpPubXmlRcvMapper) {
-        this.cpPubXmlRcvMapper = cpPubXmlRcvMapper;
+    public CpPubXmlServiceImpl(CpPubXmlMapper cpPubXmlMapper) {
+        this.cpPubXmlMapper = cpPubXmlMapper;
     }
 
     @Override
     public Map<String, String> doInsertUpdateArticleData(CpPubNewsMLTotalVo newsMLTotal)
             throws RcvDataAccessException {
         try {
-            return cpPubXmlRcvMapper.callUspRcvArticleJiXmlIns(newsMLTotal);
+            return cpPubXmlMapper.callUspRcvArticleJiXmlIns(newsMLTotal);
         } catch (DataAccessException e) {
             throw new RcvDataAccessException(e.getCause());
         }

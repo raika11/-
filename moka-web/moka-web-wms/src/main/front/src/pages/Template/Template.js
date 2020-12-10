@@ -11,7 +11,7 @@ import { ITEM_TP } from '@/constants';
 import { clearStore, deleteTemplate, hasRelationList, changeTemplateBody } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 
-import TemplateEditor from './TemplateEditor';
+const TemplateEditor = React.lazy(() => import('./TemplateEditor'));
 const TemplateList = React.lazy(() => import('./TemplateList'));
 const TemplateEdit = React.lazy(() => import('./TemplateEdit'));
 
@@ -36,6 +36,7 @@ const Template = ({ match }) => {
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [activeTabIdx, setActiveTabIdx] = useState(0);
+    const [] = useState(false);
 
     /**
      * 리스트 확장 시
@@ -173,45 +174,57 @@ const Template = ({ match }) => {
                 </Suspense>
             </MokaCard>
 
-            {/* 에디터 */}
-            <Route path={[match.url, `${match.url}/:templateSeq`]} exact render={() => <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />} />
+            <Route
+                path={[`${match.url}/add`, `${match.url}/:templateSeq`]}
+                exact
+                render={() => (
+                    <React.Fragment>
+                        {/* 에디터 */}
+                        <Suspense>
+                            <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+                        </Suspense>
 
-            {/* 탭 */}
-            <MokaIconTabs
-                expansion={expansionState[2]}
-                onExpansion={handleTabExpansion}
-                onSelectNav={(idx) => setActiveTabIdx(idx)}
-                tabWidth={412}
-                tabs={[
-                    <Suspense>
-                        <TemplateEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
-                    </Suspense>,
-                    <Suspense>
-                        <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
-                    </Suspense>,
-                    <Suspense>
-                        <RelationInArticlePageList show={activeTabIdx === 2} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
-                    </Suspense>,
-                    <Suspense>
-                        <RelationInContainerList show={activeTabIdx === 3} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
-                    </Suspense>,
-                    <Suspense>
-                        <RelationInComponentList show={activeTabIdx === 4} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
-                    </Suspense>,
-                    <Suspense>
-                        <HistoryList show={activeTabIdx === 5} seqType={ITEM_TP} seq={template.templateSeq} onLoad={handleClickLoad} />
-                    </Suspense>,
-                ]}
-                tabNavWidth={48}
-                tabNavPosition="right"
-                tabNavs={[
-                    { title: '템플릿 정보', text: 'Info' },
-                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
-                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
-                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
-                    { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
-                ]}
+                        {/* 탭 */}
+                        <Suspense>
+                            <MokaIconTabs
+                                expansion={expansionState[2]}
+                                onExpansion={handleTabExpansion}
+                                onSelectNav={(idx) => setActiveTabIdx(idx)}
+                                tabWidth={412}
+                                tabs={[
+                                    <Suspense>
+                                        <TemplateEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <RelationInArticlePageList show={activeTabIdx === 2} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <RelationInContainerList show={activeTabIdx === 3} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <RelationInComponentList show={activeTabIdx === 4} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
+                                    </Suspense>,
+                                    <Suspense>
+                                        <HistoryList show={activeTabIdx === 5} seqType={ITEM_TP} seq={template.templateSeq} onLoad={handleClickLoad} />
+                                    </Suspense>,
+                                ]}
+                                tabNavWidth={48}
+                                tabNavPosition="right"
+                                tabNavs={[
+                                    { title: '템플릿 정보', text: 'Info' },
+                                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
+                                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
+                                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
+                                    { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
+                                ]}
+                            />
+                        </Suspense>
+                    </React.Fragment>
+                )}
             />
         </div>
     );

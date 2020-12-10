@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
-import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, copyTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
+import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, copyTemplate, clearTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { DefaultInputModal } from '@pages/commons';
@@ -236,6 +236,14 @@ const TemplateEdit = ({ onDelete }) => {
         onDelete(template);
     };
 
+    /**
+     * 취소 버튼
+     */
+    const handleClickCancle = () => {
+        history.push('/template');
+        dispatch(clearTemplate());
+    };
+
     useEffect(() => {
         if (template.templateSeq) {
             setBtnDisabled(false);
@@ -273,10 +281,8 @@ const TemplateEdit = ({ onDelete }) => {
     }, [templateGroup, tpZoneRows]);
 
     useEffect(() => {
-        // 코드 조회
-        dispatch(getTpZone());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        if (!tpZoneRows) dispatch(getTpZone());
+    }, [dispatch, tpZoneRows]);
 
     useEffect(() => {
         // invalidList 처리
@@ -305,6 +311,9 @@ const TemplateEdit = ({ onDelete }) => {
                     <div className="d-flex">
                         <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                             저장
+                        </Button>
+                        <Button variant="negative" className="mr-05" onClick={handleClickCancle}>
+                            취소
                         </Button>
                         <Button variant="negative" disabled={btnDisabled} onClick={handleClickDelete}>
                             삭제

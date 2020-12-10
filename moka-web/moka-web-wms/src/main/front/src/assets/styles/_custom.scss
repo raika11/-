@@ -6,6 +6,7 @@ body {
     height: 100vh;
     overflow: hidden;
     overflow-x: auto;
+    letter-spacing: -0.6px;
 }
 
 .gap {
@@ -246,7 +247,9 @@ body {
 }
 
 .modal-dialog {
-    @include toast-footer;
+    .toast-footer {
+        @include toast-footer;
+    }
 }
 
 /* -----------------------

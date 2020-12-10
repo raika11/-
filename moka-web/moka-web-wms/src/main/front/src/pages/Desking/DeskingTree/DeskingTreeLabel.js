@@ -29,7 +29,7 @@ const DeskingTreeLabel = (props) => {
     const { areaNm } = nodeData;
 
     return (
-        <span className="ft-12 font-weight-bold" onClick={onClick}>
+        <span className="font-weight-bold" onClick={onClick}>
             {areaNm}
         </span>
     );

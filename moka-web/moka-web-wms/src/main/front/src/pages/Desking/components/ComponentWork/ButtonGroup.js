@@ -85,10 +85,10 @@ const ButtonGroup = (props) => {
     }, [component.seq, dispatch]);
 
     /**
-     * 임시저장 + 전송 (영역 미노출 상태를 저장할 때)
+     * 임시저장 + 전송 (비활성 상태를 저장할 때)
      */
     const handleClickSavePublish = useCallback(() => {
-        messageBox.confirm('영역 비노출 상태를 저장하시겠습니까?\n(즉시 전송되어 서비스 화면에 반영됩니다.)', () => {
+        messageBox.confirm('컴포넌트 비활성 상태를 저장하시겠습니까?\n(즉시 전송되어 서비스 화면에 반영됩니다.)', () => {
             dispatch(
                 postSavePublishComponentWork({
                     componentWorkSeq: component.seq,
@@ -172,7 +172,7 @@ const ButtonGroup = (props) => {
     // };
 
     /**
-     * 영역 노출, 비노출
+     * 영역 활성, 비활성
      */
     const handleClickViewYn = useCallback(() => {
         dispatch(
@@ -196,8 +196,8 @@ const ButtonGroup = (props) => {
             { text: '전체 삭제', viewN: false, onClick: handleClickDelete },
             { text: '기사 이동', viewN: false, onClick: handleOpenRegister },
             { text: '리스트 건수 변경', viewN: false, onClick: handleOpenListNumber },
-            { text: '영역 노출', viewN: true, onClick: handleClickViewYn },
-            { text: '영역 비노출', viewN: false, onClick: handleClickViewYn },
+            { text: '영역 활성', viewN: true, onClick: handleClickViewYn },
+            { text: '컴포넌트 비활성', viewN: false, onClick: handleClickViewYn },
         ];
 
         return (

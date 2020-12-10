@@ -16,9 +16,11 @@ body {
             color:$white;
         }
         .card{ 
-            width: 480px !important;
+            width: 500px !important;
             background-color: transparent;
             box-shadow: 0 0 0;
+            border: 2px solid #fff;
+            padding: 30px;
         }
         .form-group{
             border-bottom: 1px solid $white;

@@ -40,7 +40,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
     }, [data, field, previewImg]);
 
     return (
-        <div className="d-flex h-100 w-100 align-items-center justify-content-center border" ref={boxRef}>
+        <div className="d-flex h-100 w-100 align-items-center justify-content-center bg-white border" ref={boxRef}>
             <img ref={imgRef} alt={data.imgAlt} />
         </div>
     );

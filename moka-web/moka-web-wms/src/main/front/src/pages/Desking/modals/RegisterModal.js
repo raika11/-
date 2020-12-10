@@ -84,7 +84,7 @@ const RegisterModal = (props) => {
     };
 
     return (
-        <MokaModal title="기사 이동" show={show} onHide={onHide} size="xs" width={300} height={441} draggable>
+        <MokaModal title="기사 이동" show={show} onHide={onHide} size="sm" width={300} height={441} draggable>
             {loading && <MokaLoader />}
             <ListGroup variant="flush" className="border custom-scroll h-100">
                 {filterList.length < 1 && (

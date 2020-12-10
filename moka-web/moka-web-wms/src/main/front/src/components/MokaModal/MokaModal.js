@@ -78,6 +78,14 @@ const propTypes = {
      * 로딩 여부
      */
     loading: PropTypes.bool,
+    /**
+     * 모달 사이즈
+     * sm) max-width = 400 ==> 토스트와 동일한 버튼 형태
+     * md) max-width = 600 ==> 토스트와 동일한 버튼 형태
+     * lg) max-width = 900
+     * xl) max-width = 1200
+     */
+    size: PropTypes.oneOf(['sm', 'md', 'lg', 'xl']),
 };
 
 const defaultProps = {
@@ -86,6 +94,7 @@ const defaultProps = {
     centered: false,
     loading: false,
     id: '',
+    size: 'md',
 };
 
 /**
@@ -110,6 +119,7 @@ const MokaModal = (props) => {
         footerClassName,
         loading,
         id,
+        size,
         ...rest
     } = props;
 
@@ -132,7 +142,18 @@ const MokaModal = (props) => {
     );
 
     return (
-        <Modal aria-labelledby={title} show={show} onHide={onHide} backdrop={false} animation={false} scrollable="true" dialogAs={DraggableModal} enforceFocus={false} {...rest}>
+        <Modal
+            aria-labelledby={title}
+            show={show}
+            onHide={onHide}
+            backdrop={false}
+            animation={false}
+            scrollable="true"
+            dialogAs={DraggableModal}
+            enforceFocus={false}
+            size={size}
+            {...rest}
+        >
             {/* 타이틀 */}
             <Modal.Header className={headerClassName} id="draggable-modal-title" data-drag-on={draggable} closeButton>
                 {draggable && <div id={`draggable-handle-${id}`} data-drag-handle="true" />}
@@ -147,9 +168,13 @@ const MokaModal = (props) => {
 
             {/* 푸터 버튼 */}
             {buttons && (
-                <Modal.Footer className={footerClassName}>
+                <Modal.Footer
+                    className={clsx(footerClassName, {
+                        'toast-footer': size === 'sm' || size === 'md',
+                    })}
+                >
                     {buttons.map(({ variant, text, ...rest }, idx) => (
-                        <Button key={`${text}-${idx}`} variant={variant} {...rest}>
+                        <Button key={`${text}-${idx}`} variant={variant} data-color={variant} {...rest}>
                             {text}
                         </Button>
                     ))}

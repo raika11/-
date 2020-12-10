@@ -4,9 +4,11 @@
 package jmnet.moka.web.wms.config.security;
 
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.HttpHelper;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
@@ -18,6 +20,8 @@ import jmnet.moka.web.wms.config.security.exception.NewUserSmsAuthRequiredExcept
 import jmnet.moka.web.wms.config.security.exception.PasswordUnchangedException;
 import jmnet.moka.web.wms.config.security.exception.WmsBadCredentialsException;
 import jmnet.moka.web.wms.config.security.exception.WmsUsernameNotFoundException;
+import jmnet.moka.web.wms.config.security.groupware.GroupWareUserInfo;
+import jmnet.moka.web.wms.config.security.groupware.SoapWebServiceGatewaySupport;
 import jmnet.moka.web.wms.config.security.jwt.WmsJwtAuthenticationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +73,9 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private MessageByLocale messageByLocale;
 
+    @Autowired
+    public SoapWebServiceGatewaySupport groupWareAuthClient;
+
     /**
      * <pre>
      *
@@ -99,14 +106,34 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
 
         try {
 
-            // 0. Groupware 아이디 존재 여부 확인. 추후 그룹웨어 호출 로직 추가 예정
-            boolean exists = true;
-            if (!exists) {
-                throw new GroupwareUserNotFoundException(messageByLocale.get("wms.login.error.GroupwareUserNotFoundException"));
+            // 1. 회원 정보를 조회한다.
+            boolean groupwareCheck = true;
+            UserDTO userDetails = (UserDTO) userService.loadUserByUsername(userId);
+
+            /**
+             * 개발 단계이기 때문에 사용자 권한이 슈퍼관리자인 경우 그룹웨어 존재여부 체크하지 않는다.
+             */
+            if (userDetails != null && userDetails.getAuthorities() != null && userDetails
+                    .getAuthorities()
+                    .stream()
+                    .filter(grantedAuthority -> grantedAuthority
+                            .getAuthority()
+                            .equals(TpsConstants.ROLE_SUPERADMIN))
+                    .count() > 0) {
+                groupwareCheck = false;
+            }
+            GroupWareUserInfo groupwareUserInfo = null;
+            if (groupwareCheck) {
+                // 0. Groupware 아이디 존재 여부 확인. 추후 그룹웨어 호출 로직 추가 예정
+                groupwareUserInfo = groupWareAuthClient.getUserInfo(userId);
+                boolean exists = groupwareUserInfo != null && McpString.isNotEmpty(groupwareUserInfo.getUserName());
+
+                if (!exists) {
+                    throw new GroupwareUserNotFoundException(messageByLocale.get("wms.login.error.GroupwareUserNotFoundException"));
+                }
             }
 
-            // 1. 회원 정보를 조회한다.
-            UserDTO userDetails = (UserDTO) userService.loadUserByUsername(userId);
+
             // 2. 회원 정보가 없으면 로그 테이블에 이력 남기고 UsernameNotFoundException 발생
             if (userDetails == null) {
                 throw new WmsUsernameNotFoundException(messageByLocale.get("wms.login.error.UsernameNotFoundException"));
@@ -182,7 +209,21 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(userId, null, userDetails.getAuthorities());
-            memberService.updateMemberLoginInfo(userId, McpDate.now(), userIp, userDetails.getExpireDt());
+
+            /**
+             * 그룹웨어 정보로 사용자 정보 변경
+             */
+            if (groupwareUserInfo != null) {
+                userDetails.setUserName(groupwareUserInfo.getUserName());
+                userDetails.setPhoneNo(groupwareUserInfo.getPhone());
+                userDetails.setPosition(groupwareUserInfo.getPositionName());
+                userDetails.setCellPhoneNo(groupwareUserInfo.getMobile());
+                userDetails.setDept(groupwareUserInfo.getGroupName());
+                userDetails.setEmailaddress(groupwareUserInfo.getEmail());
+            }
+
+
+            memberService.updateMemberLoginInfo(userId, McpDate.now(), userIp, userDetails);
             authenticationToken.setDetails(userDetails);
 
             return authenticationToken;

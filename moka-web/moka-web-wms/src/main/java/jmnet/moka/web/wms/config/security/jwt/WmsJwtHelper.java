@@ -59,7 +59,7 @@ public class WmsJwtHelper {
                 UserDTO userDetails = MAPPER.readValue(detailsJson, UserDTO.class);
 
                 // jwt token에서 복원한 userDetails의 권한을 설정한다.
-                userDetails.setAuthorities(authService.getAuthorities(userDetails.getPosition()));
+                userDetails.setAuthorities(authService.getAuthorities(userDetails.getGroup()));
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails.getUserId(), null, userDetails.getAuthorities());
                 authenticationToken.setDetails(userDetails);

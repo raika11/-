@@ -30,8 +30,6 @@ export const initialState = {
         },
         total: 0,
         search: {
-            //startDt: moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)).format(DB_DATEFORMAT),
-            //endDt: moment().format(DB_DATEFORMAT),
             startDt: moment(new Date(2020, 7, 21, 0, 0, 0)).format(DB_DATEFORMAT),
             endDt: moment(new Date(2020, 7, 21, 23, 59, 59)).format(DB_DATEFORMAT),
             searchType: 'artTitle',
@@ -45,6 +43,12 @@ export const initialState = {
 
 export default handleActions(
     {
+        [action.CLEAR_META_STORE]: (state) => {
+            console.log(state);
+            return produce(state, (draft) => {
+                draft.meta = initialState.meta;
+            });
+        },
         [action.GET_SNS_META_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.meta.list = body.list;

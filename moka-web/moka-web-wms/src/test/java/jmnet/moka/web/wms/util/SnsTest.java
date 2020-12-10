@@ -1,5 +1,6 @@
 package jmnet.moka.web.wms.util;
 
+import javax.annotation.Resource;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
@@ -35,7 +36,7 @@ public class SnsTest {
     @Autowired
     private RestTemplateHelper restTemplateHelper;
 
-    @Autowired
+    @Resource(name = "twitterApiService")
     private SnsApiService snsApiService;
 
     @Test
@@ -59,9 +60,9 @@ public class SnsTest {
 
         snsApiService.publish(SnsPublishDTO
                 .builder()
-                .totalId(23940560l)
-                .snsType(SnsTypeCode.FB)
-                .message("ㅇㅋ")
+                .totalId(22111L)
+                .snsType(SnsTypeCode.TW)
+                .message("테스트")
                 .build());
     }
 }

@@ -103,6 +103,15 @@ export const postReserveComponentWork = createAction(POST_RESERVE_COMPONENT_WORK
 }));
 
 /**
+ * 컴포넌트 워크 예약 삭제
+ */
+export const DELETE_RESERVE_COMPONENT_WORK = 'desking/DELETE_RESERVE_COMPONENT_WORK';
+export const deleteReserveComponentWork = createAction(DELETE_RESERVE_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({
+    componentWorkSeq,
+    callback,
+}));
+
+/**
  * 컴포넌트 워크 임시저장 + 전송 둘 다 하는 액션
  */
 export const POST_SAVE_PUBLISH_COMPONENT_WORK = 'desking/POST_SAVE_PUBLISH_COMPONENT_WORK';

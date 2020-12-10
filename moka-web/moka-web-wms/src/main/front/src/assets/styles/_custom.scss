@@ -213,7 +213,7 @@ body {
                 user-select: none;
                 position: relative;
 
-                #draggable-handle {
+                [data-drag-handle="true"] {
                     position: absolute;
                     top: 0;
                     bottom: 0;
@@ -227,6 +227,14 @@ body {
     @include media-breakpoint-down(md) {
         padding: 10px;
     }
+}
+
+.modal-header .close {
+    text-overflow: clip;
+}
+
+.modal-dialog {
+    @include toast-footer;
 }
 
 /* -----------------------

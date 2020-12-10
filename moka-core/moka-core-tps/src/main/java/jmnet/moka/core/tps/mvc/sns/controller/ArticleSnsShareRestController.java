@@ -29,7 +29,6 @@ import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.service.ArticleSnsShareService;
-import jmnet.moka.core.tps.mvc.sns.service.SnsApiService;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
@@ -66,12 +65,9 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
 
     private final ArticleService articleService;
 
-    private final SnsApiService snsApiService;
-
-    public ArticleSnsShareRestController(ArticleSnsShareService articleSnsShareService, ArticleService articleService, SnsApiService snsApiService) {
+    public ArticleSnsShareRestController(ArticleSnsShareService articleSnsShareService, ArticleService articleService) {
         this.articleSnsShareService = articleSnsShareService;
         this.articleService = articleService;
-        this.snsApiService = snsApiService;
     }
 
     /**
@@ -180,7 +176,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     @PostMapping
     public ResponseEntity<?> postArticleSnsShare(@Valid ArticleSnsShareDTO articleSnsShareDTO)
             throws InvalidDataException, Exception {
-        
+
         ArticleSnsShare articleSnsShare = modelMapper.map(articleSnsShareDTO, ArticleSnsShare.class);
 
         // 기사 정보 없을 경우 에러 처리
@@ -378,7 +374,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
-    @ApiOperation(value = "Facebook Instance Article 등록")
+    @ApiOperation(value = "SNS에 배포 등록")
     @PostMapping("/feeds")
     public ResponseEntity<?> postSnsFeed(@Valid SnsPublishDTO snsPublish)
             throws InvalidDataException, Exception {
@@ -425,7 +421,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @throws NoDataException      삭제 할 SNS 없음
      * @throws Exception            그 외 에러처리
      */
-    @ApiOperation(value = "SNS 삭제")
+    @ApiOperation(value = "SNS에 배포 된 기사 삭제")
     @DeleteMapping("/feeds")
     public ResponseEntity<?> deleteSnsFeed(@Valid SnsDeleteDTO snsDelete)
             throws InvalidDataException, NoDataException, Exception {

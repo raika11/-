@@ -133,6 +133,7 @@ const PageListModal = (props) => {
             temp['page'] = 0;
         }
         setSearch(temp);
+        dispatch(getPageListModal({ search: temp, callback: responseCallback }));
     };
 
     /**

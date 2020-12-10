@@ -92,13 +92,12 @@ export default [
         headerName: '출고시간\n수정시간',
         width: 85,
         field: 'articleDt',
+        cellClassRules: {
+            'pre-wrap-cell': () => true,
+        },
         cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
-            whiteSpace: 'pre-wrap',
-            lineHeight: '20px',
             height: '50px',
-            fontSize: '12px',
+            lineHeight: '20px',
         },
     },
     {

@@ -263,7 +263,11 @@ const MokaTable = forwardRef((props, ref) => {
             setTimeout(function () {
                 handleSelected();
             });
-            params.api.refreshCells({ force: true });
+
+            setTimeout(function () {
+                // getRowClass, getRowStyle을 초기화하기 위해 redrawRows 실행
+                params.api.refreshCells({ force: true });
+            });
         },
         [handleSelected],
     );

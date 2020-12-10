@@ -84,12 +84,16 @@ const ChangeArtGroupModal = (props) => {
             show={show}
             size="sm"
             onHide={handleHide}
-            footerClassName="d-flex justify-content-center"
             buttons={[
                 {
                     text: '저장',
                     variant: 'positive',
                     onClick: handleClickSave,
+                },
+                {
+                    text: '취소',
+                    variant: 'negative',
+                    onClick: handleHide,
                 },
             ]}
             draggable

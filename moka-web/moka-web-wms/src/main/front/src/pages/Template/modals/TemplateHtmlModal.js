@@ -112,23 +112,15 @@ const TemplateHtmlModal = (props) => {
     }, [template.templateSeq]);
 
     useEffect(() => {
-        let isInvalid = false;
-
-        // invalidList 처리
         if (invalidList.length > 0) {
-            invalidList.forEach((i) => {
-                if (i.field === 'templateBody') {
-                    setError({
-                        line: Number(i.extra),
-                        message: i.reason,
-                    });
-                    isInvalid = isInvalid || true;
-                }
-            });
-        }
-
-        if (!isInvalid) {
-            setError({});
+            let er = invalidList.reduce(
+                (all, c) => ({
+                    ...all,
+                    [c.field]: true,
+                }),
+                {},
+            );
+            setError(er);
         }
     }, [invalidList]);
 

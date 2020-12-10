@@ -154,9 +154,15 @@
     <result property="fbMetaTitle" column="FB_META_TITLE"/>
     <result property="fbMetaImage" column="FB_META_IMAGE"/>
     <result property="fbMetaSummary" column="FB_META_SUMMARY"/>
+    <result property="fbMetaUsedYn" column="FB_META_USED_YN"/>
+    <result property="fbMetaReserveDt" column="FB_META_RESERVE_DT"/>
+    <result property="fbMetaPostMsg" column="FB_META_POST_MSG"/>
     <result property="twMetaTitle" column="TW_META_TITLE"/>
     <result property="twMetaImage" column="TW_META_IMAGE"/>
     <result property="twMetaSummary" column="TW_META_SUMMARY"/>
+    <result property="twMetaUsedYn" column="TW_META_USED_YN"/>
+    <result property="twMetaReserveDt" column="TW_META_RESERVE_DT"/>
+    <result property="twMetaPostMsg" column="TW_META_POST_MSG"/>
     <result property="jaMetaTitle" column="JA_META_TITLE"/>
     <result property="jaMetaSummary" column="JA_META_SUMMARY"/>
     <result property="jaMetaKeyword" column="JA_META_KEYWORD"/>

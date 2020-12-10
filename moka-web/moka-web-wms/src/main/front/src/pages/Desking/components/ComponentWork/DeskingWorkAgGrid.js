@@ -62,7 +62,7 @@ const DeskingWorkAgGrid = (props) => {
             }),
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [component.seq, deskingWorks]);
+    }, [deskingWorks]);
 
     /**
      * ag-grid onGridReady
@@ -337,6 +337,11 @@ const DeskingWorkAgGrid = (props) => {
                     componentWorkSeq: component.seq,
                     datasetSeq: component.datasetSeq,
                     list: result,
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            api.deselectAll();
+                        }
+                    },
                 }),
             );
         },
@@ -448,7 +453,6 @@ const DeskingWorkAgGrid = (props) => {
             }
 
             appendRelRows(params.api, type, draggingNode, overNode);
-            params.api.deselectAll();
         },
         [appendRelRows, handleRowDragLeave],
     );
@@ -458,20 +462,23 @@ const DeskingWorkAgGrid = (props) => {
      */
     const handleRowDataUpdated = useCallback(
         (params) => {
-            params.api.refreshCells({ force: true });
-            if (draggingNodeData) {
-                let arr = [];
-                params.api.forEachNode((node) => {
-                    if (node.data.contentId === draggingNodeData.contentId || node.data.parentContentId === draggingNodeData.contentId) {
-                        arr.push(node);
-                    }
-                });
-                params.api.redrawRows({ rowNodes: arr });
-                params.api.resetRowHeights();
-                setHoverNode(null);
-                setNextNode(null);
-                setDraggingNodeData(null);
-            }
+            setTimeout(function () {
+                params.api.refreshCells({ force: true });
+
+                if (draggingNodeData) {
+                    let arr = [];
+                    params.api.forEachNode((node) => {
+                        if (node.data.contentId === draggingNodeData.contentId || node.data.parentContentId === draggingNodeData.contentId) {
+                            arr.push(node);
+                        }
+                    });
+                    // params.api.redrawRows({ rowNodes: arr });
+                    params.api.resetRowHeights();
+                    setHoverNode(null);
+                    setNextNode(null);
+                    setDraggingNodeData(null);
+                }
+            });
         },
         [draggingNodeData],
     );
@@ -500,8 +507,8 @@ const DeskingWorkAgGrid = (props) => {
                 onRowDragLeave={handleRowDragLeave}
                 onRowSelected={handleRowSelected}
                 rowSelection="multiple"
-                rowDragManaged={false}
                 animateRows
+                rowDragManaged={false}
                 enableMultiRowDragging
                 suppressRowClickSelection
                 suppressMoveWhenRowDragging

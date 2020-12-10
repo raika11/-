@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MokaTable } from '@components';
 import columnDefs from './DeskingWorkHistoryListColumns';
+import { unescapeHtml } from '@utils/convertUtil';
 
 const DeskingWorkHistoryList = (props) => {
     const { loading, rowData } = props;
+    const [rows, setRows] = useState([]);
+
+    useEffect(() => {
+        setRows(
+            rowData.map((r) => ({
+                ...r,
+                title: unescapeHtml(r.title),
+            })),
+        );
+    }, [rowData]);
 
     return (
-        <MokaTable
-            columnDefs={columnDefs}
-            rowData={rowData}
-            onRowNodeId={(history) => history.histSeq}
-            agGridHeight={721}
-            onRowClicked={() => {}}
-            loading={loading}
-            paging={false}
-        />
+        <MokaTable columnDefs={columnDefs} rowData={rows} onRowNodeId={(history) => history.histSeq} agGridHeight={721} onRowClicked={() => {}} loading={loading} paging={false} />
     );
 };
 

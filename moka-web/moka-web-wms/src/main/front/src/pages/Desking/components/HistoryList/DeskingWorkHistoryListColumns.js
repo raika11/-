@@ -5,16 +5,20 @@ export default [
         headerName: 'No',
         field: 'histSeq',
         width: 60,
-        cellStyle: { fontSize: '12px' },
+        cellClassRules: {
+            'ft-12': () => true,
+        },
     },
     {
         headerName: '기사 ID',
         field: 'contentId',
         width: 75,
-        cellStyle: { fontSize: '12px', textAlign: 'center' },
+        cellClassRules: {
+            'ft-12': () => true,
+        },
         cellRendererFramework: (row) => {
             const { data } = row;
-            return data.parentContentId ? <p style={{ color: 'blue' }}>└</p> : data.contentId;
+            return data.parentContentId ? <p className="text-info">└</p> : data.contentId;
         },
     },
     {
@@ -23,6 +27,8 @@ export default [
         width: 565,
         tooltipField: 'title',
         flex: 1,
-        cellStyle: { fontSize: '12px' },
+        cellClassRules: {
+            'ft-12': () => true,
+        },
     },
 ];

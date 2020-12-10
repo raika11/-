@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MokaModal, MokaCardTabs } from '@components';
 import LiveList from './LiveList';
 import OvpList from './OvpList';
@@ -6,7 +6,23 @@ import OvpList from './OvpList';
 const VodModal = (props) => {
     const { show, onHide, vodUrl, onSave } = props;
     const [activeKey, setActivekey] = useState(0);
-    // const [selectedUrl, setSelectedUrl] = useState('');
+    const [videoId, setVideoId] = useState('');
+    const [options, setOptions] = useState({});
+
+    useEffect(() => {
+        if (vodUrl && vodUrl !== '') {
+            const url = new URL(vodUrl);
+            setVideoId(url.searchParams.get('viedoId'));
+            setOptions({
+                autoplay: url.searchParams.get('options[autoplay]') === 'true',
+                muteFirstPlay: url.searchParams.get('options[muteFirstPlay]') === 'true',
+                loop: url.searchParams.get('options[loop]') === 'true',
+            });
+        } else {
+            setVideoId('');
+            setOptions({});
+        }
+    }, [vodUrl]);
 
     return (
         <MokaModal
@@ -30,7 +46,11 @@ const VodModal = (props) => {
                 onSelectNav={(idx) => setActivekey(Number(idx))}
                 tabNavs={['YOUTUBE', 'LIVE', 'OVP']}
                 className="w-100 h-100"
-                tabs={[<>TEST</>, <LiveList show={show && activeKey === 1} />, <OvpList show={show && activeKey === 2} />]}
+                tabs={[
+                    <>TEST</>,
+                    <LiveList show={show && activeKey === 1} videoId={videoId} options={options} />,
+                    <OvpList show={show && activeKey === 2} videoId={videoId} options={options} />,
+                ]}
             />
         </MokaModal>
     );

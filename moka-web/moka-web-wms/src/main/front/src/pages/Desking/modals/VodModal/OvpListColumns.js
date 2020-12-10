@@ -1,11 +1,10 @@
 export default [
     {
-        colId: 'radiobutton',
-        width: 28,
-        // checkboxSelection: true,
+        colId: 'checkbox',
+        headerName: '선택',
+        width: 30,
+        checkboxSelection: true,
         suppressMenu: true,
-        // headerCheckboxSelection: true,
-        cellStyle: { width: '28px' },
     },
     {
         headerName: '이미지',
@@ -23,12 +22,12 @@ export default [
         cellStyle: {
             boxSizing: 'border-box',
             whiteSpace: 'normal',
-            lineHeight: '20px',
-            fontSize: '14px',
-            height: '50px',
+            lineHeight: '21px',
+            fontSize: '12px',
+            height: '100%',
             display: '-webkit-box',
             paddingTop: '5px',
-            '-webkit-line-clamp': 2,
+            '-webkit-line-clamp': 3,
             '-webkit-box-orient': 'vertical',
             overflow: 'hidden',
             cursor: 'pointer',
@@ -42,11 +41,14 @@ export default [
             display: 'flex',
             alignItems: 'center',
         },
+        cellClassRules: {
+            'ft-12': () => true,
+        },
     },
     {
         headerName: '등록일',
         field: 'regDt',
-        width: 80,
+        width: 83,
         cellClassRules: {
             'pre-wrap-cell': () => true,
         },
@@ -56,6 +58,11 @@ export default [
     },
     {
         headerName: '옵션',
-        width: 75,
+        width: 83,
+        cellRenderer: 'optionRenderer',
+        cellStyle: {
+            lineHeight: '22px',
+            fontSize: '12px',
+        },
     },
 ];

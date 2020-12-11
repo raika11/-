@@ -1,7 +1,6 @@
 export default [
     {
         colId: 'checkbox',
-        headerName: '선택',
         width: 30,
         checkboxSelection: true,
         suppressMenu: true,
@@ -22,11 +21,10 @@ export default [
         cellStyle: {
             boxSizing: 'border-box',
             whiteSpace: 'normal',
-            lineHeight: '21px',
+            lineHeight: '22px',
             fontSize: '12px',
-            height: '100%',
+            height: '66px',
             display: '-webkit-box',
-            paddingTop: '5px',
             '-webkit-line-clamp': 3,
             '-webkit-box-orient': 'vertical',
             overflow: 'hidden',
@@ -60,10 +58,10 @@ export default [
         headerName: '옵션',
         width: 83,
         cellRenderer: 'optionRenderer',
+        height: 60,
         cellStyle: {
             lineHeight: '22px',
             fontSize: '12px',
-            height: '66px',
         },
     },
 ];

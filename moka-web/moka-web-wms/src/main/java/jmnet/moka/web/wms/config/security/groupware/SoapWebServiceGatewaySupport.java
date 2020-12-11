@@ -32,6 +32,8 @@ public class SoapWebServiceGatewaySupport extends WebServiceGatewaySupport {
 
     private String serviceId;
 
+    private final String errorCode = "Error";
+
     public SoapWebServiceGatewaySupport(String serviceId) {
         this.serviceId = serviceId;
     }
@@ -65,11 +67,11 @@ public class SoapWebServiceGatewaySupport extends WebServiceGatewaySupport {
         SetReAuthenticationNumberJBOResponse authNumberResponse = getAuthNumber(userId);
         String jboResult = authNumberResponse.getSetReAuthenticationNumberJBOResult();
         GroupWareUserInfo groupWareUserInfo = null;
-        
+
         Map<String, Object> authNumberMap = null;
         try {
             authNumberMap = BeanConverter.jsonToMap(jboResult);
-            if (McpString.isNotEmpty(authNumberMap.getOrDefault("AuthNumber", "Error"))) {
+            if ((authNumberMap.getOrDefault("AuthNumber", errorCode)).equals(errorCode)) {
                 throw new GroupWareException(UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_ERROR);
             }
         } catch (Exception ex) {

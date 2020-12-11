@@ -33,21 +33,27 @@ public class RouteConfigServiceImpl implements RouteConfigService {
 
     @Override
     public void addMenuRoute(String route) {
-        reactRoute.addReactRoutesList(route);
-        setRoutPermit(route);
+        if (McpString.isNotEmpty(route)) {
+            reactRoute.addReactRoutesList(route);
+            setRoutPermit(route);
+        }
     }
 
     @Override
     public void changeMenuRoute(String orgRoute, String route) {
-        reactRoute.removeReactRoutesList(orgRoute);
-        reactRoute.addReactRoutesList(route);
-        setRoutPermit(route);
+        if (McpString.isNotEmpty(route)) {
+            reactRoute.removeReactRoutesList(orgRoute);
+            reactRoute.addReactRoutesList(route);
+            setRoutPermit(route);
+        }
     }
 
     @Override
     public void removeMenuRoute(String route) {
-        reactRoute.removeReactRoutesList(route);
-        setRoutPermit(route);
+        if (McpString.isNotEmpty(route)) {
+            reactRoute.removeReactRoutesList(route);
+            setRoutPermit(route);
+        }
     }
 
     private void setRoutPermit(String route) {

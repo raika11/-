@@ -41,16 +41,16 @@ import org.springframework.util.StringUtils;
 
 /**
  * <pre>
- * 
+ *
  * 2019. 11. 29. ssc 최초생성
  * </pre>
- * 
- * @since 2019. 11. 29. 오후 2:05:07
+ *
  * @author ssc
+ * @since 2019. 11. 29. 오후 2:05:07
  */
 @Configuration
 @AutoConfigureBefore(MybatisAutoConfiguration.class)
-@MapperScan(basePackages = "jmnet.moka.core.tps.mvc.**.mapper")
+@MapperScan(basePackages = "jmnet.moka.core.tps.mvc.**.mapper", sqlSessionFactoryRef = "tpsSqlSessionFactory")
 @PropertySource("classpath:tps-auto.properties")
 public class TpsMybatisConfiguration {
 
@@ -76,8 +76,7 @@ public class TpsMybatisConfiguration {
     public TpsMybatisConfiguration(ObjectProvider<Interceptor[]> interceptorsProvider,
             @SuppressWarnings("rawtypes") ObjectProvider<TypeHandler[]> typeHandlersProvider,
             ObjectProvider<LanguageDriver[]> languageDriversProvider, ResourceLoader resourceLoader,
-            ObjectProvider<DatabaseIdProvider> databaseIdProvider,
-            ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
+            ObjectProvider<DatabaseIdProvider> databaseIdProvider, ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
         this.interceptors = interceptorsProvider.getIfAvailable();
         this.typeHandlers = typeHandlersProvider.getIfAvailable();
         this.languageDrivers = languageDriversProvider.getIfAvailable();
@@ -88,15 +87,13 @@ public class TpsMybatisConfiguration {
 
     @Primary
     @Bean
-    public SqlSessionFactory tpsSqlSessionFactory(
-            @Autowired @Qualifier("tpsMybatisProperties") MybatisProperties properties)
+    public SqlSessionFactory tpsSqlSessionFactory(@Autowired @Qualifier("tpsMybatisProperties") MybatisProperties properties)
             throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(this.dataSource);
         factory.setVfs(SpringBootVFS.class);
         if (StringUtils.hasText(properties.getConfigLocation())) {
-            factory.setConfigLocation(
-                    this.resourceLoader.getResource(properties.getConfigLocation()));
+            factory.setConfigLocation(this.resourceLoader.getResource(properties.getConfigLocation()));
         }
         applyConfiguration(factory, properties);
         if (properties.getConfigurationProperties() != null) {
@@ -123,13 +120,13 @@ public class TpsMybatisConfiguration {
         if (!ObjectUtils.isEmpty(properties.resolveMapperLocations())) {
             factory.setMapperLocations(properties.resolveMapperLocations());
         }
-        Set<String> factoryPropertyNames =
-                Stream.of(new BeanWrapperImpl(SqlSessionFactoryBean.class).getPropertyDescriptors())
-                        .map(PropertyDescriptor::getName).collect(Collectors.toSet());
+        Set<String> factoryPropertyNames = Stream
+                .of(new BeanWrapperImpl(SqlSessionFactoryBean.class).getPropertyDescriptors())
+                .map(PropertyDescriptor::getName)
+                .collect(Collectors.toSet());
         // Class<? extends LanguageDriver> defaultLanguageDriver =
         // properties.getDefaultScriptingLanguageDriver();
-        if (factoryPropertyNames.contains("scriptingLanguageDrivers")
-                && !ObjectUtils.isEmpty(this.languageDrivers)) {
+        if (factoryPropertyNames.contains("scriptingLanguageDrivers") && !ObjectUtils.isEmpty(this.languageDrivers)) {
             // Need to mybatis-spring 2.0.2+
             // factory.setScriptingLanguageDrivers(this.languageDrivers);
             // if (defaultLanguageDriver == null && this.languageDrivers.length == 1) {
@@ -159,8 +156,7 @@ public class TpsMybatisConfiguration {
 
     @Primary
     @Bean
-    public SqlSessionTemplate tpsSqlSessionTemplate(
-            @Autowired @Qualifier("tpsSqlSessionFactory") SqlSessionFactory sqlSessionFactory,
+    public SqlSessionTemplate tpsSqlSessionTemplate(@Autowired @Qualifier("tpsSqlSessionFactory") SqlSessionFactory sqlSessionFactory,
             @Autowired @Qualifier("tpsMybatisProperties") MybatisProperties properties) {
         ExecutorType executorType = properties.getExecutorType();
         if (executorType != null) {

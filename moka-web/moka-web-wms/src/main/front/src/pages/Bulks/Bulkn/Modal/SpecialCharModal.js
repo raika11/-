@@ -33,7 +33,7 @@ const defaultProps = {};
 const SpecialCharModal = (props) => {
     const dispatch = useDispatch();
     const { specialchar } = useSelector((store) => ({
-        specialchar: store.bulks.specialchar,
+        specialchar: store.bulks.bulkn.specialchar,
     }));
 
     const [specialChar, setSpecialChar] = useState('');

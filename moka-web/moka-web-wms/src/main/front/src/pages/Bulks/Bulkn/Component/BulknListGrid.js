@@ -11,9 +11,9 @@ const BulknListGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { list, total, search, loading, bulkPathName } = useSelector((store) => ({
-        total: store.bulks.total,
-        search: store.bulks.search,
-        list: store.bulks.list,
+        total: store.bulks.bulkn.total,
+        search: store.bulks.bulkn.search,
+        list: store.bulks.bulkn.list,
         bulkPathName: store.bulks.bulkPathName,
         loading: store.loading[GET_BULK_LIST],
     }));

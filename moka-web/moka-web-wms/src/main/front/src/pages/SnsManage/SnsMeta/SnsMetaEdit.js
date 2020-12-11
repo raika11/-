@@ -71,7 +71,7 @@ const SnsMetaEdit = () => {
             footerButtons={[
                 { text: '전송', variant: 'positive', onClick: tempFooterButtonClick, className: 'mr-05' },
                 { text: '임시저장', variant: 'positive', onClick: tempFooterButtonClick, className: 'mr-05' },
-                { text: '미리보기', variant: 'outline-neutral', onClick: tempFooterButtonClick, className: 'mr-05' },
+                { text: '기사보기', variant: 'outline-neutral', onClick: tempFooterButtonClick, className: 'mr-05' },
             ]}
             footer
         >

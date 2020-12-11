@@ -65,6 +65,7 @@ import {
     faCheck as fasCheck,
     faTimes as fasTimes,
     faStar as fasStar,
+    faCaretDown as fasCaretDown,
 } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
@@ -136,6 +137,7 @@ library.add(fasPencil);
 library.add(fasCheck);
 library.add(fasTimes);
 library.add(fasStar);
+library.add(fasCaretDown);
 
 // 아이콘 등록 (fad)
 library.add(fadImage);

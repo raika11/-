@@ -53,7 +53,8 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(getArticleList(changeSearchOption(temp)));
+        dispatch(getArticleList({ search: temp }));
+        dispatch(changeSearchOption(temp));
     };
 
     useEffect(() => {

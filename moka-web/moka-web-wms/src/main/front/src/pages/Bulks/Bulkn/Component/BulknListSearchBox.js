@@ -17,7 +17,7 @@ const BulknListSearchBox = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { search: storeSearch, bulkPathName } = useSelector((store) => ({
-        search: store.bulks.search,
+        search: store.bulks.bulkn.search,
         bulkPathName: store.bulks.bulkPathName,
     }));
 

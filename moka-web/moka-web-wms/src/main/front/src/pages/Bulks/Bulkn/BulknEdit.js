@@ -28,8 +28,8 @@ const BulknEdit = (props) => {
 
     const { loading, bulkArticle, bulkPathName, specialchar } = useSelector((store) => ({
         bulkPathName: store.bulks.bulkPathName,
-        bulkArticle: store.bulks.bulkArticle,
-        specialchar: store.bulks.specialchar,
+        bulkArticle: store.bulks.bulkn.bulkArticle,
+        specialchar: store.bulks.bulkn.specialchar,
         loading: store.loading[GET_BULK_LIST],
     }));
 

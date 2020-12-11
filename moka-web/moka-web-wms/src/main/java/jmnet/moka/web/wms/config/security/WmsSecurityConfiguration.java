@@ -6,6 +6,7 @@ package jmnet.moka.web.wms.config.security;
 import com.hazelcast.core.HazelcastInstance;
 import java.io.IOException;
 import java.util.Arrays;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.web.wms.config.ReactRoutesHandlerMapping;
@@ -128,13 +129,14 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
         String[] reactRoutes = reactRoute
                 .getReactRoutesList()
                 .stream()
+                .filter(s -> McpString.isNotEmpty(s))
                 .map(s -> s + "/**")
                 .toArray(value -> new String[value]);
 
         http.authorizeRequests()
             // home, react 소스, 미리보기, 템플릿 이미지 허용
             .antMatchers("/", TpsConstants.HEALTH_PAGE, "/preview/**", "/image/template/**", "/" + urlPathPrefix + "/**", "/swagger-ui.html",
-                    "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login")
+                    "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login", "/api/group-ware/**")
             .permitAll()
             // react 서버렌더링 허용
             .antMatchers(reactRoutes)

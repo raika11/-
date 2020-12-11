@@ -17,8 +17,8 @@ const defaultProps = {};
 const BulkPreviewModal = () => {
     const dispatch = useDispatch();
     const { previewModal, copyright } = useSelector((store) => ({
-        previewModal: store.bulks.previewModal,
-        copyright: store.bulks.copyright,
+        previewModal: store.bulks.bulkn.previewModal,
+        copyright: store.bulks.bulkn.copyright,
     }));
 
     // 모달 상태 스테이트

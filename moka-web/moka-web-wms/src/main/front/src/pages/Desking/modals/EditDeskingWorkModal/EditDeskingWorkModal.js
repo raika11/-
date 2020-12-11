@@ -23,8 +23,10 @@ const urlRegex = /[Uu]rl$/;
 const EditDeskingWorkModal = (props) => {
     const { show, onHide, deskingWorkData, component, onSave, deskingPart: deskingPartStr } = props;
     const dispatch = useDispatch();
-    const { bulkCharRows, IR_URL, loading } = useSelector((store) => ({
+    const { bulkCharRows, IR_URL, PHOTO_ARCHIVE_URL, loading } = useSelector((store) => ({
         bulkCharRows: store.codeMgt.bulkCharRows,
+        IR_URL: store.app.IR_URL,
+        PHOTO_ARCHIVE_URL: store.app.PHOTO_ARCHIVE_URL,
         loading:
             store.loading[PUT_DESKING_WORK] ||
             store.loading[GET_BULK_CHAR] ||
@@ -35,7 +37,6 @@ const EditDeskingWorkModal = (props) => {
             store.loading[GET_DS_PRE] ||
             store.loading[GET_DS_PRE_LOC] ||
             store.loading[GET_DS_TITLE_LOC],
-        IR_URL: store.app.IR_URL,
     }));
     const imgFileRef = useRef(null);
 
@@ -140,13 +141,14 @@ const EditDeskingWorkModal = (props) => {
         // 기사 deskingWorkData 셋팅
         if (show && deskingWorkData) {
             // 이미지경로
-            let irImg = deskingWorkData.thumbFileName ? `${IR_URL}?t=k&w=216&h=150u=//${deskingWorkData.thumbFileName}` : undefined;
+            let irImg = deskingWorkData.thumbFileName ? `${PHOTO_ARCHIVE_URL}${deskingWorkData.thumbFileName}` : undefined;
+            // `${IR_URL}?t=k&w=216&h=150u=//${deskingWorkData.thumbFileName}`
             setTemp({
                 ...deskingWorkData,
                 irImg,
             });
         }
-    }, [IR_URL, deskingWorkData, show]);
+    }, [PHOTO_ARCHIVE_URL, deskingWorkData, show]);
 
     useEffect(() => {
         // 기타코드 로드

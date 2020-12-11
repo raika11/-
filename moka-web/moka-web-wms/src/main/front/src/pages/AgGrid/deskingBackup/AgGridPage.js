@@ -10,6 +10,9 @@ import { EditThumbModal } from '@pages/Desking/modals';
 const AgGridPage = () => {
     const [moveRows, setMoveRows] = useState([]);
 
+    // test state
+    const [fileValue, setFileValue] = useState(null); // 파일
+
     // 드래그 시작
     const onRowDragEnter = (params) => {
         const data = params.node.data;
@@ -158,7 +161,7 @@ const AgGridPage = () => {
                     </div>
                 </Col>
             </Row>
-            <EditThumbModal show={true} onHide={() => {}} />
+            <EditThumbModal show={true} onHide={() => {}} fileValue={fileValue} setFileValue={setFileValue} />
         </Container>
     );
 };

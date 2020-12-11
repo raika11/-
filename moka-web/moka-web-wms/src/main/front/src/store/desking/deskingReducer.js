@@ -116,18 +116,25 @@ export default handleActions(
          */
         [act.GET_COMPONENT_WORK_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                const { area, desking } = body;
-                draft.list = desking;
-                draft.area = area;
-                draft.error = initialState.error;
-                if (!area.areaComps && !Array.isArray(area.areaComps)) {
-                    draft.area.areaComps = [];
-                }
+                if (body === null) {
+                    draft.list = initialState.list;
+                    draft.area = initialState.area;
+                    draft.error = initialState.error;
+                    draft.selectedComponent = initialState.selectedComponent;
+                } else {
+                    const { area, desking } = body;
+                    draft.list = desking;
+                    draft.area = area;
+                    draft.error = initialState.error;
+                    if (!area.areaComps && !Array.isArray(area.areaComps)) {
+                        draft.area.areaComps = [];
+                    }
 
-                // selectedComponent 설정
-                let org = draft.selectedComponent.seq ? desking.find((d) => d.seq === draft.selectedComponent.seq) : null;
-                if (!org && desking.length > 0) {
-                    draft.selectedComponent = desking[0];
+                    // selectedComponent 설정
+                    let org = draft.selectedComponent.seq ? desking.find((d) => d.seq === draft.selectedComponent.seq) : null;
+                    if (!org && desking.length > 0) {
+                        draft.selectedComponent = desking[0];
+                    }
                 }
             });
         },

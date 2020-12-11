@@ -1,6 +1,6 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-import { createRequestSaga, callApiAfterActions, errorResponse } from '../commons/saga';
+import { createRequestSaga, errorResponse } from '../commons/saga';
 
 import * as act from './articleAction';
 import * as api from './articleApi';
@@ -8,7 +8,7 @@ import * as api from './articleApi';
 /**
  * 기사 목록 조회
  */
-const getArticleList = callApiAfterActions(act.getArticleList, api.getArticleList, (store) => store.article);
+const getArticleList = createRequestSaga(act.getArticleList, api.getArticleList);
 
 /**
  * 매체 목록 조회

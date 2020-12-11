@@ -16,6 +16,7 @@ import { initialState, getArticleList, changeSearchOption, clearList } from '@st
 const ArticleDeskSearch = (props) => {
     const { media, selectedComponent, show } = props;
     const dispatch = useDispatch();
+
     const { storeSearch } = useSelector((store) => ({
         storeSearch: store.article.search,
     }));
@@ -24,6 +25,9 @@ const ArticleDeskSearch = (props) => {
     const [search, setSearch] = useState(initialState.search);
     const [searchDisabled, setSearchDisabled] = useState(false);
     const [modalShow, setModalShow] = useState(false);
+    const [error, setError] = useState({});
+    const [sourceOn, setSourceOn] = useState(false);
+    const [deskingSourceList, setDeskingSourceList] = useState(null);
 
     /**
      * 입력값 변경
@@ -38,16 +42,15 @@ const ArticleDeskSearch = (props) => {
      * 검색
      */
     const handleSearch = () => {
-        dispatch(
-            getArticleList(
-                changeSearchOption({
-                    ...search,
-                    startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
-                    endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
-                    page: 0,
-                }),
-            ),
-        );
+        let ns = {
+            ...search,
+            deskingSourceList,
+            startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
+            endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
+            page: 0,
+        };
+        dispatch(getArticleList({ search: ns }));
+        dispatch(changeSearchOption(ns));
     };
 
     /**
@@ -57,6 +60,8 @@ const ArticleDeskSearch = (props) => {
     const handleChangeSDate = (date) => {
         if (typeof date === 'object') {
             setSearch({ ...search, startServiceDay: date });
+        } else if (date === '') {
+            setSearch({ ...search, startServiceDay: null });
         }
     };
 
@@ -67,6 +72,8 @@ const ArticleDeskSearch = (props) => {
     const handleChangeEDate = (date) => {
         if (typeof date === 'object') {
             setSearch({ ...search, endServiceDay: date });
+        } else if (date === '') {
+            setSearch({ ...search, endServiceDay: null });
         }
     };
 
@@ -88,27 +95,33 @@ const ArticleDeskSearch = (props) => {
 
         const date = new Date();
 
-        setSearch({
-            ...initialState.search,
-            masterCode: selectedComponent.masterCode || null,
-            startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
-            endServiceDay: moment(date).format(DB_DATEFORMAT),
-            page: 0,
-        });
+        dispatch(
+            changeSearchOption({
+                ...initialState.search,
+                masterCode: selectedComponent.masterCode || null,
+                startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
+                endServiceDay: moment(date).format(DB_DATEFORMAT),
+                page: 0,
+            }),
+        );
     };
-
-    useEffect(() => {
-        setSearch({
-            ...storeSearch,
-            masterCode: selectedComponent.masterCode || null,
-            startServiceDay: moment(storeSearch.startServiceDay, DB_DATEFORMAT),
-            endServiceDay: moment(storeSearch.endServiceDay, DB_DATEFORMAT),
-        });
-    }, [selectedComponent.masterCode, storeSearch]);
 
     useEffect(() => {
         if (media) setSearchDisabled(true);
     }, [media]);
+
+    useEffect(() => {
+        let ssd = moment(storeSearch.startServiceDay, DB_DATEFORMAT);
+        if (!ssd.isValid()) ssd = null;
+        let esd = moment(storeSearch.endServiceDay, DB_DATEFORMAT);
+        if (!esd.isValid()) esd = null;
+
+        setSearch({
+            ...storeSearch,
+            startServiceDay: ssd,
+            endServiceDay: esd,
+        });
+    }, [storeSearch]);
 
     useEffect(() => {
         /**
@@ -117,32 +130,36 @@ const ArticleDeskSearch = (props) => {
          * 시작일 : 현재 시간(시분초o)
          * 종료일 : 현재 시간(시분초o) - 24시간
          */
-
         if (show) {
             // const date = new Date();
-            // const startServiceDay = storeSearch.startServiceDay || moment(date).add(-24, 'hours');
-            // const endServiceDay = storeSearch.endServiceDay || moment(date);
-            const startServiceDay = storeSearch.startServiceDay || '2020-08-21 00:00:00';
-            const endServiceDay = storeSearch.endServiceDay || '2020-08-22 00:00:00';
+            // const startServiceDay = search.startServiceDay || moment(date).add(-24, 'hours');
+            // const endServiceDay = search.endServiceDay || moment(date);
+            const startServiceDay = search.startServiceDay ? moment(search.startServiceDay).format(DB_DATEFORMAT) : '2020-08-21 00:00:00';
+            const endServiceDay = search.endServiceDay ? moment(search.endServiceDay).format(DB_DATEFORMAT) : '2020-08-22 00:00:00';
+            let ns = {
+                ...search,
+                masterCode: selectedComponent.masterCode || null,
+                deskingSourceList,
+                startServiceDay,
+                endServiceDay,
+                contentType: media ? 'M' : null,
+                page: 0,
+            };
 
-            dispatch(
-                getArticleList(
-                    changeSearchOption({
-                        ...storeSearch,
-                        masterCode: selectedComponent.masterCode || null,
-                        startServiceDay,
-                        endServiceDay,
-                        contentType: media ? 'M' : null,
-                        page: 0,
-                    }),
-                ),
-            );
+            if (sourceOn) {
+                dispatch(getArticleList({ search: ns }));
+                dispatch(changeSearchOption(ns));
+                setError({ ...error, deskingSourceList: false });
+            } else {
+                setError({ ...error, deskingSourceList: true });
+            }
         } else {
             dispatch(clearList());
+            setError({ ...error, deskingSourceList: true });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedComponent.masterCode, show]);
+    }, [selectedComponent.masterCode, sourceOn, show]);
 
     return (
         <Form>
@@ -184,7 +201,17 @@ const ArticleDeskSearch = (props) => {
                     </div>
 
                     {/* 매체 */}
-                    <SourceSelector className="mr-2" value={search.sourceCode} onChange={(value) => setSearch({ ...search, sourceCode: value })} />
+                    <SourceSelector
+                        className="mr-2"
+                        value={deskingSourceList}
+                        onChange={(value) => {
+                            setDeskingSourceList(value);
+                            if (value !== '') {
+                                setSourceOn(true);
+                            }
+                        }}
+                        isInvalid={error.deskingSourceList}
+                    />
 
                     {/* 면 */}
                     <div style={{ width: 85 }} className="mr-2">

@@ -11,33 +11,15 @@ import { AUTHORIZATION, SIGNIN_MEMBER_ID } from '@/constants';
  * 로그인
  * @param {object} param0.payload
  */
-export function* loginJwtSaga({ payload }) {
+export function* loginJwtSaga({ payload: { userId, userPassword, callback } }) {
     try {
-        const response = yield call(api.loginJwt, payload);
-        const { headers, data } = response;
-
+        const response = yield call(api.loginJwt, userId, userPassword);
+        const { headers } = response;
         if (headers.authorization) {
             yield call(setLocalItem, { key: AUTHORIZATION, value: headers.authorization });
-            yield call(setLocalItem, { key: SIGNIN_MEMBER_ID, value: payload.userId });
-
-            if (data.header.resultType === 0) {
-                toast.success(data.header.message.replace(/\\n/g, '<br/>'));
-
-                yield delay(1000);
-                yield call(window.location.reload());
-            } else {
-                // 패스워드 변경 안내 팝업으로 변경 예정
-                messageBox.confirm(data.header.message, (ok) => {
-                    if (ok) {
-                        toast.info('비밀번호 변경 페이지로 이동. 기능 구현중...');
-                    } else {
-                        window.location.reload();
-                    }
-                });
-            }
-        } else {
-            toast.error(data.header.message.replace(/\\n/g, '<br/>'));
+            yield call(setLocalItem, { key: SIGNIN_MEMBER_ID, value: userId });
         }
+        callback(response);
     } catch (err) {}
 }
 

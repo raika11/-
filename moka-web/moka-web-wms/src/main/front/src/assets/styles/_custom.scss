@@ -19,7 +19,7 @@ body {
             width: 500px !important;
             background-color: transparent;
             box-shadow: 0 0 0;
-            border: 2px solid #fff;
+            border: 2px solid $white;
             padding: 30px;
         }
         .form-group{
@@ -39,7 +39,18 @@ body {
                 &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
                     color: $white;
                     opacity: 1; /* Firefox */
-                    }
+                }
+            }
+        }
+        .user-info{
+            > *{
+                display: inline-block;
+            }
+            .password-error{
+                float: right;
+                span{
+                    color: $primary
+                }
             }
         }
         .signin-btn{
@@ -68,8 +79,8 @@ body {
             content: '';
             display: inline-block;
             visibility: visible;
-            background-color: #fff;
-            border: 1px solid #FF3907;
+            background-color:  $white;
+            border: 1px solid $primary;
             box-shadow: none !important;
             line-height: 15px;
             text-align: center;
@@ -81,13 +92,13 @@ body {
             top: -3px;
             left: -1px;
             position: relative;
-            background-color: #FF3907;
+            background-color: $primary;
             content: '\2714';
             display: inline-block;
             visibility: visible;
-            border: 1px solid #FF3907;
+            border: 1px solid $primary;
             box-shadow: none !important;
-            color: #fff !important;
+            color:  $white !important;
             line-height: 15px;
         }
     }

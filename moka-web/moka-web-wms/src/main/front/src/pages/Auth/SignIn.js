@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { loginJwt } from '@store/auth';
+import { call, delay } from 'redux-saga/effects';
 import { Button, Card, Col, Form, FormCheck, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import Main from '@/layout/components/Main';
@@ -8,13 +9,13 @@ import { SIGNIN_MEMBER_ID } from '@/constants';
 import logo from '@assets/images/img_logo@2x.png';
 import loginBg from '@assets/images/login_bg.png';
 import { MokaIcon } from '@components';
-
+import toast, { messageBox } from '@utils/toastUtil';
 const SignIn = () => {
     const dispatch = useDispatch();
 
     const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || 'ssc01');
     const [password, setPassword] = useState('sscMoka#2020');
-
+    const [passwordErrorCount, setPasswordErrorCount] = useState(0);
     const handleSubmit = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -26,6 +27,37 @@ const SignIn = () => {
             loginJwt({
                 userId: userId,
                 userPassword: password,
+                callback: ({ headers, data }) => {
+                    if (headers.authorization) {
+                        if (data.header.resultType === 0) {
+                            toast.success(data.header.message);
+                            delay(1000);
+                            call(window.location.reload());
+                        } else {
+                            // 패스워드 변경 안내 팝업으로 변경 예정
+                            messageBox.confirm(data.header.message, (ok) => {
+                                if (ok) {
+                                    toast.info('비밀번호 변경 페이지로 이동. 기능 구현중...');
+                                } else {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    } else {
+                        const resultType = data.header.resultType;
+                        if (resultType < 150 || resultType >= 900) {
+                            if (resultType === 100) {
+                                setPasswordErrorCount(data.body.extra);
+                            }
+                            console.log(data.body);
+                            messageBox.alert(data.header.message);
+                        } else if (resultType < 200) {
+                            //confirm 창 출력 메시지
+                        } else {
+                            toast.error(data.header.message);
+                        }
+                    }
+                },
             }),
         );
     };
@@ -38,10 +70,17 @@ const SignIn = () => {
         setPassword(e.target.value);
     };
 
+    const handleClickApproval = (event) => {
+        console.log(event);
+    };
+    const handleClickUnlock = (event) => {
+        console.log(event);
+    };
+
     return (
         <React.Fragment>
             <Main className="h-100 w-100 signin-main" style={{ background: '#080808 url(' + loginBg + ') no-repeat center / cover' }}>
-                <div className="d-flex h-100 w-100 justify-content-center" style={{ background: 'rgb(33, 35, 56, 0.3)' }}>
+                <div className="d-flex h-100 w-100 justify-content-center" style={{ background: 'rgb(60, 65, 93, 0.69)' }}>
                     <div className="d-flex flex-column">
                         <Row className="h-100">
                             <Col className="mx-auto d-table h-100">
@@ -60,7 +99,15 @@ const SignIn = () => {
                                                         <Form.Label>
                                                             <MokaIcon iconName="fal-user" />
                                                         </Form.Label>
-                                                        <Form.Control type={'text'} size="lg" name="userid" onChange={handleUserIdChange} value={userId} placeholder="ID" />
+                                                        <Form.Control
+                                                            type={'text'}
+                                                            size="lg"
+                                                            name="userid"
+                                                            onChange={handleUserIdChange}
+                                                            value={userId}
+                                                            placeholder="ID"
+                                                            autoComplete="off"
+                                                        />
                                                     </Form.Group>
                                                     <Form.Group>
                                                         <Form.Label>
@@ -73,10 +120,18 @@ const SignIn = () => {
                                                             onChange={handlePasswrdChange}
                                                             value={password}
                                                             placeholder="Password"
+                                                            autoComplete="off"
                                                         />
                                                     </Form.Group>
-                                                    <div className="">
+                                                    <div className="user-info">
                                                         <FormCheck type="checkbox" id="rememberMe" label="Save ID" defaultChecked />
+                                                        {passwordErrorCount ? (
+                                                            <label class="password-error">
+                                                                비밀번호 오류 <span>{passwordErrorCount}</span> 회
+                                                            </label>
+                                                        ) : (
+                                                            ''
+                                                        )}
                                                     </div>
                                                     <div className="text-center signin-btn">
                                                         <Button className="w-100" color="primary" onClick={(e) => handleSubmit(e)}>
@@ -84,12 +139,12 @@ const SignIn = () => {
                                                         </Button>
                                                     </div>
                                                     <div className="etc-btn">
-                                                        <label>
+                                                        <label onClick={handleClickApproval}>
                                                             BackOffice <span>사용신청</span>
                                                         </label>
                                                     </div>
                                                     <div className="etc-btn">
-                                                        <label>
+                                                        <label onClick={handleClickUnlock}>
                                                             BackOffice <span>잠금해제</span>
                                                         </label>
                                                     </div>

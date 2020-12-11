@@ -1,7 +1,7 @@
 import instance from '../commons/axios';
 
 // 로그인
-export const loginJwt = ({ userId, userPassword }) => {
+export const loginJwt = (userId, userPassword) => {
     return instance
         .post(
             '/loginJwt',

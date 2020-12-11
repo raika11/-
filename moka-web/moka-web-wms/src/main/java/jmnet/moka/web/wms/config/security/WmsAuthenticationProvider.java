@@ -14,10 +14,13 @@ import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.member.entity.LoginLog;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.web.wms.config.security.exception.AccountStatusUnactiveException;
+import jmnet.moka.web.wms.config.security.exception.GroupWareException;
+import jmnet.moka.web.wms.config.security.exception.GroupWareUserStatusException;
 import jmnet.moka.web.wms.config.security.exception.GroupwareUserNotFoundException;
 import jmnet.moka.web.wms.config.security.exception.LimitExcessBadCredentialsException;
 import jmnet.moka.web.wms.config.security.exception.NewUserSmsAuthRequiredException;
 import jmnet.moka.web.wms.config.security.exception.PasswordUnchangedException;
+import jmnet.moka.web.wms.config.security.exception.UnauthrizedErrorCode;
 import jmnet.moka.web.wms.config.security.exception.WmsBadCredentialsException;
 import jmnet.moka.web.wms.config.security.exception.WmsUsernameNotFoundException;
 import jmnet.moka.web.wms.config.security.groupware.GroupWareUserInfo;
@@ -124,12 +127,28 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
             }
             GroupWareUserInfo groupwareUserInfo = null;
             if (groupwareCheck) {
-                // 0. Groupware 아이디 존재 여부 확인. 추후 그룹웨어 호출 로직 추가 예정
-                groupwareUserInfo = groupWareAuthClient.getUserInfo(userId);
-                boolean exists = groupwareUserInfo != null && McpString.isNotEmpty(groupwareUserInfo.getUserName());
+                try {
+                    // 0. Groupware 아이디 존재 여부 확인. 추후 그룹웨어 호출 로직 추가 예정
+                    groupwareUserInfo = groupWareAuthClient.getUserInfo(userId);
+                    boolean exists = groupwareUserInfo != null && McpString.isNotEmpty(groupwareUserInfo.getUserName());
 
-                if (!exists) {
-                    throw new GroupwareUserNotFoundException(messageByLocale.get("wms.login.error.GroupwareUserNotFoundException"));
+                    if (!exists) {
+                        throw new GroupwareUserNotFoundException(messageByLocale.get("wms.login.error.GroupwareUserNotFoundException"));
+                    }
+                } catch (GroupWareException ex) {
+                    /**
+                     * 그룹웨어 관련 오류 메세지 처리
+                     */
+                    if (ex.getErrorCode() == UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_ERROR) {
+                        throw new GroupwareUserNotFoundException(messageByLocale.get("wms.login.error.GroupwareUserNotFoundException"));
+                    }
+                    if (ex.getErrorCode() == UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_PARSING_ERROR) {
+                        throw new GroupWareUserStatusException(ex.getErrorCode(), messageByLocale.get("wms.login.error.groupware-authnumber"));
+                    }
+                    if (ex.getErrorCode() == UnauthrizedErrorCode.GROUPWARE_USER_PARSING_ERROR) {
+                        throw new GroupWareUserStatusException(ex.getErrorCode(), messageByLocale.get("wms.login.error.groupware-userinfo"));
+                    }
+                    throw new GroupWareUserStatusException(ex.getErrorCode(), messageByLocale.get("wms.login.error.groupware"));
                 }
             }
 
@@ -216,7 +235,7 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
             if (groupwareUserInfo != null) {
                 userDetails.setUserName(groupwareUserInfo.getUserName());
                 userDetails.setPhoneNo(groupwareUserInfo.getPhone());
-                userDetails.setPosition(groupwareUserInfo.getPositionName());
+                //userDetails.setPosition(groupwareUserInfo.getPositionName());
                 userDetails.setCellPhoneNo(groupwareUserInfo.getMobile());
                 userDetails.setDept(groupwareUserInfo.getGroupName());
                 userDetails.setEmailaddress(groupwareUserInfo.getEmail());

@@ -24,6 +24,7 @@ public class GroupWareConfiguration {
     @Value("${groupware.service-id}")
     private String serviceId;
 
+
     @Bean
     public Jaxb2Marshaller marshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();

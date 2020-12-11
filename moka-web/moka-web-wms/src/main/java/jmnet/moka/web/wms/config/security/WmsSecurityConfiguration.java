@@ -6,6 +6,7 @@ package jmnet.moka.web.wms.config.security;
 import com.hazelcast.core.HazelcastInstance;
 import java.io.IOException;
 import java.util.Arrays;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.web.wms.config.ReactRoutesHandlerMapping;
@@ -128,6 +129,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
         String[] reactRoutes = reactRoute
                 .getReactRoutesList()
                 .stream()
+                .filter(s -> McpString.isNotEmpty(s))
                 .map(s -> s + "/**")
                 .toArray(value -> new String[value]);
 

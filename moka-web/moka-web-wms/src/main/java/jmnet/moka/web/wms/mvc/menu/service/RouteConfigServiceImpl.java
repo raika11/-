@@ -1,5 +1,6 @@
 package jmnet.moka.web.wms.mvc.menu.service;
 
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.wms.config.ReactRoutesHandlerMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,16 +51,21 @@ public class RouteConfigServiceImpl implements RouteConfigService {
     }
 
     private void setRoutPermit(String route) {
+
         String[] reactRoutes = reactRoute
                 .getReactRoutesList()
                 .stream()
+                .filter(s -> McpString.isNotEmpty(s))
                 .map(s -> s + "/**")
                 .toArray(value -> new String[value]);
         try {
-            httpSecurity
-                    .authorizeRequests()
-                    .antMatchers(reactRoutes)
-                    .permitAll();
+            log.debug("change menus {}", reactRoutes);
+            synchronized (RouteConfigServiceImpl.class) {
+                httpSecurity
+                        .authorizeRequests()
+                        .antMatchers(reactRoutes)
+                        .permitAll();
+            }
         } catch (Exception ex) {
             log.error("[FAIL ROUTE Config] : {}, {}", route, ex.toString());
         }

@@ -15,6 +15,7 @@ import {
     CHANGE_SEARCH_OPTION,
     GET_COPYRIGHT_SUCCESS,
     GET_COPYRIGHT_FAILURE,
+    CLEAR_BULKS_ARTICLE,
 } from './bulksAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
@@ -77,6 +78,11 @@ export default handleActions(
                 draft.bulks_list = initialState.list;
                 draft.bulksError = initialState.bulksError;
                 draft.invalidList = initialState.invalidList;
+            });
+        },
+        [CLEAR_BULKS_ARTICLE]: (state) => {
+            return produce(state, (draft) => {
+                draft.bulkArticle = initialState.bulkArticle;
             });
         },
         // 리스트 조회 성공.

@@ -10,9 +10,10 @@ const BulknListGrid = () => {
     const params = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
-    const { list, search, loading, bulkPathName } = useSelector((store) => ({
-        list: store.bulks.list,
+    const { list, total, search, loading, bulkPathName } = useSelector((store) => ({
+        total: store.bulks.total,
         search: store.bulks.search,
+        list: store.bulks.list,
         bulkPathName: store.bulks.bulkPathName,
         loading: store.loading[GET_BULK_LIST],
     }));
@@ -71,12 +72,13 @@ const BulknListGrid = () => {
                 onRowNodeId={(data) => data.bulkartSeq}
                 onRowClicked={handleClickListRow}
                 loading={loading}
-                total={search.total}
+                total={total}
                 page={search.page}
                 size={search.size}
                 displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={params.bulkartSeq}
+                preventRowClickCell={['used', 'preview']}
             />
         </>
     );

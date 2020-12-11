@@ -16,6 +16,7 @@ import {
     GET_BULK_ARTICLE_SUCCESS,
     GET_BULK_ARTICLE_FAILURE,
     GET_COPYRIGHT,
+    GET_MODAL_BULK_ARTICLE,
 } from './bulksAction';
 import { getBulkList, getBulkArticle, saveBulkArticle, getSpecialchar, putSpecialchar, putChangeBulkused, getCopyright } from './bulksApi';
 
@@ -60,6 +61,33 @@ function* getBulkArticleSaga({ payload: { bulkartSeq, callback } }) {
     }
 
     yield put(finishLoading(GET_BULK_ARTICLE));
+}
+
+// 벌크 상세 정보 ( 기사리스트 미리 보기 모달용)
+function* getModalBulkArticleSaga({ payload: { bulkartSeq, callback } }) {
+    yield put(startLoading(GET_MODAL_BULK_ARTICLE));
+
+    let callbackData = {};
+    let response;
+    let getData = {
+        bulkartSeq: bulkartSeq,
+    };
+
+    try {
+        response = yield call(getBulkArticle, getData);
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(e);
+        yield put({
+            type: CHANGE_INVALID_LINK,
+            payload: callbackData,
+        });
+    }
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(GET_MODAL_BULK_ARTICLE));
 }
 
 // 미리보기 모달 상태 변경.
@@ -175,6 +203,7 @@ export default function* bulksSaga() {
     yield takeLatest(TRY_PREVIEW_MODAL, showPreviewModelSaga); // 벌크 에서 사용하는 미리보기 모달.
     yield takeLatest(GET_BULK_LIST, getBulkListSaga); // 벌크 리스트
     yield takeLatest(GET_BULK_ARTICLE, getBulkArticleSaga); // 벌크 상세 정보(기사들).
+    yield takeLatest(GET_MODAL_BULK_ARTICLE, getModalBulkArticleSaga); // 벌크 상세 정보(기사들 미리 보기 모달용).
     yield takeLatest(SAVE_BULK_ARTICLE, saveBulkArticleSaga); // 벌크 문구 저장(기사들).
     yield takeLatest(GET_SPECIALCHAR, getSpecialcharSaga); // 약물정보 가지고 오기.
     yield takeLatest(GET_COPYRIGHT, getCopyrightSaga); // Copyright 가지고 오기.

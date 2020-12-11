@@ -17,6 +17,8 @@ export const CLEAR_STORE = 'bulks/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 export const CLEAR_BULKS_LIST = 'bulks/CLEAR_BULKS_LIST';
 export const clearBulksList = createAction(CLEAR_BULKS_LIST);
+export const CLEAR_BULKS_ARTICLE = 'bulks/CLEAR_BULKS_ARTICLE';
+export const clearBulksArticle = createAction(CLEAR_BULKS_ARTICLE);
 
 // 벌크 리스트 조회.
 export const [GET_BULK_LIST, GET_BULK_LIST_SUCCESS, GET_BULK_LIST_FAILURE] = createRequestActionTypes('bulks/GET_BULK_LIST');
@@ -25,6 +27,10 @@ export const getBulkList = createAction(GET_BULK_LIST, (...actions) => actions);
 // 벌크 상세 조회.
 export const [GET_BULK_ARTICLE, GET_BULK_ARTICLE_SUCCESS, GET_BULK_ARTICLE_FAILURE] = createRequestActionTypes('bulks/GET_BULK_ARTICLE');
 export const getBulkArticle = createAction(GET_BULK_ARTICLE, ({ bulkartSeq, callback }) => ({ bulkartSeq, callback }));
+
+// 벌크 상세 조회(미리보기 모달용).
+export const [GET_MODAL_BULK_ARTICLE, GET_MODAL_BULK_ARTICLE_SUCCESS, GET_MODAL_BULK_ARTICLE_FAILURE] = createRequestActionTypes('bulks/GET_MODAL_BULK_ARTICLE');
+export const getModalBulkArticle = createAction(GET_MODAL_BULK_ARTICLE, ({ bulkartSeq, callback }) => ({ bulkartSeq, callback }));
 
 // 벌크 데이터 저장.
 export const [SAVE_BULK_ARTICLE, SAVE_BULK_ARTICLE_SUCCESS, SAVE_BULK_ARTICLE_FAILURE] = createRequestActionTypes('bulks/SAVE_BULK_ARTICLE');

@@ -4,7 +4,7 @@ import { Form, Col, Button } from 'react-bootstrap';
 import { MokaInput, MokaInputLabel } from '@components';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeSearchOption, getBulkList } from '@store/bulks';
+import { changeSearchOption, getBulkList, clearBulksArticle } from '@store/bulks';
 import { useHistory } from 'react-router-dom';
 
 const propTypes = {
@@ -51,6 +51,7 @@ const BulknListSearchBox = (props) => {
     // 등록 버튼 클릭하면 라우터 이동및 상위 props 에디트 상태 변경 처리.
     const handleClickNewButton = () => {
         props.HandleEditEnable();
+        dispatch(clearBulksArticle());
         history.push(`/${bulkPathName}`);
     };
 

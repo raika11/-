@@ -54,6 +54,7 @@ const ButtonGroup = (props) => {
             dispatch(
                 postPublishComponentWork({
                     componentWorkSeq: component.seq,
+                    areaSeq,
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success(header.message);
@@ -64,7 +65,7 @@ const ButtonGroup = (props) => {
                 }),
             );
         });
-    }, [component.seq, dispatch]);
+    }, [component.seq, areaSeq, dispatch]);
 
     /**
      * 임시저장
@@ -92,13 +93,14 @@ const ButtonGroup = (props) => {
             dispatch(
                 postSavePublishComponentWork({
                     componentWorkSeq: component.seq,
+                    areaSeq,
                     callback: ({ header }) => {
                         if (!header.success) toast.fail(header.message);
                     },
                 }),
             );
         });
-    }, [component.seq, dispatch]);
+    }, [component.seq, areaSeq, dispatch]);
 
     /**
      * 공백추가

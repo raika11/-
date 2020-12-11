@@ -119,8 +119,9 @@ export const postSaveComponentWork = ({ componentWorkSeq }) => {
 };
 
 // 컴포넌트 워크 전송
-export const postPublishComponentWork = ({ componentWorkSeq }) => {
-    return instance.post(`/api/desking/components/publish/${componentWorkSeq}`).catch((err) => {
+export const postPublishComponentWork = ({ componentWorkSeq, areaSeq }) => {
+    const queryString = { areaSeq };
+    return instance.post(`/api/desking/components/publish/${componentWorkSeq}?${qs.stringify(queryString)}`).catch((err) => {
         throw err;
     });
 };

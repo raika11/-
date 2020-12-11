@@ -87,8 +87,9 @@ export const postSaveComponentWork = createAction(POST_SAVE_COMPONENT_WORK, ({ c
  * 컴포넌트 워크 전송
  */
 export const POST_PUBLISH_COMPONENT_WORK = 'desking/POST_PUBLISH_COMPONENT_WORK';
-export const postPublishComponentWork = createAction(POST_PUBLISH_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({
+export const postPublishComponentWork = createAction(POST_PUBLISH_COMPONENT_WORK, ({ componentWorkSeq, areaSeq, callback }) => ({
     componentWorkSeq,
+    areaSeq,
     callback,
 }));
 
@@ -115,8 +116,9 @@ export const deleteReserveComponentWork = createAction(DELETE_RESERVE_COMPONENT_
  * 컴포넌트 워크 임시저장 + 전송 둘 다 하는 액션
  */
 export const POST_SAVE_PUBLISH_COMPONENT_WORK = 'desking/POST_SAVE_PUBLISH_COMPONENT_WORK';
-export const postSavePublishComponentWork = createAction(POST_SAVE_PUBLISH_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({
+export const postSavePublishComponentWork = createAction(POST_SAVE_PUBLISH_COMPONENT_WORK, ({ componentWorkSeq, areaSeq, callback }) => ({
     componentWorkSeq,
+    areaSeq,
     callback,
 }));
 

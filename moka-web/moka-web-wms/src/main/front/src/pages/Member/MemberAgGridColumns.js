@@ -44,7 +44,7 @@ export const columnDefs = [
         field: 'remark',
         tooltipField: 'remark',
         width: 200,
-        flex: true,
+        flex: 1,
     },
 ];
 
@@ -81,6 +81,6 @@ export const historyColumnDefs = [
         field: 'regDt',
         tooltipField: 'regDt',
         width: 200,
-        flex: true,
+        flex: 1,
     },
 ];

@@ -29,7 +29,7 @@ export const tempColumnDefs = [
         field: 'snsTitle',
         wrapText: true,
         width: 250,
-        flex: true,
+        flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '40px', paddingLeft: '20px', paddingTop: '12px' },
     },
     {

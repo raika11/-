@@ -19,7 +19,7 @@ export const ColumnDefs = [
         headerName: '작성자',
         field: 'regId',
         width: 150,
-        flex: true,
+        flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px', alignItems: 'center' },
     },
     {

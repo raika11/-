@@ -160,10 +160,11 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
 
             // 3. 패스워드 오류
             if (!passwordEncoder.matches(userPassword, userDetails.getPassword())) {
-                if (userDetails.getErrorCnt() + 1 < passwordErrorLimit) { // 오류 한도 초과 전
-                    String errMsg = messageByLocale.get("wms.login.error.BadCredentials", userDetails.getErrorCnt() + 1, passwordErrorLimit);
+                int errorCnt = userDetails.getErrorCnt() + 1;
+                if (errorCnt < passwordErrorLimit) { // 오류 한도 초과 전
+                    String errMsg = messageByLocale.get("wms.login.error.BadCredentials", errorCnt, passwordErrorLimit);
                     memberService.addMemberLoginErrorCount(userId);
-                    throw new WmsBadCredentialsException(errMsg, passwordErrorLimit);
+                    throw new WmsBadCredentialsException(errMsg, errorCnt);
                 } else {// 한도가 초과한 경우
                     String errMsg = messageByLocale.get("wms.login.error.limit-excesss-bad-credentials", McpDate.nowDateStr());
                     if (userDetails.getErrorCnt() + 1 == passwordErrorLimit) { // 현재 오류 횟수가 한도와 동일한 경우 update

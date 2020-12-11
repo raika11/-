@@ -126,7 +126,9 @@ export const addNextRowStyle = (nextRow) => {
  * @param {number} currentIndex 타겟 grid리스트에서 현재 넘어온 타겟 grid의 인덱스 (있으면 넘긴다)
  */
 export const addDeskingWorkDropzone = (onDragStop, sourceGrid, targetGrid, currentIndex) => {
-    const workElement = findWork(targetGrid.api.gridOptionsWrapper.layoutElements[0]); // .component-work
+    const wrapper = targetGrid.api.gridOptionsWrapper;
+    if (!wrapper) return null;
+    const workElement = findWork(wrapper.layoutElements[0]); // .component-work
     if (!workElement) return null;
     if (workElement.classList.contains('disabled')) {
         sourceGrid.api.removeRowDropZone({ getContainer: () => workElement });

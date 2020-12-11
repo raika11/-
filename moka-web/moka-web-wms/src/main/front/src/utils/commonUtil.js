@@ -279,31 +279,8 @@ const dateFormat = (date, format) => {
     });
 };
 
-const stringUtil = {
-    isNullOrEmpty: function (string) {
-        return string === undefined || string === null || string !== '';
-    },
-    isNotNullAndNotEmpty: function (string) {
-        return string !== undefined && string !== null && string !== '';
-    },
-    isNull: function (string) {
-        return string === null;
-    },
-    isNotNull: function (string) {
-        return string !== null;
-    },
-    isEmpty: function (string) {
-        return string === '';
-    },
-    isNotEmpty: function (string) {
-        return string !== '';
-    },
-    isUndefined: function (string) {
-        return string === undefined;
-    },
-    isNotUndefined: function (string) {
-        return string !== undefined;
-    },
+export const setDefaultValue = (value, defaultValue = '') => {
+    return value !== null && value !== undefined ? value : defaultValue;
 };
 
 export default {
@@ -316,5 +293,5 @@ export default {
     makeImgPreview,
     euckrBytes,
     dateFormat,
-    stringUtil,
+    setDefaultValue,
 };

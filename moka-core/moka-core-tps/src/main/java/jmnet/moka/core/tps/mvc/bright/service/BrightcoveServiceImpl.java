@@ -112,7 +112,7 @@ public class BrightcoveServiceImpl implements BrightcoveService {
                 .after(brightcoveCredentailVO.getExpireDt())) {
             return false;
         }
-        return true;
+        return false;
     }
 
     private BrightcoveCredentailVO getClientCredentials() {
@@ -154,45 +154,58 @@ public class BrightcoveServiceImpl implements BrightcoveService {
         builder.path(cmsBaseUrl + "/videos");
         builder.queryParam("limit", search.getSize());
         builder.queryParam("offset", search.getPage() * search.getSize());
-        if(McpString.isNotEmpty(search.getKeyword())) {
+        if (McpString.isNotEmpty(search.getKeyword())) {
             builder.queryParam("q", search.getSearchType() + ":" + search.getKeyword());
         }
-        String requestUrl = builder.build().encode().toString();
+        String requestUrl = builder
+                .build()
+                .encode()
+                .toString();
 
         ResponseEntity<String> responseEntity = restTemplateHelper.get(requestUrl, null, headers);
 
         String response = responseEntity.getBody();
-        List<Map<String, Object>> map
-                = ResourceMapper
-                .getDefaultObjectMapper().readValue(response, new TypeReference<List<Map<String,Object>>>(){});
+        List<Map<String, Object>> map = ResourceMapper
+                .getDefaultObjectMapper()
+                .readValue(response, new TypeReference<List<Map<String, Object>>>() {
+                });
 
         List<OvpVO> returnList = new ArrayList<>();
-        for(Map<String, Object> item : map) {
+        for (Map<String, Object> item : map) {
             String src = null;
-            if( item.containsKey("images") ){
-                Map<String, Object> images = (Map<String, Object>)item.get("images");
-                if( images.containsKey("thumbnail") ) {
+            if (item.containsKey("images")) {
+                Map<String, Object> images = (Map<String, Object>) item.get("images");
+                if (images.containsKey("thumbnail")) {
                     Map<String, Object> thumbnail = (Map<String, Object>) images.get("thumbnail");
-                    if( thumbnail.containsKey("src") ) {
-                        src = thumbnail.get("src").toString();
+                    if (thumbnail.containsKey("src")) {
+                        src = thumbnail
+                                .get("src")
+                                .toString();
                     }
                 }
             }
 
             Date created_at = null;
-            if( item.containsKey("created_at") ) {
+            if (item.containsKey("created_at")) {
                 created_at = McpDate.date("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", item
                         .get("created_at")
                         .toString());    // 2019-04-30T23:27:22.507Z
             }
 
-            OvpVO ovp = OvpVO.builder()
-                   .id(item.containsKey("id") ? item.get("id").toString() : null)
-                   .thumbFileName(src)
-                   .name(item.containsKey("name") ? item.get("name").toString() : null)
-                   .state(item.containsKey("state") ? item.get("state").toString() : "ACTIVE")
-                   .regDt(created_at)
-                   .build();
+            OvpVO ovp = OvpVO
+                    .builder()
+                    .id(item.containsKey("id") ? item
+                            .get("id")
+                            .toString() : null)
+                    .thumbFileName(src)
+                    .name(item.containsKey("name") ? item
+                            .get("name")
+                            .toString() : null)
+                    .state(item.containsKey("state") ? item
+                            .get("state")
+                            .toString() : "ACTIVE")
+                    .regDt(created_at)
+                    .build();
             returnList.add(ovp);
         }
         return returnList;
@@ -204,9 +217,13 @@ public class BrightcoveServiceImpl implements BrightcoveService {
 
         List<OvpVO> returnList = new ArrayList<>();
         OvpVO ovp1 = this.findLiveByChannel(1);
-        if(ovp1 != null) returnList.add(ovp1);
+        if (ovp1 != null) {
+            returnList.add(ovp1);
+        }
         OvpVO ovp2 = this.findLiveByChannel(2);
-        if(ovp2 != null) returnList.add(ovp2);
+        if (ovp2 != null) {
+            returnList.add(ovp2);
+        }
 
         return returnList;
     }
@@ -225,22 +242,31 @@ public class BrightcoveServiceImpl implements BrightcoveService {
 
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
         builder.path(bcovliveUrl + "/jobs/" + jobId);
-        String requestUrl = builder.build().encode().toString();
+        String requestUrl = builder
+                .build()
+                .encode()
+                .toString();
 
         ResponseEntity<String> responseEntity = restTemplateHelper.get(requestUrl, null, headers);
 
         String response = responseEntity.getBody();
-        Map<String, Object> map
-                = ResourceMapper
-                .getDefaultObjectMapper().readValue(response, new TypeReference<Map<String,Object>>(){});
+        Map<String, Object> map = ResourceMapper
+                .getDefaultObjectMapper()
+                .readValue(response, new TypeReference<Map<String, Object>>() {
+                });
 
-        if(!map.isEmpty()){
-            if(map.containsKey("job")) {
-                Map<String, Object> job = (Map<String, Object>)map.get("job");
-                OvpVO ovp = OvpVO.builder()
-                                 .id(job.containsKey("job_videocloud_asset_id") ? job.get("job_videocloud_asset_id").toString() : null)
-                                 .state(job.containsKey("state") ? job.get("state").toString() : "processing")
-                                 .build();
+        if (!map.isEmpty()) {
+            if (map.containsKey("job")) {
+                Map<String, Object> job = (Map<String, Object>) map.get("job");
+                OvpVO ovp = OvpVO
+                        .builder()
+                        .id(job.containsKey("job_videocloud_asset_id") ? job
+                                .get("job_videocloud_asset_id")
+                                .toString() : null)
+                        .state(job.containsKey("state") ? job
+                                .get("state")
+                                .toString() : "processing")
+                        .build();
                 return ovp;
             }
         }

@@ -15,6 +15,7 @@ const SnsMetaList = () => {
     }));
 
     useEffect(() => {
+        console.log(search);
         dispatch(getSNSMetaList({ payload: search }));
     }, [dispatch, search]);
 

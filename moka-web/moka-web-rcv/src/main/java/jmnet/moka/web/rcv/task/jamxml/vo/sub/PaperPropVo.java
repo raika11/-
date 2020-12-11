@@ -45,5 +45,5 @@ public class PaperPropVo implements Serializable {
     private String myun;
 
     @XmlElement(name = "position")
-    private String position;
+    private int position;
 }

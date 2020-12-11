@@ -72,10 +72,7 @@ public class XMLUtil {
     public Node getChildNode(Node node, String childName) {
         NodeList childNodeList = node.getChildNodes();
         for (int i = 0; i < childNodeList.getLength(); i++) {
-            if (childNodeList
-                    .item(i)
-                    .getNodeName()
-                    .compareTo(childName) == 0) {
+            if (childNodeList.item(i).getNodeName().equals(childName)) {
                 return childNodeList.item(i);
             }
         }

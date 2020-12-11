@@ -1,5 +1,6 @@
 package jmnet.moka.web.rcv.task.cpxml.vo;
 
+import java.util.Date;
 import jmnet.moka.web.rcv.common.vo.TotalVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpCategoryVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpComponentVo;
@@ -27,12 +28,19 @@ public class CpArticleTotalVo extends TotalVo<CpArticleListVo> {
     private CpArticleVo curArticle;
     private String sourceCode;
     private String editYn;
+    private Date pressDT;
 
     private int rid;
     private CpComponentVo curComponent;
     private CpReporterVo curReporter;
     private CpCategoryVo curCategory;
     private String curIndex;
+    private String curKeyword;
+
+    private String xmlFileNM;
+    private int artHistoryId;
+    private int artHistoryStep;
+    private String errorMessage;
 
     public CpArticleTotalVo(CpArticleListVo mainData) {
         super(mainData);

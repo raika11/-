@@ -113,8 +113,7 @@ const ArticleDeskSearch = (props) => {
         if (sourceList.length < 1) {
             dispatch(getSourceList());
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch, sourceList.length]);
 
     useEffect(() => {
         setSearch({

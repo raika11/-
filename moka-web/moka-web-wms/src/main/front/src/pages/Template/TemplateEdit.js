@@ -8,14 +8,14 @@ import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
-import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, copyTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
+import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, copyTemplate, clearTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { DefaultInputModal } from '@pages/commons';
 import AddComponentModal from './modals/AddComponentModal';
 
 /**
- * 템플릿 정보/수정 컴포넌트
+ * 템플릿 등록/수정 컴포넌트
  */
 const TemplateEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
@@ -236,6 +236,14 @@ const TemplateEdit = ({ onDelete }) => {
         onDelete(template);
     };
 
+    /**
+     * 취소 버튼
+     */
+    const handleClickCancle = () => {
+        history.push('/template');
+        dispatch(clearTemplate());
+    };
+
     useEffect(() => {
         if (template.templateSeq) {
             setBtnDisabled(false);
@@ -273,10 +281,8 @@ const TemplateEdit = ({ onDelete }) => {
     }, [templateGroup, tpZoneRows]);
 
     useEffect(() => {
-        // 코드 조회
-        dispatch(getTpZone());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        if (!tpZoneRows) dispatch(getTpZone());
+    }, [dispatch, tpZoneRows]);
 
     useEffect(() => {
         // invalidList 처리
@@ -290,7 +296,7 @@ const TemplateEdit = ({ onDelete }) => {
     }, [invalidList]);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`템플릿 ${template.templateSeq ? '정보' : '등록'}`} loading={loading}>
+        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`템플릿 ${template.templateSeq ? '수정' : '등록'}`} loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
@@ -306,9 +312,14 @@ const TemplateEdit = ({ onDelete }) => {
                         <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="negative" disabled={btnDisabled} onClick={handleClickDelete}>
-                            삭제
+                        <Button variant="negative" onClick={handleClickCancle}>
+                            취소
                         </Button>
+                        {!btnDisabled && (
+                            <Button variant="negative" className="ml-05" onClick={handleClickDelete}>
+                                삭제
+                            </Button>
+                        )}
                     </div>
                 </Form.Group>
                 {/* 템플릿ID */}
@@ -387,7 +398,7 @@ const TemplateEdit = ({ onDelete }) => {
                             </Button>
                         </>
                     }
-                    labelClassName="justify-content-end mr-3"
+                    labelClassName="justify-content-end"
                     inputProps={{ width: 284, height: 280, img: thumbSrc, alt: templateName, setFileValue }}
                     className="mb-2"
                 />

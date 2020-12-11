@@ -132,8 +132,6 @@ public class CpArticleVo implements Serializable {
                                                 .replace(":", "")
                                                 .replace(" ", ""));
 
-
-
         doReplaceInsertDataContent(sourceCode);
     }
     private void doReplaceInsertDataContent(String sourceCode) {
@@ -144,54 +142,55 @@ public class CpArticleVo implements Serializable {
                 .replaceAll("&gt;", ">")
                 .replaceAll("&quot;", "\"");
 
-        if (sourceCode.compareTo("c5") == 0) {
-            // 게임메가 예외처리.. <p>로 개행처리 하고있다.
-            this.content = this.content
-                    .replaceAll("\r", "")
-                    .replaceAll("\n", "")
-                    .replaceAll("(?i)</p><p", "</p><br /><p");
-        } else if (sourceCode.compareTo("d5") == 0) {
-            // 네이버에 나가는 동영상 아이프레임 태그 안쪽 & -> &amp;로 변환
-            final String findStart = "<iframe src=\"http://serviceapi.rmcnmv.naver.com/";
-            final String findEnd = "</iframe>";
+        switch (sourceCode) {
+            case "c5":
+                // 게임메가 예외처리.. <p>로 개행처리 하고있다.
+                this.content = this.content
+                        .replaceAll("\r", "")
+                        .replaceAll("\n", "")
+                        .replaceAll("(?i)</p><p", "</p><br /><p");
+                break;
+            case "d5":
+                // 네이버에 나가는 동영상 아이프레임 태그 안쪽 & -> &amp;로 변환
+                final String findStart = "<iframe src=\"http://serviceapi.rmcnmv.naver.com/";
+                final String findEnd = "</iframe>";
 
-            int findPos = this.content.length();
-            do {
-                final int startPos = this.content.lastIndexOf(findStart, findPos);
-                if (startPos == -1) {
-                    break;
-                }
-                final int endPos = this.content.indexOf(findEnd, startPos + 1);
-                if (endPos == -1) {
-                    break;
-                }
+                int findPos = this.content.length();
+                do {
+                    final int startPos = this.content.lastIndexOf(findStart, findPos);
+                    if (startPos == -1) {
+                        break;
+                    }
+                    final int endPos = this.content.indexOf(findEnd, startPos + 1);
+                    if (endPos == -1) {
+                        break;
+                    }
+                    this.content = this.content.substring(0, startPos).concat(this.content.substring(startPos).replace("&", "&amp;"));
+                    findPos = startPos - 1;
+                } while (findPos > 0);
+                break;
+            case "g6":
                 this.content = this.content
-                        .substring(0, startPos)
-                        .concat(this.content
-                                .substring(startPos)
-                                .replace("&", "&amp;"));
-                findPos = startPos - 1;
-            } while (findPos > 0);
-        } else if (sourceCode.compareTo("g6") == 0) {
-            this.content = this.content
-                    .replaceAll("\r", "")
-                    .replaceAll("\n", "");
-        } else {
-            this.content = this.content.replaceAll("(?i)<br( *)(/*)>", "<br />");
-            if (this.content.contains("<br />")) {
-                this.content = this.content.replaceAll("\r\n", "");
-            } else {
-                this.content = this.content
-                        .replaceAll("\r\n", "<br />")
-                        .replaceAll("\r", "<br />")
-                        .replaceAll("\n", "<br />");
-            }
+                        .replaceAll("\r", "")
+                        .replaceAll("\n", "");
+                break;
+            default:
+                this.content = this.content.replaceAll("(?i)<br( *)(/*)>", "<br />");
+                if (this.content.contains("<br />")) {
+                    this.content = this.content.replaceAll("\r\n", "");
+                } else {
+                    this.content = this.content
+                            .replaceAll("\r\n", "<br />")
+                            .replaceAll("\r", "<br />")
+                            .replaceAll("\n", "<br />");
+                }
+                break;
         }
 
         //br을 캐리지리턴으로 변경한다.
         this.content = this.content.replaceAll("(?i)<br( *)(/*)>", "\r\n");
 
-        if (sourceCode.compareTo("c5") == 0) {
+        if (sourceCode.equals("c5")) {
             // 부동산
             this.content = this.content
                     .replaceAll("(?i)<br /><br />", "<br />")
@@ -221,7 +220,7 @@ public class CpArticleVo implements Serializable {
         }
 
         // 카피라잇 붙이기
-        if (sourceCode.compareTo("7") == 0) {
+        if (sourceCode.equals("7")) {
             this.content = this.content.concat("\r\n\r\n<저작권자(c)중앙일보조인스랜드. 무단전제-재배포금지.>");
         } else {
             if( !McpString.isNullOrEmpty(this.copyright) ) {

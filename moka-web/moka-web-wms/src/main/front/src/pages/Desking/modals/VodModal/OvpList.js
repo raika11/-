@@ -6,11 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { initialState, getOvpList, GET_OVP_LIST } from '@store/bright';
 import { MokaLoader, MokaTable, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
+import OvpOptionRenderer from './OvpOptionRenderer';
 import columnDefs from './OvpListColumns';
 
 moment.locale('ko');
 
-const OvpList = ({ show }) => {
+const OvpList = ({ show, videoId, options }) => {
     const dispatch = useDispatch();
 
     const { loading, ovpList } = useSelector((store) => ({
@@ -49,9 +50,11 @@ const OvpList = ({ show }) => {
                 ...ovp,
                 stateText: ovp.state === 'ACTIVE' ? '정상' : '대기',
                 regDt: moment(ovp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD\nLTS'),
+                videoId,
+                options,
             })),
         );
-    }, [ovpList]);
+    }, [options, ovpList, videoId]);
 
     return (
         <div className="positive-relative px-3">
@@ -64,7 +67,14 @@ const OvpList = ({ show }) => {
                 </Form.Row>
             </Form>
 
-            <MokaTable agGridHeight={366} onRowNodeId={(data) => data.id} columnDefs={columnDefs} rowData={rowData} paging={false} />
+            <MokaTable
+                agGridHeight={378}
+                onRowNodeId={(data) => data.id}
+                columnDefs={columnDefs}
+                rowData={rowData}
+                paging={false}
+                frameworkComponents={{ optionRenderer: OvpOptionRenderer }}
+            />
             {loading && <MokaLoader />}
         </div>
     );

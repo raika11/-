@@ -33,6 +33,7 @@ import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.service.DeskingService;
+import jmnet.moka.core.tps.mvc.desking.service.NaverService;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
@@ -64,10 +65,14 @@ public class DeskingRestController extends AbstractCommonController {
 
     private final UploadFileHelper uploadFileHelper;
 
-    public DeskingRestController(DeskingService deskingService, AreaService areaService, UploadFileHelper uploadFileHelper) {
+    private final NaverService naverService;
+
+    public DeskingRestController(DeskingService deskingService, AreaService areaService, UploadFileHelper uploadFileHelper,
+            NaverService naverService) {
         this.deskingService = deskingService;
         this.areaService = areaService;
         this.uploadFileHelper = uploadFileHelper;
+        this.naverService = naverService;
     }
 
     /**
@@ -894,6 +899,25 @@ public class DeskingRestController extends AbstractCommonController {
             log.error("[FAIL TO IMPORT DESKING HIST ]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO IMPORT DESKING HIST]", e, true);
             throw new Exception(msg("tps.deskinghist.error.work.update"), e);
+        }
+    }
+
+    @ApiOperation("네이버 스탠드 파일 생성")
+    @PutMapping("/naver-stand/{componentSeq}")
+    public ResponseEntity<?> postNaverStand(
+            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq, Principal principal)
+            throws NoDataException, Exception {
+        try {
+
+            naverService.send(componentSeq);
+            // 리턴값 설정
+            //            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, msg("tps.desking.success.naver-stand"));
+            //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            return null;
+        } catch (Exception e) {
+            log.error("[FAIL TO IMPORT DESKING HIST ]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO IMPORT DESKING HIST]", e, true);
+            throw new Exception(msg("tps.desking.error.naver-stand"), e);
         }
     }
 

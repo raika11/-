@@ -70,6 +70,8 @@ public abstract class Task<T> extends TaskBase {
         return String.format("[%s]-[%s]", getParentGroup().getName(), getName());
     }
 
+    protected boolean canLoadTask() { return true; }
+
     protected abstract boolean doVerifyData(T taskInputData);
 
     protected abstract void doProcess(T taskInputData)
@@ -88,32 +90,34 @@ public abstract class Task<T> extends TaskBase {
                 .isInterrupted() && !isEnd()) {
             while (!isPause() && !isEnd()) {
                 try {
-                    TaskInputData taskInputData = taskInput.getTaskInputData();
-                    if (taskInputData != null) {
-                        if (doVerifyData((T) taskInputData)) {
-                            int retryCount = this.retryCount;
-                            do {
-                                try {
-                                    doProcess((T) taskInputData);
-                                    break;
-                                } catch (RcvDataAccessException e) {
-                                    taskInputData.logError("Database Exception {}", e);
-                                }
+                    if( canLoadTask() ) {
+                        TaskInputData taskInputData = taskInput.getTaskInputData();
+                        if (taskInputData != null) {
+                            if (doVerifyData((T) taskInputData)) {
+                                int retryCount = this.retryCount;
+                                do {
+                                    try {
+                                        doProcess((T) taskInputData);
+                                        break;
+                                    } catch (Exception e) {
+                                        taskInputData.logError("Exception {}", e);
+                                    }
 
-                                if (--retryCount > 0) {
-                                    taskInputData.logError("Database Exception retry {} ", this.retryCount - retryCount + 1);
-                                    //noinspection BusyWait
-                                    Thread.sleep(1000);
-                                }
-                            } while (retryCount > 0);
-                        }
-                        try {
-                            doAfterProcess((T) taskInputData);
-                        } catch (RcvDataAccessException e) {
-                            taskInputData.logError("doAfterProcess Database Exception {}", e);
-                        }
-                        if (taskInputData.isSuccess()) {
-                            continue;
+                                    if (--retryCount > 0) {
+                                        taskInputData.logError("Exception retry {} ", this.retryCount - retryCount + 1);
+                                        //noinspection BusyWait
+                                        Thread.sleep(1000);
+                                    }
+                                } while (retryCount > 0);
+                            }
+                            try {
+                                doAfterProcess((T) taskInputData);
+                            } catch (Exception e) {
+                                taskInputData.logError("doAfterProcess Database Exception {}", e);
+                            }
+                            if (taskInputData.isSuccess()) {
+                                continue;
+                            }
                         }
                     }
                 } catch (Exception e) {

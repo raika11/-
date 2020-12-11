@@ -54,7 +54,7 @@ public class ArticlePropVo implements Serializable {
     private String breakingNews;
 
     @XmlElement(name = "breaking_news_count")
-    private int breakingNewsCount;
+    private Integer breakingNewsCount;
 
     @XmlElement(name = "on_the_scene_reporting")
     private String onTheSceneReporting;

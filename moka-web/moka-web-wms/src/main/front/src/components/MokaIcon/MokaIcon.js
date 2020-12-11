@@ -51,6 +51,8 @@ import {
     faSearchPlus as falSearchPlus,
     faEyeSlash as falEyeSlash,
     faExclamationTriangle as falExclamationTriangle,
+    faUser as falUser,
+    faLockAlt as falLockAlt,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -117,6 +119,8 @@ library.add(falSort);
 library.add(falSearchPlus);
 library.add(falEyeSlash);
 library.add(falExclamationTriangle);
+library.add(falUser);
+library.add(falLockAlt);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

@@ -28,13 +28,12 @@ export const tempColumnDefs = [
         headerName: '기사제목',
         headerClass: 'ag-grid-sns-meta-header',
         width: 120,
-        // flex: true,
         children: [
             {
                 headerName: 'SNS제목',
                 field: 'listTitle',
                 headerClass: 'ag-grid-sns-meta-header',
-                flex: true,
+                flex: 1,
                 cellRendererFramework: (params) => <ListTitleRenderer title={params.data.title} summary={params.data.summary} />,
                 cellStyle: { fontSize: '12px' },
             },

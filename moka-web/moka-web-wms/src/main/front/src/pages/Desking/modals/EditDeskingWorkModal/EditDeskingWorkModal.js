@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -106,14 +106,14 @@ const EditDeskingWorkModal = (props) => {
     /**
      * 닫기
      */
-    const handleHide = () => {
+    const handleHide = useCallback(() => {
         setTemp({});
         if (imgFileRef.current) {
             imgFileRef.current.deleteFile();
         }
         setError({});
         onHide();
-    };
+    }, [onHide]);
 
     /**
      * 대표 이미지 thumbName
@@ -154,6 +154,16 @@ const EditDeskingWorkModal = (props) => {
             !bulkCharRows ? dispatch(getBulkChar()) : setSpecialChar(bulkCharRows.find((char) => char.dtlCd === 'bulkChar').cdNm);
         }
     }, [bulkCharRows, dispatch, show]);
+
+    useEffect(() => {
+        return () => {
+            setTemp({});
+            if (imgFileRef.current) {
+                imgFileRef.current.deleteFile();
+            }
+            setError({});
+        };
+    }, []);
 
     return (
         <>
@@ -210,7 +220,7 @@ const EditDeskingWorkModal = (props) => {
                                         <MokaInputLabel as="none" label="대표\n이미지" labelWidth={80} labelClassName="ft-12 pr-3" className="mb-0" />
                                         <MokaImage img={temp.irImg} width={216} height={150} />
                                     </div>
-                                    <div className="mt-2 d-flex justify-content-between" style={{ width: 216, marginLeft: 80 }}>
+                                    <div className="mt-2 d-flex justify-content-between" style={{ width: 216, marginLeft: 92 }}>
                                         <Button variant="positive" size="sm" onClick={() => setShowModal(true)}>
                                             신규등록
                                         </Button>

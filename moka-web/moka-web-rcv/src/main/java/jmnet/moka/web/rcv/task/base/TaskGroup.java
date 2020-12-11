@@ -100,9 +100,7 @@ public class TaskGroup {
         final boolean isIdNull = McpString.isNullOrEmpty(id);
         for (Task<?> task : this.tasks) {
             if (!isIdNull) {
-                if (Long
-                        .toString(task.getThreadId())
-                        .compareTo(id) != 0) {
+                if (!Long.toString(task.getThreadId()).equals(id)) {
                     continue;
                 }
             }

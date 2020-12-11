@@ -8,8 +8,8 @@ import util from '@utils/commonUtil';
  * @param {object} params ag grid params
  */
 const MokaTableImageRenderer = forwardRef((params, ref) => {
-    const { data: initialData } = params;
-    const field = params.colDef.field;
+    const { data: initialData, colDef } = params;
+    const [field] = useState(colDef.field);
     const [data, setData] = useState(initialData);
 
     const boxRef = useRef(null);

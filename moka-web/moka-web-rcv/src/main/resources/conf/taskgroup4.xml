@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <TaskGroup>
+  <Task class="jmnet.moka.web.rcv.task.rcvartreg.RcvArtRegTask"
+    name="수신기사 -> 등록기사 IUD"
+    intervalTime="10s">
+  </Task>
 
+  <Task class="jmnet.moka.web.rcv.task.calljamapi.CallJamApiTask"
+    name="Jam 기사 수신 History Send by JamApi"
+    intervalTime="10s">
+  </Task>
+
+  <Task class="jmnet.moka.web.rcv.task.artafteriud.ArtAfterIudTask"
+    name="등록기사 After Iud"
+    intervalTime="10s">
+  </Task>
 </TaskGroup>

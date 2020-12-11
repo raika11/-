@@ -12,9 +12,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading }) => {
     const history = useHistory();
 
     const handleClickListRow = ({ id }) => {
-        console.log(`/sns-meta/${id}`);
         history.push(`/sns-meta/${id}`);
-        console.log('handleClickListRow');
     };
 
     const handleChangeSearchOption = (option) => {
@@ -46,6 +44,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading }) => {
                 selected={(data) => {
                     console.log(data);
                 }}
+                preventRowClickCell={['insStatus', 'sendType']}
                 className="sns-meta-ag-grid"
             />
         </>

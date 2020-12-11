@@ -78,20 +78,20 @@ export default handleActions(
         // 리스트 초기화.
         [CLEAR_BULKS_LIST]: (state) => {
             return produce(state, (draft) => {
-                draft.bulkn.bulks_list = initialState.list;
-                draft.bulkn.bulksError = initialState.bulksError;
-                draft.bulkn.invalidList = initialState.invalidList;
+                draft.bulkn.bulks_list = initialState.bulkn.list;
+                draft.bulkn.bulksError = initialState.bulkn.bulksError;
+                draft.bulkn.invalidList = initialState.bulkn.invalidList;
             });
         },
         [CLEAR_BULKS_ARTICLE]: (state) => {
             return produce(state, (draft) => {
-                draft.bulkn.bulkArticle = initialState.bulkArticle;
+                draft.bulkn.bulkArticle = initialState.bulkn.bulkArticle;
             });
         },
         // 리스트 조회 성공.
         [GET_BULK_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.bulkn.error = initialState.error;
+                draft.bulkn.error = initialState.bulkn.error;
                 draft.bulkn.list = body.list;
                 draft.bulkn.total = body.totalCnt;
             });
@@ -100,14 +100,14 @@ export default handleActions(
         [GET_BULK_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.bulkn.error = payload;
-                draft.bulkn.list = initialState.list;
-                draft.bulkn.total = initialState.total;
+                draft.bulkn.list = initialState.bulkn.list;
+                draft.bulkn.total = initialState.bulkn.total;
             });
         },
         // 약물 가지고 오기 성공.
         [GET_SPECIALCHAR_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.bulkn.error = initialState.error;
+                draft.bulkn.error = initialState.bulkn.error;
                 draft.bulkn.specialchar = body;
             });
         },
@@ -115,13 +115,13 @@ export default handleActions(
         [GET_SPECIALCHAR_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.bulkn.error = payload;
-                draft.bulkn.specialchar = initialState.specialchar;
+                draft.bulkn.specialchar = initialState.bulkn.specialchar;
             });
         },
         // Copyright 가지고 오기 성공.
         [GET_COPYRIGHT_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.bulkn.error = initialState.error;
+                draft.bulkn.error = initialState.bulkn.error;
                 draft.bulkn.copyright = body;
             });
         },
@@ -129,7 +129,7 @@ export default handleActions(
         [GET_COPYRIGHT_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.bulkn.error = payload;
-                draft.bulkn.copyright = initialState.copyright;
+                draft.bulkn.copyright = initialState.bulkn.copyright;
             });
         },
 
@@ -151,7 +151,7 @@ export default handleActions(
         [GET_BULK_ARTICLE_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.bulkn.bulkArticle = body;
-                draft.bulkn.bulksError = initialState.bulksError;
+                draft.bulkn.bulksError = initialState.bulkn.bulksError;
             });
         },
         // 문구 상세 정보 가기고 오기 실패.

@@ -55,7 +55,7 @@ public class GroupWareMemberRestController extends AbstractCommonController {
             throws MokaException {
         try {
             GroupWareUserInfo groupWareUserInfo = groupWareAuthClient.getUserInfo(groupWareUserId);
-
+            groupWareUserInfo.setUserId(groupWareUserId);
             tpsLogger.success(ActionType.SELECT);
 
             ResultDTO<GroupWareUserInfo> resultDto = new ResultDTO<>(groupWareUserInfo);

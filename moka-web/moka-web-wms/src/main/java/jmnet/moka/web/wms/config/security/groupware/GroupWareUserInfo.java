@@ -2,7 +2,9 @@ package jmnet.moka.web.wms.config.security.groupware;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -19,6 +21,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupWareUserInfo {
+
+    @Getter
+    @Setter
+    private String userId;
 
     /**
      * 사용자명

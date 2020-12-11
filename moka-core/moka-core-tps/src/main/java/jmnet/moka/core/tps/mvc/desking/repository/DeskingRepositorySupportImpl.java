@@ -49,4 +49,22 @@ public class DeskingRepositorySupportImpl extends QuerydslRepositorySupport impl
 
         return query.fetch();
     }
+
+    @Override
+    public List<Desking> findByDatasetSeq(Long datasetSeq) {
+        QDesking desking = QDesking.desking;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        builder.and(desking.datasetSeq.eq(datasetSeq));
+        builder.and(desking.parentContentId.isNull());
+
+        JPQLQuery<Desking> query = queryFactory
+                .selectFrom(desking)
+                .fetchJoin()
+                .where(builder)
+                .orderBy(desking.contentOrd.asc());
+
+        return query.fetch();
+    }
 }

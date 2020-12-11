@@ -1,5 +1,7 @@
 package jmnet.moka.core.tps.mvc.desking.controller;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.common.rest.RestTemplateHelper;
+import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
@@ -36,11 +40,13 @@ import jmnet.moka.core.tps.mvc.desking.service.DeskingService;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
-import jmnet.moka.core.tps.mvc.naver.service.NaverService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,14 +71,15 @@ public class DeskingRestController extends AbstractCommonController {
 
     private final UploadFileHelper uploadFileHelper;
 
-    private final NaverService naverService;
+    @Autowired
+    private RestTemplateHelper restTemplateHelper;
 
     public DeskingRestController(DeskingService deskingService, AreaService areaService, UploadFileHelper uploadFileHelper,
-            NaverService naverService) {
+            RestTemplateHelper restTemplateHelper) {
         this.deskingService = deskingService;
         this.areaService = areaService;
         this.uploadFileHelper = uploadFileHelper;
-        this.naverService = naverService;
+        this.restTemplateHelper = restTemplateHelper;
     }
 
     /**
@@ -197,7 +204,7 @@ public class DeskingRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 전송")
     @PostMapping("/components/publish/{componentWorkSeq}")
-    public ResponseEntity<?> postPublishComponentWork(
+    public ResponseEntity<?> postPublishComponentWork(HttpServletRequest request,
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
             @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq, Principal principal)
             throws Exception {
@@ -209,23 +216,50 @@ public class DeskingRestController extends AbstractCommonController {
             // 컴포넌트 저장, 편집기사 저장
             deskingService.publish(returnValue, principal.getName());
 
+            String message = msg("tps.desking.success.publish");
+
             // 편집영역에 after api있을경우 실행
             Area area = areaService
                     .findAreaBySeq(areaSeq)
                     .orElseThrow(() -> {
-                        String message = msg("tps.common.error.no-data");
-                        tpsLogger.fail(message, true);
-                        return new NoDataException(message);
+                        String messageArea = msg("tps.common.error.no-data");
+                        tpsLogger.fail(messageArea, true);
+                        return new NoDataException(messageArea);
                     });
-            if (McpString.isNotEmpty(area.getAfterApi())) {
-
+            String afterApi = area.getAfterApi();
+            if (McpString.isNotEmpty(afterApi)) {
+                String token = request.getHeader(MokaConstants.AUTHORIZATION);
+                MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+                headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
+                headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
+                headers.add(MokaConstants.AUTHORIZATION, token);
+                ResponseEntity<String> responseEntity = restTemplateHelper.get(afterApi, null, headers);
+                if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                    // localhost로 호출한 경우
+                    if (afterApi.contains("localhost")) {
+                        String response = responseEntity.getBody();
+                        ResultDTO<Boolean> map = ResourceMapper
+                                .getDefaultObjectMapper()
+                                .readValue(response, new TypeReference<ResultDTO<Boolean>>() {
+                                });
+                        message = map
+                                .getHeader()
+                                .getMessage();
+                    }
+                } else {
+                    message = msg("tps.desking.error.after-api");
+                    log.warn(message);
+                }
             }
 
             // work를 그대로 리턴
-            String message = msg("tps.desking.success.publish");
             ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, message);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
+        } catch (JsonParseException je) {
+            log.error("[SENT IT, BUT THERE WAS AN ERROR IN PARSING THE RESPONSE DATA.]", je);
+            tpsLogger.error(ActionType.SELECT, "[SENT IT, BUT THERE WAS AN ERROR IN PARSING THE RESPONSE DATA.]", je, true);
+            throw new Exception(msg("tps.desking.error.after-api"), je);
         } catch (Exception e) {
             log.error("[FAIL TO PUBLISH DESKING]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO PUBLISH DESKING]", e, true);

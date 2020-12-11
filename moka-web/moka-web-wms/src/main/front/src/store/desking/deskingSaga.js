@@ -378,7 +378,7 @@ const postPublishComponentWork = createDeskingRequestSaga(act.POST_PUBLISH_COMPO
  * 컴포넌트 워크 임시저장 + 전송
  */
 function* postSavePublishComponentWork({ payload }) {
-    const { componentWorkSeq, callback } = payload;
+    const { componentWorkSeq, areaSeq, callback } = payload;
     const ACTION = act.POST_SAVE_PUBLISH_COMPONENT_WORK;
     let callbackData;
 
@@ -387,7 +387,7 @@ function* postSavePublishComponentWork({ payload }) {
         const saveResponse = yield call(api.postSaveComponentWork, { componentWorkSeq });
 
         if (saveResponse.data.header.success) {
-            const publishResponse = yield call(api.postPublishComponentWork, { componentWorkSeq });
+            const publishResponse = yield call(api.postPublishComponentWork, { componentWorkSeq, areaSeq });
             callbackData = publishResponse.data;
 
             if (publishResponse.data.header.success) {

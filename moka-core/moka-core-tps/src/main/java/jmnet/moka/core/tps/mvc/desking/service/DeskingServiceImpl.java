@@ -145,7 +145,7 @@ public class DeskingServiceImpl implements DeskingService {
         // 컴포넌트에 관련기사정보 연결
         if (search
                 .getReturnValue()
-                .intValue() > 0) {
+                .intValue() > 0 && listMap.size() >= 2) {
 
             List<ComponentWorkVO> componentList = modelMapper.map(listMap.get(0), ComponentWorkVO.TYPE);
             List<DeskingWorkVO> deskingAllList = modelMapper.map(listMap.get(1), DeskingWorkVO.TYPE);
@@ -1064,6 +1064,11 @@ public class DeskingServiceImpl implements DeskingService {
                 throw new Exception("Failed to insert DESKING WORK error code: " + returnValue);
             }
         }
+    }
+
+    @Override
+    public List<Desking> findByDatasetSeq(Long datasetSeq) {
+        return deskingRepository.findByDatasetSeq(datasetSeq);
     }
 }
 

@@ -4,6 +4,9 @@
 
 package jmnet.moka.core.tps.mvc.naver.service;
 
+import javax.xml.stream.XMLStreamException;
+import jmnet.moka.core.tps.exception.NoDataException;
+
 /**
  * Description: 설명
  *
@@ -18,5 +21,6 @@ public interface NaverService {
      * @param source
      * @param areaSeq
      */
-    void publishNewsStand(String source, Long areaSeq);
+    void publishNaverStand(String source, Long areaSeq)
+            throws NoDataException, XMLStreamException;
 }

@@ -41,4 +41,5 @@ public interface DeskingRepository extends JpaRepository<Desking, Long>, Desking
     @Modifying
     public void deleteByDatasetSeq(Long datasetSeq);
 
+
 }

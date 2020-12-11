@@ -15,6 +15,7 @@ import jmnet.moka.core.tps.mvc.desking.dto.DeskingOrdDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
+import jmnet.moka.core.tps.mvc.desking.entity.Desking;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
@@ -389,4 +390,12 @@ public interface DeskingService {
      */
     void importDeskingWorkHistory(Long componentWorkSeq, Long componentHistSeq, String regId)
             throws Exception;
+
+    /**
+     * 데이타셋에 해당하는 기사목록 조회(주기사만 조회)
+     *
+     * @param datasetSeq 데이타셋Seq
+     * @return
+     */
+    List<Desking> findByDatasetSeq(Long datasetSeq);
 }

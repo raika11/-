@@ -60,7 +60,7 @@ const BulknListSearchBox = (props) => {
             <Form>
                 <Form.Row className="mb-3">
                     <Col xs={1} className="d-flex justify-content-center align-items-center">
-                        <MokaInputLabel label="기간" labelWidth={50} as="none" value="tempvalue1" className="m-0 pr-3" name="tag" />
+                        <MokaInputLabel label="기간" labelWidth={50} as="none" value="tempvalue1" className="m-0 pr-3" name="tag" labelClassName="text-center" />
                     </Col>
                     <Col xs={3} className="d-flex justify-content-center align-items-center">
                         <MokaInput

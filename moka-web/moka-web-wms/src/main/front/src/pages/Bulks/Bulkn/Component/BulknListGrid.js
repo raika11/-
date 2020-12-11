@@ -68,7 +68,7 @@ const BulknListGrid = () => {
                 agGridHeight={650}
                 columnDefs={ColumnDefs}
                 rowData={rowData}
-                rowHeight={65}
+                rowHeight={40}
                 onRowNodeId={(data) => data.bulkartSeq}
                 onRowClicked={handleClickListRow}
                 loading={loading}

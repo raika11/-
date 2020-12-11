@@ -136,7 +136,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             // home, react 소스, 미리보기, 템플릿 이미지 허용
             .antMatchers("/", TpsConstants.HEALTH_PAGE, "/preview/**", "/image/template/**", "/" + urlPathPrefix + "/**", "/swagger-ui.html",
-                    "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login")
+                    "/swagger-resources/**", "/v2/api-docs", "/api/user/test-login", "/api/group-ware/**")
             .permitAll()
             // react 서버렌더링 허용
             .antMatchers(reactRoutes)

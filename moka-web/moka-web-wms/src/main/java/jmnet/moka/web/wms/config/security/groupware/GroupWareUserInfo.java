@@ -2,9 +2,7 @@ package jmnet.moka.web.wms.config.security.groupware;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * <pre>
@@ -20,31 +18,125 @@ import lombok.Setter;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class GroupWareUserInfo {
 
-    @JsonProperty("NAME")
+    /**
+     * 사용자명
+     */
     private String userName;
 
-    @JsonProperty("DN_NAME")
+    /**
+     * 회사명
+     */
     private String compnayName;
 
-    @JsonProperty("GR_NAME")
+    /**
+     * 그룹명
+     */
     private String groupName;
 
-    @JsonProperty("PHONE")
+    /**
+     * 전번
+     */
     private String phone;
 
-    @JsonProperty("MOBILE")
+    /**
+     * 모바일폰
+     */
     private String mobile;
 
-    @JsonProperty("PO_NAME")
+    /**
+     * 직책
+     */
     private String positionName;
 
-    @JsonProperty("TI_NAME")
+    /**
+     * 팀명
+     */
     private String teamName;
 
-    @JsonProperty("MAILID")
+    /**
+     * 이메일
+     */
     private String email;
+
+    @JsonProperty("userName")
+    public String getUserName() {
+        return userName;
+    }
+
+    @JsonProperty("NAME")
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @JsonProperty("compnayName")
+    public String getCompnayName() {
+        return compnayName;
+    }
+
+    @JsonProperty("DN_NAME")
+    public void setCompnayName(String compnayName) {
+        this.compnayName = compnayName;
+    }
+
+    @JsonProperty("groupName")
+    public String getGroupName() {
+        return groupName;
+    }
+
+    @JsonProperty("GR_NAME")
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    @JsonProperty("phone")
+    public String getPhone() {
+        return phone;
+    }
+
+    @JsonProperty("PHONE")
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @JsonProperty("mobile")
+    public String getMobile() {
+        return mobile;
+    }
+
+    @JsonProperty("MOBILE")
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    @JsonProperty("positionName")
+    public String getPositionName() {
+        return positionName;
+    }
+
+    @JsonProperty("PO_NAME")
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
+    }
+
+    @JsonProperty("teamName")
+    public String getTeamName() {
+        return teamName;
+    }
+
+    @JsonProperty("TI_NAME")
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    @JsonProperty("email")
+    public String getEmail() {
+        return email;
+    }
+
+    @JsonProperty("MAILID")
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

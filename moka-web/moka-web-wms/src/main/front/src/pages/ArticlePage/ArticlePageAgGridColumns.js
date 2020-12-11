@@ -12,7 +12,7 @@ export default [
         headerName: '기사페이지명',
         field: 'artPageName',
         width: 160,
-        flex: true,
+        flex: 1,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'artPageName',
     },

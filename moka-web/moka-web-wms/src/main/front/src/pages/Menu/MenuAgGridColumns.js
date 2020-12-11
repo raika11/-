@@ -14,7 +14,7 @@ export const columnDefs = [
         headerName: '메뉴명',
         field: 'menuDisplayNm',
         width: 140,
-        flex: true,
+        flex: 1,
     },
     {
         headerName: '',

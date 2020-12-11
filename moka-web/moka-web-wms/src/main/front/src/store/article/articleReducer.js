@@ -30,7 +30,7 @@ export const initialState = {
         { id: 'artReporter', name: '기자명' },
     ],
     invalidList: [],
-    sourceList: [],
+    sourceList: null,
 };
 
 export default handleActions(

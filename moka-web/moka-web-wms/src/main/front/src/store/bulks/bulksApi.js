@@ -51,7 +51,7 @@ export const saveBulkArticle = ({ PostData: { parameter, validList } }) => {
 
 // 벌크 상태값 변경.
 export const putChangeBulkused = ({ bulkartSeq, parameter }) => {
-    return instance.put(`api/bulks/${bulkartSeq}/used?${qs.stringify(parameter)}`).catch((err) => {
+    return instance.put(`/api/bulks/${bulkartSeq}/used?${qs.stringify(parameter)}`).catch((err) => {
         throw err;
     });
 };

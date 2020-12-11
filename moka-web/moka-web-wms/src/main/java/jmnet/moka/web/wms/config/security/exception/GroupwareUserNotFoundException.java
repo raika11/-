@@ -13,6 +13,7 @@ package jmnet.moka.web.wms.config.security.exception;
  * @since 2020-11-04 13:31
  */
 public class GroupwareUserNotFoundException extends AbstractAuthenticationException {
+    
     public GroupwareUserNotFoundException(String msg) {
         super(UnauthrizedErrorCode.GROUPWARE_NOTFOUND, msg);
     }

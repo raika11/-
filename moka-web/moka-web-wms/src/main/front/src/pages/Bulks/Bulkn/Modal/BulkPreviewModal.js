@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
-import { MokaModal, MokaCardTabs } from '@components';
+import { MokaModal, MokaCardTabs, MokaInput } from '@components';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { hidePreviewModal, getCopyright } from '@store/bulks';
-
-// 미리보기 창에 css 가 없기 때문에 링크 타이틀에 색이 보여서 미리보기 창에만 사용할 css 를 추가 했습니다.
-// 공통 css 를 수정 해야 하고 모달 창에만 사용할 꺼라서 css 를 추가 했습니다.
-// 이방법이 안좋으면 공통 css 에 추가해 주세요.
-// import './BulkPreviewModal.css';
 
 const propTypes = {
     control: PropTypes.object,
@@ -46,44 +41,34 @@ const BulkPreviewModal = () => {
         dispatch(hidePreviewModal()); // 모달 스토어 초기화.
     };
 
-    // 모달 상태가 true 로 변경되면 store 에 bulkarticle 를 가지고와서 상태 변경 처리.
-
     /*
     * 링크 css.
-    a, a:hover, a:focus, a:active {
-        text-decoration: none;
-        color: inherit;
-    }
+    * html 미리보기에서 공통 css 가 먹혀서 테스트 했던 css 입니다.
+        a, a:hover, a:focus, a:active {
+            text-decoration: none;
+            color: inherit;
+        }
     */
 
     useEffect(() => {
         const initPrivewString = (bulkArticle) => {
-            // 미리 보기 창에 보여줄 html 파싱 처리.
+            // 미리 보기 창에 보여줄 html 처리.
             const tempHtmlString = `
             ${bulkArticle
                 .filter((e) => e.url.length > 0)
                 .map(function (e) {
                     return `▶ <a href="${e.url}" target="_joins_nw">${e.title}</a>`;
                 })
-                .join(`<br >`)}<br><br>
-                ${copyright.cdNm}
+                .join(`<br >`)}<br><br>${copyright.cdNm}
             `;
 
-            // 미리 보기 창에 보여줄 xml 파싱 처리.
-            const tempXmlString = `
-            <copyright>
-            <![CDATA[
-                ${bulkArticle
-                    .filter((e) => e.url.length > 0)
-                    .map(function (e) {
-                        return `▶️ <a href="${e.url}" target="_joins_nw">${e.title}</a>`;
-                    })
-                    .join(``)}
-                <br/>
-                ${copyright.cdNm}
-            ]]>
-            </copyright>
-            `;
+            // 미리 보기 창에 보여줄 xml 처리.
+            const tempXmlString = `<copyright><![CDATA[${bulkArticle
+                .filter((e) => e.url.length > 0)
+                .map(function (e) {
+                    return `▶️ <a href="${e.url}" target="_joins_nw">${e.title}</a>`;
+                })
+                .join(``)}${copyright.cdNm}]]></copyright>`;
 
             // 스테이트 변경.
             setHtmlString(tempHtmlString);
@@ -103,6 +88,7 @@ const BulkPreviewModal = () => {
         }
     }, [previewModal.state]);
 
+    // 모달창 copyright 가져오기.
     useEffect(() => {
         dispatch(getCopyright());
     }, [dispatch]);
@@ -125,10 +111,8 @@ const BulkPreviewModal = () => {
                 );
             } else if (nav === '소스보기') {
                 return (
-                    <Col xs={12} className=" w-100 pt-4 d-sm-inline">
-                        <>
-                            <div>{xmlString}</div>
-                        </>
+                    <Col xs={12} className="pt-4">
+                        <MokaInput as={'textarea'} className="resize-none" value={xmlString} inputProps={{ plaintext: true, readOnly: true, rows: '7' }} />
                     </Col>
                 );
             }
@@ -144,10 +128,10 @@ const BulkPreviewModal = () => {
             size="xl"
             footerClassName="justify-content-center"
             width={700}
-            height={350}
+            height={400}
             draggable
         >
-            <MokaCardTabs width={840} className="w-100" onSelectNav={(idx) => setNavIdx(idx)} fill tabs={createTabs()} tabNavs={tabNavs} height={180} />
+            <MokaCardTabs width={840} className="w-100" onSelectNav={(idx) => setNavIdx(idx)} fill tabs={createTabs()} tabNavs={tabNavs} height={250} />
             <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
                 <div className="d-flex justify-content-center">
                     <Button variant="negative" className="mr-05" onClick={hidePreviewModel}>

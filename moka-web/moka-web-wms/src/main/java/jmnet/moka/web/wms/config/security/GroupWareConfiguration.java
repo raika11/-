@@ -1,10 +1,13 @@
 package jmnet.moka.web.wms.config.security;
 
+import java.time.Duration;
 import jmnet.moka.web.wms.config.security.groupware.SoapWebServiceGatewaySupport;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.ws.transport.WebServiceMessageSender;
+import org.springframework.ws.transport.http.HttpUrlConnectionMessageSender;
 
 /**
  * <pre>
@@ -21,8 +24,18 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 @Configuration
 public class GroupWareConfiguration {
 
-    @Value("${groupware.service-id}")
+    @Value("${groupware.service.id}")
     private String serviceId;
+
+    @Value("${groupware.service.url}")
+    private String serviceUrl;
+
+    @Value("${groupware.connection-timeout:5000}")
+    private int connectionTimeout;
+
+    @Value("${groupware.read-timeout:12000}")
+    private int readTimeout;
+
 
     @Bean
     public Jaxb2Marshaller marshaller() {
@@ -34,9 +47,16 @@ public class GroupWareConfiguration {
     @Bean
     public SoapWebServiceGatewaySupport groupWareAuthClient(Jaxb2Marshaller marshaller) {
         SoapWebServiceGatewaySupport client = new SoapWebServiceGatewaySupport(serviceId);
-        client.setDefaultUri("https://ep.joins.net/webSite/mobile/controls/MobileWebServiceExternal_JBO.asmx");
+        client.setDefaultUri(serviceUrl);
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
+        if (client.getMessageSenders() != null) {
+
+            for (WebServiceMessageSender messageSender : client.getMessageSenders()) {
+                ((HttpUrlConnectionMessageSender) messageSender).setConnectionTimeout(Duration.ofMillis(connectionTimeout));
+                ((HttpUrlConnectionMessageSender) messageSender).setReadTimeout(Duration.ofMillis(readTimeout));
+            }
+        }
         return client;
     }
 

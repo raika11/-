@@ -1,6 +1,6 @@
 package jmnet.moka.web.wms.groupware;
 
-import jmnet.moka.core.common.exception.MokaException;
+import jmnet.moka.web.wms.config.security.exception.GroupWareException;
 import jmnet.moka.web.wms.config.security.groupware.SoapWebServiceGatewaySupport;
 import jmnet.moka.web.wms.config.security.groupware.webservice.SetReAuthenticationNumberJBOResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class GroupWareTest {
 
     @Test
     public void longAccessToken()
-            throws MokaException {
+            throws GroupWareException {
 
         SetReAuthenticationNumberJBOResponse authNumber = groupWareAuthClient.getAuthNumber("kweon.hyukjoo");
 

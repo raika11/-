@@ -17,10 +17,6 @@ const defaultProps = {};
 var checkTextLength = function (str) {
     var len = 0;
     for (var i = 0; i < str.length; i++) {
-        // 글자가 한글일 경우는 2자로 처리 해야 하는 경우.
-        // if (escape(str.charAt(i)).length === 6) {
-        //     len++;
-        // }
         len++;
     }
     return len;
@@ -38,7 +34,7 @@ const BulknEdit = (props) => {
     }));
 
     const dispatch = useDispatch();
-    const checkBulkSeqNumber = useRef(0);
+    const checkBulkSeqNumber = useRef();
     const [modalMShow, setModalMShow] = useState(false);
     const [editState, setEditState] = useState(true); // edit 상태 true 일일때 input 상태가 disable.
     const [bulkArticleRow, setBulkArticleRow] = useState(rowInit); // 선택된 벌크 기사들.
@@ -48,7 +44,7 @@ const BulknEdit = (props) => {
         setModalMShow(true);
     };
 
-    // 모달창에 문구들과 상태값 전달.
+    // 모달창 스토어에 문구들과 상태값 전달.
     const handlePreviewModalButton = (e) => {
         dispatch(
             showPreviewModal({
@@ -64,18 +60,18 @@ const BulknEdit = (props) => {
 
         setBulkArticleRow(
             bulkArticleRow.map(function (element, element_index) {
-                let tempLength = element.title && element.title.length > 0 ? checkTextLength(element.title) : 0;
+                let titleLength = name === 'title' ? checkTextLength(value.replace(/^\s+|\s+$/g, '')) : checkTextLength(element.title.replace(/^\s+|\s+$/g, ''));
 
                 if (element_index === index) {
                     element = {
                         ...element,
                         [name]: value,
+                        title_length: titleLength,
                     };
                 }
 
                 return {
                     ...element,
-                    title_length: tempLength,
                 };
             }),
         );
@@ -86,13 +82,13 @@ const BulknEdit = (props) => {
         const changeEditState = (state) => {
             if (state === 'enable') {
                 setEditState(false);
-            } else if (state === 'clean') {
-                // enable 일때 다시 눌었을 경우. input 데이터 초기화.
+            } else if (state === 'clear') {
+                // clear 는 라우터 이동시 clear
+                setEditState(false);
             } else {
                 setEditState(true);
             }
         };
-
         changeEditState(props.EditState);
     }, [props.EditState]);
 
@@ -108,38 +104,49 @@ const BulknEdit = (props) => {
                 );
             };
 
-            if (typeof seq === 'string' && seq !== undefined) {
-                if (checkBulkSeqNumber.current !== seq) {
-                    checkBulkSeqNumber.current = seq;
-                    props.HandleEditEnable();
-                    getBulksData(seq);
-                }
-            } else {
-                setBulkArticleRow(rowInit); // seq 가 없거나 정상이 아닐때 리셋.
+            // seq 값이 현재랑 다르면 데이터 가지고 오기.
+            if (checkBulkSeqNumber.current !== seq) {
+                checkBulkSeqNumber.current = seq;
+                props.HandleEditEnable();
+                getBulksData(seq);
             }
         };
+        // 현재 에디트 상태 일때
+        if (checkBulkSeqNumber.current !== undefined && params.bulkartSeq === undefined) {
+            setBulkArticleRow(rowInit);
+            checkBulkSeqNumber.current = undefined;
+        } else {
+            getCheckGetBulks(params.bulkartSeq);
+        }
 
-        getCheckGetBulks(params.bulkartSeq);
+        // params 값이 변경 될때만 실행 되게.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
 
     // Redux Store 에서 벌크 기사가 변경이되면 State 에도 변경처리.
     useEffect(() => {
         const storeBulkArticleToState = (list) => {
-            setBulkArticleRow(
-                list.map(function (e) {
-                    let title_length = checkTextLength(e.title);
-                    return {
-                        ...e,
-                        title_length: title_length > 0 ? title_length : 0,
-                    };
-                }),
-            );
-        };
+            let tempList = rowInit.map(function (e, index) {
+                const t_title = list[index] ? list[index].title.replace(/^\s+|\s+$/g, '') : '';
+                const t_url = list[index] ? list[index].url.replace(/^\s+|\s+$/g, '') : '';
+                const title_length = checkTextLength(t_title);
 
+                return {
+                    ...e,
+                    title: t_title,
+                    url: t_url,
+                    title_length: title_length,
+                };
+            });
+
+            setBulkArticleRow(tempList);
+        };
         if (bulkArticle.totalCnt > 0) {
             storeBulkArticleToState(bulkArticle.list);
         }
+
+        // bulkArticle 값이 변경 될때만 실행 되게.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bulkArticle]);
 
     // 문구 저장.
@@ -154,14 +161,34 @@ const BulknEdit = (props) => {
 
     // 실제 저장 처리.
     const handleSaveBulkArticle = (type) => {
-        // 벨리데이션은 어떻게 할껀지?
-        const newSaveData = bulkArticleRow.map(function (element) {
+        let tempArray = { title: [], url: [] };
+
+        bulkArticleRow
+            .filter((e) => e.title || e.url)
+            .map((element) => {
+                if (element.title) tempArray.title.push(element.title);
+                if (element.url) tempArray.url.push(element.url);
+
+                return element;
+            });
+
+        if (tempArray.title.length === 0) {
+            messageBox.alert('문구가 없거나 형식에 맞지 않습니다.');
+            return;
+        }
+
+        if (tempArray.title.length !== tempArray.url.length) {
+            messageBox.alert('문구가 없거나 형식에 맞지 않습니다.');
+            return;
+        }
+
+        const newSaveData = tempArray.title.map(function (e, i) {
             return {
                 bulkartSeq: 0,
                 ordNo: 0,
-                title: element.title,
+                title: e,
                 totalId: 0,
-                url: element.url,
+                url: tempArray.url[i],
             };
         });
 

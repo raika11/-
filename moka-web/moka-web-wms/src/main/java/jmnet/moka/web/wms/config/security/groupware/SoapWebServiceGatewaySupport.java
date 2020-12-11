@@ -1,10 +1,12 @@
 package jmnet.moka.web.wms.config.security.groupware;
 
+import java.io.IOException;
 import java.util.Map;
 import jmnet.moka.common.utils.BeanConverter;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.web.wms.config.security.exception.GroupwareUserNotFoundException;
+import jmnet.moka.web.wms.config.security.exception.GroupWareException;
+import jmnet.moka.web.wms.config.security.exception.UnauthrizedErrorCode;
 import jmnet.moka.web.wms.config.security.groupware.webservice.GetUserInfoWSJBO;
 import jmnet.moka.web.wms.config.security.groupware.webservice.GetUserInfoWSJBOResponse;
 import jmnet.moka.web.wms.config.security.groupware.webservice.SetReAuthenticationNumberJBO;
@@ -30,13 +32,16 @@ public class SoapWebServiceGatewaySupport extends WebServiceGatewaySupport {
 
     private String serviceId;
 
+    private final String errorCode = "Error";
+
     public SoapWebServiceGatewaySupport(String serviceId) {
         this.serviceId = serviceId;
     }
 
 
 
-    public SetReAuthenticationNumberJBOResponse getAuthNumber(String userId) {
+    public SetReAuthenticationNumberJBOResponse getAuthNumber(String userId)
+            throws GroupWareException {
 
         SetReAuthenticationNumberJBO request = new SetReAuthenticationNumberJBO();
 
@@ -50,33 +55,43 @@ public class SoapWebServiceGatewaySupport extends WebServiceGatewaySupport {
 
         } catch (Exception ex) {
             log.error("groupware auth api error ", ex);
-            throw new GroupwareUserNotFoundException(ex.toString());
+            throw new GroupWareException(UnauthrizedErrorCode.GROUPWARE_ERROR, ex);
         }
 
         return response;
     }
 
     public GroupWareUserInfo getUserInfo(String userId)
-            throws GroupwareUserNotFoundException {
+            throws GroupWareException {
 
         SetReAuthenticationNumberJBOResponse authNumberResponse = getAuthNumber(userId);
         String jboResult = authNumberResponse.getSetReAuthenticationNumberJBOResult();
         GroupWareUserInfo groupWareUserInfo = null;
+
+        Map<String, Object> authNumberMap = null;
         try {
-            Map<String, Object> authNumberMap = BeanConverter.jsonToMap(jboResult);
-            String authNumber = (String) authNumberMap.getOrDefault("AuthNumber", "");
-            if (McpString.isNotEmpty(authNumber)) {
-                GetUserInfoWSJBO request = new GetUserInfoWSJBO();
-                GetUserInfoWSJBOResponse response = getUserInfo(userId, authNumber);
+            authNumberMap = BeanConverter.jsonToMap(jboResult);
+            if ((authNumberMap.getOrDefault("AuthNumber", errorCode)).equals(errorCode)) {
+                throw new GroupWareException(UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_ERROR);
+            }
+        } catch (Exception ex) {
+            throw new GroupWareException(UnauthrizedErrorCode.GROUPWARE_AUTHNUMBER_PARSING_ERROR);
+        }
+        String authNumber = (String) authNumberMap.getOrDefault("AuthNumber", "");
+        if (McpString.isNotEmpty(authNumber)) {
+            GetUserInfoWSJBO request = new GetUserInfoWSJBO();
+            GetUserInfoWSJBOResponse response = getUserInfo(userId, authNumber);
+            try {
                 groupWareUserInfo = ResourceMapper
                         .getDefaultObjectMapper()
                         .readValue(response.getGetUserInfoWSJBOResult(), GroupWareUserInfo.class);
-            } else {
-                throw new GroupwareUserNotFoundException("GroupWare Data error!!");
+            } catch (IOException ex) {
+                throw new GroupWareException(UnauthrizedErrorCode.GROUPWARE_USER_PARSING_ERROR);
             }
-        } catch (Exception ex) {
-            throw new GroupwareUserNotFoundException(ex.toString());
+        } else {
+            throw new GroupWareException(UnauthrizedErrorCode.GROUPWARE_ERROR);
         }
+
 
         return groupWareUserInfo;
     }

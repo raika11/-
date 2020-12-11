@@ -3,14 +3,21 @@ package jmnet.moka.core.tms.mvc.view;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.proxy.http.HttpProxy;
+import jmnet.moka.common.template.exception.DataLoadException;
+import jmnet.moka.common.template.exception.TemplateMergeException;
+import jmnet.moka.common.template.exception.TemplateParseException;
+import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
+import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +43,7 @@ public class DigitalSpecialView extends AbstractView {
     private boolean isPageCache;
 
     @Autowired
-    private MokaDomainTemplateMerger templateMerger;
+    private MokaDomainTemplateMerger domainTemplateMerger;
 
     @Autowired(required = false)
     private CacheManager cacheManager;
@@ -60,27 +67,52 @@ public class DigitalSpecialView extends AbstractView {
      * @see AbstractView#renderMergedOutputModel(Map, HttpServletRequest, HttpServletResponse)
      */
     @Override
-    protected final void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) {
+    protected final void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response)
+            throws TemplateMergeException, TemplateParseException, DataLoadException {
 
         // 머지 옵션설정
 //        MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
         MergeContext mergeContext = (MergeContext)model.get(MokaConstants.MERGE_CONTEXT);
+        String digitalSpecialId = (String)mergeContext.get(MokaConstants.MERGE_CONTEXT_DIGIAL_SPECIAL_ID);
+        String domainId = (String)mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
 
-        // TODO digital specail 정보를 가져오는 api를 정의하고 정보를 가져온다.
-        // PC와 Mobile을 구분한다.
-        // 메타 정보의 수정이 필요한 부분을 체크한다.
-
-
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter writer;
         try {
-            writer = response.getWriter();
-            writer.print(this.httpProxy.getString("https://digitalspecial.joins.com/special/2020/0918_kepco"));
-            writer.close();
-        } catch (IOException | URISyntaxException e) {
+            MokaTemplateMerger templateMerger = this.domainTemplateMerger.getTemplateMerger(domainId);
+            DataLoader loader = null;
+            if ( templateMerger.isDefaultApiHostPathUse() ) {
+                loader = templateMerger.getDefaultDataLoader();
+            } else {
+                loader = templateMerger.getDataLoader();
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("digitalSpecialId",digitalSpecialId);
+            JSONResult jsonResult = loader.getJSONResult("digitalSpecial.list",paramMap,true);
+            Map map = jsonResult.getDataListFirst();
+            if ( map == null ) return; // 해당되는 id가 없으면 아무것도 표시하지 않는다.
+            String url = "";
+            // PC와 Mobile을 구분한다.
+            // 메타 정보의 수정이 필요한 부분을 체크한다.
+            if ( domainId.equals("1000")) {
+                url = (String)map.get("PC_URL");
+            } else {
+                url = (String)map.get("MOB_URL");
+            }
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter writer;
+            try {
+                writer = response.getWriter();
+                writer.print(this.httpProxy.getString(url));
+                writer.close();
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+            }
+        } catch (TemplateMergeException e) {
+            e.printStackTrace();
+        } catch (TemplateParseException e) {
+            e.printStackTrace();
+        } catch (DataLoadException e) {
             e.printStackTrace();
         }
-
     }
 
 }

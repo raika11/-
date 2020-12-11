@@ -909,7 +909,7 @@ public class DeskingRestController extends AbstractCommonController {
             throws NoDataException, Exception {
         try {
 
-            naverService.send(componentSeq);
+            naverService.send(componentSeq, null);
             // 리턴값 설정
             //            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, msg("tps.desking.success.naver-stand"));
             //            return new ResponseEntity<>(resultDto, HttpStatus.OK);

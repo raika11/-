@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
@@ -59,7 +60,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                     .filter(gm -> gm
                             .getGroup()
                             .getGroupCd()
-                            .equals(TpsConstants.SUPER_ADMIN_GROUP_CD))
+                            .equals(TpsConstants.SUPER_ADMIN_GROUP_CD) && MokaConstants.YES.equals(gm.getUsedYn()))
                     .count() > 0) {
                 return Arrays.asList(new SimpleGrantedAuthority(TpsConstants.ROLE_SUPERADMIN));
             }

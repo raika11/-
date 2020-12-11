@@ -6,12 +6,17 @@ const ovpOptionRenderer = forwardRef((props, ref) => {
     const [data, setData] = useState(initialData);
     const [options, setOptions] = useState({});
 
-    useImperativeHandle(ref, () => ({
-        refresh: (params) => {
-            setData(params.data);
-            return true;
-        },
-    }));
+    useImperativeHandle(
+        ref,
+        () => ({
+            refresh: (params) => {
+                setData(params.data);
+                return true;
+            },
+            getValue: () => options,
+        }),
+        [options],
+    );
 
     const handleChangeValue = useCallback(
         (e) => {
@@ -34,7 +39,7 @@ const ovpOptionRenderer = forwardRef((props, ref) => {
     }, [data]);
 
     return (
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column" ref={ref}>
             <MokaInput
                 as="checkbox"
                 value={options.autoplay}

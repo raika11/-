@@ -17,14 +17,12 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
 
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
-            // if (params.data[field] !== data[field]) {
-            //     setData(params.data);
-            //     return true;
-            // } else {
-            //     return false;
-            // }
-            setData(params.data);
-            return true;
+            if (params.data[field] !== data[field]) {
+                setData(params.data);
+                return true;
+            } else {
+                return false;
+            }
         },
     }));
 
@@ -32,18 +30,16 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
      * 이미지 프리뷰 생성
      */
     const previewImg = useCallback((src) => {
-        util.makeImgPreview(src, imgRef.current, boxRef.current, null, () => {
-            imgRef.current.src = src;
-        });
+        util.makeImgPreview(src, imgRef.current, boxRef.current, null, () => {});
     }, []);
 
     useEffect(() => {
-        previewImg(data[field]);
+        previewImg(data?.[field]);
     }, [data, field, previewImg]);
 
     return (
-        <div className="d-flex h-100 w-100 align-items-center justify-content-center bg-white border" ref={boxRef}>
-            <img ref={imgRef} alt={data.imgAlt} />
+        <div className="d-flex h-100 w-100 align-items-center justify-content-center bg-white border overflow-hidden" ref={boxRef}>
+            <img ref={imgRef} alt={data?.imgAlt || ''} />
         </div>
     );
 });

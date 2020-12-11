@@ -24,22 +24,22 @@ const CustomMenu = forwardRef(({ children, style, className, 'aria-labelledby': 
  */
 const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
     return (
-        <div ref={ref} className="cursor-pointer">
+        <div
+            ref={ref}
+            onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onClick(e);
+            }}
+        >
             <MokaInputGroup
                 value={children}
                 inputProps={{ readOnly: true }}
                 placeholder="매체를 선택하세요"
-                inputClassName="bg-white ft-12"
+                inputClassName="bg-white ft-12 cursor-pointer"
                 isInvalid={isInvalid}
                 append={
-                    <Button
-                        variant="searching"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onClick(e);
-                        }}
-                    >
+                    <Button variant="searching">
                         <MokaIcon iconName="fas-caret-down" />
                     </Button>
                 }

@@ -9,6 +9,8 @@ const VodModal = (props) => {
     const [videoId, setVideoId] = useState('');
     const [options, setOptions] = useState({});
 
+    const [returnUrl, setReturnUrl] = useState(null);
+
     useEffect(() => {
         if (vodUrl && vodUrl !== '') {
             const url = new URL(vodUrl);
@@ -48,8 +50,8 @@ const VodModal = (props) => {
                 className="w-100 h-100"
                 tabs={[
                     <>TEST</>,
-                    <LiveList show={show && activeKey === 1} videoId={videoId} options={options} />,
-                    <OvpList show={show && activeKey === 2} videoId={videoId} options={options} />,
+                    <LiveList show={show && activeKey === 1} videoId={videoId} options={options} setReturnUrl={setReturnUrl} />,
+                    <OvpList show={show && activeKey === 2} videoId={videoId} options={options} setReturnUrl={setReturnUrl} />,
                 ]}
             />
         </MokaModal>

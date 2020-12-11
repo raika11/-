@@ -21,7 +21,14 @@ const VodUrlForm = ({ temp, setTemp }) => {
         <Form.Row className="mb-2">
             <MokaInputLabel label="영상" labelWidth={80} labelClassName="ft-12 pr-3" className="m-0" as="none" />
             <div className="w-100">
-                <MokaSearchInput placeholder="URL을 입력하세요" name="vodUrl" value={temp.vodUrl} onSearch={() => setShow(true)} inputProps={{ readOnly: true }} />
+                <MokaSearchInput
+                    placeholder="URL을 선택하세요"
+                    name="vodUrl"
+                    value={temp.vodUrl}
+                    onSearch={() => setShow(true)}
+                    inputProps={{ readOnly: true }}
+                    inputClassName="bg-white"
+                />
             </div>
 
             <VodModal show={show} onHide={() => setShow(false)} vodUrl={temp.vodUrl} onSave={handleClickSave} />

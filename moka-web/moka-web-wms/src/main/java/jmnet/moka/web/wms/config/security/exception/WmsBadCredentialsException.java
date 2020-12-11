@@ -17,6 +17,10 @@ public class WmsBadCredentialsException extends AbstractAuthenticationException 
         super(UnauthrizedErrorCode.GROUPWARE_NOTFOUND, msg);
     }
 
+    public WmsBadCredentialsException(String msg, int limit) {
+        super(UnauthrizedErrorCode.GROUPWARE_NOTFOUND, msg, limit);
+    }
+
     public WmsBadCredentialsException(String msg, Throwable t) {
         super(UnauthrizedErrorCode.GROUPWARE_NOTFOUND, msg, t);
     }

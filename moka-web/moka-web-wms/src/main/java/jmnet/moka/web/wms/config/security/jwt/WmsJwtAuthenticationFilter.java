@@ -104,11 +104,16 @@ public class WmsJwtAuthenticationFilter extends AbstractAuthenticationProcessing
         //super.unsuccessfulAuthentication(request, response, failed);
         if (failed instanceof AbstractAuthenticationException) {
             AbstractAuthenticationException wmsAuthenticationFailed = (AbstractAuthenticationException) failed;
-            ResponseUtil.error(response, TpsConstants.HEADER_UNAUTHORIZED, wmsAuthenticationFailed.getMessage(), wmsAuthenticationFailed
+            Map<String, Object> body = wmsAuthenticationFailed
                     .getErrorCode()
-                    .toMap(), wmsAuthenticationFailed
+                    .toMap();
+            if (wmsAuthenticationFailed.getExtra() != null) {
+                body.put("extra", wmsAuthenticationFailed.getExtra());
+            }
+            ResponseUtil.error(response, TpsConstants.HEADER_UNAUTHORIZED, wmsAuthenticationFailed.getMessage(), body, wmsAuthenticationFailed
                     .getErrorCode()
                     .getCode());
+
         } else {
             ResponseUtil.error(response, TpsConstants.HEADER_UNAUTHORIZED, failed.getMessage(), null);
         }

@@ -17,10 +17,17 @@ import org.springframework.security.core.AuthenticationException;
 public abstract class AbstractAuthenticationException extends AuthenticationException {
 
     protected UnauthrizedErrorCode errorCode;
+    protected Object extra;
 
     public AbstractAuthenticationException(UnauthrizedErrorCode errorCode, String msg) {
         super(msg);
         this.errorCode = errorCode;
+    }
+
+    public AbstractAuthenticationException(UnauthrizedErrorCode errorCode, String msg, Object extra) {
+        super(msg);
+        this.errorCode = errorCode;
+        this.extra = extra;
     }
 
     public AbstractAuthenticationException(UnauthrizedErrorCode errorCode, String msg, Throwable t) {
@@ -28,7 +35,11 @@ public abstract class AbstractAuthenticationException extends AuthenticationExce
         this.errorCode = errorCode;
     }
 
+    public Object getExtra() {
+        return this.extra;
+    }
+
     public UnauthrizedErrorCode getErrorCode() {
-        return this.errorCode = errorCode;
+        return this.errorCode;
     }
 }

@@ -163,14 +163,14 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                 if (userDetails.getErrorCnt() + 1 < passwordErrorLimit) { // 오류 한도 초과 전
                     String errMsg = messageByLocale.get("wms.login.error.BadCredentials", userDetails.getErrorCnt() + 1, passwordErrorLimit);
                     memberService.addMemberLoginErrorCount(userId);
-                    throw new WmsBadCredentialsException(errMsg);
+                    throw new WmsBadCredentialsException(errMsg, passwordErrorLimit);
                 } else {// 한도가 초과한 경우
                     String errMsg = messageByLocale.get("wms.login.error.limit-excesss-bad-credentials", McpDate.nowDateStr());
                     if (userDetails.getErrorCnt() + 1 == passwordErrorLimit) { // 현재 오류 횟수가 한도와 동일한 경우 update
                         memberService.updateMemberStatus(userId, MemberStatusCode.P, passwordErrorLimit, errMsg);
                     }
                     throw new LimitExcessBadCredentialsException(
-                            messageByLocale.get("wms.login.error.LimitExcessBadCredentialsException", passwordErrorLimit));
+                            messageByLocale.get("wms.login.error.LimitExcessBadCredentialsException", passwordErrorLimit), passwordErrorLimit);
                 }
             }
 
@@ -179,7 +179,7 @@ public class WmsAuthenticationProvider implements AuthenticationProvider {
                 if (MemberStatusCode.P == userDetails.getStatus()) { // 잠김 상태
                     if (userDetails.getErrorCnt() == passwordErrorLimit) { // 비밀번호 입력 오류 잠김 상태
                         throw new LimitExcessBadCredentialsException(
-                                messageByLocale.get("wms.login.error.limit-excesss-bad-credentials-locked", passwordErrorLimit));
+                                messageByLocale.get("wms.login.error.limit-excesss-bad-credentials-locked", passwordErrorLimit), passwordErrorLimit);
                     } else { // 비밀번호 갱신 만료일이 지나 잠김 상태
                         throw new PasswordUnchangedException(messageByLocale.get("wms.login.error.PasswordUnchangedException"));
                     }

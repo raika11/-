@@ -11,6 +11,9 @@ import columnDefs from './OvpListColumns';
 
 moment.locale('ko');
 
+/**
+ * ovp 리스트
+ */
 const OvpList = ({ show, videoId, options }) => {
     const dispatch = useDispatch();
 
@@ -21,6 +24,7 @@ const OvpList = ({ show, videoId, options }) => {
 
     const [search, setSearch] = useState(initialState.ovp.search);
     const [rowData, setRowData] = useState([]);
+    const [gridInstance, setGridInstance] = useState(null);
 
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
@@ -61,7 +65,14 @@ const OvpList = ({ show, videoId, options }) => {
             <Form className="mb-2">
                 <Form.Row>
                     <MokaSearchInput placeholder="검색어를 입력하세요" className="flex-fill mr-2" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
-                    <Button variant="negative" className="ft-12">
+                    <Button
+                        variant="negative"
+                        className="ft-12"
+                        onClick={() => {
+                            debugger;
+                            const selectedNode = gridInstance.api.getSelectedNode();
+                        }}
+                    >
                         초기화
                     </Button>
                 </Form.Row>
@@ -74,6 +85,7 @@ const OvpList = ({ show, videoId, options }) => {
                 rowData={rowData}
                 paging={false}
                 frameworkComponents={{ optionRenderer: OvpOptionRenderer }}
+                setGridInstance={setGridInstance}
             />
             {loading && <MokaLoader />}
         </div>

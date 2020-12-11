@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.desking.service;
+package jmnet.moka.core.tps.mvc.naver.service;
 
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class NaverServiceImpl implements NaverService {
 
     @Override
-    public void send(Long componentSeq) {
+    public void publishNewsStand(String source, Long areaSeq) {
 
     }
 }

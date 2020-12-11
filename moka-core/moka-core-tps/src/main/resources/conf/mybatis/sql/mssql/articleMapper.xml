@@ -74,16 +74,6 @@
     </choose>
 
     <choose>
-      <when test="sourceCode != 'all' and sourceCode != null and sourceCode != ''">
-        #{sourceCode},
-      </when>
-      <otherwise>
-        NULL,
-      </otherwise>
-    </choose>
-
-
-    <choose>
       <when test="pressMyun != 'all' and pressMyun != null and pressMyun != ''">
         #{pressMyun},
       </when>

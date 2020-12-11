@@ -33,6 +33,7 @@ import {
     NewIcon,
 } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
+import { SourceSelector } from '@pages/commons';
 // import { changeTheme } from '@store/layout/layoutAction';
 import { options } from './data';
 import bg from '@assets/images/bg.jpeg';
@@ -47,9 +48,12 @@ const Dashboard = () => {
     const [serror, setSerror] = useState(false);
     const [hookData, setHookData] = useState({});
 
+    // 매체 state
+    const [sourceList, setSourceList] = useState(null);
+
     // modal test
     const [showD, setShowD] = useState(false);
-    const [showLMS, setShowLMS] = useState(false);
+    const [, setShowLMS] = useState(false);
     // const dispatch = useDispatch();
 
     /**
@@ -116,6 +120,10 @@ const Dashboard = () => {
                         },
                     ]}
                 >
+                    {/* 매체 selector */}
+                    <Form.Label>매체 select</Form.Label>
+                    <SourceSelector className="mb-2" value={sourceList} onChange={(value) => setSourceList(value)} />
+
                     {/* MokaAlert 예제 */}
                     <Form.Label>1) Alert</Form.Label>
                     <MokaAlertWithButtons

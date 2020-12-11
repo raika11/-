@@ -33,10 +33,10 @@ import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.service.DeskingService;
-import jmnet.moka.core.tps.mvc.desking.service.NaverService;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
+import jmnet.moka.core.tps.mvc.naver.service.NaverService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -190,6 +190,7 @@ public class DeskingRestController extends AbstractCommonController {
      * 컴포넌트 전송
      *
      * @param componentWorkSeq 워크아이디
+     * @param areaSeq          편집영역seq
      * @param principal        로그인사용자 세션
      * @return 등록된 편집 컴포넌트정보
      * @throws Exception
@@ -198,7 +199,7 @@ public class DeskingRestController extends AbstractCommonController {
     @PostMapping("/components/publish/{componentWorkSeq}")
     public ResponseEntity<?> postPublishComponentWork(
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            Principal principal)
+            @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq, Principal principal)
             throws Exception {
 
         try {
@@ -207,6 +208,18 @@ public class DeskingRestController extends AbstractCommonController {
 
             // 컴포넌트 저장, 편집기사 저장
             deskingService.publish(returnValue, principal.getName());
+
+            // 편집영역에 after api있을경우 실행
+            Area area = areaService
+                    .findAreaBySeq(areaSeq)
+                    .orElseThrow(() -> {
+                        String message = msg("tps.common.error.no-data");
+                        tpsLogger.fail(message, true);
+                        return new NoDataException(message);
+                    });
+            if (McpString.isNotEmpty(area.getAfterApi())) {
+
+            }
 
             // work를 그대로 리턴
             String message = msg("tps.desking.success.publish");
@@ -899,25 +912,6 @@ public class DeskingRestController extends AbstractCommonController {
             log.error("[FAIL TO IMPORT DESKING HIST ]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO IMPORT DESKING HIST]", e, true);
             throw new Exception(msg("tps.deskinghist.error.work.update"), e);
-        }
-    }
-
-    @ApiOperation("네이버 스탠드 파일 생성")
-    @PutMapping("/naver-stand/{componentSeq}")
-    public ResponseEntity<?> postNaverStand(
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq, Principal principal)
-            throws NoDataException, Exception {
-        try {
-
-            naverService.send(componentSeq);
-            // 리턴값 설정
-            //            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, msg("tps.desking.success.naver-stand"));
-            //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-            return null;
-        } catch (Exception e) {
-            log.error("[FAIL TO IMPORT DESKING HIST ]", e);
-            tpsLogger.error(ActionType.SELECT, "[FAIL TO IMPORT DESKING HIST]", e, true);
-            throw new Exception(msg("tps.desking.error.naver-stand"), e);
         }
     }
 

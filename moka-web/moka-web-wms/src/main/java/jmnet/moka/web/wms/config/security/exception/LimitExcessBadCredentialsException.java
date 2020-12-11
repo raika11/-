@@ -13,8 +13,8 @@ package jmnet.moka.web.wms.config.security.exception;
  * @since 2020-11-04 13:31
  */
 public class LimitExcessBadCredentialsException extends AbstractAuthenticationException {
-    public LimitExcessBadCredentialsException(String msg) {
-        super(UnauthrizedErrorCode.PASSWORD_LIMIT, msg);
+    public LimitExcessBadCredentialsException(String msg, int limit) {
+        super(UnauthrizedErrorCode.PASSWORD_LIMIT, msg, limit);
     }
 
     public LimitExcessBadCredentialsException(String msg, Throwable t) {

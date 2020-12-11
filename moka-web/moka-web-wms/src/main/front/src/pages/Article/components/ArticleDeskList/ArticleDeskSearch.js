@@ -7,7 +7,8 @@ import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultArticleSearchType, CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
-import { initialState, getArticleList, getSourceList, changeSearchOption, clearList } from '@store/article';
+import { SourceSelector } from '@pages/commons';
+import { initialState, getArticleList, changeSearchOption, clearList } from '@store/article';
 
 /**
  * 기사 검색
@@ -15,9 +16,8 @@ import { initialState, getArticleList, getSourceList, changeSearchOption, clearL
 const ArticleDeskSearch = (props) => {
     const { media, selectedComponent, show } = props;
     const dispatch = useDispatch();
-    const { storeSearch, sourceList } = useSelector((store) => ({
+    const { storeSearch } = useSelector((store) => ({
         storeSearch: store.article.search,
-        sourceList: store.article.sourceList,
     }));
 
     // state
@@ -31,18 +31,7 @@ const ArticleDeskSearch = (props) => {
      */
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
-
-        if (name === 'searchType') {
-            setSearch({ ...search, searchType: value });
-        } else if (name === 'keyword') {
-            setSearch({ ...search, keyword: value });
-        } else if (name === 'sourceCode') {
-            setSearch({ ...search, sourceCode: value });
-        } else if (name === 'pressMyun') {
-            setSearch({ ...search, pressMyun: value });
-        } else if (name === 'pressPan') {
-            setSearch({ ...search, pressPan: value });
-        }
+        setSearch({ ...search, [name]: value });
     };
 
     /**
@@ -107,13 +96,6 @@ const ArticleDeskSearch = (props) => {
             page: 0,
         });
     };
-
-    useEffect(() => {
-        // 매체 조회
-        if (sourceList.length < 1) {
-            dispatch(getSourceList());
-        }
-    }, [dispatch, sourceList.length]);
 
     useEffect(() => {
         setSearch({
@@ -202,18 +184,7 @@ const ArticleDeskSearch = (props) => {
                     </div>
 
                     {/* 매체 */}
-                    <div style={{ width: 130 }} className="mr-2">
-                        <MokaInput as="select" name="sourceCode" value={search.sourceCode} onChange={handleChangeValue} className="ft-12">
-                            {sourceList.map(
-                                (cd) =>
-                                    cd.usedYn === 'Y' && (
-                                        <option key={cd.sourceCode} value={cd.sourceCode}>
-                                            {cd.sourceName}
-                                        </option>
-                                    ),
-                            )}
-                        </MokaInput>
-                    </div>
+                    <SourceSelector className="mr-2" value={search.sourceCode} onChange={(value) => setSearch({ ...search, sourceCode: value })} />
 
                     {/* 면 */}
                     <div style={{ width: 85 }} className="mr-2">

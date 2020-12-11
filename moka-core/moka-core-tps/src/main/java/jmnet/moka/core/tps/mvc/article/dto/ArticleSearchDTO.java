@@ -32,12 +32,6 @@ public class ArticleSearchDTO extends SearchDTO {
     private static final long serialVersionUID = 6774193298696439472L;
 
     /**
-     * 매체
-     */
-    @Length(max = 2, message = "{tps.article.error.length.sourceCode}")
-    private String sourceCode;
-
-    /**
      * 분류
      */
     @Length(max = 8, message = "{tps.article.error.length.masterCode}")
@@ -76,7 +70,7 @@ public class ArticleSearchDTO extends SearchDTO {
     private String contentType;
 
     /**
-     * 기본 매체목록(구분자 ,)
+     * 매체목록(구분자 ,)
      */
     @JsonIgnore
     private String deskingSourceList;
@@ -86,7 +80,6 @@ public class ArticleSearchDTO extends SearchDTO {
         super.setUseTotal(MokaConstants.YES);
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
-        //        this.sourceCode = TpsConstants.SEARCH_TYPE_ALL;
         //        this.masterCode = TpsConstants.SEARCH_TYPE_ALL;
     }
 

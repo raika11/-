@@ -33,9 +33,21 @@ const propTypes = {
      */
     bodyClassName: PropTypes.string,
     /**
-     * footerClassName (buttons이 있을 경우에만 생김)
+     * footerClassName (footer, buttons 있을 경우에 생성)
      */
     footerClassName: PropTypes.string,
+    /**
+     * headerStyle
+     */
+    headerStyle: PropTypes.object,
+    /**
+     * bodyStyle
+     */
+    bodyStyle: PropTypes.object,
+    /**
+     * footerStyle (footer, buttons 있을 경우에 생성)
+     */
+    footerStyle: PropTypes.object,
     /**
      * show
      */
@@ -56,6 +68,10 @@ const propTypes = {
      * children (컨텐츠)
      */
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+    /**
+     * footer 영역 (푸터 영역 편집시 node)
+     */
+    footer: PropTypes.node,
     /**
      * footer의 버튼
      */
@@ -113,10 +129,14 @@ const MokaModal = (props) => {
         buttons,
         draggable,
         centered,
+        footer,
         className,
         headerClassName,
         bodyClassName,
         footerClassName,
+        headerStyle,
+        bodyStyle,
+        footerStyle,
         loading,
         id,
         size,
@@ -155,16 +175,23 @@ const MokaModal = (props) => {
             {...rest}
         >
             {/* 타이틀 */}
-            <Modal.Header className={headerClassName} id="draggable-modal-title" data-drag-on={draggable} closeButton>
+            <Modal.Header className={headerClassName} style={headerStyle} id="draggable-modal-title" data-drag-on={draggable} closeButton>
                 {draggable && <div id={`draggable-handle-${id}`} data-drag-handle="true" />}
                 {titleAs ? titleAs : <Modal.Title>{title}</Modal.Title>}
             </Modal.Header>
 
             {/* 컨텐츠 */}
-            <Modal.Body className={bodyClassName}>
+            <Modal.Body className={bodyClassName} style={bodyStyle}>
                 {children}
                 {loading && <MokaLoader />}
             </Modal.Body>
+
+            {/* 푸터 */}
+            {footer && (
+                <Modal.Footer className={footerClassName} style={footerStyle}>
+                    {footer}
+                </Modal.Footer>
+            )}
 
             {/* 푸터 버튼 */}
             {buttons && (
@@ -172,6 +199,7 @@ const MokaModal = (props) => {
                     className={clsx(footerClassName, {
                         'toast-footer': size === 'sm' || size === 'md',
                     })}
+                    style={footerStyle}
                 >
                     {buttons.map(({ variant, text, ...rest }, idx) => (
                         <Button key={`${text}-${idx}`} variant={variant} data-color={variant} {...rest}>

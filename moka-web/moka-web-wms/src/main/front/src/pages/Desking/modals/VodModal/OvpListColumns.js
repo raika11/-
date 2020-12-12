@@ -63,5 +63,9 @@ export default [
             lineHeight: '22px',
             fontSize: '12px',
         },
+        valueGetter: (params) => {
+            debugger;
+            return params.getValue();
+        },
     },
 ];

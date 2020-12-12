@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './brightAction';
-import { PAGESIZE_OPTIONS } from '@/constants';
+import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
 /**
  * initialState
@@ -13,7 +13,7 @@ export const initialState = {
         error: null,
         search: {
             page: 0,
-            size: PAGESIZE_OPTIONS[0],
+            size: MODAL_PAGESIZE_OPTIONS[0],
             searchType: 'name',
             keyword: '',
         },
@@ -48,7 +48,16 @@ export default handleActions(
          */
         [act.GET_OVP_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.ovp.list = payload.body.list;
+                const { body, payload: actionPayload } = payload;
+                const { search } = actionPayload;
+
+                if (search.page === 0) {
+                    // search.page === 0이면 리스트 다시 조회
+                    draft.ovp.list = body.list;
+                } else {
+                    // search.page > 0 이면 더보기형식이므로 concat으로 합침
+                    draft.ovp.list = Array.prototype.concat(draft.ovp.list, body.list);
+                }
                 draft.ovp.error = initialState.ovp.error;
             });
         },

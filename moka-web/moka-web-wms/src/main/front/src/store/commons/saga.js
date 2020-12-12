@@ -46,12 +46,12 @@ export function createRequestSaga(actionType, api, simpleCall = false) {
                 if (response.data.header.success) {
                     yield put({
                         type: `${actionType}_SUCCESS`,
-                        payload: response.data,
+                        payload: callbackData,
                     });
                 } else {
                     yield put({
                         type: `${actionType}_FAILURE`,
-                        payload: response.data,
+                        payload: callbackData,
                     });
                 }
             }

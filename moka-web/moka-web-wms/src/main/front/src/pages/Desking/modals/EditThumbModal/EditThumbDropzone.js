@@ -6,7 +6,9 @@ import { useDrop } from 'react-dnd';
 import { MokaInputLabel, MokaIcon } from '@components';
 import EditThumbCard, { ItemTypes } from './EditThumbCard';
 
-const EditThumbDropzone = ({ collapse, setCollapse }) => {
+const EditThumbDropzone = (props) => {
+    const { collapse, setCollapse } = props;
+    const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
     const cardRef = useRef(null);
@@ -101,6 +103,10 @@ const EditThumbDropzone = ({ collapse, setCollapse }) => {
                                 moveCard={moveCard}
                                 dropCard
                                 setAddIndex={setAddIndex}
+                                onThumbClick={onThumbClick}
+                                onDeleteClick={onDeleteClick}
+                                onRepClick={onRepClick}
+                                onEditClick={onEditClick}
                             />
                         ))}
                     </div>

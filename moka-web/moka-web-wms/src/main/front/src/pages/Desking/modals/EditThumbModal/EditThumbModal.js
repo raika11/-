@@ -33,7 +33,6 @@ const EditThumbModal = (props) => {
 
     const [search, setSearch] = useState(initialState.search);
     const [collapse, setCollapse] = useState(true);
-    const [showRep, setShowRep] = useState(false);
     const [cardData, setCardData] = useState({});
     const [repPhoto, setRepPhoto] = useState({
         type: '',
@@ -58,12 +57,39 @@ const EditThumbModal = (props) => {
     /**
      * 대표 사진, 드롭존 카드 아이템 삭제 버튼 클릭
      */
-    const handleDeleteClick = () => {};
+    const handleDeleteClick = (data, e) => {
+        e.stopPropagation();
+
+        // 대표사진 삭제
+        if (!data.index) {
+            setRepPhoto({
+                ...repPhoto,
+                path: {
+                    thumbPath: '',
+                },
+            });
+        } else {
+            setRepPhoto(repPhoto);
+        }
+    };
 
     /**
      * 카드의 대표사진 지정 버튼 클릭
      */
-    const handleRepClick = () => {};
+    const handleRepClick = (data, e) => {
+        e.stopPropagation();
+
+        setRepPhoto({
+            ...repPhoto,
+            id: data.nid,
+            path: {
+                orgPath: data.imageOnlnPath,
+                thumbPath: data.imageThumPath,
+            },
+            // imgProps: imgData,
+        });
+        // setThumbFileName(data.imageOnlnPath);
+    };
 
     /**
      * 카드의 이미지 편집 버튼 클릭
@@ -79,6 +105,23 @@ const EditThumbModal = (props) => {
             temp['page'] = 0;
         }
         dispatch(getPhotoList(changeSearchOption(temp)));
+    };
+
+    /**
+     * 등록 버튼 클릭
+     */
+    const handleClickSave = () => {
+        setThumbFileName(repPhoto.path.orgPath);
+        handleHide();
+    };
+
+    /**
+     * 취소 버튼 클릭
+     */
+    const handleHide = () => {
+        setRepPhoto(repPhoto);
+        setCardData({});
+        onHide();
     };
 
     useEffect(() => {
@@ -99,8 +142,14 @@ const EditThumbModal = (props) => {
 
     useEffect(() => {
         if (thumbFileName) {
-            setShowRep(true);
+            setRepPhoto({
+                ...repPhoto,
+                path: {
+                    thumbPath: thumbFileName,
+                },
+            });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [thumbFileName]);
 
     return (
@@ -108,13 +157,13 @@ const EditThumbModal = (props) => {
             <MokaModal
                 title="대표 이미지 편집"
                 show={show}
-                onHide={onHide}
+                onHide={handleHide}
                 width={1200}
                 height={860}
                 size="xl"
                 buttons={[
-                    { text: '등록', variant: 'positive' },
-                    { text: '취소', variant: 'negative' },
+                    { text: '등록', variant: 'positive', onClick: handleClickSave },
+                    { text: '취소', variant: 'negative', onClick: handleHide },
                 ]}
                 bodyClassName="p-0 overflow-x-hidden custom-scroll"
                 footerClassName="d-flex justify-content-center"
@@ -133,12 +182,9 @@ const EditThumbModal = (props) => {
                                         page={search.page}
                                         size={search.pageCount}
                                         list={list}
-                                        setThumbFileName={setThumbFileName}
                                         setRepPhoto={setRepPhoto}
-                                        setShowRep={setShowRep}
                                         onChangeSearchOption={handleChangeSearchOption}
                                         onThumbClick={handleThumbClick}
-                                        onDeleteClick={handleDeleteClick}
                                         onRepClick={handleRepClick}
                                         onEditClick={handleEditClick}
                                     />
@@ -153,14 +199,12 @@ const EditThumbModal = (props) => {
                         style={{ backgroundColor: 'F4F5F6' }}
                     >
                         <div className="deskthumb-main d-flex align-items-center justify-content-center" style={{ width: 202 }}>
-                            {showRep && (
+                            {repPhoto.path.thumbPath !== '' && (
                                 <EditThumbCard
-                                    img={thumbFileName}
+                                    img={repPhoto.path.thumbPath}
+                                    onThumbClick={handleThumbClick}
                                     onDeleteClick={handleDeleteClick}
                                     onEditClick={handleEditClick}
-                                    repPhoto={repPhoto}
-                                    setRepPhoto={setRepPhoto}
-                                    setShowRep={setShowRep}
                                     represent
                                 />
                             )}

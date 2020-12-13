@@ -7,7 +7,7 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 const EditThumbTable = (props) => {
     const { page, size, total, list, onThumbClick, onRepClick, onChangeSearchOption } = props;
     // 대표 사진 props
-    const { setFileValue, setThumbFileName, setRepPhoto, setShowRep } = props;
+    const { setRepPhoto } = props;
 
     return (
         <React.Fragment>
@@ -19,8 +19,6 @@ const EditThumbTable = (props) => {
                             img={p.imageOnlnPath}
                             data={{ ...p, id: p.nid, date: moment(p.date).format('YYYY-MM-DD') }}
                             setRepPhoto={setRepPhoto}
-                            setThumbFileName={setThumbFileName}
-                            setShowRep={setShowRep}
                             onThumbClick={onThumbClick}
                             onRepClick={onRepClick}
                         />

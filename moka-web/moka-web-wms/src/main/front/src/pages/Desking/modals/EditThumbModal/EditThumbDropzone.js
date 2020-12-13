@@ -8,7 +8,7 @@ import EditThumbCard, { ItemTypes } from './EditThumbCard';
 
 const EditThumbDropzone = (props) => {
     const { collapse, setCollapse } = props;
-    const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
+    const { onThumbClick, onRepClick, onEditClick } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
     const cardRef = useRef(null);
@@ -46,10 +46,6 @@ const EditThumbDropzone = (props) => {
         }),
     });
 
-    React.useEffect(() => {
-        console.log(addIndex);
-    }, [addIndex]);
-
     const moveCard = useCallback(
         (dragIndex, hoverIndex) => {
             const dragImg = imgList[dragIndex];
@@ -62,6 +58,23 @@ const EditThumbDropzone = (props) => {
         },
         [imgList],
     );
+
+    /**
+     * 드롭 카드 아이템 삭제 버튼 클릭
+     */
+    const handleDeleteDropCard = (data, e) => {
+        e.stopPropagation();
+
+        setImgList(
+            produce(imgList, (draft) => {
+                draft.splice(imgList.findIndex((list) => list.index === data.index, 1));
+            }),
+        );
+    };
+
+    React.useEffect(() => {
+        console.log(addIndex);
+    }, [addIndex]);
 
     return (
         <div className="d-flex flex-column overflow-hidden" style={{ width: 998 }}>
@@ -104,7 +117,7 @@ const EditThumbDropzone = (props) => {
                                 dropCard
                                 setAddIndex={setAddIndex}
                                 onThumbClick={onThumbClick}
-                                onDeleteClick={onDeleteClick}
+                                onDeleteClick={handleDeleteDropCard}
                                 onRepClick={onRepClick}
                                 onEditClick={onEditClick}
                             />

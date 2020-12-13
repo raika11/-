@@ -67,7 +67,7 @@ export const ItemTypes = {
 const EditThumbCard = forwardRef((props, ref) => {
     const { width, height, data, img, alt, selected, className, dropCard, moveCard, setAddIndex } = props;
     // 대표 사진 설정 props
-    const { represent, setFileValue, setThumbFileName, repPhoto, setRepPhoto, setShowRep } = props;
+    const { represent, setFileValue, setThumbFileName } = props;
     const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
 
     const PHOTO_ARCHIVE_URL = useSelector((store) => store.app.PHOTO_ARCHIVE_URL);
@@ -151,50 +151,6 @@ const EditThumbCard = forwardRef((props, ref) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [PHOTO_ARCHIVE_URL]);
 
-    /**
-     * 썸네일 클릭
-     */
-    const handleThumb = (data, e) => {
-        e.stopPropagation();
-
-        if (onThumbClick) {
-            onThumbClick(data);
-        }
-    };
-
-    /**
-     * 삭제 버튼 클릭
-     */
-    const handleDelete = (e) => {
-        e.stopPropagation();
-
-        if (onDeleteClick) {
-            setShowRep(false);
-        }
-    };
-
-    /**
-     * 대표 이미지 설정
-     */
-    const handleRepImg = (e) => {
-        e.stopPropagation();
-
-        if (onRepClick) {
-            setRepButtonColor('yellow');
-            setRepPhoto({
-                ...repPhoto,
-                id: data.nid,
-                path: {
-                    orgPath: data.imageOnlnPath,
-                    thumbPath: data.imageThumPath,
-                },
-                // imgProps: imgData,
-            });
-            setShowRep(true);
-            // setThumbFileName(data.imageOnlnPath);
-        }
-    };
-
     const handleEdit = (e) => {
         e.stopPropagation();
 
@@ -232,7 +188,7 @@ const EditThumbCard = forwardRef((props, ref) => {
                             <div
                                 ref={wrapperRef}
                                 className={clsx('w-100 h-100 bg-gray600 d-flex align-item-center justify-content-center overflow-hidden', { 'rounded-top': !dropCard })}
-                                onClick={handleThumb}
+                                onClick={() => onThumbClick(data)}
                                 onMouseOver={() => setMouseOver(true)}
                                 onMouseLeave={() => {
                                     setMouseOver(false);
@@ -245,7 +201,10 @@ const EditThumbCard = forwardRef((props, ref) => {
                                         variant="searching"
                                         className="border-0 p-0 moka-table-button"
                                         style={{ position: 'absolute', top: '5px', left: '5px', opacity: '0.8', color: repButtonColor }}
-                                        onClick={handleRepImg}
+                                        onClick={(e) => {
+                                            setRepButtonColor('yellow');
+                                            onRepClick(data, e);
+                                        }}
                                     >
                                         <MokaIcon iconName="fas-star" />
                                     </Button>
@@ -279,14 +238,14 @@ const EditThumbCard = forwardRef((props, ref) => {
                                         <MokaIcon iconName="fal-exclamation-triangle" />
                                     </Button> */}
 
-                                {/* 드롭 카드 버튼 */}
+                                {/* 드롭된 카드의 버튼 */}
                                 {dropCard && !represent && (
                                     <>
                                         <Button
                                             variant="searching"
                                             className="border-0 p-0 moka-table-button"
                                             style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.7' }}
-                                            onClick={handleDelete}
+                                            onClick={(e) => onDeleteClick(data, e)}
                                         >
                                             <MokaIcon iconName="fas-times" />
                                         </Button>
@@ -301,14 +260,14 @@ const EditThumbCard = forwardRef((props, ref) => {
                                     </>
                                 )}
 
-                                {/* 대표 사진 버튼 */}
+                                {/* 대표 사진의 버튼 */}
                                 {represent && (
                                     <>
                                         <Button
                                             variant="searching"
                                             className="border-0 p-0 moka-table-button"
                                             style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.7' }}
-                                            onClick={handleDelete}
+                                            onClick={(e) => onDeleteClick(data, e)}
                                         >
                                             <MokaIcon iconName="fas-times" />
                                         </Button>

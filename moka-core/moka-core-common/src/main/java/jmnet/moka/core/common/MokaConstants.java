@@ -185,6 +185,7 @@ public class MokaConstants {
      */
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String AUTHORIZATION = "Authorization";
+    public static final String ACCEPT = "Accept";
     /**
      * response header의 다운로드 파일명
      */

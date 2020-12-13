@@ -349,37 +349,36 @@ public class AreaRestController {
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
         if (area != null) {
-            // 자식영역일 경우 부모가 있는지 조사
             if (area.getDepth() > 1) {
+                // 자식영역일 경우 부모가 있는지 조사
                 if (area.getParent() == null) {
                     String message = messageByLocale.get("tps.area.error.parentAreaSeq");
                     invalidList.add(new InvalidDataDTO("parentAreaSeq", message));
                     tpsLogger.fail(actionType, message, true);
                 }
-            }
 
-            // 컴포넌트가 없으면 에러
-            if (area
-                    .getAreaDiv()
-                    .equals(MokaConstants.ITEM_COMPONENT) && area
-                    .getAreaComps()
-                    .size() <= 0) {
-                String message = messageByLocale.get("tps.area.error.notnull.areaComp");
-                invalidList.add(new InvalidDataDTO("areaComp", message));
-                tpsLogger.fail(actionType, message, true);
-            }
+                // 컴포넌트가 없으면 에러
+                if (area
+                        .getAreaDiv()
+                        .equals(MokaConstants.ITEM_COMPONENT) && area
+                        .getAreaComps()
+                        .size() <= 0) {
+                    String message = messageByLocale.get("tps.area.error.notnull.areaComp");
+                    invalidList.add(new InvalidDataDTO("areaComp", message));
+                    tpsLogger.fail(actionType, message, true);
+                }
 
-            // 컨테이너에 컴포넌트가 없으면 에러
-            if (area
-                    .getAreaDiv()
-                    .equals(MokaConstants.ITEM_CONTAINER) && area
-                    .getAreaComps()
-                    .size() <= 0) {
-                String message = messageByLocale.get("tps.area.error.notnull.areaComp");
-                invalidList.add(new InvalidDataDTO("areaComps", message));
-                tpsLogger.fail(actionType, message, true);
+                // 컨테이너에 컴포넌트가 없으면 에러
+                if (area
+                        .getAreaDiv()
+                        .equals(MokaConstants.ITEM_CONTAINER) && area
+                        .getAreaComps()
+                        .size() <= 0) {
+                    String message = messageByLocale.get("tps.area.error.notnull.areaComp");
+                    invalidList.add(new InvalidDataDTO("areaComps", message));
+                    tpsLogger.fail(actionType, message, true);
+                }
             }
-
         }
 
         if (invalidList.size() > 0) {

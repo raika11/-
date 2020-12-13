@@ -61,7 +61,6 @@ public class DeskingRepositorySupportImpl extends QuerydslRepositorySupport impl
 
         JPQLQuery<Desking> query = queryFactory
                 .selectFrom(desking)
-                .fetchJoin()
                 .where(builder)
                 .orderBy(desking.contentOrd.asc());
 

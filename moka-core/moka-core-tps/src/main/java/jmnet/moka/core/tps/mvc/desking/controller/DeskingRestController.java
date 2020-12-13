@@ -231,7 +231,7 @@ public class DeskingRestController extends AbstractCommonController {
                 String token = request.getHeader(MokaConstants.AUTHORIZATION);
                 MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
                 headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
-                headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
+                headers.add(MokaConstants.ACCEPT, MediaType.APPLICATION_JSON_UTF8_VALUE);
                 headers.add(MokaConstants.AUTHORIZATION, token);
                 ResponseEntity<String> responseEntity = restTemplateHelper.get(afterApi, null, headers);
                 if (responseEntity.getStatusCode() == HttpStatus.OK) {

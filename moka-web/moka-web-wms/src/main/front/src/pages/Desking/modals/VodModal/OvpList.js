@@ -14,24 +14,28 @@ moment.locale('ko');
 /**
  * ovp 리스트
  */
-const OvpList = ({ show, videoId, options }) => {
+const OvpList = ({ show, resultVId, setResultVId }) => {
     const dispatch = useDispatch();
 
-    const { loading, ovpList } = useSelector((store) => ({
-        loading: store.loading[GET_OVP_LIST],
-        ovpList: store.bright.ovp.list,
-    }));
-
+    const ovpList = useSelector((store) => store.bright.ovp.list);
+    const loading = useSelector((store) => store.loading[GET_OVP_LIST]);
+    // state
     const [search, setSearch] = useState(initialState.ovp.search);
     const [rowData, setRowData] = useState([]);
-    const [optionsById, setOptionsById] = useState({});
     const [, setGridInstance] = useState(null);
 
+    /**
+     * input 변경
+     * @param {object} e 이벤트
+     */
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
         setSearch({ ...search, [name]: value });
     };
 
+    /**
+     * 검색
+     */
     const handleSearch = useCallback(
         (type) => {
             let ns = { ...search, page: 0 };
@@ -44,10 +48,18 @@ const OvpList = ({ show, videoId, options }) => {
         [dispatch, search],
     );
 
-    const handleSelectionChanged = (params) => {
-        debugger;
-        console.log(params);
-    };
+    /**
+     * 테이블 row select 시
+     */
+    const handleSelectionChanged = useCallback(
+        (params) => {
+            if (!params[0].data) return;
+
+            const { id } = params[0].data;
+            setResultVId(id);
+        },
+        [setResultVId],
+    );
 
     useEffect(() => {
         if (show) {
@@ -62,11 +74,9 @@ const OvpList = ({ show, videoId, options }) => {
                 ...ovp,
                 stateText: ovp.state === 'ACTIVE' ? '정상' : '대기',
                 regDt: moment(ovp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD\nLTS'),
-                videoId,
-                options,
             })),
         );
-    }, [options, ovpList, videoId]);
+    }, [ovpList]);
 
     return (
         <div className="positive-relative px-3">
@@ -91,6 +101,7 @@ const OvpList = ({ show, videoId, options }) => {
                 rowData={rowData}
                 agGridHeight={340}
                 onRowNodeId={(data) => data.id}
+                selected={resultVId}
                 columnDefs={columnDefs}
                 paging={false}
                 frameworkComponents={{ optionRenderer: OvpOptionRenderer }}
@@ -98,7 +109,7 @@ const OvpList = ({ show, videoId, options }) => {
                 onSelectionChanged={handleSelectionChanged}
             />
 
-            <Button variant="white" className="border p-2 rounded-0" block onClick={() => handleSearch('more')}>
+            <Button variant="white" className="border p-2 rounded-0 shadow-none" block onClick={() => handleSearch('more')} disabled={loading}>
                 더보기
             </Button>
         </div>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MokaInput } from '@components';
 import { changeVodOptions } from '@store/bright';
 
-const OvpOptionRenderer = forwardRef((props, ref) => {
+const LiveOptionRenderer = forwardRef((props, ref) => {
     const { data } = props;
     const dispatch = useDispatch();
 
@@ -26,16 +26,13 @@ const OvpOptionRenderer = forwardRef((props, ref) => {
                 ...vodOptions[data.id],
                 [name]: checked,
             };
-
-            // ag-grid 셀의 value가 무엇을 의미하는지 모르겠음 getValue, setValue 쓸 줄 알게되면 그때 처리... 지금은 스토어에 저장
-            // setValue({ vid: data.id, op: nop });
             dispatch(changeVodOptions({ key: data.id, value: nop }));
         },
         [data.id, dispatch, vodOptions],
     );
 
     return (
-        <div className="d-flex flex-column">
+        <div className="d-flex">
             <MokaInput
                 as="checkbox"
                 name="autoplay"
@@ -50,15 +47,8 @@ const OvpOptionRenderer = forwardRef((props, ref) => {
                 onChange={handleChangeValue}
                 inputProps={{ label: '음소거', custom: true, checked: vodOptions[data.id]?.muteFirstPlay || false }}
             />
-            <MokaInput
-                as="checkbox"
-                name="loop"
-                id={`${data.id}-loop`}
-                onChange={handleChangeValue}
-                inputProps={{ label: '반복재생', custom: true, checked: vodOptions[data.id]?.loop || false }}
-            />
         </div>
     );
 });
 
-export default OvpOptionRenderer;
+export default LiveOptionRenderer;

@@ -27,10 +27,9 @@ const AreaAgGrid1D = ({ match, onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { areaSeq } = useParams();
-    const { list, loading } = useSelector((store) => ({
-        list: store.area.depth1.list,
-        loading: store.loading[GET_AREA_LIST_DEPTH1],
-    }));
+
+    const list = useSelector((store) => store.area.depth1.list);
+    const loading = useSelector((store) => store.loading[GET_AREA_LIST_DEPTH1]);
 
     // state
     const [rowData, setRowData] = useState([]);

@@ -1,30 +1,81 @@
 import React, { useState, useEffect } from 'react';
+import qs from 'qs';
+import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaCardTabs } from '@components';
+import { changeVodOptions, clearVodOptions } from '@store/bright';
 import LiveList from './LiveList';
 import OvpList from './OvpList';
+import YoutubeList from './YoutubeList';
+import { messageBox } from '@utils/toastUtil';
 
 const VodModal = (props) => {
     const { show, onHide, vodUrl, onSave } = props;
-    const [activeKey, setActivekey] = useState(0);
-    const [videoId, setVideoId] = useState('');
-    const [options, setOptions] = useState({});
 
-    const [returnUrl, setReturnUrl] = useState(null);
+    const dispatch = useDispatch();
+    const vodOptions = useSelector((store) => store.bright.vodOptions);
+    const OVP_PREVIEW_URL = useSelector((store) => store.app.OVP_PREVIEW_URL);
+
+    // state
+    const [activeKey, setActivekey] = useState(0);
+    const [resultVId, setResultVId] = useState(null);
+    const [youtubeUrl, setYoutubeUrl] = useState('');
+
+    /**
+     * 취소, 닫기
+     */
+    const handleHide = () => {
+        if (onHide) onHide();
+        dispatch(clearVodOptions());
+        setYoutubeUrl('');
+    };
+
+    /**
+     * 저장
+     */
+    const handleSave = () => {
+        let url = '';
+
+        // 유튜브 예외처리
+        if (activeKey === 0) {
+            url = youtubeUrl;
+        } else {
+            if (!resultVId) {
+                messageBox.warn('선택된 URL이 없습니다');
+                return;
+            } else {
+                const op = vodOptions[resultVId];
+                // options[loop]=true 이런 형식
+                url = `${OVP_PREVIEW_URL}?videoId=${resultVId}&${qs.stringify({ options: op }, { encode: false })}`;
+            }
+        }
+        if (onSave) onSave(url);
+        handleHide();
+    };
 
     useEffect(() => {
-        if (vodUrl && vodUrl !== '') {
-            const url = new URL(vodUrl);
-            setVideoId(url.searchParams.get('viedoId'));
-            setOptions({
-                autoplay: url.searchParams.get('options[autoplay]') === 'true',
-                muteFirstPlay: url.searchParams.get('options[muteFirstPlay]') === 'true',
-                loop: url.searchParams.get('options[loop]') === 'true',
-            });
-        } else {
-            setVideoId('');
-            setOptions({});
-        }
-    }, [vodUrl]);
+        try {
+            if (vodUrl && vodUrl !== '') {
+                const url = vodUrl.split('?');
+
+                // 유튜브 영상인지 체크
+                if (url[0].indexOf('.youtu') > -1) {
+                    setYoutubeUrl(vodUrl);
+                } else {
+                    if (url[1]) {
+                        const searchParams = qs.parse(url[1]);
+                        // string value => boolean으로 변경
+                        const convert = Object.keys(searchParams.options).reduce((all, cv) => ({ ...all, [cv]: searchParams.options[cv] === 'true' }), {});
+                        dispatch(
+                            changeVodOptions({
+                                key: searchParams.videoId,
+                                value: convert,
+                            }),
+                        );
+                    }
+                }
+            }
+        } catch (e) {}
+    }, [dispatch, vodUrl]);
 
     return (
         <MokaModal
@@ -32,12 +83,12 @@ const VodModal = (props) => {
             height={610}
             title="동영상 URL 선택"
             show={show}
-            onHide={onHide}
+            onHide={handleHide}
             footerClassName="d-flex justify-content-center"
             bodyClassName="p-0"
             buttons={[
-                { text: '등록', onClick: onSave, variant: 'positive' },
-                { text: '취소', onClick: onHide, variant: 'negative' },
+                { text: '등록', onClick: handleSave, variant: 'positive' },
+                { text: '취소', onClick: handleHide, variant: 'negative' },
             ]}
             id="vod"
             centered
@@ -49,9 +100,9 @@ const VodModal = (props) => {
                 tabNavs={['YOUTUBE', 'LIVE', 'OVP']}
                 className="w-100 h-100"
                 tabs={[
-                    <>TEST</>,
-                    <LiveList show={show && activeKey === 1} videoId={videoId} options={options} setReturnUrl={setReturnUrl} />,
-                    <OvpList show={show && activeKey === 2} videoId={videoId} options={options} setReturnUrl={setReturnUrl} />,
+                    <YoutubeList show={show && activeKey === 0} youtubeUrl={youtubeUrl} setYoutubeUrl={setYoutubeUrl} />,
+                    <LiveList show={show && activeKey === 1} setResultVId={setResultVId} />,
+                    <OvpList show={show && activeKey === 2} resultVId={resultVId} setResultVId={setResultVId} />,
                 ]}
             />
         </MokaModal>

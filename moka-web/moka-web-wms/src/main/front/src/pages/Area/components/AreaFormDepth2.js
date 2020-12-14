@@ -25,33 +25,22 @@ const AreaFormDepth2 = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const {
-        domainList,
-        areaCompLoadDepth2,
-        areaCompLoadDepth3,
-        areaListDepth1,
-        areaListDepth2,
-        areaListDepth3,
-        areaDepth1,
-        areaDepth2,
-        areaDepth3,
-        invalidList,
-        loading,
-        selectedDepth,
-    } = useSelector((store) => ({
-        domainList: store.auth.domainList,
-        areaCompLoadDepth2: store.area.depth2.areaCompLoad,
-        areaCompLoadDepth3: store.area.depth3.areaCompLoad,
-        areaListDepth1: store.area.depth1.list,
-        areaListDepth2: store.area.depth2.list,
-        areaListDepth3: store.area.depth3.list,
-        areaDepth1: store.area.depth1.area,
-        areaDepth2: store.area.depth2.area,
-        areaDepth3: store.area.depth3.area,
-        invalidList: store.area.invalidList,
-        loading: store.loading[GET_AREA_DEPTH2] || store.loading[GET_AREA_DEPTH3] || store.loading[SAVE_AREA] || store.loading[DELETE_AREA],
-        selectedDepth: store.area.selectedDepth,
-    }));
+    const loading = useSelector((store) => store.loading[GET_AREA_DEPTH2] || store.loading[GET_AREA_DEPTH3] || store.loading[SAVE_AREA] || store.loading[DELETE_AREA]);
+    const domainList = useSelector((store) => store.auth.domainList);
+    const { areaCompLoadDepth2, areaCompLoadDepth3, areaListDepth1, areaListDepth2, areaListDepth3, areaDepth1, areaDepth2, areaDepth3, invalidList, selectedDepth } = useSelector(
+        (store) => ({
+            areaCompLoadDepth2: store.area.depth2.areaCompLoad,
+            areaCompLoadDepth3: store.area.depth3.areaCompLoad,
+            areaListDepth1: store.area.depth1.list,
+            areaListDepth2: store.area.depth2.list,
+            areaListDepth3: store.area.depth3.list,
+            areaDepth1: store.area.depth1.area,
+            areaDepth2: store.area.depth2.area,
+            areaDepth3: store.area.depth3.area,
+            invalidList: store.area.invalidList,
+            selectedDepth: store.area.selectedDepth,
+        }),
+    );
 
     // state
     const [origin, setOrigin] = useState({}); // 원본 데이터

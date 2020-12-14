@@ -23,11 +23,9 @@ const urlRegex = /[Uu]rl$/;
 const EditDeskingWorkModal = (props) => {
     const { show, onHide, deskingWorkData, component, onSave, deskingPart: deskingPartStr } = props;
     const dispatch = useDispatch();
-    const { bulkCharRows, IR_URL, PHOTO_ARCHIVE_URL, loading } = useSelector((store) => ({
-        bulkCharRows: store.codeMgt.bulkCharRows,
-        IR_URL: store.app.IR_URL,
-        PHOTO_ARCHIVE_URL: store.app.PHOTO_ARCHIVE_URL,
-        loading:
+
+    const loading = useSelector(
+        (store) =>
             store.loading[PUT_DESKING_WORK] ||
             store.loading[GET_BULK_CHAR] ||
             store.loading[GET_DS_FONT_IMGD] ||
@@ -37,7 +35,12 @@ const EditDeskingWorkModal = (props) => {
             store.loading[GET_DS_PRE] ||
             store.loading[GET_DS_PRE_LOC] ||
             store.loading[GET_DS_TITLE_LOC],
+    );
+    const { IR_URL, PHOTO_ARCHIVE_URL } = useSelector((store) => ({
+        IR_URL: store.app.IR_URL,
+        PHOTO_ARCHIVE_URL: store.app.PHOTO_ARCHIVE_URL,
     }));
+    const bulkCharRows = useSelector((store) => store.codeMgt.bulkCharRows);
     const imgFileRef = useRef(null);
 
     // state

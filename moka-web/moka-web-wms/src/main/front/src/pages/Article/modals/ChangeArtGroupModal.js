@@ -12,11 +12,11 @@ import { getArticleList } from '@store/article';
 const ChangeArtGroupModal = (props) => {
     const { show, onHide } = props;
     const dispatch = useDispatch();
-    const { artGroupRows, cd, loading } = useSelector(
+    const loading = useSelector((store) => store.loading[GET_CODE_MGT_GRP] || store.loading[GET_CODE_MGT] || store.loading[SAVE_CODE_MGT] || store.loading[GET_ART_GROUP]);
+    const { artGroupRows, cd } = useSelector(
         (store) => ({
             artGroupRows: store.codeMgt.artGroupRows,
             cd: store.codeMgt.cd,
-            loading: store.loading[GET_CODE_MGT_GRP] || store.loading[GET_CODE_MGT] || store.loading[SAVE_CODE_MGT] || store.loading[GET_ART_GROUP],
         }),
         shallowEqual,
     );

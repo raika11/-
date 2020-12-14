@@ -22,6 +22,7 @@ export const initialState = {
         list: [],
         error: null,
     },
+    vodOptions: {},
 };
 
 /**
@@ -41,6 +42,21 @@ export default handleActions(
         [act.CLEAR_LIVE]: (state) => {
             return produce(state, (draft) => {
                 draft.live = initialState.live;
+            });
+        },
+        [act.CLEAR_VOD_OPTIONS]: (state) => {
+            return produce(state, (draft) => {
+                draft.vodOptions = initialState.vodOptions;
+            });
+        },
+        /**
+         * VOD 옵션 변경
+         */
+        [act.CHANGE_VOD_OPTIONS]: (state, { payload }) => {
+            const { key, value } = payload;
+
+            return produce(state, (draft) => {
+                draft.vodOptions[key] = value;
             });
         },
         /**

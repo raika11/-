@@ -1,3 +1,6 @@
+import React from 'react';
+import { MokaTablePreviewButton } from '@components';
+
 export default [
     {
         colId: 'checkbox',
@@ -6,13 +9,7 @@ export default [
         suppressMenu: true,
     },
     {
-        headerName: '이미지',
-        width: 60,
-        field: 'thumbFileName',
-        cellRenderer: 'imageRenderer',
-    },
-    {
-        headerName: '제목',
+        headerName: '채널명',
         field: 'name',
         width: 186,
         flex: 1,
@@ -32,7 +29,7 @@ export default [
         },
     },
     {
-        headerName: '상태',
+        headerName: '송출상태',
         field: 'stateText',
         width: 40,
         cellStyle: {
@@ -44,14 +41,12 @@ export default [
         },
     },
     {
-        headerName: '등록일',
+        headerName: '미리보기',
         field: 'regDt',
         width: 83,
-        cellClassRules: {
-            'pre-wrap-cell': () => true,
-        },
-        cellStyle: {
-            lineHeight: '20px',
+        cellRendererFramework: (row) => {
+            const { data } = row;
+            return <MokaTablePreviewButton {...row} onClick={data.handleClickPreview} />;
         },
     },
     {
@@ -63,9 +58,5 @@ export default [
             lineHeight: '22px',
             fontSize: '12px',
         },
-        // valueGetter: (params) => {
-        //     debugger;
-        //     return params.getValue();
-        // },
     },
 ];

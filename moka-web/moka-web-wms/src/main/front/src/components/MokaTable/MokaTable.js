@@ -143,8 +143,6 @@ const MokaTable = forwardRef((props, ref) => {
         setGridInstance: setParentGridInstance,
     } = props;
 
-    console.log(rowHeight);
-
     // drag props
     const { dragManaged, onRowDragMove, onRowDragEnd } = props;
 

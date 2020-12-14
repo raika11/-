@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import { ArticleDeskList } from '@/pages/Article/components';
 import { deskingDragStop } from '@store/desking';
@@ -7,8 +7,8 @@ import toast from '@utils/toastUtil';
 
 const DeskingArticleTab = (props) => {
     const { componentList, componentAgGridInstances } = props;
-
     const dispatch = useDispatch();
+    const area = useSelector((store) => store.desking.area);
 
     // state
     const [tabNavs] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
@@ -25,17 +25,28 @@ const DeskingArticleTab = (props) => {
      * @param {number} agGridIndex agGridIndex
      */
     const handleArticleDragStop = (source, target, agGridIndex) => {
-        const payload = {
-            source,
-            target,
-            tgtComponent: componentList[agGridIndex],
-            callback: ({ header }) => {
-                if (!header.success) {
-                    toast.fail(header.message);
-                }
-            },
-        };
-        dispatch(deskingDragStop(payload));
+        const tgtComponent = componentList[agGridIndex];
+
+        // deskingPart를 찾아야해서 area.areaComp || area.areaComps 에서 찾음
+        let areaComp = null;
+        if (area.areaComp) areaComp = area.areaComp;
+        else if (area.areaComps.length > 0) {
+            areaComp = area.areaComps.find((ac) => ac.componentSeq === tgtComponent.componentseq);
+        }
+
+        dispatch(
+            deskingDragStop({
+                source,
+                target,
+                tgtComponent,
+                areaComp: areaComp,
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     const createTabs = () => {

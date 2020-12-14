@@ -195,11 +195,12 @@ export const changeArea = createAction(CHANGE_AREA, (area) => area);
  * 데스킹 드래그스탑
  */
 export const DESKING_DRAG_STOP = 'desking/DESKING_DRAG_STOP';
-export const deskingDragStop = createAction(DESKING_DRAG_STOP, ({ source, target, srcComponent, tgtComponent, callback }) => ({
+export const deskingDragStop = createAction(DESKING_DRAG_STOP, ({ source, target, srcComponent, tgtComponent, areaComp, callback }) => ({
     source,
     target,
     srcComponent,
     tgtComponent,
+    areaComp,
     callback,
 }));
 

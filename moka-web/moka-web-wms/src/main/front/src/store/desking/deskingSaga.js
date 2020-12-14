@@ -1,12 +1,11 @@
-import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
+import { takeLatest, takeEvery, put, call, select } from 'redux-saga/effects';
 import { createRequestSaga, errorResponse } from '@store/commons/saga';
 import { getRowIndex, getMoveMode } from '@utils/agGridUtil';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-
 import * as api from './deskingApi';
 import * as act from './deskingAction';
-
 import { DEFAULT_LANG } from '@/constants';
+
 const dragResult = {
     existRow: { success: false, message: '이미 존재하는 기사입니다' },
     unmovableRow: { success: false, message: '관련기사를 포함한 주기사를 이동하세요' },
@@ -77,7 +76,7 @@ const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPO
 /**
  * 데스킹 워크의 관련기사 rowNode 생성
  */
-const makeRelRowNode = (data, relOrd, parentData, component) => {
+const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
     let key = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
 
     if (!parentData || parentData.contentId === null) {
@@ -91,7 +90,16 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
 
     let appendData = null;
     if (data.gridType === 'ARTICLE') {
-        let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
+        const { areaComp, domain } = etc;
+
+        // domain.servicePlatform === 'M' 이면 data.artEditMobTitle
+        let title = domain?.servicePlatform === 'P' ? data.artEditTitle || data.artJamTitle || data.artTitle : data.artEditMobTitle || data.artJamMobTitle || data.artTitle;
+
+        // deskingPart에 TITLE이 없으면 원본 기사 제목으로 셋팅한다
+        if (areaComp?.deskingPart && areaComp?.deskingPart.indexOf('TITLE') < 0) {
+            title = data.artTitle;
+        }
+
         appendData = {
             componentWorkSeq: component.seq,
             seq: null,
@@ -111,10 +119,10 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
             nameplate: null,
             titlePrefix: null,
             bodyHead: data.artSummary,
-            linkUrl: null,
-            linkTarget: null,
-            moreUrl: null,
-            moreTarget: null,
+            linkUrl: `//${domain?.domainUrl}/article/${data.totalId}`,
+            linkTarget: '_self',
+            boxUrl: null,
+            boxTarget: '_self',
             thumbFileName: data.artPdsThumb,
             rel: true,
             relSeqs: null,
@@ -127,7 +135,7 @@ const makeRelRowNode = (data, relOrd, parentData, component) => {
 /**
  * 데스킹 워크의 rowNode 생성
  */
-const makeRowNode = (data, contentOrd, component) => {
+const makeRowNode = (data, contentOrd, component, etc) => {
     let key = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
 
     if (!data || key === null) {
@@ -142,7 +150,16 @@ const makeRowNode = (data, contentOrd, component) => {
     let appendData = null;
 
     if (data.gridType === 'ARTICLE') {
-        let title = data.artEditTitle ? data.artEditTitle : data.artJamTitle ? data.artJamTitle : data.artTitle;
+        const { areaComp, domain } = etc;
+
+        // domain.servicePlatform === 'M' 이면 data.artEditMobTitle
+        let title = domain?.servicePlatform === 'P' ? data.artEditTitle || data.artJamTitle || data.artTitle : data.artEditMobTitle || data.artJamMobTitle || data.artTitle;
+
+        // deskingPart에 TITLE이 없으면 원본 기사 제목으로 셋팅한다
+        if (areaComp?.deskingPart && areaComp?.deskingPart.indexOf('TITLE') < 0) {
+            title = data.artTitle;
+        }
+
         appendData = {
             componentWorkSeq: component.seq,
             seq: null,
@@ -162,15 +179,11 @@ const makeRowNode = (data, contentOrd, component) => {
             nameplate: null,
             titlePrefix: null,
             bodyHead: data.artSummary,
-            linkUrl: null,
-            linkTarget: null,
-            moreUrl: null,
-            moreTarget: null,
+            linkUrl: `//${domain?.domainUrl}/article/${data.totalId}`,
+            linkTarget: '_self',
+            boxUrl: null,
+            boxTarget: '_self',
             thumbFileName: data.artPdsThumb,
-            // thumbSize:,
-            // thumbWidth:
-            // thumbHeight:
-            // regId:
             rel: false,
             relSeqs: null,
         };
@@ -193,7 +206,8 @@ const makeRowNode = (data, contentOrd, component) => {
  * 컴포넌트워크의 ag-grid row drag stop
  */
 function* deskingDragStop({ payload }) {
-    const { source, target, srcComponent, tgtComponent, callback } = payload;
+    const { source, target, srcComponent, tgtComponent, areaComp, callback } = payload;
+    const domain = yield select((store) => store.desking.area.domain);
 
     let overIndex = -1,
         addRelArt = false,
@@ -205,11 +219,6 @@ function* deskingDragStop({ payload }) {
     } else if (source.event) {
         overIndex = getRowIndex(source.event);
     }
-
-    // if (source.node.data.gridType === 'DESKING') {
-    //     let rowNode = source.api.getRowNode(source.node.contentId);
-    //     rowNode && rowNode.setSelected(true);
-    // }
 
     sourceNode = source.api.getSelectedNodes().length > 0 ? source.api.getSelectedNodes() : source.node;
     if (Array.isArray(sourceNode)) {
@@ -231,7 +240,7 @@ function* deskingDragStop({ payload }) {
             let contentOrdering = insertIndex - 1;
             sourceNode.some((node) => {
                 if (!node.data.rel) contentOrdering++;
-                const result = makeRowNode(node.data, contentOrdering, tgtComponent);
+                const result = makeRowNode(node.data, contentOrdering, tgtComponent, { domain, areaComp });
                 if (result.success) {
                     ans.push(result.list);
                     return false;
@@ -243,7 +252,7 @@ function* deskingDragStop({ payload }) {
             });
         } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
-            const result = makeRowNode(sourceNode.data, insertIndex, tgtComponent);
+            const result = makeRowNode(sourceNode.data, insertIndex, tgtComponent, { domain, areaComp });
             if (result.success) ans.push(result.list);
             else callback && callback({ header: result });
         }
@@ -258,7 +267,7 @@ function* deskingDragStop({ payload }) {
         if (Array.isArray(sourceNode)) {
             // 기사 여러개 이동
             sourceNode.some((node, idx) => {
-                const result = makeRelRowNode(node.data, firstIndex + idx, parentData, tgtComponent);
+                const result = makeRelRowNode(node.data, firstIndex + idx, parentData, tgtComponent, { domain, areaComp });
                 if (result.success) {
                     ans.push(result.list);
                     return false;
@@ -270,7 +279,7 @@ function* deskingDragStop({ payload }) {
             });
         } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
-            const result = makeRelRowNode(sourceNode.data, firstIndex, parentData, tgtComponent);
+            const result = makeRelRowNode(sourceNode.data, firstIndex, parentData, tgtComponent, { domain, areaComp });
             if (result.success) ans.push(result.list);
             else callback && callback({ header: result });
         }

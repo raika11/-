@@ -128,7 +128,7 @@ export const addNextRowStyle = (nextRow) => {
 export const addDeskingWorkDropzone = (onDragStop, sourceGrid, targetGrid, currentIndex) => {
     const wrapper = targetGrid.api.gridOptionsWrapper;
     if (!wrapper) return null;
-    const workElement = findWork(wrapper.layoutElements[0]); // .component-work
+    const workElement = findWork(wrapper.layoutElements[0]); // .component-work 찾음
     if (!workElement) return null;
     if (workElement.classList.contains('disabled')) {
         sourceGrid.api.removeRowDropZone({ getContainer: () => workElement });

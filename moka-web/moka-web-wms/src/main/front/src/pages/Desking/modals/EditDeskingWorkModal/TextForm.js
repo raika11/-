@@ -12,6 +12,7 @@ import { MokaInput, MokaInputLabel } from '@components';
 const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
     const { as, field, label, errorCheck, ...mappingProps } = mappingData;
     const isUrl = urlRegex.test(field);
+    const urlTarget = isUrl ? `${field.replace('Url', '')}Target` : '';
 
     return (
         <Form.Row className="mb-2">
@@ -31,7 +32,7 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
             </Col>
             {isUrl && (
                 <Col xs={2} className="p-0">
-                    <MokaInput as="select" name={`${field}Target`} value={temp[`${field}Target`] || '_self'} className="ft-12" onChange={onChange}>
+                    <MokaInput as="select" name={urlTarget} value={temp[urlTarget] || '_self'} className="ft-12" onChange={onChange}>
                         <option value="_self" className="ft-12">
                             본창
                         </option>

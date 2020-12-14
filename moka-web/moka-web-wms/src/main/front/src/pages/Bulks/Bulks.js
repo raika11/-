@@ -42,7 +42,7 @@ const Bulks = ({ match }) => {
                 case 'bulkn-su':
                     setBulkParams({
                         bulkPathName: pathName,
-                        bulk_source: '60',
+                        bulk_source: '61',
                         bulk_div: 'N',
                     });
                     break;

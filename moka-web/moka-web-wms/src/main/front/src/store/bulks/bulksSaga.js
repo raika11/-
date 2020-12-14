@@ -21,7 +21,7 @@ import {
 import { getBulkList, getBulkArticle, saveBulkArticle, getSpecialchar, putSpecialchar, putChangeBulkused, getCopyright } from './bulksApi';
 
 // 벌크 리스트 가지고 오기.
-const getBulkListSaga = callApiAfterActions(GET_BULK_LIST, getBulkList, (state) => state.bulks);
+const getBulkListSaga = callApiAfterActions(GET_BULK_LIST, getBulkList, (state) => state.bulks.bulkn);
 // 약물 정보 가지고 오기.
 const getSpecialcharSaga = callApiAfterActions(GET_SPECIALCHAR, getSpecialchar, (state) => state.bulks);
 const getCopyrightSaga = callApiAfterActions(GET_COPYRIGHT, getCopyright, (state) => state.bulks);

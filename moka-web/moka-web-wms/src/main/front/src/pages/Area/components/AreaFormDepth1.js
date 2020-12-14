@@ -13,12 +13,12 @@ import { saveArea, GET_AREA_DEPTH1, DELETE_AREA, SAVE_AREA } from '@store/area';
 const AreaFormDepth1 = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { domainList, area, loading, areaListDepth2 } = useSelector((store) => ({
-        domainList: store.auth.domainList,
+    const { area, areaListDepth2 } = useSelector((store) => ({
         area: store.area.depth1.area,
         areaListDepth2: store.area.depth2.list,
-        loading: store.loading[GET_AREA_DEPTH1] || store.loading[DELETE_AREA] || store.loading[SAVE_AREA],
     }));
+    const domainList = useSelector((store) => store.auth.domainList);
+    const loading = useSelector((store) => store.loading[GET_AREA_DEPTH1] || store.loading[DELETE_AREA] || store.loading[SAVE_AREA]);
 
     // state
     const [temp, setTemp] = useState({});
@@ -103,14 +103,6 @@ const AreaFormDepth1 = ({ onDelete }) => {
         setDomain(area.domain);
     }, [area]);
 
-    useEffect(() => {
-        if (!domain.domainId) {
-            if (domainList.length > 0) {
-                setDomain(domainList[0]);
-            }
-        }
-    }, [domain, domainList]);
-
     return (
         <MokaCard title={`편집영역 ${area.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>
             <div className="d-flex justify-content-center">
@@ -156,9 +148,10 @@ const AreaFormDepth1 = ({ onDelete }) => {
                         onChange={handleChangeValue}
                         disabled={temp.areaSeq ? true : false}
                     >
-                        {domainList.map((domain) => (
-                            <option key={domain.domainId} value={domain.domianId}>
-                                {domain.domainName} ({domain.domainUrl})
+                        <option hidden>도메인을 선택하세요</option>
+                        {domainList.map((d) => (
+                            <option key={d.domainId} value={d.domainId}>
+                                {d.domainName} ({d.domainUrl})
                             </option>
                         ))}
                     </MokaInputLabel>

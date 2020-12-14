@@ -98,6 +98,10 @@ const propTypes = {
      * 쓰는 곳에서 grid Instance를 state로 관리할 때, gridReady시 state 변경
      */
     setGridInstance: PropTypes.func,
+    /**
+     * row data update 후 api.refreshCells 호출을 막음
+     */
+    suppressRefreshCellAfterUpdate: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -115,6 +119,7 @@ const defaultProps = {
     rowSelection: 'single',
     headerHeight: 35,
     animateRows: false,
+    suppressRefreshCellAfterUpdate: false,
 };
 
 /**
@@ -141,6 +146,7 @@ const MokaTable = forwardRef((props, ref) => {
         frameworkComponents,
         animateRows,
         setGridInstance: setParentGridInstance,
+        suppressRefreshCellAfterUpdate,
     } = props;
 
     // drag props
@@ -262,10 +268,13 @@ const MokaTable = forwardRef((props, ref) => {
         (params) => {
             setTimeout(function () {
                 handleSelected();
-                params.api.refreshCells({ force: true });
+
+                if (!suppressRefreshCellAfterUpdate) {
+                    params.api.refreshCells({ force: true });
+                }
             });
         },
-        [handleSelected],
+        [handleSelected, suppressRefreshCellAfterUpdate],
     );
 
     useEffect(() => {

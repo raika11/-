@@ -27,20 +27,24 @@ const AreaFormDepth2 = (props) => {
     const history = useHistory();
     const loading = useSelector((store) => store.loading[GET_AREA_DEPTH2] || store.loading[GET_AREA_DEPTH3] || store.loading[SAVE_AREA] || store.loading[DELETE_AREA]);
     const domainList = useSelector((store) => store.auth.domainList);
-    const { areaCompLoadDepth2, areaCompLoadDepth3, areaListDepth1, areaListDepth2, areaListDepth3, areaDepth1, areaDepth2, areaDepth3, invalidList, selectedDepth } = useSelector(
-        (store) => ({
-            areaCompLoadDepth2: store.area.depth2.areaCompLoad,
-            areaCompLoadDepth3: store.area.depth3.areaCompLoad,
-            areaListDepth1: store.area.depth1.list,
-            areaListDepth2: store.area.depth2.list,
-            areaListDepth3: store.area.depth3.list,
-            areaDepth1: store.area.depth1.area,
-            areaDepth2: store.area.depth2.area,
-            areaDepth3: store.area.depth3.area,
-            invalidList: store.area.invalidList,
-            selectedDepth: store.area.selectedDepth,
-        }),
-    );
+    const { areaListDepth1, areaDepth1 } = useSelector((store) => ({
+        areaListDepth1: store.area.depth1.list,
+        areaDepth1: store.area.depth1.area,
+    }));
+    const { areaListDepth2, areaCompLoadDepth2, areaDepth2 } = useSelector((store) => ({
+        areaListDepth2: store.area.depth2.list,
+        areaCompLoadDepth2: store.area.depth2.areaCompLoad,
+        areaDepth2: store.area.depth2.area,
+    }));
+    const { areaListDepth3, areaCompLoadDepth3, areaDepth3 } = useSelector((store) => ({
+        areaListDepth3: store.area.depth3.list,
+        areaCompLoadDepth3: store.area.depth3.areaCompLoad,
+        areaDepth3: store.area.depth3.area,
+    }));
+    const { invalidList, selectedDepth } = useSelector((store) => ({
+        invalidList: store.area.invalidList,
+        selectedDepth: store.area.selectedDepth,
+    }));
 
     // state
     const [origin, setOrigin] = useState({}); // 원본 데이터
@@ -236,13 +240,22 @@ const AreaFormDepth2 = (props) => {
                             domainId: page.domain?.domainId,
                         },
                         callback: ({ body }) => {
+                            // 오리지널 areaComps의 deskingPart를 셋팅
                             setAreaComps(
-                                body.list.map((b) => ({
-                                    compAlign: AREA_COMP_ALIGN_LEFT,
-                                    component: { ...b },
-                                    ordNo: b.relOrd + 1,
-                                    deskingPart: null,
-                                })),
+                                body.list.map((b) => {
+                                    let deskingPart = null;
+                                    if (origin.areaComps?.length > 0) {
+                                        const tgt = origin.areaComps.find((o) => o.component.componentSeq === b.componentSeq);
+                                        deskingPart = tgt?.deskingPart;
+                                    }
+
+                                    return {
+                                        compAlign: AREA_COMP_ALIGN_LEFT,
+                                        component: { ...b },
+                                        ordNo: b.relOrd + 1,
+                                        deskingPart,
+                                    };
+                                }),
                             );
                             setAreaCompLoad({
                                 ...areaCompLoad,
@@ -262,7 +275,7 @@ const AreaFormDepth2 = (props) => {
                 });
             }
         },
-        [areaCompLoad, dispatch, page],
+        [areaCompLoad, dispatch, origin.areaComps, page.domain],
     );
 
     /**

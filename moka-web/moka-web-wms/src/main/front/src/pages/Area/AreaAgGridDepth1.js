@@ -65,8 +65,7 @@ const AreaAgGrid1D = ({ match, onDelete }) => {
             dispatch(clearList(2));
             dispatch(clearList(3));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [areaSeq]);
+    }, [areaSeq, dispatch, history]);
 
     /**
      * 목록에서 Row클릭
@@ -108,6 +107,7 @@ const AreaAgGrid1D = ({ match, onDelete }) => {
                     onRowNodeId={(data) => data.areaSeq}
                     onRowClicked={handleRowClicked}
                     preventRowClickCell={['delete']}
+                    suppressRefreshCellAfterUpdate
                 />
             </MokaCard>
             <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth2 {...props} parentSeq={areaSeq} baseUrl="/area" onDelete={onDelete} />} />

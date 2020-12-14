@@ -7,9 +7,12 @@ import toast from '@utils/toastUtil';
 import { PageListModal } from '@pages/Page/modals';
 
 const AreaEdit = ({ onDelete }) => {
-    const { selectedDepth, areaError, errorDepth1, errorDepth2, errorDepth3 } = useSelector((store) => ({
+    const { selectedDepth, areaError } = useSelector((store) => ({
         selectedDepth: store.area.selectedDepth,
         areaError: store.area.areaError,
+    }));
+
+    const { errorDepth1, errorDepth2, errorDepth3 } = useSelector((store) => ({
         errorDepth1: store.area.depth1.error,
         errorDepth2: store.area.depth2.error,
         errorDepth3: store.area.depth3.error,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MokaInputLabel, MokaModal } from '@components';
 import { MokaLoader } from '@components';
 import MokaEditor from '@/components/MokaEditor/MokaEditorCore';
@@ -13,13 +13,8 @@ import toast, { messageBox } from '@utils/toastUtil';
 const EditHtmlModal = (props) => {
     const { show, onHide, component } = props;
     const dispatch = useDispatch();
-    const { area, loading } = useSelector(
-        (store) => ({
-            area: store.desking.area,
-            loading: store.loading[PREVIEW_COMPONENT_MODAL] || store.loading[PUT_SNAPSHOT_COMPONENT_WORK] || store.loading[POST_SAVE_COMPONENT_WORK],
-        }),
-        [shallowEqual],
-    );
+    const loading = useSelector((store) => store.loading[PREVIEW_COMPONENT_MODAL] || store.loading[PUT_SNAPSHOT_COMPONENT_WORK] || store.loading[POST_SAVE_COMPONENT_WORK]);
+    const area = useSelector((store) => store.desking.area);
 
     // state
     const [defaultValue, setDefaultValue] = useState(null);
@@ -75,7 +70,7 @@ const EditHtmlModal = (props) => {
     const handleClickPreview = () => {
         dispatch(
             previewComponentModal({
-                area: area.areaSeq,
+                areaSeq: area.areaSeq,
                 componentWorkSeq: component.seq,
                 resourceYn: 'Y',
                 callback: ({ header, body }) => {

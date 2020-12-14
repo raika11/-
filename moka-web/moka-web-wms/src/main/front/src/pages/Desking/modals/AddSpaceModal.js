@@ -127,7 +127,7 @@ const AddSpaceModal = (props) => {
                                 <Col xs={10} className="p-0">
                                     <MokaInputLabel
                                         label="제목"
-                                        labelWidth={44}
+                                        labelWidth={56}
                                         labelClassName="ft-12 mr-3"
                                         inputClassName="resize-none custom-scroll"
                                         className="mb-0"

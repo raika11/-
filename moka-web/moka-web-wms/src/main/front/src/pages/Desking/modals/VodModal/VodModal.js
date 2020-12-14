@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaCardTabs } from '@components';
@@ -23,11 +23,11 @@ const VodModal = (props) => {
     /**
      * 취소, 닫기
      */
-    const handleHide = () => {
+    const handleHide = useCallback(() => {
         if (onHide) onHide();
         dispatch(clearVodOptions());
         setYoutubeUrl({ url: '', option: '' });
-    };
+    }, [dispatch, onHide]);
 
     /**
      * 저장
@@ -76,6 +76,13 @@ const VodModal = (props) => {
             }
         } catch (e) {}
     }, [dispatch, vodUrl]);
+
+    useEffect(() => {
+        return () => {
+            handleHide();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <MokaModal

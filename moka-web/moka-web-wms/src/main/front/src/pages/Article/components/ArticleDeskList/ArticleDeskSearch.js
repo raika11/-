@@ -8,6 +8,7 @@ import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { defaultArticleSearchType, CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
 import { SourceSelector } from '@pages/commons';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { initialState, getArticleList, changeSearchOption, clearList } from '@store/article';
 
 /**
@@ -16,10 +17,7 @@ import { initialState, getArticleList, changeSearchOption, clearList } from '@st
 const ArticleDeskSearch = (props) => {
     const { media, selectedComponent, show } = props;
     const dispatch = useDispatch();
-
-    const { storeSearch } = useSelector((store) => ({
-        storeSearch: store.article.search,
-    }));
+    const storeSearch = useSelector((store) => store.article.search);
 
     // state
     const [search, setSearch] = useState(initialState.search);
@@ -39,6 +37,20 @@ const ArticleDeskSearch = (props) => {
     };
 
     /**
+     * validate
+     */
+    const validate = (ns) => {
+        let isInvalid = false;
+
+        if (!REQUIRED_REGEX.test(ns.deskingSourceList)) {
+            isInvalid = isInvalid || true;
+            setError({ ...error, deskingSourceList: true });
+        }
+
+        return !isInvalid;
+    };
+
+    /**
      * 검색
      */
     const handleSearch = () => {
@@ -49,8 +61,11 @@ const ArticleDeskSearch = (props) => {
             endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
             page: 0,
         };
-        dispatch(getArticleList({ search: ns }));
-        dispatch(changeSearchOption(ns));
+
+        if (validate(ns)) {
+            dispatch(getArticleList({ search: ns }));
+            dispatch(changeSearchOption(ns));
+        }
     };
 
     /**
@@ -149,13 +164,9 @@ const ArticleDeskSearch = (props) => {
             if (sourceOn) {
                 dispatch(getArticleList({ search: ns }));
                 dispatch(changeSearchOption(ns));
-                setError({ ...error, deskingSourceList: false });
-            } else {
-                setError({ ...error, deskingSourceList: true });
             }
         } else {
             dispatch(clearList());
-            setError({ ...error, deskingSourceList: true });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -206,6 +217,7 @@ const ArticleDeskSearch = (props) => {
                         value={deskingSourceList}
                         onChange={(value) => {
                             setDeskingSourceList(value);
+                            setError({ ...error, deskingSourceList: false });
                             if (value !== '') {
                                 setSourceOn(true);
                             }

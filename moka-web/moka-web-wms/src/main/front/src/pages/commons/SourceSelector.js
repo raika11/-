@@ -76,13 +76,11 @@ const defaultProps = {};
 const SourceSelector = (props) => {
     const { className, isInvalid, value, onChange } = props;
     const dispatch = useDispatch();
-    const [selectedList, setSelectedList] = useState([]);
+    const [selectedList, setSelectedList] = useState([]); // 체크된 매체 리스트
     const [toggleText, setToggleText] = useState('매체 전체');
     const [sourceObj, setSourceObj] = useState({}); // 순서를 유지하기 위해 매체 리스트를 obj로 변환함. key는 list의 idx, value는 list값
 
-    const { sourceList } = useSelector((store) => ({
-        sourceList: store.article.sourceList,
-    }));
+    const sourceList = useSelector((store) => store.article.sourceList);
 
     /**
      * 매체 리스트에서 sourceCode로 매체 데이터의 index를 찾음
@@ -121,8 +119,8 @@ const SourceSelector = (props) => {
      * @param {string} sourceCode 매체코드
      */
     const chkTrue = (sourceCode) => {
-        if (!value || value === '') return false;
-        else return value.indexOf(sourceCode) > -1;
+        if (!value) return false;
+        else return value.split(',').indexOf(sourceCode) > -1;
     };
 
     useEffect(() => {
@@ -152,8 +150,8 @@ const SourceSelector = (props) => {
 
     useEffect(() => {
         if (Object.keys(sourceObj).length < 1) return;
-        if (value) {
-            const valueArr = value.split(',');
+        if (value || value === '') {
+            const valueArr = value.split(',').filter((v) => v !== '');
             setSelectedList(
                 valueArr.map((v) => {
                     const targetIndex = findSourceIndex(v);
@@ -161,7 +159,7 @@ const SourceSelector = (props) => {
                 }),
             );
         } else {
-            // 값이 없을 때는 모든 매체 선택
+            // 값이 없을 때는(value === null) 모든 매체 선택
             if (typeof onChange === 'function') {
                 onChange(
                     Object.values(sourceObj)

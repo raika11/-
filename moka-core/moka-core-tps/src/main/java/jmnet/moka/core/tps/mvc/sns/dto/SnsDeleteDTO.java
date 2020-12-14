@@ -32,8 +32,8 @@ public class SnsDeleteDTO implements Serializable {
     /**
      * message
      */
-    @NotEmpty(message = "{tps.article.error.notempty.totalId}")
-    @Min(value = 0, message = "{tps.article.error.min.totalId}")
+    @NotEmpty(message = "{tps.sns.error.notempty.totalId}")
+    @Min(value = 0, message = "{tps.sns.error.notempty.totalId}")
     private Long totalId;
 
     /**

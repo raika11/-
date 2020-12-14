@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
@@ -45,6 +46,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * <pre>
@@ -187,6 +189,10 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
                 .totalId(totalId)
                 .snsType(articleSnsShareSaveDTO.getSnsType())
                 .build());
+
+        // html escape
+        articleSnsShare = escapeHtml(articleSnsShare);
+
         // 기사 정보 없을 경우 에러 처리
         articleService
                 .findArticleBasicById(articleSnsShare
@@ -244,6 +250,9 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
                 .totalId(totalId)
                 .snsType(articleSnsShareSaveDTO.getSnsType())
                 .build());
+
+        // html escape
+        newArticleSnsShare = escapeHtml(newArticleSnsShare);
 
         // 기사 정보 없을 경우 에러 처리
         articleService
@@ -467,5 +476,18 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.INSERT, e);
             throw new Exception(msg("tps.sns.error.save.facebook-instance-article"), e);
         }
+    }
+
+    private ArticleSnsShare escapeHtml(ArticleSnsShare articleSnsShare) {
+        if (McpString.isNotEmpty(articleSnsShare.getArtTitle())) {
+            articleSnsShare.setArtTitle(HtmlUtils.htmlEscape(articleSnsShare.getArtTitle()));
+        }
+        if (McpString.isNotEmpty(articleSnsShare.getArtSummary())) {
+            articleSnsShare.setArtSummary(HtmlUtils.htmlEscape(articleSnsShare.getArtSummary()));
+        }
+        if (McpString.isNotEmpty(articleSnsShare.getSnsPostMsg())) {
+            articleSnsShare.setSnsPostMsg(HtmlUtils.htmlEscape(articleSnsShare.getSnsPostMsg()));
+        }
+        return articleSnsShare;
     }
 }

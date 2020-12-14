@@ -231,6 +231,18 @@ public class DeskingWork implements Serializable {
     @Column(name = "REG_ID")
     private String regId;
 
+    /**
+     * 영상URL
+     */
+    @Column(name = "VOD_URL")
+    private String vodUrl;
+
+    /**
+     * 아이콘파일명
+     */
+    @Column(name = "ICON_FILE_NAME")
+    private String iconFileName;
+
     @PrePersist
     @PreUpdate
     public void prePersist() {

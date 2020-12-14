@@ -275,6 +275,18 @@ public class DeskingHist implements Serializable {
     @Builder.Default
     private String approvalYn = MokaConstants.NO;
 
+    /**
+     * 영상URL
+     */
+    @Column(name = "VOD_URL")
+    private String vodUrl;
+
+    /**
+     * 아이콘파일명
+     */
+    @Column(name = "ICON_FILE_NAME")
+    private String iconFileName;
+
     @PrePersist
     @PreUpdate
     public void prePersist() {

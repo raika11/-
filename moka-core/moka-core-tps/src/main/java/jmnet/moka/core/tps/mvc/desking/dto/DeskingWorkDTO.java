@@ -208,4 +208,14 @@ public class DeskingWorkDTO implements Serializable {
      * 컴포넌트SEQ
      */
     private Long componentSeq;
+
+    /**
+     * 영상URL
+     */
+    private String vodUrl;
+
+    /**
+     * 아이콘파일명
+     */
+    private String iconFileName;
 }

@@ -5,12 +5,11 @@
 package jmnet.moka.core.tps.mvc.naver.service;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +21,6 @@ import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.ftp.FtpHelper;
@@ -88,7 +86,7 @@ public class NaverServiceImpl implements NaverService {
 
     @Override
     public void publishNaverStand(String source, Long areaSeq)
-            throws NoDataException, XMLStreamException, IOException, TemplateParseException, DataLoadException, TemplateMergeException {
+            throws Exception {
         // 편집영역조회
         Area area = areaService
                 .findAreaBySeq(areaSeq)
@@ -99,49 +97,63 @@ public class NaverServiceImpl implements NaverService {
                 });
 
         // html 생성
-        File tmpHtmlFile = File.createTempFile("newsStand",".html");
-        makeHTML(area, tmpHtmlFile);
+        File htmlFile = File.createTempFile("newsStand", ".html");
+        String htmlPath = makeHTML(area, htmlFile);
 
         // xml 생성
-        makeXML(area);
-    }
+        String xmlPath = "";
+        if (McpString.isNotEmpty(htmlPath)) {
+            xmlPath = makeXML(area, htmlPath);
+        }
 
-    private void makeHTML(Area area, File htmlFile)
-            throws NoDataException, TemplateMergeException, DataLoadException, TemplateParseException, IOException {
-        Page page = pageService.findPageBySeq(area.getPage().getPageSeq())
-                               .orElseThrow(() -> {
-                                   String message = messageByLocale.get("tps.common.error.no-data");
-                                   log.error(message, true);
-                                   return new NoDataException(message);
-                               });
-
-        PageDTO dto = modelMapper.map(page, PageDTO.class);
-
-        String html = mergeService.getMergePage(dto);
-
-        File tmpFile = File.createTempFile("newsStand",".html");
-        try (FileWriter writer = new FileWriter(tmpFile.getName(), true)) {
-            writer.write(html);
-            writer.flush();
-            writer.close();
-
-            // 파일 저장
-            String fileName = naverStandHtmlPath.substring(naverStandHtmlPath.lastIndexOf("/")+1);
-            String remotePath = naverStandHtmlPath.substring(0, naverStandHtmlPath.lastIndexOf("/"));
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(tmpFile));
-            boolean upload = ftpHelper.upload(naverFtpKey, fileName, bufferedInputStream, remotePath);
-            if (upload) {
-                log.debug("SAVE NAVER STAND HTML FTP SEND");
-            } else {
-                log.debug("SAVE FAIL NAVER STAND HTML FTP SEND");
-            }
-            tmpFile.deleteOnExit(); // 생성된 임시파일은 종료와 함께 삭제.
-        } catch (IOException e) {
-            log.error("FAIL TO SAVE THE NAVER STAND HTML FILE");
+        if (McpString.isEmpty(htmlPath) || McpString.isEmpty(xmlPath)) {
+            throw new Exception();
         }
     }
 
-    private void makeXML(Area area)
+    private String makeHTML(Area area, File htmlFile)
+            throws NoDataException, TemplateMergeException, DataLoadException, TemplateParseException {
+        Page page = pageService
+                .findPageBySeq(area
+                        .getPage()
+                        .getPageSeq())
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    log.error(message, true);
+                    return new NoDataException(message);
+                });
+
+        PageDTO dto = modelMapper.map(page, PageDTO.class);
+
+        String html = mergeService.getMergePage(dto, false);
+
+        html = html.replace("nv_arti=\"\"", "nv_arti");
+        html = html.replace("</li>nn<li>", "</li><li>");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(htmlFile))) {
+            writer.write(html);
+            writer.close();
+
+            // 파일 저장
+            String fileName = naverStandHtmlPath.substring(naverStandHtmlPath.lastIndexOf("/") + 1);
+            String remotePath = naverStandHtmlPath.substring(0, naverStandHtmlPath.lastIndexOf("/"));
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(htmlFile));
+            boolean upload = ftpHelper.upload(naverFtpKey, fileName, bufferedInputStream, remotePath);
+            if (upload) {
+                log.debug("SAVE NAVER STAND HTML FTP SEND: {}", htmlFile.getPath());
+                return naverStandHtmlUrl;
+            } else {
+                log.debug("SAVE FAIL NAVER STAND HTML FTP SEND: {}", htmlFile.getPath());
+                return "";
+            }
+            //tmpFile.deleteOnExit(); // 생성된 임시파일은 종료와 함께 삭제.
+        } catch (IOException e) {
+            log.error("FAIL TO SAVE THE NAVER STAND HTML FILE");
+        }
+        return "";
+    }
+
+    private String makeXML(Area area, String htmlPath)
             throws XMLStreamException, IOException {
 
         // 1. 편집영역 headline 기사 데이타셋 조회
@@ -173,9 +185,9 @@ public class NaverServiceImpl implements NaverService {
         Set<String> domainList = getDomainList(topDeskingList, subDeskingList);
 
         // 3. xml 생성
-        File tmpFile = File.createTempFile("newsStand",".xml");
+        File tmpFile = File.createTempFile("newsStand", ".xml");
         XMLOutputFactory factory = XMLOutputFactory.newFactory();
-        try (FileWriter writer = new FileWriter(tmpFile.getName(), true)) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(tmpFile))) {
             XMLStreamWriter xml = factory.createXMLStreamWriter(writer);
             // <?xml version="1.0" ?> 작성
             xml.writeStartDocument();
@@ -195,7 +207,7 @@ public class NaverServiceImpl implements NaverService {
 
             // <source>
             xml.writeStartElement("source");
-            xml.writeCData(naverStandHtmlUrl);
+            xml.writeCData(htmlPath);
             xml.writeEndElement();
 
             // <modified>
@@ -205,7 +217,7 @@ public class NaverServiceImpl implements NaverService {
 
             // <domains>
             xml.writeStartElement("domains");
-            for(String domain: domainList) {
+            for (String domain : domainList) {
                 xml.writeStartElement("domain");
                 xml.writeCData(domain);
                 xml.writeEndElement();
@@ -214,45 +226,43 @@ public class NaverServiceImpl implements NaverService {
 
             // headline_articles 작성성
             xml.writeStartElement("headline_articles");
-            xml.writeStartElement("headline_article");
 
             // top 기사
+            xml.writeStartElement("headline_article");
             if (topDeskingList.size() > 0) {
                 Desking desking = topDeskingList.get(0);
                 xml.writeCharacters(System.lineSeparator());
 
                 xml.writeStartElement("url");
-                xml.writeCData(desking.getLinkUrl() == null ? "" : desking.getLinkUrl() );
+                xml.writeCData(desking.getLinkUrl() == null ? "" : desking.getLinkUrl());
                 xml.writeEndElement();
 
                 xml.writeStartElement("title");
-                xml.writeCData(desking
-                        .getTitle());
+                xml.writeCData(trimTitle(desking.getTitle()));
                 xml.writeEndElement();
 
-                String imgUrl = desking
-                        .getThumbFileName();
-                if(McpString.isNotEmpty(imgUrl)) {
+                String imgUrl = desking.getThumbFileName();
+                if (McpString.isNotEmpty(imgUrl)) {
                     xml.writeStartElement("img");
                     xml.writeCData(imgUrl);
                     xml.writeEndElement();
                 }
             }
+            xml.writeEndElement();  // </headline_article>
 
             // 서브기사
             for (Desking desking : subDeskingList) {
                 xml.writeCharacters(System.lineSeparator());
 
                 xml.writeStartElement("url");
-                xml.writeCData(desking.getLinkUrl() == null ? "" : desking.getLinkUrl() );
+                xml.writeCData(desking.getLinkUrl() == null ? "" : desking.getLinkUrl());
                 xml.writeEndElement();
 
                 xml.writeStartElement("title");
-                xml.writeCData(desking.getTitle());
+                xml.writeCData(trimTitle(desking.getTitle()));
                 xml.writeEndElement();
             }
 
-            xml.writeEndElement();  // </headline_article>
             xml.writeEndElement();  // </headline_articles>
             xml.writeEndElement();  // </newsstand>
 
@@ -260,44 +270,57 @@ public class NaverServiceImpl implements NaverService {
             xml.close();
 
             // 파일 저장
-            String fileName = naverStandXmlPath.substring(naverStandXmlPath.lastIndexOf("/")+1);
+            String fileName = naverStandXmlPath.substring(naverStandXmlPath.lastIndexOf("/") + 1);
             String remotePath = naverStandXmlPath.substring(0, naverStandXmlPath.lastIndexOf("/"));
             BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(tmpFile));
             boolean upload = ftpHelper.upload(naverFtpKey, fileName, bufferedInputStream, remotePath);
             if (upload) {
-                log.debug("SAVE NAVER STAND XML FTP SEND");
+                log.debug("SAVE NAVER STAND XML FTP SEND: {}", tmpFile.getPath());
+                return remotePath + "/" + fileName;
             } else {
-                log.debug("SAVE FAIL NAVER STAND XML FTP SEND");
+                log.debug("SAVE FAIL NAVER STAND XML FTP SEND: {}", tmpFile.getPath());
             }
-            tmpFile.deleteOnExit(); // 생성된 임시파일은 종료와 함께 삭제.
+            //tmpFile.deleteOnExit(); // 생성된 임시파일은 종료와 함께 삭제.
         } catch (IOException e) {
             log.error("FAIL TO SAVE THE NAVER STAND XML FILE");
         }
+        return "";
+    }
 
+    private String trimTitle(String title) {
+        String retTitle = title;
+        retTitle = retTitle.replace("<strong>", "");
+        retTitle = retTitle.replace("</strong>", "");
+        retTitle = retTitle.replace("<span>", "");
+        retTitle = retTitle.replace("</span>", "");
+        return retTitle;
     }
 
     private Set<String> getDomainList(List<Desking> topDeskingList, List<Desking> subDeskingList) {
         Set<String> domainList = new LinkedHashSet<>();
 
         // top 1 기사 link url
-        Set<String> topDomainList = topDeskingList.stream()
-                      .filter(item-> McpString.isNotEmpty(item.getLinkUrl()))
-                      .map(item->item.getLinkUrl())
-                      .collect(Collectors.toSet());
+        Set<String> topDomainList = topDeskingList
+                .stream()
+                .filter(item -> McpString.isNotEmpty(item.getLinkUrl()))
+                .map(item -> item.getLinkUrl())
+                .collect(Collectors.toSet());
         domainList.addAll(topDomainList);
 
         // top 1 기사 thumbnail url
-        Set<String> topImgDomainList = topDeskingList.stream()
-                       .filter(item-> McpString.isNotEmpty(item.getThumbFileName()))
-                       .map(item->item.getThumbFileName())
-                       .collect(Collectors.toSet());
+        Set<String> topImgDomainList = topDeskingList
+                .stream()
+                .filter(item -> McpString.isNotEmpty(item.getThumbFileName()))
+                .map(item -> item.getThumbFileName())
+                .collect(Collectors.toSet());
         domainList.addAll(topImgDomainList);
 
         // top 서브기사 link url
-        Set<String> subDomainList = subDeskingList.stream()
-                                                   .filter(item-> McpString.isNotEmpty(item.getLinkUrl()))
-                                                   .map(item->item.getLinkUrl())
-                                                   .collect(Collectors.toSet());
+        Set<String> subDomainList = subDeskingList
+                .stream()
+                .filter(item -> McpString.isNotEmpty(item.getLinkUrl()))
+                .map(item -> item.getLinkUrl())
+                .collect(Collectors.toSet());
         domainList.addAll(subDomainList);
 
         return domainList;

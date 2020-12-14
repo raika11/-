@@ -85,6 +85,12 @@ public class MergeServiceImpl implements MergeService {
     @Override
     public String getMergePage(PageDTO pageDto)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
+        return getMergePage(pageDto, true);
+    }
+
+    @Override
+    public String getMergePage(PageDTO pageDto, boolean baseTag)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
         // 도메인
         Domain domainInfo = domainService
                 .findDomainById(pageDto
@@ -108,7 +114,7 @@ public class MergeServiceImpl implements MergeService {
         MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
 
         // 랜더링
-        StringBuilder sb = dtm.merge(pageItem, null, true);
+        StringBuilder sb = dtm.merge(pageItem, null, true, false, true, baseTag);
 
         String content = sb.toString();
 
@@ -227,7 +233,7 @@ public class MergeServiceImpl implements MergeService {
                     (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
 
             // 랜더링
-            StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false);
+            StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false, true);
 
             String content = sb.toString();
 
@@ -330,7 +336,7 @@ public class MergeServiceImpl implements MergeService {
                         (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
 
                 // 랜더링
-                StringBuilder sb = dtm.merge(pageItem, containerItem, false, false, false);
+                StringBuilder sb = dtm.merge(pageItem, containerItem, false, false, false, true);
 
                 content = sb.toString();
 
@@ -365,7 +371,7 @@ public class MergeServiceImpl implements MergeService {
                             (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
 
                     // 랜더링
-                    StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false);
+                    StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false, true);
 
                     content = sb.toString();
 

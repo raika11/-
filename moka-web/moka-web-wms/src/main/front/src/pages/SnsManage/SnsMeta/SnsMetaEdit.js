@@ -9,7 +9,7 @@ import toast from '@utils/toastUtil';
 import SnsPreviewModal from '@pages/SnsManage/SnsMeta/modal/SnsPreviewModal';
 import { snsNames } from '@/constants';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
-import { getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
+import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
 
 const SnsMetaEdit = () => {
     const dispatch = useDispatch();
@@ -21,7 +21,6 @@ const SnsMetaEdit = () => {
     const [edit, setEdit] = useState(initialState.meta.meta);
 
     const { meta, errors, cdNm: fbToken, loading } = useSelector((store) => {
-        console.log(store.codeMgt.specialCharCode.cdNm);
         return {
             meta: store.sns.meta.meta,
             cdNm: store.codeMgt.specialCharCode.cdNm,
@@ -59,6 +58,7 @@ const SnsMetaEdit = () => {
     };
 
     const handleClickFbTokenModalSave = ({ value: token }) => {
+        dispatch(changeSpecialCharCode(token));
         dispatch(
             saveSpecialCharCode({
                 grpCd: 'specialChar',
@@ -72,7 +72,6 @@ const SnsMetaEdit = () => {
                 },
             }),
         );
-        console.log(token);
     };
 
     const handleClickArticlePreviewModalShow = () => {

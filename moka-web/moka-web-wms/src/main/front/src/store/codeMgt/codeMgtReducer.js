@@ -215,6 +215,18 @@ export default handleActions(
                 draft.specialCharCode = { ...draft.specialCharCode, ...payload };
             });
         },
+
+        [act.CLEAR_SPECIAL_CHAR_CODE]: (state) => {
+            return produce(state, (draft) => {
+                draft.specialCharCode = initialState.specialCharCode;
+            });
+        },
+
+        [act.CHANGE_SPECIAL_CHAR_CODE]: (state, { payload: cdNm }) => {
+            return produce(state, (draft) => {
+                draft.specialCharCode.cdNm = cdNm;
+            });
+        },
     },
     initialState,
 );

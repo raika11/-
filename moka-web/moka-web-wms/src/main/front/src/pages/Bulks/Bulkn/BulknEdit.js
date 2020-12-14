@@ -7,6 +7,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { getBulkArticle, GET_BULK_LIST, saveBulkArticle, getBulkList, getSpecialchar, showPreviewModal } from '@store/bulks';
+import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
+import DefaultInputModal from '@pages/commons/DefaultInputModal';
 
 const propTypes = {
     EditState: PropTypes.string,
@@ -26,10 +28,10 @@ const BulknEdit = (props) => {
     const params = useParams();
     const history = useHistory();
 
-    const { loading, bulkArticle, bulkPathName, specialchar } = useSelector((store) => ({
+    const { loading, bulkArticle, bulkPathName, cdNm: symbol } = useSelector((store) => ({
         bulkPathName: store.bulks.bulkPathName,
         bulkArticle: store.bulks.bulkn.bulkArticle,
-        specialchar: store.bulks.bulkn.specialchar,
+        cdNm: store.codeMgt.specialCharCode.cdNm,
         loading: store.loading[GET_BULK_LIST],
     }));
 
@@ -150,13 +152,30 @@ const BulknEdit = (props) => {
     }, [bulkArticle]);
 
     // 문구 저장.
-    const hancleClickSaveButton = () => {
+    const handleClickSaveButton = () => {
         handleSaveBulkArticle('publish');
     };
 
     // 문구 임시 저장.
-    const hancleClickTempSaveButton = () => {
+    const handleClickTempSaveButton = () => {
         handleSaveBulkArticle('save');
+    };
+
+    const handleClickSymbolSave = ({ value: symbol }) => {
+        dispatch(changeSpecialCharCode(symbol));
+        dispatch(
+            saveSpecialCharCode({
+                grpCd: 'specialChar',
+                dtlCd: 'bulkChar',
+                cdNm: symbol,
+                callback: (response) => {
+                    if (response.header.success) {
+                        setModalMShow(false);
+                    }
+                    toast.result(response);
+                },
+            }),
+        );
     };
 
     // 실제 저장 처리.
@@ -213,7 +232,7 @@ const BulknEdit = (props) => {
 
     // 문구 정보에 약물 정보를 가지고 오는 처리.
     useEffect(() => {
-        dispatch(getSpecialchar());
+        dispatch(getSpecialCharCode({ grpCd: 'specialChar', dtlCd: 'bulkChar' }));
     }, [dispatch]);
 
     // props 로 받은 edit 상태가 변경되면 라우터를 이동 시킴. ( edit disabled 변경.)
@@ -246,7 +265,7 @@ const BulknEdit = (props) => {
                                 label="약물"
                                 onChange={(e) => handleChangeBulkinputBox(e)}
                                 labelWidth={87}
-                                value={specialchar.cdNm}
+                                value={symbol}
                                 inputClassName="shadow-none border-0"
                                 disabled={editState}
                             />
@@ -311,15 +330,25 @@ const BulknEdit = (props) => {
                 <hr />
                 <Form.Row>
                     <Col className="justify-content-center align-items-center text-center">
-                        <Button variant="positive" className="mr-05" onClick={hancleClickSaveButton} disabled={editState}>
+                        <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editState}>
                             저장
                         </Button>
-                        <Button variant="positive" className="mr-05" onClick={hancleClickTempSaveButton} disabled={editState}>
+                        <Button variant="positive" className="mr-05" onClick={handleClickTempSaveButton} disabled={editState}>
                             임시저장
                         </Button>
                     </Col>
                 </Form.Row>
-                <SpecialCharModal show={modalMShow} onHide={() => setModalMShow(false)} onClickSave={null} />
+                {/*<SpecialCharModal show={modalMShow} onHide={() => setModalMShow(false)} onClickSave={null} />*/}
+                <DefaultInputModal
+                    title="약물 등록"
+                    inputData={{ title: '', value: symbol, isInvalid: false }}
+                    show={modalMShow}
+                    onHide={() => {
+                        dispatch(getSpecialCharCode({ grpCd: 'specialChar', dtlCd: 'bulkChar' }));
+                        setModalMShow(false);
+                    }}
+                    onSave={handleClickSymbolSave}
+                />
             </MokaCard>
         </>
     );

@@ -5,6 +5,7 @@ import { MokaCard } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import commonUtil from '@utils/commonUtil';
 import { clearMetaStore } from '@store/snsManage';
+import { clearSpecialCharCode } from '@store/codeMgt';
 
 const SnsMetaList = React.lazy(() => import('./SnsMetaList'));
 const SnsMetaEdit = React.lazy(() => import('./SnsMetaEdit'));
@@ -17,6 +18,7 @@ const SnsMeta = ({ match }) => {
     useEffect(() => {
         return () => {
             dispatch(clearMetaStore());
+            dispatch(clearSpecialCharCode());
         };
     }, [dispatch]);
 

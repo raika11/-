@@ -280,7 +280,7 @@ const dateFormat = (date, format) => {
 };
 
 export const setDefaultValue = (value, defaultValue = '') => {
-    return value !== null && value !== undefined ? value : defaultValue;
+    return value !== null && value !== undefined && value !== '' ? value : defaultValue;
 };
 
 export default {

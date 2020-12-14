@@ -23,11 +23,13 @@ import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
+import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSaveDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.InstanceArticleSaveDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
+import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.core.tps.mvc.sns.service.ArticleSnsShareService;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
 import lombok.extern.slf4j.Slf4j;
@@ -167,18 +169,24 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     /**
      * 등록
      *
-     * @param articleSnsShareDTO 등록할 SNS정보
+     * @param articleSnsShareSaveDTO 등록할 SNS정보
      * @return 등록된 SNS정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
-    @ApiOperation(value = "SNS 등록")
-    @PostMapping
-    public ResponseEntity<?> postArticleSnsShare(@Valid ArticleSnsShareDTO articleSnsShareDTO)
+    @ApiOperation(value = "SNS 메타 등록")
+    @PostMapping("/{totalId}")
+    public ResponseEntity<?> postArticleSnsShare(
+            @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") Long totalId,
+            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO)
             throws InvalidDataException, Exception {
 
-        ArticleSnsShare articleSnsShare = modelMapper.map(articleSnsShareDTO, ArticleSnsShare.class);
-
+        ArticleSnsShare articleSnsShare = modelMapper.map(articleSnsShareSaveDTO, ArticleSnsShare.class);
+        articleSnsShare.setId(ArticleSnsSharePK
+                .builder()
+                .totalId(totalId)
+                .snsType(articleSnsShareSaveDTO.getSnsType())
+                .build());
         // 기사 정보 없을 경우 에러 처리
         articleService
                 .findArticleBasicById(articleSnsShare
@@ -212,58 +220,30 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
         }
     }
 
-    /**
-     * FB Instance Article 등록
-     *
-     * @param instanceArticle 등록할 페이스북 article 정보
-     * @return 성공여부
-     * @throws InvalidDataException 데이타 유효성 오류
-     * @throws Exception            예외처리
-     */
-    @ApiOperation(value = "TB_FB_INSTANT_ARTICLE_LIST 테이블에 기사 등록")
-    @PostMapping("/fb-instance-article")
-    public ResponseEntity<?> postArticleSnsMetaFbIA(@Valid InstanceArticleSaveDTO instanceArticle)
-            throws InvalidDataException, Exception {
 
-        try {
-            // insert
-            int result = articleSnsShareService.insertFbInstanceArticle(modelMapper.map(instanceArticle, ArticleSnsShareItemVO.class));
-
-
-            // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(result > 0,
-                    result > 0 ? msg("tps.sns.success.save.facebook-instance-article") : msg("tps.sns.error.save.facebook-instance-article"));
-
-            // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.INSERT);
-
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("[FAIL TO INSERT FACEBOOK INSTANCE ARTICLE]", e);
-            // 액션 로그에 오류 내용 출력
-            tpsLogger.error(ActionType.INSERT, e);
-            throw new Exception(msg("tps.sns.error.save.facebook-instance-article"), e);
-        }
-    }
 
     /**
      * 수정
      *
-     * @param totalId            SNS아이디
-     * @param articleSnsShareDTO 수정할 SNS정보
+     * @param totalId                SNS아이디
+     * @param articleSnsShareSaveDTO 수정할 SNS정보
      * @return 수정된 SNS정보
      * @throws Exception 그외 모든 에러
      */
-    @ApiOperation(value = "SNS 수정")
+    @ApiOperation(value = "SNS 메타 수정")
     @PutMapping("/{totalId}")
     public ResponseEntity<?> putArticleSnsShare(
-            @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") String totalId,
-            @Valid ArticleSnsShareDTO articleSnsShareDTO)
+            @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") Long totalId,
+            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO)
             throws Exception {
 
         // ArticleSnsShareDTO -> ArticleSnsShare 변환
-        ArticleSnsShare newArticleSnsShare = modelMapper.map(articleSnsShareDTO, ArticleSnsShare.class);
+        ArticleSnsShare newArticleSnsShare = modelMapper.map(articleSnsShareSaveDTO, ArticleSnsShare.class);
+        newArticleSnsShare.setId(ArticleSnsSharePK
+                .builder()
+                .totalId(totalId)
+                .snsType(articleSnsShareSaveDTO.getSnsType())
+                .build());
 
         // 기사 정보 없을 경우 에러 처리
         articleService
@@ -330,7 +310,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @throws NoDataException      삭제 할 SNS 없음
      * @throws Exception            그 외 에러처리
      */
-    @ApiOperation(value = "SNS 삭제")
+    @ApiOperation(value = "SNS 메타 삭제")
     @DeleteMapping("/{totalId}")
     public ResponseEntity<?> deleteArticleSnsShare(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
             @RequestParam(value = "snsType", required = false)
@@ -368,15 +348,15 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
 
 
     /**
-     * SNS Feed 기사 퍼블리시
+     * SNS 게시
      *
      * @return 성공여부
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
-    @ApiOperation(value = "SNS에 배포 등록")
-    @PostMapping("/feeds")
-    public ResponseEntity<?> postSnsFeed(@Valid SnsPublishDTO snsPublish)
+    @ApiOperation(value = "SNS에 전송")
+    @PostMapping("/publish")
+    public ResponseEntity<?> postSnsSend(@Valid SnsPublishDTO snsPublish)
             throws InvalidDataException, Exception {
 
         try {
@@ -414,7 +394,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
 
 
     /**
-     * SNS Feed 기사 삭제
+     * SNS 게시 삭제
      *
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
@@ -422,8 +402,8 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @throws Exception            그 외 에러처리
      */
     @ApiOperation(value = "SNS에 배포 된 기사 삭제")
-    @DeleteMapping("/feeds")
-    public ResponseEntity<?> deleteSnsFeed(@Valid SnsDeleteDTO snsDelete)
+    @DeleteMapping("/unpublish")
+    public ResponseEntity<?> deleteSns(@Valid SnsDeleteDTO snsDelete)
             throws InvalidDataException, NoDataException, Exception {
 
         try {
@@ -450,6 +430,42 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.UPDATE, e.toString());
             throw new Exception(msg("tps.sns.error.delete"), e);
+        }
+    }
+
+    /**
+     * FB Instance Article 등록
+     *
+     * @param instanceArticle 등록할 페이스북 article 정보
+     * @return 성공여부
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "TB_FB_INSTANT_ARTICLE_LIST 테이블에 기사 등록")
+    @PostMapping("/fb-instance-article")
+    public ResponseEntity<?> postArticleSnsMetaFbIA(@Valid InstanceArticleSaveDTO instanceArticle)
+            throws InvalidDataException, Exception {
+
+        try {
+            // insert
+
+            int result = articleSnsShareService.insertFbInstanceArticle(modelMapper.map(instanceArticle, ArticleSnsShareItemVO.class));
+
+
+            // 결과리턴
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(result > 0,
+                    result > 0 ? msg("tps.sns.success.save.facebook-instance-article") : msg("tps.sns.error.save.facebook-instance-article"));
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.INSERT);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT FACEBOOK INSTANCE ARTICLE]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(msg("tps.sns.error.save.facebook-instance-article"), e);
         }
     }
 }

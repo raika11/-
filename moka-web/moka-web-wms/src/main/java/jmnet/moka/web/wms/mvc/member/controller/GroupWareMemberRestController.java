@@ -6,6 +6,7 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.web.wms.config.security.exception.GroupWareException;
 import jmnet.moka.web.wms.config.security.exception.UnauthrizedErrorCode;
 import jmnet.moka.web.wms.config.security.groupware.GroupWareUserInfo;
@@ -37,8 +38,11 @@ public class GroupWareMemberRestController extends AbstractCommonController {
 
     public final SoapWebServiceGatewaySupport groupWareAuthClient;
 
-    public GroupWareMemberRestController(SoapWebServiceGatewaySupport groupWareAuthClient) {
+    private final MemberService memberService;
+
+    public GroupWareMemberRestController(SoapWebServiceGatewaySupport groupWareAuthClient, MemberService memberService) {
         this.groupWareAuthClient = groupWareAuthClient;
+        this.memberService = memberService;
     }
 
     /**
@@ -56,6 +60,9 @@ public class GroupWareMemberRestController extends AbstractCommonController {
         try {
             GroupWareUserInfo groupWareUserInfo = groupWareAuthClient.getUserInfo(groupWareUserId);
             groupWareUserInfo.setUserId(groupWareUserId);
+
+            groupWareUserInfo.setExistMokaUserId(memberService.isDuplicatedId(groupWareUserId));
+
             tpsLogger.success(ActionType.SELECT);
 
             ResultDTO<GroupWareUserInfo> resultDto = new ResultDTO<>(groupWareUserInfo);

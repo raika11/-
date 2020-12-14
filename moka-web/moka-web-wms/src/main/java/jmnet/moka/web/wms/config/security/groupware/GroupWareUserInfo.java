@@ -26,6 +26,10 @@ public class GroupWareUserInfo {
     @Setter
     private String userId;
 
+    @Getter
+    @Setter
+    private boolean existMokaUserId;
+
     /**
      * 사용자명
      */

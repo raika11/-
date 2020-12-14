@@ -116,3 +116,9 @@ export const getSpecialCharCode = createAction(GET_SPECIAL_CHAR_CODE);
 
 export const SAVE_SPECIAL_CHAR_CODE = 'codeMgt/SAVE_SPECIAL_CHAR_CODE';
 export const saveSpecialCharCode = createAction(SAVE_SPECIAL_CHAR_CODE);
+
+export const CHANGE_SPECIAL_CHAR_CODE = 'codeMgt/CHANGE_SPECIAL_CHAR_CODE';
+export const changeSpecialCharCode = createAction(CHANGE_SPECIAL_CHAR_CODE);
+
+export const CLEAR_SPECIAL_CHAR_CODE = 'codeMgt/CLEAR_SPECIAL_CHAR_CODE';
+export const clearSpecialCharCode = createAction(CLEAR_SPECIAL_CHAR_CODE);

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { clearStore, initializeParams } from '@store/bulks';
+import { clearSpecialCharCode } from '@store/codeMgt';
 
 const Bulkh = React.lazy(() => import('./Bulkh'));
 const Bulkn = React.lazy(() => import('./Bulkn'));
@@ -80,6 +81,7 @@ const Bulks = ({ match }) => {
     useEffect(() => {
         return () => {
             dispatch(clearStore());
+            dispatch(clearSpecialCharCode());
         };
     }, [dispatch]);
 

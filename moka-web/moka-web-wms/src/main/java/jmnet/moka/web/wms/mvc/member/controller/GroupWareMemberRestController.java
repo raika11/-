@@ -1,10 +1,13 @@
 package jmnet.moka.web.wms.mvc.member.controller;
 
 import io.swagger.annotations.ApiOperation;
+import java.util.Map;
 import javax.validation.constraints.Size;
-import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.MapBuilder;
+import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.tps.common.code.MemberRequestCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.member.service.MemberService;
 import jmnet.moka.web.wms.config.security.exception.GroupWareException;
@@ -65,8 +68,32 @@ public class GroupWareMemberRestController extends AbstractCommonController {
 
             tpsLogger.success(ActionType.SELECT);
 
-            ResultDTO<GroupWareUserInfo> resultDto = new ResultDTO<>(groupWareUserInfo);
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            Map<String, Object> result = MapBuilder
+                    .getInstance()
+                    .getMap();
+
+            /**
+             * 사용자 신규 등록 요청
+             */
+            result.put("NEW_REQUEST", MemberRequestCode.NEW_REQUEST.getCode());
+            /**
+             * 사용자 신규 등록 SMS 인증 문자 발송
+             */
+            result.put("NEW_SMS", MemberRequestCode.NEW_SMS.getCode());
+            /**
+             * 잠금해제 요청
+             */
+            result.put("UNLOCK_REQUEST", MemberRequestCode.UNLOCK_REQUEST.getCode());
+            /**
+             * 잠금해제 요청 SMS인증문자
+             */
+            result.put("UNLOCK_SMS", MemberRequestCode.UNLOCK_SMS.getCode());
+
+            result.put("groupWareUser", groupWareUserInfo);
+
+            ResultMapDTO resultDTO = new ResultMapDTO(result);
+
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
         } catch (GroupWareException ex) {
             /**

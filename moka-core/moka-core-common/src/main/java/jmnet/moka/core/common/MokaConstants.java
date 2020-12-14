@@ -175,7 +175,9 @@ public class MokaConstants {
     /* naverbulk service */
     public static final String STATUS_SAVE = "save";
     public static final String STATUS_PUBLISH = "publish";
-    public static final String SOURCE_CODE_60 = "60";
+    // 중앙선데이
+    public static final String SOURCE_CODE_61 = "61";
+    // 중앙일보 집배신
     public static final String SOURCE_CODE_3 = "3";
     public static final String CLICKART_DIV_H = "H";
     public static final String CLICKART_DIV_N = "N";

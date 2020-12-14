@@ -16,6 +16,8 @@ import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
+import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkArticleDTO;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkDTO;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkSaveDTO;
@@ -71,15 +73,18 @@ public class BulkRestController extends AbstractCommonController {
 
     private final MessageByLocale messageByLocale;
 
+    private final ArticleService articleService;
+
     private final TpsLogger tpsLogger;
 
     public BulkRestController(BulkService naverBulkService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger,
-            CodeMgtService codeMgtService) {
+            CodeMgtService codeMgtService, ArticleService articleService) {
         this.codeMgtService = codeMgtService;
         this.naverBulkService = naverBulkService;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
         this.tpsLogger = tpsLogger;
+        this.articleService = articleService;
     }
 
     /**
@@ -180,7 +185,15 @@ public class BulkRestController extends AbstractCommonController {
                 });
 
         // SourceCode check
-        if (!MokaConstants.SOURCE_CODE_60.equals(bulkDTO.getSourceCode()) && !MokaConstants.SOURCE_CODE_3.equals(bulkDTO.getSourceCode())) {
+        List<ArticleSource> articleSources = articleService.findAllBulkArticleSource();
+        boolean isSourceCodeMatch = articleSources
+                .stream()
+                .anyMatch(articleSource -> articleSource
+                        .getSourceCode()
+                        .equals(newBulk.getSourceCode()));
+
+        // status check
+        if (!isSourceCodeMatch) {
             throw new Exception(msg("tps.bulk.error.pattern.sourceCode"));
         }
 
@@ -238,8 +251,15 @@ public class BulkRestController extends AbstractCommonController {
                 throw new Exception(msg("tps.bulk.error.pattern.status"));
             }
 
+            List<ArticleSource> articleSources = articleService.findAllBulkArticleSource();
+            boolean isSourceCodeMatch = articleSources
+                    .stream()
+                    .anyMatch(articleSource -> articleSource
+                            .getSourceCode()
+                            .equals(bulkSave.getSourceCode()));
+
             // status check
-            if (!MokaConstants.SOURCE_CODE_60.equals(bulkSave.getSourceCode()) && !MokaConstants.SOURCE_CODE_3.equals(bulkSave.getSourceCode())) {
+            if (!isSourceCodeMatch) {
                 //            tpsLogger.fail(ActionType.UPDATE, message, true);
                 throw new Exception(msg("tps.bulk.error.pattern.sourceCode"));
             }

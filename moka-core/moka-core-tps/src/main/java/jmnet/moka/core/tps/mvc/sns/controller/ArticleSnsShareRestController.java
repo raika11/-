@@ -153,7 +153,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
         Optional<ArticleSnsShare> articleSnsShareInfo = articleSnsShareService.findArticleSnsShareById(totalId, snsType);
 
         ArticleDetailVO articleDetailVO = articleDetailInfo.orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
-        ArticleSnsShare articleSnsShare = articleSnsShareInfo.orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+        ArticleSnsShare articleSnsShare = articleSnsShareInfo.orElse(new ArticleSnsShare());
 
         ResultMapDTO resultDto = new ResultMapDTO(HttpStatus.OK);
         resultDto.addBodyAttribute("article", articleDetailVO);

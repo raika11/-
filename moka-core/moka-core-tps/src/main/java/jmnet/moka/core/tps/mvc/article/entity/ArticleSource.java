@@ -100,7 +100,20 @@ public class ArticleSource extends BaseAudit {
     private String jstoreUse;
 
     /**
-     * 사용여부
+     * SOCIAL사용
+     */
+    @Column(name = "SOCIAL_USE", columnDefinition = "char")
+    private String socialUse;
+
+    /**
+     * 벌크 사용
+     */
+    @Column(name = "BULK_FLAG", columnDefinition = "char")
+    @Builder.Default
+    private String bulkFlag = MokaConstants.NO;
+
+    /**
+     * 수신 사용여부
      */
     @Column(name = "RCV_USED_YN", columnDefinition = "char")
     private String rcvUsedYn = MokaConstants.YES;

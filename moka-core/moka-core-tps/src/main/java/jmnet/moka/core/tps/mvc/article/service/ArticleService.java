@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.article.service;
 
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
@@ -51,4 +52,19 @@ public interface ArticleService {
 
 
     Optional<ArticleDetailVO> findArticleDetailById(Long totalId);
+
+    /**
+     * 벌크에서 사용하는 소스 코드 목록 조회
+     *
+     * @return ArticleSource목록
+     */
+    List<ArticleSource> findAllBulkArticleSource();
+
+    /**
+     * 각 사용여부 코드에 따른 소스 코드 목록 조회
+     *
+     * @param useTypeCode 소스 코드 사용 유형 코드
+     * @return ArticleSource목록
+     */
+    List<ArticleSource> findAllUsedArticleSource(ArticleSourceUseTypeCode useTypeCode);
 }

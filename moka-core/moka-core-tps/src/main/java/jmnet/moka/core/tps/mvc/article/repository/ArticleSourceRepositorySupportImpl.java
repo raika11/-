@@ -10,6 +10,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.entity.QArticleSource;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -45,6 +46,39 @@ public class ArticleSourceRepositorySupportImpl extends QuerydslRepositorySuppor
         JPQLQuery<ArticleSource> query = queryFactory
                 .selectFrom(articleSource)
                 .where(builder);
+        QueryResults<ArticleSource> list = query.fetchResults();
+        return query
+                .fetchResults()
+                .getResults();
+    }
+
+    @Override
+    public List<ArticleSource> findAllUsedSource(ArticleSourceUseTypeCode useTypeCode) {
+        QArticleSource articleSource = QArticleSource.articleSource;
+
+        JPQLQuery<ArticleSource> query = from(articleSource);
+        switch (useTypeCode) {
+            case BULK:
+                query.where(articleSource.bulkFlag.eq(MokaConstants.YES));
+                break;
+            case CONSALES:
+                query.where(articleSource.consalesUse.eq(MokaConstants.YES));
+                break;
+            case JOONGANG:
+                query.where(articleSource.joongangUse.eq(MokaConstants.YES));
+                break;
+            case JSTORE:
+                query.where(articleSource.jstoreUse.eq(MokaConstants.YES));
+                break;
+            case RCV:
+                query.where(articleSource.rcvUsedYn.eq(MokaConstants.YES));
+                break;
+            case SOCIAL:
+                query.where(articleSource.socialUse.eq(MokaConstants.YES));
+                break;
+            default:
+        }
+        
         QueryResults<ArticleSource> list = query.fetchResults();
         return query
                 .fetchResults()

@@ -68,7 +68,7 @@ public class BulkRepositorySupportImpl extends QuerydslRepositorySupport impleme
         }
 
         //검색조건 : 조회시작일자
-        if (McpString.isNotEmpty(searchDTO.getStartDt())) {
+        if (searchDTO.getStartDt() != null) {
             //query.where(qBulk.regDt.between(McpDate.dateStr(searchDTO.getStartDt()), McpDate.dateStr(searchDTO.getEndDt())));
             query.where(qBulk.regDt.between(searchDTO.getStartDt(), searchDTO.getEndDt()));
         }

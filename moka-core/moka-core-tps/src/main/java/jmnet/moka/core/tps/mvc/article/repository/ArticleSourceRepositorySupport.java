@@ -5,6 +5,7 @@
 package jmnet.moka.core.tps.mvc.article.repository;
 
 import java.util.List;
+import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 
 /**
@@ -15,4 +16,6 @@ import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
  */
 public interface ArticleSourceRepositorySupport {
     List<ArticleSource> findAllSourceByDesking(String[] deskingSourceList);
+
+    List<ArticleSource> findAllUsedSource(ArticleSourceUseTypeCode useTypeCode);
 }

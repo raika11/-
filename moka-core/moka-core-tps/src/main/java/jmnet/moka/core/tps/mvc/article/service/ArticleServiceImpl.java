@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.article.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
@@ -143,6 +144,16 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         return Optional.ofNullable(articleDetailVO);
+    }
+
+    @Override
+    public List<ArticleSource> findAllBulkArticleSource() {
+        return findAllUsedArticleSource(ArticleSourceUseTypeCode.BULK);
+    }
+
+    @Override
+    public List<ArticleSource> findAllUsedArticleSource(ArticleSourceUseTypeCode useTypeCode) {
+        return articleSourceRepository.findAllUsedSource(useTypeCode);
     }
 
 }

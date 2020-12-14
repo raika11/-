@@ -105,3 +105,15 @@ export const getCodeMgtDuplicateCheck = ({ grpCd, dtlCd }) => {
         throw err;
     });
 };
+
+export const getSpecialCharCode = ({ grpCd, dtlCd }) => {
+    return instance.get(`/api/codemgt-grps/${grpCd}/special-char/${dtlCd}`).catch((err) => {
+        throw err;
+    });
+};
+
+export const putSpecialCharCode = ({ grpCd, dtlCd, cdNm }) => {
+    return instance.put(`/api/codemgt-grps/${grpCd}/special-char?${qs.stringify({ dtlCd, cdNm })}`).catch((err) => {
+        throw err;
+    });
+};

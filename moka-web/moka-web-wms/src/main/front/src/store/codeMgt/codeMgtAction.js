@@ -110,3 +110,9 @@ export const getDsTitleLoc = createAction(GET_DS_TITLE_LOC);
 export const getDsPre = createAction(GET_DS_PRE);
 export const getDsPreLoc = createAction(GET_DS_PRE_LOC);
 export const getDsIcon = createAction(GET_DS_ICON);
+
+export const [GET_SPECIAL_CHAR_CODE, GET_SPECIAL_CHAR_CODE_SUCCESS, GET_SPECIAL_CHAR_CODE_FAILURE] = createRequestActionTypes('codeMgt/GET_SPECIAL_CHAR_CODE');
+export const getSpecialCharCode = createAction(GET_SPECIAL_CHAR_CODE);
+
+export const SAVE_SPECIAL_CHAR_CODE = 'codeMgt/SAVE_SPECIAL_CHAR_CODE';
+export const saveSpecialCharCode = createAction(SAVE_SPECIAL_CHAR_CODE);

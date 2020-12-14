@@ -310,6 +310,52 @@ function* getCodeMgtDuplicateCheck({ payload: { grpCd, dtlCd, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+function* getSpecialCharCode({ type, payload: { grpCd, dtlCd } }) {
+    try {
+        const response = yield call(api.getSpecialCharCode, { grpCd, dtlCd });
+        if (response.data.header.success) {
+            yield put({
+                type: `${type}_SUCCESS`,
+                payload: response.data.body,
+            });
+        } else {
+            yield put({
+                type: `${type}_FAILURE`,
+                payload: response.data.body,
+            });
+        }
+    } catch (e) {
+        yield put({
+            type: `${type}_FAILURE`,
+            payload: errorResponse(e),
+        });
+    }
+}
+
+function* putSpecialCharCode({ type, payload: { grpCd, dtlCd, cdNm, callback } }) {
+    try {
+        const response = yield call(api.putSpecialCharCode, { grpCd, dtlCd, cdNm });
+        if (response.data.header.success) {
+            yield put({
+                type: act.GET_SPECIAL_CHAR_CODE_SUCCESS,
+                payload: response.data.body,
+            });
+        } else {
+            yield put({
+                type: act.GET_SPECIAL_CHAR_CODE_FAILURE,
+                payload: response.data.body,
+            });
+        }
+        //callback({ ...response.data, header: { ...response.data.header, success: false } });
+        callback(response.data);
+    } catch (e) {
+        yield put({
+            type: act.GET_SPECIAL_CHAR_CODE_FAILURE,
+            payload: errorResponse(e),
+        });
+    }
+}
+
 export const getTpSize = createReadOnlySaga(act.GET_TP_SIZE, 'tpSizeRows', constants.CODETYPE_TP_SIZE);
 export const getTpZone = createReadOnlySaga(act.GET_TP_ZONE, 'tpZoneRows', constants.CODETYPE_TP_ZONE);
 export const getLang = createReadOnlySaga(act.GET_LANG, 'langRows', constants.CODETYPE_LANG);
@@ -356,4 +402,7 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_DS_PRE_LOC, getDsPreLoc);
     yield takeLatest(act.GET_DS_ICON, getDsIcon);
     yield takeLatest(act.GET_ARTICLE_TYPE, getArticleType);
+
+    yield takeLatest(act.GET_SPECIAL_CHAR_CODE, getSpecialCharCode);
+    yield takeLatest(act.SAVE_SPECIAL_CHAR_CODE, putSpecialCharCode);
 }

@@ -25,6 +25,12 @@ export const initialState = {
     },
     grpList: [],
     grp: {},
+    specialCharCode: {
+        cdNm: '',
+        dtlCd: '',
+        grpCd: '',
+        seqNo: null,
+    },
     grpTotal: 0,
     grpError: null,
     cdList: [],
@@ -201,6 +207,12 @@ export default handleActions(
         [act.READ_ONLY_FAILURE]: (state, { payload: { rowName } }) => {
             return produce(state, (draft) => {
                 draft[rowName] = [];
+            });
+        },
+
+        [act.GET_SPECIAL_CHAR_CODE_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.specialCharCode = { ...draft.specialCharCode, ...payload };
             });
         },
     },

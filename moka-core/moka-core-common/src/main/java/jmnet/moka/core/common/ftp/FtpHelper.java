@@ -340,8 +340,10 @@ public class FtpHelper {
                 // 파일 경로를 변경한다.
                 //ftpClient.makeDirectory(realSavePath.toString());
                 mkdirs(ftpClient, realSavePath.toString());
-                success = ftpClient.rename(McpFile.makeFilepathName(fi.getTempPath(), fileName),
-                        McpFile.makeFilepathName(realSavePath.toString(), fileName));
+                String from = McpFile.makeFilepathName(fi.getTempPath(), fileName);
+                String to = McpFile.makeFilepathName(realSavePath.toString(), fileName);
+                ftpClient.deleteFile(to);
+                success = ftpClient.rename(from, to);
             }
 
         } catch (FileNotFoundException e) {

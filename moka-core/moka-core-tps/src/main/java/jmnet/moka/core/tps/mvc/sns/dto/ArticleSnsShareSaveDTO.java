@@ -56,7 +56,7 @@ public class ArticleSnsShareSaveDTO implements Serializable {
     /**
      * SNS 전송상태
      */
-    @NotEmpty
+    @NotEmpty(message = "{tps.sns.error.notempty.snsArtSts}")
     private String snsArtSts;
 
     /**
@@ -78,7 +78,7 @@ public class ArticleSnsShareSaveDTO implements Serializable {
     /**
      * 기사제목
      */
-    @NotEmpty
+    @NotEmpty(message = "{tps.sns.error.notempty.artTitle}")
     private String artTitle;
 
     /**

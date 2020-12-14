@@ -112,7 +112,7 @@ public class BrightcoveServiceImpl implements BrightcoveService {
                 .after(brightcoveCredentailVO.getExpireDt())) {
             return false;
         }
-        return false;
+        return true;
     }
 
     private BrightcoveCredentailVO getClientCredentials() {

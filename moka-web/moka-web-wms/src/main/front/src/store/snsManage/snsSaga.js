@@ -35,7 +35,12 @@ function toSnsMetaData({ snsShare, article }) {
             title: commonUtil.setDefaultValue(article.fbMetaTitle),
             summary: commonUtil.setDefaultValue(article.fbMetaSummary),
             postMessage: commonUtil.setDefaultValue(article.fbMetaPostMsg),
-            metaImage: commonUtil.setDefaultValue(article.fbMetaImage),
+            metaImage: toMetaImage(
+                commonUtil.setDefaultValue(
+                    article.fbMetaImage,
+                    'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg',
+                ),
+            ),
             isReserve: !commonUtil.isEmpty(article.fbMetaReserveDt),
             reserveDt: article.fbMetaReserveDt,
         },
@@ -44,11 +49,31 @@ function toSnsMetaData({ snsShare, article }) {
             title: commonUtil.setDefaultValue(article.twMetaTitle),
             summary: commonUtil.setDefaultValue(article.twMetaSummary),
             postMessage: commonUtil.setDefaultValue(article.twMetaPostMsg),
-            metaImage: commonUtil.setDefaultValue(article.twMetaImage),
+            metaImage: toMetaImage(
+                commonUtil.setDefaultValue(
+                    article.twMetaImage,
+                    'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg',
+                ),
+            ),
             isReserve: !commonUtil.isEmpty(article.twMetaReserveDt),
             reserveDt: article.twMetaReserveDt,
         },
     };
+}
+
+function toMetaImage(metaImageUrl) {
+    let toMetaImageUrl = metaImageUrl;
+    if (toMetaImageUrl.indexOf('https://ir.joins.com/') < 0) {
+        if (toMetaImageUrl.indexOf('https://pds.joins.com') < 0) {
+            toMetaImageUrl = `https://pds.joins.com/${toMetaImageUrl}`;
+        }
+
+        if (toMetaImageUrl.indexOf('.tn_120') > 0) {
+            toMetaImageUrl = toMetaImageUrl.split('.tn_120')[0];
+        }
+    }
+
+    return toMetaImageUrl;
 }
 
 function* getSnsMetaList({ type, payload }) {
@@ -148,6 +173,8 @@ function setThumbnail(articleThumbnailUrl, snsThumbnailUrl) {
         } else {
             thumbnail = IMAGE_DEFAULT_URL + articleThumbnailUrl;
         }
+    } else {
+        thumbnail = 'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg';
     }
 
     return { thumbnail, snsFlag };

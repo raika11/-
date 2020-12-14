@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
+import moment from 'moment';
 import {
     INITIALIZED_PARAMS,
     CLEAR_STORE,
@@ -17,7 +18,7 @@ import {
     GET_COPYRIGHT_FAILURE,
     CLEAR_BULKS_ARTICLE,
 } from './bulksAction';
-import { PAGESIZE_OPTIONS } from '@/constants';
+import { PAGESIZE_OPTIONS, DB_DATEFORMAT } from '@/constants';
 
 export const initialState = {
     bulkPathName: '',
@@ -32,8 +33,8 @@ export const initialState = {
             size: PAGESIZE_OPTIONS[0],
             bulkartDiv: '',
             sourceCode: '',
-            startDt: '',
-            endDt: '',
+            startDt: moment().format('YYYY-MM-DD 00:00:00'),
+            endDt: moment().format('YYYY-MM-DD 23:59:00'),
         },
         bulkArticle: {
             totalCnt: 0,

@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaInput } from '@components';
 
 const YoutubeList = ({ youtubeUrl, setYoutubeUrl }) => {
-    const [option, setOption] = useState('');
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
+        setYoutubeUrl({
+            ...youtubeUrl,
+            [name]: value,
+        });
+    };
 
     return (
         <div className="px-3">
@@ -13,11 +19,12 @@ const YoutubeList = ({ youtubeUrl, setYoutubeUrl }) => {
 
             <Row className="m-0">
                 <Col xs={9} className="p-0 pr-2">
-                    <MokaInput value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} />
+                    <MokaInput name="url" value={youtubeUrl.url} onChange={handleChangeValue} />
                 </Col>
                 <Col xs={3} className="p-0">
-                    <MokaInput as="select" value={option} onChange={(e) => setOption(e.target.value)}>
-                        <option>멈춤재생</option>
+                    <MokaInput as="select" name="option" value={youtubeUrl.option} onChange={handleChangeValue}>
+                        <option value="">멈춤재생</option>
+                        <option value="?autoplay=1">자동재생</option>
                     </MokaInput>
                 </Col>
             </Row>

@@ -18,7 +18,7 @@ const VodModal = (props) => {
     // state
     const [activeKey, setActivekey] = useState(0);
     const [resultVId, setResultVId] = useState(null);
-    const [youtubeUrl, setYoutubeUrl] = useState('');
+    const [youtubeUrl, setYoutubeUrl] = useState({ url: '', option: '' });
 
     /**
      * 취소, 닫기
@@ -26,7 +26,7 @@ const VodModal = (props) => {
     const handleHide = () => {
         if (onHide) onHide();
         dispatch(clearVodOptions());
-        setYoutubeUrl('');
+        setYoutubeUrl({ url: '', option: '' });
     };
 
     /**
@@ -37,7 +37,7 @@ const VodModal = (props) => {
 
         // 유튜브 예외처리
         if (activeKey === 0) {
-            url = youtubeUrl;
+            url = `${youtubeUrl.url}${youtubeUrl.option}`;
         } else {
             if (!resultVId) {
                 messageBox.warn('선택된 URL이 없습니다');
@@ -59,7 +59,7 @@ const VodModal = (props) => {
 
                 // 유튜브 영상인지 체크
                 if (url[0].indexOf('.youtu') > -1) {
-                    setYoutubeUrl(vodUrl);
+                    // youtubeUrl 유지 안돼도 됨
                 } else {
                     if (url[1]) {
                         const searchParams = qs.parse(url[1]);

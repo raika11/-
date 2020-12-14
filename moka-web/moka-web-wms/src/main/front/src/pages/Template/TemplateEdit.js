@@ -20,14 +20,14 @@ import AddComponentModal from './modals/AddComponentModal';
 const TemplateEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { template, inputTag, tpZoneRows = [], latestDomainId, invalidList, UPLOAD_PATH_URL, loading } = useSelector((store) => ({
+    const loading = useSelector((store) => store.loading[GET_TEMPLATE] || store.loading[DELETE_TEMPLATE] || store.loading[SAVE_TEMPLATE]);
+    const UPLOAD_PATH_URL = useSelector((store) => store.app.UPLOAD_PATH_URL);
+    const tpZoneRows = useSelector((store) => store.codeMgt.tpZoneRows);
+    const latestDomainId = useSelector((store) => store.auth.latestDomainId);
+    const { template, inputTag, invalidList } = useSelector((store) => ({
         template: store.template.template,
         inputTag: store.template.inputTag,
-        tpZoneRows: store.codeMgt.tpZoneRows,
-        latestDomainId: store.auth.latestDomainId,
         invalidList: store.template.invalidList,
-        UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
-        loading: store.loading[GET_TEMPLATE] || store.loading[DELETE_TEMPLATE] || store.loading[SAVE_TEMPLATE],
     }));
 
     // state
@@ -275,7 +275,7 @@ const TemplateEdit = ({ onDelete }) => {
 
     useEffect(() => {
         // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
-        if (templateGroup === '' && tpZoneRows.length > 0) {
+        if (templateGroup === '' && tpZoneRows && tpZoneRows.length > 0) {
             setTemplateGroup(tpZoneRows[0].dtlCd);
         }
     }, [templateGroup, tpZoneRows]);
@@ -337,11 +337,12 @@ const TemplateEdit = ({ onDelete }) => {
                 />
                 {/* 위치그룹 */}
                 <MokaInputLabel className="mb-2" label="위치 그룹" as="select" value={templateGroup} onChange={handleChangeValue} name="templateGroup">
-                    {tpZoneRows.map((cd) => (
-                        <option key={cd.dtlCd} value={cd.dtlCd}>
-                            {cd.cdNm}
-                        </option>
-                    ))}
+                    {tpZoneRows &&
+                        tpZoneRows.map((cd) => (
+                            <option key={cd.dtlCd} value={cd.dtlCd}>
+                                {cd.cdNm}
+                            </option>
+                        ))}
                 </MokaInputLabel>
                 {/* 사이즈, 이미지 크기 */}
                 <Row className="m-0 mb-2">

@@ -5,15 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
-import { MokaCard, MokaIcon } from '@components';
+import { MokaCard, MokaIcon, MokaLoader } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_TP } from '@/constants';
 import { clearStore, deleteTemplate, hasRelationList, changeTemplateBody } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 
-const TemplateEditor = React.lazy(() => import('./TemplateEditor'));
+import TemplateEditor from './TemplateEditor';
+import TemplateEdit from './TemplateEdit';
 const TemplateList = React.lazy(() => import('./TemplateList'));
-const TemplateEdit = React.lazy(() => import('./TemplateEdit'));
 
 // relations
 const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
@@ -36,7 +36,6 @@ const Template = ({ match }) => {
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [activeTabIdx, setActiveTabIdx] = useState(0);
-    const [] = useState(false);
 
     /**
      * 리스트 확장 시
@@ -180,9 +179,7 @@ const Template = ({ match }) => {
                 render={() => (
                     <React.Fragment>
                         {/* 에디터 */}
-                        <Suspense>
-                            <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
-                        </Suspense>
+                        <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
                         {/* 탭 */}
                         <Suspense>
@@ -192,22 +189,20 @@ const Template = ({ match }) => {
                                 onSelectNav={(idx) => setActiveTabIdx(idx)}
                                 tabWidth={412}
                                 tabs={[
-                                    <Suspense>
-                                        <TemplateEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
-                                    </Suspense>,
-                                    <Suspense>
+                                    <TemplateEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />,
+                                    <Suspense fallback={<MokaLoader />}>
                                         <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <RelationInArticlePageList show={activeTabIdx === 2} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <RelationInContainerList show={activeTabIdx === 3} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <RelationInComponentList show={activeTabIdx === 4} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <HistoryList show={activeTabIdx === 5} seqType={ITEM_TP} seq={template.templateSeq} onLoad={handleClickLoad} />
                                     </Suspense>,
                                 ]}

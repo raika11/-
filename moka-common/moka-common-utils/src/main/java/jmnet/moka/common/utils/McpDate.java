@@ -302,7 +302,7 @@ public class McpDate {
         cal.clear();
         cal.setTime(now());
 
-        cal.add(Calendar.HOUR, plus);
+        cal.add(Calendar.SECOND, plus);
 
         return new Date(cal
                 .getTime()
@@ -323,7 +323,7 @@ public class McpDate {
         cal.clear();
         cal.setTime(date);
 
-        cal.add(Calendar.HOUR, plus);
+        cal.add(Calendar.SECOND, plus);
 
         return new Date(cal
                 .getTime()

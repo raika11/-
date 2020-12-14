@@ -66,6 +66,5 @@ public class MemberRequestDTO extends MemberDTO {
     /**
      * 해제사유
      */
-    @NotEmpty(message = "{tps.member.error.notempty.requestType}")
     private MemberRequestCode requestType;
 }

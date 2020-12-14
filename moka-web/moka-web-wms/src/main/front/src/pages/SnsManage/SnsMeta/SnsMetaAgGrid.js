@@ -5,11 +5,11 @@ import { useDispatch } from 'react-redux';
 import { changeSNSMetaSearchOptions } from '@store/snsManage/snsAction';
 import { useHistory } from 'react-router-dom';
 
-const SnsMetaAgGrid = ({ rows, total, searchOptions, loading }) => {
+const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [rowData, setRowData] = useState([]);
-    const history = useHistory();
 
     const handleClickListRow = ({ id }) => {
         history.push(`/sns-meta/${id}`);
@@ -41,9 +41,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading }) => {
                 page={searchOptions.page}
                 size={searchOptions.size}
                 onChangeSearchOption={handleChangeSearchOption}
-                selected={(data) => {
-                    console.log(data);
-                }}
+                selected={selected}
                 preventRowClickCell={['insStatus', 'sendType']}
                 className="sns-meta-ag-grid"
             />

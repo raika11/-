@@ -10,10 +10,6 @@ const SnsPreviewModal = ({ show, onHide, totalId }) => {
             width={1200}
             height={860}
             size="xl"
-            buttons={[
-                { text: '등록', variant: 'positive' },
-                { text: '취소', variant: 'negative' },
-            ]}
             bodyClassName="p-0 overflow-x-hidden custom-scroll"
             footerClassName="d-flex justify-content-center"
             draggable

@@ -31,7 +31,7 @@ const SnsMeta = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={450} className="mr-gutter flex-fill" titleClassName="mb-0" header={false}>
+            <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" header={false}>
                 <Suspense>
                     <SnsMetaList />
                 </Suspense>

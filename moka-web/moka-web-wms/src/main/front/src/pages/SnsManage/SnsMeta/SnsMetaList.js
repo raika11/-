@@ -7,22 +7,22 @@ import { GET_SNS_META_LIST } from '@store/snsManage';
 
 const SnsMetaList = () => {
     const dispatch = useDispatch();
-    const { search, list, total, loading } = useSelector((store) => ({
+    const { search, list, total, loading, totalId } = useSelector((store) => ({
         search: store.sns.meta.search,
         list: store.sns.meta.list,
         total: store.sns.meta.total,
+        totalId: store.sns.meta.totalId,
         loading: store.loading[GET_SNS_META_LIST],
     }));
 
     useEffect(() => {
-        console.log(search);
         dispatch(getSNSMetaList({ payload: search }));
     }, [dispatch, search]);
 
     return (
         <>
             <Search searchOptions={search} />
-            <AgGrid rows={list} searchOptions={search} total={total} loading={loading} />
+            <AgGrid rows={list} searchOptions={search} total={total} loading={loading} seledted={totalId} />
         </>
     );
 };

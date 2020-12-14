@@ -44,7 +44,6 @@ export const initialState = {
 export default handleActions(
     {
         [action.CLEAR_META_STORE]: (state) => {
-            console.log(state);
             return produce(state, (draft) => {
                 draft.meta = initialState.meta;
             });

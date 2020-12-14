@@ -106,3 +106,7 @@ export const DATA_TYPE_AUTO = 'AUTO';
 export const DATA_TYPE_FORM = 'FORM';
 
 export const IMAGE_DEFAULT_URL = 'http://pds.joins.com';
+export const snsNames = {
+    fb: 'Facebook',
+    tw: 'Twitter',
+};

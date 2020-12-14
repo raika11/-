@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Col, Button, Figure } from 'react-bootstrap';
-import SnsMetaModal from './modal/SnsMetaModal';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSnsMeta, GET_SNS_META, initialState } from '@store/snsManage';
+import { getSnsMeta, GET_SNS_META, initialState, clearSnsMeta } from '@store/snsManage';
 import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 import SnsPreviewModal from '@pages/SnsManage/SnsMeta/modal/SnsPreviewModal';
+import { snsNames } from '@/constants';
+import DefaultInputModal from '@pages/commons/DefaultInputModal';
+import { getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
 
 const SnsMetaEdit = () => {
-    const [modalShow, setModalShow] = useState(false);
-    const [previewModalShow, setPreviewModalShow] = useState(false);
-    const [edit, setEdit] = useState(initialState.meta.meta);
-    const { totalId } = useParams();
     const dispatch = useDispatch();
-    const { meta, errors, loading } = useSelector((store) => ({
-        meta: store.sns.meta.meta,
-        loading: store.loading[GET_SNS_META],
-        errors: store.sns.meta.errors,
-    }));
+    const history = useHistory();
+    const { totalId } = useParams();
+
+    const [fbTokenModalShow, setFbTokenModalShow] = useState(false);
+    const [articlePreviewModalShow, setArticlePreviewModalShow] = useState(false);
+    const [edit, setEdit] = useState(initialState.meta.meta);
+
+    const { meta, errors, cdNm: fbToken, loading } = useSelector((store) => {
+        console.log(store.codeMgt.specialCharCode.cdNm);
+        return {
+            meta: store.sns.meta.meta,
+            cdNm: store.codeMgt.specialCharCode.cdNm,
+            loading: store.loading[GET_SNS_META],
+            errors: store.sns.meta.errors,
+        };
+    });
 
     const handleChangeCheckedValue = ({ target: { name } }) => {
         const divideName = name.split('-');
@@ -35,14 +44,62 @@ const SnsMetaEdit = () => {
         setEdit({ ...edit, [target]: { ...edit[target], [targetName]: value } });
     };
 
-    // 임시.
-    const handleClickFBTokenManage = () => {
-        setModalShow(true);
+    const handleClickCancel = () => {
+        history.push('/sns-meta');
     };
 
-    const tempFooterButtonClick = (e) => {
-        setPreviewModalShow(true);
-        console.log('tempFooterButtonClick', e);
+    // 임시.
+    const handleClickFbTokenModalShow = () => {
+        dispatch(getSpecialCharCode({ grpCd: 'specialChar', dtlCd: 'fbToken' }));
+        setFbTokenModalShow(true);
+    };
+
+    const handleClickFbTokenModalHide = () => {
+        setFbTokenModalShow(false);
+    };
+
+    const handleClickFbTokenModalSave = ({ value: token }) => {
+        dispatch(
+            saveSpecialCharCode({
+                grpCd: 'specialChar',
+                dtlCd: 'fbToken',
+                cdNm: token,
+                callback: (response) => {
+                    toast.result(response);
+                    if (response.header.success) {
+                        setFbTokenModalShow(false);
+                    }
+                },
+            }),
+        );
+        console.log(token);
+    };
+
+    const handleClickArticlePreviewModalShow = () => {
+        setArticlePreviewModalShow(true);
+    };
+
+    const handleClickArticlePreviewModalHide = () => {
+        setArticlePreviewModalShow(false);
+    };
+
+    const handleClickCopyContent = (from) => {
+        try {
+            let to = '';
+            switch (from) {
+                case 'tw':
+                    to = 'fb';
+                    break;
+                case 'fb':
+                    to = 'tw';
+                    break;
+            }
+            setEdit({ ...edit, [to]: edit[from] });
+            toast.info(`${snsNames[from]}에서 ${snsNames[to]}로 복사 되었습니다.`);
+        } catch (e) {
+            toast.warning('오류가 발생 했습니다. 관리자에게 문의하세요.');
+            console.log(e);
+        }
     };
 
     useEffect(() => {
@@ -58,6 +115,8 @@ const SnsMetaEdit = () => {
     useEffect(() => {
         if (!commonUtil.isEmpty(totalId)) {
             dispatch(getSnsMeta(totalId));
+        } else {
+            dispatch(clearSnsMeta());
         }
     }, [dispatch, totalId]);
 
@@ -69,9 +128,10 @@ const SnsMetaEdit = () => {
             loading={loading}
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '전송', variant: 'positive', onClick: tempFooterButtonClick, className: 'mr-05' },
-                { text: '임시저장', variant: 'positive', onClick: tempFooterButtonClick, className: 'mr-05' },
-                { text: '기사보기', variant: 'outline-neutral', onClick: tempFooterButtonClick, className: 'mr-05' },
+                { text: '전송', variant: 'positive', onClick: handleClickArticlePreviewModalShow, className: 'mr-05' },
+                { text: '임시저장', variant: 'positive', onClick: handleClickArticlePreviewModalShow, className: 'mr-05' },
+                { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'mr-05' },
+                { text: '기사보기', variant: 'outline-neutral', onClick: handleClickArticlePreviewModalShow, className: 'mr-05' },
             ]}
             footer
         >
@@ -89,13 +149,19 @@ const SnsMetaEdit = () => {
                             <Button variant="outline-neutral" className="mr-05">
                                 FB 캐시삭제
                             </Button>
-                            <Button variant="outline-neutral" className="mr-05" onClick={(e) => handleClickFBTokenManage(e)}>
+                            <Button variant="outline-neutral" className="mr-05" onClick={handleClickFbTokenModalShow}>
                                 토큰 관리
                             </Button>
                             <Button variant="outline-neutral" className="mr-05">
                                 공유
                             </Button>
-                            <Button variant="outline-neutral" className="mr-05">
+                            <Button
+                                variant="outline-neutral"
+                                className="mr-05"
+                                onClick={() => {
+                                    handleClickCopyContent('fb');
+                                }}
+                            >
                                 TW로 복사
                             </Button>
                         </div>
@@ -212,7 +278,13 @@ const SnsMetaEdit = () => {
                                 </Button>
                             </div>
                             <div className="justify-content-end pr-2">
-                                <Button variant="outline-neutral" className="mr-05">
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-05"
+                                    onClick={() => {
+                                        handleClickCopyContent('tw');
+                                    }}
+                                >
                                     FB로 복사
                                 </Button>
                             </div>
@@ -312,14 +384,14 @@ const SnsMetaEdit = () => {
                 </Form.Row>
             </Form>
 
-            <SnsMetaModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={null} />
-            <SnsPreviewModal
-                show={previewModalShow}
-                onHide={() => {
-                    setPreviewModalShow(false);
-                }}
-                totalId={totalId}
+            <DefaultInputModal
+                title="페이스북 관리용 토큰"
+                inputData={{ title: '페이스북 토큰', value: fbToken, isInvalid: false }}
+                show={fbTokenModalShow}
+                onHide={handleClickFbTokenModalHide}
+                onSave={handleClickFbTokenModalSave}
             />
+            <SnsPreviewModal show={articlePreviewModalShow} onHide={handleClickArticlePreviewModalHide} totalId={totalId} />
         </MokaCard>
     );
 };

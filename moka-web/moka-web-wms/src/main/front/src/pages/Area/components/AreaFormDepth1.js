@@ -122,7 +122,7 @@ const AreaFormDepth1 = ({ onDelete }) => {
                     </Form.Row>
                     {/* 그룹영역명 */}
                     <Form.Row className="mb-2">
-                        <Col xs={8} className="p-0">
+                        <Col xs={8} className="p-0 pr-2">
                             <MokaInputLabel
                                 className="mb-0"
                                 labelWidth={87}

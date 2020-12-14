@@ -10,9 +10,6 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import ImageRenderer from './MokaTableImageRenderer';
 
 const propTypes = {
-    /**
-     * pagination props
-     */
     ...paginationPropTypes,
     /**
      * ag-grid의 className
@@ -27,16 +24,13 @@ const propTypes = {
      */
     columnDefs: PropTypes.arrayOf(PropTypes.object),
     /**
-     * 목록 데이타
+     * 목록 데이터
      */
     rowDatapageSizes: PropTypes.arrayOf(PropTypes.object),
     /**
      * agGrid getRowNodeId()
      */
     onRowNodeId: PropTypes.func,
-    /**
-     * agGrid 높이
-     */
     agGridHeight: PropTypes.number,
     /**
      * 테이블 헤더 여부
@@ -67,7 +61,7 @@ const propTypes = {
      */
     preventRowClickCell: PropTypes.arrayOf(PropTypes.string),
     /**
-     * selected row 갯수
+     * selected row 타입
      */
     rowSelection: PropTypes.oneOf(['single', 'multiple']),
     /**
@@ -78,21 +72,9 @@ const propTypes = {
      * 드래그 기능을 직접 구현하는지 (false시 ag-grid의 unmanaged drag 기능이 동작)
      */
     dragManaged: PropTypes.bool,
-    /**
-     * row를 드래그할 때 실행하는 함수
-     */
     onRowDragMove: PropTypes.func,
-    /**
-     * row의 드래그가 멈췄을 때 실행하는 함수
-     */
     onRowDragEnd: PropTypes.func,
-    /**
-     * 추가적인 framework components
-     */
     frameworkComponents: PropTypes.object,
-    /**
-     * drag가능한 ag-grid에서 rows 이동 시 애니메이션 효과를 줄지 말지 결정
-     */
     animateRows: PropTypes.bool,
     /**
      * 쓰는 곳에서 grid Instance를 state로 관리할 때, gridReady시 state 변경
@@ -102,6 +84,7 @@ const propTypes = {
      * row data update 후 api.refreshCells 호출을 막음
      */
     suppressRefreshCellAfterUpdate: PropTypes.bool,
+    onRowDataUpdated: PropTypes.func,
 };
 
 const defaultProps = {
@@ -120,6 +103,13 @@ const defaultProps = {
     headerHeight: 35,
     animateRows: false,
     suppressRefreshCellAfterUpdate: false,
+};
+
+/**
+ * ag-grid의 rowClassRules
+ */
+const rowClassRules = {
+    'usedyn-n': (params) => params.data.usedYn === 'N',
 };
 
 /**
@@ -147,6 +137,7 @@ const MokaTable = forwardRef((props, ref) => {
         animateRows,
         setGridInstance: setParentGridInstance,
         suppressRefreshCellAfterUpdate,
+        onRowDataUpdated,
     } = props;
 
     // drag props
@@ -196,17 +187,6 @@ const MokaTable = forwardRef((props, ref) => {
         },
         [onRowClicked, preventRowClickCell],
     );
-
-    /**
-     * usedYn에 따른 row 색상 처리
-     * @param {object} instance 인스턴스
-     */
-    const getRowClass = (instance) => {
-        if (instance.node.data.usedYn === 'N') {
-            return 'usedyn-n';
-        }
-        return null;
-    };
 
     /**
      * ag-grid가 화면에 그릴 row data가 변경되었을 때 실행
@@ -273,8 +253,12 @@ const MokaTable = forwardRef((props, ref) => {
                     params.api.refreshCells({ force: true });
                 }
             });
+
+            if (onRowDataUpdated) {
+                onRowDataUpdated(params);
+            }
         },
-        [handleSelected, suppressRefreshCellAfterUpdate],
+        [handleSelected, onRowDataUpdated, suppressRefreshCellAfterUpdate],
     );
 
     useEffect(() => {
@@ -295,6 +279,7 @@ const MokaTable = forwardRef((props, ref) => {
                     getRowNodeId={onRowNodeId}
                     animateRows={animateRows}
                     localeText={localeText}
+                    rowClassRules={rowClassRules}
                     onCellClicked={handleCellClicked}
                     onSelectionChanged={handleSelectionChanged}
                     onGridReady={onGridReady}
@@ -308,7 +293,6 @@ const MokaTable = forwardRef((props, ref) => {
                     tooltipShowDelay={0}
                     frameworkComponents={{ imageRenderer: ImageRenderer, ...frameworkComponents }}
                     suppressRowClickSelection
-                    getRowClass={getRowClass}
                     onColumnResized={onColumnResized}
                     onColumnVisible={onColumnVisible}
                     enableMultiRowDragging={rowSelection === 'multiple'}

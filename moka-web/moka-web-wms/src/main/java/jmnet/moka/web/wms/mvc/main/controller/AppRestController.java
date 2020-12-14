@@ -60,10 +60,10 @@ public class AppRestController {
     @Value("${ir.url}")
     private String irUrl;
 
-    @Value("brightcove.preview.url")
+    @Value("${brightcove.preview.url}")
     private String ovpPreviewUrl;
 
-    @Value("photo.archive.url")
+    @Value("${photo.archive.url}")
     private String photoArchiveUrl;
 
     @Autowired

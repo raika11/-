@@ -12,12 +12,25 @@ const periodType = [
 ];
 
 const EditThumbSearch = (props) => {
-    const { search, setSearch, imageTypeList, onSearch } = props;
+    const { search, setSearch, onSearch } = props;
 
     const [period, setPeriod] = useState('all');
-    const [startDate, setStartDate] = useState(moment(search.startdate, DB_DATEFORMAT));
-    const [finishDate, setFinishDate] = useState(moment(search.finishdate, DB_DATEFORMAT));
+    const [startDate, setStartDate] = useState(moment().format(DB_DATEFORMAT));
+    const [finishDate, setFinishDate] = useState(moment().format(DB_DATEFORMAT));
+    const [error, setError] = useState({});
     const [searchType, setSearchType] = useState('all');
+    const [imageTypeList, setImageTypeList] = useState(null);
+    const [type, setType] = useState(false);
+
+    // useEffect(() => {
+    //     if (type) {
+    //         dispatch(getPhotoList({ search: ns }));
+    //         dispatch(changeSearchOption(ns));
+    //         setError({ ...error, deskingSourceList: false });
+    //     } else {
+    //         setError({ ...error, deskingSourceList: true });
+    //     }
+    // }, []);
 
     return (
         <Form className="d-flex mb-2">
@@ -57,7 +70,7 @@ const EditThumbSearch = (props) => {
                         if (typeof date === 'object') {
                             setSearch({
                                 ...search,
-                                startdate: moment(date).format(DB_DATEFORMAT),
+                                startdate: date,
                             });
                         } else {
                             setSearch({
@@ -78,7 +91,7 @@ const EditThumbSearch = (props) => {
                         if (typeof date === 'object') {
                             setSearch({
                                 ...search,
-                                finishdate: moment(date).format(DB_DATEFORMAT),
+                                finishdate: date,
                             });
                         } else {
                             setSearch({
@@ -97,13 +110,23 @@ const EditThumbSearch = (props) => {
                     <option value="addImg">등록 이미지</option>
                     <option value="editImg">지면 편집 이미지</option>
                     <option value="pool">사진 POOL</option>
-                    <option value="in">제휴 내신</option>
-                    <option value="out">제휴 외신</option>
+                    <option value="domestic">제휴 내신</option>
+                    <option value="foreign">제휴 외신</option>
                 </MokaInput>
             </div>
 
             <div className="mr-2 d-flex align-items-center" style={{ width: 140 }}>
-                <EditThumbSelectDropdown />
+                <EditThumbSelectDropdown
+                // className="mr-2"
+                // value={imageTypeList}
+                // onChange={(value) => {
+                //     setImageTypeList(value);
+                //     if (value !== '') {
+                //         setType(true);
+                //     }
+                // }}
+                // isInvalid={error.deskingSourceList}
+                />
             </div>
 
             <div className="mr-2" style={{ width: 150 }}>

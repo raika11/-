@@ -47,7 +47,6 @@ import {
     faSlidersH as falSlidersH, // 메뉴 아이콘
     faTachometerSlow as falTachometerSlow, // 메뉴 아이콘
     faShieldCheck as falShieldCheck, // 메뉴 아이콘
-    faSort as falSort,
     faSearchPlus as falSearchPlus,
     faEyeSlash as falEyeSlash,
     faExclamationTriangle as falExclamationTriangle,
@@ -65,6 +64,7 @@ import {
     faCheck as fasCheck,
     faTimes as fasTimes,
     faStar as fasStar,
+    faSort as fasSort,
     faCaretDown as fasCaretDown,
 } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
@@ -116,7 +116,6 @@ library.add(falInfoCircle);
 library.add(falSlidersH);
 library.add(falTachometerSlow);
 library.add(falShieldCheck);
-library.add(falSort);
 library.add(falSearchPlus);
 library.add(falEyeSlash);
 library.add(falExclamationTriangle);
@@ -138,6 +137,7 @@ library.add(fasCheck);
 library.add(fasTimes);
 library.add(fasStar);
 library.add(fasCaretDown);
+library.add(fasSort);
 
 // 아이콘 등록 (fad)
 library.add(fadImage);

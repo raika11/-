@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Image from 'react-bootstrap/Image';
 import { MokaModal } from '@components';
@@ -21,6 +22,8 @@ const defaultProps = {
 
 const ThumbViewModal = (props) => {
     const { show, onHide, data, alt } = props;
+
+    const PHOTO_ARCHIVE_URL = useSelector((store) => store.app.PHOTO_ARCHIVE_URL);
 
     return (
         <MokaModal
@@ -63,7 +66,9 @@ const ThumbViewModal = (props) => {
             footerStyle={{ backgroundColor: '#373D53', height: '40px' }}
             draggable
         >
-            <div className="w-100 h-100">{data.imageOnlnPath && <Image src={data.imageOnlnPath} alt={alt} />}</div>
+            <div style={{ width: '800px', height: '540px' }}>
+                {data.imageOnlnPath && <Image className="w-100 h-100" src={`${PHOTO_ARCHIVE_URL}${data.imageOnlnPath}`} alt={alt} />}
+            </div>
         </MokaModal>
     );
 };

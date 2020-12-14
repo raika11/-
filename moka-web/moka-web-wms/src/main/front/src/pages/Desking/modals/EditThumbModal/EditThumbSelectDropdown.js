@@ -38,8 +38,8 @@ const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
                 inputClassName="bg-white ft-12 cursor-pointer"
                 isInvalid={isInvalid}
                 append={
-                    <Button variant="searching">
-                        <MokaIcon iconName="fas-caret-down" />
+                    <Button className="ft-12" variant="white">
+                        <MokaIcon iconName="fas-sort" />
                     </Button>
                 }
             />
@@ -61,7 +61,7 @@ export const propTypes = {
      */
     width: PropTypes.number,
     /**
-     * imgList (필수)
+     * imgTypeList (필수)
      */
     value: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null])]),
     /**
@@ -84,9 +84,9 @@ const EditThumbSelectDropdown = (props) => {
     const imageTypeList = useSelector((store) => store.photoArchive.imageTypeList);
 
     /**
-     * 리스트에서 매체 데이터의 index를 찾음
+     * 리스트에서 타입 데이터의 index를 찾음
      */
-    const findIndex = useCallback((id) => imageTypeList.findIndex((img) => img.cd === id), [imageTypeList]);
+    const findIndex = useCallback((id) => imageTypeList.findIndex((type) => type.cd === id), [imageTypeList]);
 
     /**
      * change 이벤트
@@ -98,11 +98,11 @@ const EditThumbSelectDropdown = (props) => {
 
         const targetIdx = findIndex(id);
         if (checked) {
-            resultList = [...selectedList, dataObj[targetIdx]].sort(function (a, b) {
+            resultList = [...selectedList, dataObj[targetIdx]].sort((a, b) => {
                 return a.index - b.index;
             });
         } else {
-            const isSelected = selectedList.findIndex((img) => img.cd === id);
+            const isSelected = selectedList.findIndex((type) => type.cd === id);
             if (isSelected > -1) {
                 resultList = produce(selectedList, (draft) => {
                     draft.splice(isSelected, 1);
@@ -117,18 +117,24 @@ const EditThumbSelectDropdown = (props) => {
 
     /**
      * 렌더링 시 checked true인지 false인지 판단
-     * @param {string} cd img코드
+     * @param {string} typeCd 이미지 타입 코드
      */
-    const chkTrue = (cd) => {
+    const chkTrue = (typeCd) => {
         if (!value || value === '') return false;
-        else return value.indexOf(cd) > -1;
+        else return value.indexOf(typeCd) > -1;
     };
+
+    // useEffect(() => {
+    //     if (imageTypeList) {
+    //         imageTypeList.slice().sort((a, b) = b.stats.speed-a.stats.speed);
+    //     }
+    // }, [imageTypeList]);
 
     useEffect(() => {
         if (!imageTypeList) {
             dispatch(getPhotoTypes());
         } else {
-            setDataObj(imageTypeList.reduce((all, sc, index) => ({ ...all, [index]: { ...sc, index } }), {}));
+            setDataObj(imageTypeList.reduce((all, type, index) => ({ ...all, [index]: { ...type, index } }), {}));
         }
     }, [dispatch, imageTypeList]);
 
@@ -164,7 +170,7 @@ const EditThumbSelectDropdown = (props) => {
             if (typeof onChange === 'function') {
                 onChange(
                     Object.values(dataObj)
-                        .map((sc) => sc.cd)
+                        .map((type) => type.cd)
                         .join(','),
                 );
             }
@@ -177,17 +183,17 @@ const EditThumbSelectDropdown = (props) => {
                 {toggleText}
             </Dropdown.Toggle>
 
-            <Dropdown.Menu as={CustomMenu}>
+            <Dropdown.Menu as={CustomMenu} style={{ width: '100px' }}>
                 {imageTypeList &&
-                    imageTypeList.map((img) => (
+                    imageTypeList.map((type) => (
                         <MokaInput
-                            key={img.cd}
-                            id={img.cd}
+                            key={type.cd}
+                            id={type.cd}
                             name="imageTypeList"
                             onChange={handleChangeValue}
                             className="mb-2 ft-12"
                             as="checkbox"
-                            inputProps={{ label: img.label, custom: true, checked: chkTrue(img.cd) }}
+                            inputProps={{ label: type.label, custom: true, checked: chkTrue(type.cd) }}
                         />
                     ))}
             </Dropdown.Menu>

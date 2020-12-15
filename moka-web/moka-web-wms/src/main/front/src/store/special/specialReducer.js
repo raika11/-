@@ -24,9 +24,13 @@ export const initialState = {
         { id: 'pageTitle', name: '제목' },
         { id: 'devName', name: '담당자' },
     ],
-    special: {},
+    special: {
+        seqNo: null,
+        repDeptNameSelect: 'self',
+    },
     specialError: null,
     invalidList: [],
+    depts: null,
 };
 
 export default handleActions(
@@ -37,12 +41,42 @@ export default handleActions(
             });
         },
         [act.CLEAR_STORE]: () => initialState,
+        [act.CLEAR_SPECIAL]: (state) => {
+            return produce(state, (draft) => {
+                draft.special = initialState.special;
+            });
+        },
         [act.GET_SPECIAL_LIST_SUCCESS]: (state, { payload }) => {
             const { body } = payload;
             return produce(state, (draft) => {
                 draft.list = body.list;
                 draft.total = body.totalCnt;
+                draft.specialError = initialState.specialError;
+            });
+        },
+        [act.GET_SPECIAL_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.list = initialState.list;
+                draft.total = initialState.total;
+                draft.specialError = payload;
+            });
+        },
+        [act.GET_SPECIAL_SUCCESS]: (state, { payload }) => {
+            const { body } = payload;
+            return produce(state, (draft) => {
+                draft.special = { ...body, repDeptNameSelect: 'self' };
                 draft.invalidList = initialState.invalidList;
+            });
+        },
+        [act.GET_SPECIAL_DEPT_LIST_SUCCESS]: (state, { payload }) => {
+            const { body } = payload;
+            return produce(state, (draft) => {
+                draft.depts = body.list;
+            });
+        },
+        [act.GET_SPECIAL_DEPT_LIST_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.depts = initialState.depts;
             });
         },
     },

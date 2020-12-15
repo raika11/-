@@ -199,7 +199,10 @@ const MokaImageInput = forwardRef((props, ref) => {
                 return (
                     <Figure
                         {...getRootProps()}
-                        className={clsx('d-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white', className)}
+                        className={clsx(
+                            'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden',
+                            className,
+                        )}
                         style={{ width, height }}
                         ref={wrapRef}
                         as="div"

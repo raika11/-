@@ -152,7 +152,7 @@ public class MemberJoinRestController extends AbstractCommonController {
                     .equals(memberDTO.getConfirmPassword())) {
                 throw new MokaException(passwordSameMessage);
             }
-
+            member.setRemark(memberDTO.getRequestReason());
             MemberInfo returnValue = processUserSave(member, memberDTO.getMemberGroups(), MemberRequestCode.NEW_REQUEST.getNextStatus());
 
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
@@ -199,7 +199,7 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
         if (!same) {
-            throw new UserPrincipalNotFoundException(memberId);
+            throw new PasswordNotMatchedException(msg("wms.login.error.PasswordUnMatchedException"));
         }
 
         // SMS 서버에 문자 발송 요청
@@ -208,6 +208,14 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         member.setSmsAuth(smsAuth);
         member.setSmsExp(smsExp);
+
+        String remark = McpString.defaultValue(member.getRemark());
+        if (McpString.isNotEmpty(remark)) {
+            remark += "\n";
+        }
+        remark += "· " + memberRequestDTO.getRequestReason();
+        member.setRemark(remark);
+
         memberService.updateMember(member);
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
@@ -293,6 +301,13 @@ public class MemberJoinRestController extends AbstractCommonController {
             // 잠금 해제
             member.setPasswordModDt(McpDate.now());
             member.setErrCnt(0);
+        } else {
+            String remark = McpString.defaultValue(member.getRemark());
+            if (McpString.isNotEmpty(remark)) {
+                remark += "\n";
+            }
+            remark += "· " + memberRequestDTO.getRequestReason();
+            member.setRemark(remark);
         }
 
         member.setStatus(memberRequestDTO

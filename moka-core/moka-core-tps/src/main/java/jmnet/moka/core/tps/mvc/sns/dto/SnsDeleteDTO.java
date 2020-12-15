@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 /**
  * sns 삭제용
@@ -43,7 +42,6 @@ public class SnsDeleteDTO implements Serializable {
     private Date reserveDt;
 
     @Builder.Default
-    @Length(max = 2, message = "{tps.sns.error.length.snsType}")
     private SnsTypeCode snsType = SnsTypeCode.FB;
 
 }

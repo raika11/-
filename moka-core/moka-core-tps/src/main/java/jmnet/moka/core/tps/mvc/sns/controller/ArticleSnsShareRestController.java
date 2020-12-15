@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.sns.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import java.io.IOException;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -11,15 +12,20 @@ import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
+import jmnet.moka.common.utils.exception.FileFormatException;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareDTO;
@@ -35,8 +41,12 @@ import jmnet.moka.core.tps.mvc.sns.service.ArticleSnsShareService;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +56,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.HtmlUtils;
 
 /**
@@ -69,9 +80,18 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
 
     private final ArticleService articleService;
 
-    public ArticleSnsShareRestController(ArticleSnsShareService articleSnsShareService, ArticleService articleService) {
+    private final FtpHelper ftpHelper;
+
+    @Value("${pds.url}")
+    private String pdsUrl;
+
+    @Autowired
+    private Environment env;
+
+    public ArticleSnsShareRestController(ArticleSnsShareService articleSnsShareService, ArticleService articleService, FtpHelper ftpHelper) {
         this.articleSnsShareService = articleSnsShareService;
         this.articleService = articleService;
+        this.ftpHelper = ftpHelper;
     }
 
     /**
@@ -177,10 +197,11 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "SNS 메타 등록")
-    @PostMapping("/{totalId}")
+    @PostMapping(value = "/{totalId}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                                                                                                       MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postArticleSnsShare(
             @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") Long totalId,
-            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO)
+            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO, @RequestParam(value = "imgFile", required = false) MultipartFile imgFile)
             throws InvalidDataException, Exception {
 
         ArticleSnsShare articleSnsShare = modelMapper.map(articleSnsShareSaveDTO, ArticleSnsShare.class);
@@ -194,7 +215,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
         articleSnsShare = escapeHtml(articleSnsShare);
 
         // 기사 정보 없을 경우 에러 처리
-        articleService
+        ArticleBasic articleBasic = articleService
                 .findArticleBasicById(articleSnsShare
                         .getId()
                         .getTotalId())
@@ -203,6 +224,10 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
                     tpsLogger.fail(message, true);
                     return new NoDataException(message);
                 });
+
+        articleSnsShare.setImgUrl(fileUpload(articleBasic, null, articleSnsShareSaveDTO
+                .getSnsType()
+                .getCode(), imgFile));
 
         try {
             // insert
@@ -237,11 +262,12 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @throws Exception 그외 모든 에러
      */
     @ApiOperation(value = "SNS 메타 수정")
-    @PutMapping("/{totalId}")
+    @PutMapping(value = "/{totalId}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                                                                                                      MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> putArticleSnsShare(
             @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") Long totalId,
-            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO)
-            throws Exception {
+            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO, @RequestParam(value = "imgFile", required = false) MultipartFile imgFile)
+            throws FileFormatException, NoDataException, IOException {
 
         // ArticleSnsShareDTO -> ArticleSnsShare 변환
         ArticleSnsShare newArticleSnsShare = modelMapper.map(articleSnsShareSaveDTO, ArticleSnsShare.class);
@@ -255,7 +281,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
         newArticleSnsShare = escapeHtml(newArticleSnsShare);
 
         // 기사 정보 없을 경우 에러 처리
-        articleService
+        ArticleBasic articleBasic = articleService
                 .findArticleBasicById(newArticleSnsShare
                         .getId()
                         .getTotalId())
@@ -268,26 +294,35 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
         // 오리진 데이터 조회
         Optional<ArticleSnsShare> oldArticleSnsShare = articleSnsShareService.findArticleSnsShareById(newArticleSnsShare.getId());
 
-        try {
-            ArticleSnsShare returnValue = oldArticleSnsShare.isPresent()
-                    ? articleSnsShareService.updateArticleSnsShare(newArticleSnsShare)
-                    : articleSnsShareService.insertArticleSnsShare(newArticleSnsShare);
-
-            // 결과리턴
-            ArticleSnsShareDTO dto = modelMapper.map(returnValue, ArticleSnsShareDTO.class);
-            ResultDTO<ArticleSnsShareDTO> resultDto = new ResultDTO<>(dto, msg("tps.sns.success.save"));
-
-            // 액션 로그에 성공 로그 출력
-            tpsLogger.success(ActionType.UPDATE);
-
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("[FAIL TO UPDATE SNS]", e);
-            // 액션 로그에 에러 로그 출력
-            tpsLogger.error(ActionType.UPDATE, e);
-            throw new Exception(msg("tps.sns.error.save"), e);
+        ArticleSnsShare returnValue = null;
+        if (oldArticleSnsShare.isPresent()) {
+            returnValue = oldArticleSnsShare.get();
+            returnValue.setArtKeyword(newArticleSnsShare.getArtKeyword());
+            returnValue.setArtTitle(newArticleSnsShare.getArtTitle());
+            returnValue.setArtSummary(newArticleSnsShare.getArtSummary());
+            returnValue.setImgUrl(fileUpload(articleBasic, returnValue.getImgUrl(), articleSnsShareSaveDTO
+                    .getSnsType()
+                    .getCode(), imgFile));
+            returnValue.setSnsPostMsg(newArticleSnsShare.getSnsPostMsg());
+            returnValue.setUsedYn(newArticleSnsShare.getUsedYn());
+            returnValue.setReserveDt(newArticleSnsShare.getReserveDt());
+            returnValue = articleSnsShareService.updateArticleSnsShare(returnValue);
+        } else {
+            newArticleSnsShare.setImgUrl(fileUpload(articleBasic, returnValue.getImgUrl(), articleSnsShareSaveDTO
+                    .getSnsType()
+                    .getCode(), imgFile));
+            returnValue = articleSnsShareService.insertArticleSnsShare(newArticleSnsShare);
         }
+
+
+        // 결과리턴
+        ArticleSnsShareDTO dto = modelMapper.map(returnValue, ArticleSnsShareDTO.class);
+        ResultDTO<ArticleSnsShareDTO> resultDto = new ResultDTO<>(dto, msg("tps.sns.success.save"));
+
+        // 액션 로그에 성공 로그 출력
+        tpsLogger.success(ActionType.UPDATE);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
@@ -489,5 +524,27 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             articleSnsShare.setSnsPostMsg(HtmlUtils.htmlEscape(articleSnsShare.getSnsPostMsg()));
         }
         return articleSnsShare;
+    }
+
+    private String fileUpload(ArticleBasic articleBasic, String originalImgUrl, String snsType, MultipartFile imgFile)
+            throws FileFormatException, IOException {
+        if (imgFile != null) {
+            if (!ImageUtil.isAllowUploadImageFormat(imgFile)) {
+                throw new FileFormatException();
+            }
+            String ext = ImageUtil.ext(imgFile);
+            String saveFilePath = env.getProperty(snsType.toLowerCase() + ".save.filepath", "/news/FbMetaImage");
+            String yearMonth = McpDate.dateStr(McpDate.now(), "yyyyMM");
+            saveFilePath = saveFilePath + "/" + yearMonth;
+            String filename = UUIDGenerator.uuid() + "." + ext;
+
+            if (ftpHelper.upload(FtpHelper.PDS, filename, imgFile.getInputStream(), saveFilePath)) {
+                return pdsUrl + saveFilePath + "/" + filename;
+            } else {
+                return McpString.isNotEmpty(originalImgUrl) ? originalImgUrl : pdsUrl + articleBasic.getArtThumb();
+            }
+        } else {
+            return McpString.isNotEmpty(originalImgUrl) ? originalImgUrl : pdsUrl + articleBasic.getArtThumb();
+        }
     }
 }

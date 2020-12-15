@@ -1,7 +1,7 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
@@ -56,8 +56,8 @@ public class ArticleSnsShareSaveDTO implements Serializable {
     /**
      * SNS 전송상태
      */
-    @NotEmpty(message = "{tps.sns.error.notempty.snsArtSts}")
-    private String snsArtSts;
+    //@NotEmpty(message = "{tps.sns.error.notempty.snsArtSts}")
+    //private String snsArtSts;
 
     /**
      * 예약일시

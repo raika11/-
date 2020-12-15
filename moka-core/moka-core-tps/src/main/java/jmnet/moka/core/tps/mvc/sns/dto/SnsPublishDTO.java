@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 /**
  * sns 게시용
@@ -43,7 +42,6 @@ public class SnsPublishDTO implements Serializable {
 
 
     @Builder.Default
-    @Length(max = 2, message = "{tps.sns.error.length.snsType}")
     private SnsTypeCode snsType = SnsTypeCode.FB;
 
 }

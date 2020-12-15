@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
@@ -219,6 +220,40 @@ public class BulkRestController extends AbstractCommonController {
             log.error("[FAIL TO UPDATE Article] seq: {} {}", bulkDTO.getBulkartSeq(), e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE Article]", e, true);
+            throw new Exception(msg("tps.bulk.error.save"), e);
+        }
+    }
+
+    @ApiOperation(value = "벌크 재전송")
+    @PutMapping(value = "/{bulkartSeq}/resend")
+    public ResponseEntity<?> putResend(@PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq)
+            throws InvalidDataException, Exception {
+
+        Bulk bulk = naverBulkService
+                .findById(bulkartSeq)
+                .orElseThrow(() -> {
+                    return new NoDataException(msg("tps.bulk.error.no-data"));
+                });
+
+        try {
+            // update
+            bulk.setBulkSendYn(MokaConstants.YES);
+            bulk.setSendDt(McpDate.now());
+
+            naverBulkService.updateArticle(bulk);
+
+            // 결과리턴
+            BulkDTO dto = modelMapper.map(bulk, BulkDTO.class);
+            String message = msg("tps.bulk.success.update");
+            ResultDTO<BulkDTO> resultDto = new ResultDTO<>(dto, message);
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.UPDATE);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE BULK RESEND] seq: {} {}", bulkartSeq, e.getMessage());
+            // 액션 로그에 에러 로그 출력
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE BULK RESEND]", e, true);
             throw new Exception(msg("tps.bulk.error.save"), e);
         }
     }

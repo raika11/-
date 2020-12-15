@@ -34,4 +34,6 @@ public class BulkSaveDTO implements Serializable {
 
     @NotNull(message = "{tps.bulk.error.notnull.status}")
     private String status;
+
+    private String usedYn;
 }

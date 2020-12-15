@@ -5,8 +5,6 @@ import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
 import { AUTHORIZATION, SIGNIN_MEMBER_ID } from '@/constants';
-import { createRequestSaga, errorResponse } from '../commons/saga';
-import * as act from './authAction';
 /**
  * 로그인
  * @param {object} param0.payload

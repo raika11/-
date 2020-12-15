@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { getGroupWareUser, getSmsRequest, unlockRequest, approvalRequest } from '@store/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGroupWareUser, getSmsRequest, unlockRequest, approvalRequest, GET_GROUP_WARE_USER, GET_SMS_REQUEST, UNLOCK_REQUEST, UNLOCK_SMS } from '@store/auth';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -8,7 +8,6 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaModal, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
-
 const propTypes = {
     /**
      * show
@@ -62,6 +61,11 @@ const UnlockModal = (props) => {
         confirmPassword: false,
         requestReason: false,
     });
+
+    const { loading } = useSelector((store) => ({
+        loading: store.loading[GET_GROUP_WARE_USER] || store.loading[GET_SMS_REQUEST] || store.loading[UNLOCK_REQUEST] || store.loading[UNLOCK_SMS],
+    }));
+
     /**
      * modal의 항목 값 변경
      */
@@ -344,6 +348,7 @@ const UnlockModal = (props) => {
     return (
         <>
             <MokaModal
+                loading={loading}
                 width={400}
                 size="md"
                 draggable
@@ -464,11 +469,15 @@ const UnlockModal = (props) => {
                                         관리자 해제 요청
                                     </Button>
                                 </Col>
-                                <Col xs lg="4" className="p-0">
-                                    <Button variant="outline-neutral" className="mr-2" onClick={handleClickSmsUnlock}>
-                                        본인인증 해제
-                                    </Button>
-                                </Col>
+                                {!smsUnlock ? (
+                                    <Col xs lg="4" className="p-0">
+                                        <Button variant="outline-neutral" className="mr-2" onClick={handleClickSmsUnlock}>
+                                            본인인증 해제
+                                        </Button>
+                                    </Col>
+                                ) : (
+                                    ''
+                                )}
                             </Form.Group>
                             {smsUnlock ? (
                                 <>

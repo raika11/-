@@ -9,7 +9,6 @@
 package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.Optional;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
@@ -49,16 +48,17 @@ public class ComponentWorkServiceImpl implements jmnet.moka.core.tps.mvc.desking
     public ComponentWork updateComponentWork(ComponentWorkVO workVO)
             throws NoDataException, Exception {
         String messageC = messageByLocale.get("tps.common.error.no-data");
-        ComponentWork componentWork = this.findComponentWorkBySeq(workVO.getSeq())
-                                          .orElseThrow(() -> new NoDataException(messageC));
+        ComponentWork componentWork = this
+                .findComponentWorkBySeq(workVO.getSeq())
+                .orElseThrow(() -> new NoDataException(messageC));
 
-//        String messageT = messageByLocale.get("tps.common.error.no-data");
-//        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-//                                           .orElseThrow(() -> new NoDataException(messageT));
+        //        String messageT = messageByLocale.get("tps.common.error.no-data");
+        //        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
+        //                                           .orElseThrow(() -> new NoDataException(messageT));
 
-//        componentWork.setTemplate(template);
-//        componentWork.setZone(workVO.getZone());
-//        componentWork.setMatchZone(workVO.getMatchZone());
+        //        componentWork.setTemplate(template);
+        //        componentWork.setZone(workVO.getZone());
+        //        componentWork.setMatchZone(workVO.getMatchZone());
         componentWork.setViewYn(workVO.getViewYn());
         componentWork.setPerPageCount(workVO.getPerPageCount());
 
@@ -74,8 +74,9 @@ public class ComponentWorkServiceImpl implements jmnet.moka.core.tps.mvc.desking
             throws NoDataException, Exception {
 
         String messageC = messageByLocale.get("tps.common.error.no-data");
-        ComponentWork componentWork = this.findComponentWorkBySeq(componentWorkSeq)
-                                          .orElseThrow(() -> new NoDataException(messageC));
+        ComponentWork componentWork = this
+                .findComponentWorkBySeq(componentWorkSeq)
+                .orElseThrow(() -> new NoDataException(messageC));
 
         componentWork.setSnapshotYn(snapshotYn);
         componentWork.setSnapshotBody(snapshotBody);
@@ -88,17 +89,41 @@ public class ComponentWorkServiceImpl implements jmnet.moka.core.tps.mvc.desking
     }
 
     @Override
+    public ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String regId)
+            throws NoDataException, Exception {
+
+        String messageC = messageByLocale.get("tps.common.error.no-data");
+        ComponentWork componentWork = this
+                .findComponentWorkBySeq(componentWorkSeq)
+                .orElseThrow(() -> new NoDataException(messageC));
+
+        String messageT = messageByLocale.get("tps.common.error.no-data");
+        Template template = templateService
+                .findTemplateBySeq(templateSeq)
+                .orElseThrow(() -> new NoDataException(messageT));
+
+        componentWork.setTemplate(template);
+
+        // 컴포넌트 업데이트
+        ComponentWork saved = componentWorkRepository.save(componentWork);
+        log.debug("[COMPONENT WORK TEMPLATE UPDATE] seq: {}", saved.getSeq());
+
+        return saved;
+    }
+
+    @Override
     public ComponentWork updateComponentWork(Long componentWorkSeq, ComponentHist componentHist)
             throws NoDataException {
         String messageC = messageByLocale.get("tps.common.error.no-data");
-        ComponentWork componentWork = this.findComponentWorkBySeq(componentWorkSeq)
-                                          .orElseThrow(() -> new NoDataException(messageC));
+        ComponentWork componentWork = this
+                .findComponentWorkBySeq(componentWorkSeq)
+                .orElseThrow(() -> new NoDataException(messageC));
 
         componentWork.setSnapshotYn(componentHist.getSnapshotYn());
         componentWork.setSnapshotBody(componentHist.getSnapshotBody());
-//        componentWork.setTemplate(componentHist.getTemplate());
-//        componentWork.setZone(componentHist.getZone());
-//        componentWork.setMatchZone(componentHist.getMatchZone());
+        //        componentWork.setTemplate(componentHist.getTemplate());
+        //        componentWork.setZone(componentHist.getZone());
+        //        componentWork.setMatchZone(componentHist.getMatchZone());
         componentWork.setViewYn(componentHist.getViewYn());
         componentWork.setPerPageCount(componentHist.getPerPageCount());
 

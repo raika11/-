@@ -124,7 +124,7 @@ public class ComponentWorkVO implements Serializable {
     public ComponentItem toComponentItem() {
         ComponentItem componentItem = new ComponentItem();
         componentItem.put(ItemConstants.COMPONENT_ID, this.componentSeq);
-        //componentItem.put(ItemConstants.COMPONENT_TEMPLATE_ID, this.getTemplateSeq());
+        componentItem.put(ItemConstants.COMPONENT_TEMPLATE_ID, this.getTemplateSeq());
         componentItem.put(ItemConstants.COMPONENT_DATASET_ID, this.getDatasetSeq());
         componentItem.put(ItemConstants.COMPONENT_DATA_TYPE, this.dataType);
         componentItem.put(ItemConstants.COMPONENT_NAME, this.componentName);

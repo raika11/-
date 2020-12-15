@@ -40,6 +40,8 @@ import jmnet.moka.core.tps.mvc.desking.service.DeskingService;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
+import jmnet.moka.core.tps.mvc.template.service.TemplateService;
+import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,15 +73,18 @@ public class DeskingRestController extends AbstractCommonController {
 
     private final UploadFileHelper uploadFileHelper;
 
+    private final TemplateService templateService;
+
     @Autowired
     private RestTemplateHelper restTemplateHelper;
 
     public DeskingRestController(DeskingService deskingService, AreaService areaService, UploadFileHelper uploadFileHelper,
-            RestTemplateHelper restTemplateHelper) {
+            RestTemplateHelper restTemplateHelper, TemplateService templateService) {
         this.deskingService = deskingService;
         this.areaService = areaService;
         this.uploadFileHelper = uploadFileHelper;
         this.restTemplateHelper = restTemplateHelper;
+        this.templateService = templateService;
     }
 
     /**
@@ -163,6 +168,7 @@ public class DeskingRestController extends AbstractCommonController {
      * 컴포넌트 임시저장
      *
      * @param componentWorkSeq 컴포넌트work SEQ
+     * @param templateSeq      템플릿SEQ
      * @param principal        로그인사용자 세션
      * @return 등록된 편집 컴포넌트정보
      * @throws Exception
@@ -171,7 +177,7 @@ public class DeskingRestController extends AbstractCommonController {
     @PostMapping("/components/save/{componentWorkSeq}")
     public ResponseEntity<?> postSaveComponentWork(
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            Principal principal)
+            Long templateSeq, Principal principal)
             throws Exception {
 
         try {
@@ -179,7 +185,7 @@ public class DeskingRestController extends AbstractCommonController {
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 저장, 편집기사 저장
-            deskingService.save(returnValue, principal.getName());
+            deskingService.save(returnValue, principal.getName(), templateSeq);
 
             // work를 그대로 리턴
             String message = msg("tps.desking.success.save");
@@ -198,6 +204,7 @@ public class DeskingRestController extends AbstractCommonController {
      *
      * @param componentWorkSeq 워크아이디
      * @param areaSeq          편집영역seq
+     * @param templateSeq      템플릿SEQ
      * @param principal        로그인사용자 세션
      * @return 등록된 편집 컴포넌트정보
      * @throws Exception
@@ -206,7 +213,7 @@ public class DeskingRestController extends AbstractCommonController {
     @PostMapping("/components/publish/{componentWorkSeq}")
     public ResponseEntity<?> postPublishComponentWork(HttpServletRequest request,
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq, Principal principal)
+            @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq, Long templateSeq, Principal principal)
             throws Exception {
 
         try {
@@ -214,7 +221,7 @@ public class DeskingRestController extends AbstractCommonController {
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 저장, 편집기사 저장
-            deskingService.publish(returnValue, principal.getName());
+            deskingService.publish(returnValue, principal.getName(), templateSeq);
 
             String message = msg("tps.desking.success.publish");
 
@@ -280,7 +287,7 @@ public class DeskingRestController extends AbstractCommonController {
     @PostMapping("/components/reserve/{componentWorkSeq}")
     public ResponseEntity<?> postReserveComponentWork(
             @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            Principal principal, Date reserveDt)
+            Principal principal, Date reserveDt, Long templateSeq)
             throws Exception {
 
         try {
@@ -288,7 +295,7 @@ public class DeskingRestController extends AbstractCommonController {
             ComponentWorkVO updateValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 예약, 편집기사 예약
-            deskingService.reserve(updateValue, principal.getName(), reserveDt);
+            deskingService.reserve(updateValue, principal.getName(), reserveDt, templateSeq);
 
             // 수정된 결과 재조회
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
@@ -946,6 +953,42 @@ public class DeskingRestController extends AbstractCommonController {
             log.error("[FAIL TO IMPORT DESKING HIST ]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO IMPORT DESKING HIST]", e, true);
             throw new Exception(msg("tps.deskinghist.error.work.update"), e);
+        }
+    }
+
+    @ApiOperation(value = "단일 컴포넌트Work 템플릿 조회")
+    @GetMapping("/components/{componentSeq}/template")
+    public ResponseEntity<?> getTemplate(
+            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq=}") Long componentSeq) {
+
+        TemplateVO returnValue = templateService.findTemplateByComponentHist(componentSeq);
+
+        // 리턴값 설정
+        ResultDTO<TemplateVO> resultDto = new ResultDTO<TemplateVO>(returnValue);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "단일 컴포넌트Work 템플릿 수정")
+    @PutMapping("/components/save/{componentWorkSeq}/template/{templateSeq}")
+    public ResponseEntity<?> putTemplateComponentWork(
+            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            Long templateSeq, Principal principal)
+            throws Exception {
+
+        try {
+            // 템플릿 수정
+            deskingService.updateComponentWorkTemplate(componentWorkSeq, templateSeq, principal.getName());
+
+            // 컴포넌트 워크 조회(편집기사포함)
+            ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+
+            // 리턴값 설정
+            ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO COMPONENT WORK TEMPLATE UPDATE]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO COMPONENT WORK TEMPLATE UPDATE]", e, true);
+            throw new Exception(msg("tps.desking.component.error.work.update"), e);
         }
     }
 

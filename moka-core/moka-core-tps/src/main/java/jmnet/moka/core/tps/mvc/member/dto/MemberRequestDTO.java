@@ -47,7 +47,7 @@ public class MemberRequestDTO extends MemberDTO {
     /**
      * 비밀번호
      */
-    @NotEmpty(message = "{tps.member.error.pattern.password}")
+    @NotEmpty(message = "{tps.member.error.pattern.confirmPassword}")
     @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}")
     private String confirmPassword;
 

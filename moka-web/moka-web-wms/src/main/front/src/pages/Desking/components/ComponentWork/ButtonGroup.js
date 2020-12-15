@@ -22,13 +22,11 @@ const ButtonGroup = (props) => {
     const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus } = props;
     const dispatch = useDispatch();
 
-    // state
     const [title, setTitle] = useState('');
     // const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [viewN, setViewN] = useState(false);
     const [tooltipText, setTooltipText] = useState('');
     const [iconButton, setIconButton] = useState([]);
-
     // modal state
     const [modalShow, setModalShow] = useState({
         html: false,
@@ -194,6 +192,7 @@ const ButtonGroup = (props) => {
      */
     const createDropdownItem = useCallback(() => {
         const items = [
+            { text: 'HTML 수동편집', viewN: false, onClick: () => handleModalShow('html', true) },
             { text: '공백 기사 추가', viewN: false, onClick: handleOpenAddSpace },
             { text: '전체 삭제', viewN: false, onClick: handleClickDelete },
             { text: '기사 이동', viewN: false, onClick: handleOpenRegister },
@@ -213,7 +212,7 @@ const ButtonGroup = (props) => {
                     ))}
             </React.Fragment>
         );
-    }, [handleClickDelete, handleClickViewYn, handleOpenAddSpace, handleOpenListNumber, handleOpenRegister, viewN]);
+    }, [handleClickDelete, handleClickViewYn, handleModalShow, handleOpenAddSpace, handleOpenListNumber, handleOpenRegister, viewN]);
 
     useEffect(() => {
         if (component.componentSeq) setTitle(component.componentName);
@@ -233,7 +232,6 @@ const ButtonGroup = (props) => {
 
     useEffect(() => {
         let btns = [
-            { title: 'HTML 수동편집', iconName: 'fal-code', onClick: () => handleModalShow('html', true) },
             // { title: '템플릿', iconName: 'fal-expand-wide', onClick: () => setTemplateModalShow(true) },
             { title: '임시저장', iconName: 'fal-save', onClick: handleClickSave },
             { title: '전송', iconName: 'fal-share-square', onClick: handleClickPublish },
@@ -242,7 +240,7 @@ const ButtonGroup = (props) => {
         if (component.dataType === DATA_TYPE_FORM) btns = [];
 
         setIconButton(btns);
-    }, [handleClickSave, handleClickPublish, handleClickSavePublish, viewN, component.dataType, handleModalShow]);
+    }, [handleClickSave, handleClickPublish, handleClickSavePublish, viewN, component.dataType]);
 
     return (
         <div className="px-2 py-1">

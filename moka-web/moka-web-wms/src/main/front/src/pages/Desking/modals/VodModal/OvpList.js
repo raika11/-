@@ -53,8 +53,7 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
      */
     const handleSelectionChanged = useCallback(
         (params) => {
-            if (!params[0].data) return;
-
+            if (params.length < 1 || !params[0].data) return;
             const { id } = params[0].data;
             setResultVId(id);
         },

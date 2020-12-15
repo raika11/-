@@ -57,7 +57,7 @@ const VodModal = (props) => {
 
     useEffect(() => {
         try {
-            if (vodUrl && vodUrl !== '') {
+            if (show && vodUrl && vodUrl !== '') {
                 const url = vodUrl.split('?');
 
                 // 유튜브 영상인지 체크
@@ -78,7 +78,7 @@ const VodModal = (props) => {
                 }
             }
         } catch (e) {}
-    }, [dispatch, vodUrl]);
+    }, [dispatch, show, vodUrl]);
 
     useEffect(() => {
         return () => {

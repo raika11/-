@@ -50,7 +50,9 @@ public class SpecialPageMgtRepositorySupportImpl extends QuerydslRepositorySuppo
         builder.and(specialPageMgt.usedYn.ne(MokaConstants.DELETE));    // 삭제된 디지털스페셜은 제외
 
         if (McpString.isNotEmpty(search.getPageCd())) {
-            builder.and(specialPageMgt.pageCd.eq(search.getPageCd()));
+            if (!searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
+                builder.and(specialPageMgt.pageCd.eq(search.getPageCd()));
+            }
         }
 
         if (McpString.isNotEmpty(search.getUsedYn())) {

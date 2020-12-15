@@ -27,12 +27,12 @@ public class SnsDeleteDTO implements Serializable {
      * SNS 기사ID
      */
     @NotEmpty(message = "{tps.sns.error.notempty.snsId}")
+    @Length(max = 50, message = "{tps.sns.error.length.snsId}")
     private String snsId;
 
     /**
      * message
      */
-    @NotEmpty(message = "{tps.sns.error.notempty.totalId}")
     @Min(value = 0, message = "{tps.sns.error.notempty.totalId}")
     private Long totalId;
 
@@ -43,7 +43,6 @@ public class SnsDeleteDTO implements Serializable {
     private Date reserveDt;
 
     @Builder.Default
-    @Length(max = 2, message = "{tps.sns.error.length.snsType}")
     private SnsTypeCode snsType = SnsTypeCode.FB;
 
 }

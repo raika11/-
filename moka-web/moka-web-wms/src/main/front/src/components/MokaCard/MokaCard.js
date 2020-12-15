@@ -54,6 +54,10 @@ const propTypes = {
      */
     titleAs: PropTypes.node,
     /**
+     * custom element type for this component (Card.Title)
+     */
+    footerAs: PropTypes.node,
+    /**
      * buttons
      */
     buttons: PropTypes.arrayOf(
@@ -124,6 +128,7 @@ const MokaCard = forwardRef((props, ref) => {
         onExpansion,
         buttons,
         footerButtons,
+        footerAs,
         foldable,
         loading,
     } = props;
@@ -150,7 +155,7 @@ const MokaCard = forwardRef((props, ref) => {
     /**
      * 헤더의 버튼 생성 함수
      */
-    const createButtons = () => {
+    const createHeaderButtons = () => {
         const headerButtons = produce(buttons, (draft) => {
             if (foldable) {
                 draft.push({
@@ -201,7 +206,7 @@ const MokaCard = forwardRef((props, ref) => {
                     ) : (
                         <React.Fragment>
                             <Card.Title className={clsx({ 'd-none': foldable && !localExpandState }, titleClassName)}>{title}</Card.Title>
-                            {createButtons()}
+                            {createHeaderButtons()}
                         </React.Fragment>
                     )}
                 </Card.Header>
@@ -211,13 +216,19 @@ const MokaCard = forwardRef((props, ref) => {
             <Card.Body className={clsx({ 'd-none': foldable && !localExpandState }, 'custom-scroll', bodyClassName)}>{children}</Card.Body>
 
             {/* 푸터 버튼 */}
-            {footer && footerButtons && (
+            {footer && (
                 <Card.Footer className={clsx({ 'd-none': foldable && !localExpandState }, 'd-flex', footerClassName)}>
-                    {footerButtons.map(({ variant, text, ...rest }, idx) => (
-                        <Button key={`${text}-${idx}`} variant={variant} {...rest}>
-                            {text}
-                        </Button>
-                    ))}
+                    {footerButtons ? (
+                        <>
+                            {footerButtons.map(({ variant, text, ...rest }, idx) => (
+                                <Button key={`${text}-${idx}`} variant={variant} {...rest}>
+                                    {text}
+                                </Button>
+                            ))}
+                        </>
+                    ) : (
+                        footerAs
+                    )}
                 </Card.Footer>
             )}
         </Card>

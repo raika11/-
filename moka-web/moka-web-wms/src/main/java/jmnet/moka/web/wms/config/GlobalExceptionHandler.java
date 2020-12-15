@@ -14,6 +14,7 @@ import javax.validation.ConstraintViolationException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.common.utils.exception.FileFormatException;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -264,6 +265,24 @@ public class GlobalExceptionHandler {
         logger.error("[IOException] {}", ex);
 
         String message = "입출력에 오류가 있습니다. " + ex.getMessage();
+        return ResponseUtil.getErrorResponseEntity(response, TpsConstants.HEADER_FILE_ERROR, message);
+    }
+
+    /**
+     * <pre>
+     * 파일 형식 오류
+     * </pre>
+     *
+     * @param request  요청
+     * @param response 응답
+     * @param ex       NoContentException예외
+     */
+    @ExceptionHandler(FileFormatException.class)
+    public ResponseEntity<?> fileFormatException(HttpServletRequest request, HttpServletResponse response, FileFormatException ex) {
+
+        logger.error("[FileFormatException] {}", ex);
+
+        String message = "파일 형식 오류입니다.";
         return ResponseUtil.getErrorResponseEntity(response, TpsConstants.HEADER_FILE_ERROR, message);
     }
 

@@ -32,6 +32,7 @@ import articlePage from '@store/articlePage/articlePageReducer';
 import sns from '@store/snsManage/snsReducer';
 import bright from '@store/bright/brightReducer';
 import bulks from '@store/bulks/bulksReducer';
+import special from '@store/special/specialReducer';
 
 export default combineReducers({
     toastr,
@@ -66,4 +67,5 @@ export default combineReducers({
     columnist,
     sns,
     bulks,
+    special,
 });

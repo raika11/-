@@ -1,7 +1,7 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -51,13 +52,14 @@ public class ArticleSnsShareSaveDTO implements Serializable {
     /**
      * SNS 기사ID
      */
+    @Length(max = 50, message = "{tps.sns.error.length.snsId}")
     private String snsArtId;
 
     /**
      * SNS 전송상태
      */
-    @NotEmpty(message = "{tps.sns.error.notempty.snsArtSts}")
-    private String snsArtSts;
+    //@NotEmpty(message = "{tps.sns.error.notempty.snsArtSts}")
+    //private String snsArtSts;
 
     /**
      * 예약일시
@@ -68,6 +70,7 @@ public class ArticleSnsShareSaveDTO implements Serializable {
     /**
      * 포스트 메시지
      */
+    @Length(max = 300, message = "{tps.sns.error.length.snsPostMsg}")
     private String snsPostMsg;
 
     /**
@@ -79,16 +82,19 @@ public class ArticleSnsShareSaveDTO implements Serializable {
      * 기사제목
      */
     @NotEmpty(message = "{tps.sns.error.notempty.artTitle}")
+    @Length(max = 510, message = "{tps.sns.error.length.artTitle}")
     private String artTitle;
 
     /**
      * 메타데이터 추가 키워드
      */
+    @Length(max = 250, message = "{tps.sns.error.length.artKeyword}")
     private String artKeyword;
 
     /**
      * 설명
      */
+    @Length(max = 300, message = "{tps.sns.error.length.artSummary}")
     private String artSummary;
 
 }

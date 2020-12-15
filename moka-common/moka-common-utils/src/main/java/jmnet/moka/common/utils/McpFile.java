@@ -53,7 +53,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
 
     public static final String[] GIF_EXTENSIONS = {"gif"};
 
-    public static final String[] IMG_MIMETYPES = {"image/gif", "image/jpeg", "image/pjpeg", "image/png"};
+    public static final String[] IMG_MIMETYPES = {"image/gif", "image/jpeg", "image/jpg"};
 
     public static final String[] MOV_EXTENSIONS = {"mp4"};
 

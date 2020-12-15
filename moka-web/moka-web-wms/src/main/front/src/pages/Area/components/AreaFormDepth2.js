@@ -245,7 +245,7 @@ const AreaFormDepth2 = (props) => {
                                 body.list.map((b) => {
                                     let deskingPart = null;
                                     if (origin.areaComps?.length > 0) {
-                                        const tgt = origin.areaComps.find((o) => o.component?.componentSeq === b.componentSeq);
+                                        const tgt = origin.areaComps.find((o) => o.component !== null && o.component?.componentSeq === b.componentSeq);
                                         deskingPart = tgt?.deskingPart;
                                     }
 

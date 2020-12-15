@@ -216,11 +216,9 @@ const MokaCard = forwardRef((props, ref) => {
             <Card.Body className={clsx({ 'd-none': foldable && !localExpandState }, 'custom-scroll', bodyClassName)}>{children}</Card.Body>
 
             {/* 푸터 버튼 */}
-            {footer && footerButtons && (
+            {footer && (
                 <Card.Footer className={clsx({ 'd-none': foldable && !localExpandState }, 'd-flex', footerClassName)}>
-                    {footerAs ? (
-                        footerAs
-                    ) : (
+                    {footerButtons ? (
                         <>
                             {footerButtons.map(({ variant, text, ...rest }, idx) => (
                                 <Button key={`${text}-${idx}`} variant={variant} {...rest}>
@@ -228,6 +226,8 @@ const MokaCard = forwardRef((props, ref) => {
                                 </Button>
                             ))}
                         </>
+                    ) : (
+                        footerAs
                     )}
                 </Card.Footer>
             )}

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
@@ -6,10 +6,12 @@ import { useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import toast, { messageBox } from '@utils/toastUtil';
 import { MokaCard, MokaInput, MokaInputLabel, MokaImageInput, MokaCopyTextButton, MokaInputGroup } from '@components';
-import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial, SAVE_SPECIAL } from '@store/special';
+import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial, deleteSpecial, DELETE_SPECIAL, SAVE_SPECIAL } from '@store/special';
 
 moment.locale('ko');
+let currentDate = moment().format('YYYYMMDDHHmmss');
 
 const SpecialEdit = () => {
     const dispatch = useDispatch();
@@ -18,14 +20,14 @@ const SpecialEdit = () => {
     const special = useSelector((store) => store.special.special);
     const ptRows = useSelector((store) => store.codeMgt.ptRows);
     const depts = useSelector((store) => store.special.depts);
-    const loading = useSelector((store) => store.loading[GET_SPECIAL] || store.loading[SAVE_SPECIAL]);
+    const loading = useSelector((store) => store.loading[GET_SPECIAL] || store.loading[SAVE_SPECIAL] || store.loading[DELETE_SPECIAL]);
     const invalidList = useSelector((store) => store.special.invalidList);
     const [temp, setTemp] = useState({});
     const [articleUrl, setArticleUrl] = useState('');
     const [error, setError] = useState({});
     const [fileValue, setFileValue] = useState(null);
+    const [footerBtns, setFooterBtns] = useState([]);
     const imgFileRef = useRef(null);
-    const currentDate = moment().format('YYYYMMDDHHmmss');
 
     /**
      * input 변경
@@ -75,18 +77,49 @@ const SpecialEdit = () => {
     /**
      * 취소
      */
-    const handleClickCancle = () => {
+    const handleClickCancle = useCallback(() => {
         history.push('/special');
         dispatch(clearSpecial());
-    };
+    }, [dispatch, history]);
 
+    /**
+     * 삭제
+     */
+    const handleClickDelete = useCallback(() => {
+        messageBox.confirm(
+            '삭제하시겠습니까?',
+            () => {
+                dispatch(
+                    deleteSpecial({
+                        seqNo: special.seqNo,
+                        callback: ({ header }) => {
+                            if (header.success) {
+                                toast.success(header.message);
+                            } else {
+                                toast.fail(header.message);
+                            }
+                        },
+                    }),
+                );
+            },
+            () => {},
+        );
+    }, [dispatch, special.seqNo]);
+
+    /**
+     * validate
+     * @param {object} saveObj validate target
+     */
     const validate = (saveObj) => {
         let isInvalid = false;
 
         return !isInvalid;
     };
 
-    const handleClickSave = () => {
+    /**
+     * 저장
+     */
+    const handleClickSave = useCallback(() => {
         let saveObj = {
             ...temp,
             pageSdate: moment(temp.pageSdate).format('YYYYMMDD'),
@@ -98,12 +131,17 @@ const SpecialEdit = () => {
                 saveSpecial({
                     special: saveObj,
                     callback: ({ header }) => {
-                        console.log(header);
+                        if (header.success) {
+                            currentDate = moment().format('YYYYMMDDHHmmss');
+                            toast.success(header.message);
+                        } else {
+                            toast.fail(header.message);
+                        }
                     },
                 }),
             );
         }
-    };
+    }, [dispatch, fileValue, temp]);
 
     useEffect(() => {
         if (seqNo) {
@@ -130,12 +168,22 @@ const SpecialEdit = () => {
     }, [special.seqNo]);
 
     useEffect(() => {
+        let btns = [
+            { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
+            { text: '취소', variant: 'negative', onClick: handleClickCancle },
+        ];
+        if (special.seqNo) {
+            btns.push({ text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'ml-2' });
+        }
+        setFooterBtns(btns);
+    }, [handleClickCancle, handleClickDelete, handleClickSave, special.seqNo]);
+
+    useEffect(() => {
         setTemp({
             ...special,
             pageSdate: moment(special.pageSdate, 'YYYYMMDD'),
             pageEdate: moment(special.pageEdate, 'YYYYMMDD'),
         });
-        console.log(special);
     }, [special]);
 
     useEffect(() => {
@@ -163,10 +211,7 @@ const SpecialEdit = () => {
             headerClassName="border-bottom"
             titleClassName="mb-0"
             footerClassName="justify-content-center border-top"
-            footerButtons={[
-                { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
-                { text: '취소', variant: 'negative', onClick: handleClickCancle },
-            ]}
+            footerButtons={footerBtns}
             footer
         >
             <Form>
@@ -260,6 +305,7 @@ const SpecialEdit = () => {
                                     name="ordinal"
                                     required
                                     value={temp.ordinal}
+                                    isInvalid={error.ordinal}
                                     onChange={handleChangeValue}
                                 />
                             </Col>
@@ -276,7 +322,7 @@ const SpecialEdit = () => {
                         <Form.Row className="mb-2">
                             <MokaInputLabel label="제목" labelWidth={72} className="mb-3" labelClassName="mr-3 ft-12" required as="none" />
                             <div className="w-100 d-flex flex-column">
-                                <MokaInput name="pageTitle" className="mb-1" value={temp.pageTitle} onChange={handleChangeValue} />
+                                <MokaInput name="pageTitle" className="mb-1" value={temp.pageTitle} isInvalid={error.pageTitle} onChange={handleChangeValue} />
                                 <p className="m-0 ft-12 text-danger">*&nbsp;""포함, 특수문자 사용금지</p>
                             </div>
                         </Form.Row>
@@ -320,6 +366,7 @@ const SpecialEdit = () => {
                     name="pcUrl"
                     value={temp.pcUrl}
                     onChange={handleChangeValue}
+                    isInvalid={error.pcUrl}
                     required
                 />
                 {/* Mobile URL */}
@@ -331,6 +378,7 @@ const SpecialEdit = () => {
                     name="mobUrl"
                     value={temp.mobUrl}
                     onChange={handleChangeValue}
+                    isInvalid={error.mobUrl}
                     required
                 />
                 {/* 중계페이지 URL */}

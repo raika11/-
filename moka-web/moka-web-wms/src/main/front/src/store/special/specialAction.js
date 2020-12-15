@@ -32,3 +32,9 @@ export const getSpecialDeptList = createAction(GET_SPECIAL_DEPT_LIST, () => ({})
  */
 export const SAVE_SPECIAL = 'special/SAVE_SPECIAL';
 export const saveSpecial = createAction(SAVE_SPECIAL, ({ special, callback }) => ({ special, callback }));
+
+/**
+ * 삭제
+ */
+export const [DELETE_SPECIAL, DELETE_SPECIAL_SUCCESS] = createRequestActionTypes('special/DELETE_SPECIAL');
+export const deleteSpecial = createAction(DELETE_SPECIAL, ({ special, callback }) => ({ special, callback }));

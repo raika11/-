@@ -126,8 +126,6 @@ public class AreaRestController {
                     return new NoDataException(message);
                 });
 
-
-
         try {
             // 컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
             // 페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.

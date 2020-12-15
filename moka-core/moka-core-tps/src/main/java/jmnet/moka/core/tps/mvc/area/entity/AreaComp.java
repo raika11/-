@@ -61,7 +61,7 @@ public class AreaComp implements Serializable {
      * 컴포넌트
      */
     @NotFound(action = NotFoundAction.IGNORE)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "COMPONENT_SEQ", referencedColumnName = "COMPONENT_SEQ", nullable = false)
     private Component component;
 

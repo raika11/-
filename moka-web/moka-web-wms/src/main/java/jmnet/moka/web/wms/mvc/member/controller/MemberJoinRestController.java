@@ -147,7 +147,7 @@ public class MemberJoinRestController extends AbstractCommonController {
 
             String passwordSameMessage = msg("tps.member.error.same.password");
 
-            if (memberDTO
+            if (!memberDTO
                     .getPassword()
                     .equals(memberDTO.getConfirmPassword())) {
                 throw new MokaException(passwordSameMessage);

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import clsx from 'clsx';
+import moment from 'moment';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DB_DATEFORMAT } from '@/constants';
 import { MokaModal, MokaCardTabs } from '@components';
 import { initialState, getPhotoList, getPhotoTypes, changeSearchOption, clearStore } from '@store/photoArchive';
 import EditThumbSearch from './EditThumbSearch';
@@ -44,6 +46,18 @@ const EditThumbModal = (props) => {
         imgProps: {},
     });
     const [showViewModal, setShowViewModal] = useState(false);
+    const [error, setError] = useState();
+
+    const handleSearch = () => {
+        let temp = {
+            ...search,
+            startdate: moment(search.startdate, DB_DATEFORMAT),
+            endServiceDay: moment(search.finishdate, DB_DATEFORMAT),
+            imageTypeList,
+            page: 0,
+        };
+        dispatch(getPhotoList(changeSearchOption(temp)));
+    };
 
     /**
      * 썸네일 클릭
@@ -62,14 +76,7 @@ const EditThumbModal = (props) => {
 
         // 대표사진 삭제
         if (!data.index) {
-            setRepPhoto({
-                ...repPhoto,
-                path: {
-                    thumbPath: '',
-                },
-            });
-        } else {
-            setRepPhoto(repPhoto);
+            setRepPhoto({ ...repPhoto, path: { thumbPath: '' } });
         }
     };
 
@@ -88,7 +95,6 @@ const EditThumbModal = (props) => {
             },
             // imgProps: imgData,
         });
-        // setThumbFileName(data.imageOnlnPath);
     };
 
     /**
@@ -111,7 +117,8 @@ const EditThumbModal = (props) => {
      * 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        setThumbFileName(repPhoto.path.orgPath);
+        setThumbFileName(repPhoto.path.thumbPath);
+        // setFileValue(repPhoto);
         handleHide();
     };
 
@@ -129,6 +136,34 @@ const EditThumbModal = (props) => {
         setSearch(storeSearch);
     }, [storeSearch]);
 
+    // useEffect(() => {
+    //     // 모달 show 포토아카이브 목록 셋팅
+    //     if (show) {
+    //         const startdate = search.startdate ? moment(search.startdate).format(DB_DATEFORMAT) : moment().format(DB_DATEFORMAT);
+    //         const finishdate = search.finishdate ? moment(search.finishdate).format(DB_DATEFORMAT) : moment().format(DB_DATEFORMAT);
+    //         let temp = {
+    //             ...search,
+    //             startdate,
+    //             finishdate,
+    //             imageTypeList,
+    //             page: 0,
+    //         };
+
+    //         // if (type) {
+    //         //     dispatch(getPhotoList(changeSearchOption(temp)));
+    //         //     setError({ ...error, deskingSourceList: false });
+    //         // } else {
+    //         //     setError({ ...error, deskingSourceList: true });
+    //         // }
+    //     }
+    //     //  else {
+    //     //     dispatch(clearList());
+    //     //     setError({ ...error, deskingSourceList: true });
+    //     // }
+
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [sourceOn, show]);
+
     useEffect(() => {
         // 모달 show 포토아카이브 목록 셋팅
         if (show) {
@@ -141,7 +176,7 @@ const EditThumbModal = (props) => {
     }, [show]);
 
     useEffect(() => {
-        if (thumbFileName) {
+        if (show && thumbFileName) {
             setRepPhoto({
                 ...repPhoto,
                 path: {
@@ -150,7 +185,7 @@ const EditThumbModal = (props) => {
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [thumbFileName]);
+    }, [show, thumbFileName]);
 
     return (
         <>
@@ -176,7 +211,7 @@ const EditThumbModal = (props) => {
                         tabs={[
                             <React.Fragment>
                                 <div className="px-3 py-2">
-                                    <EditThumbSearch search={search} setSearch={setSearch} imageTypeList={imageTypeList} />
+                                    <EditThumbSearch search={search} setSearch={setSearch} imageTypeList={imageTypeList} onSearch={handleSearch} />
                                     <EditThumbTable
                                         total={total}
                                         page={search.page}

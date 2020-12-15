@@ -17,9 +17,8 @@ export const initialState = {
         finishdate: null,
         searchKey: '',
         searchValue: '',
-        imageType: [],
+        imageTypeList: [],
     },
-    imageTypeList: [],
     photo: {},
 };
 

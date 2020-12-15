@@ -99,6 +99,7 @@ const ChangeArtGroupModal = (props) => {
         <MokaModal
             width={530}
             title={unescapeHtml(artData.artTitle || '')}
+            titleClassName="user-select-text"
             show={show}
             size="md"
             loading={loading}
@@ -128,14 +129,7 @@ const ChangeArtGroupModal = (props) => {
             >
                 웹제목
             </p>
-            <MokaInput
-                as="textarea"
-                className="mb-2"
-                inputClassName="resize-none custom-scroll p-05"
-                value={webTitle}
-                onChange={(e) => setWebTitle(e.target.value)}
-                isInvalid={error.webTitle}
-            />
+            <MokaInput as="textarea" className="mb-2 resize-none custom-scroll p-05" value={webTitle} onChange={(e) => setWebTitle(e.target.value)} isInvalid={error.webTitle} />
 
             <div className="mob-title-line position-absolute" style={{ height: 19, top: 120, left: 70 + 5 + mobWidth }}></div>
             <p
@@ -145,14 +139,7 @@ const ChangeArtGroupModal = (props) => {
             >
                 모바일제목
             </p>
-            <MokaInput
-                as="textarea"
-                className="mb-0"
-                inputClassName="resize-none custom-scroll"
-                value={mobTitle}
-                onChange={(e) => setMobTitle(e.target.value)}
-                isInvalid={error.mobTitle}
-            />
+            <MokaInput as="textarea" className="mb-0 resize-none custom-scroll" value={mobTitle} onChange={(e) => setMobTitle(e.target.value)} isInvalid={error.mobTitle} />
         </MokaModal>
     );
 };

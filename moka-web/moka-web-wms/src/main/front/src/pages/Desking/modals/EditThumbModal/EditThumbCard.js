@@ -67,7 +67,7 @@ export const ItemTypes = {
 const EditThumbCard = forwardRef((props, ref) => {
     const { width, height, data, img, alt, selected, className, dropCard, moveCard, setAddIndex } = props;
     // 대표 사진 설정 props
-    const { represent, setFileValue, setThumbFileName } = props;
+    const { represent } = props;
     const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
 
     const PHOTO_ARCHIVE_URL = useSelector((store) => store.app.PHOTO_ARCHIVE_URL);
@@ -149,7 +149,7 @@ const EditThumbCard = forwardRef((props, ref) => {
             setThumbSrc(thumb);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [PHOTO_ARCHIVE_URL]);
+    }, [img]);
 
     const handleEdit = (e) => {
         e.stopPropagation();

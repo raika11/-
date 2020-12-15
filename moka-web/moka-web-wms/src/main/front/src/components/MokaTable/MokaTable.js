@@ -168,12 +168,15 @@ const MokaTable = forwardRef((props, ref) => {
      * agGrid 로딩 전 인스턴스 설정
      * @param {object} params grid object
      */
-    const onGridReady = (params) => {
-        setGridApi(params.api);
-        if (setParentGridInstance) {
-            setParentGridInstance(params);
-        }
-    };
+    const onGridReady = useCallback(
+        (params) => {
+            setGridApi(params.api);
+            if (setParentGridInstance) {
+                setParentGridInstance(params);
+            }
+        },
+        [setParentGridInstance],
+    );
 
     /**
      * cell별 설정에 따라서 RowClick를 호출
@@ -222,12 +225,15 @@ const MokaTable = forwardRef((props, ref) => {
      * selection 변경 시 실행
      * @param {object} params grid
      */
-    const handleSelectionChanged = (params) => {
-        if (onSelectionChanged) {
-            const selectedNodes = params.api.getSelectedNodes();
-            onSelectionChanged(selectedNodes, rowSelection);
-        }
-    };
+    const handleSelectionChanged = useCallback(
+        (params) => {
+            if (onSelectionChanged) {
+                const selectedNodes = params.api.getSelectedNodes();
+                onSelectionChanged(selectedNodes, rowSelection);
+            }
+        },
+        [onSelectionChanged, rowSelection],
+    );
 
     /**
      * When a column is resized, the grid re-calculates the row heights after the resize is finished

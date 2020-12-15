@@ -188,14 +188,13 @@ const EditThumbCard = forwardRef((props, ref) => {
                             <div
                                 ref={wrapperRef}
                                 className={clsx('w-100 h-100 bg-gray600 d-flex align-item-center justify-content-center overflow-hidden', { 'rounded-top': !dropCard })}
-                                onClick={() => onThumbClick(data)}
                                 onMouseOver={() => setMouseOver(true)}
                                 onMouseLeave={() => {
                                     setMouseOver(false);
                                     setRepButtonColor('');
                                 }}
                             >
-                                {/* 카드의 마우스 오버 버튼 생성 */}
+                                {/* 마우스 오버 -> 대표 사진 등록 버튼 생성 */}
                                 {mouseOver && !represent && (
                                     <Button
                                         variant="searching"
@@ -213,46 +212,54 @@ const EditThumbCard = forwardRef((props, ref) => {
                                 {/* 테이블 카드의 버튼 */}
                                 {!dropCard && !represent && (
                                     <>
-                                        <Button
-                                            variant="searching"
-                                            className="border-0 p-0 moka-table-button"
-                                            style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
-                                        >
-                                            <MokaIcon iconName="fal-eye-slash" />
-                                        </Button>
+                                        {/* 초상권 주의 */}
+                                        {data.atpnPoriatentYn === 'Y' && (
+                                            <Button
+                                                variant="searching"
+                                                className="border-0 p-0 moka-table-button"
+                                                style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
+                                            >
+                                                <MokaIcon iconName="fal-eye-slash" />
+                                            </Button>
+                                        )}
+                                        {data.atpnReusprhibtYn === 'Y' && (
+                                            <Button
+                                                variant="searching"
+                                                className="border-0 p-0 moka-table-button"
+                                                style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
+                                            >
+                                                <MokaIcon iconName="fal-exclamation-triangle" />
+                                            </Button>
+                                        )}
+                                        {/* 상세 조회 */}
                                         <Button
                                             variant="searching"
                                             className="border-0 p-0 moka-table-button"
                                             style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
+                                            onClick={() => onThumbClick(data)}
                                         >
                                             <MokaIcon iconName="fal-search-plus" />
                                         </Button>
                                     </>
                                 )}
-                                {/* <Button
-                                        variant="searching"
-                                        className="border-0 p-0 moka-table-button"
-                                        style={{ position: 'absolute', top: '5px', left: '5px', opacity: '0.7' }}
-                                        onClick={handleRepImg}
-                                    >
-                                        <MokaIcon iconName="fal-exclamation-triangle" />
-                                    </Button> */}
 
                                 {/* 드롭된 카드의 버튼 */}
                                 {dropCard && !represent && (
                                     <>
+                                        {/* 삭제 */}
                                         <Button
                                             variant="searching"
                                             className="border-0 p-0 moka-table-button"
-                                            style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.7' }}
+                                            style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
                                             onClick={(e) => onDeleteClick(data, e)}
                                         >
                                             <MokaIcon iconName="fas-times" />
                                         </Button>
+                                        {/* 사진 편집 */}
                                         <Button
                                             variant="searching"
                                             className="border-0 p-0 moka-table-button"
-                                            style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.7' }}
+                                            style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
                                             onClick={handleEdit}
                                         >
                                             <MokaIcon iconName="fas-pencil" />
@@ -263,23 +270,25 @@ const EditThumbCard = forwardRef((props, ref) => {
                                 {/* 대표 사진의 버튼 */}
                                 {represent && (
                                     <>
+                                        {/* 삭제 */}
                                         <Button
                                             variant="searching"
                                             className="border-0 p-0 moka-table-button"
-                                            style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.7' }}
+                                            style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
                                             onClick={(e) => onDeleteClick(data, e)}
                                         >
                                             <MokaIcon iconName="fas-times" />
                                         </Button>
+                                        {/* 사진 편집 */}
                                         <Button
                                             variant="searching"
                                             className="border-0 p-0 moka-table-button"
-                                            style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.7' }}
+                                            style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
                                             onClick={handleEdit}
                                         >
                                             <MokaIcon iconName="fas-pencil" />
                                         </Button>
-                                        <Button style={{ position: 'absolute', bottom: '1px', left: '1px' }} as="div">
+                                        <Button className="ft-12" style={{ position: 'absolute', bottom: '1px', left: '1px' }} as="a">
                                             대표 이미지
                                         </Button>
                                     </>

@@ -35,12 +35,15 @@ const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
             <MokaInputGroup
                 value={children}
                 inputProps={{ readOnly: true }}
-                inputClassName="bg-white ft-12 cursor-pointer"
+                inputClassName="bg-white ft-12 cursor-pointer border-right-0"
                 isInvalid={isInvalid}
                 append={
-                    <Button className="ft-12" variant="white">
+                    <div
+                        className="cursor-pointer bg-white d-flex align-items-center justify-content-center border-left-0"
+                        style={{ width: 30, border: '1px solid #CED1DB', borderRadius: '0.2rem' }}
+                    >
                         <MokaIcon iconName="fas-sort" />
-                    </Button>
+                    </div>
                 }
             />
         </div>
@@ -61,7 +64,7 @@ export const propTypes = {
      */
     width: PropTypes.number,
     /**
-     * imgTypeList (필수)
+     * list (필수)
      */
     value: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null])]),
     /**
@@ -77,36 +80,58 @@ const defaultProps = {
 const EditThumbSelectDropdown = (props) => {
     const { className, isInvalid, width, value, onChange } = props;
     const dispatch = useDispatch();
-    const [selectedList, setSelectedList] = useState([]);
+    const [dataSelectedList, setDataSelectedList] = useState([]);
+    const [imageSelectedList, setImageSelectedList] = useState([]);
     const [toggleText, setToggleText] = useState('전체');
-    const [dataObj, setDataObj] = useState({}); // 순서를 유지하기 위해 리스트를 obj로 변환함. key는 list의 idx, value는 list값
+    const [dataObj, setDataObj] = useState({});
+    const [imageObj, setImageObj] = useState({});
 
+    const dataTypeList = useSelector((store) => store.photoArchive.dataTypeList);
     const imageTypeList = useSelector((store) => store.photoArchive.imageTypeList);
 
     /**
-     * 리스트에서 타입 데이터의 index를 찾음
+     * id로 리스트의 index 조회
      */
-    const findIndex = useCallback((id) => imageTypeList.findIndex((type) => type.cd === id), [imageTypeList]);
+    const dataTypeIndex = useCallback((id) => dataTypeList.findIndex((type) => type.cd === id), [dataTypeList]);
+    const imageTypeIndex = useCallback((id) => imageTypeList.findIndex((type) => type.cd === id), [imageTypeList]);
 
     /**
      * change 이벤트
      * @param {object} e 이벤트
      */
     const handleChangeValue = (e) => {
-        const { checked, id } = e.target;
+        const { name, checked, id } = e.target;
         let resultList = [];
 
-        const targetIdx = findIndex(id);
-        if (checked) {
-            resultList = [...selectedList, dataObj[targetIdx]].sort((a, b) => {
-                return a.index - b.index;
-            });
-        } else {
-            const isSelected = selectedList.findIndex((type) => type.cd === id);
-            if (isSelected > -1) {
-                resultList = produce(selectedList, (draft) => {
-                    draft.splice(isSelected, 1);
+        if (name === 'dataTypeList') {
+            const targetIdx = dataTypeIndex(id);
+
+            if (checked) {
+                resultList = [...dataSelectedList, dataObj[targetIdx]].sort((a, b) => {
+                    return a.index - b.index;
                 });
+            } else {
+                const isSelected = dataSelectedList.findIndex((type) => type.cd === id);
+                if (isSelected > -1) {
+                    resultList = produce(dataSelectedList, (draft) => {
+                        draft.splice(isSelected, 1);
+                    });
+                }
+            }
+        } else if (name === 'imageTypeList') {
+            const targetIdx = imageTypeIndex(id);
+
+            if (checked) {
+                resultList = [...imageSelectedList, dataObj[targetIdx]].sort((a, b) => {
+                    return a.index - b.index;
+                });
+            } else {
+                const isSelected = imageSelectedList.findIndex((type) => type.cd === id);
+                if (isSelected > -1) {
+                    resultList = produce(imageSelectedList, (draft) => {
+                        draft.splice(isSelected, 1);
+                    });
+                }
             }
         }
 
@@ -117,11 +142,11 @@ const EditThumbSelectDropdown = (props) => {
 
     /**
      * 렌더링 시 checked true인지 false인지 판단
-     * @param {string} typeCd 이미지 타입 코드
+     * @param {string} cd 이미지 타입 코드
      */
-    const chkTrue = (typeCd) => {
+    const chkTrue = (cd) => {
         if (!value || value === '') return false;
-        else return value.indexOf(typeCd) > -1;
+        else return value.indexOf(cd) > -1;
     };
 
     // useEffect(() => {
@@ -130,52 +155,64 @@ const EditThumbSelectDropdown = (props) => {
     //     }
     // }, [imageTypeList]);
 
-    useEffect(() => {
-        if (!imageTypeList) {
-            dispatch(getPhotoTypes());
-        } else {
-            setDataObj(imageTypeList.reduce((all, type, index) => ({ ...all, [index]: { ...type, index } }), {}));
-        }
-    }, [dispatch, imageTypeList]);
+    // useEffect(() => {
+    //     if (!imageTypeList) {
+    //         dispatch(getPhotoTypes());
+    //     } else {
+    //         setDataObj(imageTypeList.reduce((all, type, index) => ({ ...all, [index]: { ...type, index } }), {}));
+    //     }
+    // }, [dispatch, imageTypeList]);
 
-    useEffect(() => {
-        if (selectedList.length > 0) {
-            const targetIdx = findIndex(selectedList[0].cd);
-            const target = dataObj[targetIdx];
+    // useEffect(() => {
+    //     if (dataSelectedList.length > 0) {
+    //         const targetIdx = dataTypeIndex(dataSelectedList[0].cd);
+    //         const target = dataObj[targetIdx];
 
-            if (selectedList.length === Object.keys(dataObj).length) {
-                setToggleText('전체');
-            } else if (selectedList.length === 1) {
-                setToggleText(target.label);
-            } else {
-                setToggleText(`${target.label} 외 ${selectedList.length - 1}개`);
-            }
-        } else {
-            setToggleText('');
-        }
-    }, [dataObj, selectedList, findIndex]);
+    //         if (dataSelectedList.length === Object.keys(dataObj).length) {
+    //             setToggleText('전체');
+    //         } else if (dataSelectedList.length === 1) {
+    //             setToggleText(target.label);
+    //         } else {
+    //             setToggleText(`${target.label} 외 ${dataSelectedList.length - 1}개`);
+    //         }
+    //     } else if (imageSelectedList.length > 0) {
+    //         const targetIdx = dataTypeIndex(imageSelectedList[0].cd);
+    //         const target = dataObj[targetIdx];
 
-    useEffect(() => {
-        if (Object.keys(dataObj).length < 1) return;
-        if (value) {
-            const valueArr = value.split(',');
-            setSelectedList(
-                valueArr.map((v) => {
-                    const targetIndex = findIndex(v);
-                    return dataObj[targetIndex];
-                }),
-            );
-        } else {
-            // 값이 없을 때는 모든 매체 선택
-            if (typeof onChange === 'function') {
-                onChange(
-                    Object.values(dataObj)
-                        .map((type) => type.cd)
-                        .join(','),
-                );
-            }
-        }
-    }, [findIndex, onChange, dataObj, value]);
+    //         if (dataSelectedList.length === Object.keys(dataObj).length) {
+    //             setToggleText('전체');
+    //         } else if (dataSelectedList.length === 1) {
+    //             setToggleText(target.label);
+    //         } else {
+    //             setToggleText(`${target.label} 외 ${dataSelectedList.length - 1}개`);
+    //         }
+    //     }
+    //     else {
+    //         setToggleText('');
+    //     }
+    // }, [dataObj, dataSelectedList, dataTypeIndex]);
+
+    // useEffect(() => {
+    //     if (Object.keys(dataObj).length < 1) return;
+    //     if (value) {
+    //         const valueArr = value.split(',');
+    //         setSelectedList(
+    //             valueArr.map((v) => {
+    //                 const targetIndex = findTypeIndex(v);
+    //                 return dataObj[targetIndex];
+    //             }),
+    //         );
+    //     } else {
+    //         // 값이 없을 때는 모든 매체 선택
+    //         if (typeof onChange === 'function') {
+    //             onChange(
+    //                 Object.values(dataObj)
+    //                     .map((type) => type.cd)
+    //                     .join(','),
+    //             );
+    //         }
+    //     }
+    // }, [findTypeIndex, onChange, dataObj, value]);
 
     return (
         <Dropdown className={clsx('flex-fill', className)} style={{ width: width }}>
@@ -184,6 +221,19 @@ const EditThumbSelectDropdown = (props) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu} style={{ width: '100px' }}>
+                {/* {dataTypeList &&
+                    dataTypeList.map((data) => (
+                        <MokaInput
+                            key={data.id}
+                            id={data.id}
+                            name="dataTypeList"
+                            onChange={handleChangeValue}
+                            className="mb-2 ft-12"
+                            as="checkbox"
+                            inputProps={{ label: data.name, custom: true, checked: chkTrue(data.id) }}
+                        />
+                    ))} */}
+
                 {imageTypeList &&
                     imageTypeList.map((type) => (
                         <MokaInput

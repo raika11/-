@@ -12,6 +12,7 @@ import EditThumbTable from './EditThumbTable';
 import EditThumbDropzone from './EditThumbDropzone';
 import EditThumbCard from './EditThumbCard';
 import ThumbViewModal from './ThumbViewModal';
+import toast from '@utils/toastUtil';
 
 /**
  * 대표이미지 편집 모달 ====> 데스킹워크 저장 후 나중에 작업
@@ -85,6 +86,12 @@ const EditThumbModal = (props) => {
      */
     const handleRepClick = (data, e) => {
         e.stopPropagation();
+
+        if (thumbFileName === data.imageThumPath) {
+            toast.warning('이미 등록 된 대표사진 입니다.');
+        } else if (repPhoto.path.thumbPath === data.imageThumPath) {
+            toast.warning('이미 대표이미지 영역에 설정된 사진 입니다.');
+        }
 
         setRepPhoto({
             ...repPhoto,

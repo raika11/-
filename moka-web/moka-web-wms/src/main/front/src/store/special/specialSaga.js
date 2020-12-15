@@ -68,9 +68,41 @@ function* saveSpecial({ payload }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 삭제
+ */
+function* deleteSpecial({ payload }) {
+    const { seqNo, callback } = payload;
+    const ACTION = act.DELETE_SPECIAL;
+    let response, callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        response = yield call(api.deleteSpecial, { seqNo });
+        callbackData = response;
+
+        if (response.data.header.success && response.data.body) {
+            yield put({
+                type: act.DELETE_SPECIAL_SUCCESS,
+            });
+
+            // 목록 다시 검색
+            yield put({ type: act.GET_SPECIAL_LIST });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
 export default function* saga() {
     yield takeLatest(act.GET_SPECIAL_LIST, getSpecialList);
     yield takeLatest(act.GET_SPECIAL, getSpecial);
     yield takeLatest(act.GET_SPECIAL_DEPT_LIST, getSpecialDeptList);
     yield takeLatest(act.SAVE_SPECIAL, saveSpecial);
+    yield takeLatest(act.DELETE_SPECIAL, deleteSpecial);
 }

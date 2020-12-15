@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * Facebook Article instance 등록 정보
@@ -22,7 +23,6 @@ public class InstanceArticleSaveDTO implements Serializable {
     /**
      * 기사ID
      */
-    @NotEmpty(message = "{tps.article.error.notempty.totalId}")
     @Min(value = 0, message = "{tps.article.error.min.totalId}")
     private Long totalId;
 
@@ -30,6 +30,7 @@ public class InstanceArticleSaveDTO implements Serializable {
      * iud
      */
     @NotEmpty(message = "{tps.sns.error.notempty.uid}")
+    @Length(max = 1, message = "{tps.sns.error.length.iud}")
     private String iud;
 
     /**

@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * sns 삭제용
@@ -26,6 +27,7 @@ public class SnsDeleteDTO implements Serializable {
      * SNS 기사ID
      */
     @NotEmpty(message = "{tps.sns.error.notempty.snsId}")
+    @Length(max = 50, message = "{tps.sns.error.length.snsId}")
     private String snsId;
 
     /**

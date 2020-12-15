@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * sns 게시용
@@ -30,6 +31,7 @@ public class SnsPublishDTO implements Serializable {
     /**
      * message
      */
+    @Length(max = 300, message = "{tps.sns.error.length.message}")
     private String message;
 
     /**

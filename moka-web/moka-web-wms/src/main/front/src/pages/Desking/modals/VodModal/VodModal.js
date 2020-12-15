@@ -8,6 +8,9 @@ import OvpList from './OvpList';
 import YoutubeList from './YoutubeList';
 import { messageBox } from '@utils/toastUtil';
 
+/**
+ * vod url 검색&입력 모달
+ */
 const VodModal = (props) => {
     const { show, onHide, vodUrl, onSave } = props;
 
@@ -108,7 +111,7 @@ const VodModal = (props) => {
                 className="w-100 h-100"
                 tabs={[
                     <YoutubeList show={show && activeKey === 0} youtubeUrl={youtubeUrl} setYoutubeUrl={setYoutubeUrl} />,
-                    <LiveList show={show && activeKey === 1} setResultVId={setResultVId} />,
+                    <LiveList show={show && activeKey === 1} resultVId={resultVId} setResultVId={setResultVId} OVP_PREVIEW_URL={OVP_PREVIEW_URL} />,
                     <OvpList show={show && activeKey === 2} resultVId={resultVId} setResultVId={setResultVId} />,
                 ]}
             />

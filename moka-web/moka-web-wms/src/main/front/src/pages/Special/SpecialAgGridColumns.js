@@ -1,12 +1,6 @@
-import React from 'react';
-import UrlCopyButton from './components/UrlCopyButton';
-import CmsTagCopyButton from './components/CmsTagCopyButton';
-import UrlConfirmButton from './components/UrlConfirmButton';
-import SpecialEditButton from './components/SpecialEditButton';
-
 export const columnDefs = [
     {
-        headerName: '번호',
+        headerName: 'No',
         field: 'cdNo',
         width: 60,
         cellStyle: { fontSize: '12px' },
@@ -22,7 +16,8 @@ export const columnDefs = [
     {
         headerName: '제목',
         field: 'pageTitle',
-        width: 250,
+        width: 315,
+        flex: 1,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'pageTitle',
     },
@@ -41,57 +36,17 @@ export const columnDefs = [
         tooltipField: 'regDt',
     },
     {
-        headerName: '리스트 노출',
+        headerName: '노출',
         field: 'listYn',
-        width: 90,
+        width: 50,
         cellStyle: { fontSize: '12px' },
     },
     {
-        headerName: '사용여부',
+        headerName: '사용',
         field: 'usedYn',
-        width: 80,
+        width: 50,
         cellStyle: { fontSize: '12px' },
     },
-    // {
-    //     headerName: '',
-    //     field: 'urlCopy',
-    //     width: 90,
-    //     cellStyle: { fontSize: '12px' },
-    //     cellRendererFramework: (row) => {
-    //         const { data } = row;
-    //         return <UrlCopyButton {...row} data={data} />;
-    //     },
-    // },
-    // {
-    //     headerName: '',
-    //     field: 'cmsTagCopy',
-    //     width: 150,
-    //     cellStyle: { fontSize: '12px' },
-    //     cellRendererFramework: (row) => {
-    //         const { data } = row;
-    //         return <CmsTagCopyButton {...row} data={data} />;
-    //     },
-    // },
-    // {
-    //     headerName: '',
-    //     field: 'urlConfirm',
-    //     width: 90,
-    //     cellStyle: { fontSize: '12px' },
-    //     cellRendererFramework: (row) => {
-    //         const { data } = row;
-    //         return <UrlConfirmButton {...row} data={data} />;
-    //     },
-    // },
-    // {
-    //     headerName: '',
-    //     field: 'edit',
-    //     width: 80,
-    //     cellStyle: { fontSize: '12px' },
-    //     cellRendererFramework: (row) => {
-    //         const { data } = row;
-    //         return <SpecialEditButton {...row} data={data} />;
-    //     },
-    // },
 ];
 
 export const rowData = [

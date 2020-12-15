@@ -6,10 +6,7 @@ import { changeVodOptions } from '@store/bright';
 const LiveOptionRenderer = forwardRef((props, ref) => {
     const { data } = props;
     const dispatch = useDispatch();
-
-    const { vodOptions } = useSelector((store) => ({
-        vodOptions: store.bright.vodOptions,
-    }));
+    const vodOptions = useSelector((store) => store.bright.vodOptions);
 
     useImperativeHandle(
         ref,
@@ -32,12 +29,13 @@ const LiveOptionRenderer = forwardRef((props, ref) => {
     );
 
     return (
-        <div className="d-flex">
+        <div className="d-flex h-100 align-items-center">
             <MokaInput
                 as="checkbox"
                 name="autoplay"
                 id={`${data.id}-autoplay`}
                 onChange={handleChangeValue}
+                className="mr-2"
                 inputProps={{ label: '자동재생', custom: true, checked: vodOptions[data.id]?.autoplay || false }}
             />
             <MokaInput

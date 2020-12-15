@@ -4,7 +4,7 @@ import { takeLatest, put, call, select } from 'redux-saga/effects';
 
 import { finishLoading, startLoading } from '@store/loading';
 import { errorResponse } from '@store/commons/saga';
-import { IMAGE_DEFAULT_URL } from '@/constants';
+import { IMAGE_DEFAULT_URL, snsNames } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 import moment from 'moment';
 import { unescapeHtml } from '@utils/convertUtil';
@@ -62,7 +62,7 @@ function* saveSnsMeta({ type, payload: { totalId, data, callback } }) {
         const response = yield call(api.putSnsMeta, totalId, params['FB']);
         if (callback instanceof Function) {
             const callbackResponse = response.data;
-            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `FB ${callbackResponse.header.message}` } });
+            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `${snsNames['fb']} ${callbackResponse.header.message}` } });
         }
     }
 
@@ -70,7 +70,7 @@ function* saveSnsMeta({ type, payload: { totalId, data, callback } }) {
         const response = yield call(api.putSnsMeta, totalId, params['TW']);
         if (callback instanceof Function) {
             const callbackResponse = response.data;
-            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `TW ${callbackResponse.header.message}` } });
+            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `${snsNames['tw']} ${callbackResponse.header.message}` } });
         }
     }
 

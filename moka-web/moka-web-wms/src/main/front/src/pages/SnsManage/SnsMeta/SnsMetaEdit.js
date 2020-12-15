@@ -13,7 +13,6 @@ import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '
 import moment from 'moment';
 
 const SnsMetaEdit = () => {
-    const snsTypeKor = { FB: '페이스북', TW: '트위터' };
     const dispatch = useDispatch();
     const history = useHistory();
     const { totalId } = useParams();
@@ -111,6 +110,7 @@ const SnsMetaEdit = () => {
                     data,
                     callback: (response) => {
                         dispatch(getSnsMeta(totalId));
+                        dispatch(getSNSMetaList({ payload: search }));
                         toast.result(response);
                     },
                 }),
@@ -144,8 +144,8 @@ const SnsMetaEdit = () => {
 
     const validSaveData = (data, type) => {
         for (const item of data) {
-            const snsTypeEng = item.snsType;
-            const snsKor = snsTypeKor[snsTypeEng];
+            const snsTypeEng = item.snsType.toLowerCase();
+            const snsKor = snsNames[snsTypeEng];
 
             if (commonUtil.isEmpty(item.title)) {
                 toast.warning(`${snsKor} 제목을 입력해 주세요.`);

@@ -29,6 +29,7 @@ import articlePageSaga from '@/store/articlePage/articlePageSaga';
 import snsSaga from '@store/snsManage/snsSaga';
 import brightSaga from '@store/bright/brightSaga';
 import bulks from '@store/bulks/bulksSaga';
+import special from '@store/special/specialSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -61,5 +62,6 @@ export default function* rootSaga() {
         snsSaga(),
         brightSaga(),
         bulks(),
+        special(),
     ]);
 }

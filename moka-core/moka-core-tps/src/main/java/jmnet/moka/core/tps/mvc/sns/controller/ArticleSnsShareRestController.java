@@ -308,7 +308,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             returnValue.setReserveDt(newArticleSnsShare.getReserveDt());
             returnValue = articleSnsShareService.updateArticleSnsShare(returnValue);
         } else {
-            newArticleSnsShare.setImgUrl(fileUpload(articleBasic, returnValue.getImgUrl(), articleSnsShareSaveDTO
+            newArticleSnsShare.setImgUrl(fileUpload(articleBasic, null, articleSnsShareSaveDTO
                     .getSnsType()
                     .getCode(), imgFile));
             returnValue = articleSnsShareService.insertArticleSnsShare(newArticleSnsShare);

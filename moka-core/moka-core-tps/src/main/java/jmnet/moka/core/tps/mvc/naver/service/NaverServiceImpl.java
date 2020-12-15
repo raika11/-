@@ -10,10 +10,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -24,7 +27,9 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.ftp.FtpHelper;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.entity.AreaComp;
@@ -60,17 +65,23 @@ public class NaverServiceImpl implements NaverService {
     @Autowired
     private MessageByLocale messageByLocale;
 
-    @Value("${naverStand.ftp.key}")
+    @Autowired
+    private TpsLogger tpsLogger;
+
+    @Value("${naver.ftp.key}")
     private String naverFtpKey;
 
-    @Value("${naverStand.xml.path}")
+    @Value("${naver.stand.xml.path}")
     private String naverStandXmlPath;
 
-    @Value("${naverStand.html.path}")
+    @Value("${naver.stand.html.path}")
     private String naverStandHtmlPath;
 
-    @Value("${naverStand.html.url}")
+    @Value("${naver.stand.html.url}")
     private String naverStandHtmlUrl;
+
+    @Value("${naver.channel.path}")
+    private String naverChannelPath;
 
     @Autowired
     private FtpHelper ftpHelper;
@@ -85,7 +96,7 @@ public class NaverServiceImpl implements NaverService {
     private ModelMapper modelMapper;
 
     @Override
-    public void publishNaverStand(String source, Long areaSeq)
+    public void publishNaverStand(Long areaSeq)
             throws Exception {
         // 편집영역조회
         Area area = areaService
@@ -97,22 +108,41 @@ public class NaverServiceImpl implements NaverService {
                 });
 
         // html 생성
-        File htmlFile = File.createTempFile("newsStand", ".html");
-        String htmlPath = makeHTML(area, htmlFile);
+        String html = makeHTML(area);
+
+        // html에서 도메인 추출
+        Set<String> domainList = getDomainList(html);
 
         // xml 생성
-        String xmlPath = "";
-        if (McpString.isNotEmpty(htmlPath)) {
-            xmlPath = makeXML(area, htmlPath);
+        boolean sendXml = false;
+        if (McpString.isNotEmpty(html)) {
+            sendXml = makeXML(area, domainList);
         }
 
-        if (McpString.isEmpty(htmlPath) || McpString.isEmpty(xmlPath)) {
+        // html, xml모두 생성된 경우만 정상.
+        if (McpString.isEmpty(html) || !sendXml) {
             throw new Exception();
         }
     }
 
-    private String makeHTML(Area area, File htmlFile)
-            throws NoDataException, TemplateMergeException, DataLoadException, TemplateParseException {
+    @Override
+    public void publishNaverChannel(Long areaSeq) {
+        
+    }
+
+    /**
+     * 네이버스탠드 HTML파일 생성
+     *
+     * @param area 편집영역정보
+     * @return html파일 내용
+     * @throws NoDataException
+     * @throws TemplateMergeException
+     * @throws DataLoadException
+     * @throws TemplateParseException
+     * @throws IOException
+     */
+    private String makeHTML(Area area)
+            throws NoDataException, TemplateMergeException, DataLoadException, TemplateParseException, IOException {
         Page page = pageService
                 .findPageBySeq(area
                         .getPage()
@@ -130,6 +160,7 @@ public class NaverServiceImpl implements NaverService {
         html = html.replace("nv_arti=\"\"", "nv_arti");
         html = html.replace("</li>nn<li>", "</li><li>");
 
+        File htmlFile = File.createTempFile("newsStand", ".html");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(htmlFile))) {
             writer.write(html);
             writer.close();
@@ -140,20 +171,30 @@ public class NaverServiceImpl implements NaverService {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(htmlFile));
             boolean upload = ftpHelper.upload(naverFtpKey, fileName, bufferedInputStream, remotePath);
             if (upload) {
-                log.debug("SAVE NAVER STAND HTML FTP SEND: {}", htmlFile.getPath());
-                return naverStandHtmlUrl;
+                tpsLogger.success(ActionType.UPLOAD, true);
+                log.debug("SEND NAVER_STAND_HTML TO FTP: {}", htmlFile.getPath());
+                return html;
             } else {
-                log.debug("SAVE FAIL NAVER STAND HTML FTP SEND: {}", htmlFile.getPath());
-                return "";
+                tpsLogger.error(ActionType.UPLOAD, "FAIL TO SEND NAVER_STAND_HTML TO FTP", true);
+                log.debug("FAIL TO SEND NAVER_STAND_HTML TO FTP: {}", htmlFile.getPath());
             }
-            //tmpFile.deleteOnExit(); // 생성된 임시파일은 종료와 함께 삭제.
+            htmlFile.deleteOnExit(); // 생성된 임시파일은 종료와 함께 삭제.
         } catch (IOException e) {
-            log.error("FAIL TO SAVE THE NAVER STAND HTML FILE");
+            log.error("FAIL TO SEND NAVER_STAND_HTML");
         }
-        return "";
+        return null;
     }
 
-    private String makeXML(Area area, String htmlPath)
+    /**
+     * 네이버스탠드 xml생성
+     *
+     * @param area       편집정보
+     * @param domainList 도메인목록
+     * @return xml전송 성공여부
+     * @throws XMLStreamException
+     * @throws IOException
+     */
+    private boolean makeXML(Area area, Set<String> domainList)
             throws XMLStreamException, IOException {
 
         // 1. 편집영역 headline 기사 데이타셋 조회
@@ -181,9 +222,6 @@ public class NaverServiceImpl implements NaverService {
         List<Desking> topDeskingList = deskingService.findByDatasetSeq(topDatasetSeq);
         List<Desking> subDeskingList = deskingService.findByDatasetSeq(subDatasetSeq);
 
-        // 2. 사용된 도메인 조회
-        Set<String> domainList = getDomainList(topDeskingList, subDeskingList);
-
         // 3. xml 생성
         File tmpFile = File.createTempFile("newsStand", ".xml");
         XMLOutputFactory factory = XMLOutputFactory.newFactory();
@@ -207,7 +245,7 @@ public class NaverServiceImpl implements NaverService {
 
             // <source>
             xml.writeStartElement("source");
-            xml.writeCData(htmlPath);
+            xml.writeCData(naverStandHtmlUrl);
             xml.writeEndElement();
 
             // <modified>
@@ -275,54 +313,87 @@ public class NaverServiceImpl implements NaverService {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(tmpFile));
             boolean upload = ftpHelper.upload(naverFtpKey, fileName, bufferedInputStream, remotePath);
             if (upload) {
-                log.debug("SAVE NAVER STAND XML FTP SEND: {}", tmpFile.getPath());
-                return remotePath + "/" + fileName;
+                tpsLogger.success(ActionType.UPLOAD, true);
+                log.debug("SEND NAVER_STAND_XML TO FTP: {}", tmpFile.getPath());
+                return true;
             } else {
-                log.debug("SAVE FAIL NAVER STAND XML FTP SEND: {}", tmpFile.getPath());
+                tpsLogger.error(ActionType.UPLOAD, "FAIL TO SEND NAVER_STAND_XML TO FTP", true);
+                log.debug("FAIL TO SEND NAVER_STAND_XML TO FTP: {}", tmpFile.getPath());
             }
-            //tmpFile.deleteOnExit(); // 생성된 임시파일은 종료와 함께 삭제.
+            tmpFile.deleteOnExit(); // 생성된 임시파일은 종료와 함께 삭제.
         } catch (IOException e) {
-            log.error("FAIL TO SAVE THE NAVER STAND XML FILE");
+            log.error("FAIL TO SEND NAVER_STAND_XML TO FTP");
         }
-        return "";
+        return false;
     }
 
+    /**
+     * 제목에서 태그제거(xml에서 사용)
+     *
+     * @param title 제목
+     * @return 태그제거된 제목
+     */
     private String trimTitle(String title) {
         String retTitle = title;
-        retTitle = retTitle.replace("<strong>", "");
-        retTitle = retTitle.replace("</strong>", "");
-        retTitle = retTitle.replace("<span>", "");
-        retTitle = retTitle.replace("</span>", "");
+
+        retTitle = retTitle.replaceAll("<strong>", "");
+        retTitle = retTitle.replaceAll("</strong>", "");
+        retTitle = retTitle.replaceAll("<span>", "");
+        retTitle = retTitle.replaceAll("</span>", "");
+
+        retTitle = retTitle.replaceAll("(?i)<img\\s[^>]*>(?:\\s*?</img>)?", "");
+        retTitle = retTitle.replaceAll("(?i)<strong\\s[^>]*>(?:\\s*?</strong>)?", "");
+        retTitle = retTitle.replaceAll("(?i)<span\\s[^>]*>(?:\\s*?</span>)?", "");
+        retTitle = retTitle.replaceAll("(?i)<font\\s[^>]*>(?:\\s*?</font>)?", "");
+        retTitle = retTitle.replaceAll("(?i)<br/>", "");
+        retTitle = retTitle.replaceAll("(?i)<br>", "");
+
         return retTitle;
     }
 
-    private Set<String> getDomainList(List<Desking> topDeskingList, List<Desking> subDeskingList) {
+    /**
+     * html에서 모든 도메인 추출
+     *
+     * @param html html내용
+     * @return 도메인목록
+     * @throws MalformedURLException
+     */
+    private Set<String> getDomainList(String html)
+            throws MalformedURLException {
         Set<String> domainList = new LinkedHashSet<>();
-
-        // top 1 기사 link url
-        Set<String> topDomainList = topDeskingList
-                .stream()
-                .filter(item -> McpString.isNotEmpty(item.getLinkUrl()))
-                .map(item -> item.getLinkUrl())
-                .collect(Collectors.toSet());
-        domainList.addAll(topDomainList);
-
-        // top 1 기사 thumbnail url
-        Set<String> topImgDomainList = topDeskingList
-                .stream()
-                .filter(item -> McpString.isNotEmpty(item.getThumbFileName()))
-                .map(item -> item.getThumbFileName())
-                .collect(Collectors.toSet());
-        domainList.addAll(topImgDomainList);
-
-        // top 서브기사 link url
-        Set<String> subDomainList = subDeskingList
-                .stream()
-                .filter(item -> McpString.isNotEmpty(item.getLinkUrl()))
-                .map(item -> item.getLinkUrl())
-                .collect(Collectors.toSet());
-        domainList.addAll(subDomainList);
-
+        appendDomain(domainList, html, "<a href=\\\"(?<entry>.*?)\\\"");
+        appendDomain(domainList, html, "src=\\\"(?<entry>.*?)\\\"");
+        appendDomain(domainList, html, "src='(?<entry>.*?)'");
         return domainList;
     }
+
+    /**
+     * 정규식에 따라 host를 추출한다.
+     *
+     * @param domainList 도메인목록
+     * @param html       html내용
+     * @param regx       추출할 정규식
+     * @throws MalformedURLException
+     */
+    private void appendDomain(Set<String> domainList, String html, String regx)
+            throws MalformedURLException {
+        Pattern pattern1 = Pattern.compile(regx, Pattern.CASE_INSENSITIVE);
+        Matcher matcher1 = pattern1.matcher(html);
+        String url = "";
+        while (matcher1.find()) {
+            url = matcher1.group(1);
+            if (!url.equals("#") && McpString.isNotEmpty(url)) {
+                if (!url.startsWith("http") && !url.startsWith("https")) {
+                    url = "http:" + url;
+                }
+                URL netUrl = new URL(url);
+                String host = netUrl.getHost();
+                if (McpString.isNotEmpty(host)) {
+                    domainList.add(host);
+                }
+            }
+        }
+    }
+
+
 }

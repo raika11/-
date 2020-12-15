@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import SpecialEdit from './SpecialEdit';
@@ -25,9 +25,11 @@ const Special = ({ match }) => {
             </MokaCard>
 
             {/* 등록/수정 */}
-            <Route path={[`${match.url}/add`, `${match.url}/:seqNo`]}>
-                <SpecialEdit />
-            </Route>
+            <Switch>
+                <Route path={[`${match.url}/add`, `${match.url}/:seqNo`]}>
+                    <SpecialEdit />
+                </Route>
+            </Switch>
         </div>
     );
 };

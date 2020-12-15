@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInput, MokaInputLabel, MokaImageInput, MokaCopyTextButton, MokaInputGroup } from '@components';
-import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList } from '@store/special';
+import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial, SAVE_SPECIAL } from '@store/special';
 
 moment.locale('ko');
 
@@ -18,12 +18,14 @@ const SpecialEdit = () => {
     const special = useSelector((store) => store.special.special);
     const ptRows = useSelector((store) => store.codeMgt.ptRows);
     const depts = useSelector((store) => store.special.depts);
-    const loading = useSelector((store) => store.loading[GET_SPECIAL]);
+    const loading = useSelector((store) => store.loading[GET_SPECIAL] || store.loading[SAVE_SPECIAL]);
+    const invalidList = useSelector((store) => store.special.invalidList);
     const [temp, setTemp] = useState({});
     const [articleUrl, setArticleUrl] = useState('');
     const [error, setError] = useState({});
     const [fileValue, setFileValue] = useState(null);
     const imgFileRef = useRef(null);
+    const currentDate = moment().format('YYYYMMDDHHmmss');
 
     /**
      * input 변경
@@ -78,6 +80,31 @@ const SpecialEdit = () => {
         dispatch(clearSpecial());
     };
 
+    const validate = (saveObj) => {
+        let isInvalid = false;
+
+        return !isInvalid;
+    };
+
+    const handleClickSave = () => {
+        let saveObj = {
+            ...temp,
+            pageSdate: moment(temp.pageSdate).format('YYYYMMDD'),
+            pageEdate: moment(temp.pageEdate).format('YYYYMMDD'),
+            thumbnailFile: fileValue,
+        };
+        if (validate(saveObj)) {
+            dispatch(
+                saveSpecial({
+                    special: saveObj,
+                    callback: ({ header }) => {
+                        console.log(header);
+                    },
+                }),
+            );
+        }
+    };
+
     useEffect(() => {
         if (seqNo) {
             dispatch(
@@ -111,6 +138,18 @@ const SpecialEdit = () => {
         console.log(special);
     }, [special]);
 
+    useEffect(() => {
+        setError(
+            invalidList.reduce(
+                (all, c) => ({
+                    ...all,
+                    [c.field]: true,
+                }),
+                {},
+            ),
+        );
+    }, [invalidList]);
+
     return (
         <MokaCard
             width={738}
@@ -125,7 +164,7 @@ const SpecialEdit = () => {
             titleClassName="mb-0"
             footerClassName="justify-content-center border-top"
             footerButtons={[
-                { text: '저장', variant: 'positive', onClick: () => {}, className: 'mr-2' },
+                { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancle },
             ]}
             footer
@@ -133,10 +172,12 @@ const SpecialEdit = () => {
             <Form>
                 <Form.Row>
                     {/* 이미지등록 */}
-                    <Col xs={4} className="p-0 pr-4">
-                        <p className="mb-1 ft-12">이미지 등록(290*180)</p>
-                        <MokaImageInput width={205} height={166} ref={imgFileRef} setFileValue={setFileValue} />
-                        <Form.Row className="d-flex justify-content-between">
+                    <Col xs={4} className="p-0 pr-4 d-flex flex-column">
+                        <p className="mb-1 ft-12">
+                            <span className="required-text">*</span>이미지 등록(290*180)
+                        </p>
+                        <MokaImageInput width={205} height={166} ref={imgFileRef} img={temp.imgUrl ? `${temp.imgUrl}?${currentDate}` : null} setFileValue={setFileValue} />
+                        <Form.Row className="d-flex justify-content-between mt-2">
                             <Button variant="negative" size="sm" onClick={() => imgFileRef.current.deleteFile()}>
                                 삭제
                             </Button>

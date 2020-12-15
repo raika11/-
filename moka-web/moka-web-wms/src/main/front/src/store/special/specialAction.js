@@ -26,3 +26,9 @@ export const [GET_SPECIAL, GET_SPECIAL_SUCCESS] = createRequestActionTypes('spec
 export const getSpecial = createAction(GET_SPECIAL, ({ seqNo, callback }) => ({ seqNo, callback }));
 export const [GET_SPECIAL_DEPT_LIST, GET_SPECIAL_DEPT_LIST_SUCCESS, GET_SPECIAL_DEPT_LIST_FAILURE] = createRequestActionTypes('special/GET_SPECIAL_DEPT_LIST');
 export const getSpecialDeptList = createAction(GET_SPECIAL_DEPT_LIST, () => ({}));
+
+/**
+ * 저장, 수정
+ */
+export const SAVE_SPECIAL = 'special/SAVE_SPECIAL';
+export const saveSpecial = createAction(SAVE_SPECIAL, ({ special, callback }) => ({ special, callback }));

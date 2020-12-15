@@ -29,6 +29,10 @@ const propTypes = {
      */
     headerClassName: PropTypes.string,
     /**
+     * titleClassName
+     */
+    titleClassName: PropTypes.string,
+    /**
      * bodyClassName
      */
     bodyClassName: PropTypes.string,
@@ -132,6 +136,7 @@ const MokaModal = (props) => {
         footer,
         className,
         headerClassName,
+        titleClassName,
         bodyClassName,
         footerClassName,
         headerStyle,
@@ -177,7 +182,7 @@ const MokaModal = (props) => {
             {/* 타이틀 */}
             <Modal.Header className={headerClassName} style={headerStyle} id="draggable-modal-title" data-drag-on={draggable} closeButton>
                 {draggable && <div id={`draggable-handle-${id}`} data-drag-handle="true" />}
-                {titleAs ? titleAs : <Modal.Title>{title}</Modal.Title>}
+                {titleAs ? titleAs : <Modal.Title className={titleClassName}>{title}</Modal.Title>}
             </Modal.Header>
 
             {/* 컨텐츠 */}

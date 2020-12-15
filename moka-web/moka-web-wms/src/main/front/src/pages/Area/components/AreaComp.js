@@ -31,12 +31,12 @@ const AreaComp = ({ areaComp, areaComps, index, onChange, disabled, setAreaComps
     };
 
     return (
-        <Form.Row className="mb-2" key={areaComp.component.componentSeq}>
+        <Form.Row className="mb-2" key={areaComp.component?.componentSeq}>
             <Col xs={2} className="p-0">
                 <MokaInput value="컴포넌트" disabled />
             </Col>
             <Col xs={areaComp.component?.dataType === 'DESK' ? 6 : 8} className="p-0 pl-2 pr-2">
-                <MokaInput value={areaComp.component.componentName} inputProps={{ readOnly: true }} />
+                <MokaInput value={areaComp.component?.componentName} inputProps={{ readOnly: true }} />
             </Col>
             {areaComp.component?.dataType === 'DESK' && (
                 <Col xs={2} className="p-0 pr-2">

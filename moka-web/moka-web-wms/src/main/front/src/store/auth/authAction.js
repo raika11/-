@@ -9,6 +9,22 @@ export const loginJwt = createAction(LOGIN_JWT);
 export const LOGOUT = 'auth/LOGOUT';
 export const logout = createAction(LOGOUT);
 
+// 그룹웨어 유저 정보 조회
+export const GET_GROUP_WARE_USER = 'auth/GET_GROUP_WARE_USER';
+export const getGroupWareUser = createAction(GET_GROUP_WARE_USER);
+
+// SMS인증문자 요청
+export const GET_SMS_REQUEST = 'auth/GET_SMS_REQUEST';
+export const getSmsRequest = createAction(GET_SMS_REQUEST);
+
+// 관리자 해제 요청
+export const UNLOCK_SMS = 'auth/UNLOCK_REQUEST';
+export const unlockRequest = createAction(UNLOCK_SMS);
+
+// 본인인증 해제
+export const UNLOCK_REQUEST = 'auth/UNLOCK_SMS';
+export const approvalRequest = createAction(UNLOCK_SMS);
+
 // 메뉴 조회
 export const [GET_USER_MENU_TREE, GET_USER_MENU_TREE_SUCCESS, GET_USER_MENU_TREE_FAILURE] = createRequestActionTypes('auth/GET_USER_MENU_TREE');
 export const getUserMenuTree = createAction(GET_USER_MENU_TREE, (pathName) => pathName);

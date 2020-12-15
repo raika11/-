@@ -10,10 +10,13 @@ import logo from '@assets/images/img_logo@2x.png';
 import loginBg from '@assets/images/login_bg.png';
 import { MokaIcon } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
+import UnlockModal from './modals/UnlockModal';
+
 const SignIn = () => {
     const dispatch = useDispatch();
-
     const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || 'ssc01');
+    const [showUnlockModal, setShowUnlockModal] = useState(false);
+    const [showApprovalModal, setShowApprovalModal] = useState(false);
     const [password, setPassword] = useState('sscMoka#2020');
     const [passwordErrorCount, setPasswordErrorCount] = useState(0);
     const handleSubmit = (e) => {
@@ -49,7 +52,6 @@ const SignIn = () => {
                             if (resultType === 100) {
                                 setPasswordErrorCount(data.body.extra);
                             }
-                            console.log(data.body);
                             messageBox.alert(data.header.message);
                         } else if (resultType < 200) {
                             //confirm 창 출력 메시지
@@ -74,7 +76,7 @@ const SignIn = () => {
         console.log(event);
     };
     const handleClickUnlock = (event) => {
-        console.log(event);
+        setShowUnlockModal(true);
     };
 
     return (
@@ -142,6 +144,7 @@ const SignIn = () => {
                                                         <label onClick={handleClickApproval}>
                                                             BackOffice <span>사용신청</span>
                                                         </label>
+                                                        <UnlockModal show={showUnlockModal} onHide={() => setShowUnlockModal(false)} /* onSave={onSave} onDelete={onDelete}*/ />
                                                     </div>
                                                     <div className="etc-btn">
                                                         <label onClick={handleClickUnlock}>

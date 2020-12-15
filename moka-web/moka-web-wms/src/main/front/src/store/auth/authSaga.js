@@ -1,12 +1,12 @@
-import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { setLocalItem } from '@utils/storageUtil';
 import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
-import toast, { messageBox } from '@utils/toastUtil';
 import { AUTHORIZATION, SIGNIN_MEMBER_ID } from '@/constants';
-
+import { createRequestSaga, errorResponse } from '../commons/saga';
+import * as act from './authAction';
 /**
  * 로그인
  * @param {object} param0.payload
@@ -35,6 +35,50 @@ export function* logout() {
             yield call(setLocalItem, { key: AUTHORIZATION, value: undefined });
             yield call(window.location.reload());
         }
+    } catch (err) {}
+}
+
+/**
+ * 그룹웨어 사용자 조회
+ * @param {object} param0.payload
+ */
+
+export function* getGroupWareUser({ payload: { groupWareUserId, callback } }) {
+    try {
+        const response = yield call(api.getGroupWareUser, groupWareUserId);
+        callback(response.data);
+    } catch (err) {}
+}
+/**
+ * SMS 인증 요청
+ * @param {object} param0.payload
+ */
+export function* getSmsRequest({ payload: { unlock, callback } }) {
+    try {
+        const response = yield call(api.getSmsRequest, { payload: unlock });
+        callback(response.data);
+    } catch (err) {}
+}
+
+/**
+ * 본인인증 해제
+ * @param {object} param0.payload
+ */
+export function* approvalRequest({ payload: { unlock, callback } }) {
+    try {
+        const response = yield call(api.approvalRequest, { payload: unlock });
+        callback(response.data);
+    } catch (err) {}
+}
+
+/**
+ * 관리자 해제 요청
+ * @param {object} param0.payload
+ */
+export function* unlockRequest({ payload: { unlock, callback } }) {
+    try {
+        const response = yield call(api.unlockRequest, { payload: unlock });
+        callback(response.data);
     } catch (err) {}
 }
 
@@ -171,6 +215,10 @@ export function* getDomainList({ payload: domainId }) {
 export default function* authSaga() {
     yield takeLatest(authAction.LOGIN_JWT, loginJwtSaga);
     yield takeLatest(authAction.LOGOUT, logout);
+    yield takeLatest(authAction.GET_GROUP_WARE_USER, getGroupWareUser);
+    yield takeLatest(authAction.GET_SMS_REQUEST, getSmsRequest);
+    yield takeLatest(authAction.UNLOCK_SMS, approvalRequest);
+    yield takeLatest(authAction.UNLOCK_REQUEST, unlockRequest);
     yield takeLatest(authAction.GET_USER_MENU_TREE, getUserMenuTree);
     yield takeLatest(authAction.GET_DOMAIN_LIST, getDomainList);
 }

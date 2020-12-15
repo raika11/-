@@ -396,6 +396,7 @@ const ArticlePageEdit = ({ onDelete }) => {
                         labelWidth={84}
                         placeholder="기사페이지명을 입력하세요"
                         isInvalid={error.artPageName}
+                        inputProps={{ autoComplete: 'off' }}
                         required
                     />
                 </Form.Row>
@@ -431,6 +432,7 @@ const ArticlePageEdit = ({ onDelete }) => {
                         className="mb-0 w-100"
                         labelWidth={84}
                         placeholder="기사ID를 입력하세요."
+                        inputProps={{ autoComplete: 'off' }}
                     />
                 </Form.Row>
             </Form>

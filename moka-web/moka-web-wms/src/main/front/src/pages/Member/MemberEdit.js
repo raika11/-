@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { DB_DATEFORMAT } from '@/constants';
-import toast from '@/utils/toastUtil';
+import toast, { messageBox } from '@/utils/toastUtil';
 import { clearMember, getMember, changeInvalidList, changeMember, saveMember, GET_MEMBER, SAVE_MEMBER, getMemberMenuAuth, clearMemberMenuAuth } from '@store/member';
 import { MokaInputLabel } from '@components';
 
@@ -118,7 +118,6 @@ const MemberEdit = () => {
     };
 
     useEffect(() => {
-        let errorMessage = '';
         if (invalidList && invalidList.length > 0) {
             invalidList.forEach((i) => {
                 if (i.field === 'expireDt') {
@@ -130,9 +129,8 @@ const MemberEdit = () => {
                 if (i.field === 'remark') {
                     setRemarkError(true);
                 }
-                errorMessage += '<p>' + i.reason + '</p>';
             });
-            toast.error(errorMessage);
+            messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});
         } else {
             setExpireDtError(false);
             setStatusError(false);

@@ -3,15 +3,17 @@ import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Col, Button, Figure } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSnsMeta, GET_SNS_META, initialState, clearSnsMeta } from '@store/snsManage';
+import { getSnsMeta, GET_SNS_META, initialState, clearSnsMeta, saveSnsMeta, publishSnsMeta, getSNSMetaList } from '@store/snsManage';
 import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 import SnsPreviewModal from '@pages/SnsManage/SnsMeta/modal/SnsPreviewModal';
-import { snsNames } from '@/constants';
+import { DB_DATEFORMAT, snsNames } from '@/constants';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
+import moment from 'moment';
 
 const SnsMetaEdit = () => {
+    const snsTypeKor = { FB: '페이스북', TW: '트위터' };
     const dispatch = useDispatch();
     const history = useHistory();
     const { totalId } = useParams();
@@ -20,27 +22,37 @@ const SnsMetaEdit = () => {
     const [articlePreviewModalShow, setArticlePreviewModalShow] = useState(false);
     const [edit, setEdit] = useState(initialState.meta.meta);
 
-    const { meta, errors, cdNm: fbToken, loading } = useSelector((store) => {
+    const { meta, errors, cdNm: fbToken, loading, search } = useSelector((store) => {
         return {
             meta: store.sns.meta.meta,
             cdNm: store.codeMgt.specialCharCode.cdNm,
             loading: store.loading[GET_SNS_META],
             errors: store.sns.meta.errors,
+            search: store.sns.meta.search,
         };
     });
 
     const handleChangeCheckedValue = ({ target: { name } }) => {
         const divideName = name.split('-');
-        const target = divideName[0];
+        const snsType = divideName[0];
         const targetName = divideName[1];
-        setEdit({ ...edit, [target]: { ...edit[target], [targetName]: !edit[target][targetName] } });
+
+        if (!edit[snsType][targetName] === false) {
+            setEdit({ ...edit, [snsType]: { ...edit[snsType], [targetName]: !edit[snsType][targetName], reserveDt: null } });
+        } else {
+            changeEditValue(snsType, targetName, !edit[snsType][targetName]);
+        }
     };
 
     const handleChangeTextValue = ({ target: { name, value } }) => {
         const divideName = name.split('-');
-        const target = divideName[0];
+        const snsType = divideName[0];
         const targetName = divideName[1];
-        setEdit({ ...edit, [target]: { ...edit[target], [targetName]: value } });
+        changeEditValue(snsType, targetName, value);
+    };
+
+    const changeEditValue = (snsType, targetName, value) => {
+        setEdit({ ...edit, [snsType]: { ...edit[snsType], [targetName]: value } });
     };
 
     const handleClickCancel = () => {
@@ -80,6 +92,87 @@ const SnsMetaEdit = () => {
 
     const handleClickArticlePreviewModalHide = () => {
         setArticlePreviewModalShow(false);
+    };
+
+    const handleClickPublish = (type) => {
+        snsMetaSave(type);
+    };
+
+    const handleClickSave = () => {
+        const data = [
+            { ...edit['fb'], snsType: 'FB' },
+            { ...edit['tw'], snsType: 'TW' },
+        ];
+
+        if (validSaveData(data)) {
+            dispatch(
+                saveSnsMeta({
+                    totalId: edit.totalId,
+                    data,
+                    callback: (response) => {
+                        dispatch(getSnsMeta(totalId));
+                        toast.result(response);
+                    },
+                }),
+            );
+        }
+        //snsMetaSave('all');
+    };
+
+    const snsMetaSave = (type) => {
+        let data = [{ ...edit[type], snsType: type.toUpperCase() }];
+        if (type === 'all') {
+            data = [
+                { ...edit['fb'], snsType: 'FB' },
+                { ...edit['tw'], snsType: 'TW' },
+            ];
+        }
+        if (validSaveData(data, 'send')) {
+            dispatch(
+                publishSnsMeta({
+                    totalId: edit.totalId,
+                    data,
+                    callback: (response) => {
+                        dispatch(getSnsMeta(totalId));
+                        dispatch(getSNSMetaList({ payload: search }));
+                        toast.result(response);
+                    },
+                }),
+            );
+        }
+    };
+
+    const validSaveData = (data, type) => {
+        for (const item of data) {
+            const snsTypeEng = item.snsType;
+            const snsKor = snsTypeKor[snsTypeEng];
+
+            if (commonUtil.isEmpty(item.title)) {
+                toast.warning(`${snsKor} 제목을 입력해 주세요.`);
+                return false;
+            }
+
+            if (commonUtil.isEmpty(item.summary)) {
+                toast.warning(`${snsKor} 설명을 입력해 주세요.`);
+                return false;
+            }
+
+            if (item.isReserve) {
+                if (commonUtil.isEmpty(item.reserveDt)) {
+                    toast.warning(`${snsKor} 예약일자를 입력해 주세요.`);
+                    return false;
+                }
+            }
+
+            if (type === 'send') {
+                if (commonUtil.isEmpty(item.postMessage)) {
+                    toast.warning(`${snsKor} 메세지를 입력해 주세요.`);
+                    return false;
+                }
+            }
+        }
+
+        return true;
     };
 
     const handleClickCopyContent = (from) => {
@@ -127,8 +220,8 @@ const SnsMetaEdit = () => {
             loading={loading}
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '전송', variant: 'positive', onClick: handleClickArticlePreviewModalShow, className: 'mr-05' },
-                { text: '임시저장', variant: 'positive', onClick: handleClickArticlePreviewModalShow, className: 'mr-05' },
+                { text: '전송', variant: 'positive', onClick: () => handleClickPublish('all'), className: 'mr-05' },
+                { text: '임시저장', variant: 'positive', onClick: handleClickSave, className: 'mr-05' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'mr-05' },
                 { text: '기사보기', variant: 'outline-neutral', onClick: handleClickArticlePreviewModalShow, className: 'mr-05' },
             ]}
@@ -142,16 +235,34 @@ const SnsMetaEdit = () => {
                     <div className="d-flex">
                         <MokaInputLabel label="Facebook" labelWidth={70} className="m-0 h5" as="none" />
                         <div className="d-flex justify-content-center">
-                            <Button variant="outline-neutral" className="mr-05">
+                            <Button
+                                variant="outline-neutral"
+                                className="mr-05"
+                                onClick={() => {
+                                    handleClickPublish('fb');
+                                }}
+                            >
                                 FB 전송
                             </Button>
-                            <Button variant="outline-neutral" className="mr-05">
+                            <Button
+                                variant="outline-neutral"
+                                className="mr-05"
+                                onClick={() => {
+                                    window.open(`https://developers.facebook.com/tools/debug/?q=https://mnews.joins.com/article/${totalId}`);
+                                }}
+                            >
                                 FB 캐시삭제
                             </Button>
                             <Button variant="outline-neutral" className="mr-05" onClick={handleClickFbTokenModalShow}>
                                 토큰 관리
                             </Button>
-                            <Button variant="outline-neutral" className="mr-05">
+                            <Button
+                                variant="outline-neutral"
+                                className="mr-05"
+                                onClick={() => {
+                                    window.open(`https://www.facebook.com/sharer.php?u=https://mnews.joins.com/article/${totalId}`, '', 'width=500,height=500');
+                                }}
+                            >
                                 공유
                             </Button>
                             <Button
@@ -250,7 +361,9 @@ const SnsMetaEdit = () => {
                             as="dateTimePicker"
                             name="fb-reserveDt"
                             value={edit.fb.reserveDt}
-                            onChange={handleChangeTextValue}
+                            onChange={(e) => {
+                                handleChangeTextValue({ target: { name: 'fb-reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
+                            }}
                             inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm' }}
                             disabled={!edit.fb.isReserve}
                         />
@@ -267,12 +380,24 @@ const SnsMetaEdit = () => {
                         <MokaInputLabel label="Twitter" labelWidth={70} className="m-0 h5" as="none" />
                         <Col className="d-flex justify-content-end">
                             <div className="justify-content-end pr-2">
-                                <Button variant="outline-neutral" className="mr-05">
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-05"
+                                    onClick={() => {
+                                        handleClickPublish('tw');
+                                    }}
+                                >
                                     TW 전송
                                 </Button>
                             </div>
                             <div className="justify-content-end pr-2">
-                                <Button variant="outline-neutral" className="mr-05">
+                                <Button
+                                    variant="outline-neutral"
+                                    className="mr-05"
+                                    onClick={() => {
+                                        window.open('https://cards-dev.twitter.com/validator');
+                                    }}
+                                >
                                     TW 캐시삭제
                                 </Button>
                             </div>
@@ -375,7 +500,9 @@ const SnsMetaEdit = () => {
                             as="dateTimePicker"
                             name="tw-reserveDt"
                             value={edit.tw.reserveDt}
-                            onChange={handleChangeTextValue}
+                            onChange={(e) => {
+                                handleChangeTextValue({ target: { name: 'tw-reserveDt', value: moment(e._d).format(DB_DATEFORMAT) } });
+                            }}
                             inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm' }}
                             disabled={!edit.tw.isReserve}
                         />

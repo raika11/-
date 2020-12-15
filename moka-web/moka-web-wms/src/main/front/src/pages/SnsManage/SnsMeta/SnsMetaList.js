@@ -11,7 +11,7 @@ const SnsMetaList = () => {
         search: store.sns.meta.search,
         list: store.sns.meta.list,
         total: store.sns.meta.total,
-        totalId: store.sns.meta.totalId,
+        totalId: store.sns.meta.meta.totalId,
         loading: store.loading[GET_SNS_META_LIST],
     }));
 
@@ -22,7 +22,7 @@ const SnsMetaList = () => {
     return (
         <>
             <Search searchOptions={search} />
-            <AgGrid rows={list} searchOptions={search} total={total} loading={loading} seledted={totalId} />
+            <AgGrid rows={list} searchOptions={search} total={total} loading={loading} selected={totalId} />
         </>
     );
 };

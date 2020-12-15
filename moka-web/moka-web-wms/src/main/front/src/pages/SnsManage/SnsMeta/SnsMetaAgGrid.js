@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { tempColumnDefs } from './SnsMetaAgGridColumns';
 import { MokaTable } from '@components';
 import { useDispatch } from 'react-redux';
-import { changeSNSMetaSearchOptions } from '@store/snsManage/snsAction';
+import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
 import { useHistory } from 'react-router-dom';
 
 const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
     const [rowData, setRowData] = useState([]);
 
     const handleClickListRow = ({ id }) => {
@@ -16,10 +15,8 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     };
 
     const handleChangeSearchOption = (option) => {
-        dispatch(changeSNSMetaSearchOptions({ ...searchOptions, [option.key]: option.value }));
+        dispatch(changeSnsMetaSearchOptions({ ...searchOptions, [option.key]: option.value }));
     };
-
-    const handleOnRowNodeId = () => {};
 
     useEffect(() => {
         setRowData(rows);

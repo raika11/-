@@ -13,3 +13,21 @@ export const getSnsMeta = (totalId) => {
         throw err;
     });
 };
+
+export const putSnsMeta = (totalId, params) => {
+    return instance
+        .put(`/api/sns/${totalId}?${qs.stringify(params)}`, null, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+export const postSnsPublish = (params) => {
+    return instance.post('/api/sns/publish', qs.stringify(params)).catch((err) => {
+        throw err;
+    });
+};

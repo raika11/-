@@ -1,20 +1,107 @@
 import * as api from '@store/snsManage/snsApi';
 import * as action from '@store/snsManage/snsAction';
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put, call, select } from 'redux-saga/effects';
 
 import { finishLoading, startLoading } from '@store/loading';
 import { errorResponse } from '@store/commons/saga';
 import { IMAGE_DEFAULT_URL } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 import moment from 'moment';
+import { unescapeHtml } from '@utils/convertUtil';
+
+function* publishSnsMeta({ type, payload }) {
+    yield put(startLoading(action.GET_SNS_META));
+    const data = toSaveSnsMeta(payload.data);
+    yield saveSnsMeta({
+        type,
+        payload: {
+            ...payload,
+            callback: function* (saveResponse) {
+                if (saveResponse.header.success) {
+                    if (data[saveResponse.body.id.snsType]) {
+                        const snsData = data[saveResponse.body.id.snsType];
+                        const response = yield call(api.postSnsPublish, {
+                            totalId: payload.totalId,
+                            message: snsData.snsPostMsg,
+                            reserveDt: snsData.reserveDt,
+                            snsType: snsData.snsType,
+                        });
+                        if (payload.callback instanceof Function) {
+                            payload.callback(response.data);
+                        }
+                    }
+                } else {
+                    if (payload.callback instanceof Function) {
+                        payload.callback(saveResponse);
+                    }
+                }
+
+                yield put(finishLoading(action.GET_SNS_META));
+            },
+        },
+    });
+}
+
+function* saveSnsMeta({ type, payload: { totalId, data, callback } }) {
+    yield put(startLoading(action.GET_SNS_META));
+    const params = toSaveSnsMeta(data);
+    /*data.forEach((data) => {
+        params[data.snsType] = {
+            usedYn: data.usedYn === true ? 'Y' : 'N',
+            reserveDt: data.reserveDt,
+            snsPostMsg: data.postMessage,
+            imgUrl: data.metaImage,
+            artTitle: data.title,
+            artSummary: data.summary,
+            snsType: data.snsType.toUpperCase(),
+            snsArtSts: 'I',
+        };
+    });*/
+
+    if (params['FB']) {
+        const response = yield call(api.putSnsMeta, totalId, params['FB']);
+        if (callback instanceof Function) {
+            const callbackResponse = response.data;
+            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `FB ${callbackResponse.header.message}` } });
+        }
+    }
+
+    if (params['TW']) {
+        const response = yield call(api.putSnsMeta, totalId, params['TW']);
+        if (callback instanceof Function) {
+            const callbackResponse = response.data;
+            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `TW ${callbackResponse.header.message}` } });
+        }
+    }
+
+    yield put(finishLoading(action.GET_SNS_META));
+}
+
+function toSaveSnsMeta(data) {
+    const params = {};
+    data.forEach((data) => {
+        params[data.snsType] = {
+            usedYn: data.usedYn === true ? 'Y' : 'N',
+            reserveDt: data.reserveDt,
+            snsPostMsg: data.postMessage,
+            imgUrl: data.metaImage,
+            artTitle: data.title,
+            artSummary: data.summary,
+            snsType: data.snsType.toUpperCase(),
+            snsArtSts: 'I',
+        };
+    });
+
+    return params;
+}
 
 function* getSnsMeta({ type, payload: totalId }) {
     yield put(startLoading(type));
 
-    const response = yield call(api.getSnsMeta, totalId);
     try {
+        const response = yield call(api.getSnsMeta, totalId);
         if (response.data.header.success) {
-            yield put({ type: `${type}_SUCCESS`, payload: toSnsMetaData(response.data.body) });
+            yield put({ type: `${type}_SUCCESS`, payload: toSnsMetaViewData(response.data.body) });
         } else {
             yield put({ type: `${type}_FAILURE`, payload: response.data });
         }
@@ -24,7 +111,7 @@ function* getSnsMeta({ type, payload: totalId }) {
     yield put(finishLoading(type));
 }
 
-function toSnsMetaData({ snsShare, article }) {
+function toSnsMetaViewData({ snsShare, article }) {
     const textArea = document.createElement('textarea');
     textArea.innerText = commonUtil.setDefaultValue(article.fbMetaTitle);
 
@@ -32,7 +119,7 @@ function toSnsMetaData({ snsShare, article }) {
         totalId: commonUtil.setDefaultValue(article.totalId),
         fb: {
             usedYn: commonUtil.setDefaultValue(article.fbMetaUsedYn, 'N') === 'Y',
-            title: commonUtil.setDefaultValue(article.fbMetaTitle),
+            title: unescapeHtml(commonUtil.setDefaultValue(article.fbMetaTitle)),
             summary: commonUtil.setDefaultValue(article.fbMetaSummary),
             postMessage: commonUtil.setDefaultValue(article.fbMetaPostMsg),
             metaImage: toMetaImage(
@@ -46,7 +133,7 @@ function toSnsMetaData({ snsShare, article }) {
         },
         tw: {
             usedYn: commonUtil.setDefaultValue(article.twMetaUsedYn, 'N') === 'Y',
-            title: commonUtil.setDefaultValue(article.twMetaTitle),
+            title: unescapeHtml(commonUtil.setDefaultValue(article.twMetaTitle)),
             summary: commonUtil.setDefaultValue(article.twMetaSummary),
             postMessage: commonUtil.setDefaultValue(article.twMetaPostMsg),
             metaImage: toMetaImage(
@@ -155,7 +242,7 @@ function setHasSendSnsIcons({ sendSnsType, fbSendSnsArtId, fbSendSnsArtSts, twSe
         }
         if (sendSnsType.toUpperCase().indexOf('TW') >= 0) {
             hasIcons.button = false;
-            if (!commonUtil.isEmpty(fbSendSnsArtId) && !commonUtil.isEmpty(fbSendSnsArtSts)) {
+            if (!commonUtil.isEmpty(twSendSnsArtId) && !commonUtil.isEmpty(twSendSnsArtSts)) {
                 hasIcons.twitter = true;
             }
         }
@@ -220,4 +307,6 @@ function setStatus({ iud, insDt, sendDt, statusMsg, fbStatusId, fbArticleId }) {
 export default function* snsSaga() {
     yield takeLatest(action.GET_SNS_META_LIST, getSnsMetaList);
     yield takeLatest(action.GET_SNS_META, getSnsMeta);
+    yield takeLatest(action.SAVE_SNS_META, saveSnsMeta);
+    yield takeLatest(action.PUBLISH_SNS_META, publishSnsMeta);
 }

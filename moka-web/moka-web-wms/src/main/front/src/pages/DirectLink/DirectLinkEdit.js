@@ -519,7 +519,7 @@ const DirectLinkEdit = ({ history }) => {
                         selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                         setFileValue,
                     }}
-                    labelClassName="justify-content-end mr-3"
+                    labelClassName="justify-content-end"
                     disabled={inputBoxDisabled}
                 />
 

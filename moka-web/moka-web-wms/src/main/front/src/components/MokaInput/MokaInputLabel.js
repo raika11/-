@@ -86,8 +86,8 @@ const MokaInputLabel = forwardRef((props, ref) => {
         <Form.Group className={clsx('d-flex', 'align-items-center', className)}>
             {label && (
                 <Form.Label
-                    className={clsx('px-0', 'mb-0', 'position-relative', 'text-left', labelClassName)}
-                    style={{ width: labelWidth, minWidth: labelWidth, marginRight: 12 }}
+                    className={clsx('px-0 mb-0 position-relative flex-shrink-0', labelClassName)}
+                    style={{ width: labelWidth, minWidth: labelWidth, marginRight: 12, marginLeft: 8 }}
                     htmlFor="none"
                 >
                     {required && <span className="required-text">*</span>}

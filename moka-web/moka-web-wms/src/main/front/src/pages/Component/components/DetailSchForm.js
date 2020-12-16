@@ -28,27 +28,22 @@ const DetailSchForm = (props) => {
 
     return (
         <Form className="collapsed-box">
-            <Card.Title className={clsx('mb-2', { collapsed: !open, disabled: !available })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
-                <p className="mb-0 d-inline cursor-pointer" onClick={handleClickTitle}>
-                    검색설정
-                </p>
+            <Card.Title className={clsx('mb-2 d-flex', { collapsed: !open, disabled: !available })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
+                <div className="d-flex align-items-center" onClick={handleClickTitle}>
+                    <MokaInputLabel as="none" className="mb-0" label="검색설정" />
+                </div>
+                <MokaInputLabel as="none" className="mb-0" labelClassName="font-weight-normal ft-13 ml-0" label="분류" />
             </Card.Title>
             <Collapse in={open} timeout={3000}>
-                <div id={controls} className="mt-3">
-                    <div className="d-flex justify-content-center">
-                        <Col xs={11} className="p-0">
-                            <Form.Row className="mb-2">
-                                <Col xs={2} className="d-flex p-0 pr-3">
-                                    <MokaInputLabel label="검색조건" as="none" className="mb-0" />
-                                </Col>
-                                {/* 코드타입 */}
-                                <Col xs={10} className="p-0">
-                                    <CodeAutocomplete label="분류" labelWidth={45} className="mb-0" value={component.schCodeId} onChange={handleChangeValue} />
-                                </Col>
-                            </Form.Row>
-                        </Col>
-                    </div>
-                </div>
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="d-flex p-0 pr-3">
+                        <MokaInputLabel label="검색조건" as="none" className="mb-0" />
+                        {/* 코드타입 */}
+                        <div style={{ width: 300 }}>
+                            <CodeAutocomplete className="mb-0" value={component.schCodeId} onChange={handleChangeValue} />
+                        </div>
+                    </Col>
+                </Form.Row>
             </Collapse>
         </Form>
     );

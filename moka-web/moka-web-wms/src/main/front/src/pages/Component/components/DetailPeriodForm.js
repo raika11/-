@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
-import { MokaInputLabel, MokaDateTimePicker } from '@components';
+import { MokaInputLabel, MokaInput, MokaDateTimePicker } from '@components';
 
 const DetailPeriodForm = (props) => {
     const { component, setComponent, available, error, setError } = props;
@@ -64,41 +64,43 @@ const DetailPeriodForm = (props) => {
 
     return (
         <Form className="collapsed-box">
-            <Card.Title className={clsx('mb-2', { collapsed: !open, disabled: !available })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
-                <p className="mb-0 d-inline cursor-pointer" onClick={handleClickTitle}>
-                    기간설정
-                </p>
+            <Card.Title className={clsx('mb-2 d-flex', { collapsed: !open, disabled: !available })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
+                <div className="d-flex align-items-center" onClick={handleClickTitle}>
+                    <MokaInputLabel className="mb-0" as="none" label="기간설정" />
+                </div>
+                <MokaInput
+                    as="switch"
+                    id="period-yn"
+                    inputProps={{ checked: component.periodYn === 'Y' }}
+                    onChange={(e) => {
+                        setComponent({ ...component, periodYn: e.target.checked ? 'Y' : 'N' });
+                    }}
+                    disabled={!available}
+                />
             </Card.Title>
             <Collapse in={open}>
                 <div id={controls} className="mt-3">
-                    <div className="d-flex justify-content-center">
-                        <Col xs={11} className="p-0">
-                            <Form.Row>
-                                <Col xs={3} className="d-flex p-0 pr-3">
-                                    <MokaInputLabel
-                                        label="사용기간"
-                                        as="switch"
-                                        id="period-yn"
-                                        className="mb-0 h-100"
-                                        inputProps={{ checked: component.periodYn === 'Y' }}
-                                        onChange={(e) => {
-                                            setComponent({ ...component, periodYn: e.target.checked ? 'Y' : 'N' });
-                                        }}
-                                    />
-                                </Col>
-                                {/* 시작일 종료일 */}
-                                <Col xs={9} className="d-flex align-items-center p-0">
-                                    <div style={{ width: 185 }} className="mr-2">
-                                        <MokaDateTimePicker disabled={disabled} value={component.periodStartDt} onChange={handleStartDt} isInvalid={error.periodStartDt} />
-                                    </div>
-                                    ~
-                                    <div style={{ width: 185 }} className="ml-2">
-                                        <MokaDateTimePicker disabled={disabled} value={component.periodEndDt} onChange={handleEndDt} isInvalid={error.periodEndDt} />
-                                    </div>
-                                </Col>
-                            </Form.Row>
+                    <Form.Row>
+                        <Col xs={12} className="d-flex align-items-center p-0 pr-3">
+                            {/* 시작일 종료일 */}
+                            <div style={{ width: 265 }} className="mr-2">
+                                <MokaInputLabel
+                                    as="dateTimePicker"
+                                    label="사용기간"
+                                    disabled={disabled}
+                                    value={component.periodStartDt}
+                                    onChange={handleStartDt}
+                                    isInvalid={error.periodStartDt}
+                                    inputClassName="ft-12"
+                                    className="mb-0"
+                                />
+                            </div>
+                            ~
+                            <div style={{ width: 185 }} className="ml-2">
+                                <MokaDateTimePicker disabled={disabled} value={component.periodEndDt} onChange={handleEndDt} isInvalid={error.periodEndDt} inputClassName="ft-12" />
+                            </div>
                         </Col>
-                    </div>
+                    </Form.Row>
                 </div>
             </Collapse>
         </Form>

@@ -439,7 +439,7 @@ const AreaFormDepth2 = (props) => {
                             as="switch"
                             id="usedYn"
                             name="usedYn"
-                            labelWidth={87}
+                            labelWidth={81}
                             label="사용여부"
                             className="mb-0"
                             inputProps={{ checked: temp.usedYn === 'Y' }}
@@ -455,7 +455,7 @@ const AreaFormDepth2 = (props) => {
                                     as="select"
                                     name="parent"
                                     className="mb-0"
-                                    labelWidth={87}
+                                    labelWidth={81}
                                     label="그룹 영역"
                                     value={parent?.areaSeq}
                                     onChange={handleChangeValue}
@@ -469,7 +469,7 @@ const AreaFormDepth2 = (props) => {
                                 </MokaInputLabel>
                             </Col>
                             <Col xs={5} className="p-0">
-                                <MokaInputLabel className="mb-0" labelWidth={87} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
+                                <MokaInputLabel className="mb-0" labelWidth={81} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
                             </Col>
                         </Form.Row>
                     )}
@@ -482,7 +482,7 @@ const AreaFormDepth2 = (props) => {
                                     as="select"
                                     name="parent"
                                     className="mb-0"
-                                    labelWidth={87}
+                                    labelWidth={81}
                                     label="중분류 영역"
                                     value={parent?.areaSeq}
                                     onChange={handleChangeValue}
@@ -496,7 +496,7 @@ const AreaFormDepth2 = (props) => {
                                 </MokaInputLabel>
                             </Col>
                             <Col xs={5} className="p-0">
-                                <MokaInputLabel className="mb-0" labelWidth={87} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
+                                <MokaInputLabel className="mb-0" labelWidth={81} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
                             </Col>
                         </Form.Row>
                     )}
@@ -507,7 +507,7 @@ const AreaFormDepth2 = (props) => {
                         as="select"
                         label="도메인"
                         name="domain"
-                        labelWidth={87}
+                        labelWidth={81}
                         value={domain?.domainId}
                         disabled={parent?.areaSeq ? true : false}
                         onChange={handleChangeValue}
@@ -523,7 +523,7 @@ const AreaFormDepth2 = (props) => {
                     <MokaInputLabel
                         className="mb-2"
                         label="영역명"
-                        labelWidth={87}
+                        labelWidth={81}
                         name="areaNm"
                         value={temp.areaNm}
                         onChange={handleChangeValue}
@@ -535,7 +535,7 @@ const AreaFormDepth2 = (props) => {
 
                     {/* 페이지 검색 */}
                     <Form.Row className="mb-2">
-                        <MokaInputLabel as="none" className="mb-0" label="페이지" labelWidth={87} />
+                        <MokaInputLabel as="none" className="mb-0" label="페이지" labelWidth={81} />
                         <MokaSearchInput
                             className="w-100"
                             inputClassName="bg-white"
@@ -549,7 +549,7 @@ const AreaFormDepth2 = (props) => {
                     </Form.Row>
 
                     {/* api 입력 */}
-                    <MokaInputLabel name="afterApi" label="API" className="mb-2" labelWidth={87} value={temp.afterApi} onChange={handleChangeValue} />
+                    <MokaInputLabel name="afterApi" label="API" className="mb-2" labelWidth={81} value={temp.afterApi} onChange={handleChangeValue} />
 
                     {/* 컴포넌트/컨테이너 선택 */}
                     <Form.Row className="mb-2">
@@ -612,7 +612,7 @@ const AreaFormDepth2 = (props) => {
                         as="textarea"
                         name="previewRsrc"
                         label="미리보기\n리소스"
-                        labelWidth={87}
+                        labelWidth={81}
                         inputClassName="resize-none"
                         inputProps={{ rows: 5 }}
                         value={temp.previewRsrc}

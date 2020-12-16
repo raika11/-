@@ -83,7 +83,7 @@ const DetailPeriodForm = (props) => {
                     <Form.Row>
                         <Col xs={12} className="d-flex align-items-center p-0 pr-3">
                             {/* 시작일 종료일 */}
-                            <div style={{ width: 265 }} className="mr-2">
+                            <div style={{ width: 276 }} className="mr-2">
                                 <MokaInputLabel
                                     as="dateTimePicker"
                                     label="사용기간"
@@ -91,7 +91,7 @@ const DetailPeriodForm = (props) => {
                                     value={component.periodStartDt}
                                     onChange={handleStartDt}
                                     isInvalid={error.periodStartDt}
-                                    inputClassName="ft-12"
+                                    inputProps={{ inputClassName: 'ft-12' }}
                                     className="mb-0"
                                 />
                             </div>

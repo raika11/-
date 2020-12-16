@@ -120,8 +120,8 @@ const ChangeArtGroupModal = (props) => {
             ]}
             centered
         >
-            <div className="title-line1 position-absolute" style={{ height: 19, top: 35, left: 12 + titleWidth[0] }}></div>
-            <div className="title-line2 position-absolute" style={{ height: 19, top: 35, left: 12 + titleWidth[1] }}></div>
+            <div className="title-line1 position-absolute" style={{ height: 19, top: 35, left: 8 + titleWidth[0] }}></div>
+            <div className="title-line2 position-absolute" style={{ height: 19, top: 35, left: 8 + titleWidth[1] }}></div>
             <p
                 className={clsx('mb-10', {
                     'color-positive': !artData.artEditTitle || artData.artEditTitle === '',
@@ -131,7 +131,7 @@ const ChangeArtGroupModal = (props) => {
             </p>
             <MokaInput className="mb-20" value={webTitle} onChange={(e) => setWebTitle(e.target.value)} isInvalid={error.webTitle} />
 
-            <div className="mob-title-line position-absolute" style={{ height: 19, top: 115, left: 12 + mobWidth }}></div>
+            <div className="mob-title-line position-absolute" style={{ height: 19, top: 115, left: 8 + mobWidth }}></div>
             <p
                 className={clsx('mb-10', {
                     'color-positive': !artData.artEditMobTitle || artData.artEditMobTitle === '',

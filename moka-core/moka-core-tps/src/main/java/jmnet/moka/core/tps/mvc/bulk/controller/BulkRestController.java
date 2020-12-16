@@ -275,7 +275,7 @@ public class BulkRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "벌크문구 및 벌크기사정보저장")
     @PostMapping
-    public ResponseEntity<?> postBulk(@Valid BulkSaveDTO bulkSave, @RequestBody @Valid ValidList<BulkArticleDTO> validList)
+    public ResponseEntity<?> postBulk(@Valid BulkSaveDTO bulkSave, @ApiParam("벌크 기사 목록") @RequestBody @Valid ValidList<BulkArticleDTO> validList)
             throws InvalidDataException, Exception {
 
         try {

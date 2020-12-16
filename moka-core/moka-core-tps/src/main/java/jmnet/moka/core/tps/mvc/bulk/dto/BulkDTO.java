@@ -89,12 +89,14 @@ public class BulkDTO implements Serializable {
     /**
      * datetime (getdate()) NO  등록일시
      */
+    @ApiModelProperty(hidden = true)
     @DTODateTimeFormat
     private Date regDt;
 
     /**
      * varchar  30  YES 등록자
      */
+    @ApiModelProperty(hidden = true)
     @Length(max = 30, message = "{tps.bulk.error.length.regId}")
     private String regId;
 

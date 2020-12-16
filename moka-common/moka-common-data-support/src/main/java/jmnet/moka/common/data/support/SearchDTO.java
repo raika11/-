@@ -96,7 +96,7 @@ public class SearchDTO implements Serializable {
      */
     @ApiModelProperty("총갯수 사용여부")
     @Builder.Default
-    private String useTotal = McpString.YES;
+    public String useTotal = McpString.YES;
 
     /**
      * 총갯수

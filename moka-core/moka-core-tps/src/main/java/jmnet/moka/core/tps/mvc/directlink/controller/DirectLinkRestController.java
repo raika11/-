@@ -210,6 +210,7 @@ public class DirectLinkRestController {
 
         // DirectLinkDTO -> DirectLink 변환
         DirectLink newDirectLink = modelMapper.map(directLinkDTO, DirectLink.class);
+        newDirectLink.setLinkSeq(linkSeq);
         DirectLink orgDirectLink = directLinkService
                 .findById(newDirectLink.getLinkSeq())
                 .orElseThrow(() -> {

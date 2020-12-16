@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.bulk.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -45,12 +46,14 @@ public class BulkDTO implements Serializable {
     /**
      * int   10,0    NO  클릭기사일련번호
      */
+    @ApiModelProperty("클릭기사일련번호")
     @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}")
     private Long bulkartSeq;
 
     /**
      * char 1   NO  클릭기사구분 - H(아티클핫클릭) N(벌크)
      */
+    @ApiModelProperty("클릭기사구분 - H(아티클핫클릭) N(벌크)")
     @NotNull(message = "{tps.bulk.error.notnull.bulkartDiv}")
     @Pattern(regexp = "[H|N]{1}$", message = "{tps.bulk.error.pattern.bulkartDiv}")
     private String bulkartDiv;
@@ -58,12 +61,14 @@ public class BulkDTO implements Serializable {
     /**
      * varchar  2   NO  출처 - 썬데이[60] 중앙일보[3]
      */
+    @ApiModelProperty("출처 - 썬데이[60] 중앙일보[3]")
     @NotNull(message = "{tps.bulk.error.notnull.sourceCode}")
     private String sourceCode;
 
     /**
      * char 1   ('N')   NO  서비스여부
      */
+    @ApiModelProperty("서비스여부")
     @NotNull(message = "{tps.bulk.error.notnull.usedYn}") @Pattern(regexp = "[Y|N]{1}$", message = "{tps.bulk.error.pattern.usedYn}")
     @Builder.Default
     String usedYn = MokaConstants.NO;
@@ -71,12 +76,13 @@ public class BulkDTO implements Serializable {
     /**
      * varchar  10  YES 상태 - SAVE(임시) / PUBLISH(전송)
      */
-    //    @Pattern(regexp = "[SAVE|PUBLISH]{4,7}$", message = "{tps.bulk.error.pattern.usedYn}")
+    @ApiModelProperty("상태 - SAVE(임시) / PUBLISH(전송)")
     @Length(max = 10, message = "{tps.bulk.error.length.status}") String status;
 
     /**
      * datetime YES 전송일시 - PUBLISH 될때 들어감
      */
+    @ApiModelProperty("전송일시")
     @DTODateTimeFormat
     private Date sendDt;
 
@@ -96,6 +102,7 @@ public class BulkDTO implements Serializable {
     /**
      * char 1   ('N')   NO  벌크전송여부
      */
+    @ApiModelProperty("벌크전송여부")
     @NotNull(message = "{tps.bulk.error.notnull.bulkSendYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.bulk.error.pattern.bulkSendYn}")
     @Builder.Default
@@ -104,6 +111,7 @@ public class BulkDTO implements Serializable {
     /**
      * datetime YES 벌크전송일시
      */
+    @ApiModelProperty("벌크전송일시")
     @DTODateTimeFormat
     private Date bulkSendDt;
 }

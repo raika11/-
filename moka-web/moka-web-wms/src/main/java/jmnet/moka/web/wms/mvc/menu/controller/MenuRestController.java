@@ -255,6 +255,7 @@ public class MenuRestController {
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
         try {
+            newMenu.setMenuSeq(menuSeq);
             // update
             Menu returnValue = menuService.updateMenu(newMenu);
 

@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.jpod.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -30,62 +31,74 @@ public class JpodChannelDTO implements Serializable {
     /**
      * 채널일련번호
      */
+    @ApiModelProperty("채널일련번호")
     private Long chnlSeq;
 
     /**
      * 사용여부
      */
     @Builder.Default
+    @ApiModelProperty("사용여부")
     private String usedYn = "N";
 
     /**
      * 채널명
      */
+    @ApiModelProperty("채널명")
     private String chnlNm;
 
     /**
      * 채널소개
      */
+    @ApiModelProperty("채널소개")
     private String chnlMemo;
 
     /**
      * 채널 개설일
      */
+    @ApiModelProperty("채널 개설일")
     private String chnlSdt;
 
     /**
      * 커버이미지
      */
+    @ApiModelProperty("커버이미지")
     private String chnlImg;
 
     /**
      * 썸네일이미지
      */
+    @ApiModelProperty("썸네일이미지")
     private String chnlThumb;
 
     /**
      * 팟티채널
      */
+    @ApiModelProperty("팟티채널")
     private String podtyUrl;
 
     /**
      * 채널 종료일
      */
+    @ApiModelProperty("채널 종료일")
     private String chnlEdt;
 
     /**
      * 채널 방송 요일
      */
+    @ApiModelProperty("채널 방송 요일")
     private String chnlDy;
 
     /**
      * 모바일용 이미지
      */
+    @ApiModelProperty("모바일용 이미지")
     private String chnlImgMob;
 
     /**
      * 팟티채널SRL
      */
+    @ApiModelProperty("팟티채널SRL")
     @Builder.Default
     private Integer podtyChnlSrl = 0;
 

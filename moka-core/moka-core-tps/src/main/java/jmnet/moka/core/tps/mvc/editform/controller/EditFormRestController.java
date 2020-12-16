@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -792,7 +793,7 @@ public class EditFormRestController extends AbstractCommonController {
     @ApiOperation(value = "편집 폼 삭제")
     @DeleteMapping("/{formSeq}")
     public ResponseEntity<?> deleteEditForm(HttpServletRequest request,
-            @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.menuSeq}") Long formSeq)
+            @ApiParam("폼 일련번호") @PathVariable("formSeq") @Min(value = 0, message = "{tps.edit-form.error.min.formSeq}") Long formSeq)
             throws InvalidDataException, NoDataException, Exception {
 
 

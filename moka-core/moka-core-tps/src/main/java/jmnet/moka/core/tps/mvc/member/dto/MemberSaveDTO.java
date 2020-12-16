@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.member.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.lang.reflect.Type;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
@@ -40,6 +41,7 @@ public class MemberSaveDTO extends MemberDTO {
     /**
      * 비밀번호
      */
+    @ApiModelProperty("비밀번호")
     @NotEmpty(message = "{tps.member.error.pattern.password}")
     @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}")
     private String password;

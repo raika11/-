@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.menu.dto;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -23,8 +24,9 @@ public class MenuOrderDTO implements Serializable {
 
 
     /**
-     * 메뉴코드 (GRP_CD+MID_CD+DTL_CD)
+     * 메뉴ID
      */
+    @ApiModelProperty("메뉴ID")
     @NotNull(message = "{tps.menu.error.invalid.menuId}")
     @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.invalid.menuId}")
     private String menuId;
@@ -32,6 +34,7 @@ public class MenuOrderDTO implements Serializable {
     /**
      * 정렬순서
      */
+    @ApiModelProperty("정렬순서")
     @Builder.Default
     private Integer menuOrder = 1;
 

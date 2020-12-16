@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,12 +34,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@ApiModel("편집폼 Import DTO")
 public class EditFormImportDTO {
 
+    @ApiModelProperty("폼 일련번호")
     private Long formSeq;
 
+    @ApiModelProperty("폼 Part 일련번호")
     private Long partSeq;
 
+    @ApiModelProperty("import file")
     @NotNull(message = "{tps.edit-form.error.notnull.file}")
     private MultipartFile file;
 

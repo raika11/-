@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
@@ -41,10 +42,13 @@ public class EditFormPartHistSearchDTO extends SearchDTO {
     public static final Type TYPE = new TypeReference<List<EditFormPartHistSearchDTO>>() {
     }.getType();
 
+    @ApiModelProperty("폼 일련번호")
     private Long formSeq;
 
+    @ApiModelProperty("폼 Part 일련번호")
     private Long partSeq;
 
+    @ApiModelProperty("등록일시")
     @DTODateTimeFormat
     private Date regDt;
 

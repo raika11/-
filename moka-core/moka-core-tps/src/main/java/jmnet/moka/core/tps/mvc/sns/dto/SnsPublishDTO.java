@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.Min;
@@ -25,24 +26,28 @@ import org.hibernate.validator.constraints.Length;
 public class SnsPublishDTO implements Serializable {
 
     /**
-     * 기사ID
+     * 기사 ID
      */
+    @ApiModelProperty("기사 ID")
     @Min(value = 0, message = "{tps.article.error.min.totalId}")
     private Long totalId;
 
     /**
      * message
      */
+    @ApiModelProperty("message")
     @Length(max = 300, message = "{tps.sns.error.length.message}")
     private String message;
 
     /**
      * 예약일시
      */
+    @ApiModelProperty("예약일시")
     @DTODateTimeFormat
     private Date reserveDt;
 
 
+    @ApiModelProperty("SNS 유형")
     @Builder.Default
     private SnsTypeCode snsType = SnsTypeCode.FB;
 

@@ -151,11 +151,22 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         MemberDTO dto = modelMapper.map(member, MemberDTO.class);
 
-
         tpsLogger.success(ActionType.SELECT);
 
-        ResultDTO<MemberDTO> resultDto = new ResultDTO<>(dto);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        Map<String, Object> result = MapBuilder
+                .getInstance()
+                .getMap();
+
+        result.put("NEW_REQUEST", MemberRequestCode.NEW_REQUEST.getCode());
+        result.put("NEW_SMS", MemberRequestCode.NEW_SMS.getCode());
+        result.put("UNLOCK_REQUEST", MemberRequestCode.UNLOCK_REQUEST.getCode());
+        result.put("UNLOCK_SMS", MemberRequestCode.UNLOCK_SMS.getCode());
+
+        result.put("member", dto);
+
+        ResultMapDTO resultDTO = new ResultMapDTO(result);
+
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     /**

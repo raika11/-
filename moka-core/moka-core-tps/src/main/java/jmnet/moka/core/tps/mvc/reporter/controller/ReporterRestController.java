@@ -133,6 +133,7 @@ public class ReporterRestController {
         String cd4Nm = reporterSimpleDTO.getR4CdNm();
 
         Reporter newReporter = modelMapper.map(reporterSimpleDTO, Reporter.class);
+        newReporter.setRepSeq(repSeq);
 
         reporterService
                 .findReporterById(newReporter.getRepSeq())

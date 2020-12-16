@@ -41,13 +41,11 @@ const SnsMeta = ({ match }) => {
 
             {/* 등록/수정창 */}
             <Route
-                path={[match.url, `${match.url}/:totalId`]}
+                path={[`${match.url}/:totalId`]}
                 exact
                 render={(props) => (
                     <Suspense>
-                        <div style={!commonUtil.isEmpty(totalId) ? { display: 'block' } : { display: 'none' }}>
-                            <SnsMetaEdit {...props} />
-                        </div>
+                        <SnsMetaEdit {...props} />
                     </Suspense>
                 )}
             />

@@ -11,15 +11,19 @@ import { DB_DATEFORMAT, snsNames } from '@/constants';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
 import moment from 'moment';
+import { EditThumbModal } from '@pages/Desking/modals';
 
 const SnsMetaEdit = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { totalId } = useParams();
 
-    const [fbTokenModalShow, setFbTokenModalShow] = useState(false);
+    const [isFacebookTokenModalOpen, setIsFacebookTokenModalOpen] = useState(false);
     const [articlePreviewModalShow, setArticlePreviewModalShow] = useState(false);
     const [edit, setEdit] = useState(initialState.meta.meta);
+
+    const [isTwitterImageModalOpen, setIsTwitterImageModalOpen] = useState(false);
+    const [isFacebookImageModalOpen, setIsFacebookImageModalOpen] = useState(false);
 
     const { meta, errors, cdNm: fbToken, loading, search } = useSelector((store) => {
         return {
@@ -61,11 +65,11 @@ const SnsMetaEdit = () => {
     // 임시.
     const handleClickFbTokenModalShow = () => {
         dispatch(getSpecialCharCode({ grpCd: 'specialChar', dtlCd: 'fbToken' }));
-        setFbTokenModalShow(true);
+        setIsFacebookTokenModalOpen(true);
     };
 
     const handleClickFbTokenModalHide = () => {
-        setFbTokenModalShow(false);
+        setIsFacebookTokenModalOpen(false);
     };
 
     const handleClickFbTokenModalSave = ({ value: token }) => {
@@ -78,7 +82,7 @@ const SnsMetaEdit = () => {
                 callback: (response) => {
                     toast.result(response);
                     if (response.header.success) {
-                        setFbTokenModalShow(false);
+                        setIsFacebookTokenModalOpen(false);
                     }
                 },
             }),
@@ -345,7 +349,14 @@ const SnsMetaEdit = () => {
                             <Button variant="outline-neutral">편집</Button>
                         </Col>
                         <Col xs={2} className="pl-0">
-                            <Button variant="outline-neutral">신규 등록</Button>
+                            <Button
+                                variant="outline-neutral"
+                                onClick={() => {
+                                    setIsTwitterImageModalOpen(true);
+                                }}
+                            >
+                                신규 등록
+                            </Button>
                         </Col>
                     </Col>
                 </Form.Row>
@@ -484,7 +495,14 @@ const SnsMetaEdit = () => {
                             <Button variant="outline-neutral">편집</Button>
                         </Col>
                         <Col xs={2} className="pl-0">
-                            <Button variant="outline-neutral">신규 등록</Button>
+                            <Button
+                                variant="outline-neutral"
+                                onClick={() => {
+                                    setIsFacebookImageModalOpen(true);
+                                }}
+                            >
+                                신규 등록
+                            </Button>
                         </Col>
                     </Col>
                 </Form.Row>
@@ -513,11 +531,25 @@ const SnsMetaEdit = () => {
             <DefaultInputModal
                 title="페이스북 관리용 토큰"
                 inputData={{ title: '페이스북 토큰', value: fbToken, isInvalid: false }}
-                show={fbTokenModalShow}
+                show={isFacebookTokenModalOpen}
                 onHide={handleClickFbTokenModalHide}
                 onSave={handleClickFbTokenModalSave}
             />
             <SnsPreviewModal show={articlePreviewModalShow} onHide={handleClickArticlePreviewModalHide} totalId={totalId} />
+            <EditThumbModal
+                show={isFacebookImageModalOpen}
+                onHide={() => setIsFacebookImageModalOpen(false)}
+                setFileValue={(data) => console.log('fb-setFileValue', data)}
+                thumbFileName={edit.fb.metaImage}
+                setThumbFileName={(data) => console.log('fb-handleThumbFileName', data)}
+            />
+            <EditThumbModal
+                show={isTwitterImageModalOpen}
+                onHide={() => setIsTwitterImageModalOpen(false)}
+                setFileValue={(data) => console.log('tw-setFileValue', data)}
+                thumbFileName={edit.tw.metaImage}
+                setThumbFileName={(data) => console.log('tw-handleThumbFileName', data)}
+            />
         </MokaCard>
     );
 };

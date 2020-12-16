@@ -338,7 +338,7 @@ const SnsMetaEdit = () => {
                     </Col>
                     <Col xs={8} className="pl-2">
                         <Col>
-                            <Figure.Image className="mb-0" src={meta.fb.metaImage} />
+                            <Figure.Image className="mb-0" src={meta.fb.imgUrl} />
                         </Col>
                         <Col>
                             <Form.Label className="text-danger">1200*628 이미지 용량 제한: 1MB.</Form.Label>
@@ -484,7 +484,7 @@ const SnsMetaEdit = () => {
                     </Col>
                     <Col xs={8} className="pl-2">
                         <Col>
-                            <Figure.Image className="mb-0" src={edit.tw.metaImage} />
+                            <Figure.Image className="mb-0" src={edit.tw.imgUrl} />
                         </Col>
                         <Col>
                             <Form.Label className="text-danger">1200*628 이미지 용량 제한: 1MB.</Form.Label>
@@ -540,14 +540,14 @@ const SnsMetaEdit = () => {
                 show={isFacebookImageModalOpen}
                 onHide={() => setIsFacebookImageModalOpen(false)}
                 setFileValue={(data) => console.log('fb-setFileValue', data)}
-                thumbFileName={edit.fb.metaImage}
+                thumbFileName={edit.fb.imgUrl}
                 setThumbFileName={(data) => console.log('fb-handleThumbFileName', data)}
             />
             <EditThumbModal
                 show={isTwitterImageModalOpen}
                 onHide={() => setIsTwitterImageModalOpen(false)}
                 setFileValue={(data) => console.log('tw-setFileValue', data)}
-                thumbFileName={edit.tw.metaImage}
+                thumbFileName={edit.tw.imgUrl}
                 setThumbFileName={(data) => console.log('tw-handleThumbFileName', data)}
             />
         </MokaCard>

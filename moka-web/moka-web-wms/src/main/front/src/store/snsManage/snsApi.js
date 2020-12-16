@@ -1,7 +1,7 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
 
-export const getSNSMetaList = ({ search }) => {
+export const getSnsMetaList = ({ search }) => {
     const queryString = qs.stringify(search);
     return instance.get(`/api/sns?${queryString}`).catch((err) => {
         throw err;
@@ -28,6 +28,13 @@ export const putSnsMeta = (totalId, params) => {
 
 export const postSnsPublish = (params) => {
     return instance.post('/api/sns/publish', qs.stringify(params)).catch((err) => {
+        throw err;
+    });
+};
+
+export const getSnsSendArticleList = ({ search }) => {
+    const queryString = qs.stringify(search);
+    return instance.get(`/api/sns/send-articles?${queryString}`).catch((err) => {
         throw err;
     });
 };

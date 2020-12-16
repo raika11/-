@@ -21,7 +21,7 @@ const FbArt = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={840} className="mr-gutter flex-fill" titleClassName="mb-0" header={false}>
+            <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" header={false}>
                 <Suspense>
                     <FbArtList />
                 </Suspense>
@@ -29,7 +29,7 @@ const FbArt = ({ match }) => {
 
             {/* 등록/수정창 */}
             <Route
-                path={[match.url, `${match.url}/:mataSeq`]}
+                path={[`${match.url}/:totalId`]}
                 exact
                 render={(props) => (
                     <Suspense>

@@ -79,7 +79,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
 
     return (
         <React.Fragment>
-            <MokaCard header={false} width={280} className="mr-10">
+            <MokaCard header={false} width={280} className="mr-10" bodyClassName="d-flex flex-column">
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0 d-flex justify-content-end">
                         <Button variant="positive" onClick={handleClickAdd}>
@@ -89,7 +89,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
                 </Form.Row>
 
                 <MokaTable
-                    agGridHeight={738}
+                    className="overflow-hidden flex-fill"
                     rowData={rowData}
                     columnDefs={columnDefs}
                     selected={areaSeq}

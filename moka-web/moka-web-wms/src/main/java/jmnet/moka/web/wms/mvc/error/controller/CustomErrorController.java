@@ -1,11 +1,13 @@
 package jmnet.moka.web.wms.mvc.error.controller;
 
+import io.swagger.annotations.Api;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.common.utils.dto.ResultHeaderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -18,16 +20,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import jmnet.moka.common.utils.dto.ResultHeaderDTO;
 
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
+@Api(tags = {"에러페이지 이동"})
 public class CustomErrorController extends BasicErrorController {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomErrorController.class);
 
-    public CustomErrorController(ErrorAttributes errorAttributes, ServerProperties serverProperties,
-            List<ErrorViewResolver> errorViewResolvers) {
+    public CustomErrorController(ErrorAttributes errorAttributes, ServerProperties serverProperties, List<ErrorViewResolver> errorViewResolvers) {
         super(errorAttributes, serverProperties.getError(), errorViewResolvers);
     }
 
@@ -35,12 +36,12 @@ public class CustomErrorController extends BasicErrorController {
      * <pre>
      * GlobalException에서 처리하지 않고, Content-Type이 text/html인 대한 에러 처리
      * </pre>
-     * 
-     * @param request HTTP요청
+     *
+     * @param request  HTTP요청
      * @param response HTTP응답
      * @return 페이지
      * @see org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController#errorHtml(javax.servlet.http.HttpServletRequest,
-     *      javax.servlet.http.HttpServletResponse)
+     * javax.servlet.http.HttpServletResponse)
      */
     @Override
     @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
@@ -49,7 +50,9 @@ public class CustomErrorController extends BasicErrorController {
 
         String prefix = "/html/error/";
 
-        int errorValue = this.getStatus(request).value();
+        int errorValue = this
+                .getStatus(request)
+                .value();
         String errorPath = null;
         if (errorValue == 401) {
             errorPath = prefix + "401.html";
@@ -71,7 +74,9 @@ public class CustomErrorController extends BasicErrorController {
             errorPath = prefix + "error.html";
         }
 
-        if (request.getMethod().equals("POST")) {
+        if (request
+                .getMethod()
+                .equals("POST")) {
             return new ModelAndView("redirect:" + errorPath, this.getStatus(request));
         } else {
             return new ModelAndView(errorPath, this.getStatus(request));
@@ -83,7 +88,7 @@ public class CustomErrorController extends BasicErrorController {
      * <pre>
      * GlobalException에서 처리하지 않고, Content-Type이 text/html이 아닌 요청에 대한 에러 처리
      * </pre>
-     * 
+     *
      * @param request HTTP 요청
      * @return error json
      * @see org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController#error(javax.servlet.http.HttpServletRequest)
@@ -111,13 +116,12 @@ public class CustomErrorController extends BasicErrorController {
      * <pre>
      * 에러 로그를 찍는다
      * </pre>
-     * 
+     *
      * @param request HTTP요청
      */
     private void logError(HttpServletRequest request) {
         HttpStatus status = getStatus(request);
-        Map<String, Object> model = Collections.unmodifiableMap(
-                getErrorAttributes(request, isIncludeStackTrace(request, MediaType.TEXT_HTML)));
+        Map<String, Object> model = Collections.unmodifiableMap(getErrorAttributes(request, isIncludeStackTrace(request, MediaType.TEXT_HTML)));
         // key [ path, trace, error, timestamp ]
         logger.error("{}, {}", status, model.get("path"));
     }

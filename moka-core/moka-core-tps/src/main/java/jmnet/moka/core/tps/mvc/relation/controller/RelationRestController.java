@@ -4,6 +4,7 @@
 
 package jmnet.moka.core.tps.mvc.relation.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
@@ -44,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Validated
 @Slf4j
 @RequestMapping("/api/relations")
+@Api(tags = {"관련아이템 API"})
 public class RelationRestController {
 
     @Autowired

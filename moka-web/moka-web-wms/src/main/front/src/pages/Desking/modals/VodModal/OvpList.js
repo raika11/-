@@ -78,7 +78,7 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
     }, [ovpList]);
 
     return (
-        <div className="positive-relative px-3">
+        <div className="d-flex flex-column overflow-hidden h-100">
             <Form className="mb-2">
                 <Form.Row>
                     <MokaSearchInput
@@ -98,7 +98,7 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
             <MokaTable
                 loading={loading}
                 rowData={rowData}
-                agGridHeight={340}
+                className="overflow-hidden flex-fill"
                 onRowNodeId={(data) => data.id}
                 selected={resultVId}
                 columnDefs={columnDefs}
@@ -108,7 +108,7 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
                 onSelectionChanged={handleSelectionChanged}
             />
 
-            <Button variant="white" className="border p-2 rounded-0 shadow-none" block onClick={() => handleSearch('more')} disabled={loading}>
+            <Button variant="white" className="border p-2 rounded-0 shadow-none flex-shrink-0 mb-3" block onClick={() => handleSearch('more')} disabled={loading}>
                 더보기
             </Button>
         </div>

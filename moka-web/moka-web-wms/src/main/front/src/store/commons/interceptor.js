@@ -25,7 +25,7 @@ export default {
 
         /** 요청 인터셉터 */
         const onRequest = (config) => {
-            if (config.url !== '/loginJwt') {
+            if (config.url !== '/loginJwt' && config.url.indexOf('/member-join') < 0) {
                 const token = getLocalItem(AUTHORIZATION);
                 const menuId = store.getState().auth.latestMenuId;
                 if (token) {

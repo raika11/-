@@ -60,10 +60,10 @@ const ReporterMgrAgGrid = () => {
 
     return (
         <MokaTable
+            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={reporterRows}
             onRowNodeId={(reporter) => reporter.repSeq}
-            agGridHeight={660}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}

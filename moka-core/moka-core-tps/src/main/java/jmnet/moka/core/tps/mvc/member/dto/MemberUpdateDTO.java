@@ -1,6 +1,8 @@
 package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
@@ -29,24 +31,27 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("J팟 수정 DTO")
 public class MemberUpdateDTO {
 
     /**
      * 상태(유효/정지)
      */
+    @ApiModelProperty("상태(유효/정지)")
     @Builder.Default
-    //@EnumValid(enumClass = MemberStatusCode.class, message = "{tps.member.error.pattern.status}")
     private MemberStatusCode status = MemberStatusCode.D;
 
     /**
      * 계정만료일
      */
+    @ApiModelProperty("계정만료일")
     @DTODateTimeFormat
     private Date expireDt;
 
     /**
      * 비고
      */
+    @ApiModelProperty("비고")
     @Builder.Default
     private String remark = "";
 

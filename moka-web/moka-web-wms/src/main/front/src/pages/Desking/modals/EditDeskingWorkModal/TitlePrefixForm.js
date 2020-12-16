@@ -34,7 +34,7 @@ const TitlePrefixForm = ({ show, temp, deskingPartStr, onChange }) => {
 
     return (
         <Form.Row className="mb-2">
-            <Col xs={3} className="p-0">
+            <Col xs={4} className="p-0">
                 <MokaInputLabel
                     as="select"
                     label="말머리"

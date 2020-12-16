@@ -9,7 +9,6 @@ import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
 import columnDefs from './RelationInArticlePageListColumns';
 import { ITEM_TP, ITEM_CP, ITEM_CT, ITEM_DS } from '@/constants';
-import { relationAgGridHeight, relationDSAgGridHeight } from '@pages/commons';
 
 const propTypes = {
     /**
@@ -120,7 +119,7 @@ const RelationInArticlePageList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 기사페이지">
+        <MokaCard titleClassName="mb-0" title="관련 기사페이지" bodyClassName="d-flex flex-column">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-2">
@@ -148,7 +147,7 @@ const RelationInArticlePageList = (props) => {
 
             {/* 테이블 */}
             <MokaTable
-                agGridHeight={relSeqType === ITEM_DS ? relationDSAgGridHeight : relationAgGridHeight}
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(data) => data.artPageSeq}

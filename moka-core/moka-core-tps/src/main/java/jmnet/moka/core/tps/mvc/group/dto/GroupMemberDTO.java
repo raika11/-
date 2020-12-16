@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.group.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.tps.mvc.member.dto.MemberDTO;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("그룹 사용자 DTO")
 public class GroupMemberDTO {
     /**
      * 일련번호

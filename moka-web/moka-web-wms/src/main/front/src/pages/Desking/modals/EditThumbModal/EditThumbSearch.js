@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaSearchInput } from '@components';
@@ -14,13 +15,16 @@ const periodType = [
 const EditThumbSearch = (props) => {
     const { search, setSearch, onSearch } = props;
 
+    const searchKeyList = useSelector((store) => store.photoArchive.searchKeyList);
+
     const [period, setPeriod] = useState('all');
     const [startDate, setStartDate] = useState(moment().format(DB_DATEFORMAT));
     const [finishDate, setFinishDate] = useState(moment().format(DB_DATEFORMAT));
-    const [error, setError] = useState({});
-    const [searchType, setSearchType] = useState('all');
+    const [dataTypeList, setDataTypeList] = useState(null);
     const [imageTypeList, setImageTypeList] = useState(null);
+    const [searchType, setSearchType] = useState('all');
     const [type, setType] = useState(false);
+    const [error, setError] = useState({});
 
     // useEffect(() => {
     //     if (type) {
@@ -104,15 +108,17 @@ const EditThumbSearch = (props) => {
             </div>
 
             <div className="mr-2" style={{ width: 150 }}>
-                <MokaInput as="select" className="mr-2" value={searchType} onChange={(e) => e.target.value}>
-                    <option value="all">전체</option>
-                    <option value="addPhoto">등록 사진</option>
-                    <option value="addImg">등록 이미지</option>
-                    <option value="editImg">지면 편집 이미지</option>
-                    <option value="pool">사진 POOL</option>
-                    <option value="domestic">제휴 내신</option>
-                    <option value="foreign">제휴 외신</option>
-                </MokaInput>
+                <EditThumbSelectDropdown
+                // className="mr-2"
+                // value={dataTypeList}
+                // onChange={(value) => {
+                //     setDataTypeList(value);
+                //     if (value !== '') {
+                //         setType(true);
+                //     }
+                // }}
+                // isInvalid={error.deskingSourceList}
+                />
             </div>
 
             <div className="mr-2 d-flex align-items-center" style={{ width: 140 }}>
@@ -130,18 +136,22 @@ const EditThumbSearch = (props) => {
             </div>
 
             <div className="mr-2" style={{ width: 150 }}>
-                <MokaInput as="select" className="mr-2" value={search.searchValue} onChange={(e) => setSearch({ ...search, searchValue: e.target.value })}>
-                    <option>전체</option>
+                <MokaInput as="select" className="mr-2" value={search.searchKey} onChange={(e) => setSearch({ ...search, searchKey: e.target.value })}>
+                    {searchKeyList.map((key) => (
+                        <option key={key.id} value={key.id}>
+                            {key.name}
+                        </option>
+                    ))}
                 </MokaInput>
             </div>
 
             <MokaSearchInput
                 className="flex-fill"
-                value={search.keyword}
+                value={search.searchValue}
                 onChange={(e) => {
                     setSearch({
                         ...search,
-                        keyword: e.target.value,
+                        searchValue: e.target.value,
                     });
                 }}
                 onSearch={onSearch}

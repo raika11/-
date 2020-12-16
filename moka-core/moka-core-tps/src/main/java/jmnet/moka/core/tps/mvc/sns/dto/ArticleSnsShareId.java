@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,11 +30,13 @@ public class ArticleSnsShareId {
     /**
      * 서비스기사아이디
      */
+    @ApiModelProperty("기사 ID")
     private Long totalId;
 
     /**
      * SNS 타입{FB:페이스북, TW:트위터}
      */
+    @ApiModelProperty("SNS 타입{FB:페이스북, TW:트위터}")
     @Builder.Default
     private SnsTypeCode snsType = SnsTypeCode.FB;
 }

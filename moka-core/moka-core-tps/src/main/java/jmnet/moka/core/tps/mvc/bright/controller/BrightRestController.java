@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.bright.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api")
+@Api(tags = "브라이트 코드 API")
 public class BrightRestController extends AbstractCommonController {
 
     @Value("${brightcove.jpod.folder-id}")

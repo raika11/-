@@ -223,4 +223,9 @@ public class TemplateServiceImpl implements TemplateService {
         String imageRealPath = uploadFileHelper.getRealPathByDB(template.getTemplateThumb());
         return uploadFileHelper.deleteFile(imageRealPath);
     }
+
+    @Override
+    public TemplateVO findTemplateByComponentHist(Long componentSeq) {
+        return templateMapper.findTemplateByComponentHist(componentSeq);
+    }
 }

@@ -91,7 +91,7 @@ const DirectLinkAgGrid = () => {
             </div>
 
             <MokaTable
-                agGridHeight={650}
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
                 rowHeight={60}

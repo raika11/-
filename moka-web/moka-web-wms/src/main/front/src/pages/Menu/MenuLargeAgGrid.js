@@ -4,7 +4,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getMenuList, changeSearchOption } from '@store/menu';
 import { columnDefs } from './MenuAgGridColumns';
 
-const LIST_HEIGHT = 737;
+// const LIST_HEIGHT = 737;
 
 const MenuLargeAgGrid = (props) => {
     const dispatch = useDispatch();
@@ -31,6 +31,7 @@ const MenuLargeAgGrid = (props) => {
     return (
         <>
             <MokaTable
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={list}
                 onRowNodeId={(rowData) => rowData.menuId}
@@ -38,7 +39,6 @@ const MenuLargeAgGrid = (props) => {
                 onRowClicked={handleRowClicked}
                 selected={menuId}
                 paging={false}
-                agGridHeight={LIST_HEIGHT}
             />
         </>
     );

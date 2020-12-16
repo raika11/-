@@ -70,7 +70,7 @@ const EditForm = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard className="mb-0 mr-gutter" height={CARD_DEFAULT_HEIGHT} title="편집폼 관리" titleClassName="mb-0" width={480}>
+            <MokaCard className="mb-0 mr-gutter" height={CARD_DEFAULT_HEIGHT} title="편집폼 관리" titleClassName="mb-0" bodyClassName="d-flex flex-column" width={480}>
                 <div className="mb-3 d-flex justify-content-end">
                     <Button variant="positive" className={clsx('p-0', 'mr-05')} onClick={handleAddClickEditForm} style={{ width: '100px', height: '32px' }}>
                         편집폼 추가

@@ -3,10 +3,10 @@
  */
 package jmnet.moka.core.tps.mvc.reserved.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -49,6 +49,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/reserveds")
+@Api(tags = {"예약어 API"})
 public class ReservedRestController {
 
     @Autowired
@@ -100,17 +101,19 @@ public class ReservedRestController {
      */
     @ApiOperation(value = "예약어 상세조회")
     @GetMapping("/{reservedSeq}")
-    public ResponseEntity<?> getReserved(@PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
+    public ResponseEntity<?> getReserved(
+            @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
             throws NoDataException, InvalidDataException, Exception {
 
         validData(reservedSeq, null);
 
-        Reserved reserved = reservedService.findReservedBySeq(reservedSeq)
-                                           .orElseThrow(() -> {
-                                               String message = messageByLocale.get("tps.common.error.no-data");
-                                               tpsLogger.fail(message, true);
-                                               return new NoDataException(message);
-                                           });
+        Reserved reserved = reservedService
+                .findReservedBySeq(reservedSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         ReservedDTO dto = modelMapper.map(reserved, ReservedDTO.class);
         ResultDTO<ReservedDTO> resultDto = new ResultDTO<ReservedDTO>(dto);
@@ -194,7 +197,8 @@ public class ReservedRestController {
      */
     @ApiOperation(value = "예약어수정")
     @PutMapping("/{reservedSeq}")
-    public ResponseEntity<?> putReserved(@PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq,
+    public ResponseEntity<?> putReserved(
+            @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq,
             @Valid ReservedDTO reservedDTO)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -203,12 +207,13 @@ public class ReservedRestController {
 
         // 수정
         Reserved newReserved = modelMapper.map(reservedDTO, Reserved.class);
-        Reserved orgReserved = reservedService.findReservedBySeq(reservedSeq)
-                                              .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.common.error.no-data");
-                                                  tpsLogger.fail(ActionType.UPDATE, message, true);
-                                                  return new NoDataException(message);
-                                              });
+        Reserved orgReserved = reservedService
+                .findReservedBySeq(reservedSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
         try {
             Reserved returnValue = reservedService.updateReserved(newReserved);
 
@@ -238,16 +243,18 @@ public class ReservedRestController {
      */
     @ApiOperation(value = "예약어삭제")
     @DeleteMapping("/{reservedSeq}")
-    public ResponseEntity<?> deleteReserved(@PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
+    public ResponseEntity<?> deleteReserved(
+            @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
             throws NoDataException, Exception {
 
         // 데이타 확인
-        Reserved reserved = reservedService.findReservedBySeq(reservedSeq)
-                                           .orElseThrow(() -> {
-                                               String message = messageByLocale.get("tps.common.error.no-data");
-                                               tpsLogger.fail(ActionType.DELETE, message, true);
-                                               return new NoDataException(message);
-                                           });
+        Reserved reserved = reservedService
+                .findReservedBySeq(reservedSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             // 삭제

@@ -108,7 +108,7 @@ const VodModal = (props) => {
                 fill
                 onSelectNav={(idx) => setActivekey(Number(idx))}
                 tabNavs={['YOUTUBE', 'LIVE', 'OVP']}
-                className="w-100 h-100"
+                className="w-100 h-100 px-modal"
                 tabs={[
                     <YoutubeList show={show && activeKey === 0} youtubeUrl={youtubeUrl} setYoutubeUrl={setYoutubeUrl} />,
                     <LiveList show={show && activeKey === 1} resultVId={resultVId} setResultVId={setResultVId} OVP_PREVIEW_URL={OVP_PREVIEW_URL} />,

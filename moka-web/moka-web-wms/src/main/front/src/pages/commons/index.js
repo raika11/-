@@ -19,12 +19,15 @@ export const { searchTypeList: defaultArticleSearchType } = articleInitialState;
 export { default as DefaultInputModal } from './DefaultInputModal';
 
 // 관련 아이템 (하위 => 상위)
-export const relationAgGridHeight = 649;
-export const relationDSAgGridHeight = 602;
+export const relationHeight = 633;
+export const relationDSHeight = 594;
 
 // Lookup 아이템 (상위 => 하위)
-export const LookupAgGridMineHeight = 648;
-export const LookupAgGridHeight = 608;
+export const LookupPGHeight = 633;
+export const LookupCTHeight = LookupPGHeight;
+export const LookupHeight = 592;
+export const LookupCPHeight = 553;
+export const LookupTPHeight = 551;
 
 // 우측 히스토리 리스트
 export { default as HistoryList } from './HistoryList';

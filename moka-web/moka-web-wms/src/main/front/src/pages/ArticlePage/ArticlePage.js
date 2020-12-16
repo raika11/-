@@ -177,7 +177,16 @@ const ArticlePage = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={412} className="mr-gutter" titleClassName="mb-0" title="기사페이지 검색" expansion={expansionState[0]} onExpansion={handleListExpansion} foldable>
+            <MokaCard
+                width={412}
+                className="mr-gutter"
+                titleClassName="mb-0"
+                bodyClassName="d-flex flex-column"
+                title="기사페이지 검색"
+                expansion={expansionState[0]}
+                onExpansion={handleListExpansion}
+                foldable
+            >
                 <Suspense>
                     <ArticlePageList onDelete={handleClickDelete} />
                 </Suspense>

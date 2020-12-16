@@ -1,12 +1,54 @@
+.modal-dialog {
+    box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    margin: 0;
+    min-width: 400px;
+}
+
+.modal-header {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 0;
+
+    .modal-title {
+        padding: 0;
+        font-size: 16px;
+        letter-spacing: -1px;
+    }
+    
+    .close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        margin: 0;
+        text-overflow: clip;
+        padding: 8px;
+    }
+}
+
+.modal-body {
+    padding: 0 $modal-inner-padding $modal-inner-padding $modal-inner-padding;
+}
+
+.modal-footer {
+    // 임시 데이터임, 확정 시 변경
+    padding: 16px;
+}
+
+.toast-footer {
+    @include toast-footer;
+}
+
 @each $color, $value in $theme-colors {
-  .modal-#{$color} {
-    @include modal-variant($value);
-  }
+    .modal-#{$color} {
+        @include modal-variant($value);
+    }
 }
 
 .modal-colored {
-  .modal-header,
-  .modal-footer {
-    border-color: rgba(255, 255, 255, 0.33)
-  }
+    .modal-header,
+    .modal-footer {
+        border-color: rgba(255, 255, 255, 0.33)
+    }
 }

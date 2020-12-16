@@ -4,6 +4,7 @@
 
 package jmnet.moka.core.tps.mvc.area.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Validated
 @Slf4j
 @RequestMapping("/api/areas")
+@Api(tags = {"편집영역 API"})
 public class AreaRestController {
     @Autowired
     private AreaService areaService;
@@ -125,8 +127,6 @@ public class AreaRestController {
                     tpsLogger.fail(message, true);
                     return new NoDataException(message);
                 });
-
-
 
         try {
             // 컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.

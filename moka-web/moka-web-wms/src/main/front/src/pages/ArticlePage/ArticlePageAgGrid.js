@@ -70,7 +70,7 @@ const ArticlePageAgGrid = ({ onDelete }) => {
 
             {/* ag-grid table */}
             <MokaTable
-                agGridHeight={564}
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(rowData) => rowData.artPageSeq}

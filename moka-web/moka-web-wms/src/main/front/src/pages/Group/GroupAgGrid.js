@@ -76,10 +76,10 @@ const GroupAgGrid = (props) => {
 
     return (
         <MokaTable
+            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={groupRows}
             onRowNodeId={(rowData) => rowData.groupCd}
-            agGridHeight={600}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}

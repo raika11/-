@@ -44,10 +44,10 @@ const MemberAgGrid = () => {
 
     return (
         <MokaTable
+            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={list}
             onRowNodeId={(rowData) => rowData.memberId}
-            agGridHeight={639}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}

@@ -157,7 +157,7 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
                 .build());
 
         if (McpString.isNotEmpty(result.getOrDefault("id", ""))) {
-            share = updateArticleSnsShare(ArticleSnsShare
+            share = updateArticleSnsShareStatus(ArticleSnsShare
                     .builder()
                     .id(ArticleSnsSharePK
                             .builder()
@@ -185,7 +185,7 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
                 .build());
 
         if (McpString.isNotEmpty(result.getOrDefault("id", ""))) {
-            share = updateArticleSnsShare(ArticleSnsShare
+            share = updateArticleSnsShareStatus(ArticleSnsShare
                     .builder()
                     .id(ArticleSnsSharePK
                             .builder()

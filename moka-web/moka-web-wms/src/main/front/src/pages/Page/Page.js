@@ -221,6 +221,7 @@ const Page = () => {
                 height={CARD_DEFAULT_HEIGHT}
                 expansion={expansionState[0]}
                 onExpansion={handleListExpansion}
+                bodyClassName="d-flex flex-column"
             >
                 <Suspense>
                     <PageList onDelete={handleClickDelete} />

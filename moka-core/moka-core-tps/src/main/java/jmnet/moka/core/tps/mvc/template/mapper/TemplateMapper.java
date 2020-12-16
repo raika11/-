@@ -38,4 +38,12 @@ public interface TemplateMapper extends BaseMapper<TemplateVO, TemplateSearchDTO
     //     * @throws RuntimeException
     //     */
     //    List<List<Object>> findAllTest(TemplateSearchDTO param) throws RuntimeException;
+
+    /**
+     * 컴포넌트의 최종 템플릿 정보를 조회한다.(네이버채널에서 사용)
+     *
+     * @param componentSeq 컴포넌트순번
+     * @return 템플릿정보
+     */
+    TemplateVO findTemplateByComponentHist(Long componentSeq);
 }

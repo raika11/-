@@ -53,10 +53,10 @@ const ReservedAgGrid = () => {
             </div>
             {/* table */}
             <MokaTable
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={list}
                 onRowNodeId={(reserved) => reserved.reservedSeq}
-                agGridHeight={569}
                 onRowClicked={handleRowClicked}
                 loading={loading}
                 total={total}

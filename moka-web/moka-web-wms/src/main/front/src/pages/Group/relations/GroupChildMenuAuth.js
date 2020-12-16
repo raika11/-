@@ -62,7 +62,7 @@ const GroupChildMenuAuth = () => {
                 <>
                     메뉴권한
                     <Row className="rc-tree-header" style={{ marginTop: '20px' }}>
-                        <Col xs={6} style={{ fontWeight: '700' }} style={{ paddingLeft: '40px' }}>
+                        <Col xs={6} style={{ fontWeight: '700', paddingLeft: '40px' }}>
                             메뉴명
                         </Col>
                         <Col xs={3} style={{ fontWeight: '700', textAlign: 'right' }}>

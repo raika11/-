@@ -107,7 +107,9 @@ export const DATA_TYPE_DESK = 'DESK';
 export const DATA_TYPE_AUTO = 'AUTO';
 export const DATA_TYPE_FORM = 'FORM';
 
-export const IMAGE_DEFAULT_URL = 'http://pds.joins.com';
+export const PDS_URL = process.env.PDS_URL;
+export const IR_URL = process.env.IR_URL;
+export const BLANK_IMAGE_PATH = '?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg';
 export const snsNames = {
     fb: 'Facebook',
     tw: 'Twitter',

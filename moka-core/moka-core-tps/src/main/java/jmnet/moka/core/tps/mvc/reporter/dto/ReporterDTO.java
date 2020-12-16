@@ -2,13 +2,17 @@ package jmnet.moka.core.tps.mvc.reporter.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
-import lombok.*;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -25,6 +29,7 @@ import java.util.List;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("기자 DTO")
 public class ReporterDTO implements Serializable {
 
     private static final long serialVersionUID = 3926910123722632117L;

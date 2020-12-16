@@ -11,6 +11,8 @@ $headings-font-weight: 600 !default;
 // Spacer
 $spacer: 1rem !default;
 $spacer-px: 1px !default;
+$spacer-modal: 32px !default;
+$spacer-card: 24px !default;
 
 $spacers: (
     0: 0,
@@ -26,6 +28,8 @@ $spacers: (
     10: ($spacer-px * 10),
 	20: ($spacer-px * 20),
 	gutter: ($spacer-px * 16),
+	modal: $spacer-modal,
+	card: $spacer-card
 ) !default;
 
 $min-width: 1360px !default;
@@ -211,7 +215,7 @@ $input-bg: $white !default;
 $input-disabled-bg: $gray-200 !default;
 $input-color: $gray-700 !default;
 $input-placeholder-color: rgba($black, 0.5) !default;
-$input-padding-x: 0.55rem;
+$input-padding-x: 12px;
 $input-btn-focus-box-shadow: unset;
 $input-btn-border-width: $border-width !default;
 $input-btn-line-height: $line-height-base !default;
@@ -262,6 +266,8 @@ $dropdown-item-padding-y: .35rem !default;
 $dropdown-item-padding-x: 1.5rem !default;
 
 // Cards
+$card-spacer-y: 20px !default;
+$card-spacer-x: $spacer-card !default;
 $card-border-radius: .25rem !default;
 $card-inner-border-radius: $card-border-radius !default;
 $card-border-width: 0 !default;
@@ -339,9 +345,14 @@ $transition-appearance-slow: background .6s ease-in-out, color .6s ease-in-out !
 $transition-appearance-fast: background .1s ease-in-out, color .1s ease-in-out !default;
 
 // Modals
+$modal-footer-margin-between: 8px !default;
+$modal-spacer-y: $spacer-modal - $modal-footer-margin-between !default;
+$modal-spacer-x: $spacer-modal !default;
 $modal-content-border-width: 0 !default;
 $modal-header-border-width: 1px !default;
 $modal-footer-border-width: 1px !default;
+$modal-header-padding: $modal-spacer-y $modal-spacer-x !default;
+$modal-inner-padding: $modal-spacer-x !default;
 $modal-xl: 1200px !default;
 $modal-lg: 900px !default;
 $modal-md: 600px !default;

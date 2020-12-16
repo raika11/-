@@ -59,7 +59,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public GroupInfo updateGroup(GroupInfo group) {
-        return groupRepository.save(group);
+        return groupRepository.saveAndFlush(group);
     }
 
     @Override

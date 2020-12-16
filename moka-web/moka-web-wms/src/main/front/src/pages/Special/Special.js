@@ -1,5 +1,5 @@
-import React, { useState, Suspense } from 'react';
-import { Route } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import SpecialEdit from './SpecialEdit';
@@ -9,14 +9,6 @@ const SpecialList = React.lazy(() => import('./SpecialList'));
  * 디지털 스페셜 관리
  */
 const Special = ({ match }) => {
-    const [show, setShow] = useState(false);
-
-    const handleClickSave = () => {};
-
-    const handleRowClicked = (row) => {
-        setShow(true);
-    };
-
     return (
         <div className="d-flex">
             <Helmet>
@@ -26,16 +18,18 @@ const Special = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={840} className="mr-gutter" titleClassName="mb-0" header={false}>
+            <MokaCard width={840} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
                 <Suspense>
-                    <SpecialList onRowClicked={handleRowClicked} />
+                    <SpecialList />
                 </Suspense>
             </MokaCard>
 
             {/* 등록/수정 */}
-            <Route path={[`${match.url}/add`, `${match.url}/:seqNo`]}>
-                <SpecialEdit show={show} onSave={handleClickSave} />
-            </Route>
+            <Switch>
+                <Route path={[`${match.url}/add`, `${match.url}/:seqNo`]}>
+                    <SpecialEdit />
+                </Route>
+            </Switch>
         </div>
     );
 };

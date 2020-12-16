@@ -9,7 +9,6 @@ import { ITEM_PG } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getPageLookupList, changeLookupSearchOption, clearLookup, getPageLookup, GET_PAGE_LOOKUP_LIST } from '@store/page';
 import columnDefs from './LookupPageListColumns';
-import { defaultPageSearchType, LookupAgGridHeight, LookupAgGridMineHeight } from '@pages/commons';
 import { PageHtmlModal } from '@pages/Page/modals';
 
 const propTypes = {
@@ -156,71 +155,70 @@ const LookupPageList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <>
-            <MokaCard titleClassName="mb-0" title="관련 페이지">
-                <Form className="mb-2">
-                    {/* 검색조건, 키워드 */}
-                    <Form.Row>
-                        <Col xs={4} className="p-0 pr-2">
-                            <MokaInput
-                                className="mb-0"
-                                as="select"
-                                value={search.searchType}
-                                onChange={(e) => {
-                                    setSearch({
-                                        ...search,
-                                        searchType: e.target.value,
-                                    });
-                                }}
-                            >
-                                {defaultPageSearchType.map((type) => (
-                                    <option key={type.id} value={type.id}>
-                                        {type.name}
-                                    </option>
-                                ))}
-                            </MokaInput>
-                        </Col>
-                        <Col xs={8} className="p-0">
-                            <MokaSearchInput
-                                value={search.keyword}
-                                onChange={(e) => {
-                                    setSearch({
-                                        ...search,
-                                        keyword: e.target.value,
-                                    });
-                                }}
-                                onSearch={handleSearch}
-                            />
-                        </Col>
-                    </Form.Row>
-                </Form>
+        <MokaCard titleClassName="mb-0" title="관련 페이지" bodyClassName="d-flex flex-column">
+            <Form className="mb-2">
+                {/* 검색조건, 키워드 */}
+                <Form.Row>
+                    <Col xs={4} className="p-0 pr-2">
+                        <MokaInput
+                            className="mb-0"
+                            as="select"
+                            value={search.searchType}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    searchType: e.target.value,
+                                });
+                            }}
+                        >
+                            {initialState.searchTypeList.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </Col>
+                    <Col xs={8} className="p-0">
+                        <MokaSearchInput
+                            value={search.keyword}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    keyword: e.target.value,
+                                });
+                            }}
+                            onSearch={handleSearch}
+                        />
+                    </Col>
+                </Form.Row>
+            </Form>
 
-                {/* 버튼 그룹 */}
-                {seqType !== ITEM_PG && (
-                    <div className="d-flex mb-10 justify-content-end">
-                        <Button variant="positive" onClick={() => window.open('/page')}>
-                            페이지 등록
-                        </Button>
-                    </div>
-                )}
+            {/* 버튼 그룹 */}
+            {seqType !== ITEM_PG && (
+                <div className="d-flex mb-10 justify-content-end">
+                    <Button variant="positive" onClick={() => window.open('/page')}>
+                        페이지 등록
+                    </Button>
+                </div>
+            )}
 
-                {/* ag-grid table */}
-                <MokaTable
-                    agGridHeight={seqType === ITEM_PG ? LookupAgGridMineHeight : LookupAgGridHeight}
-                    columnDefs={columnDefs}
-                    rowData={rowData}
-                    onRowNodeId={(data) => data.pageSeq}
-                    onRowClicked={handleRowClicked}
-                    loading={loading}
-                    total={total}
-                    page={search.page}
-                    size={search.size}
-                    displayPageNum={3}
-                    onChangeSearchOption={handleChangeSearchOption}
-                    preventRowClickCell={['load', 'preview', 'link']}
-                    selected={selected.pageSeq}
-                />
-            </MokaCard>
+            {/* ag-grid table */}
+            <MokaTable
+                className="overflow-hidden flex-fill"
+                columnDefs={columnDefs}
+                rowData={rowData}
+                onRowNodeId={(data) => data.pageSeq}
+                onRowClicked={handleRowClicked}
+                loading={loading}
+                total={total}
+                page={search.page}
+                size={search.size}
+                displayPageNum={3}
+                onChangeSearchOption={handleChangeSearchOption}
+                preventRowClickCell={['load', 'preview', 'link']}
+                selected={selected.pageSeq}
+            />
+
             <PageHtmlModal
                 pageSeq={selected.pageSeq}
                 show={showModal}
@@ -229,7 +227,7 @@ const LookupPageList = (props) => {
                     setSelected({});
                 }}
             />
-        </>
+        </MokaCard>
     );
 };
 

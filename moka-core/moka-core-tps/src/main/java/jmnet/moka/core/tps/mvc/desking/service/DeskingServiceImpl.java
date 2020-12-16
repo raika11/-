@@ -48,6 +48,7 @@ import jmnet.moka.core.tps.mvc.desking.repository.DeskingWorkRepository;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
+import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -277,7 +278,7 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     @Transactional
-    public void save(ComponentWorkVO componentWorkVO, String regId)
+    public void save(ComponentWorkVO componentWorkVO, String regId, Long templateSeq)
             throws Exception {
 
         HistPublishDTO histPublishDTO = HistPublishDTO
@@ -287,7 +288,7 @@ public class DeskingServiceImpl implements DeskingService {
                 .build();
 
         // 컴포넌트 히스토리만 추가
-        ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO);
+        ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO, templateSeq);
 
         // 편집기사 히스토리 추가
         insertDeskingHist(componentHist, componentWorkVO.getDeskingWorks(), regId);
@@ -296,7 +297,7 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     @Transactional
-    public void publish(ComponentWorkVO componentWorkVO, String regId)
+    public void publish(ComponentWorkVO componentWorkVO, String regId, Long templateSeq)
             throws Exception {
 
         HistPublishDTO histPublishDTO = HistPublishDTO
@@ -306,7 +307,7 @@ public class DeskingServiceImpl implements DeskingService {
                 .build();
 
         // 컴포넌트 수정
-        Component component = this.updateComponent(componentWorkVO, regId, histPublishDTO);
+        Component component = this.updateComponent(componentWorkVO, regId, histPublishDTO, templateSeq);
 
         // 편집기사 등록
         updateDesking(component, componentWorkVO.getDeskingWorks(), regId, histPublishDTO);
@@ -315,7 +316,7 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     @Transactional
-    public void reserve(ComponentWorkVO componentWorkVO, String regId, Date reserveDt)
+    public void reserve(ComponentWorkVO componentWorkVO, String regId, Date reserveDt, Long templateSeq)
             throws Exception {
 
         HistPublishDTO histPublishDTO = HistPublishDTO
@@ -329,7 +330,7 @@ public class DeskingServiceImpl implements DeskingService {
         deleteReserveHist(componentWorkVO);
 
         // 컴포넌트 히스토리만 추가
-        ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO);
+        ComponentHist componentHist = this.insertComponentHist(componentWorkVO, regId, histPublishDTO, templateSeq);
 
         // 편집기사 히스토리 추가
         insertDeskingHist(componentHist, componentWorkVO.getDeskingWorks(), regId);
@@ -372,20 +373,24 @@ public class DeskingServiceImpl implements DeskingService {
     //    }
 
     @Override
-    public ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO)
+    public ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO, Long templateSeq)
             throws Exception {
         String messageC = messageByLocale.get("tps.common.error.no-data");
         Component component = componentService
                 .findComponentBySeq(workVO.getComponentSeq())
                 .orElseThrow(() -> new NoDataException(messageC));
 
-        //        String messageT = messageByLocale.get("tps.common.error.no-data");
-        //        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-        //                                           .orElseThrow(() -> new NoDataException(messageT));
+        if (templateSeq != null) {
+            String messageT = messageByLocale.get("tps.common.error.no-data");
+            Template template = templateService
+                    .findTemplateBySeq(workVO.getTemplateSeq())
+                    .orElseThrow(() -> new NoDataException(messageT));
+            component.setTemplate(template);
+        }
 
         component.setSnapshotYn(workVO.getSnapshotYn());
         component.setSnapshotBody(workVO.getSnapshotBody());
-        //        component.setTemplate(template);
+
         component.setPerPageCount(workVO.getPerPageCount());
         component.setViewYn(workVO.getViewYn());
         //        component.setZone(workVO.getZone());
@@ -401,17 +406,20 @@ public class DeskingServiceImpl implements DeskingService {
     }
 
     @Override
-    public Component updateComponent(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO)
+    public Component updateComponent(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO, Long templateSeq)
             throws Exception {
         String messageC = messageByLocale.get("tps.common.error.no-data");
         Component component = componentService
                 .findComponentBySeq(workVO.getComponentSeq())
                 .orElseThrow(() -> new NoDataException(messageC));
 
-        //        String messageT = messageByLocale.get("tps.common.error.no-data");
-        //        Template template = templateService.findTemplateBySeq(workVO.getTemplateSeq())
-        //                                           .orElseThrow(() -> new NoDataException(messageT));
-
+        if (templateSeq != null) {
+            String messageT = messageByLocale.get("tps.common.error.no-data");
+            Template template = templateService
+                    .findTemplateBySeq(workVO.getTemplateSeq())
+                    .orElseThrow(() -> new NoDataException(messageT));
+            component.setTemplate(template);
+        }
         component.setSnapshotYn(workVO.getSnapshotYn());
         component.setSnapshotBody(workVO.getSnapshotBody());
         //        component.setTemplate(template);
@@ -1069,6 +1077,12 @@ public class DeskingServiceImpl implements DeskingService {
     @Override
     public List<Desking> findByDatasetSeq(Long datasetSeq) {
         return deskingRepository.findByDatasetSeq(datasetSeq);
+    }
+
+    @Override
+    public ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String regId)
+            throws Exception {
+        return componentWorkService.updateComponentWorkTemplate(componentWorkSeq, templateSeq, regId);
     }
 }
 

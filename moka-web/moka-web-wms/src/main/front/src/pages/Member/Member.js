@@ -37,6 +37,7 @@ const Member = () => {
                 className="mb-0 mr-gutter flex-fill"
                 height={CARD_DEFAULT_HEIGHT}
                 headerClassName="d-flex justify-content-between align-item-center"
+                bodyClassName="d-flex flex-column"
                 title="사용자 관리"
                 titleClassName="mb-0"
                 width={1016}

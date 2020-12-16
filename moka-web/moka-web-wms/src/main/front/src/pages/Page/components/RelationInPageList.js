@@ -4,12 +4,10 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
 import columnDefs from './RelationInPageListColums';
 import { ITEM_TP, ITEM_CP, ITEM_CT, ITEM_AP, ITEM_DS, ITEM_PG } from '@/constants';
-import { relationAgGridHeight, relationDSAgGridHeight } from '@pages/commons';
 
 const propTypes = {
     /**
@@ -120,7 +118,7 @@ const RelationInPageList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 페이지">
+        <MokaCard titleClassName="mb-0" title="관련 페이지" bodyClassName="d-flex flex-column">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-2">
@@ -148,7 +146,7 @@ const RelationInPageList = (props) => {
 
             {/* 테이블 */}
             <MokaTable
-                agGridHeight={relSeqType === ITEM_DS ? relationDSAgGridHeight : relationAgGridHeight}
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(page) => page.pageSeq}

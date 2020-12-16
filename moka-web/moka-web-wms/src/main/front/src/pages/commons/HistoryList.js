@@ -168,7 +168,7 @@ const HistoryList = (props) => {
     }, [handleClickLoad, list]);
 
     return (
-        <MokaCard title="히스토리" titleClassName="mb-0">
+        <MokaCard title="히스토리" titleClassName="mb-0" bodyClassName="d-flex flex-column">
             <Form>
                 {/* 날짜 검색 */}
                 <Form.Row className="mb-2">
@@ -221,7 +221,7 @@ const HistoryList = (props) => {
                 </Form.Row>
             </Form>
             <MokaTable
-                agGridHeight={610}
+                className="overflow-hidden flex-fill"
                 columnDefs={columDefs}
                 rowData={rowData}
                 onRowNodeId={(history) => history.seq}

@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.menu.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonRootName("menuNode")
+@ApiModel("메뉴 트리 DTO")
 public class MenuNodeDTO implements Serializable {
 
     private static final long serialVersionUID = 8033550614720880882L;

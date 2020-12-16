@@ -13,11 +13,17 @@ package jmnet.moka.core.tps.mvc.naver.service;
 public interface NaverService {
 
     /**
-     * newsStand전송
+     * 네이버스탠드 전송(html,xml전송)
      *
-     * @param source
-     * @param areaSeq
+     * @param areaSeq 편집영역순번
      */
-    void publishNaverStand(String source, Long areaSeq)
+    void publishNaverStand(Long areaSeq)
             throws Exception;
+
+    /**
+     * 네이버 채널 전송(json전송)
+     *
+     * @param areaSeq 편집영역순번
+     */
+    void publishNaverChannel(Long areaSeq);
 }

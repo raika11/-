@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.page.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/pages")
+@Api(tags = {"페이지 API"})
 public class PageRestController {
 
     @Autowired
@@ -122,12 +124,13 @@ public class PageRestController {
         // 데이타유효성검사.
         validData(pageSeq, null, ActionType.SELECT);
 
-        Page page = pageService.findPageBySeq(pageSeq)
-                               .orElseThrow(() -> {
-                                   String message = messageByLocale.get("tps.common.error.no-data");
-                                   tpsLogger.fail(message, true);
-                                   return new NoDataException(message);
-                               });
+        Page page = pageService
+                .findPageBySeq(pageSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         PageDTO dto = modelMapper.map(page, PageDTO.class);
         if (page.getParent() != null) {
@@ -142,8 +145,8 @@ public class PageRestController {
     /**
      * 페이지정보 유효성 검사
      *
-     * @param pageSeq 페이지 순번. 0이면 등록일때 유효성 검사
-     * @param pageDTO 페이지정보
+     * @param pageSeq    페이지 순번. 0이면 등록일때 유효성 검사
+     * @param pageDTO    페이지정보
      * @param actionType 동작유형
      * @throws InvalidDataException 유효성예외
      * @throws Exception            기타예외
@@ -162,20 +165,23 @@ public class PageRestController {
             }
 
             // command명칭 사용불가
-            if (Arrays.asList(serviceNameExcludes)
-                      .contains(pageDTO.getPageServiceName())) {
+            if (Arrays
+                    .asList(serviceNameExcludes)
+                    .contains(pageDTO.getPageServiceName())) {
                 String message = messageByLocale.get("tps.page.error.invalid.pageServiceName");
                 invalidList.add(new InvalidDataDTO("pageServiceName", message));
                 tpsLogger.fail(actionType, message, true);
             }
 
             // PageUrl 중복검사
-            List<Page> pageList = pageService.findPageByPageUrl(pageDTO.getPageUrl(), pageDTO.getDomain()
-                                                                                             .getDomainId());
+            List<Page> pageList = pageService.findPageByPageUrl(pageDTO.getPageUrl(), pageDTO
+                    .getDomain()
+                    .getDomainId());
             if (pageList.size() > 0) {
                 for (Page page : pageList) {
-                    if (!page.getPageSeq()
-                             .equals(pageDTO.getPageSeq())) {
+                    if (!page
+                            .getPageSeq()
+                            .equals(pageDTO.getPageSeq())) {
                         String message = messageByLocale.get("tps.page.error.duplicate.pageServiceName");
                         invalidList.add(new InvalidDataDTO("pageServiceName", message));
                         tpsLogger.fail(actionType, message, true);
@@ -209,7 +215,7 @@ public class PageRestController {
     /**
      * 페이지 등록
      *
-     * @param pageDTO   등록할 페이지정보
+     * @param pageDTO 등록할 페이지정보
      * @return 등록된 페이지정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            기타예외
@@ -255,8 +261,8 @@ public class PageRestController {
     /**
      * 페이지 수정
      *
-     * @param pageSeq   페이지번호
-     * @param pageDTO   수정할 페이지정보
+     * @param pageSeq 페이지번호
+     * @param pageDTO 수정할 페이지정보
      * @return 수정된 페이지정보
      * @throws InvalidDataException 데이타 유효성오류
      * @throws NoDataException      데이타 없음
@@ -273,19 +279,21 @@ public class PageRestController {
 
         // 수정
         Page newPage = modelMapper.map(pageDTO, Page.class);
-        pageService.findPageBySeq(pageSeq)
-              .orElseThrow(() -> {
-                  String message = messageByLocale.get("tps.common.error.no-data");
-                  tpsLogger.fail(ActionType.UPDATE, message, true);
-                  return new NoDataException(message);
-              });
+        pageService
+                .findPageBySeq(pageSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             Page returnValue = pageService.updatePage(newPage);
 
             // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
-            purgeHelper.purgeTms(returnValue.getDomain()
-                                            .getDomainId(), MokaConstants.ITEM_PAGE, returnValue.getPageSeq());
+            purgeHelper.purgeTms(returnValue
+                    .getDomain()
+                    .getDomainId(), MokaConstants.ITEM_PAGE, returnValue.getPageSeq());
 
             // 결과리턴
             PageDTO dto = modelMapper.map(returnValue, PageDTO.class);
@@ -325,12 +333,13 @@ public class PageRestController {
         //validData(pageSeq, null, ActionType.DELETE);
 
         // 1.2. 데이타 존재여부 검사
-        Page page = pageService.findPageBySeq(pageSeq)
-                               .orElseThrow(() -> {
-                                   String message = messageByLocale.get("tps.common.error.no-data");
-                                   tpsLogger.fail(ActionType.DELETE, message, true);
-                                   return new NoDataException(message);
-                               });
+        Page page = pageService
+                .findPageBySeq(pageSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             // 2. 삭제
@@ -369,7 +378,8 @@ public class PageRestController {
         Boolean ret = false;
         if (pageList.size() > 0) {
             for (Page page : pageList) {
-                if (page.getPageSeq()
+                if (page
+                        .getPageSeq()
                         .equals(pageSeq)) {
                     ret = true;
                 }

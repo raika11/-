@@ -309,10 +309,15 @@ const MenuEditContainerEdit = (props) => {
                 {menuSeq ? (
                     <Form.Row className="mb-2">
                         <Col xs={12} className="p-0">
-                            <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
-                                메뉴ID
-                            </Form.Label>
-                            <Form.Label className="form-label">{menuId}</Form.Label>
+                            <MokaInputLabel
+                                className="mb-0"
+                                label="메뉴ID"
+                                labelWidth={labelWidth}
+                                inputClassName="bg-white"
+                                inputProps={{ plaintext: true }}
+                                value={menuId}
+                                disabled
+                            />
                         </Col>
                     </Form.Row>
                 ) : (
@@ -396,34 +401,54 @@ const MenuEditContainerEdit = (props) => {
                     <>
                         <Form.Row className="mb-2">
                             <Col xs={12} className="p-0">
-                                <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
-                                    등록자
-                                </Form.Label>
-                                <Form.Label className="form-label">{regId}</Form.Label>
+                                <MokaInputLabel
+                                    className="mb-0"
+                                    label="등록자"
+                                    labelWidth={labelWidth}
+                                    inputClassName="bg-white"
+                                    inputProps={{ plaintext: true }}
+                                    value={regId}
+                                    disabled
+                                />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={12} className="p-0">
-                                <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
-                                    등록일시
-                                </Form.Label>
-                                <Form.Label className="form-label">{regDt}</Form.Label>
+                                <MokaInputLabel
+                                    className="mb-0"
+                                    label="등록일시"
+                                    labelWidth={labelWidth}
+                                    inputClassName="bg-white"
+                                    inputProps={{ plaintext: true }}
+                                    value={regDt}
+                                    disabled
+                                />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={12} className="p-0">
-                                <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
-                                    수정자
-                                </Form.Label>
-                                <Form.Label className="form-label">{modId}</Form.Label>
+                                <MokaInputLabel
+                                    className="mb-0"
+                                    label="수정자"
+                                    labelWidth={labelWidth}
+                                    inputClassName="bg-white"
+                                    inputProps={{ plaintext: true }}
+                                    value={modId}
+                                    disabled
+                                />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={12} className="p-0">
-                                <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
-                                    수정일시
-                                </Form.Label>
-                                <Form.Label className="form-label">{modDt}</Form.Label>
+                                <MokaInputLabel
+                                    className="mb-0"
+                                    label="수정일시"
+                                    labelWidth={labelWidth}
+                                    inputClassName="bg-white"
+                                    inputProps={{ plaintext: true }}
+                                    value={modDt}
+                                    disabled
+                                />
                             </Col>
                         </Form.Row>
                     </>

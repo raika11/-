@@ -35,18 +35,34 @@ public class NaverRestController extends AbstractCommonController {
     private NaverService naverService;
 
     @ApiOperation("네이버 스탠드 전송")
-    @GetMapping("/news-stand")
-    public ResponseEntity<?> getPublishNaverStand(HttpServletRequest request, String source, Long areaSeq)
+    @GetMapping("/stand")
+    public ResponseEntity<?> getPublishNaverStand(HttpServletRequest request, Long areaSeq)
             throws Exception {
         try {
-            naverService.publishNaverStand(source, areaSeq);
+            naverService.publishNaverStand(areaSeq);
 
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg("tps.desking.sucess.naver-stand"));
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg("tps.naver.sucess.stand"));
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO PUBLISH NAVER STAND]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO PUBLISH NAVER STAND]", e, true);
-            throw new Exception(msg("tps.desking.error.naver-stand"), e);
+            throw new Exception(msg("tps.naver.error.stand"), e);
+        }
+    }
+
+    @ApiOperation("네이버 채널 전송")
+    @GetMapping("/channel")
+    public ResponseEntity<?> getPublishNaverChannel(HttpServletRequest request, Long areaSeq)
+            throws Exception {
+        try {
+            naverService.publishNaverChannel(areaSeq);
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg("tps.naver.sucess.channel"));
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO PUBLISH NAVER CHANNEL]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO PUBLISH NAVER CHANNEL]", e, true);
+            throw new Exception(msg("tps.naver.error.channel"), e);
         }
     }
 }

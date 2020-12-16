@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.code.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModelProperty;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class CodeSearchDTO extends SearchDTO {
     /**
      * 사용여부
      */
+    @ApiModelProperty("사용여부")
     private String usedYn;
 
     // 검색 조건의 기본값을 설정

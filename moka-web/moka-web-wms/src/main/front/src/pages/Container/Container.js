@@ -207,6 +207,7 @@ const Container = () => {
                 headerClassName="pb-0"
                 titleClassName="mb-0"
                 title="컨테이너 검색"
+                bodyClassName="d-flex flex-column"
                 foldable
                 expansion={expansionState[0]}
                 onExpansion={handleListExpansion}

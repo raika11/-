@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.code.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Validated
 @Slf4j
 @RequestMapping("/api/codes")
+@Api(tags = {"마스터코드조회 API"})
 public class CodeRestController {
 
     @Autowired

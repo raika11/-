@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.merge.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/merge")
+@Api(tags = {"머지 API"})
 public class MergeRestController extends AbstractCommonController {
 
     @Autowired

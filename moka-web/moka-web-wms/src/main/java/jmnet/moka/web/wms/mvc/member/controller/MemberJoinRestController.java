@@ -1,6 +1,8 @@
 package jmnet.moka.web.wms.mvc.member.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +59,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/member-join")
+@Api(tags = {"회원 가입 API"})
 public class MemberJoinRestController extends AbstractCommonController {
 
     public final SoapWebServiceGatewaySupport groupWareAuthClient;
@@ -80,8 +83,8 @@ public class MemberJoinRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "그룹웨어 사용자 정보 조회")
     @GetMapping("/groupware-users/{groupWareUserId}")
-    public ResponseEntity<?> getGroupWareMember(
-            @PathVariable("groupWareUserId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String groupWareUserId)
+    public ResponseEntity<?> getGroupWareMember(@ApiParam("그룹웨어 사용자 ID") @PathVariable("groupWareUserId")
+    @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String groupWareUserId)
             throws MokaException {
         try {
             GroupWareUserInfo groupWareUserInfo = groupWareAuthClient.getUserInfo(groupWareUserId);
@@ -123,6 +126,44 @@ public class MemberJoinRestController extends AbstractCommonController {
     }
 
     /**
+     * Member정보 조회
+     *
+     * @param memberId Member아이디 (필수)
+     * @return Member정보
+     * @throws NoDataException Member 정보가 없음
+     */
+    @ApiOperation(value = "Member 조회")
+    @GetMapping("/{memberId}")
+    public ResponseEntity<?> getMember(
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
+            throws NoDataException {
+
+        String message = msg("tps.common.error.no-data");
+        MemberInfo member = memberService
+                .findMemberById(memberId)
+                .orElseThrow(() -> new NoDataException(message));
+
+        MemberDTO dto = modelMapper.map(member, MemberDTO.class);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        Map<String, Object> result = MapBuilder
+                .getInstance()
+                .getMap();
+
+        result.put("NEW_REQUEST", MemberRequestCode.NEW_REQUEST.getCode());
+        result.put("NEW_SMS", MemberRequestCode.NEW_SMS.getCode());
+        result.put("UNLOCK_REQUEST", MemberRequestCode.UNLOCK_REQUEST.getCode());
+        result.put("UNLOCK_SMS", MemberRequestCode.UNLOCK_SMS.getCode());
+
+        result.put("member", dto);
+
+        ResultMapDTO resultDTO = new ResultMapDTO(result);
+
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
      * Member 신규 등록 요청
      *
      * @param memberDTO 등록할 Member정보
@@ -147,12 +188,12 @@ public class MemberJoinRestController extends AbstractCommonController {
 
             String passwordSameMessage = msg("tps.member.error.same.password");
 
-            if (memberDTO
+            if (!memberDTO
                     .getPassword()
                     .equals(memberDTO.getConfirmPassword())) {
                 throw new MokaException(passwordSameMessage);
             }
-
+            member.setRemark(memberDTO.getRequestReason());
             MemberInfo returnValue = processUserSave(member, memberDTO.getMemberGroups(), MemberRequestCode.NEW_REQUEST.getNextStatus());
 
             MemberDTO dto = modelMapper.map(returnValue, MemberDTO.class);
@@ -179,7 +220,7 @@ public class MemberJoinRestController extends AbstractCommonController {
     @ApiOperation(value = "Member SMS 인증문자 요청")
     @GetMapping("/{memberId}/sms-request")
     public ResponseEntity<?> putSmsRequest(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @Valid MemberRequestDTO memberRequestDTO)
             throws Exception {
 
@@ -199,7 +240,7 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         same = passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword());
         if (!same) {
-            throw new UserPrincipalNotFoundException(memberId);
+            throw new PasswordNotMatchedException(msg("wms.login.error.PasswordUnMatchedException"));
         }
 
         // SMS 서버에 문자 발송 요청
@@ -208,6 +249,14 @@ public class MemberJoinRestController extends AbstractCommonController {
 
         member.setSmsAuth(smsAuth);
         member.setSmsExp(smsExp);
+
+        String remark = McpString.defaultValue(member.getRemark());
+        if (McpString.isNotEmpty(remark)) {
+            remark += "\n";
+        }
+        remark += "· " + memberRequestDTO.getRequestReason();
+        member.setRemark(remark);
+
         memberService.updateMember(member);
 
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
@@ -262,7 +311,7 @@ public class MemberJoinRestController extends AbstractCommonController {
     @ApiOperation(value = "Member SMS 인증문자로 잠금 해제 및 관리자 잠금 해제 요청")
     @GetMapping({"/{memberId}/approval-request", "/{memberId}/unlock-request"})
     public ResponseEntity<?> putStatusChange(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @Valid MemberRequestDTO memberRequestDTO)
             throws Exception {
 
@@ -293,6 +342,13 @@ public class MemberJoinRestController extends AbstractCommonController {
             // 잠금 해제
             member.setPasswordModDt(McpDate.now());
             member.setErrCnt(0);
+        } else {
+            String remark = McpString.defaultValue(member.getRemark());
+            if (McpString.isNotEmpty(remark)) {
+                remark += "\n";
+            }
+            remark += "· " + memberRequestDTO.getRequestReason();
+            member.setRemark(remark);
         }
 
         member.setStatus(memberRequestDTO

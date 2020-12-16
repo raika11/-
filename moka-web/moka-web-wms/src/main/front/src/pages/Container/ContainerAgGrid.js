@@ -67,7 +67,7 @@ const ContainerAgGrid = ({ onDelete }) => {
             </div>
             {/* table */}
             <MokaTable
-                agGridHeight={570}
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(container) => container.containerSeq}

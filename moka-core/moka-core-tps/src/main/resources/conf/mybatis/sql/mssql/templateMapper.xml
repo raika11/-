@@ -138,4 +138,13 @@
     #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
     ) }
   </select>
+
+  <!-- 컴포넌트의 최종 템플릿 정보를 조회 (네이버채널에서 사용) -->
+  <select id="findTemplateByComponentHist" parameterType="java.lang.Long" resultType="TemplateVO"
+    statementType="CALLABLE">
+  { call UPA_WMS_TEMPLATE_SEL_BY_COMPONENT_HIST(
+  #{componentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+  ) }
+  </select>
+
 </mapper>

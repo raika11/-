@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModelProperty;
 import java.lang.reflect.Type;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -36,10 +37,12 @@ public class MemberSimpleDTO {
     /**
      * 사용자ID
      */
+    @ApiModelProperty(hidden = true)
     private String memberId;
 
     /**
      * 사용자명
      */
+    @ApiModelProperty(hidden = true)
     private String memberNm;
 }

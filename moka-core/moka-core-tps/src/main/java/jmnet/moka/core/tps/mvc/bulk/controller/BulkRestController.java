@@ -1,11 +1,14 @@
 package jmnet.moka.core.tps.mvc.bulk.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
@@ -63,6 +66,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/bulks")
+@Api(tags = {"네이버벌크/핫클릭 API"})
 public class BulkRestController extends AbstractCommonController {
 
     private final BulkService naverBulkService;
@@ -124,7 +128,7 @@ public class BulkRestController extends AbstractCommonController {
     @ApiOperation(value = "벌크문구 기사 목록 조회")
     @GetMapping("/{bulkartSeq}/articles")
     public ResponseEntity<?> getBulkList(HttpServletRequest request,
-            @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq)
+            @ApiParam("벌크 일련번호") @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq)
             throws Exception {
 
         ResultListDTO<BulkArticleDTO> resultListMessage = new ResultListDTO<>();
@@ -173,7 +177,8 @@ public class BulkRestController extends AbstractCommonController {
     @ApiOperation(value = "벌크 사용여부 수정")
     @PutMapping(value = "/{bulkartSeq}/used")
     public ResponseEntity<?> putBulkWordServiceYn(
-            @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq, @Valid BulkDTO bulkDTO)
+            @ApiParam("벌크 일련번호") @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq,
+            @Valid BulkDTO bulkDTO)
             throws InvalidDataException, Exception {
 
         // naverbulkDto -> naverbulk 변환
@@ -223,6 +228,41 @@ public class BulkRestController extends AbstractCommonController {
         }
     }
 
+    @ApiOperation(value = "벌크 재전송")
+    @PutMapping(value = "/{bulkartSeq}/resend")
+    public ResponseEntity<?> putResend(
+            @ApiParam("벌크 일련번호") @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq)
+            throws InvalidDataException, Exception {
+
+        Bulk bulk = naverBulkService
+                .findById(bulkartSeq)
+                .orElseThrow(() -> {
+                    return new NoDataException(msg("tps.bulk.error.no-data"));
+                });
+
+        try {
+            // update
+            bulk.setBulkSendYn(MokaConstants.YES);
+            bulk.setSendDt(McpDate.now());
+
+            naverBulkService.updateArticle(bulk);
+
+            // 결과리턴
+            BulkDTO dto = modelMapper.map(bulk, BulkDTO.class);
+            String message = msg("tps.bulk.success.update");
+            ResultDTO<BulkDTO> resultDto = new ResultDTO<>(dto, message);
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.UPDATE);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE BULK RESEND] seq: {} {}", bulkartSeq, e.getMessage());
+            // 액션 로그에 에러 로그 출력
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE BULK RESEND]", e, true);
+            throw new Exception(msg("tps.bulk.error.save"), e);
+        }
+    }
+
     /**
      * 벌크문구기사 저장
      *
@@ -235,7 +275,7 @@ public class BulkRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "벌크문구 및 벌크기사정보저장")
     @PostMapping
-    public ResponseEntity<?> postBulk(@Valid BulkSaveDTO bulkSave, @RequestBody @Valid ValidList<BulkArticleDTO> validList)
+    public ResponseEntity<?> postBulk(@Valid BulkSaveDTO bulkSave, @ApiParam("벌크 기사 목록") @RequestBody @Valid ValidList<BulkArticleDTO> validList)
             throws InvalidDataException, Exception {
 
         try {

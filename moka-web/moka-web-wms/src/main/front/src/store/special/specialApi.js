@@ -50,7 +50,7 @@ export const deleteSpecial = ({ seqNo }) => {
 };
 
 // 디지털스페셜 부서조회
-export const getDeptList = () => {
+export const getSpecialDeptList = () => {
     return instance.get(`/api/specials/depts`).catch((err) => {
         throw err;
     });

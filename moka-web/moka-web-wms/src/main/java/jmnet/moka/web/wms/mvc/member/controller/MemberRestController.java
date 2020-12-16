@@ -1,6 +1,8 @@
 package jmnet.moka.web.wms.mvc.member.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.Principal;
 import java.util.Date;
@@ -63,6 +65,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/members")
+@Api(tags = {"사용자 API"})
 public class MemberRestController extends AbstractCommonController {
 
     private final MenuService menuService;
@@ -119,7 +122,7 @@ public class MemberRestController extends AbstractCommonController {
     @ApiOperation(value = "Member 로그인 이력 목록 조회")
     @GetMapping("/{memberId}/login-historys")
     public ResponseEntity<?> getMemberLoginHistoryList(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @SearchParam SearchDTO search) {
 
         ResultListDTO<LoginLogDTO> resultListMessage = new ResultListDTO<>();
@@ -154,7 +157,7 @@ public class MemberRestController extends AbstractCommonController {
     @ApiOperation(value = "Member 조회")
     @GetMapping("/{memberId}")
     public ResponseEntity<?> getMember(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws NoDataException {
 
         String message = msg("tps.common.error.no-data");
@@ -180,7 +183,7 @@ public class MemberRestController extends AbstractCommonController {
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{memberId}/exists")
     public ResponseEntity<?> duplicateCheckId(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId) {
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId) {
 
         boolean duplicated = memberService.isDuplicatedId(memberId);
         ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
@@ -261,7 +264,7 @@ public class MemberRestController extends AbstractCommonController {
     @ApiOperation(value = "Member 수정")
     @PutMapping("/{memberId}")
     public ResponseEntity<?> putMember(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @Valid MemberUpdateDTO memberDTO)
             throws Exception {
 
@@ -312,7 +315,7 @@ public class MemberRestController extends AbstractCommonController {
     @ApiOperation(value = "Member 상태 활성화")
     @GetMapping("/{memberId}/activation")
     public ResponseEntity<?> putFouceUnlock(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws NoDataException {
 
         String noDataMsg = msg("tps.common.error.no-data");
@@ -344,7 +347,7 @@ public class MemberRestController extends AbstractCommonController {
     @ApiOperation(value = "Member 삭제")
     @DeleteMapping("/{memberId}")
     public ResponseEntity<?> deleteMember(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws InvalidDataException, NoDataException, Exception {
 
 
@@ -385,10 +388,10 @@ public class MemberRestController extends AbstractCommonController {
     @ApiOperation(value = "Member 수정")
     @PutMapping("/{memberId}/change-password")
     public ResponseEntity<?> putChangePassword(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
-            @RequestParam("password")
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @ApiParam("패스워드") @RequestParam("password")
             @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}") String password,
-            @RequestParam("newPassword")
+            @ApiParam("신규 패스워드") @RequestParam("newPassword")
             @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}") String newPassword)
             throws Exception {
 
@@ -475,7 +478,7 @@ public class MemberRestController extends AbstractCommonController {
     @ApiOperation(value = "여러 메뉴의 그룹 권한 수정")
     @PutMapping("/{memberId}/menu-auths")
     public ResponseEntity<?> putMemberMenuAuth(HttpServletRequest request,
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @RequestBody List<@Valid MenuAuthSimpleDTO> menuAuths)
             throws Exception {
 

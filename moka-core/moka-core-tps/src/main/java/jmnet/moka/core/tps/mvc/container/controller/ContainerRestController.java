@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.container.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/containers")
+@Api(tags = {"컨테이너 API"})
 public class ContainerRestController {
 
     @Autowired
@@ -101,18 +103,20 @@ public class ContainerRestController {
      */
     @ApiOperation(value = "컨테이너 상세조회")
     @GetMapping("/{containerSeq}")
-    public ResponseEntity<?> getContainer(@PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq)
+    public ResponseEntity<?> getContainer(
+            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
         validData(containerSeq, null, ActionType.SELECT);
 
-        Container container = containerService.findContainerBySeq(containerSeq)
-                                              .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.common.error.no-data");
-                                                  tpsLogger.fail(message, true);
-                                                  return new NoDataException(message);
-                                              });
+        Container container = containerService
+                .findContainerBySeq(containerSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         ContainerDTO dto = modelMapper.map(container, ContainerDTO.class);
 
@@ -212,7 +216,8 @@ public class ContainerRestController {
      */
     @ApiOperation(value = "컨테이너 수정")
     @PutMapping("/{containerSeq}")
-    public ResponseEntity<?> putContainer(@PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq,
+    public ResponseEntity<?> putContainer(
+            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq,
             @Valid ContainerDTO containerDTO)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -221,19 +226,21 @@ public class ContainerRestController {
 
         // 수정
         Container newContainer = modelMapper.map(containerDTO, Container.class);
-        Container orgContainer = containerService.findContainerBySeq(containerSeq)
-                                                 .orElseThrow(() -> {
-                                                     String message = messageByLocale.get("tps.container.error.no-data");
-                                                     tpsLogger.fail(ActionType.UPDATE, message, true);
-                                                     return new NoDataException(message);
-                                                 });
+        Container orgContainer = containerService
+                .findContainerBySeq(containerSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.container.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             Container returnValue = containerService.updateContainer(newContainer);
 
             // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
-            purgeHelper.purgeTms(returnValue.getDomain()
-                                                     .getDomainId(), MokaConstants.ITEM_CONTAINER, returnValue.getContainerSeq());
+            purgeHelper.purgeTms(returnValue
+                    .getDomain()
+                    .getDomainId(), MokaConstants.ITEM_CONTAINER, returnValue.getContainerSeq());
 
             // 결과리턴
             ContainerDTO dto = modelMapper.map(returnValue, ContainerDTO.class);
@@ -261,19 +268,21 @@ public class ContainerRestController {
      */
     @ApiOperation(value = "컨테이너 삭제")
     @DeleteMapping("/{containerSeq}")
-    public ResponseEntity<?> deleteContainer(@PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq, Principal principal)
+    public ResponseEntity<?> deleteContainer(
+            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq, Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 
         // 아이디체크
         validData(containerSeq, null, ActionType.DELETE);
 
         // 데이타 확인
-        Container container = containerService.findContainerBySeq(containerSeq)
-                                              .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.common.error.no-data");
-                                                  tpsLogger.fail(ActionType.DELETE, message, true);
-                                                  return new NoDataException(message);
-                                              });
+        Container container = containerService
+                .findContainerBySeq(containerSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
 
         // 관련 데이터 확인
@@ -310,22 +319,25 @@ public class ContainerRestController {
      */
     @ApiOperation(value = "관련 아이템 존재여부")
     @GetMapping("/{containerSeq}/has-relations")
-    public ResponseEntity<?> hasRelationList(@PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq)
+    public ResponseEntity<?> hasRelationList(
+            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq)
             throws Exception {
 
         // 컨테이너 확인
-        containerService.findContainerBySeq(containerSeq)
-                        .orElseThrow(() -> {
-                            String message = messageByLocale.get("tps.common.error.no-data");
-                            tpsLogger.fail(ActionType.SELECT, message, true);
-                            return new NoDataException(message);
-                        });
+        containerService
+                .findContainerBySeq(containerSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             Boolean chkRels = relationService.hasRelations(containerSeq, MokaConstants.ITEM_TEMPLATE);
             String message = "";
-            if(chkRels)
+            if (chkRels) {
                 message = messageByLocale.get("tps.common.success.has-relations");
+            }
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels, message);
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);

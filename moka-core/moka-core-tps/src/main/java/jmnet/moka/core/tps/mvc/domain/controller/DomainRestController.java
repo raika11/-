@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.domain.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/domains")
+@Api(tags = {"도메인 API"})
 public class DomainRestController {
 
     private final DomainService domainService;
@@ -136,8 +138,9 @@ public class DomainRestController {
             throws NoDataException {
 
         String message = messageByLocale.get("tps.domain.error.no-data", request);
-        Domain domain = domainService.findDomainById(domainId)
-                                     .orElseThrow(() -> new NoDataException(message));
+        Domain domain = domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> new NoDataException(message));
 
         DomainDTO dto = modelMapper.map(domain, DomainDTO.class);
 
@@ -234,8 +237,9 @@ public class DomainRestController {
         Domain newDomain = modelMapper.map(domainDTO, Domain.class);
 
         // 오리진 데이터 조회
-        domainService.findDomainById(newDomain.getDomainId())
-                     .orElseThrow(() -> new NoDataException(infoMessage));
+        domainService
+                .findDomainById(newDomain.getDomainId())
+                .orElseThrow(() -> new NoDataException(infoMessage));
 
         setHostAndPath(request, newDomain, domainDTO);
 
@@ -276,8 +280,9 @@ public class DomainRestController {
             throws NoDataException {
 
         String message = messageByLocale.get("tps.domain.error.no-data", request);
-        domainService.findDomainById(domainId)
-                     .orElseThrow(() -> new NoDataException(message));
+        domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> new NoDataException(message));
 
         // 관련 데이터 조회
         boolean isRelated = relationService.isRelatedDomain(domainId);
@@ -307,8 +312,9 @@ public class DomainRestController {
 
         // 도메인 데이터 조회
         String noContentMessage = messageByLocale.get("tps.domain.error.no-data", request);
-        Domain domain = domainService.findDomainById(domainId)
-                                     .orElseThrow(() -> new NoDataException(noContentMessage));
+        Domain domain = domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 관련 데이터 조회
         try {
@@ -349,8 +355,7 @@ public class DomainRestController {
             throws InvalidDataException {
         if (!McpString.isNullOrEmpty(domainDTO.getApiCodeId())) {
             // apiCodeId -> apiHost, apiPath
-            Map<String, String> apiInfo =
-                    apiCodeHelper.getDataApi(codeMgtService.findUseList(TpsConstants.DATAAPI), domainDTO.getApiCodeId());
+            Map<String, String> apiInfo = apiCodeHelper.getDataApi(codeMgtService.findUseList(TpsConstants.DATAAPI), domainDTO.getApiCodeId());
 
             domain.setApiHost(apiInfo.get(TpsConstants.API_HOST));
             domain.setApiPath(apiInfo.get(TpsConstants.API_PATH));

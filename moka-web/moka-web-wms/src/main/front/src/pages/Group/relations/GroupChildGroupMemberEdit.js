@@ -127,8 +127,8 @@ const GroupChildGroupMemberEdit = () => {
 
     return (
         <MokaCard title="사용자 목록" className="w-100">
-            <Row>
-                <Col xs={6}>
+            <Row className="m-0 h-100">
+                <Col xs={6} className="py-0 pr-2 pl-0 d-flex flex-column">
                     <GroupChildGroupMemberHeader onClick={handleClickGroupMemberDelete} />
                     <GroupChildGroupMemberList
                         list={groupIn.list}
@@ -142,7 +142,7 @@ const GroupChildGroupMemberEdit = () => {
                         }}
                     />
                 </Col>
-                <Col xs={6}>
+                <Col xs={6} className="py-0 pl-2 pr-0 d-flex flex-column">
                     <GroupChildSearchMemberHeader onSearch={handleSearch} onChange={handleChangeSearchOption} onClick={handleClickGroupMemberAdd} />
                     <GroupChildSearchMemberList
                         list={groupOut.list}

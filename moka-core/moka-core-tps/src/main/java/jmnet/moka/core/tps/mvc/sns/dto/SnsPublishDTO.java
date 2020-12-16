@@ -1,9 +1,10 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * sns 게시용
@@ -20,27 +22,32 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@ApiModel("SNS 게시 DTO")
 public class SnsPublishDTO implements Serializable {
 
     /**
-     * 기사ID
+     * 기사 ID
      */
-    @NotEmpty(message = "{tps.article.error.notempty.totalId}")
+    @ApiModelProperty("기사 ID")
     @Min(value = 0, message = "{tps.article.error.min.totalId}")
     private Long totalId;
 
     /**
      * message
      */
+    @ApiModelProperty("message")
+    @Length(max = 300, message = "{tps.sns.error.length.message}")
     private String message;
 
     /**
      * 예약일시
      */
+    @ApiModelProperty("예약일시")
     @DTODateTimeFormat
     private Date reserveDt;
 
 
+    @ApiModelProperty("SNS 유형")
     @Builder.Default
     private SnsTypeCode snsType = SnsTypeCode.FB;
 

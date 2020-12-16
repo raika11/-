@@ -73,10 +73,11 @@ public interface DeskingService {
      *
      * @param componentWorkVO 컴포넌트work정보
      * @param regId           작업자
+     * @param templateSeq     템플릿순번
      * @throws NoDataException 데이터없음 예외
      * @throws Exception       기타예외
      */
-    void save(ComponentWorkVO componentWorkVO, String regId)
+    void save(ComponentWorkVO componentWorkVO, String regId, Long templateSeq)
             throws NoDataException, Exception;
 
     /**
@@ -84,10 +85,11 @@ public interface DeskingService {
      *
      * @param componentWorkVO work컴포넌트정보
      * @param regId           작업자
+     * @param templateSeq     템플릿순번
      * @throws NoDataException 데이터없음 예외
      * @throws Exception       기타예외
      */
-    void publish(ComponentWorkVO componentWorkVO, String regId)
+    void publish(ComponentWorkVO componentWorkVO, String regId, Long templateSeq)
             throws NoDataException, Exception;
 
     /**
@@ -96,10 +98,11 @@ public interface DeskingService {
      * @param componentWorkVO work컴포넌트정보
      * @param regId           작업자
      * @param reserveDt       예약시간
+     * @param templateSeq     템플릿순번
      * @throws NoDataException 데이터없음 예외
      * @throws Exception       기타예외
      */
-    void reserve(ComponentWorkVO componentWorkVO, String regId, Date reserveDt)
+    void reserve(ComponentWorkVO componentWorkVO, String regId, Date reserveDt, Long templateSeq)
             throws NoDataException, Exception;
 
     /**
@@ -127,11 +130,12 @@ public interface DeskingService {
      * @param workVO         work컴포넌트정보
      * @param regId          작업자
      * @param histPublishDTO 임시저장/전송/예약 정보
+     * @param templateSeq    템플릿순번
      * @return 수정된 컴포넌트
      * @throws NoDataException 데이터없음 예외
      * @throws Exception       기타예외
      */
-    ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO)
+    ComponentHist insertComponentHist(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO, Long templateSeq)
             throws NoDataException, Exception;
 
     /**
@@ -140,11 +144,12 @@ public interface DeskingService {
      * @param workVO         work컴포넌트정보
      * @param regId          작업자
      * @param histPublishDTO 임시저장/전송/예약 정보
+     * @param templateSeq    템플릿순번
      * @return 수정된 컴포넌트
      * @throws NoDataException 데이터없음 예외
      * @throws Exception       기타예외
      */
-    Component updateComponent(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO)
+    Component updateComponent(ComponentWorkVO workVO, String regId, HistPublishDTO histPublishDTO, Long templateSeq)
             throws NoDataException, Exception;
 
     /**
@@ -398,4 +403,15 @@ public interface DeskingService {
      * @return
      */
     List<Desking> findByDatasetSeq(Long datasetSeq);
+
+    /**
+     * 컴포넌트work의 템플릿수정
+     *
+     * @param componentWorkSeq 컴포넌트work
+     * @param templateSeq      템플릿순번
+     * @param regId            작업자
+     * @return 컴포넌트work
+     */
+    ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String regId)
+            throws Exception;
 }

@@ -70,7 +70,7 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
     }, [areaSeq, dispatch]);
 
     return (
-        <MokaCard header={false} width={280} className="mr-gutter">
+        <MokaCard header={false} width={280} className="mr-gutter" bodyClassName="d-flex flex-column">
             <Form.Row className="mb-2">
                 <Col xs={12} className="p-0 d-flex justify-content-end">
                     <Button variant="positive" onClick={handleClickAdd}>
@@ -80,7 +80,7 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
             </Form.Row>
 
             <MokaTable
-                agGridHeight={738}
+                className="overflow-hidden flex-fill"
                 selected={areaSeq}
                 rowData={rowData}
                 columnDefs={columnDefs}

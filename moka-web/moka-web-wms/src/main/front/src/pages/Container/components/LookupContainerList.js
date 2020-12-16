@@ -9,7 +9,6 @@ import { ITEM_PG, ITEM_AP, ITEM_CT } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getContainerLookupList, changeLookupSearchOption, clearLookup, getContainerLookup, GET_CONTAINER_LOOKUP_LIST } from '@store/container';
 import columnDefs, { ctColumnDefs } from './LookupContainerListColumns';
-import { defaultContainerSearchType, LookupAgGridHeight, LookupAgGridMineHeight } from '@pages/commons';
 import { ContainerHtmlModal } from '@pages/Container/modals';
 
 const propTypes = {
@@ -165,74 +164,73 @@ const LookupContainerList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <>
-            <MokaCard titleClassName="mb-0" title="관련 컨테이너">
-                <Form className="mb-2">
-                    {/* 검색조건, 키워드 */}
-                    <Form.Row>
-                        <Col xs={4} className="p-0 pr-2">
-                            <MokaInput
-                                className="mb-0"
-                                as="select"
-                                value={search.searchType}
-                                onChange={(e) => {
-                                    setSearch({
-                                        ...search,
-                                        searchType: e.target.value,
-                                    });
-                                }}
-                            >
-                                {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
-                                {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {seqType === ITEM_AP && <option value="artPageSeq">기사페이지ID</option>}
-                                {defaultContainerSearchType.map((type) => (
-                                    <option key={type.id} value={type.id}>
-                                        {type.name}
-                                    </option>
-                                ))}
-                            </MokaInput>
-                        </Col>
-                        <Col xs={8} className="p-0">
-                            <MokaSearchInput
-                                value={search.keyword}
-                                onChange={(e) => {
-                                    setSearch({
-                                        ...search,
-                                        keyword: e.target.value,
-                                    });
-                                }}
-                                onSearch={handleSearch}
-                            />
-                        </Col>
-                    </Form.Row>
-                </Form>
+        <MokaCard titleClassName="mb-0" title="관련 컨테이너" bodyClassName="d-flex flex-column">
+            <Form className="mb-2">
+                {/* 검색조건, 키워드 */}
+                <Form.Row>
+                    <Col xs={4} className="p-0 pr-2">
+                        <MokaInput
+                            className="mb-0"
+                            as="select"
+                            value={search.searchType}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    searchType: e.target.value,
+                                });
+                            }}
+                        >
+                            {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
+                            {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
+                            {seqType === ITEM_AP && <option value="artPageSeq">기사페이지ID</option>}
+                            {initialState.searchTypeList.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </Col>
+                    <Col xs={8} className="p-0">
+                        <MokaSearchInput
+                            value={search.keyword}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    keyword: e.target.value,
+                                });
+                            }}
+                            onSearch={handleSearch}
+                        />
+                    </Col>
+                </Form.Row>
+            </Form>
 
-                {/* 버튼 그룹 */}
-                {seqType !== ITEM_CT && (
-                    <div className="d-flex mb-10 justify-content-end">
-                        <Button variant="positive" onClick={() => window.open('/container')}>
-                            컨테이너 등록
-                        </Button>
-                    </div>
-                )}
+            {/* 버튼 그룹 */}
+            {seqType !== ITEM_CT && (
+                <div className="d-flex mb-10 justify-content-end">
+                    <Button variant="positive" onClick={() => window.open('/container')}>
+                        컨테이너 등록
+                    </Button>
+                </div>
+            )}
 
-                {/* ag-grid table */}
-                <MokaTable
-                    agGridHeight={seqType === ITEM_CT ? LookupAgGridMineHeight : LookupAgGridHeight}
-                    columnDefs={seqType === ITEM_CT ? ctColumnDefs : columnDefs}
-                    rowData={rowData}
-                    onRowNodeId={(data) => data.containerSeq}
-                    onRowClicked={handleRowClicked}
-                    loading={loading}
-                    total={total}
-                    page={search.page}
-                    size={search.size}
-                    displayPageNum={3}
-                    onChangeSearchOption={handleChangeSearchOption}
-                    preventRowClickCell={['append', 'link', 'load']}
-                    selected={selected.containerSeq}
-                />
-            </MokaCard>
+            {/* ag-grid table */}
+            <MokaTable
+                className="overflow-hidden flex-fill"
+                columnDefs={seqType === ITEM_CT ? ctColumnDefs : columnDefs}
+                rowData={rowData}
+                onRowNodeId={(data) => data.containerSeq}
+                onRowClicked={handleRowClicked}
+                loading={loading}
+                total={total}
+                page={search.page}
+                size={search.size}
+                displayPageNum={3}
+                onChangeSearchOption={handleChangeSearchOption}
+                preventRowClickCell={['append', 'link', 'load']}
+                selected={selected.containerSeq}
+            />
+
             <ContainerHtmlModal
                 containerSeq={selected.containerSeq}
                 show={showModal}
@@ -242,7 +240,7 @@ const LookupContainerList = (props) => {
                     setSelected({});
                 }}
             />
-        </>
+        </MokaCard>
     );
 };
 

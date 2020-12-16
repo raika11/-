@@ -1,6 +1,12 @@
 package jmnet.moka.core.tps.mvc.columnist.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -23,14 +29,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <pre>
@@ -52,6 +58,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequestMapping("/api/columnists")
+@Api(tags = {"칼럼니스트 API"})
 public class ColumnistRestController {
 
     private final ColumnistService columnistService;
@@ -98,19 +105,21 @@ public class ColumnistRestController {
     /**
      * 컬럼리스트 조회
      *
-     * @param request  요청
-     * @param seqNo 일련번호 (필수)
+     * @param request 요청
+     * @param seqNo   일련번호 (필수)
      * @return 컬럼리스트정보
      * @throws NoDataException 컬럼리스트 정보가 없음
      */
     @ApiOperation(value = "컬럼리스트 조회")
     @GetMapping("/{seqNo}")
-    public ResponseEntity<?> getColumninst(HttpServletRequest request
-            , @PathVariable("seqNo") @Min(value = 0, message = "{tps.columnist.error.pattern.seqNo}") Long seqNo)
+    public ResponseEntity<?> getColumninst(HttpServletRequest request,
+            @PathVariable("seqNo") @Min(value = 0, message = "{tps.columnist.error.pattern.seqNo}") Long seqNo)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.columnist.error.no-data", request);
-        Columnist columnist = columnistService.findById(seqNo).orElseThrow(() -> new NoDataException(message));
+        Columnist columnist = columnistService
+                .findById(seqNo)
+                .orElseThrow(() -> new NoDataException(message));
         ColumnistDTO dto = modelMapper.map(columnist, ColumnistDTO.class);
         tpsLogger.success(ActionType.SELECT);
         ResultDTO<ColumnistDTO> resultDto = new ResultDTO<>(dto);
@@ -121,18 +130,18 @@ public class ColumnistRestController {
     /**
      * 컬럼리스트등록
      *
-     * @param columnistDTO 등록할 컬럼리스트등록
+     * @param columnistDTO  등록할 컬럼리스트등록
      * @param columnistFile 등록할 컬럼리스트 이미지
      * @return 등록된 컬럼리스트정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "컬럼리스트 등록")
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
-    , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<?> postColumnist(@Valid ColumnistDTO columnistDTO
-            , @RequestParam(value="columnistFile", required = false) MultipartFile columnistFile
-    )throws InvalidDataException, Exception {
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                                                                                 MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> postColumnist(@Valid ColumnistDTO columnistDTO,
+            @RequestParam(value = "columnistFile", required = false) MultipartFile columnistFile)
+            throws InvalidDataException, Exception {
 
         // 데이터 유효성 검사
         validData(columnistFile, ActionType.INSERT);
@@ -180,28 +189,28 @@ public class ColumnistRestController {
     /**
      * 수정
      *
-     * @param seqNo  일련번호
-     * @param columnistDTO 컬럼리스트 수정
+     * @param seqNo         일련번호
+     * @param columnistDTO  컬럼리스트 수정
      * @param columnistFile 프로필이미지
      * @return 수정된 컬럼리스트
      * @throws Exception 그외 모든 에러
      */
     @ApiOperation(value = "컬럼리스트 수정")
-    @PutMapping(value = "/{seqNo}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
-            , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<?> putColumnist(
-            @PathVariable("seqNo") @Min(value = 0, message = "{tps.columnist.error.pattern.seqNo}") Long seqNo,
-            @Valid ColumnistDTO columnistDTO,
-            @RequestParam(value="columnistFile", required = false) MultipartFile columnistFile
-    )throws InvalidDataException, Exception {
+    @PutMapping(value = "/{seqNo}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                                                                                                    MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> putColumnist(@PathVariable("seqNo") @Min(value = 0, message = "{tps.columnist.error.pattern.seqNo}") Long seqNo,
+            @Valid ColumnistDTO columnistDTO, @RequestParam(value = "columnistFile", required = false) MultipartFile columnistFile)
+            throws InvalidDataException, Exception {
 
         // ColumnistDto -> Columnist 변환
         Columnist newColumnist = modelMapper.map(columnistDTO, Columnist.class);
-        Columnist orgColumnist = columnistService.findById(newColumnist.getSeqNo()).orElseThrow(() -> {
-            String message = messageByLocale.get("tps.columnist.error.no-data");
-            tpsLogger.fail(ActionType.UPDATE, message, true);
-            return new NoDataException(message);
-        });
+        Columnist orgColumnist = columnistService
+                .findById(newColumnist.getSeqNo())
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.columnist.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
 
         try {
@@ -240,7 +249,7 @@ public class ColumnistRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE Columnist] seq: {} {}", columnistDTO.getSeqNo(),  e.getMessage());
+            log.error("[FAIL TO UPDATE Columnist] seq: {} {}", columnistDTO.getSeqNo(), e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE columnist]", e, true);
             throw new Exception(messageByLocale.get("tps.columnist.error.save"), e);
@@ -251,12 +260,13 @@ public class ColumnistRestController {
     /**
      * 컬럼리스트 데이터 유효성 검사
      *
-     * @param file                  컬럼리스트프로필이미지
-     * @param actionType            작업구분(INSERT OR UPDATE)
+     * @param file       컬럼리스트프로필이미지
+     * @param actionType 작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성 오류
      * @throws Exception            예외
      */
-    private void validData(MultipartFile file, ActionType actionType) throws InvalidDataException, Exception {
+    private void validData(MultipartFile file, ActionType actionType)
+            throws InvalidDataException, Exception {
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
         // 문법검사

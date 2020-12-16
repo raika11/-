@@ -41,7 +41,16 @@ const MemberChildLoginHistoryAgGrid = () => {
         }
     }, [dispatch, paramId]);
 
-    return <MokaTable agGridHeight={733} columnDefs={historyColumnDefs} rowData={historyList} onRowNodeId={(rowData) => rowData.seqNo} loading={loading} paging={false} />;
+    return (
+        <MokaTable
+            className="overflow-hidden flex-fill"
+            columnDefs={historyColumnDefs}
+            rowData={historyList}
+            onRowNodeId={(rowData) => rowData.seqNo}
+            loading={loading}
+            paging={false}
+        />
+    );
 };
 
 export default MemberChildLoginHistoryAgGrid;

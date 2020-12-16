@@ -17,6 +17,7 @@ export const columnDefs = [
     {
         headerName: '아이디',
         field: 'memberId',
+        flex: 1,
         width: 100,
     },
     {

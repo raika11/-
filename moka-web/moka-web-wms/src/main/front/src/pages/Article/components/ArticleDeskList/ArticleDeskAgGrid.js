@@ -124,10 +124,9 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
         <React.Fragment>
             <MokaTable
                 ref={ref}
-                className="article-list"
+                className="article-list overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
                 headerHeight={50}
-                agGridHeight={614}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(article) => article.totalId}

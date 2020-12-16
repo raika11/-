@@ -54,10 +54,10 @@ const LiveList = ({ show, resultVId, setResultVId, OVP_PREVIEW_URL }) => {
     }, [handleClickPreview, liveList]);
 
     return (
-        <div className="positive-relative h-100 w-100 px-3">
+        <React.Fragment>
             <MokaTable
                 loading={loading}
-                agGridHeight={240}
+                agGridHeight={190}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(data) => data.id}
@@ -78,7 +78,7 @@ const LiveList = ({ show, resultVId, setResultVId, OVP_PREVIEW_URL }) => {
             <p className="mb-0">※&nbsp;온라인 송출 상태가 [on]이어야 서비스가 가능합니다. 아닌 경우 담당자에게 문의해주세요.</p>
             <p className="mb-0">※&nbsp;미리보기를 통해 라이브 영상이 정상적으로 재생되는지 확인 후 채널을 선택해주세요.</p>
             <p className="mb-0">※&nbsp;모바일에서는 서비스 정책 상 자동재생 기능이 불가합니다. (데이터요금 과다발생 이슈)</p>
-        </div>
+        </React.Fragment>
     );
 };
 

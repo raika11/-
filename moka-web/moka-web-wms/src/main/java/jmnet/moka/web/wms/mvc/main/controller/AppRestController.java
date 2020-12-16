@@ -1,6 +1,7 @@
 package jmnet.moka.web.wms.mvc.main.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
+import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/app")
+@Api(tags = {"앱 기본 설정 조회 API"})
 public class AppRestController {
 
     @Value("${tps.upload.path.url}")
@@ -100,6 +103,8 @@ public class AppRestController {
                 .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());
+
+        result.put("PHOTO_ARCHIVE_CODE", PhotoArchiveMenuCode.toList());
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 

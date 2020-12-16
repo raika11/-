@@ -91,6 +91,12 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
                     .getMultiValueMap();
             params.setAll(BeanConverter.toMap(searchDTO));
             params.set("page", searchDTO.getPage() + 1);
+            params.remove("menuCode");
+            if (searchDTO.getMenuCode() != null) {
+                params.set("menuNo", searchDTO
+                        .getMenuCode()
+                        .getMenuNo());
+            }
 
             ResponseEntity<String> responseEntity = restTemplateHelper.post(archiveAddress + photoListApi, params, getHeader(memberId));
 

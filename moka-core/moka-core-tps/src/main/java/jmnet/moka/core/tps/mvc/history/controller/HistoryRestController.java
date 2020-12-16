@@ -10,9 +10,9 @@ package jmnet.moka.core.tps.mvc.history.controller;
  * @author ssc
  * @since 2020-11-02
  */
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Validated
 @Slf4j
 @RequestMapping("/api/histories")
+@Api(tags = {"히스토리 API"})
 public class HistoryRestController {
 
     @Autowired
@@ -59,7 +60,7 @@ public class HistoryRestController {
     /**
      * 히스토리 목록조회
      *
-     * @param search  검색조건
+     * @param search 검색조건
      * @return 히스토리 목록
      */
     @ApiOperation(value = "히스토리 목록조회")

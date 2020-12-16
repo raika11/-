@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.desking.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @Slf4j
 @RequestMapping("/api/desking")
+@Api(tags = {"테스킹 API"})
 public class DeskingRestController extends AbstractCommonController {
 
     private final DeskingService deskingService;

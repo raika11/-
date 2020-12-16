@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.menu.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.menu.service.MenuService;
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = true)
+@ApiModel("메뉴 검색 DTO")
 public class MenuSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 7741459044517702553L;

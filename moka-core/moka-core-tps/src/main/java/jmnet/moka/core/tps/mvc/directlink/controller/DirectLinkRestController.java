@@ -1,6 +1,12 @@
 package jmnet.moka.core.tps.mvc.directlink.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -23,28 +29,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <pre>
- * 기자관리
+ * 바로가기관리
  * 2020. 11. 16. ssc 최초생성
  * RequestMapping 생성 규칙
- * RESTful 방식에 소문자만 허용하고 단어 사이 구분이 필요한 경우 '-' 사용
- * 메소드 생성 규칙
- * 목록 조회 : get{Target}List, HttpMethod = GET
- * 조회 : get{Target}, HttpMethod = GET
- * 저장  : post{Target}, HttpMethod = POST
- * 수정  : put{Target}, HttpMethod = PUT
- * 삭제  : delete{Target}, HttpMethod = DELETE
- * 사이트내멤버조회 : get{Target}, HttpMethod = GET
  * </pre>
  *
  * @author ssc
@@ -54,6 +53,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequestMapping("/api/direct-links")
+@Api(tags = {"바로가기 API"})
 public class DirectLinkRestController {
 
     private final DirectLinkService directLinkService;
@@ -64,7 +64,8 @@ public class DirectLinkRestController {
 
     private final TpsLogger tpsLogger;
 
-    public DirectLinkRestController(DirectLinkService directLinkService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger) {
+    public DirectLinkRestController(DirectLinkService directLinkService, ModelMapper modelMapper, MessageByLocale messageByLocale,
+            TpsLogger tpsLogger) {
         this.directLinkService = directLinkService;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
@@ -72,12 +73,12 @@ public class DirectLinkRestController {
     }
 
     /**
-     * 사이트관리 목록 조회
+     * 바로가기관리 목록 조회
      *
      * @param search 검색조건 : 사용여부, 노출고정, 링크타입
      * @return 기자목록
      */
-    @ApiOperation(value = "사이트관리 목록 조회")
+    @ApiOperation(value = "바로가기 목록 조회")
     @GetMapping
     public ResponseEntity<?> getDirectLinkList(@Valid @SearchParam DirectLinkSearchDTO search) {
 
@@ -98,21 +99,23 @@ public class DirectLinkRestController {
     }
 
     /**
-     * 사이트관리 조회
+     * 바로가기관리 조회
      *
-     * @param request  요청
+     * @param request 요청
      * @param linkSeq 링크일련번호 (필수)
-     * @return 사이트관리정보
+     * @return 바로가기관리정보
      * @throws NoDataException 사이트 정보가 없음
      */
-    @ApiOperation(value = "사이트관리 조회")
+    @ApiOperation(value = "바로가기 조회")
     @GetMapping("/{linkSeq}")
-    public ResponseEntity<?> getDirectLink(HttpServletRequest request
-            , @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
+    public ResponseEntity<?> getDirectLink(HttpServletRequest request,
+            @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.direct-link.error.no-data", request);
-        DirectLink directLink = directLinkService.findById(linkSeq).orElseThrow(() -> new NoDataException(message));
+        DirectLink directLink = directLinkService
+                .findById(linkSeq)
+                .orElseThrow(() -> new NoDataException(message));
         DirectLinkDTO dto = modelMapper.map(directLink, DirectLinkDTO.class);
         tpsLogger.success(ActionType.SELECT);
         ResultDTO<DirectLinkDTO> resultDto = new ResultDTO<>(dto);
@@ -123,22 +126,22 @@ public class DirectLinkRestController {
     /**
      * 사이트등록
      *
-     * @param directLinkDTO 등록할 사이트정보
+     * @param directLinkDTO           등록할 사이트정보
      * @param directLinkThumbnailFile 등록할 사이트바로가기 이미지
      * @return 등록된 사이트정보
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "사이트 등록")
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
-    , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO
-            , @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
-    )throws InvalidDataException, Exception {
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                                                                                 MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO,
+            @RequestParam(value = "directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile)
+            throws InvalidDataException, Exception {
 
 
         // 널이면 강제로 셋팅
-        if(directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == ""){
+        if (directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == "") {
             directLinkDTO.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
         }
 
@@ -185,34 +188,35 @@ public class DirectLinkRestController {
     /**
      * 수정
      *
-     * @param linkSeq  링크일련번호
-     * @param directLinkDTO 수정할 사이트
+     * @param linkSeq                 링크일련번호
+     * @param directLinkDTO           수정할 사이트
      * @param directLinkThumbnailFile 등록할 사이트바로가기 이미지
      * @return 수정된 사이트정보
      * @throws Exception 그외 모든 에러
      */
     @ApiOperation(value = "사이트정보 수정")
-    @PutMapping(value = "/{linkSeq}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
-            , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<?> putDirectLink(
-            @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq,
+    @PutMapping(value = "/{linkSeq}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                                                                                                      MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> putDirectLink(@PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq,
             @Valid DirectLinkDTO directLinkDTO,
-            @RequestParam(value="directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile
-    )throws InvalidDataException, Exception {
+            @RequestParam(value = "directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile)
+            throws InvalidDataException, Exception {
 
 
         // 널이면 강제로 셋팅
-        if(directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == ""){
+        if (directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == "") {
             directLinkDTO.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
         }
 
         // DirectLinkDTO -> DirectLink 변환
         DirectLink newDirectLink = modelMapper.map(directLinkDTO, DirectLink.class);
-        DirectLink orgDirectLink = directLinkService.findById(newDirectLink.getLinkSeq()).orElseThrow(() -> {
-            String message = messageByLocale.get("tps.direct-link.error.no-data");
-            tpsLogger.fail(ActionType.UPDATE, message, true);
-            return new NoDataException(message);
-        });
+        DirectLink orgDirectLink = directLinkService
+                .findById(newDirectLink.getLinkSeq())
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.direct-link.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
 
         try {
@@ -246,7 +250,7 @@ public class DirectLinkRestController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE DirectLink] seq: {} {}", directLinkDTO.getLinkSeq(),  e.getMessage());
+            log.error("[FAIL TO UPDATE DirectLink] seq: {} {}", directLinkDTO.getLinkSeq(), e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE DirectLink]", e, true);
             throw new Exception(messageByLocale.get("tps.direct-link.error.save"), e);
@@ -264,8 +268,7 @@ public class DirectLinkRestController {
     @ApiOperation(value = "사이트 내 속한 멤버 존재 여부")
     @GetMapping("/{linkSeq}/has-members")
     public ResponseEntity<?> hasMembers(HttpServletRequest request,
-                                        @PathVariable("linkSeq")
-                                        @Min(value=0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
+            @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
         boolean exists = directLinkService.hasMembers(linkSeq);
@@ -286,18 +289,17 @@ public class DirectLinkRestController {
      * @throws NoDataException      삭제 할 사이트정보 없음
      * @throws Exception            그 외 에러처리
      */
-    @ApiOperation(value = "사이트관리 삭제")
+    @ApiOperation(value = "바로가기 삭제")
     @DeleteMapping("/{linkSeq}")
     public ResponseEntity<?> deleteDirectLink(HttpServletRequest request,
-                                         @PathVariable("linkSeq")
-                                         @Min(value=0,
-                                         message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
+            @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws InvalidDataException, NoDataException, Exception {
 
 
         // 그룹 데이터 조회
         String noContentMessage = messageByLocale.get("tps.direct-link.error.no-data", request);
-        DirectLink member = directLinkService.findById(linkSeq)
+        DirectLink member = directLinkService
+                .findById(linkSeq)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 
         try {
@@ -327,10 +329,10 @@ public class DirectLinkRestController {
     }
 
     /**
-     * 사이트관리 데이터 유효성 검사
+     * 바로가기관리 데이터 유효성 검사
      *
-     * @param file                  사이트관리 이미지
-     * @param actionType            작업구분(INSERT OR UPDATE)
+     * @param file       바로가기관리 이미지
+     * @param actionType 작업구분(INSERT OR UPDATE)
      * @throws InvalidDataException 데이타유효성 오류
      * @throws Exception            예외
      */

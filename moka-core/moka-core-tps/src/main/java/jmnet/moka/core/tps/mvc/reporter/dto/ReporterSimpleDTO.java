@@ -2,11 +2,15 @@ package jmnet.moka.core.tps.mvc.reporter.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
-import lombok.*;
-
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -14,8 +18,8 @@ import java.util.List;
  * 2020. 11. 09. obiwan 최초생성
  * </pre>
  *
- * @since 2020. 11. 09. 오후 4:46:30
  * @author obiwan
+ * @since 2020. 11. 09. 오후 4:46:30
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,11 +27,13 @@ import java.util.List;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("기자 수정 DTO")
 public class ReporterSimpleDTO implements Serializable {
 
     private static final long serialVersionUID = -7979684085879328911L;
 
-    public static final Type TYPE = new TypeReference<List<ReporterSimpleDTO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<ReporterSimpleDTO>>() {
+    }.getType();
 
     /**
      * 기자 일련번호 (1001부터 시작)

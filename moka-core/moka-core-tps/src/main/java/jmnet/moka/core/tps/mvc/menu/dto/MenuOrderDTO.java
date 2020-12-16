@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.menu.dto;
 
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@ApiModel("메뉴 순서 변경 DTO")
 public class MenuOrderDTO implements Serializable {
 
 

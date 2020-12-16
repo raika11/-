@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.jpod.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import java.util.Date;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("J팟 에피소드 검색 DTO")
 public class JpodEpisodeSearchDTO extends SearchDTO {
 
     private Long chnlSeq;

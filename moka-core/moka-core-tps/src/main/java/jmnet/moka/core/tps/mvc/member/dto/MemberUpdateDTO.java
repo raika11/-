@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import java.util.Date;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
@@ -29,6 +30,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("J팟 수정 DTO")
 public class MemberUpdateDTO {
 
     /**

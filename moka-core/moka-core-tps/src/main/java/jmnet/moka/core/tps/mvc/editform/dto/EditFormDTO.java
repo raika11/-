@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.swagger.annotations.ApiModel;
 import java.lang.reflect.Type;
 import java.util.List;
 import javax.validation.constraints.Size;
@@ -36,6 +37,7 @@ import lombok.Setter;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@ApiModel("편집폼 DTO")
 public class EditFormDTO {
 
     public static final Type TYPE = new TypeReference<List<EditFormDTO>>() {

@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.bulk.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("벌크 저장 DTO")
 public class BulkSaveDTO implements Serializable {
 
     @NotNull(message = "{tps.bulk.error.notnull.bulkartDiv}")

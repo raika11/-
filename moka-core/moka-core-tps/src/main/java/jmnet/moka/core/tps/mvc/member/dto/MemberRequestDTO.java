@@ -38,14 +38,14 @@ public class MemberRequestDTO extends MemberDTO {
     }.getType();
 
     /**
-     * 사용자ID
+     * 비밀번호
      */
     @NotEmpty(message = "{tps.member.error.pattern.password}")
     @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}")
     private String password;
 
     /**
-     * 비밀번호
+     * 비밀번호 확인
      */
     @NotEmpty(message = "{tps.member.error.pattern.confirmPassword}")
     @Pattern(regexp = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W).*$", message = "{tps.member.error.pattern.password}")

@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.menu.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -25,6 +26,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @Builder
+@ApiModel("메뉴 DTO")
 public class MenuDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<MenuDTO>>() {

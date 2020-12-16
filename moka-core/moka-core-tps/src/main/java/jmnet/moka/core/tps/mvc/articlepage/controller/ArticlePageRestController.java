@@ -8,6 +8,7 @@
 
 package jmnet.moka.core.tps.mvc.articlepage.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -63,6 +64,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/article-pages")
+@Api(tags = {"기사페이지 API"})
 public class ArticlePageRestController extends AbstractCommonController {
     private final PurgeHelper purgeHelper;
 

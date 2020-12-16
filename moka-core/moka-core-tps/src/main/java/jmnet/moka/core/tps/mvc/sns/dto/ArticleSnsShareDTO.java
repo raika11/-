@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.sql.Date;
@@ -20,6 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@ApiModel("SNS 공유 DTO")
 public class ArticleSnsShareDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<ArticleSnsShareDTO>>() {

@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.merge.controller;
 
+import io.swagger.annotations.Api;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
@@ -43,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Validated
 @Slf4j
 @RequestMapping("/preview")
+@Api(tags = {"미리보기 API"})
 public class PreviewController extends AbstractCommonController {
 
     @Autowired

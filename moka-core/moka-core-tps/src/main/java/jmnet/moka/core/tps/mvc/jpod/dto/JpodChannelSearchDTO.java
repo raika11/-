@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.jpod.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import java.util.Date;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("J팟 채널 검색 DTO")
 public class JpodChannelSearchDTO extends SearchDTO {
 
     @Pattern(regexp = "[N|Y]{1}$", message = "{tps.common.error.pattern.usedYn}")

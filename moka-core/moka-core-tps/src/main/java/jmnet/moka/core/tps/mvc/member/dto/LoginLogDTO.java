@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +31,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("사용자 접속 로그 DTO")
 public class LoginLogDTO {
 
     public static final Type TYPE = new TypeReference<List<LoginLogDTO>>() {

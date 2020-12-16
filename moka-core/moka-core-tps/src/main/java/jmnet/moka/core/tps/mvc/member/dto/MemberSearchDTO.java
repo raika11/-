@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("사용자 검색 DTO")
 public class MemberSearchDTO extends SearchDTO {
     /**
      * 사용자ID

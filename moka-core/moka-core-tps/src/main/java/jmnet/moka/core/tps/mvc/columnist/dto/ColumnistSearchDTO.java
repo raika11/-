@@ -4,20 +4,23 @@
 package jmnet.moka.core.tps.mvc.columnist.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
-import javax.validation.constraints.Pattern;
-
 /**
- * 기자관리 검색 DTO
- * 2020. 11. 16. ssc 최초생성
- * 
- * @since 2020. 11. 16. 오전 11:35:05
+ * 기자관리 검색 DTO 2020. 11. 16. ssc 최초생성
+ *
  * @author ssc
+ * @since 2020. 11. 16. 오전 11:35:05
  */
 @AllArgsConstructor
 @Setter
@@ -26,6 +29,7 @@ import javax.validation.constraints.Pattern;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = true)
 @Alias("ColumnistSearchDTO")
+@ApiModel("칼럼니스트 검색 DTO")
 public class ColumnistSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1972229889422176779L;
@@ -40,10 +44,6 @@ public class ColumnistSearchDTO extends SearchDTO {
      */
     private String status;
 
-//    /**
-//     * char	1   ('N')	NO	상태(유효/정지)
-//     */
-//    private String columnNm;
 
     /**
      * 총갯수 사용여부

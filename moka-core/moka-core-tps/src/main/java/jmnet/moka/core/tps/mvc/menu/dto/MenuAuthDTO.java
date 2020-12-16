@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.menu.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -21,6 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@ApiModel("메뉴 권한 DTO")
 public class MenuAuthDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<MenuAuthDTO>>() {

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import io.swagger.annotations.ApiModel;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +42,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@ApiModel("편집폼 Part DTO")
 public class EditFormPartDTO {
 
     public static final Type TYPE = new TypeReference<List<EditFormPartDTO>>() {

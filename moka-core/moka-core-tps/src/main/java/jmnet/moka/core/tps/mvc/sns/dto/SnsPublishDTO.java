@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.Min;
@@ -20,6 +21,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @Builder
+@ApiModel("SNS 게시 DTO")
 public class SnsPublishDTO implements Serializable {
 
     /**

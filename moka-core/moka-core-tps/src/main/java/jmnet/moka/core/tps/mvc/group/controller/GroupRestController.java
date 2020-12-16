@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.group.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/groups")
+@Api(tags = {"그룹 API"})
 public class GroupRestController extends AbstractCommonController {
 
     private final GroupService groupService;

@@ -8,6 +8,7 @@
 
 package jmnet.moka.core.tps.mvc.special.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @Slf4j
 @RequestMapping("/api/specials")
+@Api(tags = {"디지털 스페셜 API"})
 public class SpecialPageMgtRestController extends AbstractCommonController {
     @Autowired
     private SpecialPageMgtService specialPageMgtService;

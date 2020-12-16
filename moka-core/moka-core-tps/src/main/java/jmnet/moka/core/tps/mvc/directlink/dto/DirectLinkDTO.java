@@ -2,18 +2,22 @@ package jmnet.moka.core.tps.mvc.directlink.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
-import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * <pre>
@@ -30,6 +34,7 @@ import java.util.List;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("바로가기 DTO")
 public class DirectLinkDTO implements Serializable {
 
     private static final long serialVersionUID = 3926910123722632118L;
@@ -91,7 +96,7 @@ public class DirectLinkDTO implements Serializable {
      * 대표이미지
      */
     //@NotNull(message = "{tps.page.error.notnull.linkUrl}") // 일시적으로 막음. 수정할때만 필요하다.
-//    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.linkUrl}")
+    //    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.linkUrl}")
     //private String imgUrl = "https://pds.joins.com/news/search_direct_link/001.jpg";
     private String imgUrl;
 

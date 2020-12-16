@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.NotEmpty;
@@ -22,6 +23,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 @Setter
 @Builder
+@ApiModel("SNS 저장 DTO")
 public class ArticleSnsShareSaveDTO implements Serializable {
 
     /**

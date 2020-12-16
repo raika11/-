@@ -2,18 +2,22 @@ package jmnet.moka.core.tps.mvc.columnist.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
-import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * <pre>
@@ -30,6 +34,7 @@ import java.util.List;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("칼럼니스트 DTO")
 public class ColumnistDTO implements Serializable {
 
     private static final long serialVersionUID = 3926910123722652118L;
@@ -93,7 +98,7 @@ public class ColumnistDTO implements Serializable {
     /**
      * nvarchar	500			YES	프로필
      */
-    @Length( max = 500, message = "{tps.columnist.error.length.profile}")
+    @Length(max = 500, message = "{tps.columnist.error.length.profile}")
     private String profile;
 
     /**

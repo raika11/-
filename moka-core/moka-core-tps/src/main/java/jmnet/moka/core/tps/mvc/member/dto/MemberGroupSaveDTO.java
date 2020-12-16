@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("사용자 그룹 저장 DTO")
 public class MemberGroupSaveDTO {
 
     /**

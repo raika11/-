@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
+import io.swagger.annotations.ApiModel;
 import java.util.Date;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@ApiModel("SNS 공유 검색 DTO")
 public class ArticleSnsShareSearchDTO extends SearchDTO {
 
     /**

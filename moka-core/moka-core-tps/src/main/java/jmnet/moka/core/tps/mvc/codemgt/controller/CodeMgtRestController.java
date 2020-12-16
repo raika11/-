@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.codemgt.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequestMapping("/api/codemgt-grps")
+@Api(tags = {"기타코드 API"})
 public class CodeMgtRestController {
 
     @Autowired

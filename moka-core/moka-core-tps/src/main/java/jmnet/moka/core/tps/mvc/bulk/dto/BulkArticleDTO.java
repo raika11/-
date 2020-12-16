@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.bulk.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -29,6 +30,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("벌크 기사 DTO")
 public class BulkArticleDTO implements Serializable {
 
     private static final long serialVersionUID = 3926910123722652118L;

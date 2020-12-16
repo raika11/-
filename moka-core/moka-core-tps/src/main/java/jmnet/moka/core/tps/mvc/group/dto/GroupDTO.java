@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.group.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("그룹 DTO")
 public class GroupDTO {
 
     public static final Type TYPE = new TypeReference<List<GroupDTO>>() {

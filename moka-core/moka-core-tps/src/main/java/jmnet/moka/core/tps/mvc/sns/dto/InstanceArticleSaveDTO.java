@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -18,6 +19,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @Builder
+@ApiModel("인스턴스 아티클 저장 DTO")
 public class InstanceArticleSaveDTO implements Serializable {
 
     /**

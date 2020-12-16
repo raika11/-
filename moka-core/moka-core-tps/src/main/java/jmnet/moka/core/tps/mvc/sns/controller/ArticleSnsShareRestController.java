@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.sns.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -74,6 +75,7 @@ import org.springframework.web.util.HtmlUtils;
 @Slf4j
 @RestController
 @RequestMapping("/api/sns")
+@Api(tags = {"SNS API"})
 public class ArticleSnsShareRestController extends AbstractCommonController {
 
     private final ArticleSnsShareService articleSnsShareService;

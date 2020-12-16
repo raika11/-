@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.auth.controller;
 
+import io.swagger.annotations.Api;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/auth")
+@Api(tags = {"사용자 권한 API"})
 public class AuthRestController {
 
     @Autowired
@@ -158,16 +160,16 @@ public class AuthRestController {
         List<DomainDTO> domainDtoList = modelMapper.map(returnValue, DomainDTO.TYPE);
 
         List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
-        List<DomainDTO> domainDtoMapList = domainDtoList.stream()
-                                                        .map((item) -> {
-                                                            String apiCodeId =
-                                                                    apiCodeHelper.getDataApiCode(CodeMgts, item.getApiHost(), item.getApiPath());
-                                                            if (apiCodeId != null) {
-                                                                item.setApiCodeId(apiCodeId);
-                                                            }
-                                                            return item;
-                                                        })
-                                                        .collect(Collectors.toList());
+        List<DomainDTO> domainDtoMapList = domainDtoList
+                .stream()
+                .map((item) -> {
+                    String apiCodeId = apiCodeHelper.getDataApiCode(CodeMgts, item.getApiHost(), item.getApiPath());
+                    if (apiCodeId != null) {
+                        item.setApiCodeId(apiCodeId);
+                    }
+                    return item;
+                })
+                .collect(Collectors.toList());
 
         resultListMessage.setTotalCnt(returnValue.size());
         resultListMessage.setList(domainDtoMapList);

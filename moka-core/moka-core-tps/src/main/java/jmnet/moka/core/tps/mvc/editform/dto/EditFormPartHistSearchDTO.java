@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,7 @@ import lombok.Setter;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@ApiModel("편집폼 Part 편집이력 검색 DTO")
 public class EditFormPartHistSearchDTO extends SearchDTO {
 
     public static final Type TYPE = new TypeReference<List<EditFormPartHistSearchDTO>>() {

@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.bulk.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +65,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/bulks")
+@Api(tags = {"네이버벌크/핫클릭 API"})
 public class BulkRestController extends AbstractCommonController {
 
     private final BulkService naverBulkService;

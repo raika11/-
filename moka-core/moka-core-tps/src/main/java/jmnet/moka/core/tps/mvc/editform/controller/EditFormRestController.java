@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.editform.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -81,6 +82,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @Slf4j
 @RequestMapping("/api/edit-forms")
+@Api(tags = {"편집폼 API"})
 public class EditFormRestController extends AbstractCommonController {
 
     private final EditFormHelper editFormHelper;

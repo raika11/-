@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.menu.dto;
 
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -19,6 +20,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
+@ApiModel("메뉴 권한 저장 DTO")
 public class MenuAuthSimpleDTO implements Serializable {
 
 

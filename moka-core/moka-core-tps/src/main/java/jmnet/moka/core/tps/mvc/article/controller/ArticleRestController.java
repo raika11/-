@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.article.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/articles")
+@Api(tags = {"기사 API"})
 public class ArticleRestController extends AbstractCommonController {
 
     private final ArticleService articleService;
@@ -66,12 +68,14 @@ public class ArticleRestController extends AbstractCommonController {
         if (search.getMasterCode() != null && McpString.isNotEmpty(search.getMasterCode())) {
             String masterCode = search.getMasterCode();
 
-            if (masterCode.length() > 2 && masterCode.substring(2)
-                                                     .equals("00000")) {
+            if (masterCode.length() > 2 && masterCode
+                    .substring(2)
+                    .equals("00000")) {
                 // 대분류검색
                 search.setMasterCode(masterCode.substring(0, 1));
-            } else if (masterCode.length() > 4 && masterCode.substring(4)
-                                                            .equals("000")) {
+            } else if (masterCode.length() > 4 && masterCode
+                    .substring(4)
+                    .equals("000")) {
                 // 중분류검색
                 search.setMasterCode(masterCode.substring(0, 1));
             }
@@ -79,9 +83,10 @@ public class ArticleRestController extends AbstractCommonController {
 
         // 편집기사 기본매체조건 추가
         if (deskingSourceList.length > 0) {
-            String paramSList = Arrays.stream(deskingSourceList)
-                                      .reduce((a, b) -> a + "," + b)
-                                      .get();
+            String paramSList = Arrays
+                    .stream(deskingSourceList)
+                    .reduce((a, b) -> a + "," + b)
+                    .get();
             search.setDeskingSourceList(paramSList);
         }
 
@@ -109,12 +114,13 @@ public class ArticleRestController extends AbstractCommonController {
     public ResponseEntity<?> getArticle(@PathVariable("totalId") Long totalId)
             throws NoDataException {
 
-        ArticleBasic articleBasic = articleService.findArticleBasicById(totalId)
-                                                  .orElseThrow(() -> {
-                                                      String message = msg("tps.common.error.no-data");
-                                                      tpsLogger.fail(message, true);
-                                                      return new NoDataException(message);
-                                                  });
+        ArticleBasic articleBasic = articleService
+                .findArticleBasicById(totalId)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
         ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto);
@@ -145,12 +151,13 @@ public class ArticleRestController extends AbstractCommonController {
     public ResponseEntity<?> putEditTitle(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
             @Valid ArticleTitleDTO articleTitleDTO)
             throws Exception {
-        ArticleBasic articleBasic = articleService.findArticleBasicById(totalId)
-                                                  .orElseThrow(() -> {
-                                                      String message = msg("tps.common.error.no-data");
-                                                      tpsLogger.fail(message, true);
-                                                      return new NoDataException(message);
-                                                  });
+        ArticleBasic articleBasic = articleService
+                .findArticleBasicById(totalId)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
         try {
             articleService.saveArticleTitle(articleBasic, articleTitleDTO);
 

@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.template.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @Slf4j
 @RequestMapping("/api/templates")
+@Api(tags = {"템플릿 API"})
 public class TemplateRestController {
 
     @Autowired
@@ -107,15 +109,17 @@ public class TemplateRestController {
      */
     @ApiOperation(value = "템플릿 상세조회")
     @GetMapping("/{templateSeq}")
-    public ResponseEntity<?> getTemplate(@PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
+    public ResponseEntity<?> getTemplate(
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
             throws NoDataException {
 
-        Template template = templateService.findTemplateBySeq(templateSeq)
-                                           .orElseThrow(() -> {
-                                               String message = messageByLocale.get("tps.common.error.no-data");
-                                               tpsLogger.fail(message, true);
-                                               return new NoDataException(message);
-                                           });
+        Template template = templateService
+                .findTemplateBySeq(templateSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         TemplateDTO templateDTO = modelMapper.map(template, TemplateDTO.class);
 
@@ -135,7 +139,7 @@ public class TemplateRestController {
      */
     @ApiOperation(value = "템플릿 등록")
     @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.APPLICATION_JSON_UTF8_VALUE})
+                                                                                 MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postTemplate(@Valid TemplateDTO templateDTO,
             @RequestPart(value = "templateThumbnailFile", required = false) MultipartFile templateThumbnailFile)
             throws InvalidDataException, Exception {
@@ -199,7 +203,7 @@ public class TemplateRestController {
      */
     @ApiOperation(value = "템플릿 수정")
     @PutMapping(value = "/{templateSeq}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.APPLICATION_JSON_UTF8_VALUE})
+                                                                                                          MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> putTemplate(@Valid TemplateDTO templateDTO,
             @ApiParam(value = "templateThumbnailFile") @RequestPart(value = "templateThumbnailFile", required = false)
                     MultipartFile templateThumbnailFile)
@@ -209,12 +213,13 @@ public class TemplateRestController {
         validData(templateDTO, templateThumbnailFile, ActionType.UPDATE);
 
         Template newTemplate = modelMapper.map(templateDTO, Template.class);
-        Template orgTemplate = templateService.findTemplateBySeq(templateDTO.getTemplateSeq())
-                                              .orElseThrow(() -> {
-                                                  String message = messageByLocale.get("tps.common.error.no-data");
-                                                  tpsLogger.fail(ActionType.UPDATE, message, true);
-                                                  return new NoDataException(message);
-                                              });
+        Template orgTemplate = templateService
+                .findTemplateBySeq(templateDTO.getTemplateSeq())
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    return new NoDataException(message);
+                });
 
         //        newTemplate.setRegDt(orgTemplate.getRegDt());
         //        newTemplate.setRegId(orgTemplate.getRegId());
@@ -250,8 +255,9 @@ public class TemplateRestController {
 
             // 수정 (템플릿바디가 변경되었을 때만 히스토리를 생성한다)
             Template returnVal;
-            if (orgTemplate.getTemplateBody() != null && orgTemplate.getTemplateBody()
-                                                                    .equals(newTemplate.getTemplateBody())) {
+            if (orgTemplate.getTemplateBody() != null && orgTemplate
+                    .getTemplateBody()
+                    .equals(newTemplate.getTemplateBody())) {
                 returnVal = templateService.updateTemplate(newTemplate, false);
             } else {
                 returnVal = templateService.updateTemplate(newTemplate);
@@ -273,7 +279,9 @@ public class TemplateRestController {
             //                purgeHelper.purgeTms(request, domainIds, MokaConstants.ITEM_TEMPLATE,
             //                        returnVal.getTemplateSeq());
             //            } else {
-            purgeHelper.purgeTms(returnVal.getDomain().getDomainId(), MokaConstants.ITEM_TEMPLATE, returnVal.getTemplateSeq());
+            purgeHelper.purgeTms(returnVal
+                    .getDomain()
+                    .getDomainId(), MokaConstants.ITEM_TEMPLATE, returnVal.getTemplateSeq());
             //                actionLogger.success(principal.getName(), ActionType.PURGE, System.currentTimeMillis() - processStartTime);
             //            }
 
@@ -299,17 +307,19 @@ public class TemplateRestController {
      */
     @ApiOperation(value = "템플릿 복사")
     @PostMapping("/{templateSeq}/copy")
-    public ResponseEntity<?> copyTemplate(@PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq, DomainSimpleDTO domain,
+    public ResponseEntity<?> copyTemplate(
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq, DomainSimpleDTO domain,
             String templateName)
             throws InvalidDataException, Exception {
 
         // 조회
-        Template template = templateService.findTemplateBySeq(templateSeq)
-                                           .orElseThrow(() -> {
-                                               String message = messageByLocale.get("tps.common.error.no-data");
-                                               tpsLogger.fail(ActionType.INSERT, message, true);
-                                               return new NoDataException(message);
-                                           });
+        Template template = templateService
+                .findTemplateBySeq(templateSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.INSERT, message, true);
+                    return new NoDataException(message);
+                });
 
         TemplateDTO templateDTO = modelMapper.map(template, TemplateDTO.class);
         templateDTO.setTemplateSeq(null);
@@ -329,16 +339,18 @@ public class TemplateRestController {
      */
     @ApiOperation(value = "템플릿 삭제")
     @DeleteMapping("/{templateSeq}")
-    public ResponseEntity<?> deleteTemplate(@PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
+    public ResponseEntity<?> deleteTemplate(
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
             throws NoDataException, Exception {
 
         // 데이타 확인
-        Template template = templateService.findTemplateBySeq(templateSeq)
-                                           .orElseThrow(() -> {
-                                               String message = messageByLocale.get("tps.common.error.no-data");
-                                               tpsLogger.fail(ActionType.DELETE, message, true);
-                                               return new NoDataException(message);
-                                           });
+        Template template = templateService
+                .findTemplateBySeq(templateSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.DELETE, message, true);
+                    return new NoDataException(message);
+                });
 
         // 관련 데이터 확인
         Boolean hasRels = relationService.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
@@ -380,23 +392,26 @@ public class TemplateRestController {
      */
     @ApiOperation(value = "관련 아이템 존재여부")
     @GetMapping("/{templateSeq}/has-relations")
-    public ResponseEntity<?> hasRelationList(@PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
+    public ResponseEntity<?> hasRelationList(
+            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
             throws Exception {
 
         // 템플릿 확인
-        templateService.findTemplateBySeq(templateSeq)
-                       .orElseThrow(() -> {
-                           String message = messageByLocale.get("tps.common.error.no-data");
-                           tpsLogger.fail(ActionType.SELECT, message, true);
-                           return new NoDataException(message);
-                       });
+        templateService
+                .findTemplateBySeq(templateSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
 
         try {
             Boolean chkRels = relationService.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
 
             String message = "";
-            if(chkRels)
+            if (chkRels) {
                 message = messageByLocale.get("tps.common.success.has-relations");
+            }
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels, message);
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);

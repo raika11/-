@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
 import java.lang.reflect.Type;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
@@ -30,6 +31,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("사용자 등록 DTO")
 public class MemberSaveDTO extends MemberDTO {
 
     public static final Type TYPE = new TypeReference<List<MemberSaveDTO>>() {

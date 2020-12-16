@@ -142,14 +142,14 @@ public class DirectLinkRestController {
 
 
         // 널이면 강제로 셋팅
-        if (directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == "") {
+        if (McpString.isEmpty(directLinkDTO.getImgUrl())) {
             directLinkDTO.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
         }
 
         // 데이터 유효성 검사
-        validData(directLinkThumbnailFile, ActionType.INSERT);
+        validData(directLinkThumbnailFile);
 
-        // DirectLinkDTO -> directlink 변환
+        // DirectLinkDTO -> direct link 변환
         DirectLink directLink = modelMapper.map(directLinkDTO, DirectLink.class);
         if (McpString.isNotEmpty(directLink.getLinkSeq())) { // 자동 발번이 아닌 경우 중복 체크
             if (directLinkService.isDuplicatedId(directLink.getLinkSeq())) {
@@ -202,11 +202,11 @@ public class DirectLinkRestController {
             @ApiParam("바로가기 일련번호") @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq,
             @Valid DirectLinkDTO directLinkDTO,
             @ApiParam("썸네일파일") @RequestParam(value = "directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile)
-            throws InvalidDataException, Exception {
+            throws Exception {
 
 
         // 널이면 강제로 셋팅
-        if (directLinkDTO.getImgUrl() == null || directLinkDTO.getImgUrl() == "") {
+        if (McpString.isEmpty(directLinkDTO.getImgUrl())) {
             directLinkDTO.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
         }
 
@@ -246,7 +246,7 @@ public class DirectLinkRestController {
             // 결과리턴
             DirectLinkDTO dto = modelMapper.map(returnValue, DirectLinkDTO.class);
             String message = messageByLocale.get("tps.direct-link.success.update");
-            ResultDTO<DirectLinkDTO> resultDto = new ResultDTO<DirectLinkDTO>(dto, message);
+            ResultDTO<DirectLinkDTO> resultDto = new ResultDTO<>(dto, message);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
@@ -263,16 +263,13 @@ public class DirectLinkRestController {
     /**
      * 사이트 내 속한 멤버 존재 여부
      *
-     * @param request HTTP요청
      * @param linkSeq 링크일련번호
      * @return 관련아이템 존재 여부
-     * @throws NoDataException 데이터없음 예외처리
      */
     @ApiOperation(value = "사이트 내 속한 멤버 존재 여부")
     @GetMapping("/{linkSeq}/has-members")
-    public ResponseEntity<?> hasMembers(HttpServletRequest request,
-            @ApiParam("바로가기 일련번호") @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
-            throws NoDataException {
+    public ResponseEntity<?> hasMembers(
+            @ApiParam("바로가기 일련번호") @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq) {
 
         boolean exists = directLinkService.hasMembers(linkSeq);
         String message = exists ? messageByLocale.get("tps.direct-link.success.select.exist-member") : "";
@@ -320,7 +317,7 @@ public class DirectLinkRestController {
 
             // 결과리턴
             String message = messageByLocale.get("tps.direct-link.success.delete");
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, message);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -334,23 +331,22 @@ public class DirectLinkRestController {
     /**
      * 바로가기관리 데이터 유효성 검사
      *
-     * @param file       바로가기관리 이미지
-     * @param actionType 작업구분(INSERT OR UPDATE)
+     * @param file 바로가기관리 이미지
      * @throws InvalidDataException 데이타유효성 오류
      * @throws Exception            예외
      */
-    private void validData(MultipartFile file, ActionType actionType)
+    private void validData(MultipartFile file)
             throws InvalidDataException, Exception {
-        List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+        List<InvalidDataDTO> invalidList = new ArrayList<>();
 
         // 문법검사
         // 등록한 파일이 이미지 파일인지 체크
         if (file != null && !file.isEmpty()) {
             boolean isImage = ImageUtil.isImage(file);
             if (!isImage) {
-                String message = messageByLocale.get("tps.direct-link.error.onlyimage.thumbnail");
+                String message = messageByLocale.get("tps.direct-link.error.only-image.thumbnail");
                 invalidList.add(new InvalidDataDTO("thumbnail", message));
-                tpsLogger.fail(actionType, message, true);
+                tpsLogger.fail(ActionType.INSERT, message, true);
             }
         }
 

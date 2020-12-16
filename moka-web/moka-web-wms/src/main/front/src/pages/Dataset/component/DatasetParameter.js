@@ -166,7 +166,7 @@ const DatasetParameter = (props) => {
 
                 renderer = (
                     <>
-                        <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'text-right', 'mr-3')} style={{ width: 80 }} key={`${name}_label`}>
+                        <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'mr-3')} style={{ width: 80 }} key={`${name}_label`}>
                             {required && <span className="required-text">*</span>}
                             {desc}
                         </Form.Label>
@@ -195,7 +195,7 @@ const DatasetParameter = (props) => {
                     <MokaInputLabel
                         label={desc}
                         labelWidth={80}
-                        className="flex-fill mb-0 mr-2"
+                        className="flex-fill mb-0"
                         value={value}
                         onChange={(event) => handleChangeValue(event, name, apiDefaultValue)}
                         required={required}

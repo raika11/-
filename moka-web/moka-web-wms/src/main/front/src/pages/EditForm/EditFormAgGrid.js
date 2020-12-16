@@ -67,10 +67,10 @@ const EditFormAgGrid = (props) => {
 
     return (
         <MokaTable
+            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={editFormRows}
             onRowNodeId={(rowData) => rowData.formSeq}
-            agGridHeight={620}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}

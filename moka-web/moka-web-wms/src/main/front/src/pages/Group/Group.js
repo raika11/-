@@ -45,6 +45,7 @@ const Group = () => {
                 titleClassName="h-100 mb-0 pb-0"
                 headerClassName="d-flex justify-content-between align-item-center"
                 className="mb-0 mr-10"
+                bodyClassName="d-flex flex-column"
                 height={CARD_DEFAULT_HEIGHT}
             >
                 <div className="mb-3 d-flex justify-content-end">
@@ -69,7 +70,7 @@ const Group = () => {
                                 height={CARD_DEFAULT_HEIGHT}
                                 tabs={[
                                     <Suspense>
-                                        <MokaCard className="flex-fill w-100" titleClassName="mb-0" height={CARD_DEFAULT_HEIGHT}>
+                                        <MokaCard className="flex-fill w-100" height={CARD_DEFAULT_HEIGHT}>
                                             <Row>
                                                 <Col xs={6}>
                                                     <GroupEdit />

@@ -4,11 +4,11 @@ import io.swagger.annotations.ApiOperation;
 import java.security.Principal;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.archive.dto.PhotoArchiveDTO;
@@ -106,18 +106,18 @@ public class PhotoArchiveController extends AbstractCommonController {
     /**
      * 포토 아카이브 출처 목록 조회
      *
-     * @param menuNo 메뉴 코드
+     * @param menuCode 메뉴 코드
      * @return 검색 결과
      */
     @ApiOperation(value = "포토 아카이브 출처 목록 조회")
     @GetMapping("/origins")
-    public ResponseEntity<?> getPhotoOriginList(@RequestParam(value = "menuNo", required = true)
-    @Pattern(regexp = "[0-9]{3}$", message = "{tps.domain.error.pattern.domainId}") String menuNo, @NotNull Principal principal) {
+    public ResponseEntity<?> getPhotoOriginList(@RequestParam(value = "menuCode", required = true)
+    @NotNull(message = "{tps.photo-archive.error.notnull.menuCode}") PhotoArchiveMenuCode menuCode, @NotNull Principal principal) {
 
         ResultListDTO<OriginCodeVO> resultListMessage = new ResultListDTO<>();
 
         // 조회
-        List<OriginCodeVO> returnValue = photoArchiveService.findAllPhotoOrigin(menuNo, principal.getName());
+        List<OriginCodeVO> returnValue = photoArchiveService.findAllPhotoOrigin(menuCode.getMenuNo(), principal.getName());
         resultListMessage.setTotalCnt(returnValue.size());
         resultListMessage.setList(returnValue);
 

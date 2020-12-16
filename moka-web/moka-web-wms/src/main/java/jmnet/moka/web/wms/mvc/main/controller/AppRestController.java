@@ -9,6 +9,7 @@ import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
+import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -100,6 +101,8 @@ public class AppRestController {
                 .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());
+
+        result.put("PHOTO_ARCHIVE_CODE", PhotoArchiveMenuCode.toList());
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 

@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.component.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -27,6 +29,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("간단 컴포넌트 DTO")
 public class ComponentSimpleDTO implements Serializable {
 
     private static final long serialVersionUID = -5912885230431022389L;
@@ -34,40 +37,28 @@ public class ComponentSimpleDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<ComponentSimpleDTO>>() {
     }.getType();
 
-    /**
-     * 컴포넌트SEQ
-     */
+    @ApiModelProperty("컴포넌트SEQ")
     private Long componentSeq;
 
-    /**
-     * 컴포넌트명
-     */
+    @ApiModelProperty("컴포넌트명")
     @NotNull(message = "{tps.component.error.notnull.componentName}")
     @Pattern(regexp = ".+", message = "{tps.component.error.pattern.componentName}")
     @Length(min = 1, max = 128, message = "{tps.component.error.length.componentName}")
     private String componentName;
 
-    /**
-     * 데이터유형:NONE, DESK, AUTO
-     */
+    @ApiModelProperty("데이터유형:NONE, DESK, AUTO, FORM")
     @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)|(FORM)]{4}$", message = "{tps.component.error.pattern.dataType}")
     @Builder.Default
     private String dataType = TpsConstants.DATATYPE_NONE;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    /**
-     * 템플릿
-     */
+    @ApiModelProperty("템플릿")
     @NotNull(message = "{tps.template.error.notnull.templateSeq}")
     private TemplateSimpleDTO template;
 
-    /**
-     * 에디트폼 파트
-     */
+    @ApiModelProperty("에디트폼 파트")
     private EditFormPartDTO editFormPart;
 }

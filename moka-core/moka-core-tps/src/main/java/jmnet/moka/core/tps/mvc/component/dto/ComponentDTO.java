@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.component.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -34,6 +36,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("컴포넌트 DTO")
 public class ComponentDTO implements Serializable {
 
     private static final long serialVersionUID = 7271351833690295727L;
@@ -41,166 +44,114 @@ public class ComponentDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<ComponentDTO>>() {
     }.getType();
 
-    /**
-     * 컴포넌트SEQ
-     */
+    @ApiModelProperty("컴포넌트SEQ")
     @Min(value = 0, message = "{tps.component.error.min.componentSeq}")
     private Long componentSeq;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    /**
-     * 템플릿
-     */
+    @ApiModelProperty("템플릿(필수)")
     @NotNull(message = "{tps.template.error.notnull.templateSeq}")
     private TemplateSimpleDTO template;
 
-    /**
-     * 데이타셋
-     */
+    @ApiModelProperty("데이타셋")
     private DatasetDTO dataset;
 
-    /**
-     * 에디트폼 파트
-     */
+    @ApiModelProperty("에디트폼 파트")
     private EditFormPartDTO editFormPart;
 
-    /**
-     * 컴포넌트명
-     */
+    @ApiModelProperty("컴포넌트명")
     @NotNull(message = "{tps.component.error.notnull.componentName}")
     @Pattern(regexp = ".+", message = "{tps.component.error.pattern.componentName}")
     @Length(min = 1, max = 128, message = "{tps.component.error.length.componentName}")
     private String componentName;
 
-    /**
-     * 상세정보
-     */
+    @ApiModelProperty("상세정보")
     @Length(max = 4000, message = "{tps.component.error.length.description}")
     private String description;
 
-    /**
-     * 기간여부
-     */
+    @ApiModelProperty("기간여부")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.component.error.pattern.periodYn}")
     @Builder.Default
     private String periodYn = MokaConstants.NO;
 
-    /**
-     * 기간시작일
-     */
+    @ApiModelProperty("기간시작일")
     @DTODateTimeFormat
     private Date periodStartDt;
 
-    /**
-     * 기간종료일
-     */
+    @ApiModelProperty("기간종료일")
     @DTODateTimeFormat
     private Date periodEndDt;
 
-    /**
-     * 데이터유형:NONE, DESK, AUTO, FORM
-     */
+    @ApiModelProperty("데이터유형:NONE, DESK, AUTO, FORM")
     @Pattern(regexp = "[(NONE)|(DESK)|(AUTO)|(FORM)]{4}$", message = "{tps.component.error.pattern.dataType}")
     @Builder.Default
     private String dataType = TpsConstants.DATATYPE_NONE;
 
-    /**
-     * 삭제단어-단어구분은 개행
-     */
+    @ApiModelProperty("삭제단어-단어구분은 개행")
     @Length(max = 256, message = "{tps.component.error.length.delWords}")
     private String delWords;
 
-    /**
-     * 영역
-     */
+    @ApiModelProperty("영역")
     @Length(max = 100, message = "{tps.component.error.length.zone}")
     private String zone;
 
-    /**
-     * 매칭영역
-     */
+    @ApiModelProperty("매칭영역")
     @Length(max = 50, message = "{tps.component.error.length.matchZone}")
     private String matchZone;
 
-    /**
-     * 노출여부
-     */
+    @ApiModelProperty("노출여부")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.component.error.pattern.viewYn}")
     @Builder.Default
     private String viewYn = MokaConstants.YES;
 
-    /**
-     * 페이징여부
-     */
+    @ApiModelProperty("페이징여부")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.component.error.pattern.pagingYn}")
     @Builder.Default
     private String pagingYn = MokaConstants.NO;
 
-    /**
-     * 페이징유형:N:이전/다음, M:더보기
-     */
+    @ApiModelProperty("페이징유형:N:이전/다음, M:더보기")
     @Pattern(regexp = "[N|M]{1}$", message = "{tps.component.error.pattern.pagingType}")
     private String pagingType;
 
-    /**
-     * 페이지당 건수
-     */
+    @ApiModelProperty("페이지당 건수")
     @NotNull(message = "{tps.component.error.notnull.perPageCount}")
     @Builder.Default
     private Integer perPageCount = TpsConstants.PER_PAGE_COUNT;
 
-    /**
-     * 최대 페이지수
-     */
+    @ApiModelProperty("최대 페이지수")
     @NotNull(message = "{tps.component.error.notnull.maxPageCount}")
     @Builder.Default
     private Integer maxPageCount = TpsConstants.MAX_PAGE_COUNT;
 
-    /**
-     * 표출 페이지수
-     */
+    @ApiModelProperty("표출 페이지수")
     @NotNull(message = "{tps.component.error.notnull.dispPageCount}")
     @Builder.Default
     private Integer dispPageCount = TpsConstants.DISP_PAGE_COUNT;
 
-    /**
-     * 더보기 건수
-     */
+    @ApiModelProperty("더보기 건수")
     @NotNull(message = "{tps.component.error.notnull.moreCount}")
     @Builder.Default
     private Integer moreCount = TpsConstants.MORE_COUNT;
 
-    /**
-     * 검색코드ID
-     */
+    @ApiModelProperty("검색코드ID")
     @Length(max = 24, message = "{tps.component.error.length.schCodeId}")
     private String schCodeId;
 
-    /**
-     * 스냅샷여부
-     */
+    @ApiModelProperty("스냅샷여부")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.component.error.pattern.snapshotYn}")
     @Builder.Default
     private String snapshotYn = MokaConstants.NO;
 
-    /**
-     * 스냅샷본문
-     */
+    @ApiModelProperty("스냅샷 tems소스")
     private String snapshotBody;
 
-    /**
-     * 이전 자동데이타셋 : 디비에 없는 필드
-     */
+    @ApiModelProperty("이전 자동데이타셋 : 디비에 없는 필드")
     private DatasetDTO prevAutoDataset;
 
-    /**
-     * 이전 수동데이타셋 : 디비에 없는 필드
-     */
+    @ApiModelProperty("이전 수동데이타셋 : 디비에 없는 필드")
     private DatasetDTO prevDeskDataset;
 
     public ComponentItem toComponentItem() {

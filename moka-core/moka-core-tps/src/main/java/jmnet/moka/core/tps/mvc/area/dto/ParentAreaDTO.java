@@ -7,6 +7,8 @@ package jmnet.moka.core.tps.mvc.area.dto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -29,6 +31,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Builder
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "areaSeq")
+@ApiModel("부모 편집영역 DTO")
 public class ParentAreaDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,15 +39,11 @@ public class ParentAreaDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<ParentAreaDTO>>() {
     }.getType();
 
-    /**
-     * 영역일련번호
-     */
+    @ApiModelProperty("영역SEQ")
     @Min(value = 0, message = "{tps.area.error.min.areaSeq}")
     private Long areaSeq;
 
-    /**
-     * 영역명
-     */
+    @ApiModelProperty("영역명")
     @NotNull(message = "{tps.area.error.notnull.areaName}")
     @Pattern(regexp = ".+", message = "{tps.area.error.pattern.areaName}")
     @Length(min = 1, max = 128, message = "{tps.area.error.length.areaName}")

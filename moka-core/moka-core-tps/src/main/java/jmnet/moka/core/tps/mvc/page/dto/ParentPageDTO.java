@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -28,6 +30,7 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@ApiModel("부모 페이지 DTO")
 public class ParentPageDTO implements Serializable {
 
     private static final long serialVersionUID = 4232007330201723143L;
@@ -35,23 +38,17 @@ public class ParentPageDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<ParentPageDTO>>() {
     }.getType();
 
-    /**
-     * 페이지SEQ
-     */
+    @ApiModelProperty("페이지SEQ")
     @Min(value = 0, message = "{tps.page.error.min.pageSeq}")
     private Long pageSeq;
 
-    /**
-     * 페이지명
-     */
+    @ApiModelProperty("페이지명")
     @NotNull(message = "{tps.page.error.notnull.pageName}")
     @Pattern(regexp = ".+", message = "{tps.page.error.pattern.pageName}")
     @Length(min = 1, max = 256, message = "{tps.page.error.length.pageName}")
     private String pageName;
 
-    /**
-     * 페이지URL
-     */
+    @ApiModelProperty("페이지URL")
     @NotNull(message = "{tps.page.error.notnull.pageUrl}")
     @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.pageUrl}")
     @Length(min = 1, max = 512, message = "{tps.page.error.length.pageUrl}")

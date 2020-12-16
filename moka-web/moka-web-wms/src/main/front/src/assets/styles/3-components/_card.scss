@@ -5,6 +5,7 @@
 
 .card-header {
   border-bottom-width: 1px;
+  padding: $card-spacer-y $card-spacer-x;
   
   button {
     width: 24px;
@@ -14,6 +15,14 @@
       font-size: 20px;
     }
   }
+}
+
+.card-body {
+  padding: $card-spacer-y $card-spacer-x;
+}
+
+.card-footer {
+  padding: $card-spacer-y $card-spacer-x;
 }
 
 .card-actions {
@@ -36,6 +45,7 @@
   font-size: $font-size-lg;
   font-weight: $card-title-font-weight;
   color: $card-title-color;
+  margin-bottom: 0px;
 }
 
 .card-subtitle {

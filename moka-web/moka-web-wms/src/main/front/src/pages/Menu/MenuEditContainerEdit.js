@@ -309,7 +309,7 @@ const MenuEditContainerEdit = (props) => {
                 {menuSeq ? (
                     <Form.Row className="mb-2">
                         <Col xs={12} className="p-0">
-                            <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
+                            <Form.Label className="px-0 mb-0 position-relative mr-3 form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
                                 메뉴ID
                             </Form.Label>
                             <Form.Label className="form-label">{menuId}</Form.Label>
@@ -396,7 +396,7 @@ const MenuEditContainerEdit = (props) => {
                     <>
                         <Form.Row className="mb-2">
                             <Col xs={12} className="p-0">
-                                <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
+                                <Form.Label className="px-0 mb-0 position-relative mr-3  form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
                                     등록자
                                 </Form.Label>
                                 <Form.Label className="form-label">{regId}</Form.Label>
@@ -404,7 +404,7 @@ const MenuEditContainerEdit = (props) => {
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={12} className="p-0">
-                                <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
+                                <Form.Label className="px-0 mb-0 position-relative mr-3  form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
                                     등록일시
                                 </Form.Label>
                                 <Form.Label className="form-label">{regDt}</Form.Label>
@@ -412,7 +412,7 @@ const MenuEditContainerEdit = (props) => {
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={12} className="p-0">
-                                <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
+                                <Form.Label className="px-0 mb-0 position-relative mr-3  form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
                                     수정자
                                 </Form.Label>
                                 <Form.Label className="form-label">{modId}</Form.Label>
@@ -420,7 +420,7 @@ const MenuEditContainerEdit = (props) => {
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={12} className="p-0">
-                                <Form.Label className="px-0 mb-0 position-relative mr-3 text-right form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
+                                <Form.Label className="px-0 mb-0 position-relative mr-3  form-label" style={{ width: labelWidth, minWidth: labelWidth }}>
                                     수정일시
                                 </Form.Label>
                                 <Form.Label className="form-label">{modDt}</Form.Label>

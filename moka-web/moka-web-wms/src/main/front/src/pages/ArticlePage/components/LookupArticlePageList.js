@@ -48,13 +48,12 @@ const defaultProps = {
 const LookupArticlePageList = (props) => {
     const { seq, seqType, show, onLoad } = props;
     const dispatch = useDispatch();
-    const { list, search: storeSearch, total, loading, latestDomainId, searchTypeList } = useSelector((store) => ({
+    const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
         list: store.articlePage.lookup.list,
         search: store.articlePage.lookup.search,
         total: store.articlePage.lookup.total,
         loading: store.loading[GET_ARTICLE_PAGE_LOOKUP_LIST],
         latestDomainId: store.auth.latestDomainId,
-        searchTypeList: store.articlePage.searchTypeList,
     }));
 
     useEffect(() => {
@@ -225,65 +224,63 @@ const LookupArticlePageList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <>
-            <MokaCard titleClassName="mb-0" title="관련 기사페이지">
-                <Form className="mb-2">
-                    {/* 검색조건, 키워드 */}
-                    <Form.Row>
-                        <Col xs={5} className="p-0 pr-2">
-                            <MokaInputLabel
-                                label="구분"
-                                labelWidth={28}
-                                className="mb-0"
-                                as="select"
-                                value={search.searchType}
-                                onChange={(e) => {
-                                    setSearch({
-                                        ...search,
-                                        searchType: e.target.value,
-                                    });
-                                }}
-                            >
-                                {searchTypeList.map((type) => (
-                                    <option key={type.id} value={type.id}>
-                                        {type.name}
-                                    </option>
-                                ))}
-                            </MokaInputLabel>
-                        </Col>
-                        <Col xs={7} className="p-0">
-                            <MokaSearchInput
-                                value={search.keyword}
-                                onChange={(e) => {
-                                    setSearch({
-                                        ...search,
-                                        keyword: e.target.value,
-                                    });
-                                }}
-                                onSearch={handleSearch}
-                            />
-                        </Col>
-                    </Form.Row>
-                </Form>
+        <MokaCard titleClassName="mb-0" title="관련 기사페이지" bodyClassName="d-flex flex-column">
+            <Form className="mb-2">
+                {/* 검색조건, 키워드 */}
+                <Form.Row>
+                    <Col xs={5} className="p-0 pr-2">
+                        <MokaInputLabel
+                            label="구분"
+                            labelWidth={28}
+                            className="mb-0"
+                            as="select"
+                            value={search.searchType}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    searchType: e.target.value,
+                                });
+                            }}
+                        >
+                            {initialState.searchTypeList.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
+                                </option>
+                            ))}
+                        </MokaInputLabel>
+                    </Col>
+                    <Col xs={7} className="p-0">
+                        <MokaSearchInput
+                            value={search.keyword}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    keyword: e.target.value,
+                                });
+                            }}
+                            onSearch={handleSearch}
+                        />
+                    </Col>
+                </Form.Row>
+            </Form>
 
-                {/* ag-grid table */}
-                <MokaTable
-                    agGridHeight={649}
-                    columnDefs={columnDefs}
-                    rowData={rowData}
-                    onRowNodeId={(data) => data.artPageSeq}
-                    onRowClicked={handleRowClicked}
-                    loading={loading}
-                    total={total}
-                    page={search.page}
-                    size={search.size}
-                    displayPageNum={3}
-                    onChangeSearchOption={handleChangeSearchOption}
-                    preventRowClickCell={['load', 'preview']}
-                    selected={selected.artPageSeq}
-                />
-            </MokaCard>
-        </>
+            {/* ag-grid table */}
+            <MokaTable
+                className="overflow-hidden flex-fill"
+                columnDefs={columnDefs}
+                rowData={rowData}
+                onRowNodeId={(data) => data.artPageSeq}
+                onRowClicked={handleRowClicked}
+                loading={loading}
+                total={total}
+                page={search.page}
+                size={search.size}
+                displayPageNum={3}
+                onChangeSearchOption={handleChangeSearchOption}
+                preventRowClickCell={['load', 'preview']}
+                selected={selected.artPageSeq}
+            />
+        </MokaCard>
     );
 };
 

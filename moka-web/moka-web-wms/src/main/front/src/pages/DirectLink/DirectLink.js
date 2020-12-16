@@ -29,7 +29,7 @@ const DirectLink = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={840} className="mr-gutter flex-fill" titleClassName="mb-0" header={false}>
+            <MokaCard width={840} className="mr-gutter flex-fill" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
                 <Suspense>
                     <DirectLinkList />
                 </Suspense>

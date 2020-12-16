@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { MokaPagination, MokaLoader } from '@components';
 import TemplateThumbCard from './TemplateThumbCard';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
@@ -72,6 +73,7 @@ export const propTypes = {
      * 로딩 여부
      */
     loading: PropTypes.bool,
+    className: PropTypes.string,
 };
 
 const defaultProps = {
@@ -94,7 +96,7 @@ const defaultProps = {
  */
 const TemplateThumbTable = (props) => {
     // table props
-    const { loading, tableHeight } = props;
+    const { loading, tableHeight, className } = props;
 
     // card props
     const { cardWidth, cardHeight, onClick, menus, rowData, selected } = props;
@@ -104,9 +106,9 @@ const TemplateThumbTable = (props) => {
 
     return (
         <>
-            <div className="mb-3 border" style={{ height: tableHeight }}>
+            <div className={clsx('mb-3 border', className)} style={{ height: tableHeight }}>
                 {loading && <MokaLoader />}
-                <div className="d-flex flex-wrap align-content-start custom-scroll p-05 h-100">
+                <div className="d-flex flex-wrap align-content-start custom-scroll overflow-y-scroll p-05 h-100">
                     {rowData.map((data) => (
                         <TemplateThumbCard
                             key={data.id}

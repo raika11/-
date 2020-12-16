@@ -10,7 +10,6 @@ import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { getComponentLookupList, changeLookupSearchOption, initialState, clearLookup, GET_COMPONENT_LOOKUP_LIST } from '@store/component';
 import { getTpZone } from '@store/codeMgt';
 import columnDefs from './LookupComponentListColumns';
-import { defaultComponentSearchType } from '@pages/commons';
 import { TemplateHtmlModal } from '@pages/Template/modals';
 
 const propTypes = {
@@ -146,92 +145,91 @@ const LookupComponentList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <>
-            <MokaCard titleClassName="mb-0" title="관련 컴포넌트">
-                <Form className="mb-2">
-                    {/* 위치그룹 */}
-                    <MokaInput
-                        as="select"
-                        className="mb-2"
-                        value={search.templateGroup}
-                        onChange={(e) => {
-                            setSearch({
-                                ...search,
-                                templateGroup: e.target.value,
-                            });
-                        }}
-                    >
-                        <option value="all">위치그룹 전체</option>
-                        {tpZoneRows &&
-                            tpZoneRows.map((cd) => (
-                                <option key={cd.dtlCd} value={cd.dtlCd}>
-                                    {cd.cdNm}
+        <MokaCard titleClassName="mb-0" title="관련 컴포넌트" bodyClassName="d-flex flex-column">
+            <Form className="mb-2">
+                {/* 위치그룹 */}
+                <MokaInput
+                    as="select"
+                    className="mb-2"
+                    value={search.templateGroup}
+                    onChange={(e) => {
+                        setSearch({
+                            ...search,
+                            templateGroup: e.target.value,
+                        });
+                    }}
+                >
+                    <option value="all">위치그룹 전체</option>
+                    {tpZoneRows &&
+                        tpZoneRows.map((cd) => (
+                            <option key={cd.dtlCd} value={cd.dtlCd}>
+                                {cd.cdNm}
+                            </option>
+                        ))}
+                </MokaInput>
+                {/* 검색조건, 키워드 */}
+                <Form.Row>
+                    <Col xs={4} className="p-0 pr-2">
+                        <MokaInput
+                            className="mb-0"
+                            as="select"
+                            value={search.searchType}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    searchType: e.target.value,
+                                });
+                            }}
+                        >
+                            {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
+                            {seqType === ITEM_AP && <option value="artPageSeq">기사페이지ID</option>}
+                            {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
+                            {initialState.searchTypeList.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
                                 </option>
                             ))}
-                    </MokaInput>
-                    {/* 검색조건, 키워드 */}
-                    <Form.Row>
-                        <Col xs={4} className="p-0 pr-2">
-                            <MokaInput
-                                className="mb-0"
-                                as="select"
-                                value={search.searchType}
-                                onChange={(e) => {
-                                    setSearch({
-                                        ...search,
-                                        searchType: e.target.value,
-                                    });
-                                }}
-                            >
-                                {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                                {seqType === ITEM_AP && <option value="artPageSeq">기사페이지ID</option>}
-                                {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
-                                {defaultComponentSearchType.map((type) => (
-                                    <option key={type.id} value={type.id}>
-                                        {type.name}
-                                    </option>
-                                ))}
-                            </MokaInput>
-                        </Col>
-                        <Col xs={8} className="p-0">
-                            <MokaSearchInput
-                                value={search.keyword}
-                                onChange={(e) => {
-                                    setSearch({
-                                        ...search,
-                                        keyword: e.target.value,
-                                    });
-                                }}
-                                onSearch={handleSearch}
-                            />
-                        </Col>
-                    </Form.Row>
-                </Form>
+                        </MokaInput>
+                    </Col>
+                    <Col xs={8} className="p-0">
+                        <MokaSearchInput
+                            value={search.keyword}
+                            onChange={(e) => {
+                                setSearch({
+                                    ...search,
+                                    keyword: e.target.value,
+                                });
+                            }}
+                            onSearch={handleSearch}
+                        />
+                    </Col>
+                </Form.Row>
+            </Form>
 
-                {/* 버튼 그룹 */}
-                <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="positive" onClick={() => window.open('/component')}>
-                        컴포넌트 등록
-                    </Button>
-                </div>
+            {/* 버튼 그룹 */}
+            <div className="d-flex mb-10 justify-content-end">
+                <Button variant="positive" onClick={() => window.open('/component')}>
+                    컴포넌트 등록
+                </Button>
+            </div>
 
-                {/* ag-grid table */}
-                <MokaTable
-                    agGridHeight={569}
-                    columnDefs={columnDefs}
-                    rowData={rowData}
-                    onRowNodeId={(data) => data.componentSeq}
-                    onRowClicked={handleRowClicked}
-                    loading={loading}
-                    total={total}
-                    page={search.page}
-                    size={search.size}
-                    displayPageNum={3}
-                    onChangeSearchOption={handlechangeLookupSearchOption}
-                    preventRowClickCell={['append', 'link']}
-                    selected={selected.componentSeq}
-                />
-            </MokaCard>
+            {/* ag-grid table */}
+            <MokaTable
+                className="overflow-hidden flex-fill"
+                columnDefs={columnDefs}
+                rowData={rowData}
+                onRowNodeId={(data) => data.componentSeq}
+                onRowClicked={handleRowClicked}
+                loading={loading}
+                total={total}
+                page={search.page}
+                size={search.size}
+                displayPageNum={3}
+                onChangeSearchOption={handlechangeLookupSearchOption}
+                preventRowClickCell={['append', 'link']}
+                selected={selected.componentSeq}
+            />
+
             <TemplateHtmlModal
                 templateSeq={selected.templateSeq}
                 show={showModal}
@@ -240,7 +238,7 @@ const LookupComponentList = (props) => {
                     setSelected({});
                 }}
             />
-        </>
+        </MokaCard>
     );
 };
 

@@ -62,8 +62,8 @@ const DatasetAgGrid = (props) => {
 
     return (
         <MokaTable
+            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            agGridHeight={569}
             size={storeSearch.size}
             page={storeSearch.page}
             total={total}

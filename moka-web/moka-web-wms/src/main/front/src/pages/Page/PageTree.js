@@ -134,7 +134,7 @@ const PageTree = ({ onDelete }) => {
 
     return (
         <MokaTreeView
-            height={660}
+            className="h-100"
             data={tree}
             loading={loading}
             expanded={expanded}

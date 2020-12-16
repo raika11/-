@@ -163,6 +163,11 @@ body {
             padding-right: 0px;
             justify-content: center !important;
         }
+
+        .card-body, .card-footer {
+            display: none;
+            opacity: 0;
+        }
     }
 
     .card-title.disabled {
@@ -267,14 +272,14 @@ body {
     display: block;
     width: 100%;
     overflow: hidden;
-    background-color: $gray-160;
+    background-color: $gray-300;
 }
 
 .vertical-divider {
     width: 1px;
     height: 100%;
     border: none;
-    border-left: 1px solid $gray-160;
+    border-left: 1px solid $gray-300;
     margin-top: 0px;
     margin-bottom: 0px;
     margin-left: $spacer;

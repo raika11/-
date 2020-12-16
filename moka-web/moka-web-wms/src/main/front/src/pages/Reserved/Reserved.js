@@ -26,7 +26,7 @@ const Reserved = ({ match }) => {
             </Helmet>
 
             {/* 예약어 목록 */}
-            <MokaCard width={412} className="mr-gutter" titleClassName="mb-0" title="예약어 검색">
+            <MokaCard width={412} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" title="예약어 검색">
                 <Suspense>
                     <ReservedList />
                 </Suspense>

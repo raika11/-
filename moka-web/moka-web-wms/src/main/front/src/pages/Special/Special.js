@@ -18,7 +18,7 @@ const Special = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={840} className="mr-gutter" titleClassName="mb-0" header={false}>
+            <MokaCard width={840} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
                 <Suspense>
                     <SpecialList />
                 </Suspense>

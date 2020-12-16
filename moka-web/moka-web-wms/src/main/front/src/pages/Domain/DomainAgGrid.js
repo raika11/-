@@ -68,10 +68,10 @@ const DomainAgGrid = (props) => {
 
     return (
         <MokaTable
+            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={domainRows}
             onRowNodeId={(rowData) => rowData.domainId}
-            agGridHeight={648}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}

@@ -58,7 +58,7 @@ const SpecialAgGrid = () => {
 
     return (
         <MokaTable
-            agGridHeight={685}
+            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(data) => data.seqNo}

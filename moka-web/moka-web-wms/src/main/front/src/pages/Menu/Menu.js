@@ -160,7 +160,7 @@ const Menu = () => {
             <MokaCard
                 className="mr-gutter"
                 headerClassName="pb-0 d-flex justify-content-between align-items-center"
-                bodyClassName="pt-0"
+                bodyClassName="pt-0 d-flex flex-column"
                 title="대메뉴"
                 width={LIST_WIDTH}
                 height={CARD_DEFAULT_HEIGHT}
@@ -190,7 +190,7 @@ const Menu = () => {
             <MokaCard
                 className="mr-gutter"
                 headerClassName="pb-0 d-flex justify-content-between align-items-center"
-                bodyClassName="pt-0"
+                bodyClassName="pt-0 d-flex flex-column"
                 title="중메뉴"
                 width={LIST_WIDTH}
                 height={CARD_DEFAULT_HEIGHT}
@@ -220,7 +220,7 @@ const Menu = () => {
             <MokaCard
                 className="mr-gutter"
                 headerClassName="pb-0 d-flex justify-content-between align-items-center"
-                bodyClassName="pt-0"
+                bodyClassName="pt-0 d-flex flex-column"
                 title="소메뉴"
                 width={LIST_WIDTH}
                 height={CARD_DEFAULT_HEIGHT}

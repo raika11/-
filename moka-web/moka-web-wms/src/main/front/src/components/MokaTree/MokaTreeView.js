@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import clsx from 'clsx';
 import MokaTreeCategory from './MokaTreeCategory';
 import MokaTreeItem from './MokaTreeItem';
 import { MokaLoader } from '@components';
@@ -52,6 +52,7 @@ const propTypes = {
      * 로딩중 여부
      */
     loading: PropTypes.bool,
+    className: PropTypes.string,
 };
 const defaultProps = {
     expanded: [],
@@ -63,7 +64,7 @@ const defaultProps = {
  * 트리뷰 컴포넌트
  */
 const MokaTreeView = (props) => {
-    const { data, height, loading } = props;
+    const { data, height, loading, className } = props;
 
     /**
      * 트리아이템 생성 함수
@@ -82,7 +83,7 @@ const MokaTreeView = (props) => {
     };
 
     return (
-        <div className="border custom-scroll treeview" style={{ height }}>
+        <div className={clsx('border custom-scroll treeview', className)} style={{ height }}>
             <ul className="list-unstyled tree-list">
                 {loading && <MokaLoader />}
                 {!loading && data && (

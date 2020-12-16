@@ -14,7 +14,7 @@ export const columnDefs = [
         field: 'datasetName',
         // cellClass: 'ag-cell-center',
         cellStyle: { fontSize: '12px' },
-        width: 214,
+        width: 204,
         flex: 1,
     },
     {

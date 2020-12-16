@@ -5,7 +5,7 @@ export default [
     {
         headerName: '기타코드',
         field: 'cdNm',
-        width: 176,
+        width: 168,
         flex: 1,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'cdNm',

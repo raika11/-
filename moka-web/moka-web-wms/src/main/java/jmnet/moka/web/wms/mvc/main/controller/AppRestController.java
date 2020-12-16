@@ -1,6 +1,7 @@
 package jmnet.moka.web.wms.mvc.main.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/app")
+@Api(tags = {"앱 기본 설정 조회 API"})
 public class AppRestController {
 
     @Value("${tps.upload.path.url}")

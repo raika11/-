@@ -1,5 +1,6 @@
 package jmnet.moka.web.wms.mvc.member.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.Principal;
@@ -63,6 +64,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/members")
+@Api(tags = {"사용자 API"})
 public class MemberRestController extends AbstractCommonController {
 
     private final MenuService menuService;

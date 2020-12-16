@@ -1,5 +1,6 @@
 package jmnet.moka.web.wms.mvc.menu.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.Comparator;
 import java.util.List;
@@ -62,6 +63,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/menus")
+@Api(tags = {"메뉴 API"})
 public class MenuRestController {
 
     private final MenuService menuService;

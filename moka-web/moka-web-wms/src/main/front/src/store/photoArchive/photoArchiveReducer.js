@@ -16,7 +16,7 @@ export const initialState = {
         startdate: null,
         finishdate: null,
         // dataType: null,
-        // imageType: '',
+        // imageType: null,
         searchKey: '',
         searchValue: '',
     },
@@ -89,7 +89,10 @@ export default handleActions(
          */
         [act.GET_PHOTO_TYPES_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.imageTypeList = body.list;
+                const sortArr = body.list;
+                sortArr.sort((a, b) => Number(a.cd) - Number(b.cd));
+
+                draft.imageTypeList = sortArr;
             });
         },
         [act.GET_PHOTO_TYPES_FAILURE]: (state, { payload }) => {

@@ -1,6 +1,6 @@
-import React, { useState, forwardRef, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, forwardRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import produce, { castDraft } from 'immer';
+import produce from 'immer';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -13,7 +13,7 @@ import { getPhotoTypes } from '@store/photoArchive';
  */
 const CustomMenu = forwardRef(({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
     return (
-        <div ref={ref} style={style} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
+        <div ref={ref} style={{ ...style, width: 140, minWidth: 140 }} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
             {children}
         </div>
     );
@@ -60,40 +60,33 @@ export const propTypes = {
      */
     isInvalid: PropTypes.bool,
     /**
-     * width
+     * 이미지 타입 리스트 (필수)
      */
-    width: PropTypes.number,
-    /**
-     * list (필수)
-     */
-    value: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null])]),
+    imageValue: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null])]),
     /**
      * checked 변경 시 실행되는 함수 (필수)
      */
     onChange: PropTypes.func.isRequired,
 };
 
-const defaultProps = {
-    width: 120,
-};
+const defaultProps = {};
 
 const EditThumbSelectDropdown = (props) => {
-    const { className, isInvalid, width, value, onChange } = props;
+    const { className, isInvalid, imageValue, onChange } = props;
     const dispatch = useDispatch();
-    const [dataSelectedList, setDataSelectedList] = useState([]);
+    // const [dataSelectedList, setDataSelectedList] = useState([]);
     const [imageSelectedList, setImageSelectedList] = useState([]);
-    const [toggleText, setToggleText] = useState('전체');
-    const [dataObj, setDataObj] = useState({});
     const [imageObj, setImageObj] = useState({});
+    const [toggleText, setToggleText] = useState('전체');
 
-    const dataTypeList = useSelector((store) => store.photoArchive.dataTypeList);
+    // const dataTypeList = useSelector((store) => store.photoArchive.dataTypeList);
     const imageTypeList = useSelector((store) => store.photoArchive.imageTypeList);
 
     /**
      * id로 리스트의 index 조회
      */
-    const dataTypeIndex = useCallback((id) => dataTypeList.findIndex((type) => type.cd === id), [dataTypeList]);
-    const imageTypeIndex = useCallback((id) => imageTypeList.findIndex((type) => type.cd === id), [imageTypeList]);
+    // const dataTypeIndex = useCallback((id) => dataTypeList.findIndex((type) => type.name === id), [dataTypeList]);
+    const imageTypeIndex = useCallback((id) => imageTypeList.findIndex((type) => type.name === id), [imageTypeList]);
 
     /**
      * change 이벤트
@@ -102,31 +95,31 @@ const EditThumbSelectDropdown = (props) => {
     const handleChangeValue = (e) => {
         const { name, checked, id } = e.target;
         let resultList = [];
+        // if (name === 'dataTypeList') {
+        //     const targetIdx = dataTypeIndex(id);
+        //     if (checked) {
+        //         resultList = [...dataSelectedList, dataObj[targetIdx]].sort((a, b) => {
+        //             return a.index - b.index;
+        //         });
+        //     } else {
+        //         const isSelected = dataSelectedList.findIndex((type) => type.cd === id);
+        //         if (isSelected > -1) {
+        //             resultList = produce(dataSelectedList, (draft) => {
+        //                 draft.splice(isSelected, 1);
+        //             });
+        //         }
+        //     }
+        // }
 
-        if (name === 'dataTypeList') {
-            const targetIdx = dataTypeIndex(id);
-
-            if (checked) {
-                resultList = [...dataSelectedList, dataObj[targetIdx]].sort((a, b) => {
-                    return a.index - b.index;
-                });
-            } else {
-                const isSelected = dataSelectedList.findIndex((type) => type.cd === id);
-                if (isSelected > -1) {
-                    resultList = produce(dataSelectedList, (draft) => {
-                        draft.splice(isSelected, 1);
-                    });
-                }
-            }
-        } else if (name === 'imageTypeList') {
+        if (name === 'imageTypeList') {
             const targetIdx = imageTypeIndex(id);
 
             if (checked) {
-                resultList = [...imageSelectedList, dataObj[targetIdx]].sort((a, b) => {
+                resultList = [...imageSelectedList, imageObj[targetIdx]].sort((a, b) => {
                     return a.index - b.index;
                 });
             } else {
-                const isSelected = imageSelectedList.findIndex((type) => type.cd === id);
+                const isSelected = imageSelectedList.findIndex((type) => type.name === id);
                 if (isSelected > -1) {
                     resultList = produce(imageSelectedList, (draft) => {
                         draft.splice(isSelected, 1);
@@ -134,93 +127,92 @@ const EditThumbSelectDropdown = (props) => {
                 }
             }
         }
-
         if (typeof onChange === 'function') {
-            onChange(resultList.map((r) => r.cd).join(','));
+            onChange(resultList.map((r) => r.name).join(','));
         }
     };
+
+    useEffect(() => {
+        // 이미지 타입 조회
+        dispatch(getPhotoTypes());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        // 이미지 타입 배열 객체로 변환
+        if (imageTypeList) {
+            setImageObj(Object.assign({}, imageTypeList));
+        }
+    }, [imageTypeList]);
 
     /**
      * 렌더링 시 checked true인지 false인지 판단
      * @param {string} cd 이미지 타입 코드
      */
     const chkTrue = (cd) => {
-        if (!value || value === '') return false;
-        else return value.indexOf(cd) > -1;
+        if (!imageValue || imageValue === '') return false;
+        else return imageValue.split(',').indexOf(cd) > -1;
     };
 
-    // useEffect(() => {
-    //     if (imageTypeList) {
-    //         imageTypeList.slice().sort((a, b) = b.stats.speed-a.stats.speed);
-    //     }
-    // }, [imageTypeList]);
+    useEffect(() => {
+        // if (dataSelectedList.length > 0) {
+        //     const targetIdx = dataTypeIndex(dataSelectedList[0].cd);
+        //     const target = dataObj[targetIdx];
 
-    // useEffect(() => {
-    //     if (!imageTypeList) {
-    //         dispatch(getPhotoTypes());
-    //     } else {
-    //         setDataObj(imageTypeList.reduce((all, type, index) => ({ ...all, [index]: { ...type, index } }), {}));
-    //     }
-    // }, [dispatch, imageTypeList]);
+        //     if (dataSelectedList.length === Object.keys(dataObj).length) {
+        //         setToggleText('전체');
+        //     } else if (dataSelectedList.length === 1) {
+        //         setToggleText(target.label);
+        //     } else {
+        //         setToggleText(`${target.label} 외 ${dataSelectedList.length - 1}개`);
+        //     }
+        // }
 
-    // useEffect(() => {
-    //     if (dataSelectedList.length > 0) {
-    //         const targetIdx = dataTypeIndex(dataSelectedList[0].cd);
-    //         const target = dataObj[targetIdx];
+        if (imageSelectedList.length > 0) {
+            const targetIdx = imageTypeIndex(imageSelectedList[0].name);
+            const target = imageObj[targetIdx];
 
-    //         if (dataSelectedList.length === Object.keys(dataObj).length) {
-    //             setToggleText('전체');
-    //         } else if (dataSelectedList.length === 1) {
-    //             setToggleText(target.label);
-    //         } else {
-    //             setToggleText(`${target.label} 외 ${dataSelectedList.length - 1}개`);
-    //         }
-    //     } else if (imageSelectedList.length > 0) {
-    //         const targetIdx = dataTypeIndex(imageSelectedList[0].cd);
-    //         const target = dataObj[targetIdx];
+            if (imageSelectedList.length === Object.keys(imageObj).length) {
+                setToggleText('전체');
+            } else if (imageSelectedList.length === 1) {
+                setToggleText(target.label);
+            } else {
+                setToggleText(`${target.label} 외 ${imageSelectedList.length - 1}개`);
+            }
+        } else {
+            setToggleText('');
+        }
+    }, [imageObj, imageSelectedList, imageTypeIndex]);
 
-    //         if (dataSelectedList.length === Object.keys(dataObj).length) {
-    //             setToggleText('전체');
-    //         } else if (dataSelectedList.length === 1) {
-    //             setToggleText(target.label);
-    //         } else {
-    //             setToggleText(`${target.label} 외 ${dataSelectedList.length - 1}개`);
-    //         }
-    //     }
-    //     else {
-    //         setToggleText('');
-    //     }
-    // }, [dataObj, dataSelectedList, dataTypeIndex]);
-
-    // useEffect(() => {
-    //     if (Object.keys(dataObj).length < 1) return;
-    //     if (value) {
-    //         const valueArr = value.split(',');
-    //         setSelectedList(
-    //             valueArr.map((v) => {
-    //                 const targetIndex = findTypeIndex(v);
-    //                 return dataObj[targetIndex];
-    //             }),
-    //         );
-    //     } else {
-    //         // 값이 없을 때는 모든 매체 선택
-    //         if (typeof onChange === 'function') {
-    //             onChange(
-    //                 Object.values(dataObj)
-    //                     .map((type) => type.cd)
-    //                     .join(','),
-    //             );
-    //         }
-    //     }
-    // }, [findTypeIndex, onChange, dataObj, value]);
+    useEffect(() => {
+        if (Object.keys(imageObj).length < 1) return;
+        if (imageValue || imageValue === '') {
+            const valueArr = imageValue.split(',').filter((v) => v !== '');
+            setImageSelectedList(
+                valueArr.map((v) => {
+                    const targetIndex = imageTypeIndex(v);
+                    return imageObj[targetIndex];
+                }),
+            );
+        } else {
+            // 값이 없을 때는 모든 매체 선택
+            if (typeof onChange === 'function') {
+                onChange(
+                    Object.values(imageObj)
+                        .map((type) => type.name)
+                        .join(','),
+                );
+            }
+        }
+    }, [imageObj, imageTypeIndex, imageValue, onChange]);
 
     return (
-        <Dropdown className={clsx('flex-fill', className)} style={{ width: width }}>
+        <Dropdown className={clsx('flex-fill', className)}>
             <Dropdown.Toggle as={CustomToggle} isInvalid={isInvalid} id="dropdown-custom-components">
                 {toggleText}
             </Dropdown.Toggle>
 
-            <Dropdown.Menu as={CustomMenu} style={{ width: '100px' }}>
+            <Dropdown.Menu as={CustomMenu}>
                 {/* {dataTypeList &&
                     dataTypeList.map((data) => (
                         <MokaInput
@@ -237,13 +229,13 @@ const EditThumbSelectDropdown = (props) => {
                 {imageTypeList &&
                     imageTypeList.map((type) => (
                         <MokaInput
-                            key={type.cd}
-                            id={type.cd}
+                            key={type.name}
+                            id={type.name}
                             name="imageTypeList"
                             onChange={handleChangeValue}
                             className="mb-2 ft-12"
                             as="checkbox"
-                            inputProps={{ label: type.label, custom: true, checked: chkTrue(type.cd) }}
+                            inputProps={{ label: type.label, custom: true, checked: chkTrue(type.name) }}
                         />
                     ))}
             </Dropdown.Menu>

@@ -4,7 +4,7 @@ import { takeLatest, put, call, select } from 'redux-saga/effects';
 
 import { finishLoading, startLoading } from '@store/loading';
 import { errorResponse } from '@store/commons/saga';
-import { IMAGE_DEFAULT_URL, snsNames } from '@/constants';
+import { BLANK_IMAGE_PATH, IR_URL, PDS_URL, snsNames } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 import moment from 'moment';
 import { unescapeHtml } from '@utils/convertUtil';
@@ -150,9 +150,9 @@ function toSnsMetaViewData({ snsShare, article }) {
 
 function toMetaImage(metaImageUrl) {
     let toMetaImageUrl = metaImageUrl;
-    if (toMetaImageUrl.indexOf('https://ir.joins.com/') < 0) {
-        if (toMetaImageUrl.indexOf('https://pds.joins.com') < 0) {
-            toMetaImageUrl = `https://pds.joins.com/${toMetaImageUrl}`;
+    if (toMetaImageUrl.indexOf(IR_URL) < 0) {
+        if (toMetaImageUrl.indexOf(PDS_URL) < 0) {
+            toMetaImageUrl = PDS_URL + toMetaImageUrl;
         }
 
         if (toMetaImageUrl.indexOf('.tn_120') > 0) {
@@ -251,17 +251,15 @@ function setHasSendSnsIcons({ sendSnsType, fbSendSnsArtId, fbSendSnsArtSts, twSe
 }
 
 function setThumbnail(articleThumbnailUrl, snsThumbnailUrl) {
-    let thumbnail = IMAGE_DEFAULT_URL;
+    let thumbnail = IR_URL + BLANK_IMAGE_PATH;
     let snsFlag = false;
     if (!commonUtil.isEmpty(articleThumbnailUrl)) {
         if (!commonUtil.isEmpty(snsThumbnailUrl)) {
             thumbnail = snsThumbnailUrl;
             snsFlag = true;
         } else {
-            thumbnail = IMAGE_DEFAULT_URL + articleThumbnailUrl;
+            thumbnail = PDS_URL + articleThumbnailUrl;
         }
-    } else {
-        thumbnail = 'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg';
     }
 
     return { thumbnail, snsFlag };

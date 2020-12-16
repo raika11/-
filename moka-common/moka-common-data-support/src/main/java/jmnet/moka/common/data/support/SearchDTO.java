@@ -1,5 +1,7 @@
 package jmnet.moka.common.data.support;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import org.springframework.util.MultiValueMap;
 @AllArgsConstructor
 @Setter
 @Getter
-
+@ApiModel(description = "목록 조회 / 검색용 DTO")
 public class SearchDTO implements Serializable {
 
     private static final long serialVersionUID = -2765846428393381760L;
@@ -47,57 +49,65 @@ public class SearchDTO implements Serializable {
     /**
      * 페이지
      */
+    @ApiModelProperty("페이지 수")
     private int page = DEFAULT_PAGE;
 
     /**
      * 페이지당 조회 건수
      */
+    @ApiModelProperty("페이지당 조회 건수")
     private int size = DEFAULT_SIZE;
 
     /**
      * 정렬 정보 key,order 형식
      */
+    @ApiModelProperty("정렬 정보 key,order 형식")
     private List<String> sort;
 
-    /**
-     * 정렬 정보 key,order 형식
-     */
+    @ApiModelProperty("추가 검색 조건")
     private MultiValueMap<String, String> extraParamMap;
 
     /**
      * 정렬필드조회용 VO클래스
      */
+    @ApiModelProperty(hidden = true)
     protected Class<?> voClass;
 
     /**
      * 기본정렬정보
      */
+    @ApiModelProperty(hidden = true)
     protected String defaultSort;
 
     /**
      * 검색타입
      */
-    private String searchType;
+    @ApiModelProperty("검색타입")
+    protected String searchType;
 
     /**
      * 검색어
      */
-    private String keyword;
+    @ApiModelProperty("검색어")
+    protected String keyword;
 
     /**
      * 총갯수 사용여부
      */
+    @ApiModelProperty("총갯수 사용여부")
     @Builder.Default
     private String useTotal = McpString.YES;
 
     /**
      * 총갯수
      */
+    @ApiModelProperty(hidden = true)
     private Long total;
 
     /**
      * 검색결과 성공여부
      */
+    @ApiModelProperty(hidden = true)
     private Integer returnValue;
 
     /**

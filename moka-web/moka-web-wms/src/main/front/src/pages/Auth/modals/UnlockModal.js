@@ -17,23 +17,10 @@ const propTypes = {
      * hide 함수
      */
     onHide: PropTypes.func.isRequired,
-    /**
-     * type 모달 type
-     */
-    type: PropTypes.string,
-    /**
-     * onSave 함수
-     */
-    onSave: PropTypes.func,
-};
-const defaultProps = {
-    type: '',
-    onSave: null,
-    onDelete: null,
 };
 
 /**
- * 기타코드 편집 모달 컴포넌트
+ * 잠금해제 모달
  */
 const UnlockModal = (props) => {
     const dispatch = useDispatch();
@@ -120,7 +107,7 @@ const UnlockModal = (props) => {
     const validate = (unlock) => {
         let isInvalid = false;
         let errList = [];
-        // 기사페이지명 체크
+
         if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(unlock.password)) {
             errList.push({
                 field: 'password',
@@ -533,6 +520,5 @@ const UnlockModal = (props) => {
 };
 
 UnlockModal.propTypes = propTypes;
-UnlockModal.defaultProps = defaultProps;
 
 export default UnlockModal;
